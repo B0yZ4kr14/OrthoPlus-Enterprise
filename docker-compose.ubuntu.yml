@@ -1,0 +1,243 @@
+# ============================================================================
+# OrthoPlus Enterprise - Docker Compose for Ubuntu Server LTS
+# ============================================================================
+# Otimizado para: Ubuntu Server 22.04/24.04 LTS
+# Arquitetura: x86_64 (amd64)
+# 
+# INSTRUÇÕES RÁPIDAS:
+# 1. Copie .env.ubuntu.example para .env e configure
+# 2. Execute: docker compose -f docker-compose.ubuntu.yml up -d
+# 3. Acesse: http://seu-servidor
+#
+# BACKUP:
+# ./scripts/backup-ubuntu.sh
+# ============================================================================
+
+version: '3.8'
+
+services:
+  # ==========================================================================
+  # PostgreSQL 16 - Banco de dados principal
+  # Único engine suportado em produção (OrthoPlus v2.0+)
+  # ==========================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: orthoplus-postgres
+    hostname: postgres
+    environment:
+      POSTGRES_DB: orthoplus
+      POSTGRES_USER: orthoplus
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      # Configurações otimizadas para Ubuntu Server
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      # Configurações customizadas do PostgreSQL
+      - ./config/postgresql/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    # Healthcheck nativo do PostgreSQL
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orthoplus -d orthoplus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # Limites de recursos para Ubuntu Server
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    # Logs otimizados
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  # ==========================================================================
+  # Redis 7 - Cache e sessões
+  # ==========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: orthoplus-redis
+    hostname: redis
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+      --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+    volumes:
+      - redis-data:/data
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ==========================================================================
+  # Backend API - Node.js + Prisma + PostgreSQL
+  # ==========================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: orthoplus-backend
+    hostname: backend
+    environment:
+      NODE_ENV: production
+      PORT: 3005
+      # Database - APENAS PostgreSQL suportado
+      DATABASE_URL: postgresql://orthoplus:${DB_PASSWORD}@postgres:5432/orthoplus?schema=public
+      # Redis
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      # Security
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      AUTH_ALLOW_MOCK: "false"
+      ENABLE_DANGEROUS_ADMIN_ENDPOINTS: "false"
+      # CORS
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://orthoplus.i9corp.com.br}
+      # Email (opcional)
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3005/health', (r) => { if (r.statusCode !== 200) process.exit(1); }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  # ==========================================================================
+  # Frontend - React SPA servido via Nginx
+  # ==========================================================================
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api
+    container_name: orthoplus-frontend
+    hostname: frontend
+    environment:
+      - NODE_ENV=production
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ==========================================================================
+  # Nginx - Reverse Proxy e SSL
+  # ==========================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: orthoplus-nginx
+    hostname: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+# ============================================================================
+# Volumes Persistentes
+# ============================================================================
+volumes:
+  postgres-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/orthoplus/data/postgres
+  redis-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/orthoplus/data/redis
+
+# ============================================================================
+# Rede Docker
+# ============================================================================
+networks:
+  orthoplus-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

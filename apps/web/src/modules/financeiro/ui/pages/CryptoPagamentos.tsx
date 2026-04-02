@@ -1,0 +1,1238 @@
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCrypto } from "@/modules/crypto/hooks/useCrypto";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { LoadingState } from "@/components/shared/LoadingState";
+import {
+  CryptoKPISkeleton,
+  CryptoListSkeleton,
+  CryptoTableSkeleton,
+} from "@/components/crypto/CryptoSkeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import { Button } from "@orthoplus/core-ui/button";
+import { Badge } from "@orthoplus/core-ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@orthoplus/core-ui/dialog";
+import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
+import {
+  Bitcoin,
+  Wallet,
+  ArrowRightLeft,
+  TrendingUp,
+  RefreshCw,
+  Settings,
+  Plus,
+  ExternalLink,
+  QrCode,
+  Info,
+  Bell,
+  Activity,
+  AlertTriangle,
+  AlertCircle,
+} from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
+import {
+  exchangeLabels,
+  coinLabels,
+  statusLabels,
+  tipoLabels,
+} from "@/modules/crypto/types/crypto.types";
+import { Skeleton } from "@orthoplus/core-ui/skeleton";
+import { ExchangeConfigForm } from "@/components/crypto/ExchangeConfigForm";
+import { WalletForm } from "@/components/crypto/WalletForm";
+import { BitcoinQRCodeDialog } from "@/components/crypto/BitcoinQRCodeDialog";
+import { WalletQRPreview } from "@/components/crypto/WalletQRPreview";
+import { CryptoCalculator } from "@/components/crypto/CryptoCalculator";
+import { CryptoTour } from "@/components/crypto/CryptoTour";
+import { CryptoAnalysisDashboard } from "@/modules/crypto/components/CryptoAnalysisDashboard";
+import { AdvancedTechnicalAnalysis } from "@/components/crypto/AdvancedTechnicalAnalysis";
+import { ConversionSimulator } from "@/components/crypto/ConversionSimulator";
+import { CryptoPortfolioDashboard } from "@/components/crypto/CryptoPortfolioDashboard";
+import { BitcoinInfoCard } from "@/components/crypto/BitcoinInfoCard";
+import { useCryptoNotifications } from "@/hooks/useCryptoNotifications";
+import { CryptoPriceAlertForm } from "@/modules/crypto/components/CryptoPriceAlertForm";
+import { CascadeAlertWizard } from "@/modules/crypto/components/CascadeAlertWizard";
+import { CryptoComparativeDashboard } from "@/modules/crypto/components/CryptoComparativeDashboard";
+import { useCryptoPriceAlerts } from "@/modules/crypto/hooks/useCryptoPriceAlerts";
+import { Switch } from "@orthoplus/core-ui/switch";
+import { Trash2, TrendingDown, BarChart3 } from "lucide-react";
+import { DCABacktesting } from "@/components/crypto/DCABacktesting";
+import { VolatilityAlerts } from "@/components/crypto/VolatilityAlerts";
+
+export default function CryptoPagamentos() {
+  const { clinicId } = useAuth();
+  const { connected: notificationsConnected, requestNotificationPermission } =
+    useCryptoNotifications();
+
+  const {
+    exchanges,
+    wallets,
+    transactions,
+    loading,
+    syncWalletBalance,
+    convertCryptoToBRL,
+    getDashboardData,
+    createExchangeConfig,
+    createWallet,
+    createPaymentRequest,
+  } = useCrypto(clinicId);
+
+  const {
+    alerts,
+    loading: alertsLoading,
+    createAlert,
+    toggleAlert,
+    deleteAlert,
+  } = useCryptoPriceAlerts();
+
+  const [selectedWallet, setSelectedWallet] = useState(null);
+  const [syncingWallet, setSyncingWallet] = useState<string | null>(null);
+  const [convertingTx, setConvertingTx] = useState<string | null>(null);
+  const [exchangeDialogOpen, setExchangeDialogOpen] = useState(false);
+  const [walletDialogOpen, setWalletDialogOpen] = useState(false);
+  const [qrCodeDialogOpen, setQrCodeDialogOpen] = useState(false);
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
+  const [cascadeWizardOpen, setCascadeWizardOpen] = useState(false);
+
+  const dashboardData = getDashboardData();
+
+  const handleSyncWallet = async (walletId: string) => {
+    setSyncingWallet(walletId);
+    try {
+      await syncWalletBalance(walletId);
+    } finally {
+      setSyncingWallet(null);
+    }
+  };
+
+  const handleConvert = async (transactionId: string) => {
+    setConvertingTx(transactionId);
+    try {
+      await convertCryptoToBRL(transactionId);
+    } finally {
+      setConvertingTx(null);
+    }
+  };
+
+  const handleExchangeSubmit = async (data: unknown) => {
+    await createExchangeConfig(data);
+    setExchangeDialogOpen(false);
+  };
+
+  const handleWalletSubmit = async (data: unknown) => {
+    await createWallet(data);
+    setWalletDialogOpen(false);
+  };
+
+  const handleAlertSubmit = async (data: unknown) => {
+    await createAlert(data);
+    setAlertDialogOpen(false);
+  };
+
+  const handleCascadeSubmit = async (cascadeAlerts: unknown[]) => {
+    try {
+      // Criar todos os alertas da cascata
+      for (const alertData of cascadeAlerts) {
+        await createAlert(alertData);
+      }
+      toast.success(
+        `Estratégia DCA criada com ${cascadeAlerts.length} níveis!`,
+      );
+      setCascadeWizardOpen(false);
+    } catch (error) {
+      console.error("Error creating cascade:", error);
+      toast.error("Erro ao criar estratégia em cascata");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-6 space-y-6">
+        <PageHeader
+          icon={Bitcoin}
+          title="Pagamentos em Criptomoedas"
+          description="Receba pagamentos em Bitcoin e outras criptomoedas"
+        />
+
+        <CryptoKPISkeleton />
+
+        <Card depth="normal" className="mt-6">
+          <CardHeader>
+            <Skeleton className="h-6 w-48" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <Skeleton className="h-10 w-full" />
+              <CryptoListSkeleton />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto py-6 space-y-6">
+      <CryptoTour />
+
+      <PageHeader
+        icon={Bitcoin}
+        title="Pagamentos em Criptomoedas"
+        description="Receba pagamentos em Bitcoin e outras criptomoedas de forma profissional e segura"
+      />
+
+      {/* Indicador de conexão WebSocket */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          <Badge
+            variant={notificationsConnected ? "success" : "secondary"}
+            className="gap-2"
+          >
+            <div
+              className={`w-2 h-2 rounded-full ${notificationsConnected ? "bg-success" : "bg-muted-foreground"}`}
+            />
+            {notificationsConnected
+              ? "Notificações em Tempo Real Ativas"
+              : "Notificações Desconectadas"}
+          </Badge>
+          {!notificationsConnected && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={requestNotificationPermission}
+            >
+              Ativar Notificações Push
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Card Informativo sobre Bitcoin */}
+      <BitcoinInfoCard />
+
+      {!clinicId && (
+        <Card variant="default" className="border-amber-500/50 bg-amber-500/5">
+          <CardContent className="py-4">
+            <div className="flex items-start gap-3">
+              <Info className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
+                  Nenhuma clínica selecionada
+                </p>
+                <p className="text-sm text-amber-700 dark:text-amber-200 mt-1">
+                  Selecione uma clínica no menu superior para gerenciar
+                  pagamentos em criptomoedas.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Calculadora de Conversão Cripto */}
+      <CryptoCalculator />
+
+      {/* KPIs Dashboard */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card
+          variant="metric"
+          depth="normal"
+          className="p-6 border-l-orange-500"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                Total em BTC
+              </p>
+              <p className="text-2xl font-bold truncate">
+                {dashboardData.totalBTC.toFixed(8)} BTC
+              </p>
+            </div>
+            <Bitcoin className="h-10 w-10 text-orange-500 opacity-20 shrink-0" />
+          </div>
+        </Card>
+
+        <Card
+          variant="metric"
+          depth="normal"
+          className="p-6 border-l-green-500"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                Total em BRL
+              </p>
+              <p className="text-2xl font-bold text-green-500 truncate">
+                R${" "}
+                {dashboardData.totalBRL.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                })}
+              </p>
+            </div>
+            <TrendingUp className="h-10 w-10 text-green-500 opacity-20 shrink-0" />
+          </div>
+        </Card>
+
+        <Card
+          variant="metric"
+          depth="normal"
+          className="p-6 border-l-yellow-500"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                Transações Pendentes
+              </p>
+              <p className="text-2xl font-bold text-yellow-500 truncate">
+                {dashboardData.pendingTransactions}
+              </p>
+            </div>
+            <ArrowRightLeft className="h-10 w-10 text-yellow-500 opacity-20 shrink-0" />
+          </div>
+        </Card>
+
+        <Card variant="metric" depth="normal" className="p-6 border-l-blue-500">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                Confirmadas Hoje
+              </p>
+              <p className="text-2xl font-bold truncate">
+                {dashboardData.confirmedToday}
+              </p>
+            </div>
+            <Wallet className="h-10 w-10 text-blue-500 opacity-20 shrink-0" />
+          </div>
+        </Card>
+      </div>
+
+      <Tabs defaultValue="transactions" className="mt-8">
+        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-11">
+          <TabsTrigger value="transactions" data-tour="transactions-tab">
+            <ArrowRightLeft className="h-4 w-4 mr-2" />
+            Transações
+          </TabsTrigger>
+          <TabsTrigger value="wallets" data-tour="wallets-tab">
+            <Wallet className="h-4 w-4 mr-2" />
+            Carteiras
+          </TabsTrigger>
+          <TabsTrigger value="exchanges" data-tour="exchange-tab">
+            <Settings className="h-4 w-4 mr-2" />
+            Exchanges
+          </TabsTrigger>
+          <TabsTrigger value="portfolio">
+            <Wallet className="h-4 w-4 mr-2" />
+            Portfolio
+          </TabsTrigger>
+          <TabsTrigger value="technical">
+            <Activity className="h-4 w-4 mr-2" />
+            Análise Técnica
+          </TabsTrigger>
+          <TabsTrigger value="simulator">
+            <ArrowRightLeft className="h-4 w-4 mr-2" />
+            Simulador
+          </TabsTrigger>
+          <TabsTrigger value="analysis">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="comparative">
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Comparativo
+          </TabsTrigger>
+          <TabsTrigger value="alerts" data-tour="alerts-tab">
+            <Bell className="h-4 w-4 mr-2" />
+            Alertas
+          </TabsTrigger>
+          <TabsTrigger value="backtesting">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            DCA
+          </TabsTrigger>
+          <TabsTrigger value="volatility">
+            <AlertTriangle className="h-4 w-4 mr-2" />
+            Volatilidade
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Global Exchange Dialog */}
+        <Dialog open={exchangeDialogOpen} onOpenChange={setExchangeDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Configurar Exchange</DialogTitle>
+            </DialogHeader>
+            <ExchangeConfigForm
+              onSubmit={handleExchangeSubmit}
+              onCancel={() => setExchangeDialogOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+
+        {/* Transactions Tab */}
+        <TabsContent value="transactions" className="space-y-4">
+          {exchanges.length === 0 ? (
+            <Card depth="normal" className="p-8">
+              <div className="text-center space-y-6">
+                <div className="flex justify-center">
+                  <div className="rounded-full bg-primary/10 p-6">
+                    <Settings className="h-12 w-12 text-primary" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">
+                    Configure sua primeira Exchange
+                  </h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    Para começar a receber pagamentos em criptomoedas, você
+                    precisa configurar uma exchange (Binance, Coinbase, etc.)
+                  </p>
+                  <p className="text-sm text-muted-foreground max-w-lg mx-auto mt-4">
+                    <strong>Dica:</strong> Você pode gerar suas credenciais API
+                    na seção de API Management da sua conta na exchange.
+                    Certifique-se de habilitar apenas as permissões necessárias
+                    (leitura de saldo e histórico).
+                  </p>
+                </div>
+                <div className="flex justify-center gap-4">
+                  <Button onClick={() => setExchangeDialogOpen(true)} size="lg">
+                    <Settings className="h-5 w-5 mr-2" />
+                    Configurar Exchange
+                  </Button>
+                </div>
+                <div className="pt-4 border-t">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div className="text-center p-3 rounded-lg bg-muted/50">
+                      <p className="font-semibold mb-1">Binance</p>
+                      <p className="text-muted-foreground text-xs">
+                        Maior volume global
+                      </p>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-muted/50">
+                      <p className="font-semibold mb-1">Coinbase</p>
+                      <p className="text-muted-foreground text-xs">
+                        Interface amigável
+                      </p>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-muted/50">
+                      <p className="font-semibold mb-1">Mercado Bitcoin</p>
+                      <p className="text-muted-foreground text-xs">
+                        Exchange brasileira
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ) : wallets.length === 0 ? (
+            <Card depth="normal" className="p-8">
+              <div className="text-center space-y-6">
+                <div className="flex justify-center">
+                  <div className="rounded-full bg-orange-500/10 p-6">
+                    <Wallet className="h-12 w-12 text-orange-500" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">
+                    Crie sua primeira Carteira
+                  </h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    Agora que você já configurou uma exchange, crie uma carteira
+                    para receber pagamentos em Bitcoin, Ethereum ou outras
+                    criptomoedas.
+                  </p>
+                </div>
+                <div className="flex justify-center gap-4">
+                  <Button
+                    onClick={() => setWalletDialogOpen(true)}
+                    size="lg"
+                    className="bg-orange-500 hover:bg-orange-600"
+                  >
+                    <Plus className="h-5 w-5 mr-2" />
+                    Criar Carteira
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ) : (
+            <>
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold">
+                  Histórico de Transações
+                </h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setQrCodeDialogOpen(true)}
+                  disabled={wallets.filter((w) => w.is_active).length === 0}
+                >
+                  <QrCode className="h-4 w-4 mr-2" />
+                  Gerar QR Code de Pagamento
+                </Button>
+              </div>
+
+              {transactions.length === 0 ? (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    Nenhuma transação encontrada. Gere um QR Code para receber
+                    seu primeiro pagamento!
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="space-y-4">
+                  {transactions.map((tx) => (
+                    <Card
+                      key={tx.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1 space-y-3">
+                            <div className="flex items-center gap-3">
+                              <Badge variant="outline">
+                                {coinLabels[tx.coin_type]}
+                              </Badge>
+                              <Badge
+                                variant={
+                                  tx.status === "CONFIRMADO"
+                                    ? "default"
+                                    : tx.status === "PENDENTE"
+                                      ? "secondary"
+                                      : tx.status === "CONVERTIDO"
+                                        ? "default"
+                                        : "destructive"
+                                }
+                              >
+                                {statusLabels[tx.status]}
+                              </Badge>
+                              <Badge variant="outline">
+                                {tipoLabels[tx.tipo]}
+                              </Badge>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                              <div>
+                                <span className="text-muted-foreground">
+                                  Valor Crypto:
+                                </span>
+                                <p className="font-semibold">
+                                  {tx.amount_crypto} {tx.coin_type}
+                                </p>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">
+                                  Valor BRL:
+                                </span>
+                                <p className="font-semibold">
+                                  R${" "}
+                                  {tx.amount_brl?.toLocaleString("pt-BR", {
+                                    minimumFractionDigits: 2,
+                                  })}
+                                </p>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">
+                                  Taxa de Câmbio:
+                                </span>
+                                <p className="font-semibold">
+                                  R${" "}
+                                  {tx.exchange_rate?.toLocaleString("pt-BR", {
+                                    minimumFractionDigits: 2,
+                                  })}
+                                </p>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">
+                                  Confirmações:
+                                </span>
+                                <p className="font-semibold">
+                                  {tx.confirmations}/{tx.required_confirmations}
+                                </p>
+                              </div>
+                            </div>
+
+                            {tx.processing_fee_brl &&
+                              tx.processing_fee_brl > 0 && (
+                                <div className="grid grid-cols-2 gap-4 text-sm pt-2 border-t">
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      Taxa de Processamento:
+                                    </span>
+                                    <p className="font-semibold text-amber-600 dark:text-amber-400">
+                                      - R${" "}
+                                      {tx.processing_fee_brl?.toLocaleString(
+                                        "pt-BR",
+                                        { minimumFractionDigits: 2 },
+                                      )}
+                                      {tx.processing_fee_percentage &&
+                                        ` (${tx.processing_fee_percentage}%)`}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <span className="text-muted-foreground">
+                                      Valor Líquido:
+                                    </span>
+                                    <p className="font-semibold text-green-600 dark:text-green-400">
+                                      R${" "}
+                                      {tx.net_amount_brl?.toLocaleString(
+                                        "pt-BR",
+                                        { minimumFractionDigits: 2 },
+                                      )}
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+
+                            {tx.patient_name && (
+                              <div className="text-sm">
+                                <span className="text-muted-foreground">
+                                  Paciente:{" "}
+                                </span>
+                                <span className="font-medium">
+                                  {tx.patient_name}
+                                </span>
+                              </div>
+                            )}
+
+                            {tx.transaction_hash && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <span className="text-muted-foreground">
+                                  Hash:
+                                </span>
+                                <code className="text-xs bg-muted px-2 py-1 rounded">
+                                  {tx.transaction_hash.substring(0, 20)}...
+                                </code>
+                                <Button variant="ghost" size="sm" asChild>
+                                  <a
+                                    href={`https://blockchain.com/btc/tx/${tx.transaction_hash}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <ExternalLink className="h-3 w-3" />
+                                  </a>
+                                </Button>
+                              </div>
+                            )}
+
+                            <div className="text-xs text-muted-foreground">
+                              {format(
+                                new Date(tx.created_at),
+                                "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
+                                { locale: ptBR },
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-2">
+                            {tx.status === "CONFIRMADO" &&
+                              !tx.converted_to_brl_at && (
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleConvert(tx.id)}
+                                  disabled={convertingTx === tx.id}
+                                >
+                                  {convertingTx === tx.id ? (
+                                    <>
+                                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                                      Convertendo...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ArrowRightLeft className="h-4 w-4 mr-2" />
+                                      Converter
+                                    </>
+                                  )}
+                                </Button>
+                              )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </TabsContent>
+
+        {/* Wallets Tab */}
+        <TabsContent value="wallets" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Carteiras Configuradas</h3>
+            <Dialog open={walletDialogOpen} onOpenChange={setWalletDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={exchanges.length === 0}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nova Carteira
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Nova Carteira</DialogTitle>
+                </DialogHeader>
+                <WalletForm
+                  onSubmit={handleWalletSubmit}
+                  onCancel={() => setWalletDialogOpen(false)}
+                  exchanges={exchanges}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {exchanges.length === 0 ? (
+            <Card depth="normal" className="p-8">
+              <div className="text-center space-y-6">
+                <div className="flex justify-center">
+                  <div className="rounded-full bg-amber-500/10 p-6">
+                    <Info className="h-12 w-12 text-amber-500" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">
+                    Configure uma exchange primeiro
+                  </h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    Antes de criar carteiras, você precisa configurar pelo menos
+                    uma exchange para sincronização.
+                  </p>
+                  <p className="text-sm text-muted-foreground max-w-lg mx-auto mt-4">
+                    <strong>Por que vincular a uma exchange?</strong> A
+                    vinculação permite sincronização automática de saldos,
+                    confirmações de transações e cotações em tempo real.
+                  </p>
+                </div>
+                <div className="flex justify-center">
+                  <Button onClick={() => setExchangeDialogOpen(true)} size="lg">
+                    <Settings className="h-5 w-5 mr-2" />
+                    Configurar Exchange
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ) : wallets.length === 0 ? (
+            <Card depth="normal" className="p-8">
+              <div className="text-center space-y-6">
+                <div className="flex justify-center">
+                  <div className="rounded-full bg-orange-500/10 p-6">
+                    <Wallet className="h-12 w-12 text-orange-500" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">
+                    Nenhuma carteira configurada
+                  </h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    Crie uma carteira para receber pagamentos em Bitcoin,
+                    Ethereum ou outras criptomoedas.
+                  </p>
+                </div>
+                <div className="flex justify-center">
+                  <Button
+                    onClick={() => setWalletDialogOpen(true)}
+                    size="lg"
+                    className="bg-orange-500 hover:bg-orange-600"
+                  >
+                    <Plus className="h-5 w-5 mr-2" />
+                    Criar Carteira
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {wallets.map((wallet) => (
+                <WalletQRPreview key={wallet.id} wallet={wallet} />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* Portfolio Tab */}
+        <TabsContent value="portfolio" className="space-y-4">
+          <CryptoPortfolioDashboard
+            wallets={wallets}
+            transactions={transactions}
+          />
+        </TabsContent>
+
+        {/* Exchanges Tab */}
+        <TabsContent value="exchanges" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Exchanges Configuradas</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setExchangeDialogOpen(true)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Nova Exchange
+            </Button>
+          </div>
+
+          {exchanges.length === 0 ? (
+            <Card depth="normal" className="p-8">
+              <div className="text-center space-y-6">
+                <div className="flex justify-center">
+                  <div className="rounded-full bg-blue-500/10 p-6">
+                    <Settings className="h-12 w-12 text-blue-500" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold">
+                    Nenhuma exchange configurada
+                  </h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    Configure uma exchange (Binance, Coinbase, Kraken, etc.) com
+                    suas credenciais API para começar.
+                  </p>
+                  <Alert className="mt-6 text-left max-w-2xl mx-auto">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Importante:</strong> Suas credenciais API são
+                      armazenadas de forma segura e criptografada. Recomendamos
+                      criar uma API Key com permissões somente de leitura para
+                      maior segurança.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+                <div className="flex justify-center">
+                  <Button onClick={() => setExchangeDialogOpen(true)} size="lg">
+                    <Settings className="h-5 w-5 mr-2" />
+                    Configurar Exchange
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {exchanges.map((exchange) => (
+                <Card
+                  key={exchange.id}
+                  className="hover:shadow-md transition-shadow"
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <CardTitle className="text-base">
+                        {exchangeLabels[exchange.exchange_name]}
+                      </CardTitle>
+                      <Badge
+                        variant={exchange.is_active ? "default" : "secondary"}
+                      >
+                        {exchange.is_active ? "Ativa" : "Inativa"}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <span className="text-sm text-muted-foreground">
+                        Moedas Suportadas:
+                      </span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {exchange.supported_coins?.map((coin) => (
+                          <Badge
+                            key={coin}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {coin}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {exchange.wallet_address && (
+                      <div>
+                        <span className="text-sm text-muted-foreground">
+                          Carteira Principal:
+                        </span>
+                        <code className="block text-xs bg-muted p-2 rounded mt-1 break-all">
+                          {exchange.wallet_address}
+                        </code>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-muted-foreground">
+                        Conversão Automática:
+                      </span>
+                      <Badge
+                        variant={
+                          exchange.auto_convert_to_brl ? "default" : "outline"
+                        }
+                      >
+                        {exchange.auto_convert_to_brl
+                          ? "Ativada"
+                          : "Desativada"}
+                      </Badge>
+                    </div>
+
+                    {exchange.processing_fee_percentage &&
+                      exchange.processing_fee_percentage > 0 && (
+                        <div className="text-sm">
+                          <span className="text-muted-foreground">
+                            Taxa de Processamento:{" "}
+                          </span>
+                          <span className="font-semibold text-amber-600 dark:text-amber-400">
+                            {exchange.processing_fee_percentage}%
+                          </span>
+                        </div>
+                      )}
+
+                    <Button variant="outline" size="sm" className="w-full">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Configurar
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        {/* Analysis Tab */}
+        <TabsContent value="analysis">
+          <CryptoAnalysisDashboard clinicId={clinicId} />
+        </TabsContent>
+
+        {/* Technical Analysis Tab */}
+        <TabsContent value="technical" className="space-y-4">
+          <div className="space-y-2 mb-6">
+            <h3 className="text-lg font-semibold">Análise Técnica Avançada</h3>
+            <p className="text-sm text-muted-foreground">
+              Indicadores técnicos profissionais (RSI, MACD, Bollinger Bands) e
+              histórico de preços
+            </p>
+          </div>
+
+          <Tabs defaultValue="BTC" className="w-full">
+            <TabsList>
+              <TabsTrigger value="BTC">Bitcoin (BTC)</TabsTrigger>
+              <TabsTrigger value="ETH">Ethereum (ETH)</TabsTrigger>
+              <TabsTrigger value="USDT">Tether (USDT)</TabsTrigger>
+            </TabsList>
+            <TabsContent value="BTC">
+              <AdvancedTechnicalAnalysis coinType="BTC" />
+            </TabsContent>
+            <TabsContent value="ETH">
+              <AdvancedTechnicalAnalysis coinType="ETH" />
+            </TabsContent>
+            <TabsContent value="USDT">
+              <AdvancedTechnicalAnalysis coinType="USDT" />
+            </TabsContent>
+          </Tabs>
+        </TabsContent>
+
+        {/* Simulator Tab */}
+        <TabsContent value="simulator" className="space-y-4">
+          <div className="space-y-2 mb-6">
+            <h3 className="text-lg font-semibold">
+              Simulador de Conversão Cripto → BRL
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Compare taxas entre exchanges e identifique o melhor momento para
+              converter baseado em histórico
+            </p>
+          </div>
+
+          <ConversionSimulator />
+        </TabsContent>
+
+        {/* Comparative Dashboard Tab */}
+        <TabsContent value="comparative" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-semibold">
+                Dashboard Comparativo de Rentabilidade
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                Compare taxas e economia entre criptomoedas e métodos
+                tradicionais
+              </p>
+            </div>
+          </div>
+
+          <CryptoComparativeDashboard transactions={transactions} />
+        </TabsContent>
+
+        {/* Alerts Tab */}
+        <TabsContent value="alerts" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">
+              Alertas de Preço e Estratégias DCA
+            </h3>
+            <div className="flex gap-2">
+              <Dialog
+                open={cascadeWizardOpen}
+                onOpenChange={setCascadeWizardOpen}
+              >
+                <DialogTrigger asChild>
+                  <Button variant="default" size="sm">
+                    <TrendingDown className="h-4 w-4 mr-2" />
+                    Estratégia DCA
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Criar Estratégia DCA em Cascata</DialogTitle>
+                  </DialogHeader>
+                  <CascadeAlertWizard
+                    onSubmit={handleCascadeSubmit}
+                    onCancel={() => setCascadeWizardOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Alerta Simples
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Configurar Alerta de Preço</DialogTitle>
+                  </DialogHeader>
+                  <CryptoPriceAlertForm
+                    onSubmit={handleAlertSubmit}
+                    onCancel={() => setAlertDialogOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+
+          {alertsLoading ? (
+            <Card>
+              <CardContent className="py-8 text-center">
+                <LoadingState message="Carregando alertas..." />
+              </CardContent>
+            </Card>
+          ) : alerts.length === 0 ? (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                Nenhum alerta configurado. Crie um alerta para ser notificado
+                quando as taxas atingirem valores específicos.
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-3">
+              {/* Group alerts by cascade_group_id */}
+              {(() => {
+                const cascadeGroups = new Map<string | null, typeof alerts>();
+                alerts.forEach((alert) => {
+                  const groupId = alert.cascade_enabled
+                    ? alert.cascade_group_id
+                    : null;
+                  if (!cascadeGroups.has(groupId)) {
+                    cascadeGroups.set(groupId, []);
+                  }
+                  cascadeGroups.get(groupId)!.push(alert);
+                });
+
+                return Array.from(cascadeGroups.entries()).map(
+                  ([groupId, groupAlerts]) => {
+                    const isCascade = groupId !== null;
+                    const sortedAlerts = isCascade
+                      ? [...groupAlerts].sort(
+                          (a, b) =>
+                            (a.cascade_order || 0) - (b.cascade_order || 0),
+                        )
+                      : groupAlerts;
+
+                    if (isCascade) {
+                      // Render cascade group
+                      return (
+                        <Card
+                          key={groupId}
+                          className="border-primary/30 bg-primary/5"
+                        >
+                          <CardContent className="p-4 space-y-3">
+                            <div className="flex items-center gap-2 mb-2">
+                              <TrendingDown className="h-5 w-5 text-primary" />
+                              <span className="font-semibold text-primary">
+                                Estratégia DCA em Cascata
+                              </span>
+                              <Badge variant="outline" className="ml-auto">
+                                {sortedAlerts.length} níveis
+                              </Badge>
+                            </div>
+
+                            <div className="space-y-2">
+                              {sortedAlerts.map((alert, idx) => (
+                                <div
+                                  key={alert.id}
+                                  className="flex items-center gap-2 p-3 bg-background rounded-lg border"
+                                >
+                                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary font-semibold text-xs shrink-0">
+                                    {alert.cascade_order}
+                                  </div>
+                                  <div className="flex-1 space-y-1">
+                                    <div className="flex items-center gap-2">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {alert.coin_type}
+                                      </Badge>
+                                      <span className="text-sm font-medium">
+                                        R${" "}
+                                        {alert.target_rate_brl.toLocaleString(
+                                          "pt-BR",
+                                          { minimumFractionDigits: 2 },
+                                        )}
+                                      </span>
+                                      <Badge
+                                        variant="secondary"
+                                        className="text-xs"
+                                      >
+                                        {alert.conversion_percentage}%
+                                      </Badge>
+                                    </div>
+                                    {alert.last_triggered_at && (
+                                      <span className="text-xs text-muted-foreground">
+                                        ✓ Disparado:{" "}
+                                        {format(
+                                          new Date(alert.last_triggered_at),
+                                          "dd/MM HH:mm",
+                                          { locale: ptBR },
+                                        )}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    <Switch
+                                      checked={alert.is_active}
+                                      onCheckedChange={() =>
+                                        toggleAlert(alert.id, alert.is_active)
+                                      }
+                                      disabled={
+                                        idx > 0 &&
+                                        !sortedAlerts[idx - 1].last_triggered_at
+                                      }
+                                    />
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => deleteAlert(alert.id)}
+                                    >
+                                      <Trash2 className="h-4 w-4 text-destructive" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    }
+
+                    // Render individual alerts
+                    return sortedAlerts.map((alert) => (
+                      <Card
+                        key={alert.id}
+                        className="hover:shadow-md transition-shadow"
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 space-y-2">
+                              <div className="flex items-center gap-2">
+                                <Badge variant="outline">
+                                  {alert.coin_type}
+                                </Badge>
+                                <Badge
+                                  variant={
+                                    alert.alert_type === "BELOW"
+                                      ? "success"
+                                      : "warning"
+                                  }
+                                >
+                                  {alert.alert_type === "BELOW"
+                                    ? "Abaixo de"
+                                    : "Acima de"}{" "}
+                                  R${" "}
+                                  {alert.target_rate_brl.toLocaleString(
+                                    "pt-BR",
+                                    { minimumFractionDigits: 2 },
+                                  )}
+                                </Badge>
+                                {alert.stop_loss_enabled && (
+                                  <Badge
+                                    variant="destructive"
+                                    className="text-xs"
+                                  >
+                                    Stop-Loss {alert.conversion_percentage}%
+                                  </Badge>
+                                )}
+                                {alert.last_triggered_at && (
+                                  <Badge variant="secondary">
+                                    Disparado:{" "}
+                                    {format(
+                                      new Date(alert.last_triggered_at),
+                                      "dd/MM HH:mm",
+                                      { locale: ptBR },
+                                    )}
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span>
+                                  Notificações:{" "}
+                                  {alert.notification_method.join(", ")}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Switch
+                                checked={alert.is_active}
+                                onCheckedChange={() =>
+                                  toggleAlert(alert.id, alert.is_active)
+                                }
+                              />
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => deleteAlert(alert.id)}
+                              >
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ));
+                  },
+                );
+              })()}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="backtesting" className="space-y-6">
+          <DCABacktesting />
+        </TabsContent>
+
+        <TabsContent value="volatility" className="space-y-6">
+          <VolatilityAlerts />
+        </TabsContent>
+      </Tabs>
+
+      <BitcoinQRCodeDialog
+        open={qrCodeDialogOpen}
+        onOpenChange={setQrCodeDialogOpen}
+        wallets={wallets}
+        onGeneratePayment={createPaymentRequest}
+      />
+    </div>
+  );
+}

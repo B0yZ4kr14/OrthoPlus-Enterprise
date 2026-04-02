@@ -1,0 +1,110 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: orthoplus
+          POSTGRES_PASSWORD: orthoplus_test
+          POSTGRES_DB: orthoplus
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install backend dependencies
+        run: cd backend && npm install --legacy-peer-deps
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run E2E tests
+        run: npx playwright test --project=${{ matrix.browser }}
+        env:
+          CI: true
+          NODE_ENV: test
+          JWT_SECRET: ci-only-test-secret-not-for-production-use
+          DB_HOST: localhost
+          DB_PORT: "5432"
+          DB_NAME: orthoplus
+          DB_USER: orthoplus
+          DB_PASSWORD: orthoplus_test
+          DATABASE_URL: postgresql://orthoplus:orthoplus_test@localhost:5432/orthoplus
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-results-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+      - name: Upload videos
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-videos-${{ matrix.browser }}
+          path: test-results/**/*.webm
+          retention-days: 7
+
+  report:
+    name: Publish Test Report
+    needs: test
+    runs-on: ubuntu-22.04
+    if: always()
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+
+      - name: Publish HTML Report
+        uses: peaceiris/actions-gh-pages@v4
+        if: hashFiles('playwright-report') != ''
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./playwright-report
+          destination_dir: test-reports/${{ github.run_number }}

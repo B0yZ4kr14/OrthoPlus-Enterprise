@@ -1,0 +1,169 @@
+# Ortho+ Docker Compose
+# Desenvolvido por TSI Telecom © 2025
+
+services:
+  # Aplicação Ortho+
+  orthoplus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE_URL=${VITE_API_BASE_URL}
+    container_name: orthoplus-app
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.orthoplus.description=Ortho+ Main Application"
+      - "com.orthoplus.vendor=TSI Telecom"
+
+  # Backend Node.js API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: orthoplus-backend
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://orthoplus.i9corp.com.br}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3005/health', (r) => { if (r.statusCode !== 200) process.exit(1); }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL (opcional, para ambiente local completo)
+  postgres:
+    image: postgres:16-alpine
+    container_name: orthoplus-db
+    environment:
+      - POSTGRES_DB=orthoplus
+      - POSTGRES_USER=orthoplus
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+    # Port not exposed to host — accessible only within orthoplus-network
+    # For local development access, use docker-compose.dev.yml
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orthoplus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 7 (Session Cache & Queue)
+  redis:
+    image: redis:7-alpine
+    container_name: orthoplus-redis
+    # Port not exposed to host — accessible only within orthoplus-network
+    volumes:
+      - redis-data:/data
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD must be set}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - "com.orthoplus.description=Redis 7 Session Cache"
+
+  # Nginx (Reverse Proxy)
+  nginx:
+    image: nginx:alpine
+    container_name: orthoplus-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - orthoplus-network
+    depends_on:
+      - orthoplus
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus (Monitoramento)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: orthoplus-prometheus
+    # Port not exposed to host — accessible only within orthoplus-network
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+
+  # Grafana (Visualização)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: orthoplus-grafana
+    # Port not exposed to host — accessible only within orthoplus-network
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:?GRAFANA_PASSWORD must be set}
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - orthoplus-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+networks:
+  orthoplus-network:
+    driver: bridge
+    name: orthoplus-network
+
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

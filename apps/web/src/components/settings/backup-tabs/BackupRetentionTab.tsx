@@ -1,0 +1,144 @@
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api/apiClient";
+import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import { Label } from "@orthoplus/core-ui/label";
+import { Input } from "@orthoplus/core-ui/input";
+import { Button } from "@orthoplus/core-ui/button";
+import { Switch } from "@orthoplus/core-ui/switch";
+import { toast } from "sonner";
+import { Settings, Trash2 } from "lucide-react";
+
+export function BackupRetentionTab() {
+  const { clinicId } = useAuth();
+  const queryClient = useQueryClient();
+  const [retentionDays, setRetentionDays] = useState(30);
+  const [autoCleanup, setAutoCleanup] = useState(true);
+
+  const { data: config } = useQuery({
+    queryKey: ["backup-retention-config", clinicId],
+    queryFn: async () => {
+      const data = await apiClient.get<unknown[]>(
+        "/configuracoes/backups/retencao",
+      );
+
+      const clinic = data?.[0] || {};
+
+      setRetentionDays(clinic.backup_retention_days || 30);
+      setAutoCleanup(clinic.auto_cleanup_enabled || false);
+
+      return clinic;
+    },
+    enabled: !!clinicId,
+  });
+
+  const updateConfigMutation = useMutation({
+    mutationFn: async () => {
+      await apiClient.patch("/configuracoes/backups/retencao", {
+        backup_retention_days: retentionDays,
+        auto_cleanup_enabled: autoCleanup,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Configuração atualizada com sucesso");
+      queryClient.invalidateQueries({ queryKey: ["backup-retention-config"] });
+    },
+    onError: () => {
+      toast.error("Erro ao atualizar configuração");
+    },
+  });
+
+  const cleanupMutation = useMutation({
+    mutationFn: async () => {
+      const data = await apiClient.post<unknown[]>(
+        "/configuracoes/backups/limpeza",
+        {
+          p_clinic_id: clinicId,
+        },
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      if (data && data.length > 0) {
+        const result = data[0];
+        toast.success(
+          `${result.deleted_count} backups removidos (${(result.freed_bytes / 1024 / 1024 / 1024).toFixed(2)} GB liberados)`,
+        );
+      }
+      queryClient.invalidateQueries({ queryKey: ["backup-timeline"] });
+    },
+    onError: () => {
+      toast.error("Erro ao executar limpeza");
+    },
+  });
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5" />
+            Configuração de Retenção
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="retention">Período de Retenção (dias)</Label>
+            <Input
+              id="retention"
+              type="number"
+              min="7"
+              max="365"
+              value={retentionDays}
+              onChange={(e) => setRetentionDays(parseInt(e.target.value))}
+            />
+            <p className="text-sm text-muted-foreground">
+              Backups mais antigos que {retentionDays} dias serão
+              automaticamente removidos.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label>Limpeza Automática</Label>
+              <p className="text-sm text-muted-foreground">
+                Ativar remoção automática de backups antigos
+              </p>
+            </div>
+            <Switch checked={autoCleanup} onCheckedChange={setAutoCleanup} />
+          </div>
+
+          <Button
+            onClick={() => updateConfigMutation.mutate()}
+            disabled={updateConfigMutation.isPending}
+          >
+            Salvar Configurações
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Trash2 className="h-5 w-5" />
+            Limpeza Manual
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Execute a limpeza manual de backups antigos baseado nas
+            configurações atuais.
+          </p>
+          <Button
+            variant="destructive"
+            onClick={() => cleanupMutation.mutate()}
+            disabled={cleanupMutation.isPending}
+          >
+            Executar Limpeza Agora
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@orthoplus/admin-devops-database-config",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pages": "./src/pages/DatabaseConfigPage.tsx",
+    "./hooks": "./src/hooks/useDatabaseConfig.ts",
+    "./types": "./src/types/index.ts",
+    "./constants": "./src/constants/index.ts"
+  },
+  "scripts": {
+    "lint": "echo 'Lint skipped - no local eslint config'",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@orthoplus/core-hooks": "workspace:*",
+    "@orthoplus/core-ui": "workspace:*",
+    "lucide-react": "^0.462.0",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^18.3.0",
+    "eslint": "^10.1.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.58.0"
+  }
+}

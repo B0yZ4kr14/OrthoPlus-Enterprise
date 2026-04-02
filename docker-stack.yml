@@ -1,0 +1,153 @@
+# Ortho+ Docker Swarm Stack
+# Orquestração completa para deployment cloud e on-premises
+
+version: "3.9"
+
+services:
+  # ============= FRONTEND =============
+  frontend:
+    image: orthoplus-frontend:${VERSION:-latest}
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.frontend.rule=Host(`app.orthoplus.local`)"
+        - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    networks:
+      - frontend
+    environment:
+      - NODE_ENV=production
+      - VITE_API_BASE_URL=http://backend:3000/api
+
+  # ============= BACKEND =============
+  backend:
+    image: orthoplus-backend:${VERSION:-latest}
+    deploy:
+      replicas: 5
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    networks:
+      - frontend
+      - backend
+    secrets:
+      - db_password
+      - jwt_secret
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
+
+  # ============= DATABASES =============
+  postgres:
+    image: postgres:15-alpine
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    secrets:
+      - db_password
+    environment:
+      - POSTGRES_USER=orthoplus
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+
+  # ============= CACHE =============
+  redis:
+    image: redis:7-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  # ============= REVERSE PROXY =============
+  traefik:
+    image: traefik:v3.0
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    networks:
+      - frontend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+
+  # ============= OBSERVABILITY =============
+  prometheus:
+    image: prom/prometheus:latest
+    deploy:
+      replicas: 1
+    networks:
+      - backend
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    deploy:
+      replicas: 1
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+networks:
+  frontend:
+    driver: overlay
+  backend:
+    driver: overlay
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+secrets:
+  db_password:
+    external: true
+  jwt_secret:
+    external: true

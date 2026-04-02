@@ -1,0 +1,381 @@
+version: '3.8'
+
+# ============================================================================
+# OrthoPlus Self-Hosted Stack - Private Infrastructure (On-Premise)
+# ============================================================================
+# This configuration provides a fully self-hosted, BaaS-independent stack
+# for private dental clinic infrastructure with:
+# - Zero cloud lock-in
+# - Clinical data sovereignty (GDPR/HIPAA compliant)
+# - Automated backups and health monitoring
+# - MinIO for S3-compatible storage
+# - PostgreSQL 16+ with RLS multi-tenant isolation
+# ============================================================================
+
+services:
+  # Frontend
+  frontend:
+    image: orthoplus-frontend:${VERSION:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://backend:3333
+    networks:
+      - frontend_net
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.orthoplus.service=frontend"
+      - "com.orthoplus.description=React SPA Frontend"
+
+  # Backend (Monólito Modular)
+  backend:
+    image: orthoplus-backend:${VERSION:-latest}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3333:3333"
+    environment:
+      - NODE_ENV=production
+      - PORT=3333
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/orthoplus
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_URL=redis://redis:6379
+      - STORAGE_ENDPOINT=minio:9000
+      - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER:-admin}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD:-miniopassword}
+      - STORAGE_USE_SSL=false
+    networks:
+      - backend_net
+      - db_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    labels:
+      - "com.orthoplus.service=backend"
+      - "com.orthoplus.description=Express.js API Gateway"
+
+  # PostgreSQL 16 (Main Database - Multi-tenant with RLS)
+  postgres:
+    image: postgres:16-alpine
+    container_name: orthoplus-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=orthoplus
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_backups:/backups
+      - ./scripts/init-schemas.sql:/docker-entrypoint-initdb.d/01-init-schemas.sql
+      - ./scripts/postgres-backup.sh:/usr/local/bin/backup.sh:ro
+    networks:
+      - db_net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d orthoplus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    labels:
+      - "com.orthoplus.service=database"
+      - "com.orthoplus.description=PostgreSQL 16 with RLS"
+      - "com.orthoplus.backup=daily"
+    command: >
+      postgres
+      -c shared_buffers=2GB
+      -c effective_cache_size=6GB
+      -c maintenance_work_mem=512MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=10485kB
+      -c min_wal_size=1GB
+      -c max_wal_size=4GB
+      -c max_worker_processes=4
+      -c max_parallel_workers_per_gather=2
+      -c max_parallel_workers=4
+      -c log_statement=all
+      -c log_duration=on
+
+  # Redis 7 (Cache & Session Store)
+  redis:
+    image: redis:7-alpine
+    container_name: orthoplus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend_net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru --appendonly yes
+    labels:
+      - "com.orthoplus.service=cache"
+      - "com.orthoplus.description=Redis 7 Cache"
+
+  # MinIO (Self-Hosted S3-Compatible Storage)
+  minio:
+    image: minio/minio:latest
+    container_name: orthoplus-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-admin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-miniopassword}
+      - MINIO_BROWSER_REDIRECT_URL=http://localhost:9001
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - backend_net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 30s
+    labels:
+      - "com.orthoplus.service=storage"
+      - "com.orthoplus.description=MinIO S3-Compatible Storage"
+      - "com.orthoplus.backup=daily"
+
+  # Nginx (Reverse Proxy with TLS Termination)
+  nginx:
+    image: nginx:alpine
+    container_name: orthoplus-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/dhparam.pem:/etc/nginx/dhparam.pem:ro
+    networks:
+      - frontend_net
+      - backend_net
+    depends_on:
+      - frontend
+      - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "com.orthoplus.service=proxy"
+      - "com.orthoplus.description=Nginx Reverse Proxy + TLS"
+
+  # PostgreSQL Backup Scheduler
+  postgres-backup:
+    image: postgres:16-alpine
+    container_name: orthoplus-backup
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=orthoplus
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - BACKUP_RETENTION_DAYS=30
+    volumes:
+      - postgres_backups:/backups
+      - ./scripts/postgres-backup.sh:/backup.sh:ro
+    networks:
+      - db_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Setting up automated PostgreSQL backups..."
+        echo "0 2 * * * /backup.sh" > /etc/crontabs/root
+        crond -f -l 2
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    labels:
+      - "com.orthoplus.service=backup"
+      - "com.orthoplus.description=Automated PostgreSQL Backups"
+
+  # MinIO Backup Scheduler (Volume Sync)
+  minio-backup:
+    image: minio/mc:latest
+    container_name: orthoplus-minio-backup
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-admin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-miniopassword}
+    volumes:
+      - minio_data:/minio-source:ro
+      - minio_backups:/minio-backups
+      - ./scripts/minio-backup.sh:/backup.sh:ro
+    networks:
+      - backend_net
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Setting up automated MinIO backups..."
+        mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-admin} ${MINIO_ROOT_PASSWORD:-miniopassword}
+        echo "0 3 * * * /backup.sh" > /etc/crontabs/root
+        crond -f -l 2
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    labels:
+      - "com.orthoplus.service=storage-backup"
+      - "com.orthoplus.description=Automated MinIO Backups"
+
+  # Health Monitor (Prometheus-compatible metrics exporter)
+  health-monitor:
+    image: prom/node-exporter:latest
+    container_name: orthoplus-health-monitor
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - backend_net
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    labels:
+      - "com.orthoplus.service=monitoring"
+      - "com.orthoplus.description=System Health Monitor"
+
+networks:
+  frontend_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+  backend_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+  db_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+
+volumes:
+  postgres_data:
+    driver: local
+    labels:
+      - "com.orthoplus.data=clinical"
+      - "com.orthoplus.backup=required"
+  postgres_backups:
+    driver: local
+    labels:
+      - "com.orthoplus.data=backup"
+  redis_data:
+    driver: local
+  minio_data:
+    driver: local
+    labels:
+      - "com.orthoplus.data=clinical-files"
+      - "com.orthoplus.backup=required"
+  minio_backups:
+    driver: local
+    labels:
+      - "com.orthoplus.data=backup"
