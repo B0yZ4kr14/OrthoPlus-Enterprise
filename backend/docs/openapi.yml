@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: OrthoPlus API
+  version: 3.0.0
+  description: API do sistema OrthoPlus SaaS
+
+servers:
+  - url: /api
+
+paths:
+  /pacientes:
+    get:
+      summary: Listar pacientes
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        200:
+          description: Lista de pacientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          : '#/components/schemas/Patient'
+                      total:
+                        type: integer
+    post:
+      summary: Criar paciente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              : '#/components/schemas/CreatePatientRequest'
+      responses:
+        201:
+          description: Paciente criado
+
+  /pdv/vendas:
+    get:
+      summary: Listar vendas
+      responses:
+        200:
+          description: Lista de vendas
+    post:
+      summary: Criar venda
+      responses:
+        201:
+          description: Venda criada
+
+components:
+  schemas:
+    Patient:
+      type: object
+      properties:
+        id:
+          type: string
+        fullName:
+          type: string
+        cpf:
+          type: string
+        email:
+          type: string
+        statusCode:
+          type: string
+    
+    CreatePatientRequest:
+      type: object
+      required:
+        - fullName
+        - clinicId
+      properties:
+        fullName:
+          type: string
+        cpf:
+          type: string
+        email:
+          type: string

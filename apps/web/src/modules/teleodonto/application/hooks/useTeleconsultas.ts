@@ -1,0 +1,53 @@
+import { useAuth } from "@/contexts/AuthContext";
+import { apiClient } from "@/lib/api/apiClient";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+export const useTeleconsultas = () => {
+  const { clinicId } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { data: teleconsultas = [], isLoading } = useQuery({
+    queryKey: ["teleconsultas", clinicId],
+    queryFn: async () => {
+      if (!clinicId) return [];
+      const data = await apiClient.get<unknown[]>("/teleodonto/teleconsultas");
+      return data;
+    },
+    enabled: !!clinicId,
+  });
+
+  const createTeleconsulta = useMutation({
+    mutationFn: async (teleconsulta: unknown) => {
+      const response = await apiClient.post<unknown>(
+        "/teleodonto/teleconsultas",
+        teleconsulta,
+      );
+      return Array.isArray(response) ? response[0] : response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["teleconsultas", clinicId] });
+      toast.success("Teleconsulta agendada com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao agendar teleconsulta");
+    },
+  });
+
+  const updateStatus = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      await apiClient.patch(`/teleodonto/teleconsultas/${id}`, { status });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["teleconsultas", clinicId] });
+      toast.success("Status atualizado!");
+    },
+  });
+
+  return {
+    teleconsultas,
+    isLoading,
+    createTeleconsulta: createTeleconsulta.mutate,
+    updateStatus: updateStatus.mutate,
+  };
+};

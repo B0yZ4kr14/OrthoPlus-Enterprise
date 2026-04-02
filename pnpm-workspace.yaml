@@ -1,0 +1,5 @@
+packages:
+  - "categories/@orthoplus/*"
+  - "categories/@orthoplus/*/packages/*"
+  - "apps/*"
+  - "backend"

@@ -1,0 +1,36 @@
+name: Deploy to Proxmox VM200
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: deploy-proxmox
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HAS_HOST: ${{ secrets.PROXMOX_HOST != '' }}
+    steps:
+      - name: Checkout Code
+        if: env.HAS_HOST == 'true'
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        if: env.HAS_HOST == 'true'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROXMOX_HOST }}
+          username: ${{ secrets.PROXMOX_USER }}
+          key: ${{ secrets.PROXMOX_SSH_KEY }}
+          script: |
+            # Assuming Tailscale IP and VM id 200
+            ssh -o StrictHostKeyChecking=no root@100.123.253.1 "qm guest exec 200 -- bash -c 'cd /ortho-plus && git pull origin main && npm install && npm run build && pm2 restart all'"
+
+      - name: Skip deployment
+        if: env.HAS_HOST != 'true'
+        run: echo "⚠️ Deployment skipped - PROXMOX_HOST secret not configured"

@@ -1,0 +1,34 @@
+name: "CD: SaaS OrthoPlus Deployment"
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HAS_HOST: ${{ secrets.PROD_HOST != '' }}
+
+    steps:
+      - name: Deploy to VM 200
+        if: env.HAS_HOST == 'true'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: b0yz4kr14
+          key: ${{ secrets.PROD_SSH_KEY }}
+          port: 22
+          script: |
+            echo "Kicking off autonomous update routine..."
+            cd /home/b0yz4kr14
+            ./deploy.sh
+
+      - name: Skip deployment
+        if: env.HAS_HOST != 'true'
+        run: echo "⚠️ Deployment skipped - PROD_HOST secret not configured"

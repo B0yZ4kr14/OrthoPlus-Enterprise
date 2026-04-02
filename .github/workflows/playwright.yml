@@ -1,0 +1,57 @@
+name: Playwright E2E Tests (Staging)
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-staging-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-22.04
+    
+    # Needs Tailscale runner auth if we are hitting internal Tailnet IPs,
+    # but the instructions say the NGINX SSL is serving on Tailscale DNS.
+    # We will assume the runner has Tailscale configured or this is an internal runner.
+    
+    strategy:
+      matrix:
+        browser: [chromium]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install backend dependencies
+        run: cd backend && npm install --legacy-peer-deps
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run E2E tests against Staging
+        # Using the Tailscale endpoint for the E2E staging URL verification
+        run: npx playwright test --project=${{ matrix.browser }}
+        env:
+          CI: true
+          # Override the playwright config to point to staging
+          VITE_API_BASE_URL: https://saas-orthoplus.tailbda57.ts.net
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-results-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
