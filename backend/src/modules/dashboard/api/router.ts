@@ -4,7 +4,7 @@ import { DashboardController } from '../controllers/DashboardController';
 import { cacheRoute } from '@/infrastructure/redis/cacheRoute';
 
 export function createDashboardRouter(db?: IDatabaseConnection): Router {
-  const router = Router();
+  const router: Router = Router();
 
   if (!db) {
     // Without a database connection, return a stub router

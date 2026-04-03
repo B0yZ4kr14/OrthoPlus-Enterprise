@@ -2,7 +2,7 @@ import { Router } from "express";
 import { MarketingController } from "./controller";
 
 const controller = new MarketingController();
-const router = Router();
+const router: Router = Router();
 
 // Campanhas
 router.get("/campanhas", (req, res) => controller.listCampanhas(req, res));

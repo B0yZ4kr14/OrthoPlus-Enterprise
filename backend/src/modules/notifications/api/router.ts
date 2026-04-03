@@ -3,7 +3,7 @@ import { NotificationController } from "./notificationController";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 
-const router = Router();
+const router: Router = Router();
 const controller = new NotificationController();
 
 // GET / - List notifications for the authenticated user's clinic

@@ -35,7 +35,7 @@ const controller = new PacientesController(
 );
 
 // Router
-const router = Router();
+const router: Router = Router();
 
 // POST /api/pacientes - Cadastrar paciente
 router.post("/", (req, res) => controller.create(req, res));

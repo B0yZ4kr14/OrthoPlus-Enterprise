@@ -2,7 +2,7 @@ import { Router } from "express";
 import { FuncionariosController } from "./controller";
 
 const controller = new FuncionariosController();
-const router = Router();
+const router: Router = Router();
 
 router.get("/", (req, res) => controller.list(req, res));
 router.get("/:id", (req, res) => controller.getById(req, res));

@@ -3,7 +3,7 @@ import { PdvController } from './PdvController';
 import { PDVController as PDVDashboardController } from './controller';
 
 export function createPdvRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new PdvController();
   const dashboardCtrl = new PDVDashboardController();
 

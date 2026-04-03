@@ -2,7 +2,7 @@ import { Router } from "express";
 import { FidelidadeController } from "./controller";
 
 const controller = new FidelidadeController();
-const router = Router();
+const router: Router = Router();
 
 // Pontos
 router.get("/pontos", (req, res) => controller.getPoints(req, res));

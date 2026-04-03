@@ -9,7 +9,7 @@ import { Router } from 'express';
 import { NFeController } from './controller';
 
 export function createNfeRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new NFeController();
 
   router.get('/status', (req, res) => controller.status(req, res));

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { AnalyticsController } from "./analyticsController";
 import { cacheRoute } from "@/infrastructure/redis/cacheRoute";
 
-const router = Router();
+const router: Router = Router();
 const controller = new AnalyticsController();
 
 // Relatórios consolidados

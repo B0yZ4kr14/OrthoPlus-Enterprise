@@ -11,7 +11,7 @@ import {
   validateFiscalXml,
 } from "../controllers/fiscalController";
 
-const router = Router();
+const router: Router = Router();
 
 router.post("/nfce/autorizar", autorizarNfceSefaz);
 router.post("/nfce/carta-correcao", cartaCorrecaoNfce);

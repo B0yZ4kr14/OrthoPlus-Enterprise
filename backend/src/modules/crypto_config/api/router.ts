@@ -9,7 +9,7 @@ import { CryptoController } from "./CryptoController";
 import { VolatilityWorkerController } from "./volatilityWorker";
 
 export function createCryptoConfigRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new CryptoConfigController();
   const volatilityWorker = new VolatilityWorkerController();
 
@@ -48,7 +48,7 @@ export function createCryptoConfigRouter(): Router {
 }
 
 export function createCryptoRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new CryptoController();
 
   router.post("/convert", controller.convertCryptoToBrl);

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { TeleodontoController } from "./controller";
 
 const controller = new TeleodontoController();
-const router = Router();
+const router: Router = Router();
 
 // Teleconsultas CRUD
 router.get("/teleconsultas", (req, res) => controller.listTeleconsultas(req, res));

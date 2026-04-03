@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { manageAutomation } from "../controllers/estoqueController";
 
-const router = Router();
+const router: Router = Router();
 
 // Single entry point mapped matching Edge Function structure and encompassing 8 variants
 router.post("/automation", manageAutomation);

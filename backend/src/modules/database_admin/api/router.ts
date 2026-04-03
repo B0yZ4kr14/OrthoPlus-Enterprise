@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { DatabaseAdminController } from "./DatabaseAdminController";
 
-const router = Router();
+const router: Router = Router();
 const databaseAdminController = new DatabaseAdminController();
 
 // /api/db/maintenance

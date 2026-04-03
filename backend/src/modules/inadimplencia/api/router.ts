@@ -2,7 +2,7 @@ import { Router } from "express";
 import { InadimplenciaController } from "./controller";
 
 const controller = new InadimplenciaController();
-const router = Router();
+const router: Router = Router();
 
 // Inadimplentes
 router.get("/inadimplentes", (req, res) => controller.listInadimplentes(req, res));

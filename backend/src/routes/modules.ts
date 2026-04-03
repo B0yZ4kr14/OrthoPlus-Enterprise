@@ -9,7 +9,7 @@ import {
   exportClinicData
 } from "../controllers/moduleController";
 
-const modulesRouter = Router();
+const modulesRouter: Router = Router();
 
 // Module Management Routes
 modulesRouter.post("/apply-template", applyModuleTemplate);

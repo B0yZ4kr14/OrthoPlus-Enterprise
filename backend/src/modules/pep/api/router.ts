@@ -26,7 +26,7 @@ const odontogramaUpdateSchema = z.object({
 });
 
 export function createPepRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new PepController();
 
   // Prontuarios

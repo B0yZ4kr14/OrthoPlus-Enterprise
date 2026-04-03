@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 
-const router = Router();
+const router: Router = Router();
 
 // Full module catalog matching useModulos.ts expectations
 const MODULE_CATALOG = [

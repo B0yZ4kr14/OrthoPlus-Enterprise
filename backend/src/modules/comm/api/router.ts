@@ -12,7 +12,7 @@ import { Router } from "express";
 import { CommController } from "./CommController";
 
 const controller = new CommController();
-const router = Router();
+const router: Router = Router();
 
 // POST /api/comm/agora/token - Generate Video Token (from 'generate-video-token')
 router.post("/agora/token", (req, res) =>
