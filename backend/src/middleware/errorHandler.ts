@@ -101,6 +101,7 @@ export type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
 export class ApiError extends Error {
   public readonly status: number;
   public readonly code: ErrorCode;
+  public readonly title: string;
   public readonly type: string;
   public readonly errors?: ValidationError[];
   public readonly timestamp: string;
@@ -211,9 +212,6 @@ export function errorHandler(
   // Generate request ID for tracking
   const requestId = (err as ApiError).requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   
-  // Determine if it's an operational error we expect
-  const isOperationalError = err instanceof ApiError;
-  
   // Default error values
   let status = 500;
   let problemDetail: ProblemDetail;
@@ -224,7 +222,7 @@ export function errorHandler(
     problemDetail = err.toProblemDetail(req.originalUrl);
     
     // Log operational errors with context
-    logger.warn({
+    logger.warn(`Operational error: ${err.code}`, {
       requestId,
       code: err.code,
       status: err.status,
@@ -233,7 +231,7 @@ export function errorHandler(
       userAgent: req.headers["user-agent"],
       ip: req.ip,
       errors: err.errors,
-    }, `Operational error: ${err.code}`);
+    });
     
   } else {
     // Unexpected error - don't leak details to client
@@ -251,7 +249,7 @@ export function errorHandler(
     };
     
     // Log full error details for debugging
-    logger.error({
+    logger.error("Unexpected error occurred", {
       requestId,
       error: err.message,
       stack: err.stack,
@@ -261,7 +259,7 @@ export function errorHandler(
       query: req.query,
       userAgent: req.headers["user-agent"],
       ip: req.ip,
-    }, "Unexpected error occurred");
+    });
   }
   
   // Send response with proper content type

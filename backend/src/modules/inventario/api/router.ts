@@ -8,7 +8,7 @@ import { ProdutoRepositoryPostgres } from '../infrastructure/repositories/Produt
 import { InventarioController } from './InventarioController';
 
 export function createInventarioRouter(db?: IDatabaseConnection): Router {
-  const router = Router();
+  const router: Router = Router();
 
   const produtoRepository = db ? new ProdutoRepositoryPostgres(db) : undefined;
   const controller = new InventarioController(produtoRepository);

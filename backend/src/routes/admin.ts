@@ -6,7 +6,7 @@ import {
   globalSearch
 } from "../controllers/adminController";
 
-const adminRouter = Router();
+const adminRouter: Router = Router();
 
 // Define routes mapped to controller actions
 adminRouter.post("/create-root-user", createRootUser);

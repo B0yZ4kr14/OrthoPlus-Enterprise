@@ -2,7 +2,7 @@ import { Router } from "express";
 import { AuthController } from "./AuthController";
 
 export function createAuthRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new AuthController();
 
   router.post("/token", controller.login);

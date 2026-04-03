@@ -2,7 +2,7 @@ import { Router } from "express";
 import { SplitPagamentoController } from "./controller";
 
 const controller = new SplitPagamentoController();
-const router = Router();
+const router: Router = Router();
 
 // Config
 router.get("/config", (req, res) => controller.getConfig(req, res));

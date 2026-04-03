@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ContratosController } from "./controller";
 
 const controller = new ContratosController();
-const router = Router();
+const router: Router = Router();
 
 router.get("/", (req, res) => controller.list(req, res));
 router.get("/templates", (req, res) => controller.listTemplates(req, res));

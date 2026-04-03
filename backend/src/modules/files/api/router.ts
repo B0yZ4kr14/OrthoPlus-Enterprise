@@ -16,7 +16,7 @@ const upload = multer({ storage: storage });
 import { FilesController } from "./filesController";
 import { ReportController } from "./reportController";
 
-const router = Router();
+const router: Router = Router();
 const filesController = new FilesController();
 const reportController = new ReportController();
 

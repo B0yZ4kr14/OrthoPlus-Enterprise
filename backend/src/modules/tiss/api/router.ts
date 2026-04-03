@@ -2,7 +2,7 @@ import { Router } from "express";
 import { TISSController } from "./controller";
 
 const controller = new TISSController();
-const router = Router();
+const router: Router = Router();
 
 // Guias TISS
 router.get("/guias", (req, res) => controller.listGuias(req, res));

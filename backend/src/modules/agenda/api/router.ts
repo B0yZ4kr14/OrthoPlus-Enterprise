@@ -22,7 +22,7 @@ import {
   deleteDentistSchedule,
 } from "./agendaController";
 
-const router = Router();
+const router: Router = Router();
 
 // Appointments CRUD
 router.get("/appointments", getAppointments);

@@ -3,7 +3,7 @@ import { FaturamentoController } from "./FaturamentoController";
 import { GamificationWorkerController } from "./gamificationWorker";
 
 export function createFaturamentoRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new FaturamentoController();
 
   router.post("/nfes", (req, res) => controller.createNFe(req, res));

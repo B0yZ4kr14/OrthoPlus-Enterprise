@@ -13,7 +13,7 @@ export interface Patient {
   birthDate?: string;
   gender?: "M" | "F" | "O" | "N";
   maritalStatus?: MaritalStatus;
-  address?: Address;
+  address?: PatientAddress;
   emergencyContact?: EmergencyContact;
   healthInfo?: HealthInfo;
   dentalHistory?: DentalHistory;
@@ -32,7 +32,7 @@ export type MaritalStatus =
   | "widowed" 
   | "separated";
 
-export interface Address {
+export interface PatientAddress {
   street: string;
   number: string;
   complement?: string;
@@ -75,7 +75,7 @@ export interface CreatePatientRequest {
   cpf?: string;
   birthDate?: string;
   gender?: "M" | "F" | "O" | "N";
-  address?: Address;
+  address?: PatientAddress;
   emergencyContact?: EmergencyContact;
   healthInfo?: Partial<HealthInfo>;
 }

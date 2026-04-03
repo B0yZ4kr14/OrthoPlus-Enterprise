@@ -2,7 +2,7 @@ import { Router } from "express";
 import { BIController } from "./controller";
 
 const controller = new BIController();
-const router = Router();
+const router: Router = Router();
 
 // Dashboards
 router.get("/dashboards", (req, res) => controller.listDashboards(req, res));

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { AdminToolsController } from "./controller";
 
 const controller = new AdminToolsController();
-const router = Router();
+const router: Router = Router();
 
 // ADRs
 router.get("/adrs", (req, res) => controller.listADRs(req, res));

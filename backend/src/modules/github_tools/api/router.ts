@@ -6,7 +6,7 @@ import { Router } from 'express';
 import { GitHubToolsController } from './GitHubToolsController';
 
 export function createGitHubToolsRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new GitHubToolsController();
 
   router.get('/repositories', (req, res) => controller.listRepositories(req, res));

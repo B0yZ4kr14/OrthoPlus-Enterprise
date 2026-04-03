@@ -1,9 +1,9 @@
 import { logger } from '@/infrastructure/logger';
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { prisma } from "@/infrastructure/database/prismaClient";
-import { ApiError, Errors, asyncHandler } from "@/middleware/errorHandler";
+import { ApiError, Errors, ErrorCodes, asyncHandler } from "@/middleware/errorHandler";
 import type { LoginRequest, LoginResponse, User, JWTPayload } from "@orthoplus/shared-types";
 
 /**
@@ -360,7 +360,7 @@ export class AuthController {
 
         const clinicId = patient.clinic_id;
         if (!clinicId) {
-          throw new ApiError(403, "AUTH_NO_CLINIC", "No Clinic Assigned", "Patient has no clinic associated");
+          throw new ApiError(403, ErrorCodes.AUTH_NO_CLINIC, "No Clinic Assigned", "Patient has no clinic associated");
         }
 
         const patientEmail = `patient-${normalizedCpf}@portal`;

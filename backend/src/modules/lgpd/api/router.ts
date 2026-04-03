@@ -2,7 +2,7 @@ import { Router } from "express";
 import { LGPDController } from "./controller";
 
 const controller = new LGPDController();
-const router = Router();
+const router: Router = Router();
 
 // Consentimentos
 router.get("/consentimentos", (req, res) => controller.listConsentimentos(req, res));

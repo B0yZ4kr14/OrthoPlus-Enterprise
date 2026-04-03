@@ -5,7 +5,7 @@ import {
   sugerirSangriaIa,
 } from "../controllers/financeiroController";
 
-const router = Router();
+const router: Router = Router();
 
 router.post("/extratos/sync", sincronizarExtratoBancario);
 router.post("/caixa/sugerir-sangria-ia", sugerirSangriaIa);

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { backupController } from './backupController';
 
-const router = Router();
+const router: Router = Router();
 
 // Endpoint que emula a Edge Function 'backup-manager'
 // Gerencia deduplication, immutability, streaming, integrity-check, auto-config,

@@ -6,7 +6,7 @@ import { Router } from 'express';
 import { TerminalController } from './TerminalController';
 
 export function createTerminalRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new TerminalController();
 
   router.post('/sessions', (req, res) => controller.createSession(req, res));

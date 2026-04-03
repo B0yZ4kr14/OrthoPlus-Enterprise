@@ -2,7 +2,7 @@ import { Router } from "express";
 import { CRMController } from "./controller";
 
 const controller = new CRMController();
-const router = Router();
+const router: Router = Router();
 
 router.get("/leads", (req, res) => controller.listLeads(req, res));
 router.get("/leads/:id", (req, res) => controller.getLeadById(req, res));

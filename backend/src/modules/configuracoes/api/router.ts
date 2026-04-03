@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ModulosController } from "./ModulosController";
 
 export function createConfiguracoesRouter(): Router {
-  const router = Router();
+  const router: Router = Router();
   const controller = new ModulosController();
 
   router.get("/modulos", controller.getMyModules);

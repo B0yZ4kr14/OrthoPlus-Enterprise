@@ -12,6 +12,7 @@
     "predeploy": "node -e \"const r=(k)=>{if(!process.env[k])throw new Error('Missing env: '+k)};['JWT_SECRET','DATABASE_URL'].forEach(r);if(process.env.AUTH_ALLOW_MOCK==='true')throw new Error('AUTH_ALLOW_MOCK=true is not allowed in production');console.log('predeploy checks passed');\""
   },
   "dependencies": {
+    "@orthoplus/shared-types": "workspace:*",
     "@prisma/client": "^6.4.1",
     "axios": "^1.13.5",
     "bcrypt": "^6.0.0",

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { OrcamentosController } from "./controller";
 
 const controller = new OrcamentosController();
-const router = Router();
+const router: Router = Router();
 
 router.get("/", (req, res) => controller.list(req, res));
 router.get("/:id", (req, res) => controller.getById(req, res));
