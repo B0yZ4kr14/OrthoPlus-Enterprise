@@ -10,7 +10,7 @@ export default function PEPPage() {
       fallback={
         <LoadingState
           message="Carregando Prontuário Eletrônico..."
-          subMessage="Preparando módulos de odontograma e histórico"
+          message="Preparando módulos de odontograma e histórico"
           className="min-h-[60vh]"
         />
       }

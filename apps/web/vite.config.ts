@@ -43,20 +43,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks: (id: string) => {
-          if (!id.includes('node_modules')) return;
-          if (/react|react-dom|react-router/.test(id)) return 'vendor-core';
-          if (/radix-ui|class-variance-authority|clsx|tailwind-merge/.test(id)) return 'vendor-ui';
-          if (/recharts/.test(id)) return 'vendor-charts';
-          if (/react-hook-form|@hookform|zod/.test(id)) return 'vendor-forms';
-          if (/three|@react-three/.test(id)) return 'vendor-3d';
-          if (/date-fns|react-day-picker/.test(id)) return 'vendor-dates';
-          return 'vendor';
-        },
-      },
-    },
     cssCodeSplit: true,
     minify: 'esbuild',
     chunkSizeWarningLimit: 500,

@@ -53,6 +53,9 @@ import { createPdvRouter } from "./modules/pdv/api/router";
 import { createDashboardRouter } from "./modules/dashboard/api/router";
 import { createNfeRouter } from "./modules/nfe/api/router";
 
+// Agents Module — Integration with Agno Agent Service
+import { createAgentsRouter } from "./modules/agents/api/router";
+
 // Domain event handlers
 import { registerEventHandlers } from "./shared/events/EventRegistry";
 
@@ -195,6 +198,11 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 app.use(helmet());
 app.use(express.json({ limit: '10mb' }));
 
+// Health check (public - must be before authMiddleware)
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
+});
+
 // Auth middleware — populates req.clinicId from JWT for all routes
 app.use(authMiddleware);
 
@@ -202,11 +210,6 @@ app.use(authMiddleware);
 const authRouter = createAuthRouter();
 app.use("/auth/v1", authRouter);
 app.use("/api/auth", authRouter);
-
-// Health check
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
-});
 
 // Admin / System API routes (migrated from Edge Functions)
 app.use("/api/db", databaseRouter);
@@ -261,6 +264,9 @@ app.use("/api/inventario", createInventarioRouter());
 app.use("/api/dashboard", createDashboardRouter());
 app.use("/api/nfe", createNfeRouter());
 
+// Agents Module — Integration with Agno Agent Service (Python/FastAPI on port 8000)
+app.use("/api/agents", createAgentsRouter());
+
 // Legacy Edge Function redirect: /functions/v1/<fn> → /api/<fn>
 // Rewrites the URL and re-dispatches through the Express router stack.
 // Auth middleware already covers /functions/v1 paths (see authMiddleware isApiRoute check).
@@ -297,6 +303,7 @@ app.get("/api/clinics/:id/active-modules", tenantGuard, async (req, res) => {
       "TISS",
       "TELEODONTO",
       "IA",
+      "AGENTS",
       "FLUXO_DIGITAL",
       "DATABASE_ADMIN",
       "BACKUPS",

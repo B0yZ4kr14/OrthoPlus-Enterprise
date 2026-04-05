@@ -2,13 +2,19 @@ import { ModuleCard } from "./ModuleCard";
 import { groupModulesByCategory } from "@/core/config/modules.config";
 
 interface ModulesListProps {
-  modules: unknown[];
+  modules: Array<{
+    module_key: string;
+    name: string;
+    description?: string;
+    is_active: boolean;
+    icon?: string;
+  }>;
   toggling: string | null;
   onToggle: (moduleKey: string) => Promise<void>;
 }
 
 export function ModulesList({ modules, toggling, onToggle }: ModulesListProps) {
-  const categorizedModules = groupModulesByCategory(modules);
+  const categorizedModules = groupModulesByCategory(modules as any);
 
   return (
     <div className="space-y-8">

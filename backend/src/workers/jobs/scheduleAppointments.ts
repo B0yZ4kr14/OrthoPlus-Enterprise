@@ -2,7 +2,6 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import cron from "node-cron";
 
-
 // Replacing schedule-appointments edge function
 export const runScheduleAppointmentsJob = async () => {
   logger.info("Running scheduled appointments job...");
@@ -12,16 +11,17 @@ export const runScheduleAppointmentsJob = async () => {
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const appointments = await (prisma as any).appointments.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    // Converter datas para string ISO (campo start_time é String no schema)
+    const nowStr = now.toISOString();
+    const tomorrowStr = tomorrow.toISOString();
+
+    const appointments = await prisma.appointments.findMany({
       where: {
-        data_hora: {
-          gte: now,
-          lt: tomorrow,
+        start_time: {
+          gte: nowStr,
+          lt: tomorrowStr,
         },
         status: "AGENDADO",
-      },
-      include: {
-        patients: true,
       },
     });
 
@@ -29,11 +29,19 @@ export const runScheduleAppointmentsJob = async () => {
       `Found ${appointments.length} upcoming appointments. Supposed to send reminders.`,
     );
 
-    // 2. Logic to send Whatsapp/Email reminders goes here
+    // 2. Fetch patient data separately (sem relation definida no schema)
     for (const apt of appointments) {
-      if (apt.patients && apt.patients.celular) {
+      const patient = await prisma.patients.findUnique({
+        where: { id: apt.patient_id },
+        select: { phone_primary: true, full_name: true },
+      });
+
+      if (patient?.phone_primary) {
+        logger.info(
+          `Would send reminder to ${patient.full_name} at ${patient.phone_primary}`,
+        );
         // Send mock whatsapp
-        // await sendWhatsappWithMessage(apt.patients.celular, "Lembrete: Você tem consulta amanhã.");
+        // await sendWhatsappWithMessage(patient.phone_primary, `Lembrete: Você tem consulta amanhã às ${apt.start_time}.`);
       }
     }
   } catch (error) {

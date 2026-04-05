@@ -7,10 +7,13 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copiar package files
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Instalar pnpm
+RUN npm install -g pnpm@10.33.0
 
 # Instalar todas as dependências (incluindo devDependencies para o build)
-RUN npm ci --legacy-peer-deps
+RUN pnpm install --frozen-lockfile
 
 # Copiar código fonte
 COPY . .
@@ -20,7 +23,7 @@ ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 # Build da aplicação
-RUN npm run build
+RUN pnpm run build
 
 # Stage 2: Serve com nginx
 FROM nginx:1.25-alpine

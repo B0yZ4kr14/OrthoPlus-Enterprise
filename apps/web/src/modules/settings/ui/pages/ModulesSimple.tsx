@@ -101,7 +101,7 @@ const ModulesSimple = memo(function ModulesSimple() {
   const [showWizard, setShowWizard] = useState(false);
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [roadmapData, setRoadmapData] = useState<unknown>(null);
+  const [roadmapData, setRoadmapData] = useState<{ recommendation?: string[]; clinic_profile?: Record<string, unknown> } | null>(null);
   const [loadingRoadmap, setLoadingRoadmap] = useState(false);
 
   // ✅ FASE 2: Memoizar categorias agrupadas
@@ -116,10 +116,10 @@ const ModulesSimple = memo(function ModulesSimple() {
 
   const fetchModules = async () => {
     try {
-      const data: unknown = await apiClient.post(
+      const data = await apiClient.post<{ modules: Module[] }>(
         "/functions/v1/get-my-modules",
       );
-      setModules(data?.modules || []);
+      setModules(data?.modules ?? []);
     } catch (error) {
       logger.error("Erro ao carregar módulos", error);
       toast.error("Erro ao carregar módulos");
@@ -136,7 +136,7 @@ const ModulesSimple = memo(function ModulesSimple() {
     setToggling(moduleKey);
 
     try {
-      const data: unknown = await apiClient.post(
+      const data = await apiClient.post<{ cascade_activated?: number; message?: string }>(
         "/functions/v1/toggle-module-state",
         {
           module_key: moduleKey,
@@ -144,8 +144,8 @@ const ModulesSimple = memo(function ModulesSimple() {
       );
 
       // Mostrar mensagem customizada sobre ativação em cascata
-      if (data?.cascade_activated > 0) {
-        toast.success(data.message);
+      if ((data?.cascade_activated ?? 0) > 0) {
+        toast.success(data.message ?? "Módulos ativados!");
       } else {
         toast.success("Módulo atualizado com sucesso!");
       }
@@ -153,7 +153,7 @@ const ModulesSimple = memo(function ModulesSimple() {
       await fetchModules();
     } catch (error: unknown) {
       logger.error("Erro ao alternar módulo", error, { moduleKey });
-      toast.error(error.message || "Erro ao alterar módulo");
+      toast.error(error instanceof Error ? error.message : "Erro ao alterar módulo");
     } finally {
       setToggling(null);
     }
@@ -163,7 +163,7 @@ const ModulesSimple = memo(function ModulesSimple() {
     setLoadingRoadmap(true);
 
     try {
-      const data: unknown = await apiClient.post(
+      const data = await apiClient.post<{ recommendation?: string[]; clinic_profile?: Record<string, unknown> }>(
         "/functions/v1/recommend-module-sequence",
       );
 
@@ -172,7 +172,7 @@ const ModulesSimple = memo(function ModulesSimple() {
       toast.success("Roadmap de adoção gerado com sucesso!");
     } catch (error: unknown) {
       logger.error("Erro ao gerar roadmap", error);
-      toast.error(error.message || "Erro ao gerar roadmap de adoção");
+      toast.error(error instanceof Error ? error.message : "Erro ao gerar roadmap de adoção");
     } finally {
       setLoadingRoadmap(false);
     }
@@ -342,7 +342,7 @@ const ModulesSimple = memo(function ModulesSimple() {
                             >
                               {(() => {
                                 const Icon =
-                                  moduleIcons[module.module_key] || Settings;
+                                  (moduleIcons[module.module_key] || Settings) as React.ComponentType<{ className?: string }>;
                                 return (
                                   <Icon
                                     className={cn(
@@ -481,8 +481,8 @@ const ModulesSimple = memo(function ModulesSimple() {
 
           {roadmapData && (
             <ModuleAdoptionRoadmap
-              recommendation={roadmapData.recommendation}
-              clinicProfile={roadmapData.clinic_profile}
+              recommendation={roadmapData.recommendation as any}
+              clinicProfile={roadmapData.clinic_profile as any}
               onActivatePhase={handleActivatePhase}
             />
           )}

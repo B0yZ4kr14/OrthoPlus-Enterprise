@@ -24,6 +24,9 @@ import {
 
 const router: Router = Router();
 
+// Root route - lista appointments (alias para /appointments)
+router.get("/", getAppointments);
+
 // Appointments CRUD
 router.get("/appointments", getAppointments);
 router.get("/appointments/conflict", checkConflict);

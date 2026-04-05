@@ -30,7 +30,7 @@ export const useTISSGuides = () => {
   const createGuide = useMutation({
     mutationFn: async (guideData: unknown) => {
       const response = await apiClient.post<unknown>("/tiss/guias", {
-        ...guideData,
+        ...(guideData as Record<string, unknown>),
         created_by: user?.id,
       });
       return response;

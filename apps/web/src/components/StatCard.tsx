@@ -24,7 +24,14 @@ export function StatCard({
   alert,
 }: StatCardProps) {
   return (
-    <Card variant="metric" depth="normal" className={cn("p-6", borderColor)}>
+    <Card 
+      variant="metric" 
+      depth="normal" 
+      className={cn(
+        "p-6 transition-all duration-300 ease-out hover:shadow-card-hover hover:-translate-y-0.5",
+        borderColor
+      )}
+    >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
@@ -38,8 +45,8 @@ export function StatCard({
               className={cn(
                 "text-xs font-medium flex items-center gap-1",
                 trendPositive
-                  ? "text-green-600 dark:text-green-500"
-                  : "text-red-600 dark:text-red-500",
+                  ? "text-emerald-400"
+                  : "text-red-400",
               )}
             >
               <span>{trendPositive ? "↑" : "↓"}</span>
@@ -47,7 +54,7 @@ export function StatCard({
             </p>
           )}
           {alert && (
-            <p className="text-xs text-orange-600 dark:text-orange-500 font-medium flex items-center gap-1 mt-2">
+            <p className="text-xs text-amber-400 font-medium flex items-center gap-1 mt-2">
               <span>⚠️</span> {alert}
             </p>
           )}
@@ -55,6 +62,7 @@ export function StatCard({
         <div
           className={cn(
             "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg",
+            "transition-all duration-300 hover:shadow-glow-cyan hover:scale-105",
             iconColor,
           )}
         >

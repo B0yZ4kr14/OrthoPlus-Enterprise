@@ -87,11 +87,11 @@ export default function ModulesAdmin() {
 
   const fetchModules = async () => {
     try {
-      const data: unknown = await apiClient.post(
+      const data = await apiClient.post<{ modules: ModuleData[] }>(
         "/functions/v1/get-my-modules",
       );
       // A Edge Function retorna {modules: [...]}
-      setModules(data?.modules || []);
+      setModules(data?.modules ?? []);
     } catch (error) {
       console.error("Error fetching modules:", error);
       toast({
@@ -178,7 +178,7 @@ export default function ModulesAdmin() {
       }
 
       // Parse error message to show dependency info
-      const errorMsg = error.message || "Erro ao alterar estado do módulo";
+      const errorMsg = error instanceof Error ? error.message : "Erro ao alterar estado do módulo";
       toast({
         title: "Erro ao alterar módulo",
         description: errorMsg,
@@ -206,7 +206,7 @@ export default function ModulesAdmin() {
       console.error("Request error:", error);
       toast({
         title: "Erro ao solicitar módulo",
-        description: error.message || "Tente novamente mais tarde.",
+        description: error instanceof Error ? error.message : "Tente novamente mais tarde." || "Tente novamente mais tarde.",
         variant: "destructive",
       });
     }
@@ -291,7 +291,7 @@ export default function ModulesAdmin() {
       console.error("Import error:", error);
       toast({
         title: "Erro ao importar",
-        description: error.message || "Verifique o formato do arquivo.",
+        description: error instanceof Error ? error.message : "Verifique o formato do arquivo.",
         variant: "destructive",
       });
     }
@@ -319,7 +319,7 @@ export default function ModulesAdmin() {
         },
       );
 
-      setSuggestions(data.suggestions || []);
+      setSuggestions((data as { suggestions?: string[] }).suggestions ?? []);
       toast({
         title: "Sugestões geradas!",
         description: "Confira as recomendações de módulos abaixo.",
@@ -328,7 +328,7 @@ export default function ModulesAdmin() {
       console.error("Suggestions error:", error);
       toast({
         title: "Erro ao gerar sugestões",
-        description: error.message || "Tente novamente mais tarde.",
+        description: error instanceof Error ? error.message : "Tente novamente mais tarde." || "Tente novamente mais tarde.",
         variant: "destructive",
       });
     } finally {

@@ -45,7 +45,7 @@ export default function QuickChart() {
   const { data: tratamentos = [] } = useQuery({
     queryKey: ["tratamentos-ativos", patient?.id],
     queryFn: async () => {
-      if (!patient?.id) return [];
+      if (!(patient as { id?: string })?.id) return [];
 
       const data = await apiClient.get<unknown[]>(
         `/pep/tratamentos?prontuario_id=${patient.id}&status=EM_ANDAMENTO`,
@@ -69,7 +69,7 @@ export default function QuickChart() {
           </Button>
           <div>
             <h1 className="text-2xl font-bold">
-              {patient?.patient_name || "Carregando..."}
+              {(patient as { patient_name?: string })?.patient_name || "Carregando..."}
             </h1>
             <p className="text-sm text-muted-foreground">
               Quick Chart - Atendimento Rápido
@@ -197,21 +197,21 @@ export default function QuickChart() {
                     </Card>
                   ) : (
                     tratamentos.map((trat: unknown) => (
-                      <Card key={trat.id}>
+                      <Card key={(trat as { id: string }).id}>
                         <CardHeader>
                           <CardTitle className="text-base">
-                            {trat.procedimento?.nome || "Procedimento"}
+                            {(trat as { procedimento?: { nome?: string } }).procedimento?.nome || "Procedimento"}
                           </CardTitle>
                           <CardDescription>
                             Código TUSS:{" "}
-                            {trat.procedimento?.codigo_tuss || "N/A"}
+                            {(trat as { procedimento?: { codigo_tuss?: string } }).procedimento?.codigo_tuss || "N/A"}
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center justify-between">
-                            <Badge>{trat.status}</Badge>
+                            <Badge>{(trat as { status?: string }).status}</Badge>
                             <span className="text-sm text-muted-foreground">
-                              Dente: {trat.dente || "Múltiplos"}
+                              Dente: {(trat as { dente?: string }).dente || "Múltiplos"}
                             </span>
                           </div>
                         </CardContent>

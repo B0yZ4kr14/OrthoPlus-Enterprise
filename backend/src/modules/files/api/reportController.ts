@@ -49,12 +49,23 @@ export class ReportController {
       };
 
       if (options.includeModules) {
-        exportData.data.modules = await (prisma as any).clinic_modules.findMany( // eslint-disable-line @typescript-eslint/no-explicit-any
-          {
-            where: { clinic_id: clinicId },
-            include: { module_catalog: true },
-          },
-        );
+        const clinicModules = await (prisma as any).clinic_modules.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+          where: { clinic_id: clinicId },
+        });
+        
+        // Buscar module_catalog separadamente (sem relation no schema)
+        const moduleCatalogIds = clinicModules.map((m: { module_catalog_id: number }) => m.module_catalog_id);
+        const moduleCatalogs = moduleCatalogIds.length > 0 
+          ? await (prisma as any).module_catalog.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+              where: { id: { in: moduleCatalogIds } },
+            })
+          : [];
+        
+        // Mapear para incluir dados do catalog
+        exportData.data.modules = clinicModules.map((cm: { module_catalog_id: number; [key: string]: unknown }) => ({
+          ...cm,
+          module_catalog: moduleCatalogs.find((mc: { id: number }) => mc.id === cm.module_catalog_id),
+        }));
       }
 
       if (options.includePatients) {

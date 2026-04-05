@@ -58,7 +58,7 @@ export function useSplit() {
 
     try {
       await apiClient.post("/split/config", {
-        ...configData,
+        ...(configData as Record<string, unknown>),
         clinic_id: selectedClinic,
       });
 
