@@ -21,8 +21,8 @@ export default function ProfileSettings() {
 
   useEffect(() => {
     if (user && "user_metadata" in user) {
-      setFullName(user.user_metadata?.full_name || "");
-      setAvatarUrl(user.user_metadata?.avatar_url || null);
+      setFullName((user.user_metadata?.full_name as string) ?? "");
+      setAvatarUrl((user.user_metadata?.avatar_url as string | null) ?? null);
     }
   }, [user]);
 
@@ -49,7 +49,7 @@ export default function ProfileSettings() {
       console.error("Erro ao salvar:", error);
       toast({
         title: "Erro ao salvar",
-        description: error.message,
+        description: error instanceof Error ? error.message : "Erro ao salvar perfil",
         variant: "destructive",
       });
     } finally {

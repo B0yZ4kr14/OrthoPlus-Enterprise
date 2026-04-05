@@ -28,12 +28,12 @@ export class PacientesController {
     try {
       const user = req.user;
 
-      // Build the full DTO from request body.
-      // NOTE: The CommandBus cannot be used correctly here because this codebase's
-      // CQRS implementation conflates the command handler class with the command DTO
-      // (both share the same constructor name, which the bus uses for routing).
-      // We call the command handler directly — the same pattern used by
-      // PatientCommandController (api/commands/PatientCommandController.ts).
+      /* Build the full DTO from request body.
+         NOTE: The CommandBus cannot be used correctly here because this codebase's
+         CQRS implementation conflates the command handler class with the command DTO
+         (both share the same constructor name, which the bus uses for routing).
+         We call the command handler directly — the same pattern used by
+         PatientCommandController (api/commands/PatientCommandController.ts). */
       const data: CreatePatientDTO = {
         fullName: req.body.fullName,
         email: req.body.email,

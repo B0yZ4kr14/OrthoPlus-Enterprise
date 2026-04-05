@@ -5,64 +5,92 @@ import { prisma } from '@/infrastructure/database/prismaClient';
 
 export class PatientRepositoryPostgres implements IPatientRepository {
   async findById(id: string, clinicId: string): Promise<Patient | null> {
-    const result = await prisma.$queryRaw<any[]>`SELECT * FROM pacientes.patients WHERE id = ${id} AND clinic_id = ${clinicId} LIMIT 1`;
-    return result[0] ? this.mapToEntity(result[0]) : null;
+    const result = await prisma.patients.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
+    return result ? this.mapToEntity(result) : null;
   }
 
   async findByCPF(cpf: string, clinicId: string): Promise<Patient | null> {
-    const result = await prisma.$queryRaw<any[]>`SELECT * FROM pacientes.patients WHERE cpf = ${cpf} AND clinic_id = ${clinicId} LIMIT 1`;
-    return result[0] ? this.mapToEntity(result[0]) : null;
+    const result = await prisma.patients.findFirst({
+      where: { cpf, clinic_id: clinicId },
+    });
+    return result ? this.mapToEntity(result) : null;
   }
 
   async findByEmail(email: string, clinicId: string): Promise<Patient | null> {
-    const result = await prisma.$queryRaw<any[]>`SELECT * FROM pacientes.patients WHERE email = ${email} AND clinic_id = ${clinicId} LIMIT 1`;
-    return result[0] ? this.mapToEntity(result[0]) : null;
+    const result = await prisma.patients.findFirst({
+      where: { email, clinic_id: clinicId },
+    });
+    return result ? this.mapToEntity(result) : null;
   }
 
   async findAll(options: FindAllOptions): Promise<{ items: Patient[]; total: number }> {
     const skip = options.skip ?? 0;
     const take = options.take ?? 50;
-    const searchPattern = options.searchTerm ? `%${options.searchTerm}%` : null;
-    const rows = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-      SELECT * FROM pacientes.patients
-      WHERE clinic_id = ${options.clinicId}
-        AND (${options.status ?? null}::text IS NULL OR status_code = ${options.status ?? null})
-        AND (${searchPattern}::text IS NULL OR full_name ILIKE ${searchPattern})
-      ORDER BY created_at DESC
-      LIMIT ${take} OFFSET ${skip}
-    `;
-    const countRows = await prisma.$queryRaw<{ count: bigint }[]>`
-      SELECT COUNT(*) as count FROM pacientes.patients
-      WHERE clinic_id = ${options.clinicId}
-        AND (${options.status ?? null}::text IS NULL OR status_code = ${options.status ?? null})
-        AND (${searchPattern}::text IS NULL OR full_name ILIKE ${searchPattern})
-    `;
+    
+    const whereClause: Record<string, unknown> = {
+      clinic_id: options.clinicId,
+    };
+    
+    if (options.status) {
+      whereClause.status = options.status;
+    }
+    
+    if (options.searchTerm) {
+      whereClause.full_name = { contains: options.searchTerm, mode: 'insensitive' };
+    }
+
+    const [rows, countResult] = await Promise.all([
+      prisma.patients.findMany({
+        where: whereClause,
+        orderBy: { created_at: 'desc' },
+        skip,
+        take,
+      }),
+      prisma.patients.count({ where: whereClause }),
+    ]);
+
     return {
       items: rows.map(r => this.mapToEntity(r)),
-      total: Number(countRows[0]?.count ?? 0),
+      total: countResult,
     };
   }
 
   async findMany(filters: PatientFilters, pagination: PaginationOptions): Promise<PaginatedResult<Patient>> {
     const skip = (pagination.page - 1) * pagination.limit;
-    const searchPattern = filters.searchTerm ? `%${filters.searchTerm}%` : null;
-    const rows = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-      SELECT * FROM pacientes.patients
-      WHERE clinic_id = ${filters.clinicId}
-        AND (${filters.statusCode ?? null}::text IS NULL OR status_code = ${filters.statusCode ?? null})
-        AND (${searchPattern}::text IS NULL OR full_name ILIKE ${searchPattern})
-        AND (${filters.isActive ?? null}::boolean IS NULL OR is_active = ${filters.isActive ?? null})
-      ORDER BY created_at DESC
-      LIMIT ${pagination.limit} OFFSET ${skip}
-    `;
-    const countRows = await prisma.$queryRaw<{ count: bigint }[]>`
-      SELECT COUNT(*) as count FROM pacientes.patients
-      WHERE clinic_id = ${filters.clinicId}
-        AND (${filters.statusCode ?? null}::text IS NULL OR status_code = ${filters.statusCode ?? null})
-        AND (${searchPattern}::text IS NULL OR full_name ILIKE ${searchPattern})
-        AND (${filters.isActive ?? null}::boolean IS NULL OR is_active = ${filters.isActive ?? null})
-    `;
-    const total = Number(countRows[0]?.count ?? 0);
+    
+    const whereClause: Record<string, unknown> = {
+      clinic_id: filters.clinicId,
+    };
+    
+    if (filters.statusCode) {
+      whereClause.status = filters.statusCode;
+    }
+    
+    if (filters.searchTerm) {
+      whereClause.full_name = { contains: filters.searchTerm, mode: 'insensitive' };
+    }
+    
+    // is_active não existe no schema - filtrar por status se necessário
+    if (filters.isActive !== undefined && filters.isActive !== null) {
+      const activeStatuses = ['TRATAMENTO', 'CONTENCAO', 'ERUPCAO', 'PROSPECT'];
+      const inactiveStatuses = ['INATIVO', 'ABANDONO', 'CANCELADO', 'CONCLUIDO'];
+      whereClause.status = filters.isActive 
+        ? { in: activeStatuses }
+        : { in: inactiveStatuses };
+    }
+
+    const [rows, total] = await Promise.all([
+      prisma.patients.findMany({
+        where: whereClause,
+        orderBy: { created_at: 'desc' },
+        skip,
+        take: pagination.limit,
+      }),
+      prisma.patients.count({ where: whereClause }),
+    ]);
+
     return {
       data: rows.map(r => this.mapToEntity(r)),
       total,
@@ -73,77 +101,119 @@ export class PatientRepositoryPostgres implements IPatientRepository {
   }
 
   async countByStatus(clinicId: string): Promise<Record<string, number>> {
-    const rows = await prisma.$queryRaw<{ status_code: string; count: bigint }[]>`
-      SELECT status_code, COUNT(*) as count FROM pacientes.patients
-      WHERE clinic_id = ${clinicId}
-      GROUP BY status_code
-    `;
-    return Object.fromEntries(rows.map(r => [r.status_code, Number(r.count)]));
+    const rows = await prisma.patients.groupBy({
+      by: ['status'],
+      where: { clinic_id: clinicId },
+      _count: { status: true },
+    });
+    return Object.fromEntries(rows.map(r => [r.status, r._count.status]));
   }
 
   async getStats(clinicId: string): Promise<PatientStats> {
     const now = new Date();
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-    const total = await prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*) as count FROM pacientes.patients WHERE clinic_id = ${clinicId}`;
-    const ativos = await prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*) as count FROM pacientes.patients WHERE clinic_id = ${clinicId} AND is_active = true`;
-    const inativos = await prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*) as count FROM pacientes.patients WHERE clinic_id = ${clinicId} AND is_active = false`;
-    const novos = await prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*) as count FROM pacientes.patients WHERE clinic_id = ${clinicId} AND created_at >= ${firstDay}::timestamptz`;
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const activeStatuses = ['TRATAMENTO', 'CONTENCAO', 'ERUPCAO', 'PROSPECT'];
+    const inactiveStatuses = ['INATIVO', 'ABANDONO', 'CANCELADO', 'CONCLUIDO'];
+    
+    const [total, ativos, inativos, novos] = await Promise.all([
+      prisma.patients.count({ where: { clinic_id: clinicId } }),
+      prisma.patients.count({ where: { clinic_id: clinicId, status: { in: activeStatuses } } }),
+      prisma.patients.count({ where: { clinic_id: clinicId, status: { in: inactiveStatuses } } }),
+      prisma.patients.count({ 
+        where: { 
+          clinic_id: clinicId, 
+          created_at: { gte: firstDay } 
+        } 
+      }),
+    ]);
+
     return {
-      total: Number(total[0]?.count ?? 0),
-      ativos: Number(ativos[0]?.count ?? 0),
-      inativos: Number(inativos[0]?.count ?? 0),
+      total,
+      ativos,
+      inativos,
       arquivados: 0,
-      novosEsteMes: Number(novos[0]?.count ?? 0),
+      novosEsteMes: novos,
     };
   }
 
   async saveStatusHistory(patientId: string, fromStatus: string | null, toStatus: string, reason: string, changedBy: string, metadata?: Record<string, unknown>): Promise<void> {
-    const metadataJson = JSON.stringify(metadata ?? {});
-    await prisma.$executeRaw`
-      INSERT INTO pacientes.patient_status_history (patient_id, from_status, to_status, reason, changed_by, metadata, changed_at)
-      VALUES (${patientId}, ${fromStatus}, ${toStatus}, ${reason}, ${changedBy}, ${metadataJson}::jsonb, NOW())
-    `;
+    await prisma.patient_status_history.create({
+      data: {
+        patient_id: patientId,
+        from_status: fromStatus,
+        to_status: toStatus,
+        reason,
+        changed_by: changedBy,
+        notes: metadata ? JSON.stringify(metadata) : null,
+        changed_at: new Date().toISOString(),
+      },
+    });
   }
 
   async getStatusHistory(patientId: string): Promise<unknown[]> {
-    return prisma.$queryRaw<unknown[]>`SELECT * FROM pacientes.patient_status_history WHERE patient_id = ${patientId} ORDER BY changed_at DESC`;
+    return prisma.patient_status_history.findMany({
+      where: { patient_id: patientId },
+      orderBy: { changed_at: 'desc' },
+    });
   }
 
   async exists(id: string, clinicId: string): Promise<boolean> {
-    const rows = await prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*) as count FROM pacientes.patients WHERE id = ${id} AND clinic_id = ${clinicId}`;
-    return Number(rows[0]?.count ?? 0) > 0;
+    const count = await prisma.patients.count({
+      where: { id, clinic_id: clinicId },
+    });
+    return count > 0;
   }
 
   async save(patient: Patient): Promise<void> {
-    await prisma.$executeRaw`
-      INSERT INTO pacientes.patients (id, clinic_id, full_name, cpf, email, status_code, is_active, created_at, updated_at)
-      VALUES (${patient.id}, ${patient.clinicId}, ${patient.fullName}, ${patient.cpf ?? null}, ${patient.email ?? null}, ${patient.statusCode}, ${patient.isActive}, ${patient.createdAt}, ${patient.updatedAt})
-    `;
+    await prisma.patients.create({
+      data: {
+        id: patient.id,
+        clinic_id: patient.clinicId,
+        full_name: patient.fullName,
+        cpf: patient.cpf ?? null,
+        email: patient.email ?? null,
+        status: patient.statusCode,
+        birth_date: new Date().toISOString(),
+        phone_primary: '',
+        created_at: patient.createdAt,
+        updated_at: patient.updatedAt,
+      },
+    });
   }
 
   async update(patient: Patient): Promise<void> {
-    await prisma.$executeRaw`
-      UPDATE pacientes.patients
-      SET full_name = ${patient.fullName}, cpf = ${patient.cpf ?? null}, email = ${patient.email ?? null}, status_code = ${patient.statusCode}, is_active = ${patient.isActive}, updated_at = ${patient.updatedAt}
-      WHERE id = ${patient.id} AND clinic_id = ${patient.clinicId}
-    `;
+    await prisma.patients.updateMany({
+      where: { id: patient.id, clinic_id: patient.clinicId },
+      data: {
+        full_name: patient.fullName,
+        cpf: patient.cpf ?? null,
+        email: patient.email ?? null,
+        status: patient.statusCode,
+        updated_at: patient.updatedAt,
+      },
+    });
   }
 
   async delete(id: string, clinicId: string): Promise<void> {
-    await prisma.$executeRaw`UPDATE pacientes.patients SET is_active = false, updated_at = NOW() WHERE id = ${id} AND clinic_id = ${clinicId}`;
+    await prisma.patients.updateMany({
+      where: { id, clinic_id: clinicId },
+      data: { status: 'INATIVO', updated_at: new Date() },
+    });
   }
 
   private mapToEntity(row: Record<string, unknown>): Patient {
+    const statusCode = (row.status as string) ?? 'PROSPECT';
+    const activeStatuses = ['TRATAMENTO', 'CONTENCAO', 'ERUPCAO', 'PROSPECT'];
     return Patient.reconstitute({
       id: row.id as string,
       clinicId: row.clinic_id as string,
       fullName: row.full_name as string,
       cpf: row.cpf as string | undefined,
       email: row.email as string | undefined,
-      status: PatientStatus.fromCode((row.status_code as string) ?? 'PROSPECT'),
-      isActive: (row.is_active as boolean) ?? true,
-      createdAt: row.created_at as Date,
-      updatedAt: row.updated_at as Date,
+      status: PatientStatus.fromCode(statusCode),
+      isActive: activeStatuses.includes(statusCode),
+      createdAt: new Date(row.created_at as string),
+      updatedAt: new Date(row.updated_at as string),
     });
   }
 }

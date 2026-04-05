@@ -2,6 +2,37 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
+  safelist: [
+    // Cores de background para tema dark
+    "bg-slate-950",
+    "bg-slate-900",
+    "bg-slate-900/80",
+    "bg-slate-800",
+    "bg-slate-800/50",
+    "bg-slate-700",
+    "bg-slate-400",
+    // Cores de texto
+    "text-white",
+    "text-slate-300",
+    "text-slate-400",
+    "text-slate-500",
+    "text-cyan-400",
+    "text-cyan-500",
+    // Cores de borda
+    "border-slate-700",
+    "border-slate-800",
+    // Cores de foco
+    "focus:border-cyan-500",
+    "focus:ring-cyan-500/20",
+    // Gradientes
+    "from-cyan-500",
+    "to-blue-600",
+    "hover:from-cyan-600",
+    "hover:to-blue-700",
+    // Sombras
+    "shadow-cyan-500/10",
+    "shadow-cyan-500/25",
+  ],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",

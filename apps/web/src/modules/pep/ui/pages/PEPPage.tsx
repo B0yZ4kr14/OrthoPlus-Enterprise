@@ -106,11 +106,11 @@ export default function PEPPage() {
       // Criar tratamentos usando o Use Case via hook customizado
       for (const suggestion of suggestions) {
         await createTratamento({
-          titulo: suggestion.procedure,
+          titulo: (suggestion as { procedure?: string }).procedure,
           descricao:
-            suggestion.clinical_notes ||
-            `Tratamento para o dente ${suggestion.tooth_number}`,
-          denteCodigo: suggestion.tooth_number,
+            (suggestion as { clinical_notes?: string }).clinical_notes ||
+            `Tratamento para o dente ${(suggestion as { tooth_number?: number }).tooth_number}`,
+          denteCodigo: (suggestion as { tooth_number?: number }).tooth_number,
           dataInicio: new Date(),
           createdBy: user.id,
         });
@@ -125,7 +125,7 @@ export default function PEPPage() {
     } catch (error: unknown) {
       toast({
         title: "Erro ao criar tratamentos",
-        description: error.message,
+        description: error instanceof Error ? error.message : "Erro",
         variant: "destructive",
       });
     }

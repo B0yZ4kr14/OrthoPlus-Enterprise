@@ -1,4 +1,20 @@
 import { useState } from "react";
+
+interface ScheduledBackupConfig {
+  id: string;
+  name: string;
+  frequency: string;
+  next_run_at: string;
+  last_run_at?: string;
+  enabled: boolean;
+  include_patients?: boolean;
+  include_clinical_history?: boolean;
+  include_appointments?: boolean;
+  include_financial?: boolean;
+  compression_enabled?: boolean;
+  encryption_enabled?: boolean;
+  cloud_upload_enabled?: boolean;
+}
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -24,7 +40,7 @@ import {
 
 export default function ScheduledBackupsManagement() {
   const [wizardOpen, setWizardOpen] = useState(false);
-  const [backupToEdit, setBackupToEdit] = useState<unknown>(null);
+  const [backupToEdit, setBackupToEdit] = useState<ScheduledBackupConfig | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [backupToDelete, setBackupToDelete] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -32,7 +48,7 @@ export default function ScheduledBackupsManagement() {
   const { data: scheduledBackups, isLoading } = useQuery({
     queryKey: ["scheduled-backups"],
     queryFn: async () => {
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<ScheduledBackupConfig[]>(
         "/configuracoes/backups/agendados",
         {},
       );
@@ -75,7 +91,7 @@ export default function ScheduledBackupsManagement() {
     toggleMutation.mutate({ id, enabled: !currentEnabled });
   };
 
-  const handleEdit = (backup: unknown) => {
+  const handleEdit = (backup: ScheduledBackupConfig) => {
     setBackupToEdit(backup);
     setWizardOpen(true);
   };
@@ -100,7 +116,7 @@ export default function ScheduledBackupsManagement() {
     return labels[frequency] || frequency;
   };
 
-  const getStatusBadge = (backup: unknown) => {
+  const getStatusBadge = (backup: ScheduledBackupConfig) => {
     if (!backup.enabled) {
       return <Badge variant="secondary">Pausado</Badge>;
     }

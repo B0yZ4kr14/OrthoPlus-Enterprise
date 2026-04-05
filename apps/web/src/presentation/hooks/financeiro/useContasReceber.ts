@@ -101,8 +101,8 @@ export function useContasReceber() {
       await receberContaUseCase.execute({
         contaId,
         dataPagamento: new Date(),
-        valorPago,
-        formaPagamento,
+        valorPago: valorPago ?? 0,
+        formaPagamento: formaPagamento ?? "",
       });
 
       await loadContas();

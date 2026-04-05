@@ -69,6 +69,9 @@ export function createFinanceiroRouter(): Router {
   // Analytics
   router.get('/cash-flow', (req, res) => c.getCashFlow(req, res));
 
+  // Resumo Financeiro
+  router.get('/resumo', (req, res) => c.getResumo(req, res));
+
   // Legacy Financeiro Jobs/Mocks
   router.post("/extratos/sync", c.sincronizarExtratoBancario);
   router.post("/caixa/sugerir-sangria-ia", c.sugerirSangriaIa);

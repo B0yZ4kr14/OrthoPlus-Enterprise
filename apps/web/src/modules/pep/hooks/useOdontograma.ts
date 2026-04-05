@@ -69,19 +69,19 @@ export const useOdontograma = (prontuarioId: string) => {
             lingual: "higido",
           };
 
-          if (tooth.surfaces || tooth.pep_tooth_surfaces) {
-            const surfaceList = tooth.surfaces || tooth.pep_tooth_surfaces;
+          if ((tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).surfaces || (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).pep_tooth_surfaces) {
+            const surfaceList = (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).surfaces || (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).pep_tooth_surfaces;
             surfaceList.forEach((surface: unknown) => {
-              surfaces[surface.surface] = surface.status;
+              surfaces[(surface as { surface: string }).surface] = (surface as { status: string }).status;
             });
           }
 
-          processedTeeth[tooth.tooth_number] = {
-            number: tooth.tooth_number,
-            status: tooth.status,
-            notes: tooth.notes,
+          processedTeeth[(tooth as { tooth_number: string }).tooth_number] = {
+            number: (tooth as { tooth_number: string }).tooth_number,
+            status: (tooth as { status: string }).status,
+            notes: (tooth as { notes?: string }).notes,
             surfaces,
-            updatedAt: tooth.updated_at,
+            updatedAt: (tooth as { updated_at?: string }).updated_at,
           };
         });
       } else {
@@ -96,11 +96,11 @@ export const useOdontograma = (prontuarioId: string) => {
       if (historyData) {
         const processedHistory: OdontogramaHistoryEntry[] = historyData.map(
           (entry: unknown) => ({
-            id: entry.id,
-            timestamp: entry.created_at,
-            teeth: entry.snapshot_data,
-            changedTeeth: entry.changed_teeth || [],
-            description: entry.description,
+            id: (entry as { id: string }).id,
+            timestamp: (entry as { created_at: string }).created_at,
+            teeth: (entry as { snapshot_data: unknown }).snapshot_data,
+            changedTeeth: (entry as { changed_teeth?: unknown[] }).changed_teeth || [],
+            description: (entry as { description?: string }).description,
           }),
         );
         setHistory(processedHistory);

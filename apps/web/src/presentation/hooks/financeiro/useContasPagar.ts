@@ -105,8 +105,8 @@ export function useContasPagar() {
       await pagarContaUseCase.execute({
         contaId,
         dataPagamento: new Date(),
-        valorPago,
-        formaPagamento,
+        valorPago: valorPago ?? 0,
+        formaPagamento: formaPagamento ?? "",
       });
 
       await loadContas();

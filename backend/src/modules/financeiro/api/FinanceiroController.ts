@@ -928,11 +928,29 @@ export class FinanceiroController {
       const where: any = { clinic_id: clinicId }; // eslint-disable-line @typescript-eslint/no-explicit-any
       if (start_date) where.created_at = { gte: new Date(start_date as string) };
 
-      const data = await (prisma as any).pdv_vendas.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const vendas = await (prisma as any).pdv_vendas.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where,
-        include: { pdv_venda_itens: true, pdv_pagamentos: true },
         orderBy: { created_at: "desc" },
       });
+      
+      // Buscar itens e pagamentos separadamente (sem relation no schema)
+      const vendaIds = vendas.map((v: { id: string }) => v.id);
+      const [itens, pagamentos] = await Promise.all([
+        vendaIds.length > 0 
+          ? (prisma as any).pdv_venda_itens.findMany({ where: { venda_id: { in: vendaIds } } }) // eslint-disable-line @typescript-eslint/no-explicit-any
+          : Promise.resolve([]),
+        vendaIds.length > 0
+          ? (prisma as any).pdv_pagamentos.findMany({ where: { venda_id: { in: vendaIds } } }) // eslint-disable-line @typescript-eslint/no-explicit-any
+          : Promise.resolve([]),
+      ]);
+      
+      // Mapear para incluir relações
+      const data = vendas.map((v: { id: string; [key: string]: unknown }) => ({
+        ...v,
+        pdv_venda_itens: itens.filter((i: { venda_id: string }) => i.venda_id === v.id),
+        pdv_pagamentos: pagamentos.filter((p: { venda_id: string }) => p.venda_id === v.id),
+      }));
+      
       res.json(data);
     } catch (error) {
       logger.error("Error listing vendas PDV", { error });
@@ -985,6 +1003,65 @@ export class FinanceiroController {
       res.json(data);
     } catch (error) {
       logger.error("Error updating extrato", { error });
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  // ═══════════════════ RESUMO FINANCEIRO ═══════════════════
+
+  async getResumo(req: Request, res: Response): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
+
+      // const hoje = new Date(); // Unused - reserved for future date filtering
+
+      const [
+        totalReceitas,
+        totalDespesas,
+        contasReceberPendentes,
+        contasPagarPendentes,
+        caixasAbertos,
+      ] = await Promise.all([
+        prisma.financial_transactions.aggregate({
+          where: { clinic_id: clinicId, type: "RECEITA", status: "PAGO" },
+          _sum: { amount: true },
+        }),
+        prisma.financial_transactions.aggregate({
+          where: { clinic_id: clinicId, type: "DESPESA", status: "PAGO" },
+          _sum: { amount: true },
+        }),
+        prisma.contas_receber.aggregate({
+          where: { clinic_id: clinicId, status: { not: "PAGO" } },
+          _sum: { valor: true },
+          _count: { id: true },
+        }),
+        prisma.contas_pagar.aggregate({
+          where: { clinic_id: clinicId, status: { not: "PAGO" } },
+          _sum: { valor: true },
+          _count: { id: true },
+        }),
+        (prisma as any).cash_registers.count({
+          where: { clinic_id: clinicId, status: "ABERTO" },
+        }),
+      ]);
+
+      res.json({
+        saldoGeral: (totalReceitas._sum.amount || 0) - (totalDespesas._sum.amount || 0),
+        totalReceitas: totalReceitas._sum.amount || 0,
+        totalDespesas: totalDespesas._sum.amount || 0,
+        contasReceber: {
+          total: contasReceberPendentes._sum.valor || 0,
+          quantidade: contasReceberPendentes._count?.id || 0,
+        },
+        contasPagar: {
+          total: contasPagarPendentes._sum.valor || 0,
+          quantidade: contasPagarPendentes._count?.id || 0,
+        },
+        caixasAbertos: caixasAbertos || 0,
+      });
+    } catch (error) {
+      logger.error("Error getting resumo financeiro", { error });
       res.status(500).json({ error: "Internal server error" });
     }
   }
@@ -1083,21 +1160,25 @@ export class FinanceiroController {
 
       const cobranca = await (prisma as any).contas_receber.findUnique({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: contaReceberId },
-        include: { patients: true },
       });
 
-      if (!cobranca || !cobranca.patients) {
+      if (!cobranca) {
         return res
           .status(404)
-          .json({ error: "Billing record or Patient not found" });
+          .json({ error: "Billing record not found" });
       }
+
+      // Buscar paciente separadamente (sem relation no schema)
+      const patient = cobranca.patient_id ? await (prisma as any).patients.findUnique({
+        where: { id: cobranca.patient_id },
+      }) : null;
 
       await (prisma as any).comunicacao_logs.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
         data: {
           paciente_id: cobranca.patient_id,
           clinic_id: cobranca.clinic_id,
           tipo: method.toUpperCase(),
-          mensagem: message || `Cobrança de R$ ${cobranca.valor} enviada.`,
+          mensagem: message || `Cobrança de R$ ${cobranca.valor} enviada.` + (patient ? ` para ${patient.full_name}` : ""),
           status: "ENVIADO",
         },
       });

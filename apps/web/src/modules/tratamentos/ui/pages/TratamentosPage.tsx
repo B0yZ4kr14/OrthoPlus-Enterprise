@@ -39,11 +39,10 @@ export function TratamentosPage() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const {
     tratamentos,
-    loading,
-    criarTratamento,
-    iniciarTratamento,
-    concluirTratamento,
-  } = useTratamentos(selectedPatient?.id);
+    isLoading,
+    createTratamento,
+    updateStatus,
+  } = useTratamentos(selectedPatient?.id ?? null, "clinic-id");
 
   const planejados = tratamentos.filter((t) => t.status === "PLANEJADO");
   const emAndamento = tratamentos.filter((t) => t.status === "EM_ANDAMENTO");
@@ -51,7 +50,7 @@ export function TratamentosPage() {
 
   const handleIniciar = async (id: string) => {
     try {
-      await iniciarTratamento(id);
+      await updateStatus(id, "iniciar");
       toast.success("Tratamento iniciado com sucesso!");
     } catch {
       toast.error("Erro ao iniciar tratamento");
@@ -60,7 +59,7 @@ export function TratamentosPage() {
 
   const handleConcluir = async (id: string) => {
     try {
-      await concluirTratamento(id);
+      await updateStatus(id, "concluir");
       toast.success("Tratamento concluído!");
     } catch {
       toast.error("Erro ao concluir tratamento");
@@ -72,15 +71,7 @@ export function TratamentosPage() {
       <PageHeader
         title="Planos de Tratamento"
         description="Gerencie os planos de tratamento dos pacientes"
-        icon={<ClipboardPlus className="h-6 w-6" />}
-        actions={
-          selectedPatient && (
-            <Button onClick={() => criarTratamento()} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Novo Plano
-            </Button>
-          )
-        }
+        icon={ClipboardPlus}
       />
 
       <Card>
@@ -93,7 +84,7 @@ export function TratamentosPage() {
         <CardContent>
           <PatientSelector
             onSelect={(patient: Patient) => setSelectedPatient(patient)}
-            selected={selectedPatient}
+            selectedPatient={selectedPatient}
           />
         </CardContent>
       </Card>
@@ -105,7 +96,7 @@ export function TratamentosPage() {
             Selecione um paciente para visualizar os planos de tratamento.
           </AlertDescription>
         </Alert>
-      ) : loading ? (
+      ) : isLoading ? (
         <Card>
           <CardContent className="py-8 text-center text-muted-foreground">
             Carregando tratamentos...
@@ -155,7 +146,7 @@ export function TratamentosPage() {
                             {tratamento.descricao || "Plano de Tratamento"}
                           </CardTitle>
                           <CardDescription>
-                            {tratamento.dentes?.join(", ") || "Sem dentes especificados"}
+                            {tratamento.denteCodigo || "Sem dente especificado"}
                           </CardDescription>
                         </div>
                         <StatusBadge status={tratamento.status} />
@@ -163,7 +154,7 @@ export function TratamentosPage() {
                       <CardContent>
                         <div className="flex items-center justify-between">
                           <div className="text-sm text-muted-foreground">
-                            {tratamento.procedimentos?.length || 0} procedimento(s)
+                            {tratamento.procedimentoId ? "1 procedimento" : "0 procedimentos"}
                             {tratamento.dataInicio && (
                               <span className="ml-4">
                                 Início: {new Date(tratamento.dataInicio).toLocaleDateString("pt-BR")}

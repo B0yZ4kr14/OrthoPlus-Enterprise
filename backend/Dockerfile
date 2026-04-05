@@ -1,52 +1,56 @@
-# Ortho+ Backend - Node.js API Gateway
+# Stage 1: Build
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install all dependencies (including devDependencies for TypeScript compilation)
-COPY package*.json ./
-RUN npm ci
+# Install pnpm
+RUN npm install -g pnpm@10.33.0
 
-# Copy source code and prisma schema
-COPY . .
+# Copy root configurations
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# Build TypeScript
-RUN npm run build
+# Copy packages needed for build
+COPY backend/package.json ./backend/
+COPY shared-types/package.json ./shared-types/
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY backend ./backend
+COPY shared-types ./shared-types
+
+# Build shared types first, then backend
+RUN pnpm --filter @orthoplus/shared-types run build
+RUN pnpm --filter orthoplus-backend run build
 
 # Production stage
 FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Copy package files and install production-only dependencies
-COPY --from=builder /app/package*.json ./
-RUN npm ci --omit=dev
+# Install pnpm for production install
+RUN npm install -g pnpm@10.33.0
 
-# Copy build output and prisma schema
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+# Copy root configurations and lockfile
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 
-# Generate Prisma client for production
-RUN npx prisma generate
+# Copy backend and shared-types package files
+COPY --from=builder /app/backend/package.json ./backend/
+COPY --from=builder /app/shared-types/package.json ./shared-types/package.json
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
+# Install only production dependencies
+RUN pnpm install --prod --frozen-lockfile
 
-# Create logs directory for Winston file transports
-RUN mkdir -p /app/logs && chown nodejs:nodejs /app/logs
+# Copy build outputs
+COPY --from=builder /app/backend/dist ./backend/dist
+COPY --from=builder /app/shared-types/dist ./shared-types/dist
 
-# Set ownership
-RUN chown -R nodejs:nodejs /app
+# Also copy prisma schema if needed for production (usually yes)
+COPY --from=builder /app/backend/prisma ./backend/prisma
+# Generate prisma client in production stage
+RUN cd backend && pnpm prisma generate
 
-USER nodejs
-
+WORKDIR /app/backend
 EXPOSE 3005
-
-ENV NODE_ENV=production \
-    PORT=3005
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3005/health', (r) => {if (r.statusCode !== 200) throw new Error('Health check failed')})"
-
 CMD ["node", "dist/index.js"]

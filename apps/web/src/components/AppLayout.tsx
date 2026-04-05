@@ -18,40 +18,40 @@ export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
 
   const contentClassName = useMemo(
     () =>
-      `flex-1 bg-background overflow-x-hidden transition-all duration-300 ${isFocusMode ? "p-2 md:p-4" : "p-4 md:p-6"}`,
+      `flex-1 bg-background overflow-x-hidden transition-all duration-300 ease-out ${isFocusMode ? "p-2 md:p-4" : "p-4 md:p-6"}`,
     [isFocusMode],
   );
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-background">
         {!isMobile && !isFocusMode && (
-          <nav data-tour="sidebar" className="transition-all duration-300">
+          <nav data-tour="sidebar" className="transition-all duration-300 ease-out">
             <AppSidebar />
           </nav>
         )}
 
         {isMobile && (
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetContent side="left" className="w-[280px] p-0">
+            <SheetContent side="left" className="w-[280px] p-0 border-r border-cyan-500/20">
               <AppSidebar onNavigate={() => setMobileMenuOpen(false)} />
             </SheetContent>
           </Sheet>
         )}
 
         <div
-          className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${isFocusMode ? "ml-0" : ""}`}
+          className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-out ${isFocusMode ? "ml-0" : ""}`}
         >
           {(!isFocusMode || isMobile) && (
-            <header className="transition-all duration-300">
+            <header className="transition-all duration-300 ease-out">
               <DashboardHeader onMenuClick={() => setMobileMenuOpen(true)} />
             </header>
           )}
 
           <main className={contentClassName}>
             {isFocusMode && !isMobile && (
-              <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-lg backdrop-blur-sm">
-                <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-cyan-500/10">
+                <div className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse-glow" />
                 <span>Modo Foco Ativo - Digitando...</span>
               </div>
             )}
