@@ -1,0 +1,65 @@
+name: Deploy Theme v2
+
+on:
+  push:
+    branches: [ feat/theme-v2-orchestration, main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.33.0
+      
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Build frontend
+        run: pnpm --filter=@orthoplus/web build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: apps/web/dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+      
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: 100.111.74.69
+          username: ubuntu
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "dist/*"
+          target: "/var/www/orthoplus/"
+          strip_components: 1
+      
+      - name: Reload nginx
+        uses: appleboy/ssh-action@master
+        with:
+          host: 100.111.74.69
+          username: ubuntu
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            sudo nginx -t && sudo systemctl reload nginx
