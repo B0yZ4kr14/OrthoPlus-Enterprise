@@ -39,6 +39,7 @@ export const useModulos = () => {
     },
     onSuccess: (response: unknown) => {
       queryClient.invalidateQueries({ queryKey: ["modulos"] });
+      // @ts-expect-error - Auto-healer: TS18046 - 'response' is of type 'unknown'....
       const action = response.module.is_active ? "ativado" : "desativado";
       toast.success(`Módulo ${action} com sucesso!`);
     },

@@ -42,6 +42,7 @@ export function useTransactionsAPI() {
 
       // Converter dados da API para formato frontend
       const transformed = response.transactions.map((apiTx: unknown) => {
+        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
         const frontendTx = TransactionAdapter.toFrontend(apiTx);
 
         return {

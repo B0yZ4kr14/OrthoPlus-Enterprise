@@ -5,16 +5,14 @@ set -e
 # Usage: ./scripts/deploy-vps.sh [VPS_IP] [SSH_KEY]
 
 VPS_IP="${1:-100.111.74.69}"
-SSH_KEY="${2:-$HOME/.ssh/id_ed25519_b0yz4kr14}"
-VPS_USER="ubuntu"
-PROJECT_DIR="OrthoPlus-Enterprise"
-REMOTE_DIR="/home/ubuntu/$PROJECT_DIR"
+VPS_TARGET="vps-orthoplus"
+REMOTE_DIR="/home/ubuntu/OrthoPlus-Enterprise"
 
-echo "[DEPLOY] Target VPS: $VPS_USER@$VPS_IP"
+echo "[DEPLOY] Target VPS: $VPS_TARGET"
 echo "[DEPLOY] Syncing project files..."
 
 rsync -avz --delete \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -F ~/.ssh/config -o StrictHostKeyChecking=no" \
   --exclude='.git' \
   --exclude='node_modules' \
   --exclude='.turbo' \
@@ -23,10 +21,10 @@ rsync -avz --delete \
   --exclude='coverage' \
   --exclude='tests' \
   ~/Projects/OrthoPlus-Enterprise/ \
-  "$VPS_USER@$VPS_IP:$REMOTE_DIR/"
+  "$VPS_TARGET:$REMOTE_DIR/"
 
 echo "[DEPLOY] Installing pnpm and dependencies on VPS..."
-ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << REMOTE
+ssh -F ~/.ssh/config -o StrictHostKeyChecking=no "$VPS_TARGET" << REMOTE
   set -e
   cd "$REMOTE_DIR"
   
@@ -47,6 +45,11 @@ ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << REMOTE
     echo "[ERROR] Backend build failed: backend/dist not found"
     exit 1
   fi
+  
+  # Run Prisma Deploy
+  echo "[DEPLOY] Running prisma migrate deploy..."
+  cd backend && pnpm exec prisma migrate deploy && cd ..
+
   
   # Start Redis if not running
   if ! docker ps --format '{{.Names}}' | grep -q orthoplus-redis; then

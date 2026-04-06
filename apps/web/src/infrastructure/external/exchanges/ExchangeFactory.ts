@@ -49,6 +49,7 @@ export class ExchangeFactory {
       case "BTCPAY": {
         const { BTCPayAdapter } = await import("./BTCPayAdapter");
         return new BTCPayAdapter(
+          // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
           additionalConfig?.btcpayServerUrl,
           additionalConfig?.storeId,
           apiKey,

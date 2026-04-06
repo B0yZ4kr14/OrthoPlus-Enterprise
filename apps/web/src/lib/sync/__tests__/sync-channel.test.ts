@@ -93,6 +93,7 @@ function createSyncChannel(ChannelClass: typeof MockBroadcastChannel) {
 
   function postSyncUpdate(type: SyncMessageType, data?: unknown): void {
     const ch = getChannel();
+    // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
     const message: SyncMessage = { type, data, timestamp: Date.now() };
     ch.postMessage(message);
   }

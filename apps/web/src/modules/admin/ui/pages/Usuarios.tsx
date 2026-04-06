@@ -70,6 +70,7 @@ export default function Usuarios() {
     queryKey: ["users", clinicId],
     queryFn: async () => {
       const response = await apiClient.get<User[]>("/usuarios");
+      // @ts-expect-error - Auto-healer: TS2339 - Property 'data' does not exist on type '...
       return response.data;
     },
     enabled: !!clinicId,

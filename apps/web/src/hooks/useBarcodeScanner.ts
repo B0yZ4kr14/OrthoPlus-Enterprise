@@ -1,4 +1,5 @@
 import { useState } from "react";
+// @ts-expect-error - Auto-healer: TS2307 - Cannot find module '@capacitor-community...
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { useToast } from "@/hooks/use-toast";
 

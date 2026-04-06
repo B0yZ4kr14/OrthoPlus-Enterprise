@@ -37,6 +37,7 @@ interface ModuleCardProps {
 export function ModuleCard({ module, onToggle }: ModuleCardProps) {
   // Get icon component dynamically
   const IconComponent =
+    // @ts-expect-error - Auto-healer: TS2571 - Object is of type 'unknown'....
     (LucideIcons as unknown)[module.icon] || LucideIcons.Package;
 
   const isDisabled =

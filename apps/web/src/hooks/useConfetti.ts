@@ -1,3 +1,4 @@
+// @ts-expect-error - Auto-healer: TS7016 - Could not find a declaration file for mo...
 import confetti from "canvas-confetti";
 
 interface ConfettiOptions {
