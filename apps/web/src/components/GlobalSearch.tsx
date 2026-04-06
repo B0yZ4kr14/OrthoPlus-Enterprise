@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 import { apiClient } from "@/lib/api/apiClient";
 import { useAuth } from "@/contexts/AuthContext";
+import type { Patient, Appointment, Procedure } from "@orthoplus/shared-types";
 import {
   CommandDialog,
   CommandEmpty,
@@ -57,28 +58,22 @@ const GlobalSearch = memo(function GlobalSearch() {
         // Buscar pacientes, agendamentos e procedimentos em paralelo
         const [patients, appointments, procedures] = await Promise.all([
           apiClient
-            .get<
-              unknown[]
-            >(`/patients?clinic_id=eq.${clinicId}&or=(full_name.ilike.%25${query}%25,cpf.ilike.%25${query}%25)&limit=3&select=id,full_name,cpf`)
+            .get<Patient[]>(`/patients?clinic_id=eq.${clinicId}&or=(full_name.ilike.%25${query}%25,cpf.ilike.%25${query}%25)&limit=3&select=id,full_name,cpf`)
             .catch(() => null),
           apiClient
-            .get<
-              unknown[]
-            >(`/appointments?clinic_id=eq.${clinicId}&title=ilike.%25${query}%25&limit=3&select=id,title,start_time`)
+            .get<Appointment[]>(`/appointments?clinic_id=eq.${clinicId}&title=ilike.%25${query}%25&limit=3&select=id,title,start_time`)
             .catch(() => null),
           apiClient
-            .get<
-              unknown[]
-            >(`/procedimentos_odontologicos?nome=ilike.%25${query}%25&limit=3&select=id,nome,codigo`)
+            .get<Procedure[]>(`/procedimentos_odontologicos?nome=ilike.%25${query}%25&limit=3&select=id,nome,codigo`)
             .catch(() => null),
         ]);
 
         if (patients) {
           searchResults.push(
-            ...patients.map((p: unknown) => ({
+            ...patients.map((p) => ({
               id: p.id,
-              title: p.full_name,
-              subtitle: p.cpf,
+              title: p.name || (p as unknown as {full_name: string}).full_name || "",
+              subtitle: p.cpf || "",
               type: "patient" as const,
               route: `/pacientes/${p.id}`,
               icon: User,
@@ -88,7 +83,7 @@ const GlobalSearch = memo(function GlobalSearch() {
 
         if (appointments) {
           searchResults.push(
-            ...appointments.map((a: unknown) => ({
+            ...appointments.map((a) => ({
               id: a.id,
               title: a.title,
               subtitle: new Date(a.start_time).toLocaleDateString("pt-BR"),
@@ -101,7 +96,7 @@ const GlobalSearch = memo(function GlobalSearch() {
 
         if (procedures) {
           searchResults.push(
-            ...procedures.map((p: unknown) => ({
+            ...procedures.map((p) => ({
               id: p.id,
               title: p.nome,
               subtitle: p.codigo || "Procedimento",
