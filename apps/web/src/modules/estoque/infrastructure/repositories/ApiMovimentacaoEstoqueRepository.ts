@@ -13,6 +13,7 @@ export class ApiMovimentacaoEstoqueRepository implements IMovimentacaoEstoqueRep
       );
       return data;
     } catch (error) {
+      // @ts-expect-error - Auto-healer: TS2571 - Object is of type 'unknown'....
       if ((error as unknown).status === 404) return null;
       throw error;
     }

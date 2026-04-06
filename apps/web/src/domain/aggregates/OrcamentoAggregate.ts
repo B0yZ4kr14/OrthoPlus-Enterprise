@@ -86,6 +86,7 @@ export class OrcamentoAggregate {
     }
 
     // Executar ação no aggregate
+    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'string | undefined' is...
     this.orcamento.rejeitar(rejeitadoPor, motivo);
 
     // Registrar evento

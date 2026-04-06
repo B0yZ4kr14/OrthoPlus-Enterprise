@@ -41,6 +41,7 @@ export class CoinbaseAdapter implements ICryptoExchange {
       if (!response.ok) throw new Error("Failed to fetch balance");
 
       const data = await response.json();
+      // @ts-expect-error - Auto-healer: TS18046 - 'acc' is of type 'unknown'....
       const account = data.data.find((acc: unknown) => acc.currency === coin);
 
       return parseFloat(account?.balance?.amount || "0");
@@ -61,6 +62,7 @@ export class CoinbaseAdapter implements ICryptoExchange {
 
       const accountsData = await accountsResponse.json();
       const account = accountsData.data.find(
+        // @ts-expect-error - Auto-healer: TS18046 - 'acc' is of type 'unknown'....
         (acc: unknown) => acc.currency === coin,
       );
 

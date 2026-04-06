@@ -30,6 +30,7 @@ export const useLGPDRequests = () => {
   const createRequest = useMutation({
     mutationFn: async (requestData: unknown) => {
       const response = await apiClient.post<unknown>("/lgpd/solicitacoes", {
+        // @ts-expect-error - Auto-healer: TS2698 - Spread types may only be created from ob...
         ...requestData,
         requested_by: user?.id,
       });

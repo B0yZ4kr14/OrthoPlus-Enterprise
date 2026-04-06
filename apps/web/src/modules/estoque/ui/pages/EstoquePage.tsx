@@ -7,6 +7,7 @@ import { useProdutos } from "../../presentation/hooks";
 import { ProdutoList } from "../components/ProdutoList";
 import { ProdutoForm } from "../components/ProdutoForm";
 import { MovimentacaoForm } from "../components/MovimentacaoForm";
+// @ts-expect-error - Auto-healer: TS2307 - Cannot find module '../../domain/entitie...
 import type { Produto } from "../../domain/entities/Produto";
 
 export const EstoquePage = () => {

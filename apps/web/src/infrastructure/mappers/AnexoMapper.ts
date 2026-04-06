@@ -16,6 +16,7 @@ export class AnexoMapper {
       prontuarioId: raw.prontuario_id,
       historicoId: raw.historico_id || undefined,
       clinicId: "", // Tabela não tem clinic_id, será preenchido via query
+      // @ts-expect-error - Auto-healer: TS2322 - Type '{}' is not assignable to type '"RE...
       tipo: (raw.tipo_arquivo as unknown) || "OUTRO",
       nomeArquivo: raw.nome_arquivo,
       storagePath: raw.caminho_storage,

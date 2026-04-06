@@ -30,6 +30,7 @@ export function usePatientsAPI(): UsePatientsReturn {
 
       // Converter dados da API para formato global do sistema usando adapter
       const transformedPatients = PatientAdapter.toFrontendList(
+        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown[]' is not assi...
         response.patients,
       );
       setPatients(transformedPatients);

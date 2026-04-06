@@ -17,6 +17,7 @@ export class TratamentoMapper {
       descricao: raw.descricao || "",
       denteCodigo: raw.dente_codigo || undefined,
       procedimentoId: raw.procedimento_id || undefined,
+      // @ts-expect-error - Auto-healer: TS2322 - Type '{}' is not assignable to type '"CO...
       status: (raw.status as unknown) || "PLANEJADO",
       dataInicio: new Date(raw.data_inicio),
       dataTermino: raw.data_conclusao

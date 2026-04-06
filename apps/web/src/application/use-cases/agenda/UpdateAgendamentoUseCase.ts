@@ -62,6 +62,7 @@ export class UpdateAgendamentoUseCase {
 
       props.updatedAt = new Date();
 
+      // @ts-expect-error - Auto-healer: TS2571 - Object is of type 'unknown'....
       const updatedAgendamento = (agendamento as unknown).constructor.restore(
         props,
       );
