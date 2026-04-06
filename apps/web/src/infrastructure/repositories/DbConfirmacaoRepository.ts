@@ -21,7 +21,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
     agendamentoId: string,
   ): Promise<Confirmacao | null> {
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
         params: { appointment_id: agendamentoId },
       });
       if (!data || data.length === 0) return null;
@@ -44,7 +44,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
             : "ERROR";
 
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
         params: { status: dbStatus },
       });
       return (data || []).map(ConfirmacaoMapper.toDomain);
@@ -55,7 +55,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
 
   async findPendentes(): Promise<Confirmacao[]> {
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
         params: { status: "PENDING" },
       });
       return (data || []).map(ConfirmacaoMapper.toDomain);
@@ -66,7 +66,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
 
   async findEnviadasNaoConfirmadas(): Promise<Confirmacao[]> {
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
         params: { status: "SENT" },
       });
       return (data || []).map(ConfirmacaoMapper.toDomain);
@@ -79,7 +79,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
     const dbData = ConfirmacaoMapper.toDatabase(confirmacao);
     try {
       await apiClient.post("/agenda/confirmations", dbData);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao salvar confirmação: ${error.message}`);
     }
   }
@@ -88,7 +88,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
     const dbData = ConfirmacaoMapper.toDatabase(confirmacao);
     try {
       await apiClient.patch(`/agenda/confirmations/${confirmacao.id}`, dbData);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao atualizar confirmação: ${error.message}`);
     }
   }
@@ -96,7 +96,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/agenda/confirmations/${id}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao deletar confirmação: ${error.message}`);
     }
   }

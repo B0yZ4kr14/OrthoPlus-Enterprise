@@ -31,7 +31,7 @@ export function useSplit() {
       if (configsData) setConfigs(configsData as unknown[]);
       if (transacoesData) setTransacoes(transacoesData as unknown[]);
       if (comissoesData) setComissoes(comissoesData as unknown[]);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao carregar dados de split:", error);
       toast.error("Erro ao carregar dados de split");
     } finally {
@@ -64,7 +64,7 @@ export function useSplit() {
 
       toast.success("Configuração de split criada com sucesso!");
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao criar configuração:", error);
       toast.error("Erro ao criar configuração de split");
     }
@@ -81,7 +81,7 @@ export function useSplit() {
 
       toast.success("Configuração de split atualizada com sucesso!");
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao atualizar configuração:", error);
       toast.error("Erro ao atualizar configuração de split");
     }
@@ -98,7 +98,7 @@ export function useSplit() {
 
       toast.success("Configuração de split excluída com sucesso!");
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao excluir configuração:", error);
       toast.error("Erro ao excluir configuração de split");
     }

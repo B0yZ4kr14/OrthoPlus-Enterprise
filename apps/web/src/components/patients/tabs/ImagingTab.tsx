@@ -18,7 +18,7 @@ export function ImagingTab({ patientId }: ImagingTabProps) {
   const { data: images, isLoading } = useQuery({
     queryKey: ["patient-images", patientId],
     queryFn: async () => {
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         `/pacientes/${patientId}/imaging`,
       );
       return data || [];

@@ -14,9 +14,9 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
 
   async findById(id: string): Promise<BlockedTime | null> {
     try {
-      const data = await apiClient.get<unknown>(`${this.basePath}/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`${this.basePath}/${id}`);
       return data ? BlockedTimeMapper.toDomain(data) : null;
-    } catch (error: unknown) {
+    } catch (error: any) {
       if (error?.response?.status === 404 || error?.response?.status === 400)
         return null;
       throw new Error(`Erro ao buscar bloqueio: ${error.message}`);
@@ -24,7 +24,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
   }
 
   async findByDentist(dentistId: string): Promise<BlockedTime[]> {
-    const data = await apiClient.get<unknown[]>(this.basePath, {
+    const data = await apiClient.get<Record<string, any>[]>(this.basePath, {
       params: {
         dentist_id: dentistId,
         active: true,
@@ -38,7 +38,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
     startDate: Date,
     endDate: Date,
   ): Promise<BlockedTime[]> {
-    const data = await apiClient.get<unknown[]>(this.basePath, {
+    const data = await apiClient.get<Record<string, any>[]>(this.basePath, {
       params: {
         dentist_id: dentistId,
         start_date: startDate.toISOString(),
@@ -49,7 +49,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
   }
 
   async findByClinicId(clinicId: string): Promise<BlockedTime[]> {
-    const data = await apiClient.get<unknown[]>(this.basePath, {
+    const data = await apiClient.get<Record<string, any>[]>(this.basePath, {
       params: {
         clinic_id: clinicId,
         active: true,

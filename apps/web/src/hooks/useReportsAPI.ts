@@ -12,7 +12,7 @@ export interface ReportData {
   report_id: string;
   report_type: string;
   generated_at: string;
-  data: unknown;
+  data: Record<string, any>;
 }
 
 export function useReportsAPI() {

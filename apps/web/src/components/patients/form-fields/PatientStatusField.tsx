@@ -20,7 +20,7 @@ import {
 } from "@/types/patient-status";
 
 interface PatientStatusFieldProps {
-  form: unknown;
+  form: Record<string, any>;
 }
 
 export function PatientStatusField({ form }: PatientStatusFieldProps) {

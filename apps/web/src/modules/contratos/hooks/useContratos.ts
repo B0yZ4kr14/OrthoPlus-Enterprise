@@ -20,7 +20,7 @@ export function useContratos() {
 
     try {
       setLoading(true);
-      const data: unknown = await apiClient.get("/contratos", {
+      const data: Record<string, any> = await apiClient.get("/contratos", {
         params: { clinic_id: selectedClinic.id, sort: "created_at.desc" },
       });
       setContratos(data as ContratoComplete[]);
@@ -37,7 +37,7 @@ export function useContratos() {
     if (!selectedClinic) return;
 
     try {
-      const data: unknown = await apiClient.get("/contrato-templates", {
+      const data: Record<string, any> = await apiClient.get("/contrato-templates", {
         params: {
           clinic_id: selectedClinic.id,
           ativo: "eq.true",
@@ -58,7 +58,7 @@ export function useContratos() {
     try {
       const numero = `CTR-${Date.now()}`;
 
-      const data: unknown = await apiClient.post("/contratos", {
+      const data: Record<string, any> = await apiClient.post("/contratos", {
         ...contrato,
         clinic_id: selectedClinic.id,
         numero_contrato: numero,
@@ -82,7 +82,7 @@ export function useContratos() {
     orcamentoId?: string,
   ) => {
     try {
-      const template: unknown = await apiClient.get(
+      const template: Record<string, any> = await apiClient.get(
         `/contrato-templates/${templateId}`,
       );
 
@@ -166,7 +166,7 @@ export function useContratos() {
     if (!selectedClinic) return null;
 
     try {
-      const data: unknown = await apiClient.post("/contrato-templates", {
+      const data: Record<string, any> = await apiClient.post("/contrato-templates", {
         ...template,
         clinic_id: selectedClinic.id,
       });

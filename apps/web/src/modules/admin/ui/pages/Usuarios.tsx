@@ -96,7 +96,7 @@ export default function Usuarios() {
       queryClient.invalidateQueries({ queryKey: ["users", clinicId] });
       toast.success("Usuário excluído com sucesso!");
     },
-    onError: (error: unknown) => {
+    onError: (error: any) => {
       toast.error("Erro ao excluir usuário", {
         description: error.message,
       });

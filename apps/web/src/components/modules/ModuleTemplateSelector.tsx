@@ -63,7 +63,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
 
   const fetchTemplates = async () => {
     try {
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/module_configuration_templates?is_active=eq.true&order=name",
       );
 
@@ -108,7 +108,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
 
       setDialogOpen(false);
       onApply?.();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error applying template:", error);
       toast({
         title: "Erro ao aplicar template",

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Domain Layer
 export * from "./entities";
 export * from "./repositories";

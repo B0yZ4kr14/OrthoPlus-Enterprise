@@ -14,7 +14,7 @@ export class ApiCashRegisterRepository implements ICashRegisterRepository {
 
   async findById(id: string): Promise<CashRegister | null> {
     try {
-      const data = await apiClient.get<unknown>(`${this.baseUrl}/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`${this.baseUrl}/${id}`);
       if (!data) return null;
       return this.toDomain(data);
     } catch {
@@ -37,7 +37,7 @@ export class ApiCashRegisterRepository implements ICashRegisterRepository {
         params.end_date = filters.period.endDate.toISOString();
       }
 
-      const data = await apiClient.get<unknown[]>(this.baseUrl, { params });
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, { params });
       return (data || []).map((row) => this.toDomain(row));
     } catch (e) {
       console.error(e);
@@ -61,7 +61,7 @@ export class ApiCashRegisterRepository implements ICashRegisterRepository {
 
   async findOpenRegister(clinicId: string): Promise<CashRegister | null> {
     try {
-      const data = await apiClient.get<unknown[]>(this.baseUrl, {
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
         params: { status: "ABERTO" },
       });
       if (!data || data.length === 0) return null;
@@ -73,7 +73,7 @@ export class ApiCashRegisterRepository implements ICashRegisterRepository {
 
   async getLastClosedRegister(clinicId: string): Promise<CashRegister | null> {
     try {
-      const data = await apiClient.get<unknown[]>(this.baseUrl, {
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
         params: { status: "FECHADO" },
       });
       if (!data || data.length === 0) return null;
@@ -83,7 +83,7 @@ export class ApiCashRegisterRepository implements ICashRegisterRepository {
     }
   }
 
-  private toDomain(row: unknown): CashRegister {
+  private toDomain(row: Record<string, any>): CashRegister {
     const props: CashRegisterProps = {
       id: row.id,
       clinicId: row.clinic_id,

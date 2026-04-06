@@ -94,7 +94,7 @@ export function PaymentDialog({
 
       onSuccess();
       onClose();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao processar pagamento:", error);
       toast.error("Erro ao processar pagamento", {
         description: error.message || "Tente novamente",

@@ -30,7 +30,7 @@ export interface IBTCPayService {
     amount: number;
     currency: string;
     orderId: string;
-    metadata?: unknown;
+    metadata?: Record<string, any>;
   }): Promise<{
     invoiceId: string;
     checkoutLink: string;

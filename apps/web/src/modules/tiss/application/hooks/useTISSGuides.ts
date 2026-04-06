@@ -11,7 +11,7 @@ export const useTISSGuides = () => {
     queryKey: ["tiss-guides", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<unknown[]>("/tiss/guias");
+      const data = await apiClient.get<Record<string, any>[]>("/tiss/guias");
       return data;
     },
     enabled: !!clinicId,
@@ -21,7 +21,7 @@ export const useTISSGuides = () => {
     queryKey: ["tiss-batches", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<unknown[]>("/tiss/lotes");
+      const data = await apiClient.get<Record<string, any>[]>("/tiss/lotes");
       return data;
     },
     enabled: !!clinicId,

@@ -9,7 +9,7 @@ export interface FrontendEvent {
   eventId: string;
   eventType: string;
   timestamp: Date;
-  payload: unknown;
+  payload: Record<string, any>;
   source?: string;
 }
 

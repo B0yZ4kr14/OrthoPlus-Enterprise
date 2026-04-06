@@ -3,7 +3,7 @@ import { History, Calendar } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
 
 interface HistoricoTabProps {
-  patient: unknown;
+  patient: Record<string, any>;
 }
 
 export function HistoricoTab({ patient }: HistoricoTabProps) {

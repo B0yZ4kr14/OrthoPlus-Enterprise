@@ -37,7 +37,7 @@ export interface SplitTransaction {
   payment_method: PaymentMethod;
   payment_date: string;
   split_config_id?: string;
-  split_config_snapshot: unknown; // Snapshot das regras no momento do split
+  split_config_snapshot: Record<string, any>; // Snapshot das regras no momento do split
   split_results: SplitResult[];
   status: SplitTransactionStatus;
   processed_at?: string;

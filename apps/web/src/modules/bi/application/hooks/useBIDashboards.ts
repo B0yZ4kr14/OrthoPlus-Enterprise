@@ -11,7 +11,7 @@ export const useBIDashboards = () => {
     queryKey: ["bi-dashboards", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<unknown[]>("/bi/dashboards");
+      const data = await apiClient.get<Record<string, any>[]>("/bi/dashboards");
       return data || [];
     },
     enabled: !!clinicId,
@@ -21,7 +21,7 @@ export const useBIDashboards = () => {
     queryKey: ["bi-metrics", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<unknown[]>("/bi/metricas");
+      const data = await apiClient.get<Record<string, any>[]>("/bi/metricas");
       return data || [];
     },
     enabled: !!clinicId,

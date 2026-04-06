@@ -11,7 +11,7 @@ export const useTeleconsultas = () => {
     queryKey: ["teleconsultas", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<unknown[]>("/teleodonto/teleconsultas");
+      const data = await apiClient.get<Record<string, any>[]>("/teleodonto/teleconsultas");
       return data;
     },
     enabled: !!clinicId,

@@ -77,7 +77,7 @@ type SyncMessageType =
 interface SyncMessage {
   type: SyncMessageType;
   tag?: string;
-  data?: unknown;
+  data?: Record<string, any>;
   timestamp: number;
 }
 

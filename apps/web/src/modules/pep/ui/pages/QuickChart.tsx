@@ -32,7 +32,7 @@ export default function QuickChart() {
   const { data: patient } = useQuery({
     queryKey: ["patient", patientId],
     queryFn: async () => {
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         `/pep/prontuarios?patient_id=${patientId}&limit=1`,
       );
       if (!data || data.length === 0) throw new Error("Patient not found");
@@ -47,7 +47,7 @@ export default function QuickChart() {
     queryFn: async () => {
       if (!(patient as { id?: string })?.id) return [];
 
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         `/pep/tratamentos?prontuario_id=${patient.id}&status=EM_ANDAMENTO`,
       );
       return data || [];

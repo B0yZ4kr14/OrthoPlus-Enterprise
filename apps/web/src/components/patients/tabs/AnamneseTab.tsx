@@ -12,7 +12,7 @@ import {
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 
 interface AnamneseTabProps {
-  patient: unknown;
+  patient: Record<string, any>;
 }
 
 export function AnamneseTab({ patient }: AnamneseTabProps) {

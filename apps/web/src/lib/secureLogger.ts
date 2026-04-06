@@ -46,7 +46,7 @@ export function sanitizeLogData(data: unknown): unknown {
   }
 
   // Objetos
-  const sanitized: unknown = {};
+  const sanitized: Record<string, any> = {};
 
   for (const key of Object.keys(data)) {
     const lowerKey = key.toLowerCase();

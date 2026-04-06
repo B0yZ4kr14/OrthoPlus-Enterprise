@@ -62,7 +62,7 @@ export default function ConciliacaoBancaria() {
         params,
       });
       setExtratos(data || []);
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error(`Erro ao carregar extratos: ${error.message}`);
     } finally {
       setLoading(false);
@@ -78,7 +78,7 @@ export default function ConciliacaoBancaria() {
       });
       toast.success("Lançamento conciliado com sucesso");
       loadExtratos();
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error(`Erro ao conciliar: ${error.message}`);
     }
   };
@@ -92,7 +92,7 @@ export default function ConciliacaoBancaria() {
       });
       toast.success("Conciliação desfeita com sucesso");
       loadExtratos();
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error(`Erro ao desconciliar: ${error.message}`);
     }
   };

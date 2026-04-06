@@ -24,7 +24,7 @@ export function PatientHeader({ patientId }: PatientHeaderProps) {
   const { data: patient, isLoading } = useQuery({
     queryKey: ["patient-header", patientId],
     queryFn: async () => {
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         `/patients?id=eq.${patientId}&limit=1`,
       );
       if (!data || data.length === 0) throw new Error("Patient not found");

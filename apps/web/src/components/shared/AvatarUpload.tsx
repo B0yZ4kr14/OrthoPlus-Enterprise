@@ -167,7 +167,7 @@ export const AvatarUpload = ({
         title: "Sucesso",
         description: "Foto atualizada com sucesso",
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro no upload:", error);
       toast({
         title: "Erro no upload",
@@ -199,7 +199,7 @@ export const AvatarUpload = ({
         title: "Sucesso",
         description: "Foto removida com sucesso",
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao remover:", error);
       toast({
         title: "Erro",

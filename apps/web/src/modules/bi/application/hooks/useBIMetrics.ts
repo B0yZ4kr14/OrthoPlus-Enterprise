@@ -44,7 +44,7 @@ export function useBIMetrics() {
   const { data: dashboards = [], isLoading: loadingDashboards } = useQuery({
     queryKey: ["bi-dashboards", clinicId],
     queryFn: async () => {
-      const data = await apiClient.get<unknown[]>("/bi/dashboards");
+      const data = await apiClient.get<Record<string, any>[]>("/bi/dashboards");
       return data || [];
     },
     enabled: !!clinicId,

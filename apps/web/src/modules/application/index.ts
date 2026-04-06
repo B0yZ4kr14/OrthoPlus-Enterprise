@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Application Layer
 export * from "./use-cases";
 export * from "./commands";

@@ -108,7 +108,7 @@ export function AnexosUpload({
       document.body.removeChild(a);
 
       toast.success("Download iniciado!");
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao baixar arquivo:", error);
       toast.error("Erro ao baixar arquivo", { description: error.message });
     }
@@ -130,7 +130,7 @@ export function AnexosUpload({
 
     try {
       await deleteAnexo(anexoId, caminhoStorage);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao excluir anexo:", error);
       // Toast já exibido pelo hook
     }

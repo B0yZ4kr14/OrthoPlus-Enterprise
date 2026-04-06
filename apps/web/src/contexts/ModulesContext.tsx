@@ -25,7 +25,7 @@ interface ModulesContextData {
   getModulesByCategory: (category: string) => Module[];
   toggleModule: (moduleId: number) => void;
   isTogglingModule: boolean;
-  dependencies: unknown;
+  dependencies: Record<string, any>;
 }
 
 const ModulesContext = createContext<ModulesContextData | undefined>(undefined);

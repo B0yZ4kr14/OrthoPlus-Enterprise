@@ -64,7 +64,7 @@ export function OnboardingAnalyticsDashboard() {
   const fetchAnalytics = async () => {
     try {
       // Buscar todos os eventos de onboarding da clínica
-      const events = await apiClient.get<unknown[]>(
+      const events = await apiClient.get<Record<string, any>[]>(
         "/onboarding_analytics?order=created_at.desc",
       );
 

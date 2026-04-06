@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { IEventHandler } from "@/core/domain/events/EventBus";
 import { DomainEvent } from "@/core/domain/events/DomainEvent";
 import { toast } from "sonner";

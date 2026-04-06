@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";

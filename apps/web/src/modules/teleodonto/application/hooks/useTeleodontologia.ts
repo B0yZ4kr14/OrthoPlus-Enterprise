@@ -18,7 +18,7 @@ export const useTeleodontologia = (clinicId: string) => {
   const { toast } = useToast();
   const { user } = useAuth();
 
-  const getErrorMessage = (error: unknown) =>
+  const getErrorMessage = (error: any) =>
     error instanceof Error ? error.message : "Erro desconhecido";
 
   const loadData = async () => {
@@ -45,7 +45,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       setPrescricoes(prescricoesData || []);
       setTriagens(triagensData || []);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error loading teleodontologia data:", error);
       toast({
         title: "Erro ao carregar dados",
@@ -87,7 +87,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error creating teleconsulta:", error);
       toast({
         title: "Erro",
@@ -114,7 +114,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error updating teleconsulta:", error);
       toast({
         title: "Erro",
@@ -136,7 +136,7 @@ export const useTeleodontologia = (clinicId: string) => {
       });
 
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error deleting teleconsulta:", error);
       toast({
         title: "Erro",
@@ -163,7 +163,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error creating prescricao:", error);
       toast({
         title: "Erro",
@@ -190,7 +190,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error creating triagem:", error);
       toast({
         title: "Erro",
@@ -211,7 +211,7 @@ export const useTeleodontologia = (clinicId: string) => {
         uid: user?.id || "anonymous",
         teleconsultaId,
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error starting consultation:", error);
       toast({
         title: "Erro",

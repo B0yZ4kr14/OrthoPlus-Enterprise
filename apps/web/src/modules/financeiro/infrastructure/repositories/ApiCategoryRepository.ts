@@ -14,7 +14,7 @@ export class ApiCategoryRepository implements ICategoryRepository {
 
   async findById(id: string): Promise<Category | null> {
     try {
-      const data = await apiClient.get<unknown>(`${this.baseUrl}/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`${this.baseUrl}/${id}`);
       if (!data) return null;
       return this.toDomain(data);
     } catch {
@@ -32,7 +32,7 @@ export class ApiCategoryRepository implements ICategoryRepository {
       if (filters?.isActive !== undefined)
         params.is_active = String(filters.isActive);
 
-      const data = await apiClient.get<unknown[]>(this.baseUrl, { params });
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, { params });
       return (data || []).map((row) => this.toDomain(row));
     } catch {
       return [];
@@ -59,7 +59,7 @@ export class ApiCategoryRepository implements ICategoryRepository {
     type: CategoryType,
   ): Promise<Category | null> {
     try {
-      const data = await apiClient.get<unknown[]>(this.baseUrl, {
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
         params: { name, type },
       });
       if (!data || data.length === 0) return null;
@@ -69,7 +69,7 @@ export class ApiCategoryRepository implements ICategoryRepository {
     }
   }
 
-  private toDomain(row: unknown): Category {
+  private toDomain(row: Record<string, any>): Category {
     const props: CategoryProps = {
       id: row.id,
       clinicId: row.clinic_id,

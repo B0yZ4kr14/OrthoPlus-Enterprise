@@ -22,7 +22,7 @@ export function BackupExecutiveTab() {
   const { data: stats, isLoading } = useQuery({
     queryKey: ["backup-executive-stats", clinicId],
     queryFn: async () => {
-      const backups = await apiClient.get<unknown[]>(
+      const backups = await apiClient.get<Record<string, any>[]>(
         "/configuracoes/backups/historico",
         { params: { limit: 100 } },
       );

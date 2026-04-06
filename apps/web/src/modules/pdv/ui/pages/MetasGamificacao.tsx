@@ -30,7 +30,7 @@ export default function MetasGamificacao() {
       const hoje = new Date().toISOString().split("T")[0];
 
       // Carregar todas as informações do endpoint consolidado
-      const data = await apiClient.get<unknown>("/pdv/metas-gamificacao", {
+      const data = await apiClient.get<Record<string, any>>("/pdv/metas-gamificacao", {
         params: {
           clinicId,
           userId: user?.id,

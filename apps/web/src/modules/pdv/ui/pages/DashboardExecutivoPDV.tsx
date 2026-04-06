@@ -66,7 +66,7 @@ export default function DashboardExecutivoPDV() {
 
       // Call the unified backend endpoint for the executive dashboard data
       // Carregar todas as informações do endpoint consolidado
-      const data = await apiClient.get<unknown>("/pdv/dashboard-executivo", {
+      const data = await apiClient.get<Record<string, any>>("/pdv/dashboard-executivo", {
         params: { clinicId },
       });
 

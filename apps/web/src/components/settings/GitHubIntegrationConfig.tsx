@@ -42,7 +42,7 @@ export function GitHubIntegrationConfig() {
 
     setLoading(true);
     try {
-      const dataArray = await apiClient.get<unknown[]>(
+      const dataArray = await apiClient.get<Record<string, any>[]>(
         "/admin/configuracoes/github",
       );
 

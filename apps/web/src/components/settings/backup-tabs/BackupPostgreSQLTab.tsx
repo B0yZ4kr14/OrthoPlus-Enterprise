@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";

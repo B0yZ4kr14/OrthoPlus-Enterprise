@@ -27,7 +27,7 @@ export function useInventario() {
   // Inventários
   const loadInventarios = async () => {
     try {
-      const data = await apiClient.get<unknown[]>("/estoque/inventarios");
+      const data = await apiClient.get<Record<string, any>[]>("/estoque/inventarios");
       setInventarios(
         data.map((inv) => ({
           id: inv.id as string,
@@ -74,7 +74,7 @@ export function useInventario() {
 
   const updateInventario = async (id: string, data: Partial<Inventario>) => {
     try {
-      const updateData: unknown = {};
+      const updateData: Record<string, any> = {};
 
       if (data.numero !== undefined) updateData.numero = data.numero;
       if (data.data !== undefined) updateData.data = data.data;
@@ -119,7 +119,7 @@ export function useInventario() {
   // Itens do Inventário
   const loadInventarioItems = async () => {
     try {
-      const data = await apiClient.get<unknown[]>("/estoque/inventarios/itens");
+      const data = await apiClient.get<Record<string, any>[]>("/estoque/inventarios/itens");
       setInventarioItems(
         data.map((item) => ({
           id: item.id as string,
@@ -177,7 +177,7 @@ export function useInventario() {
     data: Partial<InventarioItem>,
   ) => {
     try {
-      const updateData: unknown = {};
+      const updateData: Record<string, any> = {};
 
       if (data.quantidadeFisica !== undefined) {
         updateData.quantidade_fisica = data.quantidadeFisica;

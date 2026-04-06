@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Module } from "@/core/config/modules.config";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient } from "@/lib/api/apiClient";

@@ -45,7 +45,7 @@ export function useFidelidade() {
       if (recompensasData) setRecompensas(recompensasData as unknown[]);
       if (badgesData) setBadges(badgesData as unknown[]);
       if (indicacoesData) setIndicacoes(indicacoesData as unknown[]);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao carregar dados de fidelidade:", error);
       toast.error("Erro ao carregar dados de fidelidade");
     } finally {
@@ -82,7 +82,7 @@ export function useFidelidade() {
       }
 
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao salvar configuração:", error);
       toast.error("Erro ao salvar configuração");
     }
@@ -98,7 +98,7 @@ export function useFidelidade() {
       await apiClient.post("/fidelidade/recompensas", recompensaData);
       toast.success("Recompensa criada com sucesso!");
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao criar recompensa:", error);
       toast.error("Erro ao criar recompensa");
     }
@@ -114,7 +114,7 @@ export function useFidelidade() {
       await apiClient.put(`/fidelidade/recompensas/${id}`, recompensaData);
       toast.success("Recompensa atualizada com sucesso!");
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao atualizar recompensa:", error);
       toast.error("Erro ao atualizar recompensa");
     }
@@ -130,7 +130,7 @@ export function useFidelidade() {
       await apiClient.delete(`/fidelidade/recompensas/${id}`);
       toast.success("Recompensa excluída com sucesso!");
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao excluir recompensa:", error);
       toast.error("Erro ao excluir recompensa");
     }
@@ -146,7 +146,7 @@ export function useFidelidade() {
       await apiClient.post("/fidelidade/badges", badgeData);
       toast.success("Badge criada com sucesso!");
       await loadData();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao criar badge:", error);
       toast.error("Erro ao criar badge");
     }

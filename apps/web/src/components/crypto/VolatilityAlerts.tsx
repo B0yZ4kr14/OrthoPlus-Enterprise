@@ -102,7 +102,7 @@ export function VolatilityAlerts() {
     if (!selectedClinic?.id) return;
 
     try {
-      const userData = await apiClient.get<unknown>("/auth/me");
+      const userData = await apiClient.get<Record<string, any>>("/auth/me");
       if (!userData?.id) {
         toast.error("Usuário não autenticado");
         return;

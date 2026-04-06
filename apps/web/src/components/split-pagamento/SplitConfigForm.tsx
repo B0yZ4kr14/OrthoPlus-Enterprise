@@ -48,7 +48,7 @@ interface SplitConfigFormProps {
   onOpenChange: (open: boolean) => void;
   dentistas: Array<{ id: string; nome: string }>;
   procedimentos: Array<{ id: string; nome: string }>;
-  editingConfig?: unknown;
+  editingConfig?: Record<string, any>;
 }
 
 export function SplitConfigForm({

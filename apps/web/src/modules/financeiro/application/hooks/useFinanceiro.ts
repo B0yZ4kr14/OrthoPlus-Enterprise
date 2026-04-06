@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";

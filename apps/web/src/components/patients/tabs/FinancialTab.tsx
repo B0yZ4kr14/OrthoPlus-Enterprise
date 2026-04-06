@@ -21,7 +21,7 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
   const { data: patient } = useQuery({
     queryKey: ["patient-financial", patientId],
     queryFn: async () => {
-      const data = await apiClient.get<unknown>(`/pacientes/${patientId}`);
+      const data = await apiClient.get<Record<string, any>>(`/pacientes/${patientId}`);
       return PatientAdapter.toFrontend(data);
     },
   });
@@ -30,7 +30,7 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
     queryKey: ["patient-budgets", patientId],
     queryFn: async () => {
       // Fetch timeline which contains the budgets associated with the patient
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         `/pacientes/${patientId}/timeline`,
       );
       const events = data || [];

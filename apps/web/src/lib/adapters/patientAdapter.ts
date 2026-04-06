@@ -27,8 +27,8 @@ interface PatientAPI {
   paymentStatus?: string;
 
   // Status and other complex types we might receive as simplified objects
-  status: unknown; // Keep as unknown or define PatientStatus here if needed from backend
-  dadosComerciais?: unknown;
+  status: string;
+  dadosComerciais?: Record<string, any>;
   notes?: string;
 
   isActive: boolean;
