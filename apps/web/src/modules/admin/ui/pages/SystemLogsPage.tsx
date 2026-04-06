@@ -252,8 +252,7 @@ export default function SystemLogsPage() {
                   </Badge>
                   <div className="flex-1">
                     <p>{log.message}</p>
-                    // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
-                    {log.details && (
+                    {log.details != null && (
                       <pre className="text-xs text-muted-foreground mt-2 bg-muted p-2 rounded overflow-x-auto">
                         {JSON.stringify(log.details, null, 2)}
                       </pre>

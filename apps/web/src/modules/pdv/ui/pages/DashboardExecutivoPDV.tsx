@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
@@ -39,6 +39,28 @@ const COLORS = [
   "hsl(var(--warning))",
 ];
 
+interface VendedorItem {
+  nome: string;
+  vendas: number;
+}
+
+interface MetaPeriodoItem {
+  mes: string;
+  meta: number;
+  atingido: number;
+}
+
+interface TransacaoMetodoItem {
+  name: string;
+  value: number;
+}
+
+interface RankingTop5Item {
+  vendedor_id: string;
+  profiles?: { full_name: string };
+  total_vendas: number;
+}
+
 export default function DashboardExecutivoPDV() {
   const { clinicId } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -49,18 +71,12 @@ export default function DashboardExecutivoPDV() {
     transacoesTEF: 0,
     vendedores: 0,
   });
-  const [vendasPorVendedor, setVendasPorVendedor] = useState([]);
-  const [metasPorPeriodo, setMetasPorPeriodo] = useState([]);
-  const [transacoesPorMetodo, setTransacoesPorMetodo] = useState([]);
-  const [rankingTop5, setRankingTop5] = useState([]);
+  const [vendasPorVendedor, setVendasPorVendedor] = useState<VendedorItem[]>([]);
+  const [metasPorPeriodo, setMetasPorPeriodo] = useState<MetaPeriodoItem[]>([]);
+  const [transacoesPorMetodo, setTransacoesPorMetodo] = useState<TransacaoMetodoItem[]>([]);
+  const [rankingTop5, setRankingTop5] = useState<RankingTop5Item[]>([]);
 
-  useEffect(() => {
-    if (clinicId) {
-      loadDashboardData();
-    }
-  }, [clinicId]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -80,16 +96,22 @@ export default function DashboardExecutivoPDV() {
         },
       );
 
-      setVendasPorVendedor(data.vendasPorVendedor || []);
-      setMetasPorPeriodo(data.metasPorPeriodo || []);
-      setTransacoesPorMetodo(data.transacoesPorMetodo || []);
-      setRankingTop5(data.rankingTop5 || []);
+      setVendasPorVendedor((data.vendasPorVendedor as VendedorItem[]) || []);
+      setMetasPorPeriodo((data.metasPorPeriodo as MetaPeriodoItem[]) || []);
+      setTransacoesPorMetodo((data.transacoesPorMetodo as TransacaoMetodoItem[]) || []);
+      setRankingTop5((data.rankingTop5 as RankingTop5Item[]) || []);
     } catch (error) {
       console.error("Erro ao carregar dashboard executivo:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [clinicId]);
+
+  useEffect(() => {
+    if (clinicId) {
+      loadDashboardData();
+    }
+  }, [clinicId, loadDashboardData]);
 
   if (loading) {
     return (
@@ -260,8 +282,7 @@ export default function DashboardExecutivoPDV() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={(entry) =>
-                    // @ts-expect-error - Auto-healer: TS2339 - Property 'value' does not exist on type ...
+                  label={(entry: TransacaoMetodoItem & { name: string }) =>
                     `${entry.name}: ${((entry.value / transacoesPorMetodo.reduce((sum, m) => sum + m.value, 0)) * 100).toFixed(1)}%`
                   }
                   outerRadius={100}
@@ -301,7 +322,6 @@ export default function DashboardExecutivoPDV() {
             {rankingTop5.length > 0 ? (
               rankingTop5.map((vendedor, index) => (
                 <div
-                  // @ts-expect-error - Auto-healer: TS2339 - Property 'vendedor_id' does not exist on...
                   key={vendedor.vendedor_id}
                   className="flex items-center justify-between p-3 rounded-lg bg-muted/20 hover:bg-muted/40 transition-colors"
                 >
@@ -322,11 +342,9 @@ export default function DashboardExecutivoPDV() {
                     </div>
                     <div>
                       <p className="font-medium">
-                        // @ts-expect-error - Auto-healer: TS2339 - Property 'profiles' does not exist on ty...
                         {vendedor.profiles?.full_name || "Vendedor"}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        // @ts-expect-error - Auto-healer: TS2339 - Property 'total_vendas' does not exist o...
                         {(vendedor.total_vendas || 0).toLocaleString("pt-BR", {
                           style: "currency",
                           currency: "BRL",

@@ -13,20 +13,24 @@ import { FileText, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+interface Prontuario {
+  id: string;
+  created_at: string;
+  patient_name: string;
+}
+
 interface PEPTabProps {
   patientId: string;
 }
 
 export function PEPTab({ patientId }: PEPTabProps) {
-  const { data: prontuarios, isLoading } = useQuery({
+  const { data: prontuarios, isLoading } = useQuery<Prontuario[]>({
     queryKey: ["prontuarios", patientId],
     queryFn: async () => {
-      const response = await apiClient.get(
+      const response = await apiClient.get<{ data: Prontuario[] }>(
         `/pep/prontuarios/patient/${patientId}`,
       );
-      // Assuming response.data comes sorted or we could sort it here
-      // @ts-expect-error - Auto-healer: TS18046 - 'response' is of type 'unknown'....
-      return response.data;
+      return (response as unknown as { data: Prontuario[] }).data ?? [];
     },
   });
 
@@ -51,7 +55,6 @@ export function PEPTab({ patientId }: PEPTabProps) {
 
       {prontuarios && prontuarios.length > 0 ? (
         <div className="space-y-4">
-          // @ts-expect-error - Auto-healer: TS7006 - Parameter 'prontuario' implicitly has an...
           {prontuarios.map((prontuario) => (
             <Card key={prontuario.id}>
               <CardHeader>

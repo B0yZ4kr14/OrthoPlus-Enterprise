@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 
-interface Product {
+export interface Product {
   id: string;
   nome: string;
   codigo: string;

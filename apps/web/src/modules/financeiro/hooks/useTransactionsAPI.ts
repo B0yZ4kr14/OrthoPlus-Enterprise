@@ -9,7 +9,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { TransactionAdapter } from "@/lib/adapters/transactionAdapter";
 import { toast } from "sonner";
 
-interface Transaction {
+export interface Transaction {
   id: string;
   type: "RECEITA" | "DESPESA";
   category: string;
