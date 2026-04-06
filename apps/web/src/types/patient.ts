@@ -89,4 +89,10 @@ export interface Patient {
   updated_at: string;
   created_by: string | null;
   updated_by: string | null;
+
+  // Marketing Tracking
+  marketing_campaign?: string | null;
+  marketing_source?: string | null;
+  marketing_event?: string | null;
+  marketing_promoter?: string | null;
 }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
@@ -10,11 +9,6 @@ import {
   ResponsiveContainer,
   Tooltip,
   Legend,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
 } from "recharts";
 import {
   Wallet,
@@ -30,6 +24,7 @@ import { logger } from "@/lib/logger";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import type { CryptoWallet, CryptoTransaction, CoinType } from "@/types/crypto";
 
 interface PortfolioData {
   totalBRL: number;
@@ -55,8 +50,8 @@ interface PortfolioData {
 }
 
 interface CryptoPortfolioDashboardProps {
-  wallets: unknown[];
-  transactions: unknown[];
+  wallets: CryptoWallet[];
+  transactions: CryptoTransaction[];
 }
 
 const COIN_COLORS: Record<string, string> = {
@@ -74,6 +69,7 @@ export function CryptoPortfolioDashboard({
   const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(
     null,
   );
+
   const [loading, setLoading] = useState(true);
   const [rates, setRates] = useState<Record<string, number>>({});
 

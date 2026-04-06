@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
@@ -25,18 +24,52 @@ import {
 } from "@/types/patient-status";
 import type { Patient } from "@/types/patient";
 
+// Definindo localmente caso não esteja exportado no adapter (verificado: não está exportado)
+interface PatientAPIData {
+  id: string;
+  clinicId: string;
+  fullName: string;
+  cpf?: string;
+  rg?: string;
+  birthDate?: string;
+  gender?: string;
+  email?: string;
+  phone?: string;
+  mobile?: string;
+  addressStreet?: string;
+  addressNumber?: string;
+  addressComplement?: string;
+  addressNeighborhood?: string;
+  addressCity?: string;
+  addressState?: string;
+  addressZipcode?: string;
+  totalDebt?: number;
+  totalPaid?: number;
+  paymentStatus?: string;
+  status: any; // Pode ser string ou objeto com code
+  dadosComerciais?: Record<string, any>;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: string;
+  updatedBy?: string;
+}
+
 export default function PatientDetail() {
-  const { patientId } = useParams();
+  const { patientId } = useParams<{ patientId: string }>();
   const navigate = useNavigate();
 
   const { data: patient, isLoading } = useQuery<Patient>({
     queryKey: ["patient", patientId],
     queryFn: async () => {
-      const data = await apiClient.get<Record<string, any>>(`/pacientes/${patientId}`);
+      const data = await apiClient.get<PatientAPIData>(`/pacientes/${patientId}`);
+      // @ts-ignore - adapter expects PatientAPI but local interface is same
       return PatientAdapter.toFrontend(data);
     },
     enabled: !!patientId,
   });
+
 
   if (isLoading) {
     return (

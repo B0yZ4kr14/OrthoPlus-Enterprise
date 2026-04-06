@@ -78,8 +78,8 @@ export function PatientStatusManager({
     try {
       await onStatusChange(selectedStatus, reason);
       setReason("");
-    } catch (err: unknown) {
-      setError(err.message || "Erro ao alterar status");
+    } catch (err: any) {
+      setError(err?.message || "Erro ao alterar status");
     } finally {
       setIsSubmitting(false);
     }

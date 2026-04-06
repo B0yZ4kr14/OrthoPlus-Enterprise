@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +25,7 @@ import {
 import type { Patient } from "@/types/patient";
 
 export default function PatientFormPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { clinicId, user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +35,7 @@ export default function PatientFormPage() {
     resolver: zodResolver(patientFormSchema),
     defaultValues: {
       full_name: "",
+      birth_date: "",
       phone_primary: "",
       status: "PROSPECT",
     },
@@ -47,18 +47,19 @@ export default function PatientFormPage() {
 
     const fetchPatient = async () => {
       try {
-        const response = await apiClient.get<{ data: unknown }>(
+        const response = await apiClient.get<any>(
           `/pacientes/${id}`,
         );
 
-        if (response.data) {
+        if (response) {
           // Converter data da API para o formato do formulário
-          const formData = PatientAdapter.toFrontend(response.data);
-          form.reset(formData as unknown);
+          const formData = PatientAdapter.toFrontend(response);
+          // @ts-ignore - Some fields in GlobalPatient are null while PatientFormValues expects optional/nullable
+          form.reset(formData);
         }
       } catch (error: any) {
         toast.error("Erro ao carregar paciente", {
-          description: error.message || "Erro desconhecido",
+          description: error instanceof Error ? error.message : "Erro desconhecido",
         });
         navigate("/pacientes");
       } finally {
@@ -68,6 +69,7 @@ export default function PatientFormPage() {
 
     fetchPatient();
   }, [id, form, navigate]);
+
 
   // Calcular IMC automaticamente quando peso ou altura mudar
   useEffect(() => {
