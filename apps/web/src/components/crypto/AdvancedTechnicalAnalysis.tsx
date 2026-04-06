@@ -1,3 +1,4 @@
+import type { TechnicalAnalysis } from "@orthoplus/shared-types";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
