@@ -99,9 +99,7 @@ export function DataTable<T extends Record<string, unknown>>({
 
       if (aVal === bVal) return 0;
 
-      // @ts-expect-error - Auto-healer: TS18046 - 'bVal' is of type 'unknown'....
-      // @ts-expect-error - Auto-healer: TS18046 - 'aVal' is of type 'unknown'....
-      const comparison = aVal < bVal ? -1 : 1;
+      const comparison = String(aVal) < String(bVal) ? -1 : 1;
       return sortDirection === "asc" ? comparison : -comparison;
     });
   }, [filteredData, sortColumn, sortDirection]);
@@ -200,8 +198,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 <TableRow key={rowIndex} className="hover:bg-muted/50">
                   {columns.map((column) => (
                     <TableCell key={column.key}>
-                      // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
-                      {column.render ? column.render(row) : row[column.key]}
+                      {column.render ? column.render(row) : (row[column.key] as React.ReactNode)}
                     </TableCell>
                   ))}
                 </TableRow>

@@ -42,8 +42,7 @@ const CRMPage = () => {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
-          <Tabs value={view} onValueChange={(v) => setView(v as unknown)}>
+          <Tabs value={view} onValueChange={(v) => setView(v as "list" | "kanban")}>
             <TabsList>
               <TabsTrigger value="kanban" className="flex items-center gap-2">
                 <LayoutGrid className="h-4 w-4" />

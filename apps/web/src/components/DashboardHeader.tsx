@@ -129,21 +129,18 @@ export function DashboardHeader({
                   data-tour="user-menu"
                 >
                   <Avatar className="h-7 w-7 bg-primary border-2 border-primary/20">
-                    // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
-                    {user &&
-                      "user_metadata" in user &&
-                      user.user_metadata?.avatar_url && (
+                    {(() => {
+                      if (!user || !("user_metadata" in user)) return null;
+                      const meta = user.user_metadata as Record<string, unknown> | undefined;
+                      const avatarUrl = typeof meta?.avatar_url === "string" ? meta.avatar_url : null;
+                      if (!avatarUrl) return null;
+                      return (
                         <AvatarImage
-                          // @ts-expect-error - Auto-healer: TS2322 - Type '{}' is not assignable to type 'str...
-                          src={user.user_metadata.avatar_url}
-                          // @ts-expect-error - Auto-healer: TS2322 - Type '{}' is not assignable to type 'str...
-                          alt={
-                            user.user_metadata?.full_name ||
-                            user.email ||
-                            "Avatar"
-                          }
+                          src={avatarUrl}
+                          alt={String(meta?.full_name || user.email || "Avatar")}
                         />
-                      )}
+                      );
+                    })()}
                     <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
                       {user?.email ? getInitials(user.email) : "US"}
                     </AvatarFallback>

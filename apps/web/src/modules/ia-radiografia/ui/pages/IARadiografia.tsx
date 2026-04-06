@@ -154,15 +154,13 @@ export default function IARadiografia() {
   };
 
   const getStatusIcon = (status: string) => {
-    const icons: Record<string, unknown> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       PENDENTE: Clock,
       PROCESSANDO: Clock,
       CONCLUIDA: CheckCircle,
       ERRO: AlertCircle,
     };
     const Icon = icons[status] || Clock;
-    // @ts-expect-error - Auto-healer: TS2786 - 'Icon' cannot be used as a JSX component...
-    // @ts-expect-error - Auto-healer: TS2604 - JSX element type 'Icon' does not have an...
     return <Icon className="h-4 w-4" />;
   };
 
@@ -483,8 +481,7 @@ export default function IARadiografia() {
                     <div className="text-sm text-muted-foreground space-y-1">
                       <p>
                         Data:{" "}
-                        // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
-                        {new Date(analise.created_at).toLocaleString("pt-BR")}
+                        {new Date(analise.created_at ?? "").toLocaleString("pt-BR")}
                       </p>
                       <p className="flex items-center gap-2">
                         <AlertCircle className="h-3 w-3 text-warning" />

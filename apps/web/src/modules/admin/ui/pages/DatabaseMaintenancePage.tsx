@@ -232,8 +232,7 @@ export default function DatabaseMaintenancePage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            // @ts-expect-error - Auto-healer: TS18048 - 'stats.tables' is possibly 'undefined'....
-            {stats?.tables.map((table) => (
+            {stats?.tables?.map((table) => (
               <div
                 key={table.name}
                 className="flex items-center justify-between p-3 border rounded-lg"

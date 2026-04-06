@@ -45,6 +45,19 @@ export default defineConfig({
     emptyOutDir: true,
     cssCodeSplit: true,
     minify: 'esbuild',
-    chunkSizeWarningLimit: 500,
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react-dom') || id.includes('/react/')) return 'react-vendor';
+            if (id.includes('lucide-react')) return 'lucide';
+            if (id.includes('recharts') || id.includes('d3-') || id.includes('victory-vendor')) return 'charts';
+            if (id.includes('jspdf') || id.includes('html2canvas')) return 'pdf';
+            if (id.includes('exceljs')) return 'excel';
+          }
+        },
+      },
+    },
   },
 });
