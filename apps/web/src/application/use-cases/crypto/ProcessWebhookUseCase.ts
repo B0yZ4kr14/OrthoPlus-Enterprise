@@ -4,6 +4,7 @@
 
 import { CryptoTransaction } from "@/domain/entities/CryptoPayment";
 import { ICryptoRepository } from "./CreateCryptoInvoiceUseCase";
+import { logger } from "@/lib/logger";
 
 export interface ProcessWebhookDTO {
   invoiceId: string;

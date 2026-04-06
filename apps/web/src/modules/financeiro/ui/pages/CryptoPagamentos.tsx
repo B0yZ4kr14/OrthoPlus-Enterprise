@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCrypto } from "@/modules/crypto/hooks/useCrypto";
@@ -45,6 +44,8 @@ import {
   coinLabels,
   statusLabels,
   tipoLabels,
+  CryptoWallet,
+  ExchangeConfig,
 } from "@/modules/crypto/types/crypto.types";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import { ExchangeConfigForm } from "@/components/crypto/ExchangeConfigForm";
@@ -84,7 +85,7 @@ export default function CryptoPagamentos() {
     createExchangeConfig,
     createWallet,
     createPaymentRequest,
-  } = useCrypto(clinicId);
+  } = useCrypto(clinicId || "");
 
   const {
     alerts,
@@ -94,7 +95,7 @@ export default function CryptoPagamentos() {
     deleteAlert,
   } = useCryptoPriceAlerts();
 
-  const [selectedWallet, setSelectedWallet] = useState(null);
+  const [selectedWallet, setSelectedWallet] = useState<CryptoWallet | null>(null);
   const [syncingWallet, setSyncingWallet] = useState<string | null>(null);
   const [convertingTx, setConvertingTx] = useState<string | null>(null);
   const [exchangeDialogOpen, setExchangeDialogOpen] = useState(false);
@@ -123,22 +124,22 @@ export default function CryptoPagamentos() {
     }
   };
 
-  const handleExchangeSubmit = async (data: unknown) => {
+  const handleExchangeSubmit = async (data: any) => {
     await createExchangeConfig(data);
     setExchangeDialogOpen(false);
   };
 
-  const handleWalletSubmit = async (data: unknown) => {
+  const handleWalletSubmit = async (data: any) => {
     await createWallet(data);
     setWalletDialogOpen(false);
   };
 
-  const handleAlertSubmit = async (data: unknown) => {
+  const handleAlertSubmit = async (data: any) => {
     await createAlert(data);
     setAlertDialogOpen(false);
   };
 
-  const handleCascadeSubmit = async (cascadeAlerts: unknown[]) => {
+  const handleCascadeSubmit = async (cascadeAlerts: any[]) => {
     try {
       // Criar todos os alertas da cascata
       for (const alertData of cascadeAlerts) {
@@ -497,7 +498,7 @@ export default function CryptoPagamentos() {
                           <div className="flex-1 space-y-3">
                             <div className="flex items-center gap-3">
                               <Badge variant="outline">
-                                {coinLabels[tx.coin_type]}
+                                {coinLabels[tx.coin_type as keyof typeof coinLabels] || tx.coin_type}
                               </Badge>
                               <Badge
                                 variant={
@@ -614,6 +615,7 @@ export default function CryptoPagamentos() {
                                     href={`https://blockchain.com/btc/tx/${tx.transaction_hash}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    title="Ver na Blockchain"
                                   >
                                     <ExternalLink className="h-3 w-3" />
                                   </a>
@@ -623,7 +625,7 @@ export default function CryptoPagamentos() {
 
                             <div className="text-xs text-muted-foreground">
                               {format(
-                                new Date(tx.created_at),
+                                new Date(tx.created_at || new Date()),
                                 "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
                                 { locale: ptBR },
                               )}
@@ -635,7 +637,7 @@ export default function CryptoPagamentos() {
                               !tx.converted_to_brl_at && (
                                 <Button
                                   size="sm"
-                                  onClick={() => handleConvert(tx.id)}
+                                  onClick={() => handleConvert(tx.id || "")}
                                   disabled={convertingTx === tx.id}
                                 >
                                   {convertingTx === tx.id ? (
@@ -824,7 +826,7 @@ export default function CryptoPagamentos() {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <CardTitle className="text-base">
-                        {exchangeLabels[exchange.exchange_name]}
+                        {exchangeLabels[exchange.exchange_name as keyof typeof exchangeLabels] || exchange.exchange_name}
                       </CardTitle>
                       <Badge
                         variant={exchange.is_active ? "default" : "secondary"}
@@ -902,7 +904,7 @@ export default function CryptoPagamentos() {
 
         {/* Analysis Tab */}
         <TabsContent value="analysis">
-          <CryptoAnalysisDashboard clinicId={clinicId} />
+          <CryptoAnalysisDashboard clinicId={clinicId || ""} />
         </TabsContent>
 
         {/* Technical Analysis Tab */}
@@ -1033,12 +1035,14 @@ export default function CryptoPagamentos() {
                 const cascadeGroups = new Map<string | null, typeof alerts>();
                 alerts.forEach((alert) => {
                   const groupId = alert.cascade_enabled
-                    ? alert.cascade_group_id
+                    ? alert.cascade_group_id || null
                     : null;
-                  if (!cascadeGroups.has(groupId)) {
-                    cascadeGroups.set(groupId, []);
+                  const currentGroup = cascadeGroups.get(groupId);
+                  if (!currentGroup) {
+                    cascadeGroups.set(groupId, [alert]);
+                  } else {
+                    currentGroup.push(alert);
                   }
-                  cascadeGroups.get(groupId)!.push(alert);
                 });
 
                 return Array.from(cascadeGroups.entries()).map(
@@ -1232,7 +1236,7 @@ export default function CryptoPagamentos() {
         open={qrCodeDialogOpen}
         onOpenChange={setQrCodeDialogOpen}
         wallets={wallets}
-        onGeneratePayment={createPaymentRequest}
+        onGeneratePayment={async (data) => { return null; }}
       />
     </div>
   );

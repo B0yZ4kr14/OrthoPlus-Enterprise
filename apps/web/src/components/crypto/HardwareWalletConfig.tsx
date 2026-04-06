@@ -117,8 +117,8 @@ export function HardwareWalletConfig() {
               <Label htmlFor="wallet-type">Tipo de Hardware</Label>
               <Select
                 value={newWallet.type}
-                onValueChange={(value: unknown) =>
-                  setNewWallet({ ...newWallet, type: value })
+                onValueChange={(value) =>
+                  setNewWallet({ ...newWallet, type: value as any })
                 }
               >
                 <SelectTrigger id="wallet-type">

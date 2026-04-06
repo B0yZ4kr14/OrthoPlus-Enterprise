@@ -95,7 +95,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
         },
       );
 
-      setTestAddress(data.address);
+      setTestAddress((data as any).address);
       setIsValid(true);
       toast.success("xPub validado com sucesso!");
     } catch (error: any) {

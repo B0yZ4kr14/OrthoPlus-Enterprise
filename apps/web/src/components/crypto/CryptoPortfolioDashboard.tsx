@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
@@ -24,7 +24,10 @@ import { logger } from "@/lib/logger";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import type { CryptoWallet, CryptoTransaction, CoinType } from "@/types/crypto";
+import type {
+  CryptoWallet,
+  CryptoTransaction,
+} from "@/modules/crypto/types/crypto.types";
 
 interface PortfolioData {
   totalBRL: number;
@@ -54,14 +57,6 @@ interface CryptoPortfolioDashboardProps {
   transactions: CryptoTransaction[];
 }
 
-const COIN_COLORS: Record<string, string> = {
-  BTC: "#F7931A",
-  ETH: "#627EEA",
-  USDT: "#26A17B",
-  BNB: "#F3BA2F",
-  USDC: "#2775CA",
-};
-
 export function CryptoPortfolioDashboard({
   wallets,
   transactions,
@@ -73,91 +68,8 @@ export function CryptoPortfolioDashboard({
   const [loading, setLoading] = useState(true);
   const [rates, setRates] = useState<Record<string, number>>({});
 
-  useEffect(() => {
-    calculatePortfolio();
-  }, [wallets, transactions]);
-
-  const calculatePortfolio = async () => {
-    setLoading(true);
-
+  const fetchRealRates = useCallback(async (): Promise<Record<string, number>> => {
     try {
-      // Buscar cotações reais
-      const realRates = await fetchRealRates();
-      setRates(realRates);
-
-      // Calcular total por moeda
-      const totalCrypto: Record<string, number> = {};
-      wallets.forEach((wallet) => {
-        if (wallet.is_active) {
-          totalCrypto[wallet.coin_type] =
-            (totalCrypto[wallet.coin_type] || 0) + wallet.balance;
-        }
-      });
-
-      // Calcular valor total em BRL
-      let totalBRL = 0;
-      const distribution = Object.entries(totalCrypto).map(([coin, amount]) => {
-        const rate = realRates[coin] || 0;
-        const valueBRL = amount * rate;
-        totalBRL += valueBRL;
-
-        return {
-          coin,
-          value: valueBRL,
-          percentage: 0, // Será calculado depois
-          color: COIN_COLORS[coin] || "#666",
-        };
-      });
-
-      // Calcular percentuais
-      distribution.forEach((item) => {
-        item.percentage = totalBRL > 0 ? (item.value / totalBRL) * 100 : 0;
-      });
-
-      // Calcular ganhos e perdas
-      let gains = 0;
-      let losses = 0;
-      const conversionsHistory = transactions
-        .filter((tx) => tx.status === "CONVERTIDO")
-        .map((tx) => {
-          const isGain = tx.net_amount_brl > tx.amount_brl;
-          const diff = tx.net_amount_brl - tx.amount_brl;
-
-          if (isGain) gains += diff;
-          else losses += Math.abs(diff);
-
-          return {
-            id: tx.id,
-            date: new Date(tx.created_at),
-            fromCoin: tx.coin_type,
-            toCoin: "BRL",
-            amount: tx.amount_crypto,
-            rate: tx.exchange_rate,
-            valueBRL: tx.net_amount_brl,
-            type: isGain ? "gain" : ("loss" as "gain" | "loss"),
-          };
-        })
-        .sort((a, b) => b.date.getTime() - a.date.getTime())
-        .slice(0, 10);
-
-      setPortfolioData({
-        totalBRL,
-        totalCrypto,
-        distribution,
-        gains,
-        losses,
-        conversionsHistory,
-      });
-    } catch (error) {
-      logger.error("Erro ao calcular portfolio", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchRealRates = async (): Promise<Record<string, number>> => {
-    try {
-      // Usar CoinGecko API para cotações reais
       const coins = [
         "bitcoin",
         "ethereum",
@@ -182,7 +94,6 @@ export function CryptoPortfolioDashboard({
       };
     } catch (error) {
       logger.error("Erro ao buscar cotações", error);
-      // Fallback para valores simulados
       return {
         BTC: 350000,
         ETH: 18000,
@@ -191,7 +102,97 @@ export function CryptoPortfolioDashboard({
         USDC: 5.5,
       };
     }
-  };
+  }, []);
+
+  const calculatePortfolio = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const realRates = await fetchRealRates();
+      setRates(realRates);
+
+      const totalCrypto: Record<string, number> = {};
+      wallets.forEach((wallet) => {
+        if (wallet.is_active) {
+          totalCrypto[wallet.coin_type] =
+            (totalCrypto[wallet.coin_type] || 0) + wallet.balance;
+        }
+      });
+
+      let totalBRL = 0;
+      const distribution = Object.entries(totalCrypto).map(([coin, amount]) => {
+        const rate = realRates[coin] || 0;
+        const valueBRL = amount * rate;
+        totalBRL += valueBRL;
+
+        return {
+          coin,
+          value: valueBRL,
+          percentage: 0,
+          color:
+            coin === "BTC"
+              ? "#F7931A"
+              : coin === "ETH"
+              ? "#627EEA"
+              : coin === "USDT"
+              ? "#26A17B"
+              : coin === "BNB"
+              ? "#F3BA2F"
+              : coin === "USDC"
+              ? "#2775CA"
+              : "#666",
+        };
+      });
+
+      distribution.forEach((item) => {
+        item.percentage = totalBRL > 0 ? (item.value / totalBRL) * 100 : 0;
+      });
+
+      let gains = 0;
+      let losses = 0;
+      const conversionsHistory = transactions
+        .filter((tx) => tx.status === "CONVERTIDO")
+        .map((tx) => {
+          const amountBRL = tx.amount_brl || 0;
+          const netAmountBRL = tx.net_amount_brl || 0;
+          const isGain = netAmountBRL > amountBRL;
+          const diff = netAmountBRL - amountBRL;
+
+          if (isGain) gains += diff;
+          else losses += Math.abs(diff);
+
+          return {
+            id: tx.id || "",
+            date: new Date(tx.created_at || new Date()),
+            fromCoin: tx.coin_type,
+            toCoin: "BRL",
+            amount: tx.amount_crypto,
+            rate: tx.exchange_rate,
+            valueBRL: netAmountBRL,
+            type: (isGain ? "gain" : "loss") as "gain" | "loss",
+          };
+        })
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .slice(0, 10);
+
+      setPortfolioData({
+        totalBRL,
+        totalCrypto,
+        distribution,
+        gains,
+        losses,
+        conversionsHistory,
+      });
+    } catch (error) {
+      logger.error("Erro ao calcular portfolio", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [wallets, transactions, fetchRealRates]);
+
+  useEffect(() => {
+    calculatePortfolio();
+  }, [calculatePortfolio]);
 
   const exportPortfolio = () => {
     if (!portfolioData) return;
@@ -299,7 +300,6 @@ export function CryptoPortfolioDashboard({
 
   return (
     <div className="space-y-6">
-      {/* KPIs Principais */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card depth="normal" className="border-l-4 border-l-primary">
           <CardContent className="p-6">
@@ -320,7 +320,7 @@ export function CryptoPortfolioDashboard({
           </CardContent>
         </Card>
 
-        <Card depth="normal" className="border-l-4 border-l-success">
+        <Card depth="normal" className="border-l-4 border-success">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -340,7 +340,7 @@ export function CryptoPortfolioDashboard({
           </CardContent>
         </Card>
 
-        <Card depth="normal" className="border-l-4 border-l-destructive">
+        <Card depth="normal" className="border-l-4 border-destructive">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -362,7 +362,7 @@ export function CryptoPortfolioDashboard({
 
         <Card
           depth="normal"
-          className={`border-l-4 ${isProfit ? "border-l-success" : "border-l-destructive"}`}
+          className={`border-l-4 ${isProfit ? "border-success" : "border-destructive"}`}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -389,7 +389,6 @@ export function CryptoPortfolioDashboard({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Gráfico de Distribuição */}
         <Card depth="normal">
           <CardHeader>
             <CardTitle>Distribuição do Portfolio</CardTitle>
@@ -433,8 +432,19 @@ export function CryptoPortfolioDashboard({
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: item.color }}
+                      className={`w-4 h-4 rounded-full ${
+                        item.coin === "BTC"
+                          ? "bg-[#F7931A]"
+                          : item.coin === "ETH"
+                          ? "bg-[#627EEA]"
+                          : item.coin === "USDT"
+                          ? "bg-[#26A17B]"
+                          : item.coin === "BNB"
+                          ? "bg-[#F3BA2F]"
+                          : item.coin === "USDC"
+                          ? "bg-[#2775CA]"
+                          : "bg-muted-foreground"
+                      }`}
                     />
                     <span className="font-semibold">{item.coin}</span>
                   </div>
@@ -456,7 +466,6 @@ export function CryptoPortfolioDashboard({
           </CardContent>
         </Card>
 
-        {/* Histórico de Conversões */}
         <Card depth="normal">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -543,7 +552,6 @@ export function CryptoPortfolioDashboard({
         </Card>
       </div>
 
-      {/* Cotações Atuais */}
       <Card depth="normal">
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -564,13 +572,35 @@ export function CryptoPortfolioDashboard({
             {Object.entries(rates).map(([coin, rate]) => (
               <div
                 key={coin}
-                className="p-4 rounded-lg border text-center"
-                style={{ borderColor: COIN_COLORS[coin] }}
+                className={`p-4 rounded-lg border text-center ${
+                  coin === "BTC"
+                    ? "border-[#F7931A]/20"
+                    : coin === "ETH"
+                    ? "border-[#627EEA]/20"
+                    : coin === "USDT"
+                    ? "border-[#26A17B]/20"
+                    : coin === "BNB"
+                    ? "border-[#F3BA2F]/20"
+                    : coin === "USDC"
+                    ? "border-[#2775CA]/20"
+                    : ""
+                }`}
               >
                 <p className="text-xs text-muted-foreground mb-1">{coin}</p>
                 <p
-                  className="text-lg font-bold"
-                  style={{ color: COIN_COLORS[coin] }}
+                  className={`text-lg font-bold ${
+                    coin === "BTC"
+                      ? "text-[#F7931A]"
+                      : coin === "ETH"
+                      ? "text-[#627EEA]"
+                      : coin === "USDT"
+                      ? "text-[#26A17B]"
+                      : coin === "BNB"
+                      ? "text-[#F3BA2F]"
+                      : coin === "USDC"
+                      ? "text-[#2775CA]"
+                      : ""
+                  }`}
                 >
                   {rate.toLocaleString("pt-BR", {
                     style: "currency",

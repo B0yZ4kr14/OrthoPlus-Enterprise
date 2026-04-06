@@ -12,15 +12,10 @@ import {
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
 
+import { type CryptoWallet } from "@/modules/crypto/types/crypto.types";
+
 interface WalletQRPreviewProps {
-  wallet: {
-    id: string;
-    wallet_name: string;
-    wallet_address: string;
-    coin_type: string;
-    balance: number;
-    is_active: boolean;
-  };
+  wallet: CryptoWallet;
 }
 
 export function WalletQRPreview({ wallet }: WalletQRPreviewProps) {

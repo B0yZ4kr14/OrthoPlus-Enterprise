@@ -1,9 +1,10 @@
-// @ts-nocheck
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   cryptoWalletSchema,
   coinLabels,
+  type ExchangeConfig,
+  type CryptoWallet,
 } from "@/modules/crypto/types/crypto.types";
 import {
   Form,
@@ -24,12 +25,13 @@ import {
   SelectValue,
 } from "@orthoplus/core-ui/select";
 import { Switch } from "@orthoplus/core-ui/switch";
+import { z } from "zod";
 
 interface WalletFormProps {
-  onSubmit: (data: unknown) => Promise<void>;
+  onSubmit: (data: z.infer<typeof cryptoWalletSchema>) => Promise<void>;
   onCancel: () => void;
-  initialData?: Record<string, any>;
-  exchanges?: unknown[];
+  initialData?: z.infer<typeof cryptoWalletSchema>;
+  exchanges?: ExchangeConfig[];
 }
 
 export function WalletForm({
@@ -38,13 +40,16 @@ export function WalletForm({
   initialData,
   exchanges = [],
 }: WalletFormProps) {
-  const form = useForm({
-    resolver: zodResolver(cryptoWalletSchema),
-    defaultValues: initialData || {
-      wallet_name: "",
-      coin_type: "BTC",
-      wallet_address: "",
-      is_active: true,
+  const form = useForm<z.infer<typeof cryptoWalletSchema>>({
+    resolver: zodResolver(cryptoWalletSchema) as any,
+    defaultValues: {
+      wallet_name: initialData?.wallet_name || "",
+      coin_type: initialData?.coin_type || "BTC",
+      wallet_address: initialData?.wallet_address || "",
+      is_active: initialData?.is_active ?? true,
+      balance: initialData?.balance || 0,
+      balance_brl: initialData?.balance_brl || 0,
+      exchange_config_id: initialData?.exchange_config_id || undefined,
     },
   });
 
@@ -125,7 +130,7 @@ export function WalletForm({
               <FormItem>
                 <FormLabel>Exchange Vinculada (Opcional)</FormLabel>
                 <Select
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => field.onChange(value || undefined)}
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -136,7 +141,7 @@ export function WalletForm({
                   <SelectContent>
                     <SelectItem value="">Nenhuma</SelectItem>
                     {exchanges.map((exchange) => (
-                      <SelectItem key={exchange.id} value={exchange.id}>
+                      <SelectItem key={exchange.id || `exchange-${exchange.exchange_name}`} value={exchange.id || ""}>
                         {exchange.exchange_name}
                       </SelectItem>
                     ))}

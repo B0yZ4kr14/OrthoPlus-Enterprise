@@ -25,6 +25,13 @@ interface CryptoPaymentSelectorProps {
   onPaymentConfirmed: (txHash: string, cryptoCurrency: string) => void;
 }
 
+interface PaymentData {
+  address: string;
+  qrData: string;
+  amount: number;
+  coin: string;
+}
+
 export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
   amount,
   onPaymentConfirmed,
@@ -33,7 +40,7 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
   const [selectedWallet, setSelectedWallet] = useState<string>("");
   const [selectedCoin, setSelectedCoin] = useState<string>("BTC");
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
-  const [paymentData, setPaymentData] = useState<unknown>(null);
+  const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [generatingAddress, setGeneratingAddress] = useState(false);
 
   // ✅ FASE 2: Memoizar lista combinada de wallets
@@ -182,7 +189,17 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
         <BitcoinQRCodeDialog
           open={qrDialogOpen}
           onOpenChange={setQrDialogOpen}
-          wallets={[{ ...paymentData, wallet_address: paymentData.address }]}
+          wallets={[
+            {
+              id: "payment-request",
+              wallet_address: paymentData.address,
+              coin_type: paymentData.coin as any,
+              wallet_name: `Pagamento ${paymentData.coin}`,
+              balance: 0,
+              balance_brl: 0,
+              is_active: true,
+            },
+          ]}
           onGeneratePayment={handlePaymentGenerated}
         />
       )}

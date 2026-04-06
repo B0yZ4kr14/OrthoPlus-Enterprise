@@ -32,7 +32,7 @@ export class GeneratePaymentAddressUseCase {
       } else {
         return await this.generateOfflineWalletAddress(dto);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("[GeneratePaymentAddressUseCase] Error:", error);
       throw new Error(`Failed to generate payment address: ${error.message}`);
     }

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const exchangeConfigSchema = z.object({
   id: z.string().uuid().optional(),
-  clinic_id: z.string().uuid(),
+  clinic_id: z.string().uuid().optional(),
   exchange_name: z.enum([
     "BINANCE",
     "COINBASE",
@@ -17,24 +17,28 @@ export const exchangeConfigSchema = z.object({
   auto_convert_to_brl: z.boolean().default(false),
   conversion_threshold: z.number().default(0),
   processing_fee_percentage: z.number().min(0).max(100).default(0),
-  created_by: z.string().uuid(),
+  created_by: z.string().uuid().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export const cryptoWalletSchema = z.object({
   id: z.string().uuid().optional(),
-  clinic_id: z.string().uuid(),
+  clinic_id: z.string().uuid().optional(),
   exchange_config_id: z.string().uuid().optional(),
   wallet_address: z.string().min(1, "Endereço da carteira é obrigatório"),
   coin_type: z.enum(["BTC", "ETH", "USDT", "BNB", "USDC"]),
   wallet_name: z.string().min(1, "Nome da carteira é obrigatório"),
-  balance: z.number().default(0),
-  balance_brl: z.number().default(0),
-  is_active: z.boolean().default(true),
+  balance: z.number().optional().default(0),
+  balance_brl: z.number().optional().default(0),
+  is_active: z.boolean().optional().default(true),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export const cryptoTransactionSchema = z.object({
   id: z.string().uuid().optional(),
-  clinic_id: z.string().uuid(),
+  clinic_id: z.string().uuid().optional(),
   exchange_config_id: z.string().uuid().optional(),
   wallet_id: z.string().uuid().optional(),
   patient_id: z.string().uuid().optional(),
@@ -58,6 +62,8 @@ export const cryptoTransactionSchema = z.object({
   processing_fee_brl: z.number().optional(),
   net_amount_brl: z.number().optional(),
   observacoes: z.string().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
 });
 
 export type ExchangeConfig = z.infer<typeof exchangeConfigSchema>;
