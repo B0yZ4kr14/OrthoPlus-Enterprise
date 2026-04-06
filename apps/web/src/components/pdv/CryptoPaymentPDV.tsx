@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Card,
   CardContent,
@@ -49,9 +50,10 @@ export default function CryptoPaymentPDV({
   onSuccess,
   onCancel,
 }: CryptoPaymentPDVProps) {
+  const { clinicId } = useAuth();
   const { wallets, offlineWallets, loading: loadingData } = useCrypto();
   const [selectedWallet, setSelectedWallet] = useState<string>("");
-  const [selectedCoin, setSelectedCoin] = useState<string>("BTC");
+  const [selectedCoin, setSelectedCoin] = useState<"BTC" | "ETH" | "USDT" | "BNB" | "USDC">("BTC");
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [generatingAddress, setGeneratingAddress] = useState(false);
@@ -61,12 +63,7 @@ export default function CryptoPaymentPDV({
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
 
   const allWallets = [
-    ...wallets.map((w) => ({ ...w, type: "exchange", id: w.id.toString() })),
-    ...offlineWallets.map((w) => ({
-      ...w,
-      type: "offline",
-      id: w.id.toString(),
-    })),
+    ...wallets.map((w) => ({ ...w, type: "exchange", id: w.id?.toString() || "" })),
   ];
 
   // Mock exchange rates (em produção, buscar de API)
@@ -96,7 +93,7 @@ export default function CryptoPaymentPDV({
       if (wallet?.type === "exchange") {
         // Exchange: usar endereço da config
         mockAddress =
-          (wallet as unknown).wallet_address ||
+          (wallet as any).wallet_address ||
           `bc1q${Math.random().toString(36).substring(2, 42)}`;
       } else {
         // Offline wallet: derivar do xPub (em produção)
@@ -244,7 +241,10 @@ export default function CryptoPaymentPDV({
             <label className="text-sm font-medium mb-2 block">
               Criptomoeda
             </label>
-            <Select value={selectedCoin} onValueChange={setSelectedCoin}>
+            <Select 
+              value={selectedCoin} 
+              onValueChange={(v) => setSelectedCoin(v as any)}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -345,11 +345,14 @@ export default function CryptoPaymentPDV({
             {
               id: paymentData.invoiceId || "1",
               wallet_address: paymentData.address,
-              coin_type: paymentData.coin,
+              coin_type: paymentData.coin as "BTC" | "ETH" | "USDT" | "BNB" | "USDC",
               wallet_name: `Pagamento ${paymentData.coin}`,
+              balance: 0,
+              balance_brl: 0,
+              is_active: true,
             },
           ]}
-          onGeneratePayment={async (data) => {}}
+          onGeneratePayment={async (data) => { return null; }}
         />
       )}
     </>

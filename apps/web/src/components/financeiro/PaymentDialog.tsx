@@ -89,7 +89,7 @@ export function PaymentDialog({
       triggerSuccessConfetti();
 
       toast.success("Pagamento processado com sucesso!", {
-        description: `Transação: ${data.transacao_id}`,
+        description: `Transação: ${(data as any).transacao_id}`,
       });
 
       onSuccess();
@@ -129,7 +129,7 @@ export function PaymentDialog({
             />
           </div>
 
-          <Tabs value={metodo} onValueChange={(v) => setMetodo(v as unknown)}>
+          <Tabs value={metodo} onValueChange={(v) => setMetodo(v as any)}>
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="PIX" className="gap-2">
                 <QrCode className="h-4 w-4" />
@@ -211,7 +211,7 @@ export function PaymentDialog({
                 <Label htmlFor="card-type">Tipo de Cartão</Label>
                 <Select
                   value={metodo}
-                  onValueChange={(v) => setMetodo(v as unknown)}
+                  onValueChange={(v) => setMetodo(v as any)}
                 >
                   <SelectTrigger>
                     <SelectValue />

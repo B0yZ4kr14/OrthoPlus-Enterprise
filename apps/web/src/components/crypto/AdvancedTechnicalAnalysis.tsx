@@ -378,11 +378,11 @@ export function AdvancedTechnicalAnalysis({
                           </p>
                           <p className="text-sm font-semibold">
                             Preço: R${" "}
-                            {payload[0].value.toLocaleString("pt-BR", {
+                            {typeof payload[0]?.value === 'number' ? payload[0].value.toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,
-                            })}
+                            }) : "0,00"}
                           </p>
-                          {payload[1] && (
+                          {payload[1] && typeof payload[1].value === 'number' && (
                             <p className="text-xs text-muted-foreground">
                               Banda Superior: R${" "}
                               {payload[1].value.toLocaleString("pt-BR", {
@@ -390,7 +390,7 @@ export function AdvancedTechnicalAnalysis({
                               })}
                             </p>
                           )}
-                          {payload[3] && (
+                          {payload[3] && typeof payload[3].value === 'number' && (
                             <p className="text-xs text-muted-foreground">
                               Banda Inferior: R${" "}
                               {payload[3].value.toLocaleString("pt-BR", {

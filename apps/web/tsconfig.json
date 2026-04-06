@@ -6,9 +6,11 @@
       "@/*": ["./src/*"]
     },
     "skipLibCheck": true,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictFunctionTypes": false
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

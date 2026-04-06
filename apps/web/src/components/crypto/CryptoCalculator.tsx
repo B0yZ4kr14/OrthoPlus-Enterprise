@@ -46,7 +46,14 @@ export function CryptoCalculator() {
     BRL: 1,
   });
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-  const [history24h, setHistory24h] = useState<unknown[]>([]);
+  interface HistoryItem {
+    timestamp: Date;
+    BTC: number;
+    ETH: number;
+    USDT: number;
+    [key: string]: any;
+  }
+  const [history24h, setHistory24h] = useState<HistoryItem[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
 
   useEffect(() => {
@@ -191,7 +198,7 @@ export function CryptoCalculator() {
             <div className="grid grid-cols-2 gap-2">
               <Select
                 value={fromCurrency}
-                onValueChange={(value: unknown) => setFromCurrency(value)}
+                onValueChange={(value) => setFromCurrency(value as any)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -244,7 +251,7 @@ export function CryptoCalculator() {
             <div className="grid grid-cols-2 gap-2">
               <Select
                 value={toCurrency}
-                onValueChange={(value: unknown) => setToCurrency(value)}
+                onValueChange={(value) => setToCurrency(value as any)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -283,10 +290,10 @@ export function CryptoCalculator() {
             <h4 className="text-sm font-semibold">Tendência das Últimas 24h</h4>
             {!loadingHistory && history24h.length > 0 && (
               <Badge variant="outline" className="gap-1">
-                {history24h[history24h.length - 1][
+                {(history24h[history24h.length - 1][
                   fromCurrency !== "BRL" ? fromCurrency : "BTC"
-                ] >
-                history24h[0][fromCurrency !== "BRL" ? fromCurrency : "BTC"] ? (
+                ] || 0) >
+                (history24h[0][fromCurrency !== "BRL" ? fromCurrency : "BTC"] || 0) ? (
                   <>
                     <TrendingUp className="h-3 w-3 text-success" />
                     <span className="text-success">Alta</span>

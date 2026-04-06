@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect, useRef } from "react";
 import {
   Dialog,
@@ -19,17 +18,18 @@ import {
 import { Copy, Download, QrCode } from "lucide-react";
 import { toast } from "sonner";
 import QRCode from "qrcode";
+import { type CryptoWallet } from "@/modules/crypto/types/crypto.types";
 
 interface BitcoinQRCodeDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  wallets: unknown[];
+  wallets: CryptoWallet[];
   onGeneratePayment: (data: {
     wallet_id: string;
     amount_crypto: number;
     patient_id?: string;
     conta_receber_id?: string;
-  }) => Promise<void>;
+  }) => Promise<any>;
 }
 
 export function BitcoinQRCodeDialog({
@@ -147,7 +147,7 @@ export function BitcoinQRCodeDialog({
                   {wallets
                     .filter((w) => w.is_active)
                     .map((wallet) => (
-                      <SelectItem key={wallet.id} value={wallet.id}>
+                      <SelectItem key={wallet.id} value={wallet.id || "unknown"}>
                         {wallet.wallet_name} ({wallet.coin_type})
                       </SelectItem>
                     ))}

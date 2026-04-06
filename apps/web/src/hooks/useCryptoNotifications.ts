@@ -165,7 +165,7 @@ export function useCryptoNotifications() {
         }),
       );
     } catch (error) {
-      logger.debug("Erro ao tocar som", error);
+      logger.debug("Erro ao tocar som", { error });
     }
   };
 

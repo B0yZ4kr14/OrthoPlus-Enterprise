@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { exchangeLabels } from "@/modules/crypto/types/crypto.types";
+import {
+  exchangeLabels,
+  exchangeConfigSchema,
+  type ExchangeConfig,
+} from "@/modules/crypto/types/crypto.types";
 import {
   Form,
   FormControl,
@@ -39,9 +43,16 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-// Schema de validação aprimorado
-const exchangeConfigSchema = z.object({
-  exchange_name: z.string().min(1, "Selecione uma exchange"),
+interface ExchangeConfigFormProps {
+  onSubmit: (data: z.infer<typeof exchangeConfigSchema>) => Promise<void>;
+  onCancel: () => void;
+  initialData?: Partial<ExchangeConfig>;
+}
+
+const AVAILABLE_COINS = ["BTC", "ETH", "USDT", "BNB", "USDC"];
+
+const exchangeFormSchema = z.object({
+  exchange_name: exchangeConfigSchema.shape.exchange_name,
   api_key: z
     .string()
     .min(16, "API Key deve ter no mínimo 16 caracteres")
@@ -58,14 +69,6 @@ const exchangeConfigSchema = z.object({
   is_active: z.boolean().default(true),
 });
 
-interface ExchangeConfigFormProps {
-  onSubmit: (data: unknown) => Promise<void>;
-  onCancel: () => void;
-  initialData?: Record<string, any>;
-}
-
-const AVAILABLE_COINS = ["BTC", "ETH", "USDT", "BNB", "USDC"];
-
 export function ExchangeConfigForm({
   onSubmit,
   onCancel,
@@ -76,9 +79,9 @@ export function ExchangeConfigForm({
     "idle" | "success" | "error"
   >("idle");
 
-  const form = useForm({
-    resolver: zodResolver(exchangeConfigSchema),
-    defaultValues: initialData || {
+  const form = useForm<z.infer<typeof exchangeFormSchema>>({
+    resolver: zodResolver(exchangeFormSchema) as any,
+    defaultValues: (initialData as any) || {
       exchange_name: "BINANCE",
       api_key: "",
       api_secret: "",
@@ -91,13 +94,15 @@ export function ExchangeConfigForm({
     },
   });
 
-  const handleTestConnection = async () => {
-    const apiKey = form.getValues("api_key");
-    const apiSecret = form.getValues("api_secret");
-    const exchangeName = form.getValues("exchange_name");
+  const getValues = form.getValues;
 
-    if (!apiKey || !apiSecret) {
-      toast.error("Preencha API Key e API Secret antes de testar");
+  const handleTestConnection = async () => {
+    const exchange = getValues("exchange_name");
+    const apiKey = getValues("api_key");
+    const apiSecret = getValues("api_secret");
+
+    if (!exchange || !apiKey || !apiSecret) {
+      toast.error("Preencha Exchange, API Key e API Secret para testar");
       return;
     }
 
@@ -105,17 +110,13 @@ export function ExchangeConfigForm({
     setConnectionStatus("idle");
 
     try {
-      // Simula teste de conexão (em produção, chamar edge function)
+      // Simulação de teste de conexão
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Por enquanto sempre sucesso
       setConnectionStatus("success");
       toast.success("Conexão testada com sucesso!");
     } catch (error) {
       setConnectionStatus("error");
-      toast.error(
-        "Falha ao conectar com a exchange. Verifique suas credenciais.",
-      );
+      toast.error("Falha na conexão. Verifique suas credenciais.");
     } finally {
       setTestingConnection(false);
     }

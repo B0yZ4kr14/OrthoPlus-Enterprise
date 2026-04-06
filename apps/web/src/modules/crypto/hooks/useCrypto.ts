@@ -231,7 +231,7 @@ export const useCrypto = (clinicId: string) => {
     const confirmedToday = transactions.filter(
       (t) =>
         t.status === "CONFIRMADO" &&
-        new Date(t.created_at).toDateString() === new Date().toDateString(),
+        new Date(t.created_at || new Date()).toDateString() === new Date().toDateString(),
     ).length;
 
     return {

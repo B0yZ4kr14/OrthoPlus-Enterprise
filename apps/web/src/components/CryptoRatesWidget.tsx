@@ -30,12 +30,13 @@ export function CryptoRatesWidget() {
   const fetchRates = async () => {
     setLoading(true);
     try {
-      const data = await apiClient.post<unknown>(
+      const response = await apiClient.post<{ rates: CryptoRate[] }>(
         "/functions/v1/get-crypto-rates",
         {},
       );
 
-      setRates(data.rates.slice(0, 4)); // Top 4 cryptos
+      const data = response as any;
+      setRates((data.rates || []).slice(0, 4)); // Top 4 cryptos
       setLastUpdate(new Date());
     } catch (error) {
       logger.error("Error fetching crypto rates:", error);
@@ -75,7 +76,7 @@ export function CryptoRatesWidget() {
         )}
         <span className="text-sm font-medium">
           {isPositive ? "+" : ""}
-          {change.toFixed(2)}%
+          {typeof change === 'number' ? change.toFixed(2) : "0.00"}%
         </span>
       </div>
     );
