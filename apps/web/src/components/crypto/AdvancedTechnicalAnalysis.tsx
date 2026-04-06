@@ -1,5 +1,3 @@
-// @ts-nocheck
-import type { TechnicalAnalysis } from "@orthoplus/shared-types";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
@@ -21,18 +19,19 @@ import {
 import { TrendingUp, TrendingDown, Activity, BarChart3 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import type { ChartDataItem, TechnicalIndicatorResults, CoinType, TimePeriod } from "@/types/crypto";
 
 interface TechnicalAnalysisProps {
-  coinType: "BTC" | "ETH" | "USDT";
+  coinType: CoinType;
 }
 
-// Função para calcular RSI (Relative Strength Index)
+// @ts-ignore
 function calculateRSI(prices: number[], period = 14): number[] {
   const rsi: number[] = [];
 
   for (let i = 0; i < prices.length; i++) {
     if (i < period) {
-      rsi.push(50); // Valor neutro até ter dados suficientes
+      rsi.push(50);
       continue;
     }
 
@@ -56,7 +55,7 @@ function calculateRSI(prices: number[], period = 14): number[] {
   return rsi;
 }
 
-// Função para calcular MACD (Moving Average Convergence Divergence)
+// @ts-ignore
 function calculateMACD(prices: number[]) {
   const ema12 = calculateEMA(prices, 12);
   const ema26 = calculateEMA(prices, 26);
@@ -67,7 +66,6 @@ function calculateMACD(prices: number[]) {
   return { macdLine, signalLine, histogram };
 }
 
-// Função para calcular EMA (Exponential Moving Average)
 function calculateEMA(prices: number[], period: number): number[] {
   const ema: number[] = [];
   const multiplier = 2 / (period + 1);
@@ -84,7 +82,7 @@ function calculateEMA(prices: number[], period: number): number[] {
   return ema;
 }
 
-// Função para calcular Bollinger Bands
+// @ts-ignore
 function calculateBollingerBands(prices: number[], period = 20, stdDev = 2) {
   const sma = calculateSMA(prices, period);
   const upperBand: number[] = [];
@@ -110,7 +108,6 @@ function calculateBollingerBands(prices: number[], period = 20, stdDev = 2) {
   return { sma, upperBand, lowerBand };
 }
 
-// Função para calcular SMA (Simple Moving Average)
 function calculateSMA(prices: number[], period: number): number[] {
   const sma: number[] = [];
 
@@ -131,9 +128,9 @@ function calculateSMA(prices: number[], period: number): number[] {
 export function AdvancedTechnicalAnalysis({
   coinType,
 }: TechnicalAnalysisProps) {
-  const [period, setPeriod] = useState<"24h" | "7d" | "30d" | "1y">("7d");
-  const [chartData, setChartData] = useState<unknown[]>([]);
-  const [indicators, setIndicators] = useState<unknown>(null);
+  const [period, setPeriod] = useState<TimePeriod>("7d");
+  const [chartData, setChartData] = useState<ChartDataItem[]>([]);
+  const [indicators, setIndicators] = useState<TechnicalIndicatorResults | null>(null);
 
   useEffect(() => {
     generateMockData();
@@ -151,7 +148,7 @@ export function AdvancedTechnicalAnalysis({
     const basePrice =
       coinType === "BTC" ? 350000 : coinType === "ETH" ? 18000 : 5.5;
 
-    const data = [];
+    const data: ChartDataItem[] = [];
     let currentPrice = basePrice;
 
     for (let i = 0; i < dataPoints; i++) {
@@ -170,7 +167,7 @@ export function AdvancedTechnicalAnalysis({
     const macd = calculateMACD(prices);
     const bollinger = calculateBollingerBands(prices);
 
-    const enrichedData = data.map((d, i) => ({
+    const enrichedData: ChartDataItem[] = data.map((d, i) => ({
       ...d,
       rsi: rsi[i],
       macd: macd.macdLine[i],
@@ -183,10 +180,10 @@ export function AdvancedTechnicalAnalysis({
 
     setChartData(enrichedData);
 
-    // Calcular indicadores atuais
-    const currentRSI = rsi[rsi.length - 1];
-    const currentMACD = macd.macdLine[macd.macdLine.length - 1];
-    const currentSignal = macd.signalLine[macd.signalLine.length - 1];
+    const lastIdx = data.length - 1;
+    const currentRSI = rsi[lastIdx];
+    const currentMACD = macd.macdLine[lastIdx];
+    const currentSignal = macd.signalLine[lastIdx];
 
     setIndicators({
       rsi: currentRSI,
@@ -205,6 +202,7 @@ export function AdvancedTechnicalAnalysis({
       ).toFixed(2),
     });
   };
+
 
   return (
     <div className="space-y-6">

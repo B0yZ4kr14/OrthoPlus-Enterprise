@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Calendar, Clock, Plus, Settings } from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";
@@ -52,7 +51,6 @@ function AgendaContent() {
   });
 
   const {
-    schedules,
     createSchedule,
     isCreating: isCreatingSchedule,
   } = useDentistSchedules({
@@ -63,7 +61,14 @@ function AgendaContent() {
     clinicId: clinicId || undefined,
   });
 
-  const handleCreateAppointment = (data: unknown) => {
+  const handleCreateAppointment = (data: {
+    patientId: string;
+    dentistId: string;
+    scheduledDatetime: Date;
+    durationMinutes: number;
+    appointmentType: string;
+    notes?: string;
+  }) => {
     createAppointment(
       {
         ...data,
@@ -77,7 +82,14 @@ function AgendaContent() {
     );
   };
 
-  const handleCreateSchedule = (data: unknown) => {
+  const handleCreateSchedule = (data: {
+    dentistId: string;
+    dayOfWeek: number;
+    startTime: string;
+    endTime: string;
+    breakStart?: string;
+    breakEnd?: string;
+  }) => {
     createSchedule(
       {
         ...data,
@@ -91,7 +103,12 @@ function AgendaContent() {
     );
   };
 
-  const handleCreateBlock = (data: unknown) => {
+  const handleCreateBlock = (data: {
+    dentistId: string;
+    startDatetime: Date;
+    endDatetime: Date;
+    reason: string;
+  }) => {
     createBlockedTime(
       {
         ...data,

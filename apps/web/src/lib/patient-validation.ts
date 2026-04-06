@@ -154,7 +154,7 @@ export const patientFormSchema = z.object({
       "RESPONSAVEL",
       "TRANSFERENCIA",
     ])
-    .default("PROSPECT"),
+    .optional(),
 });
 
 export type PatientFormValues = z.infer<typeof patientFormSchema>;
