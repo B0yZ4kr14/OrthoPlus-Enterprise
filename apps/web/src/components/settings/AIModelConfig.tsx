@@ -99,7 +99,7 @@ export function AIModelConfig() {
 
     setLoading(true);
     try {
-      const dataArray = await apiClient.get<unknown[]>(
+      const dataArray = await apiClient.get<Record<string, any>[]>(
         "/admin/configuracoes/ai_models",
       );
 

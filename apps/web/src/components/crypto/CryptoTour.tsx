@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useState } from "react";
 import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
 

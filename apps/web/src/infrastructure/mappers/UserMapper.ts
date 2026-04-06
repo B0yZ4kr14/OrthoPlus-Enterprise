@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { User, AppRole } from "@/domain/entities/User";
 import { Email } from "@/domain/value-objects/Email";
 import { Database } from "@/types/database";

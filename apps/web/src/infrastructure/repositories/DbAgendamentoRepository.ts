@@ -44,7 +44,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     clinicId: string,
   ): Promise<Agendamento[]> {
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
         params: { patient_id: patientId, clinic_id: clinicId },
       });
       return (data || []).map(AgendamentoMapper.toDomain);
@@ -59,7 +59,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     endDate: Date,
   ): Promise<Agendamento[]> {
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
         params: {
           clinic_id: clinicId,
           start_date: startDate.toISOString(),
@@ -84,7 +84,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
   ): Promise<Agendamento[]> {
     const dbStatus = status.toLowerCase();
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
         params: { clinic_id: clinicId, status: dbStatus },
       });
       return (data || []).map(AgendamentoMapper.toDomain);
@@ -95,7 +95,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
 
   async findAtivos(clinicId: string): Promise<Agendamento[]> {
     try {
-      const data = await apiClient.get<unknown[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
         params: {
           clinic_id: clinicId,
           status: "not.in.(cancelado,concluido,faltou)",
@@ -136,7 +136,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     const dbData = AgendamentoMapper.toDatabase(agendamento);
     try {
       await apiClient.post("/agenda/appointments", dbData);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao salvar agendamento: ${error.message}`);
     }
   }
@@ -145,7 +145,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     const dbData = AgendamentoMapper.toDatabase(agendamento);
     try {
       await apiClient.patch(`/agenda/appointments/${agendamento.id}`, dbData);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao atualizar agendamento: ${error.message}`);
     }
   }
@@ -153,7 +153,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/agenda/appointments/${id}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao deletar agendamento: ${error.message}`);
     }
   }

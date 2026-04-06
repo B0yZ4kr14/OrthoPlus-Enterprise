@@ -12,10 +12,10 @@ import {
 export class CampaignSendRepositoryApi implements ICampaignSendRepository {
   async findById(id: string): Promise<CampaignSend | null> {
     try {
-      const data = await apiClient.get<unknown>(`/marketing/envios/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`/marketing/envios/${id}`);
       if (!data) return null;
       return this.toDomain(data);
-    } catch (error: unknown) {
+    } catch (error: any) {
       if (error.response?.status === 404 || error.response?.status === 406)
         return null;
       throw new Error(`Erro ao buscar envio de campanha: ${error.message}`);
@@ -37,22 +37,22 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
         params.has_error = filters.hasError;
       }
 
-      const data = await apiClient.get<unknown[]>("/marketing/envios", {
+      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
         params,
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao buscar envios da campanha: ${error.message}`);
     }
   }
 
   async findByPatient(patientId: string): Promise<CampaignSend[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/marketing/envios", {
+      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
         params: { patient_id: patientId },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(
         `Erro ao buscar envios para o paciente: ${error.message}`,
       );
@@ -63,7 +63,7 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
     const data = this.toDatabase(send);
     try {
       await apiClient.post("/marketing/envios", data);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao salvar envio: ${error.message}`);
     }
   }
@@ -72,7 +72,7 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
     const data = this.toDatabase(send);
     try {
       await apiClient.patch(`/marketing/envios/${send.id}`, data);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao atualizar envio: ${error.message}`);
     }
   }
@@ -80,14 +80,14 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/marketing/envios/${id}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao deletar envio: ${error.message}`);
     }
   }
 
   async getScheduledSends(campaignId: string): Promise<CampaignSend[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/marketing/envios", {
+      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
         params: {
           campaign_id: campaignId,
           status: "AGENDADO",
@@ -95,26 +95,26 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
         },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao buscar envios agendados: ${error.message}`);
     }
   }
 
   async getErrorSends(campaignId: string): Promise<CampaignSend[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/marketing/envios", {
+      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
         params: {
           campaign_id: campaignId,
           status: "ERRO",
         },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao buscar envios com erro: ${error.message}`);
     }
   }
 
-  private toDomain(row: unknown): CampaignSend {
+  private toDomain(row: Record<string, any>): CampaignSend {
     const statusMap: Record<string, CampaignSendStatus> = {
       PENDENTE: "AGENDADO",
       AGENDADO: "AGENDADO",

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";

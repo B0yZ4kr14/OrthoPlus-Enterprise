@@ -194,7 +194,7 @@ export default function ContasReceber() {
       });
 
       toast.success(`Cobrança enviada via ${tipo} com sucesso!`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao enviar cobrança:", error);
       toast.error(error.message || "Erro ao enviar cobrança");
     } finally {

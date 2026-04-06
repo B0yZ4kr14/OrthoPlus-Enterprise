@@ -42,7 +42,7 @@ export const useModulos = () => {
       const action = response.module.is_active ? "ativado" : "desativado";
       toast.success(`Módulo ${action} com sucesso!`);
     },
-    onError: (error: unknown) => {
+    onError: (error: any) => {
       // Erro 412 indica dependências não atendidas
       if (error.response?.status === 412) {
         toast.error(

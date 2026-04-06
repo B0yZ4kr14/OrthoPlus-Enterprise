@@ -66,7 +66,7 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
       });
 
       setQrDialogOpen(true);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error generating payment address:", error);
       toast.error("Erro ao gerar endereço de pagamento");
     } finally {

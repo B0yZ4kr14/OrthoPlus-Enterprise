@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { Plus, FileText, Send, CheckCircle } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";

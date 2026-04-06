@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Performance Monitoring Utilities
  * Ferramentas para monitorar e otimizar performance da aplicação

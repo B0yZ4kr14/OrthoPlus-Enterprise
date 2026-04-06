@@ -8,7 +8,7 @@ import {
 import { Badge } from "@orthoplus/core-ui/badge";
 
 interface FinanceiroTabProps {
-  patient: unknown;
+  patient: Record<string, any>;
 }
 
 export function FinanceiroTab({ patient }: FinanceiroTabProps) {

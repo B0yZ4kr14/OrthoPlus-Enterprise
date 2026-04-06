@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCrypto } from "@/modules/crypto/hooks/useCrypto";

@@ -3,7 +3,7 @@ import { Smile } from "lucide-react";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 
 interface OdontogramaTabProps {
-  patient: unknown;
+  patient: Record<string, any>;
 }
 
 export function OdontogramaTab({ patient }: OdontogramaTabProps) {

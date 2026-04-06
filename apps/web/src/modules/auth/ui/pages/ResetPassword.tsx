@@ -86,7 +86,7 @@ export default function ResetPassword() {
       setTimeout(() => {
         navigate("/auth");
       }, 2000);
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error("Erro ao redefinir senha", {
         description: error.message || "Tente novamente mais tarde.",
       });

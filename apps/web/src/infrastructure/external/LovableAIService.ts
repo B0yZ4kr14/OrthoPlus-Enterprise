@@ -21,7 +21,7 @@ interface AIAnalysisRequest {
 
 interface AIAnalysisResponse {
   model: string;
-  analysis: unknown;
+  analysis: Record<string, any>;
   confidence: number;
   processingTimeMs: number;
   tokensUsed?: number;

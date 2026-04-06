@@ -33,7 +33,7 @@ export default function PatientDetailPage() {
   const { data: patient, isLoading } = useQuery<Patient>({
     queryKey: ["patient", id],
     queryFn: async () => {
-      const data = await apiClient.get<unknown>(`/pacientes/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`/pacientes/${id}`);
       return PatientAdapter.toFrontend(data);
     },
     enabled: !!id,

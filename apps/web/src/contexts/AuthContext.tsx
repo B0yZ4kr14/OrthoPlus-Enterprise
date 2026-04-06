@@ -221,7 +221,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         description: "Você já pode fazer login.",
       });
       return { error: null };
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error("Erro ao criar conta", { description: (error as ApiError).message });
       return { error };
     }
@@ -245,7 +245,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       return { error: null };
-    } catch (error: unknown) {
+    } catch (error: any) {
       const err = error as ApiError;
       const errorMessage = err.response?.data?.error || err.message;
       toast.error("Erro ao fazer login", { description: errorMessage });
@@ -273,7 +273,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       toast.success("Bem-vindo ao Portal do Paciente!");
       return { error: null };
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error("Erro ao fazer login: " + (error as ApiError).message);
       return { error };
     }
@@ -288,7 +288,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUserRole(null);
       setClinicId(null);
       toast.success("Logout realizado com sucesso");
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error("Erro ao sair", { description: (error as ApiError).message });
     }
   };

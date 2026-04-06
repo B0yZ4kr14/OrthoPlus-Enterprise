@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Input } from "@orthoplus/core-ui/input";

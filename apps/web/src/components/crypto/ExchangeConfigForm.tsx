@@ -61,7 +61,7 @@ const exchangeConfigSchema = z.object({
 interface ExchangeConfigFormProps {
   onSubmit: (data: unknown) => Promise<void>;
   onCancel: () => void;
-  initialData?: unknown;
+  initialData?: Record<string, any>;
 }
 
 const AVAILABLE_COINS = ["BTC", "ETH", "USDT", "BNB", "USDC"];

@@ -20,7 +20,7 @@ export function BackupStatsTab() {
 
   const fetchStats = async () => {
     try {
-      const backups = await apiClient.get<unknown[]>(
+      const backups = await apiClient.get<Record<string, any>[]>(
         "/configuracoes/backups/historico",
       );
 

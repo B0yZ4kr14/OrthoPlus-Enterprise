@@ -15,7 +15,7 @@ export class ApiTransactionRepository implements ITransactionRepository {
 
   async findById(id: string): Promise<Transaction | null> {
     try {
-      const data = await apiClient.get<unknown>(`${this.baseUrl}/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`${this.baseUrl}/${id}`);
       if (!data) return null;
       return this.toDomain(data);
     } catch {
@@ -43,7 +43,7 @@ export class ApiTransactionRepository implements ITransactionRepository {
       if (filters?.relatedEntityId)
         params.related_entity_id = filters.relatedEntityId;
 
-      const data = await apiClient.get<unknown[]>(this.baseUrl, { params });
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, { params });
       return (data || []).map((row) => this.toDomain(row));
     } catch (e) {
       console.error(e);
@@ -71,7 +71,7 @@ export class ApiTransactionRepository implements ITransactionRepository {
     type: "RECEITA" | "DESPESA",
   ): Promise<number> {
     try {
-      const data = await apiClient.get<unknown[]>(this.baseUrl, {
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
         params: {
           type,
           status: "PAGO",
@@ -87,7 +87,7 @@ export class ApiTransactionRepository implements ITransactionRepository {
 
   async getOverdueTransactions(clinicId: string): Promise<Transaction[]> {
     try {
-      const data = await apiClient.get<unknown[]>(this.baseUrl, {
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
         params: { status: "PENDENTE", end_date: new Date().toISOString() },
       });
       return (data || []).map((row) => this.toDomain(row));
@@ -98,7 +98,7 @@ export class ApiTransactionRepository implements ITransactionRepository {
 
   async getPendingTransactions(clinicId: string): Promise<Transaction[]> {
     try {
-      const data = await apiClient.get<unknown[]>(this.baseUrl, {
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
         params: { status: "PENDENTE" },
       });
       return (data || []).map((row) => this.toDomain(row));
@@ -107,7 +107,7 @@ export class ApiTransactionRepository implements ITransactionRepository {
     }
   }
 
-  private toDomain(row: unknown): Transaction {
+  private toDomain(row: Record<string, any>): Transaction {
     const props: TransactionProps = {
       id: row.id,
       clinicId: row.clinic_id,

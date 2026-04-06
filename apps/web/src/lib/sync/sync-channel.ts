@@ -19,7 +19,7 @@ export type SyncMessageType =
 export interface SyncMessage {
   type: SyncMessageType;
   tag?: string;
-  data?: unknown;
+  data?: Record<string, any>;
   timestamp: number;
 }
 
@@ -101,7 +101,7 @@ function triggerDebouncedSync(tag: string): void {
     debounceTimer = null;
     // Fire-and-forget: errors are logged via syncLogger; the debounced trigger
     // is best-effort and should not propagate to the event listener.
-    requestBackgroundSync(tag).catch((error: unknown) => {
+    requestBackgroundSync(tag).catch((error: any) => {
       syncLogger.error(
         tag,
         error instanceof Error ? error : new Error(String(error)),

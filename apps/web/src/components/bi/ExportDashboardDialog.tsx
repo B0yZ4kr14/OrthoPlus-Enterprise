@@ -245,7 +245,7 @@ export function ExportDashboardDialog({
                 : "mensalmente"
           } em ${email}`,
       );
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao agendar exportação:", error);
       toast.error(
         error instanceof Error ? error.message : "Erro ao agendar exportação",

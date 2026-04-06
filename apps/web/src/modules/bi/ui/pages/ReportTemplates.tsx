@@ -143,7 +143,7 @@ export default function ReportTemplates() {
         },
       ];
       setTemplates(mockTemplates);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao carregar templates:", error);
       toast.error("Erro ao carregar templates");
     } finally {

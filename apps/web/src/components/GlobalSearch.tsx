@@ -20,7 +20,7 @@ interface SearchResult {
   subtitle: string;
   type: "patient" | "appointment" | "procedure" | "transaction" | "product";
   route: string;
-  icon: unknown;
+  icon: React.ElementType;
 }
 
 const GlobalSearch = memo(function GlobalSearch() {

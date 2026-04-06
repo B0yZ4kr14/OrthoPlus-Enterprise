@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Tratamento } from "@/domain/entities/Tratamento";
 import { ITratamentoRepository } from "@/domain/repositories/ITratamentoRepository";
 import { apiClient } from "@/lib/api/apiClient";

@@ -98,7 +98,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
       setTestAddress(data.address);
       setIsValid(true);
       toast.success("xPub validado com sucesso!");
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error validating xPub:", error);
       toast.error("xPub inválido ou erro ao validar");
       setIsValid(false);
@@ -124,7 +124,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
       setTestAddress("");
       setIsValid(false);
       onSuccess?.();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error saving offline wallet:", error);
       toast.error("Erro ao salvar configuração");
     }

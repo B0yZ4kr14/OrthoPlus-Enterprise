@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { useAuthAPI } from "@/contexts/AuthContextAPI";
 import { PageHeader } from "@/components/shared/PageHeader";

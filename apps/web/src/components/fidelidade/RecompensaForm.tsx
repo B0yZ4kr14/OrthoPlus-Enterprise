@@ -42,7 +42,7 @@ interface RecompensaFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   procedimentos: Array<{ id: string; nome: string }>;
-  editingRecompensa?: unknown;
+  editingRecompensa?: Record<string, any>;
 }
 
 export function RecompensaForm({

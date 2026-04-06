@@ -11,7 +11,7 @@ export const useInadimplentes = () => {
     queryKey: ["inadimplentes", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data: unknown = await apiClient.get("/inadimplentes", {
+      const data: Record<string, any> = await apiClient.get("/inadimplentes", {
         params: { clinic_id: clinicId, sort: "valor_total_devido.desc" },
       });
       return data;
@@ -23,7 +23,7 @@ export const useInadimplentes = () => {
     queryKey: ["campanhas-inadimplencia", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data: unknown = await apiClient.get("/campanhas-inadimplencia", {
+      const data: Record<string, any> = await apiClient.get("/campanhas-inadimplencia", {
         params: { clinic_id: clinicId, sort: "created_at.desc" },
       });
       return data;
@@ -39,7 +39,7 @@ export const useInadimplentes = () => {
       inadimplenteId: string;
       tipo: string;
     }) => {
-      const data: unknown = await apiClient.post("/campanhas-inadimplencia", {
+      const data: Record<string, any> = await apiClient.post("/campanhas-inadimplencia", {
         clinic_id: clinicId,
         inadimplente_id: inadimplenteId,
         tipo_campanha: tipo,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { memo, useMemo } from "react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";

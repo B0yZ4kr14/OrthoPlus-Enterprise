@@ -91,7 +91,7 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
     const insert = IncidenteCaixaMapper.toDbInsert(incidente);
     try {
       await apiClient.post("/financeiro/incidentes", insert);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao salvar incidente de caixa: ${error.message}`);
     }
   }
@@ -100,7 +100,7 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
     const insert = IncidenteCaixaMapper.toDbInsert(incidente);
     try {
       await apiClient.patch(`/financeiro/incidentes/${incidente.id}`, insert);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao atualizar incidente de caixa: ${error.message}`);
     }
   }
@@ -108,7 +108,7 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/financeiro/incidentes/${id}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao deletar incidente de caixa: ${error.message}`);
     }
   }

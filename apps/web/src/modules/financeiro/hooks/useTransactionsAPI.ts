@@ -66,7 +66,7 @@ export function useTransactionsAPI() {
       });
 
       setTransactions(transformed);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error loading transactions:", error);
       toast.error("Erro ao carregar transações: " + error.message);
     } finally {
@@ -97,7 +97,7 @@ export function useTransactionsAPI() {
 
       toast.success("Transação criada com sucesso!");
       await loadTransactions();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error creating transaction:", error);
       toast.error("Erro ao criar transação: " + error.message);
       throw error;
@@ -114,7 +114,7 @@ export function useTransactionsAPI() {
 
       toast.success("Transação atualizada com sucesso!");
       await loadTransactions();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error updating transaction:", error);
       toast.error("Erro ao atualizar transação: " + error.message);
       throw error;
@@ -126,7 +126,7 @@ export function useTransactionsAPI() {
       await apiClient.delete(`/financeiro/transactions/${id}`);
       toast.success("Transação removida com sucesso!");
       await loadTransactions();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error deleting transaction:", error);
       toast.error("Erro ao remover transação: " + error.message);
       throw error;

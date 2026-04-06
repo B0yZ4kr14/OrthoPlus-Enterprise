@@ -19,7 +19,7 @@ export function BackupRetentionTab() {
   const { data: config } = useQuery({
     queryKey: ["backup-retention-config", clinicId],
     queryFn: async () => {
-      const data = await apiClient.get<unknown[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/configuracoes/backups/retencao",
       );
 
@@ -51,7 +51,7 @@ export function BackupRetentionTab() {
 
   const cleanupMutation = useMutation({
     mutationFn: async () => {
-      const data = await apiClient.post<unknown[]>(
+      const data = await apiClient.post<Record<string, any>[]>(
         "/configuracoes/backups/limpeza",
         {
           p_clinic_id: clinicId,

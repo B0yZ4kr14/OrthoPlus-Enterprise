@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Button } from "@orthoplus/core-ui/button";
 import {

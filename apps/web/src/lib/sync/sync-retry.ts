@@ -9,7 +9,7 @@
 import { syncLogger } from "./sync-logger";
 
 /** Errors that warrant a retry attempt. */
-function isRetryable(error: unknown): boolean {
+function isRetryable(error: any): boolean {
   if (error instanceof TypeError) {
     // TypeError is thrown by fetch() on network failure
     return true;
@@ -58,7 +58,7 @@ export async function syncWithRetry<T>(
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await operation();
-    } catch (error: unknown) {
+    } catch (error: any) {
       lastError = error;
 
       if (!isRetryable(error) || attempt === maxAttempts) {

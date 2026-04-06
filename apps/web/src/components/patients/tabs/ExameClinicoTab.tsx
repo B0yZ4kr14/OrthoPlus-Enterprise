@@ -12,7 +12,7 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { Progress } from "@orthoplus/core-ui/progress";
 
 interface ExameClinicoTabProps {
-  patient: unknown;
+  patient: Record<string, any>;
 }
 
 export function ExameClinicoTab({ patient }: ExameClinicoTabProps) {

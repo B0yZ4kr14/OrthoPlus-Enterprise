@@ -130,7 +130,7 @@ export default function ModulesAdmin() {
     }
 
     try {
-      const data: unknown = await apiClient.post(
+      const data: Record<string, any> = await apiClient.post(
         "/functions/v1/toggle-module-state",
         {
           module_key: moduleKey,
@@ -167,7 +167,7 @@ export default function ModulesAdmin() {
         description: `O módulo ${moduleKey} foi ${newState ? "ativado" : "desativado"}.`,
       });
       await fetchModules();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Toggle error:", error);
 
       // Shake animation para erro
@@ -191,7 +191,7 @@ export default function ModulesAdmin() {
 
   const handleRequest = async (moduleKey: string, moduleName: string) => {
     try {
-      const data: unknown = await apiClient.post(
+      const data: Record<string, any> = await apiClient.post(
         "/functions/v1/request-new-module",
         {
           module_key: moduleKey,
@@ -202,7 +202,7 @@ export default function ModulesAdmin() {
         title: "Solicitação enviada!",
         description: `Sua solicitação para o módulo ${moduleName} foi enviada ao time comercial.`,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Request error:", error);
       toast({
         title: "Erro ao solicitar módulo",
@@ -287,7 +287,7 @@ export default function ModulesAdmin() {
         title: "Importação concluída!",
         description: `${activated} módulos ativados com sucesso.`,
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Import error:", error);
       toast({
         title: "Erro ao importar",
@@ -309,7 +309,7 @@ export default function ModulesAdmin() {
         .map((m) => m.name)
         .join(", ");
 
-      const data: unknown = await apiClient.post(
+      const data: Record<string, any> = await apiClient.post(
         "/functions/v1/suggest-modules",
         {
           body: {
@@ -324,7 +324,7 @@ export default function ModulesAdmin() {
         title: "Sugestões geradas!",
         description: "Confira as recomendações de módulos abaixo.",
       });
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Suggestions error:", error);
       toast({
         title: "Erro ao gerar sugestões",

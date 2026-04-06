@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/car
 import { FileText } from "lucide-react";
 
 interface TratamentosTabProps {
-  patient: unknown;
+  patient: Record<string, any>;
 }
 
 export function TratamentosTab({ patient }: TratamentosTabProps) {

@@ -46,7 +46,7 @@ interface AuditLog {
   user_id: string;
   clinic_id: string;
   action: string;
-  details: unknown;
+  details: Record<string, any>;
   target_module_id: number | null;
   profiles?: { full_name: string | null } | null;
 }
@@ -80,7 +80,7 @@ export default function AuditLogs() {
     try {
       const data = await apiClient.get<User[]>("/usuarios");
       setUsers(data || []);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao carregar usuários:", error);
     }
   };
@@ -99,7 +99,7 @@ export default function AuditLogs() {
         `/db/audit_logs?${params.toString()}`,
       );
       setLogs(data || []);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Erro ao carregar logs:", error);
       toast.error("Erro ao carregar logs de auditoria");
     } finally {

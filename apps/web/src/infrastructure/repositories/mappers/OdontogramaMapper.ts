@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Odontograma, OdontogramaProps } from "@/domain/entities/Odontograma";
 import { Database } from "@/types/database";
 

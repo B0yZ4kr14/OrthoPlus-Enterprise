@@ -122,7 +122,7 @@ export default function PEPPage() {
       });
 
       setActiveTab("tratamentos");
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast({
         title: "Erro ao criar tratamentos",
         description: error instanceof Error ? error.message : "Erro",

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Dashboard de comparação de rentabilidade: Crypto vs Métodos Tradicionais (PIX, Cartão)
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";

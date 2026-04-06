@@ -33,7 +33,7 @@ export function usePatientsAPI(): UsePatientsReturn {
         response.patients,
       );
       setPatients(transformedPatients);
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error loading patients:", error);
       toast.error("Erro ao carregar pacientes: " + error.message);
     } finally {
@@ -57,7 +57,7 @@ export function usePatientsAPI(): UsePatientsReturn {
 
       toast.success("Paciente cadastrado com sucesso!");
       await loadPatients();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error adding patient:", error);
       toast.error("Erro ao cadastrar paciente: " + error.message);
       throw error;
@@ -75,7 +75,7 @@ export function usePatientsAPI(): UsePatientsReturn {
 
       toast.success("Paciente atualizado com sucesso!");
       await loadPatients();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error updating patient:", error);
       toast.error("Erro ao atualizar paciente: " + error.message);
       throw error;
@@ -87,7 +87,7 @@ export function usePatientsAPI(): UsePatientsReturn {
       await apiClient.delete(`/pacientes/${patientId}`);
       toast.success("Paciente removido com sucesso!");
       await loadPatients();
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error deleting patient:", error);
       toast.error("Erro ao remover paciente: " + error.message);
       throw error;

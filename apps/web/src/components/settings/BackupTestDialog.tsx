@@ -76,7 +76,7 @@ export function BackupTestDialog({
       } else {
         toast.error(`Teste falhou: ${data.testsFailed} erro(s) encontrado(s)`);
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Error running backup test:", error);
       toast.error("Erro ao executar teste de restauração");
       setTestResult({

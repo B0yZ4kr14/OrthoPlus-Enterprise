@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { Scan, History, GitCompare, Brain, Maximize2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";

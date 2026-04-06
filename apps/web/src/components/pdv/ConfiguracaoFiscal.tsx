@@ -32,7 +32,7 @@ export const ConfiguracaoFiscal = () => {
           clinic_id: clinicId,
         });
         return Array.isArray(data) ? data[0] : data;
-      } catch (error: unknown) {
+      } catch (error: any) {
         if (error?.status !== 404) throw error;
         return null;
       }
@@ -73,7 +73,7 @@ export const ConfiguracaoFiscal = () => {
         description: "Configuração fiscal atualizada com sucesso",
       });
     },
-    onError: (error: unknown) => {
+    onError: (error: any) => {
       toast({
         title: "Erro ao salvar",
         description: error.message,

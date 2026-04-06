@@ -3,7 +3,7 @@ import { FileImage, Shield, CheckCircle, XCircle } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
 
 interface DocumentosTabProps {
-  patient: unknown;
+  patient: Record<string, any>;
 }
 
 export function DocumentosTab({ patient }: DocumentosTabProps) {

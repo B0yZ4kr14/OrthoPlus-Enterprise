@@ -19,7 +19,7 @@ export class DbAnexoRepository implements IAnexoRepository {
 
   async findByProntuarioId(prontuarioId: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/pep/anexos", {
+      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos", {
         params: { prontuario_id: prontuarioId },
       });
       return (data || []).map(AnexoMapper.toDomain);
@@ -33,7 +33,7 @@ export class DbAnexoRepository implements IAnexoRepository {
 
   async findByHistoricoId(historicoId: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/pep/anexos", {
+      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos", {
         params: { historico_id: historicoId },
       });
       return (data || []).map(AnexoMapper.toDomain);
@@ -47,7 +47,7 @@ export class DbAnexoRepository implements IAnexoRepository {
 
   async findByTipo(prontuarioId: string, tipo: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/pep/anexos", {
+      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos", {
         params: { prontuario_id: prontuarioId, tipo_arquivo: tipo },
       });
       return (data || []).map(AnexoMapper.toDomain);
@@ -58,7 +58,7 @@ export class DbAnexoRepository implements IAnexoRepository {
 
   async findByClinicId(clinicId: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/pep/anexos");
+      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos");
       return (data || []).map(AnexoMapper.toDomain);
     } catch (error) {
       throw new InfrastructureError("Erro ao buscar anexos da clínica", error);

@@ -15,17 +15,17 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
         throw new Error("Nenhum dado retornado ao salvar atividade");
 
       return AtividadeMapper.toDomain(savedData);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao salvar atividade: ${error.message}`);
     }
   }
 
   async findById(id: string): Promise<Atividade | null> {
     try {
-      const data = await apiClient.get<unknown>(`/crm/atividades/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`/crm/atividades/${id}`);
       if (!data) return null;
       return AtividadeMapper.toDomain(data);
-    } catch (error: unknown) {
+    } catch (error: any) {
       if (error.response?.status === 404 || error.response?.status === 406)
         return null;
       throw new Error(`Erro ao buscar atividade: ${error.message}`);
@@ -34,22 +34,22 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
 
   async findByLeadId(leadId: string): Promise<Atividade[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/crm/atividades", {
+      const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
         params: { lead_id: leadId },
       });
       return data?.map(AtividadeMapper.toDomain) ?? [];
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao buscar atividades do lead: ${error.message}`);
     }
   }
 
   async findByResponsavel(responsavelId: string): Promise<Atividade[]> {
     try {
-      const data = await apiClient.get<unknown[]>("/crm/atividades", {
+      const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
         params: { assigned_to: responsavelId },
       });
       return data?.map(AtividadeMapper.toDomain) ?? [];
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(
         `Erro ao buscar atividades do responsável: ${error.message}`,
       );
@@ -67,7 +67,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
     endOfDay.setHours(23, 59, 59, 999);
 
     try {
-      const activities = await apiClient.get<unknown[]>("/crm/atividades", {
+      const activities = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
         params: {
           status: "AGENDADA",
           start_date: startOfDay.toISOString(),
@@ -75,7 +75,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
         },
       });
       return activities?.map(AtividadeMapper.toDomain) ?? [];
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao buscar atividades agendadas: ${error.message}`);
     }
   }
@@ -94,7 +94,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
         throw new Error("Nenhum dado retornado ao atualizar atividade");
 
       return AtividadeMapper.toDomain(updatedData);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao atualizar atividade: ${error.message}`);
     }
   }
@@ -102,7 +102,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/crm/atividades/${id}`);
-    } catch (error: unknown) {
+    } catch (error: any) {
       throw new Error(`Erro ao deletar atividade: ${error.message}`);
     }
   }

@@ -65,7 +65,7 @@ export function ConfiguracaoBancaria() {
 
       setEditando(null);
       loadConfigs();
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error(`Erro ao salvar: ${error.message}`);
     } finally {
       setLoading(false);
@@ -80,7 +80,7 @@ export function ConfiguracaoBancaria() {
         clinic_id: selectedClinic,
       });
       setConfigs(Array.isArray(data) ? data : data ? [data] : []);
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error(`Erro ao carregar configurações: ${error.message}`);
     }
   };
@@ -93,7 +93,7 @@ export function ConfiguracaoBancaria() {
         hoje.getTime() - 30 * 24 * 60 * 60 * 1000,
       );
 
-      const data: unknown = await apiClient.post(
+      const data: Record<string, any> = await apiClient.post(
         "/sincronizar-extrato-bancario",
         {
           bancoConfigId: configId,
@@ -105,7 +105,7 @@ export function ConfiguracaoBancaria() {
         `${data.lancamentos_sincronizados} lançamentos sincronizados (${data.conciliados_automaticamente} conciliados)`,
       );
       loadConfigs();
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error(`Erro ao sincronizar: ${error.message}`);
     } finally {
       setLoading(false);
@@ -120,7 +120,7 @@ export function ConfiguracaoBancaria() {
       await apiClient.delete(`/banco-config/${id}`);
       toast.success("Configuração excluída com sucesso");
       loadConfigs();
-    } catch (error: unknown) {
+    } catch (error: any) {
       toast.error(`Erro ao excluir: ${error.message}`);
     }
   };

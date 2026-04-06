@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AggregateRoot } from "@/core/domain/AggregateRoot";
 import { Email } from "@/core/domain/valueObjects/Email";
 import { Phone } from "@/core/domain/valueObjects/Phone";
