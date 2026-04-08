@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --exec tsx -r tsconfig-paths/register src/index.ts",
-    "build": "tsc && tsc-alias",
+    "build": "prisma generate && tsc && tsc-alias",
     "start": "node dist/index.js",
     "test": "jest",
     "lint": "ESLINT_USE_FLAT_CONFIG=false ./node_modules/.bin/eslint src --ext .ts",

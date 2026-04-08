@@ -175,7 +175,7 @@ export const createAppointment = async (req: Request, res: Response) => {
     }
 
     const appointment = await prisma.appointments.create({
-      data: { ...parsed.data, clinic_id: clinicId },
+      data: { ...parsed.data, clinic_id: clinicId } as any,
     });
     res.status(201).json(appointment);
   } catch (error) {
@@ -369,7 +369,7 @@ export const createConfirmation = async (req: Request, res: Response) => {
     }
 
     const confirmation = await prisma.appointment_confirmations.create({
-      data: parsed.data,
+      data: parsed.data as any,
     });
     res.status(201).json(confirmation);
   } catch (error) {
@@ -525,7 +525,7 @@ export const createBlockedTime = async (req: Request, res: Response) => {
     }
 
     const item = await prisma.blocked_times.create({
-      data: { ...parsed.data, clinic_id: clinicId },
+      data: { ...parsed.data, clinic_id: clinicId } as any,
     });
     res.status(201).json(item);
   } catch (error) {
@@ -622,7 +622,7 @@ export const createDentistSchedule = async (req: Request, res: Response) => {
     }
 
     const item = await prisma.dentist_schedules.create({
-      data: { ...parsed.data, clinic_id: clinicId },
+      data: { ...parsed.data, clinic_id: clinicId } as any,
     });
     res.status(201).json(item);
   } catch (error) {

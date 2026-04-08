@@ -6,7 +6,9 @@
   "workspaces": [
     "categories/@orthoplus/*",
     "categories/@orthoplus/*/packages/*",
-    "apps/*"
+    "apps/*",
+    "backend",
+    "shared-types"
   ],
   "scripts": {
     "dev": "turbo run dev --parallel",
