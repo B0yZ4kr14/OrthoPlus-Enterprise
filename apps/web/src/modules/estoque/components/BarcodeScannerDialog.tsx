@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// @ts-expect-error - Auto-healer: TS2307 - Cannot find module 'html5-qrcode' or its...
+// @ts-expect-error — TS2307
 import { Html5QrcodeScanner } from "html5-qrcode";
 import {
   Dialog,
@@ -37,12 +37,12 @@ export function BarcodeScannerDialog({
       );
 
       html5QrcodeScanner.render(
-        // @ts-expect-error - Auto-healer: TS7006 - Parameter 'decodedText' implicitly has a...
+        // @ts-expect-error — TS7006
         (decodedText) => {
           onScanSuccess(decodedText);
           onOpenChange(false);
         },
-        // @ts-expect-error - Auto-healer: TS7006 - Parameter 'error' implicitly has an 'any...
+        // @ts-expect-error — TS7006
         (error) => {
           // Silenciar erros de scan contínuo
         },

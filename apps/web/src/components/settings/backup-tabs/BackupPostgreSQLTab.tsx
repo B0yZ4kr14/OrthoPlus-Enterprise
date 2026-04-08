@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
@@ -6,11 +5,28 @@ import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Loader2, Database, Activity, AlertTriangle } from "lucide-react";
 
+interface DatabaseHealthResponse {
+  metrics: {
+    total_size_mb: number;
+    connections_active: number;
+    connections_max: number;
+    cache_hit_ratio: number;
+    largest_tables: Array<{
+      table_name: string;
+      size_mb: number;
+    }>;
+  };
+  alerts: Array<{
+    severity: "critical" | "warning";
+    message: string;
+  }>;
+}
+
 export function BackupPostgreSQLTab() {
   const { data: healthData, isLoading } = useQuery({
     queryKey: ["database-health"],
     queryFn: async () => {
-      return await apiClient.post<unknown>(
+      return await apiClient.post<DatabaseHealthResponse>(
         "/functions/v1/analyze-database-health",
         {},
       );
@@ -29,9 +45,9 @@ export function BackupPostgreSQLTab() {
   const metrics = healthData?.metrics;
   const alerts = healthData?.alerts || [];
   const criticalAlerts = alerts.filter(
-    (a: unknown) => a.severity === "critical",
+    (a) => a.severity === "critical",
   );
-  const warningAlerts = alerts.filter((a: unknown) => a.severity === "warning");
+  const warningAlerts = alerts.filter((a) => a.severity === "warning");
 
   return (
     <div className="space-y-6">
@@ -41,7 +57,7 @@ export function BackupPostgreSQLTab() {
           <AlertDescription>
             <strong>Alertas Críticos:</strong>
             <ul className="mt-2 space-y-1">
-              {criticalAlerts.map((alert: unknown, idx: number) => (
+              {criticalAlerts.map((alert, idx) => (
                 <li key={idx}>• {alert.message}</li>
               ))}
             </ul>
@@ -55,7 +71,7 @@ export function BackupPostgreSQLTab() {
           <AlertDescription>
             <strong>Avisos:</strong>
             <ul className="mt-2 space-y-1">
-              {warningAlerts.map((alert: unknown, idx: number) => (
+              {warningAlerts.map((alert, idx) => (
                 <li key={idx}>• {alert.message}</li>
               ))}
             </ul>
@@ -76,7 +92,7 @@ export function BackupPostgreSQLTab() {
               {metrics?.total_size_mb?.toFixed(0) || 0} MB
             </div>
             <p className="text-xs text-muted-foreground">
-              {metrics?.total_size_mb > 8000
+              {(metrics?.total_size_mb || 0) > 8000
                 ? "⚠️ Próximo ao limite"
                 : "✓ Capacidade OK"}
             </p>
@@ -97,7 +113,7 @@ export function BackupPostgreSQLTab() {
             </div>
             <p className="text-xs text-muted-foreground">
               {(
-                (metrics?.connections_active / metrics?.connections_max) *
+                ((metrics?.connections_active || 0) / (metrics?.connections_max || 100)) *
                 100
               ).toFixed(0)}
               % utilização
@@ -116,9 +132,9 @@ export function BackupPostgreSQLTab() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {metrics?.cache_hit_ratio > 90
+              {(metrics?.cache_hit_ratio || 0) > 90
                 ? "✓ Excelente"
-                : metrics?.cache_hit_ratio > 70
+                : (metrics?.cache_hit_ratio || 0) > 70
                   ? "⚠️ Bom"
                   : "⚠️ Baixo"}
             </div>
@@ -137,7 +153,7 @@ export function BackupPostgreSQLTab() {
           </CardHeader>
           <CardContent>
             <div className="text-sm">
-              {metrics?.largest_tables?.slice(0, 3).map((table: unknown) => (
+              {metrics?.largest_tables?.slice(0, 3).map((table) => (
                 <div
                   key={table.table_name}
                   className="flex justify-between py-1"

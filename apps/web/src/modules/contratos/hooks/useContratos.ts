@@ -198,6 +198,7 @@ export function useContratos() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- loadContratos/loadTemplates capture selectedClinic from closure */
   useEffect(() => {
     loadContratos();
     loadTemplates();
@@ -208,6 +209,7 @@ export function useContratos() {
 
     return () => clearInterval(interval);
   }, [selectedClinic]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return {
     contratos,

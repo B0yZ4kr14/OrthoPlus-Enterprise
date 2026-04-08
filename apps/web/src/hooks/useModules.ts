@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Module } from "@/core/config/modules.config";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient } from "@/lib/api/apiClient";
@@ -75,14 +74,18 @@ export function useModules() {
           { module_key: moduleKey },
         );
 
+        // @ts-expect-error — TS2339
         if (data?.error) {
+          // @ts-expect-error — TS2339
           throw new Error(data.error);
         }
 
+        // @ts-expect-error — TS2339
         if (data?.success) {
           toast({
             title: "Módulo atualizado",
             description:
+              // @ts-expect-error — TS2339
               data.message || "O status do módulo foi alterado com sucesso.",
           });
           // Invalidar cache e recarregar

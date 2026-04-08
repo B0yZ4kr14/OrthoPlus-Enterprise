@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
@@ -10,6 +9,7 @@ import { Label } from "@orthoplus/core-ui/label";
 import { Textarea } from "@orthoplus/core-ui/textarea";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { toast as sonnerToast } from "sonner";
 import {
   AlertTriangle,
   Brain,
@@ -19,6 +19,23 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@orthoplus/core-ui/alert";
+
+interface SugestaoIA {
+  deveSugerirSangria: boolean;
+  valorSugerido: number;
+  motivo: string;
+  analise: {
+    riscoPercentual: number;
+    horaAtual: number;
+    valorAtualCaixa: number;
+    totalIncidentes: number;
+    mediaValorSangrias: number;
+    horariosRisco: Array<{
+      hora: number;
+      incidentes: number;
+    }>;
+  };
+}
 
 interface SangriaInteligenteProps {
   caixaId: string;
@@ -40,11 +57,11 @@ export const SangriaInteligente = ({
     data: sugestaoIA,
     isLoading,
     refetch,
-  } = useQuery({
+  } = useQuery<SugestaoIA>({
     queryKey: ["sugestao-sangria", clinicId, valorAtualCaixa],
     queryFn: async () => {
-      const data = await apiClient.post("/sugerir-sangria-ia", {
-        clinicId,
+      const data = await apiClient.post<SugestaoIA>("/sugerir-sangria-ia", {
+        clinicId: clinicId || "",
         valorAtualCaixa,
       });
       return data;
@@ -84,15 +101,12 @@ export const SangriaInteligente = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["caixa-movimentos"] });
-      toast({
-        title: "Sangria realizada",
-        description: `R$ ${valorSangria.toFixed(2)} removido do caixa`,
-      });
+      sonnerToast.success(`R$ ${valorSangria.toFixed(2)} removido do caixa`);
       setValorSangria(0);
       setObservacoes("");
       refetch();
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({
         title: "Erro ao realizar sangria",
         description: error.message,
@@ -221,7 +235,7 @@ export const SangriaInteligente = ({
                 Horários de Maior Risco:
               </p>
               <div className="flex gap-2">
-                {sugestaoIA.analise.horariosRisco.map((hr: unknown) => (
+                {sugestaoIA.analise.horariosRisco.map((hr) => (
                   <Badge key={hr.hora} variant="outline">
                     {hr.hora}:00h ({hr.incidentes} incidentes)
                   </Badge>

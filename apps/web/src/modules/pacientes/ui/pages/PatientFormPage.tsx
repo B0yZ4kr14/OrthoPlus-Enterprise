@@ -54,10 +54,10 @@ export default function PatientFormPage() {
         if (response) {
           // Converter data da API para o formato do formulário
           const formData = PatientAdapter.toFrontend(response);
-          // @ts-ignore - Some fields in GlobalPatient are null while PatientFormValues expects optional/nullable
+          // @ts-expect-error — TS2345
           form.reset(formData);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         toast.error("Erro ao carregar paciente", {
           description: error instanceof Error ? error.message : "Erro desconhecido",
         });
@@ -125,9 +125,10 @@ export default function PatientFormPage() {
       }
 
       navigate("/pacientes");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       toast.error("Erro ao salvar paciente", {
-        description: error.message || "Erro desconhecido",
+        description: _e.message || "Erro desconhecido",
       });
     } finally {
       setIsLoading(false);

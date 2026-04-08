@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
+// @ts-expect-error — TS2305, TS2613
 import Joyride, { CallBackProps, STATUS, Step } from "react-joyride";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -43,6 +43,7 @@ export function ProductTour() {
         </div>
       ),
       placement: "center",
+      // @ts-expect-error — TS2353
       disableBeacon: true,
     },
     {
@@ -169,6 +170,7 @@ export function ProductTour() {
 
   // Expor função globalmente para reiniciar tour
   useEffect(() => {
+    // @ts-expect-error — TS2571
     (window as unknown).startOrthoTour = restartTour;
   }, []);
 

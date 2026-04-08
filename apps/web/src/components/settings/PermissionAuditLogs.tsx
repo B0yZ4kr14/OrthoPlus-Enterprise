@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
@@ -58,6 +57,7 @@ export function PermissionAuditLogs() {
   const fetchUsers = async () => {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/configuracoes/usuarios");
+      // @ts-expect-error — TS2345
       setUsers(data || []);
     } catch (error) {
       console.error("Erro ao carregar usuários:", error);
@@ -106,11 +106,13 @@ export function PermissionAuditLogs() {
           ...log,
           user: {
             full_name:
+              // @ts-expect-error — TS2339
               (log.user as unknown)?.full_name?.[0]?.full_name ||
               "Desconhecido",
           },
           target_user: {
             full_name:
+              // @ts-expect-error — TS2339
               (log.target_user as unknown)?.full_name?.[0]?.full_name ||
               "Desconhecido",
           },
@@ -119,6 +121,7 @@ export function PermissionAuditLogs() {
             : undefined,
         })) || [];
 
+      // @ts-expect-error — TS2345
       setLogs(processedLogs);
     } catch (error) {
       console.error("Erro ao carregar logs:", error);

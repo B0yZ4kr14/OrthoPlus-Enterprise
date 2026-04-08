@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";
@@ -132,9 +131,13 @@ export default function EstoquePedidosPage() {
           </div>
 
           <PedidosList
+            // @ts-expect-error — TS2322
             pedidos={pedidos}
+            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
+            // @ts-expect-error — TS2322
             produtos={produtos}
+            // @ts-expect-error — TS2322
             pedidosItens={pedidosItens}
             onUpdateStatus={updatePedidoStatus}
           />
@@ -194,6 +197,7 @@ export default function EstoquePedidosPage() {
             <Card className="p-6">
               <PedidoConfigForm
                 config={selectedConfig}
+                // @ts-expect-error — TS2322
                 produtos={produtos}
                 onSubmit={handleSubmitConfig}
                 onCancel={handleCancelForm}

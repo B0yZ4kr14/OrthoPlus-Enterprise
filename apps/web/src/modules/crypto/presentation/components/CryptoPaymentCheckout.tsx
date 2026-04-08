@@ -21,6 +21,8 @@ import {
 import { toast } from "sonner";
 import QRCode from "qrcode";
 
+import { CryptoInvoice } from "@/modules/crypto/types/crypto.types";
+
 interface CryptoPaymentCheckoutProps {
   paymentId: string;
   invoiceId: string;
@@ -28,8 +30,8 @@ interface CryptoPaymentCheckoutProps {
   qrCodeData: string;
   amountBRL: number;
   expiresAt: string;
-  status: "PENDING" | "PROCESSING" | "CONFIRMED" | "EXPIRED" | "FAILED";
-  onStatusChange?: (newStatus: string) => void;
+  status: CryptoInvoice["status"];
+  onStatusChange?: (newStatus: CryptoInvoice["status"]) => void;
 }
 
 export function CryptoPaymentCheckout({

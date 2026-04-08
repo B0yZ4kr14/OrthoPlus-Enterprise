@@ -46,17 +46,19 @@ export const StatsCard = memo(function StatsCard({
     <Card
       data-testid="stats-card"
       className={cn(
-        "transition-all hover:shadow-md",
+        "transition-all duration-300 hover:scale-[1.02] hover:shadow-neon-cyan/20 glass-deep border-primary/20",
         variantStyles[variant],
         className,
       )}
     >
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className={cn("h-4 w-4", iconColors[variant])} />
+      <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardTitle className="text-sm font-bold tracking-tight text-muted-foreground uppercase">{title}</CardTitle>
+        <div className={cn("p-2 rounded-lg bg-background/40 backdrop-blur-sm border border-border/30 shadow-inner")}>
+          <Icon className={cn("h-5 w-5", iconColors[variant])} />
+        </div>
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+    <CardContent className="pt-2">
+        <div className="text-3xl font-black gradient-text neon-glow-cyan tracking-tighter">{value}</div>
         {trend && (
           <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
             <span

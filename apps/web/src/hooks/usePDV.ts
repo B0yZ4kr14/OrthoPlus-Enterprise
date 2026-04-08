@@ -81,7 +81,7 @@ export const usePDV = (clinicId: string | undefined) => {
       );
 
       setCaixaAberto(data || null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading caixa:", error);
     }
   };
@@ -95,7 +95,7 @@ export const usePDV = (clinicId: string | undefined) => {
       );
 
       setVendas(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading vendas:", error);
     }
   };
@@ -148,11 +148,12 @@ export const usePDV = (clinicId: string | undefined) => {
       setCaixaAberto(data || null);
       sonnerToast.success("Caixa aberto com sucesso!");
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error opening caixa:", error);
       toast({
         title: "Erro ao abrir caixa",
-        description: error.message,
+        description: _e.message,
         variant: "destructive",
       });
       throw error;
@@ -170,11 +171,12 @@ export const usePDV = (clinicId: string | undefined) => {
 
       setCaixaAberto(null);
       sonnerToast.success("Caixa fechado com sucesso!");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error closing caixa:", error);
       toast({
         title: "Erro ao fechar caixa",
-        description: error.message,
+        description: _e.message,
         variant: "destructive",
       });
       throw error;
@@ -183,7 +185,7 @@ export const usePDV = (clinicId: string | undefined) => {
 
   const criarVenda = async (
     venda: Partial<PDVVenda>,
-    itens: unknown[],
+    itens: Partial<PDVVendaItem>[],
     pagamentos: Partial<PDVPagamento>[],
   ) => {
     if (!clinicId || !caixaAberto) throw new Error("Caixa must be open");
@@ -206,11 +208,12 @@ export const usePDV = (clinicId: string | undefined) => {
         `Venda ${novaVenda.numero_venda} realizada com sucesso!`,
       );
       return novaVenda;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error creating venda:", error);
       toast({
         title: "Erro ao criar venda",
-        description: error.message,
+        description: _e.message,
         variant: "destructive",
       });
       throw error;
@@ -227,11 +230,12 @@ export const usePDV = (clinicId: string | undefined) => {
 
       await loadVendas();
       sonnerToast.success("Venda cancelada");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error canceling venda:", error);
       toast({
         title: "Erro ao cancelar venda",
-        description: error.message,
+        description: _e.message,
         variant: "destructive",
       });
       throw error;

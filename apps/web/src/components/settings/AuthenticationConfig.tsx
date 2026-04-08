@@ -43,9 +43,11 @@ export function AuthenticationConfig() {
     require_special_char: true,
   });
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     loadConfig();
   }, [selectedClinic]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const loadConfig = async () => {
     if (!selectedClinic) return;

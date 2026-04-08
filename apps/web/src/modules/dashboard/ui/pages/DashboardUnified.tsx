@@ -59,19 +59,21 @@ export default function DashboardUnified() {
   const { stats, appointmentsData, revenueData, treatmentsByStatus } = data;
 
   const COLORS = [
-    "hsl(173, 58%, 39%)",
-    "hsl(38, 100%, 50%)",
-    "hsl(217, 91%, 60%)",
-    "hsl(0, 72%, 51%)",
+    "hsl(186, 100%, 42%)", // Neon Cyan
+    "hsl(173, 58%, 39%)", // Sage
+    "hsl(38, 100%, 50%)", // Amber
+    "hsl(217, 91%, 60%)", // Royal Blue
   ];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <PageHeader
-        title="Dashboard Unificado"
-        icon={LayoutDashboard}
-        description="Visão consolidada de toda a operação da clínica"
-      />
+    <div className="container mx-auto p-8 space-y-8 min-h-screen">
+      <div className="glass-deep p-8 rounded-[2.5rem] shadow-neon-cyan/5 border border-primary/10">
+        <PageHeader
+          title="Master Dashboard"
+          icon={LayoutDashboard}
+          description="Visão analítica em tempo real de toda a rede OrthoPlus"
+        />
+      </div>
 
       {/* Tabs de Domínios */}
       <Tabs defaultValue="executivo" className="w-full">

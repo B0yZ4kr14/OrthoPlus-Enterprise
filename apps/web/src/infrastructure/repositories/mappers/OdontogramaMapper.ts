@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Odontograma, OdontogramaProps } from "@/domain/entities/Odontograma";
 import { Database } from "@/types/database";
 
@@ -16,8 +15,10 @@ export class OdontogramaMapper {
     const props: OdontogramaProps = {
       id: row.id,
       prontuarioId: row.prontuario_id,
+      // @ts-expect-error — TS2322
       teeth: row.teeth as unknown, // JSONB será parseado automaticamente
       lastUpdated: new Date(row.last_updated),
+      // @ts-expect-error — TS2740
       history: (row.history as unknown) || [],
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
@@ -34,8 +35,10 @@ export class OdontogramaMapper {
       id: entity.id,
       prontuario_id: entity.prontuarioId,
       clinic_id: clinicId,
+      // @ts-expect-error — TS2322
       teeth: entity.teeth as unknown,
       last_updated: entity.lastUpdated.toISOString(),
+      // @ts-expect-error — TS2322
       history: entity.history as unknown,
       created_at: entity.createdAt.toISOString(),
       updated_at: entity.updatedAt.toISOString(),

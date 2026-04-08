@@ -76,7 +76,8 @@ export function BackupTestDialog({
       } else {
         toast.error(`Teste falhou: ${data.testsFailed} erro(s) encontrado(s)`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error running backup test:", error);
       toast.error("Erro ao executar teste de restauração");
       setTestResult({
@@ -85,7 +86,7 @@ export function BackupTestDialog({
         testsRun: 1,
         testsPassed: 0,
         testsFailed: 1,
-        errors: [error.message || "Erro desconhecido"],
+        errors: [_e.message || "Erro desconhecido"],
         duration: 0,
         timestamp: new Date().toISOString(),
       });

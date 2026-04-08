@@ -1,4 +1,4 @@
-import { jsPDF } from "jspdf";
+// jsPDF loaded dynamically to reduce initial bundle
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -32,6 +32,7 @@ export async function generateCryptoPerformanceReport(
   startDate: Date,
   endDate: Date,
 ) {
+  const { jsPDF } = await import("jspdf");
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();

@@ -141,7 +141,7 @@ export const FormattedInput = forwardRef<HTMLInputElement, FormattedInputProps>(
         case "rg":
           return 12; // 00.000.000-0
         default:
-          // @ts-expect-error - Auto-healer: TS2322 - Type 'undefined' is not assignable to ty...
+          // @ts-expect-error — TS2322
           return undefined;
       }
     };

@@ -102,6 +102,7 @@ export const useRadiografia = () => {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     if (clinicId) {
       loadData();
@@ -114,6 +115,7 @@ export const useRadiografia = () => {
       return () => clearInterval(interval);
     }
   }, [clinicId, user]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return {
     analises,

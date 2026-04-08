@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { LoadingState } from "@/components/shared/LoadingState";
 
 // Lazy load do componente 3D pesado
-// @ts-expect-error - Auto-healer: TS2322 - Type 'Promise<typeof import("/home/heosp...
+// @ts-expect-error — TS2322
 const Odontograma3D = lazy(() => import("../Odontograma3D"));
 
 interface Odontograma3DLazyProps {
@@ -19,7 +19,7 @@ export function Odontograma3DLazy({
       fallback={
         <LoadingState
           message="Carregando visualizador 3D..."
-          // @ts-expect-error - Auto-healer: TS2322 - Type '{ message: string; subMessage: str...
+          // @ts-expect-error — TS2322
           subMessage="Isso pode levar alguns segundos na primeira vez"
         />
       }

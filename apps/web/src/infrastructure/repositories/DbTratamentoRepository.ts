@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Tratamento } from "@/domain/entities/Tratamento";
 import { ITratamentoRepository } from "@/domain/repositories/ITratamentoRepository";
 import { apiClient } from "@/lib/api/apiClient";
@@ -8,18 +7,21 @@ import { TratamentoMapper } from "../mappers/TratamentoMapper";
 export class DbTratamentoRepository implements ITratamentoRepository {
   async findById(id: string): Promise<Tratamento | null> {
     try {
+      // @ts-expect-error — TS2304
       const data = await apiClient.get<Tables<"patient_treatments">>(
         `/pep/tratamentos/${id}`,
       );
       if (!data) return null;
       return TratamentoMapper.toDomain(data);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao buscar tratamento", error);
     }
   }
 
   async findByProntuarioId(prontuarioId: string): Promise<Tratamento[]> {
     try {
+      // @ts-expect-error — TS2304
       const data = await apiClient.get<Tables<"patient_treatments">[]>(
         `/pep/tratamentos`,
         { params: { prontuario_id: prontuarioId } },
@@ -28,6 +30,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar tratamentos do prontuário",
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -38,6 +41,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     status: "PLANEJADO" | "EM_ANDAMENTO" | "CONCLUIDO" | "CANCELADO",
   ): Promise<Tratamento[]> {
     try {
+      // @ts-expect-error — TS2304
       const data = await apiClient.get<Tables<"patient_treatments">[]>(
         `/pep/tratamentos`,
         { params: { prontuario_id: prontuarioId, status } },
@@ -46,6 +50,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar tratamentos por status",
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -53,12 +58,14 @@ export class DbTratamentoRepository implements ITratamentoRepository {
 
   async findAtivos(prontuarioId: string): Promise<Tratamento[]> {
     try {
+      // @ts-expect-error — TS2304
       const data = await apiClient.get<Tables<"patient_treatments">[]>(
         `/pep/tratamentos`,
         { params: { prontuario_id: prontuarioId, ativos: true } },
       );
       return (data || []).map(TratamentoMapper.toDomain);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao buscar tratamentos ativos", error);
     }
   }
@@ -66,11 +73,13 @@ export class DbTratamentoRepository implements ITratamentoRepository {
   async findByClinicId(clinicId: string): Promise<Tratamento[]> {
     try {
       const data =
+        // @ts-expect-error — TS2304
         await apiClient.get<Tables<"patient_treatments">[]>("/pep/tratamentos");
       return (data || []).map(TratamentoMapper.toDomain);
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar tratamentos da clínica",
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -81,6 +90,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
       const data = TratamentoMapper.toInsert(tratamento);
       await apiClient.post("/pep/tratamentos", data);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao salvar tratamento", error);
     }
   }
@@ -90,6 +100,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
       const data = TratamentoMapper.toPersistence(tratamento);
       await apiClient.patch(`/pep/tratamentos/${tratamento.id}`, data);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao atualizar tratamento", error);
     }
   }
@@ -98,6 +109,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     try {
       await apiClient.delete(`/pep/tratamentos/${id}`);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao deletar tratamento", error);
     }
   }

@@ -16,6 +16,17 @@ import {
   BarChart3,
   FileBarChart,
   Briefcase,
+  FileSignature,
+  Bitcoin,
+  ShoppingCart,
+  Receipt,
+  ClipboardCheck,
+  Gift,
+  UserCircle,
+  Database,
+  HardDrive,
+  Github,
+  Terminal,
 } from "lucide-react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
@@ -43,12 +54,19 @@ const moduleIcons: Record<string, React.ComponentType<{ className?: string }>> =
   PROCEDIMENTOS: ClipboardList,
   PEP: FileText,
   ODONTOGRAMA: Stethoscope,
+  CONTRATOS: FileSignature,
   ESTOQUE: Package,
+  INVENTARIO: ClipboardCheck,
   FINANCEIRO: DollarSign,
   SPLIT_PAGAMENTO: CreditCard,
+  CRYPTO_PAYMENTS: Bitcoin,
+  PDV: ShoppingCart,
+  FISCAL: Receipt,
   INADIMPLENCIA: TrendingUp,
   COBRANCA: CreditCard,
   CRM: Activity,
+  FIDELIDADE: Gift,
+  PORTAL_PACIENTE: UserCircle,
   MARKETING_AUTO: TrendingUp,
   BI: FileBarChart,
   LGPD: Shield,
@@ -59,6 +77,10 @@ const moduleIcons: Record<string, React.ComponentType<{ className?: string }>> =
   IA: Activity,
   RELATORIOS: FileBarChart,
   ORCAMENTOS: DollarSign,
+  DATABASE_ADMIN: Database,
+  BACKUPS: HardDrive,
+  GITHUB_TOOLS: Github,
+  TERMINAL: Terminal,
 };
 
 const categoryLabels: Record<string, string> = {

@@ -45,11 +45,9 @@ export function useReportsAPI() {
       setLoading(true);
       setError(null);
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3333"}/api/reports/${reportId}/download?format=${format}`,
+        `${import.meta.env.VITE_API_URL || ""}/api/reports/${reportId}/download?format=${format}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          },
+          credentials: "include", // Send HttpOnly cookies — no localStorage token needed
         },
       );
 

@@ -2,7 +2,7 @@ import { Button } from "@orthoplus/core-ui/button";
 import { FileDown, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
+// jsPDF loaded dynamically to reduce initial bundle
 import html2canvas from "html2canvas";
 import type { AnaliseComplete } from "../types/radiografia.types";
 import { tipoRadiografiaLabels } from "../types/radiografia.types";
@@ -28,6 +28,7 @@ export function ComparativoPDFExport({
     setIsExporting(true);
 
     try {
+      const { default: jsPDF } = await import("jspdf");
       const pdf = new jsPDF("p", "mm", "a4");
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
@@ -165,7 +166,7 @@ export function ComparativoPDFExport({
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
       pdf.text(
-        // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+        // @ts-expect-error — TS2769
         `Data: ${new Date(analise1.created_at).toLocaleDateString("pt-BR")}`,
         margin,
         yPosition,
@@ -221,7 +222,7 @@ export function ComparativoPDFExport({
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
       pdf.text(
-        // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+        // @ts-expect-error — TS2769
         `Data: ${new Date(analise2.created_at).toLocaleDateString("pt-BR")}`,
         margin,
         yPosition,
@@ -283,7 +284,7 @@ export function ComparativoPDFExport({
       }
 
       // Salvar PDF
-      // @ts-expect-error - Auto-healer: TS18048 - 'analise1.patient_name' is possibly 'und...
+      // @ts-expect-error — TS18048
       const fileName = `comparativo_${analise1.patient_name.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`;
       pdf.save(fileName);
 

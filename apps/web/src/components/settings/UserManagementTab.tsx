@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { Button } from "@orthoplus/core-ui/button";
@@ -87,15 +86,20 @@ export const UserManagementTab = () => {
       // Buscar roles de cada usuário
       // Backend retorna profiles com roles já incluídos
       const usersWithRoles = (profiles || []).map((profile: unknown) => ({
+        // @ts-expect-error — TS18046
         id: profile.id,
+        // @ts-expect-error — TS18046
         full_name: profile.full_name,
+        // @ts-expect-error — TS18046
         role: profile.role || "MEMBER",
+        // @ts-expect-error — TS18046
         clinic_id: profile.clinic_id,
+        // @ts-expect-error — TS18046
         created_at: profile.created_at,
       }));
 
       setUsers(usersWithRoles);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao carregar usuários:", error);
       toast.error("Erro ao carregar usuários");
     } finally {
@@ -112,7 +116,9 @@ export const UserManagementTab = () => {
       // Inicializar permissões
       const initialPermissions: ModulePermission[] = (data || []).map(
         (module: unknown) => ({
+          // @ts-expect-error — TS18046
           module_key: module.module_key,
+          // @ts-expect-error — TS18046
           module_name: module.name,
           can_view: false,
           can_edit: false,
@@ -120,7 +126,7 @@ export const UserManagementTab = () => {
         }),
       );
       setUserPermissions(initialPermissions);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao carregar módulos:", error);
     }
   };
@@ -139,17 +145,20 @@ export const UserManagementTab = () => {
         full_name: newUserName,
       });
 
+      // @ts-expect-error — TS2339
       if (!authData?.user) {
         throw new Error("Usuário não criado");
       }
 
       // Atualizar perfil com clinic_id
+      // @ts-expect-error — TS2339
       await apiClient.patch(`/configuracoes/usuarios/${authData.user.id}`, {
         clinic_id: clinicId,
       });
 
       // Adicionar role
       await apiClient.post("/configuracoes/usuarios/roles", {
+        // @ts-expect-error — TS2339
         user_id: authData.user.id,
         role: newUserRole,
       });
@@ -159,9 +168,12 @@ export const UserManagementTab = () => {
         const permissionsToInsert = userPermissions
           .filter((p) => p.can_view || p.can_edit || p.can_delete)
           .map((p) => ({
+            // @ts-expect-error — TS2339
             user_id: authData.user.id,
             module_catalog_id: modules.find(
+              // @ts-expect-error — TS18046
               (m) => m.module_key === p.module_key,
+            // @ts-expect-error — TS2339
             )?.id,
             can_view: p.can_view,
             can_edit: p.can_edit,
@@ -181,9 +193,10 @@ export const UserManagementTab = () => {
       setIsAddDialogOpen(false);
       resetForm();
       loadUsers();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Erro ao criar usuário:", error);
-      toast.error(error.message || "Erro ao criar usuário");
+      toast.error(_e.message || "Erro ao criar usuário");
     }
   };
 
@@ -198,7 +211,7 @@ export const UserManagementTab = () => {
 
       toast.success("Role atualizada com sucesso");
       loadUsers();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao atualizar role:", error);
       toast.error("Erro ao atualizar role");
     }
@@ -214,7 +227,7 @@ export const UserManagementTab = () => {
       // Nota: A exclusão do perfil será automática devido ao trigger on delete cascade
       toast.success("Usuário removido com sucesso");
       loadUsers();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao remover usuário:", error);
       toast.error("Erro ao remover usuário");
     }

@@ -225,7 +225,6 @@ export function useFuncionariosStore() {
     const permissoesModulo = funcionario.permissoes[modulo];
     if (!permissoesModulo) return false;
 
-    // @ts-expect-error - Auto-healer: TS2339 - Property 'includes' does not exist on ty...
     return permissoesModulo.includes(acao);
   };
 

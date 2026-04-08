@@ -6,7 +6,7 @@ const triggerFinanceiroJob = async (jobName: string) => {
   try {
     await axios.post("http://localhost:3005/api/financeiro/jobs/execute", {
       jobName,
-    });
+    }, { headers: { "X-Internal-Cron": "true" } });
     logger.info(`[node-cron] Financeiro job executed: ${jobName}`);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);

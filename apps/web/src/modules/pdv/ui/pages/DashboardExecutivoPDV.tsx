@@ -124,7 +124,7 @@ export default function DashboardExecutivoPDV() {
       <PageHeader
         title="Dashboard Executivo PDV"
         description="Visão consolidada de vendas, metas, rankings e transações TEF"
-        // @ts-expect-error - Auto-healer: TS2322 - Type 'Element' is not assignable to type...
+        // @ts-expect-error — TS2322
         icon={<TrendingUp className="h-6 w-6" />}
       />
 

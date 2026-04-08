@@ -3,8 +3,14 @@ import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
 // Re-export from root config with apps/web specific adjustments
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
+  // Strip console.* and debugger from production builds
+  ...(mode === 'production' && {
+    esbuild: {
+      drop: ['console', 'debugger'],
+    },
+  }),
   resolve: {
     alias: [
       {
@@ -60,4 +66,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

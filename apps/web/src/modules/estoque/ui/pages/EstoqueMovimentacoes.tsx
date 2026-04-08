@@ -1,6 +1,5 @@
-// @ts-nocheck
 import { useState } from "react";
-import { useAuthAPI } from "@/contexts/AuthContextAPI";
+import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
 import {
@@ -42,8 +41,9 @@ export default function EstoqueMovimentacoes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [tipoFiltro, setTipoFiltro] = useState<string>("TODOS");
 
-  const { user: authUser } = useAuthAPI();
-  const currentUser = authUser?.full_name ?? "Usuário Atual";
+  const { user: authUser } = useAuth();
+  // @ts-expect-error — TS2339
+  const currentUser = (authUser?.user_metadata?.full_name as string) ?? "Usuário Atual";
 
   const handleSubmit = async (data: Movimentacao) => {
     try {
@@ -238,32 +238,44 @@ export default function EstoqueMovimentacoes() {
 
               <TabsContent value="todas" className="mt-0">
                 <MovimentacoesList
+                  // @ts-expect-error — TS2345
                   movimentacoes={filteredMovimentacoes(movimentacoes)}
+                  // @ts-expect-error — TS2322
                   produtos={produtos}
+                  // @ts-expect-error — TS2322
                   fornecedores={fornecedores}
                 />
               </TabsContent>
 
               <TabsContent value="entradas" className="mt-0">
                 <MovimentacoesList
+                  // @ts-expect-error — TS2345
                   movimentacoes={filteredMovimentacoes(movimentacoesEntrada)}
+                  // @ts-expect-error — TS2322
                   produtos={produtos}
+                  // @ts-expect-error — TS2322
                   fornecedores={fornecedores}
                 />
               </TabsContent>
 
               <TabsContent value="saidas" className="mt-0">
                 <MovimentacoesList
+                  // @ts-expect-error — TS2345
                   movimentacoes={filteredMovimentacoes(movimentacoesSaida)}
+                  // @ts-expect-error — TS2322
                   produtos={produtos}
+                  // @ts-expect-error — TS2322
                   fornecedores={fornecedores}
                 />
               </TabsContent>
 
               <TabsContent value="ajustes" className="mt-0">
                 <MovimentacoesList
+                  // @ts-expect-error — TS2345
                   movimentacoes={filteredMovimentacoes(movimentacoesAjuste)}
+                  // @ts-expect-error — TS2322
                   produtos={produtos}
+                  // @ts-expect-error — TS2322
                   fornecedores={fornecedores}
                 />
               </TabsContent>
@@ -278,7 +290,9 @@ export default function EstoqueMovimentacoes() {
             <DialogTitle>Registrar Movimentação</DialogTitle>
           </DialogHeader>
           <MovimentacaoForm
+            // @ts-expect-error — TS2322
             produtos={produtos}
+            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
             onSubmit={handleSubmit}
             onCancel={() => setShowForm(false)}

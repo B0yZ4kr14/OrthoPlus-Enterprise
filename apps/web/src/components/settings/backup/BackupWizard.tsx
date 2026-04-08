@@ -120,7 +120,10 @@ export function BackupWizard({ open, onOpenChange }: BackupWizardProps) {
                   >
                     <Checkbox
                       checked={selectedData.includes(option.id)}
-                      onCheckedChange={() => {}}
+                      onCheckedChange={
+                        // Handled by parent div onClick
+                        undefined
+                      }
                     />
                     <Icon className="h-5 w-5 text-muted-foreground" />
                     <Label className="flex-1 cursor-pointer font-medium">

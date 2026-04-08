@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
@@ -85,6 +84,7 @@ export default function EstoqueCadastrosPage() {
         description: "Produto atualizado com sucesso!",
       });
     } else {
+      // @ts-expect-error — TS2345
       addProduto(data);
       toast({
         title: "Sucesso",
@@ -224,8 +224,10 @@ export default function EstoqueCadastrosPage() {
   };
 
   const handleBarcodeScanned = (barcode: string) => {
+    // @ts-expect-error — TS2551
     const produto = produtos.find((p) => p.codigoBarras === barcode);
     if (produto) {
+      // @ts-expect-error — TS2345
       handleEditProduto(produto);
     }
     setScannerOpen(false);
@@ -290,14 +292,17 @@ export default function EstoqueCadastrosPage() {
                 </div>
               </div>
               <ProdutosList
+                // @ts-expect-error — TS2322
                 produtos={produtos.filter(
                   (p) =>
                     p.nome
                       .toLowerCase()
                       .includes(searchProduto.toLowerCase()) ||
+                    // @ts-expect-error — TS2551
                     (p.codigoBarras && p.codigoBarras.includes(searchProduto)),
                 )}
                 categorias={categorias}
+                // @ts-expect-error — TS2322
                 fornecedores={fornecedores}
                 onEdit={handleEditProduto}
                 onDelete={handleDeleteProduto}
@@ -308,6 +313,7 @@ export default function EstoqueCadastrosPage() {
               <ProdutoForm
                 produto={selectedProduto}
                 categorias={categorias}
+                // @ts-expect-error — TS2322
                 fornecedores={fornecedores}
                 onSubmit={handleSubmitProduto}
                 onCancel={() => {
@@ -335,11 +341,13 @@ export default function EstoqueCadastrosPage() {
                 </Button>
               </div>
               <FornecedoresList
+                // @ts-expect-error — TS2322
                 fornecedores={fornecedores.filter(
                   (f) =>
                     f.nome
                       .toLowerCase()
                       .includes(searchFornecedor.toLowerCase()) ||
+                    // @ts-expect-error — TS18048
                     f.cnpj.includes(searchFornecedor),
                 )}
                 onEdit={handleEditFornecedor}

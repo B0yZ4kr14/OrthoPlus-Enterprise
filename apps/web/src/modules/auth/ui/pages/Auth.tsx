@@ -250,21 +250,6 @@ export default function Auth() {
                   >
                     Esqueceu sua senha?
                   </Button>
-
-                  <div className="mt-4 p-4 bg-slate-800/50 border border-slate-700 rounded-lg space-y-2">
-                    <p className="text-sm font-semibold text-center text-slate-300">
-                      Login Padrão de Administrador
-                    </p>
-                    <div className="text-xs space-y-1 text-slate-400">
-                      <p>
-                        <span className="font-medium text-slate-300">Email:</span>{" "}
-                        admin@orthoplus.com
-                      </p>
-                      <p>
-                        <span className="font-medium text-slate-300">Senha:</span> Admin123!
-                      </p>
-                    </div>
-                  </div>
                 </form>
               </Form>
             </TabsContent>

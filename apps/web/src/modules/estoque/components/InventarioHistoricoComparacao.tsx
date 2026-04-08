@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
@@ -34,6 +33,13 @@ import { useInventario } from "../hooks/useInventario";
 import { Inventario } from "../types/estoque.types";
 
 const COLORS = ["#ef4444", "#f97316", "#f59e0b", "#10b981"];
+
+interface ProdutoPerda {
+  produtoNome: string;
+  totalDivergencia: number;
+  valorTotal: number;
+  ocorrencias: number;
+}
 
 export function InventarioHistoricoComparacao() {
   const { inventarios, inventarioItems } = useInventario();
@@ -101,14 +107,14 @@ export function InventarioHistoricoComparacao() {
         existing.ocorrencias += 1;
       } else {
         acc.push({
-          produtoNome: item.produtoNome,
+          produtoNome: item.produtoNome || "Produto sem nome",
           totalDivergencia: Math.abs(item.divergencia!),
           valorTotal: Math.abs(item.valorDivergencia || 0),
           ocorrencias: 1,
         });
       }
       return acc;
-    }, [] as unknown[])
+    }, [] as ProdutoPerda[])
     .sort((a, b) => b.valorTotal - a.valorTotal)
     .slice(0, 10);
 
@@ -325,7 +331,7 @@ export function InventarioHistoricoComparacao() {
               <XAxis type="number" />
               <YAxis dataKey="produtoNome" type="category" width={150} />
               <Tooltip
-                formatter={(value: unknown) => `R$ ${Number(value).toFixed(2)}`}
+                formatter={(value: number) => `R$ ${value.toFixed(2)}`}
               />
               <Bar
                 dataKey="valorTotal"

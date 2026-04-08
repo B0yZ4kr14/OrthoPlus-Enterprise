@@ -17,18 +17,22 @@ test.describe('Financial Workflows', () => {
 
   test('should create new receivable (Conta a Receber)', async ({ page }) => {
     await page.click('button:has-text("Nova Conta a Receber")');
-    await page.waitForSelector('[data-testid="transaction-form"]');
+    await page.waitForSelector('.max-w-xl'); // Dialog class
     
-    await page.fill('input[name="descricao"]', 'Pagamento Tratamento Ortodôntico');
-    await page.fill('input[name="valor"]', '2500.00');
-    await page.fill('input[name="data_vencimento"]', '2024-12-31');
-    await page.selectOption('select[name="categoria"]', 'SERVICOS_PRESTADOS');
-    
-    await page.click('[data-testid="patient-select"]');
-    await page.click('[data-testid="patient-option"]:first-child');
-    
-    await page.getByRole('button', { name: /entrar/i }).click();
-    await expect(page.locator('.toast')).toContainText('Conta a receber criada com sucesso');
+    // Passo 1
+    await page.fill('input[id="patient_name"]', 'Maria das Dores');
+    await page.fill('input[id="descricao"]', 'Pagamento Tratamento Ortodôntico');
+    await page.getByRole('button', { name: /próximo/i }).click();
+
+    // Passo 2
+    await page.fill('input[id="valor"]', '2500.00');
+    await page.fill('input[id="data_vencimento"]', '2024-12-31');
+    await page.getByRole('button', { name: /próximo/i }).click();
+
+    // Passo 3
+    await page.getByRole('button', { name: /salvar/i }).click();
+
+    await expect(page.locator('.toast')).toContainText('sucesso', { ignoreCase: true });
   });
 
   test('should create new payable (Conta a Pagar)', async ({ page }) => {

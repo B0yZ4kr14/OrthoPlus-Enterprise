@@ -78,7 +78,7 @@ export function PatientSelector({
         <Button
           variant="ghost"
           size="sm"
-          // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+          // @ts-expect-error — TS2345
           onClick={() => onSelect(null as unknown)}
         >
           Trocar
@@ -133,7 +133,7 @@ export function PatientSelector({
               <Button
                 variant="outline"
                 size="sm"
-                // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+                // @ts-expect-error — TS2345
                 onClick={() => onSelect(null as unknown)}
               >
                 Trocar

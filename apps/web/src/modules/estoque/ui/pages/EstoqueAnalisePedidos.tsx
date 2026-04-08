@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
@@ -71,6 +70,7 @@ export default function EstoqueAnalisePedidos() {
     const pedidosAutomaticos = pedidos.filter(
       (p) => p.geradoAutomaticamente,
     ).length;
+    // @ts-expect-error — TS18048
     const valorTotal = pedidos.reduce((sum, p) => sum + p.valorTotal, 0);
 
     // Calcular tempo médio de entrega (pedidos recebidos)
@@ -114,12 +114,15 @@ export default function EstoqueAnalisePedidos() {
     pedidos.forEach((pedido) => {
       const fornecedor = fornecedores.find((f) => f.id === pedido.fornecedorId);
       if (fornecedor) {
+        // @ts-expect-error — TS2345
         const current = fornecedorMap.get(pedido.fornecedorId) || {
           total: 0,
           quantidade: 0,
           nome: fornecedor.nome,
         };
+        // @ts-expect-error — TS2345
         fornecedorMap.set(pedido.fornecedorId, {
+          // @ts-expect-error — TS18048
           total: current.total + pedido.valorTotal,
           quantidade: current.quantidade + 1,
           nome: fornecedor.nome,
@@ -156,6 +159,7 @@ export default function EstoqueAnalisePedidos() {
         produtoMap.set(item.produtoId, {
           quantidade: current.quantidade + item.quantidade,
           nome: produto.nome,
+          // @ts-expect-error — TS18048
           valor: current.valor + item.valorTotal,
         });
       }
@@ -364,6 +368,7 @@ export default function EstoqueAnalisePedidos() {
               />
               <YAxis />
               <Tooltip
+                // @ts-expect-error — TS2345
                 formatter={(value: unknown) => formatCurrency(value)}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
               />
@@ -472,12 +477,16 @@ export default function EstoqueAnalisePedidos() {
             <tbody>
               {historicoFornecedor.map((fornecedor, index) => (
                 <tr key={index} className="border-b hover:bg-muted/50">
+                  {/* @ts-expect-error — TS18046 */}
                   <td className="p-3 font-medium">{fornecedor.nome}</td>
+                  {/* @ts-expect-error — TS18046 */}
                   <td className="text-right p-3">{fornecedor.quantidade}</td>
                   <td className="text-right p-3">
+                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(fornecedor.total)}
                   </td>
                   <td className="text-right p-3">
+                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(fornecedor.total / fornecedor.quantidade)}
                   </td>
                 </tr>
@@ -505,12 +514,16 @@ export default function EstoqueAnalisePedidos() {
             <tbody>
               {produtosMaisPedidos.map((produto, index) => (
                 <tr key={index} className="border-b hover:bg-muted/50">
+                  {/* @ts-expect-error — TS18046 */}
                   <td className="p-3 font-medium">{produto.nome}</td>
+                  {/* @ts-expect-error — TS18046 */}
                   <td className="text-right p-3">{produto.quantidade}</td>
                   <td className="text-right p-3">
+                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(produto.valor)}
                   </td>
                   <td className="text-right p-3">
+                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(produto.valor / produto.quantidade)}
                   </td>
                 </tr>

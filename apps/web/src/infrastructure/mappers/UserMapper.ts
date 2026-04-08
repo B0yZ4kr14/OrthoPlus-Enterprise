@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { User, AppRole } from "@/domain/entities/User";
 import { Email } from "@/domain/value-objects/Email";
 import { Database } from "@/types/database";
@@ -16,9 +15,12 @@ export class UserMapper {
       clinicId: row.clinic_id ?? "",
       email: Email.create(email),
       fullName: row.full_name ?? "Usuário",
+      // @ts-expect-error — TS18046
       appRole: (rowAny.app_role as AppRole) ?? "MEMBER",
+      // @ts-expect-error — TS18046
       isActive: rowAny.is_active ?? true,
       avatarUrl: row.avatar_url ?? undefined,
+      // @ts-expect-error — TS18046
       phone: rowAny.phone ?? undefined,
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),

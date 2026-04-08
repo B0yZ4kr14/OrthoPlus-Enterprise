@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";
 import {
@@ -12,7 +12,11 @@ import {
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
-import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
+import {
+  useEstoque,
+  type Produto,
+  type Movimentacao,
+} from "@/modules/estoque/hooks/useEstoque";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingState } from "@/components/shared/LoadingState";
 import {
@@ -34,26 +38,27 @@ interface ScanHistory {
   code: string;
   format?: string;
   mode: ScanMode;
-  produto?: unknown;
+  produto?: Produto;
   timestamp: Date;
   status: "success" | "error";
   message: string;
 }
 
 export default function EstoqueScannerMobile() {
+  const { user } = useAuth();
   const { toast } = useToast();
   const { produtos, addMovimentacao, loading } = useEstoque();
   const [scanMode, setScanMode] = useState<ScanMode>("consulta");
   const [isScanning, setIsScanning] = useState(false);
   const [scanHistory, setScanHistory] = useState<ScanHistory[]>([]);
-  const [lastScannedProduct, setLastScannedProduct] = useState<unknown>(null);
+  const [lastScannedProduct, setLastScannedProduct] = useState<Produto | null>(null);
 
   const handleScan = async (code: string, format?: string) => {
     setIsScanning(false);
 
     // Buscar produto pelo código
     const produto = produtos.find(
-      (p) => p.codigo === code || p.codigoBarras === code,
+      (p) => p.codigo_barra === code,
     );
 
     const historyEntry: ScanHistory = {
@@ -70,7 +75,7 @@ export default function EstoqueScannerMobile() {
     };
 
     setScanHistory((prev) => [historyEntry, ...prev]);
-    setLastScannedProduct(produto);
+    setLastScannedProduct(produto || null);
 
     if (!produto) {
       toast({
@@ -94,6 +99,7 @@ export default function EstoqueScannerMobile() {
           tipo: "ENTRADA",
           quantidade: 1,
           motivo: "Entrada via Scanner Mobile",
+          realizadoPor: (user as any)?.nome || "Scanner Mobile",
           createdAt: new Date().toISOString(),
         });
 
@@ -101,7 +107,7 @@ export default function EstoqueScannerMobile() {
           title: "Entrada Registrada",
           description: `+1 ${produto.nome} - Novo estoque: ${(produto.quantidadeAtual || 0) + 1} un`,
         });
-      } catch (error) {
+      } catch (error: unknown) {
         toast({
           title: "Erro",
           description: "Não foi possível registrar a entrada",
@@ -124,6 +130,7 @@ export default function EstoqueScannerMobile() {
           tipo: "SAIDA",
           quantidade: 1,
           motivo: "Saída via Scanner Mobile",
+          realizadoPor: (user as any)?.nome || "Scanner Mobile",
           createdAt: new Date().toISOString(),
         });
 
@@ -131,7 +138,7 @@ export default function EstoqueScannerMobile() {
           title: "Saída Registrada",
           description: `-1 ${produto.nome} - Novo estoque: ${(produto.quantidadeAtual || 0) - 1} un`,
         });
-      } catch (error) {
+      } catch (error: unknown) {
         toast({
           title: "Erro",
           description: "Não foi possível registrar a saída",
@@ -261,8 +268,7 @@ export default function EstoqueScannerMobile() {
             <div>
               <p className="font-semibold text-lg">{lastScannedProduct.nome}</p>
               <p className="text-sm text-muted-foreground">
-                Código:{" "}
-                {lastScannedProduct.codigo || lastScannedProduct.codigoBarras}
+                Código: {lastScannedProduct.codigo_barra}
               </p>
             </div>
             <div className="flex items-center justify-between pt-2 border-t">

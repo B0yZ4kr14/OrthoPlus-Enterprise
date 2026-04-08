@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect, useCallback } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
@@ -43,12 +42,42 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+interface FornecedorIntegracao {
+  id: string;
+  nome: string;
+  api_enabled: boolean;
+  auto_order_enabled: boolean;
+  api_endpoint?: string;
+  api_auth_type?: string;
+}
+
+interface PedidoAutomatico {
+  id: string;
+  numero_pedido: string;
+  status: "enviado" | "confirmado" | "cancelado" | string;
+  created_at: string;
+  valor_total: number;
+  estoque_fornecedores: {
+    id: string;
+    nome: string;
+  };
+}
+
+interface Metrics {
+  totalPedidos: number;
+  pedidosEnviados: number;
+  pedidosConfirmados: number;
+  pedidosFalhos: number;
+  taxaSucesso: number;
+  tempoMedioResposta: number;
+}
+
 export default function EstoqueIntegracoes() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [fornecedores, setFornecedores] = useState<unknown[]>([]);
-  const [pedidos, setPedidos] = useState<unknown[]>([]);
-  const [metrics, setMetrics] = useState({
+  const [fornecedores, setFornecedores] = useState<FornecedorIntegracao[]>([]);
+  const [pedidos, setPedidos] = useState<PedidoAutomatico[]>([]);
+  const [metrics, setMetrics] = useState<Metrics>({
     totalPedidos: 0,
     pedidosEnviados: 0,
     pedidosConfirmados: 0,
@@ -63,8 +92,8 @@ export default function EstoqueIntegracoes() {
       setLoading(true);
 
       const [fornecedoresData, pedidosData] = await Promise.all([
-        apiClient.get<Record<string, any>[]>("/estoque/fornecedores?api_enabled=true"),
-        apiClient.get<Record<string, any>[]>("/estoque/pedidos/automaticos?limit=100"),
+        apiClient.get<FornecedorIntegracao[]>("/estoque/fornecedores?api_enabled=true"),
+        apiClient.get<PedidoAutomatico[]>("/estoque/pedidos/automaticos?limit=100"),
       ]);
 
       setFornecedores(fornecedoresData || []);
@@ -74,13 +103,13 @@ export default function EstoqueIntegracoes() {
       const total = pedidosData?.length || 0;
       const enviados =
         pedidosData?.filter(
-          (p: unknown) => p.status === "enviado" || p.status === "confirmado",
+          (p) => p.status === "enviado" || p.status === "confirmado",
         ).length || 0;
       const confirmados =
-        pedidosData?.filter((p: unknown) => p.status === "confirmado").length ||
+        pedidosData?.filter((p) => p.status === "confirmado").length ||
         0;
       const falhos =
-        pedidosData?.filter((p: unknown) => p.status === "cancelado").length ||
+        pedidosData?.filter((p) => p.status === "cancelado").length ||
         0;
       const taxaSucesso = total > 0 ? (confirmados / total) * 100 : 0;
 
@@ -115,7 +144,7 @@ export default function EstoqueIntegracoes() {
     try {
       setTestingAPI(fornecedorId);
 
-      const data = await apiClient.post(`/estoque/integracoes/testar-api`, {
+      const data = await apiClient.post<{ message?: string }>(`/estoque/integracoes/testar-api`, {
         fornecedor_id: fornecedorId,
       });
 
@@ -125,11 +154,12 @@ export default function EstoqueIntegracoes() {
       });
 
       loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Erro ao testar API:", error);
       toast({
         title: "Erro no teste",
-        description: error.message || "Não foi possível testar a API",
+        description: _e.message || "Não foi possível testar a API",
         variant: "destructive",
       });
     } finally {
@@ -141,7 +171,7 @@ export default function EstoqueIntegracoes() {
     try {
       setLoading(true);
 
-      const data = await apiClient.post(
+      const data = await apiClient.post<{ message?: string }>(
         "/estoque/pedidos/disparar-automaticos",
         {},
       );
@@ -153,12 +183,13 @@ export default function EstoqueIntegracoes() {
       });
 
       loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Erro ao disparar pedidos:", error);
       toast({
         title: "Erro ao disparar pedidos",
         description:
-          error.message || "Não foi possível processar os pedidos automáticos",
+          _e.message || "Não foi possível processar os pedidos automáticos",
         variant: "destructive",
       });
     } finally {

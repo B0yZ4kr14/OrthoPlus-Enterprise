@@ -124,7 +124,7 @@ class PerformanceTracker {
     }
 
     if (filter?.minDuration) {
-      // @ts-expect-error - Auto-healer: TS18048 - 'filter.minDuration' is possibly 'undefi...
+      // @ts-expect-error — TS18048
       filtered = filtered.filter((m) => m.duration >= filter.minDuration);
     }
 

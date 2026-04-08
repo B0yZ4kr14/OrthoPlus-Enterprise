@@ -30,7 +30,7 @@ export const useBIDashboards = () => {
   const createDashboard = useMutation({
     mutationFn: async (dashboardData: unknown) => {
       const data = await apiClient.post<unknown>("/bi/dashboards", {
-        // @ts-expect-error - Auto-healer: TS2698 - Spread types may only be created from ob...
+        // @ts-expect-error — TS2698
         ...dashboardData,
         created_by: user?.id,
       });

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Prontuario } from "@/domain/entities/Prontuario";
 import { IProntuarioRepository } from "@/domain/repositories/IProntuarioRepository";
 import { apiClient } from "@/lib/api/apiClient";
@@ -8,12 +7,14 @@ import { ProntuarioMapper } from "../mappers/ProntuarioMapper";
 export class DbProntuarioRepository implements IProntuarioRepository {
   async findById(id: string): Promise<Prontuario | null> {
     try {
+      // @ts-expect-error — TS2304
       const data = await apiClient.get<Tables<"patient_records">>(
         `/pep/prontuarios/${id}`,
       );
       if (!data) return null;
       return ProntuarioMapper.toDomain(data);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao buscar prontuário", error);
     }
   }
@@ -23,6 +24,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     clinicId: string,
   ): Promise<Prontuario | null> {
     try {
+      // @ts-expect-error — TS2304
       const data = await apiClient.get<Tables<"patient_records">[]>(
         `/pep/prontuarios/patient/${patientId}`,
       );
@@ -31,6 +33,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário do paciente",
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -39,11 +42,13 @@ export class DbProntuarioRepository implements IProntuarioRepository {
   async findByClinicId(clinicId: string): Promise<Prontuario[]> {
     try {
       const data =
+        // @ts-expect-error — TS2304
         await apiClient.get<Tables<"patient_records">[]>("/pep/prontuarios");
       return (data || []).map(ProntuarioMapper.toDomain);
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuários da clínica",
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -58,6 +63,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     clinicId: string,
   ): Promise<Prontuario | null> {
     try {
+      // @ts-expect-error — TS2304
       const data = await apiClient.get<Tables<"patient_records">[]>(
         "/pep/prontuarios",
         { params: { search: numero } },
@@ -67,6 +73,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário por número",
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -77,6 +84,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
       const data = ProntuarioMapper.toInsert(prontuario);
       await apiClient.post("/pep/prontuarios", data);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao salvar prontuário", error);
     }
   }
@@ -86,6 +94,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
       const data = ProntuarioMapper.toPersistence(prontuario);
       await apiClient.patch(`/pep/prontuarios/${prontuario.id}`, data);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao atualizar prontuário", error);
     }
   }
@@ -94,6 +103,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     try {
       await apiClient.delete(`/pep/prontuarios/${id}`);
     } catch (error) {
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao deletar prontuário", error);
     }
   }

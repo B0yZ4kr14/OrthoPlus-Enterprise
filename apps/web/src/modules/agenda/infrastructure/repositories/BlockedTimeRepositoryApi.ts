@@ -9,19 +9,20 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
   async save(blockedTime: BlockedTime): Promise<BlockedTime> {
     const data = BlockedTimeMapper.toPersistence(blockedTime);
     const result = await apiClient.post<unknown>(this.basePath, data);
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+    // @ts-expect-error — TS2345
     return BlockedTimeMapper.toDomain(result);
   }
 
   async findById(id: string): Promise<BlockedTime | null> {
     try {
       const data = await apiClient.get<Record<string, any>>(`${this.basePath}/${id}`);
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'Record<string, any>' i...
+      // @ts-expect-error — TS2345
       return data ? BlockedTimeMapper.toDomain(data) : null;
-    } catch (error: any) {
-      if (error?.response?.status === 404 || error?.response?.status === 400)
+    } catch (error: unknown) {
+      const axiosErr = error as { response?: { status?: number } };
+      if (axiosErr.response?.status === 404 || axiosErr.response?.status === 400)
         return null;
-      throw new Error(`Erro ao buscar bloqueio: ${error.message}`);
+      throw new Error(`Erro ao buscar bloqueio: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -32,7 +33,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         active: true,
       },
     });
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: BlockedTimeRow) ...
+    // @ts-expect-error — TS2345
     return data.map(BlockedTimeMapper.toDomain);
   }
 
@@ -48,7 +49,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         end_date: endDate.toISOString(),
       },
     });
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: BlockedTimeRow) ...
+    // @ts-expect-error — TS2345
     return data.map(BlockedTimeMapper.toDomain);
   }
 
@@ -59,7 +60,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         active: true,
       },
     });
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: BlockedTimeRow) ...
+    // @ts-expect-error — TS2345
     return data.map(BlockedTimeMapper.toDomain);
   }
 

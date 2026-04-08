@@ -56,9 +56,11 @@ export function CryptoCalculator() {
   const [history24h, setHistory24h] = useState<HistoryItem[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     calculateConversion();
   }, [fromCurrency, toCurrency, amount, rates]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   useEffect(() => {
     fetchHistory24h();

@@ -61,7 +61,7 @@ describe('Auth Controller (mock mode)', () => {
     it('returns 400 when email is missing', async () => {
       const req = mockReq({ password: '123' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ error: 'Email and password required' });
     });
@@ -69,14 +69,14 @@ describe('Auth Controller (mock mode)', () => {
     it('returns 400 when password is missing', async () => {
       const req = mockReq({ email: 'a@b.com' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(400);
     });
 
     it('returns 401 for known-bad credentials', async () => {
       const req = mockReq({ email: 'invalido@email.com', password: 'any' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.json).toHaveBeenCalledWith({ error: 'Credenciais inválidas' });
     });
@@ -84,7 +84,7 @@ describe('Auth Controller (mock mode)', () => {
     it('returns JWT on valid mock credentials', async () => {
       const req = mockReq({ email: 'admin@clinic.com', password: 'correct' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.json).toHaveBeenCalled();
       const payload = (res.json as jest.Mock).mock.calls[0][0];
       expect(payload).toHaveProperty('access_token');
@@ -104,7 +104,7 @@ describe('Auth Controller (mock mode)', () => {
       (prisma.profiles.findUnique as jest.Mock).mockResolvedValueOnce(null);
       const req = mockReq({}, {}, { id: 'any-user-id' });
       const res = mockRes();
-      await controller.getUserMetadata(req as Request, res);
+      await controller.getUserMetadata(req as Request, res, jest.fn());
       const payload = (res.json as jest.Mock).mock.calls[0][0];
       expect(payload.roleData.role).toBe('ADMIN');
       expect(payload.clinicData).toHaveProperty('id');
@@ -127,7 +127,7 @@ describe('Auth Controller (real auth mode)', () => {
     it('returns 400 when email is missing', async () => {
       const req = mockReq({ password: 'pw' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(400);
     });
 
@@ -135,7 +135,7 @@ describe('Auth Controller (real auth mode)', () => {
       (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([]);
       const req = mockReq({ email: 'nouser@clinic.com', password: 'pw' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.json).toHaveBeenCalledWith({ error: 'Credenciais inválidas' });
     });
@@ -152,7 +152,7 @@ describe('Auth Controller (real auth mode)', () => {
       }]);
       const req = mockReq({ email: 'user@clinic.com', password: 'wrong-pw' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
     });
 
@@ -160,7 +160,7 @@ describe('Auth Controller (real auth mode)', () => {
       (prisma.$queryRaw as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
       const req = mockReq({ email: 'user@clinic.com', password: 'pw' });
       const res = mockRes();
-      await controller.login(req as Request, res);
+      await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(500);
     });
   });
@@ -170,7 +170,7 @@ describe('Auth Controller (real auth mode)', () => {
     it('returns 400 when userId is missing', async () => {
       const req = mockReq({}, {}, {});
       const res = mockRes();
-      await controller.getUserMetadata(req as Request, res);
+      await controller.getUserMetadata(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(400);
     });
 
@@ -178,7 +178,7 @@ describe('Auth Controller (real auth mode)', () => {
       (prisma.profiles.findUnique as jest.Mock).mockResolvedValueOnce(null);
       const req = mockReq({}, {}, { id: 'uid-unknown' });
       const res = mockRes();
-      await controller.getUserMetadata(req as Request, res);
+      await controller.getUserMetadata(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(404);
     });
 
@@ -196,7 +196,7 @@ describe('Auth Controller (real auth mode)', () => {
       });
       const req = mockReq({}, {}, { id: 'uid-1' });
       const res = mockRes();
-      await controller.getUserMetadata(req as Request, res);
+      await controller.getUserMetadata(req as Request, res, jest.fn());
       const payload = (res.json as jest.Mock).mock.calls[0][0];
       expect(payload.roleData.role).toBe('ADMIN');
       expect(payload.clinicData).toMatchObject({ id: 'clinic-1', name: 'Test Clinic' });
@@ -218,7 +218,7 @@ describe('Auth Controller (real auth mode)', () => {
       (prisma.user_module_permissions.findMany as jest.Mock).mockResolvedValueOnce([]);
       const req = mockReq({}, {}, { id: 'uid-2' });
       const res = mockRes();
-      await controller.getUserMetadata(req as Request, res);
+      await controller.getUserMetadata(req as Request, res, jest.fn());
       const payload = (res.json as jest.Mock).mock.calls[0][0];
       expect(payload.roleData.role).toBe('MEMBER');
       expect(payload.permissionsData).toEqual([]);
@@ -233,14 +233,14 @@ describe('Auth Controller (shared)', () => {
     it('returns 401 when no authorization header', async () => {
       const req = mockReq({}, {});
       const res = mockRes();
-      await controller.getUser(req as Request, res);
+      await controller.getUser(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
     });
 
     it('returns 401 for invalid token', async () => {
       const req = mockReq({}, { authorization: 'Bearer invalidtoken' });
       const res = mockRes();
-      await controller.getUser(req as Request, res);
+      await controller.getUser(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.json).toHaveBeenCalledWith({ error: 'Invalid token' });
     });
@@ -253,7 +253,7 @@ describe('Auth Controller (shared)', () => {
       );
       const req = mockReq({}, { authorization: `Bearer ${token}` });
       const res = mockRes();
-      await controller.getUser(req as Request, res);
+      await controller.getUser(req as Request, res, jest.fn());
       expect(res.json).toHaveBeenCalled();
       const payload = (res.json as jest.Mock).mock.calls[0][0];
       expect(payload.user.email).toBe('test@clinic.com');
@@ -265,7 +265,7 @@ describe('Auth Controller (shared)', () => {
     it('returns 204 no content', async () => {
       const req = mockReq();
       const res = mockRes();
-      await controller.logout(req as Request, res);
+      await controller.logout(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(204);
       expect(res.send).toHaveBeenCalled();
     });
@@ -276,7 +276,7 @@ describe('Auth Controller (shared)', () => {
     it('returns 400 when cpf/birthDate missing', async () => {
       const req = mockReq({ cpf: '12345678901' }); // no birthDate
       const res = mockRes();
-      await controller.patientAuth(req as Request, res);
+      await controller.patientAuth(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(400);
     });
 
@@ -288,7 +288,7 @@ describe('Auth Controller (shared)', () => {
       }]);
       const req = mockReq({ cpf: '12345678901', birthDate: '1990-01-01' });
       const res = mockRes();
-      await controller.patientAuth(req as Request, res);
+      await controller.patientAuth(req as Request, res, jest.fn());
       const payload = (res.json as jest.Mock).mock.calls[0][0];
       expect(payload).toHaveProperty('access_token');
       expect(payload.user.role).toBe('patient');
@@ -299,7 +299,7 @@ describe('Auth Controller (shared)', () => {
       (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([]);
       const req = mockReq({ cpf: '99999999999', birthDate: '1990-01-01' });
       const res = mockRes();
-      await controller.patientAuth(req as Request, res);
+      await controller.patientAuth(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
     });
 
@@ -311,7 +311,7 @@ describe('Auth Controller (shared)', () => {
       }]);
       const req = mockReq({ cpf: '12345678901', birthDate: '1990-01-01' });
       const res = mockRes();
-      await controller.patientAuth(req as Request, res);
+      await controller.patientAuth(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
     });
   });

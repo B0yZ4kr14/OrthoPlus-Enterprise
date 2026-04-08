@@ -30,6 +30,7 @@ export function BackendSelector() {
   });
 
   // Verificar status de conexão
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     const checkBackendStatus = async (): Promise<BackendConfig> => {
       const startTime = Date.now();
@@ -72,6 +73,7 @@ export function BackendSelector() {
     const interval = setInterval(checkStatus, 30000);
     return () => clearInterval(interval);
   }, []);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const getStatusBadge = (status: BackendConfig["status"]) => {
     const variants = {

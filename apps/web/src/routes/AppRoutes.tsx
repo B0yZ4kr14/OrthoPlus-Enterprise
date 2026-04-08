@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppLayout } from "@/components/AppLayout";
 import { LoadingState } from "@/components/shared/LoadingState";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Core pages (não lazy - carregamento imediato)
 import Demo from "@/modules/core/ui/pages/Demo";
@@ -149,7 +150,7 @@ const HelpCenter = lazy(
   () => import("@/modules/admin/ui/pages/HelpCenter"),
 );
 
-/** Helper: wraps a page in ProtectedRoute + AppLayout + Suspense */
+/** Helper: wraps a page in ProtectedRoute + AppLayout + ErrorBoundary + Suspense */
 function protectedRoute(
   page: React.ReactNode,
   opts?: { moduleKey?: string; requireAdmin?: boolean },
@@ -157,7 +158,9 @@ function protectedRoute(
   return (
     <ProtectedRoute moduleKey={opts?.moduleKey} requireAdmin={opts?.requireAdmin}>
       <AppLayout>
-        <Suspense fallback={<LoadingState />}>{page}</Suspense>
+        <ErrorBoundary moduleName={opts?.moduleKey?.toLowerCase()}>
+          <Suspense fallback={<LoadingState />}>{page}</Suspense>
+        </ErrorBoundary>
       </AppLayout>
     </ProtectedRoute>
   );

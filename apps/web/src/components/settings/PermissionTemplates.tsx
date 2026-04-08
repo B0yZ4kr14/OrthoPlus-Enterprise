@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
@@ -62,6 +61,7 @@ export function PermissionTemplates() {
       const templatesData = await apiClient.get<Record<string, any>[]>(
         "/configuracoes/permissoes/templates",
       );
+      // @ts-expect-error — TS2345
       setTemplates(templatesData || []);
 
       // Buscar usuários MEMBER
@@ -76,9 +76,11 @@ export function PermissionTemplates() {
       // Filtrar apenas MEMBERs
       const memberUsers =
         profilesData?.filter((profile: unknown) => {
+          // @ts-expect-error — TS18046
           return (profile.role || "MEMBER") === "MEMBER";
         }) || [];
 
+      // @ts-expect-error — TS2345
       setUsers(memberUsers);
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
@@ -199,6 +201,7 @@ export function PermissionTemplates() {
             >
               <div className="flex items-start gap-4 mb-4">
                 <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10">
+                  {/* @ts-expect-error — TS2604, TS2786 */}
                   <Icon className="h-6 w-6 text-primary" />
                 </div>
                 <div className="flex-1">

@@ -47,7 +47,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
       const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
         params: { patient_id: patientId, clinic_id: clinicId },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: { clinic_id: str...
+      // @ts-expect-error — TS2345
       return (data || []).map(AgendamentoMapper.toDomain);
     } catch {
       return [];
@@ -67,7 +67,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
           end_date: endDate.toISOString(),
         },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: { clinic_id: str...
+      // @ts-expect-error — TS2345
       return (data || []).map(AgendamentoMapper.toDomain);
     } catch {
       return [];
@@ -89,7 +89,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
       const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
         params: { clinic_id: clinicId, status: dbStatus },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: { clinic_id: str...
+      // @ts-expect-error — TS2345
       return (data || []).map(AgendamentoMapper.toDomain);
     } catch {
       return [];
@@ -104,7 +104,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
           status: "not.in.(cancelado,concluido,faltou)",
         },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: { clinic_id: str...
+      // @ts-expect-error — TS2345
       return (data || []).map(AgendamentoMapper.toDomain);
     } catch {
       return [];
@@ -140,8 +140,9 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     const dbData = AgendamentoMapper.toDatabase(agendamento);
     try {
       await apiClient.post("/agenda/appointments", dbData);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar agendamento: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar agendamento: ${_e.message}`);
     }
   }
 
@@ -149,16 +150,18 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     const dbData = AgendamentoMapper.toDatabase(agendamento);
     try {
       await apiClient.patch(`/agenda/appointments/${agendamento.id}`, dbData);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar agendamento: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar agendamento: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/agenda/appointments/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar agendamento: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar agendamento: ${_e.message}`);
     }
   }
 }

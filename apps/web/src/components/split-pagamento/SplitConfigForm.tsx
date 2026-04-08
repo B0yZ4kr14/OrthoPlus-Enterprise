@@ -97,7 +97,7 @@ export function SplitConfigForm({
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // @ts-expect-error - Auto-healer: TS2339 - Property 'errors' does not exist on type...
+        // @ts-expect-error — TS2339
         toast.error(error.errors[0].message);
       } else {
         toast.error("Erro ao salvar configuração de split");

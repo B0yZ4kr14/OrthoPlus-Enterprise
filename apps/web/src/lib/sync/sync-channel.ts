@@ -48,7 +48,7 @@ export function postSyncUpdate(type: SyncMessageType, data?: unknown): void {
 
   const message: SyncMessage = {
     type,
-    // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
+    // @ts-expect-error — TS2322
     data,
     timestamp: Date.now(),
   };

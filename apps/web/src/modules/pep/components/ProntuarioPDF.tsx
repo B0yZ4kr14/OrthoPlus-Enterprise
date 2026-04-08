@@ -1,7 +1,7 @@
 import { Button } from "@orthoplus/core-ui/button";
 import { Download, FileText } from "lucide-react";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
+// jsPDF loaded dynamically to reduce initial bundle
 
 interface ProntuarioPDFProps {
   prontuarioId: string;
@@ -12,7 +12,8 @@ export function ProntuarioPDF({
   prontuarioId,
   patientName,
 }: ProntuarioPDFProps) {
-  const generatePDF = () => {
+  const generatePDF = async () => {
+    const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 20;

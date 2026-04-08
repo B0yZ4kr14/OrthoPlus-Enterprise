@@ -131,7 +131,7 @@ export default function CryptoPaymentPDV({
       startPaymentMonitoring(payment.address);
 
       toast.success("Endereço de pagamento gerado!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error generating payment address:", error);
       toast.error("Erro ao gerar endereço de pagamento");
     } finally {

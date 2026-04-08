@@ -64,7 +64,6 @@ export default function PatientDetail() {
     queryKey: ["patient", patientId],
     queryFn: async () => {
       const data = await apiClient.get<PatientAPIData>(`/pacientes/${patientId}`);
-      // @ts-ignore - adapter expects PatientAPI but local interface is same
       return PatientAdapter.toFrontend(data);
     },
     enabled: !!patientId,

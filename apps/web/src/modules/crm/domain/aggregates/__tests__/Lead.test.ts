@@ -98,7 +98,7 @@ describe("Lead Aggregate", () => {
       lead.assignTo("user-1");
 
       const persistence = lead.toPersistence();
-      // @ts-expect-error - Auto-healer: TS18046 - 'persistence' is of type 'unknown'....
+      // @ts-expect-error — TS18046
       expect(persistence.assigned_to).toBe("user-1");
     });
   });

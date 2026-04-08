@@ -7,7 +7,7 @@
  * - Hooks: Custom hooks do módulo
  */
 
-// @ts-expect-error - Auto-healer: TS2307 - Cannot find module './pages' or its corr...
+// @ts-expect-error — TS2307
 export * from "./pages";
 // export * from './components';
 // export * from './hooks';

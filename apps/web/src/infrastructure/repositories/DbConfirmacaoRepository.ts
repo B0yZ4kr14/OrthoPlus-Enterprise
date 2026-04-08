@@ -25,7 +25,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
         params: { appointment_id: agendamentoId },
       });
       if (!data || data.length === 0) return null;
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'Record<string, any>' i...
+      // @ts-expect-error — TS2345
       return ConfirmacaoMapper.toDomain(data[0]);
     } catch {
       return null;
@@ -48,7 +48,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
       const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
         params: { status: dbStatus },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: { appointment_id...
+      // @ts-expect-error — TS2345
       return (data || []).map(ConfirmacaoMapper.toDomain);
     } catch {
       return [];
@@ -60,7 +60,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
       const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
         params: { status: "PENDING" },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: { appointment_id...
+      // @ts-expect-error — TS2345
       return (data || []).map(ConfirmacaoMapper.toDomain);
     } catch {
       return [];
@@ -72,7 +72,7 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
       const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
         params: { status: "SENT" },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(row: { appointment_id...
+      // @ts-expect-error — TS2345
       return (data || []).map(ConfirmacaoMapper.toDomain);
     } catch {
       return [];
@@ -83,8 +83,9 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
     const dbData = ConfirmacaoMapper.toDatabase(confirmacao);
     try {
       await apiClient.post("/agenda/confirmations", dbData);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar confirmação: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar confirmação: ${_e.message}`);
     }
   }
 
@@ -92,16 +93,18 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
     const dbData = ConfirmacaoMapper.toDatabase(confirmacao);
     try {
       await apiClient.patch(`/agenda/confirmations/${confirmacao.id}`, dbData);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar confirmação: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar confirmação: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/agenda/confirmations/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar confirmação: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar confirmação: ${_e.message}`);
     }
   }
 }

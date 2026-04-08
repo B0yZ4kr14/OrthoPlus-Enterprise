@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,9 +38,10 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
       // Disparar impressão automática em SAT/MFe após emissão NFCe
       await imprimirCupomFiscal();
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast({
         title: "Erro ao emitir NFCe",
+        // @ts-expect-error — TS18046
         description: error.message,
         variant: "destructive",
       });
@@ -53,6 +53,7 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
       const data: Record<string, any> = await apiClient.post("/imprimir-cupom-sat", {
         vendaId: venda.id,
         clinicId: clinicId,
+        // @ts-expect-error — TS2345
         items: items.map((item: Record<string, any>) => ({
           descricao: item.descricao,
           quantidade: item.quantidade,
@@ -71,11 +72,12 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
       } else {
         throw new Error(data.mensagem || "Erro ao imprimir cupom fiscal");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error printing fiscal coupon:", error);
       toast({
         title: "Erro ao imprimir cupom fiscal",
-        description: error.message,
+        description: _e.message,
         variant: "destructive",
       });
     }
@@ -107,6 +109,7 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
   };
 
   const valorTotal = items.reduce(
+    // @ts-expect-error — TS18046
     (sum, item) => sum + item.valor_unitario * item.quantidade,
     0,
   );
@@ -157,19 +160,23 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
               {items.map((item, index) => (
                 <tr key={index}>
                   <td colSpan={3}>
+                    {/* @ts-expect-error — TS18046 */}
                     <div>{item.descricao}</div>
                     <div className="flex justify-between">
+                      {/* @ts-expect-error — TS18046 */}
                       <span>{item.quantidade} x</span>
                       <span>
                         {new Intl.NumberFormat("pt-BR", {
                           style: "currency",
                           currency: "BRL",
+                        // @ts-expect-error — TS18046
                         }).format(item.valor_unitario)}
                       </span>
                       <span className="bold">
                         {new Intl.NumberFormat("pt-BR", {
                           style: "currency",
                           currency: "BRL",
+                        // @ts-expect-error — TS18046
                         }).format(item.valor_unitario * item.quantidade)}
                       </span>
                     </div>
@@ -188,6 +195,7 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
                 {new Intl.NumberFormat("pt-BR", {
                   style: "currency",
                   currency: "BRL",
+                // @ts-expect-error — TS2769
                 }).format(valorTotal)}
               </td>
             </tr>

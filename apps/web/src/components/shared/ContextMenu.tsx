@@ -74,6 +74,7 @@ export function ContextMenu({ children, sections }: ContextMenuProps) {
 }
 
 // Hook para criar menus contextuais comuns
+// eslint-disable-next-line react-refresh/only-export-components
 export function useCommonContextMenus() {
   const patientContextMenu = (
     patientId: string,
@@ -90,18 +91,21 @@ export function useCommonContextMenus() {
         {
           label: "Abrir Prontuário",
           icon: <span>📋</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onOpenChart || (() => {}),
           shortcut: "Ctrl+O",
         },
         {
           label: "Agendar Consulta",
           icon: <span>📅</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onSchedule || (() => {}),
           shortcut: "Ctrl+A",
         },
         {
           label: "Novo Orçamento",
           icon: <span>💰</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onBudget || (() => {}),
         },
       ],
@@ -111,6 +115,7 @@ export function useCommonContextMenus() {
         {
           label: "Exportar PDF",
           icon: <span>📄</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onExport || (() => {}),
         },
       ],
@@ -120,6 +125,7 @@ export function useCommonContextMenus() {
         {
           label: "Excluir Paciente",
           icon: <span>🗑️</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onDelete || (() => {}),
           destructive: true,
         },
@@ -141,11 +147,13 @@ export function useCommonContextMenus() {
         {
           label: "Editar Consulta",
           icon: <span>✏️</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onEdit || (() => {}),
         },
         {
           label: "Reagendar",
           icon: <span>📅</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onReschedule || (() => {}),
         },
       ],
@@ -155,6 +163,7 @@ export function useCommonContextMenus() {
         {
           label: "Confirmar Presença",
           icon: <span>✅</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onConfirm || (() => {}),
         },
       ],
@@ -164,6 +173,7 @@ export function useCommonContextMenus() {
         {
           label: "Cancelar Consulta",
           icon: <span>❌</span>,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onClick: actions.onCancel || (() => {}),
           destructive: true,
         },

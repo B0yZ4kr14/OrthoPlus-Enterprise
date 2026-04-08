@@ -27,10 +27,10 @@ export function ExportButton({
       return;
     }
 
-    // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+    // @ts-expect-error — TS2769
     const headers = Object.keys(data[0]).join(",");
     const rows = data.map((item) =>
-      // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+      // @ts-expect-error — TS2769
       Object.values(item)
         .map((val) =>
           typeof val === "string" && val.includes(",") ? `"${val}"` : val,

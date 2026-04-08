@@ -70,7 +70,7 @@ export default function Usuarios() {
     queryKey: ["users", clinicId],
     queryFn: async () => {
       const response = await apiClient.get<User[]>("/usuarios");
-      // @ts-expect-error - Auto-healer: TS2339 - Property 'data' does not exist on type '...
+      // @ts-expect-error — TS2339
       return response.data;
     },
     enabled: !!clinicId,
@@ -97,9 +97,10 @@ export default function Usuarios() {
       queryClient.invalidateQueries({ queryKey: ["users", clinicId] });
       toast.success("Usuário excluído com sucesso!");
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
       toast.error("Erro ao excluir usuário", {
-        description: error.message,
+        description: msg,
       });
     },
   });

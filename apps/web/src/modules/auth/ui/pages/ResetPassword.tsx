@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +27,16 @@ import orthoLogo from "@/assets/ortho-logo-main.png";
 
 const resetPasswordSchema = z
   .object({
-    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+    password: z
+      .string()
+      .min(12, "Senha deve ter no mínimo 12 caracteres")
+      .regex(/[A-Z]/, "Senha deve conter pelo menos uma letra maiúscula")
+      .regex(/[a-z]/, "Senha deve conter pelo menos uma letra minúscula")
+      .regex(/\d/, "Senha deve conter pelo menos um número")
+      .regex(
+        /[@$!%*?&#]/,
+        "Senha deve conter pelo menos um símbolo (@$!%*?&#)",
+      ),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -41,6 +50,8 @@ export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [isValidToken, setIsValidToken] = useState(true);
   const navigate = useNavigate();
+  // Store reset token in memory only — never in localStorage (XSS risk)
+  const resetTokenRef = useRef<string | null>(null);
 
   const form = useForm<ResetPasswordValues>({
     resolver: zodResolver(resetPasswordSchema),
@@ -57,25 +68,33 @@ export default function ResetPassword() {
     const type = hashParams.get("type");
     if (type === "recovery" && accessToken) {
       setIsValidToken(true);
-      // Store token for password update
-      localStorage.setItem("reset_token", accessToken);
+      // Store token in memory only — never expose to XSS via localStorage
+      resetTokenRef.current = accessToken;
+      // Clean the URL hash to avoid token leak in browser history
+      window.history.replaceState(null, "", window.location.pathname);
     } else {
-      // Check if token was stored previously
-      const storedToken = localStorage.getItem("reset_token");
-      setIsValidToken(!!storedToken);
+      setIsValidToken(false);
     }
   }, []);
 
   const handleSubmit = async (values: ResetPasswordValues) => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("reset_token");
+      const token = resetTokenRef.current;
+      if (!token) {
+        toast.error("Token inválido", {
+          description: "Por favor, solicite um novo link de recuperação.",
+        });
+        return;
+      }
+
       await apiClient.post("/auth/update-password", {
         password: values.password,
         token,
       });
 
-      localStorage.removeItem("reset_token");
+      // Clear token from memory after use
+      resetTokenRef.current = null;
 
       toast.success("Senha redefinida!", {
         description:
@@ -86,9 +105,11 @@ export default function ResetPassword() {
       setTimeout(() => {
         navigate("/auth");
       }, 2000);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Tente novamente mais tarde.";
       toast.error("Erro ao redefinir senha", {
-        description: error.message || "Tente novamente mais tarde.",
+        description: message,
       });
     } finally {
       setIsLoading(false);

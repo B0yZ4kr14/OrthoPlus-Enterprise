@@ -23,7 +23,7 @@ export class DbModuleRepository implements IModuleRepository {
       return ModuleMapper.toDomain(data);
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro inesperado ao buscar módulo", error);
     }
   }
@@ -39,7 +39,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulo por chave",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -55,7 +55,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulos da clínica",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -74,7 +74,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulos ativos",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -91,7 +91,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulos por categoria",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -105,7 +105,7 @@ export class DbModuleRepository implements IModuleRepository {
       });
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro inesperado ao ativar módulo", error);
     }
   }
@@ -120,7 +120,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao desativar módulo",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -148,7 +148,7 @@ export class DbModuleRepository implements IModuleRepository {
       });
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao buscar dependências", error);
     }
   }
@@ -172,7 +172,7 @@ export class DbModuleRepository implements IModuleRepository {
       });
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao buscar dependentes ativos", error);
     }
   }

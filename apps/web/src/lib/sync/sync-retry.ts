@@ -58,7 +58,7 @@ export async function syncWithRetry<T>(
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       return await operation();
-    } catch (error: any) {
+    } catch (error: unknown) {
       lastError = error;
 
       if (!isRetryable(error) || attempt === maxAttempts) {

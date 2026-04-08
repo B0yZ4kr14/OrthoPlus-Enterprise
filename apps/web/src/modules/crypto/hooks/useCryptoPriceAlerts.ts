@@ -37,7 +37,7 @@ export function useCryptoPriceAlerts() {
         `/crypto/price-alerts?clinic_id=${clinicId}`,
       );
       setAlerts(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching alerts:", error);
       toast.error("Erro ao carregar alertas");
     } finally {
@@ -45,9 +45,11 @@ export function useCryptoPriceAlerts() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     fetchAlerts();
   }, [clinicId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const createAlert = async (
     alertData: Omit<
@@ -71,7 +73,7 @@ export function useCryptoPriceAlerts() {
         : "Alerta criado com sucesso!";
       toast.success(successMsg);
       fetchAlerts();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating alert:", error);
       toast.error("Erro ao criar alerta");
     }
@@ -87,7 +89,7 @@ export function useCryptoPriceAlerts() {
         `Alerta ${!isActive ? "ativado" : "desativado"} com sucesso!`,
       );
       fetchAlerts();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error toggling alert:", error);
       toast.error("Erro ao atualizar alerta");
     }
@@ -99,7 +101,7 @@ export function useCryptoPriceAlerts() {
 
       toast.success("Alerta excluído com sucesso!");
       fetchAlerts();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting alert:", error);
       toast.error("Erro ao excluir alerta");
     }

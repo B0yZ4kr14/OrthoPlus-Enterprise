@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Button } from "@orthoplus/core-ui/button";
 import { Card } from "@orthoplus/core-ui/card";
@@ -7,6 +6,12 @@ import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 import { Shield, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
+
+interface BackupEntry {
+  id: string;
+  created_at: string;
+  backup_type: string;
+}
 
 interface IntegrityResult {
   backupId: string;
@@ -31,11 +36,11 @@ export function BackupIntegrityChecker({
   const [loading, setLoading] = useState(false);
   const [selectedBackupId, setSelectedBackupId] = useState<string>("");
   const [result, setResult] = useState<IntegrityResult | null>(null);
-  const [backups, setBackups] = useState<unknown[]>([]);
+  const [backups, setBackups] = useState<BackupEntry[]>([]);
 
   const loadBackups = async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(
+      const data = await apiClient.get<BackupEntry[]>(
         "/configuracoes/backups/historico",
         { params: { status: "success", limit: 20 } },
       );
@@ -82,7 +87,7 @@ export function BackupIntegrityChecker({
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full p-6 space-y-6" depth="normal">
+      <Card className="max-w-2xl w-full p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Shield className="h-6 w-6" />
@@ -95,14 +100,16 @@ export function BackupIntegrityChecker({
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium mb-2 block">
+            <label htmlFor="backup-select" className="text-sm font-medium mb-2 block">
               Selecione um Backup para Validar
             </label>
             <select
-              className="w-full p-2 border rounded"
+              id="backup-select"
+              className="w-full p-2 border rounded bg-background"
               value={selectedBackupId}
               onChange={(e) => setSelectedBackupId(e.target.value)}
               onFocus={loadBackups}
+              aria-label="Selecionar backup para validação"
             >
               <option value="">Selecione...</option>
               {backups.map((b) => (

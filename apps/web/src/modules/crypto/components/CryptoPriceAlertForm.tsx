@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -51,6 +50,7 @@ export function CryptoPriceAlertForm({
   onCancel,
 }: CryptoPriceAlertFormProps) {
   const form = useForm<AlertFormData>({
+    // @ts-expect-error — TS2322
     resolver: zodResolver(alertSchema),
     defaultValues: {
       coin_type: "",
@@ -68,8 +68,10 @@ export function CryptoPriceAlertForm({
 
   return (
     <Form {...form}>
+      {/* @ts-expect-error — TS2345 */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="coin_type"
           render={({ field }) => (
@@ -95,6 +97,7 @@ export function CryptoPriceAlertForm({
         />
 
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="target_rate_brl"
           render={({ field }) => (
@@ -117,6 +120,7 @@ export function CryptoPriceAlertForm({
         />
 
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="alert_type"
           render={({ field }) => (
@@ -146,6 +150,7 @@ export function CryptoPriceAlertForm({
         />
 
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="notification_method"
           render={() => (
@@ -153,6 +158,7 @@ export function CryptoPriceAlertForm({
               <FormLabel>Métodos de Notificação</FormLabel>
               <div className="space-y-2">
                 <FormField
+                  // @ts-expect-error — TS2322
                   control={form.control}
                   name="notification_method"
                   render={({ field }) => (
@@ -177,6 +183,7 @@ export function CryptoPriceAlertForm({
                   )}
                 />
                 <FormField
+                  // @ts-expect-error — TS2322
                   control={form.control}
                   name="notification_method"
                   render={({ field }) => (
@@ -209,6 +216,7 @@ export function CryptoPriceAlertForm({
         {/* Stop-Loss Configuration */}
         <div className="space-y-4 p-4 border border-warning/20 rounded-lg bg-warning/5">
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="stop_loss_enabled"
             render={({ field }) => (
@@ -237,6 +245,7 @@ export function CryptoPriceAlertForm({
           {stopLossEnabled && (
             <>
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="auto_convert_on_trigger"
                 render={({ field }) => (
@@ -261,6 +270,7 @@ export function CryptoPriceAlertForm({
 
               {autoConvert && (
                 <FormField
+                  // @ts-expect-error — TS2322
                   control={form.control}
                   name="conversion_percentage"
                   render={({ field }) => (

@@ -125,7 +125,7 @@ export function TratamentoForm({
           <Label htmlFor="status">Status *</Label>
           <Select
             defaultValue="EM_ANDAMENTO"
-            // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+            // @ts-expect-error — TS2345
             onValueChange={(value) => setValue("status", value as unknown)}
           >
             <SelectTrigger id="status">

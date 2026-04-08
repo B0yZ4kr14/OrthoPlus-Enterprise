@@ -12,9 +12,11 @@ import { CheckCircle2, Clock, Loader2, AlertCircle } from "lucide-react";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 
+import { CryptoInvoice } from "../../types/crypto.types";
+
 interface CryptoPaymentStatusProps {
   paymentId: string;
-  onStatusChange?: (status: string) => void;
+  onStatusChange?: (status: CryptoInvoice["status"]) => void;
 }
 
 interface PaymentStatus {
@@ -34,6 +36,7 @@ export function CryptoPaymentStatus({
   );
   const [loading, setLoading] = useState(true);
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     fetchPaymentStatus();
 
@@ -44,6 +47,7 @@ export function CryptoPaymentStatus({
       clearInterval(interval);
     };
   }, [paymentId, onStatusChange]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const fetchPaymentStatus = async () => {
     try {
@@ -65,7 +69,7 @@ export function CryptoPaymentStatus({
       };
 
       setPaymentStatus(newStatus);
-      onStatusChange?.(data.status);
+      onStatusChange?.(data.status as CryptoInvoice["status"]);
 
       if (data.status === "CONFIRMED") {
         toast.success("Pagamento confirmado!", {

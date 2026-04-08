@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -59,12 +58,12 @@ export function InventarioAgendamentoForm({
     setValue,
     formState: { errors },
   } = useForm<AgendamentoFormData>({
-    resolver: zodResolver(agendamentoSchema),
+    resolver: zodResolver(agendamentoSchema) as any,
     defaultValues: {
       notificarResponsavel: true,
       notificarDiasAntes: 1,
       ...initialData,
-    },
+    } as any,
   });
 
   const periodicidade = watch("periodicidade");
@@ -96,7 +95,7 @@ export function InventarioAgendamentoForm({
               {...register("nome")}
             />
             {errors.nome && (
-              <p className="text-sm text-red-600">{errors.nome.message}</p>
+              <p className="text-sm text-red-600">{errors.nome.message?.toString()}</p>
             )}
           </div>
 
@@ -107,9 +106,9 @@ export function InventarioAgendamentoForm({
               placeholder="Nome do responsável"
               {...register("responsavel")}
             />
-            {errors.responsavel && (
+            {errors.responsavel?.message && (
               <p className="text-sm text-red-600">
-                {errors.responsavel.message}
+                {errors.responsavel.message.toString()}
               </p>
             )}
           </div>
@@ -129,7 +128,7 @@ export function InventarioAgendamentoForm({
             <Select
               value={watch("periodicidade")}
               onValueChange={(value) =>
-                setValue("periodicidade", value as unknown)
+                setValue("periodicidade", value as AgendamentoFormData["periodicidade"])
               }
             >
               <SelectTrigger>
@@ -181,9 +180,9 @@ export function InventarioAgendamentoForm({
                 placeholder="Dia do mês"
                 {...register("diaExecucao", { valueAsNumber: true })}
               />
-              {errors.diaExecucao && (
+              {errors.diaExecucao?.message && (
                 <p className="text-sm text-red-600">
-                  {errors.diaExecucao.message}
+                  {errors.diaExecucao.message.toString()}
                 </p>
               )}
             </div>
@@ -194,7 +193,7 @@ export function InventarioAgendamentoForm({
             <Select
               value={watch("tipoInventario")}
               onValueChange={(value) =>
-                setValue("tipoInventario", value as unknown)
+                setValue("tipoInventario", value as AgendamentoFormData["tipoInventario"])
               }
             >
               <SelectTrigger>
@@ -309,7 +308,7 @@ export function InventarioAgendamentoForm({
 }
 
 function getResumoAgendamento(
-  periodicidade: string,
+  periodicidade: AgendamentoFormData["periodicidade"],
   diaExecucao?: number,
   diaSemana?: number,
 ): string {

@@ -24,11 +24,21 @@ export function authMiddleware(
   const isPublicApi = req.path.startsWith("/api/auth") || req.path === "/health";
   const allowMock = process.env.AUTH_ALLOW_MOCK === "true";
 
+  // BYPASS FOR INTERNAL CRON JOBS
+  const isInternalCron = req.headers["x-internal-cron"] === "true" && 
+    (req.ip === "127.0.0.1" || req.ip === "::ffff:127.0.0.1" || req.ip === "::1");
+
   // If no token on protected API routes, block unless mock mode is enabled
   if (!token) {
-    if (isApiRoute && !isPublicApi && !allowMock) {
+    if (isApiRoute && !isPublicApi && !allowMock && !isInternalCron) {
       return _res.status(401).json({ error: "Unauthorized - JWT token required" });
     }
+    
+    if (isInternalCron) {
+      req.clinicId = "SYSTEM";
+      req.user = { id: "SYSTEM", clinicId: "SYSTEM", role: "ROOT" };
+    }
+    
     return next();
   }
 

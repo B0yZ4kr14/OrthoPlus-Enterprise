@@ -59,7 +59,7 @@ export const fidelidadeBadgeSchema = z.object({
   nome: z.string().min(1),
   descricao: z.string().min(1),
   icone: z.string().min(1),
-  // @ts-expect-error - Auto-healer: TS2554 - Expected 2-3 arguments, but got 1....
+  // @ts-expect-error — TS2554
   criterio: z.record(z.unknown()),
   compartilhavel: z.boolean().default(true),
 });
@@ -75,6 +75,10 @@ export const fidelidadeIndicacaoSchema = z.object({
     .enum(["PENDENTE", "AGENDADO", "COMPARECEU", "NAO_COMPARECEU"])
     .default("PENDENTE"),
   pontos_concedidos: z.number().optional(),
+  created_at: z.string().optional(),
+  indicador: z.object({
+    nome: z.string()
+  }).optional()
 });
 
 export type FidelidadeConfig = z.infer<typeof fidelidadeConfigSchema>;

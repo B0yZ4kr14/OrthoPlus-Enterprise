@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
@@ -101,6 +100,7 @@ export default function RecallPage() {
       CANCELADO: { variant: "destructive", icon: XCircle, label: "Cancelado" },
     };
 
+    // @ts-expect-error — TS2339
     const { variant, icon: Icon, label } = config[status] || config.PENDENTE;
 
     return (

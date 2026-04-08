@@ -45,7 +45,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       setPrescricoes(prescricoesData || []);
       setTriagens(triagensData || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error loading teleodontologia data:", error);
       toast({
         title: "Erro ao carregar dados",
@@ -57,6 +57,7 @@ export const useTeleodontologia = (clinicId: string) => {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     if (!clinicId) return;
 
@@ -70,6 +71,7 @@ export const useTeleodontologia = (clinicId: string) => {
       clearInterval(interval);
     };
   }, [clinicId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const createTeleconsulta = async (teleconsulta: unknown) => {
     try {
@@ -87,7 +89,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating teleconsulta:", error);
       toast({
         title: "Erro",
@@ -114,7 +116,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error updating teleconsulta:", error);
       toast({
         title: "Erro",
@@ -136,7 +138,7 @@ export const useTeleodontologia = (clinicId: string) => {
       });
 
       await loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting teleconsulta:", error);
       toast({
         title: "Erro",
@@ -163,7 +165,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating prescricao:", error);
       toast({
         title: "Erro",
@@ -190,7 +192,7 @@ export const useTeleodontologia = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating triagem:", error);
       toast({
         title: "Erro",
@@ -211,7 +213,7 @@ export const useTeleodontologia = (clinicId: string) => {
         uid: user?.id || "anonymous",
         teleconsultaId,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error starting consultation:", error);
       toast({
         title: "Erro",

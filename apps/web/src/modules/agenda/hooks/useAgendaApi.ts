@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { endOfDay, isWithinInterval, parseISO, startOfDay } from "date-fns";
@@ -34,41 +33,58 @@ export function useAgendaApi() {
       // Transform database row to Appointment format
       const transformedAppointments: Appointment[] = (data || []).map(
         (apt: unknown) => {
+          // @ts-expect-error — TS18046
           const startDate = new Date(apt.start_time);
+          // @ts-expect-error — TS18046
           const endDate = new Date(apt.end_time);
 
           return {
+            // @ts-expect-error — TS18046
             id: apt.id,
+            // @ts-expect-error — TS18046
             pacienteId: apt.patient_id,
+            // @ts-expect-error — TS18046
             pacienteNome: apt.patient?.profiles?.full_name || "Paciente",
+            // @ts-expect-error — TS18046
             dentistaId: apt.dentist_id,
+            // @ts-expect-error — TS18046
             dentistaNome: apt.dentist?.full_name || "Dentista",
             data: startDate.toISOString().split("T")[0],
             horaInicio: startDate.toTimeString().slice(0, 5),
             horaFim: endDate.toTimeString().slice(0, 5),
+            // @ts-expect-error — TS18046
             procedimento: apt.title || "",
             status:
+              // @ts-expect-error — TS18046
               apt.status === "agendado"
                 ? "Agendada"
+                // @ts-expect-error — TS18046
                 : apt.status === "confirmado"
                   ? "Confirmada"
+                  // @ts-expect-error — TS18046
                   : apt.status === "cancelado"
                     ? "Cancelada"
+                    // @ts-expect-error — TS18046
                     : apt.status === "concluido"
                       ? "Realizada"
                       : "Agendada",
+            // @ts-expect-error — TS18046
             observacoes: apt.description || "",
+            // @ts-expect-error — TS18046
             lembreteEnviado: apt.reminder_sent || false,
+            // @ts-expect-error — TS18046
             createdAt: apt.created_at,
+            // @ts-expect-error — TS18046
             updatedAt: apt.updated_at,
           };
         },
       );
 
       setAppointments(transformedAppointments);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error loading appointments:", error);
-      toast.error("Erro ao carregar agendamentos: " + error.message);
+      toast.error("Erro ao carregar agendamentos: " + _e.message);
     }
   };
 
@@ -88,7 +104,9 @@ export function useAgendaApi() {
 
       const transformedDentistas: Dentista[] = (data || []).map(
         (dentista: unknown, index: number) => ({
+          // @ts-expect-error — TS18046
           id: dentista.id,
+          // @ts-expect-error — TS18046
           nome: dentista.full_name || "Dentista",
           especialidade: "Odontologia",
           cor: ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"][
@@ -98,13 +116,15 @@ export function useAgendaApi() {
       );
 
       setDentistas(transformedDentistas);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error loading dentistas:", error);
-      toast.error("Erro ao carregar dentistas: " + error.message);
+      toast.error("Erro ao carregar dentistas: " + _e.message);
     }
   };
 
   // ============= INITIAL LOAD & POLLING =============
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     const loadAll = async () => {
       setLoading(true);
@@ -125,6 +145,7 @@ export function useAgendaApi() {
       };
     }
   }, [user, selectedClinic]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   // ============= CRUD OPERATIONS =============
   const addAppointment = async (
@@ -167,9 +188,10 @@ export function useAgendaApi() {
       toast.success("Consulta agendada com sucesso!");
       await loadAppointments();
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error adding appointment:", error);
-      toast.error("Erro ao agendar consulta: " + error.message);
+      toast.error("Erro ao agendar consulta: " + _e.message);
       throw error;
     }
   };
@@ -219,9 +241,10 @@ export function useAgendaApi() {
 
       toast.success("Consulta atualizada com sucesso!");
       await loadAppointments();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error updating appointment:", error);
-      toast.error("Erro ao atualizar consulta: " + error.message);
+      toast.error("Erro ao atualizar consulta: " + _e.message);
       throw error;
     }
   };
@@ -234,9 +257,10 @@ export function useAgendaApi() {
 
       toast.success("Consulta removida com sucesso!");
       await loadAppointments();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error deleting appointment:", error);
-      toast.error("Erro ao remover consulta: " + error.message);
+      toast.error("Erro ao remover consulta: " + _e.message);
       throw error;
     }
   };
@@ -287,6 +311,7 @@ export function useAgendaApi() {
   };
 
   const enviarLembrete = async (id: string) => {
+    // @ts-expect-error — TS2345
     await updateAppointment(id, { lembreteEnviado: true } as unknown);
     toast.success("Lembrete enviado com sucesso!");
   };

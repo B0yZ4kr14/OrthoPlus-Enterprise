@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Odontograma } from "@/domain/entities/Odontograma";
 import { IOdontogramaRepository } from "@/domain/repositories/IOdontogramaRepository";
 import { apiClient } from "@/lib/api/apiClient";
@@ -11,6 +10,7 @@ import type { Tables } from "@/types/database";
 export class DbOdontogramaRepository implements IOdontogramaRepository {
   async findById(id: string): Promise<Odontograma | null> {
     try {
+      // @ts-expect-error — TS2344
       const data = await apiClient.get<Tables<"patient_odontograms">>(
         `/pep/odontogramas/${id}`,
       );
@@ -23,6 +23,7 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
 
   async findByProntuarioId(prontuarioId: string): Promise<Odontograma | null> {
     try {
+      // @ts-expect-error — TS2344
       const data = await apiClient.get<Tables<"patient_odontograms">[]>(
         "/pep/odontogramas",
         { params: { prontuario_id: prontuarioId } },
@@ -37,6 +38,7 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
   async findByClinicId(clinicId: string): Promise<Odontograma[]> {
     try {
       const data =
+        // @ts-expect-error — TS2344
         await apiClient.get<Tables<"patient_odontograms">[]>(
           "/pep/odontogramas",
         );
@@ -57,8 +59,9 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
         ...insert,
         prontuario_id: odontograma.prontuarioId,
       });
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar odontograma: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar odontograma: ${_e.message}`);
     }
   }
 
@@ -70,16 +73,18 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
 
     try {
       await apiClient.patch(`/pep/odontogramas/${odontograma.id}`, insert);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar odontograma: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar odontograma: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/pep/odontogramas/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar odontograma: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar odontograma: ${_e.message}`);
     }
   }
 }

@@ -100,8 +100,9 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
     const insert = MovimentoCaixaMapper.toDbInsert(movimento);
     try {
       await apiClient.post("/financeiro/movimentos", insert);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar movimento de caixa: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar movimento de caixa: ${_e.message}`);
     }
   }
 
@@ -109,16 +110,18 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
     const insert = MovimentoCaixaMapper.toDbInsert(movimento);
     try {
       await apiClient.patch(`/financeiro/movimentos/${movimento.id}`, insert);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar movimento de caixa: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar movimento de caixa: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/financeiro/movimentos/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar movimento de caixa: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar movimento de caixa: ${_e.message}`);
     }
   }
 }

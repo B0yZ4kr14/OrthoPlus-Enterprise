@@ -123,7 +123,7 @@ export function ReceitaForm({
           <Label htmlFor="validade">Validade (dias)</Label>
           <Select
             defaultValue="30"
-            // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+            // @ts-expect-error — TS2345
             onValueChange={(value) => setValue("validade", value as unknown)}
           >
             <SelectTrigger>

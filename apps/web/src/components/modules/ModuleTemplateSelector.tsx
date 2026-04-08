@@ -57,9 +57,11 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
   const [applying, setApplying] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     fetchTemplates();
   }, []);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const fetchTemplates = async () => {
     try {
@@ -75,7 +77,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
           : [],
       }));
 
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '{ modules: string[]; }...
+      // @ts-expect-error — TS2345
       setTemplates(processedTemplates);
     } catch (error) {
       console.error("Error fetching templates:", error);
@@ -104,17 +106,18 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
 
       toast({
         title: "Template aplicado!",
-        // @ts-expect-error - Auto-healer: TS18046 - 'data' is of type 'unknown'....
+        // @ts-expect-error — TS18046
         description: `${data.activated} módulos ativados com sucesso.`,
       });
 
       setDialogOpen(false);
       onApply?.();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error applying template:", error);
       toast({
         title: "Erro ao aplicar template",
-        description: error.message || "Tente novamente mais tarde.",
+        description: _e.message || "Tente novamente mais tarde.",
         variant: "destructive",
       });
     } finally {

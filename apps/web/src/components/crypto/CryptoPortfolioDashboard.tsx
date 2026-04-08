@@ -1,24 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { Badge } from "@orthoplus/core-ui/badge";
-import { Button } from "@orthoplus/core-ui/button";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  Legend,
-} from "recharts";
-import {
-  Wallet,
-  TrendingUp,
-  TrendingDown,
-  DollarSign,
-  RefreshCw,
-  Download,
-  FileText,
-} from "lucide-react";
+import { Card, CardContent } from "@orthoplus/core-ui/card";
+import { RefreshCw } from "lucide-react";
 import { generateCryptoPerformanceReport } from "./CryptoPerformanceReport";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
@@ -28,55 +10,38 @@ import type {
   CryptoWallet,
   CryptoTransaction,
 } from "@/modules/crypto/types/crypto.types";
-
-interface PortfolioData {
-  totalBRL: number;
-  totalCrypto: { [key: string]: number };
-  distribution: {
-    coin: string;
-    value: number;
-    percentage: number;
-    color: string;
-  }[];
-  gains: number;
-  losses: number;
-  conversionsHistory: {
-    id: string;
-    date: Date;
-    fromCoin: string;
-    toCoin: string;
-    amount: number;
-    rate: number;
-    valueBRL: number;
-    type: "gain" | "loss";
-  }[];
-}
+import type { PortfolioData } from "./portfolio/types";
+import { formatBRL } from "./portfolio/types";
+import { PortfolioKPIs } from "./portfolio/PortfolioKPIs";
+import { PortfolioDistributionChart } from "./portfolio/PortfolioDistributionChart";
+import { ConversionsHistory } from "./portfolio/ConversionsHistory";
+import { RealTimeRates } from "./portfolio/RealTimeRates";
+import { getCoinColor } from "./portfolio/types";
 
 interface CryptoPortfolioDashboardProps {
   wallets: CryptoWallet[];
   transactions: CryptoTransaction[];
 }
 
+const DEFAULT_RATES: Record<string, number> = {
+  BTC: 350000,
+  ETH: 18000,
+  USDT: 5.5,
+  BNB: 1500,
+  USDC: 5.5,
+};
+
 export function CryptoPortfolioDashboard({
   wallets,
   transactions,
 }: CryptoPortfolioDashboardProps) {
-  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(
-    null,
-  );
-
+  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
   const [loading, setLoading] = useState(true);
   const [rates, setRates] = useState<Record<string, number>>({});
 
   const fetchRealRates = useCallback(async (): Promise<Record<string, number>> => {
     try {
-      const coins = [
-        "bitcoin",
-        "ethereum",
-        "tether",
-        "binancecoin",
-        "usd-coin",
-      ];
+      const coins = ["bitcoin", "ethereum", "tether", "binancecoin", "usd-coin"];
       const response = await fetch(
         `https://api.coingecko.com/api/v3/simple/price?ids=${coins.join(",")}&vs_currencies=brl`,
       );
@@ -86,21 +51,15 @@ export function CryptoPortfolioDashboard({
       const data = await response.json();
 
       return {
-        BTC: data.bitcoin?.brl || 350000,
-        ETH: data.ethereum?.brl || 18000,
-        USDT: data.tether?.brl || 5.5,
-        BNB: data.binancecoin?.brl || 1500,
-        USDC: data["usd-coin"]?.brl || 5.5,
+        BTC: data.bitcoin?.brl || DEFAULT_RATES.BTC,
+        ETH: data.ethereum?.brl || DEFAULT_RATES.ETH,
+        USDT: data.tether?.brl || DEFAULT_RATES.USDT,
+        BNB: data.binancecoin?.brl || DEFAULT_RATES.BNB,
+        USDC: data["usd-coin"]?.brl || DEFAULT_RATES.USDC,
       };
     } catch (error) {
       logger.error("Erro ao buscar cotações", error);
-      return {
-        BTC: 350000,
-        ETH: 18000,
-        USDT: 5.5,
-        BNB: 1500,
-        USDC: 5.5,
-      };
+      return { ...DEFAULT_RATES };
     }
   }, []);
 
@@ -129,18 +88,7 @@ export function CryptoPortfolioDashboard({
           coin,
           value: valueBRL,
           percentage: 0,
-          color:
-            coin === "BTC"
-              ? "#F7931A"
-              : coin === "ETH"
-              ? "#627EEA"
-              : coin === "USDT"
-              ? "#26A17B"
-              : coin === "BNB"
-              ? "#F3BA2F"
-              : coin === "USDC"
-              ? "#2775CA"
-              : "#666",
+          color: getCoinColor(coin),
         };
       });
 
@@ -202,36 +150,15 @@ export function CryptoPortfolioDashboard({
       ["Data:", new Date().toLocaleDateString("pt-BR")],
       [""],
       ["Resumo"],
-      [
-        "Valor Total (BRL):",
-        portfolioData.totalBRL.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }),
-      ],
-      [
-        "Ganhos:",
-        portfolioData.gains.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }),
-      ],
-      [
-        "Perdas:",
-        portfolioData.losses.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }),
-      ],
+      ["Valor Total (BRL):", formatBRL(portfolioData.totalBRL)],
+      ["Ganhos:", formatBRL(portfolioData.gains)],
+      ["Perdas:", formatBRL(portfolioData.losses)],
       [""],
       ["Distribuição por Moeda"],
       ["Moeda", "Valor (BRL)", "Percentual"],
       ...portfolioData.distribution.map((item) => [
         item.coin,
-        item.value.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }),
+        formatBRL(item.value),
         `${item.percentage.toFixed(2)}%`,
       ]),
       [""],
@@ -243,10 +170,7 @@ export function CryptoPortfolioDashboard({
         conv.toCoin,
         conv.amount.toFixed(8),
         conv.rate.toFixed(2),
-        conv.valueBRL.toLocaleString("pt-BR", {
-          style: "currency",
-          currency: "BRL",
-        }),
+        formatBRL(conv.valueBRL),
         conv.type === "gain" ? "Ganho" : "Perda",
       ]),
     ]
@@ -295,323 +219,28 @@ export function CryptoPortfolioDashboard({
     );
   }
 
-  const netResult = portfolioData.gains - portfolioData.losses;
-  const isProfit = netResult >= 0;
-
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card depth="normal" className="border-l-4 border-l-primary">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">
-                  Valor Total
-                </p>
-                <p className="text-2xl font-bold">
-                  {portfolioData.totalBRL.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </p>
-              </div>
-              <Wallet className="h-8 w-8 text-primary opacity-20" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card depth="normal" className="border-l-4 border-success">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">
-                  Ganhos Realizados
-                </p>
-                <p className="text-2xl font-bold text-success">
-                  +
-                  {portfolioData.gains.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </p>
-              </div>
-              <TrendingUp className="h-8 w-8 text-success opacity-20" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card depth="normal" className="border-l-4 border-destructive">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">
-                  Perdas Realizadas
-                </p>
-                <p className="text-2xl font-bold text-destructive">
-                  -
-                  {portfolioData.losses.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </p>
-              </div>
-              <TrendingDown className="h-8 w-8 text-destructive opacity-20" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card
-          depth="normal"
-          className={`border-l-4 ${isProfit ? "border-success" : "border-destructive"}`}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">
-                  Resultado Líquido
-                </p>
-                <p
-                  className={`text-2xl font-bold ${isProfit ? "text-success" : "text-destructive"}`}
-                >
-                  {isProfit ? "+" : ""}
-                  {netResult.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </p>
-              </div>
-              <DollarSign
-                className={`h-8 w-8 opacity-20 ${isProfit ? "text-success" : "text-destructive"}`}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <PortfolioKPIs
+        totalBRL={portfolioData.totalBRL}
+        gains={portfolioData.gains}
+        losses={portfolioData.losses}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card depth="normal">
-          <CardHeader>
-            <CardTitle>Distribuição do Portfolio</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={portfolioData.distribution}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ coin, percentage }) =>
-                    `${coin} (${percentage.toFixed(1)}%)`
-                  }
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {portfolioData.distribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number) =>
-                    value.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })
-                  }
-                />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+        <PortfolioDistributionChart
+          distribution={portfolioData.distribution}
+          totalCrypto={portfolioData.totalCrypto}
+        />
 
-            <div className="mt-4 space-y-2">
-              {portfolioData.distribution.map((item) => (
-                <div
-                  key={item.coin}
-                  className="flex items-center justify-between p-3 rounded-lg border"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-4 h-4 rounded-full ${
-                        item.coin === "BTC"
-                          ? "bg-[#F7931A]"
-                          : item.coin === "ETH"
-                          ? "bg-[#627EEA]"
-                          : item.coin === "USDT"
-                          ? "bg-[#26A17B]"
-                          : item.coin === "BNB"
-                          ? "bg-[#F3BA2F]"
-                          : item.coin === "USDC"
-                          ? "bg-[#2775CA]"
-                          : "bg-muted-foreground"
-                      }`}
-                    />
-                    <span className="font-semibold">{item.coin}</span>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold">
-                      {item.value.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      })}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {portfolioData.totalCrypto[item.coin]?.toFixed(8)}{" "}
-                      {item.coin}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card depth="normal">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Histórico de Conversões</CardTitle>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleGeneratePDFReport}
-                  className="gap-2"
-                >
-                  <FileText className="h-4 w-4" />
-                  Relatório PDF
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={exportPortfolio}
-                  className="gap-2"
-                >
-                  <Download className="h-4 w-4" />
-                  CSV
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 max-h-[400px] overflow-y-auto">
-              {portfolioData.conversionsHistory.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">
-                  Nenhuma conversão realizada ainda
-                </p>
-              ) : (
-                portfolioData.conversionsHistory.map((conv) => (
-                  <div
-                    key={conv.id}
-                    className="p-3 rounded-lg border hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">{conv.fromCoin}</Badge>
-                        <span className="text-xs text-muted-foreground">→</span>
-                        <Badge variant="outline">{conv.toCoin}</Badge>
-                      </div>
-                      <Badge
-                        variant={
-                          conv.type === "gain" ? "success" : "destructive"
-                        }
-                      >
-                        {conv.type === "gain" ? "Ganho" : "Perda"}
-                      </Badge>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          Quantidade
-                        </p>
-                        <p className="font-semibold">
-                          {conv.amount.toFixed(8)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          Valor BRL
-                        </p>
-                        <p className="font-semibold">
-                          {conv.valueBRL.toLocaleString("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      {format(conv.date, "dd/MM/yyyy 'às' HH:mm", {
-                        locale: ptBR,
-                      })}
-                    </p>
-                  </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <ConversionsHistory
+          conversions={portfolioData.conversionsHistory}
+          onExportCSV={exportPortfolio}
+          onExportPDF={handleGeneratePDFReport}
+        />
       </div>
 
-      <Card depth="normal">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Cotações em Tempo Real</CardTitle>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={calculatePortfolio}
-              className="gap-2"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Atualizar
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {Object.entries(rates).map(([coin, rate]) => (
-              <div
-                key={coin}
-                className={`p-4 rounded-lg border text-center ${
-                  coin === "BTC"
-                    ? "border-[#F7931A]/20"
-                    : coin === "ETH"
-                    ? "border-[#627EEA]/20"
-                    : coin === "USDT"
-                    ? "border-[#26A17B]/20"
-                    : coin === "BNB"
-                    ? "border-[#F3BA2F]/20"
-                    : coin === "USDC"
-                    ? "border-[#2775CA]/20"
-                    : ""
-                }`}
-              >
-                <p className="text-xs text-muted-foreground mb-1">{coin}</p>
-                <p
-                  className={`text-lg font-bold ${
-                    coin === "BTC"
-                      ? "text-[#F7931A]"
-                      : coin === "ETH"
-                      ? "text-[#627EEA]"
-                      : coin === "USDT"
-                      ? "text-[#26A17B]"
-                      : coin === "BNB"
-                      ? "text-[#F3BA2F]"
-                      : coin === "USDC"
-                      ? "text-[#2775CA]"
-                      : ""
-                  }`}
-                >
-                  {rate.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </p>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <RealTimeRates rates={rates} onRefresh={calculatePortfolio} />
     </div>
   );
 }

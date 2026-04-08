@@ -260,7 +260,7 @@ export function CaixaPanel({
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
-                  // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+                  // @ts-expect-error — TS2769
                   }).format(caixaAtual.valorInicial)}
                 </span>
               </div>

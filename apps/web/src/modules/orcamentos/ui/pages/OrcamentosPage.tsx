@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useOrcamentos } from "../../presentation/hooks/useOrcamentos";
 import { Button } from "@orthoplus/core-ui/button";
@@ -47,16 +46,17 @@ export default function OrcamentosPage() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: unknown; icon: unknown }> = {
+    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: any }> = {
       RASCUNHO: { variant: "secondary", icon: FileText },
-      PENDENTE: { variant: "default", icon: Clock },
-      APROVADO: { variant: "default", icon: CheckCircle },
+      PENDENTE: { variant: "info" as any, icon: Clock },
+      APROVADO: { variant: "success" as any, icon: CheckCircle },
       REJEITADO: { variant: "destructive", icon: XCircle },
       EXPIRADO: { variant: "destructive", icon: XCircle },
     };
-    const { variant, icon: Icon } = variants[status] || variants.RASCUNHO;
+    const config = variants[status] || variants.RASCUNHO;
+    const Icon = config.icon;
     return (
-      <Badge variant={variant} className="gap-1">
+      <Badge variant={config.variant} className="gap-1">
         <Icon className="h-3 w-3" />
         {status}
       </Badge>

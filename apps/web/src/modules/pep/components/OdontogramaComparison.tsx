@@ -11,7 +11,7 @@ import {
   TOOTH_SURFACE_LABELS,
   ALL_TEETH,
 } from "../types/odontograma.types";
-import jsPDF from "jspdf";
+// jsPDF loaded dynamically to reduce initial bundle
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 
@@ -87,6 +87,7 @@ export const OdontogramaComparison = ({
       });
 
       const imgData = canvas.toDataURL("image/png");
+      const { default: jsPDF } = await import("jspdf");
       const pdf = new jsPDF("p", "mm", "a4");
       const imgWidth = 210;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;

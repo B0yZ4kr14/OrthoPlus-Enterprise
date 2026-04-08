@@ -54,7 +54,7 @@ export class PatientAdapter {
       social_name: null,
       cpf: apiPatient.cpf || null,
       rg: apiPatient.rg || null,
-      // @ts-expect-error - Auto-healer: TS2322 - Type 'string | null' is not assignable t...
+      // @ts-expect-error — TS2322
       birth_date: apiPatient.birthDate || null,
       gender: apiPatient.gender || null,
       marital_status: null,
@@ -127,7 +127,7 @@ export class PatientAdapter {
       image_usage_consent: null,
       treatment_consent: null,
       data_sharing_consent: null,
-      // @ts-expect-error - Auto-healer: TS2339 - Property 'code' does not exist on type '...
+      // @ts-expect-error — TS2339
       status: apiPatient.status?.code || apiPatient.status || "ativo",
       first_appointment_date: null,
       last_appointment_date: null,

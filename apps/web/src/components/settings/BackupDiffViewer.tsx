@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
@@ -80,11 +79,14 @@ export function BackupDiffViewer({
         },
       );
 
+      // @ts-expect-error — TS2339
       if (!data1?.data || !data2?.data) {
         throw new Error("Erro ao carregar dados dos backups");
       }
 
+      // @ts-expect-error — TS2339
       const backup1Data = JSON.parse(data1.data);
+      // @ts-expect-error — TS2339
       const backup2Data = JSON.parse(data2.data);
 
       // Comparar dados
@@ -114,13 +116,19 @@ export function BackupDiffViewer({
   };
 
   const compareArrays = (arr1: unknown[], arr2: unknown[]): DiffResult => {
+    // @ts-expect-error — TS18046
     const map1 = new Map(arr1.map((item) => [item.id, item]));
+    // @ts-expect-error — TS18046
     const map2 = new Map(arr2.map((item) => [item.id, item]));
 
+    // @ts-expect-error — TS18046
     const added = arr2.filter((item) => !map1.has(item.id));
+    // @ts-expect-error — TS18046
     const removed = arr1.filter((item) => !map2.has(item.id));
     const modified = arr2.filter((item) => {
+      // @ts-expect-error — TS18046
       if (!map1.has(item.id)) return false;
+      // @ts-expect-error — TS18046
       const original = map1.get(item.id);
       return JSON.stringify(original) !== JSON.stringify(item);
     });

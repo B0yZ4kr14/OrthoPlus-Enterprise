@@ -19,22 +19,24 @@ export class LeadRepositoryApi implements ILeadRepository {
     try {
       const data = await apiClient.get<Record<string, any>>(`/crm/leads/${id}`);
       if (!data) return null;
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'Record<string, any>' i...
+      // @ts-expect-error — TS2345
       return LeadMapper.toDomain(data);
-    } catch (error: any) {
-      if (error.response?.status === 404 || error.response?.status === 406)
+    } catch (error: unknown) {
+      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
-      throw new Error(`Erro ao buscar lead: ${error.message}`);
+      throw new Error(`Erro ao buscar lead: ${_e.message}`);
     }
   }
 
   async findByClinicId(clinicId: string): Promise<Lead[]> {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads");
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(raw: { assigned_to: s...
+      // @ts-expect-error — TS2345
       return data?.map(LeadMapper.toDomain) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar leads: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar leads: ${_e.message}`);
     }
   }
 
@@ -43,10 +45,11 @@ export class LeadRepositoryApi implements ILeadRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads", {
         params: { assigned_to: responsavelId },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(raw: { assigned_to: s...
+      // @ts-expect-error — TS2345
       return data?.map(LeadMapper.toDomain) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar leads do responsável: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar leads do responsável: ${_e.message}`);
     }
   }
 
@@ -55,10 +58,11 @@ export class LeadRepositoryApi implements ILeadRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads", {
         params: { status },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(raw: { assigned_to: s...
+      // @ts-expect-error — TS2345
       return data?.map(LeadMapper.toDomain) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar leads por status: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar leads por status: ${_e.message}`);
     }
   }
 
@@ -76,16 +80,18 @@ export class LeadRepositoryApi implements ILeadRepository {
         throw new Error("Nenhum dado retornado ao atualizar lead");
 
       return LeadMapper.toDomain(updatedData);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar lead: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar lead: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/crm/leads/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar lead: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar lead: ${_e.message}`);
     }
   }
 }

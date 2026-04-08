@@ -33,7 +33,7 @@ export class CreateAtividadeUseCase {
       id: crypto.randomUUID(),
       leadId: input.leadId,
       clinicId: input.clinicId,
-      // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
+      // @ts-expect-error — TS2322
       tipo: input.tipo as unknown,
       titulo: input.titulo.trim(),
       descricao: input.descricao?.trim(),

@@ -135,6 +135,9 @@ validateEnvironment();
 
 const app = express();
 
+// Trust proxy for rate limiting (needed when behind Nginx)
+app.set('trust proxy', 'loopback');
+
 // Rate limiting — per-context limits instead of a single global limit
 // Auth endpoints: strict limit to prevent brute-force attacks
 const authLimiter = rateLimit({

@@ -63,7 +63,7 @@ export class BinanceAdapter implements ICryptoExchange {
       if (!response.ok) throw new Error("Failed to fetch balance");
 
       const data = await response.json();
-      // @ts-expect-error - Auto-healer: TS18046 - 'b' is of type 'unknown'....
+      // @ts-expect-error — TS18046
       const balance = data.balances.find((b: unknown) => b.asset === coin);
 
       return parseFloat(balance?.free || "0");

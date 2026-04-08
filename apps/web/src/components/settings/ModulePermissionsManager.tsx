@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
@@ -38,9 +37,11 @@ export function ModulePermissionsManager() {
   const [saving, setSaving] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     fetchData();
   }, []);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const fetchData = async () => {
     try {
@@ -58,11 +59,16 @@ export function ModulePermissionsManager() {
       const usersWithRoles =
         profilesData
           ?.map((profile: unknown) => ({
+            // @ts-expect-error — TS18046
             id: profile.id,
+            // @ts-expect-error — TS18046
             full_name: profile.full_name || "Sem nome",
             email:
+              // @ts-expect-error — TS18046
               profile.email ||
+              // @ts-expect-error — TS18046
               `${(profile.full_name || "").toLowerCase().replace(/\s+/g, ".")}@ortho.com`,
+            // @ts-expect-error — TS18046
             role: (profile.role || "MEMBER") as "ADMIN" | "MEMBER",
           }))
           .filter((user) => user.role === "MEMBER") || [];
@@ -74,6 +80,7 @@ export function ModulePermissionsManager() {
         "/functions/v1/get-my-modules",
       );
       const activeModules =
+        // @ts-expect-error — TS2339
         modulesData?.modules?.filter((m: Module) => m.is_active) || [];
       setModules(activeModules);
 
@@ -82,6 +89,7 @@ export function ModulePermissionsManager() {
         "/configuracoes/permissoes",
       );
 
+      // @ts-expect-error — TS2345
       setPermissions(permissionsData || []);
 
       if (usersWithRoles.length > 0 && !selectedUser) {

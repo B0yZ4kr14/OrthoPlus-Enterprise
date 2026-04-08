@@ -1,69 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { PageHeader } from "@/components/shared/PageHeader";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@orthoplus/core-ui/card";
-import { Switch } from "@orthoplus/core-ui/switch";
-import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@orthoplus/core-ui/tooltip";
 import { Alert, AlertDescription, AlertTitle } from "@orthoplus/core-ui/alert";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@orthoplus/core-ui/dialog";
-import {
-  Settings,
-  Info,
-  AlertCircle,
-  CheckCircle2,
-  XCircle,
-  Link2,
-  Lock,
-  Unlock,
-  Loader2,
-  Network,
-  BookOpen,
-  Download,
-  Upload,
-  Sparkles,
-} from "lucide-react";
+import { Settings, Info, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
-import { ModuleDependencyGraph } from "@/components/modules/ModuleDependencyGraph";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
-import { ModuleTemplateSelector } from "@/components/modules/ModuleTemplateSelector";
-// @ts-expect-error - Auto-healer: TS7016 - Could not find a declaration file for mo...
 import confetti from "canvas-confetti";
-
-interface ModuleData {
-  id: number;
-  module_key: string;
-  name: string;
-  description: string;
-  category: string;
-  icon: string;
-  is_subscribed: boolean;
-  is_active: boolean;
-  can_activate: boolean;
-  can_deactivate: boolean;
-  unmet_dependencies: string[];
-  blocking_dependencies: string[];
-}
+import type { ModuleData } from "../components/types";
+import { ModulesToolbar } from "../components/ModulesToolbar";
+import { ModuleCard } from "../components/ModuleCard";
+import { ModuleSuggestions } from "../components/ModuleSuggestions";
 
 export default function ModulesAdmin() {
   const { toast } = useToast();
@@ -76,12 +23,10 @@ export default function ModulesAdmin() {
   const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
-    // Check if user has completed onboarding
     const hasCompletedOnboarding = localStorage.getItem(
       "ortho-onboarding-completed",
     );
     if (!hasCompletedOnboarding) {
-      // Show onboarding for first-time users
       setOnboardingOpen(true);
     }
   }, []);
@@ -91,7 +36,6 @@ export default function ModulesAdmin() {
       const data = await apiClient.post<{ modules: ModuleData[] }>(
         "/functions/v1/get-my-modules",
       );
-      // A Edge Function retorna {modules: [...]}
       setModules(data?.modules ?? []);
     } catch (error) {
       console.error("Error fetching modules:", error);
@@ -105,14 +49,15 @@ export default function ModulesAdmin() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- fetchModules captures no external deps */
   useEffect(() => {
     fetchModules();
   }, []);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const handleToggle = async (moduleKey: string, currentState: boolean) => {
     setToggling(moduleKey);
 
-    // Shake animation para tentativa de desativar bloqueado
     const module = modules.find((m) => m.module_key === moduleKey);
     if (currentState && module && !module.can_deactivate) {
       const cardElement = cardRefs.current[moduleKey];
@@ -131,16 +76,12 @@ export default function ModulesAdmin() {
     }
 
     try {
-      const data: Record<string, any> = await apiClient.post(
-        "/functions/v1/toggle-module-state",
-        {
-          module_key: moduleKey,
-        },
-      );
+      await apiClient.post("/functions/v1/toggle-module-state", {
+        module_key: moduleKey,
+      });
 
       const newState = !currentState;
 
-      // Confetti ao ativar módulo pela primeira vez
       if (newState) {
         const wasActivatedBefore = localStorage.getItem(
           `module-activated-${moduleKey}`,
@@ -168,18 +109,19 @@ export default function ModulesAdmin() {
         description: `O módulo ${moduleKey} foi ${newState ? "ativado" : "desativado"}.`,
       });
       await fetchModules();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Toggle error:", error);
 
-      // Shake animation para erro
       const cardElement = cardRefs.current[moduleKey];
       if (cardElement) {
         cardElement.classList.add("animate-shake");
         setTimeout(() => cardElement.classList.remove("animate-shake"), 500);
       }
 
-      // Parse error message to show dependency info
-      const errorMsg = error instanceof Error ? error.message : "Erro ao alterar estado do módulo";
+      const errorMsg =
+        error instanceof Error
+          ? error.message
+          : "Erro ao alterar estado do módulo";
       toast({
         title: "Erro ao alterar módulo",
         description: errorMsg,
@@ -192,23 +134,22 @@ export default function ModulesAdmin() {
 
   const handleRequest = async (moduleKey: string, moduleName: string) => {
     try {
-      const data: Record<string, any> = await apiClient.post(
-        "/functions/v1/request-new-module",
-        {
-          module_key: moduleKey,
-        },
-      );
+      await apiClient.post("/functions/v1/request-new-module", {
+        module_key: moduleKey,
+      });
 
       toast({
         title: "Solicitação enviada!",
         description: `Sua solicitação para o módulo ${moduleName} foi enviada ao time comercial.`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Request error:", error);
       toast({
         title: "Erro ao solicitar módulo",
-        // @ts-expect-error - Auto-healer: TS2872 - This kind of expression is always truthy...
-        description: error instanceof Error ? error.message : "Tente novamente mais tarde." || "Tente novamente mais tarde.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Tente novamente mais tarde.",
         variant: "destructive",
       });
     }
@@ -266,7 +207,6 @@ export default function ModulesAdmin() {
         description: `Processando ${config.modules.length} módulos...`,
       });
 
-      // Activate modules from config
       let activated = 0;
       for (const mod of config.modules) {
         const existingModule = modules.find(
@@ -289,11 +229,14 @@ export default function ModulesAdmin() {
         title: "Importação concluída!",
         description: `${activated} módulos ativados com sucesso.`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Import error:", error);
       toast({
         title: "Erro ao importar",
-        description: error instanceof Error ? error.message : "Verifique o formato do arquivo.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Verifique o formato do arquivo.",
         variant: "destructive",
       });
     }
@@ -311,7 +254,7 @@ export default function ModulesAdmin() {
         .map((m) => m.name)
         .join(", ");
 
-      const data: Record<string, any> = await apiClient.post(
+      const data = await apiClient.post<{ suggestions?: string[] }>(
         "/functions/v1/suggest-modules",
         {
           body: {
@@ -321,75 +264,24 @@ export default function ModulesAdmin() {
         },
       );
 
-      setSuggestions((data as { suggestions?: string[] }).suggestions ?? []);
+      setSuggestions(data?.suggestions ?? []);
       toast({
         title: "Sugestões geradas!",
         description: "Confira as recomendações de módulos abaixo.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Suggestions error:", error);
       toast({
         title: "Erro ao gerar sugestões",
-        // @ts-expect-error - Auto-healer: TS2872 - This kind of expression is always truthy...
-        description: error instanceof Error ? error.message : "Tente novamente mais tarde." || "Tente novamente mais tarde.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Tente novamente mais tarde.",
         variant: "destructive",
       });
     } finally {
       setLoadingSuggestions(false);
     }
-  };
-
-  const getModuleStatusIcon = (module: ModuleData) => {
-    if (!module.is_subscribed) return null;
-
-    if (module.is_active) {
-      return <CheckCircle2 className="h-5 w-5 text-success" />;
-    }
-    return <XCircle className="h-5 w-5 text-muted-foreground" />;
-  };
-
-  const getModuleStatusColor = (module: ModuleData) => {
-    if (!module.is_subscribed) return "border-muted";
-    if (module.is_active) return "border-success/50 bg-success/5";
-    return "border-muted";
-  };
-
-  const canToggle = (module: ModuleData) => {
-    if (!module.is_subscribed) return false;
-    if (module.is_active) return module.can_deactivate;
-    return module.can_activate;
-  };
-
-  const getToggleTooltip = (module: ModuleData) => {
-    if (!module.is_subscribed) return null;
-
-    const hasUnmetDeps = module.unmet_dependencies.length > 0;
-    const hasBlockingDeps = module.blocking_dependencies.length > 0;
-
-    if (!module.is_active && hasUnmetDeps) {
-      return {
-        icon: Lock,
-        title: "Não pode ser ativado",
-        description: `Requer os módulos: ${module.unmet_dependencies.join(", ")}`,
-        variant: "destructive" as const,
-      };
-    }
-
-    if (module.is_active && hasBlockingDeps) {
-      return {
-        icon: Lock,
-        title: "Não pode ser desativado",
-        description: `É necessário para: ${module.blocking_dependencies.join(", ")}`,
-        variant: "destructive" as const,
-      };
-    }
-
-    return {
-      icon: Unlock,
-      title: module.is_active ? "Pode ser desativado" : "Pode ser ativado",
-      description: "Clique no switch para alterar o estado",
-      variant: "default" as const,
-    };
   };
 
   const groupedModules = Array.isArray(modules)
@@ -423,93 +315,14 @@ export default function ModulesAdmin() {
           description="Gerencie quais módulos estão ativos na sua clínica"
         />
 
-        <div className="flex flex-wrap gap-3">
-          <Button
-            variant="outline"
-            size="lg"
-            className="gap-2"
-            onClick={() => setOnboardingOpen(true)}
-          >
-            <BookOpen className="h-5 w-5" />
-            Guia de Onboarding
-          </Button>
-
-          <ModuleTemplateSelector onApply={fetchModules} />
-
-          <Button
-            variant="outline"
-            size="lg"
-            className="gap-2"
-            onClick={handleGetSuggestions}
-            disabled={loadingSuggestions}
-          >
-            {loadingSuggestions ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <Sparkles className="h-5 w-5" />
-            )}
-            Sugestões IA
-          </Button>
-
-          <Button
-            variant="outline"
-            size="lg"
-            className="gap-2"
-            onClick={handleExportConfig}
-          >
-            <Download className="h-5 w-5" />
-            Exportar Config
-          </Button>
-
-          <label>
-            <input
-              type="file"
-              accept=".json"
-              onChange={handleImportConfig}
-              className="hidden"
-              id="import-config"
-            />
-            <Button
-              variant="outline"
-              size="lg"
-              className="gap-2"
-              onClick={() => document.getElementById("import-config")?.click()}
-              asChild
-            >
-              <span>
-                <Upload className="h-5 w-5" />
-                Importar Config
-              </span>
-            </Button>
-          </label>
-
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="gap-2">
-                <Network className="h-5 w-5" />
-                Grafo de Dependências
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-[95vw] h-[90vh] p-0">
-              <DialogHeader className="px-6 pt-6 pb-4 border-b">
-                <DialogTitle className="flex items-center gap-2">
-                  <Network className="h-5 w-5" />
-                  Grafo de Dependências dos Módulos
-                </DialogTitle>
-                <DialogDescription>
-                  Visualização interativa das dependências entre os módulos. Use
-                  os controles para zoom e navegação.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="h-[calc(90vh-120px)]">
-                {/* TODO: Implement network dependency graph visualization */}
-                <div className="text-center text-muted-foreground p-8">
-                  Grafo de dependências em desenvolvimento
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+        <ModulesToolbar
+          onOpenOnboarding={() => setOnboardingOpen(true)}
+          onExportConfig={handleExportConfig}
+          onImportConfig={handleImportConfig}
+          onGetSuggestions={handleGetSuggestions}
+          loadingSuggestions={loadingSuggestions}
+          onRefresh={fetchModules}
+        />
       </div>
 
       <Alert>
@@ -522,24 +335,7 @@ export default function ModulesAdmin() {
         </AlertDescription>
       </Alert>
 
-      {suggestions.length > 0 && (
-        <Alert className="border-primary/50 bg-primary/5">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <AlertTitle>Sugestões Inteligentes de Módulos</AlertTitle>
-          <AlertDescription>
-            <div className="mt-2 space-y-2">
-              <p className="text-sm font-medium">
-                Baseado no perfil da sua clínica, recomendamos:
-              </p>
-              <ul className="list-disc list-inside space-y-1 text-sm">
-                {suggestions.map((suggestion, index) => (
-                  <li key={index}>{suggestion}</li>
-                ))}
-              </ul>
-            </div>
-          </AlertDescription>
-        </Alert>
-      )}
+      <ModuleSuggestions suggestions={suggestions} />
 
       {Object.entries(groupedModules).map(([category, categoryModules]) => (
         <div key={category} className="space-y-4">
@@ -552,162 +348,15 @@ export default function ModulesAdmin() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categoryModules.map((module) => {
-              const tooltipInfo = getToggleTooltip(module);
-              const isTogglingThis = toggling === module.module_key;
-              const toggleEnabled = canToggle(module) && !isTogglingThis;
-
-              return (
-                <Card
-                  key={module.module_key}
-                  ref={(el) => (cardRefs.current[module.module_key] = el)}
-                  variant="elevated"
-                  className={cn(
-                    getModuleStatusColor(module),
-                    isTogglingThis && "opacity-60",
-                  )}
-                >
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-start gap-3 flex-1">
-                        {getModuleStatusIcon(module)}
-                        <div className="flex-1 min-w-0">
-                          <CardTitle className="text-base leading-tight">
-                            {module.name}
-                          </CardTitle>
-                          <CardDescription className="text-xs mt-1">
-                            {module.description}
-                          </CardDescription>
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="space-y-3">
-                    {/* Status Badges */}
-                    <div className="flex flex-wrap gap-2">
-                      {module.is_subscribed ? (
-                        <>
-                          <Badge
-                            variant={module.is_active ? "success" : "secondary"}
-                            className="text-xs"
-                          >
-                            {module.is_active ? "Ativo" : "Inativo"}
-                          </Badge>
-                          {module.unmet_dependencies.length > 0 &&
-                            !module.is_active && (
-                              <Badge variant="error" className="text-xs">
-                                <Lock className="h-3 w-3 mr-1" />
-                                Bloqueado
-                              </Badge>
-                            )}
-                          {module.blocking_dependencies.length > 0 &&
-                            module.is_active && (
-                              <Badge variant="info" className="text-xs">
-                                <Link2 className="h-3 w-3 mr-1" />
-                                Em uso
-                              </Badge>
-                            )}
-                        </>
-                      ) : (
-                        <Badge variant="outline" className="text-xs">
-                          Não contratado
-                        </Badge>
-                      )}
-                    </div>
-
-                    {/* Dependencies Info */}
-                    {module.is_subscribed &&
-                      (module.unmet_dependencies.length > 0 ||
-                        module.blocking_dependencies.length > 0) && (
-                        <div className="space-y-2 p-3 bg-muted/50 rounded-md text-xs">
-                          {module.unmet_dependencies.length > 0 && (
-                            <div className="flex items-start gap-2">
-                              <AlertCircle className="h-3 w-3 mt-0.5 text-destructive flex-shrink-0" />
-                              <div>
-                                <p className="font-medium text-destructive">
-                                  Dependências não atendidas:
-                                </p>
-                                <p className="text-muted-foreground mt-0.5">
-                                  {module.unmet_dependencies.join(", ")}
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                          {module.blocking_dependencies.length > 0 && (
-                            <div className="flex items-start gap-2">
-                              <Link2 className="h-3 w-3 mt-0.5 text-primary flex-shrink-0" />
-                              <div>
-                                <p className="font-medium text-primary">
-                                  Requerido por:
-                                </p>
-                                <p className="text-muted-foreground mt-0.5">
-                                  {module.blocking_dependencies.join(", ")}
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                    {/* Action Controls */}
-                    {module.is_subscribed ? (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="flex items-center justify-between p-3 bg-background rounded-md border">
-                              <div className="flex items-center gap-2">
-                                {tooltipInfo && (
-                                  <tooltipInfo.icon className="h-4 w-4 text-muted-foreground" />
-                                )}
-                                <span className="text-sm font-medium text-foreground">
-                                  {module.is_active
-                                    ? "Desativar módulo"
-                                    : "Ativar módulo"}
-                                </span>
-                              </div>
-                              <Switch
-                                checked={module.is_active}
-                                disabled={!toggleEnabled}
-                                onCheckedChange={() =>
-                                  handleToggle(
-                                    module.module_key,
-                                    module.is_active,
-                                  )
-                                }
-                              />
-                            </div>
-                          </TooltipTrigger>
-                          {tooltipInfo && (
-                            <TooltipContent side="bottom" className="max-w-xs">
-                              <div className="space-y-1">
-                                <p className="font-semibold text-sm">
-                                  {tooltipInfo.title}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  {tooltipInfo.description}
-                                </p>
-                              </div>
-                            </TooltipContent>
-                          )}
-                        </Tooltip>
-                      </TooltipProvider>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        onClick={() =>
-                          handleRequest(module.module_key, module.name)
-                        }
-                      >
-                        <Info className="h-4 w-4 mr-2" />
-                        Solicitar Contratação
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {categoryModules.map((module) => (
+              <ModuleCard
+                key={module.module_key}
+                module={module}
+                isToggling={toggling === module.module_key}
+                onToggle={handleToggle}
+                onRequest={handleRequest}
+              />
+            ))}
           </div>
         </div>
       ))}

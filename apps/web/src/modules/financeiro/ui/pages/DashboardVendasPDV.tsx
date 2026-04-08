@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
@@ -101,6 +100,7 @@ export default function DashboardVendasPDV() {
     ) || {};
 
   const vendedoresData = Object.values(vendasPorVendedor)
+    // @ts-expect-error — TS18046
     .sort((a: unknown, b: unknown) => b.total - a.total)
     .slice(0, 5);
 
@@ -125,6 +125,7 @@ export default function DashboardVendasPDV() {
     ) || {};
 
   const produtosData = Object.values(produtosMaisVendidos)
+    // @ts-expect-error — TS18046
     .sort((a: unknown, b: unknown) => b.quantidade - a.quantidade)
     .slice(0, 10);
 
@@ -145,7 +146,9 @@ export default function DashboardVendasPDV() {
 
   const horariosData = Object.values(vendasPorHora).sort(
     (a: unknown, b: unknown) => {
+      // @ts-expect-error — TS18046
       const horaA = parseInt(a.hora.split(":")[0]);
+      // @ts-expect-error — TS18046
       const horaB = parseInt(b.hora.split(":")[0]);
       return horaA - horaB;
     },
@@ -156,10 +159,12 @@ export default function DashboardVendasPDV() {
     vendas?.reduce(
       (acc, venda) => {
         venda.pdv_pagamentos?.forEach((pag: unknown) => {
+          // @ts-expect-error — TS18046
           const forma = pag.forma_pagamento;
           if (!acc[forma]) {
             acc[forma] = { name: forma, value: 0 };
           }
+          // @ts-expect-error — TS18046
           acc[forma].value += Number(pag.valor);
         });
         return acc;

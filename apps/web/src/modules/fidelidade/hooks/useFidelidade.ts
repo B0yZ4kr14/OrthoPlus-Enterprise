@@ -3,13 +3,21 @@ import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import {
+  FidelidadeConfig,
+  FidelidadePontosComplete,
+  FidelidadeRecompensa,
+  FidelidadeBadge,
+  FidelidadeIndicacao,
+} from "@/modules/fidelidade/types/fidelidade.types";
+
 export function useFidelidade() {
   const { user, selectedClinic } = useAuth();
-  const [config, setConfig] = useState<unknown>({});
-  const [pontos, setPontos] = useState<unknown[]>([]);
-  const [recompensas, setRecompensas] = useState<unknown[]>([]);
-  const [badges, setBadges] = useState<unknown[]>([]);
-  const [indicacoes, setIndicacoes] = useState<unknown[]>([]);
+  const [config, setConfig] = useState<FidelidadeConfig | null>(null);
+  const [pontos, setPontos] = useState<FidelidadePontosComplete[]>([]);
+  const [recompensas, setRecompensas] = useState<FidelidadeRecompensa[]>([]);
+  const [badges, setBadges] = useState<FidelidadeBadge[]>([]);
+  const [indicacoes, setIndicacoes] = useState<FidelidadeIndicacao[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
@@ -40,12 +48,12 @@ export function useFidelidade() {
         }),
       ]);
 
-      if (configData) setConfig(configData as unknown);
-      if (pontosData) setPontos(pontosData as unknown[]);
-      if (recompensasData) setRecompensas(recompensasData as unknown[]);
-      if (badgesData) setBadges(badgesData as unknown[]);
-      if (indicacoesData) setIndicacoes(indicacoesData as unknown[]);
-    } catch (error: any) {
+      if (configData) setConfig(configData as FidelidadeConfig);
+      if (pontosData) setPontos(pontosData as FidelidadePontosComplete[]);
+      if (recompensasData) setRecompensas(recompensasData as FidelidadeRecompensa[]);
+      if (badgesData) setBadges(badgesData as FidelidadeBadge[]);
+      if (indicacoesData) setIndicacoes(indicacoesData as FidelidadeIndicacao[]);
+    } catch (error: unknown) {
       console.error("Erro ao carregar dados de fidelidade:", error);
       toast.error("Erro ao carregar dados de fidelidade");
     } finally {
@@ -53,6 +61,7 @@ export function useFidelidade() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     loadData();
 
@@ -63,6 +72,7 @@ export function useFidelidade() {
 
     return () => clearInterval(interval);
   }, [selectedClinic]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const createOrUpdateConfig = async (configData: unknown) => {
     if (!user || !selectedClinic) {
@@ -71,7 +81,6 @@ export function useFidelidade() {
     }
 
     try {
-      // @ts-expect-error - Auto-healer: TS2339 - Property 'id' does not exist on type '{}...
       if (config && config.id) {
         // Update
         await apiClient.put("/fidelidade/config", configData);
@@ -83,7 +92,7 @@ export function useFidelidade() {
       }
 
       await loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao salvar configuração:", error);
       toast.error("Erro ao salvar configuração");
     }
@@ -99,7 +108,7 @@ export function useFidelidade() {
       await apiClient.post("/fidelidade/recompensas", recompensaData);
       toast.success("Recompensa criada com sucesso!");
       await loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao criar recompensa:", error);
       toast.error("Erro ao criar recompensa");
     }
@@ -115,7 +124,7 @@ export function useFidelidade() {
       await apiClient.put(`/fidelidade/recompensas/${id}`, recompensaData);
       toast.success("Recompensa atualizada com sucesso!");
       await loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao atualizar recompensa:", error);
       toast.error("Erro ao atualizar recompensa");
     }
@@ -131,7 +140,7 @@ export function useFidelidade() {
       await apiClient.delete(`/fidelidade/recompensas/${id}`);
       toast.success("Recompensa excluída com sucesso!");
       await loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao excluir recompensa:", error);
       toast.error("Erro ao excluir recompensa");
     }
@@ -147,7 +156,7 @@ export function useFidelidade() {
       await apiClient.post("/fidelidade/badges", badgeData);
       toast.success("Badge criada com sucesso!");
       await loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao criar badge:", error);
       toast.error("Erro ao criar badge");
     }

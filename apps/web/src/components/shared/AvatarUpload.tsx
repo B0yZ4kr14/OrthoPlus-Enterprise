@@ -156,7 +156,7 @@ export const AvatarUpload = ({
       if (currentAvatarUrl) {
         const oldPath = currentAvatarUrl.split("/").pop();
         if (oldPath) {
-          await apiClient.delete(`/storage/avatars/${oldPath}`).catch(() => {});
+          await apiClient.delete(`/storage/avatars/${oldPath}`).catch((_e: unknown) => { /* intentional: best-effort delete */ });
         }
       }
 
@@ -167,11 +167,12 @@ export const AvatarUpload = ({
         title: "Sucesso",
         description: "Foto atualizada com sucesso",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro no upload:", error);
+      const msg = error instanceof Error ? error.message : "Não foi possível fazer upload da foto";
       toast({
         title: "Erro no upload",
-        description: error.message || "Não foi possível fazer upload da foto",
+        description: msg,
         variant: "destructive",
       });
     } finally {
@@ -188,7 +189,7 @@ export const AvatarUpload = ({
       if (currentAvatarUrl) {
         const path = currentAvatarUrl.split("/").pop();
         if (path) {
-          await apiClient.delete(`/storage/avatars/${path}`).catch(() => {});
+          await apiClient.delete(`/storage/avatars/${path}`).catch((_e: unknown) => { /* intentional: best-effort delete */ });
         }
       }
 
@@ -199,7 +200,7 @@ export const AvatarUpload = ({
         title: "Sucesso",
         description: "Foto removida com sucesso",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao remover:", error);
       toast({
         title: "Erro",
@@ -273,6 +274,7 @@ export const AvatarUpload = ({
           ref={fileInputRef}
           type="file"
           accept="image/*"
+          aria-label="Selecionar foto de perfil"
           className="hidden"
           onChange={handleFileSelect}
           disabled={uploading}
@@ -307,7 +309,7 @@ export const AvatarUpload = ({
                     ref={imgRef}
                     src={imageSrc}
                     alt="Crop preview"
-                    style={{ maxHeight: "60vh" }}
+                    className="max-h-[60vh]"
                   />
                 </ReactCrop>
               )}

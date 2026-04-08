@@ -1,13 +1,12 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Funcionario,
+  type Funcionario,
   funcionarioSchema,
   cargosDisponiveis,
   diasSemana,
-  Permissoes,
+  type Permissoes,
 } from "../types/funcionario.types";
 import { Button } from "@orthoplus/core-ui/button";
 import { AvatarUpload } from "@/components/shared/AvatarUpload";
@@ -56,7 +55,7 @@ export function FuncionarioForm({
     setValue,
     watch,
   } = useForm<Funcionario>({
-    resolver: zodResolver(funcionarioSchema),
+    resolver: zodResolver(funcionarioSchema) as unknown as Resolver<Funcionario>,
     defaultValues: funcionario || {
       status: "Ativo",
       permissoes: {},

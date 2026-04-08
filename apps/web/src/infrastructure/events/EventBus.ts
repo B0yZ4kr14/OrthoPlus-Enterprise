@@ -15,6 +15,7 @@ export class EventBus {
   private eventHistory: DomainEvent[] = [];
   private readonly maxHistorySize = 1000;
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
   static getInstance(): EventBus {

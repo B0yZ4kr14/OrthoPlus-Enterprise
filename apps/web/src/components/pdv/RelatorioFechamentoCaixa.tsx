@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
@@ -45,31 +44,40 @@ export const RelatorioFechamentoCaixa = ({
     queryFn: async () => {
       // Buscar vendas PDV
       const vendas: unknown[] = await apiClient.get("/pdv-vendas", {
+        // @ts-expect-error — TS2353
         caixa_movimento_id: caixaMovimentoId,
       });
 
       const totalVendasPDV =
+        // @ts-expect-error — TS18046
         vendas?.reduce((sum, v) => sum + Number(v.valor_total), 0) || 0;
 
       // Buscar NFCe emitidas
+      // @ts-expect-error — TS18046
       const vendaIds = vendas?.map((v: unknown) => v.id) || [];
       const nfces: unknown[] =
         vendaIds.length > 0
           ? await apiClient.get("/nfce-emitidas", {
+              // @ts-expect-error — TS2353
               venda_id: `in.(${vendaIds.join(",")})`,
             })
           : [];
 
       const totalNFCe =
+        // @ts-expect-error — TS18046
         nfces?.reduce((sum, n) => sum + Number(n.valor_total), 0) || 0;
 
       // Vendas sem NFCe
+      // @ts-expect-error — TS18046
       const vendasComNFCe = new Set(nfces?.map((n) => n.venda_id) || []);
       const vendasSemNFCe =
+        // @ts-expect-error — TS18046
         vendas?.filter((v) => !vendasComNFCe.has(v.id)).length || 0;
 
+      // @ts-expect-error — TS2362, TS2363
       const divergencia = totalVendasPDV - totalNFCe;
       const percentualDivergencia =
+        // @ts-expect-error — TS2363, TS2365
         totalVendasPDV > 0 ? (divergencia / totalVendasPDV) * 100 : 0;
 
       return {
@@ -103,6 +111,7 @@ export const RelatorioFechamentoCaixa = ({
     },
     onSuccess: (data) => {
       // Criar arquivo para download
+      // @ts-expect-error — TS18046
       const blob = new Blob([data.arquivo], { type: "text/plain" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -115,13 +124,15 @@ export const RelatorioFechamentoCaixa = ({
 
       toast({
         title: "SPED Fiscal gerado",
+        // @ts-expect-error — TS18046
         description: `${data.estatisticas.totalNFCe} NFCe processadas`,
       });
       setGerandoSped(false);
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast({
         title: "Erro ao gerar SPED",
+        // @ts-expect-error — TS18046
         description: error.message,
         variant: "destructive",
       });
@@ -186,6 +197,7 @@ export const RelatorioFechamentoCaixa = ({
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
+                  // @ts-expect-error — TS2769
                   }).format(fechamento?.totalVendasPDV || 0)}
                 </p>
               </div>
@@ -203,6 +215,7 @@ export const RelatorioFechamentoCaixa = ({
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
+                  // @ts-expect-error — TS2769
                   }).format(fechamento?.totalNFCe || 0)}
                 </p>
               </div>

@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Github,
   GitBranch,
@@ -25,31 +24,25 @@ import { toast } from "sonner";
 import { RepositoryManager } from "@/components/admin/RepositoryManager";
 import { WebhookManager } from "@/components/admin/WebhookManager";
 import { GitHubIntegrationConfig } from "@/components/settings/GitHubIntegrationConfig";
-
-interface GitHubData {
-  commits: unknown[];
-  branches: unknown[];
-  pull_requests: unknown[];
-  workflows: unknown[];
-}
+import { GitHubData } from "../../types/github.types";
 
 export default function GitHubManagerPage() {
   const [data, setData] = useState<GitHubData | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchGitHubData = async () => {
+  const fetchGitHubData = useCallback(async () => {
     setLoading(true);
     try {
-      const reposRes = await apiClient.get<Record<string, any>>("/github/repositories");
+      const reposRes = await apiClient.get<{ repositories: { id: string }[] }>("/github/repositories");
       const repo = reposRes.repositories?.[0];
       if (!repo) {
         throw new Error("Nenhum repositório conectado");
       }
 
       const [branchesRes, prsRes, workflowsRes] = await Promise.all([
-        apiClient.get<Record<string, any>>(`/github/repositories/${repo.id}/branches`),
-        apiClient.get<Record<string, any>>(`/github/repositories/${repo.id}/pull-requests`),
-        apiClient.get<Record<string, any>>(`/github/repositories/${repo.id}/workflows`),
+        apiClient.get<{ branches: GitHubData["branches"] }>(`/github/repositories/${repo.id}/branches`),
+        apiClient.get<{ pullRequests: GitHubData["pull_requests"] }>(`/github/repositories/${repo.id}/pull-requests`),
+        apiClient.get<{ workflows: GitHubData["workflows"] }>(`/github/repositories/${repo.id}/workflows`),
       ]);
 
       setData({
@@ -60,17 +53,18 @@ export default function GitHubManagerPage() {
       });
 
       toast.success("Dados atualizados");
-    } catch (error) {
-      toast.error("Erro ao carregar dados do GitHub");
+    } catch (error: unknown) {
+      const _e = error as { message?: string };
+      toast.error(_e.message || "Erro ao carregar dados do GitHub");
       console.error(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchGitHubData();
-  }, []);
+  }, [fetchGitHubData]);
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -83,6 +77,7 @@ export default function GitHubManagerPage() {
         <Button onClick={fetchGitHubData} disabled={loading}>
           <RefreshCw
             className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+            aria-hidden="true"
           />
           Atualizar
         </Button>
@@ -110,7 +105,7 @@ export default function GitHubManagerPage() {
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
+            <Card variant="metric" depth="subtle">
               <CardHeader>
                 <CardTitle>Commits Recentes</CardTitle>
                 <CardDescription>
@@ -140,11 +135,16 @@ export default function GitHubManagerPage() {
                       </div>
                     </div>
                   ))}
+                  {data?.commits.length === 0 && (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Nenhum commit recente
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card variant="metric" depth="subtle">
               <CardHeader>
                 <CardTitle>Pull Requests</CardTitle>
                 <CardDescription>PRs abertos e recentes</CardDescription>
@@ -177,13 +177,18 @@ export default function GitHubManagerPage() {
                       <Badge>{pr.state}</Badge>
                     </div>
                   ))}
+                  {data?.pull_requests.length === 0 && (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Nenhum pull request aberto
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
+            <Card variant="metric" depth="subtle">
               <CardHeader>
                 <CardTitle>Branches</CardTitle>
                 <CardDescription>
@@ -212,11 +217,16 @@ export default function GitHubManagerPage() {
                       )}
                     </div>
                   ))}
+                  {data?.branches.length === 0 && (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Nenhum branch encontrado
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card variant="metric" depth="subtle">
               <CardHeader>
                 <CardTitle>CI/CD Workflows</CardTitle>
                 <CardDescription>
@@ -256,6 +266,11 @@ export default function GitHubManagerPage() {
                       </div>
                     </div>
                   ))}
+                  {data?.workflows.length === 0 && (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Nenhum workflow configurado
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

@@ -4,21 +4,11 @@ import { Button } from "@orthoplus/core-ui/button";
 import { Calendar, Eye, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-interface Analise {
-  id: string;
-  tipo_radiografia: string;
-  imagem_url: string;
-  confidence_score: number;
-  problemas_detectados: number;
-  status_analise: string;
-  requer_avaliacao_especialista?: boolean;
-  created_at: string;
-}
+import { AnaliseComplete } from "@/modules/ia-radiografia/types/radiografia.types";
 
 interface RadiografiaListProps {
-  analises: Analise[];
-  onView?: (analise: Analise) => void;
+  analises: AnaliseComplete[];
+  onView?: (analise: AnaliseComplete) => void;
 }
 
 export const RadiografiaList = ({ analises, onView }: RadiografiaListProps) => {
@@ -36,7 +26,7 @@ export const RadiografiaList = ({ analises, onView }: RadiografiaListProps) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {analises.map((analise) => {
+      {analises.map((analise, index) => {
         const confidencePercent = (
           (analise.confidence_score || 0) * 100
         ).toFixed(0);
@@ -44,12 +34,12 @@ export const RadiografiaList = ({ analises, onView }: RadiografiaListProps) => {
 
         return (
           <Card
-            key={analise.id}
+            key={analise.id || index}
             className="overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="relative aspect-video bg-black/5">
               <img
-                src={analise.imagem_url}
+                src={analise.imagem_url || ""}
                 alt="Radiografia"
                 className="w-full h-full object-cover"
               />
@@ -87,11 +77,11 @@ export const RadiografiaList = ({ analises, onView }: RadiografiaListProps) => {
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Calendar className="h-3 w-3" />
                 <span>
-                  {format(
+                  {analise.created_at ? format(
                     new Date(analise.created_at),
                     "dd/MM/yyyy 'às' HH:mm",
                     { locale: ptBR },
-                  )}
+                  ) : "Data não disponível"}
                 </span>
               </div>
 

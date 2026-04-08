@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
@@ -27,6 +26,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
+interface TEFTransaction {
+  success: boolean;
+  transacao: {
+    nsu_sitef: string;
+    codigo_autorizacao: string;
+    tipo_operacao: string;
+    valor: string;
+    comprovante_cliente: string;
+  };
+  error?: string;
+}
 
 interface IntegracaoTEFProps {
   vendaId: string;
@@ -44,14 +54,14 @@ export default function IntegracaoTEF({
   const [processando, setProcessando] = useState(false);
   const [tipoOperacao, setTipoOperacao] = useState("DEBITO");
   const [numParcelas, setNumParcelas] = useState(1);
-  const [transacao, setTransacao] = useState<unknown>(null);
+  const [transacao, setTransacao] = useState<TEFTransaction["transacao"] | null>(null);
   const [showComprovante, setShowComprovante] = useState(false);
 
   const processar = async () => {
     try {
       setProcessando(true);
 
-      const data: Record<string, any> = await apiClient.post("/processar-pagamento-tef", {
+      const data = await apiClient.post<TEFTransaction>("/processar-pagamento-tef", {
         clinic_id: clinicId,
         venda_id: vendaId,
         tipo_operacao: tipoOperacao,

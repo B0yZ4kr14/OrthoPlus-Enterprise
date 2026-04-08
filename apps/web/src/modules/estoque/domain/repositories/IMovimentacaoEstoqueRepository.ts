@@ -1,4 +1,4 @@
-// @ts-expect-error - Auto-healer: TS2307 - Cannot find module '../entities/Moviment...
+// @ts-expect-error — TS2307
 import { MovimentacaoEstoque } from "../entities/MovimentacaoEstoque";
 
 /**

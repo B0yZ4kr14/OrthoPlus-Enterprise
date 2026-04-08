@@ -169,6 +169,7 @@ export function usePatientPortal(patientId?: string) {
   };
 
   // Carregar dados ao montar
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     if (patientId) {
       loadNotifications();
@@ -184,6 +185,7 @@ export function usePatientPortal(patientId?: string) {
       };
     }
   }, [patientId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return {
     notifications,

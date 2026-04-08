@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Módulo CONTRATOS
  *
@@ -10,12 +9,15 @@
  */
 
 // Domain exports
+// @ts-expect-error — TS2306
 export * from "./domain";
 
 // Application exports
+// @ts-expect-error — TS2306
 export * from "./application";
 
 // Infrastructure exports
+// @ts-expect-error — TS2306
 export * from "./infrastructure";
 
 // UI exports

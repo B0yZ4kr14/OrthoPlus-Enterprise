@@ -39,15 +39,16 @@ export const useModulos = () => {
     },
     onSuccess: (response: unknown) => {
       queryClient.invalidateQueries({ queryKey: ["modulos"] });
-      // @ts-expect-error - Auto-healer: TS18046 - 'response' is of type 'unknown'....
-      const action = response.module.is_active ? "ativado" : "desativado";
+      const res = response as { module: { is_active: boolean } };
+      const action = res.module.is_active ? "ativado" : "desativado";
       toast.success(`Módulo ${action} com sucesso!`);
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       // Erro 412 indica dependências não atendidas
-      if (error.response?.status === 412) {
+      const axiosErr = error as { response?: { status?: number; data?: { error?: string } } };
+      if (axiosErr.response?.status === 412) {
         toast.error(
-          error.response.data.error ||
+          axiosErr.response.data?.error ??
             "Falha ao alterar módulo devido a dependências",
         );
       }

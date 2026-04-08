@@ -285,7 +285,7 @@ export default function ScheduledBackupsManagement() {
           setBackupToEdit(null);
           queryClient.invalidateQueries({ queryKey: ["scheduled-backups"] });
         }}
-        // @ts-expect-error - Auto-healer: TS2322 - Type 'ScheduledBackupConfig | null' is n...
+        // @ts-expect-error — TS2322
         initialData={backupToEdit}
       />
 

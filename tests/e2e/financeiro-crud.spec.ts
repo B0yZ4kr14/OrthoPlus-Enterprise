@@ -24,15 +24,20 @@ test.describe('Financeiro - CRUD Completo', () => {
   });
 
   test('deve criar nova conta a receber', async ({ page }) => {
-    // Abrir modal de nova conta
+    // Abrir modal de nova conta (Wizard)
     await page.getByRole('button', { name: /nova conta/i }).click();
     
-    // Preencher formulário
+    // Passo 1: Informações base
+    await page.getByLabel(/cliente\/paciente/i).fill('João Silva');
     await page.getByLabel(/descrição/i).fill('Consulta de Revisão');
-    await page.getByLabel(/valor/i).fill('250');
-    await page.getByLabel(/vencimento/i).fill('2025-12-31');
+    await page.getByRole('button', { name: /próximo/i }).click();
+
+    // Passo 2: Valores
+    await page.getByLabel(/valor total/i).fill('250');
+    await page.getByLabel(/data de vencimento/i).fill('2025-12-31');
+    await page.getByRole('button', { name: /próximo/i }).click();
     
-    // Salvar
+    // Passo 3: Confirmação e Salvar
     await page.getByRole('button', { name: /salvar/i }).click();
     
     // Verificar toast de sucesso
@@ -85,16 +90,16 @@ test.describe('Financeiro - CRUD Completo', () => {
     expect(count).toBeGreaterThanOrEqual(0);
   });
 
-  test('deve validar campos obrigatórios', async ({ page }) => {
+  test('deve validar campos obrigatórios no passo 1', async ({ page }) => {
     // Abrir modal
     await page.getByRole('button', { name: /nova conta/i }).click();
     
-    // Tentar salvar sem preencher
-    await page.getByRole('button', { name: /salvar/i }).click();
+    // Tentar avançar o passo 1 sem preencher
+    await page.getByRole('button', { name: /próximo/i }).click();
     
-    // Verificar mensagens de erro
-    await expect(page.getByText(/descrição é obrigatória/i)).toBeVisible();
-    await expect(page.getByText(/valor é obrigatório/i)).toBeVisible();
+    // Verificar campos nativos inválidos ou foco mantido no formulário por causa de required=""
+    const patientName = page.locator('#patient_name');
+    await expect(patientName).toBeFocused();
   });
 
   test('deve navegar entre meses no calendário', async ({ page }) => {

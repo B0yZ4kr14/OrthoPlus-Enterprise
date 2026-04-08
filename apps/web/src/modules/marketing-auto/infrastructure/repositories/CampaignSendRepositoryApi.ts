@@ -15,10 +15,11 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
       const data = await apiClient.get<Record<string, any>>(`/marketing/envios/${id}`);
       if (!data) return null;
       return this.toDomain(data);
-    } catch (error: any) {
-      if (error.response?.status === 404 || error.response?.status === 406)
+    } catch (error: unknown) {
+      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
-      throw new Error(`Erro ao buscar envio de campanha: ${error.message}`);
+      throw new Error(`Erro ao buscar envio de campanha: ${_e.message}`);
     }
   }
 
@@ -41,8 +42,9 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
         params,
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar envios da campanha: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar envios da campanha: ${_e.message}`);
     }
   }
 
@@ -52,9 +54,10 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
         params: { patient_id: patientId },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(
-        `Erro ao buscar envios para o paciente: ${error.message}`,
+        `Erro ao buscar envios para o paciente: ${_e.message}`,
       );
     }
   }
@@ -63,8 +66,9 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
     const data = this.toDatabase(send);
     try {
       await apiClient.post("/marketing/envios", data);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar envio: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar envio: ${_e.message}`);
     }
   }
 
@@ -72,16 +76,18 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
     const data = this.toDatabase(send);
     try {
       await apiClient.patch(`/marketing/envios/${send.id}`, data);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar envio: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar envio: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/marketing/envios/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar envio: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar envio: ${_e.message}`);
     }
   }
 
@@ -95,8 +101,9 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
         },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar envios agendados: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar envios agendados: ${_e.message}`);
     }
   }
 
@@ -109,8 +116,9 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
         },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar envios com erro: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar envios com erro: ${_e.message}`);
     }
   }
 
