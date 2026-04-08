@@ -7,11 +7,11 @@ module.exports = {
       exec_mode: 'cluster',
       env: {
         NODE_ENV: 'production',
-        PORT: 3000
+        PORT: 3005
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 3000
+        PORT: 3005
       },
       error_file: './logs/err.log',
       out_file: './logs/out.log',
@@ -23,7 +23,7 @@ module.exports = {
       min_uptime: '10s',
       listen_timeout: 10000,
       kill_timeout: 5000,
-      wait_ready: true,
+      wait_ready: false,
       env_file: '.env.production'
     }
   ],

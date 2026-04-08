@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   Award,
   Gift,
@@ -19,6 +18,7 @@ import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import { useFidelidade } from "@/modules/fidelidade/hooks/useFidelidade";
 import { RecompensaForm } from "@/components/fidelidade/RecompensaForm";
 import { BadgeForm } from "@/components/fidelidade/BadgeForm";
+import { FidelidadeRecompensa } from "@/modules/fidelidade/types/fidelidade.types";
 import confetti from "canvas-confetti";
 import { toast } from "sonner";
 
@@ -26,7 +26,7 @@ export default function ProgramaFidelidade() {
   const { pontos, recompensas, badges, indicacoes, loading } = useFidelidade();
   const [recompensaFormOpen, setRecompensaFormOpen] = useState(false);
   const [badgeFormOpen, setBadgeFormOpen] = useState(false);
-  const [editingRecompensa, setEditingRecompensa] = useState<unknown>(null);
+  const [editingRecompensa, setEditingRecompensa] = useState<FidelidadeRecompensa | null>(null);
 
   const triggerConfetti = () => {
     confetti({
@@ -329,7 +329,7 @@ export default function ProgramaFidelidade() {
                     >
                       <div className="flex-1">
                         <div className="font-medium">
-                          {indicacao.indicador_nome}
+                          {indicacao.id ? (indicacao as any).indicador_nome : (indicacao.indicador?.nome || "Sistema")}
                         </div>
                         <div className="text-sm text-muted-foreground">
                           Indicou: {indicacao.indicado_nome} •{" "}
@@ -338,9 +338,9 @@ export default function ProgramaFidelidade() {
                       </div>
                       <div className="text-right mr-4">
                         <div className="text-sm text-muted-foreground">
-                          {new Date(indicacao.created_at).toLocaleDateString(
+                          {indicacao.created_at ? new Date(indicacao.created_at).toLocaleDateString(
                             "pt-BR",
-                          )}
+                          ) : "—"}
                         </div>
                         {indicacao.pontos_concedidos && (
                           <div className="font-medium text-green-600">
@@ -386,44 +386,56 @@ export default function ProgramaFidelidade() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium">
+                  <label htmlFor="pontos_consulta" className="text-sm font-medium">
                     Pontos por Consulta
                   </label>
                   <input
+                    id="pontos_consulta"
+                    name="pontos_consulta"
                     type="number"
                     className="w-full mt-1 p-2 border rounded"
                     defaultValue={10}
+                    aria-label="Pontos por Consulta"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">
+                  <label htmlFor="pontos_real" className="text-sm font-medium">
                     Pontos por R$ Gasto
                   </label>
                   <input
+                    id="pontos_real"
+                    name="pontos_real"
                     type="number"
                     step="0.1"
                     className="w-full mt-1 p-2 border rounded"
                     defaultValue={1}
+                    aria-label="Pontos por R$ Gasto"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">
+                  <label htmlFor="pontos_indicacao" className="text-sm font-medium">
                     Pontos por Indicação
                   </label>
                   <input
+                    id="pontos_indicacao"
+                    name="pontos_indicacao"
                     type="number"
                     className="w-full mt-1 p-2 border rounded"
                     defaultValue={50}
+                    aria-label="Pontos por Indicação"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">
+                  <label htmlFor="validade_pontos" className="text-sm font-medium">
                     Validade dos Pontos (dias)
                   </label>
                   <input
+                    id="validade_pontos"
+                    name="validade_pontos"
                     type="number"
                     className="w-full mt-1 p-2 border rounded"
                     defaultValue={365}
+                    aria-label="Validade dos Pontos (dias)"
                   />
                 </div>
               </div>
@@ -440,7 +452,7 @@ export default function ProgramaFidelidade() {
           if (!open) setEditingRecompensa(null);
         }}
         procedimentos={[]}
-        editingRecompensa={editingRecompensa}
+        editingRecompensa={editingRecompensa || undefined}
       />
 
       <BadgeForm open={badgeFormOpen} onOpenChange={setBadgeFormOpen} />

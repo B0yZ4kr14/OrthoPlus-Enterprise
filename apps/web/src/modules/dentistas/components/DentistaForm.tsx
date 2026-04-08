@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Dentista,
+  type Dentista,
   dentistaSchema,
   especialidadesDisponiveis,
   diasSemana,
@@ -54,8 +54,7 @@ export function DentistaForm({
     setValue,
     watch,
   } = useForm<Dentista>({
-    // @ts-expect-error - Auto-healer: TS2719 - Type 'import("/home/heosphoros/Projects/...
-    resolver: zodResolver(dentistaSchema),
+    resolver: zodResolver(dentistaSchema) as unknown as Resolver<Dentista>,
     defaultValues: dentista || {
       status: "Ativo",
       especialidades: [],
@@ -104,7 +103,6 @@ export function DentistaForm({
   };
 
   return (
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(data: Dentista) => vo...
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* Avatar */}
       <div className="flex justify-center py-4">
@@ -464,6 +462,8 @@ export function DentistaForm({
                     key={cor}
                     type="button"
                     onClick={() => setValue("corCalendario", cor)}
+                    title={`Selecionar cor ${cor} para o calendário`}
+                    aria-label={`Selecionar cor ${cor} para o calendário`}
                     className={cn(
                       "w-10 h-10 rounded-lg border-2 transition-all",
                       corCalendario === cor

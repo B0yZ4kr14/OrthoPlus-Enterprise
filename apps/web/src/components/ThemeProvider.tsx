@@ -13,6 +13,7 @@ export type Theme = typeof theme;
 const ThemeContext = createContext<Theme>(theme);
 
 // Hook para usar o tema
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {

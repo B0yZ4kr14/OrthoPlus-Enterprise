@@ -28,6 +28,7 @@ describe("withTimeout", () => {
   it("rejects if the promise does not settle within the timeout", async () => {
     vi.useFakeTimers();
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const slow = new Promise<void>(() => {});
     const raced = withTimeout(slow, 1_000, "slow-sync");
 
@@ -54,6 +55,7 @@ describe("withTimeout", () => {
   it("includes the label in the rejection message", async () => {
     vi.useFakeTimers();
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const p = new Promise<void>(() => {});
     const raced = withTimeout(p, 200, "my-custom-label");
 

@@ -119,6 +119,9 @@ model appointments {
   treatment_id String?
   updated_at   DateTime @updatedAt
 
+  @@index([clinic_id, start_time])
+  @@index([patient_id])
+  @@index([clinic_id, status])
   @@schema("pacientes")
 }
 
@@ -156,6 +159,8 @@ model audit_logs {
   user_agent       String?
   user_id          String?
 
+  @@index([clinic_id, created_at])
+  @@index([user_id])
   @@schema("configuracoes")
 }
 
@@ -609,6 +614,7 @@ model clinics {
   name                  String
   updated_at            DateTime @updatedAt
 
+  @@index([name])
   @@schema("configuracoes")
 }
 
@@ -676,6 +682,7 @@ model contas_pagar {
   valor           Int
   valor_pago      Int?
 
+  @@index([clinic_id, data_vencimento, status])
   @@schema("financeiro")
 }
 
@@ -698,6 +705,8 @@ model contas_receber {
   valor           Int
   valor_pago      Int?
 
+  @@index([clinic_id, data_vencimento, status])
+  @@index([patient_id])
   @@schema("financeiro")
 }
 
@@ -1868,6 +1877,10 @@ model patients {
   valor_ticket_medio             Int?
   weight_kg                      Int?
 
+  @@index([clinic_id, full_name])
+  @@index([cpf])
+  @@index([email])
+  @@index([clinic_id, status])
   @@schema("pacientes")
 }
 
@@ -2889,6 +2902,8 @@ model event_store {
   clinic_id      String
   version        Int
 
+  @@index([clinic_id, created_at])
+  @@index([aggregate_id])
   @@schema("pacientes")
 }
 
@@ -2902,6 +2917,7 @@ model users {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
+  @@index([clinic_id])
   @@schema("configuracoes")
 }
 

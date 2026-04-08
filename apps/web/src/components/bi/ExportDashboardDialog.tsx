@@ -20,8 +20,7 @@ import { Switch } from "@orthoplus/core-ui/switch";
 import { Input } from "@orthoplus/core-ui/input";
 import { Download, Calendar, Mail } from "lucide-react";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
-import ExcelJS from "exceljs";
+// jsPDF and ExcelJS loaded dynamically on export to reduce initial bundle
 import { apiClient } from "@/lib/api/apiClient";
 
 interface ScheduleExportResponse {
@@ -45,7 +44,8 @@ export function ExportDashboardDialog({
   );
   const [email, setEmail] = useState("");
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
+    const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 20;
@@ -86,7 +86,7 @@ export function ExportDashboardDialog({
       // Exibir os primeiros 10 itens dos dados
       const displayData = data.slice(0, 10);
       displayData.forEach((item, index) => {
-        // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+        // @ts-expect-error — TS2769
         const text = Object.entries(item)
           .map(([key, value]) => `${key}: ${value}`)
           .join(" | ");
@@ -130,6 +130,7 @@ export function ExportDashboardDialog({
 
   const exportToExcel = async () => {
     try {
+      const { default: ExcelJS } = await import("exceljs");
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Dados");
 
@@ -246,7 +247,7 @@ export function ExportDashboardDialog({
                 : "mensalmente"
           } em ${email}`,
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao agendar exportação:", error);
       toast.error(
         error instanceof Error ? error.message : "Erro ao agendar exportação",
@@ -275,7 +276,7 @@ export function ExportDashboardDialog({
             <Label>Formato de Exportação</Label>
             <Select
               value={format}
-              // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+              // @ts-expect-error — TS2345
               onValueChange={(value: unknown) => setFormat(value)}
             >
               <SelectTrigger>
@@ -309,7 +310,7 @@ export function ExportDashboardDialog({
                   <Label>Frequência</Label>
                   <Select
                     value={frequency}
-                    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+                    // @ts-expect-error — TS2345
                     onValueChange={(value: unknown) => setFrequency(value)}
                   >
                     <SelectTrigger>

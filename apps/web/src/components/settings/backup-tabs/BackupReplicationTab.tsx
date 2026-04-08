@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { useAuth } from "@/contexts/AuthContext";
@@ -44,14 +43,17 @@ export function BackupReplicationTab() {
     };
 
     const config = variants[status] || variants.PENDING;
+    // @ts-expect-error — TS18046
     const Icon = config.icon;
 
     return (
       <Badge
+        // @ts-expect-error — TS18046, TS2322
         variant={config.variant as unknown}
         className="flex items-center gap-1"
       >
         <Icon className="h-3 w-3" />
+        {/* @ts-expect-error — TS18046 */}
         {config.label}
       </Badge>
     );

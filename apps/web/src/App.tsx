@@ -9,6 +9,7 @@ import { useHotkeys } from "@/hooks/useHotkeys";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { initPerformanceMonitoring } from "@/lib/performance";
 import AppRoutes from "./routes/AppRoutes";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,7 +42,9 @@ const App = () => (
           <AuthProvider>
             <ModulesProvider>
               <Sonner />
-              <AppRoutes />
+              <ErrorBoundary moduleName="app">
+                <AppRoutes />
+              </ErrorBoundary>
             </ModulesProvider>
           </AuthProvider>
         </BrowserRouter>

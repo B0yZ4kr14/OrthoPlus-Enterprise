@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { ContaPagar, CategoriaContaPagar } from "@/domain/entities/ContaPagar";
 import { IContaPagarRepository } from "@/domain/repositories/IContaPagarRepository";
 import { apiClient } from "@/lib/api/apiClient";
@@ -12,6 +11,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         `/financeiro/contas-pagar/${id}`,
       );
       if (!data) return null;
+      // @ts-expect-error — TS2345
       return ContaPagarMapper.toDomain(data);
     } catch {
       return null;
@@ -23,6 +23,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
       const data = await apiClient.get<Tables<"financial_transactions">[]>(
         "/financeiro/contas-pagar",
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaPagarMapper.toDomain(row));
     } catch {
       return [];
@@ -35,6 +36,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { status: "PENDENTE" } },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaPagarMapper.toDomain(row));
     } catch {
       return [];
@@ -48,6 +50,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { status: "PENDENTE", vencidas_antes: hoje } },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaPagarMapper.toDomain(row));
     } catch {
       return [];
@@ -63,6 +66,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { fornecedor } },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaPagarMapper.toDomain(row));
     } catch {
       return [];
@@ -78,6 +82,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { categoria } },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaPagarMapper.toDomain(row));
     } catch {
       return [];
@@ -99,6 +104,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           },
         },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaPagarMapper.toDomain(row));
     } catch {
       return [];
@@ -109,8 +115,9 @@ export class DbContaPagarRepository implements IContaPagarRepository {
     const insert = ContaPagarMapper.toDbInsert(conta);
     try {
       await apiClient.post("/financeiro/contas-pagar", insert);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar conta a pagar: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar conta a pagar: ${_e.message}`);
     }
   }
 
@@ -118,16 +125,18 @@ export class DbContaPagarRepository implements IContaPagarRepository {
     const insert = ContaPagarMapper.toDbInsert(conta);
     try {
       await apiClient.patch(`/financeiro/contas-pagar/${conta.id}`, insert);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar conta a pagar: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar conta a pagar: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/financeiro/contas-pagar/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar conta a pagar: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar conta a pagar: ${_e.message}`);
     }
   }
 }

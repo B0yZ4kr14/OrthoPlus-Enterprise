@@ -2,8 +2,11 @@
  * API Client - Cliente HTTP para comunicação com backend Node.js
  */
 
-import axios, { AxiosError, AxiosInstance } from "axios";
-import { toast } from "sonner";
+import axios, {
+  type AxiosError,
+  type AxiosInstance,
+  type AxiosRequestConfig,
+} from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
@@ -24,31 +27,37 @@ class ApiClient {
   }
 
   private setupInterceptors() {
-    // Response interceptor - tratamento global de erros
+    // Response interceptor — log errors but do NOT show toast here.
+    // Callers (AuthContext, hooks) handle their own user-facing toasts.
+    // Showing toast here causes double-toast on every error.
     this.client.interceptors.response.use(
       (response) => {
         return response;
       },
       (error: AxiosError) => {
-        console.error(
-          `[API Error]: ${error.response?.status} on ${error.config?.method?.toUpperCase()} ${error.config?.baseURL || ""}${error.config?.url}`,
-        );
-        // console.error("Data:", error.response?.data);
-        const errorMessage = this.handleError(error);
-        toast.error(errorMessage);
+        if (import.meta.env.DEV) {
+          console.error(
+            `[API Error]: ${error.response?.status} on ${error.config?.method?.toUpperCase()} ${error.config?.baseURL || ""}${error.config?.url}`,
+          );
+        }
         return Promise.reject(error);
       },
     );
   }
 
-  private handleError(error: AxiosError): string {
+  /** Extract a user-friendly error message from an AxiosError. */
+  getErrorMessage(error: unknown): string {
+    if (!axios.isAxiosError(error)) {
+      return error instanceof Error ? error.message : "Erro desconhecido";
+    }
+
     if (error.response) {
       const status = error.response.status;
-      const data = error.response.data as { error?: string };
+      const data = error.response.data as { error?: string } | undefined;
 
       switch (status) {
         case 400:
-          return data.error || "Dados inválidos";
+          return data?.error || "Dados inválidos";
         case 401:
           return "Sessão expirada. Faça login novamente.";
         case 403:
@@ -56,54 +65,56 @@ class ApiClient {
         case 404:
           return "Recurso não encontrado";
         case 412:
-          return data.error || "Pré-condições não atendidas";
+          return data?.error || "Pré-condições não atendidas";
         case 429:
           return "Muitas requisições. Aguarde alguns instantes.";
         case 500:
           return "Erro interno do servidor";
         default:
-          return data.error || "Erro desconhecido";
+          return data?.error || "Erro desconhecido";
       }
     } else if (error.request) {
       return "Erro de conexão. Verifique sua internet.";
-    } else {
-      return error.message || "Erro desconhecido";
     }
+    return error.message || "Erro desconhecido";
   }
 
-  // Métodos HTTP públicos
-  async get<T>(url: string, config?: unknown): Promise<T> {
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+  // — HTTP methods with proper typing (no ts-expect-error) —
+
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.get<T>(url, config);
-    // @ts-expect-error - Auto-healer: TS2719 - Type 'T' is not assignable to type 'T'. ...
     return response.data;
   }
 
-  async post<T>(url: string, data?: unknown, config?: unknown): Promise<T> {
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+  async post<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     const response = await this.client.post<T>(url, data, config);
-    // @ts-expect-error - Auto-healer: TS2719 - Type 'T' is not assignable to type 'T'. ...
     return response.data;
   }
 
-  async patch<T>(url: string, data?: unknown, config?: unknown): Promise<T> {
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+  async patch<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     const response = await this.client.patch<T>(url, data, config);
-    // @ts-expect-error - Auto-healer: TS2719 - Type 'T' is not assignable to type 'T'. ...
     return response.data;
   }
 
-  async put<T>(url: string, data?: unknown, config?: unknown): Promise<T> {
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+  async put<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     const response = await this.client.put<T>(url, data, config);
-    // @ts-expect-error - Auto-healer: TS2719 - Type 'T' is not assignable to type 'T'. ...
     return response.data;
   }
 
-  async delete<T>(url: string, config?: unknown): Promise<T> {
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.delete<T>(url, config);
-    // @ts-expect-error - Auto-healer: TS2719 - Type 'T' is not assignable to type 'T'. ...
     return response.data;
   }
 }

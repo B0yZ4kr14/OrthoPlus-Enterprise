@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
@@ -40,6 +39,7 @@ export function RequisicaoForm({
   currentUser,
 }: RequisicaoFormProps) {
   const form = useForm<Requisicao>({
+    // @ts-expect-error — TS2322
     resolver: zodResolver(requisicaoSchema),
     defaultValues: {
       produtoId: "",
@@ -57,8 +57,10 @@ export function RequisicaoForm({
 
   return (
     <Form {...form}>
+      {/* @ts-expect-error — TS2345 */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="produtoId"
           render={({ field }) => (
@@ -107,6 +109,7 @@ export function RequisicaoForm({
 
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="quantidade"
             render={({ field }) => (
@@ -127,6 +130,7 @@ export function RequisicaoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="prioridade"
             render={({ field }) => (
@@ -159,6 +163,7 @@ export function RequisicaoForm({
         </div>
 
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="motivo"
           render={({ field }) => (
@@ -178,6 +183,7 @@ export function RequisicaoForm({
         />
 
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="observacoes"
           render={({ field }) => (

@@ -28,12 +28,11 @@ export const ConfiguracaoFiscal = () => {
     queryKey: ["fiscal-config", clinicId],
     queryFn: async () => {
       try {
-        const data = await apiClient.get("/fiscal-config", {
-          clinic_id: clinicId,
-        });
+        const data = await apiClient.get(`/fiscal-config?clinic_id=${clinicId}`);
         return Array.isArray(data) ? data[0] : data;
-      } catch (error: any) {
-        if (error?.status !== 404) throw error;
+      } catch (error: unknown) {
+        const err = error as Record<string, unknown>;
+        if (err?.status !== 404) throw error;
         return null;
       }
     },
@@ -59,7 +58,7 @@ export const ConfiguracaoFiscal = () => {
 
   const saveMutation = useMutation({
     mutationFn: async (data: unknown) => {
-      // @ts-expect-error - Auto-healer: TS2698 - Spread types may only be created from ob...
+      // @ts-expect-error — TS2698
       const payload = { ...data, clinic_id: clinicId };
       if (fiscalConfig) {
         await apiClient.patch(`/fiscal-config/${fiscalConfig.id}`, payload);
@@ -74,10 +73,11 @@ export const ConfiguracaoFiscal = () => {
         description: "Configuração fiscal atualizada com sucesso",
       });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
       toast({
         title: "Erro ao salvar",
-        description: error.message,
+        description: msg,
         variant: "destructive",
       });
     },

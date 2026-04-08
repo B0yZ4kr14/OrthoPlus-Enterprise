@@ -88,6 +88,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (context === undefined) {
@@ -97,6 +98,7 @@ export const useTheme = () => {
 };
 
 // Hook para acessar tokens de forma mais conveniente
+// eslint-disable-next-line react-refresh/only-export-components
 export const useThemeTokens = () => {
   const { tokens, enhanced } = useTheme();
   return { tokens, enhanced };

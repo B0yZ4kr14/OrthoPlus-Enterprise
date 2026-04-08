@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
@@ -53,14 +52,19 @@ function mapRowToFuncionario(row: Record<string, any>): Funcionario {
     telefone: row.telefone,
     celular: row.celular,
     email: row.email,
+    // @ts-expect-error — TS2322
     endereco: row.endereco as unknown,
+    // @ts-expect-error — TS2322
     cargo: row.cargo as unknown,
     dataAdmissao: row.data_admissao,
     salario: Number(row.salario),
+    // @ts-expect-error — TS2322
     permissoes: row.permissoes as unknown,
+    // @ts-expect-error — TS2322
     horarioTrabalho: row.horario_trabalho as unknown,
     diasTrabalho: row.dias_trabalho,
     observacoes: row.observacoes || undefined,
+    // @ts-expect-error — TS2322
     status: row.status as unknown,
     senhaAcesso: undefined,
     avatar_url: row.avatar_url || undefined,
@@ -121,9 +125,11 @@ export function useFuncionarios() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     loadFuncionarios();
   }, [clinicId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const addFuncionario = async (funcionario: Funcionario) => {
     if (!clinicId) {
@@ -140,9 +146,11 @@ export function useFuncionarios() {
       );
       setFuncionarios((prev) => [...prev, newFuncionario]);
       toast.success("Funcionário cadastrado com sucesso!");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Erro ao adicionar funcionário:", error);
-      if (error.code === "23505") {
+      // @ts-expect-error — TS2339
+      if (_e.code === "23505") {
         toast.error("CPF já cadastrado para esta clínica");
       } else {
         toast.error("Erro ao cadastrar funcionário");

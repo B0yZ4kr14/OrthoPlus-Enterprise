@@ -29,13 +29,12 @@ export function useInventario() {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/estoque/inventarios");
       setInventarios(
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type '{ id: string; numero: ...
-        data.map((inv) => ({
-          id: inv.id as string,
+        data.map((inv: any) => ({
+          id: inv.id,
           numero: inv.numero,
           data: inv.data,
-          tipo: inv.tipo as unknown,
-          status: inv.status as unknown,
+          tipo: inv.tipo as Inventario["tipo"],
+          status: inv.status as Inventario["status"],
           responsavel: inv.responsavel,
           totalItens: inv.total_itens || 0,
           itensContados: inv.itens_contados || 0,
@@ -43,6 +42,7 @@ export function useInventario() {
           valorDivergencias: Number(inv.valor_divergencias || 0),
           observacoes: inv.observacoes || undefined,
           createdAt: inv.created_at,
+          updatedAt: inv.updated_at,
         })),
       );
     } catch (error) {
@@ -122,16 +122,15 @@ export function useInventario() {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/estoque/inventarios/itens");
       setInventarioItems(
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type '{ id: string; inventar...
-        data.map((item) => ({
-          id: item.id as string,
+        data.map((item: any) => ({
+          id: item.id,
           inventarioId: item.inventario_id,
           produtoId: item.produto_id,
           produtoNome: item.produto_nome,
           quantidadeSistema: Number(item.quantidade_sistema),
-          quantidadeFisica: item.quantidade_fisica
+          quantidadeFisica: item.quantidade_fisica !== null
             ? Number(item.quantidade_fisica)
-            : undefined,
+            : null,
           divergencia: item.divergencia ? Number(item.divergencia) : undefined,
           percentualDivergencia: item.percentual_divergencia
             ? Number(item.percentual_divergencia)
@@ -142,7 +141,7 @@ export function useInventario() {
             : undefined,
           lote: item.lote || undefined,
           contadoPor: item.contado_por || undefined,
-          contadoEm: item.contado_em || undefined,
+          dataContagem: item.data_contagem || undefined,
           observacoes: item.observacoes || undefined,
         })),
       );

@@ -19,10 +19,11 @@ export class CampaignRepositoryApi implements ICampaignRepository {
       const data = await apiClient.get<Record<string, any>>(`/marketing/campanhas/${id}`);
       if (!data) return null;
       return this.toDomain(data);
-    } catch (error: any) {
-      if (error.response?.status === 404 || error.response?.status === 406)
+    } catch (error: unknown) {
+      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
-      throw new Error(`Erro ao buscar campanha: ${error.message}`);
+      throw new Error(`Erro ao buscar campanha: ${_e.message}`);
     }
   }
 
@@ -45,8 +46,9 @@ export class CampaignRepositoryApi implements ICampaignRepository {
         params,
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar campanhas da clínica: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar campanhas da clínica: ${_e.message}`);
     }
   }
 
@@ -54,8 +56,9 @@ export class CampaignRepositoryApi implements ICampaignRepository {
     const data = this.toDatabase(campaign);
     try {
       await apiClient.post("/marketing/campanhas", data);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar campanha: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar campanha: ${_e.message}`);
     }
   }
 
@@ -63,16 +66,18 @@ export class CampaignRepositoryApi implements ICampaignRepository {
     const data = this.toDatabase(campaign);
     try {
       await apiClient.patch(`/marketing/campanhas/${campaign.id}`, data);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar campanha: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar campanha: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/marketing/campanhas/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar campanha: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar campanha: ${_e.message}`);
     }
   }
 
@@ -82,8 +87,9 @@ export class CampaignRepositoryApi implements ICampaignRepository {
         params: { status: "ATIVA" },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar campanhas ativas: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar campanhas ativas: ${_e.message}`);
     }
   }
 
@@ -93,8 +99,9 @@ export class CampaignRepositoryApi implements ICampaignRepository {
         params: { status: "ATIVA", scheduled: true },
       });
       return data?.map((row) => this.toDomain(row)) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar campanhas agendadas: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar campanhas agendadas: ${_e.message}`);
     }
   }
 

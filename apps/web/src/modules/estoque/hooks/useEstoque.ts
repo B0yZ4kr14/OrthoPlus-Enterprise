@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useCallback, useState } from "react";
@@ -350,6 +349,7 @@ export function useEstoque() {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/estoque/requisicoes");
       setRequisicoes(
+        // @ts-expect-error — TS2345
         data.map((r) => ({
           id: r.id as string,
           produtoId: r.produto_id,
@@ -454,6 +454,7 @@ export function useEstoque() {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/estoque/movimentacoes");
       setMovimentacoes(
+        // @ts-expect-error — TS2345
         data.map((m) => ({
           id: m.id as string,
           produtoId: m.produto_id,
@@ -515,6 +516,7 @@ export function useEstoque() {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/estoque/alertas");
       setAlertas(
+        // @ts-expect-error — TS2345
         data.map((a) => ({
           id: a.id as string,
           produtoId: a.produto_id,

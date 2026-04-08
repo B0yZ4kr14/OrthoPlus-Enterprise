@@ -30,13 +30,14 @@ export function usePatientsAPI(): UsePatientsReturn {
 
       // Converter dados da API para formato global do sistema usando adapter
       const transformedPatients = PatientAdapter.toFrontendList(
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown[]' is not assi...
+        // @ts-expect-error — TS2345
         response.patients,
       );
       setPatients(transformedPatients);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error loading patients:", error);
-      toast.error("Erro ao carregar pacientes: " + error.message);
+      toast.error("Erro ao carregar pacientes: " + _e.message);
     } finally {
       setLoading(false);
     }
@@ -58,9 +59,10 @@ export function usePatientsAPI(): UsePatientsReturn {
 
       toast.success("Paciente cadastrado com sucesso!");
       await loadPatients();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error adding patient:", error);
-      toast.error("Erro ao cadastrar paciente: " + error.message);
+      toast.error("Erro ao cadastrar paciente: " + _e.message);
       throw error;
     }
   };
@@ -76,9 +78,10 @@ export function usePatientsAPI(): UsePatientsReturn {
 
       toast.success("Paciente atualizado com sucesso!");
       await loadPatients();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error updating patient:", error);
-      toast.error("Erro ao atualizar paciente: " + error.message);
+      toast.error("Erro ao atualizar paciente: " + _e.message);
       throw error;
     }
   };
@@ -88,9 +91,10 @@ export function usePatientsAPI(): UsePatientsReturn {
       await apiClient.delete(`/pacientes/${patientId}`);
       toast.success("Paciente removido com sucesso!");
       await loadPatients();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error deleting patient:", error);
-      toast.error("Erro ao remover paciente: " + error.message);
+      toast.error("Erro ao remover paciente: " + _e.message);
       throw error;
     }
   };

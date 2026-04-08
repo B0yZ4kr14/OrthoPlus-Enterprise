@@ -221,8 +221,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         description: "Você já pode fazer login.",
       });
       return { error: null };
-    } catch (error: any) {
-      toast.error("Erro ao criar conta", { description: (error as ApiError).message });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Tente novamente.";
+      toast.error("Erro ao criar conta", { description: msg });
       return { error };
     }
   };
@@ -245,9 +246,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       return { error: null };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const err = error as ApiError;
-      const errorMessage = err.response?.data?.error || err.message;
+      const errorMessage = err.response?.data?.error || err.message || "Erro desconhecido";
       toast.error("Erro ao fazer login", { description: errorMessage });
       return { error };
     }
@@ -273,8 +274,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       toast.success("Bem-vindo ao Portal do Paciente!");
       return { error: null };
-    } catch (error: any) {
-      toast.error("Erro ao fazer login: " + (error as ApiError).message);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error("Erro ao fazer login: " + msg);
       return { error };
     }
   };
@@ -288,8 +290,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUserRole(null);
       setClinicId(null);
       toast.success("Logout realizado com sucesso");
-    } catch (error: any) {
-      toast.error("Erro ao sair", { description: (error as ApiError).message });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error("Erro ao sair", { description: msg });
     }
   };
 
@@ -362,11 +365,3 @@ export function useAuth() {
   return context;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export function useAuthAPI() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider");
-  }
-  return context;
-}

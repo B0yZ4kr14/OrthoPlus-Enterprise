@@ -64,6 +64,7 @@ export function AgendaProvider({ children }: AgendaProviderProps) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAgenda() {
   const context = useContext(AgendaContext);
   if (!context) {

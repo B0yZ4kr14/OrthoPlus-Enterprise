@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useEffect } from "react";
@@ -85,7 +84,9 @@ export function useWebVitals(enabled: boolean = true) {
       let clsValue = 0;
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
+          // @ts-expect-error — TS2571
           if (!(entry as unknown).hadRecentInput) {
+            // @ts-expect-error — TS2571
             clsValue += (entry as unknown).value;
           }
         }
@@ -112,6 +113,7 @@ export function useWebVitals(enabled: boolean = true) {
         const entries = list.getEntries();
         const firstInput = entries[0];
         const value =
+          // @ts-expect-error — TS2571
           (firstInput as unknown).processingStart - firstInput.startTime;
 
         reportMetric({

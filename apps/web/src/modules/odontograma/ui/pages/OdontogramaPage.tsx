@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Scan, History, GitCompare, Brain, Maximize2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -23,6 +22,7 @@ import type { Patient } from "@/types/patient";
 
 export function OdontogramaPage() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  // @ts-expect-error — TS2345
   const odontograma = useOdontograma(selectedPatient?.id);
 
   return (
@@ -30,6 +30,7 @@ export function OdontogramaPage() {
       <PageHeader
         title="Odontograma"
         description="Visualização e registro do estado dental do paciente"
+        // @ts-expect-error — TS2322
         icon={<Scan className="h-6 w-6" />}
       />
 
@@ -43,6 +44,7 @@ export function OdontogramaPage() {
         <CardContent>
           <PatientSelector
             onSelect={(patient: Patient) => setSelectedPatient(patient)}
+            // @ts-expect-error — TS2322
             selected={selectedPatient}
           />
         </CardContent>
@@ -90,8 +92,11 @@ export function OdontogramaPage() {
               </CardHeader>
               <CardContent>
                 <Odontograma2D
+                  // @ts-expect-error — TS2322, TS2339
                   teeth={odontograma.teeth}
+                  // @ts-expect-error — TS2339
                   onToothClick={odontograma.handleToothClick}
+                  // @ts-expect-error — TS2339
                   selectedTooth={odontograma.selectedTooth}
                 />
               </CardContent>
@@ -108,8 +113,11 @@ export function OdontogramaPage() {
               </CardHeader>
               <CardContent>
                 <Odontograma3D
+                  // @ts-expect-error — TS2322, TS2339
                   teeth={odontograma.teeth}
+                  // @ts-expect-error — TS2339
                   onToothClick={odontograma.handleToothClick}
+                  // @ts-expect-error — TS2339
                   selectedTooth={odontograma.selectedTooth}
                 />
               </CardContent>
@@ -125,6 +133,7 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
+                {/* @ts-expect-error — TS2322 */}
                 <OdontogramaHistory patientId={selectedPatient.id} />
               </CardContent>
             </Card>
@@ -139,6 +148,7 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
+                {/* @ts-expect-error — TS2322 */}
                 <OdontogramaComparison patientId={selectedPatient.id} />
               </CardContent>
             </Card>
@@ -153,6 +163,7 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
+                {/* @ts-expect-error — TS2741 */}
                 <OdontogramaAIAnalysis patientId={selectedPatient.id} />
               </CardContent>
             </Card>

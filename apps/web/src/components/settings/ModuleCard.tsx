@@ -14,8 +14,56 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@orthoplus/core-ui/tooltip";
-import { AlertCircle, Check, Lock } from "lucide-react";
-import * as LucideIcons from "lucide-react";
+import {
+  AlertCircle,
+  Check,
+  Lock,
+  Package,
+  LayoutDashboard,
+  CalendarDays,
+  Users,
+  FileHeart,
+  Microscope,
+  Bitcoin,
+  Clipboard,
+  Video,
+  BarChart3,
+  Split,
+  AlertTriangle,
+  FileText,
+  Target,
+  Send,
+  PieChart,
+  ShieldCheck,
+  FileSignature,
+  FileSpreadsheet,
+  Workflow,
+  BrainCircuit,
+} from "lucide-react";
+
+const ICONS_MAP: Record<string, any> = {
+  LayoutDashboard,
+  CalendarDays,
+  Users,
+  FileHeart,
+  Microscope,
+  Package,
+  Bitcoin,
+  Clipboard,
+  Video,
+  BarChart3,
+  Split,
+  AlertTriangle,
+  FileText,
+  Target,
+  Send,
+  PieChart,
+  ShieldCheck,
+  FileSignature,
+  FileSpreadsheet,
+  Workflow,
+  BrainCircuit,
+};
 
 interface ModuleCardProps {
   module: {
@@ -35,10 +83,7 @@ interface ModuleCardProps {
 }
 
 export function ModuleCard({ module, onToggle }: ModuleCardProps) {
-  // Get icon component dynamically
-  const IconComponent =
-    // @ts-expect-error - Auto-healer: TS2571 - Object is of type 'unknown'....
-    (LucideIcons as unknown)[module.icon] || LucideIcons.Package;
+  const IconComponent = ICONS_MAP[module.icon] || Package;
 
   const isDisabled =
     (!module.is_active && !module.can_activate) ||

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useEstoque } from "../hooks/useEstoque";
 import { Button } from "@orthoplus/core-ui/button";
@@ -119,12 +118,15 @@ export function PrevisaoReposicao() {
         eventosFuturos: eventosFuturos.length > 0 ? eventosFuturos : undefined,
       });
 
+      // @ts-expect-error — TS18046
       setPrevisoes(data.previsoes || []);
+      // @ts-expect-error — TS18046
       setResumo(data.resumo || {});
       toast.success("Previsões geradas com sucesso pela IA!");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Erro ao gerar previsões:", error);
-      toast.error(error.message || "Erro ao gerar previsões de reposição");
+      toast.error(_e.message || "Erro ao gerar previsões de reposição");
     } finally {
       setLoading(false);
     }
@@ -145,9 +147,10 @@ export function PrevisaoReposicao() {
       });
 
       toast.success("Alertas enviados por email para gestores!");
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Erro ao enviar alertas:", error);
-      toast.error(error.message || "Erro ao enviar alertas por email");
+      toast.error(_e.message || "Erro ao enviar alertas por email");
     } finally {
       setSendingEmail(false);
     }
@@ -229,6 +232,7 @@ export function PrevisaoReposicao() {
                     <Select
                       value={novoEvento.tipo}
                       onValueChange={(v: unknown) =>
+                        // @ts-expect-error — TS2322
                         setNovoEvento({ ...novoEvento, tipo: v })
                       }
                     >

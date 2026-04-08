@@ -48,7 +48,7 @@ export default function QuickChart() {
       if (!(patient as { id?: string })?.id) return [];
 
       const data = await apiClient.get<Record<string, any>[]>(
-        // @ts-expect-error - Auto-healer: TS18048 - 'patient' is possibly 'undefined'....
+        // @ts-expect-error — TS18048
         `/pep/tratamentos?prontuario_id=${patient.id}&status=EM_ANDAMENTO`,
       );
       return data || [];

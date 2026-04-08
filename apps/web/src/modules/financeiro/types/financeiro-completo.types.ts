@@ -129,3 +129,28 @@ export interface DRECategoria {
   valor: number;
   percentual: number;
 }
+
+// Fechamento de Caixa
+export const movimentoCaixaSchema = z.object({
+  id: z.string().uuid().optional(),
+  clinic_id: z.string().uuid().optional(),
+  caixa_id: z.string().uuid().optional(),
+  aberto_em: z.string().optional(),
+  fechado_em: z.string().optional().nullable(),
+  valor_inicial: z.number().min(0).default(0),
+  valor_esperado: z.number().min(0).optional(),
+  valor_final: z.number().min(0).optional(),
+  diferenca: z.number().optional(),
+  status: z.enum(["ABERTO", "FECHADO", "CONFERIDO"]).default("ABERTO"),
+  observacoes: z.string().optional().nullable(),
+  user_id: z.string().uuid().optional(),
+  user: z
+    .object({
+      full_name: z.string(),
+    })
+    .optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
+});
+
+export type MovimentoCaixa = z.infer<typeof movimentoCaixaSchema>;

@@ -137,7 +137,7 @@ export function ContratoForm({
         <div className="space-y-2">
           <Label htmlFor="status">Status</Label>
           <Select
-            // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+            // @ts-expect-error — TS2345
             onValueChange={(value) => setValue("status", value as unknown)}
             defaultValue={watch("status")}
           >

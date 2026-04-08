@@ -44,7 +44,14 @@ export function SidebarMenuItem({
   const isActive = (url?: string) => {
     if (!url) return false;
     if (url === "/") return location.pathname === "/";
-    return location.pathname.startsWith(url);
+    // Check exact match first
+    if (location.pathname === url) return true;
+    // Highlight parent if we are in a sub-route deeply nested that doesn't have its own menu,
+    // but avoid matching "/financeiro" for "/financeiro/receber" when "receber" is a separate menu item.
+    // Safest way is to require trailing slash if doing startsWith, OR just exact match.
+    // However, some routes like /pacientes/:id need to highlight "Pacientes".
+    // Let's do exact match OR starts with url + "/"
+    return location.pathname.startsWith(`${url}/`);
   };
 
   const handleClick = () => {

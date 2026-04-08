@@ -48,7 +48,7 @@ export const useCrypto = (clinicId: string) => {
         wallets: walletsData?.length || 0,
         transactions: transactionsData?.length || 0,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
       logger.error("[useCrypto] Error loading crypto data", error);
       toast({
@@ -61,10 +61,12 @@ export const useCrypto = (clinicId: string) => {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     loadData();
     // Realtime subscriptions removed — use reload() for manual refresh
   }, [clinicId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const createExchangeConfig = async (data: Partial<ExchangeConfig>) => {
     try {
@@ -80,7 +82,7 @@ export const useCrypto = (clinicId: string) => {
 
       await loadData();
       return newConfig;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
       console.error("Error creating exchange config:", error);
       toast({
@@ -106,7 +108,7 @@ export const useCrypto = (clinicId: string) => {
 
       await loadData();
       return newWallet;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
       console.error("Error creating wallet:", error);
       toast({
@@ -129,7 +131,7 @@ export const useCrypto = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
       console.error("Error syncing wallet:", error);
       toast({
@@ -204,7 +206,7 @@ export const useCrypto = (clinicId: string) => {
 
       await loadData();
       return data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
       console.error("Error converting crypto:", error);
       toast({

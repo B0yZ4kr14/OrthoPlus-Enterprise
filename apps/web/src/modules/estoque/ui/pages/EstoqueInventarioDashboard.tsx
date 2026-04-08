@@ -48,23 +48,23 @@ export default function EstoqueInventarioDashboard() {
     );
 
     const inventariosPeriodo = inventarios.filter(
-      // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+      // @ts-expect-error — TS2769
       (inv) => new Date(inv.createdAt) >= periodStart,
     );
 
     const totalInventarios = inventariosPeriodo.length;
     const totalDivergencias = inventariosPeriodo.reduce(
-      // @ts-expect-error - Auto-healer: TS18048 - 'inv.divergenciasEncontradas' is possibl...
+      // @ts-expect-error — TS18048
       (sum, inv) => sum + inv.divergenciasEncontradas,
       0,
     );
     const totalPerdas = inventariosPeriodo.reduce(
-      // @ts-expect-error - Auto-healer: TS18048 - 'inv.valorDivergencias' is possibly 'und...
+      // @ts-expect-error — TS18048
       (sum, inv) => sum + inv.valorDivergencias,
       0,
     );
     const totalItensAnalisados = inventariosPeriodo.reduce(
-      // @ts-expect-error - Auto-healer: TS18048 - 'inv.totalItens' is possibly 'undefined'...
+      // @ts-expect-error — TS18048
       (sum, inv) => sum + inv.totalItens,
       0,
     );
@@ -79,13 +79,13 @@ export default function EstoqueInventarioDashboard() {
       periodStart.getTime() - periodDays * 24 * 60 * 60 * 1000,
     );
     const inventariosPeriodoAnterior = inventarios.filter((inv) => {
-      // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+      // @ts-expect-error — TS2769
       const data = new Date(inv.createdAt);
       return data >= prevPeriodStart && data < periodStart;
     });
 
     const perdasPeriodoAnterior = inventariosPeriodoAnterior.reduce(
-      // @ts-expect-error - Auto-healer: TS18048 - 'inv.valorDivergencias' is possibly 'und...
+      // @ts-expect-error — TS18048
       (sum, inv) => sum + inv.valorDivergencias,
       0,
     );
@@ -121,18 +121,18 @@ export default function EstoqueInventarioDashboard() {
 
     return ultimos6Meses.map(({ mes, mesNum, anoNum }) => {
       const inventariosMes = inventarios.filter((inv) => {
-        // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+        // @ts-expect-error — TS2769
         const data = new Date(inv.createdAt);
         return data.getMonth() === mesNum && data.getFullYear() === anoNum;
       });
 
       const totalItens = inventariosMes.reduce(
-        // @ts-expect-error - Auto-healer: TS18048 - 'inv.totalItens' is possibly 'undefined'...
+        // @ts-expect-error — TS18048
         (sum, inv) => sum + inv.totalItens,
         0,
       );
       const totalDiverg = inventariosMes.reduce(
-        // @ts-expect-error - Auto-healer: TS18048 - 'inv.divergenciasEncontradas' is possibl...
+        // @ts-expect-error — TS18048
         (sum, inv) => sum + inv.divergenciasEncontradas,
         0,
       );
@@ -164,13 +164,13 @@ export default function EstoqueInventarioDashboard() {
 
     return ultimos6Meses.map(({ mes, mesNum, anoNum }) => {
       const inventariosMes = inventarios.filter((inv) => {
-        // @ts-expect-error - Auto-healer: TS2769 - No overload matches this call....
+        // @ts-expect-error — TS2769
         const data = new Date(inv.createdAt);
         return data.getMonth() === mesNum && data.getFullYear() === anoNum;
       });
 
       const perdas = inventariosMes.reduce(
-        // @ts-expect-error - Auto-healer: TS18048 - 'inv.valorDivergencias' is possibly 'und...
+        // @ts-expect-error — TS18048
         (sum, inv) => sum + inv.valorDivergencias,
         0,
       );
@@ -197,7 +197,7 @@ export default function EstoqueInventarioDashboard() {
           existing.quantidade += Math.abs(item.divergencia || 0);
         } else {
           produtoPerdas.set(item.produtoId, {
-            // @ts-expect-error - Auto-healer: TS2322 - Type 'string | undefined' is not assigna...
+            // @ts-expect-error — TS2322
             nome: item.produtoNome,
             perda: item.valorDivergencia,
             quantidade: Math.abs(item.divergencia || 0),

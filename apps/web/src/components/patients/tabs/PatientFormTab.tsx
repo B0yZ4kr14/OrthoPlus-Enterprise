@@ -13,7 +13,7 @@ export function PatientFormTab({ patientId }: PatientFormTabProps) {
     queryKey: ["patient-form", patientId],
     queryFn: async () => {
       const data = await apiClient.get<Record<string, any>>(`/pacientes/${patientId}`);
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'Record<string, any>' i...
+      // @ts-expect-error — TS2345
       return PatientAdapter.toFrontend(data);
     },
   });

@@ -13,11 +13,12 @@ export interface IEventHandler<T extends DomainEvent> {
  */
 export class EventBus {
   private static instance: EventBus;
-  // @ts-expect-error - Auto-healer: TS2344 - Type 'unknown' does not satisfy the cons...
+  // @ts-expect-error — TS2344
   private handlers: Map<string, IEventHandler<unknown>[]> = new Map();
   private eventLog: DomainEvent[] = [];
   private readonly maxLogSize = 1000;
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
   static getInstance(): EventBus {

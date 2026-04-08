@@ -7,7 +7,7 @@ const triggerCryptoJob = async (jobName: string) => {
   try {
     await axios.post("http://localhost:3005/api/crypto/jobs/execute", {
       jobName,
-    });
+    }, { headers: { "x-internal-cron": "true" } });
     logger.info(`[node-cron] Scheduled crypto job executed: ${jobName}`);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);

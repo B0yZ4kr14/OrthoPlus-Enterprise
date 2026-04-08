@@ -1,4 +1,4 @@
-// @ts-nocheck
+// ConversionSimulator.tsx - Unified Crypto Conversion & Analysis
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Input } from "@orthoplus/core-ui/input";
@@ -42,12 +42,25 @@ interface ExchangeRate {
   color: string;
 }
 
+interface HistoricalData {
+  date: Date;
+  rate: number;
+  variation: number;
+}
+
+interface BestMoment {
+  maxRate: number;
+  currentRate: number;
+  percentageFromMax: number;
+  recommendation: "CONVERTER_AGORA" | "AGUARDAR" | "EXCELENTE_MOMENTO";
+}
+
 export function ConversionSimulator() {
   const [coinType, setCoinType] = useState<"BTC" | "ETH" | "USDT">("BTC");
   const [amount, setAmount] = useState<string>("1");
-  const [historicalData, setHistoricalData] = useState<unknown[]>([]);
+  const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
   const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
-  const [bestMoment, setBestMoment] = useState<unknown>(null);
+  const [bestMoment, setBestMoment] = useState<BestMoment | null>(null);
 
   useEffect(() => {
     generateHistoricalData();
@@ -58,7 +71,7 @@ export function ConversionSimulator() {
     const days = 30;
     const baseRate =
       coinType === "BTC" ? 350000 : coinType === "ETH" ? 18000 : 5.5;
-    const data = [];
+    const data: HistoricalData[] = [];
 
     for (let i = days; i >= 0; i--) {
       const date = subDays(new Date(), i);
@@ -170,7 +183,7 @@ export function ConversionSimulator() {
               <Label>Criptomoeda</Label>
               <Select
                 value={coinType}
-                onValueChange={(value: unknown) => setCoinType(value)}
+                onValueChange={(value: "BTC" | "ETH" | "USDT") => setCoinType(value)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -294,7 +307,7 @@ export function ConversionSimulator() {
                       </p>
                       <p className="text-sm font-semibold">
                         R${" "}
-                        {payload[0].value.toLocaleString("pt-BR", {
+                        {Number(payload[0].value ?? 0).toLocaleString("pt-BR", {
                           minimumFractionDigits: 2,
                         })}
                       </p>

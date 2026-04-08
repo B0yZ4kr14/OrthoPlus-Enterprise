@@ -1,7 +1,7 @@
 import { Suspense, memo, useCallback, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, Text } from "@react-three/drei";
-// @ts-expect-error - Auto-healer: TS7016 - Could not find a declaration file for mo...
+// @ts-expect-error — TS7016
 import * as THREE from "three";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
@@ -53,9 +53,9 @@ function ToothMesh({
   const isExtraido = toothData.status === "extraido";
 
   const handleClick = (e: unknown) => {
-    // @ts-expect-error - Auto-healer: TS18046 - 'e' is of type 'unknown'....
+    // @ts-expect-error — TS18046
     e.stopPropagation();
-    // @ts-expect-error - Auto-healer: TS18046 - 'e' is of type 'unknown'....
+    // @ts-expect-error — TS18046
     if (e.button === 2) {
       // Right click
       onToothRightClick(toothData.number);

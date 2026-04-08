@@ -42,11 +42,13 @@ export default function ConciliacaoBancaria() {
   );
   const [loading, setLoading] = useState(true);
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     if (selectedClinic) {
       loadExtratos();
     }
   }, [selectedClinic, filtro]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const loadExtratos = async () => {
     try {
@@ -62,8 +64,9 @@ export default function ConciliacaoBancaria() {
         params,
       });
       setExtratos(data || []);
-    } catch (error: any) {
-      toast.error(`Erro ao carregar extratos: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      toast.error(`Erro ao carregar extratos: ${_e.message}`);
     } finally {
       setLoading(false);
     }
@@ -78,8 +81,9 @@ export default function ConciliacaoBancaria() {
       });
       toast.success("Lançamento conciliado com sucesso");
       loadExtratos();
-    } catch (error: any) {
-      toast.error(`Erro ao conciliar: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      toast.error(`Erro ao conciliar: ${_e.message}`);
     }
   };
 
@@ -92,8 +96,9 @@ export default function ConciliacaoBancaria() {
       });
       toast.success("Conciliação desfeita com sucesso");
       loadExtratos();
-    } catch (error: any) {
-      toast.error(`Erro ao desconciliar: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      toast.error(`Erro ao desconciliar: ${_e.message}`);
     }
   };
 
@@ -108,7 +113,7 @@ export default function ConciliacaoBancaria() {
 
   return (
     <div className="space-y-6">
-      {/* @ts-expect-error - Auto-healer */}
+      {/* @ts-expect-error — TS2741 */}
       <PageHeader
         title="Conciliação Bancária"
         description="Reconcilie lançamentos bancários com contas a receber automaticamente"
@@ -145,7 +150,7 @@ export default function ConciliacaoBancaria() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <Filter className="h-5 w-5 text-muted-foreground" />
-            {/* @ts-expect-error - Auto-healer */}
+            {/* @ts-expect-error — TS2345 */}
             <Select value={filtro} onValueChange={(v: unknown) => setFiltro(v)}>
               <SelectTrigger className="w-[200px]">
                 <SelectValue />

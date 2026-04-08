@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import {
   Dialog,
@@ -35,17 +34,26 @@ interface BackupData {
   backupId: string;
   isIncremental: boolean;
   data: {
-    modules?: unknown[];
-    patients?: unknown[];
-    historicoClinico?: unknown[];
-    prontuarios?: unknown[];
-    odontogramas?: unknown[];
-    appointments?: unknown[];
+    modules?: any[];
+    patients?: any[];
+    historicoClinico?: any[];
+    prontuarios?: any[];
+    odontogramas?: any[];
+    appointments?: any[];
     financeiro?: {
-      contasReceber: unknown[];
-      contasPagar: unknown[];
+      contasReceber: any[];
+      contasPagar: any[];
     };
   };
+}
+
+interface RestoreResults {
+  modules: number;
+  patients: number;
+  historico: number;
+  prontuarios: number;
+  appointments: number;
+  financeiro: number;
 }
 
 interface BackupRestoreDialogProps {
@@ -75,7 +83,7 @@ export function BackupRestoreDialog({
     financeiro: false,
   });
 
-  const [restoreResults, setRestoreResults] = useState<unknown>(null);
+  const [restoreResults, setRestoreResults] = useState<RestoreResults | null>(null);
 
   const loadBackupFile = async (file: File) => {
     setLoading(true);
@@ -112,7 +120,7 @@ export function BackupRestoreDialog({
       const text = await backupFile.text();
 
       // Call restore-backup with decryption
-      const data = await apiClient.post("/functions/v1/restore-backup", {
+      const data = await apiClient.post<BackupData>("/functions/v1/restore-backup", {
         backupData: text,
         decryptionPassword,
       });
@@ -168,7 +176,7 @@ export function BackupRestoreDialog({
 
       setProgress(40);
 
-      const data = await apiClient.post("/functions/v1/restore-backup", {
+      const data = await apiClient.post<{ results: RestoreResults }>("/functions/v1/restore-backup", {
         backupData: JSON.stringify(dataToRestore),
       });
 

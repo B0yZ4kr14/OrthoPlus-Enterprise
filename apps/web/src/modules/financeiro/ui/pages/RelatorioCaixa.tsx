@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
@@ -12,19 +11,21 @@ import {
   TrendingUp,
   TrendingDown,
   Calendar,
-  Download,
+  Zap,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LoadingState } from "@/components/shared/LoadingState";
+import { MovimentoCaixa } from "../../types/financeiro-completo.types";
+import { useCallback } from "react";
 
 export default function RelatorioCaixa() {
   const { clinicId } = useAuth();
-  const [movimentos, setMovimentos] = useState<unknown[]>([]);
+  const [movimentos, setMovimentos] = useState<MovimentoCaixa[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState<"hoje" | "semana" | "mes">("hoje");
 
-  const loadMovimentos = async () => {
+  const loadMovimentos = useCallback(async () => {
     if (!clinicId) return;
 
     setLoading(true);
@@ -39,14 +40,12 @@ export default function RelatorioCaixa() {
         dataInicio.setDate(dataInicio.getDate() - 30);
       }
 
-      const params: Record<string, string> = { status: "FECHADO" };
-      if (filtro !== "hoje") {
-        params.start_date = dataInicio.toISOString();
-      } else {
-        params.start_date = dataInicio.toISOString();
-      }
+      const params: Record<string, string> = { 
+        status: "FECHADO",
+        start_date: dataInicio.toISOString()
+      };
 
-      const data = await apiClient.get<Record<string, any>[]>("/financeiro/movimentos", {
+      const data = await apiClient.get<MovimentoCaixa[]>("/financeiro/movimentos", {
         params,
       });
       setMovimentos(data || []);
@@ -55,24 +54,30 @@ export default function RelatorioCaixa() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [clinicId, filtro]);
 
   useEffect(() => {
     loadMovimentos();
-  }, [clinicId, filtro]);
+  }, [loadMovimentos]);
 
-  const totalSobras = movimentos
-    .filter((m) => (m.diferenca || 0) > 0)
-    .reduce((sum, m) => sum + (m.diferenca || 0), 0);
+  const stats = useMemo(() => {
+    const totalSobras = movimentos
+      .filter((m) => (m.diferenca || 0) > 0)
+      .reduce((sum, m) => sum + (m.diferenca || 0), 0);
 
-  const totalFaltas = movimentos
-    .filter((m) => (m.diferenca || 0) < 0)
-    .reduce((sum, m) => sum + Math.abs(m.diferenca || 0), 0);
+    const totalFaltas = movimentos
+      .filter((m) => (m.diferenca || 0) < 0)
+      .reduce((sum, m) => sum + Math.abs(m.diferenca || 0), 0);
 
-  const totalMovimentado = movimentos.reduce(
-    (sum, m) => sum + (m.valor_esperado || 0) - m.valor_inicial,
-    0,
-  );
+    const totalMovimentado = movimentos.reduce(
+      (sum, m) => sum + ((m.valor_esperado || 0) - (m.valor_inicial || 0)),
+      0,
+    );
+
+    return { totalSobras, totalFaltas, totalMovimentado };
+  }, [movimentos]);
+
+  const { totalSobras, totalFaltas, totalMovimentado } = stats;
 
   if (loading) {
     return (
@@ -89,32 +94,35 @@ export default function RelatorioCaixa() {
 
   return (
     <div className="container mx-auto py-6 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <PageHeader
           icon={FileText}
           title="Relatório de Caixa"
           description="Histórico de movimentações e fechamentos"
         />
 
-        <div className="flex gap-2">
+        <div className="flex bg-muted/50 p-1 rounded-lg border border-border/50">
           <Button
-            variant={filtro === "hoje" ? "default" : "outline"}
+            variant={filtro === "hoje" ? "default" : "ghost"}
             onClick={() => setFiltro("hoje")}
             size="sm"
+            className="h-8 px-4"
           >
             Hoje
           </Button>
           <Button
-            variant={filtro === "semana" ? "default" : "outline"}
+            variant={filtro === "semana" ? "default" : "ghost"}
             onClick={() => setFiltro("semana")}
             size="sm"
+            className="h-8 px-4"
           >
             7 dias
           </Button>
           <Button
-            variant={filtro === "mes" ? "default" : "outline"}
+            variant={filtro === "mes" ? "default" : "ghost"}
             onClick={() => setFiltro("mes")}
             size="sm"
+            className="h-8 px-4"
           >
             30 dias
           </Button>
@@ -123,141 +131,165 @@ export default function RelatorioCaixa() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card variant="metric">
+        <Card variant="metric" depth="subtle">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Total Movimentado
                 </p>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl font-black text-primary">
                   R${" "}
                   {totalMovimentado.toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
                   })}
                 </p>
               </div>
-              <DollarSign className="h-10 w-10 text-primary opacity-20" />
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <DollarSign className="h-6 w-6 text-primary" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card variant="metric">
+        <Card variant="metric" depth="subtle">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Sobras</p>
-                <p className="text-2xl font-bold text-green-600">
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Sobras</p>
+                <p className="text-2xl font-black text-success">
                   +R${" "}
                   {totalSobras.toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
                   })}
                 </p>
               </div>
-              <TrendingUp className="h-10 w-10 text-green-500 opacity-20" />
+              <div className="h-12 w-12 rounded-xl bg-success/10 flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-success" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card variant="metric">
+        <Card variant="metric" depth="subtle">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Faltas</p>
-                <p className="text-2xl font-bold text-red-600">
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Faltas</p>
+                <p className="text-2xl font-black text-destructive">
                   -R${" "}
                   {totalFaltas.toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
                   })}
                 </p>
               </div>
-              <TrendingDown className="h-10 w-10 text-red-500 opacity-20" />
+              <div className="h-12 w-12 rounded-xl bg-destructive/10 flex items-center justify-center">
+                <TrendingDown className="h-6 w-6 text-destructive" />
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Lista de Movimentos */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Histórico de Fechamentos</CardTitle>
+      <Card depth="normal">
+        <CardHeader className="border-b border-border/50 pb-4">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Calendar className="h-5 w-5 text-muted-foreground" />
+            Histórico de Fechamentos
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {movimentos.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              Nenhum fechamento de caixa encontrado no período selecionado
+            <div className="text-center py-20 text-muted-foreground">
+              <FileText className="h-12 w-12 mx-auto mb-4 opacity-20" />
+              <p className="font-medium">Nenhum fechamento de caixa encontrado</p>
+              <p className="text-sm">Tente alterar o período selecionado</p>
             </div>
           ) : (
-            <div className="space-y-3">
-              {movimentos.map((mov) => {
+            <div className="divide-y divide-border/50">
+              {[...movimentos].reverse().map((mov) => {
                 const diferenca = mov.diferenca || 0;
                 const hasDiferenca = Math.abs(diferenca) > 0.01;
 
                 return (
                   <div
                     key={mov.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    className="flex flex-col md:flex-row md:items-center justify-between p-6 hover:bg-muted/30 transition-all group"
                   >
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-3">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">
-                          {format(
+                    <div className="flex-1 space-y-4">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <div className="px-3 py-1 bg-accent/30 rounded-full text-sm font-bold flex items-center gap-2">
+                          <Calendar className="h-3.5 w-3.5" />
+                          {mov.fechado_em ? format(
                             new Date(mov.fechado_em),
                             "dd/MM/yyyy 'às' HH:mm",
                             { locale: ptBR },
-                          )}
-                        </span>
-                        <Badge variant="secondary" className="text-xs">
-                          {mov.user?.full_name || "Usuário"}
+                          ) : "--/--/----"}
+                        </div>
+                        <Badge variant="secondary" className="px-2 font-mono text-[10px]">
+                          OPERADOR: {mov.user?.full_name?.toUpperCase() || "SISTEMA"}
                         </Badge>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">
-                            Inicial:
-                          </span>
-                          <span className="ml-2 font-medium">
-                            R$ {mov.valor_inicial.toFixed(2)}
-                          </span>
+                      <dl className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div className="space-y-1">
+                          <dt className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                            Valor Inicial
+                          </dt>
+                          <dd className="font-mono text-base font-semibold">
+                            R$ {(mov.valor_inicial || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          </dd>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">
-                            Esperado:
-                          </span>
-                          <span className="ml-2 font-medium">
-                            R$ {(mov.valor_esperado || 0).toFixed(2)}
-                          </span>
+                        <div className="space-y-1">
+                          <dt className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                            Valor Esperado
+                          </dt>
+                          <dd className="font-mono text-base font-semibold text-primary">
+                            R$ {(mov.valor_esperado || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          </dd>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">
-                            Contado:
-                          </span>
-                          <span className="ml-2 font-medium">
-                            R$ {(mov.valor_final || 0).toFixed(2)}
-                          </span>
+                        <div className="space-y-1">
+                          <dt className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                            Valor Contado
+                          </dt>
+                          <dd className="font-mono text-base font-semibold italic">
+                            R$ {(mov.valor_final || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          </dd>
                         </div>
-                      </div>
+                      </dl>
 
                       {mov.observacoes && (
-                        <p className="text-sm text-muted-foreground italic">
-                          {mov.observacoes}
-                        </p>
+                        <div className="p-3 bg-muted/20 border-l-2 border-primary/30 rounded-r-lg">
+                          <p className="text-xs text-muted-foreground italic">
+                            &ldquo;{mov.observacoes}&rdquo;
+                          </p>
+                        </div>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      {hasDiferenca && (
-                        <Badge
-                          variant={diferenca > 0 ? "success" : "destructive"}
-                        >
-                          {diferenca > 0 ? "+" : ""}R${" "}
-                          {Math.abs(diferenca).toFixed(2)}
-                        </Badge>
-                      )}
-                      {!hasDiferenca && (
-                        <Badge variant="secondary">✓ Conferido</Badge>
+                    <div className="flex items-center gap-4 mt-6 md:mt-0">
+                      {hasDiferenca ? (
+                        <div className={`px-4 py-2 rounded-xl border flex flex-col items-end ${
+                          diferenca > 0 
+                            ? "bg-success/5 border-success/20 text-success" 
+                            : "bg-destructive/5 border-destructive/20 text-destructive"
+                        }`}>
+                          <span className="text-[10px] font-black uppercase tracking-tighter">
+                            {diferenca > 0 ? "Sobra de Caixa" : "Falta de Caixa"}
+                          </span>
+                          <span className="text-lg font-black font-mono">
+                            {diferenca > 0 ? "+" : "-"}R$ {Math.abs(diferenca).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="px-4 py-2 rounded-xl bg-success/10 text-success border border-success/20 flex items-center gap-2">
+                          <Zap className="h-4 w-4" />
+                          <span className="text-xs font-bold uppercase">Conferido</span>
+                        </div>
                       )}
                     </div>
                   </div>

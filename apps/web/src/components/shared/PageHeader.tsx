@@ -14,13 +14,13 @@ export function PageHeader({
   iconClassName = "",
 }: PageHeaderProps) {
   return (
-    <div className="flex items-center gap-3">
-      <div className={`p-3 rounded-lg bg-primary/10 ${iconClassName}`}>
-        <Icon className="h-6 w-6 text-primary" />
+    <div className="flex items-center gap-4 py-2">
+      <div className={`p-4 rounded-2xl bg-primary/10 border border-primary/20 shadow-neon-cyan/10 ${iconClassName} glass`}>
+        <Icon className="h-8 w-8 text-primary animate-pulse-soft" />
       </div>
       <div>
-        <h1 className="text-3xl font-bold text-foreground">{title}</h1>
-        <p className="text-muted-foreground mt-1">{description}</p>
+        <h1 className="text-4xl font-extrabold tracking-tight gradient-text neon-glow-cyan">{title}</h1>
+        <p className="text-muted-foreground/80 font-medium mt-1">{description}</p>
       </div>
     </div>
   );

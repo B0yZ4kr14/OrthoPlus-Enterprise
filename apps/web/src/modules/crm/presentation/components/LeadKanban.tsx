@@ -176,7 +176,7 @@ export const LeadKanban = ({ onLeadClick }: LeadKanbanProps) => {
           title={column.title}
           status={column.status}
           leads={leads}
-          onLeadClick={onLeadClick || (() => {})}
+          onLeadClick={onLeadClick || ((_lead: Lead) => undefined)}
           color={column.color}
         />
       ))}

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
@@ -229,24 +228,33 @@ export default function EstoqueMovimentacoesPage() {
 
         <TabsContent value="entradas">
           <MovimentacoesList
+            // @ts-expect-error — TS2345
             movimentacoes={filteredMovimentacoes(movimentacoesEntrada)}
+            // @ts-expect-error — TS2322
             produtos={produtos}
+            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
           />
         </TabsContent>
 
         <TabsContent value="saidas">
           <MovimentacoesList
+            // @ts-expect-error — TS2345
             movimentacoes={filteredMovimentacoes(movimentacoesSaida)}
+            // @ts-expect-error — TS2322
             produtos={produtos}
+            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
           />
         </TabsContent>
 
         <TabsContent value="ajustes">
           <MovimentacoesList
+            // @ts-expect-error — TS2345
             movimentacoes={filteredMovimentacoes(movimentacoesAjuste)}
+            // @ts-expect-error — TS2322
             produtos={produtos}
+            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
           />
         </TabsContent>
@@ -258,7 +266,9 @@ export default function EstoqueMovimentacoesPage() {
             <DialogTitle>Registrar Movimentação</DialogTitle>
           </DialogHeader>
           <MovimentacaoForm
+            // @ts-expect-error — TS2322
             produtos={produtos}
+            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
             onSubmit={handleSubmit}
             onCancel={() => setShowForm(false)}

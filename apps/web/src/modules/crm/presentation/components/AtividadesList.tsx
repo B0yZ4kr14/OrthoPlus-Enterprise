@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   Atividade,
   AtividadeTipo,
@@ -98,6 +97,7 @@ export const AtividadesList = ({
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    {/* @ts-expect-error — TS2604, TS2786 */}
                     <Icon className="h-5 w-5 text-primary" />
                   </div>
                 </div>
@@ -110,9 +110,11 @@ export const AtividadesList = ({
                           {getTipoLabel(atividade.tipo)}
                         </h4>
                         <Badge
+                          // @ts-expect-error — TS2322
                           variant={variant as unknown}
                           className="flex items-center gap-1"
                         >
+                          {/* @ts-expect-error — TS2604, TS2786 */}
                           <StatusIcon className="h-3 w-3" />
                           {atividade.status === "AGENDADA" && "Agendada"}
                           {atividade.status === "CONCLUIDA" && "Concluída"}

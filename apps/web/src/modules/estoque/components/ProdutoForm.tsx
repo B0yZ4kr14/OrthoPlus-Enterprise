@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
@@ -43,6 +42,7 @@ export function ProdutoForm({
   onCancel,
 }: ProdutoFormProps) {
   const form = useForm<Produto>({
+    // @ts-expect-error — TS2322
     resolver: zodResolver(produtoSchema),
     defaultValues: produto || {
       nome: "",
@@ -63,9 +63,11 @@ export function ProdutoForm({
 
   return (
     <Form {...form}>
+      {/* @ts-expect-error — TS2345 */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="nome"
             render={({ field }) => (
@@ -80,6 +82,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="codigo"
             render={({ field }) => (
@@ -94,6 +97,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="codigoBarras"
             render={({ field }) => (
@@ -109,6 +113,7 @@ export function ProdutoForm({
         </div>
 
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="descricao"
           render={({ field }) => (
@@ -129,6 +134,7 @@ export function ProdutoForm({
 
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="categoriaId"
             render={({ field }) => (
@@ -157,6 +163,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="fornecedorId"
             render={({ field }) => (
@@ -187,6 +194,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="unidadeMedida"
             render={({ field }) => (
@@ -215,6 +223,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="quantidadeMinima"
             render={({ field }) => (
@@ -234,6 +243,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="quantidadeAtual"
             render={({ field }) => (
@@ -253,6 +263,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="precoCompra"
             render={({ field }) => (
@@ -273,6 +284,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="precoVenda"
             render={({ field }) => (
@@ -293,6 +305,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="lote"
             render={({ field }) => (
@@ -307,6 +320,7 @@ export function ProdutoForm({
           />
 
           <FormField
+            // @ts-expect-error — TS2322
             control={form.control}
             name="dataValidade"
             render={({ field }) => (
@@ -322,6 +336,7 @@ export function ProdutoForm({
         </div>
 
         <FormField
+          // @ts-expect-error — TS2322
           control={form.control}
           name="ativo"
           render={({ field }) => (

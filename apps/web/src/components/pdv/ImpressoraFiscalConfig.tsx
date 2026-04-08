@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useToast } from "@/hooks/use-toast";
@@ -18,12 +17,26 @@ import { Switch } from "@orthoplus/core-ui/switch";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Loader2, Printer, CheckCircle2, XCircle } from "lucide-react";
 
+interface ImpressoraConfig {
+  id: string;
+  tipo_equipamento: string;
+  numero_serie: string;
+  codigo_ativacao: string;
+  ip_address?: string;
+  porta?: number;
+  modelo?: string;
+  fabricante?: string;
+  versao_software?: string;
+  ativo: boolean;
+  clinic_id: string;
+}
+
 export default function ImpressoraFiscalConfig() {
   const { user, selectedClinic } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [config, setConfig] = useState<unknown>(null);
+  const [config, setConfig] = useState<ImpressoraConfig | null>(null);
   const [formData, setFormData] = useState({
     tipo_equipamento: "SAT",
     numero_serie: "",
@@ -36,38 +49,49 @@ export default function ImpressoraFiscalConfig() {
     ativo: true,
   });
 
-  useEffect(() => {
-    loadConfig();
-  }, [selectedClinic]);
-
-  const loadConfig = async () => {
+  const loadConfig = useCallback(async () => {
     if (!selectedClinic) return;
 
     try {
       setLoading(true);
       try {
-        const data = await apiClient.get("/sat-mfe-config", {
-          clinic_id: selectedClinic,
+        const data = await apiClient.get<ImpressoraConfig | ImpressoraConfig[]>("/sat-mfe-config", {
+          params: { clinic_id: selectedClinic },
         });
         const configData = Array.isArray(data) ? data[0] : data;
         if (configData) {
           setConfig(configData);
-          setFormData(configData);
+          setFormData({
+            tipo_equipamento: configData.tipo_equipamento,
+            numero_serie: configData.numero_serie,
+            codigo_ativacao: configData.codigo_ativacao,
+            ip_address: configData.ip_address || "",
+            porta: configData.porta || 7000,
+            modelo: configData.modelo || "",
+            fabricante: configData.fabricante || "",
+            versao_software: configData.versao_software || "",
+            ativo: configData.ativo,
+          });
         }
       } catch (error: any) {
         if (error?.status !== 404) throw error;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error loading config:", error);
       toast({
         title: "Erro ao carregar configuração",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedClinic, toast]);
+
+  useEffect(() => {
+    loadConfig();
+  }, [loadConfig]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,11 +121,12 @@ export default function ImpressoraFiscalConfig() {
       }
 
       loadConfig();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error saving config:", error);
       toast({
         title: "Erro ao salvar configuração",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {

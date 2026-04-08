@@ -231,5 +231,6 @@ export function useFrontendEvent(eventType: string, handler: EventHandler) {
     return unsubscribe;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   return () => {};
 }

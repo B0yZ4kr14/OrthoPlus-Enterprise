@@ -51,7 +51,7 @@ export class IncidenteCaixaMapper {
       valor_caixa_momento: incidente.valorCaixaMomento,
       descricao: incidente.descricao,
       boletim_ocorrencia: incidente.boletimOcorrencia,
-      // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
+      // @ts-expect-error — TS2322
       metadata: incidente.metadata as unknown,
       created_at: incidente.createdAt.toISOString(),
     };

@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useToast } from "@/hooks/use-toast";
@@ -19,13 +18,42 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Loader2, Building2, CheckCircle2, XCircle, Send } from "lucide-react";
 
+interface ContabilConfig {
+  id: string;
+  software: string;
+  api_url: string;
+  api_key?: string;
+  api_secret?: string;
+  codigo_empresa?: string;
+  envio_automatico: boolean;
+  enviar_sped_fiscal: boolean;
+  enviar_nfce_dados: boolean;
+  periodicidade_envio: string;
+  email_contador?: string;
+  ativo: boolean;
+  created_at: string;
+}
+
+interface ContabilEnvio {
+  id: string;
+  integracao_contabil_config?: {
+    software: string;
+  };
+  status: "SUCESSO" | "ERRO" | "PENDENTE";
+  tipo_documento: string;
+  periodo_referencia: string;
+  enviado_em?: string;
+  erro_mensagem?: string;
+  created_at: string;
+}
+
 export default function IntegracaoContabilConfig() {
   const { user, selectedClinic } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [configs, setConfigs] = useState<unknown[]>([]);
-  const [envios, setEnvios] = useState<unknown[]>([]);
+  const [configs, setConfigs] = useState<ContabilConfig[]>([]);
+  const [envios, setEnvios] = useState<ContabilEnvio[]>([]);
   const [activeTab, setActiveTab] = useState("config");
 
   const [formData, setFormData] = useState({
@@ -42,58 +70,59 @@ export default function IntegracaoContabilConfig() {
     ativo: true,
   });
 
-  useEffect(() => {
-    loadData();
-  }, [selectedClinic]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!selectedClinic) return;
 
     try {
       setLoading(true);
 
       const [configsData, enviosData] = await Promise.all([
-        apiClient.get("/integracao-contabil-config", {
-          clinic_id: selectedClinic,
+        apiClient.get<ContabilConfig[]>("/integracao-contabil-config", {
+          params: { clinic_id: selectedClinic },
         }),
-        apiClient.get("/integracao-contabil-envios", {
-          clinic_id: selectedClinic,
+        apiClient.get<ContabilEnvio[]>("/integracao-contabil-envios", {
+          params: { clinic_id: selectedClinic },
         }),
       ]);
 
-      const configs = Array.isArray(configsData)
+      const configsList = Array.isArray(configsData)
         ? configsData
         : [configsData].filter(Boolean);
-      const envios = Array.isArray(enviosData)
+      const enviosList = Array.isArray(enviosData)
         ? enviosData
         : [enviosData].filter(Boolean);
 
       setConfigs(
-        configs.sort(
-          (a: unknown, b: unknown) =>
+        configsList.sort(
+          (a: ContabilConfig, b: ContabilConfig) =>
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
         ),
       );
       setEnvios(
-        envios
+        enviosList
           .sort(
-            (a: unknown, b: unknown) =>
+            (a: ContabilEnvio, b: ContabilEnvio) =>
               new Date(b.created_at).getTime() -
               new Date(a.created_at).getTime(),
           )
           .slice(0, 50),
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error loading data:", error);
       toast({
         title: "Erro ao carregar dados",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedClinic, toast]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,11 +157,12 @@ export default function IntegracaoContabilConfig() {
         email_contador: "",
         ativo: true,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error saving config:", error);
       toast({
         title: "Erro ao salvar configuração",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {

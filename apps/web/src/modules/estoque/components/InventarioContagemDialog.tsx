@@ -61,6 +61,8 @@ export function InventarioContagemDialog({
     },
   ];
 
+  // TODO: connect to real inventory API to update physical count
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const handleQuantityChange = (itemId: string, quantity: number) => {};
 
   const handleSave = () => {

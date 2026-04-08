@@ -65,8 +65,9 @@ export function ConfiguracaoBancaria() {
 
       setEditando(null);
       loadConfigs();
-    } catch (error: any) {
-      toast.error(`Erro ao salvar: ${error.message}`);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error(`Erro ao salvar: ${msg}`);
     } finally {
       setLoading(false);
     }
@@ -76,12 +77,11 @@ export function ConfiguracaoBancaria() {
     if (!selectedClinic) return;
 
     try {
-      const data = await apiClient.get("/banco-config", {
-        clinic_id: selectedClinic,
-      });
+      const data = await apiClient.get(`/banco-config?clinic_id=${selectedClinic}`);
       setConfigs(Array.isArray(data) ? data : data ? [data] : []);
-    } catch (error: any) {
-      toast.error(`Erro ao carregar configurações: ${error.message}`);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error(`Erro ao carregar configurações: ${msg}`);
     }
   };
 
@@ -105,8 +105,9 @@ export function ConfiguracaoBancaria() {
         `${data.lancamentos_sincronizados} lançamentos sincronizados (${data.conciliados_automaticamente} conciliados)`,
       );
       loadConfigs();
-    } catch (error: any) {
-      toast.error(`Erro ao sincronizar: ${error.message}`);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error(`Erro ao sincronizar: ${msg}`);
     } finally {
       setLoading(false);
     }
@@ -120,8 +121,9 @@ export function ConfiguracaoBancaria() {
       await apiClient.delete(`/banco-config/${id}`);
       toast.success("Configuração excluída com sucesso");
       loadConfigs();
-    } catch (error: any) {
-      toast.error(`Erro ao excluir: ${error.message}`);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error(`Erro ao excluir: ${msg}`);
     }
   };
 

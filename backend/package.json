@@ -5,14 +5,13 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --exec tsx -r tsconfig-paths/register src/index.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
     "test": "jest",
     "lint": "ESLINT_USE_FLAT_CONFIG=false ./node_modules/.bin/eslint src --ext .ts",
     "predeploy": "node -e \"const r=(k)=>{if(!process.env[k])throw new Error('Missing env: '+k)};['JWT_SECRET','DATABASE_URL'].forEach(r);if(process.env.AUTH_ALLOW_MOCK==='true')throw new Error('AUTH_ALLOW_MOCK=true is not allowed in production');console.log('predeploy checks passed');\""
   },
   "dependencies": {
-    "@orthoplus/shared-types": "workspace:*",
     "@prisma/client": "^6.4.1",
     "tsconfig-paths": "^4.2.0",
     "axios": "^1.13.5",
@@ -31,7 +30,8 @@
     "pg": "^8.11.3",
     "prom-client": "^15.1.0",
     "winston": "^3.11.0",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "@orthoplus/shared-types": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
@@ -55,6 +55,7 @@
     "prisma": "^6.4.1",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.6",
+    "tsc-alias": "^1.8.10",
     "tsx": "^4.21.0",
     "typescript": "^5.6.3"
   },

@@ -106,12 +106,12 @@ export default function PEPPage() {
       // Criar tratamentos usando o Use Case via hook customizado
       for (const suggestion of suggestions) {
         await createTratamento({
-          // @ts-expect-error - Auto-healer: TS2322 - Type 'string | undefined' is not assigna...
+          // @ts-expect-error — TS2322
           titulo: (suggestion as { procedure?: string }).procedure,
           descricao:
             (suggestion as { clinical_notes?: string }).clinical_notes ||
             `Tratamento para o dente ${(suggestion as { tooth_number?: number }).tooth_number}`,
-          // @ts-expect-error - Auto-healer: TS2322 - Type 'number | undefined' is not assigna...
+          // @ts-expect-error — TS2322
           denteCodigo: (suggestion as { tooth_number?: number }).tooth_number,
           dataInicio: new Date(),
           createdBy: user.id,
@@ -124,7 +124,7 @@ export default function PEPPage() {
       });
 
       setActiveTab("tratamentos");
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Erro ao criar tratamentos",
         description: error instanceof Error ? error.message : "Erro",
@@ -486,7 +486,15 @@ export default function PEPPage() {
         </TabsContent>
       </Tabs>
 
-      {prontuarioId && <AssinaturaDigital onSave={(signature) => {}} />}
+      {prontuarioId && (
+        <AssinaturaDigital
+          onSave={
+            // TODO: persist digital signature to backend
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            (_signature) => {}
+          }
+        />
+      )}
     </div>
   );
 }

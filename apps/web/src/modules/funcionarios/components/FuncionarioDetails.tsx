@@ -62,7 +62,6 @@ export function FuncionarioDetails({
     }[] = [];
 
     Object.entries(funcionario.permissoes).forEach(([modulo, acoes]) => {
-      // @ts-expect-error - Auto-healer: TS18046 - 'acoes' is of type 'unknown'....
       if (acoes.length > 0) {
         const config =
           permissoesDisponiveis[modulo as keyof typeof permissoesDisponiveis];
@@ -70,7 +69,6 @@ export function FuncionarioDetails({
           permissoesAtivas.push({
             modulo,
             label: config.label,
-            // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
             acoes,
           });
         }

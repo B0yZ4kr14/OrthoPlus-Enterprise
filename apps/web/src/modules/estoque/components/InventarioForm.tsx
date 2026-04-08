@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -37,8 +36,8 @@ export function InventarioForm({
     setValue,
     watch,
   } = useForm<Inventario>({
-    resolver: zodResolver(inventarioSchema),
-    defaultValues: inventario || {
+    resolver: zodResolver(inventarioSchema) as any,
+    defaultValues: (inventario as any) || {
       numero: `INV-${format(new Date(), "yyyy")}-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`,
       data: format(new Date(), "yyyy-MM-dd"),
       status: "PLANEJADO",
@@ -85,7 +84,7 @@ export function InventarioForm({
           <Label htmlFor="tipo">Tipo de Inventário *</Label>
           <Select
             value={watch("tipo")}
-            onValueChange={(value) => setValue("tipo", value as unknown)}
+            onValueChange={(value) => setValue("tipo", value as Inventario["tipo"])}
           >
             <SelectTrigger className={errors.tipo ? "border-destructive" : ""}>
               <SelectValue placeholder="Selecione o tipo" />
@@ -130,9 +129,9 @@ export function InventarioForm({
         <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
           <p className="text-sm text-muted-foreground">
             <strong>
-              {tiposInventario.find((t) => t.value === tipo)?.label}:
+              {tiposInventario.find((t) => t.value === tipo as any)?.label}:
             </strong>{" "}
-            {tiposInventario.find((t) => t.value === tipo)?.description}
+            {tiposInventario.find((t) => t.value === tipo as any)?.description}
           </p>
         </div>
       )}

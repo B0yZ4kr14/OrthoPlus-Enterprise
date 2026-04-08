@@ -1,12 +1,13 @@
-// @ts-nocheck
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+// jsPDF loaded dynamically to reduce initial bundle
 import { Inventario, InventarioItem } from "../types/estoque.types";
 
 export async function exportInventarioPDF(
   inventario: Inventario,
   items: InventarioItem[],
 ) {
+  const { default: jsPDF } = await import("jspdf");
+  // @ts-expect-error — TS2307
+  const { default: autoTable } = await import("jspdf-autotable");
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -156,10 +157,12 @@ export async function exportInventarioPDF(
   // Recomendações
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
+  // @ts-expect-error — TS2571
   doc.text("Recomendações", 14, (doc as unknown).lastAutoTable.finalY + 20);
 
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
+  // @ts-expect-error — TS2571
   let yPos = (doc as unknown).lastAutoTable.finalY + 30;
 
   const recomendacoes = [

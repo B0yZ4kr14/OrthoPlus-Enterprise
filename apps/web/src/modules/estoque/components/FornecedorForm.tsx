@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
@@ -43,6 +42,7 @@ export function FornecedorForm({
   onCancel,
 }: FornecedorFormProps) {
   const form = useForm<Fornecedor>({
+    // @ts-expect-error — TS2322
     resolver: zodResolver(fornecedorSchema),
     defaultValues: fornecedor || {
       nome: "",
@@ -71,6 +71,7 @@ export function FornecedorForm({
 
   return (
     <Form {...form}>
+      {/* @ts-expect-error — TS2345 */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <Tabs defaultValue="dados" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
@@ -82,6 +83,7 @@ export function FornecedorForm({
           <TabsContent value="dados" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="nome"
                 render={({ field }) => (
@@ -96,6 +98,7 @@ export function FornecedorForm({
               />
 
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="razaoSocial"
                 render={({ field }) => (
@@ -110,6 +113,7 @@ export function FornecedorForm({
               />
 
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="cnpj"
                 render={({ field }) => (
@@ -124,6 +128,7 @@ export function FornecedorForm({
               />
 
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="email"
                 render={({ field }) => (
@@ -142,6 +147,7 @@ export function FornecedorForm({
               />
 
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="telefone"
                 render={({ field }) => (
@@ -156,6 +162,7 @@ export function FornecedorForm({
               />
 
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="cep"
                 render={({ field }) => (
@@ -171,6 +178,7 @@ export function FornecedorForm({
             </div>
 
             <FormField
+              // @ts-expect-error — TS2322
               control={form.control}
               name="endereco"
               render={({ field }) => (
@@ -186,6 +194,7 @@ export function FornecedorForm({
 
             <div className="grid gap-6 md:grid-cols-2">
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="cidade"
                 render={({ field }) => (
@@ -200,6 +209,7 @@ export function FornecedorForm({
               />
 
               <FormField
+                // @ts-expect-error — TS2322
                 control={form.control}
                 name="estado"
                 render={({ field }) => (
@@ -215,6 +225,7 @@ export function FornecedorForm({
             </div>
 
             <FormField
+              // @ts-expect-error — TS2322
               control={form.control}
               name="observacoes"
               render={({ field }) => (
@@ -234,6 +245,7 @@ export function FornecedorForm({
             />
 
             <FormField
+              // @ts-expect-error — TS2322
               control={form.control}
               name="ativo"
               render={({ field }) => (
@@ -268,6 +280,7 @@ export function FornecedorForm({
               </CardHeader>
               <CardContent className="space-y-6">
                 <FormField
+                  // @ts-expect-error — TS2322
                   control={form.control}
                   name="apiEnabled"
                   render={({ field }) => (
@@ -294,6 +307,7 @@ export function FornecedorForm({
                 {form.watch("apiEnabled") && (
                   <>
                     <FormField
+                      // @ts-expect-error — TS2322
                       control={form.control}
                       name="apiEndpoint"
                       render={({ field }) => (
@@ -314,6 +328,7 @@ export function FornecedorForm({
                     />
 
                     <FormField
+                      // @ts-expect-error — TS2322
                       control={form.control}
                       name="apiAuthType"
                       render={({ field }) => (
@@ -347,6 +362,7 @@ export function FornecedorForm({
                     {form.watch("apiAuthType") === "basic" && (
                       <div className="grid gap-4 md:grid-cols-2">
                         <FormField
+                          // @ts-expect-error — TS2322
                           control={form.control}
                           name="apiUsername"
                           render={({ field }) => (
@@ -360,6 +376,7 @@ export function FornecedorForm({
                           )}
                         />
                         <FormField
+                          // @ts-expect-error — TS2322
                           control={form.control}
                           name="apiPassword"
                           render={({ field }) => (
@@ -381,6 +398,7 @@ export function FornecedorForm({
 
                     {form.watch("apiAuthType") === "bearer" && (
                       <FormField
+                        // @ts-expect-error — TS2322
                         control={form.control}
                         name="apiToken"
                         render={({ field }) => (
@@ -401,6 +419,7 @@ export function FornecedorForm({
                     {form.watch("apiAuthType") === "api_key" && (
                       <div className="grid gap-4 md:grid-cols-2">
                         <FormField
+                          // @ts-expect-error — TS2322
                           control={form.control}
                           name="apiKeyHeader"
                           render={({ field }) => (
@@ -414,6 +433,7 @@ export function FornecedorForm({
                           )}
                         />
                         <FormField
+                          // @ts-expect-error — TS2322
                           control={form.control}
                           name="apiKeyValue"
                           render={({ field }) => (
@@ -434,6 +454,7 @@ export function FornecedorForm({
                     )}
 
                     <FormField
+                      // @ts-expect-error — TS2322
                       control={form.control}
                       name="apiRequestFormat"
                       render={({ field }) => (
@@ -475,6 +496,7 @@ export function FornecedorForm({
               </CardHeader>
               <CardContent>
                 <FormField
+                  // @ts-expect-error — TS2322
                   control={form.control}
                   name="autoOrderEnabled"
                   render={({ field }) => (

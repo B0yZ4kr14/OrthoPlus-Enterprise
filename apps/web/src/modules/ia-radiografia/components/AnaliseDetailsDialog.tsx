@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   Dialog,
   DialogContent,
@@ -7,16 +6,16 @@ import {
 } from "@orthoplus/core-ui/dialog";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Card } from "@orthoplus/core-ui/card";
-import { Separator } from "@orthoplus/core-ui/separator";
 import {
   AlertCircle,
   CheckCircle,
   Clock,
   XCircle,
   Lightbulb,
+  LucideIcon,
 } from "lucide-react";
-import type { AnaliseComplete } from "../types/radiografia.types";
-import { tipoRadiografiaLabels } from "../types/radiografia.types";
+import type { AnaliseComplete, ProblemaRadiografico } from "../types/radiografia.types";
+import { tipoRadiografiaLabels, tipoProblemaLabels } from "../types/radiografia.types";
 
 interface AnaliseDetailsDialogProps {
   analise: AnaliseComplete | null;
@@ -42,7 +41,7 @@ export function AnaliseDetailsDialog({
   };
 
   const getStatusIcon = (status: string) => {
-    const icons: Record<string, unknown> = {
+    const icons: Record<string, LucideIcon> = {
       PENDENTE: Clock,
       PROCESSANDO: Clock,
       CONCLUIDA: CheckCircle,
@@ -52,13 +51,13 @@ export function AnaliseDetailsDialog({
     return <Icon className="h-5 w-5" />;
   };
 
-  const getSeverityColor = (severity: string) => {
-    const colors: Record<string, string> = {
-      BAIXA: "success",
-      MEDIA: "warning",
-      ALTA: "destructive",
+  const getSeverityVariant = (severity: string): "default" | "secondary" | "destructive" | "outline" | "info" | "warning" | "success" => {
+    const variants: Record<string, "success" | "warning" | "destructive"> = {
+      LEVE: "success",
+      MODERADA: "warning",
+      GRAVE: "destructive",
     };
-    return colors[severity] || "default";
+    return variants[severity] || "default";
   };
 
   const problemas = analise.resultado_ia?.problemas_detectados || [];
@@ -74,63 +73,61 @@ export function AnaliseDetailsDialog({
         <div className="space-y-6">
           {/* Informações Básicas */}
           <Card className="p-6" depth="normal">
-            <div className="grid grid-cols-2 gap-6">
+            <dl className="grid grid-cols-2 gap-6">
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                <dt className="text-sm font-medium text-muted-foreground mb-1">
                   Paciente
-                </h3>
-                <p className="text-lg font-semibold">{analise.patient_name}</p>
+                </dt>
+                <dd className="text-lg font-semibold">{analise.patient_name || "Paciente não identificado"}</dd>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                <dt className="text-sm font-medium text-muted-foreground mb-1">
                   Data da Análise
-                </h3>
-                <p className="text-lg">
-                  {new Date(analise.created_at).toLocaleString("pt-BR")}
-                </p>
+                </dt>
+                <dd className="text-lg">
+                  {analise.created_at ? new Date(analise.created_at).toLocaleString("pt-BR") : "Data não disponível"}
+                </dd>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                <dt className="text-sm font-medium text-muted-foreground mb-1">
                   Tipo de Radiografia
-                </h3>
-                <Badge variant="outline" className="text-sm">
-                  {
-                    tipoRadiografiaLabels[
-                      analise.tipo_radiografia as keyof typeof tipoRadiografiaLabels
-                    ]
-                  }
-                </Badge>
+                </dt>
+                <dd>
+                  <Badge variant="outline" className="text-sm">
+                    {tipoRadiografiaLabels[analise.tipo_radiografia] || analise.tipo_radiografia}
+                  </Badge>
+                </dd>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">
+                <dt className="text-sm font-medium text-muted-foreground mb-1">
                   Status
-                </h3>
-                <div
+                </dt>
+                <dd
                   className={`flex items-center gap-2 ${getStatusColor(analise.status_analise)}`}
                 >
                   {getStatusIcon(analise.status_analise)}
                   <span className="font-medium capitalize">
-                    {analise.status_analise}
+                    {analise.status_analise.toLowerCase()}
                   </span>
-                </div>
+                </dd>
               </div>
-            </div>
+            </dl>
           </Card>
 
           {/* Imagem da Radiografia */}
           <Card className="p-6" depth="normal">
             <h3 className="text-lg font-semibold mb-4">Imagem Radiográfica</h3>
-            <div className="relative rounded-lg overflow-hidden bg-black/5">
+            <div className="relative rounded-lg overflow-hidden bg-black/5 flex justify-center">
               <img
                 src={analise.imagem_url}
-                alt="Radiografia"
+                alt="Radiografia clínica"
                 className="w-full h-auto max-h-[400px] object-contain"
               />
             </div>
           </Card>
 
           {/* Confiança da IA */}
-          {analise.confidence_score && analise.confidence_score > 0 && (
+          {analise.confidence_score !== undefined && analise.confidence_score > 0 && (
             <Card className="p-6 bg-primary/5 border-primary/20" depth="subtle">
               <div className="flex items-center justify-between">
                 <div>
@@ -142,7 +139,7 @@ export function AnaliseDetailsDialog({
                   </p>
                 </div>
                 <div className="text-4xl font-bold text-primary">
-                  {Math.round(analise.confidence_score)}%
+                  {Math.round(analise.confidence_score * (analise.confidence_score <= 1 ? 100 : 1))}%
                 </div>
               </div>
             </Card>
@@ -156,33 +153,29 @@ export function AnaliseDetailsDialog({
                 Problemas Detectados ({problemas.length})
               </h3>
               <div className="space-y-4">
-                {problemas.map((problema: unknown, index: number) => (
+                {problemas.map((problema: ProblemaRadiografico, index: number) => (
                   <div
-                    key={index}
+                    key={problema.id || index}
                     className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <h4 className="font-semibold">
-                          {problema.tipo || "Problema Dentário"}
+                          {tipoProblemaLabels[problema.tipo_problema] || problema.tipo_problema}
+                          {problema.dente_codigo && ` - Dente ${problema.dente_codigo}`}
                         </h4>
                         <p className="text-sm text-muted-foreground mt-1">
-                          {problema.localizacao ||
-                            "Localização não especificada"}
+                          {problema.localizacao || "Localização não especificada"}
                         </p>
                       </div>
-                      <Badge
-                        variant={
-                          getSeverityColor(problema.severidade) as unknown
-                        }
-                      >
-                        {problema.severidade || "MÉDIA"}
+                      <Badge variant={getSeverityVariant(problema.severidade)}>
+                        {problema.severidade}
                       </Badge>
                     </div>
                     {problema.descricao && (
                       <p className="text-sm mt-2">{problema.descricao}</p>
                     )}
-                    {problema.confianca && (
+                    {problema.confianca !== undefined && (
                       <div className="mt-2 text-xs text-muted-foreground">
                         Confiança: {Math.round(problema.confianca)}%
                       </div>
@@ -201,24 +194,24 @@ export function AnaliseDetailsDialog({
                 Sugestões de Tratamento ({sugestoes.length})
               </h3>
               <div className="space-y-4">
-                {sugestoes.map((sugestao: unknown, index: number) => (
+                {sugestoes.map((sugestao, index: number) => (
                   <div
                     key={index}
                     className="border rounded-lg p-4 bg-background"
                   >
-                    <h4 className="font-semibold mb-2">
-                      {sugestao.tratamento || "Tratamento Recomendado"}
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      {sugestao.descricao}
-                    </p>
-                    {sugestao.prioridade && (
-                      <div className="mt-2">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold">
+                        {sugestao.tratamento || "Tratamento Recomendado"}
+                      </h4>
+                      {sugestao.prioridade && (
                         <Badge variant="outline" className="text-xs">
                           Prioridade: {sugestao.prioridade}
                         </Badge>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {sugestao.descricao}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -236,7 +229,7 @@ export function AnaliseDetailsDialog({
               </p>
               {analise.revisado_por_dentista && (
                 <p className="text-xs text-muted-foreground mt-4">
-                  Revisado pelo dentista
+                  Revisado pelo profissional responsável
                 </p>
               )}
             </Card>

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
@@ -64,6 +63,7 @@ export default function EstoqueRequisicoesPage() {
 
   const handleSubmit = async (data: Requisicao) => {
     try {
+      // @ts-expect-error — TS2345
       await addRequisicao(data);
       toast({
         title: "Sucesso",
@@ -152,7 +152,9 @@ export default function EstoqueRequisicoesPage() {
           </CardHeader>
           <CardContent>
             <AlertasEstoque
+              // @ts-expect-error — TS2322
               alertas={alertasNaoLidos}
+              // @ts-expect-error — TS2322
               produtos={produtos}
               onMarcarLido={marcarAlertaComoLido}
               onLimparLidos={limparAlertasLidos}
@@ -231,7 +233,9 @@ export default function EstoqueRequisicoesPage() {
 
         <TabsContent value="pendentes">
           <RequisicoesList
+            // @ts-expect-error — TS2345
             requisicoes={filteredRequisicoes(requisicoesPendentes)}
+            // @ts-expect-error — TS2322
             produtos={produtos}
             onAprovar={isAdmin ? handleAprovar : undefined}
             onRejeitar={
@@ -242,14 +246,18 @@ export default function EstoqueRequisicoesPage() {
 
         <TabsContent value="aprovadas">
           <RequisicoesList
+            // @ts-expect-error — TS2345
             requisicoes={filteredRequisicoes(requisicoesAprovadas)}
+            // @ts-expect-error — TS2322
             produtos={produtos}
           />
         </TabsContent>
 
         <TabsContent value="rejeitadas">
           <RequisicoesList
+            // @ts-expect-error — TS2345
             requisicoes={filteredRequisicoes(requisicoesRejeitadas)}
+            // @ts-expect-error — TS2322
             produtos={produtos}
           />
         </TabsContent>
@@ -261,6 +269,7 @@ export default function EstoqueRequisicoesPage() {
             <DialogTitle>Nova Requisição</DialogTitle>
           </DialogHeader>
           <RequisicaoForm
+            // @ts-expect-error — TS2322
             produtos={produtos}
             onSubmit={handleSubmit}
             onCancel={() => setShowForm(false)}

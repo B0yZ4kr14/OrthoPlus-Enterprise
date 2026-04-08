@@ -54,7 +54,7 @@ export function AppointmentForm({
     setValue,
     watch,
   } = useForm<Appointment>({
-    // @ts-expect-error - Auto-healer: TS2322 - Type 'Resolver<{ pacienteId: string; pac...
+    // @ts-expect-error — TS2322
     resolver: zodResolver(appointmentSchema),
     defaultValues: appointment || {
       data: initialDate || "",
@@ -96,7 +96,7 @@ export function AppointmentForm({
   });
 
   return (
-    // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(data: { pacienteId: s...
+    // @ts-expect-error — TS2345
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Paciente */}

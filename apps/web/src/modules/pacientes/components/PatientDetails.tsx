@@ -1,4 +1,4 @@
-// @ts-expect-error - Auto-healer: TS2307 - Cannot find module '../types/patient.typ...
+// @ts-expect-error — TS2307
 import { Patient, Consulta, Prontuario } from "../types/patient.types";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";

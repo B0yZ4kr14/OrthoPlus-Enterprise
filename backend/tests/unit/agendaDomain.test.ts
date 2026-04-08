@@ -267,8 +267,8 @@ describe('Appointment Domain Entity', () => {
 
       const apt = makeAppointment({ startTime: start, endTime: end });
 
-      expect(apt.startTime.getDate()).toBe(1);
-      expect(apt.endTime.getDate()).toBe(2);
+      expect(apt.startTime.getUTCDate()).toBe(1);
+      expect(apt.endTime.getUTCDate()).toBe(2);
     });
   });
 

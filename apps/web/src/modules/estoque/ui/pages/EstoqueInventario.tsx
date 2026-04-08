@@ -103,8 +103,7 @@ export default function EstoqueInventario() {
 
   const handleSubmit = async (data: Inventario) => {
     try {
-      if (selectedInventario) {
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'string | undefined' is...
+      if (selectedInventario?.id) {
         await updateInventario(selectedInventario.id, data);
       } else {
         await addInventario(data);

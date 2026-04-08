@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { AggregateRoot } from "@/core/domain/AggregateRoot";
 import { Email } from "@/core/domain/valueObjects/Email";
 import { Phone } from "@/core/domain/valueObjects/Phone";
@@ -134,18 +133,31 @@ export class Lead extends AggregateRoot<LeadProps> {
 
   static fromPersistence(data: unknown): Lead {
     return new Lead({
+      // @ts-expect-error — TS18046
       id: data.id,
+      // @ts-expect-error — TS18046
       clinicId: data.clinic_id,
+      // @ts-expect-error — TS18046
       name: data.name,
+      // @ts-expect-error — TS18046
       email: Email.create(data.email),
+      // @ts-expect-error — TS18046
       phone: Phone.create(data.phone),
+      // @ts-expect-error — TS18046
       source: data.source,
+      // @ts-expect-error — TS18046
       status: data.status,
+      // @ts-expect-error — TS18046
       score: data.score,
+      // @ts-expect-error — TS18046
       notes: data.notes,
+      // @ts-expect-error — TS18046
       assignedTo: data.assigned_to,
+      // @ts-expect-error — TS18046
       convertedAt: data.converted_at ? new Date(data.converted_at) : undefined,
+      // @ts-expect-error — TS18046
       createdAt: new Date(data.created_at),
+      // @ts-expect-error — TS18046
       updatedAt: new Date(data.updated_at),
     });
   }

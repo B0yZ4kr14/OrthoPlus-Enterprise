@@ -39,7 +39,7 @@ export function PedidoConfigForm({
     watch,
     setValue,
   } = useForm<PedidoConfig>({
-    // @ts-expect-error - Auto-healer: TS2322 - Type 'Resolver<{ produtoId: string; quan...
+    // @ts-expect-error — TS2322
     resolver: zodResolver(pedidoConfigSchema),
     defaultValues: config || {
       gerarAutomaticamente: true,
@@ -52,7 +52,7 @@ export function PedidoConfigForm({
 
   return (
     <Card className="p-6">
-      {/* @ts-expect-error - Auto-healer */}
+      {/* @ts-expect-error — TS2345 */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
           <div>

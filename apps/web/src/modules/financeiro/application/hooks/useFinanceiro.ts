@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
@@ -314,7 +313,7 @@ export function useFinanceiro() {
     };
   };
 
-  // Load inicial e Realtime
+  /* eslint-disable react-hooks/exhaustive-deps -- load functions capture user/selectedClinic from closure */
   useEffect(() => {
     let mounted = true;
     let timeoutId: NodeJS.Timeout;
@@ -359,6 +358,7 @@ export function useFinanceiro() {
       };
     }
   }, [user, selectedClinic]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return {
     loading,
@@ -390,12 +390,14 @@ export function useFinanceiro() {
         ...c,
         type: "RECEITA" as const,
         status: c.status?.toUpperCase() as unknown,
+        // @ts-expect-error — TS2571
         category: (c as unknown).categoria || "OUTROS",
       })),
       ...contasPagar.map((c) => ({
         ...c,
         type: "DESPESA" as const,
         status: c.status?.toUpperCase() as unknown,
+        // @ts-expect-error — TS2571
         category: (c as unknown).categoria || "OUTROS",
       })),
     ].sort(
@@ -405,9 +407,12 @@ export function useFinanceiro() {
     ),
 
     addTransaction: async (transaction: unknown) => {
+      // @ts-expect-error — TS18046
       if (transaction.tipo === "RECEITA") {
+        // @ts-expect-error — TS2345
         return addContaReceber(transaction);
       } else {
+        // @ts-expect-error — TS2345
         return addContaPagar(transaction);
       }
     },
@@ -416,8 +421,10 @@ export function useFinanceiro() {
       // Tentar atualizar em contas a receber primeiro
       const isReceber = contasReceber.some((c) => c.id === id);
       if (isReceber) {
+        // @ts-expect-error — TS2345
         return updateContaReceber(id, updates);
       } else {
+        // @ts-expect-error — TS2345
         return updateContaPagar(id, updates);
       }
     },
@@ -513,6 +520,7 @@ export function useFinanceiro() {
       contasReceber
         .filter((c) => c.status === "pago")
         .forEach((c) => {
+          // @ts-expect-error — TS2571
           const category = (c as unknown).categoria || "OUTROS";
           categories[category] =
             (categories[category] || 0) + (c.valor_pago || 0);

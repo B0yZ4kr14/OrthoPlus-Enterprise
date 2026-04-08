@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card } from "@orthoplus/core-ui/card";
 import {
@@ -250,6 +249,7 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
             fill="hsl(var(--primary))"
             radius={[2, 2, 2, 2]}
             shape={(props: unknown) => {
+              // @ts-expect-error — TS2339
               const { x, y, width, height, payload } = props;
               return (
                 <rect

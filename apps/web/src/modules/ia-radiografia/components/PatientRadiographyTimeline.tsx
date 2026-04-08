@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect, useMemo } from "react";
 import {
   Calendar,
@@ -30,18 +29,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
-
-interface AnaliseComplete {
-  id: string;
-  patient_id: string;
-  tipo_radiografia: string;
-  status_analise: string;
-  problemas_detectados: number;
-  confidence_score: number;
-  created_at: string;
-  imagem_url: string;
-  resultado_ia?: unknown;
-}
+import type { AnaliseComplete } from "../types/radiografia.types";
 
 interface TimelineData {
   data: string;
@@ -51,10 +39,15 @@ interface TimelineData {
   status: string;
 }
 
+interface Patient {
+  id: string;
+  nome: string;
+}
+
 export const PatientRadiographyTimeline = () => {
   const { selectedClinic } = useAuth();
   const [analises, setAnalises] = useState<AnaliseComplete[]>([]);
-  const [patients, setPatients] = useState<unknown[]>([]);
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
@@ -66,14 +59,14 @@ export const PatientRadiographyTimeline = () => {
         setLoading(true);
 
         // Carregar pacientes
-        const patientsData = await apiClient.get<Record<string, any>[]>("/pacientes", {
+        const patientsData = await apiClient.get<Patient[]>("/pacientes", {
           params: { fields: "id,nome" },
         });
 
         setPatients(patientsData || []);
 
         // Carregar todas as análises
-        const analisesData = await apiClient.get<Record<string, any>[]>(
+        const analisesData = await apiClient.get<AnaliseComplete[]>(
           "/ia/analises-radiograficas",
         );
 
@@ -105,17 +98,25 @@ export const PatientRadiographyTimeline = () => {
 
   const patientAnalises = useMemo(() => {
     if (!selectedPatientId) return [];
-    return analises.filter((a) => a.patient_id === selectedPatientId);
+    return analises
+      .filter((a) => a.patient_id === selectedPatientId)
+      .sort((a, b) => {
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return dateA - dateB;
+      });
   }, [analises, selectedPatientId]);
 
   const timelineData: TimelineData[] = useMemo(() => {
     return patientAnalises.map((analise) => ({
-      data: new Date(analise.created_at).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "short",
-      }),
+      data: analise.created_at
+        ? new Date(analise.created_at).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "short",
+          })
+        : "--/--",
       problemas: analise.problemas_detectados || 0,
-      confianca: Math.round((analise.confidence_score || 0) * 100),
+      confianca: Math.round((analise.confidence_score || 0) * (analise.confidence_score && analise.confidence_score <= 1 ? 100 : 1)),
       tipo: analise.tipo_radiografia,
       status: analise.status_analise,
     }));
@@ -144,7 +145,7 @@ export const PatientRadiographyTimeline = () => {
     return "Estável";
   };
 
-  const getTendenciaVariant = () => {
+  const getTendenciaVariant = (): "default" | "secondary" | "destructive" | "outline" | "info" | "warning" | "success" => {
     if (tendenciaProblemas === "aumentando") return "destructive";
     if (tendenciaProblemas === "diminuindo") return "success";
     return "outline";
@@ -210,14 +211,14 @@ export const PatientRadiographyTimeline = () => {
         </div>
 
         <div>
-          <label className="text-sm font-medium mb-2 block">
+          <label htmlFor="patient-select" className="text-sm font-medium mb-2 block">
             Selecione o Paciente
           </label>
           <Select
             value={selectedPatientId}
             onValueChange={setSelectedPatientId}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger id="patient-select" className="w-full">
               <SelectValue placeholder="Selecione um paciente" />
             </SelectTrigger>
             <SelectContent>
@@ -240,51 +241,56 @@ export const PatientRadiographyTimeline = () => {
         ) : (
           <>
             {/* Gráfico de Tendência */}
-            <div>
+            <div className="bg-card rounded-lg p-4 border border-border/50">
               <h4 className="text-sm font-semibold mb-4">
                 Gráfico de Tendência
               </h4>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={timelineData}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-muted"
-                  />
-                  <XAxis
-                    dataKey="data"
-                    className="text-xs"
-                    tick={{ fill: "hsl(var(--muted-foreground))" }}
-                  />
-                  <YAxis
-                    className="text-xs"
-                    tick={{ fill: "hsl(var(--muted-foreground))" }}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--popover))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="problemas"
-                    name="Problemas Detectados"
-                    stroke="hsl(var(--destructive))"
-                    strokeWidth={2}
-                    dot={{ fill: "hsl(var(--destructive))", r: 4 }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="confianca"
-                    name="Confiança da IA (%)"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth={2}
-                    dot={{ fill: "hsl(var(--primary))", r: 4 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={timelineData}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      className="stroke-muted/30"
+                    />
+                    <XAxis
+                      dataKey="data"
+                      className="text-[10px] uppercase tracking-wider"
+                      tick={{ fill: "hsl(var(--muted-foreground))" }}
+                    />
+                    <YAxis
+                      className="text-[10px]"
+                      tick={{ fill: "hsl(var(--muted-foreground))" }}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--popover))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                        fontSize: "12px",
+                      }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                    <Line
+                      type="monotone"
+                      dataKey="problemas"
+                      name="Problemas Detectados"
+                      stroke="hsl(var(--destructive))"
+                      strokeWidth={3}
+                      dot={{ fill: "hsl(var(--destructive))", r: 4, strokeWidth: 2 }}
+                      activeDot={{ r: 6, strokeWidth: 0 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="confianca"
+                      name="Confiança da IA (%)"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={3}
+                      dot={{ fill: "hsl(var(--primary))", r: 4, strokeWidth: 2 }}
+                      activeDot={{ r: 6, strokeWidth: 0 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             {/* Lista de Análises */}
@@ -292,57 +298,61 @@ export const PatientRadiographyTimeline = () => {
               <h4 className="text-sm font-semibold mb-4">
                 Histórico Detalhado
               </h4>
-              <div className="space-y-4">
-                {patientAnalises.map((analise, index) => (
+              <div className="space-y-3">
+                {[...patientAnalises].reverse().map((analise, index) => (
                   <div
                     key={analise.id}
-                    className="flex items-center gap-4 p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+                    className="flex items-center gap-4 p-4 border rounded-xl hover:bg-accent/30 transition-all group"
                   >
-                    <div className="flex-shrink-0 text-center">
-                      <div className="text-xs text-muted-foreground">
-                        #{index + 1}
+                    <div className="flex-shrink-0 text-center w-16">
+                      <div className="text-[10px] text-muted-foreground font-mono uppercase">
+                        Ref #{patientAnalises.length - index}
                       </div>
-                      <div className="text-sm font-semibold">
-                        {new Date(analise.created_at).toLocaleDateString(
+                      <div className="text-sm font-bold text-foreground">
+                        {analise.created_at ? new Date(analise.created_at).toLocaleDateString(
                           "pt-BR",
                           { day: "2-digit", month: "short" },
-                        )}
+                        ) : "--/--"}
                       </div>
                     </div>
-                    <div className="h-16 w-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                    <div className="h-14 w-14 rounded-lg overflow-hidden bg-muted border border-border/50 flex-shrink-0">
                       <img
                         src={analise.imagem_url}
-                        alt="Radiografia"
-                        className="h-full w-full object-cover"
+                        alt="Miniatura Radiográfica"
+                        className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge variant="outline" className="text-xs">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <Badge variant="secondary" className="text-[10px] h-5 px-1.5">
                           {analise.tipo_radiografia}
                         </Badge>
                         <Badge
                           variant={
-                            analise.status_analise === "REVISADO"
+                            analise.status_analise === "CONCLUIDA"
                               ? "success"
                               : "warning"
                           }
-                          className="text-xs"
+                          className="text-[10px] h-5 px-1.5"
                         >
                           {analise.status_analise}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <span>
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
                           <strong className="text-foreground">
-                            {analise.problemas_detectados}
+                            {analise.problemas_detectados || 0}
                           </strong>{" "}
-                          problema(s)
+                          anomalia(s)
                         </span>
-                        <span>
+                        <span className="flex items-center gap-1">
                           Confiança:{" "}
-                          <strong className="text-foreground">
-                            {Math.round((analise.confidence_score || 0) * 100)}%
+                          <strong className={`font-bold ${
+                            (analise.confidence_score || 0) > 0.8 || (analise.confidence_score || 0) > 80 
+                              ? "text-success" 
+                              : "text-warning"
+                          }`}>
+                            {Math.round((analise.confidence_score || 0) * (analise.confidence_score && analise.confidence_score <= 1 ? 100 : 1))}%
                           </strong>
                         </span>
                       </div>
@@ -353,40 +363,40 @@ export const PatientRadiographyTimeline = () => {
             </div>
 
             {/* Estatísticas Resumidas */}
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">
+            <div className="grid grid-cols-3 gap-4 pt-6 mt-2 border-t border-border/50">
+              <div className="text-center p-3 rounded-lg bg-accent/20">
+                <div className="text-2xl font-black text-primary">
                   {patientAnalises.length}
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  Total de Análises
+                <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Exames
                 </div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-destructive">
+              <div className="text-center p-3 rounded-lg bg-accent/20">
+                <div className="text-2xl font-black text-destructive">
                   {patientAnalises.reduce(
                     (sum, a) => sum + (a.problemas_detectados || 0),
                     0,
                   )}
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  Problemas Detectados
+                <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Anomalias
                 </div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-success">
-                  {Math.round(
+              <div className="text-center p-3 rounded-lg bg-accent/20">
+                <div className="text-2xl font-black text-success">
+                  {patientAnalises.length > 0 ? Math.round(
                     (patientAnalises.reduce(
                       (sum, a) => sum + (a.confidence_score || 0),
                       0,
                     ) /
-                      patientAnalises.length) *
+                      (patientAnalises.length * (patientAnalises[0].confidence_score && patientAnalises[0].confidence_score > 1 ? 100 : 1))) *
                       100,
-                  )}
+                  ) : 0}
                   %
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  Confiança Média
+                <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Precisão
                 </div>
               </div>
             </div>

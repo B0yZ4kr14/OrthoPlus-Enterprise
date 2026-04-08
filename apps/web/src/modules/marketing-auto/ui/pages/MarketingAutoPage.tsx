@@ -36,7 +36,7 @@ export function MarketingAutoPage() {
 
   const handleCreateCampaign = async (data: unknown) => {
     try {
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       await createCampaign(data);
       setShowCreateDialog(false);
       toast.success("Campanha criada com sucesso!");

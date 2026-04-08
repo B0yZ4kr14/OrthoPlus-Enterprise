@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Performance Monitoring Utilities
  * Ferramentas para monitorar e otimizar performance da aplicação
@@ -20,11 +19,14 @@ export function reportWebVitals(metric: unknown) {
 
   // Integração com analytics (Google Analytics, etc)
   if (window.gtag) {
+    // @ts-expect-error — TS18046
     window.gtag("event", metric.name, {
       value: Math.round(
+        // @ts-expect-error — TS18046
         metric.name === "CLS" ? metric.value * 1000 : metric.value,
       ),
       event_category: "Web Vitals",
+      // @ts-expect-error — TS18046
       event_label: metric.id,
       non_interaction: true,
     });
@@ -93,6 +95,7 @@ export function monitorResourceLoading() {
 // Memory Usage Monitor
 export function monitorMemoryUsage() {
   if ("memory" in performance) {
+    // @ts-expect-error — TS2571
     const memory = (performance as unknown).memory;
 
     return {

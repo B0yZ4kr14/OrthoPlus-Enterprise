@@ -57,9 +57,10 @@ export function ForgotPassword({ onBack }: ForgotPasswordProps) {
       toast.success("Email enviado!", {
         description: "Verifique sua caixa de entrada para redefinir sua senha.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       toast.error("Erro ao enviar email", {
-        description: error.message || "Tente novamente mais tarde.",
+        description: _e.message || "Tente novamente mais tarde.",
       });
     } finally {
       setIsLoading(false);

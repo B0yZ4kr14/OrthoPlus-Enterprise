@@ -34,7 +34,7 @@ const MOCK_CATEGORIAS: Categoria[] = [
 ];
 
 const MOCK_FORNECEDORES: Fornecedor[] = [
-  // @ts-expect-error - Auto-healer: TS2739 - Type '{ id: string; nome: string; razaoS...
+  // @ts-expect-error — TS2739
   {
     id: "1",
     nome: "Dental Supply Ltda",
@@ -49,7 +49,7 @@ const MOCK_FORNECEDORES: Fornecedor[] = [
     ativo: true,
     createdAt: new Date().toISOString(),
   },
-  // @ts-expect-error - Auto-healer: TS2739 - Type '{ id: string; nome: string; razaoS...
+  // @ts-expect-error — TS2739
   {
     id: "2",
     nome: "Odonto Distribuidora",

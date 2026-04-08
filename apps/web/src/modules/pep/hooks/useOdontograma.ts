@@ -71,13 +71,13 @@ export const useOdontograma = (prontuarioId: string) => {
 
           if ((tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).surfaces || (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).pep_tooth_surfaces) {
             const surfaceList = (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).surfaces || (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).pep_tooth_surfaces;
-            // @ts-expect-error - Auto-healer: TS18048 - 'surfaceList' is possibly 'undefined'....
+            // @ts-expect-error — TS18048
             surfaceList.forEach((surface: unknown) => {
               surfaces[(surface as { surface: string }).surface] = (surface as { status: string }).status;
             });
           }
 
-          // @ts-expect-error - Auto-healer: TS7015 - Element implicitly has an 'any' type bec...
+          // @ts-expect-error — TS7015
           processedTeeth[(tooth as { tooth_number: string }).tooth_number] = {
             number: (tooth as { tooth_number: string }).tooth_number,
             status: (tooth as { status: string }).status,
@@ -96,7 +96,7 @@ export const useOdontograma = (prontuarioId: string) => {
 
       // Processar histórico
       if (historyData) {
-        // @ts-expect-error - Auto-healer: TS2322 - Type '{ id: string; timestamp: string; t...
+        // @ts-expect-error — TS2322
         const processedHistory: OdontogramaHistoryEntry[] = historyData.map(
           (entry: Record<string, any>) => ({
             id: (entry as { id: string }).id,
@@ -108,7 +108,7 @@ export const useOdontograma = (prontuarioId: string) => {
         );
         setHistory(processedHistory);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao carregar odontograma:", error);
       toast.error("Erro ao carregar dados do odontograma");
     } finally {
@@ -136,7 +136,7 @@ export const useOdontograma = (prontuarioId: string) => {
 
         // Recarregar histórico
         await loadData();
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Erro ao adicionar ao histórico:", error);
         toast.error("Erro ao salvar histórico");
       }
@@ -175,7 +175,7 @@ export const useOdontograma = (prontuarioId: string) => {
         }
 
         toast.success("Dente atualizado com sucesso");
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Erro ao atualizar dente:", error);
         toast.error("Erro ao atualizar dente");
       }
@@ -223,7 +223,7 @@ export const useOdontograma = (prontuarioId: string) => {
         }
 
         toast.success("Superfície atualizada com sucesso");
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Erro ao atualizar superfície:", error);
         toast.error("Erro ao atualizar superfície");
       }
@@ -251,7 +251,7 @@ export const useOdontograma = (prontuarioId: string) => {
         }));
 
         toast.success("Notas atualizadas");
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Erro ao atualizar notas:", error);
         toast.error("Erro ao atualizar notas");
       }
@@ -287,7 +287,7 @@ export const useOdontograma = (prontuarioId: string) => {
       setTeethData(resetData);
       await addHistoryEntry(ALL_TEETH, "Odontograma resetado");
       toast.success("Odontograma resetado");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao resetar:", error);
       toast.error("Erro ao resetar odontograma");
     }

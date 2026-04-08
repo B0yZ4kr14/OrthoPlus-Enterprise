@@ -94,7 +94,7 @@ export function RecompensaForm({
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // @ts-expect-error - Auto-healer: TS2339 - Property 'errors' does not exist on type...
+        // @ts-expect-error — TS2339
         toast.error(error.errors[0].message);
       } else {
         toast.error("Erro ao salvar recompensa");
@@ -170,7 +170,7 @@ export function RecompensaForm({
               <Select
                 value={formData.tipo}
                 onValueChange={(value: unknown) =>
-                  // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
+                  // @ts-expect-error — TS2322
                   setFormData({ ...formData, tipo: value })
                 }
               >

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Plus, FileText, Send, CheckCircle } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -25,8 +24,11 @@ export default function Orcamentos() {
   const {
     orcamentos,
     loading,
+    // @ts-expect-error — TS2339
     sendOrcamento,
+    // @ts-expect-error — TS2339
     approveOrcamento,
+    // @ts-expect-error — TS2339
     convertToTreatmentPlan,
   } = useOrcamentos();
   const [selectedOrcamento, setSelectedOrcamento] =
@@ -83,6 +85,7 @@ export default function Orcamentos() {
           <div className="text-3xl font-bold mt-2 text-warning">
             {
               orcamentos.filter(
+                // @ts-expect-error — TS2367
                 (o) => o.status === "ENVIADO" || o.status === "VISUALIZADO",
               ).length
             }
@@ -98,6 +101,7 @@ export default function Orcamentos() {
           <div className="text-sm text-muted-foreground">Valor Total</div>
           <div className="text-3xl font-bold mt-2">
             {formatCurrency(
+              // @ts-expect-error — TS2339
               orcamentos.reduce((sum, o) => sum + o.valor_final, 0),
             )}
           </div>
@@ -120,23 +124,29 @@ export default function Orcamentos() {
               <div
                 key={orcamento.id}
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
+                // @ts-expect-error — TS2345
                 onClick={() => setSelectedOrcamento(orcamento)}
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-semibold">{orcamento.titulo}</h3>
+                    {/* @ts-expect-error — TS2322 */}
                     <Badge variant={getStatusVariant(orcamento.status)}>
                       {statusLabels[orcamento.status]}
                     </Badge>
                     <Badge variant="outline">
+                      {/* @ts-expect-error — TS2551 */}
                       {tipoPlanoLabels[orcamento.tipo_plano]}
                     </Badge>
                   </div>
                   <div className="text-sm text-muted-foreground space-y-1">
+                    {/* @ts-expect-error — TS2551 */}
                     <p>Número: {orcamento.numero_orcamento}</p>
+                    {/* @ts-expect-error — TS2339 */}
                     <p>Paciente: {orcamento.patient_name || "N/A"}</p>
                     <p>
                       Validade:{" "}
+                      {/* @ts-expect-error — TS2339 */}
                       {new Date(orcamento.data_validade).toLocaleDateString(
                         "pt-BR",
                       )}
@@ -146,10 +156,13 @@ export default function Orcamentos() {
                 <div className="text-right space-y-2">
                   <div>
                     <div className="text-2xl font-bold">
+                      {/* @ts-expect-error — TS2339 */}
                       {formatCurrency(orcamento.valor_final)}
                     </div>
+                    {/* @ts-expect-error — TS2551 */}
                     {orcamento.desconto_valor > 0 && (
                       <div className="text-sm text-muted-foreground line-through">
+                        {/* @ts-expect-error — TS2551 */}
                         {formatCurrency(orcamento.valor_total)}
                       </div>
                     )}
@@ -168,7 +181,9 @@ export default function Orcamentos() {
                         Enviar
                       </Button>
                     )}
+                    {/* @ts-expect-error — TS2367 */}
                     {(orcamento.status === "ENVIADO" ||
+                      // @ts-expect-error — TS2367
                       orcamento.status === "VISUALIZADO") && (
                       <Button
                         size="sm"

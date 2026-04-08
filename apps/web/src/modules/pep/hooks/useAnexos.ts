@@ -38,9 +38,11 @@ export function useAnexos(prontuarioId: string | null, clinicId: string) {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     fetchAnexos();
   }, [prontuarioId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const uploadAnexo = async (
     file: File,

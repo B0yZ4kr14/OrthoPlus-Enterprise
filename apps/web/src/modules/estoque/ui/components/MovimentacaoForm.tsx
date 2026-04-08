@@ -79,7 +79,7 @@ export const MovimentacaoForm = ({
           await registrarSaida(baseInput);
           break;
         case "AJUSTE":
-          // @ts-expect-error - Auto-healer: TS2345 - Argument of type '{ novaQuantidade: numb...
+          // @ts-expect-error — TS2345
           await ajustarEstoque({
             ...baseInput,
             novaQuantidade: data.quantidade,

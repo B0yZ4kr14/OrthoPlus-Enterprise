@@ -83,11 +83,11 @@ export default function AuditTrailViewer() {
     };
 
     const config = variants[level] || variants.LOW;
-    // @ts-expect-error - Auto-healer: TS18046 - 'config' is of type 'unknown'....
+    // @ts-expect-error — TS18046
     const Icon = config.icon;
 
     return (
-      // @ts-expect-error - Auto-healer: TS18046 - 'config' is of type 'unknown'....
+      // @ts-expect-error — TS18046
       <Badge variant={config.variant} className="gap-1">
         <Icon className="h-3 w-3" />
         {level}

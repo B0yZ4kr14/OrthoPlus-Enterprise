@@ -15,8 +15,9 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
         throw new Error("Nenhum dado retornado ao salvar atividade");
 
       return AtividadeMapper.toDomain(savedData);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar atividade: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar atividade: ${_e.message}`);
     }
   }
 
@@ -24,12 +25,13 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
     try {
       const data = await apiClient.get<Record<string, any>>(`/crm/atividades/${id}`);
       if (!data) return null;
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'Record<string, any>' i...
+      // @ts-expect-error — TS2345
       return AtividadeMapper.toDomain(data);
-    } catch (error: any) {
-      if (error.response?.status === 404 || error.response?.status === 406)
+    } catch (error: unknown) {
+      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
-      throw new Error(`Erro ao buscar atividade: ${error.message}`);
+      throw new Error(`Erro ao buscar atividade: ${_e.message}`);
     }
   }
 
@@ -38,10 +40,11 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
         params: { lead_id: leadId },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(raw: { activity_type:...
+      // @ts-expect-error — TS2345
       return data?.map(AtividadeMapper.toDomain) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar atividades do lead: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar atividades do lead: ${_e.message}`);
     }
   }
 
@@ -50,11 +53,12 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
         params: { assigned_to: responsavelId },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(raw: { activity_type:...
+      // @ts-expect-error — TS2345
       return data?.map(AtividadeMapper.toDomain) ?? [];
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(
-        `Erro ao buscar atividades do responsável: ${error.message}`,
+        `Erro ao buscar atividades do responsável: ${_e.message}`,
       );
     }
   }
@@ -77,10 +81,11 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
           end_date: endOfDay.toISOString(),
         },
       });
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type '(raw: { activity_type:...
+      // @ts-expect-error — TS2345
       return activities?.map(AtividadeMapper.toDomain) ?? [];
-    } catch (error: any) {
-      throw new Error(`Erro ao buscar atividades agendadas: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao buscar atividades agendadas: ${_e.message}`);
     }
   }
 
@@ -98,16 +103,18 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
         throw new Error("Nenhum dado retornado ao atualizar atividade");
 
       return AtividadeMapper.toDomain(updatedData);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar atividade: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar atividade: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/crm/atividades/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar atividade: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar atividade: ${_e.message}`);
     }
   }
 }

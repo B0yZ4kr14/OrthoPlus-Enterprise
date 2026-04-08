@@ -65,6 +65,7 @@ describe("assertPromise", () => {
   });
 
   it("throws TypeError when given a function (not a Promise)", () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     expect(() => assertPromise(async () => {}, "function test")).toThrow(
       TypeError,
     );
@@ -100,9 +101,8 @@ describe("withTimeout", () => {
   it("rejects when the promise exceeds the timeout", async () => {
     vi.useFakeTimers();
 
-    const neverResolves = new Promise<void>(() => {
-      // intentionally never resolves
-    });
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const neverResolves = new Promise<void>(() => {});
 
     const raced = withTimeout(neverResolves, 500, "slow-operation");
 
@@ -114,6 +114,7 @@ describe("withTimeout", () => {
   it("error message includes the label", async () => {
     vi.useFakeTimers();
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const neverResolves = new Promise<void>(() => {});
     const raced = withTimeout(neverResolves, 100, "custom-label");
     vi.advanceTimersByTime(200);

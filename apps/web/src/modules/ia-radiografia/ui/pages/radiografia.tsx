@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { RadiografiaUpload } from "@/modules/ia/presentation/components/RadiografiaUpload";
@@ -15,13 +14,21 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 import { Brain, History } from "lucide-react";
+import { AnaliseComplete } from "@/modules/ia-radiografia/types/radiografia.types";
+
+interface SelectedAnaliseState {
+  imagemUrl: string;
+  resultadoIA: AnaliseComplete["resultado_ia"];
+  confidence: number;
+  tipo: string;
+}
 
 const RadiografiaPage = () => {
   const { id: patientIdFromUrl } = useParams();
   const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedAnalise, setSelectedAnalise] = useState<unknown>(null);
-  const [analises, setAnalises] = useState<unknown[]>([]);
+  const [selectedAnalise, setSelectedAnalise] = useState<SelectedAnaliseState | null>(null);
+  const [analises, setAnalises] = useState<AnaliseComplete[]>([]);
 
   const handleUpload = async (file: File, tipo: string) => {
     if (!user) {
@@ -43,7 +50,7 @@ const RadiografiaPage = () => {
       const imageBase64 = await base64Promise;
 
       // Chamar Edge Function
-      const data = await apiClient.post<unknown>("/ia/analyze-radiografia", {
+      const data = await apiClient.post<AnaliseComplete>("/ia/analyze-radiografia", {
         imageBase64,
         tipoRadiografia: tipo,
         patientId: patientIdFromUrl || "demo-patient-id", // Usa ID da URL se disponível
@@ -55,20 +62,23 @@ const RadiografiaPage = () => {
       loadAnalises();
 
       // Abrir resultado
-      setSelectedAnalise({
-        imagemUrl: data.imagemUrl,
-        resultadoIA: data.resultadoIA,
-        confidence: data.confidence,
-        tipo,
-      });
-    } catch (error: any) {
+      if (data) {
+        setSelectedAnalise({
+          imagemUrl: data.imagem_url,
+          resultadoIA: data.resultado_ia,
+          confidence: data.confidence_score || 0,
+          tipo,
+        });
+      }
+    } catch (error: unknown) {
+      const _e = error as { message?: string };
       console.error("Erro na análise:", error);
-      if (error.message.includes("429")) {
+      if (_e.message?.includes("429")) {
         toast.error("Rate limit excedido. Aguarde alguns minutos.");
-      } else if (error.message.includes("402")) {
+      } else if (_e.message?.includes("402")) {
         toast.error("Créditos insuficientes no workspace Lovable.");
       } else {
-        toast.error(error.message || "Erro ao analisar radiografia");
+        toast.error(_e.message || "Erro ao analisar radiografia");
       }
     } finally {
       setIsUploading(false);
@@ -77,21 +87,21 @@ const RadiografiaPage = () => {
 
   const loadAnalises = async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(
+      const data = await apiClient.get<AnaliseComplete[]>(
         "/ia/analises-radiograficas?limit=20",
       );
 
       setAnalises(data || []);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Erro ao carregar análises:", error);
     }
   };
 
-  const handleViewAnalise = (analise: unknown) => {
+  const handleViewAnalise = (analise: AnaliseComplete) => {
     setSelectedAnalise({
       imagemUrl: analise.imagem_url,
       resultadoIA: analise.resultado_ia,
-      confidence: analise.confidence_score,
+      confidence: analise.confidence_score || 0,
       tipo: analise.tipo_radiografia,
     });
   };

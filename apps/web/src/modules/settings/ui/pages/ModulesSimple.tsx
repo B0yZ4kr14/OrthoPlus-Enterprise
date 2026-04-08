@@ -151,7 +151,7 @@ const ModulesSimple = memo(function ModulesSimple() {
       }
 
       await fetchModules();
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error("Erro ao alternar módulo", error, { moduleKey });
       toast.error(error instanceof Error ? error.message : "Erro ao alterar módulo");
     } finally {
@@ -170,7 +170,7 @@ const ModulesSimple = memo(function ModulesSimple() {
       setRoadmapData(data);
       setShowRoadmap(true);
       toast.success("Roadmap de adoção gerado com sucesso!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error("Erro ao gerar roadmap", error);
       toast.error(error instanceof Error ? error.message : "Erro ao gerar roadmap de adoção");
     } finally {

@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { useAuthAPI } from "@/contexts/AuthContextAPI";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
@@ -60,13 +59,13 @@ export default function EstoqueRequisicoes() {
     id: null,
   });
 
-  const { user: authUser } = useAuthAPI();
-  const currentUser = authUser?.full_name ?? "Usuário Atual";
-  const isAdmin =
-    authUser?.app_role === "ADMIN" || authUser?.app_role === "ROOT";
+  const { user: authUser, isAdmin } = useAuth();
+  // @ts-expect-error — TS2339
+  const currentUser = (authUser?.user_metadata?.full_name as string) ?? "Usuário Atual";
 
   const handleSubmit = async (data: Requisicao) => {
     try {
+      // @ts-expect-error — TS2345
       await addRequisicao(data);
       toast({
         title: "Sucesso",
@@ -244,7 +243,9 @@ export default function EstoqueRequisicoes() {
                   placeholder="Buscar requisições..."
                 />
                 <RequisicoesList
+                  // @ts-expect-error — TS2345
                   requisicoes={filteredRequisicoes(requisicoesPendentes)}
+                  // @ts-expect-error — TS2322
                   produtos={produtos}
                   canApprove={isAdmin}
                   onAprovar={handleAprovar}
@@ -271,7 +272,9 @@ export default function EstoqueRequisicoes() {
                   placeholder="Buscar requisições..."
                 />
                 <RequisicoesList
+                  // @ts-expect-error — TS2345
                   requisicoes={filteredRequisicoes(requisicoesAprovadas)}
+                  // @ts-expect-error — TS2322
                   produtos={produtos}
                 />
               </div>
@@ -295,7 +298,9 @@ export default function EstoqueRequisicoes() {
                   placeholder="Buscar requisições..."
                 />
                 <RequisicoesList
+                  // @ts-expect-error — TS2345
                   requisicoes={filteredRequisicoes(requisicoesRejeitadas)}
+                  // @ts-expect-error — TS2322
                   produtos={produtos}
                 />
               </div>
@@ -313,7 +318,9 @@ export default function EstoqueRequisicoes() {
             </CardHeader>
             <CardContent>
               <AlertasEstoque
+                // @ts-expect-error — TS2322
                 alertas={alertas}
+                // @ts-expect-error — TS2322
                 produtos={produtos}
                 onMarcarLido={marcarAlertaComoLido}
                 onLimparLidos={limparAlertasLidos}
@@ -329,6 +336,7 @@ export default function EstoqueRequisicoes() {
             <DialogTitle>Nova Requisição de Estoque</DialogTitle>
           </DialogHeader>
           <RequisicaoForm
+            // @ts-expect-error — TS2322
             produtos={produtos}
             onSubmit={handleSubmit}
             onCancel={() => setShowForm(false)}

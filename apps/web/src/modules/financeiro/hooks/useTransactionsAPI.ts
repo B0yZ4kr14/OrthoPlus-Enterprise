@@ -42,7 +42,7 @@ export function useTransactionsAPI() {
 
       // Converter dados da API para formato frontend
       const transformed = response.transactions.map((apiTx: unknown) => {
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         const frontendTx = TransactionAdapter.toFrontend(apiTx);
 
         return {
@@ -67,9 +67,10 @@ export function useTransactionsAPI() {
       });
 
       setTransactions(transformed);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error loading transactions:", error);
-      toast.error("Erro ao carregar transações: " + error.message);
+      toast.error("Erro ao carregar transações: " + _e.message);
     } finally {
       setLoading(false);
     }
@@ -98,9 +99,10 @@ export function useTransactionsAPI() {
 
       toast.success("Transação criada com sucesso!");
       await loadTransactions();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error creating transaction:", error);
-      toast.error("Erro ao criar transação: " + error.message);
+      toast.error("Erro ao criar transação: " + _e.message);
       throw error;
     }
   };
@@ -115,9 +117,10 @@ export function useTransactionsAPI() {
 
       toast.success("Transação atualizada com sucesso!");
       await loadTransactions();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error updating transaction:", error);
-      toast.error("Erro ao atualizar transação: " + error.message);
+      toast.error("Erro ao atualizar transação: " + _e.message);
       throw error;
     }
   };
@@ -127,9 +130,10 @@ export function useTransactionsAPI() {
       await apiClient.delete(`/financeiro/transactions/${id}`);
       toast.success("Transação removida com sucesso!");
       await loadTransactions();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Error deleting transaction:", error);
-      toast.error("Erro ao remover transação: " + error.message);
+      toast.error("Erro ao remover transação: " + _e.message);
       throw error;
     }
   };

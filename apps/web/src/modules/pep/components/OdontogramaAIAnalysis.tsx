@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import {
   Card,
@@ -73,14 +72,19 @@ export const OdontogramaAIAnalysis = ({
         prontuarioId,
       });
 
+      // @ts-expect-error — TS18046
       if (data.suggestions && data.suggestions.length > 0) {
+        // @ts-expect-error — TS18046
         setSuggestions(data.suggestions);
+        // @ts-expect-error — TS18046
         setPatientName(data.patient_name);
         toast.success(
+          // @ts-expect-error — TS18046
           `Análise concluída! ${data.suggestions.length} sugestões de tratamento geradas.`,
         );
       } else {
         toast.info(
+          // @ts-expect-error — TS18046
           data.message || "Nenhuma sugestão de tratamento necessária.",
         );
       }
@@ -147,6 +151,7 @@ export const OdontogramaAIAnalysis = ({
         dentistId: "mock-dentist-id", // Em produção, seria selecionado pelo usuário
       });
 
+      // @ts-expect-error — TS18046
       toast.success(data.message || "Consultas agendadas automaticamente!");
       setSuggestions([]);
       setSelectedSuggestions(new Set());
@@ -264,6 +269,7 @@ export const OdontogramaAIAnalysis = ({
                       </TableCell>
                       <TableCell>
                         <Badge
+                          // @ts-expect-error — TS2322
                           variant={config.color as unknown}
                           className="gap-1"
                         >

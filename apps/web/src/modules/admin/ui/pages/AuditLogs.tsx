@@ -69,18 +69,20 @@ export default function AuditLogs() {
   const [dateFrom, setDateFrom] = useState<Date | undefined>();
   const [dateTo, setDateTo] = useState<Date | undefined>();
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     if (hasRole("ADMIN")) {
       loadUsers();
       loadLogs();
     }
   }, [hasRole, clinicId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const loadUsers = async () => {
     try {
       const data = await apiClient.get<User[]>("/usuarios");
       setUsers(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao carregar usuários:", error);
     }
   };
@@ -99,7 +101,7 @@ export default function AuditLogs() {
         `/db/audit_logs?${params.toString()}`,
       );
       setLogs(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erro ao carregar logs:", error);
       toast.error("Erro ao carregar logs de auditoria");
     } finally {

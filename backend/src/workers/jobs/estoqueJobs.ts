@@ -7,7 +7,7 @@ const triggerEstoqueAction = async (action: string) => {
   try {
     await axios.post("http://localhost:3005/api/estoque/automation", {
       action,
-    });
+    }, { headers: { "X-Internal-Cron": "true" } });
     logger.info(`[node-cron] Scheduled action executed: ${action}`);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);

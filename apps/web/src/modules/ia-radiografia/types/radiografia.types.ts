@@ -52,10 +52,18 @@ export interface AnaliseComplete extends AnaliseRadiografica {
   created_at?: string;
   resultado_ia?: {
     problemas_detectados: ProblemaRadiografico[];
-    sugestoes_tratamento: string[];
+    sugestoes_tratamento: Array<{
+      tratamento: string;
+      descricao: string;
+      prioridade: "BAIXA" | "MEDIA" | "ALTA";
+    }>;
     observacoes_ia: string;
+    qualidade_imagem?: "baixa" | "regular" | "boa" | "excelente";
+    dentes_avaliados?: number[];
+    requer_avaliacao_especialista?: boolean;
   };
   problemas?: ProblemaRadiografico[];
+  requer_avaliacao_especialista?: boolean;
 }
 
 export const tipoRadiografiaLabels: Record<string, string> = {

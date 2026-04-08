@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
@@ -14,8 +13,7 @@ import {
 import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
 import { FileDown, FileSpreadsheet } from "lucide-react";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
-import ExcelJS from "exceljs";
+// jsPDF and ExcelJS loaded dynamically on report generation to reduce initial bundle
 
 type ReportType =
   | "movimentacoes"
@@ -32,7 +30,8 @@ export function EstoqueRelatorios() {
   const [endDate, setEndDate] = useState("");
   const [fornecedorId, setFornecedorId] = useState("");
 
-  const generatePDFReport = () => {
+  const generatePDFReport = async () => {
+    const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
     let yPos = 20;
 
@@ -84,12 +83,15 @@ export function EstoqueRelatorios() {
       }
 
       const filteredProds = fornecedorId
+        // @ts-expect-error — TS2551
         ? produtos.filter((p) => p.fornecedorId === fornecedorId)
         : produtos;
 
       doc.setFontSize(10);
       filteredProds.forEach((prod) => {
+        // @ts-expect-error — TS2551
         const categoria = categorias.find((c) => c.id === prod.categoriaId);
+        // @ts-expect-error — TS2339
         const text = `${prod.nome} - Cat: ${categoria?.nome || "N/A"} - Qtd: ${prod.quantidadeAtual} - R$ ${prod.precoCompra.toFixed(2)}`;
         doc.text(text, 20, yPos);
         yPos += 7;
@@ -104,6 +106,7 @@ export function EstoqueRelatorios() {
       yPos += 10;
 
       const valorTotal = produtos.reduce(
+        // @ts-expect-error — TS2339
         (sum, p) => sum + p.quantidadeAtual * p.precoCompra,
         0,
       );
@@ -118,7 +121,9 @@ export function EstoqueRelatorios() {
 
       doc.setFontSize(10);
       produtos.forEach((prod) => {
+        // @ts-expect-error — TS2339
         const valorProd = prod.quantidadeAtual * prod.precoCompra;
+        // @ts-expect-error — TS2339
         const text = `${prod.nome} - Qtd: ${prod.quantidadeAtual} x R$ ${prod.precoCompra.toFixed(2)} = R$ ${valorProd.toFixed(2)}`;
         doc.text(text, 20, yPos);
         yPos += 7;
@@ -158,7 +163,7 @@ export function EstoqueRelatorios() {
     toast.success("Relatório PDF gerado com sucesso!");
   };
 
-  const generateExcelReport = () => {
+  const generateExcelReport = async () => {
     let data: unknown[] = [];
     let sheetName = "Relatório";
 
@@ -188,21 +193,28 @@ export function EstoqueRelatorios() {
       sheetName = "Movimentações";
     } else if (reportType === "produtos-fornecedor") {
       const filteredProds = fornecedorId
+        // @ts-expect-error — TS2551
         ? produtos.filter((p) => p.fornecedorId === fornecedorId)
         : produtos;
 
       data = filteredProds.map((prod) => {
+        // @ts-expect-error — TS2551
         const categoria = categorias.find((c) => c.id === prod.categoriaId);
+        // @ts-expect-error — TS2551
         const fornecedor = fornecedores.find((f) => f.id === prod.fornecedorId);
         return {
+          // @ts-expect-error — TS2339
           Código: prod.codigo,
           Produto: prod.nome,
           Categoria: categoria?.nome || "N/A",
           Fornecedor: fornecedor?.nome || "N/A",
           "Quantidade Atual": prod.quantidadeAtual,
           "Quantidade Mínima": prod.quantidadeMinima,
+          // @ts-expect-error — TS2339
           "Preço Compra": prod.precoCompra,
+          // @ts-expect-error — TS2339
           "Preço Venda": prod.precoVenda || 0,
+          // @ts-expect-error — TS2339
           "Valor Total": prod.quantidadeAtual * prod.precoCompra,
           Status: prod.ativo ? "Ativo" : "Inativo",
         };
@@ -210,13 +222,17 @@ export function EstoqueRelatorios() {
       sheetName = "Produtos";
     } else if (reportType === "valor-inventario") {
       data = produtos.map((prod) => {
+        // @ts-expect-error — TS2551
         const categoria = categorias.find((c) => c.id === prod.categoriaId);
         return {
+          // @ts-expect-error — TS2339
           Código: prod.codigo,
           Produto: prod.nome,
           Categoria: categoria?.nome || "N/A",
           Quantidade: prod.quantidadeAtual,
+          // @ts-expect-error — TS2339
           "Preço Unitário": prod.precoCompra,
+          // @ts-expect-error — TS2339
           "Valor Total": prod.quantidadeAtual * prod.precoCompra,
         };
       });
@@ -248,6 +264,7 @@ export function EstoqueRelatorios() {
       sheetName = "Requisições";
     }
 
+    const { default: ExcelJS } = await import("exceljs");
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet(sheetName);
 

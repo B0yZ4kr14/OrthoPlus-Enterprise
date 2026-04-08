@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
@@ -97,6 +96,7 @@ export default function EstoqueCadastros() {
         description: "Produto atualizado com sucesso!",
       });
     } else {
+      // @ts-expect-error — TS2345
       addProduto(data);
       toast({
         title: "Sucesso",
@@ -240,9 +240,11 @@ export default function EstoqueCadastros() {
 
   const handleScanSuccess = (barcode: string) => {
     const produto = produtos.find(
+      // @ts-expect-error — TS2339, TS2551
       (p) => p.codigoBarras === barcode || p.codigo === barcode,
     );
     if (produto) {
+      // @ts-expect-error — TS2345
       setSelectedProduto(produto);
       setProdutoViewMode("form");
       toast({
@@ -261,6 +263,7 @@ export default function EstoqueCadastros() {
   const filteredProdutos = produtos.filter(
     (p) =>
       p.nome.toLowerCase().includes(searchProduto.toLowerCase()) ||
+      // @ts-expect-error — TS2339
       p.codigo.toLowerCase().includes(searchProduto.toLowerCase()),
   );
 
@@ -329,6 +332,7 @@ export default function EstoqueCadastros() {
           <CardContent>
             <div className="text-2xl font-bold">{fornecedores.length}</div>
             <p className="text-xs text-muted-foreground">
+              {/* @ts-expect-error — TS2339 */}
               {fornecedores.filter((f) => f.ativo).length} ativos no sistema
             </p>
           </CardContent>
@@ -378,8 +382,10 @@ export default function EstoqueCadastros() {
                     placeholder="Buscar produtos por nome ou código..."
                   />
                   <ProdutosList
+                    // @ts-expect-error — TS2322
                     produtos={filteredProdutos}
                     categorias={categorias}
+                    // @ts-expect-error — TS2322
                     fornecedores={fornecedores}
                     onEdit={handleEditProduto}
                     onDelete={handleDeleteProduto}
@@ -389,6 +395,7 @@ export default function EstoqueCadastros() {
                 <ProdutoForm
                   produto={selectedProduto}
                   categorias={categorias}
+                  // @ts-expect-error — TS2322
                   fornecedores={fornecedores}
                   onSubmit={handleSubmitProduto}
                   onCancel={() => {
@@ -426,6 +433,7 @@ export default function EstoqueCadastros() {
                     placeholder="Buscar fornecedores por nome ou CNPJ..."
                   />
                   <FornecedoresList
+                    // @ts-expect-error — TS2322
                     fornecedores={filteredFornecedores}
                     onEdit={handleEditFornecedor}
                     onDelete={handleDeleteFornecedor}

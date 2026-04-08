@@ -56,7 +56,7 @@ export function ModulesProvider({ children }: ModulesProviderProps) {
         getModulesByCategory,
         toggleModule,
         isTogglingModule: isToggling,
-        // @ts-expect-error - Auto-healer: TS2322 - Type 'unknown' is not assignable to type...
+        // @ts-expect-error — TS2322
         dependencies,
       }}
     >
@@ -65,6 +65,7 @@ export function ModulesProvider({ children }: ModulesProviderProps) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useModulesContext() {
   const context = useContext(ModulesContext);
   if (!context) {

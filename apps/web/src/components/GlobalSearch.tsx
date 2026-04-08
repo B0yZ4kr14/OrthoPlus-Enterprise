@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 import { apiClient } from "@/lib/api/apiClient";
 import { useAuth } from "@/contexts/AuthContext";
-// @ts-expect-error - Auto-healer: TS2307 - Cannot find module '@orthoplus/shared-ty...
+// @ts-expect-error — TS2307
 import type { Patient, Appointment, Procedure } from "@orthoplus/shared-types";
 import {
   CommandDialog,

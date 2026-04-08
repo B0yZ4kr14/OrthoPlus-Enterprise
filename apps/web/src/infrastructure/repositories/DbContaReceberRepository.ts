@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { ContaReceber } from "@/domain/entities/ContaReceber";
 import { IContaReceberRepository } from "@/domain/repositories/IContaReceberRepository";
 import { apiClient } from "@/lib/api/apiClient";
@@ -12,6 +11,7 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         `/financeiro/contas-receber/${id}`,
       );
       if (!data) return null;
+      // @ts-expect-error — TS2345
       return ContaReceberMapper.toDomain(data);
     } catch {
       return null;
@@ -23,6 +23,7 @@ export class DbContaReceberRepository implements IContaReceberRepository {
       const data = await apiClient.get<Tables<"financial_transactions">[]>(
         "/financeiro/contas-receber",
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -38,6 +39,7 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         "/financeiro/contas-receber",
         { params: { patient_id: patientId } },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -50,6 +52,7 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         "/financeiro/contas-receber",
         { params: { status: "PENDENTE" } },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -63,6 +66,7 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         "/financeiro/contas-receber",
         { params: { status: "PENDENTE", vencidas_antes: hoje } },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -84,6 +88,7 @@ export class DbContaReceberRepository implements IContaReceberRepository {
           },
         },
       );
+      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -94,8 +99,9 @@ export class DbContaReceberRepository implements IContaReceberRepository {
     const insert = ContaReceberMapper.toDbInsert(conta);
     try {
       await apiClient.post("/financeiro/contas-receber", insert);
-    } catch (error: any) {
-      throw new Error(`Erro ao salvar conta a receber: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao salvar conta a receber: ${_e.message}`);
     }
   }
 
@@ -103,16 +109,18 @@ export class DbContaReceberRepository implements IContaReceberRepository {
     const insert = ContaReceberMapper.toDbInsert(conta);
     try {
       await apiClient.patch(`/financeiro/contas-receber/${conta.id}`, insert);
-    } catch (error: any) {
-      throw new Error(`Erro ao atualizar conta a receber: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao atualizar conta a receber: ${_e.message}`);
     }
   }
 
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(`/financeiro/contas-receber/${id}`);
-    } catch (error: any) {
-      throw new Error(`Erro ao deletar conta a receber: ${error.message}`);
+    } catch (error: unknown) {
+      const _e = error instanceof Error ? error : { message: String(error) };
+      throw new Error(`Erro ao deletar conta a receber: ${_e.message}`);
     }
   }
 }

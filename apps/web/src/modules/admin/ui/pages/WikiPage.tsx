@@ -83,9 +83,11 @@ export default function WikiPage() {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
   useEffect(() => {
     fetchPages();
   }, [clinicId]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const handleSave = async () => {
     if (!clinicId || !formData.title.trim() || !formData.content.trim()) {

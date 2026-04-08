@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
@@ -7,18 +6,25 @@ import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { ScrollArea } from "@orthoplus/core-ui/scroll-area";
-import { Download, Eye, Clock, Database } from "lucide-react";
+import { Download, Eye, Clock } from "lucide-react";
 import { BackupRestoreDialog } from "../BackupRestoreDialog";
+
+interface BackupEntry {
+  id: string;
+  created_at: string;
+  backup_type: "full" | "incremental" | "differential";
+  file_size_bytes: number;
+}
 
 export function BackupTimelineTab() {
   const { clinicId } = useAuth();
-  const [selectedBackup, setSelectedBackup] = useState<unknown>(null);
+  const [selectedBackup, setSelectedBackup] = useState<BackupEntry | null>(null);
   const [isRestoreDialogOpen, setIsRestoreDialogOpen] = useState(false);
 
   const { data: backups } = useQuery({
     queryKey: ["backup-timeline", clinicId],
     queryFn: async () => {
-      const data = await apiClient.get<Record<string, any>[]>(
+      const data = await apiClient.get<BackupEntry[]>(
         "/configuracoes/backups/historico",
         { params: { status: "success", limit: 50 } },
       );
@@ -27,14 +33,14 @@ export function BackupTimelineTab() {
     enabled: !!clinicId,
   });
 
-  const groupedBackups = backups?.reduce(
+  const groupedBackups = (backups || []).reduce(
     (acc, backup) => {
       const date = new Date(backup.created_at).toLocaleDateString("pt-BR");
       if (!acc[date]) acc[date] = [];
       acc[date].push(backup);
       return acc;
     },
-    {} as Record<string, unknown[]>,
+    {} as Record<string, BackupEntry[]>,
   );
 
   const formatBytes = (bytes: number) => {
@@ -54,7 +60,7 @@ export function BackupTimelineTab() {
     return colors[type] || "bg-muted";
   };
 
-  const handleRestoreClick = (backup: unknown) => {
+  const handleRestoreClick = (backup: BackupEntry) => {
     setSelectedBackup(backup);
     setIsRestoreDialogOpen(true);
   };
@@ -63,8 +69,8 @@ export function BackupTimelineTab() {
     <div className="space-y-6">
       <ScrollArea className="h-[600px]">
         <div className="space-y-6">
-          {Object.entries(groupedBackups || {}).map(
-            ([date, dateBackups]: [string, unknown[]]) => (
+          {Object.entries(groupedBackups).map(
+            ([date, dateBackups]) => (
               <div key={date}>
                 <div className="flex items-center gap-2 mb-3">
                   <Clock className="h-4 w-4 text-muted-foreground" />

@@ -70,6 +70,17 @@ export type ExchangeConfig = z.infer<typeof exchangeConfigSchema>;
 export type CryptoWallet = z.infer<typeof cryptoWalletSchema>;
 export type CryptoTransaction = z.infer<typeof cryptoTransactionSchema>;
 
+export interface CryptoInvoice {
+  paymentId: string;
+  invoiceId: string;
+  checkoutLink: string;
+  qrCodeData: string;
+  amountBRL: number;
+  status: "PENDING" | "PROCESSING" | "CONFIRMED" | "EXPIRED" | "FAILED";
+  expiresAt: string;
+  orderId: string;
+}
+
 export interface CryptoTransactionComplete extends Omit<
   CryptoTransaction,
   "id" | "clinic_id"

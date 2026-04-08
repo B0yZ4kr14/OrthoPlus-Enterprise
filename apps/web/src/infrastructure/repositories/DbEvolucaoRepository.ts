@@ -14,7 +14,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
       if (!data) return null;
       return EvolucaoMapper.toDomain(data);
     } catch (error) {
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao buscar evolução", error);
     }
   }
@@ -29,7 +29,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções do tratamento",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -45,7 +45,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções do prontuário",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -59,7 +59,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções da clínica",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -85,7 +85,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções por período",
-        // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+        // @ts-expect-error — TS2345
         error,
       );
     }
@@ -100,7 +100,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
       const data = EvolucaoMapper.toInsert(evolucao);
       await apiClient.post("/pep/evolucoes", data);
     } catch (error) {
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao salvar evolução", error);
     }
   }
@@ -110,7 +110,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
       const data = EvolucaoMapper.toPersistence(evolucao);
       await apiClient.patch(`/pep/evolucoes/${evolucao.id}`, data);
     } catch (error) {
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao atualizar evolução", error);
     }
   }
@@ -119,7 +119,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     try {
       await apiClient.delete(`/pep/evolucoes/${id}`);
     } catch (error) {
-      // @ts-expect-error - Auto-healer: TS2345 - Argument of type 'unknown' is not assign...
+      // @ts-expect-error — TS2345
       throw new InfrastructureError("Erro ao deletar evolução", error);
     }
   }
