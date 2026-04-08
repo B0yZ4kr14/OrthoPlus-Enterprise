@@ -7,9 +7,8 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   // Strip console.* and debugger from production builds
   ...(mode === 'production' && {
-    esbuild: {
-      drop: ['console', 'debugger'],
-    },
+    // Escaping aggressive esbuild minification issues 
+    // esbuild: { drop: ['console', 'debugger'] },
   }),
   resolve: {
     alias: [
@@ -50,7 +49,13 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     emptyOutDir: true,
     cssCodeSplit: true,
-    minify: 'esbuild',
+    minify: 'terser',
+    sourcemap: true,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+      },
+    },
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
