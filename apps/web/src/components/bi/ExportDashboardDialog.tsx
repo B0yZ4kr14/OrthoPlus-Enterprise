@@ -228,7 +228,7 @@ export function ExportDashboardDialog({
 
     try {
       const result = await apiClient.post<ScheduleExportResponse>(
-        "/functions/v1/schedule-bi-export",
+        "/analytics/processor",
         {
           dashboardName,
           exportFormat: format,

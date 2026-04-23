@@ -59,7 +59,7 @@ export function BackupTestDialog({
       }, 500);
 
       const data = await apiClient.post<TestResult>(
-        "/functions/v1/test-backup-restore",
+        "/backups/manager",
         {
           backupId,
           testEnvironment: "sandbox",

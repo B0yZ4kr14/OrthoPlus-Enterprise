@@ -120,7 +120,7 @@ export function BackupRestoreDialog({
       const text = await backupFile.text();
 
       // Call restore-backup with decryption
-      const data = await apiClient.post<BackupData>("/functions/v1/restore-backup", {
+      const data = await apiClient.post<BackupData>("/backups/manager", {
         backupData: text,
         decryptionPassword,
       });
@@ -176,7 +176,7 @@ export function BackupRestoreDialog({
 
       setProgress(40);
 
-      const data = await apiClient.post<{ results: RestoreResults }>("/functions/v1/restore-backup", {
+      const data = await apiClient.post<{ results: RestoreResults }>("/backups/manager", {
         backupData: JSON.stringify(dataToRestore),
       });
 

@@ -53,7 +53,7 @@ export function BackupExportTab() {
     setIsExporting(true);
     try {
       const data = await apiClient.post<unknown>(
-        "/functions/v1/export-clinic-data",
+        "/modules/export-data",
         {
           clinic_id: clinicId,
           format: selectedFormat,

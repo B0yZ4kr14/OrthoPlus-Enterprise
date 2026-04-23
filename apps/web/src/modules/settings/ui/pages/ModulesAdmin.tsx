@@ -34,7 +34,7 @@ export default function ModulesAdmin() {
   const fetchModules = async () => {
     try {
       const data = await apiClient.post<{ modules: ModuleData[] }>(
-        "/functions/v1/get-my-modules",
+        "/modules/my-modules",
       );
       setModules(data?.modules ?? []);
     } catch (error) {
@@ -76,7 +76,7 @@ export default function ModulesAdmin() {
     }
 
     try {
-      await apiClient.post("/functions/v1/toggle-module-state", {
+      await apiClient.post("/modules/toggle", {
         module_key: moduleKey,
       });
 
@@ -134,7 +134,7 @@ export default function ModulesAdmin() {
 
   const handleRequest = async (moduleKey: string, moduleName: string) => {
     try {
-      await apiClient.post("/functions/v1/request-new-module", {
+      await apiClient.post("/modules/request-new-module", {
         module_key: moduleKey,
       });
 
@@ -217,7 +217,7 @@ export default function ModulesAdmin() {
           !existingModule.is_active &&
           existingModule.can_activate
         ) {
-          await apiClient.post("/functions/v1/toggle-module-state", {
+          await apiClient.post("/modules/toggle", {
             body: { module_key: mod.module_key },
           });
           activated++;
@@ -255,7 +255,7 @@ export default function ModulesAdmin() {
         .join(", ");
 
       const data = await apiClient.post<{ suggestions?: string[] }>(
-        "/functions/v1/suggest-modules",
+        "/modules/suggest",
         {
           body: {
             activeModules: activeModulesList,

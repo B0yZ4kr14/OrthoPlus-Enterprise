@@ -82,7 +82,7 @@ export function OnboardingWizard({
     const timeSpent = Math.floor((Date.now() - stepStartTime) / 1000);
 
     try {
-      await apiClient.post("/functions/v1/save-onboarding-analytics", {
+      await apiClient.post("/analytics/processor", {
         event_type: eventType,
         step_number: stepNumber,
         step_name: stepName,

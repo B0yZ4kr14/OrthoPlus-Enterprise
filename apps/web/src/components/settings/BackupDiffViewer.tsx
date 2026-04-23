@@ -65,14 +65,14 @@ export function BackupDiffViewer({
     try {
       // Buscar dados dos dois backups
       const data1 = await apiClient.post<unknown>(
-        "/functions/v1/download-backup",
+        "/backups/manager",
         {
           backup_id: backup1,
         },
       );
 
       const data2 = await apiClient.post<unknown>(
-        "/functions/v1/download-backup",
+        "/backups/manager",
         {
           backup_id: backup2,
         },

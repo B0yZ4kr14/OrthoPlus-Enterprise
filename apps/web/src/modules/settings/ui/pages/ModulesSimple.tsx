@@ -117,7 +117,7 @@ const ModulesSimple = memo(function ModulesSimple() {
   const fetchModules = async () => {
     try {
       const data = await apiClient.post<{ modules: Module[] }>(
-        "/functions/v1/get-my-modules",
+        "/modules/my-modules",
       );
       setModules(data?.modules ?? []);
     } catch (error) {
@@ -137,7 +137,7 @@ const ModulesSimple = memo(function ModulesSimple() {
 
     try {
       const data = await apiClient.post<{ cascade_activated?: number; message?: string }>(
-        "/functions/v1/toggle-module-state",
+        "/modules/toggle",
         {
           module_key: moduleKey,
         },
@@ -164,7 +164,7 @@ const ModulesSimple = memo(function ModulesSimple() {
 
     try {
       const data = await apiClient.post<{ recommendation?: string[]; clinic_profile?: Record<string, unknown> }>(
-        "/functions/v1/recommend-module-sequence",
+        "/modules/recommend-sequence",
       );
 
       setRoadmapData(data);

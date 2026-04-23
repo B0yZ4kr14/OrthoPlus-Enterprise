@@ -58,7 +58,7 @@ export function BackupIntegrityChecker({
 
     try {
       const data = await apiClient.post<IntegrityResult>(
-        "/functions/v1/validate-backup-integrity",
+        "/backups/manager",
         {
           backupId: selectedBackupId,
         },

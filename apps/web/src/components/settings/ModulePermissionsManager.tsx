@@ -79,7 +79,7 @@ export function ModulePermissionsManager() {
 
       // Buscar módulos ativos
       const modulesData = await apiClient.post<unknown>(
-        "/functions/v1/get-my-modules",
+        "/modules/my-modules",
       );
       const activeModules =
         // @ts-expect-error — TS2339

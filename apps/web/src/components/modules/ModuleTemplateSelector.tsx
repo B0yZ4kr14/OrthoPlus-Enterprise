@@ -98,7 +98,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
     setApplying(templateId);
     try {
       const data = await apiClient.post<unknown>(
-        "/functions/v1/apply-module-template",
+        "/modules/apply-template",
         {
           template_id: templateId,
         },

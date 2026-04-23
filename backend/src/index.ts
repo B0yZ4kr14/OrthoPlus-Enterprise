@@ -53,6 +53,9 @@ import { createPdvRouter } from "./modules/pdv/api/router";
 import { createDashboardRouter } from "./modules/dashboard/api/router";
 import { createNfeRouter } from "./modules/nfe/api/router";
 
+// Legacy module routes (migrated from Edge Functions)
+import modulesRouter from "./routes/modules";
+
 // Agents Module — Integration with Agno Agent Service
 import { createAgentsRouter } from "./modules/agents/api/router";
 
@@ -263,22 +266,14 @@ app.use("/api/split", splitPagamentoRouter); // alias: frontend uses /split/*
 // PEP, PDV, Dashboard & NF-e — modules with existing controllers
 app.use("/api/pep", createPepRouter());
 app.use("/api/pdv", createPdvRouter());
-app.use("/api/inventario", createInventarioRouter());
 app.use("/api/dashboard", createDashboardRouter());
 app.use("/api/nfe", createNfeRouter());
 
+// Legacy module management routes (migrated from Edge Functions)
+app.use("/api/modules", modulesRouter);
+
 // Agents Module — Integration with Agno Agent Service (Python/FastAPI on port 8000)
 app.use("/api/agents", createAgentsRouter());
-
-// Legacy Edge Function redirect: /functions/v1/<fn> → /api/<fn>
-// Rewrites the URL and re-dispatches through the Express router stack.
-// Auth middleware already covers /functions/v1 paths (see authMiddleware isApiRoute check).
-app.use("/functions/v1", (req, res, next) => {
-  req.url = `/api${req.url}`;
-  // Re-dispatch through Express router stack to handle legacy Edge Function paths.
-  // app.handle() is the internal Express dispatch method (not exposed in TS types).
-  (app as any).handle(req, res, next); // eslint-disable-line @typescript-eslint/no-explicit-any
-});
 
 // Active modules endpoint: returns module keys for a clinic from the database.
 // Falls back to returning all modules when AUTH_ALLOW_MOCK=true to unblock frontend in dev/test.

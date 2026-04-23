@@ -123,3 +123,23 @@ export const exportClinicData = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const requestNewModule = async (req: Request, res: Response) => {
+  try {
+    const { moduleName, description } = req.body;
+    const user = req.user;
+    if (!user) return res.status(401).json({ error: "Unauthorized" });
+
+    // Mock: in production this would create a ticket or notify admins
+    return res.status(200).json({
+      message: `Module request '${moduleName}' submitted successfully`,
+      requestId: `req-${Date.now()}`,
+      status: "pending_review",
+      submittedBy: user.id || user.email,
+      description,
+    });
+  } catch (error) {
+    logger.error("Error requesting new module:", { error });
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};

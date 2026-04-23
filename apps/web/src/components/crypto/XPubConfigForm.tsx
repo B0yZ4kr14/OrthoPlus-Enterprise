@@ -87,7 +87,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
     setTestingXPub(true);
     try {
       const data = await apiClient.post<unknown>(
-        "/functions/v1/validate-xpub",
+        "/crypto/wallet/validate-xpub",
         {
           xpub,
           derivationPath,
@@ -114,7 +114,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
     }
 
     try {
-      await apiClient.post("/functions/v1/manage-offline-wallet", {
+      await apiClient.post("/crypto/wallet/offline", {
         action: "create",
         ...values,
       });

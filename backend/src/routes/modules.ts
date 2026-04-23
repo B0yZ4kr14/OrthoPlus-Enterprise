@@ -6,7 +6,8 @@ import {
   toggleModuleState,
   recommendModuleSequence,
   importClinicData,
-  exportClinicData
+  exportClinicData,
+  requestNewModule
 } from "../controllers/moduleController";
 
 const modulesRouter: Router = Router();
@@ -21,5 +22,8 @@ modulesRouter.post("/recommend-sequence", recommendModuleSequence);
 // Data Import/Export Routes
 modulesRouter.post("/import-data", importClinicData);
 modulesRouter.get("/export-data", exportClinicData);
+
+// Module Request Route
+modulesRouter.post("/request-new-module", requestNewModule);
 
 export default modulesRouter;

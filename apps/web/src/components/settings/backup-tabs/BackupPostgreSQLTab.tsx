@@ -27,7 +27,7 @@ export function BackupPostgreSQLTab() {
     queryKey: ["database-health"],
     queryFn: async () => {
       return await apiClient.post<DatabaseHealthResponse>(
-        "/functions/v1/analyze-database-health",
+        "/admin/analyze-database-health",
         {},
       );
     },

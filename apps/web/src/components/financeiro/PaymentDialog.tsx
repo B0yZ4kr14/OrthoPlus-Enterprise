@@ -68,7 +68,7 @@ export function PaymentDialog({
       }
 
       const data = await apiClient.post<unknown>(
-        "/functions/v1/processar-pagamento",
+        "/financeiro/processar",
         {
           conta_receber_id: conta.id,
           valor: valorNumerico,

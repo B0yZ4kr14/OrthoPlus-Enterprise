@@ -245,7 +245,7 @@ export function ScheduledBackupWizard({
         );
         toast.success("Backup agendado atualizado com sucesso!");
       } else {
-        await apiClient.post("/functions/v1/configure-auto-backup", config);
+        await apiClient.post("/backups/manager", config);
         toast.success("Backup agendado configurado com sucesso!");
       }
 

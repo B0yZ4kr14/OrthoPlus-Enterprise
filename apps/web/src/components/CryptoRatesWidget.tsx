@@ -31,7 +31,7 @@ export function CryptoRatesWidget() {
     setLoading(true);
     try {
       const response = await apiClient.post<{ rates: CryptoRate[] }>(
-        "/functions/v1/get-crypto-rates",
+        "/crypto/rates",
         {},
       );
 

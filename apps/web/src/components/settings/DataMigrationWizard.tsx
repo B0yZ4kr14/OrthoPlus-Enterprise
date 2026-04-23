@@ -72,7 +72,7 @@ export function DataMigrationWizard({
     try {
       setProgress(20);
       const data = await apiClient.post<unknown>(
-        "/functions/v1/manual-backup",
+        "/backups/manager",
         exportOptions,
       );
       setProgress(60);
@@ -113,7 +113,7 @@ export function DataMigrationWizard({
     try {
       setProgress(20);
       const data = await apiClient.post<unknown>(
-        "/functions/v1/import-clinic-data",
+        "/modules/import-data",
         { data: importData, options: importOptions },
       );
       setProgress(80);
