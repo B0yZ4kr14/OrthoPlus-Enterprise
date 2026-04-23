@@ -14,5 +14,6 @@ router.get("/health", databaseAdminController.getHealth);
 
 // /api/db/audit_logs
 router.get("/audit_logs", databaseAdminController.getAuditLogs);
+router.post("/audit_logs", databaseAdminController.createAuditLog);
 
 export default router;

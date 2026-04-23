@@ -601,4 +601,14 @@ export class AuthController {
       throw Errors.internal("Error registering user");
     }
   });
+
+  public resetPassword = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body;
+    if (!email) {
+      throw Errors.validation("Email is required");
+    }
+    // TODO: Implement actual password reset logic (send email with token)
+    logger.info("Password reset requested", { email });
+    res.status(200).json({ message: "Password reset instructions sent" });
+  });
 }

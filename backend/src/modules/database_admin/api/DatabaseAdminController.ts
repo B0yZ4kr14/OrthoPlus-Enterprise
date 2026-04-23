@@ -408,4 +408,29 @@ export class DatabaseAdminController {
       res.status(500).json({ error: "Erro ao obter pool de conexões" });
     }
   }
+
+  async createAuditLog(req: Request, res: Response): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Missing clinic context" });
+        return;
+      }
+      const { action, actionType, details } = req.body;
+      const log = await prisma.audit_logs.create({
+        data: {
+          clinic_id: clinicId,
+          user_id: req.user?.id,
+          action: action || "CREATE",
+          action_type: actionType || "unknown",
+          details: details || {},
+          ip_address: req.ip || "unknown",
+        },
+      });
+      res.status(201).json(log);
+    } catch (error) {
+      logger.error("Error creating audit log:", { error });
+      res.status(500).json({ error: "Erro ao criar audit log" });
+    }
+  }
 }
