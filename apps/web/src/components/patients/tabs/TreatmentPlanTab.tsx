@@ -10,8 +10,7 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { ClipboardPlus, Plus, CheckCircle, Clock, XCircle } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date.utils";
 
 interface Treatment {
   id: string;
@@ -110,19 +109,13 @@ export function TreatmentPlanTab({ patientId }: TreatmentPlanTabProps) {
                   <div>
                     <span className="font-semibold">Data Início:</span>{" "}
                     {treatment.data_inicio
-                      ? format(new Date(treatment.data_inicio), "dd/MM/yyyy", {
-                          locale: ptBR,
-                        })
+                      ? formatDate(treatment.data_inicio)
                       : "Não iniciado"}
                   </div>
                   <div>
                     <span className="font-semibold">Data Conclusão:</span>{" "}
                     {treatment.data_conclusao
-                      ? format(
-                          new Date(treatment.data_conclusao),
-                          "dd/MM/yyyy",
-                          { locale: ptBR },
-                        )
+                      ? formatDate(treatment.data_conclusao)
                       : "Em andamento"}
                   </div>
                   {treatment.valor_estimado && (

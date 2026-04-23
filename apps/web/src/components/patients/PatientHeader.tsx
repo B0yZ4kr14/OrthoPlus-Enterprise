@@ -6,8 +6,7 @@ import { Button } from "@orthoplus/core-ui/button";
 import { Avatar, AvatarFallback } from "@orthoplus/core-ui/avatar";
 import { Phone, Mail, Calendar, MapPin, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date.utils";
 import {
   STATUS_LABELS,
   STATUS_COLORS,
@@ -110,9 +109,7 @@ export function PatientHeader({ patientId }: PatientHeaderProps) {
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
                 <span>
-                  {format(new Date(patient.birth_date), "dd/MM/yyyy", {
-                    locale: ptBR,
-                  })}{" "}
+                  {formatDate(patient.birth_date)}{" "}
                   (
                   {new Date().getFullYear() -
                     new Date(patient.birth_date).getFullYear()}{" "}

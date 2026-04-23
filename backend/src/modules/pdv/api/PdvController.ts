@@ -2,7 +2,7 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
 import { z } from "zod";
-
+import { asyncHandler, Errors } from "@/middleware/errorHandler";
 
 const createVendaSchema = z.object({
   patientId: z.string().uuid().optional(),
@@ -32,120 +32,87 @@ const createVendaSchema = z.object({
 });
 
 export class PdvController {
-  async createVenda(req: Request, res: Response): Promise<void> {
-    try {
-      createVendaSchema.parse(req.body);
-      const clinicId = req.user?.clinicId;
+  createVenda = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    createVendaSchema.parse(req.body);
+    const clinicId = req.user?.clinicId;
 
-      if (!clinicId) {
-        res.status(401).json({ error: "Clinic ID not found in token" });
-        return;
-      }
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
+    }
 
-      const valorTotal = req.body.itens.reduce((acc: number, item: any) => 
-        acc + (item.quantidade * item.valorUnitario) - item.valorDesconto, 0);
+    const valorTotal = req.body.itens.reduce((acc: number, item: any) => 
+      acc + (item.quantidade * item.valorUnitario) - item.valorDesconto, 0);
 
-      const venda = await prisma.pdv_vendas.create({
-        data: {
-          clinic_id: clinicId,
-          numero_venda: `VND-${Date.now()}`,
-          valor_total: valorTotal,
-          forma_pagamento: req.body.pagamentos[0]?.formaPagamento || 'DINHEIRO',
-          status: 'CONCLUIDA',
-          metadata: {
-            vendedorId: req.body.vendedorId,
-            itens: req.body.itens
-          }
+    const venda = await prisma.pdv_vendas.create({
+      data: {
+        clinic_id: clinicId,
+        numero_venda: `VND-${Date.now()}`,
+        valor_total: valorTotal,
+        forma_pagamento: req.body.pagamentos[0]?.formaPagamento || 'DINHEIRO',
+        status: 'CONCLUIDA',
+        metadata: {
+          vendedorId: req.body.vendedorId,
+          itens: req.body.itens
         }
-      });
-
-      logger.info("Venda created", { clinicId, vendaId: venda.id });
-      res.status(201).json({ message: "Venda created successfully", venda });
-    } catch (error) {
-      logger.error("Error creating venda", { error });
-      if (error instanceof z.ZodError) {
-        res
-          .status(400)
-          .json({ error: "Validation error", details: error.errors });
-        return;
       }
-      res.status(500).json({ error: "Internal server error" });
+    });
+
+    logger.info("Venda created", { clinicId, vendaId: venda.id });
+    res.status(201).json({ message: "Venda created successfully", venda });
+  });
+
+  listVendas = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
+
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
     }
-  }
 
-  async listVendas(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
+    const vendas = await prisma.pdv_vendas.findMany({
+      where: { clinic_id: clinicId },
+      orderBy: { created_at: 'desc' },
+      take: 50
+    });
 
-      if (!clinicId) {
-        res.status(401).json({ error: "Clinic ID not found in token" });
-        return;
-      }
+    logger.info("Listing vendas", { clinicId, count: vendas.length });
+    res.status(200).json({ vendas });
+  });
 
-      const vendas = await prisma.pdv_vendas.findMany({
-        where: { clinic_id: clinicId },
-        orderBy: { created_at: 'desc' },
-        take: 50
-      });
-
-      logger.info("Listing vendas", { clinicId, count: vendas.length });
-      res.status(200).json({ vendas });
-    } catch (error) {
-      logger.error("Error listing vendas", { error });
-      res.status(500).json({ error: "Internal server error" });
+  getVendaById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
     }
-  }
-
-  async getVendaById(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Clinic ID not found in token" });
-        return;
-      }
-      const { id } = req.params;
-      const venda = await prisma.pdv_vendas.findFirst({
-        where: { id, clinic_id: clinicId },
-      });
-      if (!venda) {
-        res.status(404).json({ error: "Venda not found" });
-        return;
-      }
-      res.json(venda);
-    } catch (error) {
-      logger.error("Error getting venda", { error });
-      res.status(500).json({ error: "Internal server error" });
+    const { id } = req.params;
+    const venda = await prisma.pdv_vendas.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
+    if (!venda) {
+      throw Errors.notFound("Venda");
     }
-  }
+    res.json(venda);
+  });
 
-  async cancelVenda(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Clinic ID not found in token" });
-        return;
-      }
-      const { id } = req.params;
-      const venda = await prisma.pdv_vendas.findFirst({
-        where: { id, clinic_id: clinicId },
-      });
-      if (!venda) {
-        res.status(404).json({ error: "Venda not found" });
-        return;
-      }
-      if (venda.status === "CANCELADA") {
-        res.status(422).json({ error: "Venda already cancelled" });
-        return;
-      }
-      const updated = await prisma.pdv_vendas.update({
-        where: { id },
-        data: { status: "CANCELADA" },
-      });
-      logger.info("Venda cancelled", { clinicId, vendaId: id });
-      res.json(updated);
-    } catch (error) {
-      logger.error("Error cancelling venda", { error });
-      res.status(500).json({ error: "Internal server error" });
+  cancelVenda = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
     }
-  }
+    const { id } = req.params;
+    const venda = await prisma.pdv_vendas.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
+    if (!venda) {
+      throw Errors.notFound("Venda");
+    }
+    if (venda.status === "CANCELADA") {
+      throw Errors.validation("Venda already cancelled");
+    }
+    const updated = await prisma.pdv_vendas.update({
+      where: { id },
+      data: { status: "CANCELADA" },
+    });
+    logger.info("Venda cancelled", { clinicId, vendaId: id });
+    res.json(updated);
+  });
 }

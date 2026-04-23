@@ -15,8 +15,7 @@ import {
   Mail,
   Send,
 } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date.utils";
 import type { ContaReceber } from "@/modules/financeiro/types/financeiro-completo.types";
 
 const formatBRL = (value: number) =>
@@ -95,9 +94,7 @@ export function ContasReceberTable({
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                  {format(new Date(conta.data_vencimento), "dd/MM/yyyy", {
-                    locale: ptBR,
-                  })}
+                  {formatDate(conta.data_vencimento)}
                 </div>
               </TableCell>
               <TableCell>{getStatusBadge(conta.status)}</TableCell>

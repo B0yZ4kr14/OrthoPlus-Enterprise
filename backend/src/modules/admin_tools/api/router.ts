@@ -1,8 +1,12 @@
 import { Router } from "express";
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { AdminToolsController } from "./controller";
 
 const controller = new AdminToolsController();
 const router: Router = Router();
+
+// Apply clinic context validation to all routes in this module
+router.use(clinicGuard);
 
 // ADRs
 router.get("/adrs", controller.listADRs);

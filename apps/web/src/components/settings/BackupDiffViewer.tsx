@@ -19,8 +19,7 @@ import {
   SelectValue,
 } from "@orthoplus/core-ui/select";
 import { Plus, Minus, Edit, FileText } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDateTime } from "@/lib/utils/date.utils";
 import { ScrollArea } from "@orthoplus/core-ui/scroll-area";
 
 interface BackupDiffViewerProps {
@@ -250,9 +249,7 @@ export function BackupDiffViewer({
                 <SelectContent>
                   {backups?.map((backup) => (
                     <SelectItem key={backup.id} value={backup.id}>
-                      {format(new Date(backup.created_at), "dd/MM/yyyy HH:mm", {
-                        locale: ptBR,
-                      })}{" "}
+                      {formatDateTime(backup.created_at)}{" "}
                       - {backup.backup_type}
                     </SelectItem>
                   ))}
@@ -269,9 +266,7 @@ export function BackupDiffViewer({
                 <SelectContent>
                   {backups?.map((backup) => (
                     <SelectItem key={backup.id} value={backup.id}>
-                      {format(new Date(backup.created_at), "dd/MM/yyyy HH:mm", {
-                        locale: ptBR,
-                      })}{" "}
+                      {formatDateTime(backup.created_at)}{" "}
                       - {backup.backup_type}
                     </SelectItem>
                   ))}

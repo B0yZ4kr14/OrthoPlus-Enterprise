@@ -1,8 +1,12 @@
 import { Router } from "express";
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { BIController } from "./controller";
 
 const controller = new BIController();
 const router: Router = Router();
+
+// Apply clinic context validation to all routes in this module
+router.use(clinicGuard);
 
 // Dashboards
 router.get("/dashboards", controller.listDashboards);

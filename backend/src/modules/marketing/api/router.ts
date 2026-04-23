@@ -5,21 +5,21 @@ const controller = new MarketingController();
 const router: Router = Router();
 
 // Campanhas
-router.get("/campanhas", (req, res) => controller.listCampanhas(req, res));
-router.get("/campanhas/:id", (req, res) => controller.getCampanhaById(req, res));
-router.post("/campanhas", (req, res) => controller.createCampanha(req, res));
-router.patch("/campanhas/:id", (req, res) => controller.updateCampanha(req, res));
+router.get("/campanhas", controller.listCampanhas);
+router.get("/campanhas/:id", controller.getCampanhaById);
+router.post("/campanhas", controller.createCampanha);
+router.patch("/campanhas/:id", controller.updateCampanha);
 
 // Envios
-router.get("/envios", (req, res) => controller.listEnvios(req, res));
-router.post("/envios", (req, res) => controller.createEnvio(req, res));
+router.get("/envios", controller.listEnvios);
+router.post("/envios", controller.createEnvio);
 
 // Recalls
-router.get("/recalls", (req, res) => controller.listRecalls(req, res));
-router.post("/recalls", (req, res) => controller.createRecall(req, res));
+router.get("/recalls", controller.listRecalls);
+router.post("/recalls", controller.createRecall);
 
 // Trigger processing
-router.post("/triggers/process", (req, res) => controller.processTriggers(req, res));
-router.post("/recalls/process", (req, res) => controller.processRecalls(req, res));
+router.post("/triggers/process", controller.processTriggers);
+router.post("/recalls/process", controller.processRecalls);
 
 export default router;

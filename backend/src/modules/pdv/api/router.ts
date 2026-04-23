@@ -8,14 +8,14 @@ export function createPdvRouter(): Router {
   const dashboardCtrl = new PDVDashboardController();
 
   // Sales CRUD
-  router.post('/vendas', (req, res) => controller.createVenda(req, res));
-  router.get('/vendas', (req, res) => controller.listVendas(req, res));
-  router.get('/vendas/:id', (req, res) => controller.getVendaById(req, res));
-  router.post('/vendas/:id/cancelar', (req, res) => controller.cancelVenda(req, res));
+  router.post('/vendas', controller.createVenda);
+  router.get('/vendas', controller.listVendas);
+  router.get('/vendas/:id', controller.getVendaById);
+  router.post('/vendas/:id/cancelar', controller.cancelVenda);
 
   // Dashboard & Gamification
-  router.get('/dashboard-executivo', (req, res) => dashboardCtrl.getDashboardExecutivo(req, res));
-  router.get('/metas-gamificacao', (req, res) => dashboardCtrl.getMetasGamificacao(req, res));
+  router.get('/dashboard-executivo', dashboardCtrl.getDashboardExecutivo);
+  router.get('/metas-gamificacao', dashboardCtrl.getMetasGamificacao);
 
   return router;
 }

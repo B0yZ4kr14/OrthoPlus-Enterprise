@@ -10,8 +10,7 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { DollarSign, TrendingUp, TrendingDown, Clock } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date.utils";
 
 interface FinancialTabProps {
   patientId: string;
@@ -147,9 +146,7 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
                       </CardTitle>
                       <CardDescription>
                         Nº {budget.numero_orcamento} •{" "}
-                        {format(new Date(budget.created_at), "dd/MM/yyyy", {
-                          locale: ptBR,
-                        })}
+                        {formatDate(budget.created_at)}
                       </CardDescription>
                     </div>
                     {getBudgetStatusBadge(budget.status)}
@@ -170,9 +167,7 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
                     {budget.data_expiracao && (
                       <div>
                         <span className="font-semibold">Validade:</span>{" "}
-                        {format(new Date(budget.data_expiracao), "dd/MM/yyyy", {
-                          locale: ptBR,
-                        })}
+                        {formatDate(budget.data_expiracao)}
                       </div>
                     )}
                   </div>

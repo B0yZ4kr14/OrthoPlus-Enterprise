@@ -3,8 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/car
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date.utils";
 
 interface ContasPagarListProps {
   contas: ContaPagar[];
@@ -89,14 +88,12 @@ export function ContasPagarList({
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Vencimento:{" "}
-                  {format(conta.dataVencimento, "dd/MM/yyyy", { locale: ptBR })}
+                  {formatDate(conta.dataVencimento)}
                 </p>
                 {conta.dataPagamento && (
                   <p className="text-sm text-success">
                     Pago em:{" "}
-                    {format(conta.dataPagamento, "dd/MM/yyyy", {
-                      locale: ptBR,
-                    })}
+                    {formatDate(conta.dataPagamento)}
                   </p>
                 )}
               </div>

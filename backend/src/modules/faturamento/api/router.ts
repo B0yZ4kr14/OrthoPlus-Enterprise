@@ -6,32 +6,26 @@ export function createFaturamentoRouter(): Router {
   const router: Router = Router();
   const controller = new FaturamentoController();
 
-  router.post("/nfes", (req, res) => controller.createNFe(req, res));
-  router.get("/nfes", (req, res) => controller.listNFes(req, res));
-  router.post("/nfes/:id/autorizar", (req, res) =>
-    controller.autorizarNFe(req, res),
-  );
-  router.post("/nfes/:id/cancelar", (req, res) =>
-    controller.cancelarNFe(req, res),
-  );
+  router.post("/nfes", controller.createNFe);
+  router.get("/nfes", controller.listNFes);
+  router.post("/nfes/:id/autorizar", controller.autorizarNFe);
+  router.post("/nfes/:id/cancelar", controller.cancelarNFe);
 
   // Gamification Worker
   const gamificationWorker = new GamificationWorkerController();
-  router.post("/gamification/process", (req, res) =>
-    gamificationWorker.processGoalsAndRankings(req, res),
-  );
+  router.post("/gamification/process", gamificationWorker.processGoalsAndRankings);
 
   // Legacy Fiscal Routes
-  router.post("/nfce/autorizar", (req, res) => controller.autorizarNfceSefaz(req, res));
-  router.post("/nfce/carta-correcao", (req, res) => controller.cartaCorrecaoNfce(req, res));
-  router.post("/nfce/emitir", (req, res) => controller.emitirNfce(req, res));
-  router.post("/nfce/inutilizar", (req, res) => controller.inutilizarNumeracaoNfce(req, res));
-  router.post("/nfce/contingencia", (req, res) => controller.sincronizarNfceContingencia(req, res));
+  router.post("/nfce/autorizar", controller.autorizarNfceSefaz);
+  router.post("/nfce/carta-correcao", controller.cartaCorrecaoNfce);
+  router.post("/nfce/emitir", controller.emitirNfce);
+  router.post("/nfce/inutilizar", controller.inutilizarNumeracaoNfce);
+  router.post("/nfce/contingencia", controller.sincronizarNfceContingencia);
   
-  router.post("/validate-xml", (req, res) => controller.validateFiscalXml(req, res));
-  router.post("/sat/imprimir", (req, res) => controller.imprimirCupomSat(req, res));
-  router.post("/sped", (req, res) => controller.gerarSpedFiscal(req, res));
-  router.post("/contabilidade/enviar", (req, res) => controller.enviarDadosContabilidade(req, res));
+  router.post("/validate-xml", controller.validateFiscalXml);
+  router.post("/sat/imprimir", controller.imprimirCupomSat);
+  router.post("/sped", controller.gerarSpedFiscal);
+  router.post("/contabilidade/enviar", controller.enviarDadosContabilidade);
 
   return router;
 }

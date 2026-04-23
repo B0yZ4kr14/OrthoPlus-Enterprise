@@ -3,8 +3,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { Card, CardContent } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Image as ImageIcon, Upload, ZoomIn } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date.utils";
 import { useState } from "react";
 import { ImageViewer } from "@/components/imaging/ImageViewer";
 
@@ -76,9 +75,7 @@ export function ImagingTab({ patientId }: ImagingTabProps) {
                 </div>
                 <p className="font-medium text-sm">{image.tipo_radiografia}</p>
                 <p className="text-xs text-muted-foreground">
-                  {format(new Date(image.created_at), "dd/MM/yyyy", {
-                    locale: ptBR,
-                  })}
+                  {formatDate(image.created_at)}
                 </p>
                 {image.resultado_ia && (
                   <div className="mt-2">
