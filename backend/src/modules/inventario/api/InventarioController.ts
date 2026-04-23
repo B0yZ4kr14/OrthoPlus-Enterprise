@@ -333,4 +333,39 @@ export class InventarioController {
         .json({ error: "Internal server error" });
     }
   };
+
+  atualizarProduto = async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        return res.status(401).json({ error: "Missing clinic context" });
+      }
+      const { id } = req.params;
+      const data = await prisma.produtos.updateMany({
+        where: { id, clinic_id: clinicId },
+        data: req.body,
+      });
+      return res.json({ success: true, data });
+    } catch (error: unknown) {
+      logger.error("Error updating produto", { error });
+      return res.status(500).json({ error: "Erro ao atualizar produto" });
+    }
+  };
+
+  removerProduto = async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        return res.status(401).json({ error: "Missing clinic context" });
+      }
+      const { id } = req.params;
+      await prisma.produtos.deleteMany({
+        where: { id, clinic_id: clinicId },
+      });
+      return res.status(204).send();
+    } catch (error: unknown) {
+      logger.error("Error deleting produto", { error });
+      return res.status(500).json({ error: "Erro ao remover produto" });
+    }
+  };
 }

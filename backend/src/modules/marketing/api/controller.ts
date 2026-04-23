@@ -394,4 +394,16 @@ export class MarketingController {
       processed,
     });
   });
+
+  deleteCampanha = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
+    }
+    const { id } = req.params;
+    await (prisma as any).marketing_campaigns.deleteMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      where: { id, clinic_id: clinicId },
+    });
+    res.status(204).send();
+  });
 }

@@ -284,4 +284,20 @@ export class TeleodontoController {
       res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  async delete(req: Request, res: Response) {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Missing clinic context" });
+        return;
+      }
+      const { id } = req.params;
+      await (prisma as any).teleconsultas.deleteMany({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      res.status(204).send();
+    } catch (error) {
+      logger.error("Error deleting teleconsulta", { error });
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }

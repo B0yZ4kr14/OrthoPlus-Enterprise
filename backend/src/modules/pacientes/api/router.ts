@@ -51,6 +51,9 @@ router.get("/", (req, res) => controller.list(req, res));
 // GET /api/pacientes/:id - Buscar paciente
 router.get("/:id", (req, res) => controller.getById(req, res));
 
+// DELETE /api/pacientes/:id - Remover paciente
+router.delete("/:id", (req, res) => controller.delete(req, res));
+
 // PATCH /api/pacientes/:id/status - Alterar status
 router.patch("/:id/status", (req, res) => controller.changeStatus(req, res));
 

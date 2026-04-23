@@ -153,8 +153,8 @@ router.use(clinicGuard);
     }
   });
 
-  // Odontogramas — UPDATE
-  router.put('/odontogramas/:id', async (req: Request, res: Response) => {
+  // Odontogramas — UPDATE (PUT, PATCH)
+  const updateOdontograma = async (req: Request, res: Response) => {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
@@ -171,6 +171,23 @@ router.use(clinicGuard);
       return res.json(data);
     } catch (error) {
       logger.error('Error updating odontograma', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  router.put('/odontogramas/:id', updateOdontograma);
+  router.patch('/odontogramas/:id', updateOdontograma);
+
+  // Odontogramas — DELETE
+  router.delete('/odontogramas/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const existing = await (prisma as any).odontogramas.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (!existing) return res.status(404).json({ error: 'Odontograma not found' });
+      await (prisma as any).odontogramas.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(204).send();
+    } catch (error) {
+      logger.error('Error deleting odontograma', { error });
       return res.status(500).json({ error: 'Internal server error' });
     }
   });

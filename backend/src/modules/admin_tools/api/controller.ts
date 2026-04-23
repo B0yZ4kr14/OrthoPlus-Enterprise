@@ -233,4 +233,14 @@ export class AdminToolsController {
     res.status(200).json({ results });
     return;
   });
+
+  deleteWikiEntry = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
+    }
+    const { id } = req.params;
+    await (prisma as any).wiki_pages.deleteMany({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    res.status(204).send();
+  });
 }

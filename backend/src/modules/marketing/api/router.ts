@@ -11,6 +11,7 @@ router.get("/campanhas", controller.listCampanhas);
 router.get("/campanhas/:id", controller.getCampanhaById);
 router.post("/campanhas", controller.createCampanha);
 router.patch("/campanhas/:id", controller.updateCampanha);
+router.delete("/campanhas/:id", controller.deleteCampanha);
 
 // Envios
 router.get("/envios", controller.listEnvios);

@@ -16,6 +16,7 @@ router.post("/adrs", controller.createADR);
 router.get("/wiki", controller.listWiki);
 router.post("/wiki", controller.createWikiEntry);
 router.patch("/wiki/:id", controller.updateWikiEntry);
+router.delete("/wiki/:id", controller.deleteWikiEntry);
 
 // Legacy Admin Endpoints
 router.post("/create-root-user", controller.createRootUser);

@@ -109,4 +109,19 @@ export class ProcedimentosController {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  async deleteTemplate(req: Request, res: Response) {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        return res.status(401).json({ error: "Missing clinic context" });
+      }
+      const { id } = req.params;
+      await (prisma as any).procedimento_templates.deleteMany({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(204).send();
+    } catch (error) {
+      logger.error("Error deleting procedure template", { error });
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
 }

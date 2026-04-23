@@ -19,6 +19,8 @@ router.use(clinicGuard);
   router.post('/produtos', controller.cadastrarProduto);
   router.get('/produtos', controller.listarProdutos);
   router.get('/produtos/:id', controller.obterProduto);
+  router.patch('/produtos/:id', controller.atualizarProduto);
+  router.delete('/produtos/:id', controller.removerProduto);
 
   // Automations / Legacy / Webhooks
   router.post("/automation", controller.manageAutomation);

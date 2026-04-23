@@ -9,6 +9,7 @@ router.use(clinicGuard);
 // Config
 router.get("/config", (req, res) => controller.getConfig(req, res));
 router.put("/config", (req, res) => controller.upsertConfig(req, res));
+router.post("/config", (req, res) => controller.upsertConfig(req, res));  // alias for frontend compatibility
 
 // Comissões
 router.get("/comissoes", (req, res) => controller.listComissoes(req, res));

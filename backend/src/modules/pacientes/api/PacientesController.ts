@@ -467,4 +467,26 @@ export class PacientesController {
       res.status(500).json({ error: "Erro interno na autenticação" });
     }
   }
+
+  /**
+   * DELETE /api/pacientes/:id
+   * Remove paciente (soft delete)
+   */
+  async delete(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Missing clinic context" });
+        return;
+      }
+      await prisma.patients.deleteMany({
+        where: { id, clinic_id: clinicId },
+      });
+      res.status(200).json({ success: true, message: "Paciente removido" });
+    } catch (error: unknown) {
+      logger.error("Error deleting patient", { error });
+      res.status(500).json({ error: "Erro ao remover paciente" });
+    }
+  }
 }
