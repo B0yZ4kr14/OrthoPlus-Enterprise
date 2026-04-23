@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
@@ -41,6 +42,7 @@ const actionLabels: Record<
 };
 
 export function PermissionAuditLogs() {
+  const { user } = useAuth();
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterUser, setFilterUser] = useState<string>("all");
@@ -56,7 +58,7 @@ export function PermissionAuditLogs() {
 
   const fetchUsers = async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/configuracoes/usuarios");
+      const data = await apiClient.get<Record<string, any>[]>('/configuracoes/usuarios');
       // @ts-expect-error — TS2345
       setUsers(data || []);
     } catch (error) {
@@ -68,8 +70,6 @@ export function PermissionAuditLogs() {
     try {
       setLoading(true);
 
-      const authUser = await apiClient.get<Record<string, any>>("/auth/me");
-      const user = authUser?.user;
       if (!user) return;
 
       const profileDataArray = await apiClient.get<Record<string, any>[]>(

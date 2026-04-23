@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/apiClient";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card } from "@orthoplus/core-ui/card";
 import { Checkbox } from "@orthoplus/core-ui/checkbox";
 import { Badge } from "@orthoplus/core-ui/badge";
@@ -30,6 +31,7 @@ interface UserPermission {
 }
 
 export function ModulePermissionsManager() {
+  const { user: currentUser, selectedClinic } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [modules, setModules] = useState<Module[]>([]);
   const [permissions, setPermissions] = useState<UserPermission[]>([]);
@@ -114,15 +116,6 @@ export function ModulePermissionsManager() {
     const currentPermission = hasPermission(userId, moduleId);
 
     try {
-      // Buscar informações para auditoria
-      const authUser = await apiClient.get<Record<string, any>>("/auth/me");
-      const user = authUser?.user;
-
-      const profileDataArray = await apiClient.get<Record<string, any>[]>(
-        `/configuracoes/usuarios/${user?.id}`,
-      );
-      const profileData = profileDataArray?.[0];
-
       if (currentPermission) {
         // Remover permissão
         await apiClient.delete(
@@ -137,8 +130,8 @@ export function ModulePermissionsManager() {
 
         // Registrar auditoria
         await apiClient.post("/configuracoes/permissoes/audit", {
-          clinic_id: profileData?.clinic_id,
-          user_id: user?.id,
+          clinic_id: selectedClinic?.id,
+          user_id: currentUser?.id,
           target_user_id: userId,
           action: "PERMISSION_REVOKED",
           module_catalog_id: moduleId,
@@ -160,8 +153,8 @@ export function ModulePermissionsManager() {
 
         // Registrar auditoria
         await apiClient.post("/configuracoes/permissoes/audit", {
-          clinic_id: profileData?.clinic_id,
-          user_id: user?.id,
+          clinic_id: selectedClinic?.id,
+          user_id: currentUser?.id,
           target_user_id: userId,
           action: "PERMISSION_GRANTED",
           module_catalog_id: moduleId,

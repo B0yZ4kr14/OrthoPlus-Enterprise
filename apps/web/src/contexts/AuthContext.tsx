@@ -25,6 +25,8 @@ interface ApiError {
 export interface User {
   id: string;
   email?: string;
+  full_name?: string;
+  avatar_url?: string;
   user_metadata?: Record<string, unknown>;
   app_metadata?: Record<string, unknown>;
   role?: string;
@@ -51,7 +53,7 @@ interface PatientUser {
 
 interface AuthContextType {
   user: User | PatientUser | null;
-  session: Session | string | null;
+  session: Session | null;
   loading: boolean;
   userRole: "ADMIN" | "MEMBER" | null;
   userProfile: UserProfile | null;
@@ -84,7 +86,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | PatientUser | null>(null);
-  const [session, setSession] = useState<Session | string | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<"ADMIN" | "MEMBER" | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -131,6 +133,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!currentUser || "role" in currentUser) return currentUser;
         return {
           ...currentUser,
+          full_name:
+            profileData?.full_name ||
+            ((currentUser as User).user_metadata?.full_name as string | undefined),
+          avatar_url: profileData?.avatar_url,
           user_metadata: {
             ...(currentUser as User).user_metadata,
             avatar_url: profileData?.avatar_url,
@@ -194,7 +200,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           "/auth/me",
         );
         if (data && data.user) {
-          setSession(data.session || "active");
+          setSession(data.session ? { access_token: data.session } : { access_token: "cookie" });
           setUser(data.user);
           fetchUserMetadata(data.user.id);
         } else {
@@ -237,7 +243,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // The backend sets an HttpOnly cookie on successful login.
       // We only need to update the in-memory state here.
-      setSession(response.access_token ?? "active");
+      setSession(response.access_token ? { access_token: response.access_token } : { access_token: "cookie" });
       setUser(response.user ?? null);
       toast.success("Login realizado com sucesso!");
 
@@ -269,7 +275,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       setUser(data.user || data.patient || null);
-      setSession(data.access_token || data.token || null);
+      setSession(data.access_token ? { access_token: data.access_token } : data.token ? { access_token: data.token } : null);
       setUserProfile("PATIENT");
 
       toast.success("Bem-vindo ao Portal do Paciente!");

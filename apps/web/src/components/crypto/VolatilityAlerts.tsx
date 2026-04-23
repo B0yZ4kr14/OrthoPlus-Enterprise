@@ -47,7 +47,7 @@ interface CryptoPriceAlertData {
 }
 
 export function VolatilityAlerts() {
-  const { selectedClinic } = useAuth();
+  const { selectedClinic, user } = useAuth();
   const [alerts, setAlerts] = useState<VolatilityAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -102,8 +102,7 @@ export function VolatilityAlerts() {
     if (!selectedClinic?.id) return;
 
     try {
-      const userData = await apiClient.get<Record<string, any>>("/auth/me");
-      if (!userData?.id) {
+      if (!user?.id) {
         toast.error("Usuário não autenticado");
         return;
       }
@@ -115,7 +114,7 @@ export function VolatilityAlerts() {
         target_rate_brl: 0,
         notification_method: formData.notification_method,
         is_active: true,
-        created_by: userData.id,
+        created_by: user.id,
       });
 
       toast.success("Alerta de volatilidade criado com sucesso!");

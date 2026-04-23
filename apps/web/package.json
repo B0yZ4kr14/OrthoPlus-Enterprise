@@ -55,6 +55,7 @@
     "eslint": "^10.1.0",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "globals": "^17.4.0",
     "postcss": "^8.5.6",
     "recharts": "^2.15.4",

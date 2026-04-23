@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
@@ -43,6 +44,7 @@ const templateIcons: Record<string, unknown> = {
 };
 
 export function PermissionTemplates() {
+  const { user, selectedClinic } = useAuth();
   const [templates, setTemplates] = useState<Template[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<string>("");
@@ -124,16 +126,8 @@ export function PermissionTemplates() {
       await apiClient.post("/configuracoes/permissoes/batch", permissions);
 
       // Registrar auditoria
-      const authUser = await apiClient.get<Record<string, any>>("/auth/me");
-      const user = authUser?.user;
-
-      const profileDataArray = await apiClient.get<Record<string, any>[]>(
-        `/configuracoes/usuarios/${user?.id}`,
-      );
-      const profileData = profileDataArray?.[0];
-
       await apiClient.post("/configuracoes/permissoes/audit", {
-        clinic_id: profileData?.clinic_id,
+        clinic_id: selectedClinic?.id,
         user_id: user?.id,
         target_user_id: selectedUser,
         action: "TEMPLATE_APPLIED",

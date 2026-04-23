@@ -82,7 +82,7 @@ function validateEnvironment() {
   }
 
   // Security check: Prevent using default/mock JWT secret
-  if (process.env.JWT_SECRET=<REMOVED> '<REMOVED>') {
+  if (process.env.JWT_SECRET === '<REMOVED>') {
     console.error('❌ FATAL: Using default JWT_SECRET "<REMOVED>" is not allowed');
     console.error('Please set a secure JWT_SECRET (256-bit random string recommended)');
     process.exit(1);
