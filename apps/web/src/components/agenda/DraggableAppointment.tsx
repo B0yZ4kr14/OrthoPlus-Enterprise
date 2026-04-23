@@ -2,8 +2,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Clock, User } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDateCustom } from "@/lib/utils/date.utils";
 
 interface DraggableAppointmentProps {
   appointment: {
@@ -63,11 +62,9 @@ export function DraggableAppointment({
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Clock className="h-3 w-3" />
             <span>
-              {format(new Date(appointment.startTime), "HH:mm", {
-                locale: ptBR,
-              })}{" "}
+              {formatDateCustom(appointment.startTime, "HH:mm")}{" "}
               -{" "}
-              {format(new Date(appointment.endTime), "HH:mm", { locale: ptBR })}
+              {formatDateCustom(appointment.endTime, "HH:mm")}
             </span>
           </div>
           {appointment.treatmentType && (

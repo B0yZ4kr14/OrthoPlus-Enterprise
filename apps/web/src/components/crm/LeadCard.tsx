@@ -3,8 +3,7 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Lead, LeadStatus } from "@/modules/crm/domain/entities/Lead";
 import { Mail, Phone, Calendar, User, TrendingUp } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date.utils";
 
 interface LeadCardProps {
   lead: Lead;
@@ -74,7 +73,7 @@ export function LeadCard({ lead, onStatusChange, onClick }: LeadCardProps) {
               <Calendar className="h-4 w-4" />
               <span>
                 Próximo contato:{" "}
-                {format(lead.proximoContato, "dd/MM/yyyy", { locale: ptBR })}
+                {formatDate(lead.proximoContato)}
               </span>
             </div>
           )}

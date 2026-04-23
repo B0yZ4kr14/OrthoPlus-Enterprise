@@ -74,6 +74,11 @@ interface AuthContextType {
     password: string,
     fullName: string,
   ) => Promise<{ error: unknown }>;
+  registerStaffUser: (payload: {
+    email: string;
+    password: string;
+    full_name: string;
+  }) => Promise<{ user?: User; error: unknown }>;
   signIn: (email: string, password: string) => Promise<{ error: unknown }>;
   signInPatient: (
     email: string,
@@ -234,6 +239,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const registerStaffUser = async (payload: {
+    email: string;
+    password: string;
+    full_name: string;
+  }) => {
+    try {
+      const data = await apiClient.post<{ user?: User }>("/auth/register", payload);
+      return { user: data.user, error: null };
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Tente novamente.";
+      toast.error("Erro ao criar usuário", { description: msg });
+      return { error };
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     try {
       const response = await apiClient.post<{
@@ -352,6 +372,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         hasModuleAccess,
         fetchUserMetadata,
         signUp,
+        registerStaffUser,
         signIn,
         signInPatient,
         signOut,

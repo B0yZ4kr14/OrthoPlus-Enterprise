@@ -49,7 +49,7 @@ interface ModulePermission {
 }
 
 export const UserManagementTab = () => {
-  const { clinicId, hasRole } = useAuth();
+  const { clinicId, hasRole, registerStaffUser } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -138,28 +138,25 @@ export const UserManagementTab = () => {
     }
 
     try {
-      // Criar usuário via API
-      const authData = await apiClient.post<unknown>("/auth/register", {
+      // Criar usuário via AuthContext
+      const { user: newUser, error } = await registerStaffUser({
         email: newUserEmail,
         password: newUserPassword,
         full_name: newUserName,
       });
 
-      // @ts-expect-error — TS2339
-      if (!authData?.user) {
+      if (error || !newUser) {
         throw new Error("Usuário não criado");
       }
 
       // Atualizar perfil com clinic_id
-      // @ts-expect-error — TS2339
-      await apiClient.patch(`/configuracoes/usuarios/${authData.user.id}`, {
+      await apiClient.patch(`/configuracoes/usuarios/${newUser.id}`, {
         clinic_id: clinicId,
       });
 
       // Adicionar role
       await apiClient.post("/configuracoes/usuarios/roles", {
-        // @ts-expect-error — TS2339
-        user_id: authData.user.id,
+        user_id: newUser.id,
         role: newUserRole,
       });
 
@@ -168,8 +165,7 @@ export const UserManagementTab = () => {
         const permissionsToInsert = userPermissions
           .filter((p) => p.can_view || p.can_edit || p.can_delete)
           .map((p) => ({
-            // @ts-expect-error — TS2339
-            user_id: authData.user.id,
+            user_id: newUser.id,
             module_catalog_id: modules.find(
               // @ts-expect-error — TS18046
               (m) => m.module_key === p.module_key,

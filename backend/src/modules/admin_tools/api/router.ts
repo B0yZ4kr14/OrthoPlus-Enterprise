@@ -5,13 +5,13 @@ const controller = new AdminToolsController();
 const router: Router = Router();
 
 // ADRs
-router.get("/adrs", (req, res) => controller.listADRs(req, res));
-router.post("/adrs", (req, res) => controller.createADR(req, res));
+router.get("/adrs", controller.listADRs);
+router.post("/adrs", controller.createADR);
 
 // Wiki
-router.get("/wiki", (req, res) => controller.listWiki(req, res));
-router.post("/wiki", (req, res) => controller.createWikiEntry(req, res));
-router.patch("/wiki/:id", (req, res) => controller.updateWikiEntry(req, res));
+router.get("/wiki", controller.listWiki);
+router.post("/wiki", controller.createWikiEntry);
+router.patch("/wiki/:id", controller.updateWikiEntry);
 
 // Legacy Admin Endpoints
 router.post("/create-root-user", controller.createRootUser);

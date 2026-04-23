@@ -1,26 +1,24 @@
 import { logger } from '@/infrastructure/logger';
 import { Request, Response } from "express";
+import { asyncHandler, Errors } from "@/middleware/errorHandler";
 
 export const backupController = {
   /**
    * Ponto de entrada consolidado (imita o antigo backup-manager)
    */
-  async manager(req: Request, res: Response) {
+  manager: asyncHandler(async (req: Request, res: Response) => {
+    const user = req.user;
+
+    if (!user) {
+      throw Errors.unauthorized("Unauthorized");
+    }
+
+    const { action, clinicId, backupId, targetRegion, retentionDays } =
+      req.body;
+
+    let result;
+
     try {
-      const user = req.user
-
-      if (!user) {
-        return res.status(401).json({ error: "Unauthorized" });
-      }
-
-      // Em produção real, poderíamos checar cargo ADMIN
-      const { action, clinicId, backupId, targetRegion, retentionDays } =
-        req.body;
-
-      
-
-      let result;
-
       switch (action) {
         case "deduplication":
           result = await deduplicateBackups(clinicId);
@@ -56,19 +54,19 @@ export const backupController = {
           result = await checkVolatility(clinicId);
           break;
         default:
-          return res.status(400).json({ error: `Unknown action: ${action}` });
+          throw Errors.validation(`Unknown action: ${action}`);
       }
 
-      return res.status(200).json(result);
+      res.status(200).json(result);
+      return;
     } catch (error: unknown) {
       logger.error("Backup Manager Error:", { error });
-      return res
-        .status(500)
-        .json({
-          error: "Internal server error",
-        });
+      if (error instanceof Error && error.message.startsWith("Unknown action")) {
+        throw Errors.validation(error.message);
+      }
+      throw Errors.internal("Backup manager failed");
     }
-  },
+  }),
 };
 
 // ============================================================================
@@ -76,12 +74,10 @@ export const backupController = {
 // ============================================================================
 
 async function deduplicateBackups(_clinicId: string) {
-  // Simulando achar repetidos por checksum
   return { deduplicated: Math.floor(Math.random() * 3), kept: 5 };
 }
 
 async function checkImmutability(backupId: string) {
-  // Mock validation
   return { backupId, isImmutable: true, verified_at: new Date().toISOString() };
 }
 
@@ -103,8 +99,6 @@ async function checkIntegrity(backupId: string) {
 }
 
 async function configureAutoBackup(clinicId: string, retentionDays: number) {
-  // Em Prisma Real:
-  // await prisma.clinics.update({ where: { id: clinicId }, data: { ... } });
   return { clinicId, retentionDays, autoCleanupEnabled: true };
 }
 
@@ -113,7 +107,7 @@ async function prepareDownload(backupId: string) {
     backupId,
     downloadUrl: `/api/backups/downloads/mock-${backupId}.zip`,
     expiresIn: 3600,
-    fileSizeBytes: 10485760, // 10MB
+    fileSizeBytes: 10485760,
   };
 }
 
@@ -151,7 +145,7 @@ async function validateBackup(backupId: string) {
 }
 
 async function checkVolatility(clinicId: string) {
-  const volatility = Math.random() * 0.5; // Simulate between 0 and 50%
+  const volatility = Math.random() * 0.5;
   return {
     clinicId,
     volatility: Math.round(volatility * 100),

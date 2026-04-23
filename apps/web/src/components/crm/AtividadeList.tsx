@@ -6,8 +6,7 @@ import {
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { formatDateCustom } from "@/lib/utils/date.utils";
 import {
   Phone,
   Mail,
@@ -79,17 +78,13 @@ export function AtividadeList({ atividades, onConcluir }: AtividadeListProps) {
                 {atividade.dataAgendada && (
                   <span>
                     Agendada:{" "}
-                    {format(atividade.dataAgendada, "dd/MM/yyyy 'às' HH:mm", {
-                      locale: ptBR,
-                    })}
+                    {formatDateCustom(atividade.dataAgendada, "dd/MM/yyyy 'às' HH:mm")}
                   </span>
                 )}
                 {atividade.dataConclusao && (
                   <span>
                     Concluída:{" "}
-                    {format(atividade.dataConclusao, "dd/MM/yyyy 'às' HH:mm", {
-                      locale: ptBR,
-                    })}
+                    {formatDateCustom(atividade.dataConclusao, "dd/MM/yyyy 'às' HH:mm")}
                   </span>
                 )}
               </div>

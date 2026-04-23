@@ -1,4 +1,13 @@
-import { format, parseISO } from "date-fns";
+import {
+  format as dateFnsFormat,
+  parseISO,
+  isValid,
+  addDays,
+  subDays,
+  startOfDay,
+  endOfDay,
+  subMonths,
+} from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export function formatDate(
@@ -7,10 +16,11 @@ export function formatDate(
 ): string {
   try {
     const dateObj = typeof date === "string" ? parseISO(date) : date;
-    return format(dateObj, formatStr, { locale: ptBR });
+    if (!isValid(dateObj)) return "-";
+    return dateFnsFormat(dateObj, formatStr, { locale: ptBR });
   } catch (error) {
     console.error("Error formatting date:", error);
-    return "";
+    return "-";
   }
 }
 
@@ -26,15 +36,28 @@ export function formatDateWithWeekday(date: string | Date): string {
   return formatDate(date, "EEEE, dd 'de' MMMM 'de' yyyy");
 }
 
+export function formatDateCustom(date: string | Date, formatStr: string): string {
+  try {
+    const dateObj = typeof date === "string" ? parseISO(date) : date;
+    if (!isValid(dateObj)) return "-";
+    return dateFnsFormat(dateObj, formatStr, { locale: ptBR });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return "-";
+  }
+}
+
 export function getCurrentDate(): string {
-  return format(new Date(), "yyyy-MM-dd");
+  return dateFnsFormat(new Date(), "yyyy-MM-dd", { locale: ptBR });
 }
 
 export function isValidDate(dateString: string): boolean {
   try {
     const date = parseISO(dateString);
-    return !isNaN(date.getTime());
+    return isValid(date);
   } catch {
     return false;
   }
 }
+
+export { parseISO, isValid, addDays, subDays, startOfDay, endOfDay, subMonths };
