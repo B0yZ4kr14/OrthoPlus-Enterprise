@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { Router, Request, Response } from 'express';
@@ -27,6 +28,7 @@ const odontogramaUpdateSchema = z.object({
 
 export function createPepRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new PepController();
 
   // Prontuarios

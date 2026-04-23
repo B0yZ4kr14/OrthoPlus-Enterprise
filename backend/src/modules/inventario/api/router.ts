@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * MÓDULO INVENTÁRIO - Router
  */
@@ -9,6 +10,7 @@ import { InventarioController } from './InventarioController';
 
 export function createInventarioRouter(db?: IDatabaseConnection): Router {
   const router: Router = Router();
+router.use(clinicGuard);
 
   const produtoRepository = db ? new ProdutoRepositoryPostgres(db) : undefined;
   const controller = new InventarioController(produtoRepository);

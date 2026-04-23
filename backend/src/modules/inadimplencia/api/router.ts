@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { InadimplenciaController } from "./controller";
 
 const controller = new InadimplenciaController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Inadimplentes
 router.get("/inadimplentes", (req, res) => controller.listInadimplentes(req, res));

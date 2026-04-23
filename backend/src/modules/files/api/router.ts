@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import multer from "multer";
 
@@ -17,6 +18,7 @@ import { FilesController } from "./filesController";
 import { ReportController } from "./reportController";
 
 const router: Router = Router();
+router.use(clinicGuard);
 const filesController = new FilesController();
 const reportController = new ReportController();
 

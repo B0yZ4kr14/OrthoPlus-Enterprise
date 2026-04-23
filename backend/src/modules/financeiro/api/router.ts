@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from 'express';
 import { FinanceiroController } from './FinanceiroController';
 
 export function createFinanceiroRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const c = new FinanceiroController();
 
   // Transactions (financial_transactions)

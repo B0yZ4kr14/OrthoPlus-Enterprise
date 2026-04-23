@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { FidelidadeController } from "./controller";
 
 const controller = new FidelidadeController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Pontos
 router.get("/pontos", (req, res) => controller.getPoints(req, res));

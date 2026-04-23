@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { AnalyticsController } from "./analyticsController";
 import { cacheRoute } from "@/infrastructure/redis/cacheRoute";
 
 const router: Router = Router();
+router.use(clinicGuard);
 const controller = new AnalyticsController();
 
 // Relatórios consolidados

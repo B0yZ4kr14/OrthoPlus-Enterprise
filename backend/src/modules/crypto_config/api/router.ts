@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * Crypto Config Module Router
  */
@@ -10,6 +11,7 @@ import { VolatilityWorkerController } from "./volatilityWorker";
 
 export function createCryptoConfigRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new CryptoConfigController();
   const volatilityWorker = new VolatilityWorkerController();
 
@@ -49,6 +51,7 @@ export function createCryptoConfigRouter(): Router {
 
 export function createCryptoRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new CryptoController();
 
   router.post("/convert", controller.convertCryptoToBrl);

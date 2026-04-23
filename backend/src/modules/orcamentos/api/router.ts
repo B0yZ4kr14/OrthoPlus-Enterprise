@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { OrcamentosController } from "./controller";
 
 const controller = new OrcamentosController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 router.get("/", (req, res) => controller.list(req, res));
 router.get("/:id", (req, res) => controller.getById(req, res));

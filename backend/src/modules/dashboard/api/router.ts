@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from 'express';
 import { IDatabaseConnection } from '@/infrastructure/database/IDatabaseConnection';
 import { DashboardController } from '../controllers/DashboardController';
@@ -5,6 +6,7 @@ import { cacheRoute } from '@/infrastructure/redis/cacheRoute';
 
 export function createDashboardRouter(db?: IDatabaseConnection): Router {
   const router: Router = Router();
+router.use(clinicGuard);
 
   if (!db) {
     // Without a database connection, return a stub router

@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * Terminal Module Router
  */
@@ -7,6 +8,7 @@ import { TerminalController } from './TerminalController';
 
 export function createTerminalRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new TerminalController();
 
   router.post('/sessions', (req, res) => controller.createSession(req, res));

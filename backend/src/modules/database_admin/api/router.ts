@@ -1,7 +1,9 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { DatabaseAdminController } from "./DatabaseAdminController";
 
 const router: Router = Router();
+router.use(clinicGuard);
 const databaseAdminController = new DatabaseAdminController();
 
 // /api/db/maintenance

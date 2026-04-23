@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { LGPDController } from "./controller";
 
 const controller = new LGPDController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Consentimentos
 router.get("/consentimentos", (req, res) => controller.listConsentimentos(req, res));

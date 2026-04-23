@@ -1,9 +1,11 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from 'express';
 import { PdvController } from './PdvController';
 import { PDVController as PDVDashboardController } from './controller';
 
 export function createPdvRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new PdvController();
   const dashboardCtrl = new PDVDashboardController();
 

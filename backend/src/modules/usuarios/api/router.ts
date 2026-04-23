@@ -1,7 +1,9 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { UsuariosController } from "./usuariosController";
 
 const router: Router = Router();
+router.use(clinicGuard);
 const controller = new UsuariosController();
 
 router.get("/", (req, res) => controller.list(req, res));

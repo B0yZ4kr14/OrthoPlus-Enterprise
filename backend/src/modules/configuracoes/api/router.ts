@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { ModulosController } from "./ModulosController";
 
 export function createConfiguracoesRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new ModulosController();
 
   router.get("/modulos", controller.getMyModules);

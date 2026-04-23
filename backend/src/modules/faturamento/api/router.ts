@@ -1,9 +1,11 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { FaturamentoController } from "./FaturamentoController";
 import { GamificationWorkerController } from "./gamificationWorker";
 
 export function createFaturamentoRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new FaturamentoController();
 
   router.post("/nfes", controller.createNFe);

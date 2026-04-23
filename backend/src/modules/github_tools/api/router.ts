@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * GitHub Tools Module Router
  */
@@ -7,6 +8,7 @@ import { GitHubToolsController } from './GitHubToolsController';
 
 export function createGitHubToolsRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new GitHubToolsController();
 
   router.get('/repositories', (req, res) => controller.listRepositories(req, res));

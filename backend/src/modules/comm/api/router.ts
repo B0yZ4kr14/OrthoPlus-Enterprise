@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * Comm Router - Communications API (Agora)
  *
@@ -13,6 +14,7 @@ import { CommController } from "./CommController";
 
 const controller = new CommController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 // POST /api/comm/agora/token - Generate Video Token (from 'generate-video-token')
 router.post("/agora/token", controller.generateVideoToken);

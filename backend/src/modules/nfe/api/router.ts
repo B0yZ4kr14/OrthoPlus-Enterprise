@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * MÓDULO NF-e - Router
  *
@@ -10,6 +11,7 @@ import { NFeController } from './controller';
 
 export function createNfeRouter(): Router {
   const router: Router = Router();
+router.use(clinicGuard);
   const controller = new NFeController();
 
   router.get('/status', (req, res) => controller.status(req, res));

@@ -1,7 +1,9 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from 'express';
 import { backupController } from './backupController';
 
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Endpoint que emula a Edge Function 'backup-manager'
 // Gerencia deduplication, immutability, streaming, integrity-check, auto-config,

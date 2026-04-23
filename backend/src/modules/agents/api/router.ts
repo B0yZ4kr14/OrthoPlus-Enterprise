@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * Agents Router - Rotas do módulo AGENTS
  * 
@@ -13,6 +14,7 @@ import { AgentsController } from './AgentsController';
  */
 export function createAgentsRouter(): Router {
   const router = Router();
+router.use(clinicGuard);
   const controller = new AgentsController();
 
   // ========================================================================

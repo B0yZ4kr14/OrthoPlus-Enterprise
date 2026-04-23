@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import {
   getAppointments,
@@ -23,6 +24,7 @@ import {
 } from "./agendaController";
 
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Root route - lista appointments (alias para /appointments)
 router.get("/", getAppointments);

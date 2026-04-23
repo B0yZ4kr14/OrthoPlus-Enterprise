@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { CRMController } from "./controller";
 
 const controller = new CRMController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 router.get("/leads", controller.listLeads);
 router.get("/leads/:id", controller.getLeadById);

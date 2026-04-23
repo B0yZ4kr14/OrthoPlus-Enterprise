@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { TeleodontoController } from "./controller";
 
 const controller = new TeleodontoController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Teleconsultas CRUD
 router.get("/teleconsultas", (req, res) => controller.listTeleconsultas(req, res));

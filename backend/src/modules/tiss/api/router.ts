@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { TISSController } from "./controller";
 
 const controller = new TISSController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Guias TISS
 router.get("/guias", (req, res) => controller.listGuias(req, res));

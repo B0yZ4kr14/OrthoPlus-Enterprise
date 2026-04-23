@@ -1,8 +1,10 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { SplitPagamentoController } from "./controller";
 
 const controller = new SplitPagamentoController();
 const router: Router = Router();
+router.use(clinicGuard);
 
 // Config
 router.get("/config", (req, res) => controller.getConfig(req, res));

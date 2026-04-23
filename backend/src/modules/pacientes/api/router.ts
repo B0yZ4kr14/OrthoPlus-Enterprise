@@ -1,3 +1,4 @@
+import { clinicGuard } from "@/middleware/clinicGuard";
 /**
  * Pacientes Router - Rotas do módulo PACIENTES
  *
@@ -36,6 +37,7 @@ const controller = new PacientesController(
 
 // Router
 const router: Router = Router();
+router.use(clinicGuard);
 
 // POST /api/pacientes - Cadastrar paciente
 router.post("/", (req, res) => controller.create(req, res));
