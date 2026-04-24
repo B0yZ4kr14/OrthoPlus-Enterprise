@@ -11,7 +11,6 @@ export function CryptoTour() {
     target: step.target,
     content: index === 0 ? <WelcomeContent /> : <StepContent step={step} />,
     placement: step.placement || "bottom",
-    // @ts-expect-error — TS2353
     disableBeacon: index > 0,
   }));
 

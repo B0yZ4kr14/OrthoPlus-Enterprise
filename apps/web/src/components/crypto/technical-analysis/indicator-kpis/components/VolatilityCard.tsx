@@ -2,7 +2,7 @@ import { BarChart3 } from "lucide-react";
 import { KPICard } from "./KPICard";
 
 interface VolatilityCardProps {
-  volatility: number;
+  volatility: string;
   period: string;
 }
 

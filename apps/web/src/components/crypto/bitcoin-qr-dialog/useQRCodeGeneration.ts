@@ -33,9 +33,9 @@ export function useQRCodeGeneration(
         dark: "#000000",
         light: "#FFFFFF",
       },
-    }).then((url) => {
+    }).then((url: string) => {
       if (!cancelled) setQrCodeUrl(url);
-    }).catch((error) => {
+    }).catch((error: unknown) => {
       logger.error("Error generating QR code:", error);
       toast.error("Erro ao gerar QR Code");
     });
