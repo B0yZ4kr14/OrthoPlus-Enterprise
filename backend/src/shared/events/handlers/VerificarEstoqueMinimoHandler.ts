@@ -22,10 +22,15 @@ export class VerificarEstoqueMinimoHandler implements EventHandler<EstoqueAltera
           ? `CRÍTICO: ${event.produto.nome} sem estoque!`
           : `Estoque mínimo: ${event.produto.nome} (${event.produto.quantidadeAtual}/${event.produto.quantidadeMinima} un)`;
 
-        await prisma.$queryRaw`
-          INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-          VALUES (${clinicId}, 'ALERTA', ${titulo}, ${mensagem}, '/estoque')
-        `;
+        await (prisma as any).notifications.create({
+          data: {
+            clinic_id: clinicId,
+            tipo: "ALERTA",
+            titulo,
+            mensagem,
+            link_acao: "/estoque",
+          },
+        });
       }
     } catch (error) {
       logger.error('Erro ao verificar estoque mínimo', { error, event });

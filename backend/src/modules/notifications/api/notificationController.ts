@@ -160,18 +160,27 @@ export class NotificationController {
         return;
       }
 
-      const notif = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        INSERT INTO notifications (clinic_id, user_id, tipo, titulo, mensagem, link_acao)
-        VALUES (${clinic_id}, ${user_id || null}, ${tipo}, ${titulo}, ${mensagem}, ${link_acao || null})
-        RETURNING *
-      `;
+      const notif = await (prisma as any).notifications.create({
+        data: {
+          clinic_id,
+          user_id: user_id || null,
+          tipo,
+          titulo,
+          mensagem,
+          link_acao: link_acao || null,
+        },
+      });
 
-      await prisma.$queryRaw`
-        INSERT INTO audit_logs (clinic_id, user_id, action, details)
-        VALUES (${clinic_id}, ${user_id || null}, 'NOTIFICATION_CREATED', ${JSON.stringify({ tipo, titulo, notification_id: notif[0].id })}::jsonb)
-      `;
+      await (prisma as any).audit_logs.create({
+        data: {
+          clinic_id,
+          user_id: user_id || null,
+          action: "NOTIFICATION_CREATED",
+          details: { tipo, titulo, notification_id: notif.id },
+        },
+      });
 
-      res.json({ success: true, notification: notif[0] });
+      res.json({ success: true, notification: notif });
     } catch (error) {
       next(error);
     }
@@ -249,15 +258,20 @@ export class NotificationController {
             shouldTrigger = true;
 
           if (shouldTrigger) {
-            await prisma.$queryRaw`
-              UPDATE crypto_price_alerts SET last_triggered_at = NOW() WHERE id = ${alert.id}
-            `;
+            await (prisma as any).crypto_price_alerts.update({
+              where: { id: alert.id },
+              data: { last_triggered_at: new Date().toISOString() },
+            });
 
-            await prisma.$queryRaw`
-              INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-              VALUES (${alert.clinic_id}, 'CRIPTO_VOLATILIDADE', 'Alerta de Volatilidade: ' || ${alert.coin_type},
-              ${alert.coin_type} || ' variou ' || ${changePercentage.toFixed(2)} || '%', '/financeiro/crypto-pagamentos')
-            `;
+            await (prisma as any).notifications.create({
+              data: {
+                clinic_id: alert.clinic_id,
+                tipo: "CRIPTO_VOLATILIDADE",
+                titulo: `Alerta de Volatilidade: ${alert.coin_type}`,
+                mensagem: `${alert.coin_type} variou ${changePercentage.toFixed(2)}%`,
+                link_acao: "/financeiro/crypto-pagamentos",
+              },
+            });
 
             triggeredAlerts.push({
               coin: alert.coin_type,
@@ -366,15 +380,21 @@ export class NotificationController {
           }
         }
 
-        await prisma.$queryRaw`
-          UPDATE crypto_price_alerts SET last_triggered_at = NOW() WHERE id = ${alert.id}
-        `;
+        await (prisma as any).crypto_price_alerts.update({
+          where: { id: alert.id },
+          data: { last_triggered_at: new Date().toISOString() },
+        });
 
-        await prisma.$queryRaw`
-          INSERT INTO notifications (clinic_id, user_id, tipo, titulo, mensagem, link_acao)
-          VALUES (${alert.clinic_id}, ${alert.created_by}, 'CRYPTO_ALERT', 'Taxa ' || ${alert.coin_type} || ' Atingida',
-          'A taxa atingiu ' || ${currentRate}, '/financeiro/crypto-pagamentos')
-        `;
+        await (prisma as any).notifications.create({
+          data: {
+            clinic_id: alert.clinic_id,
+            user_id: alert.created_by,
+            tipo: "CRYPTO_ALERT",
+            titulo: `Taxa ${alert.coin_type} Atingida`,
+            mensagem: `A taxa atingiu ${currentRate}`,
+            link_acao: "/financeiro/crypto-pagamentos",
+          },
+        });
       }
 
       res.json({ success: true, alertsTriggered, alertsSent });
@@ -428,10 +448,14 @@ export class NotificationController {
           console.error("Email failed", e);
         }
 
-        await prisma.$queryRaw`
-          INSERT INTO audit_logs (clinic_id, user_id, action, details)
-          VALUES (${clinic_id}, ${user_id}, 'ALERTAS_REPOSICAO_ENVIADOS', ${JSON.stringify({ total_produtos: previsoes.length })}::jsonb)
-        `;
+        await (prisma as any).audit_logs.create({
+          data: {
+            clinic_id,
+            user_id,
+            action: "ALERTAS_REPOSICAO_ENVIADOS",
+            details: { total_produtos: previsoes.length },
+          },
+        });
       }
 
       res.json({
@@ -451,7 +475,7 @@ export class NotificationController {
     try {
       const produtos = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
         SELECT id, nome, quantidade_atual, quantidade_minima, clinic_id
-        FROM estoque_produtos
+        FROM inventario.produtos
         WHERE quantidade_atual <= quantidade_minima
         LIMIT 1000
       `;
@@ -471,15 +495,25 @@ export class NotificationController {
             ? `CRÍTICO: ${p.nome} sem estoque!`
             : `Estoque mínimo: ${p.nome}`;
 
-        await prisma.$queryRaw`
-          INSERT INTO estoque_alertas (produto_id, tipo, mensagem, quantidade_atual, quantidade_sugerida, lido)
-          VALUES (${p.id}, ${tipoAlerta}, ${msg}, ${p.quantidade_atual}, ${p.quantidade_minima * 2}, false)
-        `;
+        await (prisma as any).estoque_alertas.create({
+          data: {
+            produto_id: p.id,
+            tipo: tipoAlerta,
+            mensagem: msg,
+            quantidade_atual: p.quantidade_atual,
+            quantidade_sugerida: p.quantidade_minima * 2,
+            lido: false,
+            clinic_id: p.clinic_id,
+          },
+        });
 
-        await prisma.$queryRaw`
-          INSERT INTO audit_logs (clinic_id, action, details)
-          VALUES (${p.clinic_id}, 'STOCK_ALERT_SENT', ${JSON.stringify({ produto: p.nome, tipo_alerta: tipoAlerta })}::jsonb)
-        `;
+        await (prisma as any).audit_logs.create({
+          data: {
+            clinic_id: p.clinic_id,
+            action: "STOCK_ALERT_SENT",
+            details: { produto: p.nome, tipo_alerta: tipoAlerta },
+          },
+        });
 
         alertasEnviados.push({
           produto: p.nome,
