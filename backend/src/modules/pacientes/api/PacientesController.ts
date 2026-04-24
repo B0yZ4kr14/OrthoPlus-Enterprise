@@ -310,15 +310,23 @@ export class PacientesController {
             orderBy: { start_time: "desc" },
             take: 20,
           }),
-          prisma.$queryRaw<Array<{ id: string; titulo: string; status: string; data_inicio: string | null; created_at: Date }>>` 
-            SELECT pt.id, pt.titulo, pt.status, pt.data_inicio, pt.created_at
-            FROM pep_tratamentos pt
-            JOIN prontuarios p ON p.id = pt.prontuario_id
-            WHERE p.patient_id = ${patientId}
-              AND p.clinic_id = ${clinicId}
-            ORDER BY pt.created_at DESC
-            LIMIT 20
-          `,
+          prisma.pep_tratamentos.findMany({
+            where: {
+              prontuario: {
+                patient_id: patientId,
+                clinic_id: clinicId,
+              },
+            },
+            select: {
+              id: true,
+              titulo: true,
+              status: true,
+              data_inicio: true,
+              created_at: true,
+            },
+            orderBy: { created_at: "desc" },
+            take: 20,
+          }),
           prisma.budgets.findMany({
             where: { patient_id: patientId, clinic_id: clinicId },
             select: {

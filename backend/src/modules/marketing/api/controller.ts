@@ -151,36 +151,19 @@ export class MarketingController {
     }
 
     // Find active campaigns with active triggers
-    const activeTriggers = await prisma.$queryRaw<Array<{
-      trigger_id: string;
-      campaign_id: string;
-      campaign_name: string;
-      campaign_type: string;
-      channel: string;
-      trigger_type: string;
-      trigger_condition: string;
-      delay_days: number | null;
-      delay_hours: number | null;
-      template_id: string | null;
-    }>>`
-      SELECT
-        ct.id AS trigger_id,
-        mc.id AS campaign_id,
-        mc.name AS campaign_name,
-        mc.campaign_type,
-        mc.channel,
-        ct.trigger_type,
-        ct.trigger_condition::text,
-        ct.delay_days,
-        ct.delay_hours,
-        mc.template_id
-      FROM campaign_triggers ct
-      JOIN marketing_campaigns mc ON mc.id = ct.campaign_id
-      WHERE mc.clinic_id = ${clinicId}
-        AND mc.status = 'ACTIVE'
-        AND ct.is_active = true
-      LIMIT 100
-    `;
+    const activeTriggers = await prisma.campaign_triggers.findMany({
+      where: {
+        is_active: true,
+        campaign: {
+          clinic_id: clinicId,
+          status: "ACTIVE",
+        },
+      },
+      include: {
+        campaign: true,
+      },
+      take: 100,
+    });
 
     if (activeTriggers.length === 0) {
       res.json({ message: "No active triggers found", triggered: 0 });
@@ -194,10 +177,13 @@ export class MarketingController {
     for (const trigger of activeTriggers) {
       let condition: { event?: string; status?: string; days_after?: number };
       try {
-        condition = JSON.parse(trigger.trigger_condition);
+        const rawCondition = typeof trigger.trigger_condition === "string"
+          ? trigger.trigger_condition
+          : JSON.stringify(trigger.trigger_condition);
+        condition = JSON.parse(rawCondition);
       } catch (parseError) {
         logger.warn("Invalid trigger_condition JSON", {
-          triggerId: trigger.trigger_id,
+          triggerId: trigger.id,
           raw: trigger.trigger_condition,
           error: parseError instanceof Error ? parseError.message : String(parseError),
         });
@@ -227,33 +213,56 @@ export class MarketingController {
         const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
         const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999));
 
-        recipients = await prisma.$queryRaw<typeof recipients>`
-          SELECT DISTINCT p.id AS patient_id, p.full_name AS patient_name, p.email
-          FROM appointments a
-          JOIN patients p ON a.patient_id = p.id
-          WHERE a.clinic_id = ${clinicId}
-            AND a.status = 'concluido'
-            AND a.end_time >= ${startOfDay}
-            AND a.end_time <= ${endOfDay}
-          LIMIT 500
-        `;
+        const appointmentRecalls = await prisma.appointments.findMany({
+          where: {
+            clinic_id: clinicId,
+            status: "concluido",
+            end_time: { gte: startOfDay.toISOString(), lte: endOfDay.toISOString() },
+          },
+          include: {
+            patient: {
+              select: { id: true, full_name: true, email: true },
+            },
+          },
+          distinct: ["patient_id"],
+          take: 500,
+        });
+        recipients = appointmentRecalls
+          .filter((a) => a.patient)
+          .map((a) => ({
+            patient_id: a.patient!.id,
+            patient_name: a.patient!.full_name || "",
+            email: a.patient!.email || null,
+          }));
       } else if (condition.event === "no_visit") {
         // Behavioral trigger: patients who haven't visited in N days
         const daysThreshold = condition.days_after || 90;
         const cutoffDate = new Date(now);
         cutoffDate.setDate(cutoffDate.getDate() - daysThreshold);
 
-        recipients = await prisma.$queryRaw<typeof recipients>`
-          SELECT p.id AS patient_id, p.full_name AS patient_name, p.email
-          FROM patients p
-          WHERE p.clinic_id = ${clinicId}
-            AND p.id NOT IN (
-              SELECT DISTINCT a.patient_id FROM appointments a
-              WHERE a.clinic_id = ${clinicId}
-                AND a.start_time >= ${cutoffDate}
-            )
-          LIMIT 500
-        `;
+        const recentAppointmentPatientIds = await prisma.appointments.findMany({
+          where: {
+            clinic_id: clinicId,
+            start_time: { gte: cutoffDate.toISOString() },
+          },
+          select: { patient_id: true },
+          distinct: ["patient_id"],
+        });
+        const recentPatientIds = new Set(recentAppointmentPatientIds.map((a) => a.patient_id));
+        recipients = await prisma.patients.findMany({
+          where: {
+            clinic_id: clinicId,
+            id: { notIn: Array.from(recentPatientIds) },
+          },
+          select: { id: true, full_name: true, email: true },
+          take: 500,
+        }).then((patients) =>
+          patients.map((p) => ({
+            patient_id: p.id,
+            patient_name: p.full_name || "",
+            email: p.email || null,
+          })),
+        );
       }
 
       // Skip if no matching recipients
@@ -268,7 +277,7 @@ export class MarketingController {
         // Check if already sent to this recipient for this campaign recently
         const alreadySent = await prisma.campanha_envios.count({
           where: {
-            campanha_id: trigger.campaign_id,
+            campanha_id: trigger.campaign.id,
             destinatario_id: recipient.patient_id,
             created_at: { gte: oneDayAgo },
           },
@@ -279,7 +288,7 @@ export class MarketingController {
         // Create send record
         await (prisma as any).campanha_envios.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
           data: {
-            campanha_id: trigger.campaign_id,
+            campanha_id: trigger.campaign.id,
             destinatario_id: recipient.patient_id,
             destinatario_tipo: "PATIENT",
             email: recipient.email,
@@ -292,8 +301,8 @@ export class MarketingController {
           data: {
             clinic_id: clinicId,
             tipo: 'MARKETING',
-            titulo: 'Campanha: ' + trigger.campaign_name,
-            mensagem: 'Envio agendado para ' + (recipient.patient_name || 'paciente') + ' via ' + trigger.channel,
+            titulo: 'Campanha: ' + trigger.campaign.name,
+            mensagem: 'Envio agendado para ' + (recipient.patient_name || 'paciente') + ' via ' + trigger.campaign.channel,
             link_acao: '/marketing-auto',
             lida: false,
           },
@@ -305,7 +314,7 @@ export class MarketingController {
       if (sendCount > 0) {
         triggered++;
         results.push({
-          campaign: trigger.campaign_name,
+          campaign: trigger.campaign.name,
           trigger: trigger.trigger_type,
           sends: sendCount,
         });
@@ -337,33 +346,33 @@ export class MarketingController {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
 
-    const pendingRecalls = await prisma.$queryRaw<Array<{
-      id: string;
-      patient_id: string;
-      patient_name: string;
-      patient_email: string | null;
-      tipo_recall: string;
-      data_prevista: string;
-      mensagem_personalizada: string | null;
-      metodo_notificacao: string | null;
-    }>>`
-      SELECT
-        r.id,
-        r.patient_id,
-        p.full_name AS patient_name,
-        p.email AS patient_email,
-        r.tipo_recall,
-        r.data_prevista,
-        r.mensagem_personalizada,
-        r.metodo_notificacao
-      FROM recalls r
-      JOIN patients p ON r.patient_id = p.id
-      WHERE r.clinic_id = ${clinicId}
-        AND r.status = 'PENDING'
-        AND r.notificacao_enviada = false
-        AND r.data_prevista <= ${today.toISOString()}
-      LIMIT 200
-    `;
+    const pendingRecallsRaw = await prisma.recalls.findMany({
+      where: {
+        clinic_id: clinicId,
+        status: "PENDING",
+        notificacao_enviada: false,
+        data_prevista: { lte: today.toISOString() },
+      },
+      include: {
+        patient: {
+          select: {
+            full_name: true,
+            email: true,
+          },
+        },
+      },
+      take: 200,
+    });
+    const pendingRecalls = pendingRecallsRaw.map((r) => ({
+      id: r.id,
+      patient_id: r.patient_id,
+      patient_name: r.patient?.full_name || "",
+      patient_email: r.patient?.email || null,
+      tipo_recall: r.tipo_recall,
+      data_prevista: r.data_prevista,
+      mensagem_personalizada: r.mensagem_personalizada,
+      metodo_notificacao: r.metodo_notificacao,
+    }));
 
     let processed = 0;
     for (const recall of pendingRecalls) {

@@ -113,6 +113,7 @@ model appointments {
   end_time     String
   id           String   @id @default(uuid())
   patient_id   String
+  patient      patients @relation(fields: [patient_id], references: [id])
   start_time   String
   status       String
   title        String
@@ -525,6 +526,7 @@ model campaign_templates {
 
 model campaign_triggers {
   campaign_id       String
+  campaign          marketing_campaigns @relation(fields: [campaign_id], references: [id])
   created_at        DateTime @default(now())
   delay_days        Int?
   delay_hours       Int?
@@ -600,6 +602,7 @@ model clinic_modules {
   id                Int      @id @default(autoincrement())
   is_active         Boolean
   module_catalog_id Int
+  module_catalog    module_catalog @relation(fields: [module_catalog_id], references: [id])
   subscribed_at     String
   updated_at        DateTime @updatedAt
 
@@ -1387,18 +1390,20 @@ model marketing_campaigns {
   target_audience  Json?
   template_id      String?
   trigger_config   Json?
+  triggers         campaign_triggers[]
   updated_at       DateTime @updatedAt
   @@schema("public")
 }
 
 model module_catalog {
-  category    String
-  created_at  DateTime @default(now())
-  description String?
-  icon        String?
-  id          Int      @id @default(autoincrement())
-  module_key  String
-  name        String
+  category       String
+  created_at     DateTime @default(now())
+  description    String?
+  icon           String?
+  id             Int      @id @default(autoincrement())
+  module_key     String
+  name           String
+  clinic_modules clinic_modules[]
   @@schema("public")
 }
 
@@ -1876,6 +1881,8 @@ model patients {
   valor_lifetime                 Int?
   valor_ticket_medio             Int?
   weight_kg                      Int?
+  appointments                   appointments[]
+  recalls                        recalls[]
 
   @@index([clinic_id, full_name])
   @@index([cpf])
@@ -2064,6 +2071,7 @@ model pep_tratamentos {
   observacoes     String?
   procedimento_id String?
   prontuario_id   String
+  prontuario      prontuarios @relation(fields: [prontuario_id], references: [id])
   status          String
   titulo          String
   updated_at      DateTime @updatedAt
@@ -2187,6 +2195,7 @@ model prontuarios {
   patient_id   String
   patient_name String
   updated_at   DateTime @updatedAt
+  tratamentos  pep_tratamentos[]
 
   @@schema("pep")
 }
@@ -2254,6 +2263,7 @@ model recalls {
   metodo_notificacao     String?
   notificacao_enviada    Boolean?
   patient_id             String
+  patient                patients @relation(fields: [patient_id], references: [id])
   status                 String
   tipo_recall            String
   updated_at             DateTime @updatedAt

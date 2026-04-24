@@ -322,14 +322,18 @@ app.get("/api/clinics/:id/active-modules", tenantGuard, async (req, res) => {
   }
 
   try {
-    const rows = await prisma.$queryRaw<Array<{ module_key: string }>>`
-      SELECT mc.module_key
-      FROM clinic_modules cm
-      JOIN module_catalog mc ON mc.id = cm.module_catalog_id
-      WHERE cm.clinic_id = ${req.params.id}
-        AND cm.is_active = true
-    `;
-    res.json(rows.map((r) => r.module_key));
+    const rows = await prisma.clinic_modules.findMany({
+      where: {
+        clinic_id: req.params.id,
+        is_active: true,
+      },
+      include: {
+        module_catalog: {
+          select: { module_key: true },
+        },
+      },
+    });
+    res.json(rows.map((r) => r.module_catalog?.module_key).filter(Boolean));
   } catch (error) {
     console.error("Error fetching active modules", error);
     res.status(500).json({ error: "Erro ao carregar módulos ativos" });
