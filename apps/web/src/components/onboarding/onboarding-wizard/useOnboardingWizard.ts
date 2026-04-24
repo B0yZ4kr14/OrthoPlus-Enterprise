@@ -1,5 +1,5 @@
 // cspell:disable
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "@/lib/api/apiClient";
 import { logger } from "@/lib/logger";
@@ -11,12 +11,12 @@ export function useOnboardingWizard(
 ) {
   const [currentStep, setCurrentStep] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const [stepStartTime, setStepStartTime] = useState<number>(Date.now());
+  const stepStartTimeRef = useRef<number>(Date.now());
   const navigate = useNavigate();
 
   const trackEvent = useCallback(
     async (eventType: string, stepNumber?: number, stepName?: string) => {
-      const timeSpent = Math.floor((Date.now() - stepStartTime) / 1000);
+      const timeSpent = Math.floor((Date.now() - stepStartTimeRef.current) / 1000);
 
       try {
         await apiClient.post("/analytics/processor", {
@@ -30,7 +30,7 @@ export function useOnboardingWizard(
         logger.error("Error tracking analytics:", error);
       }
     },
-    [stepStartTime]
+    []
   );
 
   const handleClose = useCallback(() => {
@@ -45,7 +45,7 @@ export function useOnboardingWizard(
 
       if (currentStep < totalSteps - 1) {
         setCurrentStep(currentStep + 1);
-        setStepStartTime(Date.now());
+        stepStartTimeRef.current = Date.now();
         toast.success(`Avançando para: Step ${currentStep + 2}`);
       } else {
         setCompleted(true);
@@ -71,10 +71,10 @@ export function useOnboardingWizard(
   return {
     currentStep,
     completed,
-    stepStartTime,
+    stepStartTime: stepStartTimeRef.current,
     setCurrentStep,
     setCompleted,
-    setStepStartTime,
+    setStepStartTime: () => {},
     handleClose,
     handleNext,
     handlePrevious,

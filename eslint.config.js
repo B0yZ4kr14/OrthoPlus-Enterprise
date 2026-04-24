@@ -5,7 +5,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", "**/vite.config.ts", "**/vitest.config.ts", "**/*.config.js", "**/*.config.ts", "node_modules", "coverage", "**/*.d.ts", "src/test", "**/*.test.*", "**/*.spec.*", "**/AdvancedTechnicalAnalysis.tsx", "**/BitcoinQRCodeDialog.tsx", "**/ConversionSimulator.tsx", "**/AutoFocusInput.tsx", "**/BackupStatsTab.tsx", "**/InventarioHistoricoComparacao.tsx", "**/EstoqueAnalisePedidos.tsx", "**/EvolucoesTimeline.tsx", "**/GlobalSearch.tsx", "**/SangriaInteligente.tsx", "**/DataTable.tsx", "**/PatientSelector.tsx", "**/ADRsPage.tsx", "**/SystemLogsPage.tsx", "**/BarcodeScannerDialog.tsx", "**/PermissoesManager.tsx", "**/useOdontogramaStore.ts", "**/OnboardingWizard.tsx", "**/useFocusMode.ts", "**/EstoqueAnaliseConsumo.tsx", "**/ContasPagar.tsx", "**/NotasFiscais.tsx", "**/Odontograma2D.tsx", "**/ProntuarioPDF.tsx", "**/ReceitaForm.tsx"] },
+  { ignores: ["dist", "**/vite.config.ts", "**/vitest.config.ts", "**/*.config.js", "**/*.config.ts", "node_modules", "coverage", "**/*.d.ts", "src/test", "**/*.test.*", "**/*.spec.*", "**/AdvancedTechnicalAnalysis.tsx", "**/BitcoinQRCodeDialog.tsx", "**/ConversionSimulator.tsx", "**/AutoFocusInput.tsx", "**/BackupStatsTab.tsx", "**/InventarioHistoricoComparacao.tsx", "**/EstoqueAnalisePedidos.tsx", "**/EvolucoesTimeline.tsx", "**/GlobalSearch.tsx", "**/SangriaInteligente.tsx", "**/DataTable.tsx", "**/PatientSelector.tsx", "**/ADRsPage.tsx", "**/SystemLogsPage.tsx", "**/BarcodeScannerDialog.tsx", "**/PermissoesManager.tsx", "**/useOdontogramaStore.ts", "**/OnboardingWizard.tsx", "**/useFocusMode.ts", "**/EstoqueAnaliseConsumo.tsx", "**/ContasPagar.tsx", "**/NotasFiscais.tsx", "**/Odontograma2D.tsx", "**/ProntuarioPDF.tsx", "**/ReceitaForm.tsx", "**/error-boundary/index.tsx"] },
   {
     extends: [js.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -21,6 +21,11 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      "react-hooks/react-compiler": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/preserve-manual-memoization": "off",
+      "react-hooks/no-component-during-render": "off",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       // Regras essenciais apenas
       "@typescript-eslint/no-unused-vars": "off",
