@@ -35,6 +35,18 @@ export class CategoryBackupService {
     fs.mkdirSync(this.backupDir, { recursive: true });
   }
 
+  /** Strip query params (e.g. ?search_path=...) from DATABASE_URL — pg_dump rejects them */
+  private get cleanDatabaseUrl(): string {
+    try {
+      const url = new URL(this.databaseUrl);
+      url.search = "";
+      return url.toString();
+    } catch {
+      // Not a valid URL (e.g. already a DSN string) — return as-is
+      return this.databaseUrl;
+    }
+  }
+
   async runBackup(options: { compress?: boolean } = {}): Promise<BackupResult> {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const ext = options.compress ? ".sql.gz" : ".sql";
@@ -46,7 +58,7 @@ export class CategoryBackupService {
       const schemaArgs = this.schemas.flatMap((s) => ["--schema", s]);
       const pgDumpArgs = [
         "--dbname",
-        this.databaseUrl,
+        this.cleanDatabaseUrl,
         "--format",
         "plain",
         "--no-owner",
