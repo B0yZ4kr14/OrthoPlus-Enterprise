@@ -266,14 +266,15 @@ export class MarketingController {
       let sendCount = 0;
       for (const recipient of recipients) {
         // Check if already sent to this recipient for this campaign recently
-        const alreadySent = await prisma.$queryRaw<Array<{ cnt: bigint }>>`
-          SELECT COUNT(*)::bigint AS cnt FROM campanha_envios
-          WHERE campanha_id = ${trigger.campaign_id}
-            AND destinatario_id = ${recipient.patient_id}
-            AND created_at >= ${oneDayAgo}
-        `;
+        const alreadySent = await prisma.campanha_envios.count({
+          where: {
+            campanha_id: trigger.campaign_id,
+            destinatario_id: recipient.patient_id,
+            created_at: { gte: oneDayAgo },
+          },
+        });
 
-        if (alreadySent[0] && BigInt(alreadySent[0].cnt) > 0n) continue;
+        if (alreadySent > 0) continue;
 
         // Create send record
         await (prisma as any).campanha_envios.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -287,15 +288,16 @@ export class MarketingController {
         });
 
         // Create notification for the clinic
-        await prisma.$queryRaw`
-          INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-          VALUES (
-            ${clinicId}, 'MARKETING',
-            ${'Campanha: ' + trigger.campaign_name},
-            ${'Envio agendado para ' + (recipient.patient_name || 'paciente') + ' via ' + trigger.channel},
-            '/marketing-auto'
-          )
-        `;
+        await prisma.notifications.create({
+          data: {
+            clinic_id: clinicId,
+            tipo: 'MARKETING',
+            titulo: 'Campanha: ' + trigger.campaign_name,
+            mensagem: 'Envio agendado para ' + (recipient.patient_name || 'paciente') + ' via ' + trigger.channel,
+            link_acao: '/marketing-auto',
+            lida: false,
+          },
+        });
 
         sendCount++;
       }
@@ -369,21 +371,22 @@ export class MarketingController {
         || `Olá ${recall.patient_name || ""}, está na hora do seu retorno (${recall.tipo_recall}).`;
 
       // Create notification
-      await prisma.$queryRaw`
-        INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-        VALUES (
-          ${clinicId}, 'LEMBRETE',
-          ${'Recall: ' + recall.tipo_recall},
-          ${mensagem},
-          '/recall'
-        )
-      `;
+      await prisma.notifications.create({
+        data: {
+          clinic_id: clinicId,
+          tipo: 'LEMBRETE',
+          titulo: 'Recall: ' + recall.tipo_recall,
+          mensagem,
+          link_acao: '/recall',
+          lida: false,
+        },
+      });
 
       // Mark recall as sent
-      await prisma.$queryRaw`
-        UPDATE recalls SET notificacao_enviada = true, status = 'SENT'
-        WHERE id = ${recall.id}
-      `;
+      await prisma.recalls.update({
+        where: { id: recall.id },
+        data: { notificacao_enviada: true, status: 'SENT' },
+      });
 
       processed++;
     }

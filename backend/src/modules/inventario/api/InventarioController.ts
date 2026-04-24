@@ -179,32 +179,34 @@ export class InventarioController {
             const numeroPedido = `AUTO-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
 
             // Create purchase order
-            const order = await prisma.$queryRaw<Array<{ id: string }>>`
-              INSERT INTO estoque_pedidos (
-                clinic_id, numero_pedido, fornecedor_id, data_pedido,
-                status, tipo, valor_total, gerado_automaticamente, created_by
-              ) VALUES (
-                ${clinicId}, ${numeroPedido}, ${supplierId},
-                ${new Date().toISOString()},
-                'RASCUNHO', 'COMPRA', ${totalValue}, true, 'SYSTEM'
-              )
-              RETURNING id
-            `;
+            const order = await prisma.estoque_pedidos.create({
+              data: {
+                clinic_id: clinicId,
+                numero_pedido: numeroPedido,
+                fornecedor_id: supplierId,
+                data_pedido: new Date().toISOString(),
+                status: 'RASCUNHO',
+                tipo: 'COMPRA',
+                valor_total: totalValue,
+                gerado_automaticamente: true,
+                created_by: 'SYSTEM',
+              },
+            });
 
-            const orderId = order[0].id;
+            const orderId = order.id;
 
             // Create line items for each product
             for (const product of products) {
               const itemTotal = product.valor_unitario * product.quantidade_reposicao;
-              await prisma.$queryRaw`
-                INSERT INTO estoque_pedidos_itens (
-                  pedido_id, produto_id, quantidade, preco_unitario, valor_total
-                ) VALUES (
-                  ${orderId}, ${product.produto_id},
-                  ${product.quantidade_reposicao}, ${product.valor_unitario},
-                  ${itemTotal}
-                )
-              `;
+              await prisma.estoque_pedidos_itens.create({
+                data: {
+                  pedido_id: orderId,
+                  produto_id: product.produto_id,
+                  quantidade: product.quantidade_reposicao,
+                  preco_unitario: product.valor_unitario,
+                  valor_total: itemTotal,
+                },
+              });
             }
 
             ordersCreated.push({
@@ -224,15 +226,16 @@ export class InventarioController {
 
           // Create notification about auto-orders
           if (ordersCreated.length > 0) {
-            await prisma.$queryRaw`
-              INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-              VALUES (
-                ${clinicId}, 'ALERTA',
-                'Pedidos Automáticos Gerados',
-                ${`${ordersCreated.length} pedido(s) de compra gerado(s) automaticamente para ${lowStockProducts.length} produto(s) com estoque baixo.`},
-                '/estoque'
-              )
-            `;
+            await prisma.notifications.create({
+              data: {
+                clinic_id: clinicId,
+                tipo: 'ALERTA',
+                titulo: 'Pedidos Automáticos Gerados',
+                mensagem: `${ordersCreated.length} pedido(s) de compra gerado(s) automaticamente para ${lowStockProducts.length} produto(s) com estoque baixo.`,
+                link_acao: '/estoque',
+                lida: false,
+              },
+            });
           }
 
           return res.status(200).json({

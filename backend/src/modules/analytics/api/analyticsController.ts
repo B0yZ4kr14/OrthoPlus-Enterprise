@@ -714,18 +714,16 @@ export class AnalyticsController {
     try {
       const { userId, clinicId, step, action, duration, metadata } =
         analyticsData;
-      await prisma.$queryRawUnsafe(
-        `
-        INSERT INTO onboarding_analytics (user_id, clinic_id, step_name, action_type, duration_seconds, metadata, timestamp)
-        VALUES ($1, $2, $3, $4, $5, $6, NOW())
-      `,
-        userId,
-        clinicId,
-        step,
-        action,
-        duration,
-        metadata || {},
-      );
+      await prisma.onboarding_analytics.create({
+        data: {
+          user_id: userId as string,
+          clinic_id: clinicId as string,
+          step_name: step as string,
+          event_type: action as string,
+          time_spent_seconds: duration as number,
+          metadata: (metadata || {}) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        },
+      });
       return { userId, step, action, saved_at: new Date() };
     } catch (e) {
       return { error: e };
