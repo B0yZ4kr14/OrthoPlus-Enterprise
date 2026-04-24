@@ -16,13 +16,21 @@ router.get("/", async (req: Request, res: Response) => {
       res.status(401).json({ error: "Missing clinic context" });
       return;
     }
-    const notifications = await prisma.$queryRaw<Array<Record<string, unknown>>>`
-      SELECT id, clinic_id, tipo, titulo, mensagem, link_acao, lida, created_at
-      FROM notifications
-      WHERE clinic_id = ${clinicId}
-      ORDER BY created_at DESC
-      LIMIT 100
-    `;
+    const notifications = await prisma.notifications.findMany({
+      where: { clinic_id: clinicId },
+      orderBy: { created_at: "desc" },
+      take: 100,
+      select: {
+        id: true,
+        clinic_id: true,
+        tipo: true,
+        titulo: true,
+        mensagem: true,
+        link_acao: true,
+        lida: true,
+        created_at: true,
+      },
+    });
     res.json({ notifications });
   } catch (error) {
     logger.error("Error listing notifications", { error });
@@ -39,10 +47,10 @@ router.patch("/:id/read", async (req: Request, res: Response) => {
       return;
     }
     const { id } = req.params;
-    await prisma.$queryRaw`
-      UPDATE notifications SET lida = true
-      WHERE id = ${id} AND clinic_id = ${clinicId}
-    `;
+    await prisma.notifications.updateMany({
+      where: { id, clinic_id: clinicId },
+      data: { lida: true },
+    });
     res.json({ success: true, id });
   } catch (error) {
     logger.error("Error marking notification as read", { error });
@@ -58,10 +66,10 @@ router.post("/mark-all-read", async (req: Request, res: Response) => {
       res.status(401).json({ error: "Missing clinic context" });
       return;
     }
-    await prisma.$queryRaw`
-      UPDATE notifications SET lida = true
-      WHERE clinic_id = ${clinicId} AND lida = false
-    `;
+    await prisma.notifications.updateMany({
+      where: { clinic_id: clinicId, lida: false },
+      data: { lida: true },
+    });
     res.json({ success: true });
   } catch (error) {
     logger.error("Error marking all notifications as read", { error });

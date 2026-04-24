@@ -51,11 +51,16 @@ export class NotificationController {
       `;
 
       for (const app of upcomingAppointments) {
-        await prisma.$queryRaw`
-          INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-          VALUES (${app.clinic_id}, 'CONSULTA', 'Consulta Amanhã',
-          'Consulta agendada com ' || COALESCE(${app.patient_name}, 'paciente'), '/agenda')
-        `;
+        await prisma.notifications.create({
+          data: {
+            clinic_id: app.clinic_id,
+            tipo: 'CONSULTA',
+            titulo: 'Consulta Amanhã',
+            mensagem: `Consulta agendada com ${app.patient_name || 'paciente'}`,
+            link_acao: '/agenda',
+            lida: false,
+          },
+        });
         notificationsCreated++;
       }
 
@@ -73,25 +78,35 @@ export class NotificationController {
       `;
 
       for (const payment of overduePayments) {
-        await prisma.$queryRaw`
-          INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-          VALUES (${payment.clinic_id}, 'PAGAMENTO', 'Pagamento Vencido',
-          'Pagamento vencido - Paciente: ' || COALESCE(${payment.patient_name}, 'N/A'), '/financeiro/contas-receber')
-        `;
+        await prisma.notifications.create({
+          data: {
+            clinic_id: payment.clinic_id,
+            tipo: 'PAGAMENTO',
+            titulo: 'Pagamento Vencido',
+            mensagem: `Pagamento vencido - Paciente: ${payment.patient_name || 'N/A'}`,
+            link_acao: '/financeiro/contas-receber',
+            lida: false,
+          },
+        });
         notificationsCreated++;
       }
 
       // 3. Low stock
       const lowStockProducts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT * FROM estoque_produtos WHERE quantidade_atual <= quantidade_minima LIMIT 1000
+        SELECT * FROM produtos WHERE quantidade_atual <= quantidade_minima LIMIT 1000
       `;
 
       for (const product of lowStockProducts) {
-        await prisma.$queryRaw`
-          INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-          VALUES (${product.clinic_id}, 'ALERTA', 'Estoque Baixo',
-          'Produto "' || ${product.nome} || '" com estoque baixo (' || ${product.quantidade_atual} || ' un)', '/estoque')
-        `;
+        await prisma.notifications.create({
+          data: {
+            clinic_id: product.clinic_id,
+            tipo: 'ALERTA',
+            titulo: 'Estoque Baixo',
+            mensagem: `Produto "${product.nome}" com estoque baixo (${product.quantidade_atual} un)`,
+            link_acao: '/estoque',
+            lida: false,
+          },
+        });
         notificationsCreated++;
       }
 
@@ -109,11 +124,16 @@ export class NotificationController {
       `;
 
       for (const patient of birthdayPatients) {
-        await prisma.$queryRaw`
-          INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-          VALUES (${patient.clinic_id}, 'LEMBRETE', '🎂 Aniversariante do Dia',
-          'Hoje é aniversário de ' || COALESCE(${patient.patient_name}, 'um paciente') || '!', '/pacientes')
-        `;
+        await prisma.notifications.create({
+          data: {
+            clinic_id: patient.clinic_id,
+            tipo: 'LEMBRETE',
+            titulo: '🎂 Aniversariante do Dia',
+            mensagem: `Hoje é aniversário de ${patient.patient_name || 'um paciente'}!`,
+            link_acao: '/pacientes',
+            lida: false,
+          },
+        });
         notificationsCreated++;
       }
 

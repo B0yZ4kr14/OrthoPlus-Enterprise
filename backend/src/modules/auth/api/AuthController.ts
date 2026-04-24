@@ -38,15 +38,6 @@ const COOKIE_OPTIONS = {
   path: "/",
 };
 
-/** Shape of a row returned from the `users` table. */
-interface UserRow {
-  id: string;
-  email: string;
-  password_hash: string;
-  role: string;
-  clinic_id: string | null;
-}
-
 /** Shape of a row returned from the `profiles` table. */
 interface ProfileRow {
   id: string;
@@ -84,15 +75,14 @@ export class AuthController {
 
     // STEP 1: Always try real database lookup first.
     try {
-      const rows = await prisma.$queryRaw<UserRow[]>`
-        SELECT id, email, password_hash, role, clinic_id
-        FROM users
-        WHERE email = ${email}
-          AND is_active = true
-        LIMIT 1
-      `;
+      const user = await prisma.users.findUnique({
+        where: { email },
+      });
 
-      const user = rows[0];
+      if (user && !user.is_active) {
+        throw Errors.invalidCredentials();
+      }
+
       if (user) {
         const passwordMatch = await bcrypt.compare(password, user.password_hash);
         if (!passwordMatch) {
@@ -342,15 +332,9 @@ export class AuthController {
 
     // STEP 1: Always try real database lookup first.
     try {
-      const rows = await prisma.$queryRaw<Array<{ id: string; clinic_id: string; birth_date: Date }>>`
-        SELECT id, clinic_id, birth_date
-        FROM patients
-        WHERE cpf = ${normalizedCpf}
-          AND is_active = true
-        LIMIT 1
-      `;
-
-      const patient = rows[0];
+      const patient = await prisma.patients.findFirst({
+        where: { cpf: normalizedCpf },
+      });
       if (patient) {
         // Verify birth date matches
         const patientBirth = new Date(patient.birth_date).toISOString().split("T")[0];
@@ -566,32 +550,27 @@ export class AuthController {
     }
 
     try {
-      const existing = await prisma.$queryRaw<UserRow[]>`
-        SELECT id FROM users WHERE email = ${email} LIMIT 1
-      `;
-      if (existing.length > 0) {
+      const existing = await prisma.users.findUnique({
+        where: { email },
+      });
+      if (existing) {
         throw Errors.conflict("Email already in use");
       }
 
       const passwordHash = await bcrypt.hash(password!, 12);
-      const newId = crypto.randomUUID();
 
-      await prisma.$executeRaw`
-        INSERT INTO users (id, email, password_hash, role, clinic_id, is_active, created_at, updated_at)
-        VALUES (
-          ${newId}::uuid,
-          ${email},
-          ${passwordHash},
-          ${role},
-          ${clinicId}::uuid,
-          true,
-          NOW(),
-          NOW()
-        )
-      `;
+      const newUser = await prisma.users.create({
+        data: {
+          email: email!,
+          password_hash: passwordHash,
+          role: role!,
+          clinic_id: clinicId,
+          is_active: true,
+        },
+      });
 
       res.status(201).json({
-        user: { id: newId, email, role, clinicId },
+        user: { id: newUser.id, email: newUser.email, role: newUser.role, clinicId: newUser.clinic_id },
       });
     } catch (err) {
       if (err instanceof ApiError) {
