@@ -89,3 +89,4 @@ venv/
 *.tar.gz
 node_modules
 deploy_key
+.ssh_key_vps
