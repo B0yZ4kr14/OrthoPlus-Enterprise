@@ -2932,3 +2932,105 @@ model domain_events {
   @@index([aggregate_id, occurred_at])
   @@schema("public")
 }
+
+// Wave-2: Ghost table models (added to fix missing Prisma models)
+
+model nfe_records {
+  id                   String   @id @default(uuid())
+  clinic_id            String
+  chave_acesso         String
+  valor_total          Decimal  @db.Decimal(10, 2)
+  tipo_nota            String
+  status               String
+  protocolo            String?
+  xml_autorizacao      String?
+  motivo_cancelamento  String?
+  data_cancelamento    DateTime?
+  data_emissao         DateTime @default(now())
+  created_at           DateTime @default(now())
+
+  @@index([clinic_id])
+  @@index([status])
+  @@schema("faturamento")
+}
+
+model fidelidade_pacientes {
+  id                 String   @id @default(uuid())
+  clinic_id          String
+  patient_id         String
+  pontos_acumulados  Int      @default(0)
+  nivel              String   @default("BRONZE")
+  ultima_atualizacao DateTime @updatedAt
+  created_at         DateTime @default(now())
+
+  @@index([clinic_id, patient_id])
+  @@schema("public")
+}
+
+model fidelidade_transacoes {
+  id          String   @id @default(uuid())
+  clinic_id   String
+  patient_id  String
+  tipo        String
+  pontos      Int
+  descricao   String?
+  created_at  DateTime @default(now())
+
+  @@index([clinic_id, patient_id])
+  @@schema("public")
+}
+
+model gamification_goals {
+  id             String   @id @default(uuid())
+  clinic_id      String
+  user_id        String
+  type           String
+  target_value   Int
+  current_value  Int      @default(0)
+  status         String   @default("ACTIVE")
+  deadline       DateTime
+  completed_at   DateTime?
+  created_at     DateTime @default(now())
+
+  @@index([clinic_id, user_id, status])
+  @@schema("public")
+}
+
+model bi_export_jobs {
+  id             String   @id @default(uuid())
+  clinic_id      String
+  export_type    String
+  scheduled_for  DateTime
+  status         String   @default("PENDING")
+  format         String
+  created_at     DateTime @default(now())
+
+  @@index([clinic_id, status])
+  @@schema("public")
+}
+
+model estoque_alertas {
+  id                   String   @id @default(uuid())
+  produto_id           String
+  tipo                 String
+  mensagem             String
+  quantidade_atual     Int
+  quantidade_sugerida  Int?
+  lido                 Boolean  @default(false)
+  clinic_id            String
+  created_at           DateTime @default(now())
+
+  @@index([clinic_id, lido])
+  @@schema("inventario")
+}
+
+model crypto_exchange_rates {
+  id         String   @id @default(uuid())
+  coin_type  String
+  rate_brl   Decimal  @db.Decimal(18, 8)
+  timestamp  DateTime @default(now())
+  source     String?
+
+  @@index([coin_type, timestamp])
+  @@schema("financeiro")
+}
