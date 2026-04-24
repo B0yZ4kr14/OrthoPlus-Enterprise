@@ -23,12 +23,15 @@ export class FaturamentoController {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
 
-    // Temporary Prisma raw query until nfe_records schema is migrated
-    await prisma.$executeRaw`
-      INSERT INTO "nfe_records" ("clinic_id", "chave_acesso", "valor_total", "tipo_nota", "status", "created_at")
-      VALUES (${clinicId}, ${validatedData.chaveAcesso}, ${validatedData.valorTotal}, ${validatedData.tipoNota}, 'PROCESSANDO', NOW())
-      ON CONFLICT DO NOTHING
-    `.catch(err => logger.debug('NFE schema pending migration, ignoring raw insert', err));
+    await prisma.nfe_records.create({
+      data: {
+        clinic_id: clinicId,
+        chave_acesso: validatedData.chaveAcesso,
+        valor_total: validatedData.valorTotal,
+        tipo_nota: validatedData.tipoNota,
+        status: "PROCESSANDO",
+      },
+    }).catch(err => logger.debug('NFE create error', err));
 
     logger.info('NFe created', { clinicId, chaveAcesso: validatedData.chaveAcesso });
     res.status(201).json({ message: 'NFe created successfully', data: validatedData });
@@ -43,9 +46,9 @@ export class FaturamentoController {
 
     let nfes: any[] = [];
     try {
-      nfes = await prisma.$queryRaw`SELECT * FROM "nfe_records" WHERE "clinic_id" = ${clinicId}`;
+      nfes = await prisma.nfe_records.findMany({ where: { clinic_id: clinicId } });
     } catch (err) {
-      logger.debug('NFE schema pending migration, returning empty list');
+      logger.debug('NFE findMany error', err);
     }
 
     logger.info('Listing NFes', { clinicId, count: nfes.length });
@@ -60,11 +63,10 @@ export class FaturamentoController {
       throw Errors.validation("Protocolo and XML are required");
     }
 
-    await prisma.$executeRaw`
-      UPDATE "nfe_records" 
-      SET "status" = 'AUTORIZADA', "protocolo" = ${protocolo}, "xml_autorizacao" = ${xml}
-      WHERE "id" = ${id}
-    `.catch(err => logger.debug('NFE schema pending migration, ignoring status update', err));
+    await prisma.nfe_records.updateMany({
+      where: { id },
+      data: { status: "AUTORIZADA", protocolo, xml_autorizacao: xml },
+    }).catch(err => logger.debug('NFE autorizar error', err));
 
     logger.info('NFe authorized', { id, protocolo });
     res.status(200).json({ message: 'NFe authorized successfully', protocolo });
@@ -78,11 +80,10 @@ export class FaturamentoController {
       throw Errors.validation("Motivo is required");
     }
 
-    await prisma.$executeRaw`
-      UPDATE "nfe_records" 
-      SET "status" = 'CANCELADA', "motivo_cancelamento" = ${motivo}
-      WHERE "id" = ${id}
-    `.catch(err => logger.debug('NFE schema pending migration, ignoring status update', err));
+    await prisma.nfe_records.updateMany({
+      where: { id },
+      data: { status: "CANCELADA", motivo_cancelamento: motivo, data_cancelamento: new Date() },
+    }).catch(err => logger.debug('NFE cancelar error', err));
 
     logger.info('NFe canceled', { id, motivo });
     res.status(200).json({ message: 'NFe canceled successfully' });

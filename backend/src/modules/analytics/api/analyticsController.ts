@@ -549,22 +549,29 @@ export class AnalyticsController {
 
     // Let's assume Prisma has the tables, else we will have to use $queryRawUnsafe
     try {
-      const loyalty = await prisma.$queryRawUnsafe<any[]>( // eslint-disable-line @typescript-eslint/no-explicit-any
-        `SELECT * FROM fidelidade_pacientes WHERE clinic_id = $1 AND patient_id = $2`,
-        clinicId,
-        patientId,
-      );
+      let loyalty = await prisma.fidelidade_pacientes.findFirst({
+        where: { clinic_id: clinicId, patient_id: patientId },
+      });
 
-      if (!loyalty || loyalty.length === 0) {
-        await prisma.$queryRawUnsafe(
-          `
-          INSERT INTO fidelidade_pacientes (clinic_id, patient_id, pontos_acumulados, nivel)
-          VALUES ($1, $2, $3, 'BRONZE')
-        `,
-          clinicId,
-          patientId,
-          points,
-        );
+      if (!loyalty) {
+        loyalty = await prisma.fidelidade_pacientes.create({
+          data: {
+            clinic_id: clinicId,
+            patient_id: patientId,
+            pontos_acumulados: points,
+            nivel: "BRONZE",
+          },
+        });
+
+        await prisma.fidelidade_transacoes.create({
+          data: {
+            clinic_id: clinicId,
+            patient_id: patientId,
+            tipo: "CREDITO",
+            pontos: points,
+            descricao: "Pontos por consulta realizada",
+          },
+        });
 
         return {
           patientId,
@@ -575,41 +582,37 @@ export class AnalyticsController {
         };
       }
 
-      const current = loyalty[0];
-      const newTotal = current.pontos_acumulados + points;
-      let newLevel = current.nivel;
+      const newTotal = loyalty.pontos_acumulados + points;
+      let newLevel = loyalty.nivel;
 
       if (newTotal >= 1000) newLevel = "PLATINUM";
       else if (newTotal >= 500) newLevel = "GOLD";
       else if (newTotal >= 100) newLevel = "SILVER";
 
-      await prisma.$queryRawUnsafe(
-        `
-        UPDATE fidelidade_pacientes
-        SET pontos_acumulados = $1, nivel = $2, ultima_atualizacao = NOW()
-        WHERE id = $3
-      `,
-        newTotal,
-        newLevel,
-        current.id,
-      );
+      await prisma.fidelidade_pacientes.update({
+        where: { id: loyalty.id },
+        data: {
+          pontos_acumulados: newTotal,
+          nivel: newLevel,
+        },
+      });
 
-      await prisma.$queryRawUnsafe(
-        `
-        INSERT INTO fidelidade_transacoes (clinic_id, patient_id, tipo, pontos, descricao)
-        VALUES ($1, $2, 'CREDITO', $3, 'Pontos por consulta realizada')
-      `,
-        clinicId,
-        patientId,
-        points,
-      );
+      await prisma.fidelidade_transacoes.create({
+        data: {
+          clinic_id: clinicId,
+          patient_id: patientId,
+          tipo: "CREDITO",
+          pontos: points,
+          descricao: "Pontos por consulta realizada",
+        },
+      });
 
       return {
         patientId,
         pointsAdded: points,
         totalPoints: newTotal,
         level: newLevel,
-        levelUp: newLevel !== current.nivel,
+        levelUp: newLevel !== loyalty.nivel,
       };
     } catch (e) {
       logger.error("Mocked query raw fallback:", { error: e });
@@ -628,14 +631,15 @@ export class AnalyticsController {
     goalType?: string,
   ) {
     try {
-      const goals = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT * FROM gamification_goals
-        WHERE clinic_id = ${clinicId}
-          AND user_id = ${userId}
-          AND status = 'ACTIVE'
-          AND deadline >= NOW()
-        LIMIT 1000
-      `;
+      const goals = await prisma.gamification_goals.findMany({
+        where: {
+          clinic_id: clinicId,
+          user_id: userId,
+          status: "ACTIVE",
+          deadline: { gte: new Date() },
+        },
+        take: 1000,
+      });
 
       const goalsProcessed = [];
 
@@ -669,15 +673,14 @@ export class AnalyticsController {
             break;
         }
 
-        await prisma.$queryRawUnsafe(
-          `
-          UPDATE gamification_goals SET current_value = $1, status = $2, completed_at = $3 WHERE id = $4
-        `,
-          Math.round(progress),
-          isCompleted ? "COMPLETED" : "ACTIVE",
-          isCompleted ? new Date() : null,
-          goal.id,
-        );
+        await prisma.gamification_goals.update({
+          where: { id: goal.id },
+          data: {
+            current_value: Math.round(progress),
+            status: isCompleted ? "COMPLETED" : "ACTIVE",
+            completed_at: isCompleted ? new Date() : null,
+          },
+        });
 
         goalsProcessed.push({ goalId: goal.id, progress, isCompleted });
       }
@@ -693,17 +696,19 @@ export class AnalyticsController {
 
   private async scheduleBIExport(clinicId: string) {
     try {
-      const res = await prisma.$queryRawUnsafe<any[]>( // eslint-disable-line @typescript-eslint/no-explicit-any
-        `
-         INSERT INTO bi_export_jobs (clinic_id, export_type, scheduled_for, status, format)
-         VALUES ($1, 'MONTHLY_REPORT', NOW() + INTERVAL '1 hour', 'SCHEDULED', 'PDF') RETURNING id, scheduled_for
-       `,
-        clinicId,
-      );
+      const res = await prisma.bi_export_jobs.create({
+        data: {
+          clinic_id: clinicId,
+          export_type: "MONTHLY_REPORT",
+          scheduled_for: new Date(Date.now() + 60 * 60 * 1000),
+          status: "SCHEDULED",
+          format: "PDF",
+        },
+      });
       return {
         clinicId,
-        exportJobId: res[0]?.id,
-        scheduled_for: res[0]?.scheduled_for,
+        exportJobId: res.id,
+        scheduled_for: res.scheduled_for,
       };
     } catch (e) {
       return { clinicId, error: e };

@@ -27,13 +27,13 @@ export async function runGamificationMetricsJob() {
 
     // Fetch ALL active goals across ALL clinics in a single query instead of
     // one query per clinic (eliminates the N+1 clinic-loop pattern).
-    const metas = await prisma.$queryRaw<any[]>`
-      SELECT *
-      FROM gamification_goals
-      WHERE status = 'ACTIVE'
-        AND deadline >= NOW()
-      LIMIT ${MAX_ACTIVE_GOALS_BATCH_SIZE}
-    `;
+    const metas = await prisma.gamification_goals.findMany({
+      where: {
+        status: "ACTIVE",
+        deadline: { gte: new Date() },
+      },
+      take: MAX_ACTIVE_GOALS_BATCH_SIZE,
+    });
 
     logger.info(`[Gamificação] Processando ${metas.length} meta(s) ativas`);
 
@@ -51,18 +51,17 @@ export async function runGamificationMetricsJob() {
     const appointmentCountByDentist: Record<string, number> = {};
     if (dentistIds.length > 0) {
       // Use snake_case column names matching the actual DB schema.
-      const counts = await prisma.$queryRaw<
-        { dentist_id: string; count: bigint }[]
-      >`
-        SELECT dentist_id, COUNT(*) AS count
-        FROM appointments
-        WHERE dentist_id = ANY(${dentistIds}::uuid[])
-          AND status = 'CONCLUIDA'
-          AND start_time >= ${startMonth.toISOString()}
-        GROUP BY dentist_id
-      `;
+      const counts = await prisma.appointments.groupBy({
+        by: ["dentist_id"],
+        where: {
+          dentist_id: { in: dentistIds },
+          status: "CONCLUIDA",
+          start_time: { gte: startMonth.toISOString() },
+        },
+        _count: { _all: true },
+      });
       for (const row of counts) {
-        appointmentCountByDentist[row.dentist_id] = Number(row.count);
+        appointmentCountByDentist[row.dentist_id] = row._count?._all ?? 0;
       }
     }
 
@@ -78,13 +77,14 @@ export async function runGamificationMetricsJob() {
       }
 
       const completedAt = isCompleted ? new Date() : null;
-      await prisma.$queryRaw`
-        UPDATE gamification_goals
-        SET current_value = ${Math.round(progress)},
-            status = ${isCompleted ? "COMPLETED" : "ACTIVE"},
-            completed_at = ${completedAt}
-        WHERE id = ${meta.id}
-      `;
+      await prisma.gamification_goals.update({
+        where: { id: meta.id },
+        data: {
+          current_value: Math.round(progress),
+          status: isCompleted ? "COMPLETED" : "ACTIVE",
+          completed_at: completedAt,
+        },
+      });
     }
 
     logger.info("[Gamificação] Finalizado com sucesso");

@@ -279,13 +279,15 @@ export class InventarioController {
               ? `CRÍTICO: ${product.nome} sem estoque!`
               : `Estoque mínimo: ${product.nome} (${product.quantidade_atual}/${product.quantidade_minima} un)`;
 
-            await prisma.$queryRaw`
-              INSERT INTO notifications (clinic_id, tipo, titulo, mensagem, link_acao)
-              VALUES (
-                ${clinicId}, 'ALERTA', ${tipoAlerta === "ESTOQUE_CRITICO" ? "🚨 Estoque Crítico" : "⚠️ Estoque Baixo"},
-                ${mensagem}, '/estoque'
-              )
-            `;
+            await (prisma as any).notifications.create({
+              data: {
+                clinic_id: clinicId,
+                tipo: "ALERTA",
+                titulo: tipoAlerta === "ESTOQUE_CRITICO" ? "🚨 Estoque Crítico" : "⚠️ Estoque Baixo",
+                mensagem,
+                link_acao: "/estoque",
+              },
+            });
             alertsSent++;
           }
 
