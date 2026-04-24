@@ -195,11 +195,13 @@ export class NotificationController {
     next: NextFunction,
   ) {
     try {
-      const alerts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT * FROM crypto_price_alerts
-        WHERE alert_type = 'VOLATILITY' AND is_active = true
-        LIMIT 100
-      `;
+      const alerts = await (prisma as any).crypto_price_alerts.findMany({
+        where: {
+          alert_type: "VOLATILITY",
+          is_active: true,
+        },
+        take: 100,
+      });
 
       if (!alerts || alerts.length === 0) {
         res.json({ message: "No active alerts" });
