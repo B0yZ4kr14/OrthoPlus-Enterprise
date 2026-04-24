@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import type { BitcoinQRCodeDialogProps } from "./types";
+import type { BitcoinQRCodeDialogProps } from "../types";
 
 export function useBitcoinQRDialog(
   wallets: BitcoinQRCodeDialogProps["wallets"],

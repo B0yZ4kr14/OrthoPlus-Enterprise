@@ -22,7 +22,7 @@ const tipoToIcon: Record<string, string> = {
 };
 
 export function AtividadeItem({ atividade, onConcluir }: AtividadeItemProps) {
-  const IconComponent = (Icons as Record<string, React.ComponentType<{ className?: string }>>)[
+  const IconComponent = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[
     tipoToIcon[atividade.tipo] ?? "Calendar"
   ];
 

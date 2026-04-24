@@ -1,6 +1,6 @@
 import { Activity } from "lucide-react";
 import { KPICard } from "./KPICard";
-import type { TechnicalIndicatorResults } from "../../types";
+import type { TechnicalIndicatorResults } from "../types";
 
 interface RSICardProps {
   rsi: number;

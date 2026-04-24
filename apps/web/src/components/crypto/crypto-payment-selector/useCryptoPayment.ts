@@ -17,8 +17,8 @@ export function useCryptoPayment(
 
   const allWallets = useMemo<CombinedWallet[]>(
     () => [
-      ...wallets.map((w) => ({ ...w, type: "exchange" as const })),
-      ...offlineWallets.map((w) => ({ ...w, type: "offline" as const })),
+      ...wallets.map((w) => ({ ...w, type: "exchange" as const, coin_type: w.coin_type as CoinType })),
+      ...offlineWallets.map((w) => ({ ...w, type: "offline" as const, coin_type: w.coin_type as CoinType })),
     ],
     [wallets, offlineWallets],
   );

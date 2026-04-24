@@ -7,7 +7,7 @@ export interface Advantage {
 export interface ProcessStep {
   step: string;
   title: string;
-  description: string;
+  desc: string;
 }
 
 export interface Exchange {

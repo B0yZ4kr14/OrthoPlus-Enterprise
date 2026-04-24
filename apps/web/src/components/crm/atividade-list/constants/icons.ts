@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import type { AtividadeTipo } from "../types";
 
-export const tipoIcons: Record<AtividadeTipo, React.ReactNode> = {
+export const tipoIcons: Record<AtividadeTipo, React.ElementType<{ className?: string }>> = {
   LIGACAO: Phone,
   EMAIL: Mail,
   REUNIAO: Calendar,

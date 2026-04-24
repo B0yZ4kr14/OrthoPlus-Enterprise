@@ -91,13 +91,13 @@ export function ContratoForm({
         />
 
         <StatusSelect
-          value={watch("status")}
-          onChange={(value) => setValue("status", value)}
+          value={watch("status") || ""}
+          onChange={(value) => setValue("status", value as "CONCLUIDO" | "CANCELADO" | "EXPIRADO" | "AGUARDANDO_ASSINATURA" | "ASSINADO")}
         />
 
         <div className="flex items-center md:col-span-2">
           <RenovacaoCheckbox
-            checked={watch("renovacao_automatica")}
+            checked={!!watch("renovacao_automatica")}
             onChange={(checked) => setValue("renovacao_automatica", checked)}
           />
         </div>

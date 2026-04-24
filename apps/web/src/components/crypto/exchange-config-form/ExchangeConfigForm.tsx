@@ -1,6 +1,6 @@
 // cspell:disable
 import { Form } from "@orthoplus/core-ui/form";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { TooltipProvider } from "@orthoplus/core-ui/tooltip";
 import { useExchangeConfigForm } from "./useExchangeConfigForm";
 import { ConnectionAlert } from "./ConnectionAlert";
 import { ExchangeSelectField } from "./ExchangeSelectField";

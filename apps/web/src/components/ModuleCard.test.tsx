@@ -17,8 +17,8 @@ describe("ModuleCard", () => {
       />,
     );
 
-    expect(getByText("Módulo Teste")).toBeInTheDocument();
-    expect(getByText("Descrição do módulo")).toBeInTheDocument();
+    expect(getByText("Módulo Teste")).toBeTruthy();
+    expect(getByText("Descrição do módulo")).toBeTruthy();
   });
 
   it("should call onClick when card is clicked", () => {
@@ -52,7 +52,7 @@ describe("ModuleCard", () => {
     );
 
     const colorDiv = container.querySelector(".bg-blue-500");
-    expect(colorDiv).toBeInTheDocument();
+    expect(colorDiv).toBeTruthy();
   });
 
   it("should render icon component", () => {
@@ -67,6 +67,6 @@ describe("ModuleCard", () => {
     );
 
     const icon = container.querySelector("svg");
-    expect(icon).toBeInTheDocument();
+    expect(icon).toBeTruthy();
   });
 });
