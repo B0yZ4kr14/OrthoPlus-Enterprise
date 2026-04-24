@@ -113,9 +113,10 @@ export class AdminToolsController {
         } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       });
 
-      await prisma
-        .$executeRaw`UPDATE auth.users SET raw_user_meta_data = raw_user_meta_data || '{"is_super_admin": true}'::jsonb WHERE email = ${email}`
-        .catch(() => {});
+      await prisma.users.update({
+        where: { email },
+        data: { role: "ROOT" },
+      }).catch(() => {});
 
       res
         .status(200)
@@ -128,6 +129,7 @@ export class AdminToolsController {
   });
 
   analyzeDatabaseHealth = asyncHandler(async (_req: Request, res: Response) => {
+    // PostgreSQL system-catalog queries — not representable as Prisma models.
     const activeConnections = await prisma
       .$queryRaw<{ count: number }[]>`SELECT count(*) FROM pg_stat_activity`
       .catch(() => [{ count: 0 }]);

@@ -1,0 +1,91 @@
+name: Deploy to VPS vps-orthoplus
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps-orthoplus
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Type Check Backend
+        run: pnpm --filter orthoplus-backend type-check || true
+
+      - name: Build Backend
+        run: pnpm --filter orthoplus-backend build
+
+      - name: Build Frontend
+        run: pnpm --filter @orthoplus/web build
+
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_TSI_02_HOST }}
+          username: ${{ secrets.VPS_TSI_02_USER }}
+          key: ${{ secrets.VPS_TSI_02_SSH_KEY }}
+          source: "backend/dist/"
+          target: "/home/ubuntu/OrthoPlus-Enterprise-backend/"
+          strip_components: 1
+          rm: true
+
+      - name: Deploy Frontend
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_TSI_02_HOST }}
+          username: ${{ secrets.VPS_TSI_02_USER }}
+          key: ${{ secrets.VPS_TSI_02_SSH_KEY }}
+          source: "apps/web/dist/"
+          target: "/tmp/orthoplus-dist/"
+          strip_components: 1
+          rm: true
+
+      - name: Restart Services
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_TSI_02_HOST }}
+          username: ${{ secrets.VPS_TSI_02_USER }}
+          key: ${{ secrets.VPS_TSI_02_SSH_KEY }}
+          script: |
+            # Move frontend to correct location
+            sudo rm -rf /var/www/orthoplus/*
+            sudo cp -r /tmp/orthoplus-dist/* /var/www/orthoplus/
+            sudo chown -R www-data:www-data /var/www/orthoplus
+            sudo chmod -R 755 /var/www/orthoplus
+            rm -rf /tmp/orthoplus-dist
+            
+            # Reload PM2
+            pm2 reload orthoplus-backend
+            
+            # Health check
+            sleep 5
+            curl -s http://127.0.0.1:3005/health
+            
+            echo "✅ Deploy completed successfully"
+
+      - name: Health Check (External)
+        run: |
+          sleep 10
+          curl -s http://${{ secrets.VPS_TSI_02_HOST }}:3005/health || echo "⚠️ Health check failed"

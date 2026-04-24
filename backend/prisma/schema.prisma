@@ -2918,14 +2918,15 @@ model event_store {
 }
 
 model users {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  password_hash String
-  role          String   @default("MEMBER")
-  clinic_id     String?
-  is_active     Boolean  @default(true)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id             String    @id @default(uuid())
+  email          String    @unique
+  password_hash  String
+  role           String    @default("MEMBER")
+  clinic_id      String?
+  is_active      Boolean   @default(true)
+  last_sign_in_at DateTime?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
 
   @@index([clinic_id])
   @@schema("configuracoes")

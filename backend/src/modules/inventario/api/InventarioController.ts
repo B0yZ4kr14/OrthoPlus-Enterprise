@@ -122,7 +122,8 @@ export class InventarioController {
       switch (action) {
         case "auto-orders":
         case "gerar-pedidos-automaticos": {
-          // Find products below minimum stock that have auto-order config
+          // Prisma Client does not support cross-column comparisons in WHERE.
+          // This query compares quantidade_atual against COALESCE(ponto_pedido, quantidade_minima).
           const lowStockProducts = await prisma.$queryRaw<Array<{
             produto_id: string;
             produto_nome: string;
@@ -257,7 +258,8 @@ export class InventarioController {
         case "send-alerts":
         case "send-stock-alerts":
         case "send-replenishment-alerts": {
-          // Find products below minimum and create notification alerts
+          // Prisma Client does not support cross-column comparisons in WHERE.
+          // This query compares quantidade_atual <= quantidade_minima.
           const alertProducts = await prisma.$queryRaw<Array<{
             id: string;
             nome: string;

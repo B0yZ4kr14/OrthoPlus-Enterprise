@@ -194,7 +194,8 @@ export class MarketingController {
 
       // Match trigger type to patient segment
       if (trigger.trigger_type === "TIME_BASED" || condition.event === "birthday") {
-        // Birthday-based trigger: patients with birthday today
+        // Birthday-based trigger: patients with birthday today.
+        // Prisma Client does not support EXTRACT(MONTH/DAY FROM date) natively.
         const todayMonth = now.getMonth() + 1;
         const todayDay = now.getDate();
         recipients = await prisma.$queryRaw<typeof recipients>`

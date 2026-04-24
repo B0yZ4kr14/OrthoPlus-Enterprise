@@ -1,0 +1,1 @@
+export { HardwareWalletConfig } from "./HardwareWalletConfig";

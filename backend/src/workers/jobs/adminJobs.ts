@@ -8,6 +8,7 @@ export function startAdminJobs() {
   cron.schedule('0 2 * * 0', async () => {
     logger.info('[Cron] Starting db-maintenance routine');
     try {
+        // Prisma Client does not support DDL statements such as VACUUM.
         await prisma.$executeRawUnsafe(`VACUUM ANALYZE;`);
         logger.info('[Cron] db-maintenance routine complete');
     } catch (e) {

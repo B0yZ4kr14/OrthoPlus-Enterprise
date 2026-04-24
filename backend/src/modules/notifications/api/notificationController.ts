@@ -41,14 +41,16 @@ export class NotificationController {
       const tomorrowStart = new Date(tomorrow.setHours(0, 0, 0, 0));
       const tomorrowEnd = new Date(tomorrow.setHours(23, 59, 59, 999));
 
-      const upcomingAppointments = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT a.*, p.full_name as patient_name
-        FROM appointments a
-        LEFT JOIN patients p ON a.patient_id = p.id
-        WHERE a.start_time >= ${tomorrowStart} AND a.start_time <= ${tomorrowEnd}
-        AND a.status = 'agendado'
-        LIMIT 1000
-      `;
+      const upcomingAppointments = await prisma.appointments.findMany({
+        where: {
+          start_time: { gte: tomorrowStart.toISOString(), lte: tomorrowEnd.toISOString() },
+          status: 'agendado',
+        },
+        include: {
+          patient: { select: { full_name: true } },
+        },
+        take: 1000,
+      });
 
       for (const app of upcomingAppointments) {
         await prisma.notifications.create({
@@ -56,7 +58,7 @@ export class NotificationController {
             clinic_id: app.clinic_id,
             tipo: 'CONSULTA',
             titulo: 'Consulta Amanhã',
-            mensagem: `Consulta agendada com ${app.patient_name || 'paciente'}`,
+            mensagem: `Consulta agendada com ${app.patient?.full_name || 'paciente'}`,
             link_acao: '/agenda',
             lida: false,
           },
@@ -68,6 +70,7 @@ export class NotificationController {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
+      // contas_receber has no Prisma relation to patients; kept as raw JOIN.
       const overduePayments = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
         SELECT cr.*, p.full_name as patient_name
         FROM contas_receber cr
@@ -92,6 +95,7 @@ export class NotificationController {
       }
 
       // 3. Low stock
+      // Prisma Client does not support cross-column comparisons in WHERE.
       const lowStockProducts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
         SELECT * FROM produtos WHERE quantidade_atual <= quantidade_minima LIMIT 1000
       `;
@@ -114,6 +118,7 @@ export class NotificationController {
       const todayMonth = today.getMonth() + 1;
       const todayDay = today.getDate();
 
+      // Prisma Client does not support EXTRACT(MONTH/DAY FROM date) natively.
       const birthdayPatients = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
         SELECT p.*, pat.full_name as patient_name
         FROM prontuarios p
@@ -305,6 +310,7 @@ export class NotificationController {
     next: NextFunction,
   ) {
     try {
+      // crypto_price_alerts has no Prisma relation to profiles; kept as raw JOIN.
       const alerts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
         SELECT cpa.*, p.email
         FROM crypto_price_alerts cpa
@@ -323,23 +329,25 @@ export class NotificationController {
 
       for (const alert of alerts) {
         if (alert.cascade_enabled && alert.cascade_order > 1) {
-          const previousAlerts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-            SELECT id FROM crypto_price_alerts
-            WHERE cascade_group_id = ${alert.cascade_group_id}
-            AND cascade_order < ${alert.cascade_order}
-            AND last_triggered_at IS NULL
-          `;
+          const previousAlerts = await prisma.crypto_price_alerts.findMany({
+            where: {
+              cascade_group_id: alert.cascade_group_id,
+              cascade_order: { lt: alert.cascade_order },
+              last_triggered_at: null,
+            },
+            select: { id: true },
+          });
           if (previousAlerts.length > 0) continue;
         }
 
-        const latestRate = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-          SELECT rate_brl FROM crypto_exchange_rates
-          WHERE coin_type = ${alert.coin_type}
-          ORDER BY timestamp DESC LIMIT 1
-        `;
+        const latestRate = await prisma.crypto_exchange_rates.findFirst({
+          where: { coin_type: alert.coin_type },
+          orderBy: { timestamp: 'desc' },
+          select: { rate_brl: true },
+        });
 
-        if (!latestRate || latestRate.length === 0) continue;
-        const currentRate = latestRate[0].rate_brl;
+        if (!latestRate) continue;
+        const currentRate = latestRate.rate_brl;
 
         let shouldTrigger = false;
         if (
@@ -424,10 +432,13 @@ export class NotificationController {
       const clinic_id = req.user?.clinicId;
       const user_id = req.user?.id || null;
 
-      const admins = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT email FROM profiles WHERE clinic_id = ${clinic_id} AND role = 'ADMIN'
-        /* Note: role logic simplified for mock */
-      `;
+      const admins = await prisma.users.findMany({
+        where: {
+          clinic_id: clinic_id || undefined,
+          role: 'ADMIN',
+        },
+        select: { email: true },
+      });
 
       const adminEmails = admins.map((a) => a.email).filter(Boolean);
 
@@ -475,6 +486,7 @@ export class NotificationController {
    */
   async sendStockAlerts(_req: Request, res: Response, next: NextFunction) {
     try {
+      // Prisma Client does not support cross-column comparisons in WHERE.
       const produtos = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
         SELECT id, nome, quantidade_atual, quantidade_minima, clinic_id
         FROM inventario.produtos

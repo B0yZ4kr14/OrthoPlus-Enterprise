@@ -1,0 +1,19 @@
+#!/bin/sh
+# Pre-commit hook — OrthoPlus Enterprise
+# Runs lint and type-check across the monorepo
+
+echo "🔍 Running pre-commit checks..."
+
+pnpm lint
+if [ $? -ne 0 ]; then
+  echo "❌ Lint failed. Commit aborted."
+  exit 1
+fi
+
+pnpm type-check
+if [ $? -ne 0 ]; then
+  echo "❌ Type-check failed. Commit aborted."
+  exit 1
+fi
+
+echo "✅ Pre-commit checks passed."

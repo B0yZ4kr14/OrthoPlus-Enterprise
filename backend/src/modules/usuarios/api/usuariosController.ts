@@ -15,24 +15,25 @@ export class UsuariosController {
         where: { clinic_id: user?.clinicId },
       });
 
-      // Filter auth.users by the profile IDs scoped to this clinic — prevents leaking other clinics' user data
       const profileIds = profiles.map((p: { id: string }) => p.id);
-      const authUsers = profileIds.length > 0
-        ? await (prisma as any) // eslint-disable-line @typescript-eslint/no-explicit-any
-            .$queryRaw`SELECT id, email, last_sign_in_at FROM auth.users WHERE id = ANY(${profileIds}::uuid[])`
+      const users = profileIds.length > 0
+        ? await prisma.users.findMany({
+            where: { id: { in: profileIds } },
+            select: { id: true, email: true, last_sign_in_at: true },
+          })
         : [];
 
       const usersWithEmail = profiles.map((p: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-        const authUser = (authUsers as { email: string; id: string; last_sign_in_at?: string }[]).find((u) => u.id === p.id);
+        const u = users.find((u) => u.id === p.id);
         return {
           id: p.id,
-          email: authUser?.email || "N/A",
+          email: u?.email || "N/A",
           full_name: p.full_name,
           app_role: p.app_role || "MEMBER",
           clinic_id: p.clinic_id,
           avatar_url: p.avatar_url,
           is_active: p.is_active ?? true,
-          last_sign_in_at: authUser?.last_sign_in_at,
+          last_sign_in_at: u?.last_sign_in_at,
           created_at: p.created_at,
         };
       });
@@ -51,29 +52,30 @@ export class UsuariosController {
 
       if (!user?.clinicId) { res.status(401).json({ error: "Auth required" }); return; }
 
-      // Use a cryptographically secure random password if none provided
       const effectivePassword = password || randomBytes(24).toString("base64url");
       const hashedPassword = await bcrypt.hash(effectivePassword, 12);
 
-      const userResult = await prisma.$queryRaw`
-        INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, created_at, updated_at)
-        VALUES (gen_random_uuid(), ${email}, ${hashedPassword}, NOW(), NOW(), NOW())
-        RETURNING id, email
-      `;
-
-      const newUserId = (userResult as any[])[0].id; // eslint-disable-line @typescript-eslint/no-explicit-any
-
-      await prisma.profiles.create({
+      const newUser = await prisma.users.create({
         data: {
-          id: newUserId,
+          email,
+          password_hash: hashedPassword,
+          role: app_role || "MEMBER",
           clinic_id: user.clinicId,
-          full_name,
-          app_role,
-          is_active,
+          is_active: is_active ?? true,
         },
       });
 
-      res.status(201).json({ id: newUserId });
+      await prisma.profiles.create({
+        data: {
+          id: newUser.id,
+          clinic_id: user.clinicId,
+          full_name,
+          app_role: app_role || "MEMBER",
+          is_active: is_active ?? true,
+        },
+      });
+
+      res.status(201).json({ id: newUser.id });
     } catch (error) {
       logger.error("Error creating user", { error });
       res.status(400).json({ error: "Failed to create user" });
@@ -102,9 +104,10 @@ export class UsuariosController {
 
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 12);
-        await prisma.$executeRaw`
-          UPDATE auth.users SET encrypted_password = ${hashedPassword}, updated_at = NOW() WHERE id = ${id}::uuid
-        `;
+        await prisma.users.update({
+          where: { id },
+          data: { password_hash: hashedPassword },
+        });
       }
 
       res.json({ success: true });
@@ -130,6 +133,11 @@ export class UsuariosController {
         data: { is_active },
       });
 
+      await prisma.users.update({
+        where: { id },
+        data: { is_active },
+      });
+
       res.json({ success: true });
     } catch (error) {
       logger.error("Error toggling user status", { error });
@@ -148,8 +156,7 @@ export class UsuariosController {
       if (!profile) { res.status(404).json({ error: "User not found" }); return; }
 
       await prisma.profiles.deleteMany({ where: { id, clinic_id: clinicId } });
-      await (prisma as any) // eslint-disable-line @typescript-eslint/no-explicit-any
-        .$executeRaw`DELETE FROM auth.users WHERE id = ${id}::uuid`;
+      await prisma.users.delete({ where: { id } });
 
       res.json({ success: true });
     } catch (error) {

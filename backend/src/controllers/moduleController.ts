@@ -23,13 +23,15 @@ export const getMyModules = async (req: Request, res: Response) => {
     if (!user) return res.status(401).json({ error: "Unauthorized" });
 
     // Mock grabbing modules tied to the user's tenant or clinic
-    const modules = await prisma
-      .$queryRaw<any[]>`
-        SELECT m.* FROM modules m
-        JOIN tenant_modules tm ON m.id = tm.module_id
-        WHERE tm.tenant_id = ${user.tenantId || "DEFAULT"}
-    `
-      .catch(() => []);
+    const modules = await prisma.clinic_modules.findMany({
+      where: {
+        clinic_id: user.clinicId || "DEFAULT",
+        is_active: true,
+      },
+      include: {
+        module_catalog: true,
+      },
+    }).catch(() => []);
 
     return res.status(200).json({ modules });
   } catch (error) {
@@ -67,11 +69,13 @@ export const toggleModuleState = async (req: Request, res: Response) => {
     const user = req.user;
     if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-    await prisma
-      .$executeRaw`
-        UPDATE tenant_modules SET is_active = ${isActive} WHERE module_id = ${moduleId} AND tenant_id = ${user.tenantId || "DEFAULT"}
-    `
-      .catch(() => { /* mock toggle - no-op */ });
+    await prisma.clinic_modules.updateMany({
+      where: {
+        module_catalog_id: parseInt(moduleId, 10),
+        clinic_id: user.clinicId || "DEFAULT",
+      },
+      data: { is_active: isActive },
+    }).catch(() => { /* no-op */ });
 
     return res
       .status(200)
