@@ -371,4 +371,26 @@ export class CryptoConfigController {
       res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  async generatePaymentAddress(req: Request, res: Response): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Não autenticado" });
+        return;
+      }
+      const { coin_type, wallet_id } = req.body;
+      // Mock payment address generation
+      const address = `${coin_type?.toLowerCase() || 'btc'}_${wallet_id || clinicId}_${Date.now()}`;
+      res.json({
+        address,
+        coin_type: coin_type || 'BTC',
+        wallet_id: wallet_id || null,
+        created_at: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error("Error generating payment address", { error });
+      res.status(500).json({ error: "Erro ao gerar endereço de pagamento" });
+    }
+  }
 }

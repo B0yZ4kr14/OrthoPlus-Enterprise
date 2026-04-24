@@ -192,5 +192,239 @@ router.use(clinicGuard);
     }
   });
 
+  // ---------------------------------------------------------------------------
+  // Prontuarios — UPDATE / DELETE (Wave-2 fix: previously missing)
+  // ---------------------------------------------------------------------------
+  router.patch('/prontuarios/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const existing = await (prisma as any).prontuarios.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (!existing) return res.status(404).json({ error: 'Prontuario not found' });
+      const data = await (prisma as any).prontuarios.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where: { id: req.params.id },
+        data: req.body,
+      });
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error updating prontuario', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.delete('/prontuarios/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const existing = await (prisma as any).prontuarios.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (!existing) return res.status(404).json({ error: 'Prontuario not found' });
+      await (prisma as any).prontuarios.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(204).send();
+    } catch (error) {
+      logger.error('Error deleting prontuario', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // Anexos (pep_anexos) — CRUD
+  // ---------------------------------------------------------------------------
+  router.post('/anexos', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const data = await (prisma as any).pep_anexos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data: { ...req.body, clinic_id: clinicId },
+      });
+      return res.status(201).json(data);
+    } catch (error) {
+      logger.error('Error creating anexo', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.patch('/anexos/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const data = await (prisma as any).pep_anexos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where: { id: req.params.id },
+        data: req.body,
+      });
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error updating anexo', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.delete('/anexos/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      await (prisma as any).pep_anexos.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(204).send();
+    } catch (error) {
+      logger.error('Error deleting anexo', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // Evolucoes (pep_evolucoes) — CRUD
+  // ---------------------------------------------------------------------------
+  router.post('/evolucoes', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const data = await (prisma as any).pep_evolucoes.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data: { ...req.body, created_by: req.user?.id || 'system' },
+      });
+      return res.status(201).json(data);
+    } catch (error) {
+      logger.error('Error creating evolucao', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.patch('/evolucoes/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const data = await (prisma as any).pep_evolucoes.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where: { id: req.params.id },
+        data: req.body,
+      });
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error updating evolucao', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.delete('/evolucoes/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      await (prisma as any).pep_evolucoes.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(204).send();
+    } catch (error) {
+      logger.error('Error deleting evolucao', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // Tratamentos (pep_tratamentos) — CRUD
+  // ---------------------------------------------------------------------------
+  router.post('/tratamentos', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const data = await (prisma as any).pep_tratamentos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data: { ...req.body, created_by: req.user?.id || 'system' },
+      });
+      return res.status(201).json(data);
+    } catch (error) {
+      logger.error('Error creating tratamento', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.patch('/tratamentos/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const data = await (prisma as any).pep_tratamentos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where: { id: req.params.id },
+        data: req.body,
+      });
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error updating tratamento', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.delete('/tratamentos/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      await (prisma as any).pep_tratamentos.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(204).send();
+    } catch (error) {
+      logger.error('Error deleting tratamento', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // Odontograma data — tooth / surface / delete (Wave-2 fix)
+  // ---------------------------------------------------------------------------
+  router.put('/odontogramas/data/tooth', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const { prontuario_id, tooth_number, status: toothStatus, notes } = req.body;
+      const existing = await (prisma as any).pep_odontograma_data.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where: { prontuario_id, tooth_number },
+      });
+      let data;
+      if (existing) {
+        data = await (prisma as any).pep_odontograma_data.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+          where: { id: existing.id },
+          data: { status: toothStatus, notes, updated_by: req.user?.id || 'system' },
+        });
+      } else {
+        data = await (prisma as any).pep_odontograma_data.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+          data: { prontuario_id, tooth_number, status: toothStatus, notes, created_by: req.user?.id || 'system' },
+        });
+      }
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error updating odontograma tooth data', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.put('/odontogramas/data/surface', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const { odontograma_data_id, surface, status: surfaceStatus } = req.body;
+      const existing = await (prisma as any).pep_tooth_surfaces.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where: { odontograma_data_id, surface },
+      });
+      let data;
+      if (existing) {
+        data = await (prisma as any).pep_tooth_surfaces.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+          where: { id: existing.id },
+          data: { status: surfaceStatus },
+        });
+      } else {
+        data = await (prisma as any).pep_tooth_surfaces.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+          data: { odontograma_data_id, surface, status: surfaceStatus },
+        });
+      }
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error updating odontograma surface data', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.delete('/odontogramas/data', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const { id } = req.body;
+      await (prisma as any).pep_odontograma_data.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(204).send();
+    } catch (error) {
+      logger.error('Error deleting odontograma data', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
   return router;
 }

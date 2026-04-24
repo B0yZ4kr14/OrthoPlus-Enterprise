@@ -46,6 +46,9 @@ router.use(clinicGuard);
     controller.webhookCryptoTransaction(req, res),
   );
 
+  // Payment address generation (Wave-2 fix)
+  router.post("/payment-address", (req, res) => controller.generatePaymentAddress(req, res));
+
   return router;
 }
 

@@ -13,6 +13,7 @@ export function createAuthRouter(): Router {
   router.post("/logout", controller.logout);
   router.post("/register", controller.registerStaff);
   router.post("/reset-password", controller.resetPassword);
+  router.post("/update-password", controller.resetPassword);
 
   return router;
 }

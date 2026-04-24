@@ -48,6 +48,8 @@ router.use(clinicGuard);
   router.post('/contas-receber', (req, res) => c.createContaReceber(req, res));
   router.patch('/contas-receber/:id', (req, res) => c.updateContaReceber(req, res));
   router.delete('/contas-receber/:id', (req, res) => c.deleteContaReceber(req, res));
+  // Alias para compatibilidade com frontend legado (usa underline)
+  router.patch('/contas_receber/:id', (req, res) => c.updateContaReceber(req, res));
 
   // Contas a Pagar
   router.get('/contas-pagar', (req, res) => c.listContasPagar(req, res));
