@@ -734,4 +734,51 @@ export class AnalyticsController {
       return { error: e };
     }
   }
+
+  public async getSidebarBadges(req: Request, res: Response, next: NextFunction) {
+    try {
+      const clinicId = req.clinicId;
+      if (!clinicId) {
+        return res.status(401).json({ error: "Unauthorized: Missing clinicId" });
+      }
+
+      const today = new Date();
+      const todayStr = today.toISOString().split("T")[0]; // "YYYY-MM-DD"
+      const tomorrowStr = new Date(today.getTime() + 86400000).toISOString().split("T")[0];
+
+      const [appointments, overdue, recalls] = await Promise.all([
+        prisma.appointments.count({
+          where: {
+            clinic_id: clinicId,
+            start_time: { gte: todayStr, lt: tomorrowStr },
+          },
+        }),
+        prisma.contas_receber.count({
+          where: {
+            clinic_id: clinicId,
+            data_vencimento: { lt: todayStr },
+            status: "PENDENTE",
+          },
+        }),
+        prisma.recalls.count({
+          where: {
+            clinic_id: clinicId,
+            data_prevista: { gte: todayStr, lt: tomorrowStr },
+          },
+        }),
+      ]);
+
+      return res.json({
+        badges: {
+          appointments,
+          overdue,
+          defaulters: overdue,
+          recalls,
+          messages: 0,
+        },
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 }

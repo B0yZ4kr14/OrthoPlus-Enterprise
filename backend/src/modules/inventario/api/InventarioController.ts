@@ -61,7 +61,7 @@ export class InventarioController {
       const filters = {
         categoriaId: req.query.categoriaId as string,
         fornecedorId: req.query.fornecedorId as string,
-        ativo: req.query.ativo === "true",
+        ativo: req.query.ativo !== undefined ? req.query.ativo === "true" : undefined,
         estoqueBaixo: req.query.estoqueBaixo === "true",
         search: req.query.search as string,
       };

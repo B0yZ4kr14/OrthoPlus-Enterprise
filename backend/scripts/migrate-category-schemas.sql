@@ -1,0 +1,19 @@
+-- Idempotent: creates new category schemas if they don't exist
+CREATE SCHEMA IF NOT EXISTS core;
+CREATE SCHEMA IF NOT EXISTS comercial;
+CREATE SCHEMA IF NOT EXISTS clinico;
+CREATE SCHEMA IF NOT EXISTS operacional;
+CREATE SCHEMA IF NOT EXISTS administrativo;
+-- Ensure existing schemas exist too
+CREATE SCHEMA IF NOT EXISTS pacientes;
+CREATE SCHEMA IF NOT EXISTS financeiro;
+CREATE SCHEMA IF NOT EXISTS pdv;
+CREATE SCHEMA IF NOT EXISTS faturamento;
+CREATE SCHEMA IF NOT EXISTS inventario;
+CREATE SCHEMA IF NOT EXISTS pep;
+CREATE SCHEMA IF NOT EXISTS configuracoes;
+CREATE SCHEMA IF NOT EXISTS database_admin;
+CREATE SCHEMA IF NOT EXISTS backups;
+CREATE SCHEMA IF NOT EXISTS crypto_config;
+CREATE SCHEMA IF NOT EXISTS github_tools;
+CREATE SCHEMA IF NOT EXISTS terminal;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ClipboardPlus, Plus, Clock, CheckCircle, XCircle, Pause } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";
 import {
@@ -36,13 +37,14 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export function TratamentosPage() {
+  const { clinicId } = useAuth();
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const {
     tratamentos,
     isLoading,
     createTratamento,
     updateStatus,
-  } = useTratamentos(selectedPatient?.id ?? null, "clinic-id");
+  } = useTratamentos(selectedPatient?.id ?? null, clinicId || "");
 
   const planejados = tratamentos.filter((t) => t.status === "PLANEJADO");
   const emAndamento = tratamentos.filter((t) => t.status === "EM_ANDAMENTO");

@@ -54,10 +54,8 @@ import { AprovarOrcamentoUseCase } from "@/application/use-cases/orcamentos/Apro
 import { CreateOrcamentoUseCase } from "@/application/use-cases/orcamentos/CreateOrcamentoUseCase";
 import { RejeitarOrcamentoUseCase } from "@/application/use-cases/orcamentos/RejeitarOrcamentoUseCase";
 import { UpdateOrcamentoUseCase } from "@/application/use-cases/orcamentos/UpdateOrcamentoUseCase";
-// @ts-expect-error — TS2307
-import { ItemOrcamentoRepositoryApi } from "@/infrastructure/repositories/ItemOrcamentoRepositoryApi";
-// @ts-expect-error — TS2307
-import { OrcamentoRepositoryApi } from "@/infrastructure/repositories/OrcamentoRepositoryApi";
+import { ItemOrcamentoRepositoryApi } from "@/modules/orcamentos/infrastructure/repositories/ItemOrcamentoRepositoryApi";
+import { OrcamentoRepositoryApi } from "@/modules/orcamentos/infrastructure/repositories/OrcamentoRepositoryApi";
 
 // Odontograma Module
 import { GetOdontogramaUseCase } from "@/application/use-cases/odontograma/GetOdontogramaUseCase";

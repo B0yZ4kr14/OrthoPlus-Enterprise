@@ -19,4 +19,7 @@ router.get("/marketing-roi", cacheRoute(300), controller.getMarketingROI.bind(co
 // Ponto unificado de processamento de analises e background events
 router.post("/processor", controller.processAnalytics.bind(controller));
 
+// Sidebar notification badges
+router.get("/sidebar-badges", controller.getSidebarBadges.bind(controller));
+
 export default router;

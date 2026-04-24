@@ -217,13 +217,18 @@ export class AuthController {
    * Returns current authenticated user info.
    */
   public getUser = asyncHandler(async (req: Request, res: Response) => {
+    // Read token from HttpOnly cookie first, then Authorization header.
+    // The frontend sends withCredentials: true (cookies only) so we must
+    // check the cookie before falling back to the Authorization header.
+    const cookieToken = (req as Request & { cookies?: Record<string, string> }).cookies?.access_token;
     const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      throw Errors.unauthorized("No authorization header provided");
+    const token = cookieToken || (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : undefined);
+
+    if (!token) {
+      throw Errors.unauthorized("No authentication token provided");
     }
 
     try {
-      const token = authHeader.split(" ")[1];
       const decoded = jwt.verify(token, requireJwtSecret()) as JWTPayload;
 
       const user: User = {

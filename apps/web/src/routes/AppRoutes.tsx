@@ -140,6 +140,9 @@ const AuditTrailViewer = lazy(
 const ModulesPage = lazy(
   () => import("@/modules/settings/ui/pages/ModulesPage"),
 );
+const DatabaseManagementPage = lazy(
+  () => import("@/modules/settings/ui/pages/DatabaseManagementPage"),
+);
 const Usuarios = lazy(
   () => import("@/modules/admin/ui/pages/Usuarios"),
 );
@@ -278,6 +281,7 @@ const AppRoutes = () => (
 
     {/* Configurações */}
     <Route path="/configuracoes/modulos" element={protectedRoute(<ModulesPage />, { requireAdmin: true })} />
+    <Route path="/configuracoes/database" element={protectedRoute(<DatabaseManagementPage />, { requireAdmin: true })} />
     <Route path="/usuarios" element={protectedRoute(<Usuarios />, { requireAdmin: true })} />
     <Route path="/configuracoes" element={protectedRoute(<Configuracoes />, { requireAdmin: true })} />
     <Route path="/help" element={protectedRoute(<HelpCenter />)} />

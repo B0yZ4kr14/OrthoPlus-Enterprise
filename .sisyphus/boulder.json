@@ -1,0 +1,32 @@
+{
+  "active_plan": "/data/home/ubuntu/OrthoPlus/.sisyphus/plans/db-descentralizado-por-categoria.md",
+  "started_at": "2026-04-24T09:17:49.524Z",
+  "session_ids": [
+    "ses_2422c7300ffe6ySsxZ63Xz34Dc",
+    "ses_240ebdb74ffenx5HsDtfArc9jJ",
+    "ses_240eb84dfffeccjkY6GGR2evAd",
+    "ses_240eb84c1ffeeqYvmJq5i3xBuF",
+    "ses_240e0469bffeIiy5UWPFHBy1oW",
+    "ses_240e04601ffe8ZgVCGEMKzFTrI"
+  ],
+  "session_origins": {
+    "ses_2422c7300ffe6ySsxZ63Xz34Dc": "direct",
+    "ses_240ebdb74ffenx5HsDtfArc9jJ": "appended",
+    "ses_240eb84dfffeccjkY6GGR2evAd": "appended",
+    "ses_240eb84c1ffeeqYvmJq5i3xBuF": "appended",
+    "ses_240e0469bffeIiy5UWPFHBy1oW": "appended",
+    "ses_240e04601ffe8ZgVCGEMKzFTrI": "appended"
+  },
+  "plan_name": "db-descentralizado-por-categoria",
+  "agent": "atlas",
+  "task_sessions": {
+    "final-wave:f1": {
+      "task_key": "final-wave:f1",
+      "task_label": "F1",
+      "task_title": "**Plan Compliance Audit** — `oracle`",
+      "session_id": "ses_240e04601ffe8ZgVCGEMKzFTrI",
+      "agent": "oracle",
+      "updated_at": "2026-04-24T10:58:36.008Z"
+    }
+  }
+}

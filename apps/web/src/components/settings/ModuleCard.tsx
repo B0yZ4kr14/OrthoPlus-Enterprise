@@ -93,14 +93,14 @@ export function ModuleCard({ module, onToggle }: ModuleCardProps) {
     if (
       !module.is_active &&
       !module.can_activate &&
-      module.unmet_dependencies.length > 0
+      (module.unmet_dependencies?.length ?? 0) > 0
     ) {
       return `Requer o(s) módulo(s): ${module.unmet_dependencies.join(", ")}`;
     }
     if (
       module.is_active &&
       !module.can_deactivate &&
-      module.active_dependents.length > 0
+      (module.active_dependents?.length ?? 0) > 0
     ) {
       return `Este módulo é requerido por: ${module.active_dependents.join(", ")}`;
     }

@@ -9,6 +9,7 @@ import {
   Download,
   Upload,
   Wrench,
+  ExternalLink,
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
@@ -21,7 +22,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import ModulesSimple from "@/modules/settings/ui/pages/ModulesSimple";
 import DatabaseBackupTab from "@/components/settings/DatabaseBackupTab";
 import { UserManagementTab } from "@/components/settings/UserManagementTab";
@@ -36,6 +37,7 @@ import { BackendSelector } from "@/components/settings/BackendSelector";
 
 export default function Configuracoes() {
   const { user, hasRole } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("modules");
   const [showExportWizard, setShowExportWizard] = useState(false);
   const [showImportWizard, setShowImportWizard] = useState(false);
@@ -149,6 +151,25 @@ export default function Configuracoes() {
         </TabsContent>
 
         <TabsContent value="database" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>Gerenciamento Avançado de Banco de Dados</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/configuracoes/database")}
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Abrir Painel Completo
+                </Button>
+              </CardTitle>
+              <CardDescription>
+                Controle por categoria, backups, manutenção e monitoramento de motores de banco de dados.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle>Migração de Dados</CardTitle>

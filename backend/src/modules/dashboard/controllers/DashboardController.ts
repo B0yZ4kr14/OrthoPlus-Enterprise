@@ -22,13 +22,13 @@ export class DashboardController {
         return;
       }
 
-      // Buscar estatísticas agregadas em paralelo
+      // Buscar estatísticas agregadas em paralelo — each is individually resilient
       const [stats, appointmentsData, revenueData, treatmentsByStatus] =
         await Promise.all([
-          this.getStats(clinicId),
-          this.getAppointmentsData(clinicId),
-          this.getRevenueData(clinicId),
-          this.getTreatmentsByStatus(clinicId),
+          this.getStats(clinicId).catch(() => this.defaultStats()),
+          this.getAppointmentsData(clinicId).catch(() => []),
+          this.getRevenueData(clinicId).catch(() => []),
+          this.getTreatmentsByStatus(clinicId).catch(() => []),
         ]);
 
       res.json({
@@ -43,11 +43,21 @@ export class DashboardController {
     }
   }
 
-  private async getStats(clinicId: string) {
-    const publicDb = this.db;
-    const today = new Date().toISOString().split('T')[0];
+  private defaultStats() {
+    return {
+      totalPatients: 0,
+      todayAppointments: 0,
+      monthlyRevenue: 0,
+      occupancyRate: 0,
+      pendingTreatments: 0,
+      completedTreatments: 0,
+    };
+  }
 
-    // Executar todas as queries de estatísticas em paralelo
+  private async getStats(clinicId: string) {
+    const today = new Date().toISOString().split('T')[0];
+    const todayPrefix = today + '%'; // appointments.start_time is a String
+
     const [
       totalPatientsResult,
       todayAppointmentsResult,
@@ -57,84 +67,76 @@ export class DashboardController {
       completedTreatmentsResult,
     ] = await Promise.all([
       // Total de pacientes
-      publicDb.query(
-        'SELECT COUNT(*) as count FROM public.patients WHERE clinic_id = $1',
+      this.db.query(
+        'SELECT COUNT(*) as count FROM pacientes.patients WHERE clinic_id = $1',
         [clinicId]
       ),
-      // Consultas de hoje
-      publicDb.query(
-        `SELECT COUNT(*) as count FROM public.appointments 
-         WHERE clinic_id = $1 AND DATE(start_time) = $2`,
-        [clinicId, today]
+      // Consultas de hoje (start_time is a String like '2026-04-24T...')
+      this.db.query(
+        `SELECT COUNT(*) as count FROM pacientes.appointments
+         WHERE clinic_id = $1 AND start_time LIKE $2`,
+        [clinicId, todayPrefix]
       ),
-      // Receita mensal (últimos 30 dias)
-      publicDb.query(
-        `SELECT COALESCE(SUM(valor), 0) as total 
-         FROM financeiro.transacoes 
-         WHERE clinic_id = $1 
-         AND tipo = 'RECEITA' 
-         AND data >= CURRENT_DATE - INTERVAL '30 days'`,
+      // Receita mensal (últimos 30 dias) — financial_transactions
+      this.db.query(
+        `SELECT COALESCE(SUM(amount), 0) as total
+         FROM financeiro.financial_transactions
+         WHERE clinic_id = $1
+         AND type = 'RECEITA'
+         AND transaction_date >= TO_CHAR(CURRENT_DATE - INTERVAL '30 days', 'YYYY-MM-DD')`,
         [clinicId]
       ),
-      // Taxa de ocupação (consultas realizadas vs agendadas esta semana)
-      publicDb.query(
-        `SELECT 
+      // Taxa de ocupação
+      this.db.query(
+        `SELECT
           COUNT(*) FILTER (WHERE status IN ('completed', 'confirmed')) as completed,
           COUNT(*) as total
-         FROM public.appointments 
-         WHERE clinic_id = $1 
-         AND start_time >= DATE_TRUNC('week', CURRENT_DATE)
-         AND start_time < DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '7 days'`,
+         FROM pacientes.appointments
+         WHERE clinic_id = $1
+         AND start_time >= TO_CHAR(DATE_TRUNC('week', CURRENT_DATE), 'YYYY-MM-DD')
+         AND start_time < TO_CHAR(DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '7 days', 'YYYY-MM-DD')`,
         [clinicId]
       ),
-      // Tratamentos pendentes
-      publicDb.query(
-        `SELECT COUNT(*) as count FROM pep.tratamentos 
-         WHERE clinic_id = $1 AND status = 'em_andamento'`,
-        [clinicId]
+      // Tratamentos pendentes (pep_tratamentos has no clinic_id — skip clinic filter)
+      this.db.query(
+        `SELECT COUNT(*) as count FROM pep.pep_tratamentos
+         WHERE status = 'EM_ANDAMENTO'`,
+        []
       ),
       // Tratamentos concluídos (últimos 30 dias)
-      publicDb.query(
-        `SELECT COUNT(*) as count FROM pep.tratamentos 
-         WHERE clinic_id = $1 
-         AND status = 'concluido' 
+      this.db.query(
+        `SELECT COUNT(*) as count FROM pep.pep_tratamentos
+         WHERE status = 'CONCLUIDO'
          AND updated_at >= CURRENT_DATE - INTERVAL '30 days'`,
-        [clinicId]
+        []
       ),
     ]);
 
-    const totalPatients = parseInt(totalPatientsResult.rows[0]?.count || '0');
-    const todayAppointments = parseInt(todayAppointmentsResult.rows[0]?.count || '0');
-    const monthlyRevenue = parseFloat(monthlyRevenueResult.rows[0]?.total || '0');
-    const occupancyRate = occupancyResult.rows[0]?.total > 0
-      ? Math.round((occupancyResult.rows[0].completed / occupancyResult.rows[0].total) * 100)
-      : 0;
-    const pendingTreatments = parseInt(pendingTreatmentsResult.rows[0]?.count || '0');
-    const completedTreatments = parseInt(completedTreatmentsResult.rows[0]?.count || '0');
-
     return {
-      totalPatients,
-      todayAppointments,
-      monthlyRevenue,
-      occupancyRate,
-      pendingTreatments,
-      completedTreatments,
+      totalPatients: parseInt(totalPatientsResult.rows[0]?.count || '0'),
+      todayAppointments: parseInt(todayAppointmentsResult.rows[0]?.count || '0'),
+      monthlyRevenue: parseFloat(monthlyRevenueResult.rows[0]?.total || '0'),
+      occupancyRate: occupancyResult.rows[0]?.total > 0
+        ? Math.round((occupancyResult.rows[0].completed / occupancyResult.rows[0].total) * 100)
+        : 0,
+      pendingTreatments: parseInt(pendingTreatmentsResult.rows[0]?.count || '0'),
+      completedTreatments: parseInt(completedTreatmentsResult.rows[0]?.count || '0'),
     };
   }
 
   private async getAppointmentsData(clinicId: string) {
-    // Consultas da última semana (agendadas vs realizadas por dia)
+    // Consultas da última semana — start_time is a String
     const result = await this.db.query(
-      `SELECT 
-        TO_CHAR(start_time, 'Dy') as name,
+      `SELECT
+        TO_CHAR(start_time::timestamp, 'Dy') as name,
         COUNT(*) FILTER (WHERE status IN ('scheduled', 'confirmed', 'completed')) as agendadas,
         COUNT(*) FILTER (WHERE status = 'completed') as realizadas
-       FROM public.appointments 
-       WHERE clinic_id = $1 
-       AND start_time >= CURRENT_DATE - INTERVAL '7 days'
-       AND start_time < CURRENT_DATE
-       GROUP BY DATE(start_time), TO_CHAR(start_time, 'Dy')
-       ORDER BY DATE(start_time)`,
+       FROM pacientes.appointments
+       WHERE clinic_id = $1
+       AND start_time >= TO_CHAR(CURRENT_DATE - INTERVAL '7 days', 'YYYY-MM-DD')
+       AND start_time < TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD')
+       GROUP BY DATE(start_time::timestamp), TO_CHAR(start_time::timestamp, 'Dy')
+       ORDER BY DATE(start_time::timestamp)`,
       [clinicId]
     );
 
@@ -146,17 +148,17 @@ export class DashboardController {
   }
 
   private async getRevenueData(clinicId: string) {
-    // Receitas e despesas dos últimos 6 meses
+    // Receitas e despesas dos últimos 6 meses — financial_transactions
     const result = await this.db.query(
-      `SELECT 
-        TO_CHAR(data, 'Mon') as name,
-        SUM(CASE WHEN tipo = 'RECEITA' THEN valor ELSE 0 END) as receita,
-        SUM(CASE WHEN tipo = 'DESPESA' THEN valor ELSE 0 END) as despesas
-       FROM financeiro.transacoes 
-       WHERE clinic_id = $1 
-       AND data >= CURRENT_DATE - INTERVAL '6 months'
-       GROUP BY DATE_TRUNC('month', data), TO_CHAR(data, 'Mon')
-       ORDER BY DATE_TRUNC('month', data)`,
+      `SELECT
+        TO_CHAR(transaction_date::date, 'Mon') as name,
+        SUM(CASE WHEN type = 'RECEITA' THEN amount ELSE 0 END) as receita,
+        SUM(CASE WHEN type = 'DESPESA' THEN amount ELSE 0 END) as despesas
+       FROM financeiro.financial_transactions
+       WHERE clinic_id = $1
+       AND transaction_date >= TO_CHAR(CURRENT_DATE - INTERVAL '6 months', 'YYYY-MM-DD')
+       GROUP BY DATE_TRUNC('month', transaction_date::date), TO_CHAR(transaction_date::date, 'Mon')
+       ORDER BY DATE_TRUNC('month', transaction_date::date)`,
       [clinicId]
     );
 
@@ -167,24 +169,23 @@ export class DashboardController {
     }));
   }
 
-  private async getTreatmentsByStatus(clinicId: string) {
-    // Tratamentos por status
+  private async getTreatmentsByStatus(_clinicId: string) {
+    // Tratamentos por status (pep_tratamentos has no clinic_id)
     const result = await this.db.query(
-      `SELECT 
+      `SELECT
         status as name,
         COUNT(*) as value
-       FROM pep.tratamentos 
-       WHERE clinic_id = $1
+       FROM pep.pep_tratamentos
        GROUP BY status
        ORDER BY value DESC`,
-      [clinicId]
+      []
     );
 
     const statusLabels: Record<string, string> = {
-      concluido: 'Concluído',
-      em_andamento: 'Em Andamento',
-      pendente: 'Pendente',
-      cancelado: 'Cancelado',
+      CONCLUIDO: 'Concluído',
+      EM_ANDAMENTO: 'Em Andamento',
+      PLANEJADO: 'Planejado',
+      CANCELADO: 'Cancelado',
     };
 
     return result.rows.map(row => ({

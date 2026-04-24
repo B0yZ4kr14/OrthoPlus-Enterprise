@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["public", "pacientes", "inventario", "pdv", "financeiro", "pep", "faturamento", "configuracoes", "database_admin", "backups", "crypto_config", "github_tools", "terminal"]
+  schemas  = ["public", "pacientes", "inventario", "pdv", "financeiro", "pep", "faturamento", "configuracoes", "database_admin", "backups", "crypto_config", "github_tools", "terminal", "core", "comercial", "clinico", "operacional", "administrativo"]
 }
 
 model abuse_reports {
@@ -21,7 +21,7 @@ model abuse_reports {
   resolved_by  String?
   severity     String
   user_id      String?
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model admin_configurations {
@@ -33,7 +33,7 @@ model admin_configurations {
   id          String    @id @default(uuid())
   is_active   Boolean?
   updated_at  DateTime? @updatedAt
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model analises_radiograficas {
@@ -60,7 +60,7 @@ model analises_radiograficas {
   status_analise        String
   tipo_radiografia      String
   updated_at            DateTime @updatedAt
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model analises_radiograficas_history {
@@ -73,7 +73,7 @@ model analises_radiograficas_history {
   problemas_detectados Int?
   resultado_ia         Json
   versao               Int
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model appointment_confirmations {
@@ -87,7 +87,7 @@ model appointment_confirmations {
   phone_number        String?
   sent_at             String?
   status              String
-  @@schema("public")
+  @@schema("core")
 }
 
 model appointment_reminders {
@@ -101,7 +101,7 @@ model appointment_reminders {
   scheduled_for    String
   sent_at          String?
   status           String
-  @@schema("public")
+  @@schema("core")
 }
 
 model appointments {
@@ -144,7 +144,7 @@ model architecture_decision_records {
   tags                    String[]
   title                   String
   updated_at              DateTime @updatedAt
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model audit_logs {
@@ -178,7 +178,7 @@ model audit_trail {
   timestamp         String
   user_agent        String?
   user_id           String?
-  @@schema("public")
+  @@schema("core")
 }
 
 model backup_history {
@@ -203,7 +203,7 @@ model backup_history {
   status                 String
   transfer_speed_mbps    Int?
   verified_at            String?
-  @@schema("public")
+  @@schema("backups")
 }
 
 model backup_replications {
@@ -223,7 +223,7 @@ model backup_replications {
   storage_provider   String
   target_clinic_id   String
   updated_at         DateTime? @updatedAt
-  @@schema("public")
+  @@schema("backups")
 }
 
 model backup_retention_policies {
@@ -238,7 +238,7 @@ model backup_retention_policies {
   keep_yearly         Int
   name                String
   updated_at          DateTime? @updatedAt
-  @@schema("public")
+  @@schema("backups")
 }
 
 model backup_verification_log {
@@ -248,7 +248,7 @@ model backup_verification_log {
   status            String
   verification_type String
   verified_at       String?
-  @@schema("public")
+  @@schema("backups")
 }
 
 model bi_dashboards {
@@ -265,7 +265,7 @@ model bi_dashboards {
   shared_with              String[]
   tags                     String[]
   updated_at               DateTime @updatedAt
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model bi_data_cache {
@@ -276,7 +276,7 @@ model bi_data_cache {
   expires_at String
   id         String   @id @default(uuid())
   widget_id  String?
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model bi_metrics {
@@ -295,7 +295,7 @@ model bi_metrics {
   trend              Int?
   updated_at         DateTime @updatedAt
   value              Int?
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model bi_reports {
@@ -314,7 +314,7 @@ model bi_reports {
   report_type        String
   schedule           Json?
   updated_at         DateTime @updatedAt
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model bi_widgets {
@@ -335,7 +335,7 @@ model bi_widgets {
   updated_at             DateTime @updatedAt
   widget_type            String
   width                  Int
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model blocked_times {
@@ -361,7 +361,7 @@ model budget_approvals {
   usuario_id            String
   valor_orcamento       Int
   versao                Int
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model budget_items {
@@ -378,7 +378,7 @@ model budget_items {
   quantidade          Int
   valor_total         Int
   valor_unitario      Int
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model budget_versions {
@@ -388,7 +388,7 @@ model budget_versions {
   id            String   @id @default(uuid())
   snapshot_data Json
   versao        Int
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model budgets {
@@ -480,7 +480,7 @@ model campaign_metrics {
   total_sent        Int?
   unsubscribe_count Int?
   updated_at        DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model campaign_sends {
@@ -783,7 +783,7 @@ model crm_activities {
   status         String
   title          String
   updated_at     DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model crm_conversions {
@@ -797,7 +797,7 @@ model crm_conversions {
   lead_id              String
   time_to_convert_days Int?
   total_interactions   Int?
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model crm_interactions {
@@ -814,7 +814,7 @@ model crm_interactions {
   next_action_date String?
   outcome          String?
   subject          String?
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model crm_leads {
@@ -834,7 +834,7 @@ model crm_leads {
   status               String
   tags                 String[]
   updated_at           DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model crm_stages {
@@ -849,7 +849,7 @@ model crm_stages {
   name              String
   order_index       Int
   updated_at        DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model crypto_candlestick_data {
@@ -1096,7 +1096,7 @@ model github_events {
   event_type   String
   id           String   @id @default(uuid())
   triggered_by String?
-  @@schema("public")
+  @@schema("github_tools")
 }
 
 model historico_clinico {
@@ -1109,7 +1109,7 @@ model historico_clinico {
   tipo               String
   titulo             String
   updated_at         DateTime @updatedAt
-  @@schema("public")
+  @@schema("pep")
 }
 
 model inadimplentes {
@@ -1126,7 +1126,7 @@ model inadimplentes {
   ultima_cobranca    String?
   updated_at         DateTime @updatedAt
   valor_total_devido Int
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model integracao_contabil_config {
@@ -1146,7 +1146,7 @@ model integracao_contabil_config {
   periodicidade_envio String
   software            String
   updated_at          DateTime @updatedAt
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model integracao_contabil_envios {
@@ -1165,7 +1165,7 @@ model integracao_contabil_envios {
   tentativas         Int
   tipo_documento     String
   updated_at         DateTime @updatedAt
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model inventario_agendamentos {
@@ -1187,7 +1187,7 @@ model inventario_agendamentos {
   tipo_inventario       String
   ultima_execucao       String?
   updated_at            DateTime @updatedAt
-  @@schema("public")
+  @@schema("operacional")
 }
 
 model inventario_itens {
@@ -1240,7 +1240,7 @@ model lead_interacoes {
   proximo_passo     String?
   resultado         String?
   tipo              String
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model lead_tags {
@@ -1248,7 +1248,7 @@ model lead_tags {
   id         String   @id @default(uuid())
   lead_id    String
   tag        String
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model leads {
@@ -1275,7 +1275,7 @@ model leads {
   utm_source       String?
   valor_estimado   Int?
   whatsapp         String?
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model lgpd_consents {
@@ -1297,7 +1297,7 @@ model lgpd_consents {
   updated_at   DateTime @updatedAt
   user_agent   String?
   version      Int
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model lgpd_data_consents {
@@ -1310,7 +1310,7 @@ model lgpd_data_consents {
   id           String   @id @default(uuid())
   patient_id   String
   revoked_at   String?
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model lgpd_data_exports {
@@ -1333,7 +1333,7 @@ model lgpd_data_exports {
   status          String
   tables_included String[]
   updated_at      DateTime @updatedAt
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model lgpd_data_requests {
@@ -1354,7 +1354,7 @@ model lgpd_data_requests {
   response         String?
   status           String
   updated_at       DateTime @updatedAt
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model login_attempts {
@@ -1368,7 +1368,7 @@ model login_attempts {
   session_duration_seconds Int?
   success                  Boolean
   user_agent               String?
-  @@schema("public")
+  @@schema("core")
 }
 
 model marketing_campaigns {
@@ -1392,7 +1392,7 @@ model marketing_campaigns {
   trigger_config   Json?
   triggers         campaign_triggers[]
   updated_at       DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model module_catalog {
@@ -1404,7 +1404,7 @@ model module_catalog {
   module_key     String
   name           String
   clinic_modules clinic_modules[]
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model module_configuration_templates {
@@ -1417,7 +1417,7 @@ model module_configuration_templates {
   name        String
   specialty   String
   updated_at  DateTime @updatedAt
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model module_dependencies {
@@ -1443,7 +1443,7 @@ model movimentacoes_estoque {
   usuario_id          String
   valor_total         Int
   valor_unitario      Int
-  @@schema("public")
+  @@schema("inventario")
 }
 
 model nfce_carta_correcao {
@@ -1575,7 +1575,7 @@ model notifications {
   tipo       String
   titulo     String
   user_id    String?
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model odontogramas {
@@ -1601,7 +1601,7 @@ model onboarding_analytics {
   step_number        Int?
   time_spent_seconds Int?
   user_id            String
-  @@schema("public")
+  @@schema("core")
 }
 
 model orcamento_itens {
@@ -1616,7 +1616,7 @@ model orcamento_itens {
   quantidade      Int
   valor_total     Int
   valor_unitario  Int
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model orcamento_pagamento {
@@ -1629,7 +1629,7 @@ model orcamento_pagamento {
   tipo_pagamento  String
   valor_entrada   Int?
   valor_parcela   Int?
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model orcamento_visualizacoes {
@@ -1639,7 +1639,7 @@ model orcamento_visualizacoes {
   orcamento_id     String
   user_agent       String?
   visualizado_em   String
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model orcamentos {
@@ -1686,7 +1686,7 @@ model overdue_accounts {
   status           String
   total_amount     Int
   updated_at       DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model patient_accounts {
@@ -1700,7 +1700,7 @@ model patient_accounts {
   token_verificacao String?
   ultimo_acesso     String?
   updated_at        DateTime @updatedAt
-  @@schema("public")
+  @@schema("pacientes")
 }
 
 model patient_messages {
@@ -1714,7 +1714,7 @@ model patient_messages {
   patient_id     String
   remetente_id   String
   remetente_tipo String
-  @@schema("public")
+  @@schema("pacientes")
 }
 
 model patient_notifications {
@@ -1727,7 +1727,7 @@ model patient_notifications {
   patient_id String
   tipo       String
   titulo     String
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model patient_preferences {
@@ -1741,7 +1741,7 @@ model patient_preferences {
   patient_id              String
   tema                    String?
   updated_at              DateTime @updatedAt
-  @@schema("public")
+  @@schema("pacientes")
 }
 
 model patient_sessions {
@@ -1750,7 +1750,7 @@ model patient_sessions {
   id         String   @id @default(uuid())
   patient_id String
   token      String
-  @@schema("public")
+  @@schema("pacientes")
 }
 
 model patient_status_history {
@@ -1902,7 +1902,7 @@ model payment_methods {
   taxa_percentual Int?
   type            String
   updated_at      DateTime @updatedAt
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model payment_negotiations {
@@ -1922,7 +1922,7 @@ model payment_negotiations {
   patient_id          String
   status              String
   updated_at          DateTime @updatedAt
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model pdv_produtos {
@@ -1995,7 +1995,7 @@ model pep_assinaturas {
   signed_by         String
   tipo_documento    String
   user_agent        String?
-  @@schema("public")
+  @@schema("pep")
 }
 
 model pep_evolucoes {
@@ -2057,7 +2057,7 @@ model pep_tooth_surfaces {
   status              String
   surface             String
   updated_at          DateTime @updatedAt
-  @@schema("public")
+  @@schema("pep")
 }
 
 model pep_tratamentos {
@@ -2101,7 +2101,7 @@ model permission_templates {
   id          String   @id @default(uuid())
   module_keys String[]
   name        String
-  @@schema("public")
+  @@schema("core")
 }
 
 model prescricoes_remotas {
@@ -2118,7 +2118,7 @@ model prescricoes_remotas {
   medicamento_nome       String?
   teleconsulta_id        String
   tipo                   String
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model problemas_radiograficos {
@@ -2133,7 +2133,7 @@ model problemas_radiograficos {
   sugestao_tratamento String?
   tipo_problema       String
   urgente             Boolean?
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model procedimento_templates {
@@ -2150,7 +2150,7 @@ model procedimento_templates {
   tempo_estimado_minutos Int
   updated_at             DateTime @updatedAt
   valor_sugerido         Int
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model produtos {
@@ -2184,7 +2184,7 @@ model profiles {
   is_active  Boolean
   phone      String?
   updated_at DateTime @updatedAt
-  @@schema("public")
+  @@schema("core")
 }
 
 model prontuarios {
@@ -2213,7 +2213,7 @@ model radiografia_ai_feedback {
   id                  String   @id @default(uuid())
   imagem_marcada_url  String?
   usado_para_treino   Boolean?
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model radiografia_laudo_templates {
@@ -2226,7 +2226,7 @@ model radiografia_laudo_templates {
   template_markdown     String
   tipo_radiografia      String
   variaveis_disponiveis Json?
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model rate_limit_config {
@@ -2238,7 +2238,7 @@ model rate_limit_config {
   max_requests_per_user Int
   updated_at            DateTime @updatedAt
   window_minutes        Int
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model rate_limit_log {
@@ -2250,7 +2250,7 @@ model rate_limit_log {
   updated_at    DateTime @updatedAt
   user_id       String?
   window_start  String
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model recalls {
@@ -2267,7 +2267,7 @@ model recalls {
   status                 String
   tipo_recall            String
   updated_at             DateTime @updatedAt
-  @@schema("public")
+  @@schema("core")
 }
 
 model room_availability {
@@ -2281,7 +2281,7 @@ model room_availability {
   room_name   String
   room_number String?
   updated_at  DateTime @updatedAt
-  @@schema("public")
+  @@schema("core")
 }
 
 model root_actions_log {
@@ -2294,7 +2294,7 @@ model root_actions_log {
   target_record_id String?
   target_table     String?
   user_agent       String?
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model rum_metrics {
@@ -2307,7 +2307,7 @@ model rum_metrics {
   rating       String
   user_agent   String?
   user_id      String?
-  @@schema("public")
+  @@schema("core")
 }
 
 model sat_mfe_config {
@@ -2325,7 +2325,7 @@ model sat_mfe_config {
   tipo_equipamento String
   updated_at       DateTime @updatedAt
   versao_software  String?
-  @@schema("public")
+  @@schema("faturamento")
 }
 
 model sat_mfe_impressoes {
@@ -2346,7 +2346,7 @@ model sat_mfe_impressoes {
   venda_id           String?
   xml_enviado        String?
   xml_retorno        String?
-  @@schema("public")
+  @@schema("faturamento")
 }
 
 model scheduled_backups {
@@ -2374,7 +2374,7 @@ model scheduled_backups {
   storage_destination    String?
   time_of_day            String
   updated_at             DateTime @updatedAt
-  @@schema("public")
+  @@schema("backups")
 }
 
 model scheduled_exports {
@@ -2390,7 +2390,7 @@ model scheduled_exports {
   next_send_at   String?
   updated_at     DateTime @updatedAt
   user_id        String
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model security_audit_log {
@@ -2401,7 +2401,7 @@ model security_audit_log {
   resolution        String
   resolved_at       String
   severity          String?
-  @@schema("public")
+  @@schema("configuracoes")
 }
 
 model split_payment_config {
@@ -2413,7 +2413,7 @@ model split_payment_config {
   procedure_type  String?
   professional_id String
   updated_at      DateTime @updatedAt
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model split_payment_details {
@@ -2428,7 +2428,7 @@ model split_payment_details {
   split_transaction_id String
   status               String
   tax_withheld         Int?
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model split_payment_recipients {
@@ -2443,7 +2443,7 @@ model split_payment_recipients {
   split_percentage   Int?
   tax_rate           Int?
   tax_regime         String?
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model split_payment_rules {
@@ -2457,7 +2457,7 @@ model split_payment_rules {
   rule_type  String
   status     String
   updated_at DateTime @updatedAt
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model split_payment_transactions {
@@ -2472,7 +2472,7 @@ model split_payment_transactions {
   status              String
   total_amount        Int
   transaction_id      String?
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model split_transactions {
@@ -2487,7 +2487,7 @@ model split_transactions {
   status              String
   total_amount        Int
   transaction_id      String
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model system_health_metrics {
@@ -2498,7 +2498,7 @@ model system_health_metrics {
   recorded_at String
   unit        String?
   value       Int
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model teleconsultas {
@@ -2523,7 +2523,7 @@ model teleconsultas {
   tipo            String
   titulo          String
   updated_at      DateTime @updatedAt
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model teleodonto_chat {
@@ -2537,7 +2537,7 @@ model teleodonto_chat {
   sender_role     String
   sent_at         String
   session_id      String
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model teleodonto_files {
@@ -2553,7 +2553,7 @@ model teleodonto_files {
   tipo_arquivo               String
   uploaded_at                String
   uploaded_by                String
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model teleodonto_sessions {
@@ -2586,7 +2586,7 @@ model teleodonto_sessions {
   started_at                String?
   status                    String
   updated_at                DateTime @updatedAt
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model terminal_command_history {
@@ -2599,7 +2599,7 @@ model terminal_command_history {
   output         String?
   user_id        String
   was_successful Boolean?
-  @@schema("public")
+  @@schema("terminal")
 }
 
 model tiss_batches {
@@ -2614,7 +2614,7 @@ model tiss_batches {
   status            String
   total_amount      Int
   total_guides      Int
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model tiss_guides {
@@ -2633,7 +2633,7 @@ model tiss_guides {
   status            String
   submission_date   String?
   updated_at        DateTime @updatedAt
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model triagem_teleconsulta {
@@ -2646,7 +2646,7 @@ model triagem_teleconsulta {
   sintomas         String[]
   teleconsulta_id  String
   tempo_sintoma    String?
-  @@schema("public")
+  @@schema("clinico")
 }
 
 model user_clinic_access {
@@ -2655,7 +2655,7 @@ model user_clinic_access {
   id         String   @id @default(uuid())
   is_default Boolean?
   user_id    String
-  @@schema("public")
+  @@schema("core")
 }
 
 model user_module_permissions {
@@ -2667,7 +2667,7 @@ model user_module_permissions {
   module_catalog_id Int
   updated_at        DateTime @updatedAt
   user_id           String
-  @@schema("public")
+  @@schema("core")
 }
 
 model user_roles {
@@ -2675,7 +2675,7 @@ model user_roles {
   id         String   @id @default(uuid())
   role       String
   user_id    String
-  @@schema("public")
+  @@schema("core")
 }
 
 model wiki_page_versions {
@@ -2687,7 +2687,7 @@ model wiki_page_versions {
   page_id        String
   title          String
   version        Int
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model wiki_pages {
@@ -2705,7 +2705,7 @@ model wiki_pages {
   updated_at   DateTime @updatedAt
   updated_by   String?
   version      Int
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 // ─── Models added by Batch 8-10 migration ───────────────────────────────────
@@ -2722,7 +2722,7 @@ model banco_extratos {
   reference     String?
   source        String?
   type          String
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model cash_registers {
@@ -2737,7 +2737,7 @@ model cash_registers {
   status         String
   updated_at     DateTime @updatedAt
   valor_abertura Int
-  @@schema("public")
+  @@schema("pdv")
 }
 
 model crypto_offline_wallets {
@@ -2749,7 +2749,7 @@ model crypto_offline_wallets {
   label      String?
   network    String
   updated_at DateTime @updatedAt
-  @@schema("public")
+  @@schema("crypto_config")
 }
 
 model crypto_transactions {
@@ -2765,7 +2765,7 @@ model crypto_transactions {
   tx_hash     String?
   type        String
   wallet_id   String?
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model crypto_wallets {
@@ -2779,7 +2779,7 @@ model crypto_wallets {
   label      String?
   type       String
   updated_at DateTime @updatedAt
-  @@schema("public")
+  @@schema("crypto_config")
 }
 
 model fidelidade_badges {
@@ -2792,7 +2792,7 @@ model fidelidade_badges {
   name        String
   tier        String?
   updated_at  DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model fidelidade_indicacoes {
@@ -2806,7 +2806,7 @@ model fidelidade_indicacoes {
   reward_points   Int?
   status          String
   updated_at      DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model fidelidade_pontos {
@@ -2818,7 +2818,7 @@ model fidelidade_pontos {
   patient_id  String
   source      String
   type        String
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model fidelidade_recompensas {
@@ -2830,7 +2830,7 @@ model fidelidade_recompensas {
   name        String
   points_cost Int
   updated_at  DateTime @updatedAt
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model pdv_dashboard {
@@ -2842,7 +2842,7 @@ model pdv_dashboard {
   periodo         String?
   total_vendas    Int?
   updated_at      DateTime @updatedAt
-  @@schema("public")
+  @@schema("pdv")
 }
 
 model pdv_metas_gamificacao {
@@ -2857,7 +2857,7 @@ model pdv_metas_gamificacao {
   recompensa  String?
   updated_at  DateTime @updatedAt
   vendedor_id String?
-  @@schema("public")
+  @@schema("pdv")
 }
 
 model split_comissoes {
@@ -2871,7 +2871,7 @@ model split_comissoes {
   professional_id String
   status          String
   transaction_id  String?
-  @@schema("public")
+  @@schema("financeiro")
 }
 
 model vendedor_metas {
@@ -2898,7 +2898,7 @@ model vendedor_ranking {
   updated_at    DateTime @updatedAt
   vendedor_id   String
   vendedor_nome String?
-  @@schema("public")
+  @@schema("pdv")
 }
 
 model event_store {
@@ -2941,7 +2941,7 @@ model domain_events {
   created_at   DateTime @default(now())
 
   @@index([aggregate_id, occurred_at])
-  @@schema("public")
+  @@schema("core")
 }
 
 // Wave-2: Ghost table models (added to fix missing Prisma models)
@@ -2975,7 +2975,7 @@ model fidelidade_pacientes {
   created_at         DateTime @default(now())
 
   @@index([clinic_id, patient_id])
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model fidelidade_transacoes {
@@ -2988,7 +2988,7 @@ model fidelidade_transacoes {
   created_at  DateTime @default(now())
 
   @@index([clinic_id, patient_id])
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model gamification_goals {
@@ -3004,7 +3004,7 @@ model gamification_goals {
   created_at     DateTime @default(now())
 
   @@index([clinic_id, user_id, status])
-  @@schema("public")
+  @@schema("comercial")
 }
 
 model bi_export_jobs {
@@ -3017,7 +3017,7 @@ model bi_export_jobs {
   created_at     DateTime @default(now())
 
   @@index([clinic_id, status])
-  @@schema("public")
+  @@schema("administrativo")
 }
 
 model estoque_alertas {

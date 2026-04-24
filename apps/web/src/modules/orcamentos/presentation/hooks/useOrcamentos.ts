@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AprovarOrcamentoUseCase } from "../../application/use-cases/AprovarOrcamentoUseCase";
 import { CreateOrcamentoUseCase } from "../../application/use-cases/CreateOrcamentoUseCase";
 import { EnviarOrcamentoUseCase } from "../../application/use-cases/EnviarOrcamentoUseCase";
@@ -7,13 +7,12 @@ import { ListOrcamentosUseCase } from "../../application/use-cases/ListOrcamento
 import { Orcamento, StatusOrcamento } from "../../domain/entities/Orcamento";
 import { OrcamentoRepositoryApi } from "../../infrastructure/repositories/OrcamentoRepositoryApi";
 
-const repository = new OrcamentoRepositoryApi();
-const createUseCase = new CreateOrcamentoUseCase(repository);
-const listUseCase = new ListOrcamentosUseCase(repository);
-const enviarUseCase = new EnviarOrcamentoUseCase(repository);
-const aprovarUseCase = new AprovarOrcamentoUseCase(repository);
-
 export function useOrcamentos() {
+  const repository = useMemo(() => new OrcamentoRepositoryApi(), []);
+  const createUseCase = useMemo(() => new CreateOrcamentoUseCase(repository), [repository]);
+  const listUseCase = useMemo(() => new ListOrcamentosUseCase(repository), [repository]);
+  const enviarUseCase = useMemo(() => new EnviarOrcamentoUseCase(repository), [repository]);
+  const aprovarUseCase = useMemo(() => new AprovarOrcamentoUseCase(repository), [repository]);
   const { clinicId, user, isPatient } = useAuth();
   const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
   const [loading, setLoading] = useState(true);

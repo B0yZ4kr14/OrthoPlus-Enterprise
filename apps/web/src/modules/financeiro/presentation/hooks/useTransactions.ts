@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CreateTransactionUseCase } from "../../application/use-cases/CreateTransactionUseCase";
 import { ListTransactionsUseCase } from "../../application/use-cases/ListTransactionsUseCase";
 import { PayTransactionUseCase } from "../../application/use-cases/PayTransactionUseCase";
@@ -7,12 +7,11 @@ import { Transaction } from "../../domain/entities/Transaction";
 import { TransactionFilters } from "../../domain/repositories/ITransactionRepository";
 import { ApiTransactionRepository } from "../../infrastructure/repositories/ApiTransactionRepository";
 
-const repository = new ApiTransactionRepository();
-const createUseCase = new CreateTransactionUseCase(repository);
-const payUseCase = new PayTransactionUseCase(repository);
-const listUseCase = new ListTransactionsUseCase(repository);
-
 export function useTransactions(filters?: TransactionFilters) {
+  const repository = useMemo(() => new ApiTransactionRepository(), []);
+  const createUseCase = useMemo(() => new CreateTransactionUseCase(repository), [repository]);
+  const payUseCase = useMemo(() => new PayTransactionUseCase(repository), [repository]);
+  const listUseCase = useMemo(() => new ListTransactionsUseCase(repository), [repository]);
   const { clinicId, user } = useAuth();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);

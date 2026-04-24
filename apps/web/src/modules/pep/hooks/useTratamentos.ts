@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { container } from "@/infrastructure/di/Container";
 import { SERVICE_KEYS } from "@/infrastructure/di/ServiceKeys";
 import { Tratamento } from "@/domain/entities/Tratamento";
@@ -12,17 +12,27 @@ export function useTratamentos(prontuarioId: string | null, clinicId: string) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const getTratamentosUseCase =
-    container.resolve<GetTratamentosByProntuarioUseCase>(
-      SERVICE_KEYS.GET_TRATAMENTOS_BY_PRONTUARIO_USE_CASE,
-    );
-  const createTratamentoUseCase = container.resolve<CreateTratamentoUseCase>(
-    SERVICE_KEYS.CREATE_TRATAMENTO_USE_CASE,
+  const getTratamentosUseCase = useMemo(
+    () =>
+      container.resolve<GetTratamentosByProntuarioUseCase>(
+        SERVICE_KEYS.GET_TRATAMENTOS_BY_PRONTUARIO_USE_CASE,
+      ),
+    [],
   );
-  const updateTratamentoStatusUseCase =
-    container.resolve<UpdateTratamentoStatusUseCase>(
-      SERVICE_KEYS.UPDATE_TRATAMENTO_STATUS_USE_CASE,
-    );
+  const createTratamentoUseCase = useMemo(
+    () =>
+      container.resolve<CreateTratamentoUseCase>(
+        SERVICE_KEYS.CREATE_TRATAMENTO_USE_CASE,
+      ),
+    [],
+  );
+  const updateTratamentoStatusUseCase = useMemo(
+    () =>
+      container.resolve<UpdateTratamentoStatusUseCase>(
+        SERVICE_KEYS.UPDATE_TRATAMENTO_STATUS_USE_CASE,
+      ),
+    [],
+  );
 
   const fetchTratamentos = async () => {
     if (!prontuarioId) return;

@@ -1,4 +1,8 @@
 import type { Config } from "tailwindcss";
+import path from "path";
+
+// __dirname is available via jiti (CommonJS evaluation)
+const root = path.resolve(__dirname);
 
 export default {
   darkMode: ["class"],
@@ -34,11 +38,8 @@ export default {
     "shadow-cyan-500/25",
   ],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./apps/web/src/**/*.{ts,tsx}",
-    "./categories/@orthoplus/**/*.{ts,tsx}",
+    path.join(root, "apps/web/src/**/*.{ts,tsx}"),
+    path.join(root, "categories/@orthoplus/core/packages/ui/src/**/*.{ts,tsx}"),
   ],
   prefix: "",
   theme: {

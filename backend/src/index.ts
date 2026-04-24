@@ -24,6 +24,7 @@ import notificationRouter from "./modules/notifications/api/router";
 import { pacientesRouter } from "./modules/pacientes/api/router";
 import { createTerminalRouter } from "./modules/terminal/api/router";
 import usuariosRouter from "./modules/usuarios/api/router";
+import { startCategoryBackupScheduler } from "./workers/categoryBackupScheduler";
 import { startAllWorkers } from "./workers/index";
 import { authMiddleware, tenantGuard } from "./middleware/authMiddleware";
 
@@ -163,7 +164,12 @@ const apiLimiter = rateLimit({
   message: 'Too many requests from this IP, please try again later.',
 });
 
-app.use("/api/auth", authLimiter);
+// Auth mutations (login, register, reset): strict brute-force protection.
+// GET /api/auth/me is exempt — called on every page load and must not hit 429.
+app.use("/api/auth", (req, _res, next) => {
+  if (req.method === "GET") return next();
+  return authLimiter(req, _res, next);
+});
 app.use("/auth/v1", authLimiter);
 app.use("/api/files", uploadLimiter);
 app.use("/api", apiLimiter);
@@ -237,7 +243,6 @@ app.use("/api/crypto", createCryptoRouter());
 const financeiroRouter = createFinanceiroRouter();
 app.use("/api/financeiro", financeiroRouter);
 app.use("/api/payments", financeiroRouter); // alias: /payments → /financeiro
-app.use("/api/estoque", createInventarioRouter());
 app.use("/api/configuracoes", createConfiguracoesRouter());
 
 // Batch 8 — CRUD Modules
@@ -266,7 +271,9 @@ app.use("/api/split", splitPagamentoRouter); // alias: frontend uses /split/*
 // PEP, PDV, Dashboard & NF-e — modules with existing controllers
 app.use("/api/pep", createPepRouter());
 app.use("/api/pdv", createPdvRouter());
-app.use("/api/dashboard", createDashboardRouter());
+import { db as pgDb } from "./infrastructure/database/connection";
+app.use("/api/estoque", createInventarioRouter(pgDb));
+app.use("/api/dashboard", createDashboardRouter(pgDb));
 app.use("/api/nfe", createNfeRouter());
 
 // Legacy module management routes (migrated from Edge Functions)
@@ -344,6 +351,7 @@ app.get("/api/clinics/:id/active-modules", tenantGuard, async (req, res) => {
 registerEventHandlers();
 
 // Start background workers
+startCategoryBackupScheduler();
 startAllWorkers();
 
 // Global error handler — must be registered after all routes

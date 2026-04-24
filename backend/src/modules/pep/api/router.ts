@@ -53,6 +53,45 @@ router.use(clinicGuard);
     }
   });
 
+  // Odontograma history — GET (with LIMIT) — must be BEFORE /:id wildcard
+  router.get('/odontogramas/history', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      // Table has prontuario_id (not patient_id) and no clinic_id column
+      const { prontuario_id, patient_id } = req.query;
+      const prontuarioFilter = prontuario_id || patient_id; // accept both param names
+      const where: Record<string, unknown> = {};
+      if (prontuarioFilter) where.prontuario_id = String(prontuarioFilter);
+      const data = await (prisma as any).pep_odontograma_history.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where,
+        orderBy: { created_at: 'desc' },
+        take: 100,
+      });
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error getting odontograma history', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Odontograma history — POST — must be BEFORE /:id wildcard
+  router.post('/odontogramas/history', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const parsed = odontogramaHistoryCreateSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid input', details: parsed.error.flatten() });
+      }
+      const data = await (prisma as any).pep_odontograma_history.create({ data: { ...parsed.data, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      return res.status(201).json(data);
+    } catch (error) {
+      logger.error('Error creating odontograma history', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
   // Odontogramas — GET by id
   router.get('/odontogramas/:id', async (req: Request, res: Response) => {
     try {
@@ -116,42 +155,7 @@ router.use(clinicGuard);
     }
   });
 
-  // Odontograma history — GET (with LIMIT)
-  router.get('/odontogramas/history', async (req: Request, res: Response) => {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const { patient_id } = req.query;
-      const where: Record<string, unknown> = { clinic_id: clinicId };
-      if (patient_id) where.patient_id = String(patient_id);
-      const data = await (prisma as any).pep_odontograma_history.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where,
-        orderBy: { created_at: 'desc' },
-        take: 100,
-      });
-      return res.json(data);
-    } catch (error) {
-      logger.error('Error getting odontograma history', { error });
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  });
-
-  // Odontograma history — POST
-  router.post('/odontogramas/history', async (req: Request, res: Response) => {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const parsed = odontogramaHistoryCreateSchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: 'Invalid input', details: parsed.error.flatten() });
-      }
-      const data = await (prisma as any).pep_odontograma_history.create({ data: { ...parsed.data, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
-      return res.status(201).json(data);
-    } catch (error) {
-      logger.error('Error creating odontograma history', { error });
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  });
+  // Odontograma history GET/POST moved above /:id wildcard (see above)
 
   // Odontogramas — UPDATE (PUT, PATCH)
   const updateOdontograma = async (req: Request, res: Response) => {
@@ -317,6 +321,40 @@ router.use(clinicGuard);
   // ---------------------------------------------------------------------------
   // Tratamentos (pep_tratamentos) — CRUD
   // ---------------------------------------------------------------------------
+  router.get('/tratamentos', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const { prontuario_id, status } = req.query;
+      const where: Record<string, unknown> = {};
+      if (prontuario_id) where.prontuario_id = String(prontuario_id);
+      if (status) where.status = String(status);
+      const data = await (prisma as any).pep_tratamentos.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where,
+        orderBy: { created_at: 'desc' },
+      });
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error listing tratamentos', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.get('/tratamentos/:id', async (req: Request, res: Response) => {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const data = await (prisma as any).pep_tratamentos.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        where: { id: req.params.id },
+      });
+      if (!data) return res.status(404).json({ error: 'Tratamento not found' });
+      return res.json(data);
+    } catch (error) {
+      logger.error('Error getting tratamento', { error });
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
   router.post('/tratamentos', async (req: Request, res: Response) => {
     try {
       const clinicId = req.user?.clinicId;

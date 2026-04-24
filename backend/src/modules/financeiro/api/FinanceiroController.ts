@@ -180,22 +180,20 @@ export class FinanceiroController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
 
-      const { type, status, category_id, start_date, end_date, related_entity_type, related_entity_id } = req.query;
+      const { status, category, payment_method, start_date, end_date } = req.query;
 
       const where: any = { clinic_id: clinicId }; // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (type) where.type = type;
       if (status) where.status = status;
-      if (category_id) where.category_id = category_id;
-      if (related_entity_type) where.related_entity_type = related_entity_type;
-      if (related_entity_id) where.related_entity_id = related_entity_id;
+      if (category) where.category = category;
+      if (payment_method) where.payment_method = payment_method;
       if (start_date || end_date) {
-        where.due_date = {};
-        if (start_date) where.due_date.gte = new Date(start_date as string);
-        if (end_date) where.due_date.lte = new Date(end_date as string);
+        where.transaction_date = {};
+        if (start_date) where.transaction_date.gte = start_date as string;
+        if (end_date) where.transaction_date.lte = end_date as string;
       }
 
       const data = await (prisma as any).financial_transactions.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where, orderBy: { due_date: "desc" },
+        where, orderBy: { transaction_date: "desc" },
       });
       res.json(data);
     } catch (error) {

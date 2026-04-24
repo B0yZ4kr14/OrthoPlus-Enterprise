@@ -2,15 +2,20 @@ import { clinicGuard } from "@/middleware/clinicGuard";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { Router, Request, Response } from "express";
+import { dbRouter } from "./dbRouter";
 import { ModulosController } from "./ModulosController";
 
 export function createConfiguracoesRouter(): Router {
   const router: Router = Router();
-router.use(clinicGuard);
+  router.use(clinicGuard);
   const controller = new ModulosController();
+
+  router.use("/db", dbRouter);
 
   router.get("/modulos", controller.getMyModules);
   router.get("/modulos/dependencies", controller.getDependencies);
+  // by-key toggle (frontend sends { module_key } in body — must be before /:id/toggle)
+  router.post("/modulos/toggle", controller.toggleModuleByKey);
   router.post("/modulos/:id/toggle", controller.toggleModuleState);
 
   // Legacy Module Imports/Exports & Templates

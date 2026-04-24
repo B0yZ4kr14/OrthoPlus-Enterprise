@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Scan, History, GitCompare, Brain, Maximize2 } from "lucide-react";
+import { useState, lazy, Suspense } from "react";
+import { Scan, History, GitCompare, Brain, Maximize2, Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import {
@@ -13,25 +13,39 @@ import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { AlertCircle } from "lucide-react";
 import { PatientSelector } from "@/components/shared/PatientSelector";
 import { Odontograma2D } from "@/modules/pep/components/Odontograma2D";
-import { Odontograma3D } from "@/modules/pep/components/Odontograma3D";
 import { OdontogramaHistory } from "@/modules/pep/components/OdontogramaHistory";
 import { OdontogramaComparison } from "@/modules/pep/components/OdontogramaComparison";
 import { OdontogramaAIAnalysis } from "@/modules/pep/components/OdontogramaAIAnalysis";
 import { useOdontograma } from "@/modules/pep/hooks/useOdontograma";
 import type { Patient } from "@/types/patient";
 
+const Odontograma3D = lazy(() =>
+  import("@/modules/pep/components/Odontograma3D").then((m) => ({ default: m.Odontograma3D }))
+);
+
 export function OdontogramaPage() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  // @ts-expect-error — TS2345
-  const odontograma = useOdontograma(selectedPatient?.id);
+  const [selectedIdsForComparison, setSelectedIdsForComparison] = useState<[string | null, string | null]>([null, null]);
+
+  const prontuarioId = selectedPatient?.id ?? "";
+  const { history, restoreFromHistory } = useOdontograma(prontuarioId);
+
+  const handleCompare = (historyId: string) => {
+    setSelectedIdsForComparison(([id1, id2]) => {
+      if (!id1) return [historyId, id2];
+      if (!id2) return [id1, historyId];
+      return [historyId, null];
+    });
+  };
+
+  const handleClearSelection = () => setSelectedIdsForComparison([null, null]);
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Odontograma"
         description="Visualização e registro do estado dental do paciente"
-        // @ts-expect-error — TS2322
-        icon={<Scan className="h-6 w-6" />}
+        icon={Scan}
       />
 
       <Card>
@@ -91,14 +105,7 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Odontograma2D
-                  // @ts-expect-error — TS2322, TS2339
-                  teeth={odontograma.teeth}
-                  // @ts-expect-error — TS2339
-                  onToothClick={odontograma.handleToothClick}
-                  // @ts-expect-error — TS2339
-                  selectedTooth={odontograma.selectedTooth}
-                />
+                <Odontograma2D prontuarioId={selectedPatient.id} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -112,14 +119,9 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Odontograma3D
-                  // @ts-expect-error — TS2322, TS2339
-                  teeth={odontograma.teeth}
-                  // @ts-expect-error — TS2339
-                  onToothClick={odontograma.handleToothClick}
-                  // @ts-expect-error — TS2339
-                  selectedTooth={odontograma.selectedTooth}
-                />
+                <Suspense fallback={<div className="flex items-center justify-center h-64"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>}>
+                  <Odontograma3D prontuarioId={selectedPatient.id} />
+                </Suspense>
               </CardContent>
             </Card>
           </TabsContent>
@@ -133,8 +135,12 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {/* @ts-expect-error — TS2322 */}
-                <OdontogramaHistory patientId={selectedPatient.id} />
+                <OdontogramaHistory
+                  history={history}
+                  onRestore={restoreFromHistory}
+                  onCompare={handleCompare}
+                  selectedForComparison={selectedIdsForComparison[0]}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -148,8 +154,11 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {/* @ts-expect-error — TS2322 */}
-                <OdontogramaComparison patientId={selectedPatient.id} />
+                <OdontogramaComparison
+                  history={history}
+                  selectedIds={selectedIdsForComparison}
+                  onClearSelection={handleClearSelection}
+                />
               </CardContent>
             </Card>
           </TabsContent>
@@ -163,8 +172,10 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {/* @ts-expect-error — TS2741 */}
-                <OdontogramaAIAnalysis patientId={selectedPatient.id} />
+                <OdontogramaAIAnalysis
+                  prontuarioId={selectedPatient.id}
+                  patientId={selectedPatient.id}
+                />
               </CardContent>
             </Card>
           </TabsContent>

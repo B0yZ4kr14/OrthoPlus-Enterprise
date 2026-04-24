@@ -1,5 +1,4 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { Canvas as FabricCanvas, Rect, Text } from "fabric";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
@@ -22,7 +21,10 @@ interface Odontograma2DProps {
 
 export const Odontograma2D = memo(({ prontuarioId }: Odontograma2DProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [fabricCanvas, setFabricCanvas] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fabricRef = useRef<{ Rect: any; Text: any } | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<ToothStatus>("higido");
 
   const {
@@ -35,23 +37,31 @@ export const Odontograma2D = memo(({ prontuarioId }: Odontograma2DProps) => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
+    let canvas: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    let disposed = false;
 
-    const canvas = new FabricCanvas(canvasRef.current, {
-      width: 900,
-      height: 500,
-      backgroundColor: "#f8fafc",
-      selection: false,
+    import("fabric").then(({ Canvas: FabricCanvas, Rect, Text }) => {
+      if (disposed || !canvasRef.current) return;
+      fabricRef.current = { Rect, Text };
+      canvas = new FabricCanvas(canvasRef.current, {
+        width: 900,
+        height: 500,
+        backgroundColor: "#f8fafc",
+        selection: false,
+      });
+      setFabricCanvas(canvas);
     });
 
-    setFabricCanvas(canvas);
-
     return () => {
-      canvas.dispose();
+      disposed = true;
+      if (canvas) canvas.dispose();
     };
   }, []);
 
   useEffect(() => {
-    if (!fabricCanvas || isLoading) return;
+    if (!fabricCanvas || !fabricRef.current || isLoading) return;
+
+    const { Rect, Text } = fabricRef.current;
 
     fabricCanvas.clear();
     fabricCanvas.backgroundColor = "#f8fafc";

@@ -37,15 +37,11 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // Production-safe logging — avoid console.log
-    if (import.meta.env.DEV) {
-      console.error(
-        `[ErrorBoundary${this.props.moduleName ? `:${this.props.moduleName}` : ""}]`,
-        error,
-        errorInfo,
-      );
-    }
-
+    console.error(
+      `[ErrorBoundary${this.props.moduleName ? `:${this.props.moduleName}` : ""}]`,
+      error,
+      errorInfo,
+    );
     // TODO: Send to error reporting service (e.g., Sentry)
     // reportError({ error, errorInfo, moduleName: this.props.moduleName });
   }
@@ -78,10 +74,10 @@ export class ErrorBoundary extends Component<
               </p>
             </div>
 
-            {import.meta.env.DEV && this.state.error && (
-              <details className="text-left">
+            {this.state.error && (
+              <details className="text-left" open>
                 <summary className="text-xs text-slate-500 cursor-pointer hover:text-slate-300">
-                  Detalhes do erro (dev only)
+                  Detalhes do erro
                 </summary>
                 <pre className="mt-2 p-2 bg-slate-950 rounded text-xs text-red-300 overflow-auto max-h-32">
                   {this.state.error.message}

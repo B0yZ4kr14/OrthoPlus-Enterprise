@@ -140,8 +140,8 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
       params.push(filters.categoriaId);
     }
     if (filters?.ativo !== undefined) {
-      where += ` AND status = $${paramIndex++}`;
-      params.push(filters.ativo ? 'ATIVO' : 'INATIVO');
+      where += ` AND ativo = $${paramIndex++}`;
+      params.push(filters.ativo);
     }
     if (filters?.estoqueBaixo) {
       where += ` AND quantidade_atual <= quantidade_minima`;

@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CashFlowResult,
   GetCashFlowUseCase,
@@ -7,10 +7,9 @@ import {
 import { Period } from "../../domain/valueObjects/Period";
 import { ApiTransactionRepository } from "../../infrastructure/repositories/ApiTransactionRepository";
 
-const repository = new ApiTransactionRepository();
-const getCashFlowUseCase = new GetCashFlowUseCase(repository);
-
 export function useCashFlow(period?: Period) {
+  const repository = useMemo(() => new ApiTransactionRepository(), []);
+  const getCashFlowUseCase = useMemo(() => new GetCashFlowUseCase(repository), [repository]);
   const { clinicId } = useAuth();
   const [cashFlow, setCashFlow] = useState<CashFlowResult | null>(null);
   const [loading, setLoading] = useState(true);

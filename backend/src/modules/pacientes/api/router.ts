@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { dbRouter } from "./dbRouter";
 /**
  * Pacientes Router - Rotas do módulo PACIENTES
  *
@@ -69,5 +70,7 @@ router.post("/auth", (req, res) => controller.patientAuth(req, res));
 router.get("/:id/timeline", (req, res) =>
   controller.getPatientTimeline(req, res),
 );
+
+router.use("/db", dbRouter);
 
 export { router as pacientesRouter };
