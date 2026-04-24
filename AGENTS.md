@@ -202,6 +202,28 @@ Todos os 35 módulos possuem router registrado em `backend/src/index.ts` e `clin
 
 ---
 
+## Estado Atual (2026-04-23)
+
+### Wave-2 Concluída
+- ✅ **Supabase eliminado**: `auth.users` removido, `configuracoes.users` é a tabela de auth nativa
+- ✅ **queryRaw finalizado**: 9 ocorrências restantes, todas arquiteturalmente justificadas
+- ✅ **Backend build**: `tsc && tsc-alias` limpo
+- ✅ **Frontend lint**: 0 errors, ~98 warnings
+- ✅ **Segurança**: `.ssh_key_vps` removido do git
+
+### Pendências
+- ⚠️ **PostgreSQL user**: Backend conecta como `postgres` (superuser). Criar role `orthoplus`.
+- ⚠️ **Frontend type-check**: Falhas pré-existentes em módulos não relacionados (crypto-pagamentos, marketing-auto)
+- ⚠️ **Prisma relations faltantes**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
+
+### Commits Recentes
+- `aeb645f` — fix(frontend): resolve react-hooks lint errors
+- `0f0d279` — refactor(backend): eliminate Supabase references and finalize queryRaw cleanup
+- `b0b311e` — security: remove .ssh_key_vps from git
+- `0e5c008` — docs: update documentation and session memory for Wave-2 completion
+
+---
+
 ## Contatos e Suporte
 
 - Repositório: `B0yZ4kr14/OrthoPlus-Enterprise`
