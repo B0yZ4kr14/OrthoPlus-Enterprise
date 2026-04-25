@@ -321,6 +321,12 @@ export const menuGroups: MenuGroup[] = [
         icon: Puzzle,
         moduleKey: "ADMIN_ONLY",
       },
+      {
+        title: "Bancos por Categoria",
+        url: "/configuracoes/database",
+        icon: Database,
+        moduleKey: "ADMIN_ONLY",
+      },
     ],
   },
 ];

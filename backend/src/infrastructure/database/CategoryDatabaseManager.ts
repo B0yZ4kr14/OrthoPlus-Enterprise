@@ -1,4 +1,6 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
+import { Pool } from "pg";
+import type { CategoryBackupService } from "./CategoryBackupService";
 
 export interface CategoryHealthResult {
   status: "healthy" | "degraded" | "down";
@@ -21,15 +23,26 @@ export interface CategoryMaintenanceResult {
 }
 
 export class CategoryDatabaseManager {
+  private pgPool: Pool | null = null;
+
   constructor(
     protected readonly schemas: string[],
-    protected readonly categoryName: string
+    protected readonly categoryName: string,
+    protected readonly backupService?: CategoryBackupService
   ) {}
+
+  /** Lazy pg Pool for operations that cannot run inside Prisma transactions (VACUUM, REINDEX) */
+  private getPool(): Pool {
+    if (!this.pgPool) {
+      const url = process.env.DATABASE_URL ?? "";
+      this.pgPool = new Pool({ connectionString: url });
+    }
+    return this.pgPool;
+  }
 
   async getHealth(): Promise<CategoryHealthResult> {
     const start = Date.now();
     try {
-      // Verify schemas exist in information_schema
       const result = await prisma.$queryRaw<{ schema_name: string }[]>`
         SELECT schema_name
         FROM information_schema.schemata
@@ -70,12 +83,18 @@ export class CategoryDatabaseManager {
       const sizeBytes = Number(sizeResult[0]?.total_size ?? 0);
       const sizeHuman = this.formatBytes(sizeBytes);
 
+      let lastBackup: string | null = null;
+      if (this.backupService) {
+        const info = await this.backupService.getLastBackupInfo();
+        lastBackup = info.lastBackup;
+      }
+
       return {
         schemas: this.schemas,
         tableCount,
         sizeBytes,
         sizeHuman,
-        lastBackup: null,
+        lastBackup,
       };
     } catch {
       return {
@@ -95,35 +114,34 @@ export class CategoryDatabaseManager {
       reindex: false,
     };
 
-    // VACUUM and ANALYZE must run per-table (cannot use schema.* wildcard)
+    const pool = this.getPool();
+
     for (const schema of this.schemas) {
       let tables: { tablename: string }[] = [];
       try {
-        tables = await prisma.$queryRaw<{ tablename: string }[]>`
-          SELECT tablename FROM pg_tables WHERE schemaname = ${schema}
-        `;
+        const res = await pool.query<{ tablename: string }>(
+          "SELECT tablename FROM pg_tables WHERE schemaname = $1",
+          [schema]
+        );
+        tables = res.rows;
       } catch {
         continue;
       }
 
       for (const { tablename } of tables) {
-        // VACUUM cannot run inside a transaction — use $executeRawUnsafe directly
-        try {
-          await prisma.$executeRawUnsafe(`VACUUM "${schema}"."${tablename}"`);
-          result.vacuum = true;
-        } catch {
-          // VACUUM may fail if called inside a transaction context; non-fatal
-        }
+        const qualified = `"${schema}"."${tablename}"`;
 
         try {
-          await prisma.$executeRawUnsafe(`ANALYZE "${schema}"."${tablename}"`);
+          // VACUUM must run outside a transaction block — pg Pool satisfies this
+          await pool.query(`VACUUM ANALYZE ${qualified}`);
+          result.vacuum = true;
           result.analyze = true;
         } catch {
-          // non-fatal
+          // non-fatal: table may be locked or in use
         }
 
         try {
-          await prisma.$executeRawUnsafe(`REINDEX TABLE "${schema}"."${tablename}"`);
+          await pool.query(`REINDEX TABLE ${qualified}`);
           result.reindex = true;
         } catch {
           // non-fatal

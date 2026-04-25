@@ -103,12 +103,17 @@ export class CategoryBackupService {
     });
 
     const stat = fs.statSync(filePath);
-    return {
+    const backupResult: BackupResult = {
       filePath,
       sizeBytes: stat.size,
       durationMs: Date.now() - start,
       schemas: this.schemas,
     };
+
+    // Auto-retention: keep only the 10 most recent backups
+    await this.pruneOldBackups(10);
+
+    return backupResult;
   }
 
   async listBackups(): Promise<BackupInfo[]> {
@@ -129,6 +134,22 @@ export class CategoryBackupService {
     } catch {
       return [];
     }
+  }
+
+  /** Remove oldest backups keeping only the `keep` most recent files */
+  async pruneOldBackups(keep: number = 10): Promise<number> {
+    const backups = await this.listBackups(); // already sorted newest-first
+    const toDelete = backups.slice(keep);
+    let deleted = 0;
+    for (const b of toDelete) {
+      try {
+        fs.unlinkSync(b.filePath);
+        deleted++;
+      } catch {
+        // non-fatal: file may have been removed externally
+      }
+    }
+    return deleted;
   }
 
   async getLastBackupInfo(): Promise<LastBackupInfo> {

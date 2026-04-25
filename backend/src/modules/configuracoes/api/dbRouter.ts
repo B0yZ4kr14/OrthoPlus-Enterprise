@@ -1,7 +1,16 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { AdministrativoBackupService } from "@/modules/configuracoes/infrastructure/AdministrativoBackupService";
 import { AdministrativoDatabaseManager } from "@/modules/configuracoes/infrastructure/AdministrativoDatabaseManager";
+
+const adminOnly = (req: Request, res: Response, next: NextFunction): void => {
+  const role = (req as any).user?.role; // eslint-disable-line @typescript-eslint/no-explicit-any
+  if (role !== "ADMIN" && role !== "ROOT") {
+    res.status(403).json({ error: "Admin access required" });
+    return;
+  }
+  next();
+};
 
 const manager = new AdministrativoDatabaseManager();
 const backup = new AdministrativoBackupService();
@@ -26,7 +35,7 @@ dbRouter.get("/stats", async (_req: Request, res: Response) => {
   }
 });
 
-dbRouter.post("/backup", async (_req: Request, res: Response) => {
+dbRouter.post("/backup", adminOnly, async (_req: Request, res: Response) => {
   try {
     res.json(await backup.runBackup());
   } catch (error: any) {
@@ -42,7 +51,7 @@ dbRouter.get("/backups", async (_req: Request, res: Response) => {
   }
 });
 
-dbRouter.post("/maintenance", async (_req: Request, res: Response) => {
+dbRouter.post("/maintenance", adminOnly, async (_req: Request, res: Response) => {
   try {
     res.json(await manager.runMaintenance());
   } catch (error: any) {
