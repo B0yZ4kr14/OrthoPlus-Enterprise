@@ -5,7 +5,8 @@ import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Plus, UserCircle, Phone, Calendar, AlertTriangle } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { Plus, UserCircle, Phone, Calendar, AlertTriangle, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { RiskScoreBadge } from "@/components/patients/RiskScoreBadge";
 import { TableFilter } from "@/components/shared/TableFilter";
@@ -49,18 +50,17 @@ export default function PacientesListPage() {
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Pacientes</h1>
-          <p className="text-muted-foreground mt-1">
-            Gestão completa de pacientes com ficha clínica profissional
-          </p>
-        </div>
-        <Button variant="cta" onClick={() => navigate("/pacientes/novo")} className="gap-2">
-          <Plus className="h-4 w-4" />
-          Novo Paciente
-        </Button>
-      </div>
+      <PageHeader 
+        icon={Users} 
+        title="Pacientes" 
+        description="Gestão completa de pacientes com ficha clínica profissional" 
+        actions={
+          <Button variant="cta" onClick={() => navigate("/pacientes/novo")} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Novo Paciente
+          </Button>
+        } 
+      />
 
       {/* Filters */}
       <TableFilter

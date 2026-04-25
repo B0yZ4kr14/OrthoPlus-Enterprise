@@ -4,20 +4,18 @@ import { BarChart3, TrendingUp, Users, DollarSign } from "lucide-react";
 import { BIMetrics } from "@/modules/bi/presentation/components/BIMetrics";
 import { BICharts } from "@/modules/bi/presentation/components/BICharts";
 import { useBIDashboards } from "@/modules/bi/application/hooks/useBIDashboards";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function BIDashboardPage() {
   const { dashboards, metrics, isLoading } = useBIDashboards();
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Business Intelligence</h1>
-          <p className="text-muted-foreground">
-            Dashboards e análises estratégicas
-          </p>
-        </div>
-      </div>
+      <PageHeader 
+        icon={BarChart3} 
+        title="Business Intelligence" 
+        description="Dashboards e análises estratégicas" 
+      />
 
       <Tabs defaultValue="overview">
         <TabsList className="grid w-full grid-cols-4">

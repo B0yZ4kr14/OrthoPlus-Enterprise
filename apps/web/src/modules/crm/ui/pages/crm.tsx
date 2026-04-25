@@ -12,7 +12,8 @@ import {
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import { Plus, Users, LayoutGrid } from "lucide-react";
+import { Plus, Users, LayoutGrid, Target } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 const CRMPage = () => {
   const { deleteLead } = useLeads();
@@ -32,40 +33,37 @@ const CRMPage = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            CRM - Funil de Vendas
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Gerencie seus leads e oportunidades de negócio
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Tabs value={view} onValueChange={(v) => setView(v as "list" | "kanban")}>
-            <TabsList>
-              <TabsTrigger value="kanban" className="flex items-center gap-2">
-                <LayoutGrid className="h-4 w-4" />
-                Kanban
-              </TabsTrigger>
-              <TabsTrigger value="list" className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                Lista
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <Button
-            onClick={() => {
-              setLeadToEdit(null);
-              setIsFormOpen(true);
-            }}
-            className="flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Novo Lead
-          </Button>
-        </div>
-      </div>
+      <PageHeader 
+        icon={Target} 
+        title="CRM" 
+        description="Gestão de relacionamento com pacientes e leads" 
+        actions={
+          <div className="flex items-center gap-3">
+            <Tabs value={view} onValueChange={(v) => setView(v as "list" | "kanban")}>
+              <TabsList>
+                <TabsTrigger value="kanban" className="flex items-center gap-2">
+                  <LayoutGrid className="h-4 w-4" />
+                  Kanban
+                </TabsTrigger>
+                <TabsTrigger value="list" className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  Lista
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <Button
+              onClick={() => {
+                setLeadToEdit(null);
+                setIsFormOpen(true);
+              }}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Novo Lead
+            </Button>
+          </div>
+        } 
+      />
 
       {view === "kanban" && <LeadKanban onLeadClick={handleLeadClick} />}
 

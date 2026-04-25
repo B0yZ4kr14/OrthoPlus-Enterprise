@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Clock, Plus, Settings } from "lucide-react";
+import { Calendar, CalendarDays, Clock, Plus, Settings } from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";
 import {
   Dialog,
@@ -20,6 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { WeekCalendar } from "../components/WeekCalendar";
 import { AppointmentForm } from "../components/AppointmentForm";
 import { AppointmentCard } from "../components/AppointmentCard";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { AppointmentDetailsDialog } from "../components/AppointmentDetailsDialog";
 import { DentistScheduleForm } from "../components/DentistScheduleForm";
 import { BlockedTimeForm } from "../components/BlockedTimeForm";
@@ -124,75 +125,74 @@ function AgendaContent() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Agenda</h1>
-          <p className="text-muted-foreground">
-            Gerencie agendamentos, horários e bloqueios
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Dialog
-            open={isScheduleDialogOpen}
-            onOpenChange={setIsScheduleDialogOpen}
-          >
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Settings className="mr-2 h-4 w-4" />
-                Horários
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Configurar Horário</DialogTitle>
-              </DialogHeader>
-              <DentistScheduleForm
-                onSubmit={handleCreateSchedule}
-                isLoading={isCreatingSchedule}
-              />
-            </DialogContent>
-          </Dialog>
+      <PageHeader 
+        icon={CalendarDays} 
+        title="Agenda" 
+        description="Gerencie agendamentos, horários e bloqueios" 
+        actions={
+          <>
+            <Dialog
+              open={isScheduleDialogOpen}
+              onOpenChange={setIsScheduleDialogOpen}
+            >
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Horários
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Configurar Horário</DialogTitle>
+                </DialogHeader>
+                <DentistScheduleForm
+                  onSubmit={handleCreateSchedule}
+                  isLoading={isCreatingSchedule}
+                />
+              </DialogContent>
+            </Dialog>
 
-          <Dialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Clock className="mr-2 h-4 w-4" />
-                Bloquear
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Bloquear Horário</DialogTitle>
-              </DialogHeader>
-              <BlockedTimeForm
-                onSubmit={handleCreateBlock}
-                isLoading={isCreatingBlock}
-              />
-            </DialogContent>
-          </Dialog>
+            <Dialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Clock className="mr-2 h-4 w-4" />
+                  Bloquear
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Bloquear Horário</DialogTitle>
+                </DialogHeader>
+                <BlockedTimeForm
+                  onSubmit={handleCreateBlock}
+                  isLoading={isCreatingBlock}
+                />
+              </DialogContent>
+            </Dialog>
 
-          <Dialog
-            open={isAppointmentDialogOpen}
-            onOpenChange={setIsAppointmentDialogOpen}
-          >
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Novo Agendamento
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Novo Agendamento</DialogTitle>
-              </DialogHeader>
-              <AppointmentForm
-                onSubmit={handleCreateAppointment}
-                isLoading={isCreating}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
+            <Dialog
+              open={isAppointmentDialogOpen}
+              onOpenChange={setIsAppointmentDialogOpen}
+            >
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Novo Agendamento
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Novo Agendamento</DialogTitle>
+                </DialogHeader>
+                <AppointmentForm
+                  onSubmit={handleCreateAppointment}
+                  isLoading={isCreating}
+                />
+              </DialogContent>
+            </Dialog>
+          </>
+        } 
+      />
 
       <Tabs defaultValue="calendar" className="w-full">
         <TabsList>

@@ -1,27 +1,47 @@
-import { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PageHeaderProps {
-  icon: LucideIcon;
   title: string;
   description: string;
+  icon?: LucideIcon;
   iconClassName?: string;
+  actions?: ReactNode;
+  className?: string;
 }
 
 export function PageHeader({
-  icon: Icon,
   title,
   description,
+  icon: Icon,
   iconClassName = "",
+  actions,
+  className,
 }: PageHeaderProps) {
   return (
-    <div className="flex items-center gap-4 py-2">
-      <div className={`p-3 rounded-xl bg-interactive/10 border border-interactive/20 ${iconClassName}`}>
-        <Icon className="h-7 w-7 text-interactive" />
+    <div className={cn("flex items-center justify-between gap-4 py-2", className)}>
+      <div className="flex items-center gap-4 min-w-0">
+        {Icon && (
+          <div
+            className={cn(
+              "shrink-0 p-3 rounded-xl bg-interactive/10 border border-interactive/20",
+              iconClassName
+            )}
+          >
+            <Icon className="h-7 w-7 text-interactive" />
+          </div>
+        )}
+        <div className="min-w-0">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground font-display truncate">
+            {title}
+          </h1>
+          <p className="text-muted-foreground text-sm mt-0.5 truncate">{description}</p>
+        </div>
       </div>
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground font-display">{title}</h1>
-        <p className="text-muted-foreground text-sm mt-0.5">{description}</p>
-      </div>
+      {actions && (
+        <div className="flex items-center gap-2 shrink-0">{actions}</div>
+      )}
     </div>
   );
 }

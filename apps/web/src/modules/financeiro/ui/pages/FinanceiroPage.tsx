@@ -6,6 +6,7 @@ import { useCashFlow } from "../../presentation/hooks/useCashFlow";
 import { useCashRegister } from "../../presentation/hooks/useCashRegister";
 import { Period } from "../../domain/valueObjects/Period";
 import { DollarSign, TrendingUp, TrendingDown, Wallet } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export function FinanceiroPage() {
   const [period] = useState(Period.currentMonth());
@@ -21,12 +22,12 @@ export function FinanceiroPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Gestão Financeira</h1>
-        <span className="text-sm text-muted-foreground">
-          Período: {period.toString()}
-        </span>
-      </div>
+      <PageHeader 
+        icon={Wallet} 
+        title="Gestão Financeira" 
+        description="Controle completo de receitas, despesas e fluxo de caixa" 
+        actions={<span className="text-sm text-muted-foreground">Período: {period.toString()}</span>} 
+      />
 
       {/* Cards de Resumo */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -7,6 +7,7 @@ import { useProdutos } from "../../presentation/hooks";
 import { ProdutoList } from "../components/ProdutoList";
 import { ProdutoForm } from "../components/ProdutoForm";
 import { MovimentacaoForm } from "../components/MovimentacaoForm";
+import { PageHeader } from "@/components/shared/PageHeader";
 // @ts-expect-error — TS2307
 import type { Produto } from "../../domain/entities/Produto";
 
@@ -31,18 +32,17 @@ export const EstoquePage = () => {
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Controle de Estoque</h1>
-          <p className="text-muted-foreground">
-            Gerencie produtos, movimentações e alertas
-          </p>
-        </div>
-        <Button onClick={() => setShowProdutoForm(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Novo Produto
-        </Button>
-      </div>
+      <PageHeader 
+        icon={Package} 
+        title="Controle de Estoque" 
+        description="Gerencie produtos, movimentações e alertas" 
+        actions={
+          <Button onClick={() => setShowProdutoForm(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Novo Produto
+          </Button>
+        } 
+      />
 
       {/* Métricas */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

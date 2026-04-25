@@ -10,7 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
-import { Users } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { UsersRound, Plus } from "lucide-react";
+import { Button } from "@orthoplus/core-ui/button";
 
 type ViewMode = "list" | "form" | "details";
 
@@ -76,17 +78,17 @@ export default function FuncionariosPage() {
   return (
     <div className="p-8 space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-3 rounded-lg bg-primary/10">
-          <Users className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Funcionários</h1>
-          <p className="text-muted-foreground mt-1">
-            Gerenciamento completo de funcionários, cargos e permissões
-          </p>
-        </div>
-      </div>
+      <PageHeader 
+        icon={UsersRound} 
+        title="Funcionários" 
+        description="Gestão da equipe e colaboradores da clínica" 
+        actions={
+          <Button onClick={handleAdd}>
+            <Plus className="mr-2 h-4 w-4" />
+            Novo Funcionário
+          </Button>
+        } 
+      />
 
       {/* List View */}
       <FuncionariosList

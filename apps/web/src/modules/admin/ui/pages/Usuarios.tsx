@@ -44,6 +44,8 @@ import {
 import { UserForm } from "@/components/usuarios/UserForm";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@orthoplus/core-ui/avatar";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { KeyRound } from "lucide-react";
 
 interface User {
   id: string;
@@ -205,39 +207,38 @@ export default function Usuarios() {
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Usuários</h1>
-          <p className="text-muted-foreground mt-1">
-            Gerencie os usuários e permissões da clínica
-          </p>
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setSelectedUser(null)} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Novo Usuário
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
-                {selectedUser ? "Editar Usuário" : "Novo Usuário"}
-              </DialogTitle>
-              <DialogDescription>
-                {selectedUser
-                  ? "Atualize as informações do usuário"
-                  : "Preencha os dados para criar um novo usuário"}
-              </DialogDescription>
-            </DialogHeader>
-            <UserForm
-              user={selectedUser}
-              onSuccess={handleDialogClose}
-              onCancel={handleDialogClose}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+      <PageHeader 
+        icon={KeyRound} 
+        title="Usuários" 
+        description="Gerenciamento de acessos e permissões" 
+        actions={
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => setSelectedUser(null)} className="gap-2">
+                <Plus className="h-4 w-4" />
+                Novo Usuário
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>
+                  {selectedUser ? "Editar Usuário" : "Novo Usuário"}
+                </DialogTitle>
+                <DialogDescription>
+                  {selectedUser
+                    ? "Atualize as informações do usuário"
+                    : "Preencha os dados para criar um novo usuário"}
+                </DialogDescription>
+              </DialogHeader>
+              <UserForm
+                user={selectedUser}
+                onSuccess={handleDialogClose}
+                onCancel={handleDialogClose}
+              />
+            </DialogContent>
+          </Dialog>
+        } 
+      />
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">

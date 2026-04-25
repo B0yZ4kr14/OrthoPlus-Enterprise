@@ -15,10 +15,12 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
+  HardDrive
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 interface Backup {
   id: string;
@@ -104,27 +106,26 @@ export default function BackupsPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Backups Avançados</h1>
-          <p className="text-muted-foreground">
-            Gerencie backups completos e incrementais do sistema
-          </p>
-        </div>
-        <Button onClick={createBackup} disabled={creating}>
-          {creating ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Criando...
-            </>
-          ) : (
-            <>
-              <Database className="mr-2 h-4 w-4" />
-              Criar Backup
-            </>
-          )}
-        </Button>
-      </div>
+      <PageHeader 
+        icon={HardDrive} 
+        title="Backups" 
+        description="Central de backups e restauração de dados" 
+        actions={
+          <Button onClick={createBackup} disabled={creating}>
+            {creating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Criando...
+              </>
+            ) : (
+              <>
+                <Database className="mr-2 h-4 w-4" />
+                Criar Backup
+              </>
+            )}
+          </Button>
+        } 
+      />
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card>

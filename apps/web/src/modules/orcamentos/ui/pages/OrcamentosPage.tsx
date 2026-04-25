@@ -10,9 +10,10 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Plus, FileText, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Plus, FileText, Clock, CheckCircle, XCircle, Calculator } from "lucide-react";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils/formatting.utils";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function OrcamentosPage() {
   const {
@@ -71,19 +72,17 @@ export default function OrcamentosPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Orçamentos</h1>
-          <p className="text-muted-foreground">
-            Gerencie orçamentos e propostas para seus pacientes
-          </p>
-        </div>
-
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Novo Orçamento
-        </Button>
-      </div>
+      <PageHeader 
+        icon={Calculator} 
+        title="Orçamentos" 
+        description="Gerencie propostas e aprovações de tratamentos" 
+        actions={
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Novo Orçamento
+          </Button>
+        } 
+      />
 
       {/* Métricas */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

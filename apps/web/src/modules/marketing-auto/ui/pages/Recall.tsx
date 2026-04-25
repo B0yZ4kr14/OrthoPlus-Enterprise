@@ -11,10 +11,11 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Calendar } from "@orthoplus/core-ui/calendar";
-import { Bell, CheckCircle, Clock, XCircle, MessageSquare } from "lucide-react";
+import { Bell, CheckCircle, Clock, XCircle, MessageSquare, Megaphone } from "lucide-react";
 import { format, addDays, isAfter, isBefore } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 interface Recall {
   id: string;
@@ -113,15 +114,11 @@ export default function RecallPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <Bell className="h-8 w-8" />
-          Sistema de Recall Automático
-        </h1>
-        <p className="text-muted-foreground mt-2">
-          Gerencie notificações de retorno para pacientes
-        </p>
-      </div>
+      <PageHeader 
+        icon={Megaphone} 
+        title="Recall de Pacientes" 
+        description="Gerenciamento de lembretes e retornos" 
+      />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

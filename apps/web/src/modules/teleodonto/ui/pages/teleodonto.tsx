@@ -13,6 +13,7 @@ import { TeleodontoSessionList } from "@/modules/teleodonto/presentation/compone
 import { TeleodontoScheduler } from "@/modules/teleodonto/presentation/components/TeleodontoScheduler";
 import { TeleodontoDashboard } from "@/modules/teleodonto/presentation/components/TeleodontoDashboard";
 import { useTeleconsultas } from "@/modules/teleodonto/application/hooks/useTeleconsultas";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function TeleodontoPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -20,18 +21,17 @@ export default function TeleodontoPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Teleodontologia</h1>
-          <p className="text-muted-foreground">
-            Consultas remotas e atendimento online
-          </p>
-        </div>
-        <Button>
-          <Video className="mr-2 h-4 w-4" />
-          Nova Sessão
-        </Button>
-      </div>
+      <PageHeader 
+        icon={Video} 
+        title="Teleodonto" 
+        description="Consultas e atendimentos remotos" 
+        actions={
+          <Button>
+            <Video className="mr-2 h-4 w-4" />
+            Nova Sessão
+          </Button>
+        } 
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">

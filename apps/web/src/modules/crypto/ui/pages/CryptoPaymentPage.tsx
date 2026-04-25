@@ -17,6 +17,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 import { Loader2, Bitcoin, Shield, Zap } from "lucide-react";
 import { CryptoInvoice } from "@/modules/crypto/types/crypto.types";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function CryptoPaymentPage() {
   const [loading, setLoading] = useState(false);
@@ -89,12 +90,11 @@ export default function CryptoPaymentPage() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold">Pagamentos em Criptomoeda</h1>
-        <p className="text-muted-foreground mt-2">
-          Aceite pagamentos em Bitcoin, Ethereum, USDT e outras criptomoedas
-        </p>
-      </div>
+      <PageHeader 
+        icon={Bitcoin} 
+        title="Crypto Pagamentos" 
+        description="Pagamentos em criptomoeda e gestão de invoices" 
+      />
 
       <div className="grid md:grid-cols-3 gap-4">
         <Card variant="metric" depth="subtle">

@@ -10,7 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
-import { Stethoscope } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { UserCog, Plus } from "lucide-react";
+import { Button } from "@orthoplus/core-ui/button";
 
 type ViewMode = "list" | "form" | "details";
 
@@ -71,17 +73,17 @@ export default function DentistasPage() {
   return (
     <div className="p-8 space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-3 rounded-lg bg-primary/10">
-          <Stethoscope className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Dentistas</h1>
-          <p className="text-muted-foreground mt-1">
-            Gerenciamento completo de dentistas
-          </p>
-        </div>
-      </div>
+      <PageHeader 
+        icon={UserCog} 
+        title="Dentistas" 
+        description="Gerenciamento de dentistas e especialistas" 
+        actions={
+          <Button onClick={handleAdd}>
+            <Plus className="mr-2 h-4 w-4" />
+            Novo Dentista
+          </Button>
+        } 
+      />
 
       {/* List View */}
       <DentistasList

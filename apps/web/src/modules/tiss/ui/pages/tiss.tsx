@@ -6,6 +6,8 @@ import { TISSBatchList } from "@/modules/tiss/presentation/components/TISSBatchL
 import { TISSGuideForm } from "@/modules/tiss/presentation/components/TISSGuideForm";
 import { TISSDashboard } from "@/modules/tiss/presentation/components/TISSDashboard";
 import { useTISSGuides } from "@/modules/tiss/application/hooks/useTISSGuides";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { FileSpreadsheet } from "lucide-react";
 
 export default function TISSPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -13,18 +15,17 @@ export default function TISSPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Faturamento TISS</h1>
-          <p className="text-muted-foreground">
-            Gestão de guias e faturamento de convênios
-          </p>
-        </div>
-        <Button>
-          <FileText className="mr-2 h-4 w-4" />
-          Nova Guia
-        </Button>
-      </div>
+      <PageHeader 
+        icon={FileSpreadsheet} 
+        title="TISS" 
+        description="Troca de Informações em Saúde Suplementar" 
+        actions={
+          <Button>
+            <FileText className="mr-2 h-4 w-4" />
+            Nova Guia
+          </Button>
+        } 
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">
