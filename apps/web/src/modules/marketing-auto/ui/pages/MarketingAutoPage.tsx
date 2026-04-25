@@ -74,7 +74,7 @@ export function MarketingAutoPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader 
         icon={Megaphone} 
         title="Marketing Automação" 

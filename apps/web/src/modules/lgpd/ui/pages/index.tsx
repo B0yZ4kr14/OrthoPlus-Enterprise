@@ -13,7 +13,7 @@ export default function LGPDPage() {
   const { requests, consents, isLoading } = useLGPDRequests();
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="LGPD - Conformidade"
         description="Gestão de privacidade e proteção de dados"

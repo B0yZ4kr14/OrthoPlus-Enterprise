@@ -123,7 +123,7 @@ export default function PDVPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-6">
+      <div className="space-y-6">
         <PageHeader
           icon={ShoppingCart}
           title="Ponto de Venda (PDV)"
@@ -135,7 +135,7 @@ export default function PDVPage() {
   }
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         icon={ShoppingCart}
         title="Ponto de Venda (PDV)"

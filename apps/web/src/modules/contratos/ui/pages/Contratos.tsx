@@ -11,7 +11,7 @@ import { FileText, Plus, Search, Filter } from "lucide-react";
 
 export default function ContratosPage() {
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         icon={FileText}
         title="Contratos Digitais"

@@ -81,7 +81,7 @@ export default function ApiDocsPage() {
   ];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="API Documentation"
         description="Documentação completa das Edge Functions e APIs"

@@ -26,7 +26,7 @@ export function AssinaturaICP() {
 
   if (!hasAccess) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="space-y-6">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
@@ -43,7 +43,7 @@ export function AssinaturaICP() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <Header />
       <KpiCards data={kpiData} />
 

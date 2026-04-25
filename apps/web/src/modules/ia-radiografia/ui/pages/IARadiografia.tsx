@@ -90,7 +90,7 @@ export default function IARadiografia() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <PageHeader icon={Scan} title="IA Análise de Radiografias" description="Detecção automática de problemas dentários via Inteligência Artificial" />
         <Button variant="elevated" onClick={() => setUploadDialogOpen(true)}>

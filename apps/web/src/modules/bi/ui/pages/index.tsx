@@ -72,7 +72,7 @@ export default function BusinessIntelligence() {
 
   if (!hasRole("ADMIN")) {
     return (
-      <div className="container mx-auto p-8">
+      <div className="p-0">
         <Card>
           <CardContent className="pt-6">
             <p className="text-center text-muted-foreground">
@@ -85,7 +85,7 @@ export default function BusinessIntelligence() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Business Intelligence"
         icon={BarChart3}

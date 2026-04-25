@@ -66,7 +66,7 @@ export default function DashboardUnified() {
   ];
 
   return (
-    <div className="container mx-auto p-8 space-y-8 min-h-screen">
+    <div className="space-y-8 min-h-screen">
       <div className="bg-card border border-border rounded-xl p-6 mb-2">
         <PageHeader
           title="Master Dashboard"

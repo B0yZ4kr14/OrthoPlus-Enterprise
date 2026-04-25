@@ -74,7 +74,7 @@ export default function DatabaseMaintenancePage() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Manutenção de Banco de Dados"
         description="Otimização, VACUUM, ANALYZE e monitoramento de performance"

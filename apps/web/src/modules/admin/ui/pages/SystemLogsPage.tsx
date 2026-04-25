@@ -136,7 +136,7 @@ export default function SystemLogsPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="System Logs"
         description="Logs de sistema, erros e eventos em tempo real"

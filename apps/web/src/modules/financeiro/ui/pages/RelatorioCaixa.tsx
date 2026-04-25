@@ -81,7 +81,7 @@ export default function RelatorioCaixa() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-6">
+      <div className="space-y-6">
         <PageHeader
           icon={FileText}
           title="Relatório de Caixa"
@@ -93,7 +93,7 @@ export default function RelatorioCaixa() {
   }
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <PageHeader
           icon={FileText}

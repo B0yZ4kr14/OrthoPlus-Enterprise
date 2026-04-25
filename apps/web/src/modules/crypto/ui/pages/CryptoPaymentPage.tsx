@@ -89,7 +89,7 @@ export default function CryptoPaymentPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
+    <div className="space-y-8">
       <PageHeader 
         icon={Bitcoin} 
         title="Crypto Pagamentos" 

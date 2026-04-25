@@ -32,7 +32,7 @@ export default function AssinaturaICP() {
 
   if (!hasModuleAccess("ASSINATURA_ICP")) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="space-y-6">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
@@ -49,7 +49,7 @@ export default function AssinaturaICP() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

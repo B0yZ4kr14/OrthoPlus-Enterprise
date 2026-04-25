@@ -21,7 +21,7 @@ export function FinanceiroPage() {
   const { currentRegister, isOpen } = useCashRegister();
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader 
         icon={Wallet} 
         title="Gestão Financeira" 

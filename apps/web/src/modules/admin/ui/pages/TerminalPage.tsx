@@ -97,7 +97,7 @@ export default function TerminalPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Terminal Shell"
         description="Execute comandos shell seguros com whitelist de comandos permitidos"

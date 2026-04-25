@@ -5,7 +5,7 @@ import { BackupLocalCard } from "../components/database/BackupLocalCard";
 
 export default function DatabaseManagementPage() {
   return (
-    <div className="container mx-auto space-y-6 p-6">
+    <div className="space-y-6">
       <PageHeader
         title="Gerenciamento de Banco de Dados"
         description="Controle avançado dos motores de banco de dados, backups e manutenções do sistema."

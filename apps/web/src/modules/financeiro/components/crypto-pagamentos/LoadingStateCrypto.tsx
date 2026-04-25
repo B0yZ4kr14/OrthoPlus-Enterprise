@@ -7,7 +7,7 @@ import { CryptoKPISkeleton, CryptoListSkeleton } from "@/components/crypto/Crypt
 
 export function LoadingStateCrypto() {
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         icon={Bitcoin}
         title="Pagamentos em Criptomoedas"

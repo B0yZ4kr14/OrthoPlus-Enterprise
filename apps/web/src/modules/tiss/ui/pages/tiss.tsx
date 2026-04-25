@@ -14,7 +14,7 @@ export default function TISSPage() {
   const { guides, batches, isLoading } = useTISSGuides();
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader 
         icon={FileSpreadsheet} 
         title="TISS" 

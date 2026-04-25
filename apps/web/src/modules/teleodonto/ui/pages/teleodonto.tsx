@@ -20,7 +20,7 @@ export default function TeleodontoPage() {
   const { teleconsultas, isLoading } = useTeleconsultas();
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader 
         icon={Video} 
         title="Teleodonto" 

@@ -120,7 +120,7 @@ export default function DashboardExecutivoPDV() {
   }
 
   return (
-    <div className="container mx-auto space-y-6 p-6">
+    <div className="space-y-6">
       <PageHeader
         title="Dashboard Executivo PDV"
         description="Visão consolidada de vendas, metas, rankings e transações TEF"

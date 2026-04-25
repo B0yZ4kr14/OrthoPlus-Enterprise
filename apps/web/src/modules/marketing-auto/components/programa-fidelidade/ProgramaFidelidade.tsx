@@ -35,7 +35,7 @@ export default function ProgramaFidelidade() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         icon={Award}
         title="Programa de Fidelidade"

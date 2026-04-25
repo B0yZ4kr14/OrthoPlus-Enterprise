@@ -164,7 +164,7 @@ export default function CryptoPagamentos() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-6 space-y-6">
+      <div className="space-y-6">
         <PageHeader
           icon={Bitcoin}
           title="Pagamentos em Criptomoedas"
@@ -189,7 +189,7 @@ export default function CryptoPagamentos() {
   }
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="space-y-6">
       <CryptoTour />
 
       <PageHeader

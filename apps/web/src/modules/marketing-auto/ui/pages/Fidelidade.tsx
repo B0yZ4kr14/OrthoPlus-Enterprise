@@ -11,7 +11,7 @@ import { Gift, Users, TrendingUp, Award } from "lucide-react";
 
 export default function FidelidadePage() {
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="space-y-6">
       <PageHeader
         icon={Award}
         title="Programa de Fidelidade"

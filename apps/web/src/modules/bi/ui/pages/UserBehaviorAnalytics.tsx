@@ -22,7 +22,7 @@ export default function UserBehaviorAnalytics() {
   const [selectedPeriod, setSelectedPeriod] = useState("last-30-days");
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <PageHeader
           icon={Activity}
