@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { DollarSign, TrendingUp, Users, Target } from "lucide-react";
 import { useMarketingROI } from "@/hooks/useMarketingROI";
+import { PageHeader } from "@/components/shared/PageHeader";
 import {
   BarChart,
   Bar,
@@ -17,22 +18,19 @@ export default function DashboardComercial() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6 p-6">
+      <div className="space-y-6">
         <div>Carregando métricas de marketing...</div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-3xl font-bold">
-          Análise Comercial e ROI de Marketing
-        </h1>
-        <p className="text-muted-foreground">
-          Métricas de performance e retorno sobre investimento
-        </p>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        icon={TrendingUp}
+        title="Análise Comercial e ROI de Marketing"
+        description="Métricas de performance e retorno sobre investimento"
+      />
 
       {/* KPIs Principais */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

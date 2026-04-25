@@ -94,7 +94,7 @@ export default function NotasFiscais() {
     .reduce((sum, n) => sum + n.valor_total, 0);
 
   return (
-    <div className="flex-1 space-y-8 p-8">
+    <div className="space-y-8">
       <PageHeader
         icon={FileText}
         title="Notas Fiscais Eletrônicas"

@@ -43,7 +43,7 @@ export default function ContasReceber() {
   }
 
   return (
-    <div className="flex-1 space-y-8 p-8">
+    <div className="space-y-8">
       <PageHeader
         icon={DollarSign}
         title="Contas a Receber"

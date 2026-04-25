@@ -9,6 +9,7 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Split, Settings, History, TrendingUp } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { SplitConfigForm } from "@/modules/split-pagamento/presentation/components/SplitConfigForm";
 import { SplitHistory } from "@/modules/split-pagamento/presentation/components/SplitHistory";
 import { SplitDashboard } from "@/modules/split-pagamento/presentation/components/SplitDashboard";
@@ -20,18 +21,17 @@ export default function SplitPagamentoPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Split de Pagamento</h1>
-          <p className="text-muted-foreground">
-            Divisão automática de receitas e otimização tributária
-          </p>
-        </div>
-        <Button>
-          <Split className="mr-2 h-4 w-4" />
-          Nova Regra
-        </Button>
-      </div>
+      <PageHeader
+        icon={Split}
+        title="Split de Pagamento"
+        description="Divisão automática de receitas e otimização tributária"
+        actions={
+          <Button>
+            <Split className="mr-2 h-4 w-4" />
+            Nova Regra
+          </Button>
+        }
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">

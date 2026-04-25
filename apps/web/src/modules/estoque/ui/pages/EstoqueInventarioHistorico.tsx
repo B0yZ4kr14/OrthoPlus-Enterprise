@@ -4,7 +4,7 @@ import { InventarioHistoricoComparacao } from "@/modules/estoque/components/Inve
 
 export default function EstoqueInventarioHistorico() {
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <PageHeader
         title="Histórico de Inventários"
         description="Análise comparativa e evolução de divergências ao longo do tempo"

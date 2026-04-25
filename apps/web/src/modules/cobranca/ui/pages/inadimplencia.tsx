@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import { AlertCircle, Settings, History, TrendingDown } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { InadimplenciaList } from "@/modules/inadimplencia/presentation/components/InadimplenciaList";
 import { CobrancaAutomation } from "@/modules/inadimplencia/presentation/components/CobrancaAutomation";
 import { InadimplenciaDashboard } from "@/modules/inadimplencia/presentation/components/InadimplenciaDashboard";
@@ -13,18 +14,17 @@ export default function InadimplenciaPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Controle de Inadimplência</h1>
-          <p className="text-muted-foreground">
-            Gestão e cobrança automatizada de débitos
-          </p>
-        </div>
-        <Button>
-          <AlertCircle className="mr-2 h-4 w-4" />
-          Nova Cobrança
-        </Button>
-      </div>
+      <PageHeader
+        icon={TrendingDown}
+        title="Controle de Inadimplência"
+        description="Gestão e cobrança automatizada de débitos"
+        actions={
+          <Button>
+            <AlertCircle className="mr-2 h-4 w-4" />
+            Nova Cobrança
+          </Button>
+        }
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">

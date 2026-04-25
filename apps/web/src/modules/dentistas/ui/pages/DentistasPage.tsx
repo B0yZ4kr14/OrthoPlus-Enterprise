@@ -71,7 +71,7 @@ export default function DentistasPage() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <PageHeader 
         icon={UserCog} 

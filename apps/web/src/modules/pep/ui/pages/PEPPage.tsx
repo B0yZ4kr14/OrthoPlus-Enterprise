@@ -135,7 +135,7 @@ export default function PEPPage() {
 
   if (!selectedPatient) {
     return (
-      <div className="p-8">
+      <div className="space-y-6">
         <PageHeader
           title="Prontuário Eletrônico do Paciente (PEP)"
           description="Sistema completo de prontuário com odontograma 2D/3D e análise por IA"
@@ -160,7 +160,7 @@ export default function PEPPage() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <PageHeader
           title={`PEP - ${selectedPatient.full_name}`}
