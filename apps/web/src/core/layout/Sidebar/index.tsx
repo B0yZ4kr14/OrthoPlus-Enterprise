@@ -16,7 +16,7 @@ export function AppSidebar({ onNavigate }: AppSidebarProps = {}) {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r border-sidebar-border/50 backdrop-blur-xl"
+      className="border-r border-border bg-sidebar"
     >
       <SidebarHeader />
 

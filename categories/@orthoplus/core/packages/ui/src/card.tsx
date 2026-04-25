@@ -3,26 +3,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./lib/utils";
 
 const cardVariants = cva(
-  "rounded-2xl border-0 bg-card text-card-foreground transition-all duration-300",
+  "rounded-xl border border-border bg-card text-card-foreground transition-all duration-200",
   {
     variants: {
       variant: {
         default:
-          "shadow-xl hover:shadow-2xl backdrop-blur-sm bg-card/95 shadow-primary/5",
+          "shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]",
         elevated:
-          "shadow-2xl hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-0 backdrop-blur-sm bg-card/95 hover:-translate-y-2 shadow-primary/10",
+          "shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)]",
         interactive:
-          "shadow-xl hover:shadow-2xl hover:-translate-y-2 cursor-pointer backdrop-blur-sm bg-card/95 hover:bg-card active:translate-y-0 shadow-primary/5 hover:shadow-primary/10",
+          "shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] hover:border-interactive/30 cursor-pointer",
         gradient:
-          "bg-gradient-to-br from-card via-card to-card/80 shadow-2xl hover:shadow-[0_25px_60px_rgba(0,0,0,0.35)] border-0 relative overflow-hidden backdrop-blur-sm shadow-primary/10",
+          "shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]",
         metric:
-          "shadow-xl border-l-4 border-l-primary/60 hover:shadow-2xl hover:border-l-primary hover:-translate-y-1 bg-gradient-to-br from-card via-card to-muted/10 backdrop-blur-sm shadow-primary/8 hover:shadow-primary/12",
+          "shadow-[var(--shadow-card)] border-l-4 border-l-interactive/60 hover:border-l-interactive hover:shadow-[var(--shadow-card-hover)]",
       },
       depth: {
-        subtle: "shadow-lg hover:shadow-xl shadow-primary/5",
-        normal: "shadow-xl hover:shadow-2xl shadow-primary/8",
-        intense:
-          "shadow-2xl hover:shadow-[0_25px_60px_rgba(0,0,0,0.35)] shadow-primary/10",
+        subtle:  "shadow-[var(--shadow-xs)]",
+        normal:  "shadow-[var(--shadow-card)]",
+        intense: "shadow-[var(--shadow-md)]",
       },
     },
     defaultVariants: {
@@ -66,7 +65,7 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-lg font-semibold leading-none tracking-tight",
       className,
     )}
     {...props}

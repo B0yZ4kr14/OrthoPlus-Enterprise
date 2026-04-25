@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/plus-jakarta-sans": "^5.2.8",
     "@hookform/resolvers": "^5.2.2",
     "@orthoplus/admin-devops-database-config": "workspace:*",
     "@orthoplus/core-hooks": "workspace:*",

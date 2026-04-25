@@ -1,7 +1,7 @@
 import { LucideIcon } from "lucide-react";
 
 interface PageHeaderProps {
-  icon: LucideIcon; // Obrigatório - não mais opcional
+  icon: LucideIcon;
   title: string;
   description: string;
   iconClassName?: string;
@@ -15,12 +15,12 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <div className="flex items-center gap-4 py-2">
-      <div className={`p-4 rounded-2xl bg-primary/10 border border-primary/20 shadow-neon-cyan/10 ${iconClassName} glass`}>
-        <Icon className="h-8 w-8 text-primary animate-pulse-soft" />
+      <div className={`p-3 rounded-xl bg-interactive/10 border border-interactive/20 ${iconClassName}`}>
+        <Icon className="h-7 w-7 text-interactive" />
       </div>
       <div>
-        <h1 className="text-4xl font-extrabold tracking-tight gradient-text neon-glow-cyan">{title}</h1>
-        <p className="text-muted-foreground/80 font-medium mt-1">{description}</p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground font-display">{title}</h1>
+        <p className="text-muted-foreground text-sm mt-0.5">{description}</p>
       </div>
     </div>
   );

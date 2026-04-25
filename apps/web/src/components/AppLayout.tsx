@@ -33,7 +33,7 @@ export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
 
         {isMobile && (
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetContent side="left" className="w-[280px] p-0 border-r border-cyan-500/20">
+            <SheetContent side="left" className="w-[280px] p-0 border-r border-border">
               <AppSidebar onNavigate={() => setMobileMenuOpen(false)} />
             </SheetContent>
           </Sheet>
@@ -50,8 +50,8 @@ export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
 
           <main className={contentClassName}>
             {isFocusMode && !isMobile && (
-              <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-lg backdrop-blur-sm border border-cyan-500/10">
-                <div className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse-glow" />
+              <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-lg border border-border">
+                <div className="h-2 w-2 rounded-full bg-interactive animate-pulse" />
                 <span>Modo Foco Ativo - Digitando...</span>
               </div>
             )}

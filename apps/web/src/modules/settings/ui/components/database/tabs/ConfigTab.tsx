@@ -30,27 +30,26 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h3 className="text-lg font-medium text-white flex items-center gap-2">
-          <Server className="w-5 h-5 text-blue-400" />
+        <h3 className="text-lg font-medium text-foreground flex items-center gap-2">
+          <Server className="w-5 h-5 text-interactive" />
           Configuração de Conexão: {selectedEngine}
         </h3>
         <p className="text-sm text-muted-foreground">Parâmetros para acesso à base de dados</p>
       </div>
 
-      <div className="p-4 rounded-xl border border-yellow-600 bg-yellow-900/40 text-yellow-500 text-sm font-medium flex items-center gap-2">
+      <div className="p-4 rounded-xl border border-warning/50 bg-warning/10 text-warning text-sm font-medium flex items-center gap-2">
         <AlertTriangle className="w-5 h-5" />
         ⚠ Modo Demo: Conexão será simulada
       </div>
 
-      <Card className="border-gray-800 bg-gray-900/50">
+      <Card className="border border-border bg-muted/30">
         <CardContent className="p-6 space-y-4">
           {config.fields.includes('host') && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-gray-300">Host</Label>
+              <Label className="text-right text-foreground">Host</Label>
               <div className="col-span-3">
                 <Input 
                   defaultValue="localhost" 
-                  className="bg-black border-gray-800 text-white" 
                 />
               </div>
             </div>
@@ -58,11 +57,10 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
 
           {config.fields.includes('port') && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-gray-300">Porta</Label>
+              <Label className="text-right text-foreground">Porta</Label>
               <div className="col-span-3">
                 <Input 
                   defaultValue={config.portDefault} 
-                  className="bg-black border-gray-800 text-white" 
                 />
               </div>
             </div>
@@ -70,11 +68,10 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
 
           {(config.fields.includes('database') || config.fields.includes('dbpath') || config.fields.includes('filepath')) && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-gray-300">{config.dbLabel}</Label>
+              <Label className="text-right text-foreground">{config.dbLabel}</Label>
               <div className="col-span-3">
                 <Input 
                   defaultValue={config.fields.includes('database') ? "orthoplus" : "/var/lib/data/db"} 
-                  className="bg-black border-gray-800 text-white" 
                 />
               </div>
             </div>
@@ -82,11 +79,10 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
 
           {config.fields.includes('user') && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-gray-300">Usuário</Label>
+              <Label className="text-right text-foreground">Usuário</Label>
               <div className="col-span-3">
                 <Input 
                   defaultValue={config.userDefault} 
-                  className="bg-black border-gray-800 text-white" 
                 />
               </div>
             </div>
@@ -94,17 +90,17 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
 
           {config.fields.includes('password') && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-gray-300">Senha</Label>
+              <Label className="text-right text-foreground">Senha</Label>
               <div className="col-span-3 relative">
                 <Input 
                   type={showPassword ? "text" : "password"} 
                   defaultValue="********" 
-                  className="bg-black border-gray-800 text-white pr-10" 
+                  className="pr-10" 
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -115,7 +111,7 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
           <div className="grid grid-cols-4 gap-4 pt-4">
             <div className="col-span-1"></div>
             <div className="col-span-3">
-              <Button onClick={handleTestConnection} className="bg-blue-600 hover:bg-blue-700 text-white w-full border-none">
+              <Button onClick={handleTestConnection} className="bg-interactive hover:bg-interactive/90 text-white w-full border-none">
                 <Play className="w-4 h-4 mr-2" /> {config.buttonLabel}
               </Button>
             </div>

@@ -32,7 +32,7 @@ import {
 import { useInventario } from "../hooks/useInventario";
 import { Inventario } from "../types/estoque.types";
 
-const COLORS = ["#ef4444", "#f97316", "#f59e0b", "#10b981"];
+const COLORS = ["hsl(0, 84%, 60%)", "hsl(38, 92%, 50%)", "hsl(38, 92%, 60%)", "hsl(160, 84%, 30%)"];
 
 interface ProdutoPerda {
   produtoNome: string;
@@ -139,17 +139,17 @@ export function InventarioHistoricoComparacao() {
     {
       name: "Alta (≥20%)",
       value: distribuicaoCriticidade.alta,
-      color: "#ef4444",
+      color: "hsl(0, 84%, 60%)",
     },
     {
       name: "Média (10-20%)",
       value: distribuicaoCriticidade.media,
-      color: "#f97316",
+      color: "hsl(38, 92%, 50%)",
     },
     {
       name: "Baixa (<10%)",
       value: distribuicaoCriticidade.baixa,
-      color: "#f59e0b",
+      color: "hsl(38, 92%, 60%)",
     },
   ].filter((d) => d.value > 0);
 
@@ -303,7 +303,7 @@ export function InventarioHistoricoComparacao() {
               yAxisId="left"
               type="monotone"
               dataKey="divergencias"
-              stroke="#ef4444"
+              stroke="hsl(0, 84%, 60%)"
               name="Divergências"
               strokeWidth={2}
             />
@@ -311,7 +311,7 @@ export function InventarioHistoricoComparacao() {
               yAxisId="right"
               type="monotone"
               dataKey="acuracidade"
-              stroke="#10b981"
+              stroke="hsl(160, 84%, 30%)"
               name="Acuracidade (%)"
               strokeWidth={2}
             />
@@ -335,7 +335,7 @@ export function InventarioHistoricoComparacao() {
               />
               <Bar
                 dataKey="valorTotal"
-                fill="#ef4444"
+                fill="hsl(0, 84%, 60%)"
                 name="Valor Total (R$)"
               />
             </BarChart>
@@ -358,7 +358,7 @@ export function InventarioHistoricoComparacao() {
                   `${name}: ${(percent * 100).toFixed(0)}%`
                 }
                 outerRadius={100}
-                fill="#8884d8"
+                fill="hsl(270, 60%, 65%)"
                 dataKey="value"
               >
                 {dadosCriticidade.map((entry, index) => (

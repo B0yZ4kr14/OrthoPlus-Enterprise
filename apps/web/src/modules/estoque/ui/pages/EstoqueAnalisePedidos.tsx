@@ -30,12 +30,12 @@ import {
 } from "recharts";
 
 const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884d8",
-  "#82ca9d",
+  "hsl(160, 84%, 30%)",
+  "hsl(217, 91%, 60%)",
+  "hsl(38, 92%, 50%)",
+  "hsl(270, 60%, 65%)",
+  "hsl(0, 84%, 60%)",
+  "hsl(180, 60%, 45%)",
 ];
 
 export default function EstoqueAnalisePedidos() {
@@ -373,7 +373,7 @@ export default function EstoqueAnalisePedidos() {
                 labelStyle={{ color: "hsl(var(--foreground))" }}
               />
               <Legend />
-              <Bar dataKey="total" fill="#0088FE" name="Valor Total" />
+              <Bar dataKey="total" fill="hsl(160, 84%, 30%)" name="Valor Total" />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -388,7 +388,7 @@ export default function EstoqueAnalisePedidos() {
               <YAxis dataKey="nome" type="category" width={120} fontSize={12} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="quantidade" fill="#00C49F" name="Quantidade" />
+              <Bar dataKey="quantidade" fill="hsl(217, 91%, 60%)" name="Quantidade" />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -406,21 +406,21 @@ export default function EstoqueAnalisePedidos() {
               <Line
                 type="monotone"
                 dataKey="manual"
-                stroke="#FF8042"
+                stroke="hsl(0, 84%, 60%)"
                 name="Manual"
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
                 dataKey="automatico"
-                stroke="#0088FE"
+                stroke="hsl(160, 84%, 30%)"
                 name="Automático"
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
                 dataKey="total"
-                stroke="#8884d8"
+                stroke="hsl(270, 60%, 65%)"
                 name="Total"
                 strokeWidth={2}
                 strokeDasharray="5 5"
@@ -445,7 +445,7 @@ export default function EstoqueAnalisePedidos() {
                   `${name}: ${(percent * 100).toFixed(0)}%`
                 }
                 outerRadius={100}
-                fill="#8884d8"
+                fill="hsl(270, 60%, 65%)"
                 dataKey="value"
               >
                 {statusDistribution.map((entry, index) => (

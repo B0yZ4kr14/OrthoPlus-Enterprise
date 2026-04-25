@@ -15,7 +15,7 @@ const columns: { status: LeadStatus; label: string; color: string }[] = [
     label: "Contato Inicial",
     color: "border-purple-500",
   },
-  { status: "QUALIFICADO", label: "Qualificado", color: "border-cyan-500" },
+  { status: "QUALIFICADO", label: "Qualificado", color: "border-interactive" },
   { status: "PROPOSTA", label: "Proposta", color: "border-yellow-500" },
   { status: "NEGOCIACAO", label: "Negociação", color: "border-orange-500" },
   { status: "GANHO", label: "Ganho", color: "border-green-500" },

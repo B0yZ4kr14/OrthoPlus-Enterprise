@@ -73,26 +73,26 @@ export function TemplatesTab({ category, categorySchemas }: TemplatesTabProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-medium text-white flex items-center gap-2">
-            <FileCode className="w-5 h-5 text-blue-400" />
+          <h3 className="text-lg font-medium text-foreground flex items-center gap-2">
+            <FileCode className="w-5 h-5 text-interactive" />
             Templates de tabelas para PostgreSQL
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Schemas suportados nesta categoria: <span className="font-mono text-xs bg-gray-800 px-1 py-0.5 rounded">{categorySchemas.join(', ')}</span>
+            Schemas suportados nesta categoria: <span className="font-mono text-xs bg-muted px-1 py-0.5 rounded">{categorySchemas.join(', ')}</span>
             {stats && ` • Tabelas ativas: ${stats.tableCount}`}
           </p>
         </div>
-        <Button onClick={handleExport} variant="outline" className="border-gray-700 hover:bg-gray-800 text-gray-200">
+        <Button onClick={handleExport} variant="outline" className="border-border hover:bg-muted text-foreground">
           📄 Exportar Schema
         </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         {templates.map((tpl, idx) => (
-          <Card key={idx} className="border-gray-800 bg-gray-900/40">
+          <Card key={idx} className="border border-border bg-card">
             <CardContent className="p-0">
-              <div className="flex items-center justify-between p-4 border-b border-gray-800">
-                <span className="font-medium text-gray-200">{tpl.name}</span>
+              <div className="flex items-center justify-between p-4 border-b border-border">
+                <span className="font-medium text-foreground">{tpl.name}</span>
                 <Button 
                   size="sm" 
                   variant="ghost" 
@@ -102,11 +102,11 @@ export function TemplatesTab({ category, categorySchemas }: TemplatesTabProps) {
                   {copiedId === `${category}-${idx}` ? (
                     <Check className="h-4 w-4 text-green-500" />
                   ) : (
-                    <Copy className="h-4 w-4 text-gray-400" />
+                    <Copy className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
-              <div className="p-4 bg-black/60 rounded-b-lg">
+              <div className="p-4 bg-muted/50 rounded-b-lg">
                 <pre className="text-xs text-green-400 font-mono whitespace-pre-wrap">
                   {tpl.ddl}
                 </pre>

@@ -1,11 +1,4 @@
-import { NavLink } from "@/components/NavLink";
-import { useLocation } from "react-router-dom";
-import {
-  SidebarMenuButton,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
-} from "@orthoplus/core-ui/sidebar";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Collapsible,
   CollapsibleContent,
@@ -33,110 +26,98 @@ export function SidebarMenuItem({
   const { hasModuleAccess } = useAuth();
   const collapsed = state === "collapsed";
 
-  // Check module access - if moduleKey is defined, check access
+  // Check module access
   const hasAccess = !item.moduleKey || hasModuleAccess(item.moduleKey);
-
-  // Don't render if user doesn't have access
-  if (!hasAccess) {
-    return null;
-  }
+  if (!hasAccess) return null;
 
   const isActive = (url?: string) => {
     if (!url) return false;
     if (url === "/") return location.pathname === "/";
-    // Check exact match first
     if (location.pathname === url) return true;
-    // Highlight parent if we are in a sub-route deeply nested that doesn't have its own menu,
-    // but avoid matching "/financeiro" for "/financeiro/receber" when "receber" is a separate menu item.
-    // Safest way is to require trailing slash if doing startsWith, OR just exact match.
-    // However, some routes like /pacientes/:id need to highlight "Pacientes".
-    // Let's do exact match OR starts with url + "/"
     return location.pathname.startsWith(`${url}/`);
   };
+
+  const isItemActive = isActive(item.url);
+  const IconComponent = item.icon || Circle;
 
   const handleClick = () => {
     onNavigate?.();
   };
 
-  // Get icon with fallback
-  const IconComponent = item.icon || Circle;
+  // Base styles
+  const baseClasses = `rounded-lg px-3 py-2 flex items-center gap-3 transition-colors duration-150 w-full group ${
+    isItemActive
+      ? "bg-interactive/10 text-interactive font-semibold border-l-2 border-interactive"
+      : "text-sidebar-foreground/70 font-medium hover:bg-interactive/10 hover:text-interactive"
+  }`;
 
-  // Menu item com subitems
+  const subItemClasses = `rounded-lg pl-7 pr-3 py-1.5 flex items-center gap-3 transition-colors duration-150 w-full group ${
+    isItemActive
+      ? "bg-interactive/10 text-interactive font-semibold border-l-2 border-interactive"
+      : "text-sidebar-foreground/70 font-medium hover:bg-interactive/10 hover:text-interactive"
+  }`;
+
+  const iconClasses = `shrink-0 ${
+    isItemActive
+      ? "text-interactive"
+      : "text-sidebar-foreground/50 group-hover:text-interactive"
+  }`;
+
+  // Menu item with subitems
   if (item.subItems && !isSubItem) {
+    // Check if any subitem is active to potentially open the collapsible or highlight parent
+    const isAnySubItemActive = item.subItems.some((sub) => isActive(sub.url));
+    
     return (
-      <Collapsible defaultOpen={false} className="group/submenu">
-        <CollapsibleTrigger asChild>
-          <SidebarMenuButton className="group/button my-1 rounded-xl hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-lg transition-all duration-200">
-            <div className="flex items-center gap-3 px-3 py-2 w-full">
-              <IconComponent className="h-5 w-5 shrink-0" />
-              {!collapsed && (
-                <>
-                  <span className="text-sm flex-1 font-medium transition-opacity duration-300">
-                    {item.title}
-                  </span>
-                  <ChevronDown className="h-4 w-4 transition-all duration-300 group-data-[state=open]/submenu:rotate-180" />
-                </>
-              )}
-            </div>
-          </SidebarMenuButton>
+      <Collapsible defaultOpen={isAnySubItemActive} className="group/submenu mb-1">
+        <CollapsibleTrigger className={baseClasses}>
+          <IconComponent className={`${iconClasses} h-4 w-4`} />
+          {!collapsed && (
+            <>
+              <span className="text-sm flex-1 text-left">{item.title}</span>
+              <ChevronDown className="h-4 w-4 opacity-50 transition-transform duration-200 group-data-[state=open]/submenu:rotate-180" />
+            </>
+          )}
         </CollapsibleTrigger>
-        <CollapsibleContent>
-          <SidebarMenuSub>
-            {(item.subItems || []).map((subItem) => (
-              <SidebarMenuSubItem key={subItem.title}>
-                <SidebarMenuItem
-                  item={{ ...subItem, isSubItem: true }}
-                  isSubItem
-                  onNavigate={onNavigate}
-                />
-              </SidebarMenuSubItem>
-            ))}
-          </SidebarMenuSub>
+        <CollapsibleContent className="mt-1 space-y-1">
+          {item.subItems.map((subItem) => (
+            <SidebarMenuItem
+              key={subItem.title}
+              item={subItem}
+              isSubItem
+              onNavigate={onNavigate}
+            />
+          ))}
         </CollapsibleContent>
       </Collapsible>
     );
   }
 
-  // Menu item simples
-  const ButtonComponent = isSubItem ? SidebarMenuSubButton : SidebarMenuButton;
-  const isItemActive = isActive(item.url);
-
+  // Regular menu item
   return (
-    <ButtonComponent asChild>
+    <div className="mb-1">
       <NavLink
         to={item.url || "#"}
         onClick={handleClick}
-        className={`my-1 rounded-xl transition-all duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-          isItemActive
-            ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-lg scale-[1.02] font-semibold animate-pulse-subtle"
-            : "hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground hover:shadow-md hover:scale-[1.01]"
-        }`}
+        className={isSubItem ? subItemClasses : baseClasses}
       >
-        <div
-          className={`flex items-center gap-3 ${isSubItem ? "px-4 py-1.5" : "px-3 py-2"} w-full`}
-        >
-          <IconComponent
-            className={`${isSubItem ? "h-4 w-4" : "h-5 w-5"} shrink-0`}
-          />
-          {!collapsed && (
-            <>
-              <span
-                className={`${isSubItem ? "text-xs" : "text-sm"} font-medium transition-opacity duration-300 flex-1`}
+        <IconComponent className={`${iconClasses} ${isSubItem ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
+        {!collapsed && (
+          <>
+            <span className={`${isSubItem ? "text-xs" : "text-sm"} flex-1 truncate`}>
+              {item.title}
+            </span>
+            {item.badge && Number(item.badge.count) > 0 && (
+              <Badge
+                variant={item.badge.variant || "default"}
+                className="ml-auto text-[10px] h-5 px-1.5"
               >
-                {item.title}
-              </span>
-              {item.badge && (
-                <Badge
-                  variant={item.badge.variant || "default"}
-                  className="ml-auto text-[10px] h-5 px-1.5"
-                >
-                  {item.badge.count}
-                </Badge>
-              )}
-            </>
-          )}
-        </div>
+                {item.badge.count}
+              </Badge>
+            )}
+          </>
+        )}
       </NavLink>
-    </ButtonComponent>
+    </div>
   );
 }

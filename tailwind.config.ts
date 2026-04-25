@@ -7,35 +7,30 @@ const root = path.resolve(__dirname);
 export default {
   darkMode: ["class"],
   safelist: [
-    // Cores de background para tema dark
-    "bg-slate-950",
-    "bg-slate-900",
-    "bg-slate-900/80",
-    "bg-slate-800",
-    "bg-slate-800/50",
-    "bg-slate-700",
-    "bg-slate-400",
-    // Cores de texto
-    "text-white",
-    "text-slate-300",
-    "text-slate-400",
-    "text-slate-500",
-    "text-cyan-400",
-    "text-cyan-500",
-    // Cores de borda
-    "border-slate-700",
-    "border-slate-800",
-    // Cores de foco
-    "focus:border-cyan-500",
-    "focus:ring-cyan-500/20",
-    // Gradientes
-    "from-cyan-500",
-    "to-blue-600",
-    "hover:from-cyan-600",
-    "hover:to-blue-700",
-    // Sombras
-    "shadow-cyan-500/10",
-    "shadow-cyan-500/25",
+    // ── Slate (neutral scale) ──────────────────────────────
+    "bg-slate-50", "bg-slate-100", "bg-slate-200",
+    "bg-slate-800", "bg-slate-900", "bg-slate-950",
+    "bg-slate-800/50", "bg-slate-900/80",
+    "text-slate-300", "text-slate-400", "text-slate-500",
+    "text-slate-600", "text-slate-700", "text-slate-800",
+    "border-slate-200", "border-slate-700", "border-slate-800",
+    // ── Sage / Green (interactive CTA) ────────────────────
+    "text-emerald-600", "text-emerald-700",
+    "bg-emerald-50", "bg-emerald-600", "bg-emerald-700",
+    "border-emerald-200", "border-emerald-600",
+    "focus:border-emerald-500", "focus:ring-emerald-500/20",
+    "hover:bg-emerald-700",
+    // ── Interactive token utilities ────────────────────────
+    "bg-interactive", "text-interactive", "border-interactive",
+    "hover:bg-interactive-hover",
+    // ── Semantic ──────────────────────────────────────────
+    "text-white", "text-foreground", "text-muted-foreground",
+    "bg-background", "bg-card", "bg-accent",
+    // ── Legacy cyan (compat — não adicionar novos) ─────────
+    "text-cyan-400", "text-cyan-500",
+    "from-cyan-500", "to-blue-600",
+    "hover:from-cyan-600", "hover:to-blue-700",
+    "shadow-cyan-500/10", "shadow-cyan-500/25",
   ],
   content: [
     path.join(root, "apps/web/src/**/*.{ts,tsx}"),
@@ -51,12 +46,23 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans:    ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        display: ["Plus Jakarta Sans", "system-ui", "-apple-system", "sans-serif"],
+        mono:    ["JetBrains Mono", "Fira Code", "monospace"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        // ── Interactive (sage green CTA — v3) ──────────────
+        interactive: {
+          DEFAULT: "hsl(var(--interactive))",
+          foreground: "hsl(var(--interactive-foreground))",
+          hover: "hsl(var(--interactive-hover))",
+        },
         shadow: {
           sm: "var(--shadow-sm)",
           md: "var(--shadow-md)",

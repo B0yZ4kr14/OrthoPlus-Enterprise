@@ -44,8 +44,8 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h3 className="text-lg font-medium text-white flex items-center gap-2">
-          <Settings2 className="w-5 h-5 text-blue-400" />
+        <h3 className="text-lg font-medium text-foreground flex items-center gap-2">
+          <Settings2 className="w-5 h-5 text-interactive" />
           Motor do Banco
         </h3>
         <p className="text-sm text-muted-foreground">Selecione o SGBD que melhor atende esta categoria</p>
@@ -59,19 +59,19 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
             className={`
               p-4 rounded-xl cursor-pointer transition-all duration-200 border relative group
               ${selectedEngine === engine 
-                ? 'border-yellow-400 bg-yellow-400/10 shadow-[0_0_15px_rgba(250,204,21,0.1)]' 
-                : 'border-gray-700 bg-gray-900/50 hover:bg-gray-800 hover:border-gray-600'}
+                ? 'border-interactive bg-interactive/10 shadow-[var(--shadow-card)]' 
+                : 'border border-border bg-card hover:bg-muted hover:border-border'}
             `}
           >
             {selectedEngine === engine && (
-              <div className="absolute top-4 right-4 text-yellow-400">
+              <div className="absolute top-4 right-4 text-interactive">
                 <Check className="w-5 h-5" />
               </div>
             )}
-            <h4 className="font-semibold text-gray-200 mb-1 group-hover:text-white transition-colors">
+            <h4 className="font-semibold text-foreground mb-1 transition-colors">
               {engine} / Porta: {ENGINE_DETAILS[engine].port}
             </h4>
-            <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+            <p className="text-sm text-muted-foreground transition-colors">
               {ENGINE_DETAILS[engine].desc}
             </p>
           </div>
@@ -79,9 +79,9 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
       </div>
 
       {currentDetails && (
-        <Card className="border-gray-800 bg-black/40 mt-8">
+        <Card className="border border-border bg-muted/20 mt-8">
           <CardContent className="p-6">
-            <h4 className="text-lg font-semibold text-white border-b border-gray-800 pb-4 mb-4">
+            <h4 className="text-lg font-semibold text-foreground border-b border-border pb-4 mb-4">
               {selectedEngine} — Detalhes
             </h4>
             
@@ -92,7 +92,7 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
                 </h5>
                 <ul className="space-y-2">
                   {currentDetails.whenToUse.map((item, idx) => (
-                    <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
+                    <li key={idx} className="text-sm text-foreground flex items-start gap-2">
                       <span className="text-green-500 mt-0.5">•</span> {item}
                     </li>
                   ))}
@@ -105,7 +105,7 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
                 </h5>
                 <ul className="space-y-2">
                   {currentDetails.limitations.map((item, idx) => (
-                    <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
+                    <li key={idx} className="text-sm text-foreground flex items-start gap-2">
                       <span className="text-yellow-600 mt-0.5">•</span> {item}
                     </li>
                   ))}
@@ -117,7 +117,7 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
               <h5 className="text-sm font-medium text-blue-400 mb-3">🚀 Recursos:</h5>
               <div className="flex flex-wrap gap-2">
                 {currentDetails.resources.map((resource, idx) => (
-                  <Badge key={idx} variant="outline" className="border-blue-900 bg-blue-900/20 text-blue-300">
+                  <Badge key={idx} variant="outline" className="border-interactive/30 bg-interactive/10 text-interactive">
                     {resource}
                   </Badge>
                 ))}

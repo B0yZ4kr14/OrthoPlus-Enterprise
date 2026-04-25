@@ -8,7 +8,7 @@ interface CacheCardProps {
 
 export function CacheCard({ cacheMetrics }: CacheCardProps) {
   return (
-    <Card className="backdrop-blur-xl bg-background/90 border-primary/20">
+    <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <Database className="h-4 w-4" />

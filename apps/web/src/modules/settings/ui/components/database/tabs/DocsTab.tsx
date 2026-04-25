@@ -47,7 +47,7 @@ export function DocsTab({ selectedEngine }: DocsTabProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h3 className="text-lg font-medium text-white">{selectedEngine} Docs</h3>
+        <h3 className="text-lg font-medium text-foreground">{selectedEngine} Docs</h3>
         <p className="text-sm text-muted-foreground">{data.subtitle}</p>
       </div>
 
@@ -58,30 +58,30 @@ export function DocsTab({ selectedEngine }: DocsTabProps) {
             href={link.url} 
             target="_blank" 
             rel="noreferrer"
-            className="flex items-center justify-between p-4 rounded-xl border border-gray-800 bg-gray-900 hover:bg-gray-800 transition-colors group"
+            className="flex items-center justify-between p-4 rounded-xl border border-border bg-card hover:bg-muted transition-colors group"
           >
             <div className="flex items-center gap-3">
-              <BookOpen className="w-5 h-5 text-blue-400" />
-              <span className="font-medium text-gray-200 group-hover:text-white transition-colors">{link.label}</span>
+              <BookOpen className="w-5 h-5 text-interactive" />
+              <span className="font-medium text-foreground transition-colors">{link.label}</span>
             </div>
-            <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-blue-400 transition-colors" />
+            <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-interactive transition-colors" />
           </a>
         ))}
       </div>
 
-      <Card className="border-gray-800 bg-gray-900/50">
+      <Card className="border border-border bg-muted/30">
         <CardContent className="p-6">
-          <h4 className="text-sm font-medium text-gray-300 mb-4">Dicas de Instalação (Linux)</h4>
+          <h4 className="text-sm font-medium text-foreground mb-4">Dicas de Instalação (Linux)</h4>
           <div className="space-y-4">
             <div>
               <p className="text-xs text-muted-foreground mb-1">Arch / CachyOS</p>
-              <div className="p-3 rounded-lg bg-black font-mono text-sm text-green-400 border border-gray-800">
+              <div className="p-3 rounded-lg bg-muted font-mono text-sm text-foreground border border-border">
                 {data.installTips.arch}
               </div>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">Ubuntu / Debian</p>
-              <div className="p-3 rounded-lg bg-black font-mono text-sm text-green-400 border border-gray-800">
+              <div className="p-3 rounded-lg bg-muted font-mono text-sm text-foreground border border-border">
                 {data.installTips.ubuntu}
               </div>
             </div>

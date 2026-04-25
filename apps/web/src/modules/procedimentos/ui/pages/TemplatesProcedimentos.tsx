@@ -106,7 +106,7 @@ export default function TemplatesProcedimentosPage() {
       ORTODONTIA: "bg-green-500/10 text-green-700 dark:text-green-400",
       CIRURGIA: "bg-orange-500/10 text-orange-700 dark:text-orange-400",
       PERIODONTIA: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
-      ESTETICA: "bg-cyan-500/10 text-cyan-700 dark:text-cyan-400",
+      ESTETICA: "bg-interactive/10 text-interactive",
       PREVENTIVA: "bg-teal-500/10 text-teal-700 dark:text-teal-400",
     };
 

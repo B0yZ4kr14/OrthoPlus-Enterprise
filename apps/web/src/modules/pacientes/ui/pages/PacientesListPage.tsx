@@ -56,7 +56,7 @@ export default function PacientesListPage() {
             Gestão completa de pacientes com ficha clínica profissional
           </p>
         </div>
-        <Button onClick={() => navigate("/pacientes/novo")} className="gap-2">
+        <Button variant="cta" onClick={() => navigate("/pacientes/novo")} className="gap-2">
           <Plus className="h-4 w-4" />
           Novo Paciente
         </Button>
@@ -90,8 +90,8 @@ export default function PacientesListPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-primary/10">
-              <UserCircle className="h-5 w-5 text-primary" />
+            <div className="p-2.5 rounded-lg bg-interactive/10">
+              <UserCircle className="h-4 w-4 text-interactive" />
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Total</p>
@@ -159,8 +159,8 @@ export default function PacientesListPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-full bg-primary/10">
-                      <UserCircle className="h-6 w-6 text-primary" />
+                    <div className="p-2.5 rounded-lg bg-interactive/10">
+                      <UserCircle className="h-5 w-5 text-interactive" />
                     </div>
                     <div>
                       <p className="font-semibold">{patient.full_name}</p>

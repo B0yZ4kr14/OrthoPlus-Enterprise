@@ -51,7 +51,13 @@ interface AnalyticsData {
   }>;
 }
 
-const COLORS = ["#2dd4bf", "#14b8a6", "#0d9488", "#fbbf24", "#f59e0b"];
+const COLORS = [
+  "hsl(160, 84%, 30%)",
+  "hsl(180, 60%, 45%)",
+  "hsl(180, 60%, 35%)",
+  "hsl(38, 92%, 50%)",
+  "hsl(38, 92%, 40%)",
+];
 
 export function OnboardingAnalyticsDashboard() {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
@@ -270,7 +276,7 @@ export function OnboardingAnalyticsDashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="completions" fill="#2dd4bf" name="Conclusões" />
+                <Bar dataKey="completions" fill="hsl(160, 84%, 30%)" name="Conclusões" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -300,7 +306,7 @@ export function OnboardingAnalyticsDashboard() {
                 <Line
                   type="monotone"
                   dataKey="average_time"
-                  stroke="#14b8a6"
+                  stroke="hsl(180, 60%, 45%)"
                   strokeWidth={2}
                   name="Tempo Médio"
                 />
@@ -329,7 +335,7 @@ export function OnboardingAnalyticsDashboard() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="abandoned" fill="#ef4444" name="Abandonos" />
+                  <Bar dataKey="abandoned" fill="hsl(0, 84%, 60%)" name="Abandonos" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

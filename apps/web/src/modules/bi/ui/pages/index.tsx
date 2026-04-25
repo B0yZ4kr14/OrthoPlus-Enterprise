@@ -44,10 +44,10 @@ import { ExportDashboardDialog } from "@/components/bi/ExportDashboardDialog";
 import { useAuth } from "@/contexts/AuthContext";
 
 const COLORS = [
-  "hsl(var(--primary))",
-  "hsl(var(--secondary))",
-  "hsl(var(--accent))",
-  "hsl(var(--muted))",
+  "hsl(160, 84%, 30%)",
+  "hsl(217, 91%, 60%)",
+  "hsl(38, 92%, 50%)",
+  "hsl(270, 60%, 65%)",
 ];
 
 const revenueData = [

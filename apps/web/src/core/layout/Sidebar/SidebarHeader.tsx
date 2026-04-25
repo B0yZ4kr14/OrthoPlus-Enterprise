@@ -1,39 +1,32 @@
 import { SidebarHeader as ShadcnSidebarHeader } from "@orthoplus/core-ui/sidebar";
 import { useSidebar } from "@orthoplus/core-ui/sidebar";
 import orthoLogo from "@/assets/ortho-logo-main.png";
-import { QuickActionsBar } from "@/components/QuickActionsBar";
-import { Search } from "lucide-react";
-import { Input } from "@orthoplus/core-ui/input";
-import { useState } from "react";
 
 export function SidebarHeader() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const [searchFocused, setSearchFocused] = useState(false);
 
   return (
-    <ShadcnSidebarHeader className="border-b border-sidebar-border/50 transition-all duration-300">
+    <ShadcnSidebarHeader className="border-b border-border/40 transition-all duration-300">
       <div className="p-4">
         <div className="flex items-center gap-3 px-2">
           <img
             src={orthoLogo}
             alt="Ortho+"
-            className="h-8 w-auto shrink-0 transition-transform duration-300 hover:scale-110"
+            className="h-8 w-auto shrink-0 transition-transform duration-300 hover:scale-105"
           />
           {!collapsed && (
             <div className="flex flex-col overflow-hidden transition-opacity duration-300">
-              <span className="text-lg font-bold text-sidebar-foreground tracking-tight">
+              <span className="text-lg font-bold text-sidebar-foreground tracking-tight leading-none">
                 Ortho+
               </span>
-              <span className="text-xs text-sidebar-foreground/60">
-                Sistema Odontológico
+              <span className="text-xs text-muted-foreground font-medium mt-0.5">
+                Enterprise
               </span>
             </div>
           )}
         </div>
       </div>
-
-      {!collapsed && <QuickActionsBar />}
     </ShadcnSidebarHeader>
   );
 }

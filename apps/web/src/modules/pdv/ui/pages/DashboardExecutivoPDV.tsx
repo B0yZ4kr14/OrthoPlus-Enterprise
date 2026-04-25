@@ -285,7 +285,7 @@ export default function DashboardExecutivoPDV() {
                     `${entry.name}: ${((entry.value / transacoesPorMetodo.reduce((sum, m) => sum + m.value, 0)) * 100).toFixed(1)}%`
                   }
                   outerRadius={100}
-                  fill="#8884d8"
+                  fill="hsl(270, 60%, 65%)"
                   dataKey="value"
                 >
                   {transacoesPorMetodo.map((entry, index) => (

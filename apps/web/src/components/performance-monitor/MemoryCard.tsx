@@ -16,7 +16,7 @@ function getMemoryColor(usage: string): "default" | "secondary" | "warning" | "d
 
 export function MemoryCard({ memory }: MemoryCardProps) {
   return (
-    <Card className="backdrop-blur-xl bg-background/90 border-primary/20">
+    <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <Gauge className="h-4 w-4" />

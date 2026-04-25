@@ -58,8 +58,8 @@ export function RepairTab({ selectedEngine, category }: RepairTabProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h3 className="text-lg font-medium text-white flex items-center gap-2">
-          <Wrench className="w-5 h-5 text-blue-400" />
+        <h3 className="text-lg font-medium text-foreground flex items-center gap-2">
+          <Wrench className="w-5 h-5 text-interactive" />
           Ferramentas de Reparo: {selectedEngine}
         </h3>
         <p className="text-sm text-muted-foreground">Otimize e repare a base de dados desta categoria</p>
@@ -67,23 +67,23 @@ export function RepairTab({ selectedEngine, category }: RepairTabProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {tools.map((tool, idx) => (
-          <Card key={idx} className="border-gray-800 bg-gray-900/50 hover:bg-gray-800 transition-colors">
+          <Card key={idx} className="border border-border bg-card hover:bg-muted transition-colors">
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-200">{tool.name}</h4>
+                  <h4 className="text-sm font-medium text-foreground">{tool.name}</h4>
                   <p className="text-xs text-muted-foreground mt-1">{tool.desc}</p>
                 </div>
                 <Button 
                   onClick={() => handleRun(tool.name)} 
                   variant="outline" 
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white border-none h-8 w-8 p-0"
+                  className="bg-interactive hover:bg-interactive/90 text-white border-none h-8 w-8 p-0"
                 >
                   <Play className="w-4 h-4" />
                 </Button>
               </div>
-              <div className="mt-4 p-2 bg-black rounded border border-gray-800">
+              <div className="mt-4 p-2 bg-muted rounded border border-border">
                 <code className="text-xs text-green-400 font-mono">{tool.cmd}</code>
               </div>
             </CardContent>
@@ -92,10 +92,10 @@ export function RepairTab({ selectedEngine, category }: RepairTabProps) {
       </div>
 
       <div className="mt-8 space-y-4">
-        <h4 className="text-sm font-medium text-gray-300">Histórico de Conexão e Manutenção</h4>
-        <div className="flex flex-col items-center justify-center p-8 rounded-xl border border-dashed border-gray-800 bg-gray-900/20 text-center">
-          <div className="p-3 bg-gray-800/50 rounded-full mb-3">
-            <Activity className="w-6 h-6 text-gray-500" />
+        <h4 className="text-sm font-medium text-foreground">Histórico de Conexão e Manutenção</h4>
+        <div className="flex flex-col items-center justify-center p-8 rounded-xl border border-dashed border-border bg-muted/20 text-center">
+          <div className="p-3 bg-muted rounded-full mb-3">
+            <Activity className="w-6 h-6 text-muted-foreground" />
           </div>
           <p className="text-sm text-muted-foreground">Nenhum histórico de conexão disponível</p>
         </div>

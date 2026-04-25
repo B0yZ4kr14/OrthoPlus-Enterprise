@@ -28,14 +28,14 @@ export function ModuleCard({
         <div
           className={cn(
             "w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-110",
-            "group-hover:shadow-glow-cyan",
+            "group-hover:shadow-[var(--shadow-card)]",
             color,
           )}
         >
           <Icon className="h-8 w-8 text-white" />
         </div>
         <div>
-          <h3 className="font-semibold text-foreground group-hover:text-amber-400 transition-colors duration-200">
+          <h3 className="font-semibold text-foreground group-hover:text-interactive transition-colors duration-200">
             {title}
           </h3>
           <p className="text-sm text-muted-foreground">{subtitle}</p>

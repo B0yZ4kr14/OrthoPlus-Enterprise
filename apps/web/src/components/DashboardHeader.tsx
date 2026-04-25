@@ -55,7 +55,7 @@ export function DashboardHeader({
       <HotkeysHelp />
       <header
         className={cn(
-          "sticky top-0 z-50 w-full bg-card/95 backdrop-blur-xl shadow-2xl border-0 rounded-b-3xl supports-[backdrop-filter]:bg-card/80",
+          "sticky top-0 z-50 w-full bg-card border-b border-border",
           className,
         )}
       >
@@ -128,7 +128,7 @@ export function DashboardHeader({
                   className="gap-2 h-9 px-2"
                   data-tour="user-menu"
                 >
-                  <Avatar className="h-7 w-7 bg-primary border-2 border-primary/20">
+                  <Avatar className="h-7 w-7 border-2 border-border">
                     {(() => {
                       if (!user || !("user_metadata" in user)) return null;
                       const meta = user.user_metadata as Record<string, unknown> | undefined;
@@ -141,7 +141,7 @@ export function DashboardHeader({
                         />
                       );
                     })()}
-                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
+                    <AvatarFallback className="bg-interactive text-interactive-foreground text-xs font-semibold">
                       {user?.email ? getInitials(user.email) : "US"}
                     </AvatarFallback>
                   </Avatar>
@@ -184,7 +184,7 @@ export function DashboardHeader({
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-muted/30 to-muted/10 px-6 py-3 mx-4 mb-2 rounded-2xl shadow-lg backdrop-blur-sm">
+        <div className="px-6 py-2 border-t border-border/50">
           <Breadcrumbs />
         </div>
       </header>

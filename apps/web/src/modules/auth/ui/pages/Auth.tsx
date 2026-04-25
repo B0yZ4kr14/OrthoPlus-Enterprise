@@ -130,52 +130,49 @@ export default function Auth() {
 
   if (showForgotPassword) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
         <ForgotPassword onBack={() => setShowForgotPassword(false)} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4">
-      <Card className="w-full max-w-md bg-slate-900/80 border-slate-800 shadow-2xl shadow-cyan-500/10">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md">
         <CardHeader className="space-y-6 text-center pb-2">
           {/* Logo Ortho+ */}
           <div className="flex flex-col items-center space-y-2">
-            <div className="text-4xl font-bold text-white tracking-tight">
-              Ortho<span className="text-cyan-400">+</span>
+            <div className="text-4xl font-bold font-display text-foreground tracking-tight">
+              Ortho<span className="text-interactive">+</span>
             </div>
-            <div className="text-xs font-medium text-cyan-400 tracking-[0.3em] uppercase">
+            <div className="text-xs font-medium text-interactive tracking-[0.3em] uppercase">
               Clínicas Odontológicas
             </div>
           </div>
           <div className="space-y-2">
-            <CardTitle className="text-2xl font-bold text-white">
+            <CardTitle className="text-2xl font-bold text-foreground">
               Bem-vindo ao Ortho+
             </CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardDescription className="text-muted-foreground">
               Sistema de Gestão para Clínicas Odontológicas
             </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 p-1">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger 
                 value="login" 
-                className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400"
               >
                 Equipe
               </TabsTrigger>
               <TabsTrigger 
                 value="patient"
-                className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400"
               >
                 Paciente
               </TabsTrigger>
               <TabsTrigger 
                 value="signup"
-                className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400"
               >
                 Cadastro
               </TabsTrigger>
@@ -195,17 +192,17 @@ export default function Auth() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-slate-300">Email</FormLabel>
+                        <FormLabel className="text-foreground">Email</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input
                               type="email"
                               placeholder="seu@email.com"
-                              className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500/20 pl-10"
+                              className="pl-10"
                               {...field}
                               disabled={isLoading}
                             />
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -217,17 +214,17 @@ export default function Auth() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-slate-300">Senha</FormLabel>
+                        <FormLabel className="text-foreground">Senha</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input
                               type="password"
                               placeholder="••••••••"
-                              className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500/20 pl-10"
+                              className="pl-10"
                               {...field}
                               disabled={isLoading}
                             />
-                            <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                            <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -236,7 +233,8 @@ export default function Auth() {
                   />
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-lg shadow-cyan-500/25" 
+                    variant="cta" 
+                    className="w-full" 
                     disabled={isLoading}
                   >
                     {isLoading ? "Entrando..." : "Entrar"}
@@ -245,7 +243,7 @@ export default function Auth() {
                   <Button
                     type="button"
                     variant="link"
-                    className="w-full text-sm text-cyan-400 hover:text-cyan-300"
+                    className="w-full text-sm text-interactive hover:text-interactive/80"
                     onClick={() => setShowForgotPassword(true)}
                   >
                     Esqueceu sua senha?

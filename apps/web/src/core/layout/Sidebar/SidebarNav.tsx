@@ -12,7 +12,7 @@ import { SidebarMenuItem } from "./SidebarMenuItem";
 import { menuGroups, adminMenuItems } from "./sidebar.config";
 import { Separator } from "@orthoplus/core-ui/separator";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
-import { useEffect } from "react";
+import { useMemo } from "react";
 
 interface SidebarNavProps {
   onNavigate?: () => void;
@@ -24,29 +24,32 @@ export function SidebarNav({ onNavigate }: SidebarNavProps = {}) {
   const collapsed = state === "collapsed";
   const { data: badges } = useSidebarBadges();
 
-  // Atualizar badges dinamicamente nos menuGroups
-  useEffect(() => {
-    if (!badges) return;
-
-    // Atualizar badges nos itens do menu conforme os dados da API
-    menuGroups.forEach((group) => {
-      group.items.forEach((item) => {
-        if (item.url === "/agenda") {
-          item.badge = { count: badges.appointments, variant: "default" };
-        } else if (item.url === "/financeiro/receber") {
-          item.badge = { count: badges.overdue, variant: "destructive" };
-        } else if (item.url === "/inadimplencia") {
-          item.badge = { count: badges.defaulters, variant: "destructive" };
-        } else if (item.url === "/recall") {
-          item.badge = { count: badges.recalls, variant: "default" };
+  const enrichedGroups = useMemo(() => {
+    return menuGroups.map(group => ({
+      ...group,
+      items: group.items.map(item => {
+        const enrichedItem = { ...item };
+        
+        if (badges) {
+          if (enrichedItem.url === "/agenda") {
+            enrichedItem.badge = { count: badges.appointments, variant: "default" };
+          } else if (enrichedItem.url === "/financeiro/receber") {
+            enrichedItem.badge = { count: badges.overdue, variant: "destructive" };
+          } else if (enrichedItem.url === "/inadimplencia") {
+            enrichedItem.badge = { count: badges.defaulters, variant: "destructive" };
+          } else if (enrichedItem.url === "/recall") {
+            enrichedItem.badge = { count: badges.recalls, variant: "default" };
+          }
         }
-      });
-    });
+        
+        return enrichedItem;
+      })
+    }));
   }, [badges]);
 
   return (
-    <div className="space-y-4 pb-6">
-      {menuGroups.map((group, index) => (
+    <div className="pb-6 flex flex-col">
+      {enrichedGroups.map((group, index) => (
         <SidebarGroup
           key={group.label}
           group={group}
@@ -57,30 +60,23 @@ export function SidebarNav({ onNavigate }: SidebarNavProps = {}) {
 
       {isAdmin && (
         <>
-          <Separator className="my-4 bg-sidebar-border/30" />
-          <div
-            className="rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 shadow-xl backdrop-blur-sm border border-primary/30 p-2 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl animate-fade-in"
-            style={{ animationDelay: `${menuGroups.length * 100}ms` }}
-          >
-            <ShadcnSidebarGroup>
-              <SidebarGroupLabel className="text-sm font-bold text-sidebar-foreground px-3 py-2 drop-shadow-md">
-                {!collapsed && (
-                  <span className="tracking-wide transition-opacity duration-300">
-                    Administração
-                  </span>
-                )}
+          <Separator className="my-2 bg-border/40 w-[calc(100%-2rem)] mx-auto" />
+          <ShadcnSidebarGroup className="space-y-1 py-2">
+            {!collapsed && (
+              <SidebarGroupLabel className="px-3 pt-4 pb-1 text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60">
+                ADMINISTRAÇÃO
               </SidebarGroupLabel>
-              <SidebarGroupContent className="mt-1">
-                <SidebarMenu>
-                  {adminMenuItems.map((item) => (
-                    <ShadcnSidebarMenuItem key={item.title}>
-                      <SidebarMenuItem item={item} onNavigate={onNavigate} />
-                    </ShadcnSidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </ShadcnSidebarGroup>
-          </div>
+            )}
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminMenuItems.map((item) => (
+                  <ShadcnSidebarMenuItem key={item.title}>
+                    <SidebarMenuItem item={item} onNavigate={onNavigate} />
+                  </ShadcnSidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </ShadcnSidebarGroup>
         </>
       )}
     </div>

@@ -59,15 +59,15 @@ export default function DashboardUnified() {
   const { stats, appointmentsData, revenueData, treatmentsByStatus } = data;
 
   const COLORS = [
-    "hsl(186, 100%, 42%)", // Neon Cyan
-    "hsl(173, 58%, 39%)", // Sage
-    "hsl(38, 100%, 50%)", // Amber
-    "hsl(217, 91%, 60%)", // Royal Blue
+    "hsl(160, 84%, 30%)",  // Sage Green (interactive)
+    "hsl(217, 91%, 60%)",  // Blue
+    "hsl(38, 92%, 50%)",   // Amber
+    "hsl(270, 60%, 65%)",  // Purple
   ];
 
   return (
     <div className="container mx-auto p-8 space-y-8 min-h-screen">
-      <div className="glass-deep p-8 rounded-[2.5rem] shadow-neon-cyan/5 border border-primary/10">
+      <div className="bg-card border border-border rounded-xl p-6 mb-2">
         <PageHeader
           title="Master Dashboard"
           icon={LayoutDashboard}

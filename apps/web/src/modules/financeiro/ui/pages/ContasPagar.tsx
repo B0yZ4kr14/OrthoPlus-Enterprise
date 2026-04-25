@@ -79,7 +79,7 @@ export default function ContasPagar() {
       "Materiais Odontológicos":
         "bg-blue-500/10 text-blue-700 border-blue-500/20",
       "Contas Fixas": "bg-purple-500/10 text-purple-700 border-purple-500/20",
-      Laboratório: "bg-cyan-500/10 text-cyan-700 border-cyan-500/20",
+      Laboratório: "bg-interactive/10 text-interactive border-interactive/20",
       "Taxas e Impostos":
         "bg-orange-500/10 text-orange-700 border-orange-500/20",
     };

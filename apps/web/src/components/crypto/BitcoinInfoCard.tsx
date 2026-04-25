@@ -24,7 +24,7 @@ export function BitcoinInfoCard() {
   return (
     <Card
       depth="normal"
-      className="border-l-4 border-l-orange-500 bg-gradient-to-br from-orange-500/5 to-transparent"
+      className="border-l-4 border-l-orange-500"
     >
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader>
@@ -159,7 +159,7 @@ export function BitcoinInfoCard() {
                   },
                   {
                     name: "Mercado Bitcoin",
-                    color: "bg-cyan-500/10 border-cyan-500/20",
+                    color: "bg-interactive/10 border-interactive/20",
                   },
                 ].map((exchange) => (
                   <div

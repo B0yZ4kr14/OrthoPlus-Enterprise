@@ -56,7 +56,7 @@ export default function ProgramaFidelidade() {
   const getNivelColor = (nivel: string) => {
     switch (nivel) {
       case "DIAMANTE":
-        return "text-cyan-500";
+        return "text-interactive";
       case "PLATINA":
         return "text-slate-400";
       case "OURO":
