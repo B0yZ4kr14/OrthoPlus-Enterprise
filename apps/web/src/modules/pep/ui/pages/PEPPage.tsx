@@ -161,22 +161,22 @@ export default function PEPPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageHeader
-          title={`PEP - ${selectedPatient.full_name}`}
-          description={`Prontuário eletrônico completo do paciente`}
-          icon={FileText}
-        />
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setSelectedPatient(null)}>
-            Trocar Paciente
-          </Button>
-          <ProntuarioPDF
-            prontuarioId={prontuarioId || ""}
-            patientName={selectedPatient.full_name}
-          />
-        </div>
-      </div>
+      <PageHeader
+        title={`PEP - ${selectedPatient.full_name}`}
+        description={`Prontuário eletrônico completo do paciente`}
+        icon={FileText}
+        actions={
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setSelectedPatient(null)}>
+              Trocar Paciente
+            </Button>
+            <ProntuarioPDF
+              prontuarioId={prontuarioId || ""}
+              patientName={selectedPatient.full_name}
+            />
+          </div>
+        }
+      />
 
       <Tabs
         value={activeTab}
