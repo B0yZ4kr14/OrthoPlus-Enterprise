@@ -56,6 +56,7 @@ export function authMiddleware(
     const decoded: any = jwt.verify( // eslint-disable-line @typescript-eslint/no-explicit-any
       token,
       jwtSecret,
+      { algorithms: ['HS256'] },
     );
 
     // SECURITY: clinicId MUST exist in token (except in explicit mock mode)

@@ -161,7 +161,7 @@ export class PacientesController {
           status: patient.status,
           dadosComerciais: patient.dadosComerciais,
           isActive: patient.isActive,
-          createdAt: patient.toObject().createdAt,
+          createdAt: patient.createdAt,
         })),
       };
 

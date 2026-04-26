@@ -370,9 +370,9 @@ export class ModulosController {
       const user = req.user;
       if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-      const patients = await Object(prisma).patients
+      const patients = await prisma.patients
         .findMany({
-          where: { tenantId: (user as Record<string, unknown>).tenantId },
+          where: { clinic_id: user.clinicId },
         })
         .catch(() => []);
 

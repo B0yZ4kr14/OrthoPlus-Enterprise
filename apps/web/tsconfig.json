@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@financeiro/*": ["./src/modules/financeiro/*"]
     },
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

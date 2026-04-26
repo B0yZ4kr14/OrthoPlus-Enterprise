@@ -4,6 +4,7 @@ import { logger } from '@/infrastructure/logger';
  * API para administração e monitoramento do banco de dados
  */
 
+import crypto from "crypto";
 import { Request, Response } from "express";
 import { z } from "zod";
 import { prisma } from "@/infrastructure/database/prismaClient";

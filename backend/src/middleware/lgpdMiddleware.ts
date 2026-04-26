@@ -37,8 +37,26 @@ const DEFAULT_SENSITIVE_CONFIG: SensitiveDataConfig = {
   dadosSaude: true,
 };
 
-// Chave de criptografia (deve estar em .env)
-const ENCRYPTION_KEY = process.env.LGPD_ENCRYPTION_KEY || 'default-key-32-chars-long!!!!';
+// Chave de criptografia obrigatória via variável de ambiente
+const _ENCRYPTION_KEY = process.env.LGPD_ENCRYPTION_KEY;
+if (!_ENCRYPTION_KEY) {
+  throw new Error(
+    'LGPD_ENCRYPTION_KEY environment variable is required. ' +
+    'Generate with: openssl rand -hex 32'
+  );
+}
+const ENCRYPTION_KEY: string = _ENCRYPTION_KEY;
+
+// Salt único por ambiente (obrigatório — nunca usar valor fixo)
+const _ENCRYPTION_SALT = process.env.LGPD_ENCRYPTION_SALT;
+if (!_ENCRYPTION_SALT) {
+  throw new Error(
+    'LGPD_ENCRYPTION_SALT environment variable is required. ' +
+    'Generate with: openssl rand -hex 16'
+  );
+}
+const ENCRYPTION_SALT: string = _ENCRYPTION_SALT;
+
 const ALGORITHM = 'aes-256-gcm';
 
 /**
@@ -47,7 +65,7 @@ const ALGORITHM = 'aes-256-gcm';
 export function encryptSensitiveData(value: string): string {
   try {
     const iv = crypto.randomBytes(16);
-    const key = crypto.scryptSync(ENCRYPTION_KEY, 'salt', 32);
+    const key = crypto.scryptSync(ENCRYPTION_KEY, ENCRYPTION_SALT, 32);
     const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
     cipher.setAAD(Buffer.from('lgpd-aad', 'utf8'));
     
@@ -76,7 +94,7 @@ export function decryptSensitiveData(encryptedValue: string): string {
     const iv = Buffer.from(ivHex, 'hex');
     const authTag = Buffer.from(authTagHex, 'hex');
     
-    const key = crypto.scryptSync(ENCRYPTION_KEY, 'salt', 32);
+    const key = crypto.scryptSync(ENCRYPTION_KEY, ENCRYPTION_SALT, 32);
     const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
     decipher.setAAD(Buffer.from('lgpd-aad', 'utf8'));
     decipher.setAuthTag(authTag);

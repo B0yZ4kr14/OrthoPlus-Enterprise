@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => ({
         replacement: path.resolve(__dirname, '../../categories/@orthoplus/core/packages/ui/src/components/$1.tsx'),
       },
       { find: '@', replacement: path.resolve(__dirname, './src') },
+      { find: '@financeiro', replacement: path.resolve(__dirname, './src/modules/financeiro') },
       { find: '@/components', replacement: path.resolve(__dirname, './src/components') },
       { find: '@/hooks', replacement: path.resolve(__dirname, './src/hooks') },
       { find: '@/lib', replacement: path.resolve(__dirname, './src/lib') },
