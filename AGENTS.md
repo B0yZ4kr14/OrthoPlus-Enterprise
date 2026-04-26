@@ -1,15 +1,16 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
+> **Atualizado:** 2026-04-25 | **Branch:** main | **Commit:** a1dfd3d
 
 ---
 
 ## Visão Geral
 
 O **OrthoPlus Enterprise** é um monorepo full-stack de gestão odontológica com:
-- **Frontend**: React 19 + Vite 6 + Tailwind CSS (porta 5173)
+- **Frontend**: React 19 + Vite 6 + Tailwind CSS (porta **3000** dev / 5173 legacy)
 - **Backend**: Node.js 20 + Express 4 + Prisma 6 + PostgreSQL 16 (porta 3005)
-- **Agent Service**: Python 3.14 + FastAPI + Agno (porta 8000)
+- **Agent Service**: Python 3.14 + FastAPI + Agno 2.5 (porta 8000)
 
 ---
 
@@ -22,7 +23,7 @@ OrthoPlus-Enterprise/
 │   ├── src/modules/           # 35 módulos de domínio
 │   ├── src/middleware/        # Middleware Express
 │   ├── src/routes/            # Rotas (modulesRouter)
-│   ├── prisma/schema.prisma   # 171 models
+│   ├── prisma/schema.prisma   # 178 models
 │   └── workers/               # 9 cron jobs
 ├── agent-service/             # Serviço Python/FastAPI
 ├── shared-types/              # Tipos TypeScript
@@ -85,8 +86,8 @@ Todos os 36 módulos possuem router registrado em `backend/src/index.ts` e `clin
 |---|--------|--------|------------|--------|
 | 0 | `admin_tools` | ✅ | ✅ | ❌ |
 | 1 | `agenda` | ✅ | ✅ | ✅ |
-| 2 | `analytics` | ✅ | ✅ | ⚠️ queryRaw |
-| 3 | `auth` | ✅ | ✅ | ⚠️ queryRaw |
+| 2 | `analytics` | ✅ | ✅ | ✅ |
+| 3 | `auth` | ✅ | ✅ | ✅ |
 | 4 | `backups` | ✅ | ✅ | ❌ |
 | 5 | `bi` | ✅ | ❌ | ❌ |
 | 6 | `comm` | ✅ | ✅ | ❌ |
@@ -96,33 +97,32 @@ Todos os 36 módulos possuem router registrado em `backend/src/index.ts` e `clin
 | 10 | `crypto_config` | ✅ | ✅ | ✅ |
 | 11 | `dashboard` | ✅ | ✅ | ✅ |
 | 12 | `database_admin` | ✅ | ✅ | ✅ |
-| 13 | `faturamento` | ✅ | ✅ | ⚠️ queryRaw |
+| 13 | `faturamento` | ✅ | ✅ | ✅ |
 | 14 | `fidelidade` | ✅ | ❌ | ❌ |
 | 15 | `files` | ✅ | ✅ | ✅ |
 | 16 | `financeiro` | ✅ | ✅ | ✅ |
 | 17 | `funcionarios` | ✅ | ❌ | ❌ |
 | 18 | `github_tools` | ✅ | ✅ | ❌ |
 | 19 | `inadimplencia` | ✅ | ❌ | ❌ |
-| 20 | `inventario` | ✅ | ✅ | ⚠️ queryRaw |
+| 20 | `inventario` | ✅ | ✅ | ✅ |
 | 21 | `lgpd` | ✅ | ❌ | ❌ |
-| 22 | `marketing` | ✅ | ✅ | ⚠️ queryRaw |
+| 22 | `marketing` | ✅ | ✅ | ✅ |
 | 23 | `nfe` | ✅ | ❌ | ❌ |
-| 24 | `notifications` | ✅ | ✅ | ⚠️ queryRaw |
+| 24 | `notifications` | ✅ | ✅ | ✅ |
 | 25 | `orcamentos` | ✅ | ✅ | ❌ |
 | 26 | `pacientes` | ✅ | ✅ | ✅ |
 | 27 | `pdv` | ✅ | ✅ | ✅ |
-| 28 | `pep` | ✅ | ✅ | ⚠️ queryRaw |
-| 29 | `procedimentos` | ✅ | ✅ | ⚠️ queryRaw |
+| 28 | `pep` | ✅ | ✅ | ✅ |
+| 29 | `procedimentos` | ✅ | ✅ | ✅ |
 | 30 | `split_pagamento` | ✅ | ✅ | ❌ |
-| 31 | `teleodonto` | ✅ | ✅ | ⚠️ queryRaw |
+| 31 | `teleodonto` | ✅ | ✅ | ✅ |
 | 32 | `terminal` | ✅ | ✅ | ❌ |
 | 33 | `tiss` | ✅ | ❌ | ❌ |
-| 34 | `usuarios` | ✅ | ✅ | ⚠️ queryRaw |
+| 34 | `usuarios` | ✅ | ✅ | ✅ |
 | 35 | `agents` | ✅ | ✅ | ❌ |
 
 **Legenda:**
 - ✅ Completo
-- ⚠️ Parcial (usa queryRaw ou tem gaps)
 - ❌ API-only / stub
 
 ---
@@ -247,30 +247,37 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ---
 
-## Estado Atual (2026-04-24)
+## Estado Atual (2026-04-25)
 
-### Wave-2 Concluída
-- ✅ **Supabase eliminado**: `auth.users` removido, `configuracoes.users` é a tabela de auth nativa
-- ✅ **queryRaw finalizado**: 9 ocorrências restantes, todas arquiteturalmente justificadas
-- ✅ **Backend build**: `tsc && tsc-alias` limpo
+### Concluído
+- ✅ **Supabase eliminado**: `auth.users` removido, `configuracoes.users` é auth nativa
+- ✅ **queryRaw**: zero ocorrências em backend/src (eliminadas — AGENTS.md backend ainda lista justificativas antigas)
+- ✅ **Backend build**: tsc produz erros em `agenda` e `auth` (módulo `@orthoplus/shared-types` não resolvido) — build usa `|| true` então passa mesmo assim
 - ✅ **Frontend lint**: 0 errors, ~98 warnings
-- ✅ **Segurança**: `.ssh_key_vps` removido do git
+- ✅ **UI**: PageHeader padronizado, container/padding normalizados (wave-1→wave-3)
+- ✅ **DB decentralizado**: 6 categorias com backup scheduler próprio
 
-### Wave-3 Concluída
-- ✅ **Frontend fixes**: react-hooks lint errors resolvidos
-- Último commit: `1ee9304 merge: frontend fixes (wave-3)`
+### Pendências Ativas
+- 🔴 **Backend TS errors**: `agenda` (4 erros Prisma type mismatch), `auth` (1 erro `@orthoplus/shared-types` não encontrado)
+- 🔴 **Frontend TS errors**: `crypto-pagamentos` (múltiplos módulos não encontrados: `@financeiro/components/*`, `./BitcoinInfoSection`), `marketing-auto` (type mismatch), `dentistas` (`horarioAtendimento` inexistente), `usuarios` (SubmitHandler mismatch), `tour` (@ts-expect-error inútil)
+- 🟡 **Secrets em repo**: `backend/.env` e `ecosystem.json` contêm JWT_SECRET e OPENROUTER_API_KEY — rotacionar e remover do git
+- 🟡 **PostgreSQL user**: Backend conecta como `postgres` (superuser). Criar role `orthoplus`.
+- 🟡 **Prisma relations faltantes**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
+- 🟡 **CI misto**: alguns workflows usam `npm ci`, outros `pnpm` — inconsistente
+- 🟡 **package.json workspaces**: não inclui `backend` e `shared-types` (diverge de `pnpm-workspace.yaml`)
+- 🟡 **@orthoplus/shared-types**: importado por backend/frontend mas pode não estar buildado/linkado no workspace
 
-### Pendências
-- ⚠️ **PostgreSQL user**: Backend conecta como `postgres` (superuser). Criar role `orthoplus`.
-- ⚠️ **Frontend type-check**: Falhas pré-existentes em `crypto-pagamentos`, `marketing-auto`
-- ⚠️ **Prisma relations faltantes**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
-- ⚠️ **Backend módulo `admin_tools`**: Existe em `src/modules/` mas não listado na tabela original (36 módulos reais vs 35 documentados)
+### Cobertura de Testes
+- **Backend**: 17 módulos com unit tests (jest); 19 sem cobertura; threshold global 20%
+- **Frontend**: 16 test files (vitest); domínio/core/hooks cobertos; módulos UI majoritariamente sem testes
+- **E2E**: 37 specs Playwright — cobertura de fluxo boa; ver `tests/e2e/AGENTS.md`
 
 ### Commits Recentes
-- `1ee9304` — merge: frontend fixes (wave-3)
-- `aeb645f` — fix(frontend): resolve react-hooks lint errors
-- `0f0d279` — refactor(backend): eliminate Supabase references and finalize queryRaw cleanup
-- `b0b311e` — security: remove .ssh_key_vps from git
+- `a1dfd3d` — fix(pep): move actions into PageHeader actions prop
+- `0285f94` — fix(frontend): remove double padding from 12 module pages
+- `3a12957` — fix(frontend): remove container mx-auto from all module page wrappers
+- `6904baf` — feat(ui): standardize PageHeader across all module pages
+- `65a47fd` — fix(db-management): apply all 7 decentralized DB management fixes
 
 ---
 

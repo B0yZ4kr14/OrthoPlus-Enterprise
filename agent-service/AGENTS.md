@@ -1,6 +1,7 @@
 # AGENTS.md — agent-service/
 
 > Contexto específico do serviço Python/FastAPI/Agno. Não repete o root AGENTS.md.
+> **Atualizado:** 2026-04-25
 
 ---
 
@@ -19,9 +20,15 @@
 src/
 ├── main.py          # FastAPI app, rotas HTTP
 ├── config.py        # Settings (env vars, model configs)
-├── agents/          # Definições de agentes Agno
+├── agents/
+│   ├── base_agent.py       # classe base
+│   ├── backend_agent.py    # tarefas backend/Express
+│   ├── frontend_agent.py   # tarefas frontend/React
+│   └── database_agent.py   # tarefas Prisma/DB
 ├── models/          # Pydantic models (request/response)
-├── tools/           # Ferramentas disponíveis para agentes
+├── tools/
+│   ├── codebase_tools.py   # interações com codebase
+│   └── prisma_tools.py     # schema/migration helpers
 └── workflows/
     ├── crud_workflow.py
     ├── bugfix_workflow.py
