@@ -4,6 +4,7 @@ import path from 'path';
 
 // Re-export from root config with apps/web specific adjustments
 export default defineConfig(({ mode }) => ({
+  base: '/OrthoPlus-Enterprise/',
   plugins: [react()],
   // Strip console.* and debugger from production builds
   ...(mode === 'production' && {

@@ -35,6 +35,7 @@ const App = () => (
     <TooltipProvider>
       <ThemeProvider>
         <BrowserRouter
+          basename="/OrthoPlus-Enterprise"
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
         >
           <HotkeysManager />
