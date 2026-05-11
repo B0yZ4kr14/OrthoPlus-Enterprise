@@ -172,7 +172,7 @@ export function DataMigrationWizard({
           <DialogDescription>
             {mode === "export"
               ? "Exporte dados da clínica para backup ou migração"
-              : "Importe dados de outro sistema Ortho+ ou arquivo de backup"}
+              : "Importe dados de outro sistema OrthoPlus Enterprise ou arquivo de backup"}
           </DialogDescription>
         </DialogHeader>
 

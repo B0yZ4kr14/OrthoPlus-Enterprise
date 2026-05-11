@@ -1,5 +1,5 @@
 /**
- * DASHBOARD UNIFICADO V5.0 - Ortho+
+ * DASHBOARD UNIFICADO V5.0 - OrthoPlus Enterprise
  * Consolida 4 dashboards em 1 com abas
  * 18 KPIs críticos organizados por domínio
  */

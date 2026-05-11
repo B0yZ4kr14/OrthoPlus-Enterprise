@@ -32,7 +32,7 @@ export function CompletionScreen({ onClose, onFinish }: CompletionScreenProps) {
           </div>
           <h2 className="text-3xl font-bold">Parabéns! 🎉</h2>
           <p className="text-muted-foreground text-lg">
-            Você concluiu o onboarding do Ortho+. Agora você está pronto para começar a usar o
+            Você concluiu o onboarding do OrthoPlus Enterprise. Agora você está pronto para começar a usar o
             sistema completo.
           </p>
         </div>
@@ -61,7 +61,7 @@ export function CompletionScreen({ onClose, onFinish }: CompletionScreenProps) {
 
         <Button onClick={onFinish} size="lg" className="w-full gap-2">
           <Sparkles className="h-5 w-5" />
-          Começar a usar o Ortho+
+          Começar a usar o OrthoPlus Enterprise
         </Button>
       </motion.div>
     </DialogContent>

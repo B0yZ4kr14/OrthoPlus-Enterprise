@@ -7,7 +7,7 @@ export const tourSteps: Step[] = [
     target: "body",
     content: (
       <div className="space-y-2">
-        <h2 className="text-lg font-bold text-foreground">Bem-vindo ao Ortho+ 🦷</h2>
+        <h2 className="text-lg font-bold text-foreground">Bem-vindo ao OrthoPlus Enterprise 🦷</h2>
         <p className="text-sm text-muted-foreground">
           Tour rápido pelas principais funcionalidades!
         </p>
@@ -96,7 +96,7 @@ export const tourSteps: Step[] = [
       <div className="space-y-2">
         <h2 className="text-lg font-bold text-foreground">Tour Completo! ✨</h2>
         <p className="text-sm text-muted-foreground">
-          Você está pronto para usar o Ortho+! Explore todas as funcionalidades.
+          Você está pronto para usar o OrthoPlus Enterprise! Explore todas as funcionalidades.
         </p>
         <div className="pt-2 border-t border-border">
           <p className="text-xs text-muted-foreground text-center">

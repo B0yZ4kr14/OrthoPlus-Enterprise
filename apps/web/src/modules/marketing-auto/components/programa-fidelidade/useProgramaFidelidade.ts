@@ -21,7 +21,7 @@ export function useProgramaFidelidade() {
   }, []);
 
   const handleShareBadge = useCallback(async (badgeName: string) => {
-    const shareText = `🏆 Acabei de conquistar o badge "${badgeName}" no meu programa de fidelidade odontológico! #Ortho+ #Saúde`;
+    const shareText = `🏆 Acabei de conquistar o badge "${badgeName}" no meu programa de fidelidade odontológico! #OrthoPlus Enterprise #Saúde`;
 
     if (navigator.share) {
       try {

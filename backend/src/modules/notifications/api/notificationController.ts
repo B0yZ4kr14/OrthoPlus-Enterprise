@@ -379,7 +379,7 @@ export class NotificationController {
         ) {
           try {
             await mailer.sendMail({
-              from: process.env.SMTP_FROM || "Ortho+ <noreply@orthoplus.local>",
+              from: process.env.SMTP_FROM || "OrthoPlus Enterprise <noreply@orthoplus.local>",
               to: alert.email,
               subject: `Alerta de Taxa ${alert.coin_type}`,
               html: `<p>Taxa atingida: ${currentRate}</p>`,
@@ -452,7 +452,7 @@ export class NotificationController {
 
         try {
           await mailer.sendMail({
-            from: process.env.SMTP_FROM || "Ortho+ <noreply@orthoplus.local>",
+            from: process.env.SMTP_FROM || "OrthoPlus Enterprise <noreply@orthoplus.local>",
             to: adminEmails,
             subject: `🤖 Alerta de Reposição IA: ${produtosCriticos.length} Críticos, ${produtosAlerta.length} Alertas`,
             html: `<p>Verifique o estoque no sistema. Detalhes: ${JSON.stringify(resumo)}</p>`,

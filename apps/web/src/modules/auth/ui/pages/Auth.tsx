@@ -140,18 +140,20 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-6 text-center pb-2">
-          {/* Logo Ortho+ */}
+          {/* Logo OrthoPlus Enterprise */}
           <div className="flex flex-col items-center space-y-2">
-            <div className="text-4xl font-bold font-display text-foreground tracking-tight">
-              Ortho<span className="text-interactive">+</span>
-            </div>
+            <img
+              src="/orthoplus-logo-enterprise.svg"
+              alt="OrthoPlus Enterprise"
+              className="h-12 w-auto"
+            />
             <div className="text-xs font-medium text-interactive tracking-[0.3em] uppercase">
               Clínicas Odontológicas
             </div>
           </div>
           <div className="space-y-2">
             <CardTitle className="text-2xl font-bold text-foreground">
-              Bem-vindo ao Ortho+
+              Bem-vindo ao OrthoPlus Enterprise
             </CardTitle>
             <CardDescription className="text-muted-foreground">
               Sistema de Gestão para Clínicas Odontológicas

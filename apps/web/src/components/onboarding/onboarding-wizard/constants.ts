@@ -5,7 +5,7 @@ export const STEPS: Step[] = [
   {
     id: "overview",
     title: "Visão Geral",
-    description: "Conheça o Ortho+ e seus recursos",
+    description: "Conheça o OrthoPlus Enterprise e seus recursos",
     // @ts-expect-error — will be resolved at runtime
     component: () => import("../steps/StepOverview").then((m) => m.StepOverview),
   },

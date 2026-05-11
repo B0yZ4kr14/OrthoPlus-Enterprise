@@ -1,5 +1,5 @@
 /**
- * SIDEBAR CONFIGURATION V6 - Ortho+
+ * SIDEBAR CONFIGURATION V6 - OrthoPlus Enterprise
  * Clean structure, zero duplicate icons
  */
 

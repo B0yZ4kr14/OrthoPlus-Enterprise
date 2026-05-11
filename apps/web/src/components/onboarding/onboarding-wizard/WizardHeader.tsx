@@ -21,7 +21,7 @@ export function WizardHeader({ steps, currentStep, progress }: WizardHeaderProps
       {/* Header */}
       <div className="text-center space-y-2 pr-12">
         <h1 className="text-3xl font-bold">
-          Bem-vindo ao Ortho<span className="text-primary">+</span>
+          Bem-vindo ao OrthoPlus <span className="text-primary">Enterprise</span>
         </h1>
         <p className="text-muted-foreground">
           Vamos configurar seu sistema em {steps.length} passos simples

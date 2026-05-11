@@ -134,7 +134,7 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
         >
           <div className="center bold">
             <p className="text-lg">CLÍNICA ODONTOLÓGICA</p>
-            <p>Ortho+ Sistema</p>
+            <p>OrthoPlus Enterprise Sistema</p>
             <p className="text-xs mt-2">CNPJ: 00.000.000/0000-00</p>
             <p className="text-xs">Rua Exemplo, 123 - São Paulo/SP</p>
           </div>
@@ -233,7 +233,7 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
 
           <div className="center text-xs">
             <p>OBRIGADO PELA PREFERÊNCIA!</p>
-            <p className="mt-2">Ortho+ - Sistema de Gestão Odontológica</p>
+            <p className="mt-2">OrthoPlus Enterprise - Sistema de Gestão Odontológica</p>
           </div>
         </div>
 

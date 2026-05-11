@@ -7,7 +7,7 @@ interface CupomHeaderProps {
 
 export function CupomHeader({
   clinicName = "CLÍNICA ODONTOLÓGICA",
-  systemName = "Ortho+ Sistema",
+  systemName = "OrthoPlus Enterprise Sistema",
   cnpj = "CNPJ: 00.000.000/0000-00",
   address = "Rua Exemplo, 123 - São Paulo/SP",
 }: CupomHeaderProps) {

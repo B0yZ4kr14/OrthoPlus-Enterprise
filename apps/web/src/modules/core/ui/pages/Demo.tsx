@@ -87,7 +87,7 @@ export default function Demo() {
             SaaS B2B Multitenant
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-            Ortho<span className="text-primary">+</span>
+            OrthoPlus <span className="text-primary">Enterprise</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground">
             Sistema de Gestão Odontológica Completo
@@ -173,7 +173,7 @@ export default function Demo() {
       <section className="container mx-auto px-4 py-20 bg-muted/30 rounded-3xl my-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Por que Ortho+?
+            Por que OrthoPlus Enterprise?
           </h2>
         </div>
 
@@ -259,7 +259,7 @@ export default function Demo() {
         <div className="container mx-auto px-4 py-12">
           <div className="text-center space-y-4">
             <h3 className="text-2xl font-bold">
-              Ortho<span className="text-primary">+</span>
+              OrthoPlus <span className="text-primary">Enterprise</span>
             </h3>
             <p className="text-muted-foreground">
               Desenvolvido com 💙 e excelência pela <strong>TSI Telecom</strong>

@@ -46,10 +46,10 @@ export function ComparativoPDFExport({
       );
       yPosition += 10;
 
-      // Logo Ortho+
+      // Logo OrthoPlus Enterprise
       pdf.setFontSize(12);
       pdf.setTextColor(0, 150, 136);
-      pdf.text("Ortho+", pageWidth / 2, yPosition, { align: "center" });
+      pdf.text("OrthoPlus Enterprise", pageWidth / 2, yPosition, { align: "center" });
       pdf.setTextColor(0, 0, 0);
       yPosition += 15;
 
@@ -276,7 +276,7 @@ export function ComparativoPDFExport({
         pdf.setFontSize(8);
         pdf.setTextColor(150, 150, 150);
         pdf.text(
-          `Ortho+ | Relatório Comparativo de Radiografias | Página ${i} de ${totalPages}`,
+          `OrthoPlus Enterprise | Relatório Comparativo de Radiografias | Página ${i} de ${totalPages}`,
           pageWidth / 2,
           pageHeight - 10,
           { align: "center" },

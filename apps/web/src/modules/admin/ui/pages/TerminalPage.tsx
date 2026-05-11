@@ -118,7 +118,7 @@ export default function TerminalPage() {
             <ScrollArea className="h-[400px]" ref={scrollRef}>
               <div className="space-y-3">
                 <div className="text-green-400">
-                  Ortho+ Terminal Shell v1.0 - DEMO MODE
+                  OrthoPlus Enterprise Terminal Shell v1.0 - DEMO MODE
                 </div>
                 <div className="text-muted-foreground">
                   Digite 'help' para ver comandos disponíveis

@@ -135,7 +135,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
       <CardHeader>
         <CardTitle>Configuração de Hardware Wallet (Não-Custodial)</CardTitle>
         <CardDescription>
-          O Ortho+ <strong>NUNCA</strong> terá acesso às suas chaves privadas.
+          O OrthoPlus Enterprise <strong>NUNCA</strong> terá acesso às suas chaves privadas.
           Configure sua Hardware Wallet (Trezor, Coldcard, KRUX) para gerar
           endereços de recebimento.
         </CardDescription>

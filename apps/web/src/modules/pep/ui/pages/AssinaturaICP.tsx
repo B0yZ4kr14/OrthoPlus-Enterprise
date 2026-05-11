@@ -339,7 +339,7 @@ export default function AssinaturaICP() {
                   },
                   {
                     type: "e-CNPJ A1",
-                    name: "Clínica Ortho+",
+                    name: "Clínica OrthoPlus Enterprise",
                     serial: "ABCD1234EFGH5678",
                     issuer: "AC Soluti",
                     validUntil: "10/01/2026",

@@ -175,7 +175,7 @@ export default function Configuracoes() {
               <CardTitle>Migração de Dados</CardTitle>
               <CardDescription>
                 Exporte ou importe dados completos da clínica entre instalações
-                do Ortho+
+                do OrthoPlus Enterprise
               </CardDescription>
             </CardHeader>
             <CardContent>

@@ -41,7 +41,7 @@ export function useAssinaturaICP() {
   const certificados: Certificado[] = useMemo(() => [
     { type: "e-CPF A1", name: "João Silva", serial: "1234567890ABCDEF", issuer: "AC Serasa", validUntil: "15/08/2026", status: "active" },
     { type: "e-CPF A3", name: "João Silva", serial: "FEDCBA0987654321", issuer: "AC Certisign", validUntil: "22/12/2025", status: "active" },
-    { type: "e-CNPJ A1", name: "Clínica Ortho+", serial: "ABCD1234EFGH5678", issuer: "AC Soluti", validUntil: "10/01/2026", status: "expiring" },
+    { type: "e-CNPJ A1", name: "Clínica OrthoPlus Enterprise", serial: "ABCD1234EFGH5678", issuer: "AC Soluti", validUntil: "10/01/2026", status: "expiring" },
   ], []);
 
   const certificadosTipos: CertificadoTipo[] = useMemo(() => [

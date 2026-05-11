@@ -32,7 +32,7 @@ export function ProductTour() {
       content: (
         <div className="space-y-2">
           <h2 className="text-lg font-bold text-foreground">
-            Bem-vindo ao Ortho+ 🦷
+            Bem-vindo ao OrthoPlus Enterprise 🦷
           </h2>
           <p className="text-sm text-muted-foreground">
             Tour rápido pelas principais funcionalidades!
@@ -138,7 +138,7 @@ export function ProductTour() {
             Tour Completo! ✨
           </h2>
           <p className="text-sm text-muted-foreground">
-            Você está pronto para usar o Ortho+! Explore todas as
+            Você está pronto para usar o OrthoPlus Enterprise! Explore todas as
             funcionalidades.
           </p>
           <div className="pt-2 border-t border-border">
