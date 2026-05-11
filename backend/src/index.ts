@@ -272,6 +272,7 @@ app.use("/api/split", splitPagamentoRouter); // alias: frontend uses /split/*
 app.use("/api/pep", createPepRouter());
 app.use("/api/pdv", createPdvRouter());
 import { db as pgDb } from "./infrastructure/database/connection";
+import aiRouter from "./modules/ai/api/router";
 app.use("/api/estoque", createInventarioRouter(pgDb));
 app.use("/api/dashboard", createDashboardRouter(pgDb));
 app.use("/api/nfe", createNfeRouter());
@@ -281,6 +282,7 @@ app.use("/api/modules", modulesRouter);
 
 // Agents Module — Integration with Agno Agent Service (Python/FastAPI on port 8000)
 app.use("/api/agents", createAgentsRouter());
+app.use("/api/ai", aiRouter);
 
 // Active modules endpoint: returns module keys for a clinic from the database.
 // Falls back to returning all modules when AUTH_ALLOW_MOCK=true to unblock frontend in dev/test.
