@@ -16,19 +16,14 @@ COPY shared-types ./shared-types
 
 RUN pnpm --filter @orthoplus/shared-types run build
 RUN pnpm --filter orthoplus-backend run build
-
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN cd backend && pnpm prisma generate
 
-# Production stage with gcompat for N-API symbol compatibility
+# Production stage
 FROM node:20-alpine AS production
-
-# Install gcompat (glibc compatibility layer) and other required libs
-RUN apk add --no-cache gcompat libstdc++ openssl
 
 WORKDIR /app
 
-RUN npm install -g pnpm@10.33.0 prisma@6.19.3
+RUN npm install -g pnpm@10.33.0 prisma
 
 COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=builder /app/backend/package.json ./backend/
@@ -40,7 +35,6 @@ COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/shared-types/dist ./shared-types/dist
 COPY --from=builder /app/backend/prisma ./backend/prisma
 
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN cd backend && prisma generate
 
 WORKDIR /app/backend
