@@ -27,14 +27,14 @@ import { PasswordStrengthIndicator } from "@/components/auth/PasswordStrengthInd
 import { Mail, Key } from "lucide-react";
 
 const loginSchema = z.object({
-  email: z.string().email("Email inválido"),
+  email: z.string().min(1, "Informe seu email ou usuário"),
   password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
 });
 
 const signupSchema = z
   .object({
     fullName: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
-    email: z.string().email("Email inválido"),
+    email: z.string().min(1, "Informe seu email ou usuário"),
     password: z
       .string()
       .min(12, "Senha deve ter no mínimo 12 caracteres")
@@ -96,9 +96,24 @@ export default function Auth() {
 
   const handleLogin = async (values: LoginFormValues) => {
     setIsLoading(true);
+    try {
+      const response = await fetch("/api/orthoplus/auth/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: values.email, password: values.password }),
+      });
+      const data = await response.json();
+      if (data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+        window.location.reload();
+        return;
+      }
+    } catch (e) {
+      console.error("Direct login failed, falling back to signIn", e);
+    }
     const { error } = await signIn(values.email, values.password);
     setIsLoading(false);
-
     if (!error) {
       navigate("/");
     }
@@ -194,12 +209,12 @@ export default function Auth() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Email</FormLabel>
+                        <FormLabel className="text-foreground">Email ou Usuário</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input
-                              type="email"
-                              placeholder="seu@email.com"
+                              type="text"
+                              placeholder="seu@email.com ou usuário"
                               className="pl-10"
                               {...field}
                               disabled={isLoading}
@@ -234,10 +249,11 @@ export default function Auth() {
                     )}
                   />
                   <Button 
-                    type="submit" 
+                    type="button" 
                     variant="cta" 
                     className="w-full" 
                     disabled={isLoading}
+                    onClick={() => handleLogin({ email: loginForm.getValues("email"), password: loginForm.getValues("password") })}
                   >
                     {isLoading ? "Entrando..." : "Entrar"}
                   </Button>
@@ -286,7 +302,7 @@ export default function Auth() {
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="seu@email.com"
+                            placeholder="seu@email.com ou usuário"
                             {...field}
                             disabled={isLoading}
                           />
