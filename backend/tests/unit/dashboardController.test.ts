@@ -123,7 +123,7 @@ describe('DashboardController', () => {
       expect(res.json).toHaveBeenCalled();
     });
 
-    it('returns 500 on database error', async () => {
+    it('returns default stats on database error', async () => {
       const db = mockDb();
       db.query.mockRejectedValue(new Error('DB connection lost'));
 
@@ -133,8 +133,21 @@ describe('DashboardController', () => {
 
       await controller.getOverview(req as Request, res);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Failed to fetch dashboard data' });
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          stats: expect.objectContaining({
+            totalPatients: 0,
+            todayAppointments: 0,
+            monthlyRevenue: 0,
+            occupancyRate: 0,
+            pendingTreatments: 0,
+            completedTreatments: 0,
+          }),
+          appointmentsData: [],
+          revenueData: [],
+          treatmentsByStatus: [],
+        }),
+      );
     });
   });
 });

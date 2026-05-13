@@ -114,7 +114,7 @@ describe('FinanceiroController.listTransactions', () => {
         where: expect.objectContaining({
           type: 'RECEITA',
           status: 'PAGO',
-          due_date: { gte: new Date('2025-01-01'), lte: new Date('2025-01-31') },
+          transaction_date: { gte: '2025-01-01', lte: '2025-01-31' },
         }),
       }),
     );

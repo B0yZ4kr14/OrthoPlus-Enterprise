@@ -460,13 +460,13 @@ export class AuthController {
           });
           if (permissions.length > 0) {
             const moduleIds = permissions
-              .filter((p) => p.can_view)
-              .map((p) => p.module_catalog_id);
+              .filter((p: any) => p.can_view)
+              .map((p: any) => p.module_catalog_id);
             const modules = await prisma.module_catalog.findMany({
               where: { id: { in: moduleIds } },
               select: { module_key: true },
             });
-            permissionsData = modules.map((m) => m.module_key);
+            permissionsData = modules.map((m: any) => m.module_key);
           } else {
             permissionsData = [];
           }

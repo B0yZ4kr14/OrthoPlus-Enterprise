@@ -43,8 +43,8 @@ const mockReq = (body = {}, headers = {}, params = {}): Partial<Request> => ({
   params: params as Request['params'],
 });
 
-const JWT_SECRET='<REMOVED>';
-process.env.JWT_SECRET=<REMOVED>
+const JWT_SECRET = '<REMOVED>';
+process.env.JWT_SECRET = '<REMOVED>';
 
 // ── Mock-mode tests (AUTH_ALLOW_MOCK=true) ─────────────────────────────────
 describe('Auth Controller (mock mode)', () => {

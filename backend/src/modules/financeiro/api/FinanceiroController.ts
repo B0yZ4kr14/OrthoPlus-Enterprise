@@ -180,9 +180,10 @@ export class FinanceiroController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
 
-      const { status, category, payment_method, start_date, end_date } = req.query;
+      const { type, status, category, payment_method, start_date, end_date } = req.query;
 
       const where: any = { clinic_id: clinicId }; // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (type) where.type = type;
       if (status) where.status = status;
       if (category) where.category = category;
       if (payment_method) where.payment_method = payment_method;
