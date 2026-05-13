@@ -1,0 +1,17 @@
+# Agents configuration for OrthoPlus Enterprise
+# Usage: kimi --agent-file .kimi/agents.yaml
+version: 1
+agent:
+  extend: default
+  name: orthoplus-agent
+  system_prompt_path: ./.kimi/system.md
+  subagents:
+    deploy:
+      path: ./.kimi/subagents/deploy.yaml
+      description: "Handle VPS deployment tasks"
+    backend:
+      path: ./.kimi/subagents/backend.yaml
+      description: "Implement backend stubs and APIs"
+    qa:
+      path: ./.kimi/subagents/qa.yaml
+      description: "Fix tests and run quality gates"

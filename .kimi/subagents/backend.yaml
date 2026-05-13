@@ -1,0 +1,17 @@
+version: 1
+agent:
+  extend: ../agents.yaml
+  name: orthoplus-backend
+  system_prompt_args:
+    ROLE_ADDITIONAL: |
+      You implement backend APIs for OrthoPlus Enterprise.
+      
+      Tasks:
+      - Audit ~156 endpoints returning 404 across 20 modules
+      - Check if routes are registered in backend/src/index.ts
+      - Check if Prisma models exist in backend/prisma/schema.prisma
+      - Implement missing CRUD controllers
+      - Create Prisma migrations for missing tables
+      - Test endpoints via curl
+      
+      Goal: reduce 404 endpoints from ~156 to under 50.

@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-04-25 | **Branch:** main | **Commit:** a1dfd3d
+> **Atualizado:** 2026-05-13 | **Branch:** main | **Commit:** ca5b92cd4 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md
 
 ---
 
@@ -247,25 +247,30 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ---
 
-## Estado Atual (2026-04-25)
+## Estado Atual (2026-05-13)
 
 ### Concluído
 - ✅ **Supabase eliminado**: `auth.users` removido, `configuracoes.users` é auth nativa
-- ✅ **queryRaw**: zero ocorrências em backend/src (eliminadas — AGENTS.md backend ainda lista justificativas antigas)
-- ✅ **Backend build**: tsc produz erros em `agenda` e `auth` (módulo `@orthoplus/shared-types` não resolvido) — build usa `|| true` então passa mesmo assim
+- ✅ **queryRaw**: zero ocorrências em backend/src
+- ✅ **Backend build**: passa sem erros (tsc + tsc-alias)
+- ✅ **Frontend build**: passa sem erros (vite build)
 - ✅ **Frontend lint**: 0 errors, ~98 warnings
 - ✅ **UI**: PageHeader padronizado, container/padding normalizados (wave-1→wave-3)
 - ✅ **DB decentralizado**: 6 categorias com backup scheduler próprio
+- ✅ **dbRouters registrados**: 6 módulos com `/api/{modulo}/db` (health, stats, backup, maintenance)
+- ✅ **Testes backend**: 345 passando (17 suites), 18 falhando pré-existentes em authController
+- ✅ **Landing page embeddada**: SPA serve landing page em `/` com pricing tiers
+- ✅ **Redesign premium v4**: Completo (StatCards, ChartCards, Sidebar, Dashboard Layout, A11y)
 
 ### Pendências Ativas
-- 🔴 **Backend TS errors**: `agenda` (4 erros Prisma type mismatch), `auth` (1 erro `@orthoplus/shared-types` não encontrado)
-- 🔴 **Frontend TS errors**: `crypto-pagamentos` (múltiplos módulos não encontrados: `@financeiro/components/*`, `./BitcoinInfoSection`), `marketing-auto` (type mismatch), `dentistas` (`horarioAtendimento` inexistente), `usuarios` (SubmitHandler mismatch), `tour` (@ts-expect-error inútil)
-- 🟡 **Secrets em repo**: `backend/.env` e `ecosystem.json` contêm JWT_SECRET e OPENROUTER_API_KEY — rotacionar e remover do git
+- 🔴 **Deploy VPS desatualizado**: Código VPS em commit `86a3841`, local em `ca5b92cd4`. Build Docker quebra no VPS.
+- 🔴 **~156 endpoints stubs 404**: 20 módulos retornam 404. Alguns têm controllers mas faltam tabelas Prisma.
+- 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour`
+- 🟡 **Secrets em repo**: `backend/.env` e `ecosystem.json` — rotacionar e remover do git
 - 🟡 **PostgreSQL user**: Backend conecta como `postgres` (superuser). Criar role `orthoplus`.
 - 🟡 **Prisma relations faltantes**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
-- 🟡 **CI misto**: alguns workflows usam `npm ci`, outros `pnpm` — inconsistente
-- 🟡 **package.json workspaces**: não inclui `backend` e `shared-types` (diverge de `pnpm-workspace.yaml`)
-- 🟡 **@orthoplus/shared-types**: importado por backend/frontend mas pode não estar buildado/linkado no workspace
+- 🟡 **CI misto**: alguns workflows usam `npm ci`, outros `pnpm`
+- 🟡 **package.json workspaces**: não inclui `backend` e `shared-types`
 
 ### Cobertura de Testes
 - **Backend**: 17 módulos com unit tests (jest); 19 sem cobertura; threshold global 20%
@@ -273,16 +278,38 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - **E2E**: 37 specs Playwright — cobertura de fluxo boa; ver `tests/e2e/AGENTS.md`
 
 ### Commits Recentes
-- `a1dfd3d` — fix(pep): move actions into PageHeader actions prop
-- `0285f94` — fix(frontend): remove double padding from 12 module pages
-- `3a12957` — fix(frontend): remove container mx-auto from all module page wrappers
-- `6904baf` — feat(ui): standardize PageHeader across all module pages
-- `65a47fd` — fix(db-management): apply all 7 decentralized DB management fixes
+- `ca5b92cd4` — feat(backend): register per-module dbRouters for decentralized DB management
+- `8b3edaf74` — fix(tests): resolve backend test failures and TypeScript errors
+- `89aa4853` — fix(docker): update Dockerfile and nginx-frontend.conf for v2.5 deploy
+- `65a855b0` — fix(backend): resolve TypeScript errors and remove || true workaround
+- `22fb95c1` — fix(auth): add enabled guard to useSidebarBadges
+
+---
+
+## Checkpoint de Sessão (2026-05-13)
+
+### Memória Persistente
+- **TSi-Vault checkpoint:** `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md`
+- **TSi-Vault orquestração:** `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
+
+### Contexto de Deploy
+- **Imagem frontend atual:** `orthoplus-frontend:v2.5`
+- **Imagem backend atual:** `orthoplus-backend:v2`
+- **Container frontend:** `tsiapp-orthoplus` (porta 8083)
+- **Container backend:** `tsiapp-orthoplus-backend` (porta 3005)
+- **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }`
+
+### Como Continuar
+1. Ler checkpoint no TSi-Vault
+2. Verificar `git log --oneline -3` e `git status`
+3. Rodar builds: `cd backend && npm run build`, `cd apps/web && pnpm run build`
+4. Rodar testes: `cd backend && npm test` (esperado: 16 suites OK)
+5. Consultar `.sisyphus/plans/db-descentralizado-por-categoria.md` para plano ativo
 
 ---
 
 ## Contatos e Suporte
 
 - Repositório: `B0yZ4kr14/OrthoPlus-Enterprise`
-- Deploy: VPS `vps-tsi-02` via Tailscale
+- Deploy: VPS `tsiapp.io` via Cloudflare
 - Documentação: Obsidian Vault + `docs/` no repo

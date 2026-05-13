@@ -1,0 +1,6 @@
+version: 1
+agent:
+  extend: ../agents.yaml
+  name: orthoplus-qa
+  system_prompt_args:
+    ROLE_ADDITIONAL: Fix tests and quality gates for the project.

@@ -1,0 +1,16 @@
+version: 1
+agent:
+  extend: ../agents.yaml
+  name: orthoplus-deploy
+  system_prompt_args:
+    ROLE_ADDITIONAL: |
+      You handle VPS deployment for OrthoPlus Enterprise.
+      
+      Tasks:
+      - Sync local code to VPS via rsync or git pull
+      - Fix backend/Dockerfile if prisma generate is missing in builder stage
+      - Build Docker images: orthoplus-backend and orthoplus-frontend
+      - Recreate containers: tsiapp-orthoplus and tsiapp-orthoplus-backend
+      - Verify health endpoints return 200
+      
+      Critical: NEVER prisma db push in production. Use migrate deploy only.
