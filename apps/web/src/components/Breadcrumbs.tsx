@@ -92,7 +92,7 @@ export function Breadcrumbs() {
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </BreadcrumbSeparator>
               {isLast ? (
-                <BreadcrumbPage className="font-semibold text-foreground px-2 py-1 rounded-lg bg-primary/10">
+                <BreadcrumbPage className="font-semibold text-foreground px-2.5 py-1 rounded-lg bg-[hsl(var(--interactive))]/10 text-[hsl(var(--interactive))] shadow-[0_0_8px_hsl(var(--interactive)/0.08)]">
                   {label}
                 </BreadcrumbPage>
               ) : (

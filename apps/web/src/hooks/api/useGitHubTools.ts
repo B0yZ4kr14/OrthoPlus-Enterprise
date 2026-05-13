@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 
-interface Repository {
+export interface Repository {
   id: string;
   name: string;
   full_name: string;

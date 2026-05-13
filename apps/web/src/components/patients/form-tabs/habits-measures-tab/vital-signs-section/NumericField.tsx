@@ -26,7 +26,7 @@ export function NumericField({ form, field }: NumericFieldProps) {
               step={field.step || "1"}
               placeholder={field.placeholder}
               {...formField}
-              value={formField.value || ""}
+              value={String(formField.value || "")}
               disabled={field.disabled}
               onChange={(e) =>
                 formField.onChange(e.target.value ? parseFloat(e.target.value) : null)

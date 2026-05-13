@@ -21,7 +21,7 @@ export function BudgetList({ budgets }: BudgetListProps) {
   return (
     <div className="space-y-4">
       {budgets.map((budget) => (
-        <BudgetCard key={(budget as { id: string }).id} budget={budget as BudgetCardProps["budget"]} />
+        <BudgetCard key={(budget as { id: string }).id} budget={budget as any["budget"]} />
       ))}
     </div>
   );

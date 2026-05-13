@@ -1,6 +1,5 @@
 // cspell:disable
-// @ts-expect-error — TS2305, TS2613
-import type { Step } from "react-joyride";
+type Step = any;
 
 export const tourSteps: Step[] = [
   {
@@ -17,7 +16,6 @@ export const tourSteps: Step[] = [
       </div>
     ),
     placement: "center",
-    // @ts-expect-error — TS2353
     disableBeacon: true,
   },
   {

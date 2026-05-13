@@ -40,12 +40,12 @@ export function useGlobalSearch() {
 
       const [patients, appointments, procedures] = await Promise.all([
         apiClient
-          .get<Patient[]>(
+          .get<any[]>(
             `/patients?clinic_id=eq.${clinicId}&or=(full_name.ilike.%25${query}%25,cpf.ilike.%25${query}%25)&limit=3&select=id,full_name,cpf`,
           )
           .catch(() => null),
         apiClient
-          .get<Appointment[]>(
+          .get<any[]>(
             `/appointments?clinic_id=eq.${clinicId}&title=ilike.%25${query}%25&limit=3&select=id,title,start_time`,
           )
           .catch(() => null),
@@ -60,8 +60,8 @@ export function useGlobalSearch() {
         searchResults.push(
           ...patients.map((p) => ({
             id: p.id,
-            title: (p as unknown as { full_name: string }).full_name || "",
-            subtitle: p.cpf || "",
+            title: (p as any).full_name || "",
+            subtitle: (p as any).cpf || "",
             type: "patient" as const,
             route: `/pacientes/${p.id}`,
             icon: User,
@@ -73,8 +73,8 @@ export function useGlobalSearch() {
         searchResults.push(
           ...appointments.map((a) => ({
             id: a.id,
-            title: a.title,
-            subtitle: new Date(a.start_time).toLocaleDateString("pt-BR"),
+            title: (a as any).title,
+            subtitle: new Date((a as any).start_time).toLocaleDateString("pt-BR"),
             type: "appointment" as const,
             route: `/agenda`,
             icon: Calendar,
@@ -86,7 +86,7 @@ export function useGlobalSearch() {
         searchResults.push(
           ...procedures.map((p) => ({
             id: p.id,
-            title: p.nome,
+            title: p.nome || "",
             subtitle: p.codigo || "Procedimento",
             type: "procedure" as const,
             route: `/procedimentos`,

@@ -61,7 +61,7 @@ export const NotificationDropdown = () => {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent align="end" className="w-80 glass-card border-border/50">
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Notificações</span>
           {unreadCount > 0 && (
@@ -80,7 +80,7 @@ export const NotificationDropdown = () => {
         <DropdownMenuSeparator />
         <ScrollArea className="h-[400px]">
           {notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+            <div className="flex flex-col items-center justify-center py-8 text-muted-foreground glass-card rounded-xl m-2">
               <Bell className="h-12 w-12 mb-2 opacity-50" />
               <p className="text-sm">Nenhuma notificação</p>
             </div>

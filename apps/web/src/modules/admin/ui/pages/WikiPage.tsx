@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { BookText, Plus, Search, Edit, Trash2, Eye, Clock } from "lucide-react";
+import { BookText, Plus, Search, Edit, Trash2, Eye, Clock, CheckCircle, FolderOpen } from "lucide-react";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
   Card,
@@ -166,29 +167,28 @@ export default function WikiPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageHeader
-          title="Wiki Interna"
-          description="Documentação e base de conhecimento da clínica"
-          icon={BookText}
-        />
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              onClick={() => {
-                setEditingPage(null);
-                setFormData({
-                  title: "",
-                  content: "",
-                  category: "general",
-                  is_published: false,
-                });
-              }}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nova Página
-            </Button>
-          </DialogTrigger>
+      <PageHeader
+        title="Wiki Interna"
+        description="Documentação e base de conhecimento da clínica"
+        icon={BookText}
+        actions={
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                onClick={() => {
+                  setEditingPage(null);
+                  setFormData({
+                    title: "",
+                    content: "",
+                    category: "general",
+                    is_published: false,
+                  });
+                }}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Nova Página
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
@@ -274,6 +274,28 @@ export default function WikiPage() {
             </div>
           </DialogContent>
         </Dialog>
+      }
+      ></PageHeader>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <StatsCard
+          title="Total de Páginas"
+          value={pages.length}
+          icon={BookText}
+          variant="primary"
+        />
+        <StatsCard
+          title="Publicadas"
+          value={pages.filter((p) => p.is_published).length}
+          icon={CheckCircle}
+          variant="success"
+        />
+        <StatsCard
+          title="Categorias"
+          value={categories.length}
+          icon={FolderOpen}
+          variant="default"
+        />
       </div>
 
       <div className="flex gap-4">
@@ -367,7 +389,7 @@ export default function WikiPage() {
       </div>
 
       {filteredPages.length === 0 && (
-        <Card>
+        <Card variant="elevated" className="glass-card">
           <CardContent className="text-center py-12">
             <BookText className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
             <p className="text-lg font-medium">Nenhuma página encontrada</p>

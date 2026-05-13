@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { Plus, Package, AlertTriangle, TrendingDown } from "lucide-react";
+import { Plus, Package, AlertTriangle, TrendingDown, List, Archive, AlertOctagon } from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { useProdutos } from "../../presentation/hooks";
 import { ProdutoList } from "../components/ProdutoList";
 import { ProdutoForm } from "../components/ProdutoForm";
 import { MovimentacaoForm } from "../components/MovimentacaoForm";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { StatsCard } from "@/components/shared/StatsCard";
+import { Card } from "@orthoplus/core-ui/card";
 // @ts-expect-error — TS2307
 import type { Produto } from "../../domain/entities/Produto";
 
@@ -31,122 +32,109 @@ export const EstoquePage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <PageHeader 
-        icon={Package} 
-        title="Controle de Estoque" 
-        description="Gerencie produtos, movimentações e alertas" 
+      <PageHeader
+        icon={Package}
+        title="Controle de Estoque"
+        description="Gerencie produtos, movimentações e alertas"
         actions={
-          <Button onClick={() => setShowProdutoForm(true)}>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button onClick={() => setShowProdutoForm(true)} className="gap-2 glow-interactive">
+            <Plus className="h-4 w-4" />
             Novo Produto
           </Button>
-        } 
+        }
       />
 
-      {/* Métricas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total de Produtos
-            </CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{produtos.length}</div>
-            <p className="text-xs text-muted-foreground">itens cadastrados</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Valor Total</CardTitle>
-            <TrendingDown className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(valorTotalEstoque)}
-            </div>
-            <p className="text-xs text-muted-foreground">em estoque</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Estoque Baixo</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-warning" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-warning">
-              {produtosEstoqueBaixo.length}
-            </div>
-            <p className="text-xs text-muted-foreground">produtos em alerta</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Estoque Zerado
-            </CardTitle>
-            <AlertTriangle className="h-4 w-4 text-destructive" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-destructive">
-              {produtosZerados.length}
-            </div>
-            <p className="text-xs text-muted-foreground">produtos zerados</p>
-          </CardContent>
-        </Card>
+      {/* Métricas Premium */}
+      <div className="grid gap-4 md:grid-cols-4">
+        <StatsCard
+          title="Total de Produtos"
+          value={produtos.length}
+          icon={Package}
+          variant="primary"
+          description="itens cadastrados"
+        />
+        <StatsCard
+          title="Valor Total"
+          value={new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valorTotalEstoque)}
+          icon={TrendingDown}
+          variant="success"
+          description="em estoque"
+        />
+        <StatsCard
+          title="Estoque Baixo"
+          value={produtosEstoqueBaixo.length}
+          icon={AlertTriangle}
+          variant="warning"
+          description="produtos em alerta"
+        />
+        <StatsCard
+          title="Estoque Zerado"
+          value={produtosZerados.length}
+          icon={AlertOctagon}
+          variant="danger"
+          description="produtos zerados"
+        />
       </div>
 
-      {/* Tabs */}
-      <Tabs defaultValue="todos" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="todos">Todos os Produtos</TabsTrigger>
-          <TabsTrigger value="alertas">
+      {/* Tabs Premium */}
+      <Tabs defaultValue="todos" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 bg-muted/30 backdrop-blur-sm border border-border/50 rounded-xl p-1">
+          <TabsTrigger value="todos" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+            <List className="h-4 w-4" />
+            Todos ({produtos.length})
+          </TabsTrigger>
+          <TabsTrigger value="alertas" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+            <AlertTriangle className="h-4 w-4" />
             Alertas ({produtosEstoqueBaixo.length})
           </TabsTrigger>
-          <TabsTrigger value="zerados">
+          <TabsTrigger value="zerados" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+            <Archive className="h-4 w-4" />
             Zerados ({produtosZerados.length})
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="todos" className="space-y-4">
-          <ProdutoList
-            produtos={produtos as unknown as Produto[]}
-            isLoading={isLoading}
-            onMovimentacao={handleOpenMovimentacao}
-          />
+        <TabsContent value="todos" className="mt-6">
+          <Card className="glass-card overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <div className="p-1">
+              <ProdutoList
+                produtos={produtos as unknown as Produto[]}
+                isLoading={isLoading}
+                onMovimentacao={handleOpenMovimentacao}
+              />
+            </div>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="alertas" className="space-y-4">
-          <ProdutoList
-            produtos={produtosEstoqueBaixo as unknown as Produto[]}
-            isLoading={isLoading}
-            onMovimentacao={handleOpenMovimentacao}
-          />
+        <TabsContent value="alertas" className="mt-6">
+          <Card className="glass-card overflow-hidden border-l-warning/40">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+            <div className="p-1">
+              <ProdutoList
+                produtos={produtosEstoqueBaixo as unknown as Produto[]}
+                isLoading={isLoading}
+                onMovimentacao={handleOpenMovimentacao}
+              />
+            </div>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="zerados" className="space-y-4">
-          <ProdutoList
-            produtos={produtosZerados as unknown as Produto[]}
-            isLoading={isLoading}
-            onMovimentacao={handleOpenMovimentacao}
-          />
+        <TabsContent value="zerados" className="mt-6">
+          <Card className="glass-card overflow-hidden border-l-destructive/40">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--destructive))] to-transparent opacity-40" />
+            <div className="p-1">
+              <ProdutoList
+                produtos={produtosZerados as unknown as Produto[]}
+                isLoading={isLoading}
+                onMovimentacao={handleOpenMovimentacao}
+              />
+            </div>
+          </Card>
         </TabsContent>
       </Tabs>
 
-      {/* Dialogs */}
       {showProdutoForm && (
-        <ProdutoForm
-          open={showProdutoForm}
-          onClose={() => setShowProdutoForm(false)}
-        />
+        <ProdutoForm open={showProdutoForm} onClose={() => setShowProdutoForm(false)} />
       )}
 
       {showMovimentacaoForm && selectedProdutoId && (

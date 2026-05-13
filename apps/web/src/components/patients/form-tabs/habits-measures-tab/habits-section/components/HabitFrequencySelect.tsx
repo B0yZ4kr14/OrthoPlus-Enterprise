@@ -38,7 +38,7 @@ export function HabitFrequencySelect({
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} value={field.value || ""}>
+          <Select onValueChange={field.onChange} value={String(field.value || "")}>
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Selecione" />

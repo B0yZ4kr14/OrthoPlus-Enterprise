@@ -25,7 +25,7 @@ export function useAuditLogs() {
 
       const moduleIds =
         data?.map((log) => log.module_catalog_id).filter(Boolean) || [];
-      let modulesMap: Record<number, unknown> = {};
+      let modulesMap: Record<number, { name: string }> = {};
 
       if (moduleIds.length > 0) {
         const modulesData = await apiClient.get<Record<string, unknown>[]>(
@@ -47,13 +47,12 @@ export function useAuditLogs() {
           details: (log.details as Record<string, unknown>) || {},
           user: {
             full_name:
-              (log.user as Record<string, unknown>)?.full_name?.[0]?.full_name ||
+              (log.user as any)?.full_name ||
               "Desconhecido",
           },
           target_user: {
             full_name:
-              (log.target_user as Record<string, unknown>)?.full_name?.[0]
-                ?.full_name || "Desconhecido",
+              (log.target_user as any)?.full_name || "Desconhecido",
           },
           module: log.module_catalog_id
             ? modulesMap[log.module_catalog_id as number]

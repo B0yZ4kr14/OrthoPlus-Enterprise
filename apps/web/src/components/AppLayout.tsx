@@ -6,6 +6,7 @@ import { GlobalSearch } from "@/components/layout/GlobalSearch";
 import { Sheet, SheetContent } from "@orthoplus/core-ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useFocusMode } from "@/hooks/useFocusMode";
+import { SkipLink } from "@/components/SkipLink";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -24,6 +25,7 @@ export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
 
   return (
     <SidebarProvider>
+      <SkipLink />
       <div className="flex min-h-screen w-full bg-background">
         {!isMobile && !isFocusMode && (
           <nav data-tour="sidebar" className="transition-all duration-300 ease-out">
@@ -48,9 +50,9 @@ export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
             </header>
           )}
 
-          <main className={contentClassName}>
+          <main id="main-content" className={contentClassName}>
             {isFocusMode && !isMobile && (
-              <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-4 py-2 rounded-lg border border-border">
+              <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground glass-card px-4 py-2 rounded-lg">
                 <div className="h-2 w-2 rounded-full bg-interactive animate-pulse" />
                 <span>Modo Foco Ativo - Digitando...</span>
               </div>

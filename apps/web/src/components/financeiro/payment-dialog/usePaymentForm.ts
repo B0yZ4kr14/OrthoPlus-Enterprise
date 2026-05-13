@@ -35,14 +35,14 @@ export function usePaymentForm(conta: ContaReceber) {
     return {
       valorNumerico,
       dadosPagamento:
-        metodo === "PIX"
+        (metodo === "PIX"
           ? { pix_key: pixKey }
           : {
               card_number: cardFields.number,
               card_holder: cardFields.holder,
               card_expiry: cardFields.expiry,
               card_cvv: cardFields.cvv,
-            },
+            }) as Record<string, string>,
     };
   }, [metodo, valor, pixKey, cardFields]);
 

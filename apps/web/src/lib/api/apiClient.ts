@@ -27,14 +27,17 @@ class ApiClient {
   }
 
   private setupInterceptors() {
-    // Request interceptor — inject Bearer token from localStorage
-    this.client.interceptors.request.use((config) => {
-      const token = localStorage.getItem("accessToken");
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    });
+    // Request interceptor — inject accessToken from localStorage when available
+    this.client.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("accessToken");
+        if (token && config.headers) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error),
+    );
 
     // Response interceptor — log errors but do NOT show toast here.
     // Callers (AuthContext, hooks) handle their own user-facing toasts.

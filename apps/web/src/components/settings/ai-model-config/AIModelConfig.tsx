@@ -28,7 +28,7 @@ export function AIModelConfig() {
     saveConfig,
     toggleShowKey,
     updateConfig,
-  } = useAIModelConfig({ selectedClinic });
+  } = useAIModelConfig({ selectedClinic: selectedClinic?.id || null });
 
   if (loading) {
     return (
@@ -69,7 +69,7 @@ export function AIModelConfig() {
               key={field.key}
               label={field.label}
               placeholder={field.placeholder}
-              value={config[field.key] || ""}
+              value={(config[field.key] as string) || ""}
               show={!!showKeys[field.key]}
               onChange={(value) => updateConfig({ [field.key]: value })}
               onToggleShow={() => toggleShowKey(field.key)}

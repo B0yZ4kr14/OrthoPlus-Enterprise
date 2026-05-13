@@ -1,4 +1,1 @@
-// TODO: Implement CryptoComparativeView
-export function CryptoComparativeView() {
-  return null;
-}
+export { CryptoComparativeView } from "@/modules/financeiro/ui/views/crypto/CryptoComparativeView";

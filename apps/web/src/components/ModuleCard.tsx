@@ -21,13 +21,13 @@ export function ModuleCard({
     <Card
       variant="interactive"
       depth="normal"
-      className="p-6 hover:-translate-y-1 active:translate-y-0 transition-all duration-300 ease-out hover:shadow-card-hover group"
+      className="p-6 glass-card hover:-translate-y-2 active:translate-y-0 transition-all duration-500 ease-out hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.15)] group"
       onClick={onClick}
     >
       <div className="flex flex-col items-center gap-4 text-center">
         <div
           className={cn(
-            "w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-110",
+            "w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg shadow-black/10 transition-all duration-500 hover:shadow-xl hover:shadow-black/15 hover:scale-110",
             "group-hover:shadow-[var(--shadow-card)]",
             color,
           )}

@@ -55,7 +55,7 @@ export function DashboardHeader({
       <HotkeysHelp />
       <header
         className={cn(
-          "sticky top-0 z-50 w-full bg-card border-b border-border",
+          "sticky top-0 z-50 w-full bg-card/80 backdrop-blur-xl border-b border-border/50 shadow-sm",
           className,
         )}
       >
@@ -128,7 +128,7 @@ export function DashboardHeader({
                   className="gap-2 h-9 px-2"
                   data-tour="user-menu"
                 >
-                  <Avatar className="h-7 w-7 border-2 border-border">
+                  <Avatar className="h-7 w-7 border-2 border-border shadow-[0_0_8px_hsl(var(--interactive)/0.2)]">
                     {(() => {
                       if (!user || !("user_metadata" in user)) return null;
                       const meta = user.user_metadata as Record<string, unknown> | undefined;
@@ -155,7 +155,7 @@ export function DashboardHeader({
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-56 glass-card border-border/50">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium">{user?.email}</p>

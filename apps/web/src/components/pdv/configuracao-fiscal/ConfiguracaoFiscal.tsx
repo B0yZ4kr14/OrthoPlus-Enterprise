@@ -22,7 +22,7 @@ export function ConfiguracaoFiscal() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card className="p-6">
-        <ConfigHeader config={fiscalConfig} />
+        <ConfigHeader config={fiscalConfig || null} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <AmbienteSelect value={formData.ambiente} onChange={(v) => updateFormData("ambiente", v)} />

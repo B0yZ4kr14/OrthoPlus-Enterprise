@@ -45,7 +45,7 @@ export interface Session {
 
 type UserProfile = "ADMIN" | "MEMBER" | "PATIENT";
 
-interface PatientUser {
+export interface PatientUser {
   id: string;
   email: string;
   role: "PATIENT";
@@ -216,8 +216,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setClinicId(null);
         }
       } catch (error) {
-        setSession(null);
-        setUser(null);
+        // Fallback: if accessToken exists in localStorage, try to fetch user profile directly
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+          try {
+            const userData = await apiClient.get<{ user?: User }>("/auth/profile");
+            if (userData.user) {
+              setSession({ access_token: token });
+              setUser(userData.user);
+              fetchUserMetadata(userData.user.id);
+            } else {
+              setSession(null);
+              setUser(null);
+              setUserRole(null);
+              setClinicId(null);
+            }
+          } catch {
+            setSession(null);
+            setUser(null);
+            setUserRole(null);
+            setClinicId(null);
+          }
+        } else {
+          setSession(null);
+          setUser(null);
+          setUserRole(null);
+          setClinicId(null);
+        }
       } finally {
         setLoading(false);
       }
@@ -264,7 +289,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // The backend sets an HttpOnly cookie on successful login.
       // We only need to update the in-memory state here.
-      setSession(response.access_token ? { access_token: response.access_token } : { access_token: "cookie" });
+      setSession(response.access_token || (response as any).accessToken ? { access_token: response.access_token || (response as any).accessToken } : { access_token: "cookie" });
       setUser(response.user ?? null);
       toast.success("Login realizado com sucesso!");
 

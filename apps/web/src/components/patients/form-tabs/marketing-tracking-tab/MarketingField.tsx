@@ -37,7 +37,7 @@ export function MarketingField({ form, field }: MarketingFieldProps) {
             {field.label}
           </FormLabel>
           <FormControl>
-            <Input placeholder={field.placeholder} {...formField} value={formField.value || ""} />
+            <Input placeholder={field.placeholder} {...formField} value={String(formField.value || "")} />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />

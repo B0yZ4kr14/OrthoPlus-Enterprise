@@ -22,7 +22,7 @@ export function HabitToggle({ name, label, control }: HabitToggleProps) {
         <FormItem className="flex flex-row items-start space-x-3 space-y-0">
           <FormControl>
             <Checkbox
-              checked={field.value || false}
+              checked={!!field.value}
               onCheckedChange={field.onChange}
             />
           </FormControl>

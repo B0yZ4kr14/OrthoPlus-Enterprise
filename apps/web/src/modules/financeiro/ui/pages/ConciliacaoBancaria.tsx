@@ -113,7 +113,6 @@ export default function ConciliacaoBancaria() {
 
   return (
     <div className="space-y-6">
-      {/* @ts-expect-error — TS2741 */}
       <PageHeader
         title="Conciliação Bancária"
         description="Reconcilie lançamentos bancários com contas a receber automaticamente"
@@ -150,8 +149,7 @@ export default function ConciliacaoBancaria() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <Filter className="h-5 w-5 text-muted-foreground" />
-            {/* @ts-expect-error — TS2345 */}
-            <Select value={filtro} onValueChange={(v: unknown) => setFiltro(v)}>
+            <Select value={filtro} onValueChange={(v) => setFiltro(v as "TODOS" | "CONCILIADO" | "PENDENTE")}>
               <SelectTrigger className="w-[200px]">
                 <SelectValue />
               </SelectTrigger>

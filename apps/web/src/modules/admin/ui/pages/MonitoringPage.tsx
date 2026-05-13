@@ -7,6 +7,7 @@ import {
   Clock,
   AlertTriangle,
 } from "lucide-react";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
   Card,
@@ -118,54 +119,30 @@ export default function MonitoringPage() {
 
       {/* System Health Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Uptime (30 dias)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-green-500">{uptime}</div>
-            <p className="text-xs text-muted-foreground mt-1">Target: 99.9%</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Status Geral
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-2xl font-bold">Operational</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Todos os sistemas funcionando
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Último Incidente
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{lastIncident}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Manutenção programada
-            </p>
-          </CardContent>
-        </Card>
+        <StatsCard
+          title="Uptime (30 dias)"
+          value={uptime}
+          icon={Clock}
+          variant="success"
+        />
+        <StatsCard
+          title="Status Geral"
+          value="Operational"
+          icon={Activity}
+          variant="primary"
+        />
+        <StatsCard
+          title="Último Incidente"
+          value={lastIncident}
+          icon={AlertTriangle}
+          variant="warning"
+        />
       </div>
 
       {/* Detailed Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {metrics.map((metric) => (
-          <Card key={metric.name}>
+          <Card key={metric.name} variant="elevated">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{metric.name}</CardTitle>
@@ -208,7 +185,7 @@ export default function MonitoringPage() {
       </div>
 
       {/* Recent Alerts */}
-      <Card>
+      <Card variant="elevated" className="glass-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5" />

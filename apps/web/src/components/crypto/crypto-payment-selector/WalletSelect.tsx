@@ -24,7 +24,7 @@ export function WalletSelect({ wallets, value, onChange }: WalletSelectProps) {
         </SelectTrigger>
         <SelectContent>
           {wallets.map((wallet) => (
-            <SelectItem key={wallet.id} value={wallet.id}>
+            <SelectItem key={wallet.id} value={wallet.id || ""}>
               {wallet.wallet_name}
               <Badge variant="outline" className="ml-2">
                 {wallet.type === "exchange" ? "Exchange" : "Offline"}

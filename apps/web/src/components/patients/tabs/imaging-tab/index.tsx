@@ -16,6 +16,10 @@ export {
 };
 export { usePatientImages };
 
+const ImageCardPlaceholder = (props: any) => <div {...props} />;
+
+const ImageCard = (props: any) => <div {...props} />;
+
 export function ImagingTab({ patientId }: ImagingTabProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { data: images, isLoading } = usePatientImages(patientId);
@@ -25,7 +29,7 @@ export function ImagingTab({ patientId }: ImagingTabProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <ImageCardPlaceholder className="space-y-6">
       <ImagingHeader />
 
       {selectedImage && (
@@ -40,6 +44,6 @@ export function ImagingTab({ patientId }: ImagingTabProps) {
       ) : (
         <EmptyState />
       )}
-    </div>
+    </ImageCardPlaceholder>
   );
 }

@@ -1,10 +1,10 @@
-import type { ClinicalTheme, ClinicalThemeConfig } from "@/themes/clinical";
+import type { ClinicalTheme } from "@/themes/clinical";
 
-export type { ClinicalTheme, ClinicalThemeConfig };
+export type { ClinicalTheme };
 
 export interface ThemeCardProps {
   themeKey: string;
-  theme: ClinicalThemeConfig;
+  theme: any;
   isSelected: boolean;
 }
 

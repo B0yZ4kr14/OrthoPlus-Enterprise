@@ -15,7 +15,7 @@ interface PaymentMethodTabsProps {
     expiry: string;
     cvv: string;
   };
-  onCardFieldChange: (field: keyof CardPaymentForm["cardFields"], value: string) => void;
+  onCardFieldChange: (field: any, value: string) => void;
   onCardTypeChange: (type: PaymentMethod) => void;
 }
 

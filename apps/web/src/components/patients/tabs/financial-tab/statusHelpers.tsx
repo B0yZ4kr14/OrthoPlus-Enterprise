@@ -1,13 +1,13 @@
 import { Badge } from "@orthoplus/core-ui/badge";
-import type { PaymentStatusConfig, BudgetStatusConfig } from "./types";
+import type { PaymentStatus, BudgetStatus } from "./types";
 
-const PAYMENT_STATUS_CONFIG: Record<string, PaymentStatusConfig> = {
+const PAYMENT_STATUS_CONFIG: Record<string, any> = {
   em_dia: { label: "Em Dia", variant: "default" },
   pendente: { label: "Pendente", variant: "secondary" },
   atrasado: { label: "Atrasado", variant: "destructive" },
 };
 
-const BUDGET_STATUS_CONFIG: Record<string, BudgetStatusConfig> = {
+const BUDGET_STATUS_CONFIG: Record<string, any> = {
   aprovado: { label: "Aprovado", variant: "default" },
   pendente: { label: "Pendente", variant: "secondary" },
   rejeitado: { label: "Rejeitado", variant: "destructive" },

@@ -10,7 +10,7 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit as any)} className="space-y-6">
         <FormFields user={user} />
         <FormActions isLoading={isLoading} isEditing={!!user} onCancel={onCancel} />
       </form>

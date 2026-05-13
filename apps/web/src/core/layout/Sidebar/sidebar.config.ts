@@ -1,5 +1,5 @@
 /**
- * SIDEBAR CONFIGURATION V6 - OrthoPlus Enterprise
+ * SIDEBAR CONFIGURATION V6 - Ortho+
  * Clean structure, zero duplicate icons
  */
 
@@ -25,7 +25,6 @@ import {
   Megaphone,
   UserCircle,
   BarChart3,
-  LineChart,
   Package,
   LayoutGrid,
   History,
@@ -230,7 +229,7 @@ export const menuGroups: MenuGroup[] = [
       {
         title: "Dashboard Comercial",
         url: "/dashboards/comercial",
-        icon: LineChart,
+        icon: TrendingUp,
         moduleKey: "BI",
       },
     ],

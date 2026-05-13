@@ -1,7 +1,9 @@
-import { memo } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { Card, CardContent } from "@orthoplus/core-ui/card";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { fadeUp, useAccessibleAnimation } from "@/lib/animations";
 
 interface StatCardMemoProps {
   title: string;
@@ -13,73 +15,125 @@ interface StatCardMemoProps {
   };
   subtitle?: string;
   variant?: "blue" | "purple" | "green" | "orange" | "red";
+  index?: number;
 }
 
-// ✅ FASE 3: Componente otimizado com React.memo
+function useCountUp(value: string | number) {
+  const target = useMemo(() => {
+    if (typeof value === "number") return value;
+    const cleaned = value
+      .replace(/R\$\s?/g, "")
+      .replace(/%/g, "")
+      .replace(/\./g, "")
+      .replace(/,/g, ".");
+    const parsed = parseFloat(cleaned);
+    return isNaN(parsed) ? null : parsed;
+  }, [value]);
+
+  const isCurrency = typeof value === "string" && value.startsWith("R$");
+  const isPercent = typeof value === "string" && value.endsWith("%");
+
+  const count = useMotionValue(0);
+  const spring = useSpring(count, {
+    stiffness: 100,
+    damping: 30,
+  });
+
+  useEffect(() => {
+    if (target !== null) {
+      count.set(target);
+    }
+  }, [count, target]);
+
+  const display = useTransform(spring, (latest) => {
+    if (target === null) return String(value);
+    const num = Math.round(latest);
+    if (isCurrency) return "R$ " + num.toLocaleString("pt-BR");
+    if (isPercent) return num + "%";
+    return num.toLocaleString("pt-BR");
+  });
+
+  return { display, hasAnimation: target !== null };
+}
+
 export const StatCardMemo = memo(function StatCardMemo({
   title,
   value,
   icon: Icon,
   trend,
   subtitle,
-  variant = "blue",
+  index = 0,
 }: StatCardMemoProps) {
-  const variantStyles = {
-    blue: "border-blue-500/30 hover:border-blue-500/50 bg-gradient-to-br from-blue-500/5 to-transparent",
-    purple:
-      "border-purple-500/30 hover:border-purple-500/50 bg-gradient-to-br from-purple-500/5 to-transparent",
-    green:
-      "border-green-500/30 hover:border-green-500/50 bg-gradient-to-br from-green-500/5 to-transparent",
-    orange:
-      "border-orange-500/30 hover:border-orange-500/50 bg-gradient-to-br from-orange-500/5 to-transparent",
-    red: "border-red-500/30 hover:border-red-500/50 bg-gradient-to-br from-red-500/5 to-transparent",
-  };
-
-  const iconBgStyles = {
-    blue: "bg-blue-500",
-    purple: "bg-purple-500",
-    green: "bg-green-500",
-    orange: "bg-orange-500",
-    red: "bg-red-500",
-  };
+  const { display, hasAnimation } = useCountUp(value);
+  const accessible = useAccessibleAnimation();
 
   return (
-    <Card
-      className={cn(
-        "relative overflow-hidden transition-all hover:shadow-lg border-2",
-        variantStyles[variant],
-      )}
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      transition={{ delay: index * 0.08, ...(accessible.transition || {}) }}
     >
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-2 flex-1">
-            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-              {title}
-            </p>
-            <p className="text-3xl font-bold">{value}</p>
-
-            {trend && (
-              <div className="flex items-center gap-1 text-sm">
-                <span
-                  className={cn(
-                    "font-medium",
-                    trend.isPositive ? "text-green-500" : "text-red-500",
-                  )}
-                >
-                  {trend.isPositive ? "↑" : "↓"} {Math.abs(trend.value)}%
-                </span>
-                {subtitle && (
-                  <span className="text-muted-foreground">{subtitle}</span>
+      <Card
+        role="group"
+        aria-label={`${title}: ${value}`}
+        className={cn(
+          "relative overflow-hidden",
+          "bg-white/80 dark:bg-card/80 backdrop-blur-sm",
+          "border border-sage-100/50 dark:border-sage-800/30",
+          "hover:shadow-lg hover:-translate-y-0.5",
+          "transition-all duration-200"
+        )}
+      >
+        <CardContent className="p-6">
+          <div className="flex items-start justify-between">
+            <div className="space-y-2 flex-1">
+              <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                {title}
+              </p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100 tabular-nums tracking-tight">
+                {hasAnimation ? (
+                  <motion.span>{display}</motion.span>
+                ) : (
+                  value
                 )}
-              </div>
-            )}
-          </div>
+              </p>
 
-          <div className={cn("rounded-2xl p-4", iconBgStyles[variant])}>
-            <Icon className="h-6 w-6 text-white" />
+              {trend && (
+                <div className="flex items-center gap-1.5 text-sm">
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium",
+                      trend.isPositive
+                        ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                        : "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400"
+                    )}
+                  >
+                    {trend.isPositive ? (
+                      <TrendingUp className="h-3 w-3" aria-hidden="true" />
+                    ) : (
+                      <TrendingDown className="h-3 w-3" aria-hidden="true" />
+                    )}
+                    {Math.abs(trend.value)}%
+                  </span>
+                  {subtitle && (
+                    <span className="text-slate-400 dark:text-slate-500 text-xs">
+                      {subtitle}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div
+              className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shrink-0"
+              aria-hidden="true"
+            >
+              <Icon className="h-6 w-6 text-white" aria-hidden="true" />
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 });

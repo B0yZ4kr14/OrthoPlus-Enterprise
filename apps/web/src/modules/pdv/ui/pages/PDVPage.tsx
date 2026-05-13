@@ -8,7 +8,7 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
 import { Separator } from "@orthoplus/core-ui/separator";
-import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
+import { EmptyState } from "@/components/shared/EmptyState";
 import { AberturaCaixaDialog } from "@/components/pdv/AberturaCaixaDialog";
 import { FechamentoCaixaDialog } from "@/components/pdv/FechamentoCaixaDialog";
 import {
@@ -20,6 +20,7 @@ import {
   Trash2,
   Receipt,
   Wallet,
+  Unlock,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -66,10 +67,8 @@ export default function PDVPage() {
 
   const adicionarItem = () => {
     if (!descricaoItem || !valorItem) return;
-
     const quantidade = parseFloat(quantidadeItem) || 1;
     const valor = parseFloat(valorItem) || 0;
-
     setItens([
       ...itens,
       {
@@ -81,7 +80,6 @@ export default function PDVPage() {
         valor_total: quantidade * valor,
       },
     ]);
-
     setDescricaoItem("");
     setValorItem("");
     setQuantidadeItem("1");
@@ -93,19 +91,11 @@ export default function PDVPage() {
 
   const finalizarVenda = async () => {
     if (itens.length === 0 || !caixaAberto) return;
-
-    // @ts-ignore - Mapping simple payment types to PDV equivalents
     const formaNormalizada: FormaPagamentoType = formaPagamento;
-    const taxaOperacao =
-      formaNormalizada === ("CREDITO" as any) ? totalVenda * 0.035 : 0;
+    const taxaOperacao = formaNormalizada === ("CREDITO" as any) ? totalVenda * 0.035 : 0;
     const valorLiquido = totalVenda - taxaOperacao;
-
     await criarVenda(
-      {
-        valor_total: totalVenda,
-        desconto: 0,
-        status: "FINALIZADA",
-      },
+      { valor_total: totalVenda, desconto: 0, status: "FINALIZADA" },
       itens,
       [
         {
@@ -117,19 +107,14 @@ export default function PDVPage() {
         } as any,
       ],
     );
-
     setItens([]);
   };
 
   if (loading) {
     return (
       <div className="space-y-6">
-        <PageHeader
-          icon={ShoppingCart}
-          title="Ponto de Venda (PDV)"
-          description="Gerencie as vendas do seu Ponto de Venda"
-        />
-        <div className="text-center py-12">Carregando...</div>
+        <PageHeader icon={ShoppingCart} title="Ponto de Venda (PDV)" description="Gerencie as vendas do seu Ponto de Venda" />
+        <div className="text-center py-12 text-muted-foreground">Carregando...</div>
       </div>
     );
   }
@@ -143,41 +128,47 @@ export default function PDVPage() {
       />
 
       {!caixaAberto ? (
-        <Alert>
-          <Lock className="h-4 w-4" />
-          <AlertDescription>
-            O caixa está fechado. Abra o caixa para iniciar as vendas.
-            <Button
-              onClick={() => setShowAbertura(true)}
-              className="ml-4"
-              size="sm"
-            >
-              Abrir Caixa
-            </Button>
-          </AlertDescription>
-        </Alert>
-      ) : (
-        <Card className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 border-green-200">
+        <Card className="glass-card overflow-hidden border-l-destructive/40">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--destructive))] to-transparent opacity-40" />
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Caixa Aberto</p>
-                <p className="text-2xl font-bold">
-                  R$ {caixaAberto.valor_inicial.toFixed(2)}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Aberto em{" "}
-                  {format(
-                    new Date(caixaAberto.created_at),
-                    "dd/MM/yyyy 'às' HH:mm",
-                    { locale: ptBR },
-                  )}
-                </p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-destructive/10">
+                  <Lock className="h-6 w-6 text-destructive" />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">Caixa Fechado</p>
+                  <p className="text-sm text-muted-foreground">Abra o caixa para iniciar as vendas.</p>
+                </div>
               </div>
-              <Button
-                variant="destructive"
-                onClick={() => setShowFechamento(true)}
-              >
+              <Button onClick={() => setShowAbertura(true)} className="gap-2 glow-interactive">
+                <Unlock className="h-4 w-4" />
+                Abrir Caixa
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="glass-card overflow-hidden border-l-success/40">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--success))] to-transparent opacity-40" />
+          <CardContent className="pt-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-success/10">
+                  <Unlock className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Caixa Aberto</p>
+                  <p className="text-2xl font-bold text-foreground">
+                    {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(caixaAberto.valor_inicial)}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Aberto em {format(new Date(caixaAberto.created_at), "dd/MM/yyyy às HH:mm", { locale: ptBR })}
+                  </p>
+                </div>
+              </div>
+              <Button variant="destructive" onClick={() => setShowFechamento(true)} className="gap-2">
+                <Lock className="h-4 w-4" />
                 Fechar Caixa
               </Button>
             </div>
@@ -187,9 +178,10 @@ export default function PDVPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <Card>
+          <Card className="glass-card overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
             <CardHeader>
-              <CardTitle>Adicionar Item</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">Adicionar Item</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-12 gap-4">
@@ -226,12 +218,7 @@ export default function PDVPage() {
                   />
                 </div>
                 <div className="col-span-2 flex items-end">
-                  <Button
-                    onClick={adicionarItem}
-                    disabled={!caixaAberto}
-                    className="w-full"
-                    title="Adicionar item"
-                  >
+                  <Button onClick={adicionarItem} disabled={!caixaAberto} className="w-full gap-1 glow-interactive" title="Adicionar item">
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
@@ -243,24 +230,17 @@ export default function PDVPage() {
                   {itens.map((item, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                      className="flex items-center justify-between p-3 glass-card rounded-xl border border-border/30 hover:border-interactive/30 transition-colors"
                     >
                       <div className="flex-1">
                         <p className="font-medium">{item.descricao}</p>
                         <p className="text-sm text-muted-foreground">
-                          {item.quantidade}x R$ {(item.valor_unitario || 0).toFixed(2)}
+                          {item.quantidade}x {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(item.valor_unitario || 0)}
                         </p>
                       </div>
                       <div className="flex items-center gap-4">
-                        <p className="font-bold">
-                          R$ {(item.valor_total || 0).toFixed(2)}
-                        </p>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => removerItem(idx)}
-                          title="Remover item"
-                        >
+                        <p className="font-bold">{new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(item.valor_total || 0)}</p>
+                        <Button size="icon" variant="ghost" onClick={() => removerItem(idx)} title="Remover item">
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>
@@ -273,9 +253,10 @@ export default function PDVPage() {
         </div>
 
         <div className="space-y-6">
-          <Card>
+          <Card className="glass-card overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
             <CardHeader>
-              <CardTitle>Pagamento</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">Pagamento</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -284,14 +265,12 @@ export default function PDVPage() {
                   {formasPagamento.map((forma) => (
                     <Button
                       key={forma.value}
-                      variant={
-                        formaPagamento === forma.value ? "default" : "outline"
-                      }
+                      variant={formaPagamento === forma.value ? "default" : "outline"}
                       onClick={() => setFormaPagamento(forma.value)}
                       disabled={!caixaAberto}
-                      className="justify-start"
+                      className="justify-start gap-2"
                     >
-                      <forma.icon className="h-4 w-4 mr-2" />
+                      <forma.icon className="h-4 w-4" />
                       {forma.label}
                     </Button>
                   ))}
@@ -313,26 +292,26 @@ export default function PDVPage() {
                 </div>
               )}
 
-              <Separator />
+              <Separator className="bg-border/50" />
 
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Subtotal:</span>
-                  <span>R$ {totalVenda.toFixed(2)}</span>
+                  <span className="text-muted-foreground">Subtotal:</span>
+                  <span className="font-medium">{new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(totalVenda)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total:</span>
-                  <span>R$ {totalVenda.toFixed(2)}</span>
+                  <span>{new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(totalVenda)}</span>
                 </div>
               </div>
 
               <Button
                 onClick={finalizarVenda}
                 disabled={!caixaAberto || itens.length === 0}
-                className="w-full"
+                className="w-full gap-2 glow-interactive"
                 size="lg"
               >
-                <Receipt className="mr-2 h-5 w-5" />
+                <Receipt className="h-5 w-5" />
                 Finalizar Venda
               </Button>
             </CardContent>
@@ -343,9 +322,7 @@ export default function PDVPage() {
       <AberturaCaixaDialog
         open={showAbertura}
         onOpenChange={setShowAbertura}
-        onConfirm={async (v, o) => {
-          await abrirCaixa(v, o);
-        }}
+        onConfirm={async (v, o) => { await abrirCaixa(v, o); }}
       />
 
       {caixaAberto && (

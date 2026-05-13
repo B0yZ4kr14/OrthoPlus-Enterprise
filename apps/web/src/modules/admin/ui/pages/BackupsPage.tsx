@@ -15,8 +15,9 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
-  HardDrive
+  HardDrive,
 } from "lucide-react";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
@@ -128,50 +129,33 @@ export default function BackupsPage() {
       />
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total de Backups
-            </CardTitle>
-            <Database className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{backups.length}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Último Backup</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {backups[0]
-                ? new Date(backups[0].created_at).toLocaleDateString("pt-BR")
-                : "N/A"}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Espaço Utilizado
-            </CardTitle>
-            <Upload className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {formatFileSize(
-                backups.reduce((acc, b) => acc + (b.file_size_bytes || 0), 0),
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <StatsCard
+          title="Total de Backups"
+          value={backups.length}
+          icon={Database}
+          variant="primary"
+        />
+        <StatsCard
+          title="Último Backup"
+          value={
+            backups[0]
+              ? new Date(backups[0].created_at).toLocaleDateString("pt-BR")
+              : "N/A"
+          }
+          icon={Clock}
+          variant="default"
+        />
+        <StatsCard
+          title="Espaço Utilizado"
+          value={formatFileSize(
+            backups.reduce((acc, b) => acc + (b.file_size_bytes || 0), 0),
+          )}
+          icon={Upload}
+          variant="success"
+        />
       </div>
 
-      <Card>
+      <Card variant="elevated" className="glass-card">
         <CardHeader>
           <CardTitle>Histórico de Backups</CardTitle>
           <CardDescription>

@@ -1,4 +1,1 @@
-// TODO: Implement CryptoTransactionsView
-export function CryptoTransactionsView() {
-  return null;
-}
+export { CryptoTransactionsView } from "@/modules/financeiro/ui/views/crypto/CryptoTransactionsView";

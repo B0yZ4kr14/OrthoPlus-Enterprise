@@ -30,8 +30,8 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
       </CardHeader>
 
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Form {...form as any}>
+          <form onSubmit={form.handleSubmit(onSubmit as any)} className="space-y-6">
             <FormFields form={form} />
             <TestSection
               testing={testingXPub}

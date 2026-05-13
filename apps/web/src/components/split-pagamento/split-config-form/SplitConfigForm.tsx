@@ -48,7 +48,7 @@ export function SplitConfigForm({
 
           {formData.tipo_split === "PROCEDIMENTO" && (
             <ProcedimentoSelect
-              value={formData.procedimento_id}
+              value={formData.procedimento_id || null}
               procedimentos={procedimentos}
               onChange={(value) => handleInputChange("procedimento_id", value)}
             />

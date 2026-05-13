@@ -1,7 +1,7 @@
 // cspell:disable
 import { useState, useEffect } from "react";
 import { z } from "zod";
-import { useFidelidade } from "@/lib/hooks/fidelidade";
+import { useFidelidade } from "@/modules/fidelidade/hooks/useFidelidade";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { DEFAULT_FORM_DATA } from "./constants";
@@ -43,7 +43,7 @@ export function useRecompensaForm({ editingRecompensa, onSuccess }: RecompensaFo
   const validate = (): boolean => {
     const result = recompensaSchema.safeParse(formData);
     if (!result.success) {
-      const firstError = result.error.errors[0];
+      const firstError = result.error.issues as any[0];
       toast.error(firstError.message);
       return false;
     }

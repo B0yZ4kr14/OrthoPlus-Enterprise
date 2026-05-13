@@ -130,7 +130,7 @@ export function OnboardingWizard({
   const handleFinish = () => {
     onComplete?.();
     handleClose();
-    navigate("/");
+    navigate("/dashboard");
   };
 
   if (completed) {

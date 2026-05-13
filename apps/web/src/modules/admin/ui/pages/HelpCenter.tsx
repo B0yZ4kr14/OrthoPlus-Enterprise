@@ -16,7 +16,10 @@ import {
   Shield,
   Info,
   Search,
+  FolderOpen,
 } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { StatsCard } from "@/components/shared/StatsCard";
 import {
   odontoTooltipsData,
   type OdontoTooltip,
@@ -78,17 +81,31 @@ export default function HelpCenter() {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <div className="p-3 rounded-xl bg-primary/10">
-          <BookOpen className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold">Central de Ajuda</h1>
-          <p className="text-muted-foreground">
-            Documentação completa dos 85+ módulos do sistema
-          </p>
-        </div>
+      <PageHeader
+        icon={BookOpen}
+        title="Central de Ajuda"
+        description="Documentação completa dos 85+ módulos do sistema"
+      />
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <StatsCard
+          title="Total de Módulos"
+          value={allModules.length}
+          icon={BookOpen}
+          variant="primary"
+        />
+        <StatsCard
+          title="Categorias"
+          value={Object.keys(modulesByCategory).length}
+          icon={FolderOpen}
+          variant="success"
+        />
+        <StatsCard
+          title="Documentados"
+          value={allModules.filter((m) => m.bestPractices.length > 0).length}
+          icon={CheckCircle}
+          variant="default"
+        />
       </div>
 
       {/* Search */}
@@ -190,7 +207,7 @@ export default function HelpCenter() {
         {/* Module Details */}
         <div className="lg:col-span-2">
           {selectedModule ? (
-            <Card>
+            <Card variant="elevated" className="glass-card">
               <CardHeader>
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-4">
@@ -289,7 +306,7 @@ export default function HelpCenter() {
               </CardContent>
             </Card>
           ) : (
-            <Card className="h-full flex items-center justify-center">
+            <Card variant="elevated" className="h-full flex items-center justify-center glass-card">
               <CardContent className="text-center py-12">
                 <Info className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
                 <h3 className="text-lg font-semibold mb-2">

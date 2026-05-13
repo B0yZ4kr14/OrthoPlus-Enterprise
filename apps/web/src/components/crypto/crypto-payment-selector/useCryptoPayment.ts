@@ -15,10 +15,10 @@ export function useCryptoPayment(
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [generatingAddress, setGeneratingAddress] = useState(false);
 
-  const allWallets = useMemo<CombinedWallet[]>(
+  const allWallets = useMemo<any[]>(
     () => [
       ...wallets.map((w) => ({ ...w, type: "exchange" as const, coin_type: w.coin_type as CoinType })),
-      ...offlineWallets.map((w) => ({ ...w, type: "offline" as const, coin_type: w.coin_type as CoinType })),
+      ...offlineWallets.map((w) => ({ ...w, type: "offline" as const, coin_type: (w as any).coin_type as CoinType })),
     ],
     [wallets, offlineWallets],
   );

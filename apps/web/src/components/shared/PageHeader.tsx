@@ -20,12 +20,12 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <div className={cn("flex items-center justify-between gap-4 py-2", className)}>
+    <div className={cn("flex items-center justify-between gap-4 py-3", className)}>
       <div className="flex items-center gap-4 min-w-0">
         {Icon && (
           <div
             className={cn(
-              "shrink-0 p-3 rounded-xl bg-interactive/10 border border-interactive/20",
+              "shrink-0 p-3 rounded-xl bg-interactive/10 border border-interactive/20 shadow-[0_0_12px_hsl(var(--interactive)/0.1)]",
               iconClassName
             )}
           >

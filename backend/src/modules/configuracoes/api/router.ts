@@ -7,11 +7,11 @@ import { ModulosController } from "./ModulosController";
 
 export function createConfiguracoesRouter(): Router {
   const router: Router = Router();
-  router.use(clinicGuard);
   const controller = new ModulosController();
 
   router.use("/db", dbRouter);
 
+  // Module catalog endpoints — hardcoded, no clinic context needed
   router.get("/modulos", controller.getMyModules);
   router.get("/modulos/dependencies", controller.getDependencies);
   // by-key toggle (frontend sends { module_key } in body — must be before /:id/toggle)
@@ -23,6 +23,9 @@ export function createConfiguracoesRouter(): Router {
   router.post("/suggest", controller.suggestModules);
   router.post("/recommend-sequence", controller.recommendModuleSequence);
   router.post("/import-data", controller.importClinicData);
+
+  // Clinic-scoped endpoints require clinicGuard
+  router.use(clinicGuard);
   router.get("/export-data", controller.exportClinicData);
 
   // Scheduled Backups (Wave-2 fix: previously missing endpoints)

@@ -52,7 +52,7 @@ export function useDentistaForm({
       status: "Ativo",
       especialidades: [],
       diasAtendimento: [],
-      horarioAtendimento: {
+      horariosAtendimento: {
         inicio: "08:00",
         fim: "18:00",
       },

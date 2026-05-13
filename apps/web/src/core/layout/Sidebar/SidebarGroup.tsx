@@ -9,6 +9,8 @@ import { useSidebar } from "@orthoplus/core-ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { SidebarMenuItem } from "./SidebarMenuItem";
 import { MenuGroup } from "./sidebar.config";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations";
 
 interface SidebarGroupProps {
   group: MenuGroup;
@@ -23,13 +25,10 @@ export function SidebarGroup({ group, onNavigate }: SidebarGroupProps) {
 
   // Filter items based on module access
   const visibleItems = (group.items || []).filter((item) => {
-    // If no moduleKey, item is always visible
     if (!item.moduleKey) return true;
-    // Check if user has access to this module
     return hasModuleAccess(item.moduleKey);
   });
 
-  // Don't render group if no visible items
   if (visibleItems.length === 0) {
     return null;
   }
@@ -37,17 +36,25 @@ export function SidebarGroup({ group, onNavigate }: SidebarGroupProps) {
   return (
     <ShadcnSidebarGroup className="space-y-1 py-2">
       {group.label !== "VISÃO GERAL" && !collapsed && (
-        <SidebarGroupLabel className="px-3 pt-4 pb-1 text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60">
+        <SidebarGroupLabel className="px-3 pt-4 pb-1 text-[11px] font-semibold tracking-widest uppercase text-slate-400 dark:text-[hsl(var(--muted-foreground))]">
           {group.label}
         </SidebarGroupLabel>
       )}
       <SidebarGroupContent>
         <SidebarMenu>
-          {visibleItems.map((item) => (
-            <ShadcnSidebarMenuItem key={item.title}>
-              <SidebarMenuItem item={item} onNavigate={onNavigate} />
-            </ShadcnSidebarMenuItem>
-          ))}
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            {visibleItems.map((item) => (
+              <motion.div key={item.title} variants={fadeUp}>
+                <ShadcnSidebarMenuItem>
+                  <SidebarMenuItem item={item} onNavigate={onNavigate} />
+                </ShadcnSidebarMenuItem>
+              </motion.div>
+            ))}
+          </motion.div>
         </SidebarMenu>
       </SidebarGroupContent>
     </ShadcnSidebarGroup>

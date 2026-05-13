@@ -10,6 +10,8 @@ import { Plus, UserCircle, Phone, Calendar, AlertTriangle, Users } from "lucide-
 import { useNavigate } from "react-router-dom";
 import { RiskScoreBadge } from "@/components/patients/RiskScoreBadge";
 import { TableFilter } from "@/components/shared/TableFilter";
+import { StatsCard } from "@/components/shared/StatsCard";
+import { EmptyState } from "@/components/shared/EmptyState";
 import type { Patient } from "@/types/patient";
 import { getStatusTextColor } from "@/lib/utils/status.utils";
 
@@ -19,7 +21,6 @@ export default function PacientesListPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Use unified hook (REST API)
   const { patients, loading: isLoading } = usePatients();
 
   const filteredPatients =
@@ -36,31 +37,38 @@ export default function PacientesListPage() {
       return matchesSearch && matchesStatus;
     }) || [];
 
+  const totalCount = filteredPatients?.length || 0;
+  const activeCount = filteredPatients?.filter((p) => p.status === "ativo")?.length || 0;
+  const highRiskCount = filteredPatients?.filter((p) => p.risk_level === "alto" || p.risk_level === "critico")?.length || 0;
+
   if (isLoading) {
     return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-muted rounded w-1/4"></div>
-        <div className="h-64 bg-muted rounded"></div>
+      <div className="space-y-6">
+        <div className="h-8 bg-muted rounded w-1/4 animate-pulse" />
+        <div className="grid gap-4 md:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-24 bg-muted rounded-xl animate-pulse" />
+          ))}
+        </div>
+        <div className="h-96 bg-muted rounded-xl animate-pulse" />
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <PageHeader 
-        icon={Users} 
-        title="Pacientes" 
-        description="Gestão completa de pacientes com ficha clínica profissional" 
+      <PageHeader
+        icon={Users}
+        title="Pacientes"
+        description="Gestão completa de pacientes com ficha clínica profissional"
         actions={
-          <Button variant="cta" onClick={() => navigate("/pacientes/novo")} className="gap-2">
+          <Button variant="default" onClick={() => navigate("/pacientes/novo")} className="gap-2 glow-interactive">
             <Plus className="h-4 w-4" />
             Novo Paciente
           </Button>
-        } 
+        }
       />
 
-      {/* Filters */}
       <TableFilter
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
@@ -84,84 +92,67 @@ export default function PacientesListPage() {
         }}
       />
 
-      {/* Stats */}
+      {/* Stats Premium */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-interactive/10">
-              <UserCircle className="h-4 w-4 text-interactive" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Total</p>
-              <p className="text-2xl font-bold">
-                {filteredPatients?.length || 0}
-              </p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-success/10">
-              <UserCircle className="h-5 w-5 text-success" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Ativos</p>
-              <p className="text-2xl font-bold">
-                {filteredPatients?.filter((p) => p.status === "ativo")
-                  ?.length || 0}
-              </p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-warning/10">
-              <AlertTriangle className="h-5 w-5 text-warning" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Alto Risco</p>
-              <p className="text-2xl font-bold">
-                {filteredPatients?.filter(
-                  (p) => p.risk_level === "alto" || p.risk_level === "critico",
-                )?.length || 0}
-              </p>
-            </div>
-          </div>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-muted">
-              <Calendar className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Consultas Hoje</p>
-              <p className="text-2xl font-bold">0</p>
-            </div>
-          </div>
-        </Card>
+        <StatsCard
+          title="Total"
+          value={totalCount}
+          icon={UserCircle}
+          variant="primary"
+          description="Pacientes cadastrados"
+        />
+        <StatsCard
+          title="Ativos"
+          value={activeCount}
+          icon={UserCircle}
+          variant="success"
+          description="Pacientes em tratamento"
+        />
+        <StatsCard
+          title="Alto Risco"
+          value={highRiskCount}
+          icon={AlertTriangle}
+          variant="warning"
+          description="Alto risco ou crítico"
+        />
+        <StatsCard
+          title="Consultas Hoje"
+          value={0}
+          icon={Calendar}
+          variant="default"
+          description="Agendadas para hoje"
+        />
       </div>
 
-      {/* Patient List */}
-      <Card>
-        <div className="divide-y">
+      {/* Patient List Premium */}
+      <Card className="glass-card overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+        <div className="divide-y divide-border/50">
           {filteredPatients.length === 0 ? (
-            <div className="p-8 text-center text-muted-foreground">
-              Nenhum paciente encontrado
+            <div className="py-12">
+              <EmptyState
+                icon={Users}
+                message="Nenhum paciente encontrado"
+                description={searchTerm || statusFilter !== "all" ? "Tente ajustar os filtros de busca." : "Cadastre seu primeiro paciente para começar."}
+                action={{ label: "Novo Paciente", onClick: () => navigate("/pacientes/novo") }}
+              />
             </div>
           ) : (
             filteredPatients.map((patient) => (
               <div
                 key={patient.id}
                 onClick={() => navigate(`/pacientes/${patient.id}`)}
-                className="p-4 hover:bg-muted/50 cursor-pointer transition-colors"
+                className="p-4 hover:bg-muted/30 cursor-pointer transition-all duration-200 group"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="p-2.5 rounded-lg bg-interactive/10">
+                    <div className="p-2.5 rounded-xl bg-interactive/10 shadow-sm group-hover:shadow-md group-hover:bg-interactive/20 transition-all">
                       <UserCircle className="h-5 w-5 text-interactive" />
                     </div>
                     <div>
-                      <p className="font-semibold">{patient.full_name}</p>
+                      <p className="font-semibold text-foreground group-hover:text-interactive transition-colors">
+                        {patient.full_name}
+                      </p>
                       <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
                         {patient.phone_primary && (
                           <span className="flex items-center gap-1">

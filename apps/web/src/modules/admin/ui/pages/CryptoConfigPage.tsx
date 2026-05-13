@@ -11,6 +11,8 @@ import { Label } from "@orthoplus/core-ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Bitcoin, Wallet, TrendingUp, Bell, Key, Loader2 } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
@@ -78,12 +80,11 @@ export default function CryptoConfigPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Crypto Config</h1>
-        <p className="text-muted-foreground">
-          Gerencie exchanges, carteiras e estratégias de criptomoedas
-        </p>
-      </div>
+      <PageHeader
+        icon={Bitcoin}
+        title="Crypto Config"
+        description="Gerencie exchanges, carteiras e estratégias de criptomoedas"
+      />
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
@@ -92,48 +93,29 @@ export default function CryptoConfigPage() {
       ) : (
         <>
           <div className="grid gap-4 md:grid-cols-3">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Portfolio Total
-                </CardTitle>
-                <Bitcoin className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {portfolio
-                    ? formatCurrency(portfolio.total_value_usd, "USD")
-                    : "$0.00"}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {portfolio?.total_btc.toFixed(8)} BTC
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Exchanges</CardTitle>
-                <Wallet className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{exchanges.length}</div>
-                <p className="text-xs text-muted-foreground">Conectadas</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Ativos</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {portfolio?.assets.length || 0}
-                </div>
-                <p className="text-xs text-muted-foreground">Diferentes</p>
-              </CardContent>
-            </Card>
+            <StatsCard
+              title="Portfolio Total"
+              value={
+                portfolio ? formatCurrency(portfolio.total_value_usd, "USD") : "$0.00"
+              }
+              icon={Bitcoin}
+              variant="primary"
+              description={portfolio ? `${portfolio.total_btc.toFixed(8)} BTC` : undefined}
+            />
+            <StatsCard
+              title="Exchanges"
+              value={exchanges.length}
+              icon={Wallet}
+              variant="default"
+              description="Conectadas"
+            />
+            <StatsCard
+              title="Ativos"
+              value={portfolio?.assets.length || 0}
+              icon={TrendingUp}
+              variant="success"
+              description="Diferentes"
+            />
           </div>
 
           <Tabs defaultValue="exchanges" className="w-full">
@@ -145,7 +127,7 @@ export default function CryptoConfigPage() {
             </TabsList>
 
             <TabsContent value="exchanges" className="space-y-4">
-              <Card>
+              <Card variant="elevated">
                 <CardHeader>
                   <CardTitle>Adicionar Exchange</CardTitle>
                   <CardDescription>
@@ -203,7 +185,7 @@ export default function CryptoConfigPage() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card variant="elevated">
                 <CardHeader>
                   <CardTitle>Exchanges Configuradas</CardTitle>
                   <CardDescription>
@@ -249,7 +231,7 @@ export default function CryptoConfigPage() {
             </TabsContent>
 
             <TabsContent value="portfolio">
-              <Card>
+              <Card variant="elevated" className="glass-card">
                 <CardHeader>
                   <CardTitle>Meu Portfolio</CardTitle>
                   <CardDescription>
@@ -291,7 +273,7 @@ export default function CryptoConfigPage() {
             </TabsContent>
 
             <TabsContent value="dca">
-              <Card>
+              <Card variant="elevated">
                 <CardHeader>
                   <CardTitle>Estratégias DCA</CardTitle>
                   <CardDescription>
@@ -307,7 +289,7 @@ export default function CryptoConfigPage() {
             </TabsContent>
 
             <TabsContent value="alerts">
-              <Card>
+              <Card variant="elevated">
                 <CardHeader>
                   <CardTitle>Alertas de Preço</CardTitle>
                   <CardDescription>

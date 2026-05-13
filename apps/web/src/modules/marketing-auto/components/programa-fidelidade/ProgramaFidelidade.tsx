@@ -65,7 +65,7 @@ export default function ProgramaFidelidade() {
           <RecompensasTab
             recompensas={recompensas as any}
             onAdd={() => setRecompensaFormOpen(true)}
-            onEdit={handleEditRecompensa}
+            onEdit={handleEditRecompensa as any}
           />
         </TabsContent>
 

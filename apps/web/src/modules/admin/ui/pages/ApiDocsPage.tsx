@@ -1,4 +1,5 @@
 import { Code2, BookOpen, Globe, Lock } from "lucide-react";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
   Card,
@@ -88,6 +89,27 @@ export default function ApiDocsPage() {
         icon={Code2}
       />
 
+      <div className="grid gap-4 md:grid-cols-3">
+        <StatsCard
+          title="Edge Functions"
+          value={edgeFunctions.length}
+          icon={Globe}
+          variant="primary"
+        />
+        <StatsCard
+          title="Endpoints Públicos"
+          value={edgeFunctions.filter((f) => f.auth === "PUBLIC").length}
+          icon={Globe}
+          variant="success"
+        />
+        <StatsCard
+          title="Endpoints Admin"
+          value={edgeFunctions.filter((f) => f.auth === "ADMIN").length}
+          icon={Lock}
+          variant="warning"
+        />
+      </div>
+
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">
@@ -105,9 +127,9 @@ export default function ApiDocsPage() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
-          <Card>
+          <Card variant="elevated" className="glass-card">
             <CardHeader>
-              <CardTitle>Bem-vindo à API do OrthoPlus Enterprise</CardTitle>
+              <CardTitle>Bem-vindo à API do Ortho+</CardTitle>
               <CardDescription>
                 Sistema de APIs RESTful baseado em Node.js (Express)
               </CardDescription>
@@ -151,7 +173,7 @@ export default function ApiDocsPage() {
 
         <TabsContent value="functions" className="space-y-4">
           {edgeFunctions.map((func) => (
-            <Card key={func.name}>
+            <Card key={func.name} variant="elevated">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">{func.name}</CardTitle>
@@ -228,7 +250,7 @@ export default function ApiDocsPage() {
         </TabsContent>
 
         <TabsContent value="auth" className="space-y-4">
-          <Card>
+          <Card variant="elevated">
             <CardHeader>
               <CardTitle>Autenticação e Autorização</CardTitle>
               <CardDescription>

@@ -12,6 +12,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { StatsCard } from "@/components/shared/StatsCard";
 import {
   Card,
   CardContent,
@@ -101,6 +102,13 @@ export default function Configuracoes() {
         description="Gerencie todos os aspectos do sistema Ortho +"
       />
 
+      <div className="grid gap-4 md:grid-cols-4">
+        <StatsCard title="Módulos Ativos" value={7} icon={Package} variant="primary" description="Funcionalidades habilitadas" />
+        <StatsCard title="Usuários" value={1} icon={Users} variant="success" description="Administradores e membros" />
+        <StatsCard title="Backups" value={0} icon={Database} variant="warning" description="Backups automáticos" />
+        <StatsCard title="Notificações" value={0} icon={Bell} variant="default" description="Alertas configurados" />
+      </div>
+
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -126,37 +134,39 @@ export default function Configuracoes() {
         </TabsList>
 
         <TabsContent value="modules" className="space-y-4">
-          <ModulesSimple />
+          <Card variant="elevated">
+            <ModulesSimple />
+          </Card>
         </TabsContent>
 
         <TabsContent value="permissions" className="space-y-4">
-          <PermissionTemplates />
-          <ModulePermissionsManager />
-          <PermissionAuditLogs />
+          <Card variant="elevated"><PermissionTemplates /></Card>
+          <Card variant="elevated"><ModulePermissionsManager /></Card>
+          <Card variant="elevated"><PermissionAuditLogs /></Card>
         </TabsContent>
 
         <TabsContent value="users" className="space-y-4">
-          <UserManagementTab />
+          <Card variant="elevated"><UserManagementTab /></Card>
         </TabsContent>
 
         <TabsContent value="administration" className="space-y-4">
-          <BackendSelector />
-          <GitHubIntegrationConfig />
-          <AuthenticationConfig />
-          <AIModelConfig />
+          <Card variant="elevated"><BackendSelector /></Card>
+          <Card variant="elevated"><GitHubIntegrationConfig /></Card>
+          <Card variant="elevated"><AuthenticationConfig /></Card>
+          <Card variant="elevated"><AIModelConfig /></Card>
         </TabsContent>
 
         <TabsContent value="backups" className="space-y-4">
-          <DatabaseBackupTab />
+          <Card variant="elevated"><DatabaseBackupTab /></Card>
         </TabsContent>
 
         <TabsContent value="database" className="space-y-4">
-          <Card>
+          <Card variant="elevated">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Gerenciamento Avançado de Banco de Dados</span>
                 <Button
-                  variant="outline"
+                  variant="elevated"
                   size="sm"
                   onClick={() => navigate("/configuracoes/database")}
                 >
@@ -170,19 +180,19 @@ export default function Configuracoes() {
             </CardHeader>
           </Card>
 
-          <Card>
+          <Card variant="elevated">
             <CardHeader>
               <CardTitle>Migração de Dados</CardTitle>
               <CardDescription>
                 Exporte ou importe dados completos da clínica entre instalações
-                do OrthoPlus Enterprise
+                do Ortho+
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex gap-4">
                 <Button
                   onClick={() => setShowExportWizard(true)}
-                  variant="outline"
+                  variant="elevated"
                   className="flex-1"
                 >
                   <Download className="h-4 w-4 mr-2" />
@@ -190,7 +200,7 @@ export default function Configuracoes() {
                 </Button>
                 <Button
                   onClick={() => setShowImportWizard(true)}
-                  variant="outline"
+                  variant="elevated"
                   className="flex-1"
                 >
                   <Upload className="h-4 w-4 mr-2" />
@@ -200,7 +210,7 @@ export default function Configuracoes() {
             </CardContent>
           </Card>
 
-          <DatabaseBackupTab />
+          <Card variant="elevated"><DatabaseBackupTab /></Card>
         </TabsContent>
 
         <DataMigrationWizard
@@ -216,7 +226,7 @@ export default function Configuracoes() {
         />
 
         <TabsContent value="notifications" className="space-y-4">
-          <Card>
+          <Card variant="gradient">
             <CardHeader>
               <CardTitle>Configurações de Notificações</CardTitle>
               <CardDescription>

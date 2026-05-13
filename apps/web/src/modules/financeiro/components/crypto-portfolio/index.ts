@@ -1,4 +1,1 @@
-// TODO: Implement CryptoPortfolioDashboard
-export function CryptoPortfolioDashboard() {
-  return null;
-}
+export { CryptoPortfolioDashboard } from "@/components/crypto/CryptoPortfolioDashboard";

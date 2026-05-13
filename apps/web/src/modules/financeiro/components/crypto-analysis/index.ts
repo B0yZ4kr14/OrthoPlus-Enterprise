@@ -1,4 +1,1 @@
-// TODO: Implement CryptoAnalysisDashboard
-export function CryptoAnalysisDashboard() {
-  return null;
-}
+export { CryptoAnalysisDashboard } from "@/modules/crypto/components/crypto-analysis-dashboard";

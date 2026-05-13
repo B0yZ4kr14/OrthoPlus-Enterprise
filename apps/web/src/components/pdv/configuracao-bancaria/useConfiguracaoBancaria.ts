@@ -75,7 +75,7 @@ export function useConfiguracaoBancaria() {
       const hoje = new Date();
       const trintaDiasAtras = new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-      const data = await apiClient.post("/sincronizar-extrato-bancario", {
+      const data = await apiClient.post<any>("/sincronizar-extrato-bancario", {
         bancoConfigId: configId,
         dataInicio: trintaDiasAtras.toISOString().split("T")[0],
         dataFim: hoje.toISOString().split("T")[0],

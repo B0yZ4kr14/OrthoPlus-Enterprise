@@ -40,7 +40,7 @@ export function TextField({
             <Input
               placeholder={placeholder}
               {...field}
-              value={field.value || ""}
+              value={String(field.value || "")}
               onChange={(e) => {
                 let value = e.target.value;
                 if (mask === "cpf") value = maskCPF(value);

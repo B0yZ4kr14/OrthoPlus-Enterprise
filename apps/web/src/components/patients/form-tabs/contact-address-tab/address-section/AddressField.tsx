@@ -28,7 +28,7 @@ export function AddressField({ form, field }: AddressFieldProps) {
               placeholder={field.placeholder}
               maxLength={field.maxLength}
               {...formField}
-              value={formField.value || ""}
+              value={String(formField.value || "")}
             />
           </FormControl>
           <FormMessage />

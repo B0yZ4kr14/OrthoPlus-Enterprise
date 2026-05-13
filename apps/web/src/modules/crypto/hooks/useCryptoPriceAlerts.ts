@@ -3,7 +3,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface PriceAlert {
+export interface PriceAlert {
   id: string;
   coin_type: string;
   target_rate_brl: number;

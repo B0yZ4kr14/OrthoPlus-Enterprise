@@ -8,6 +8,7 @@ import {
   Info,
   CheckCircle,
 } from "lucide-react";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
   Card,
@@ -176,59 +177,34 @@ export default function SystemLogsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Logs
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{logs.length}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Info
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-500">
-              {logs.filter((l) => l.level === "info").length}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Warnings
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">
-              {logs.filter((l) => l.level === "warning").length}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Errors
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-500">
-              {logs.filter((l) => l.level === "error").length}
-            </div>
-          </CardContent>
-        </Card>
+        <StatsCard
+          title="Total Logs"
+          value={logs.length}
+          icon={ScrollText}
+          variant="primary"
+        />
+        <StatsCard
+          title="Info"
+          value={logs.filter((l) => l.level === "info").length}
+          icon={Info}
+          variant="default"
+        />
+        <StatsCard
+          title="Warnings"
+          value={logs.filter((l) => l.level === "warning").length}
+          icon={AlertCircle}
+          variant="warning"
+        />
+        <StatsCard
+          title="Errors"
+          value={logs.filter((l) => l.level === "error").length}
+          icon={AlertCircle}
+          variant="danger"
+        />
       </div>
 
       {/* Log Entries */}
-      <Card>
+      <Card variant="elevated" className="glass-card">
         <CardHeader>
           <CardTitle>Log Entries</CardTitle>
           <CardDescription>Logs em tempo real do sistema</CardDescription>

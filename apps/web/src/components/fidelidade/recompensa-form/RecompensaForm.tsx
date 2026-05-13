@@ -32,13 +32,13 @@ export function RecompensaForm({ editingRecompensa, onSuccess }: RecompensaFormP
       <TipoSelect value={formData.tipo} onChange={(v) => handleInputChange("tipo", v)} />
       <ValorDescontoInput
         tipo={formData.tipo}
-        value={formData.valor_desconto}
+        value={formData.valor_desconto || null}
         onChange={(v) => handleInputChange("valor_desconto", v)}
       />
       {formData.tipo === "PROCEDIMENTO_GRATIS" && (
         <ProcedimentoSelect
           procedimentos={procedimentos}
-          value={formData.procedimento_id}
+          value={formData.procedimento_id || null}
           onChange={(v) => handleInputChange("procedimento_id", v)}
           loading={loadingProcedimentos}
         />

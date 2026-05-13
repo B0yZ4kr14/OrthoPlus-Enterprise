@@ -33,7 +33,11 @@ import {
   Filter,
   Download,
   Search,
+  FileText,
+  PlusCircle,
+  Trash2,
 } from "lucide-react";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
@@ -191,8 +195,37 @@ export default function AuditLogs() {
         description="Histórico completo de acessos, alterações e ações no sistema"
       />
 
+      <div className="grid gap-4 md:grid-cols-3">
+        <StatsCard
+          title="Total de Logs"
+          value={logs.length}
+          icon={FileText}
+          variant="primary"
+        />
+        <StatsCard
+          title="Ações de Criação"
+          value={
+            logs.filter(
+              (l) => l.action.includes("CREATE") || l.action.includes("ACTIVATE"),
+            ).length
+          }
+          icon={PlusCircle}
+          variant="success"
+        />
+        <StatsCard
+          title="Ações de Deleção"
+          value={
+            logs.filter(
+              (l) => l.action.includes("DELETE") || l.action.includes("DEACTIVATE"),
+            ).length
+          }
+          icon={Trash2}
+          variant="danger"
+        />
+      </div>
+
       {/* Filtros */}
-      <Card>
+      <Card variant="elevated">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Filter className="h-5 w-5" />
@@ -323,7 +356,7 @@ export default function AuditLogs() {
       </Card>
 
       {/* Lista de Logs */}
-      <Card>
+      <Card variant="elevated" className="glass-card">
         <CardHeader>
           <CardTitle>Histórico de Atividades</CardTitle>
           <CardDescription>

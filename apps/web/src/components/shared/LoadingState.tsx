@@ -28,17 +28,15 @@ export function LoadingState({
   if (variant === "table") {
     return (
       <div className={cn("space-y-3", className)}>
-        {/* Table header skeleton */}
-        <div className="flex gap-4 pb-3 border-b">
+        <div className="flex gap-4 pb-3 border-b border-border/50">
           {Array.from({ length: columns }).map((_, i) => (
-            <Skeleton key={i} className="h-4 flex-1" />
+            <Skeleton key={i} className="h-4 flex-1 rounded-md" />
           ))}
         </div>
-        {/* Table rows skeleton */}
         {Array.from({ length: rows }).map((_, rowIndex) => (
           <div key={rowIndex} className="flex gap-4 py-3">
             {Array.from({ length: columns }).map((_, colIndex) => (
-              <Skeleton key={colIndex} className="h-4 flex-1" />
+              <Skeleton key={colIndex} className="h-4 flex-1 rounded-md" />
             ))}
           </div>
         ))}
@@ -55,11 +53,11 @@ export function LoadingState({
         )}
       >
         {Array.from({ length: rows }).map((_, i) => (
-          <div key={i} className="space-y-3 p-4 border rounded-lg">
+          <div key={i} className="space-y-3 p-4 border border-border/50 rounded-xl glass-card">
             <Skeleton className="h-8 w-8 rounded-lg" />
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-3 w-full" />
-            <Skeleton className="h-3 w-5/6" />
+            <Skeleton className="h-4 w-3/4 rounded-md" />
+            <Skeleton className="h-3 w-full rounded-md" />
+            <Skeleton className="h-3 w-5/6 rounded-md" />
           </div>
         ))}
       </div>
@@ -72,14 +70,14 @@ export function LoadingState({
         {Array.from({ length: rows }).map((_, i) => (
           <div
             key={i}
-            className="flex items-center gap-4 p-4 border rounded-lg"
+            className="flex items-center gap-4 p-4 border border-border/50 rounded-xl glass-card"
           >
             <Skeleton className="h-12 w-12 rounded-full" />
             <div className="flex-1 space-y-2">
-              <Skeleton className="h-4 w-1/3" />
-              <Skeleton className="h-3 w-1/2" />
+              <Skeleton className="h-4 w-1/3 rounded-md" />
+              <Skeleton className="h-3 w-1/2 rounded-md" />
             </div>
-            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-8 w-20 rounded-md" />
           </div>
         ))}
       </div>
@@ -89,10 +87,10 @@ export function LoadingState({
   if (variant === "skeleton") {
     return (
       <div className={cn("space-y-3", className)}>
-        <Skeleton className="h-8 w-1/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-3/4" />
-        <Skeleton className="h-4 w-5/6" />
+        <Skeleton className="h-8 w-1/4 rounded-md" />
+        <Skeleton className="h-4 w-full rounded-md" />
+        <Skeleton className="h-4 w-3/4 rounded-md" />
+        <Skeleton className="h-4 w-5/6 rounded-md" />
       </div>
     );
   }
@@ -107,7 +105,7 @@ export function LoadingState({
       >
         <div
           className={cn(
-            "bg-primary/20 rounded-full animate-pulse",
+            "bg-interactive/20 rounded-full animate-pulse shadow-[0_0_16px_hsl(var(--interactive)/0.3)]",
             sizeClasses[size],
           )}
         />
@@ -125,7 +123,7 @@ export function LoadingState({
         className,
       )}
     >
-      <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />
+      <Loader2 className={cn("animate-spin text-interactive drop-shadow-[0_0_8px_hsl(var(--interactive)/0.4)]", sizeClasses[size])} />
       {message && (
         <p className="text-sm text-muted-foreground mt-4">{message}</p>
       )}

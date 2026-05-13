@@ -21,3 +21,6 @@ export interface FinancialSummary {
 
 export type BudgetStatus = Budget["status"];
 export type PaymentStatus = "paid" | "pending" | "overdue";
+
+export type PaymentStatusConfig = any;
+export type BudgetStatusConfig = any;

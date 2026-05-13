@@ -25,6 +25,9 @@ import { AppointmentDetailsDialog } from "../components/AppointmentDetailsDialog
 import { DentistScheduleForm } from "../components/DentistScheduleForm";
 import { BlockedTimeForm } from "../components/BlockedTimeForm";
 import { Appointment } from "../../domain/entities/Appointment";
+import { LoadingState } from "@/components/shared/LoadingState";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { Card } from "@orthoplus/core-ui/card";
 
 function AgendaContent() {
   const { clinicId } = useAuth();
@@ -71,15 +74,8 @@ function AgendaContent() {
     notes?: string;
   }) => {
     createAppointment(
-      {
-        ...data,
-        clinicId: clinicId || "",
-      },
-      {
-        onSuccess: () => {
-          setIsAppointmentDialogOpen(false);
-        },
-      },
+      { ...data, clinicId: clinicId || "" },
+      { onSuccess: () => setIsAppointmentDialogOpen(false) },
     );
   };
 
@@ -92,15 +88,8 @@ function AgendaContent() {
     breakEnd?: string;
   }) => {
     createSchedule(
-      {
-        ...data,
-        clinicId: clinicId || "",
-      },
-      {
-        onSuccess: () => {
-          setIsScheduleDialogOpen(false);
-        },
-      },
+      { ...data, clinicId: clinicId || "" },
+      { onSuccess: () => setIsScheduleDialogOpen(false) },
     );
   };
 
@@ -111,33 +100,23 @@ function AgendaContent() {
     reason: string;
   }) => {
     createBlockedTime(
-      {
-        ...data,
-        clinicId: clinicId || "",
-      },
-      {
-        onSuccess: () => {
-          setIsBlockDialogOpen(false);
-        },
-      },
+      { ...data, clinicId: clinicId || "" },
+      { onSuccess: () => setIsBlockDialogOpen(false) },
     );
   };
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={CalendarDays} 
-        title="Agenda" 
-        description="Gerencie agendamentos, horários e bloqueios" 
+      <PageHeader
+        icon={CalendarDays}
+        title="Agenda"
+        description="Gerencie agendamentos, horários e bloqueios"
         actions={
-          <>
-            <Dialog
-              open={isScheduleDialogOpen}
-              onOpenChange={setIsScheduleDialogOpen}
-            >
+          <div className="flex items-center gap-2">
+            <Dialog open={isScheduleDialogOpen} onOpenChange={setIsScheduleDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Settings className="mr-2 h-4 w-4" />
+                <Button variant="outline" className="gap-2">
+                  <Settings className="h-4 w-4" />
                   Horários
                 </Button>
               </DialogTrigger>
@@ -145,17 +124,14 @@ function AgendaContent() {
                 <DialogHeader>
                   <DialogTitle>Configurar Horário</DialogTitle>
                 </DialogHeader>
-                <DentistScheduleForm
-                  onSubmit={handleCreateSchedule}
-                  isLoading={isCreatingSchedule}
-                />
+                <DentistScheduleForm onSubmit={handleCreateSchedule} isLoading={isCreatingSchedule} />
               </DialogContent>
             </Dialog>
 
             <Dialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Clock className="mr-2 h-4 w-4" />
+                <Button variant="outline" className="gap-2">
+                  <Clock className="h-4 w-4" />
                   Bloquear
                 </Button>
               </DialogTrigger>
@@ -163,20 +139,14 @@ function AgendaContent() {
                 <DialogHeader>
                   <DialogTitle>Bloquear Horário</DialogTitle>
                 </DialogHeader>
-                <BlockedTimeForm
-                  onSubmit={handleCreateBlock}
-                  isLoading={isCreatingBlock}
-                />
+                <BlockedTimeForm onSubmit={handleCreateBlock} isLoading={isCreatingBlock} />
               </DialogContent>
             </Dialog>
 
-            <Dialog
-              open={isAppointmentDialogOpen}
-              onOpenChange={setIsAppointmentDialogOpen}
-            >
+            <Dialog open={isAppointmentDialogOpen} onOpenChange={setIsAppointmentDialogOpen}>
               <DialogTrigger asChild>
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
+                <Button className="gap-2 glow-interactive">
+                  <Plus className="h-4 w-4" />
                   Novo Agendamento
                 </Button>
               </DialogTrigger>
@@ -184,38 +154,52 @@ function AgendaContent() {
                 <DialogHeader>
                   <DialogTitle>Novo Agendamento</DialogTitle>
                 </DialogHeader>
-                <AppointmentForm
-                  onSubmit={handleCreateAppointment}
-                  isLoading={isCreating}
-                />
+                <AppointmentForm onSubmit={handleCreateAppointment} isLoading={isCreating} />
               </DialogContent>
             </Dialog>
-          </>
-        } 
+          </div>
+        }
       />
 
       <Tabs defaultValue="calendar" className="w-full">
-        <TabsList>
-          <TabsTrigger value="calendar">
-            <Calendar className="mr-2 h-4 w-4" />
+        <TabsList className="grid w-full grid-cols-2 bg-muted/30 backdrop-blur-sm border border-border/50 rounded-xl p-1 max-w-md">
+          <TabsTrigger value="calendar" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+            <Calendar className="h-4 w-4" />
             Calendário
           </TabsTrigger>
-          <TabsTrigger value="list">Lista</TabsTrigger>
+          <TabsTrigger value="list" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+            Lista
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="calendar" className="mt-6">
-          <WeekCalendar
-            appointments={appointments}
-            onAppointmentClick={(apt) => {
-              setSelectedAppointment(apt);
-              setIsDetailsOpen(true);
-            }}
-          />
+          <Card className="glass-card overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <div className="p-1">
+              <WeekCalendar
+                appointments={appointments}
+                onAppointmentClick={(apt) => {
+                  setSelectedAppointment(apt);
+                  setIsDetailsOpen(true);
+                }}
+              />
+            </div>
+          </Card>
         </TabsContent>
 
         <TabsContent value="list" className="mt-6">
           {isLoadingAppointments ? (
-            <p>Carregando...</p>
+            <LoadingState variant="grid" rows={3} />
+          ) : appointments.length === 0 ? (
+            <Card className="glass-card overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+              <EmptyState
+                icon={CalendarDays}
+                message="Nenhum agendamento"
+                description="Não há agendamentos para este período."
+                action={{ label: "Novo Agendamento", onClick: () => setIsAppointmentDialogOpen(true) }}
+              />
+            </Card>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {appointments.map((appointment) => (
@@ -223,9 +207,7 @@ function AgendaContent() {
                   key={appointment.id}
                   appointment={appointment}
                   onConfirm={() => confirmAppointment(appointment.id)}
-                  onCancel={() =>
-                    cancelAppointment({ appointmentId: appointment.id })
-                  }
+                  onCancel={() => cancelAppointment({ appointmentId: appointment.id })}
                 />
               ))}
             </div>

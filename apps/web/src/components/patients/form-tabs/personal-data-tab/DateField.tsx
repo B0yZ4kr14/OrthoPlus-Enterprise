@@ -27,7 +27,7 @@ export function DateField({ form, name, label, required }: DateFieldProps) {
             {label} {required && "*"}
           </FormLabel>
           <FormControl>
-            <Input type="date" {...field} />
+            <Input type="date" {...field} value={String(field.value || "")} />
           </FormControl>
           <FormMessage />
         </FormItem>

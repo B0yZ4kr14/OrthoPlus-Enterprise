@@ -65,7 +65,7 @@ export function useOnboardingWizard(
   const handleFinish = useCallback(() => {
     onComplete?.();
     handleClose();
-    navigate("/");
+    navigate("/dashboard");
   }, [onComplete, handleClose, navigate]);
 
   return {

@@ -13,7 +13,7 @@ export function useXPubConfig({ onSuccess }: XPubConfigFormProps) {
   const [isValid, setIsValid] = useState(false);
 
   const form = useForm<XPubConfigFormValues>({
-    resolver: zodResolver(xpubConfigSchema),
+    resolver: zodResolver(xpubConfigSchema) as any,
     defaultValues: {
       wallet_name: "",
       hardware_type: "trezor",

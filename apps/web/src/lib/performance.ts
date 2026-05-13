@@ -135,7 +135,7 @@ export function optimizeImageLoading() {
 }
 
 // Cache Performance Metrics
-interface CacheMetrics {
+export interface CacheMetrics {
   hits: number;
   misses: number;
   hitRate: number;

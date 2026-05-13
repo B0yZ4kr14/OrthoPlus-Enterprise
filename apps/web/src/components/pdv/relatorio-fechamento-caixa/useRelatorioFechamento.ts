@@ -15,22 +15,22 @@ export function useRelatorioFechamento({ caixaMovimentoId }: RelatorioFechamento
     queryKey: ["fechamento-caixa", caixaMovimentoId],
     queryFn: async () => {
       const vendas: unknown[] = await apiClient.get("/pdv-vendas", {
-        caixa_movimento_id: caixaMovimentoId,
+        params: { caixa_movimento_id: caixaMovimentoId },
       });
 
       const totalVendasPDV =
-        vendas?.reduce((sum, v) => sum + Number((v as Record<string, number>).valor_total), 0) || 0;
+        vendas?.reduce((sum: number, v: unknown) => sum + Number((v as Record<string, number>).valor_total), 0) || 0;
 
       const vendaIds = vendas?.map((v) => (v as Record<string, string>).id) || [];
       const nfces: unknown[] =
         vendaIds.length > 0
           ? await apiClient.get("/nfce-emitidas", {
-              venda_id: `in.(${vendaIds.join(",")})`,
+              params: { venda_id: `in.(${vendaIds.join(",")})` },
             })
           : [];
 
       const totalNFCe =
-        nfces?.reduce((sum, n) => sum + Number((n as Record<string, number>).valor_total), 0) || 0;
+        nfces?.reduce((sum: number, n: unknown) => sum + Number((n as Record<string, number>).valor_total), 0) || 0;
 
       const vendasComNFCe = new Set(nfces?.map((n) => (n as Record<string, string>).venda_id) || []);
       const vendasSemNFCe = vendas?.filter((v) => !vendasComNFCe.has((v as Record<string, string>).id)).length || 0;

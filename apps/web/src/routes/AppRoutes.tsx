@@ -9,6 +9,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Demo from "@/modules/core/ui/pages/Demo";
 import DashboardUnified from "@/modules/dashboard/ui/pages/DashboardUnified";
 import Auth from "@/modules/auth/ui/pages/Auth";
+import Landpage from "@/modules/landpage/ui/pages/Landpage";
 
 // Lazy loaded modules - usando barrel exports
 const PacientesListPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PacientesListPage })));
@@ -172,12 +173,13 @@ function protectedRoute(
 const AppRoutes = () => (
   <Routes>
     {/* Public Routes */}
+    <Route path="/" element={<Landpage />} />
     <Route path="/demo" element={<Demo />} />
     <Route path="/auth" element={<Auth />} />
 
     {/* Protected Routes */}
     <Route
-      path="/"
+      path="/dashboard"
       element={
         <ProtectedRoute>
           <AppLayout>

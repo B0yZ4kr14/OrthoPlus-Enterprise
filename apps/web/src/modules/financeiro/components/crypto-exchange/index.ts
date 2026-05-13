@@ -1,4 +1,1 @@
-// TODO: Implement ExchangeConfigForm
-export function ExchangeConfigForm() {
-  return null;
-}
+export { ExchangeConfigForm } from "@/components/crypto/ExchangeConfigForm";

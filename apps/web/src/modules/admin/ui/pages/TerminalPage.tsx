@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Terminal, Send, Trash2, History } from "lucide-react";
+import { Terminal, Send, Trash2, History, Activity, Clock } from "lucide-react";
+import { StatsCard } from "@/components/shared/StatsCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
   Card,
@@ -104,7 +105,28 @@ export default function TerminalPage() {
         icon={Terminal}
       />
 
-      <Card>
+      <div className="grid gap-4 md:grid-cols-3">
+        <StatsCard
+          title="Comandos Executados"
+          value={history.length}
+          icon={History}
+          variant="primary"
+        />
+        <StatsCard
+          title="Status"
+          value="Conectado"
+          icon={Activity}
+          variant="success"
+        />
+        <StatsCard
+          title="Sessão Ativa"
+          value="Sim"
+          icon={Clock}
+          variant="default"
+        />
+      </div>
+
+      <Card variant="elevated" className="glass-card">
         <CardHeader>
           <CardTitle>Console Interativo</CardTitle>
           <CardDescription>
@@ -118,7 +140,7 @@ export default function TerminalPage() {
             <ScrollArea className="h-[400px]" ref={scrollRef}>
               <div className="space-y-3">
                 <div className="text-green-400">
-                  OrthoPlus Enterprise Terminal Shell v1.0 - DEMO MODE
+                  Ortho+ Terminal Shell v1.0 - DEMO MODE
                 </div>
                 <div className="text-muted-foreground">
                   Digite 'help' para ver comandos disponíveis
@@ -214,7 +236,7 @@ export default function TerminalPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card variant="elevated">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <History className="h-5 w-5" />

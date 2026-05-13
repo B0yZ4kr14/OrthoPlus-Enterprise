@@ -24,7 +24,8 @@ import {
 } from "@orthoplus/core-ui/form";
 import { ForgotPassword } from "@/components/auth/ForgotPassword";
 import { PasswordStrengthIndicator } from "@/components/auth/PasswordStrengthIndicator";
-import { Mail, Key } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Mail, Key, Eye, EyeOff } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Informe seu email ou usuário"),
@@ -58,6 +59,8 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { user, signIn, signUp, signInPatient } = useAuth();
   const navigate = useNavigate();
 
@@ -90,23 +93,25 @@ export default function Auth() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate("/");
+      window.location.href = "/OrthoPlus-Enterprise/dashboard";
     }
   }, [user, navigate]);
 
   const handleLogin = async (values: LoginFormValues) => {
+    const identifier = values.email.includes("@") ? values.email : values.email + "@tsiapp.io";
     setIsLoading(true);
     try {
-      const response = await fetch("/api/orthoplus/auth/token", {
+      const response = await fetch("/api/auth/token", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: values.email, password: values.password }),
+        body: JSON.stringify({ email: identifier, password: values.password }),
       });
       const data = await response.json();
       if (data.accessToken) {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
-        window.location.reload();
+        setIsLoading(false);
+        window.location.href = "/OrthoPlus-Enterprise/dashboard";
         return;
       }
     } catch (e) {
@@ -115,7 +120,7 @@ export default function Auth() {
     const { error } = await signIn(values.email, values.password);
     setIsLoading(false);
     if (!error) {
-      navigate("/");
+      window.location.href = "/OrthoPlus-Enterprise/dashboard";
     }
   };
 
@@ -139,7 +144,7 @@ export default function Auth() {
     setIsLoading(false);
 
     if (!error) {
-      navigate("/portal-paciente");
+      window.location.href = "/OrthoPlus-Enterprise/portal-paciente";
     }
   };
 
@@ -153,14 +158,18 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-6 text-center pb-2">
+      <Card className="w-full max-w-md glass-card shadow-[0_0_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_40px_rgba(0,0,0,0.3)]">
+        <CardHeader className="space-y-6 text-center pb-2 relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-40" />
+          <div className="absolute right-0 top-0">
+            <ThemeToggle />
+          </div>
           {/* Logo OrthoPlus Enterprise */}
           <div className="flex flex-col items-center space-y-2">
             <img
-              src="/orthoplus-logo-enterprise.svg"
+              src="/OrthoPlus-Enterprise/orthoplus-logo-enterprise.svg"
               alt="OrthoPlus Enterprise"
-              className="h-12 w-auto"
+              className="h-12 w-auto dark:brightness-200 dark:drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]"
             />
             <div className="text-xs font-medium text-interactive tracking-[0.3em] uppercase">
               Clínicas Odontológicas
@@ -177,7 +186,7 @@ export default function Auth() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-3 dark:bg-slate-800 dark:border-slate-700">
               <TabsTrigger 
                 value="login" 
               >
@@ -196,7 +205,7 @@ export default function Auth() {
             </TabsList>
 
             <TabsContent value="login" className="space-y-4">
-              <p className="text-sm text-slate-400 text-center">
+              <p className="text-sm text-muted-foreground text-center">
                 Acesso para dentistas, recepcionistas e administradores
               </p>
               <Form {...loginForm}>
@@ -235,13 +244,21 @@ export default function Auth() {
                         <FormControl>
                           <div className="relative">
                             <Input
-                              type="password"
+                              type={showPassword ? "text" : "password"}
                               placeholder="••••••••"
-                              className="pl-10"
+                              className="pl-10 pr-10"
                               {...field}
                               disabled={isLoading}
                             />
                             <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                              tabIndex={-1}
+                            >
+                              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </button>
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -249,11 +266,10 @@ export default function Auth() {
                     )}
                   />
                   <Button 
-                    type="button" 
-                    variant="cta" 
-                    className="w-full" 
+                    type="submit" 
+                    variant="default" 
+                    className="w-full shadow-[0_0_16px_hsl(var(--interactive)/0.2)] hover:shadow-[0_0_24px_hsl(var(--interactive)/0.3)] transition-shadow duration-300" 
                     disabled={isLoading}
-                    onClick={() => handleLogin({ email: loginForm.getValues("email"), password: loginForm.getValues("password") })}
                   >
                     {isLoading ? "Entrando..." : "Entrar"}
                   </Button>

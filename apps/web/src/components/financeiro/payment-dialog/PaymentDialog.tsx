@@ -33,7 +33,7 @@ export function PaymentDialog({
   } = usePaymentForm(conta);
 
   const { submit, loading } = usePaymentSubmission(
-    conta.id,
+    (conta.id as string),
     metodo,
     getPaymentData,
     onSuccess,

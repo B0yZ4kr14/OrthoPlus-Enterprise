@@ -10,7 +10,7 @@ export function FormField(props: FormFieldProps) {
   const { label, name, error, success, helperText, required, className } = props;
 
   const hasError = !!error;
-  const hasSuccess = success && !hasError;
+  const hasSuccess = !!success && !hasError;
 
   const renderInput = () => {
     if (props.type === "textarea") {

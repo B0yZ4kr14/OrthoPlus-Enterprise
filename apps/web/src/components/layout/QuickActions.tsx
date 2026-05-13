@@ -20,11 +20,11 @@ export function QuickActions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="default" size="icon" data-testid="quick-actions-btn">
+        <Button variant="default" size="icon" data-testid="quick-actions-btn" className="shadow-[0_0_12px_hsl(var(--interactive)/0.25)] hover:shadow-[0_0_16px_hsl(var(--interactive)/0.35)] transition-shadow duration-300">
           <Plus className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-56 glass-card border-border/50">
         <DropdownMenuItem onClick={() => navigate("/pacientes/novo")}>
           <UserPlus className="mr-2 h-4 w-4" />
           Novo Paciente

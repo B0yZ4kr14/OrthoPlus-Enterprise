@@ -48,13 +48,13 @@ export function LogItem({ log }: LogItemProps) {
 
         {log.module && (
           <p className="text-sm text-muted-foreground mb-1">
-            Módulo: {log.module.name}
+            Módulo: {String(log.module?.name || "—")}
           </p>
         )}
 
-        {log.details?.module_keys && (
+        {!!(log.details?.module_keys as string[] | undefined) && (
           <p className="text-sm text-muted-foreground mb-1">
-            {log.details.permissions_count as number} permissões aplicadas
+            {String(log.details.permissions_count || 0)} permissões aplicadas
           </p>
         )}
 

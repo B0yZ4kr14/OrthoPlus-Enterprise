@@ -64,24 +64,24 @@ export function useCryptoPagamentos() {
   }, [convertCryptoToBRL]);
 
   const handleExchangeSubmit = useCallback(async (data: unknown) => {
-    await createExchangeConfig(data);
+    await createExchangeConfig(data as any);
     setExchangeDialogOpen(false);
   }, [createExchangeConfig]);
 
   const handleWalletSubmit = useCallback(async (data: unknown) => {
-    await createWallet(data);
+    await createWallet(data as any);
     setWalletDialogOpen(false);
   }, [createWallet]);
 
   const handleAlertSubmit = useCallback(async (data: unknown) => {
-    await createAlert(data);
+    await createAlert(data as any);
     setAlertDialogOpen(false);
   }, [createAlert]);
 
   const handleCascadeSubmit = useCallback(async (cascadeAlerts: unknown[]) => {
     try {
       for (const alertData of cascadeAlerts) {
-        await createAlert(alertData);
+        await createAlert(alertData as any);
       }
       toast.success(`Estratégia DCA criada com ${cascadeAlerts.length} níveis!`);
       setCascadeWizardOpen(false);
