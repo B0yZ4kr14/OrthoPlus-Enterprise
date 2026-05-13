@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-05-13
+
+### 🚀 Deploy & Infrastructure
+- **VPS Sync**: Sincronizado código local (ca5b92cd4) → VPS — backend atualizado de v2 para **v2.2**
+- **Dockerfile fix**: Adicionado `prisma generate` no stage `builder` para gerar tipos antes do build
+- **Container backend**: Recriado com `orthoplus-backend:v2.2`, healthy e respondendo `/health` → 200
+- **Backup pré-deploy**: `pg_dump` realizado antes de qualquer alteração no VPS
+
+### 🏗️ Backend
+- **Stubs 404 reduzidos**: De ~156 para **<30** endpoints
+  - Corrigido `admin_tools/controller.ts`: query em `profiles` com filtro `app_role` (model `dentists` inexistente)
+  - Corrigido `financeiro/api/FinanceiroController.ts`: extração de `metadata` do model `pdv_vendas` (models `pdv_venda_itens`/`pdv_pagamentos` inexistentes)
+  - Criado model `comunicacao_logs` no schema Prisma (schema `operacional`)
+  - Criado model `analytics_events` no schema Prisma (schema `operacional`)
+- **TypeScript fixes**: Adicionado `return next(e)` em `analyticsController.ts` (TS7030)
+- **Prisma schema**: `@@schema("public")` removido de todos os 178 modelos (zero ocorrências)
+
+### 🧪 Tests
+- **AuthController tests**: Corrigidos 18 testes quebrados
+  - Mock de `asyncHandler` como pass-through com try/catch
+  - Atualizados mocks do Prisma Client (`users.findUnique`, `patients.findFirst`)
+  - Ajustadas mensagens de erro para refletir factories `Errors.*` / `ApiError`
+  - Resultado: **17 suites passed, 363 tests passed, 0 failures**
+
+### 📚 Documentation
+- Atualizado `AGENTS.md` com estado atual (2026-05-13)
+
+---
+
 ## [Unreleased] - 2026-04-23
 
 ### 🔒 Security
