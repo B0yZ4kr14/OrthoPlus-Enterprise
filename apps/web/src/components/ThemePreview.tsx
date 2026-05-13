@@ -7,7 +7,7 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Check, Sun, Moon, Palette } from "lucide-react";
+import { Check, Sun, Moon, Palette, Diamond } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
@@ -60,13 +60,37 @@ const themes = [
       accent: "bg-amber-400",
     },
   },
+  {
+    id: "premium-light",
+    name: "Clínica Cristal",
+    description: "Tema premium claro com acentos azul clínico",
+    icon: Diamond,
+    preview: {
+      background: "bg-sky-50",
+      card: "bg-white",
+      text: "text-slate-800",
+      accent: "bg-sky-500",
+    },
+  },
+  {
+    id: "premium-dental-dark",
+    name: "Noite Clínica",
+    description: "Tema premium escuro com tons frios azulados",
+    icon: Diamond,
+    preview: {
+      background: "bg-slate-900",
+      card: "bg-slate-800",
+      text: "text-slate-100",
+      accent: "bg-sky-400",
+    },
+  },
 ] as const;
 
 export function ThemePreview() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
       {themes.map((themeOption) => {
         const Icon = themeOption.icon;
         const isActive = theme === themeOption.id;

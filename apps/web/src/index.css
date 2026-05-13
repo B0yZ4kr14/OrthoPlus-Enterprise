@@ -309,6 +309,126 @@
     --shadow-card: none;
     --shadow-card-hover: none;
   }
+  /* ── PREMIUM LIGHT (Clínica Cristal) ──────── */
+  .premium-light {
+    --background:        210 40% 98%;   /* slate-50 */
+    --foreground:        215 28% 17%;   /* slate-800 */
+    --card:              0 0% 100%;     /* white */
+    --card-foreground:   215 28% 17%;
+    --popover:           0 0% 100%;
+    --popover-foreground: 215 28% 17%;
+    --primary:           199 89% 48%;   /* sky-500 */
+    --primary-foreground: 0 0% 100%;
+    --interactive:       189 94% 43%;   /* cyan-500 */
+    --interactive-foreground: 0 0% 100%;
+    --interactive-hover: 192 91% 36%;   /* cyan-600 */
+    --secondary:         210 40% 96%;   /* slate-100 */
+    --secondary-foreground: 215 28% 17%;
+    --muted:             210 40% 96%;
+    --muted-foreground:  215 16% 47%;   /* slate-500 */
+    --accent:            204 100% 97%;  /* sky-50 */
+    --accent-foreground: 201 96% 32%;   /* sky-700 */
+    --destructive:        0 84% 60%;   /* red-500 */
+    --destructive-foreground: 0 0% 100%;
+    --success:           160 84% 39%;   /* emerald-500 */
+    --success-foreground: 0 0% 100%;
+    --warning:           38 92% 50%;   /* amber-500 */
+    --warning-foreground: 0 0% 100%;
+    --info:              199 89% 48%;   /* sky-500 */
+    --info-foreground:   0 0% 100%;
+    --border:            214 32% 91%;  /* slate-200 */
+    --input:             214 32% 91%;
+    --ring:              199 89% 48%;  /* sky-500 */
+    --sidebar-background:          0 0% 100%;
+    --sidebar-foreground:          215 28% 17%;
+    --sidebar-primary:             199 89% 48%;
+    --sidebar-primary-foreground:  0 0% 100%;
+    --sidebar-accent:              210 40% 96%;
+    --sidebar-accent-foreground:   215 28% 17%;
+    --sidebar-border:              214 32% 91%;
+    --sidebar-ring:                199 89% 48%;
+    --module-blue:    217 91% 60%;
+    --module-purple:  270 60% 65%;
+    --module-yellow:  45 93% 47%;
+    --module-orange:  25 95% 53%;
+    --module-cyan:    199 89% 48%;
+    --module-pink:    330 70% 60%;
+    --module-green:   160 84% 39%;
+    --module-red:     0 84% 60%;
+    --stat-blue-bg:   217 91% 60%;
+    --stat-purple-bg: 270 60% 65%;
+    --stat-green-bg:  160 84% 39%;
+    --stat-orange-bg: 25 95% 53%;
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+    --shadow-card: 0 4px 24px 0 rgb(148 163 184 / 0.08);
+    --shadow-card-hover: 0 8px 32px 0 rgb(148 163 184 / 0.12);
+    --shadow-interactive: 0 0 0 3px hsl(199 89% 48% / 0.15);
+  }
+
+  /* ── PREMIUM DENTAL DARK (Noite Clínica) ──── */
+  .premium-dental-dark {
+    --background:        222 47% 11%;   /* slate-900 */
+    --foreground:        210 40% 98%;   /* slate-100 */
+    --card:              217 33% 17%;   /* slate-800 */
+    --card-foreground:   210 40% 98%;
+    --popover:           217 33% 17%;
+    --popover-foreground: 210 40% 98%;
+    --primary:           200 98% 61%;   /* sky-400 */
+    --primary-foreground: 222 47% 11%;
+    --interactive:       189 94% 67%;   /* cyan-400 */
+    --interactive-foreground: 222 47% 11%;
+    --interactive-hover: 190 90% 77%;   /* cyan-300 */
+    --secondary:         217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted:             217 33% 17%;
+    --muted-foreground:  215 20% 65%;   /* slate-400 */
+    --accent:            202 80% 16%;   /* sky-900 */
+    --accent-foreground: 200 100% 72%;  /* sky-300 */
+    --destructive:        0 91% 71%;   /* red-400 */
+    --destructive-foreground: 222 47% 11%;
+    --success:           158 64% 52%;   /* emerald-400 */
+    --success-foreground: 222 47% 11%;
+    --warning:           43 96% 56%;   /* amber-400 */
+    --warning-foreground: 222 47% 11%;
+    --info:              200 98% 61%;   /* sky-400 */
+    --info-foreground:   222 47% 11%;
+    --border:            215 28% 25%;   /* slate-700 */
+    --input:             215 28% 25%;
+    --ring:              200 98% 61%;   /* sky-400 */
+    --sidebar-background:          222 47% 11%;
+    --sidebar-foreground:          210 40% 98%;
+    --sidebar-primary:             200 98% 61%;
+    --sidebar-primary-foreground:  222 47% 11%;
+    --sidebar-accent:              217 33% 17%;
+    --sidebar-accent-foreground:   210 40% 98%;
+    --sidebar-border:              215 28% 25%;
+    --sidebar-ring:                200 98% 61%;
+    --module-blue:    217 91% 60%;
+    --module-purple:  270 60% 65%;
+    --module-yellow:  45 93% 47%;
+    --module-orange:  25 95% 53%;
+    --module-cyan:    200 98% 61%;
+    --module-pink:    330 70% 60%;
+    --module-green:   158 64% 52%;
+    --module-red:     0 91% 71%;
+    --stat-blue-bg:   217 91% 60%;
+    --stat-purple-bg: 270 60% 65%;
+    --stat-green-bg:  158 64% 52%;
+    --stat-orange-bg: 25 95% 53%;
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.25), 0 1px 2px -1px rgb(0 0 0 / 0.2);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.25);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+    --shadow-card: 0 4px 24px 0 rgb(0 0 0 / 0.25);
+    --shadow-card-hover: 0 8px 32px 0 rgb(0 0 0 / 0.35);
+    --shadow-interactive: 0 0 0 3px hsl(200 98% 61% / 0.25);
+  }
+
 }
 
 /* ============================================
@@ -588,6 +708,140 @@
   .alert-amber  { @apply alert-warning; }
 }
 
+/* ============================================
+
+/* ============================================
+   PREMIUM DENTAL THEME EFFECTS
+   Clínica Cristal & Noite Clínica
+   ============================================ */
+
+@layer components {
+  /* Glass premium - efeito cristal */
+  .glass-premium {
+    background: hsl(var(--card) / 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(var(--border) / 0.6);
+    box-shadow: 0 8px 32px 0 hsl(var(--primary) / 0.08);
+  }
+
+  /* Gradient hero premium */
+  .gradient-hero-premium {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--background)) 0%,
+      hsl(var(--accent) / 0.5) 50%,
+      hsl(var(--card)) 100%
+    );
+  }
+
+  /* Glow premium - brilho sutil */
+  .glow-premium {
+    box-shadow: 0 0 24px hsl(var(--primary) / 0.15),
+                0 0 48px hsl(var(--primary) / 0.08);
+  }
+
+  /* Card premium */
+  .card-premium {
+    @apply rounded-xl border border-border/50;
+    background: hsl(var(--card) / 0.95);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+
+  .card-premium:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-1px);
+  }
+
+  /* Page header premium */
+  .page-header-premium {
+    @apply relative overflow-hidden rounded-2xl p-6 mb-6;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--card)) 0%,
+      hsl(var(--accent) / 0.3) 50%,
+      hsl(var(--background)) 100%
+    );
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* Stats card premium */
+  .stats-card-premium {
+    @apply relative overflow-hidden rounded-xl p-5;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border) / 0.4);
+    box-shadow: var(--shadow-card);
+  }
+
+  .stats-card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--interactive)) 50%,
+      hsl(var(--primary)) 100%
+    );
+    opacity: 0.6;
+  }
+
+  /* Button premium glow */
+  .btn-premium-glow {
+    @apply relative;
+    box-shadow: 0 0 16px hsl(var(--interactive) / 0.2);
+  }
+
+  .btn-premium-glow:hover {
+    box-shadow: 0 0 24px hsl(var(--interactive) / 0.35);
+  }
+
+  /* Premium light specific */
+  .premium-light .glass-premium {
+    border-color: hsl(var(--border) / 0.3);
+    box-shadow: 0 8px 32px 0 hsl(199 89% 48% / 0.06);
+  }
+
+  .premium-light .stats-card-premium::before {
+    background: linear-gradient(
+      90deg,
+      hsl(199 89% 48%) 0%,
+      hsl(189 94% 43%) 50%,
+      hsl(199 89% 48%) 100%
+    );
+  }
+
+  /* Premium dental dark specific */
+  .premium-dental-dark .glass-premium {
+    background: hsl(var(--card) / 0.7);
+    border-color: hsl(200 98% 61% / 0.15);
+    box-shadow: 0 8px 32px 0 hsl(200 98% 61% / 0.1);
+  }
+
+  .premium-dental-dark .stats-card-premium::before {
+    background: linear-gradient(
+      90deg,
+      hsl(200 98% 61%) 0%,
+      hsl(189 94% 67%) 50%,
+      hsl(200 98% 61%) 100%
+    );
+    opacity: 0.8;
+  }
+
+  .premium-dental-dark .page-header-premium {
+    background: linear-gradient(
+      135deg,
+      hsl(222 47% 11%) 0%,
+      hsl(202 80% 16% / 0.5) 50%,
+      hsl(217 33% 17%) 100%
+    );
+    border-color: hsl(200 98% 61% / 0.1);
+  }
+}
 /* ============================================
    SCROLLBAR
    ============================================ */

@@ -9,6 +9,8 @@ type Theme =
   | "professional-dark"   // Professional dark
   | "high-contrast"       // Acessibilidade — fundo branco
   | "high-contrast-dark"  // Acessibilidade — fundo preto
+  | "premium-light"       // Premium — Clínica Cristal
+  | "premium-dental-dark" // Premium — Noite Clínica
   // Legacy — mantido para não quebrar localStorage de usuários existentes
   | "orthoplus-v2"
   | "dark-gold";
@@ -73,6 +75,8 @@ const CSS_CLASS_THEMES: Theme[] = [
   "professional-dark",
   "high-contrast",
   "high-contrast-dark",
+  "premium-light",
+  "premium-dental-dark",
 ];
 
 // Mapa: tema → classe CSS aplicada em <html>
@@ -82,6 +86,8 @@ const THEME_CLASS_MAP: Record<Theme, string> = {
   "professional-dark": "professional-dark",
   "high-contrast":     "high-contrast",
   "high-contrast-dark":"high-contrast-dark",
+  "premium-light":     "premium-light",
+  "premium-dental-dark": "premium-dental-dark",
   // Legacy
   "orthoplus-v2":      "orthoplus-v2",
   "dark-gold":         "dark",          // fallback para dark
@@ -113,6 +119,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       "dark-gold",
       "high-contrast",
       "high-contrast-dark",
+      "premium-light",
+      "premium-dental-dark",
       "orthoplus-v2",
     );
 
