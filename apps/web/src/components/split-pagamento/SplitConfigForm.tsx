@@ -97,7 +97,6 @@ export function SplitConfigForm({
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // @ts-expect-error — TS2339
         toast.error(error.issues[0].message);
       } else {
         toast.error("Erro ao salvar configuração de split");

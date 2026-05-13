@@ -42,12 +42,19 @@ class ApiClient {
     // Response interceptor — log errors but do NOT show toast here.
     // Callers (AuthContext, hooks) handle their own user-facing toasts.
     // Showing toast here causes double-toast on every error.
+    // 401s without a token are expected (user not logged in) — silenced.
     this.client.interceptors.response.use(
       (response) => {
         return response;
       },
       (error: AxiosError) => {
         if (import.meta.env.DEV) {
+          const status = error.response?.status;
+          const hasToken = !!localStorage.getItem("accessToken");
+          // Silently ignore 401s when no token is present (expected on initial load)
+          if (status === 401 && !hasToken) {
+            return Promise.reject(error);
+          }
           console.error(
             `[API Error]: ${error.response?.status} on ${error.config?.method?.toUpperCase()} ${error.config?.baseURL || ""}${error.config?.url}`,
           );

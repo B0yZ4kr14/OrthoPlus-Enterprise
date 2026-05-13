@@ -94,7 +94,6 @@ export function RecompensaForm({
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // @ts-expect-error — TS2339
         toast.error(error.issues[0].message);
       } else {
         toast.error("Erro ao salvar recompensa");
@@ -169,8 +168,7 @@ export function RecompensaForm({
               <Label htmlFor="tipo">Tipo de Recompensa *</Label>
               <Select
                 value={formData.tipo}
-                onValueChange={(value: unknown) =>
-                  // @ts-expect-error — TS2322
+                onValueChange={(value: any) =>
                   setFormData({ ...formData, tipo: value })
                 }
               >

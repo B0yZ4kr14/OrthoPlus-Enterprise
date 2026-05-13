@@ -63,7 +63,12 @@ export function useModules() {
   );
 
   useEffect(() => {
-    loadModules();
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      loadModules();
+    } else {
+      setLoading(false);
+    }
   }, [loadModules]);
 
   const toggleModule = useCallback(

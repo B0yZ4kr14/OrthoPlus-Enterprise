@@ -201,6 +201,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const checkSession = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        setSession(null);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
       try {
         const data = await apiClient.get<{ user?: User; session?: string }>(
           "/auth/me",

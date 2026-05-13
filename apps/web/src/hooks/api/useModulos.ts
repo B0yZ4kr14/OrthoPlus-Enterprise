@@ -25,11 +25,14 @@ export const useModulos = () => {
   const queryClient = useQueryClient();
 
   // Listar todos os módulos
+  const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["modulos"],
     queryFn: async () => {
       return await apiClient.get<ModulesResponse>("/configuracoes/modulos");
     },
+    enabled: !!token,
   });
 
   // Toggle módulo (ativar/desativar)
@@ -61,6 +64,7 @@ export const useModulos = () => {
     queryFn: async () => {
       return await apiClient.get("/configuracoes/modulos/dependencies");
     },
+    enabled: !!token,
   });
 
   // Helper para verificar se módulo está ativo
