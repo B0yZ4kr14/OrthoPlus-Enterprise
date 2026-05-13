@@ -10,6 +10,7 @@ export interface SidebarBadges {
 }
 
 export function useSidebarBadges() {
+  const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
   return useQuery({
     queryKey: ["sidebar-badges"],
     queryFn: async () => {
@@ -19,6 +20,7 @@ export function useSidebarBadges() {
       return data.badges;
     },
     refetchInterval: 1000 * 60 * 2, // Atualiza a cada 2 minutos
-    staleTime: 1000 * 60, // 1 minuto
+    staleTime: 1000 * 60,
+    enabled: !!token, // 1 minuto
   });
 }
