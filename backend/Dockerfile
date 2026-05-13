@@ -3,8 +3,8 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm@10.33.0
+# Install pnpm and prisma for build
+RUN npm install -g pnpm@10.33.0 prisma@6.19.3
 
 # Copy root configurations
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -22,6 +22,8 @@ COPY shared-types ./shared-types
 
 # Build shared types first, then backend
 RUN pnpm --filter @orthoplus/shared-types run build
+# Generate Prisma client before TypeScript build (needs types)
+RUN pnpm exec prisma generate --schema=backend/prisma/schema.prisma
 RUN pnpm --filter orthoplus-backend run build
 
 # Production stage

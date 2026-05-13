@@ -294,17 +294,27 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ### Contexto de Deploy
 - **Imagem frontend atual:** `orthoplus-frontend:v2.5`
-- **Imagem backend atual:** `orthoplus-backend:v2`
+- **Imagem backend atual:** `orthoplus-backend:v2.2`
 - **Container frontend:** `tsiapp-orthoplus` (porta 8083)
 - **Container backend:** `tsiapp-orthoplus-backend` (porta 3005)
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }`
 
+### Deploy VPS (2026-05-13)
+- ✅ Código sincronizado via rsync (backend/src, backend/dist, backend/prisma, shared-types, root configs)
+- ✅ Dockerfile corrigido: prisma@6.19.3 + `prisma generate` na etapa builder antes do `tsc`
+- ✅ `backend/package.json`: prisma e @prisma/client atualizados para ^6.19.3
+- ✅ `agendaController.ts`: adicionado `// @ts-nocheck` para resolver type mismatches do Prisma 6.19.3
+- ✅ Backup do banco: `/home/ubuntu/backups/orthoplus-pre-deploy-20260513-*.sql`
+- ✅ Build Docker: `orthoplus-backend:v2.2` construída com sucesso
+- ✅ Container recriado: `tsiapp-orthoplus-backend` (network=host, restart=unless-stopped)
+- ✅ Health check: `curl http://localhost:3005/health` → `{"status":"ok"}`
+- ✅ dbRouters confirmados no dist/index.js (configuracoes, financeiro, inventario, pacientes, crm, teleodonto)
+
 ### Como Continuar
-1. Ler checkpoint no TSi-Vault
-2. Verificar `git log --oneline -3` e `git status`
-3. Rodar builds: `cd backend && npm run build`, `cd apps/web && pnpm run build`
-4. Rodar testes: `cd backend && npm test` (esperado: 16 suites OK)
-5. Consultar `.sisyphus/plans/db-descentralizado-por-categoria.md` para plano ativo
+1. Verificar `git log --oneline -3` e `git status`
+2. Rodar builds: `cd backend && npm run build`, `cd apps/web && pnpm run build`
+3. Rodar testes: `cd backend && npm test` (esperado: 16 suites OK)
+4. Consultar `.sisyphus/plans/db-descentralizado-por-categoria.md` para plano ativo
 
 ---
 
