@@ -3046,3 +3046,27 @@ model crypto_exchange_rates {
   @@index([coin_type, timestamp])
   @@schema("financeiro")
 }
+
+model comunicacao_logs {
+  id          String   @id @default(uuid())
+  paciente_id String?
+  clinic_id   String
+  tipo        String
+  mensagem    String
+  status      String
+  created_at  DateTime @default(now())
+
+  @@index([clinic_id, created_at])
+  @@schema("operacional")
+}
+
+model analytics_events {
+  id          String   @id @default(uuid())
+  event_type  String
+  clinic_id   String?
+  payload     Json?
+  created_at  DateTime @default(now())
+
+  @@index([event_type, created_at])
+  @@schema("operacional")
+}

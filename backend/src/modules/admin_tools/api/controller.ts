@@ -218,13 +218,13 @@ export class AdminToolsController {
     }
 
     if (!entityType || entityType === "dentists") {
-      results.dentists = await (prisma as any).dentists // eslint-disable-line @typescript-eslint/no-explicit-any
+      results.dentists = await (prisma as any).profiles // eslint-disable-line @typescript-eslint/no-explicit-any
         .findMany({
           where: {
             clinic_id: clinicId,
+            app_role: { contains: "DENTIST", mode: "insensitive" },
             OR: [
-              { name: { contains: String(query), mode: "insensitive" } },
-              { cro: { contains: String(query) } },
+              { full_name: { contains: String(query), mode: "insensitive" } },
             ],
           },
           take: 10,

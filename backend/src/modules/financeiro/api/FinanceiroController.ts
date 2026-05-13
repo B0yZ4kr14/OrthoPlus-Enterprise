@@ -932,22 +932,11 @@ export class FinanceiroController {
         orderBy: { created_at: "desc" },
       });
       
-      // Buscar itens e pagamentos separadamente (sem relation no schema)
-      const vendaIds = vendas.map((v: { id: string }) => v.id);
-      const [itens, pagamentos] = await Promise.all([
-        vendaIds.length > 0 
-          ? (prisma as any).pdv_venda_itens.findMany({ where: { venda_id: { in: vendaIds } } }) // eslint-disable-line @typescript-eslint/no-explicit-any
-          : Promise.resolve([]),
-        vendaIds.length > 0
-          ? (prisma as any).pdv_pagamentos.findMany({ where: { venda_id: { in: vendaIds } } }) // eslint-disable-line @typescript-eslint/no-explicit-any
-          : Promise.resolve([]),
-      ]);
-      
-      // Mapear para incluir relações
-      const data = vendas.map((v: { id: string; [key: string]: unknown }) => ({
+      // Extrair itens e pagamentos do metadata (pdv_venda_itens e pdv_pagamentos não existem no schema)
+      const data = vendas.map((v: { id: string; metadata?: { itens?: unknown[]; pagamentos?: unknown[] }; [key: string]: unknown }) => ({
         ...v,
-        pdv_venda_itens: itens.filter((i: { venda_id: string }) => i.venda_id === v.id),
-        pdv_pagamentos: pagamentos.filter((p: { venda_id: string }) => p.venda_id === v.id),
+        pdv_venda_itens: (v.metadata?.itens) || [],
+        pdv_pagamentos: (v.metadata?.pagamentos) || [],
       }));
       
       res.json(data);

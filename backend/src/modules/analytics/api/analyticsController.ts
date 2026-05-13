@@ -791,7 +791,7 @@ export class AnalyticsController {
         },
       });
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 }
