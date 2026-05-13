@@ -15,12 +15,14 @@ export const TriagemSchema = z.object({
 
 export type TriagemInput = z.infer<typeof TriagemSchema>;
 
-export interface TriagemResult {
-  especialidadeSugerida: string;
-  urgencia: "baixa" | "media" | "alta" | "emergencia";
-  orientacao: string;
-  motivo: string;
-}
+export const TriagemResultSchema = z.object({
+  especialidadeSugerida: z.string(),
+  urgencia: z.enum(["baixa", "media", "alta", "emergencia"]),
+  orientacao: z.string(),
+  motivo: z.string(),
+});
+
+export type TriagemResult = z.infer<typeof TriagemResultSchema>;
 
 const TRIAGEM_SYSTEM_PROMPT = `Você é um assistente de triagem médica para o sistema OrthoPlus Enterprise.
 Analise os sintomas do paciente e retorne APENAS um JSON válido e estritamente no seguinte formato (sem markdown, sem explicações adicionais):
@@ -32,6 +34,13 @@ Regras:
 - Especialidades comuns: Clinico Geral, Cardiologia, Ortopedia, Dermatologia, Oftalmologia, Otorrino, Ginecologia, Urologia, Pediatria, Neurologia, Psiquiatria, Endocrinologia, Gastroenterologia, Pneumologia, Reumatologia
 - Responda SEMPRE em português do Brasil
 - Seja empático mas direto nas orientações`;
+
+function buildTriagemPrompt(input: TriagemInput): string {
+  let prompt = `Sintomas: ${input.sintomas}`;
+  if (input.idade !== undefined) prompt += `\nIdade: ${input.idade} anos`;
+  if (input.sexo) prompt += `\nSexo: ${input.sexo}`;
+  return prompt;
+}
 
 export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult> {
   if (!AI_GATEWAY_API_KEY) {
@@ -70,7 +79,6 @@ export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult
   }
 
   try {
-    // Extrai JSON da resposta (pode vir com markdown ou texto extra)
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     const jsonStr = jsonMatch ? jsonMatch[0] : content;
     const parsed = JSON.parse(jsonStr);
@@ -81,21 +89,6 @@ export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult
   }
 }
 
-const TriagemResultSchema = z.object({
-  especialidadeSugerida: z.string(),
-  urgencia: z.enum(["baixa", "media", "alta", "emergencia"]),
-  orientacao: z.string(),
-  motivo: z.string(),
-});
-
-function buildTriagemPrompt(input: TriagemInput): string {
-  let prompt = `Sintomas: ${input.sintomas}`;
-  if (input.idade !== undefined) prompt += `\nIdade: ${input.idade} anos`;
-  if (input.sexo) prompt += `\nSexo: ${input.sexo}`;
-  return prompt;
-}
-
-// Health check para o módulo AI
 export async function healthCheckAI(): Promise<{ status: string; model?: string }> {
   if (!AI_GATEWAY_API_KEY) {
     return { status: "disabled" };

@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { authMiddleware } from "../../../middleware/authMiddleware";
 import { triagemVirtual, TriagemSchema, healthCheckAI } from "../ai.service";
 
-const router = Router();
+const router: Router = Router();
 
 /**
  * POST /api/ai/triagem
