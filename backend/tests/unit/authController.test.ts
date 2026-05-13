@@ -1,12 +1,36 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthController } from '../../src/modules/auth/api/AuthController';
+import crypto from 'crypto';
+
+// Mock asyncHandler so thrown ApiErrors are converted to res.status().json()
+// in tests (the real wrapper delegates to Express error middleware via next()).
+jest.mock('../../src/middleware/errorHandler', () => ({
+  ...jest.requireActual('../../src/middleware/errorHandler'),
+  asyncHandler: (fn: any) => async (req: any, res: any, next: any) => {
+    try {
+      await fn(req, res, next);
+    } catch (err: any) {
+      if (err.status && res.status) {
+        res.status(err.status).json({ error: err.message });
+      } else {
+        next(err);
+      }
+    }
+  },
+}));
 
 // Mock the Prisma client so tests run without a real database
 jest.mock('../../src/infrastructure/database/prismaClient', () => ({
   prisma: {
     $queryRaw: jest.fn(),
     $executeRaw: jest.fn(),
+    users: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+    },
+    patients: {
+      findFirst: jest.fn(),
+    },
     profiles: {
       findUnique: jest.fn(),
     },
@@ -22,6 +46,7 @@ jest.mock('../../src/infrastructure/database/prismaClient', () => ({
   },
 }));
 
+import { AuthController } from '../../src/modules/auth/api/AuthController';
 import { prisma } from '../../src/infrastructure/database/prismaClient';
 
 const controller = new AuthController();
@@ -43,8 +68,8 @@ const mockReq = (body = {}, headers = {}, params = {}): Partial<Request> => ({
   params: params as Request['params'],
 });
 
-const JWT_SECRET = '<REMOVED>';
-process.env.JWT_SECRET = '<REMOVED>';
+const JWT_SECRET = crypto.randomBytes(32).toString('hex');
+process.env.JWT_SECRET = JWT_SECRET;
 
 // ── Mock-mode tests (AUTH_ALLOW_MOCK=true) ─────────────────────────────────
 describe('Auth Controller (mock mode)', () => {
@@ -56,6 +81,10 @@ describe('Auth Controller (mock mode)', () => {
     delete process.env.AUTH_ALLOW_MOCK;
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   // ── login ─────────────────────────────────────────────────────────────────
   describe('login', () => {
     it('returns 400 when email is missing', async () => {
@@ -63,7 +92,7 @@ describe('Auth Controller (mock mode)', () => {
       const res = mockRes();
       await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Email and password required' });
+      expect(res.json).toHaveBeenCalledWith({ error: 'Email and password are required' });
     });
 
     it('returns 400 when password is missing', async () => {
@@ -78,7 +107,7 @@ describe('Auth Controller (mock mode)', () => {
       const res = mockRes();
       await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Credenciais inválidas' });
+      expect(res.json).toHaveBeenCalledWith({ error: 'Email or password is incorrect' });
     });
 
     it('returns JWT on valid mock credentials', async () => {
@@ -87,12 +116,11 @@ describe('Auth Controller (mock mode)', () => {
       await controller.login(req as Request, res, jest.fn());
       expect(res.json).toHaveBeenCalled();
       const payload = (res.json as jest.Mock).mock.calls[0][0];
-      expect(payload).toHaveProperty('access_token');
-      expect(payload).toHaveProperty('token_type', 'bearer');
-      expect(payload).toHaveProperty('expires_in', 3600);
+      expect(payload).toHaveProperty('accessToken');
+      expect(payload).toHaveProperty('expiresIn', 3600);
       expect(payload.user.email).toBe('admin@clinic.com');
       // token must be verifiable
-      const decoded = jwt.verify(payload.access_token, JWT_SECRET) as { role: string };
+      const decoded = jwt.verify(payload.accessToken, JWT_SECRET) as { role: string };
       expect(decoded.role).toBe('authenticated');
     });
   });
@@ -132,24 +160,25 @@ describe('Auth Controller (real auth mode)', () => {
     });
 
     it('returns 401 when user not found in database', async () => {
-      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([]);
+      (prisma.users.findUnique as jest.Mock).mockResolvedValueOnce(null);
       const req = mockReq({ email: 'nouser@clinic.com', password: 'pw' });
       const res = mockRes();
       await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Credenciais inválidas' });
+      expect(res.json).toHaveBeenCalledWith({ error: 'Email or password is incorrect' });
     });
 
     it('returns 401 when password does not match', async () => {
       // Return a user row but with a bcrypt hash that won't match 'wrong-pw'
-      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([{
+      (prisma.users.findUnique as jest.Mock).mockResolvedValueOnce({
         id: 'uid-1',
         email: 'user@clinic.com',
         // bcrypt hash of 'correct-password'
         password_hash: '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
         role: 'ADMIN',
         clinic_id: 'clinic-1',
-      }]);
+        is_active: true,
+      });
       const req = mockReq({ email: 'user@clinic.com', password: 'wrong-pw' });
       const res = mockRes();
       await controller.login(req as Request, res, jest.fn());
@@ -157,11 +186,12 @@ describe('Auth Controller (real auth mode)', () => {
     });
 
     it('returns 500 when database throws', async () => {
-      (prisma.$queryRaw as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
+      (prisma.users.findUnique as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
       const req = mockReq({ email: 'user@clinic.com', password: 'pw' });
       const res = mockRes();
       await controller.login(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ error: 'Database error during authentication' });
     });
   });
 
@@ -228,6 +258,10 @@ describe('Auth Controller (real auth mode)', () => {
 
 // ── Shared tests (independent of auth mode) ────────────────────────────────
 describe('Auth Controller (shared)', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   // ── getUser ───────────────────────────────────────────────────────────────
   describe('getUser', () => {
     it('returns 401 when no authorization header', async () => {
@@ -235,6 +269,7 @@ describe('Auth Controller (shared)', () => {
       const res = mockRes();
       await controller.getUser(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({ error: 'No authentication token provided' });
     });
 
     it('returns 401 for invalid token', async () => {
@@ -242,7 +277,7 @@ describe('Auth Controller (shared)', () => {
       const res = mockRes();
       await controller.getUser(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Invalid token' });
+      expect(res.json).toHaveBeenCalledWith({ error: 'The provided token is invalid or expired' });
     });
 
     it('returns user data for valid token', async () => {
@@ -278,14 +313,15 @@ describe('Auth Controller (shared)', () => {
       const res = mockRes();
       await controller.patientAuth(req as Request, res, jest.fn());
       expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ error: 'CPF and birth date are required' });
     });
 
     it('returns JWT for valid cpf + birthDate (DB patient found)', async () => {
-      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([{
+      (prisma.patients.findFirst as jest.Mock).mockResolvedValueOnce({
         id: 'patient-abc',
         clinic_id: 'clinic-xyz',
         birth_date: new Date('1990-01-01'),
-      }]);
+      });
       const req = mockReq({ cpf: '12345678901', birthDate: '1990-01-01' });
       const res = mockRes();
       await controller.patientAuth(req as Request, res, jest.fn());
@@ -296,7 +332,7 @@ describe('Auth Controller (shared)', () => {
     });
 
     it('returns 401 when cpf not found in DB', async () => {
-      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([]);
+      (prisma.patients.findFirst as jest.Mock).mockResolvedValueOnce(null);
       const req = mockReq({ cpf: '99999999999', birthDate: '1990-01-01' });
       const res = mockRes();
       await controller.patientAuth(req as Request, res, jest.fn());
@@ -304,11 +340,11 @@ describe('Auth Controller (shared)', () => {
     });
 
     it('returns 401 when birthDate does not match', async () => {
-      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([{
+      (prisma.patients.findFirst as jest.Mock).mockResolvedValueOnce({
         id: 'patient-abc',
         clinic_id: 'clinic-xyz',
         birth_date: new Date('1985-05-15'),
-      }]);
+      });
       const req = mockReq({ cpf: '12345678901', birthDate: '1990-01-01' });
       const res = mockRes();
       await controller.patientAuth(req as Request, res, jest.fn());
@@ -316,4 +352,3 @@ describe('Auth Controller (shared)', () => {
     });
   });
 });
-
