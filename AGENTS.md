@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-13 | **Branch:** main | **Commit:** ca5b92cd4 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md
+> **Atualizado:** 2026-05-13 | **Branch:** main | **Commit:** 98dfd0082 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md
 
 ---
 
