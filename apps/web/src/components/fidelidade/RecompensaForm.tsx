@@ -95,7 +95,7 @@ export function RecompensaForm({
     } catch (error) {
       if (error instanceof z.ZodError) {
         // @ts-expect-error — TS2339
-        toast.error(error.errors[0].message);
+        toast.error(error.issues[0].message);
       } else {
         toast.error("Erro ao salvar recompensa");
       }
