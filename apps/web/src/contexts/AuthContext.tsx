@@ -370,6 +370,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // If user role hasn't loaded yet, allow access (will re-check when loaded)
     if (!userRole) return true;
 
+    // Admin-only items are always visible to ADMINs (not real modules in backend catalog)
+    if (moduleKey === "ADMIN_ONLY" && userRole === "ADMIN") return true;
+
     // Check if module is active for the clinic (case-insensitive comparison)
     const normalizedKey = moduleKey.toLowerCase();
     const isModuleActive = activeModules.some((m) => m.toLowerCase() === normalizedKey);
