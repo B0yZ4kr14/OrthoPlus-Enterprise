@@ -91,3 +91,4 @@ backups/
 node_modules
 deploy_key
 .ssh_key_vps
+ecosystem.json
