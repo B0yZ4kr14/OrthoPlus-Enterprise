@@ -300,17 +300,20 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - **TSi-Vault orquestração:** `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
 
 ### Contexto de Deploy
-- **Imagem frontend atual:** `orthoplus-frontend:v2.8` (login com toast de erro/sucesso, fallback @orthoplus.com)
+- **Imagem frontend atual:** `orthoplus-frontend:v2.9` (case-insensitive hasModuleAccess, toast de erro/sucesso no login, fallback `Admin` → `admin@orthoplus.com`)
 - **Imagem backend atual:** `orthoplus-backend:v2.4` (imagem Docker limpa, prisma generate funcionando)
 - **Container frontend:** `tsiapp-orthoplus` (porta 8083)
 - **Container backend:** `tsiapp-orthoplus-backend` (porta 3005, network=host)
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
 
 ### Deploy VPS (2026-05-14) — ESTADO ATUAL VERIFICADO
-- ✅ **Frontend v2.8 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.8`
+- ✅ **Frontend v2.9 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.9`
 - ✅ **Backend v2.4 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.4` (imagem limpa, SEM volume de dist)
 - ✅ **Banco recriado** com schema Prisma completo: 180 tabelas em 16 schemas
+- ✅ **module_catalog sincronizado**: 31 módulos (10 originais + 21 adicionados para alinhar com frontend)
+- ✅ **clinic_modules**: 31 associações ativas para clinic do admin
 - ✅ **Login funcional** — `admin@orthoplus.com` / `admin123!` (ou `Admin` / `admin123!` via frontend fallback)
+- ✅ **hasModuleAccess case-insensitive**: compara `moduleKey.toLowerCase()` com `activeModules`
 - ✅ **8 stubs 404 resolvidos** — /dashboard, /procedimentos, /marketing, /inventario, /estoque, /crm, /teleodonto, /pep → 200
 - ✅ **Hash bcrypt** preservada corretamente (cuidado com shell escaping de `$` em INSERTs)
 - ✅ **Testes backend**: 367 passando, 0 falhando
