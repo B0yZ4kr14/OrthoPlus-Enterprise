@@ -7,6 +7,9 @@ const controller = new TeleodontoController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+// Rota raiz
+router.get("/", (req, res) => controller.listTeleconsultas(req, res));
+
 // Teleconsultas CRUD
 router.get("/teleconsultas", (req, res) => controller.listTeleconsultas(req, res));
 router.get("/teleconsultas/:id", (req, res) => controller.getById(req, res));

@@ -17,6 +17,7 @@ router.use(clinicGuard);
   const controller = new InventarioController(produtoRepository);
 
   // Rotas
+  router.get('/', controller.listarProdutos);
   router.post('/produtos', controller.cadastrarProduto);
   router.get('/produtos', controller.listarProdutos);
   router.get('/produtos/:id', controller.obterProduto);

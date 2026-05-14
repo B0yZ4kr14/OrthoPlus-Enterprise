@@ -31,6 +31,23 @@ export function createPepRouter(): Router {
 router.use(clinicGuard);
   const controller = new PepController();
 
+  // Rota raiz
+  router.get('/', (req: Request, res: Response) => {
+    res.json({
+      module: 'pep',
+      message: 'Prontuário Eletrônico do Paciente — use /prontuarios/patient/:patientId para listar prontuários',
+      endpoints: [
+        '/prontuarios',
+        '/prontuarios/patient/:patientId',
+        '/odontogramas/patient/:patientId',
+        '/odontogramas/history',
+        '/evolucoes',
+        '/tratamentos',
+        '/anexos',
+      ],
+    });
+  });
+
   // Prontuarios
   router.post('/prontuarios', (req, res) => controller.createProntuario(req, res));
   router.get('/prontuarios/patient/:patientId', (req, res) => controller.listProntuariosByPatient(req, res));

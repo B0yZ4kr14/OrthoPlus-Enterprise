@@ -6,6 +6,9 @@ const controller = new MarketingController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+// Rota raiz
+router.get("/", controller.listCampanhas);
+
 // Campanhas
 router.get("/campanhas", controller.listCampanhas);
 router.get("/campanhas/:id", controller.getCampanhaById);

@@ -19,6 +19,16 @@ router.use(clinicGuard);
   const controller = new DashboardController(db);
 
   /**
+   * GET /api/dashboard
+   * Rota raiz — retorna overview do dashboard
+   */
+  router.get(
+    '/',
+    cacheRoute(60, (req) => `cache:dashboard:root:${req.user?.clinicId ?? 'unknown'}`),
+    (req, res) => controller.getOverview(req, res),
+  );
+
+  /**
    * GET /api/dashboard/overview
    * Retorna dados consolidados do dashboard
    * Cache Redis de 60 segundos por clínica para reduzir carga no banco de dados

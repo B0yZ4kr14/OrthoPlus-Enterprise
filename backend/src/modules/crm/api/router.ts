@@ -7,6 +7,7 @@ const controller = new CRMController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+router.get("/", controller.listLeads);
 router.get("/leads", controller.listLeads);
 router.get("/leads/:id", controller.getLeadById);
 router.post("/leads", controller.createLead);

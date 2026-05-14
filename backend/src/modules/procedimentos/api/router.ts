@@ -6,6 +6,7 @@ const controller = new ProcedimentosController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+router.get("/", (req, res) => controller.listTemplates(req, res));
 router.get("/templates", (req, res) => controller.listTemplates(req, res));
 router.get("/templates/:id", (req, res) => controller.getTemplateById(req, res));
 router.post("/templates", (req, res) => controller.createTemplate(req, res));
