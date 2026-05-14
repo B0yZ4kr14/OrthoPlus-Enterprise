@@ -26,8 +26,13 @@ All notable changes to this project will be documented in this file.
   - Ajustadas mensagens de erro para refletir factories `Errors.*` / `ApiError`
   - Resultado: **17 suites passed, 363 tests passed, 0 failures**
 
+### 🎨 Frontend
+- **React Compiler fix**: `Auth.tsx` — substituído `window.location.href` por `navigate()` do react-router-dom (2 erros `react-hooks/immutability`)
+- **Lint**: 0 erros, 107 warnings (pré-existentes)
+
 ### 📚 Documentation
 - Atualizado `AGENTS.md` com estado atual (2026-05-13)
+- Criado `docs/STATUS-2026-05-13.md` com resultados da orquestração
 
 ---
 

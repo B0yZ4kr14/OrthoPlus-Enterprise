@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-13 | **Branch:** main | **Commit:** 98dfd0082 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md
+> **Atualizado:** 2026-05-13 | **Branch:** main | **Commit:** 4abe39035 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md
 
 ---
 
@@ -254,13 +254,14 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **queryRaw**: zero ocorrências em backend/src
 - ✅ **Backend build**: passa sem erros (tsc + tsc-alias)
 - ✅ **Frontend build**: passa sem erros (vite build)
-- ✅ **Frontend lint**: 0 errors, ~98 warnings
+- ✅ **Frontend lint**: 0 errors, 107 warnings
 - ✅ **UI**: PageHeader padronizado, container/padding normalizados (wave-1→wave-3)
 - ✅ **DB decentralizado**: 6 categorias com backup scheduler próprio
 - ✅ **dbRouters registrados**: 6 módulos com `/api/{modulo}/db` (health, stats, backup, maintenance)
-- ✅ **Testes backend**: 345 passando (17 suites), 18 falhando pré-existentes em authController
+- ✅ **Testes backend**: 363 passando (17 suites), 0 falhando
 - ✅ **Landing page embeddada**: SPA serve landing page em `/` com pricing tiers
 - ✅ **Redesign premium v4**: Completo (StatCards, ChartCards, Sidebar, Dashboard Layout, A11y)
+- ✅ **Orquestração Loops 1-5**: Concluída — builds, testes, lint, VPS health, E2E validados
 
 ### Pendências Ativas
 - 🔴 **Deploy VPS desatualizado**: Código VPS em commit `86a3841`, local em `ca5b92cd4`. Build Docker quebra no VPS.

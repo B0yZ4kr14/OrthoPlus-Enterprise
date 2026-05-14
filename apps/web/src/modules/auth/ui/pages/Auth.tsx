@@ -93,7 +93,7 @@ export default function Auth() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      window.location.href = "/OrthoPlus-Enterprise/dashboard";
+      navigate("/OrthoPlus-Enterprise/dashboard");
     }
   }, [user, navigate]);
 
@@ -111,7 +111,7 @@ export default function Auth() {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         setIsLoading(false);
-        window.location.href = "/OrthoPlus-Enterprise/dashboard";
+        navigate("/OrthoPlus-Enterprise/dashboard");
         return;
       }
     } catch (e) {
@@ -120,7 +120,7 @@ export default function Auth() {
     const { error } = await signIn(values.email, values.password);
     setIsLoading(false);
     if (!error) {
-      window.location.href = "/OrthoPlus-Enterprise/dashboard";
+      navigate("/OrthoPlus-Enterprise/dashboard");
     }
   };
 
@@ -144,7 +144,7 @@ export default function Auth() {
     setIsLoading(false);
 
     if (!error) {
-      window.location.href = "/OrthoPlus-Enterprise/portal-paciente";
+      navigate("/OrthoPlus-Enterprise/portal-paciente");
     }
   };
 
