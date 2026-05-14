@@ -272,7 +272,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **8 endpoints stubs 404**: RESOLVIDOS — todos retornam 200 com handlers raiz
 - ✅ **Container backend v2.4**: Imagem Docker limpa buildada e deployada
 - 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour`
-- 🟡 **Secrets em repo**: `backend/.env` e `ecosystem.json` — rotacionar e remover do git
+- 🟡 **Secrets em repo**: `ecosystem.json` removido do git (commit cfb9230f7), mas secrets no histórico DEVEM ser rotacionados
 - 🟡 **PostgreSQL user**: Backend conecta como `postgres` (superuser). Criar role `orthoplus`.
 - 🟡 **Prisma relations faltantes**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
 - 🟡 **CI misto**: alguns workflows usam `npm ci`, outros `pnpm`
