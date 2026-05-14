@@ -11,7 +11,7 @@
 
 | Componente | Versao | URL / Porta | Status |
 |------------|--------|-------------|--------|
-| Frontend | v2.9.3 | `https://tsiapp.io/OrthoPlus-Enterprise/` | ✅ Docker `tsiapp-orthoplus` |
+| Frontend | v2.9.4 | `https://tsiapp.io/OrthoPlus-Enterprise/` | ✅ Docker `tsiapp-orthoplus` |
 | Backend API | v2.4 | `https://tsiapp.io/api` | ✅ Docker `tsiapp-orthoplus-backend` |
 | Health Check | — | `http://localhost:3005/health` | ✅ OK |
 | PostgreSQL | 16 | `127.0.0.1:5432` | ✅ 180 tabelas, 16 schemas |
@@ -28,7 +28,7 @@
 | **Senha** | `admin123!` |
 | **Role** | `ADMIN` |
 | **Clinic ID** | `48eaa5f9-99b1-45ce-a095-e099b522b165` |
-| **Redirect** | Após login, vai para `/dashboard` (workaround `window.location.replace`) |
+| **Redirect** | Após login, redireciona automaticamente para `/dashboard` via React Router `navigate()` |
 
 ---
 
@@ -47,8 +47,8 @@ O frontend tem 32 moduleKeys no sidebar. O banco tem 31 registros em `configurac
 **SEMPRE** sincronizar o banco apos adicionar novos modulos no frontend.
 
 ### ⚠️ Seguranca Pendente
-- **DB_PASSWORD:** ainda `postgres` no VPS — **deve ser rotacionado**
-- **REDIS_PASSWORD:** ainda `orthoplusredis2025` no VPS — **deve ser rotacionado**
+- **DB_PASSWORD:** ✅ rotacionado em 2026-05-14 — role `orthoplus` com senha segura
+- **REDIS_PASSWORD:** ✅ rotacionado em 2026-05-14
 - **JWT_SECRET:** ✅ rotacionado em 2026-05-14
 
 ---
@@ -100,7 +100,7 @@ Buildar imagem Docker com `package.prod.json` (sem `workspace:*`).
 | CRM (`/crm`) | ✅ | Stat cards (3 leads), filtros, tabs Funil/Leads/Relatorios |
 
 ### 🐛 Problemas de UI Conhecidos
-- **Login redirect:** Usa `window.location.replace` (workaround) — root cause do `navigate` do React Router precisa ser corrigido
+- ✅ **Login redirect:** Corrigido — usa AuthContext `signIn` + `useEffect` + `navigate()` do React Router
 - **Dados vazios:** Todos os modulos mostram zeros/empty states porque o banco foi recriado sem seed de demonstracao
 
 ---
