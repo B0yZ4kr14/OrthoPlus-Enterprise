@@ -94,7 +94,7 @@ export default function Auth() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate("/OrthoPlus-Enterprise/dashboard");
+      navigate("/dashboard");
     }
   }, [user, navigate]);
 
@@ -113,7 +113,7 @@ export default function Auth() {
         localStorage.setItem("refreshToken", data.refreshToken);
         setIsLoading(false);
         toast.success("Login realizado com sucesso!");
-        navigate("/OrthoPlus-Enterprise/dashboard");
+        window.location.replace("/OrthoPlus-Enterprise/dashboard");
         return;
       }
       // Login failed — show error from API response
@@ -150,7 +150,7 @@ export default function Auth() {
     setIsLoading(false);
 
     if (!error) {
-      navigate("/OrthoPlus-Enterprise/portal-paciente");
+      navigate("/portal-paciente");
     }
   };
 
