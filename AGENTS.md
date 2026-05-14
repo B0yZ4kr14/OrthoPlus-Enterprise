@@ -82,48 +82,49 @@ cd agent-service && python src/main.py
 
 Todos os 36 módulos possuem router registrado em `backend/src/index.ts` e `clinicGuard` aplicado.
 
-| # | Módulo | Router | Controller | Prisma |
-|---|--------|--------|------------|--------|
-| 0 | `admin_tools` | ✅ | ✅ | ❌ |
-| 1 | `agenda` | ✅ | ✅ | ✅ |
-| 2 | `analytics` | ✅ | ✅ | ✅ |
-| 3 | `auth` | ✅ | ✅ | ✅ |
-| 4 | `backups` | ✅ | ✅ | ❌ |
-| 5 | `bi` | ✅ | ❌ | ❌ |
-| 6 | `comm` | ✅ | ✅ | ❌ |
-| 7 | `configuracoes` | ✅ | ✅ | ❌ |
-| 8 | `contratos` | ✅ | ✅ | ❌ |
-| 9 | `crm` | ✅ | ✅ | ❌ |
-| 10 | `crypto_config` | ✅ | ✅ | ✅ |
-| 11 | `dashboard` | ✅ | ✅ | ✅ |
-| 12 | `database_admin` | ✅ | ✅ | ✅ |
-| 13 | `faturamento` | ✅ | ✅ | ✅ |
-| 14 | `fidelidade` | ✅ | ❌ | ❌ |
-| 15 | `files` | ✅ | ✅ | ✅ |
-| 16 | `financeiro` | ✅ | ✅ | ✅ |
-| 17 | `funcionarios` | ✅ | ❌ | ❌ |
-| 18 | `github_tools` | ✅ | ✅ | ❌ |
-| 19 | `inadimplencia` | ✅ | ❌ | ❌ |
-| 20 | `inventario` | ✅ | ✅ | ✅ |
-| 21 | `lgpd` | ✅ | ❌ | ❌ |
-| 22 | `marketing` | ✅ | ✅ | ✅ |
-| 23 | `nfe` | ✅ | ❌ | ❌ |
-| 24 | `notifications` | ✅ | ✅ | ✅ |
-| 25 | `orcamentos` | ✅ | ✅ | ❌ |
-| 26 | `pacientes` | ✅ | ✅ | ✅ |
-| 27 | `pdv` | ✅ | ✅ | ✅ |
-| 28 | `pep` | ✅ | ✅ | ✅ |
-| 29 | `procedimentos` | ✅ | ✅ | ✅ |
-| 30 | `split_pagamento` | ✅ | ✅ | ❌ |
-| 31 | `teleodonto` | ✅ | ✅ | ✅ |
-| 32 | `terminal` | ✅ | ✅ | ❌ |
-| 33 | `tiss` | ✅ | ❌ | ❌ |
-| 34 | `usuarios` | ✅ | ✅ | ✅ |
-| 35 | `agents` | ✅ | ✅ | ❌ |
+| # | Módulo | Router | Controller | Prisma | Stubs | Status |
+|---|--------|--------|------------|--------|-------|--------|
+| 0 | `admin_tools` | ✅ | ✅ | ❌ | 0 | Sem persistência |
+| 1 | `agenda` | ✅ | ✅ | ✅ | 0 | Completo |
+| 2 | `analytics` | ✅ | ✅ | ✅ | 1 | Fallback mockado |
+| 3 | `auth` | ✅ | ✅ | ✅ | 0 | Completo |
+| 4 | `backups` | ✅ | ✅ | ❌ | 12 | Simulação (sem storage real) |
+| 5 | `bi` | ✅ | ✅ | ✅ | 0 | Completo |
+| 6 | `comm` | ✅ | ✅ | ❌ | 2 | Agora stub quando não configurado |
+| 7 | `configuracoes` | ✅ | ✅ | ❌ | 3 | 3 endpoints mockados |
+| 8 | `contratos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 9 | `crm` | ✅ | ✅ | ✅ | 0 | Completo |
+| 10 | `crypto_config` | ✅ | ✅ | ✅ | 2 | Mock address + sync simplificado |
+| 11 | `dashboard` | ✅ | ✅ | ❌ | 1 | 503 quando sem DB |
+| 12 | `database_admin` | ✅ | ✅ | ✅ | 0 | Completo |
+| 13 | `faturamento` | ✅ | ✅ | ✅ | 0 | Completo |
+| 14 | `fidelidade` | ✅ | ✅ | ✅ | 0 | Completo |
+| 15 | `files` | ✅ | ✅ | ✅ | 0 | Completo |
+| 16 | `financeiro` | ✅ | ✅ | ✅ | 0 | Completo |
+| 17 | `funcionarios` | ✅ | ✅ | ✅ | 0 | Completo |
+| 18 | `github_tools` | ✅ | ✅ | ❌ | 5 | Hardcoded mock data |
+| 19 | `inadimplencia` | ✅ | ✅ | ✅ | 0 | Completo |
+| 20 | `inventario` | ✅ | ✅ | ✅ | 0 | Completo |
+| 21 | `lgpd` | ✅ | ✅ | ✅ | 0 | Completo |
+| 22 | `marketing` | ✅ | ✅ | ✅ | 0 | Completo |
+| 23 | `nfe` | ✅ | ✅ | ✅ | 0 | Completo (fallback 42P01) |
+| 24 | `notifications` | ✅ | ✅ | ✅ | 0 | Completo |
+| 25 | `orcamentos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 26 | `pacientes` | ✅ | ✅ | ✅ | 0 | Completo |
+| 27 | `pdv` | ✅ | ✅ | ✅ | 0 | Completo |
+| 28 | `pep` | ✅ | ✅ | ✅ | 0 | Completo |
+| 29 | `procedimentos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 30 | `split_pagamento` | ✅ | ✅ | ✅ | 0 | Completo |
+| 31 | `teleodonto` | ✅ | ✅ | ✅ | 0 | Completo |
+| 32 | `terminal` | ✅ | ✅ | ❌ | 2 | 501 "disabled" |
+| 33 | `tiss` | ✅ | ✅ | ✅ | 0 | Completo |
+| 34 | `usuarios` | ✅ | ✅ | ✅ | 0 | Completo |
+| 35 | `agents` | ✅ | ✅ | ❌ | 0 | Proxy para agent-service |
 
 **Legenda:**
-- ✅ Completo
-- ❌ API-only / stub
+- ✅ Completo (CRUD real)
+- ❌ Sem persistência Prisma (API-only / mock)
+- ⚠️ Parcial (alguns endpoints mockados)
 
 ---
 
@@ -279,7 +280,10 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ### Pendências Ativas
 - 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour` (não impedem build)
-- 🟡 **~135 endpoints stubs**: Módulos sem controllers completos retornam 404 em sub-rotas
+- 🟡 **~28 mock/stub endpoints** (não 156): Apenas 8 módulos têm endpoints mockados — backups (12), github_tools (5), configuracoes (3), terminal (2), comm (2), crypto_config (2), analytics (1), dashboard (1). Todos os demais 29 módulos estão completos com CRUD real.
+  - **backups**: necessita integração com storage real (S3/MinIO)
+  - **github_tools**: necessita token GitHub real + Octokit
+  - **terminal**: feature flag `TERMINAL_ENABLED` (segurança)
 - ✅ **Prisma relations**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles` adicionadas
 - ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
 - ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
