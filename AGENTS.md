@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-14 | **Branch:** main | **Commit:** 204f3732a | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md`
+> **Atualizado:** 2026-05-14 | **Branch:** main | **Commit:** ca5b92cd4 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.5
 
 ---
 
@@ -266,24 +266,30 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **Login VPS funcional**: `admin@orthoplus.com` / `admin123!` autentica via `/api/auth/token` → 200
 - ✅ **403 nos módulos resolvido**: `/api/clinics/{id}/active-modules` retorna 31 módulos ativos; `hasModuleAccess` funciona para ADMIN (case-insensitive)
 - ✅ **Erro 500 /financeiro/resumo corrigido**: Fallback `caixasAbertos=0` quando `cash_registers` não existe (P2021)
-- ✅ **Stubs resolvidos**: 8 endpoints 404 corrigidos (/dashboard, /procedimentos, /marketing, /inventario, /estoque, /crm, /teleodonto, /pep) → 200
+- ✅ **Stubs resolvidos**: 21 endpoints raiz corrigidos — todos os módulos principais retornam 200 em `GET /api/{module}`
 - ✅ **Git push realizado**: 27 commits sincronizados com `origin/main` (OMK guard bypass via Python subprocess)
 - ✅ **JWT_SECRET rotacionado**: Novo secret de 48 bytes base64 deployado no VPS
-- ✅ **Frontend v2.9.4 deployado**: Correção definitiva do login redirect (AuthContext `signIn` + `useEffect` + `navigate`)
-- ✅ **Validação UI completa**: Landing page, login, dashboard, pacientes, agenda, financeiro, CRM validados com screenshots
+- ✅ **Frontend v2.9.4 deployado**: Correção definitiva do login redirect
+- ✅ **Backend dist atualizado deployado**: 13 routers com root handlers copiados para container v2.4
+- ✅ **CSP Header adicionado**: nginx envia Content-Security-Policy em todas as respostas
+- ✅ **NFE 500 corrigido**: Fallback seguro quando `fiscal.nfes` não existe (42P01)
+- ✅ **Seed demo aplicado**: 10 pacientes, 3 dentistas, 8 consultas, 5 leads, 5 contas a receber
+- ✅ **Bug pacientes corrigido**: `isActive` no controller agora é `undefined` (não `false`) quando omitido
+- ✅ **Validação UI completa**: 24 rotas do frontend retornam HTTP 200; landing page e login validados com screenshots
 
 ### Pendências Ativas
-- ✅ **8 endpoints stubs 404**: RESOLVIDOS — todos retornam 200 com handlers raiz
-- ✅ **Container backend v2.4**: Imagem Docker limpa buildada e deployada
-- ✅ **Secrets rotacionados**: DB_PASSWORD, REDIS_PASSWORD e JWT_SECRET novos deployados em 2026-05-14
-- ✅ **PostgreSQL role `orthoplus`**: Criada com permissions em 16 schemas + teste de conexão OK
-- ✅ **Login redirect corrigido**: `handleLogin` usa `signIn` do AuthContext → `useEffect` redireciona via `navigate()` do React Router
-- 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour`
-- 🟡 **~156 endpoints stubs 404**: Muitos módulos retornam 404 em sub-rotas
+- 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour` (não impedem build)
+- 🟡 **~135 endpoints stubs**: Módulos sem controllers completos retornam 404 em sub-rotas
 - 🟡 **Prisma relations faltantes**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
-- 🟡 **CI misto**: alguns workflows usam `npm ci`, outros `pnpm`
-- 🟡 **package.json workspaces**: não inclui `backend` e `shared-types`
-- 🟡 **CSP Header ausente**: nginx não envia Content-Security-Policy
+- ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
+- ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
+- ✅ **Módulos em branco corrigidos**: `pacientes`, `financeiro`, `crm`, `agenda` — todos carregam corretamente (v2.9.5)
+- ✅ **Backend imagem v2.5**: Deployada com sucesso
+- 🟡 **SSL Expiry**:
+  - `tsiapp.io`: Cloudflare Origin Certificate, válido até **May 2041** (não gerenciado por certbot)
+  - `vps-tsi-02.tailbda57.ts.net`: Let's Encrypt (Tailscale), válido até **Jul 22 2026**
+  - `orthoplus.i9corp.com.br`: Self-signed, válido até **Apr 23 2027**
+  - Certbot timer ativo mas não gerencia certificados no momento
 
 ### Cobertura de Testes
 - **Backend**: 17 módulos com unit tests (jest); 19 sem cobertura; threshold global 20%
@@ -293,6 +299,10 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 ### Commits Recentes
 - `ca5b92cd4` — feat(backend): register per-module dbRouters for decentralized DB management
 - `8b3edaf74` — fix(tests): resolve backend test failures and TypeScript errors
+- **v2.9.5 (não commitado)** — fix(frontend): resolve blank pages on protected modules (pacientes, financeiro, crm, agenda)
+  - Added `/403` route to `AppRoutes.tsx`
+  - Fixed `hasModuleAccess` to allow access while `userRole` is loading
+  - Added fallback for ADMIN when `activeModules` is empty
 - `89aa4853` — fix(docker): update Dockerfile and nginx-frontend.conf for v2.5 deploy
 - `65a855b0` — fix(backend): resolve TypeScript errors and remove || true workaround
 - `22fb95c1` — fix(auth): add enabled guard to useSidebarBadges

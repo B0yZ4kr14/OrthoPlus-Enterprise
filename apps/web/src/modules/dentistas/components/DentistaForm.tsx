@@ -54,7 +54,7 @@ export function DentistaForm({
     setValue,
     watch,
   } = useForm<Dentista>({
-    resolver: zodResolver(dentistaSchema) as unknown as Resolver<Dentista>,
+    resolver: zodResolver(dentistaSchema),
     defaultValues: dentista || {
       status: "Ativo",
       especialidades: [],

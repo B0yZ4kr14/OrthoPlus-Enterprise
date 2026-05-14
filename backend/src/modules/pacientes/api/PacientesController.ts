@@ -138,7 +138,7 @@ export class PacientesController {
         origemId: req.query.origemId as string,
         promotorId: req.query.promotorId as string,
         campanhaId: req.query.campanhaId as string,
-        isActive: req.query.isActive === "true",
+        isActive: req.query.isActive !== undefined ? req.query.isActive === "true" : undefined,
       };
 
       const pagination = {

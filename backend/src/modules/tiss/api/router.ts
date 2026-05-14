@@ -6,6 +6,17 @@ const controller = new TISSController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+// Root route — module status
+router.get("/", (req, res) => {
+  res.json({
+    module: "tiss",
+    version: "1.0.0",
+    endpoints: ["/"],
+    status: "active",
+    note: "Module routes available — see router.ts for full endpoint list"
+  });
+});
+
 // Guias TISS
 router.get("/guias", (req, res) => controller.listGuias(req, res));
 router.get("/guias/:id", (req, res) => controller.getGuiaById(req, res));

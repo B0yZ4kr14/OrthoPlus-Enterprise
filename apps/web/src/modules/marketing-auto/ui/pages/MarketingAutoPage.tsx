@@ -12,6 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Plus, TrendingUp, Users, Mail, BarChart3, Megaphone } from "lucide-react";
 import { toast } from "sonner";
+import { CampaignType, TargetSegment } from "../../domain/entities/Campaign";
 import {
   Dialog,
   DialogContent,
@@ -35,9 +36,15 @@ export function MarketingAutoPage() {
   } = useCampaigns();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
-  const handleCreateCampaign = async (data: unknown) => {
+  const handleCreateCampaign = async (data: {
+    name: string;
+    description?: string;
+    type: CampaignType;
+    messageTemplate: string;
+    targetSegment?: TargetSegment;
+    scheduledDate?: Date;
+  }) => {
     try {
-      // @ts-expect-error — TS2345
       await createCampaign(data);
       setShowCreateDialog(false);
       toast.success("Campanha criada com sucesso!");

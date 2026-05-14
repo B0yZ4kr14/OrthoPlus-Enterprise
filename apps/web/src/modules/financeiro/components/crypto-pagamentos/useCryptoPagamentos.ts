@@ -6,7 +6,8 @@ import { useCryptoNotifications } from "@/hooks/useCryptoNotifications";
 import { useCryptoPriceAlerts } from "@/modules/crypto/hooks/useCryptoPriceAlerts";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
-import type { CryptoWallet } from "@/modules/crypto/types/crypto.types";
+import type { CryptoWallet, ExchangeConfig } from "@/modules/crypto/types/crypto.types";
+import type { PriceAlert } from "@/modules/crypto/hooks/useCryptoPriceAlerts";
 
 export function useCryptoPagamentos() {
   const { clinicId } = useAuth();
@@ -63,25 +64,25 @@ export function useCryptoPagamentos() {
     }
   }, [convertCryptoToBRL]);
 
-  const handleExchangeSubmit = useCallback(async (data: unknown) => {
-    await createExchangeConfig(data as any);
+  const handleExchangeSubmit = useCallback(async (data: Partial<ExchangeConfig>) => {
+    await createExchangeConfig(data);
     setExchangeDialogOpen(false);
   }, [createExchangeConfig]);
 
-  const handleWalletSubmit = useCallback(async (data: unknown) => {
-    await createWallet(data as any);
+  const handleWalletSubmit = useCallback(async (data: Partial<CryptoWallet>) => {
+    await createWallet(data);
     setWalletDialogOpen(false);
   }, [createWallet]);
 
-  const handleAlertSubmit = useCallback(async (data: unknown) => {
-    await createAlert(data as any);
+  const handleAlertSubmit = useCallback(async (data: Omit<PriceAlert, "id" | "created_at" | "last_triggered_at" | "is_active">) => {
+    await createAlert(data);
     setAlertDialogOpen(false);
   }, [createAlert]);
 
-  const handleCascadeSubmit = useCallback(async (cascadeAlerts: unknown[]) => {
+  const handleCascadeSubmit = useCallback(async (cascadeAlerts: Omit<PriceAlert, "id" | "created_at" | "last_triggered_at" | "is_active">[]) => {
     try {
       for (const alertData of cascadeAlerts) {
-        await createAlert(alertData as any);
+        await createAlert(alertData);
       }
       toast.success(`Estratégia DCA criada com ${cascadeAlerts.length} níveis!`);
       setCascadeWizardOpen(false);

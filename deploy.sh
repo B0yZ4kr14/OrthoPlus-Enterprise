@@ -10,11 +10,11 @@ git pull origin main
 
 # Install dependencies
 echo '📦 Installing dependencies...'
-npm ci
+pnpm install
 
 # Build application
 echo '🔨 Building application...'
-npm run build
+pnpm run build
 
 # Database migrations
 echo '🗄️  Running database migrations...'

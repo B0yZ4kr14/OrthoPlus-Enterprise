@@ -108,14 +108,14 @@ ssh $SSH_OPTS "$VPS_USER@$VPS_IP" << 'REMOTE'
   cd /home/ubuntu/OrthoPlus-Enterprise-backend
 
   # Instalar/atualizar deps do backend (sem devDependencies)
-  npm install --omit=dev --quiet
+  pnpm install --prod
 
   # Prisma migrate deploy
   echo "[VPS] Aplicando migrações Prisma..."
-  npx prisma migrate deploy || npx prisma db push --accept-data-loss
+  pnpm exec prisma migrate deploy || pnpm exec prisma db push --accept-data-loss
 
   # Gerar Prisma client atualizado
-  npx prisma generate
+  pnpm exec prisma generate
 
   # PM2 reload
   if pm2 list | grep -q "orthoplus-backend"; then

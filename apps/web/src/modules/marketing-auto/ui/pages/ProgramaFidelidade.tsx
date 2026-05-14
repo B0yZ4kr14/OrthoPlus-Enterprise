@@ -329,7 +329,7 @@ export default function ProgramaFidelidade() {
                     >
                       <div className="flex-1">
                         <div className="font-medium">
-                          {indicacao.id ? (indicacao as any).indicador_nome : (indicacao.indicador?.nome || "Sistema")}
+                          {indicacao.indicador?.nome || "Sistema"}
                         </div>
                         <div className="text-sm text-muted-foreground">
                           Indicou: {indicacao.indicado_nome} •{" "}

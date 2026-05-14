@@ -1,6 +1,7 @@
 import { INFeRepository } from '../../domain/repositories/INFeRepository';
 import { NFe } from '../../domain/entities/NFe';
 import { db } from '@/infrastructure/database/connection';
+import { logger } from '@/infrastructure/logger';
 
 interface FindAllNFeOptions {
   clinicId: string;
@@ -46,11 +47,19 @@ export class NFeRepositoryPostgres implements INFeRepository {
     if (!NFeRepositoryPostgres.ALLOWED_LOOKUP_COLUMNS.has(column)) {
       throw new Error(`Invalid lookup column: ${column}`);
     }
-    const queryResult = await db.query(
-      `SELECT ${NFeRepositoryPostgres.BASE_COLUMNS} FROM fiscal.nfes WHERE ${column} = $1`,
-      [value]
-    );
-    return queryResult.rows[0] ? this.mapToEntity(queryResult.rows[0] as NFeRow) : null;
+    try {
+      const queryResult = await db.query(
+        `SELECT ${NFeRepositoryPostgres.BASE_COLUMNS} FROM fiscal.nfes WHERE ${column} = $1`,
+        [value]
+      );
+      return queryResult.rows[0] ? this.mapToEntity(queryResult.rows[0] as NFeRow) : null;
+    } catch (err: any) {
+      if (err.code === '42P01') {
+        logger.warn('Tabela fiscal.nfes não encontrada, retornando null');
+        return null;
+      }
+      throw err;
+    }
   }
 
   async findById(id: string): Promise<NFe | null> {
@@ -77,49 +86,73 @@ export class NFeRepositoryPostgres implements INFeRepository {
       filterClauses += ` AND cliente_id = ${this.addParameter(filterParams, options.clienteId)}`;
     }
 
-    const countQuery = `SELECT COUNT(*) FROM fiscal.nfes WHERE clinic_id = $1${filterClauses}`;
+    try {
+      const countQuery = `SELECT COUNT(*) FROM fiscal.nfes WHERE clinic_id = $1${filterClauses}`;
 
-    let dataQuery =
-      `SELECT ${NFeRepositoryPostgres.BASE_COLUMNS} FROM fiscal.nfes ` +
-      `WHERE clinic_id = $1${filterClauses} ORDER BY created_at DESC`;
-    const paginatedParams = [...filterParams];
+      let dataQuery =
+        `SELECT ${NFeRepositoryPostgres.BASE_COLUMNS} FROM fiscal.nfes ` +
+        `WHERE clinic_id = $1${filterClauses} ORDER BY created_at DESC`;
+      const paginatedParams = [...filterParams];
 
-    dataQuery += ` LIMIT ${this.addParameter(paginatedParams, options.take ?? 1000)}`;
+      dataQuery += ` LIMIT ${this.addParameter(paginatedParams, options.take ?? 1000)}`;
 
-    if (options.skip !== undefined) {
-      dataQuery += ` OFFSET ${this.addParameter(paginatedParams, options.skip)}`;
+      if (options.skip !== undefined) {
+        dataQuery += ` OFFSET ${this.addParameter(paginatedParams, options.skip)}`;
+      }
+
+      const [countResult, dataResult] = await Promise.all([
+        db.query(countQuery, filterParams),
+        db.query(dataQuery, paginatedParams),
+      ]);
+
+      const total = parseInt(countResult.rows[0].count, 10);
+      return {
+        items: dataResult.rows.map((databaseRow) => this.mapToEntity(databaseRow as NFeRow)),
+        total,
+      };
+    } catch (err: any) {
+      if (err.code === '42P01') {
+        logger.warn('Tabela fiscal.nfes não encontrada, retornando lista vazia');
+        return { items: [], total: 0 };
+      }
+      throw err;
     }
-
-    const [countResult, dataResult] = await Promise.all([
-      db.query(countQuery, filterParams),
-      db.query(dataQuery, paginatedParams),
-    ]);
-
-    const total = parseInt(countResult.rows[0].count, 10);
-    return {
-      items: dataResult.rows.map((databaseRow) => this.mapToEntity(databaseRow as NFeRow)),
-      total,
-    };
   }
 
   async save(nfe: NFe): Promise<void> {
-    await db.query(
-      `INSERT INTO fiscal.nfes (
-        id, clinic_id, numero, serie, tipo, status, chave_acesso, xml, pdf_url,
-        cliente_id, cliente_nome, valor_total, data_emissao, protocolo, created_at, updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
-      [nfe.id, nfe.clinicId, nfe.numero, nfe.serie, nfe.tipo, nfe.status, nfe.chaveAcesso,
-       nfe.xml, nfe.pdfUrl, nfe.clienteId, nfe.clienteNome, nfe.valorTotal, nfe.dataEmissao,
-       nfe.protocolo, nfe.createdAt, nfe.updatedAt]
-    );
+    try {
+      await db.query(
+        `INSERT INTO fiscal.nfes (
+          id, clinic_id, numero, serie, tipo, status, chave_acesso, xml, pdf_url,
+          cliente_id, cliente_nome, valor_total, data_emissao, protocolo, created_at, updated_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
+        [nfe.id, nfe.clinicId, nfe.numero, nfe.serie, nfe.tipo, nfe.status, nfe.chaveAcesso,
+         nfe.xml, nfe.pdfUrl, nfe.clienteId, nfe.clienteNome, nfe.valorTotal, nfe.dataEmissao,
+         nfe.protocolo, nfe.createdAt, nfe.updatedAt]
+      );
+    } catch (err: any) {
+      if (err.code === '42P01') {
+        logger.warn('Tabela fiscal.nfes não encontrada, não foi possível salvar NF-e');
+        throw new Error('Módulo NF-e não está configurado — tabela fiscal.nfes não existe');
+      }
+      throw err;
+    }
   }
 
   async update(nfe: NFe): Promise<void> {
-    await db.query(
-      'UPDATE fiscal.nfes SET status = $1, chave_acesso = $2, xml = $3, pdf_url = $4, ' +
-      'protocolo = $5, updated_at = $6 WHERE id = $7',
-      [nfe.status, nfe.chaveAcesso, nfe.xml, nfe.pdfUrl, nfe.protocolo, nfe.updatedAt, nfe.id]
-    );
+    try {
+      await db.query(
+        'UPDATE fiscal.nfes SET status = $1, chave_acesso = $2, xml = $3, pdf_url = $4, ' +
+        'protocolo = $5, updated_at = $6 WHERE id = $7',
+        [nfe.status, nfe.chaveAcesso, nfe.xml, nfe.pdfUrl, nfe.protocolo, nfe.updatedAt, nfe.id]
+      );
+    } catch (err: any) {
+      if (err.code === '42P01') {
+        logger.warn('Tabela fiscal.nfes não encontrada, não foi possível atualizar NF-e');
+        throw new Error('Módulo NF-e não está configurado — tabela fiscal.nfes não existe');
+      }
+      throw err;
+    }
   }
 
   private mapToEntity(databaseRow: NFeRow): NFe {

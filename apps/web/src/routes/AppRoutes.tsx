@@ -4,6 +4,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppLayout } from "@/components/AppLayout";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import Forbidden from "@/modules/core/ui/pages/Forbidden";
 
 // Core pages (não lazy - carregamento imediato)
 import Demo from "@/modules/core/ui/pages/Demo";
@@ -287,6 +288,9 @@ const AppRoutes = () => (
     <Route path="/usuarios" element={protectedRoute(<Usuarios />, { requireAdmin: true })} />
     <Route path="/configuracoes" element={protectedRoute(<Configuracoes />, { requireAdmin: true })} />
     <Route path="/help" element={protectedRoute(<HelpCenter />)} />
+
+    {/* 403 Forbidden page - v2.9.5 */}
+    <Route path="/403" element={<Forbidden />} />
   </Routes>
 );
 

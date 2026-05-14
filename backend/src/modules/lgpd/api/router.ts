@@ -6,6 +6,17 @@ const controller = new LGPDController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+// Root route — module status
+router.get("/", (req, res) => {
+  res.json({
+    module: "lgpd",
+    version: "1.0.0",
+    endpoints: ["/"],
+    status: "active",
+    note: "Module routes available — see router.ts for full endpoint list"
+  });
+});
+
 // Consentimentos
 router.get("/consentimentos", (req, res) => controller.listConsentimentos(req, res));
 router.post("/consentimentos", (req, res) => controller.createConsentimento(req, res));

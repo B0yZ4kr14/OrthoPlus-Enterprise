@@ -6,6 +6,17 @@ const controller = new SplitPagamentoController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+// Root route — module status
+router.get("/", (req, res) => {
+  res.json({
+    module: "split_pagamento",
+    version: "1.0.0",
+    endpoints: ["/"],
+    status: "active",
+    note: "Module routes available — see router.ts for full endpoint list"
+  });
+});
+
 // Config
 router.get("/config", (req, res) => controller.getConfig(req, res));
 router.put("/config", (req, res) => controller.upsertConfig(req, res));

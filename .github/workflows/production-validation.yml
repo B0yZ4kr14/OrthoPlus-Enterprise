@@ -40,26 +40,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "pnpm"
 
-      - name: Install frontend dependencies
-        run: npm ci --legacy-peer-deps
+      - name: Install dependencies
+        run: pnpm install
 
-      - name: Audit frontend dependencies
+      - name: Audit dependencies
         # Only critical vulnerabilities block the pipeline; high-severity ones should be triaged regularly
-        run: npm audit --audit-level=critical
-        continue-on-error: true
-
-      - name: Install backend dependencies
-        run: cd backend && npm ci
-
-      - name: Audit backend dependencies
-        # Only critical vulnerabilities block the pipeline; high-severity ones should be triaged regularly
-        run: cd backend && npm audit --audit-level=critical
+        run: pnpm audit --audit-level=critical
         continue-on-error: true
 
   build-production:
@@ -69,25 +64,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "pnpm"
 
-      - name: Install frontend dependencies
-        run: npm ci --legacy-peer-deps
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build frontend (production)
-        run: npm run build
+        run: pnpm run build
         env:
           NODE_ENV: production
           VITE_API_BASE_URL: "https://example.com/api"
 
-      - name: Install backend dependencies
-        run: cd backend && npm ci
-
       - name: Build backend (production)
-        run: cd backend && npm run build
+        run: pnpm --filter orthoplus-backend run build
         env:
           NODE_ENV: production

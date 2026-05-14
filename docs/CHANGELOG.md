@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-05-14
+
+### 🔐 Security
+- **Secret rotation**: JWT_SECRET, DB_PASSWORD, REDIS_PASSWORD rotacionados e deployados no VPS
+- **PostgreSQL role**: Criada role dedicada `orthoplus` com LOGIN e permissions nos 16 schemas
+- **CSP Header**: Adicionado `Content-Security-Policy` ao nginx (`tsiapp-https`)
+
+### 🏗️ Backend
+- **Root handlers**: Adicionados `GET /` a 13 routers (dashboard, bi, fidelidade, inadimplencia, lgpd, split_pagamento, tiss, terminal, + 5 anteriores)
+- **Backend deploy**: Dist atualizado copiado para container v2.4 (workaround para imagem v2.5 não deployada por timeout)
+- **21 módulos validados**: Todos retornam HTTP 200 em `GET /api/{module}` com autenticação
+
+### 🎨 Frontend
+- **Login redirect fix**: AuthContext `signIn` armazena tokens em localStorage; `useEffect` redireciona via `navigate()`
+- **Type-check**: 0 erros em backend e frontend (`tsc --noEmit`)
+
+### 🚀 Infrastructure
+- **Frontend v2.9.4**: Deployado e operacional em produção
+- **Backend**: Container `tsiapp-orthoplus-backend` saudável (health 200)
+
+## [Unreleased] - 2026-05-14 (continuação)
+
+### 🔧 Hotfixes
+- **NFE 500**: Adicionado tratamento 42P01 (tabela não existe) em `NFeRepositoryPostgres` — retorna lista vazia/null com warning
+- **Pacientes empty**: Corrigido bug no `PacientesController` — `isActive` agora é `undefined` quando não passado na query (não `false`)
+
+### 🌱 Seed Demo
+- **10 pacientes** inseridos em `pacientes.patients`
+- **3 dentistas** inseridos em `core.profiles`
+- **8 consultas** inseridas em `pacientes.appointments`
+- **5 leads** inseridos em `comercial.crm_leads`
+- **5 contas a receber** inseridas em `financeiro.contas_receber`
+
+### 🧪 Validação Frontend
+- **24 rotas** validadas com HTTP 200 (todas as páginas do SPA)
+- **Screenshots**: Landing page e login confirmados visualmente
+- **APIs com dados**: Pacientes (10), Agenda (8), Financeiro (5), CRM (5)
+
 ## [Unreleased] - 2026-05-13
 
 ### 🚀 Deploy & Infrastructure

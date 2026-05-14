@@ -59,8 +59,7 @@ export const fidelidadeBadgeSchema = z.object({
   nome: z.string().min(1),
   descricao: z.string().min(1),
   icone: z.string().min(1),
-  // @ts-expect-error — TS2554
-  criterio: z.record(z.unknown()),
+  criterio: z.record(z.string(), z.unknown()),
   compartilhavel: z.boolean().default(true),
 });
 

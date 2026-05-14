@@ -95,6 +95,11 @@ apt install -y nodejs
 log_success "Node.js $(node --version) instalado"
 log_success "NPM $(npm --version) instalado"
 
+# Instalar pnpm
+log_info "Instalando pnpm..."
+npm install -g pnpm@10.33.0
+log_success "pnpm $(pnpm --version) instalado"
+
 # Instalar PostgreSQL 16
 log_info "Instalando PostgreSQL 16..."
 sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -356,11 +361,11 @@ cd orthoplus
 
 # Instalar dependências do projeto
 log_info "Instalando dependências do projeto..."
-npm install
+pnpm install
 
 # Build do projeto para produção
 log_info "Compilando aplicação para produção..."
-npm run build
+pnpm run build
 
 # Criar arquivo .env
 log_info "Criando arquivo de configuração..."
@@ -396,7 +401,7 @@ After=network.target postgresql.service
 Type=simple
 User=www-data
 WorkingDirectory=${INSTALL_DIR}
-ExecStart=/usr/bin/npm run preview -- --host 0.0.0.0 --port 5173
+ExecStart=/usr/bin/pnpm run preview -- --host 0.0.0.0 --port 5173
 Restart=on-failure
 Environment=NODE_ENV=production
 

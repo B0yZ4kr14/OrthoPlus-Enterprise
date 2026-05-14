@@ -37,7 +37,7 @@ export const dentistaSchema = z.object({
     .min(0, "Valor deve ser maior ou igual a zero")
     .optional(),
   observacoes: z.string().optional(),
-  status: z.enum(["Ativo", "Inativo", "Férias"]).default("Ativo"),
+  status: z.enum(["Ativo", "Inativo", "Férias"]),
   avatar_url: z.string().nullable().optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),

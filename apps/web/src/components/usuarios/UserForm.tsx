@@ -33,7 +33,7 @@ const userFormSchema = z.object({
     .max(200),
   email: z.string().email("Email inválido"),
   app_role: z.enum(["ADMIN", "MEMBER"]),
-  is_active: z.boolean().default(true),
+  is_active: z.boolean(),
   password: z
     .string()
     .min(6, "Senha deve ter pelo menos 6 caracteres")
@@ -61,7 +61,6 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<UserFormValues>({
-    // @ts-expect-error — TS2322
     resolver: zodResolver(userFormSchema),
     defaultValues: {
       full_name: user?.full_name || "",
@@ -122,10 +121,8 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
 
   return (
     <Form {...form}>
-      {/* @ts-expect-error — TS2345 */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
-          // @ts-expect-error — TS2322
           control={form.control}
           name="full_name"
           render={({ field }) => (
@@ -140,7 +137,6 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
         />
 
         <FormField
-          // @ts-expect-error — TS2322
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -165,7 +161,6 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
         />
 
         <FormField
-          // @ts-expect-error — TS2322
           control={form.control}
           name="password"
           render={({ field }) => (
@@ -190,7 +185,6 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
         />
 
         <FormField
-          // @ts-expect-error — TS2322
           control={form.control}
           name="app_role"
           render={({ field }) => (
@@ -217,7 +211,6 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
         />
 
         <FormField
-          // @ts-expect-error — TS2322
           control={form.control}
           name="is_active"
           render={({ field }) => (

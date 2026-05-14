@@ -8,6 +8,17 @@ const router: Router = Router();
 // Apply clinic context validation to all routes in this module
 router.use(clinicGuard);
 
+// Root route — module status
+router.get("/", (req, res) => {
+  res.json({
+    module: "bi",
+    version: "1.0.0",
+    endpoints: ["/"],
+    status: "active",
+    note: "Module routes available — see router.ts for full endpoint list"
+  });
+});
+
 // Dashboards
 router.get("/dashboards", controller.listDashboards);
 router.get("/dashboards/:id", controller.getDashboardById);

@@ -29,7 +29,7 @@ jobs:
           key: ${{ secrets.PROXMOX_SSH_KEY }}
           script: |
             # Assuming Tailscale IP and VM id 200
-            ssh -o StrictHostKeyChecking=no root@100.123.253.1 "qm guest exec 200 -- bash -c 'cd /ortho-plus && git pull origin main && npm install && npm run build && pm2 restart all'"
+            ssh -o StrictHostKeyChecking=no root@100.123.253.1 "qm guest exec 200 -- bash -c 'cd /ortho-plus && git pull origin main && pnpm install && pnpm run build && pm2 restart all'"
 
       - name: Skip deployment
         if: env.HAS_HOST != 'true'

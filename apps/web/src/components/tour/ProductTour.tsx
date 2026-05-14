@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
-// @ts-expect-error — TS2305, TS2613
-import Joyride, { CallBackProps, STATUS, Step } from "react-joyride";
+import { Joyride, STATUS, Step, EventData } from "react-joyride";
 import { useAuth } from "@/contexts/AuthContext";
+
+declare global {
+  interface Window {
+    startOrthoTour?: () => void;
+  }
+}
 
 const TOUR_COMPLETED_KEY = "ortho_plus_tour_completed";
 
@@ -43,8 +48,7 @@ export function ProductTour() {
         </div>
       ),
       placement: "center",
-      // @ts-expect-error — TS2353
-      disableBeacon: true,
+      skipBeacon: true,
     },
     {
       target: '[data-tour="sidebar"]',
@@ -152,7 +156,7 @@ export function ProductTour() {
     },
   ];
 
-  const handleJoyrideCallback = (data: CallBackProps) => {
+  const handleJoyrideCallback = (data: EventData) => {
     const { status } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
@@ -170,8 +174,7 @@ export function ProductTour() {
 
   // Expor função globalmente para reiniciar tour
   useEffect(() => {
-    // @ts-expect-error — TS2571
-    (window as unknown).startOrthoTour = restartTour;
+    window.startOrthoTour = restartTour;
   }, []);
 
   if (isAutomatedBrowser) {
@@ -183,23 +186,22 @@ export function ProductTour() {
       steps={steps}
       run={run}
       continuous
-      showProgress
-      showSkipButton
       scrollToFirstStep
-      scrollOffset={100}
-      disableOverlayClose={false}
-      callback={handleJoyrideCallback}
+      onEvent={handleJoyrideCallback}
+      options={{
+        primaryColor: "hsl(var(--primary))",
+        backgroundColor: "hsl(var(--card))",
+        textColor: "hsl(var(--card-foreground))",
+        overlayColor: "rgba(0, 0, 0, 0.5)",
+        zIndex: 10000,
+        arrowColor: "hsl(var(--card))",
+        width: 320,
+        showProgress: true,
+        scrollOffset: 100,
+        overlayClickAction: false,
+      }}
       styles={{
-        options: {
-          primaryColor: "hsl(var(--primary))",
-          backgroundColor: "hsl(var(--card))",
-          textColor: "hsl(var(--card-foreground))",
-          overlayColor: "rgba(0, 0, 0, 0.5)",
-          zIndex: 10000,
-          arrowColor: "hsl(var(--card))",
-          width: 320,
-        },
-        buttonNext: {
+        buttonPrimary: {
           backgroundColor: "hsl(var(--primary))",
           color: "hsl(var(--primary-foreground))",
           borderRadius: "0.375rem",
@@ -242,7 +244,7 @@ export function ProductTour() {
           marginBottom: "0.5rem",
         },
         spotlight: {
-          borderRadius: "0.5rem",
+          // borderRadius não é atributo SVG válido na v3 do react-joyride
         },
       }}
       locale={{

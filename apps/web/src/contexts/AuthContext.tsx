@@ -367,13 +367,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const hasModuleAccess = (moduleKey: string) => {
+    // If user role hasn't loaded yet, allow access (will re-check when loaded)
+    if (!userRole) return true;
+
     // Check if module is active for the clinic (case-insensitive comparison)
     const normalizedKey = moduleKey.toLowerCase();
     const isModuleActive = activeModules.some((m) => m.toLowerCase() === normalizedKey);
 
-    // ADMIN can see all active modules
+    // ADMIN can see all active modules; if no modules configured yet, allow access (fallback)
     if (userRole === "ADMIN") {
-      return isModuleActive;
+      return activeModules.length === 0 ? true : isModuleActive;
     }
 
     // MEMBER needs both module active AND user permission

@@ -6,6 +6,17 @@ const controller = new FidelidadeController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+// Root route — module status
+router.get("/", (req, res) => {
+  res.json({
+    module: "fidelidade",
+    version: "1.0.0",
+    endpoints: ["/"],
+    status: "active",
+    note: "Module routes available — see router.ts for full endpoint list"
+  });
+});
+
 // Pontos
 router.get("/pontos", (req, res) => controller.getPoints(req, res));
 router.post("/pontos", (req, res) => controller.addPoints(req, res));

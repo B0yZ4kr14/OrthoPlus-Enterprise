@@ -220,6 +220,9 @@ app.use(express.json({ limit: '10mb' }));
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
 });
+app.get("/api/health", (_req, res) => {
+  res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
+});
 
 // Auth middleware — populates req.clinicId from JWT for all routes
 app.use(authMiddleware);

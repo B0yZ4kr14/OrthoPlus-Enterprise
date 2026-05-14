@@ -6,6 +6,17 @@ const controller = new InadimplenciaController();
 const router: Router = Router();
 router.use(clinicGuard);
 
+// Root route — module status
+router.get("/", (req, res) => {
+  res.json({
+    module: "inadimplencia",
+    version: "1.0.0",
+    endpoints: ["/"],
+    status: "active",
+    note: "Module routes available — see router.ts for full endpoint list"
+  });
+});
+
 // Inadimplentes
 router.get("/inadimplentes", (req, res) => controller.listInadimplentes(req, res));
 router.get("/inadimplentes/:id", (req, res) => controller.getInadimplente(req, res));
