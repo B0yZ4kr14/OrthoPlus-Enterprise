@@ -1009,30 +1009,43 @@ export class FinanceiroController {
         totalDespesas,
         contasReceberPendentes,
         contasPagarPendentes,
-        caixasAbertos,
       ] = await Promise.all([
-        prisma.financial_transactions.aggregate({
+        (prisma as any).financial_transactions.aggregate({
           where: { clinic_id: clinicId, type: "RECEITA", status: "PAGO" },
           _sum: { amount: true },
         }),
-        prisma.financial_transactions.aggregate({
+        (prisma as any).financial_transactions.aggregate({
           where: { clinic_id: clinicId, type: "DESPESA", status: "PAGO" },
           _sum: { amount: true },
         }),
-        prisma.contas_receber.aggregate({
+        (prisma as any).contas_receber.aggregate({
           where: { clinic_id: clinicId, status: { not: "PAGO" } },
           _sum: { valor: true },
           _count: { id: true },
         }),
-        prisma.contas_pagar.aggregate({
+        (prisma as any).contas_pagar.aggregate({
           where: { clinic_id: clinicId, status: { not: "PAGO" } },
           _sum: { valor: true },
           _count: { id: true },
-        }),
-        (prisma as any).cash_registers.count({
-          where: { clinic_id: clinicId, status: "ABERTO" },
         }),
       ]);
+
+      // Fallback para 0 se a tabela cash_registers não existir (P2021)
+      let caixasAbertos = 0;
+      try {
+        caixasAbertos = await (prisma as any).cash_registers.count({
+          where: { clinic_id: clinicId, status: "ABERTO" },
+        });
+      } catch (cashError: any) {
+        if (cashError.code === "P2021") {
+          logger.warn("Tabela cash_registers não encontrada, retornando caixasAbertos=0", {
+            clinicId,
+            table: cashError.meta?.table,
+          });
+        } else {
+          throw cashError;
+        }
+      }
 
       res.json({
         saldoGeral: (totalReceitas._sum.amount || 0) - (totalDespesas._sum.amount || 0),

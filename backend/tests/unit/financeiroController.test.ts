@@ -9,6 +9,7 @@ jest.mock('../../src/infrastructure/database/prismaClient', () => ({
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      aggregate: jest.fn(),
     },
     financial_categories: {
       findMany: jest.fn(),
@@ -23,12 +24,19 @@ jest.mock('../../src/infrastructure/database/prismaClient', () => ({
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      count: jest.fn(),
+    },
+    contas_receber: {
+      aggregate: jest.fn(),
+    },
+    contas_pagar: {
+      aggregate: jest.fn(),
     },
   },
 }));
 
 jest.mock('../../src/infrastructure/logger', () => ({
-  logger: { error: jest.fn(), info: jest.fn() },
+  logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
 }));
 
 import { prisma } from '../../src/infrastructure/database/prismaClient';
@@ -36,6 +44,8 @@ import { prisma } from '../../src/infrastructure/database/prismaClient';
 const transactions = (prisma as any).financial_transactions as Record<string, jest.Mock>;
 const categories = (prisma as any).financial_categories as Record<string, jest.Mock>;
 const cashRegisters = (prisma as any).cash_registers as Record<string, jest.Mock>;
+const contasReceber = (prisma as any).contas_receber as Record<string, jest.Mock>;
+const contasPagar = (prisma as any).contas_pagar as Record<string, jest.Mock>;
 
 const controller = new FinanceiroController();
 
@@ -373,5 +383,72 @@ describe('FinanceiroController.listCashRegisters', () => {
     const res = mockRes();
     await controller.listCashRegisters(req as Request, res);
     expect(res.json).toHaveBeenCalledWith([{ id: 'cr-1' }]);
+  });
+});
+
+// ── getResumo ─────────────────────────────────────────────────────────────────
+describe('FinanceiroController.getResumo', () => {
+  it('returns 401 when no clinicId', async () => {
+    const req = mockReq({ user: undefined });
+    const res = mockRes();
+    await controller.getResumo(req as Request, res);
+    expect(res.status).toHaveBeenCalledWith(401);
+  });
+
+  it('returns financial summary successfully', async () => {
+    transactions.aggregate
+      .mockResolvedValueOnce({ _sum: { amount: 10000 } }) // totalReceitas
+      .mockResolvedValueOnce({ _sum: { amount: 3000 } }); // totalDespesas
+
+    contasReceber.aggregate.mockResolvedValueOnce({ _sum: { valor: 5000 }, _count: { id: 3 } });
+    contasPagar.aggregate.mockResolvedValueOnce({ _sum: { valor: 2000 }, _count: { id: 2 } });
+    cashRegisters.count.mockResolvedValueOnce(1);
+
+    const req = mockReq();
+    const res = mockRes();
+    await controller.getResumo(req as Request, res);
+
+    expect(res.json).toHaveBeenCalledWith({
+      saldoGeral: 7000,
+      totalReceitas: 10000,
+      totalDespesas: 3000,
+      contasReceber: { total: 5000, quantidade: 3 },
+      contasPagar: { total: 2000, quantidade: 2 },
+      caixasAbertos: 1,
+    });
+  });
+
+  it('returns fallback caixasAbertos=0 when cash_registers table does not exist (P2021)', async () => {
+    transactions.aggregate
+      .mockResolvedValueOnce({ _sum: { amount: 0 } })
+      .mockResolvedValueOnce({ _sum: { amount: 0 } });
+
+    contasReceber.aggregate.mockResolvedValueOnce({ _sum: { valor: 0 }, _count: { id: 0 } });
+    contasPagar.aggregate.mockResolvedValueOnce({ _sum: { valor: 0 }, _count: { id: 0 } });
+
+    const p2021Error = new Error('Table not found') as any;
+    p2021Error.code = 'P2021';
+    p2021Error.meta = { table: 'pdv.cash_registers' };
+    cashRegisters.count.mockRejectedValueOnce(p2021Error);
+
+    const req = mockReq();
+    const res = mockRes();
+    await controller.getResumo(req as Request, res);
+
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caixasAbertos: 0,
+        saldoGeral: 0,
+      }),
+    );
+  });
+
+  it('returns 500 on unexpected database error', async () => {
+    transactions.aggregate.mockRejectedValueOnce(new Error('DB'));
+
+    const req = mockReq();
+    const res = mockRes();
+    await controller.getResumo(req as Request, res);
+    expect(res.status).toHaveBeenCalledWith(500);
   });
 });
