@@ -102,30 +102,17 @@ export default function Auth() {
     const identifier = values.email.includes("@") ? values.email.toLowerCase() : values.email.toLowerCase() + "@orthoplus.com";
     setIsLoading(true);
     try {
-      const response = await fetch("/api/auth/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: identifier, password: values.password }),
-      });
-      const data = await response.json();
-      if (data.accessToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        setIsLoading(false);
-        toast.success("Login realizado com sucesso!");
-        window.location.replace("/OrthoPlus-Enterprise/dashboard");
-        return;
-      }
-      // Login failed — show error from API response
-      const errorDetail = data.detail || data.message || "Email ou senha incorretos";
-      toast.error("Erro ao fazer login", { description: errorDetail });
-    } catch (e) {
-      console.error("Direct login failed, falling back to signIn", e);
-      // Network or other error — try fallback via AuthContext signIn
+      // Use AuthContext signIn — it saves tokens to localStorage AND updates global user state.
+      // The useEffect above (line 95-99) will redirect to /dashboard when user becomes non-null.
       const { error } = await signIn(identifier, values.password);
       if (error) {
-        toast.error("Erro ao fazer login", { description: "Não foi possível conectar ao servidor. Tente novamente." });
+        toast.error("Erro ao fazer login", { description: "Email ou senha incorretos" });
       }
+      // On success, signIn updated user state → useEffect will navigate automatically.
+      // No manual navigate needed here.
+    } catch (e) {
+      console.error("Login error:", e);
+      toast.error("Erro ao fazer login", { description: "Não foi possível conectar ao servidor. Tente novamente." });
     }
     setIsLoading(false);
   };

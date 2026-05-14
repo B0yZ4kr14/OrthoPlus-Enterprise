@@ -291,12 +291,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await apiClient.post<{
         access_token?: string;
+        accessToken?: string;
         user?: User;
       }>("/auth/token", { email, password });
 
-      // The backend sets an HttpOnly cookie on successful login.
-      // We only need to update the in-memory state here.
-      setSession(response.access_token || (response as any).accessToken ? { access_token: response.access_token || (response as any).accessToken } : { access_token: "cookie" });
+      const token = response.access_token || response.accessToken;
+      if (token) {
+        localStorage.setItem("accessToken", token);
+      }
+      if ((response as any).refreshToken) {
+        localStorage.setItem("refreshToken", (response as any).refreshToken);
+      }
+
+      setSession(token ? { access_token: token } : { access_token: "cookie" });
       setUser(response.user ?? null);
       toast.success("Login realizado com sucesso!");
 
