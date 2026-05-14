@@ -191,6 +191,28 @@ const MODULE_CATALOG: CatalogModule[] = [
     is_active: true,
     dependencies: [],
   },
+  {
+    id: 17,
+    module_key: "DENTISTAS",
+    name: "Dentistas",
+    description: "Gestão de dentistas e especialistas",
+    category: "CLINICO",
+    icon: "Stethoscope",
+    subscribed: true,
+    is_active: true,
+    dependencies: [],
+  },
+  {
+    id: 18,
+    module_key: "FUNCIONARIOS",
+    name: "Funcionários",
+    description: "Gestão de funcionários e equipe",
+    category: "ADMINISTRATIVO",
+    icon: "Users",
+    subscribed: true,
+    is_active: true,
+    dependencies: [],
+  },
 ];
 
 function buildModuleView(catalog: CatalogModule[]) {
