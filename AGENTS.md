@@ -300,30 +300,42 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - **TSi-Vault orquestração:** `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
 
 ### Contexto de Deploy
-- **Imagem frontend atual:** `orthoplus-frontend:v2.6`
+- **Imagem frontend atual:** `orthoplus-frontend:v2.8` (login com toast de erro/sucesso, fallback @orthoplus.com)
 - **Imagem backend atual:** `orthoplus-backend:v2.4` (imagem Docker limpa, prisma generate funcionando)
 - **Container frontend:** `tsiapp-orthoplus` (porta 8083)
 - **Container backend:** `tsiapp-orthoplus-backend` (porta 3005, network=host)
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
 
-### Deploy VPS (2026-05-14)
-- ✅ Banco recriado com schema Prisma completo: `DROP DATABASE` → `CREATE DATABASE` → `prisma db push` → 180 tabelas em 17 schemas
-- ✅ Backup pré-recriação: `/tmp/orthoplus-full-backup-20260514-0843.dump` (252KB)
-- ✅ Dados essenciais restaurados: 5 usuários, 1 clinic, 1 profile, 10 módulos no module_catalog, 10 clinic_modules
-- ✅ Hash bcrypt corrigida: `$2b$10$...` preservada corretamente no INSERT (evitar shell escaping de `$`)
-- ✅ Correção financeiro/resumo: try-catch isolado para `cash_registers.count()` com fallback `caixasAbertos=0`
-- ✅ Testes backend: 367 passando, 0 falhando
-- ✅ Container backend recriado: `tsiapp-orthoplus-backend` (imagem v2.3 + dist montado como volume)
-- ✅ Health check: `curl http://localhost:3005/health` → `{"status":"ok"}`
-- ✅ Login via nginx: `POST https://tsiapp.io/api/auth/token` → 200 com JWT
-- ✅ Módulos acessíveis: `/api/clinics/{id}/active-modules` → 10 módulos ativos
-- ⚠️ Build Docker v2.4 falhou: `workspace:*` no package.json requer build do root do monorepo
-- ⚠️ 8 endpoints stubs 404 permanecem: /dashboard, /procedimentos, /marketing, /inventario, /estoque, /crm, /teleodonto, /pep
+### Deploy VPS (2026-05-14) — ESTADO ATUAL VERIFICADO
+- ✅ **Frontend v2.8 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.8`
+- ✅ **Backend v2.4 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.4` (imagem limpa, SEM volume de dist)
+- ✅ **Banco recriado** com schema Prisma completo: 180 tabelas em 16 schemas
+- ✅ **Login funcional** — `admin@orthoplus.com` / `admin123!` (ou `Admin` / `admin123!` via frontend fallback)
+- ✅ **8 stubs 404 resolvidos** — /dashboard, /procedimentos, /marketing, /inventario, /estoque, /crm, /teleodonto, /pep → 200
+- ✅ **Hash bcrypt** preservada corretamente (cuidado com shell escaping de `$` em INSERTs)
+- ✅ **Testes backend**: 367 passando, 0 falhando
+- ✅ **Health check**: `curl http://localhost:3005/health` → `{"status":"ok"}`
+- ✅ **ecosystem.json** removido do git (security), backup em `/tmp/orthoplus-full-backup-20260514-0843.dump`
 
 ### Como Continuar
 1. Verificar `git log --oneline -3` e `git status`
 2. Rodar builds: `cd backend && npm run build`, `cd apps/web && pnpm run build`
-3. Rodar testes: `cd backend && npm test` (esperado: 16 suites OK)
+3. Rodar testes: `cd backend && npm test` (esperado: 17 suites, 367 tests OK)
+4. **Deploy frontend**: copiar `apps/web/dist/` → VPS → buildar imagem Docker
+5. **Deploy backend**: copiar `backend/dist/` → VPS → buildar imagem Docker com `package.prod.json` (sem `workspace:*`)
+6. **NUNCA** fazer `prisma db push` em produção sem backup completo
+7. **NUNCA** usar shell escaping direto em hashes bcrypt — usar `cat > file.sql` + `psql -f`
+
+### Checklist de Deploy para Novos Agentes
+- [ ] `git status` limpo (sem alterações não commitadas)
+- [ ] `cd backend && npm run build` passa
+- [ ] `cd backend && npm test` passa (367 tests)
+- [ ] `cd apps/web && pnpm run build` passa
+- [ ] Backup do banco: `pg_dump -Fc -f /tmp/backup-$(date +%Y%m%d).dump`
+- [ ] Frontend: `tar czf dist.tar.gz dist/` → scp → VPS → `docker build -t orthoplus-frontend:vX.Y .`
+- [ ] Backend: `tar czf dist.tar.gz dist/` → scp → VPS → usar `package.prod.json` → `docker build -t orthoplus-backend:vX.Y .`
+- [ ] Verificar health: `curl http://localhost:3005/health`
+- [ ] Verificar login: `curl -X POST https://tsiapp.io/api/auth/token -d '{"email":"admin@orthoplus.com","password":"admin123!"}'`
 4. Consultar `.sisyphus/plans/db-descentralizado-por-categoria.md` para plano ativo
 
 ---
