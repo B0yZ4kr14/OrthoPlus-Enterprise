@@ -286,6 +286,8 @@ import { db as pgDb } from "./infrastructure/database/connection";
 import aiRouter from "./modules/ai/api/router";
 app.use("/api/estoque", createInventarioRouter(pgDb));
 app.use("/api/estoque/db", inventarioDbRouter);
+app.use("/api/inventario", createInventarioRouter(pgDb));
+app.use("/api/inventario/db", inventarioDbRouter);
 app.use("/api/dashboard", createDashboardRouter(pgDb));
 app.use("/api/nfe", createNfeRouter());
 

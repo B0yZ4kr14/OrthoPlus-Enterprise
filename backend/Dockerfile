@@ -31,6 +31,9 @@ FROM node:20-alpine AS production
 
 WORKDIR /app
 
+# Install postgresql-client for pg_dump (category backups)
+RUN apk add --no-cache postgresql-client
+
 # Install pnpm and prisma for production
 RUN npm install -g pnpm@10.33.0 prisma@6.19.3
 

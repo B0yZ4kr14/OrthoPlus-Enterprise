@@ -35,7 +35,7 @@ export class AnalyticsController {
 
       try {
         stats.totalPatients = await ( prisma as any).patients.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinicId },
+          where: { clinic_id: clinicId },
         });
       } catch (_e) { /* ignored */ }
 
@@ -46,9 +46,7 @@ export class AnalyticsController {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         stats.todayAppointments = await ( prisma as any).appointments.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: {
-            clinicId,
-            startTime: { gte: today, lt: tomorrow },
+          where: { clinic_id: clinicId, startTime: { gte: today, lt: tomorrow },
           },
         });
       } catch (_e) { /* ignored */ }
@@ -63,9 +61,7 @@ export class AnalyticsController {
         // Tratar o sum no Prisma
         const sumResult = await ( prisma as any).financial_transactions.aggregate({ // eslint-disable-line @typescript-eslint/no-explicit-any
           _sum: { amount: true },
-          where: {
-            clinicId,
-            type: "RECEITA",
+          where: { clinic_id: clinicId, type: "RECEITA",
             date: { gte: firstDayOfMonth },
           },
         });
@@ -84,14 +80,12 @@ export class AnalyticsController {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         const totalAppointments = await ( prisma as any).appointments.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: {
-            clinicId,
-            startTime: { gte: today, lt: tomorrow },
+          where: { clinic_id: clinicId, startTime: { gte: today, lt: tomorrow },
           },
         });
 
         const dentistsCount = await ( prisma as any).profiles.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinicId }, // Presumindo todos os profiles ou poderia filtrar por role
+          where: { clinic_id: clinicId }, // Presumindo todos os profiles ou poderia filtrar por role
         });
 
         const totalSlots = (dentistsCount || 1) * 8;
@@ -101,11 +95,11 @@ export class AnalyticsController {
 
       try {
         stats.pendingTreatments = await ( prisma as any).pep_tratamentos.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinicId, status: "EM_ANDAMENTO" },
+          where: { clinic_id: clinicId, status: "EM_ANDAMENTO" },
         });
         stats.completedTreatments = await ( prisma as any).pep_tratamentos.count( // eslint-disable-line @typescript-eslint/no-explicit-any
           {
-            where: { clinicId, status: "CONCLUIDO" },
+            where: { clinic_id: clinicId, status: "CONCLUIDO" },
           },
         );
       } catch (_e) { /* ignored */ }
@@ -190,9 +184,7 @@ export class AnalyticsController {
         prisma as any // eslint-disable-line @typescript-eslint/no-explicit-any
       ).transaction.aggregate({
         _sum: { amount: true },
-        where: {
-          clinicId,
-          type: "RECEITA",
+        where: { clinic_id: clinicId, type: "RECEITA",
           status: "PAGO",
           createdAt: { gte: startOfMonth },
         },
@@ -201,9 +193,7 @@ export class AnalyticsController {
 
       const lastMonthRevenueAgg = await ( prisma as any).financial_transactions.aggregate({ // eslint-disable-line @typescript-eslint/no-explicit-any
         _sum: { amount: true },
-        where: {
-          clinicId,
-          type: "RECEITA",
+        where: { clinic_id: clinicId, type: "RECEITA",
           status: "PAGO",
           createdAt: { gte: startOfLastMonth, lt: startOfMonth },
         },
@@ -220,9 +210,7 @@ export class AnalyticsController {
         prisma as any // eslint-disable-line @typescript-eslint/no-explicit-any
       ).transaction.aggregate({
         _sum: { amount: true },
-        where: {
-          clinicId,
-          type: "DESPESA",
+        where: { clinic_id: clinicId, type: "DESPESA",
           status: "PAGO",
           createdAt: { gte: startOfMonth },
         },
@@ -235,7 +223,7 @@ export class AnalyticsController {
 
       // Clinical Metrics
       const appointments = await ( prisma as any).appointments.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinicId, startTime: { gte: startOfMonth } },
+        where: { clinic_id: clinicId, startTime: { gte: startOfMonth } },
         select: { startTime: true, endTime: true, status: true },
         take: 1000,
       });
@@ -263,9 +251,7 @@ export class AnalyticsController {
       // Financial Metrics
       const uniquePatientsAgg = await ( prisma as any).financial_transactions.groupBy({ // eslint-disable-line @typescript-eslint/no-explicit-any
         by: ["patientId"],
-        where: {
-          clinicId,
-          type: "RECEITA",
+        where: { clinic_id: clinicId, type: "RECEITA",
           status: "PAGO",
           createdAt: { gte: startOfMonth },
           patientId: { not: null },
@@ -276,9 +262,7 @@ export class AnalyticsController {
         unique_patients > 0 ? receita_total / unique_patients : 0;
 
       const receivables = await ( prisma as any).financial_transactions.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: {
-          clinicId,
-          type: "RECEITA",
+        where: { clinic_id: clinicId, type: "RECEITA",
           status: "PENDENTE",
         },
         select: { dataVencimento: true }, // verify schema properties!
@@ -295,13 +279,11 @@ export class AnalyticsController {
 
       // Commercial Metrics
       const total_leads = await ( prisma as any).crm_leads.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinicId, createdAt: { gte: startOfMonth } },
+        where: { clinic_id: clinicId, createdAt: { gte: startOfMonth } },
       });
 
       const converted_leads = await ( prisma as any).crm_leads.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: {
-          clinicId,
-          statusFunil: "CONVERTIDO",
+        where: { clinic_id: clinicId, statusFunil: "CONVERTIDO",
           createdAt: { gte: startOfMonth },
         },
       });
@@ -313,9 +295,7 @@ export class AnalyticsController {
 
       const marketingExpensesAgg = await ( prisma as any).financial_transactions.aggregate({ // eslint-disable-line @typescript-eslint/no-explicit-any
         _sum: { amount: true },
-        where: {
-          clinicId,
-          type: "DESPESA",
+        where: { clinic_id: clinicId, type: "DESPESA",
           categoria: "MARKETING", // Will this exist in schema? Maybe string!
           createdAt: { gte: startOfMonth },
         },
@@ -381,9 +361,7 @@ export class AnalyticsController {
       if (!clinicId) return res.status(401).json({ error: "Unauthorized" });
 
       const patients = await ( prisma as any).patients.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: {
-          clinicId,
-          marketingCampaign: { not: null },
+        where: { clinic_id: clinicId, marketingCampaign: { not: null },
         },
         select: {
           id: true,
@@ -396,7 +374,7 @@ export class AnalyticsController {
       });
 
       const campaigns = await ( prisma as any).marketing_campaigns.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinicId },
+        where: { clinic_id: clinicId },
         select: {
           id: true,
           name: true,
@@ -765,20 +743,20 @@ export class AnalyticsController {
             clinic_id: clinicId,
             start_time: { gte: todayStr, lt: tomorrowStr },
           },
-        }),
+        }).catch(() => 0),
         prisma.contas_receber.count({
           where: {
             clinic_id: clinicId,
             data_vencimento: { lt: todayStr },
             status: "PENDENTE",
           },
-        }),
+        }).catch(() => 0),
         prisma.recalls.count({
           where: {
             clinic_id: clinicId,
             data_prevista: { gte: todayStr, lt: tomorrowStr },
           },
-        }),
+        }).catch(() => 0),
       ]);
 
       return res.json({

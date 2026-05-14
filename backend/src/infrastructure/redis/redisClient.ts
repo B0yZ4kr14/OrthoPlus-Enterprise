@@ -24,6 +24,21 @@ function resolveRedisUrl(): string {
 const redisUrl = resolveRedisUrl();
 const isClusterMode = process.env.REDIS_CLUSTER_MODE === 'true';
 
+function parseRedisUrl(url: string): { host: string; port: number; password?: string } {
+  try {
+    const parsed = new URL(url);
+    return {
+      host: parsed.hostname,
+      port: parseInt(parsed.port || '6379', 10),
+      password: parsed.password || undefined,
+    };
+  } catch {
+    return { host: '127.0.0.1', port: 6379 };
+  }
+}
+
+const parsedRedis = parseRedisUrl(redisUrl);
+
 const getClusterNodes = (): ClusterNode[] => {
   if (process.env.REDIS_CLUSTER_NODES) {
     return process.env.REDIS_CLUSTER_NODES.split(',').map((node) => {
@@ -32,13 +47,7 @@ const getClusterNodes = (): ClusterNode[] => {
     });
   }
   
-  // Extract host/port from URL as fallback
-  try {
-    const url = new URL(redisUrl);
-    return [{ host: url.hostname, port: parseInt(url.port || '6379', 10) }];
-  } catch (e) {
-    return [{ host: '127.0.0.1', port: 6379 }];
-  }
+  return [{ host: parsedRedis.host, port: parsedRedis.port }];
 };
 
 class RedisClientManager {
@@ -66,12 +75,15 @@ class RedisClientManager {
       });
     } else {
       const options: RedisOptions = {
+        host: parsedRedis.host,
+        port: parsedRedis.port,
+        password: parsedRedis.password,
         maxRetriesPerRequest: null,
         enableReadyCheck: false,
         retryStrategy: (times) => Math.min(times * 100, 3000),
       };
       
-      this.client = new Redis(redisUrl, options);
+      this.client = new Redis(options);
       
       this.client.on('error', (err) => {
         logger.error(`Redis (${clientType}) connection error:`, err);
