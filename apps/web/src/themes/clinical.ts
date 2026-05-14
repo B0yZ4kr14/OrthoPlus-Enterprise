@@ -1,3 +1,15 @@
+/**
+ * ⚠️ WARNING: Este arquivo define temas clínicos legados para o odontograma.
+ * A função `applyClinicalTheme()` injeta CSS vars inline em `document.documentElement`,
+ * o que pode conflitar com o ThemeContext (`src/contexts/ThemeContext.tsx`) que também
+ * controla as mesmas variáveis (ex: `--background`, `--foreground`, `--primary`).
+ *
+ * Recomendação: usar apenas as variáveis odontograma (`--odonto-*`) via este arquivo,
+ * e deixar o ThemeContext gerenciar as variáveis de tema global.
+ *
+ * Para novos componentes, prefira `useTheme()` de `src/contexts/ThemeContext.tsx`
+ * e as CSS vars definidas em `src/index.css`.
+ */
 export const clinicalThemes = {
   light: {
     name: "Light",

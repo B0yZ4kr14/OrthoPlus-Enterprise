@@ -50,23 +50,23 @@ export function SidebarMenuItem({
     onNavigate?.();
   };
 
-  // Base styles
+  // Base styles — usa CSS vars para compatibilidade com todos os temas
   const baseClasses = `min-h-[44px] py-2.5 px-3 flex items-center gap-3 transition-all duration-300 ease-out w-full group focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none rounded-xl ${
     isItemActive
-      ? "bg-gradient-to-r from-emerald-50/90 to-teal-50/60 dark:from-[hsl(var(--accent))] dark:to-[hsl(var(--accent))/60] border-r-[3px] border-emerald-500 dark:border-[hsl(var(--interactive))] font-semibold text-emerald-700 dark:text-[hsl(var(--interactive))] shadow-[0_0_12px_rgba(16,185,129,0.08)] dark:shadow-[0_0_12px_hsl(168_45%_52%/0.15)]"
-      : "text-slate-600 dark:text-[hsl(var(--sidebar-foreground))] font-medium hover:bg-slate-50/80 dark:hover:bg-[hsl(var(--sidebar-accent))] hover:translate-x-0.5"
+      ? "bg-gradient-to-r from-[hsl(var(--accent))]/90 to-[hsl(var(--accent))]/60 border-r-[3px] border-[hsl(var(--interactive))] font-semibold text-[hsl(var(--interactive))] shadow-[0_0_12px_hsl(var(--interactive)/0.15)]"
+      : "text-[hsl(var(--sidebar-foreground))] font-medium hover:bg-[hsl(var(--sidebar-accent))]/80 hover:translate-x-0.5"
   }`;
 
   const subItemClasses = `min-h-[40px] py-2 px-3 pl-8 flex items-center gap-3 transition-all duration-300 ease-out w-full group focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none rounded-xl ${
     isItemActive
-      ? "bg-gradient-to-r from-emerald-50/90 to-teal-50/60 dark:from-[hsl(var(--accent))] dark:to-[hsl(var(--accent))/60] border-r-[3px] border-emerald-500 dark:border-[hsl(var(--interactive))] font-semibold text-emerald-700 dark:text-[hsl(var(--interactive))] shadow-[0_0_12px_rgba(16,185,129,0.08)] dark:shadow-[0_0_12px_hsl(168_45%_52%/0.15)]"
-      : "text-slate-500 dark:text-[hsl(var(--muted-foreground))] font-medium hover:bg-slate-50/80 dark:hover:bg-[hsl(var(--sidebar-accent))] hover:translate-x-0.5"
+      ? "bg-gradient-to-r from-[hsl(var(--accent))]/90 to-[hsl(var(--accent))]/60 border-r-[3px] border-[hsl(var(--interactive))] font-semibold text-[hsl(var(--interactive))] shadow-[0_0_12px_hsl(var(--interactive)/0.15)]"
+      : "text-[hsl(var(--muted-foreground))] font-medium hover:bg-[hsl(var(--sidebar-accent))]/80 hover:translate-x-0.5"
   }`;
 
   const iconClasses = `shrink-0 transition-all duration-300 ${
     isItemActive
-      ? "text-emerald-600 dark:text-[hsl(var(--interactive))] drop-shadow-[0_0_4px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_hsl(168_45%_52%/0.4)]"
-      : "text-slate-400 dark:text-[hsl(var(--muted-foreground))] group-hover:text-emerald-600 dark:group-hover:text-[hsl(var(--interactive))] group-hover:scale-110"
+      ? "text-[hsl(var(--interactive))] drop-shadow-[0_0_4px_hsl(var(--interactive)/0.4)]"
+      : "text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--interactive))] group-hover:scale-110"
   }`;
 
   // Menu item with subitems

@@ -1,7 +1,7 @@
 # AGENTS.md — apps/web/
 
 > Contexto específico do frontend React. Não repete o root AGENTS.md.
-> **Atualizado:** 2026-04-25
+> **Atualizado:** 2026-05-13
 
 ---
 
@@ -114,6 +114,40 @@ Stores existentes (colocados em módulo/hooks):
 - Target: 0 errors, warnings tolerados (atualmente ~98)
 
 ---
+
+## Correções de UI/CSS Aplicadas (2026-05-13)
+
+### CSS Fantasmas → Criados em `src/index.css`
+- `.glass-card` — 52 usos em 28 arquivos. Criado no `@layer components`.
+- `.stat-card-premium` — 1 uso em `StatsCard.tsx`. Criado com gradiente de topo via `::before`.
+- `.chart-card-premium` — 3 usos em `DashboardUnified.tsx`. Criado como card base com sombra.
+
+### Sidebar Hardcoded → Refatorada para CSS vars
+Arquivos modificados:
+- `src/core/layout/Sidebar/SidebarMenuItem.tsx`
+- `src/core/layout/Sidebar/SidebarHeader.tsx`
+- `src/core/layout/Sidebar/SidebarFooter.tsx`
+
+Substituições aplicadas:
+- `emerald-500` → `hsl(var(--interactive))`
+- `teal-400` → `hsl(var(--interactive-hover))`
+- `emerald-50` → `hsl(var(--accent))`
+- `emerald-700` → `hsl(var(--interactive))`
+- `emerald-400` → `hsl(var(--interactive))`
+- `emerald-600` → `hsl(var(--interactive))`
+
+Todas as classes dark: redundantes foram removidas pois as CSS vars já respondem ao tema.
+
+### Tokens v3 Integrados
+- `tokensV3` exportado de `src/theme/tokens-v3.ts` agora disponível via `useTheme().tokensV3`.
+- `src/contexts/ThemeContext.tsx` atualizado para incluir `tokensV3` no provider value.
+
+### Arquivos Órfãos Removidos
+- `src/components/ThemeProvider.tsx` — legado, não usado (App.tsx usa `contexts/ThemeContext.tsx`)
+- `src/App.css` — legado Vite, nunca importado
+
+### Conflito clinical.ts Documentado
+- `src/themes/clinical.ts` recebeu WARNING no header: `applyClinicalTheme()` injeta vars inline que podem conflitar com `ThemeContext`.
 
 ## Build e Verificação
 

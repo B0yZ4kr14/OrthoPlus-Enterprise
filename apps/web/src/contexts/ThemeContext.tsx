@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { theme as orthoTheme } from "@/theme/tokens";
 import { enhancedTheme } from "@/theme/stitch-enhanced";
+import { tokensV3 } from "@/theme/tokens-v3";
 
 // ─── Temas disponíveis (v3 — light-first, sage green CTAs) ─────────────────
 type Theme =
@@ -20,6 +21,7 @@ interface ThemeContextType {
   setTheme: (theme: Theme) => void;
   tokens: typeof orthoTheme;
   enhanced: typeof enhancedTheme;
+  tokensV3: typeof tokensV3;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -155,6 +157,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         setTheme,
         tokens: orthoTheme,
         enhanced: enhancedTheme,
+        tokensV3,
       }}
     >
       {children}

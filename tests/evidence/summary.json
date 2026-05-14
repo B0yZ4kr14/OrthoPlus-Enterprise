@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-05-14T02:56:29.668Z",
+  "urlLowercase": {
+    "status": 200,
+    "consoleErrors": 0
+  },
+  "urlUppercase": {
+    "status": 200,
+    "consoleErrors": 0
+  },
+  "sidebar": {
+    "homepage": {
+      "dataSidebar": false,
+      "ariaNav": false,
+      "roleNav": false
+    },
+    "postLogin": {
+      "dataSidebar": true,
+      "ariaNav": false
+    }
+  },
+  "login": {
+    "url": "https://tsiapp.io/OrthoPlus-Enterprise/auth",
+    "pageStatus": 200,
+    "elementsFound": {
+      "email": true,
+      "password": true,
+      "submit": true
+    },
+    "menuItemsCount": 1
+  },
+  "theme": {
+    "toggleFound": false,
+    "htmlClass": "light",
+    "htmlClassAfter": null
+  },
+  "mobile": {
+    "hamburgerFound": false,
+    "sidebarFound": false,
+    "consoleErrors": 0
+  },
+  "glassmorphism": {
+    "elementsFound": 14
+  }
+}
