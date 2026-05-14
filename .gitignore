@@ -92,3 +92,6 @@ node_modules
 deploy_key
 .ssh_key_vps
 ecosystem.json
+
+# Test evidence artifacts (screenshots, reports)
+tests/evidence/
