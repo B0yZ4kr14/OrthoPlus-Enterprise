@@ -280,7 +280,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 ### Pendências Ativas
 - 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour` (não impedem build)
 - 🟡 **~135 endpoints stubs**: Módulos sem controllers completos retornam 404 em sub-rotas
-- 🟡 **Prisma relations faltantes**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
+- ✅ **Prisma relations**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles` adicionadas
 - ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
 - ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
 - ✅ **Módulos em branco corrigidos**: `pacientes`, `financeiro`, `crm`, `agenda` — todos carregam corretamente (v2.9.5)
