@@ -1,7 +1,8 @@
 # Handoff — OrthoPlus Enterprise
 
-> **ULTIMA ATUALIZACAO:** 2026-05-14 | **Branch:** `main`
+> **ULTIMA ATUALIZACAO:** 2026-05-14 | **Branch:** `main` | **Commit:** `204f3732a`
 > **ESTADO:** ✅ Sistema operacional em producao (VPS)
+> **PLANO ATIVO:** `docs/plans/correcao-orquestrada-2026-05-14.md`
 > **IMPORTANTE:** Leia AGENTS.md antes de qualquer alteracao.
 
 ---
@@ -10,7 +11,7 @@
 
 | Componente | Versao | URL / Porta | Status |
 |------------|--------|-------------|--------|
-| Frontend | v2.9 | `https://tsiapp.io/OrthoPlus-Enterprise/` | ✅ Docker `tsiapp-orthoplus` |
+| Frontend | v2.9.3 | `https://tsiapp.io/OrthoPlus-Enterprise/` | ✅ Docker `tsiapp-orthoplus` |
 | Backend API | v2.4 | `https://tsiapp.io/api` | ✅ Docker `tsiapp-orthoplus-backend` |
 | Health Check | — | `http://localhost:3005/health` | ✅ OK |
 | PostgreSQL | 16 | `127.0.0.1:5432` | ✅ 180 tabelas, 16 schemas |
@@ -24,9 +25,10 @@
 | Campo | Valor |
 |-------|-------|
 | **Email** | `admin@orthoplus.com` (ou apenas `Admin` — frontend converte) |
-| **Senha** | Ver `.env` local ou perguntar ao usuario |
+| **Senha** | `admin123!` |
 | **Role** | `ADMIN` |
 | **Clinic ID** | `48eaa5f9-99b1-45ce-a095-e099b522b165` |
+| **Redirect** | Após login, vai para `/dashboard` (workaround `window.location.replace`) |
 
 ---
 
@@ -37,11 +39,17 @@
 - **Tabelas:** 180 total
 - **module_catalog:** 31 modulos sincronizados com frontend
 - **clinic_modules:** 31 associacoes ativas
+- **User:** `postgres` (superuser — **pendente:** criar role `orthoplus`)
 
 ### Sincronizacao module_catalog ↔ Frontend
-O frontend tem 31 moduleKeys no sidebar. O banco deve ter 31 registros correspondentes em `configuracoes.module_catalog`. O `hasModuleAccess` no frontend faz comparacao **case-insensitive** (v2.9+). O backend retorna module_keys em **minusculas**.
+O frontend tem 32 moduleKeys no sidebar. O banco tem 31 registros em `configuracoes.module_catalog`. O `hasModuleAccess` no frontend faz comparacao **case-insensitive** (v2.9+). O backend retorna module_keys em **minusculas**.
 
 **SEMPRE** sincronizar o banco apos adicionar novos modulos no frontend.
+
+### ⚠️ Seguranca Pendente
+- **DB_PASSWORD:** ainda `postgres` no VPS — **deve ser rotacionado**
+- **REDIS_PASSWORD:** ainda `orthoplusredis2025` no VPS — **deve ser rotacionado**
+- **JWT_SECRET:** ✅ rotacionado em 2026-05-14
 
 ---
 
@@ -79,6 +87,24 @@ Buildar imagem Docker com `package.prod.json` (sem `workspace:*`).
 
 ---
 
+## 🎨 Validacao de UI (2026-05-14)
+
+| Pagina/Modulo | Status | Observacoes |
+|---------------|--------|-------------|
+| Landing page (`/`) | ✅ | Hero, features, pricing tiers, footer |
+| Login (`/auth`) | ✅ | Formulario completo, tabs Equipe/Paciente/Cadastro |
+| Dashboard (`/dashboard`) | ✅ | Stat cards, graficos (barras, linhas, pie), tabs Executivo/Clinico/Financeiro/Comercial |
+| Pacientes (`/pacientes`) | ✅ | Stat cards, search, empty state, botao "Novo Paciente" |
+| Agenda (`/agenda`) | ✅ | Calendario semanal, navegacao, tabs Calendario/Lista |
+| Financeiro (`/financeiro`) | ✅ | Stat cards, fluxo de caixa, tabs Dashboard/Transacoes/Categorias/Caixa/Relatorios |
+| CRM (`/crm`) | ✅ | Stat cards (3 leads), filtros, tabs Funil/Leads/Relatorios |
+
+### 🐛 Problemas de UI Conhecidos
+- **Login redirect:** Usa `window.location.replace` (workaround) — root cause do `navigate` do React Router precisa ser corrigido
+- **Dados vazios:** Todos os modulos mostram zeros/empty states porque o banco foi recriado sem seed de demonstracao
+
+---
+
 ## 📁 Documentacao
 
 | Arquivo | Proposito |
@@ -87,6 +113,7 @@ Buildar imagem Docker com `package.prod.json` (sem `workspace:*`).
 | `HANDOFF.md` | Este arquivo |
 | `docs/ARCHITECTURE.md` | Arquitetura do sistema |
 | `docs/CATEGORIES.md` | 10 categorias de negocio |
+| `docs/plans/correcao-orquestrada-2026-05-14.md` | **Plano de correção ativo** |
 
 ---
 
