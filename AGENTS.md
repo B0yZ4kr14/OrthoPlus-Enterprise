@@ -269,8 +269,8 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **Stubs reduzidos**: De ~156 para 8 endpoints 404 (/dashboard, /procedimentos, /marketing, /inventario, /estoque, /crm, /teleodonto, /pep)
 
 ### Pendências Ativas
-- 🔴 **8 endpoints stubs 404**: /api/dashboard, /api/procedimentos, /api/marketing, /api/inventario, /api/estoque, /api/crm, /api/teleodonto, /api/pep retornam 404
-- 🟡 **Container backend não-ideal**: Rodando com imagem v2.3 + dist montado como volume (deveria ser imagem v2.4 buildada)
+- ✅ **8 endpoints stubs 404**: RESOLVIDOS — todos retornam 200 com handlers raiz
+- ✅ **Container backend v2.4**: Imagem Docker limpa buildada e deployada
 - 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour`
 - 🟡 **Secrets em repo**: `backend/.env` e `ecosystem.json` — rotacionar e remover do git
 - 🟡 **PostgreSQL user**: Backend conecta como `postgres` (superuser). Criar role `orthoplus`.
@@ -301,7 +301,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ### Contexto de Deploy
 - **Imagem frontend atual:** `orthoplus-frontend:v2.6`
-- **Imagem backend atual:** `orthoplus-backend:v2.3` (container com dist montado como volume, correção financeiro/resumo aplicada)
+- **Imagem backend atual:** `orthoplus-backend:v2.4` (imagem Docker limpa, prisma generate funcionando)
 - **Container frontend:** `tsiapp-orthoplus` (porta 8083)
 - **Container backend:** `tsiapp-orthoplus-backend` (porta 3005, network=host)
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
