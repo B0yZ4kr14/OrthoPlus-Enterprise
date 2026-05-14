@@ -98,7 +98,7 @@ export default function Auth() {
   }, [user, navigate]);
 
   const handleLogin = async (values: LoginFormValues) => {
-    const identifier = values.email.includes("@") ? values.email : values.email + "@tsiapp.io";
+    const identifier = values.email.includes("@") ? values.email.toLowerCase() : values.email.toLowerCase() + "@orthoplus.com";
     setIsLoading(true);
     try {
       const response = await fetch("/api/auth/token", {
@@ -111,17 +111,22 @@ export default function Auth() {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         setIsLoading(false);
+        toast.success("Login realizado com sucesso!");
         navigate("/OrthoPlus-Enterprise/dashboard");
         return;
       }
+      // Login failed — show error from API response
+      const errorDetail = data.detail || data.message || "Email ou senha incorretos";
+      toast.error("Erro ao fazer login", { description: errorDetail });
     } catch (e) {
       console.error("Direct login failed, falling back to signIn", e);
+      // Network or other error — try fallback via AuthContext signIn
+      const { error } = await signIn(identifier, values.password);
+      if (error) {
+        toast.error("Erro ao fazer login", { description: "Não foi possível conectar ao servidor. Tente novamente." });
+      }
     }
-    const { error } = await signIn(values.email, values.password);
     setIsLoading(false);
-    if (!error) {
-      navigate("/OrthoPlus-Enterprise/dashboard");
-    }
   };
 
   const handleSignup = async (values: SignupFormValues) => {

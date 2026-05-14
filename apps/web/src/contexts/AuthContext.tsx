@@ -360,8 +360,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const hasModuleAccess = (moduleKey: string) => {
-    // Check if module is active for the clinic
-    const isModuleActive = activeModules.includes(moduleKey);
+    // Check if module is active for the clinic (case-insensitive comparison)
+    const normalizedKey = moduleKey.toLowerCase();
+    const isModuleActive = activeModules.some((m) => m.toLowerCase() === normalizedKey);
 
     // ADMIN can see all active modules
     if (userRole === "ADMIN") {
