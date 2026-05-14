@@ -704,6 +704,7 @@ model contas_receber {
   parcela_numero  Int?
   parcela_total   Int?
   patient_id      String?
+  patient         patients? @relation(fields: [patient_id], references: [id])
   status          String
   updated_at      DateTime @updatedAt
   valor           Int
@@ -911,6 +912,7 @@ model crypto_price_alerts {
   stop_loss_enabled       Boolean?
   target_rate_brl         Int
   updated_at              DateTime @updatedAt
+  creator                 profiles @relation(fields: [created_by], references: [id], name: "crypto_alert_creator")
 
   @@schema("financeiro")
 }
@@ -1884,6 +1886,7 @@ model patients {
   weight_kg                      Int?
   appointments                   appointments[]
   recalls                        recalls[]
+  contas_receber                 contas_receber[]
 
   @@index([clinic_id, full_name])
   @@index([cpf])
@@ -2180,11 +2183,12 @@ model profiles {
   avatar_url String?
   clinic_id  String?
   created_at DateTime @default(now())
-  full_name  String?
-  id         String   @id @default(uuid())
-  is_active  Boolean
-  phone      String?
-  updated_at DateTime @updatedAt
+  full_name           String?
+  id                  String   @id @default(uuid())
+  is_active           Boolean
+  phone               String?
+  updated_at          DateTime @updatedAt
+  crypto_price_alerts crypto_price_alerts[] @relation(name: "crypto_alert_creator")
   @@schema("core")
 }
 
