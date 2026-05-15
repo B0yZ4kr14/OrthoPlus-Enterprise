@@ -1,0 +1,7 @@
+EVIDENCIA: EVC-008-A2
+AGENTE: A2
+TIMESTAMP: 2026-05-15T16:36:48.595581
+HASH: eb51b24a17fd3aa6
+CMD: agents_workers
+---
+expected=9

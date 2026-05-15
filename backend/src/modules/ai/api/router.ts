@@ -1,8 +1,20 @@
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../../../middleware/authMiddleware";
+import { clinicGuard } from "../../../middleware/clinicGuard";
 import { triagemVirtual, TriagemSchema, healthCheckAI } from "../ai.service";
 
 const router: Router = Router();
+
+/**
+ * GET /api/ai/health
+ * Health check do módulo AI (público)
+ */
+router.get("/health", async (_req: Request, res: Response) => {
+  const health = await healthCheckAI();
+  res.json(health);
+});
+
+router.use(clinicGuard);
 
 /**
  * POST /api/ai/triagem
@@ -28,15 +40,6 @@ router.post("/triagem", authMiddleware, async (req: Request, res: Response) => {
       message: error.message,
     });
   }
-});
-
-/**
- * GET /api/ai/health
- * Health check do módulo AI
- */
-router.get("/health", async (_req: Request, res: Response) => {
-  const health = await healthCheckAI();
-  res.json(health);
 });
 
 export default router;

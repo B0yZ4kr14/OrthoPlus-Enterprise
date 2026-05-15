@@ -1,0 +1,7 @@
+EVIDENCIA: EVC-004-A2
+AGENTE: A2
+TIMESTAMP: 2026-05-15T16:36:48.595330
+HASH: 8666330e11ea6d5f
+CMD: agents_module_count
+---
+expected=37

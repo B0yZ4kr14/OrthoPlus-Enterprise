@@ -1,0 +1,17 @@
+EVIDENCIA: EVC-036-A9
+AGENTE: A9
+TIMESTAMP: 2026-05-15T16:36:50.227073
+HASH: 86a57ec7c1335858
+CMD: local_docker
+---
+tsiapp-orthoplus|Up 4 hours (healthy)
+tsiapp-orthoplus-backend|Up 4 hours
+orthoplus-redis|Up 4 hours
+tsiapp-nginx|Up 41 hours
+tsiapp-tsimusic|Up 41 hours
+tsiapp-landpages|Up 41 hours
+tsiapp-tsiview|Up 41 hours
+tsiapp-smith-agent|Up 41 hours
+tsimusic-frontend|Up 41 hours (healthy)
+tsimusic-music-assistant|Up 41 hours (healthy)
+smith-grafana|Up 41 hours

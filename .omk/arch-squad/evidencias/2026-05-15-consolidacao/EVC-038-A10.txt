@@ -1,0 +1,7 @@
+EVIDENCIA: EVC-038-A10
+AGENTE: A10
+TIMESTAMP: 2026-05-15T16:36:50.230150
+HASH: 4f53cda18c2baa0c
+CMD: backend_registered
+---
+[]

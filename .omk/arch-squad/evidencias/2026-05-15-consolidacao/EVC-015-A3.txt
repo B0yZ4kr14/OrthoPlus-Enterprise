@@ -1,0 +1,7 @@
+EVIDENCIA: EVC-015-A3
+AGENTE: A3
+TIMESTAMP: 2026-05-15T16:36:48.596388
+HASH: eb51b24a17fd3aa6
+CMD: canonical_workers
+---
+expected=9

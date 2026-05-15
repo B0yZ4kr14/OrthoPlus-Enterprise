@@ -1,0 +1,10 @@
+EVIDENCIA: EVC-045-A13
+AGENTE: A13
+TIMESTAMP: 2026-05-15T16:36:50.241677
+HASH: 409d2d9e1e902f73
+CMD: rate_limit
+---
+6:import rateLimit from "express-rate-limit";
+153:const authLimiter = rateLimit({
+160:const uploadLimiter = rateLimit({
+167:const apiLimiter = rateLimit({

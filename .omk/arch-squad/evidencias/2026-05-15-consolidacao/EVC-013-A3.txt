@@ -1,0 +1,7 @@
+EVIDENCIA: EVC-013-A3
+AGENTE: A3
+TIMESTAMP: 2026-05-15T16:36:48.596284
+HASH: 22d403fcf2ef6004
+CMD: canonical_schemas
+---
+expected=17

@@ -1,0 +1,7 @@
+EVIDENCIA: EVC-014-A3
+AGENTE: A3
+TIMESTAMP: 2026-05-15T16:36:48.596336
+HASH: ab9c4dbc4eb708c4
+CMD: canonical_routes
+---
+expected=60

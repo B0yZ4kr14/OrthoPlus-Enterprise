@@ -1,0 +1,20 @@
+EVIDENCIA: EVC-037-A10
+AGENTE: A10
+TIMESTAMP: 2026-05-15T16:36:50.229790
+HASH: 2accb7e550911c87
+CMD: backend_index
+---
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+
+
+// Modules API Routers
+import { createAuthRouter } from "./modules/auth/api/router";
+import agendaRouter from "./modules/agenda/api/router";
+import analyticsRouter from "./modules/analytics/api/router";
+import backupsRouter from "./modules/backups/api/router";
+import { commRouter } from "./modules

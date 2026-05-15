@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** 3e7f0f9d | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-15.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
+> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** d25ca3a6 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-15.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
 
 ---
 
@@ -274,7 +274,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ### Pendências Ativas
 - 🟡 **DEV-001**: Backend Dockerfile sem `HEALTHCHECK`
-- 🟡 **VPS desatualizada**: Código em `/home/tsi/OrthoPlus-Enterprise` no commit Warning: (local/github em 3e7f0f9d)
+- 🟡 **VPS desatualizada**: RESOLVIDO — VPS sincronizada em `d25ca3a6`
 - 🟡 **~16 mock/stub endpoints** em 8 módulos (backups, github_tools, configuracoes, terminal, comm, crypto_config, analytics, dashboard)
 - 🟡 **SSL Expiry**: `vps-tsi-02.tailbda57.ts.net` Let's Encrypt válido até Jul 22 2026
 

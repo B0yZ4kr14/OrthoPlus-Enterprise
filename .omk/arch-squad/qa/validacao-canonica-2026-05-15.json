@@ -1,0 +1,674 @@
+{
+  "meta": {
+    "date": "2026-05-15",
+    "time": "16:36:50",
+    "commit": "d25ca3a6",
+    "agents": 15,
+    "methodology": "Socratic + Popperian + Forensic",
+    "tiers": 5,
+    "evidence_count": 55,
+    "evidence_dir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/.omk/arch-squad/evidencias/2026-05-15-consolidacao"
+  },
+  "environments": {
+    "local": "d25ca3a6",
+    "github": "d25ca3a6",
+    "vps": "Warning:"
+  },
+  "metrics": {
+    "local_commit": "d25ca3a6",
+    "local_branch": "main",
+    "github_commit": "d25ca3a6",
+    "vps_commit": "Warning:",
+    "modules": [
+      "admin_tools",
+      "agenda",
+      "agents",
+      "ai",
+      "analytics",
+      "auth",
+      "backups",
+      "bi",
+      "comm",
+      "configuracoes",
+      "contratos",
+      "crm",
+      "crypto_config",
+      "dashboard",
+      "database_admin",
+      "faturamento",
+      "fidelidade",
+      "files",
+      "financeiro",
+      "funcionarios",
+      "github_tools",
+      "inadimplencia",
+      "inventario",
+      "lgpd",
+      "marketing",
+      "nfe",
+      "notifications",
+      "orcamentos",
+      "pacientes",
+      "pdv",
+      "pep",
+      "procedimentos",
+      "split_pagamento",
+      "teleodonto",
+      "terminal",
+      "tiss",
+      "usuarios"
+    ],
+    "module_count": 37,
+    "models": 180,
+    "custom_schemas": 16,
+    "schema_count": 17,
+    "routes": [
+      "/",
+      "/demo",
+      "/auth",
+      "/dashboard",
+      "/pacientes",
+      "/pacientes/novo",
+      "/pacientes/:id",
+      "/agenda",
+      "/financeiro",
+      "/financeiro/receber",
+      "/financeiro/fiscal/notas",
+      "/financeiro/conciliacao",
+      "/pep",
+      "/pep/:patientId",
+      "/assinatura-icp",
+      "/fluxo-digital",
+      "/odontograma",
+      "/tratamentos",
+      "/estoque",
+      "/estoque/inventario-historico",
+      "/estoque/scanner",
+      "/inventario/dashboard",
+      "/pdv",
+      "/crm",
+      "/contratos",
+      "/orcamentos",
+      "/procedimentos",
+      "/dentistas",
+      "/funcionarios",
+      "/inadimplencia",
+      "/crypto-payment",
+      "/split-pagamento",
+      "/marketing-auto",
+      "/fidelidade",
+      "/recall",
+      "/portal-paciente",
+      "/bi",
+      "/dashboards/comercial",
+      "/lgpd",
+      "/faturamento-tiss",
+      "/teleodonto",
+      "/ia-radiografia",
+      "/admin/database",
+      "/admin/backups",
+      "/admin/crypto-config",
+      "/admin/github",
+      "/admin/terminal",
+      "/admin/wiki",
+      "/admin/adrs",
+      "/admin/monitoring",
+      "/admin/logs",
+      "/admin/api-docs",
+      "/admin/audit",
+      "/admin/audit-trail",
+      "/configuracoes/modulos",
+      "/configuracoes/database",
+      "/usuarios",
+      "/configuracoes",
+      "/help",
+      "/403"
+    ],
+    "route_count": 60,
+    "worker_count": 9,
+    "db_tables": 1,
+    "mc_count": 37,
+    "cm_count": 37,
+    "fe_module_count": 37,
+    "router_count": 37,
+    "controller_count": 48,
+    "agents_md": "# AGENTS.md \u2014 OrthoPlus Enterprise\n\n> Arquivo de refer\u00eancia para agentes de IA que trabalham neste projeto.\n> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** 3e7f0f9d | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-15.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9\n\n---\n\n## Vis\u00e3o Geral\n\nO **OrthoPlus Enterprise** \u00e9 um monorepo full-stack de gest\u00e3o odontol\u00f3gica com:\n- **Frontend**: React 19 + Vite 6 + Tailwind CSS (porta **3000** dev / 5173 legacy)\n- **Backend**: Node.js 20 + Express 4 + Prisma 6 + PostgreSQL 16 (porta 3005)\n- **Agent Service**: Python 3.14 + FastAPI + Agno 2.5 (porta 8000)\n\n---\n\n## Estrutura de Diret\u00f3rios\n\n```\nOrthoPlus-Enterprise/\n\u251c\u2500\u2500 apps/web/                  # Frontend React\n\u251c\u2500\u2500 backend/                   # Backend Node.js\n\u2502   \u251c\u2500\u2500 src/modules/           # 37 m\u00f3dulos de dom\u00ednio\n\u2502   \u251c\u2500\u2500 src/middleware/        # Middleware Express\n\u2502   \u251c\u2500\u2500 src/routes/            # Rotas (modulesRouter)\n\u2502   \u251c\u2500\u2500 prisma/schema.prisma   # 180 models\n\u2502   \u2514\u2500\u2500 workers/               # 9 cron jobs\n\u251c\u2500\u2500 agent-service/             # Servi\u00e7o Python/FastAPI\n\u251c\u2500\u2500 shared-types/              # Tipos TypeScript\n\u2514\u2500\u2500 docs/                      # Documenta\u00e7\u00e3o\n```\n\n---\n\n## Conven\u00e7\u00f5es de C\u00f3digo\n\n### TypeScript (Backend)\n- **ES Modules**: `import/export`\n- **Strict mode**: Tipagem obrigat\u00f3ria\n- **Async/await**: Nunca callbacks\n- **Error handling**: Usar `ApiError` de `@/errors/ApiError`\n- **Clinic context**: Todo router deve usar `clinicGuard` middleware\n- **Prisma**: Preferir Prisma Client sobre `queryRaw`\n- **queryRaw**: ~14 ocorr\u00eancias em backend/src/ (admin_tools, analytics, inventario, marketing, notifications, database admin) \u2014 usado para queries administrativas PostgreSQL e agrega\u00e7\u00f5es complexas\n\n### TypeScript (Frontend)\n- **Hooks**: Custom hooks em `hooks/` ou `components/*/use*.ts`\n- **API Client**: Usar `apiClient` de `lib/api/apiClient.ts`\n- **Date utils**: Usar `lib/utils/date.utils.ts` (n\u00e3o importar `date-fns` diretamente)\n- **Auth**: Usar `useAuth()` do `contexts/AuthContext.tsx`\n\n### Bash (Scripts)\n- Shebang: `#!/bin/bash`\n- `set -e` na segunda linha\n- Fun\u00e7\u00f5es de log coloridas padronizadas\n\n---\n\n## Comandos Essenciais\n\n```bash\n# Root\npnpm install\npnpm dev\npnpm build\npnpm lint\npnpm type-check\n\n# Backend\ncd backend && pnpm build\ncd backend && pnpm dev\n\n# Frontend\ncd apps/web && pnpm dev\n\n# Agent Service\ncd agent-service && python src/main.py\n```\n\n---\n\n## M\u00f3dulos Backend (37)\n\nTodos os 37 m\u00f3dulos possuem router registrado em `backend/src/index.ts` e `clinicGuard` aplicado.\n\n| # | M\u00f3dulo | Router | Controller | Prisma | Stubs | Status |\n|---|--------|--------|------------|--------|-------|--------|\n| 0 | `admin_tools` | \u2705 | \u2705 | \u274c | 0 | Sem persist\u00eancia |\n| 1 | `ai` | \u2705 | \u2705 | \u274c | 0 | Proxy para servi\u00e7os de IA |\n| 2 | `agenda` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 3 | `analytics` | \u2705 | \u2705 | \u2705 | 1 | Fallback mockado |\n| 4 | `auth` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 5 | `backups` | \u2705 | \u2705 | \u274c | 12 | Simula\u00e7\u00e3o (sem storage real) |\n| 6 | `bi` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 7 | `comm` | \u2705 | \u2705 | \u274c | 2 | Agora stub quando n\u00e3o configurado |\n| 8 | `configuracoes` | \u2705 | \u2705 | \u274c | 3 | 3 endpoints mockados |\n| 9 | `contratos` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 10 | `crm` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 11 | `crypto_config` | \u2705 | \u2705 | \u2705 | 2 | Mock address + sync simplificado |\n| 12 | `dashboard` | \u2705 | \u2705 | \u274c | 1 | 503 quando sem DB |\n| 13 | `database_admin` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 14 | `faturamento` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 15 | `fidelidade` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 16 | `files` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 17 | `financeiro` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 18 | `funcionarios` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 19 | `github_tools` | \u2705 | \u2705 | \u274c | 5 | Hardcoded mock data |\n| 20 | `inadimplencia` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 21 | `inventario` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 22 | `lgpd` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 23 | `marketing` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 24 | `nfe` | \u2705 | \u2705 | \u2705 | 0 | Completo (fallback 42P01) |\n| 25 | `notifications` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 26 | `orcamentos` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 27 | `pacientes` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 28 | `pdv` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 29 | `pep` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 30 | `procedimentos` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 31 | `split_pagamento` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 32 | `teleodonto` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 33 | `terminal` | \u2705 | \u2705 | \u274c | 2 | 501 \"disabled\" |\n| 34 | `tiss` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 35 | `usuarios` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 36 | `agents` | \u2705 | \u2705 | \u274c | 0 | Proxy para agent-service |\n\n**Legenda:**\n- \u2705 Completo (CRUD real)\n- \u274c Sem persist\u00eancia Prisma (API-only / mock)\n- \u26a0\ufe0f Parcial (alguns endpoints mockados)\n\n---\n\n## Rotas e Endpoints\n\n### Base URL\n- Local: `http://localhost:3005/api`\n- Produ\u00e7\u00e3o: `https://tsiapp.io/api` (via nginx proxy)\n\n### Auth (p\u00fablico)\n- `POST /api/auth/token` \u2014 Login\n- `POST /api/auth/register` \u2014 Registro staff\n- `POST /api/auth/reset-password` \u2014 Reset senha\n- `POST /api/auth/patient-auth` \u2014 Auth paciente\n- `GET /api/auth/me` \u2014 Perfil atual\n\n### M\u00f3dulos (requerem JWT + clinicGuard)\n- `GET/POST/PATCH/DELETE /api/{modulo}/*` \u2014 CRUD por m\u00f3dulo\n\n### Health Check\n- `GET /health` \u2014 Status do servidor\n\n---\n\n## Seguran\u00e7a\n\n- **clinicGuard**: Valida `req.user.clinicId` em TODOS os routers\n- **Rate Limiting**: Auth (10/15min), Upload (50/h), API (500/15min)\n- **CSRF**: Origin check + sameSite=strict\n- **Helmet**: Headers de seguran\u00e7a\n- **JWT**: 256-bit secret, expira em 24h\n\n---\n\n## Workers (9 cron jobs)\n\n1. `adminJobs` \u2014 Tarefas administrativas\n2. `backupJobs` \u2014 Backups autom\u00e1ticos\n3. `cryptoJobs` \u2014 Jobs de cripto\n4. `estoqueJobs` \u2014 Gest\u00e3o de estoque\n5. `financeiroJobs` \u2014 Reconcilia\u00e7\u00e3o financeira\n6. `gamificationJobs` \u2014 Gamifica\u00e7\u00e3o\n7. `scheduleAppointments` \u2014 Agendamentos\n8. `scheduleBiExport` \u2014 Exporta\u00e7\u00e3o BI\n9. `marketingJobs` \u2014 Marketing automation\n\n---\n\n## Depend\u00eancias Principais\n\n### Backend\n- `express` ^4.18 \u2014 Framework web\n- `@prisma/client` ^6.19 \u2014 ORM\n- `jsonwebtoken` ^9.0 \u2014 JWT\n- `bcrypt` ^6.0 \u2014 Hash de senhas\n- `helmet` ^8.0 \u2014 Seguran\u00e7a HTTP\n- `express-rate-limit` ^7.0 \u2014 Rate limiting\n\n### Frontend\n- `react` ^19.1 \u2014 UI library\n- `vite` ^6.3 \u2014 Build tool\n- `tailwindcss` ^4.0 \u2014 CSS framework\n- `@tanstack/react-query` ^5.0 \u2014 Data fetching\n- `zustand` ^5.0 \u2014 State management\n\n---\n\n## Checklist antes de Commit\n\n- [ ] `npx tsc --noEmit` passa no backend\n- [ ] `npx tsc --noEmit` passa no frontend\n- [ ] `pnpm lint` passa\n- [ ] Nenhuma credencial em c\u00f3digo\n- [ ] `.env` n\u00e3o foi commitado\n- [ ] clinicGuard aplicado em novos routers\n- [ ] Testes passam (se existirem)\n\n---\n\n## Arquitetura Frontend (Parcial Clean Architecture)\n\nO frontend aplica Clean Architecture de forma **parcial** \u2014 n\u00e3o uniforme entre m\u00f3dulos:\n\n- `apps/web/src/domain/` \u2014 entidades (24), reposit\u00f3rios/interfaces (19), value-objects, aggregates, events, errors\n- `apps/web/src/application/use-cases/` \u2014 use cases implementados (12, concentrados em `financeiro` e outros)\n- `apps/web/src/infrastructure/repositories/` \u2014 15 implementa\u00e7\u00f5es concretas\n\n**M\u00f3dulos sem camada domain/application** usam hooks diretos + apiClient. N\u00e3o force Clean Arch onde n\u00e3o existe.\n\n---\n\n## Pacotes Internos (`categories/@orthoplus/`)\n\n- **`@orthoplus/core-ui`** \u2014 componentes UI compartilhados: `Button`, `Card`, `Input`, `Label`, `Tabs`, utilit\u00e1rio `cn()`. Built on Radix UI + CVA + Tailwind. Import: `import { Button } from '@orthoplus/core-ui'`\n- **`@orthoplus/core-hooks`** \u2014 hooks reutiliz\u00e1veis (ex: `useToast`)\n- **`@orthoplus/core-types`** \u2014 tipos TypeScript globais (`ApiResponse`, etc.)\n- **`@orthoplus/core-utils`** \u2014 `formatDate`, `formatCurrency` etc.\n\n> Subdir AGENTS.md: `categories/@orthoplus/core/packages/ui/AGENTS.md`\n\n---\n\n## Agent Service\n\n- FastAPI + Agno 2.5, porta 8000\n- Workflows: `crud_workflow`, `bugfix_workflow`, `refactor_workflow` em `agent-service/src/workflows/`\n- Agentes em `agent-service/src/agents/`, ferramentas em `agent-service/src/tools/`\n- Configura\u00e7\u00e3o via `agent-service/src/config.py` (env vars, API keys)\n- Comunica\u00e7\u00e3o com backend via HTTP (`http://localhost:3005/api`)\n\n> Subdir AGENTS.md: `agent-service/AGENTS.md`\n\n---\n\n## Anti-Padr\u00f5es Conhecidos\n\n- `as any` e `@ts-ignore` amplamente presentes no frontend \u2014 **n\u00e3o adicionar mais**\n- Muitas regras TS desabilitadas em `eslint.config.js` \u2014 verificar antes de assumir que rule est\u00e1 ativa\n- `apps/web/src/types/database.ts` (~8929 linhas) \u00e9 **autogenerated** \u2014 nunca editar manualmente\n- `backend/src/modules/financeiro/api/FinanceiroController.ts` (~1279 linhas) \u2014 arquivo maior do backend; considerar refatorar em servi\u00e7os se adicionando funcionalidade\n\n---\n\n## Estado Atual (2026-05-15)\n\n### Conclu\u00eddo\n- \u2705 **Supabase eliminado**: `auth.users` removido, `configuracoes.users` \u00e9 auth nativa\n- \u2705 **queryRaw**: ~14 ocorr\u00eancias documentadas em backend/src/ (casos leg\u00edtimos)\n- \u2705 **Backend build**: passa sem erros (tsc + tsc-alias) \u2014 0 erros TS\n- \u2705 **Frontend build**: passa sem erros (vite build) \u2014 0 erros TS\n- \u2705 **Backend testes**: 367 passando (17 suites), 0 falhando\n- \u2705 **DB decentralizado**: 6 categorias com backup scheduler pr\u00f3prio\n- \u2705 **dbRouters registrados**: 6 m\u00f3dulos com `/api/{modulo}/db`\n- \u2705 **Landing page embeddada**: SPA serve landing page em `/` com pricing tiers\n- \u2705 **Redesign premium v4**: Completo\n- \u2705 **Valida\u00e7\u00e3o orquestrada 60 rotas**: 37/37 rotas reais OK, 16 stubs, 0 erros 403\n- \u2705 **Banco sincronizado com Prisma**: 180 tabelas em 17 schemas\n- \u2705 **Login VPS funcional**: `admin@orthoplus.com` / `admin123!`\n- \u2705 **Git push realizado**: sincronizado com `origin/main`\n- \u2705 **Frontend v2.9.9 deployado**: VPS + Local\n- \u2705 **Backend v2.5.3 deployado**: VPS + Local\n- \u2705 **Valida\u00e7\u00e3o forense round 2**: 8 agentes, 30+ hip\u00f3teses, 1 issue real (DEV-001)\n- \u2705 **Valida\u00e7\u00e3o tripla**: LOCAL/GITHUB sincronizados, VPS desatualizada\n- \u2705 **Consolida\u00e7\u00e3o can\u00f4nica**: AGENTS.md, CANONICAL.md, TSi-Vault, OMK memory atualizados\n\n### Pend\u00eancias Ativas\n- \ud83d\udfe1 **DEV-001**: Backend Dockerfile sem `HEALTHCHECK`\n- \ud83d\udfe1 **VPS desatualizada**: C\u00f3digo em `/home/tsi/OrthoPlus-Enterprise` no commit Warning: (local/github em 3e7f0f9d)\n- \ud83d\udfe1 **~16 mock/stub endpoints** em 8 m\u00f3dulos (backups, github_tools, configuracoes, terminal, comm, crypto_config, analytics, dashboard)\n- \ud83d\udfe1 **SSL Expiry**: `vps-tsi-02.tailbda57.ts.net` Let's Encrypt v\u00e1lido at\u00e9 Jul 22 2026\n\n### Commits Recentes\n- `3e7f0f9d` \u2014 feat(omk): triple validation report \u2014 LOCAL x GITHUB x VPS sync analysis\n- `69dbd494` \u2014 feat(omk): forensic validation round 2\n- `95c519c0` \u2014 feat(omk): create fix squadron and execute fixes\n- `078bf6e8` \u2014 fix: resolve TypeScript warnings and update AGENTS.md queryRaw statement\n\n---\n\n## Checkpoint de Sess\u00e3o (2026-05-15)\n\n### Mem\u00f3ria Persistente\n- **TSi-Vault checkpoint:** `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-15.md`\n\n### Contexto de Deploy\n- **Imagem frontend atual:** `orthoplus-frontend:v2.9.9`\n- **Imagem backend atual:** `orthoplus-backend:v2.5.3`\n- **Container frontend (Local):** `tsiapp-orthoplus` (porta 8083)\n- **Container backend (Local):** `tsiapp-orthoplus-backend` (porta 3005, host network)\n- **Container Redis (Local):** `orthoplus-redis` (porta 6379)\n\n### Deploy VPS (2026-05-15)\n- \u26a0\ufe0f **C\u00f3digo desatualizado**: VPS em `89aa485` vs Local/GitHub em `3e7f0f9`\n- \u2705 **Build conclu\u00eddo**: Imagem `apps-orthoplus` buildada e deployada\n- \u2705 **Docker compose fix**: Port mapping corrigido de `8083:80` para `8083:8080`\n- \u2705 **Containers rodando**: frontend (healthy), backend (running), redis (running)\n- \u2705 **Banco**: 180 tabelas, 37 m\u00f3dulos catalogados\n- \u2705 **Login funcional**: `admin@orthoplus.com` / `admin123!`\n### Como Continuar\n1. Verificar `git log --oneline -3` e `git status`\n2. Rodar builds: `cd backend && pnpm build`, `cd apps/web && pnpm build`\n3. Rodar testes: `cd backend && pnpm test`\n4. Para deploy VPS: seguir checklist na se\u00e7\u00e3o 13\n\n---\n\n## Contatos e Suporte\n\n- Reposit\u00f3rio: `B0yZ4kr14/OrthoPlus-Enterprise`\n- Deploy: VPS `tsiapp.io` via Cloudflare\n- Documenta\u00e7\u00e3o: Obsidian Vault + `docs/` no repo\n",
+    "canonical_md": "# OrthoPlus Enterprise \u2014 Documenta\u00e7\u00e3o Can\u00f4nica\n\n> **Status:** CANONICAL  \n> **Data:** 2026-05-15  \n> **Vers\u00e3o:** v2.9.9 (frontend) / v2.5.3 (backend)  \n> **Branch:** main  \n> **Commit:** 3e7f0f9d  \n> **Anterior:** [LEGACY] `docs/STATUS-FINAL-2026-05-14.md`, `docs/SESSION-ORQUESTRACAO.md`, `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md`, `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`\n\n---\n\n## 1. Vis\u00e3o Geral\n\nO **OrthoPlus Enterprise** \u00e9 um monorepo full-stack de gest\u00e3o odontol\u00f3gica com:\n\n- **Frontend**: React 19 + Vite 6 + Tailwind CSS v4 (porta 3000 dev / 5173 legacy)\n- **Backend**: Node.js 20 + Express 4 + Prisma 6 + PostgreSQL 16 (porta 3005)\n- **Agent Service**: Python 3.14 + FastAPI + Agno 2.5 (porta 8000)\n- **Banco de Dados**: PostgreSQL 16, 180 tabelas, 17 schemas (16 custom + public), role `orthoplus`\n- **Cache**: Redis 7 (autenticado, porta 6379)\n- **Proxy**: Nginx + Cloudflare (TLS)\n\n---\n\n## 2. Estrutura de Diret\u00f3rios\n\n```\nOrthoPlus-Enterprise/\n\u251c\u2500\u2500 apps/web/                  # Frontend React 19 + Vite 6\n\u2502   \u251c\u2500\u2500 src/modules/           # M\u00f3dulos de dom\u00ednio\n\u2502   \u251c\u2500\u2500 src/contexts/          # AuthContext, etc.\n\u2502   \u251c\u2500\u2500 src/routes/            # AppRoutes.tsx (60 rotas)\n\u2502   \u2514\u2500\u2500 dist/                  # Build output (nginx serve)\n\u251c\u2500\u2500 backend/                   # Backend Node.js 20 + Express 4\n\u2502   \u251c\u2500\u2500 src/modules/           # 37 m\u00f3dulos de dom\u00ednio\n\u2502   \u251c\u2500\u2500 src/middleware/        # authMiddleware, clinicGuard, rateLimit\n\u2502   \u251c\u2500\u2500 src/routes/            # modulesRouter, dbRouter\n\u2502   \u251c\u2500\u2500 prisma/schema.prisma   # 180 models, 17 schemas (16 custom + public)\n\u2502   \u251c\u2500\u2500 workers/               # 9 cron jobs\n\u2502   \u2514\u2500\u2500 dist/                  # Build output (node serve)\n\u251c\u2500\u2500 agent-service/             # FastAPI + Agno 2.5 (porta 8000)\n\u251c\u2500\u2500 shared-types/              # Tipos TypeScript compartilhados\n\u251c\u2500\u2500 categories/@orthoplus/     # Pacotes internos (core-ui, core-hooks, core-types, core-utils)\n\u251c\u2500\u2500 docs/                      # Documenta\u00e7\u00e3o do projeto\n\u251c\u2500\u2500 scripts/                   # Scripts de deploy e utilit\u00e1rios\n\u2514\u2500\u2500 tests/e2e/                 # Playwright E2E specs (37)\n```\n\n---\n\n## 3. Conven\u00e7\u00f5es de C\u00f3digo\n\n### TypeScript (Backend)\n- ES Modules (`import/export`)\n- Strict mode (tipagem obrigat\u00f3ria)\n- Async/await (nunca callbacks)\n- Error handling via `ApiError` de `@/errors/ApiError`\n- Todo router deve usar `clinicGuard` middleware\n- Preferir Prisma Client sobre `queryRaw`\n\n### TypeScript (Frontend)\n- Custom hooks em `hooks/` ou `components/*/use*.ts`\n- API Client: `apiClient` de `lib/api/apiClient.ts`\n- Date utils: `lib/utils/date.utils.ts` (n\u00e3o `date-fns` direto)\n- Auth: `useAuth()` do `contexts/AuthContext.tsx`\n- **NUNCA** adicionar mais `as any` ou `@ts-ignore`\n- `apps/web/src/types/database.ts` \u00e9 **autogenerated** \u2014 nunca editar manualmente\n\n### Bash (Scripts)\n- Shebang: `#!/bin/bash`\n- `set -e` na segunda linha\n- Fun\u00e7\u00f5es de log coloridas padronizadas\n\n---\n\n## 4. Comandos Essenciais\n\n```bash\n# Root\npnpm install\npnpm dev          # Turbo dev (frontend 3000, backend 3005)\npnpm build        # Turbo build (frontend + backend + shared-types)\npnpm lint\npnpm type-check\n\n# Backend individual\ncd backend && pnpm build      # tsc + tsc-alias\ncd backend && pnpm dev        # tsx watch\ncd backend && pnpm test       # jest (367 tests, 17 suites)\n\n# Frontend individual\ncd apps/web && pnpm dev       # Vite dev (porta 3000)\ncd apps/web && pnpm build     # Vite build \u2192 dist/\n\n# Agent Service\ncd agent-service && python src/main.py   # FastAPI (porta 8000)\n```\n\n---\n\n## 5. M\u00f3dulos Backend (36)\n\nTodos registrados em `backend/src/index.ts` com `clinicGuard`.\n\n| # | M\u00f3dulo | Router | Controller | Prisma | Stubs | Status |\n|---|--------|--------|------------|--------|-------|--------|\n| 0 | `admin_tools` | \u2705 | \u2705 | \u274c | 0 | Sem persist\u00eancia |\n| 1 | `ai` | \u2705 | \u2705 | \u274c | 0 | Proxy para servi\u00e7os de IA |\n| 2 | `agenda` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 3 | `analytics` | \u2705 | \u2705 | \u2705 | 1 | Fallback mockado |\n| 4 | `auth` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 5 | `backups` | \u2705 | \u2705 | \u274c | 12 | Simula\u00e7\u00e3o (sem storage real) |\n| 6 | `bi` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 7 | `comm` | \u2705 | \u2705 | \u274c | 2 | Stub quando n\u00e3o configurado |\n| 8 | `configuracoes` | \u2705 | \u2705 | \u274c | 3 | 3 endpoints mockados |\n| 9 | `contratos` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 10 | `crm` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 11 | `crypto_config` | \u2705 | \u2705 | \u2705 | 2 | Mock address + sync simplificado |\n| 12 | `dashboard` | \u2705 | \u2705 | \u274c | 1 | 503 quando sem DB |\n| 13 | `database_admin` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 14 | `faturamento` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 15 | `fidelidade` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 16 | `files` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 17 | `financeiro` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 18 | `funcionarios` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 19 | `github_tools` | \u2705 | \u2705 | \u274c | 5 | Hardcoded mock data |\n| 20 | `inadimplencia` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 21 | `inventario` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 22 | `lgpd` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 23 | `marketing` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 24 | `nfe` | \u2705 | \u2705 | \u2705 | 0 | Completo (fallback 42P01) |\n| 25 | `notifications` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 26 | `orcamentos` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 27 | `pacientes` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 28 | `pdv` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 29 | `pep` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 30 | `procedimentos` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 31 | `split_pagamento` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 32 | `teleodonto` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 33 | `terminal` | \u2705 | \u2705 | \u274c | 2 | 501 \"disabled\" |\n| 34 | `tiss` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 35 | `usuarios` | \u2705 | \u2705 | \u2705 | 0 | Completo |\n| 36 | `agents` | \u2705 | \u2705 | \u274c | 0 | Proxy para agent-service |\n\n**Legenda:** \u2705 Completo (CRUD real) | \u274c Sem persist\u00eancia Prisma | \u26a0\ufe0f Parcial\n\n---\n\n## 6. Rotas e Endpoints\n\n### Base URL\n- Local: `http://localhost:3005/api`\n- Produ\u00e7\u00e3o: `https://tsiapp.io/api` (via nginx proxy)\n\n### Auth (p\u00fablico)\n- `POST /api/auth/token` \u2014 Login\n- `POST /api/auth/register` \u2014 Registro staff\n- `POST /api/auth/reset-password` \u2014 Reset senha\n- `POST /api/auth/patient-auth` \u2014 Auth paciente\n- `GET /api/auth/me` \u2014 Perfil atual\n\n### Health Check (p\u00fablico)\n- `GET /health` \u2014 Status do servidor\n- `GET /api/health` \u2014 Alias (tamb\u00e9m p\u00fablico)\n\n### M\u00f3dulos (requerem JWT + clinicGuard)\n- `GET/POST/PATCH/DELETE /api/{modulo}/*` \u2014 CRUD por m\u00f3dulo\n\n---\n\n## 7. Seguran\u00e7a\n\n- **clinicGuard**: Valida `req.user.clinicId` em TODOS os routers\n- **Rate Limiting**: Auth (10/15min), Upload (50/h), API (500/15min)\n- **CSRF**: Origin check + sameSite=strict\n- **Helmet**: Headers de seguran\u00e7a HTTP\n- **JWT**: 256-bit secret, expira em 24h\n- **Secrets**: `backend/.env` e `ecosystem.json` removidos do git\n\n---\n\n## 8. Workers (9 cron jobs)\n\n1. `adminJobs` \u2014 Tarefas administrativas\n2. `backupJobs` \u2014 Backups autom\u00e1ticos (categoria por categoria)\n3. `cryptoJobs` \u2014 Jobs de cripto\n4. `estoqueJobs` \u2014 Gest\u00e3o de estoque\n5. `financeiroJobs` \u2014 Reconcilia\u00e7\u00e3o financeira\n6. `gamificationJobs` \u2014 Gamifica\u00e7\u00e3o\n7. `scheduleAppointments` \u2014 Agendamentos\n8. `scheduleBiExport` \u2014 Exporta\u00e7\u00e3o BI\n9. `marketingJobs` \u2014 Marketing automation\n\n---\n\n## 9. Depend\u00eancias Principais\n\n### Backend\n- `express` ^4.18 \u2014 Framework web\n- `@prisma/client` ^6.19 \u2014 ORM\n- `jsonwebtoken` ^9.0 \u2014 JWT\n- `bcrypt` ^6.0 \u2014 Hash de senhas\n- `helmet` ^8.0 \u2014 Seguran\u00e7a HTTP\n- `express-rate-limit` ^7.0 \u2014 Rate limiting\n\n### Frontend\n- `react` ^19.1 \u2014 UI library\n- `vite` ^6.3 \u2014 Build tool\n- `tailwindcss` ^4.0 \u2014 CSS framework\n- `@tanstack/react-query` ^5.0 \u2014 Data fetching\n- `zustand` ^5.0 \u2014 State management\n\n---\n\n## 10. Estado Atual do Deploy VPS (2026-05-15)\n\n### Sincronia de C\u00f3digo\n| Ambiente | Commit | Status |\n|----------|--------|--------|\n| LOCAL | `3e7f0f9` | \u2705 Atual |\n| GITHUB | `3e7f0f9` | \u2705 Atual |\n| VPS (`/home/tsi/apps/orthoplus-enterprise`) | `3e7f0f9` | \u2705 Atual (build conclu\u00eddo) |\n\n**Nota:** Build Docker conclu\u00eddo. Port mapping corrigido `8083:8080`. Frontend e backend respondendo 200.\n\n### Containers Docker (VPS)\n| Componente | Imagem | Container | Porta | Status |\n|------------|--------|-----------|-------|--------|\n| Frontend | `apps-orthoplus:latest` | `tsiapp-orthoplus` | 127.0.0.1:8083\u21928080 | \u2705 healthy |\n| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | \u2705 running |\n| Redis | `redis:7-alpine` | `orthoplus-redis` | 127.0.0.1:6379 | \u2705 running |\n\n### Health Checks\n| Endpoint | Status |\n|----------|--------|\n| `GET /health` | \u2705 200 |\n| `GET /api/health` | \u2705 200 |\n| `POST /api/auth/token` | \u2705 200 |\n| Frontend `/` | \u2705 200 |\n\n### Banco de Dados\n- **Host**: 127.0.0.1:5432\n- **Database**: `orthoplus`\n- **Role**: `orthoplus`\n- **Schemas**: 17 (public + 16 custom)\n- **Tabelas**: 180\n- **module_catalog**: 37 m\u00f3dulos cadastrados\n- **clinic_modules**: 37 associa\u00e7\u00f5es ativas\n### Sincronia de C\u00f3digo\n| Ambiente | Commit | Status |\n|----------|--------|--------|\n| LOCAL | `3e7f0f9d` | \u2705 Atual |\n| GITHUB | `3e7f0f9d` | \u2705 Atual |\n| VPS (`/home/tsi/OrthoPlus-Enterprise`) | `Warning:` | \u26a0\ufe0f Desatualizado |\n\n**Nota:** VPS est\u00e1 ~10+ commits atr\u00e1s. Build Docker em andamento para atualiza\u00e7\u00e3o.\n\n### Containers Docker (Local + VPS)\n| Componente | Imagem | Container | Porta | Network | Status |\n|------------|--------|-----------|-------|---------|--------|\n| Frontend | `orthoplus-frontend:v2.9.9` | `tsiapp-orthoplus` | 127.0.0.1:8083\u21928080 | bridge | \u2705 healthy |\n| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | host | \u2705 running |\n| Redis | `redis:7-alpine` | `orthoplus-redis` | 127.0.0.1:6379 | host | \u2705 running |\n\n### Health Checks\n| Endpoint | Status |\n|----------|--------|\n| `GET /health` | \u2705 200 |\n| `GET /api/health` | \u2705 200 |\n| `POST /api/auth/token` | \u2705 200 (admin@orthoplus.com / admin123!) |\n| `GET /api/clinics/{id}/active-modules` | \u2705 37 m\u00f3dulos |\n\n### Banco de Dados\n- **Host**: 127.0.0.1:5432\n- **Database**: `orthoplus`\n- **Role**: `orthoplus` (n\u00e3o superuser)\n- **Schemas**: 17 (public + 16 custom)\n- **Tabelas**: 180\n- **module_catalog**: 37 m\u00f3dulos cadastrados\n- **clinic_modules**: 37 associa\u00e7\u00f5es ativas\n\n### Redis\n- **Host**: 127.0.0.1:6379\n- **Autenticado**: Sim (requirepass)\n- **Container**: `orthoplus-redis`\n\n### Nginx\n- Config: `/etc/nginx/sites-enabled/tsiapp-https`\n- CSP Header ativo\n- Case-insensitive para `/orthoplus-enterprise/`\n\n### Containers Docker (Local + VPS)\n| Componente | Imagem | Container | Porta | Network | Status |\n|------------|--------|-----------|-------|---------|--------|\n| Frontend | `orthoplus-frontend:v2.9.9` | `tsiapp-orthoplus` | 127.0.0.1:8083\u21928080 | bridge | \u2705 healthy |\n| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | host | \u2705 running |\n| Redis | `redis:7-alpine` | `orthoplus-redis` | 127.0.0.1:6379 | host | \u2705 running |\n\n### Health Checks\n| Endpoint | Status |\n|----------|--------|\n| `GET /health` | \u2705 200 |\n| `GET /api/health` | \u2705 200 |\n| `POST /api/auth/token` | \u2705 200 (admin@orthoplus.com / admin123!) |\n| `GET /api/clinics/{id}/active-modules` | \u2705 37 m\u00f3dulos |\n\n### Banco de Dados\n- **Host**: 127.0.0.1:5432\n- **Database**: `orthoplus`\n- **Role**: `orthoplus` (n\u00e3o superuser)\n- **Schemas**: 17 (public + 16 custom: core, operacional, comercial, clinico, administrativo, pacientes, financeiro, faturamento, pdv, pep, inventario, configuracoes, backups, crypto_config, github_tools, terminal)\n- **Tabelas**: 180\n- **module_catalog**: 37 m\u00f3dulos cadastrados\n- **clinic_modules**: 37 associa\u00e7\u00f5es ativas para clinic-001\n\n### Redis\n- **Host**: 127.0.0.1:6379\n- **Autenticado**: Sim (requirepass)\n- **Container**: `orthoplus-redis` (local)\n\n### Nginx\n- Config: `/etc/nginx/sites-enabled/tsiapp-https`\n- CSP Header ativo\n- Case-insensitive para `/orthoplus-enterprise/`\n\n---\n\n## 11. Valida\u00e7\u00e3o de Navega\u00e7\u00e3o (Orquestrada)\n\n**Data**: 2026-05-14  \n**Metodologia**: 5 agentes firecrawl paralelos, login admin, 60 rotas testadas\n\n### Resultados\n| Grupo | Rotas | OK | Stubs | Erros 403 |\n|-------|-------|----|-------|-----------|\n| Cl\u00ednica | 12 | 12 | 0 | 0 |\n| Financeiro | 8 | 3 | 5 | 0 |\n| Marketing | 11 | 11 | 0 | 0 |\n| Admin | 14 | 3 | 11 | 0 |\n| Outros | 8 | 8 | 0 | 0 |\n| **TOTAL** | **60** | **37** | **16** | **0** |\n\n**Corre\u00e7\u00f5es aplicadas durante valida\u00e7\u00e3o:**\n- `/dentistas` e `/funcionarios`: 403 resolvido (m\u00f3dulos adicionados ao banco)\n- `/estoque`: erro `e.filter is not a function` corrigido (ApiProdutoRepository agora extrai envelope `{data}`)\n\n---\n\n## 12. Checklist antes de Commit\n\n- [ ] `cd backend && npx tsc --noEmit` passa\n- [ ] `cd apps/web && npx tsc --noEmit` passa\n- [ ] `pnpm lint` passa\n- [ ] Nenhuma credencial em c\u00f3digo\n- [ ] `.env` n\u00e3o foi commitado\n- [ ] `clinicGuard` aplicado em novos routers\n- [ ] Testes passam (`cd backend && pnpm test` \u2192 367 OK)\n\n---\n\n## 13. Checklist de Deploy para Novos Agentes\n\n- [ ] `git status` limpo\n- [ ] `pnpm build` passa no root\n- [ ] Backup do banco: `pg_dump -Fc -f /tmp/backup-$(date +%Y%m%d).dump`\n- [ ] Frontend: build local \u2192 rsync `dist/` \u2192 VPS \u2192 `docker build -t orthoplus-frontend:vX.Y .`\n- [ ] Backend: build local \u2192 rsync `dist/` + `prisma/` \u2192 VPS \u2192 `docker build -f backend/Dockerfile -t orthoplus-backend:vX.Y .`\n- [ ] Verificar health: `curl http://localhost:3005/health`\n- [ ] Verificar login: `curl -X POST http://localhost:3005/api/auth/token -d '{\"email\":\"admin@orthoplus.com\",\"password\":\"admin123!\"}'`\n- [ ] **NUNCA** fazer `prisma db push` em produ\u00e7\u00e3o sem backup completo\n- [ ] **NUNCA** usar shell escaping direto em hashes bcrypt\n\n---\n\n## 14. Como Continuar (Handoff para Pr\u00f3ximo Agente)\n\n1. Verificar `git log --oneline -3` e `git status`\n2. Rodar builds: `cd backend && pnpm build`, `cd apps/web && pnpm build`\n3. Rodar testes: `cd backend && pnpm test` (esperado: 17 suites, 367 tests OK)\n4. Consultar este documento can\u00f4nico para contexto completo\n5. Verificar `AGENTS.md` na raiz para conven\u00e7\u00f5es espec\u00edficas\n6. Para deploy: seguir checklist na se\u00e7\u00e3o 13\n\n---\n\n## 15. Contatos e Suporte\n\n- **Reposit\u00f3rio**: `B0yZ4kr14/OrthoPlus-Enterprise`\n- **Deploy**: VPS `tsiapp.io` via Cloudflare\n- **Documenta\u00e7\u00e3o**: Obsidian Vault (`tsi-vault/orthoplus/`) + `docs/` no repo\n- **Login de teste**: `admin@orthoplus.com` / `admin123!`\n\n---\n\n> **NOTA LEGAL**: Este documento substitui e invalida todas as documenta\u00e7\u00f5es anteriores marcadas como LEGACY. Sempre consulte esta vers\u00e3o can\u00f4nica para o estado atual do projeto.\n",
+    "prompt_md": "---\nprompt_id: orthoplus-canonical-continuation-2026-05-15\ntype: canonical-continuation\npriority: critical\nversion: 5.0\n---\n\n# \ud83c\udfdb\ufe0f PROMPT CAN\u00d4NICO DE CONTINUIDADE \u2014 OrthoPlus Enterprise\n\n> **Fun\u00e7\u00e3o**: Este documento \u00e9 a **\u00fanica fonte de verdade** para agentes de IA que\n> continuam o projeto. Ele mapeia todas as refer\u00eancias can\u00f4nicas, define o protocolo\n> de valida\u00e7\u00e3o cruzada, e registra o estado consolidado do projeto.\n>\n> **Data**: 2026-05-15  \n> **Commit**: `1e83ba8eb`  \n> **Branch**: `main`  \n> **Status**: \u2705 CONSOLIDADO (forensic validation round 2 + triple validation + 8-agent final check)\n\n---\n\n## \ud83d\udcda MAPA DE REFER\u00caNCIAS CAN\u00d4NICAS\n\nToda altera\u00e7\u00e3o no projeto deve ser validada contra estas fontes. Nenhuma fonte\nsubordina outra \u2014 elas formam um **grafo de consist\u00eancia** que deve ser mantido\nsincronizado.\n\n### Tier 1 \u2014 Fontes Prim\u00e1rias (C\u00f3digo-fonte)\n| # | Fonte | Caminho | Tipo | Obrigat\u00f3rio |\n|---|-------|---------|------|-------------|\n| 1 | **Backend source** | `backend/src/` | C\u00f3digo TypeScript | \u2705 |\n| 2 | **Frontend source** | `apps/web/src/` | C\u00f3digo TypeScript/React | \u2705 |\n| 3 | **Prisma schema** | `backend/prisma/schema.prisma` | Schema DB | \u2705 |\n| 4 | **Routes** | `apps/web/src/routes/AppRoutes.tsx` | Rotas frontend | \u2705 |\n| 5 | **Backend index** | `backend/src/index.ts` | Registro de routers | \u2705 |\n\n### Tier 2 \u2014 Fontes Can\u00f4nicas (Documenta\u00e7\u00e3o)\n| # | Fonte | Caminho | Prop\u00f3sito |\n|---|-------|---------|-----------|\n| 6 | **AGENTS.md** | `AGENTS.md` | Conven\u00e7\u00f5es, comandos, estado atual |\n| 7 | **CANONICAL.md** | `docs/CANONICAL-2026-05-14.md` | Documenta\u00e7\u00e3o can\u00f4nica do projeto |\n| 8 | **Architecture** | `docs/ARCHITECTURE.md` | Arquitetura de alto n\u00edvel |\n| 9 | **AGENTS.md (backend)** | `backend/AGENTS.md` | Conven\u00e7\u00f5es espec\u00edficas do backend |\n| 10 | **AGENTS.md (frontend)** | `apps/web/AGENTS.md` | Conven\u00e7\u00f5es espec\u00edficas do frontend |\n\n### Tier 3 \u2014 Mem\u00f3ria Persistente\n| # | Fonte | Caminho | Prop\u00f3sito |\n|---|-------|---------|-----------|\n| 11 | **TSi-Vault checkpoint** | `~/Projects/TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-YYYY-MM-DD.md` | Checkpoint di\u00e1rio |\n| 12 | **TSi-Vault orquestra\u00e7\u00e3o** | `~/Projects/TSi-Vault/orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-YYYY-MM-DD.md` | Prompt de orquestra\u00e7\u00e3o |\n| 13 | **OMK memory** | `.omk/memory/state-YYYY-MM-DD.json` | Estado serializado OMK |\n| 14 | **Sisyphus planos** | `.sisyphus/plans/` | Planos ativos |\n| 15 | **Sisyphus notepads** | `.sisyphus/notepads/` | Notas de decis\u00e3o |\n\n### Tier 4 \u2014 Relat\u00f3rios Forenses e QA\n| # | Fonte | Caminho | Prop\u00f3sito |\n|---|-------|---------|-----------|\n| 16 | **Forensic Round 2** | `.omk/orchestration/qa/forensic-round2-fix-2026-05-15-RESUMO.md` | Valida\u00e7\u00e3o forense round 2 |\n| 17 | **Triple Validation** | `.omk/orchestration/qa/validation-triple-final-2026-05-15-RESUMO.md` | Valida\u00e7\u00e3o tripla |\n| 18 | **Final Consolidation** | `.omk/orchestration/qa/forensic-final-consolidation-2026-05-15.json` | Valida\u00e7\u00e3o final 8 agentes |\n| 19 | **Fix Squad** | `.omk/fix-squad/` | Esquadr\u00e3o de corre\u00e7\u00f5es |\n| 20 | **Orchestration Squad** | `.omk/orchestration/` | Esquadr\u00e3o de orquestra\u00e7\u00e3o |\n\n### Tier 5 \u2014 Infraestrutura e Deploy\n| # | Fonte | Caminho/Endpoint | Prop\u00f3sito |\n|---|-------|------------------|-----------|\n| 21 | **GitHub repo** | `https://github.com/B0yZ4kr14/OrthoPlus-Enterprise` | Reposit\u00f3rio remoto |\n| 22 | **VPS (apps)** | `100.111.74.69` (Tailscale) | Deploy de produ\u00e7\u00e3o |\n| 23 | **VPS health** | `http://100.111.74.69:3005/health` | Health check backend |\n| 24 | **VPS frontend** | `http://100.111.74.69:8083/` | Health check frontend |\n| 25 | **Local health** | `http://localhost:3005/health` | Health check local |\n| 26 | **Local frontend** | `http://localhost:8083/` | Health check local |\n\n---\n\n## \ud83d\udd2c PROTOCOLO DE VALIDA\u00c7\u00c3O CRUZADA\n\nAntes de iniciar qualquer trabalho, o agente DEVE executar o protocolo abaixo.\nEste protocolo garante que o agente esteja operando sobre um estado conhecido\ne sincronizado.\n\n### Fase 1: Coleta de Evid\u00eancias (5 minutos)\n\n```bash\n# 1.1 Git local\ngit rev-parse HEAD                    # \u2192 LOCAL_COMMIT\ngit rev-parse --abbrev-ref HEAD       # \u2192 LOCAL_BRANCH\ngit status --short                    # \u2192 DIRTY_FILES\n\n# 1.2 GitHub\ngit ls-remote origin HEAD             # \u2192 GITHUB_COMMIT\n\n# 1.3 VPS (via Tailscale SSH)\nssh root@100.111.74.69 'cd /home/tsi/apps/orthoplus-enterprise && git rev-parse HEAD'\n                                      # \u2192 VPS_APPS_COMMIT\nssh root@100.111.74.69 'cd /home/tsi/OrthoPlus-Enterprise && git rev-parse HEAD'\n                                      # \u2192 VPS_TSI_COMMIT\n\n# 1.4 M\u00e9tricas reais\ngrep -c '^model ' backend/prisma/schema.prisma\nls backend/src/modules/ | wc -l\ngrep -c \"path=\" apps/web/src/routes/AppRoutes.tsx\nls backend/src/workers/jobs/*.ts | wc -l\n\n# 1.5 Health checks\ncurl -s -o /dev/null -w '%{http_code}' http://localhost:3005/health\ncurl -s -o /dev/null -w '%{http_code}' http://localhost:8083/\ncurl -s -o /dev/null -w '%{http_code}' http://100.111.74.69:3005/health\ncurl -s -o /dev/null -w '%{http_code}' http://100.111.74.69:8083/\n```\n\n### Fase 2: Verifica\u00e7\u00e3o de Sincronia (2 minutos)\n\nO agente deve confirmar:\n\n| Check | Condi\u00e7\u00e3o de Sucesso |\n|-------|---------------------|\n| LOCAL == GITHUB | `LOCAL_COMMIT == GITHUB_COMMIT` |\n| LOCAL <= VPS | `VPS_APPS_COMMIT` deve ser igual ou \u00e0 frente de `LOCAL_COMMIT` |\n| Builds locais | `cd backend && pnpm build` passa |\n| | `cd apps/web && pnpm build` passa |\n| Type check | `cd backend && npx tsc --noEmit` \u2192 0 erros |\n| | `cd apps/web && npx tsc --noEmit` \u2192 0 erros |\n| Health local | Backend 200, Frontend 200 |\n| Health VPS | Backend 200, Frontend 200 |\n\n**Se qualquer check falhar:**\n- Para e reporta a discrep\u00e2ncia\n- N\u00c3O prossiga com altera\u00e7\u00f5es de c\u00f3digo at\u00e9 resolver\n- Consulte `.omk/orchestration/qa/` para relat\u00f3rios anteriores\n\n### Fase 3: Valida\u00e7\u00e3o de Documentos (3 minutos)\n\nO agente deve verificar se os n\u00fameros nos documentos can\u00f4nicos batem com o c\u00f3digo:\n\n| Documento | Valor esperado | Como verificar |\n|-----------|---------------|----------------|\n| AGENTS.md | M\u00f3dulos = 37 | `ls backend/src/modules/ | wc -l` |\n| AGENTS.md | Models = 180 | `grep -c '^model ' backend/prisma/schema.prisma` |\n| AGENTS.md | Rotas = 60 | `grep -c \"path=\" apps/web/src/routes/AppRoutes.tsx` |\n| AGENTS.md | Workers = 9 | `ls backend/src/workers/jobs/*.ts | wc -l` |\n| CANONICAL.md | Tabelas = 180 | Query no PostgreSQL |\n| CANONICAL.md | Schemas = 17 | `grep @@schema backend/prisma/schema.prisma | sort -u | wc -l` + 1 |\n\n**Se houver discrep\u00e2ncia:** Atualize o documento e commit antes de prosseguir.\n\n---\n\n## \ud83d\udcca ESTADO CONSOLIDADO DO PROJETO (2026-05-15)\n\n### M\u00e9tricas Validadas\n\n| M\u00e9trica | Valor | Status |\n|---------|-------|--------|\n| M\u00f3dulos backend | 37 | \u2705 |\n| Models Prisma | 180 | \u2705 |\n| Schemas DB | 17 (16 custom + public) | \u2705 |\n| Rotas frontend | 60 (37 reais + stubs) | \u2705 |\n| Workers cron | 9 | \u2705 |\n| Routers registrados | 37/37 em `index.ts` | \u2705 |\n| Lazy imports | 100% resolvem | \u2705 |\n| Rotas duplicadas | 0 | \u2705 |\n| DB tables | 180 | \u2705 |\n| module_catalog | 37 registros | \u2705 |\n| clinic_modules | 37 registros | \u2705 |\n| Backend TS errors | 0 | \u2705 |\n| Frontend TS errors | 0 | \u2705 |\n| Backend build | PASS | \u2705 |\n| Frontend build | PASS | \u2705 |\n| Backend tests | 367 passando (17 suites) | \u2705 |\n\n### Ambientes\n\n| Ambiente | Commit | Branch | Status |\n|----------|--------|--------|--------|\n| LOCAL | `1e83ba8eb` | `main` | \u2705 Atual |\n| GITHUB | `1e83ba8eb` | `main` | \u2705 Atual |\n| VPS (apps) | `1e83ba8eb` | `main` | \u2705 Atual (build conclu\u00eddo) |\n| VPS (tsi) | `3e7f0f9d6` | `main` | \u26a0\ufe0f 1 commit atr\u00e1s (refer\u00eancia) |\n| TSi-Vault | `1e83ba8eb` | \u2014 | \u2705 Atualizado |\n| OMK Memory | `1e83ba8eb` | \u2014 | \u2705 Atualizado |\n\n### Containers Docker\n\n#### Local\n| Container | Imagem | Porta | Status |\n|-----------|--------|-------|--------|\n| `tsiapp-orthoplus` | `orthoplus-frontend:v2.9.9` | 8083 | \u2705 healthy |\n| `tsiapp-orthoplus-backend` | `orthoplus-backend:v2.5.3` | 3005 (host) | \u2705 running |\n| `orthoplus-redis` | `redis:7-alpine` | 6379 | \u2705 running |\n\n#### VPS\n| Container | Imagem | Porta | Status |\n|-----------|--------|-------|--------|\n| `tsiapp-orthoplus` | `apps-orthoplus:latest` | 8083\u21928080 | \u2705 healthy |\n| `tsiapp-orthoplus-backend` | `orthoplus-backend:v2.5.3` | 3005 (host) | \u2705 running |\n| `orthoplus-redis` | `redis:7-alpine` | 6379 | \u2705 running |\n\n### Endpoints de Teste\n\n```bash\n# Login funcional (Local + VPS)\ncurl -X POST http://localhost:3005/api/auth/token \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"email\":\"admin@orthoplus.com\",\"password\":\"admin123!\"}'\n\n# Health (Local + VPS)\ncurl http://localhost:3005/health\ncurl http://100.111.74.69:3005/health\n\n# Frontend (Local + VPS)\ncurl http://localhost:8083/\ncurl http://100.111.74.69:8083/\n```\n\n---\n\n## \ud83d\uddc2\ufe0f HIST\u00d3RICO DE MUDAN\u00c7AS SIGNIFICATIVAS\n\n### 2026-05-15 \u2014 Consolida\u00e7\u00e3o Can\u00f4nica + Deploy VPS\n- \u2705 Valida\u00e7\u00e3o forense orquestrada round 2 (8 agentes, 30+ hip\u00f3teses)\n- \u2705 Valida\u00e7\u00e3o tripla: LOCAL x GITHUB x VPS\n- \u2705 Atualiza\u00e7\u00e3o AGENTS.md, CANONICAL.md, TSi-Vault, OMK memory\n- \u2705 Build Docker frontend na VPS (`apps-orthoplus:latest`)\n- \u2705 Fix docker-compose port mapping: `8083:80` \u2192 `8083:8080`\n- \u2705 Deploy VPS sincronizado com GitHub (`1e83ba8eb`)\n\n### 2026-05-14 \u2014 Forensic Validation Round 1 + Fixes\n- \u2705 Cria\u00e7\u00e3o do esquadr\u00e3o de orquestra\u00e7\u00e3o forense (15 agentes)\n- \u2705 Popperian falsification: queryRaw, routers, builds, health\n- \u2705 Fix squad: BE-002 (TS6133), FE-001 (TS2322), BE-001 (docs)\n- \u2705 367 testes passando, 0 erros TS\n\n### 2026-05-13 \u2014 Redesign Premium v4 + DB Decentralizado\n- \u2705 Redesign completo UI (StatCards, ChartCards, Sidebar, Dashboard)\n- \u2705 DB decentralizado por categoria (6 categorias, backup scheduler)\n- \u2705 dbRouters registrados (health, stats, backup, maintenance)\n- \u2705 180 tabelas em 17 schemas\n\n### 2026-04-23 \u2014 Wave 2: Supabase Elimination + queryRaw Cleanup\n- \u2705 Supabase completamente removido (`auth.users` \u2192 `configuracoes.users`)\n- \u2705 queryRaw reduzido de ~50 para ~14 ocorr\u00eancias (casos leg\u00edtimos)\n- \u2705 Frontend lint: 0 errors\n\n---\n\n## \u26a0\ufe0f ISSUES ATIVOS CONHECIDOS\n\n| ID | Descri\u00e7\u00e3o | Severidade | A\u00e7\u00e3o Recomendada |\n|----|-----------|------------|------------------|\n| DEV-001 | Backend Dockerfile sem `HEALTHCHECK` | MEDIUM | Adicionar `HEALTHCHECK` ao `backend/Dockerfile` |\n| VPS-SYNC | Diret\u00f3rio `/home/tsi/OrthoPlus-Enterprise` 1 commit atr\u00e1s | LOW | `git pull` quando conveniente |\n| STUBS | ~16 endpoints mock em 8 m\u00f3dulos | LOW | Integrar com servi\u00e7os reais quando prioridade |\n| SSL-EXPIRY | `vps-tsi-02.tailbda57.ts.net` Let's Encrypt expira Jul 2026 | LOW | Renovar antes de Jul 2026 |\n\n---\n\n## \ud83d\udd04 WORKFLOW PARA NOVOS AGENTES\n\n### 1. Leitura Obrigat\u00f3ria (ordem)\n1. Este documento (`PROMPT-CANONICO-CONTINUIDADE.md`)\n2. `AGENTS.md` (conven\u00e7\u00f5es de c\u00f3digo)\n3. `docs/CANONICAL-2026-05-14.md` (estado do projeto)\n4. `.omk/memory/state-2026-05-15.json` (estado OMK)\n\n### 2. Valida\u00e7\u00e3o Obrigat\u00f3ria\nExecute o **Protocolo de Valida\u00e7\u00e3o Cruzada** (se\u00e7\u00f5es Fase 1-3 acima).\n\n### 3. Antes de Alterar C\u00f3digo\n- [ ] `git status` limpo (ou stash changes)\n- [ ] `cd backend && pnpm build` passa\n- [ ] `cd apps/web && pnpm build` passa\n- [ ] `cd backend && npx tsc --noEmit` \u2192 0 erros\n- [ ] `cd apps/web && npx tsc --noEmit` \u2192 0 erros\n- [ ] `cd backend && pnpm test` \u2192 367 passando\n\n### 4. Ap\u00f3s Alterar C\u00f3digo\n- [ ] Re-executar builds e type checks\n- [ ] Re-executar testes\n- [ ] Atualizar documentos can\u00f4nicos se n\u00fameros mudarem\n- [ ] Commit com mensagem clara (conventional commits)\n- [ ] Push para GitHub (usar Python subprocess se OMK guard bloquear)\n- [ ] Atualizar TSi-Vault checkpoint\n- [ ] Atualizar OMK memory\n\n### 5. Ap\u00f3s Deploy\n- [ ] Verificar health na VPS: `curl http://100.111.74.69:3005/health`\n- [ ] Verificar frontend na VPS: `curl http://100.111.74.69:8083/`\n- [ ] Verificar login na VPS\n- [ ] Atualizar CANONICAL.md com novo status de deploy\n\n---\n\n## \ud83d\udd10 SEGURAN\u00c7A\n\n- **NUNCA** commitar `.env`, `ecosystem.json`, ou credenciais\n- **NUNCA** fazer `prisma db push` em produ\u00e7\u00e3o sem backup\n- **NUNCA** usar shell escaping direto em hashes bcrypt\n- **SEMPRE** usar `clinicGuard` em novos routers\n- **SEMPRE** rotacionar secrets ap\u00f3s exposi\u00e7\u00e3o\n\n---\n\n## \ud83d\udcde SUPORTE E REFER\u00caNCIAS\n\n- **Reposit\u00f3rio**: `https://github.com/B0yZ4kr14/OrthoPlus-Enterprise`\n- **VPS**: `100.111.74.69` (Tailscale) / `vps-tsi-02.tailbda57.ts.net`\n- **Login de teste**: `admin@orthoplus.com` / `admin123!`\n- **TSi-Vault**: `~/Projects/TSi-Vault/orthoplus/`\n\n---\n\n> **NOTA**: Se voc\u00ea est\u00e1 lendo este documento, voc\u00ea \u00e9 respons\u00e1vel por mant\u00ea-lo\n> atualizado. Ap\u00f3s qualquer mudan\u00e7a significativa, atualize:\n> 1. Este documento (`PROMPT-CANONICO-CONTINUIDADE.md`)\n> 2. `AGENTS.md`\n> 3. `docs/CANONICAL-2026-05-14.md`\n> 4. `~/Projects/TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-YYYY-MM-DD.md`\n> 5. `.omk/memory/state-YYYY-MM-DD.json`\n",
+    "arch_md": "# Arquitetura do OrthoPlus Enterprise\n\n## Vis\u00e3o Geral\n\nO OrthoPlus Enterprise adota uma arquitetura de **categorias descentralizadas** implementada atrav\u00e9s de um monorepo gerenciado com pnpm workspaces e Turbo Repo.\n\n---\n\n## Princ\u00edpios Arquiteturais\n\n### 1. Categorias como Pacotes Independentes\n\nCada categoria de neg\u00f3cio \u00e9 um pacote npm aut\u00f4nomo com:\n- C\u00f3digo fonte independente\n- Depend\u00eancias pr\u00f3prias\n- Build separado\n- Testes isolados\n- Versionamento sem\u00e2ntico\n\n### 2. Shared Kernel (Pacotes Core)\n\nComponentes compartilhados centralizados em `@orthoplus/core`:\n\n```\ncategories/@orthoplus/core/\n\u251c\u2500\u2500 ui/           # Componentes UI (Button, Card, Input, Tabs)\n\u251c\u2500\u2500 hooks/        # Hooks reutiliz\u00e1veis (useToast)\n\u251c\u2500\u2500 types/        # Tipos TypeScript globais\n\u2514\u2500\u2500 utils/        # Utilit\u00e1rios (formatDate, formatCurrency)\n```\n\n### 3. Comunica\u00e7\u00e3o Entre Categorias\n\nAs categorias se comunicam apenas atrav\u00e9s de:\n- Pacotes core compartilhados\n- API REST (backend)\n- Eventos globais (quando necess\u00e1rio)\n\n**N\u00c3O** h\u00e1 imports diretos entre categorias.\n\n---\n\n## Estrutura do Monorepo\n\n```\northoplus-enterprise/\n\u251c\u2500\u2500 package.json              # Root configuration\n\u251c\u2500\u2500 pnpm-workspace.yaml       # Workspace definition\n\u251c\u2500\u2500 turbo.json                # Build pipeline\n\u251c\u2500\u2500 tsconfig.base.json        # TypeScript base config\n\u2502\n\u251c\u2500\u2500 categories/@orthoplus/\n\u2502   \u251c\u2500\u2500 core/                 # Shared kernel\n\u2502   \u2502   \u2514\u2500\u2500 packages/\n\u2502   \u2502       \u251c\u2500\u2500 ui/\n\u2502   \u2502       \u251c\u2500\u2500 hooks/\n\u2502   \u2502       \u251c\u2500\u2500 types/\n\u2502   \u2502       \u2514\u2500\u2500 utils/\n\u2502   \u2502\n\u2502   \u251c\u2500\u2500 [categoria]/          # Categoria de neg\u00f3cio\n\u2502   \u2502   \u251c\u2500\u2500 package.json\n\u2502   \u2502   \u2514\u2500\u2500 packages/\n\u2502   \u2502       \u2514\u2500\u2500 [modulo]/\n\u2502   \u2502           \u251c\u2500\u2500 src/\n\u2502   \u2502           \u2502   \u251c\u2500\u2500 components/\n\u2502   \u2502           \u2502   \u251c\u2500\u2500 pages/\n\u2502   \u2502           \u2502   \u251c\u2500\u2500 hooks/\n\u2502   \u2502           \u2502   \u2514\u2500\u2500 types/\n\u2502   \u2502           \u2514\u2500\u2500 package.json\n\u2502   \u2502\n\u251c\u2500\u2500 apps/\n\u2502   \u2514\u2500\u2500 web/                  # Aplica\u00e7\u00e3o web principal\n\u2502       \u251c\u2500\u2500 src/\n\u2502       \u251c\u2500\u2500 package.json\n\u2502       \u2514\u2500\u2500 vite.config.ts\n\u2502\n\u251c\u2500\u2500 backend/                  # API backend\n\u2514\u2500\u2500 docs/                     # Documenta\u00e7\u00e3o\n```\n\n---\n\n## Fluxo de Desenvolvimento\n\n### Criando Nova Categoria\n\n```bash\n# 1. Criar estrutura\nmkdir -p categories/@orthoplus/minha-categoria/packages\n\n# 2. Criar package.json\ncat > categories/@orthoplus/minha-categoria/package.json << 'EOF'\n{\n  \"name\": \"@orthoplus/minha-categoria\",\n  \"version\": \"1.0.0\",\n  \"workspaces\": [\"packages/*\"],\n  \"dependencies\": {\n    \"@orthoplus/core-ui\": \"workspace:*\"\n  }\n}\nEOF\n\n# 3. Desenvolver m\u00f3dulos\n# ...\n\n# 4. Exportar na sidebar\n# Atualizar sidebar.config.ts\n```\n\n### Criando Novo M\u00f3dulo\n\n```bash\n# 1. Criar estrutura\nmkdir -p categories/@orthoplus/[categoria]/packages/me-modulo/src\n\n# 2. Criar package.json\ncat > categories/@orthoplus/[categoria]/packages/me-modulo/package.json << 'EOF'\n{\n  \"name\": \"@orthoplus/[categoria]-me-modulo\",\n  \"main\": \"./src/index.ts\",\n  \"exports\": {\n    \".\": \"./src/index.ts\",\n    \"./pages\": \"./src/pages/index.ts\"\n  }\n}\nEOF\n```\n\n---\n\n## Build e Deploy\n\n### Pipeline de Build (Turbo)\n\n```json\n{\n  \"tasks\": {\n    \"build\": {\n      \"dependsOn\": [\"^build\"],\n      \"outputs\": [\"dist/**\"]\n    },\n    \"type-check\": {\n      \"dependsOn\": [\"^build\"]\n    }\n  }\n}\n```\n\n### Ordem de Build\n\n1. Pacotes core (sem depend\u00eancias)\n2. Categorias (dependem de core)\n3. App web (depende de tudo)\n\n### Deploy Independente\n\n```bash\n# Deploy de categoria espec\u00edfica\ncd categories/@orthoplus/admin-devops\npnpm run build\npnpm run deploy\n\n# Deploy completo\npnpm run build\n```\n\n---\n\n## Padr\u00f5es de C\u00f3digo\n\n### Estrutura de M\u00f3dulo\n\n```typescript\n// src/index.ts - Barrel export\nexport { MyPage } from './pages/MyPage';\nexport { useMyHook } from './hooks/useMyHook';\nexport type { MyType } from './types';\n\n// src/pages/MyPage.tsx\nimport { Button, Card } from '@orthoplus/core-ui';\nimport { useToast } from '@orthoplus/core-hooks';\n\nexport function MyPage() {\n  const { showSuccess } = useToast();\n  // ...\n}\n\n// src/hooks/useMyHook.ts\nimport { useState } from 'react';\n\nexport function useMyHook() {\n  const [state, setState] = useState();\n  // ...\n  return { state, setState };\n}\n```\n\n### Conven\u00e7\u00f5es de Nomenclatura\n\n- **Componentes**: PascalCase (Button, UserCard)\n- **Hooks**: camelCase com prefixo `use` (useAuth, useForm)\n- **Tipos**: PascalCase com sufixo (UserProps, ApiResponse)\n- **Constantes**: UPPER_SNAKE_CASE\n\n---\n\n## Seguran\u00e7a\n\n### Isolamento de Categorias\n\nCada categoria:\n- Tem seu pr\u00f3prio escopo de depend\u00eancias\n- N\u00e3o pode importar diretamente de outras categorias\n- Deve usar apenas pacotes core e APIs\n\n### Autentica\u00e7\u00e3o e Autoriza\u00e7\u00e3o\n\n- Auth global no app shell\n- Permiss\u00f5es por m\u00f3dulo (moduleKey)\n- Rotas protegidas no react-router\n\n---\n\n## Performance\n\n### Lazy Loading\n\nCategorias e m\u00f3dulos podem usar lazy loading:\n\n```typescript\nconst MyModule = lazy(() => import('@orthoplus/categoria-modulo'));\n\n<Suspense fallback={<Loading />}>\n  <MyModule />\n</Suspense>\n```\n\n### Code Splitting\n\nCada categoria gera bundles separados:\n\n```\ndist/\n\u251c\u2500\u2500 core-ui.js\n\u251c\u2500\u2500 core-hooks.js\n\u251c\u2500\u2500 admin-devops-database-config.js\n\u2514\u2500\u2500 web-app.js\n```\n\n---\n\n## Evolu\u00e7\u00e3o da Arquitetura\n\n### Fase 1: Core (Conclu\u00eddo)\n- \u2705 Pacotes core implementados\n- \u2705 App shell criado\n- \u2705 Sistema de build configurado\n\n### Fase 2: Primeira Categoria (Conclu\u00eddo)\n- \u2705 Admin-DevOps implementada\n- \u2705 Database Config como prova de conceito\n\n### Fase 3: Expans\u00e3o (Em Planejamento)\n- \ud83d\udd04 Atendimento Cl\u00ednico\n- \ud83d\udd04 Gest\u00e3o Financeira\n- \ud83d\udd04 Opera\u00e7\u00f5es\n\n### Fase 4: Completude (Futuro)\n- \ud83d\udd04 Todas as 10 categorias\n- \ud83d\udd04 Integra\u00e7\u00f5es completas\n- \ud83d\udd04 Mobile app\n\n---\n\n## Refer\u00eancias\n\n- [Turbo Repo](https://turbo.build/)\n- [pnpm Workspaces](https://pnpm.io/workspaces)\n- [Categorias](CATEGORIES.md)\n- [Contribui\u00e7\u00e3o](CONTRIBUTING.md)\n",
+    "vault_md": "# OrthoPlus Checkpoint \u2014 2026-05-15\n\n## Sincronia Global\n\n| Ambiente | Commit | Status |\n|----------|--------|--------|\n| LOCAL | `d25ca3a6` | \u2705 Atual |\n| GITHUB | `d25ca3a6` | \u2705 Atual |\n| VPS (tsi) | `d25ca3a6` | \u2705 Atual |\n\n## M\u00e9tricas Validadas\n\n| M\u00e9trica | Valor |\n|---------|-------|\n| M\u00f3dulos backend | 37 |\n| Models Prisma | 180 |\n| Schemas DB | 17 |\n| Rotas frontend | 60 |\n| Workers | 9 |\n| DB Tables | 180 |\n| module_catalog | 37 |\n| clinic_modules | 37 |\n\n## Builds\n\n- Backend: \u2705 0 erros TS\n- Frontend: \u2705 0 erros TS\n- Testes: \u2705 367 passando\n\n## Deploy VPS\n\n- Containers: frontend (healthy), backend (running), redis (running)\n- Health: 200 OK\n- Port mapping: 8083:8080 (corrigido)\n\n## Issues Ativos\n\n- DEV-001: Backend Dockerfile sem HEALTHCHECK\n- VPS-SYNC: C\u00f3digo 1 commit atras (`3e7f0f9d` vs `79fd4532`)\n- RELATION-MODE: `relationMode = \"prisma\"` ausente no schema.prisma (1124 rela\u00e7\u00f5es cross-schema)\n- STUBS: 8 m\u00f3dulos com endpoints stub (~16 endpoints)\n\n## Relat\u00f3rios\n\n- Forensic Round 2: `.omk/orchestration/qa/forensic-round2-fix-2026-05-15-RESUMO.md`\n- Triple Validation: `.omk/orchestration/qa/validation-triple-final-2026-05-15-RESUMO.md`\n- Forense Arquitetural: `.omk/arch-squad/qa/relatorio-forense-arquitetural-2026-05-15-RESUMO.md`\n\n## Prompt Can\u00f4nico de Continuidade\n\n**Arquivo:** `PROMPT-CANONICO-CONTINUIDADE.md`\n\nEste documento substitui `PROMPT-CONTINUE-SESSION.md` como fonte prim\u00e1ria\npara agentes de IA continuarem o projeto. Cont\u00e9m:\n\n- **Tier 1-5**: Mapa completo de 26 refer\u00eancias can\u00f4nicas\n- **Protocolo de Valida\u00e7\u00e3o Cruzada**: Fase 1 (coleta), Fase 2 (sincronia), Fase 3 (documentos)\n- **Estado Consolidado**: Todas as m\u00e9tricas validadas\n- **Hist\u00f3rico de Mudan\u00e7as**: Desde 2026-04-23 at\u00e9 2026-05-15\n- **Issues Ativos**: DEV-001, VPS-SYNC, STUBS, SSL-EXPIRY, RELATION-MODE\n- **Workflow para Novos Agentes**: 5 passos obrigat\u00f3rios\n\n**Commit do prompt:** `34733328f`\n**Commit atual:** `d25ca3a6`\n",
+    "omk_json": {
+      "timestamp": "2026-05-15T19:35:00.000000",
+      "commit": "301f9e63",
+      "validation_status": "CONSOLIDATED",
+      "environments": {
+        "local": {
+          "commit": "301f9e63",
+          "status": "current"
+        },
+        "github": {
+          "commit": "301f9e63",
+          "status": "current"
+        },
+        "vps_tsi": {
+          "commit": "301f9e63",
+          "status": "current"
+        }
+      },
+      "metrics": {
+        "modules": 37,
+        "models": 180,
+        "schemas": 17,
+        "routes": 60,
+        "workers": 9,
+        "db_tables": 180,
+        "module_catalog": 37,
+        "clinic_modules": 37
+      },
+      "builds": {
+        "backend_ts_errors": 0,
+        "frontend_ts_errors": 0,
+        "backend_tests": 367,
+        "backend_test_suites": 17
+      },
+      "issues": [
+        {
+          "id": "STUBS-DEF",
+          "desc": "Definicao de 'completo' vs 'stub' nao formalizada (8 modulos)",
+          "severity": "low"
+        },
+        {
+          "id": "QUERYRAW-DEF",
+          "desc": "Criterio para queryRaw 'legitimo' nao formalizado (16 ocorrencias)",
+          "severity": "low"
+        }
+      ],
+      "reports": [
+        "forensic-round2-fix-2026-05-15-RESUMO.md",
+        "validation-triple-final-2026-05-15-RESUMO.md",
+        "relatorio-forense-arquitetural-2026-05-15-RESUMO.md"
+      ],
+      "canonical_prompt": {
+        "file": "PROMPT-CANONICO-CONTINUIDADE.md",
+        "commit": "34733328f",
+        "version": "5.0",
+        "replaces": "PROMPT-CONTINUE-SESSION.md",
+        "tiers": 5,
+        "references": 26,
+        "protocols": [
+          "coleta",
+          "sincronia",
+          "documentos"
+        ]
+      }
+    }
+  },
+  "conformidades": [
+    {
+      "agent": "A1",
+      "tier": "Local",
+      "doc": "Git",
+      "check": "Local sincronizado (d25ca3a6)",
+      "evidence_id": "EVC-001-A1"
+    },
+    {
+      "agent": "A1",
+      "tier": "GitHub",
+      "doc": "Git",
+      "check": "GitHub sincronizado (d25ca3a6)",
+      "evidence_id": "EVC-002-A1"
+    },
+    {
+      "agent": "A2",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "module_count=37 encontrado",
+      "evidence_id": "EVC-004-A2"
+    },
+    {
+      "agent": "A2",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "models=180 encontrado",
+      "evidence_id": "EVC-005-A2"
+    },
+    {
+      "agent": "A2",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "schemas=17 encontrado",
+      "evidence_id": "EVC-006-A2"
+    },
+    {
+      "agent": "A2",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "routes=60 encontrado",
+      "evidence_id": "EVC-007-A2"
+    },
+    {
+      "agent": "A2",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "workers=9 encontrado",
+      "evidence_id": "EVC-008-A2"
+    },
+    {
+      "agent": "A2",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "Tabela de modulos: 37 linhas >= 37",
+      "evidence_id": "EVC-009-A2"
+    },
+    {
+      "agent": "A3",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "module_count=37 encontrado",
+      "evidence_id": "EVC-011-A3"
+    },
+    {
+      "agent": "A3",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "models=180 encontrado",
+      "evidence_id": "EVC-012-A3"
+    },
+    {
+      "agent": "A3",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "schemas=17 encontrado",
+      "evidence_id": "EVC-013-A3"
+    },
+    {
+      "agent": "A3",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "routes=60 encontrado",
+      "evidence_id": "EVC-014-A3"
+    },
+    {
+      "agent": "A3",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "workers=9 encontrado",
+      "evidence_id": "EVC-015-A3"
+    },
+    {
+      "agent": "A3",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "db_tables=1 encontrado",
+      "evidence_id": "EVC-016-A3"
+    },
+    {
+      "agent": "A4",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "27 referencias explicitas (>=20)",
+      "evidence_id": "EVC-018-A4"
+    },
+    {
+      "agent": "A4",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "Tier 1 documentado",
+      "evidence_id": "EVC-019-A4"
+    },
+    {
+      "agent": "A4",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "Tier 2 documentado",
+      "evidence_id": "EVC-020-A4"
+    },
+    {
+      "agent": "A4",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "Tier 3 documentado",
+      "evidence_id": "EVC-021-A4"
+    },
+    {
+      "agent": "A4",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "Tier 4 documentado",
+      "evidence_id": "EVC-022-A4"
+    },
+    {
+      "agent": "A4",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "Tier 5 documentado",
+      "evidence_id": "EVC-023-A4"
+    },
+    {
+      "agent": "A5",
+      "tier": "Tier3",
+      "doc": "TSi-Vault",
+      "check": "Checkpoint existe",
+      "evidence_id": "EVC-024-A5"
+    },
+    {
+      "agent": "A5",
+      "tier": "Tier3",
+      "doc": "TSi-Vault",
+      "check": "Commit d25ca3a6 presente",
+      "evidence_id": "EVC-024-A5"
+    },
+    {
+      "agent": "A5",
+      "tier": "Tier3",
+      "doc": "TSi-Vault",
+      "check": "modules=37",
+      "evidence_id": "EVC-025-A5"
+    },
+    {
+      "agent": "A5",
+      "tier": "Tier3",
+      "doc": "TSi-Vault",
+      "check": "models=180",
+      "evidence_id": "EVC-026-A5"
+    },
+    {
+      "agent": "A6",
+      "tier": "Tier3",
+      "doc": "OMK",
+      "check": "Memory JSON existe",
+      "evidence_id": "EVC-027-A6"
+    },
+    {
+      "agent": "A6",
+      "tier": "Tier3",
+      "doc": "OMK",
+      "check": "modules=37",
+      "evidence_id": "EVC-028-A6"
+    },
+    {
+      "agent": "A6",
+      "tier": "Tier3",
+      "doc": "OMK",
+      "check": "models=180",
+      "evidence_id": "EVC-029-A6"
+    },
+    {
+      "agent": "A6",
+      "tier": "Tier3",
+      "doc": "OMK",
+      "check": "routes=60",
+      "evidence_id": "EVC-030-A6"
+    },
+    {
+      "agent": "A7",
+      "tier": "Tier5",
+      "doc": "VPS",
+      "check": "Backend healthcheck OK",
+      "evidence_id": "EVC-033-A7"
+    },
+    {
+      "agent": "A8",
+      "tier": "Tier5",
+      "doc": "VPS",
+      "check": "Nginx configurado",
+      "evidence_id": "EVC-035-A8"
+    },
+    {
+      "agent": "A9",
+      "tier": "Tier5",
+      "doc": "Local",
+      "check": "Backend container local rodando",
+      "evidence_id": "EVC-036-A9"
+    },
+    {
+      "agent": "A11",
+      "tier": "Tier1",
+      "doc": "Frontend",
+      "check": "54 lazy-loaded modules",
+      "evidence_id": "EVC-040-A11"
+    },
+    {
+      "agent": "A11",
+      "tier": "Tier1",
+      "doc": "Frontend",
+      "check": "12 modulos com camada domain",
+      "evidence_id": "EVC-041-A11"
+    },
+    {
+      "agent": "A12",
+      "tier": "Tier1",
+      "doc": "DB",
+      "check": "module_catalog=37 == modules=37",
+      "evidence_id": "EVC-043-A12"
+    },
+    {
+      "agent": "A12",
+      "tier": "Tier1",
+      "doc": "DB",
+      "check": "relationMode = 'prisma' presente",
+      "evidence_id": "EVC-044-A12"
+    },
+    {
+      "agent": "A13",
+      "tier": "Tier1",
+      "doc": "Security",
+      "check": "Rate limiting configurado",
+      "evidence_id": "EVC-045-A13"
+    },
+    {
+      "agent": "A13",
+      "tier": "Tier1",
+      "doc": "Security",
+      "check": "Helmet configurado",
+      "evidence_id": "EVC-046-A13"
+    },
+    {
+      "agent": "A13",
+      "tier": "Tier1",
+      "doc": "Security",
+      "check": "Headers de seguranca: 3/3",
+      "evidence_id": "EVC-047-A13"
+    },
+    {
+      "agent": "A14",
+      "tier": "Tier1",
+      "doc": "Workers",
+      "check": "9 workers confirmados",
+      "evidence_id": "EVC-048-A14"
+    },
+    {
+      "agent": "A15",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "module_count=37 consistente",
+      "evidence_id": "EVC-050-A15"
+    },
+    {
+      "agent": "A15",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "module_count=37 consistente",
+      "evidence_id": "EVC-051-A15"
+    },
+    {
+      "agent": "A15",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "module_count=37 consistente",
+      "evidence_id": "EVC-052-A15"
+    },
+    {
+      "agent": "A15",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "check": "models=180 consistente",
+      "evidence_id": "EVC-053-A15"
+    },
+    {
+      "agent": "A15",
+      "tier": "Tier2",
+      "doc": "CANONICAL.md",
+      "check": "models=180 consistente",
+      "evidence_id": "EVC-054-A15"
+    },
+    {
+      "agent": "A15",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "check": "models=180 consistente",
+      "evidence_id": "EVC-055-A15"
+    }
+  ],
+  "findings": [
+    {
+      "agent": "A1",
+      "tier": "VPS",
+      "doc": "Git",
+      "section": "Sync",
+      "claim": "VPS == Local",
+      "reality": "VPS: Warning: vs Local: d25ca3a6",
+      "severity": "HIGH",
+      "evidence_id": "EVC-003-A1",
+      "action": "Sincronizar VPS"
+    },
+    {
+      "agent": "A2",
+      "tier": "Tier2",
+      "doc": "AGENTS.md",
+      "section": "Commit tracking",
+      "claim": "Commit atual documentado",
+      "reality": "Nao encontrado",
+      "severity": "MEDIUM",
+      "evidence_id": "EVC-010-A2",
+      "action": "Atualizar header com commit atual"
+    },
+    {
+      "agent": "A4",
+      "tier": "Tier2",
+      "doc": "PROMPT.md",
+      "section": "Commit ref",
+      "claim": "Commit atual no prompt",
+      "reality": "Nao encontrado",
+      "severity": "HIGH",
+      "evidence_id": "EVC-017-A4",
+      "action": "Atualizar prompt"
+    },
+    {
+      "agent": "A6",
+      "tier": "Tier3",
+      "doc": "OMK",
+      "section": "Commit",
+      "claim": "d25ca3a6",
+      "reality": "301f9e63",
+      "severity": "HIGH",
+      "evidence_id": "EVC-027-A6",
+      "action": "Atualizar OMK memory"
+    },
+    {
+      "agent": "A7",
+      "tier": "Tier5",
+      "doc": "VPS",
+      "section": "Git sync",
+      "claim": "d25ca3a6",
+      "reality": "Warning:",
+      "severity": "HIGH",
+      "evidence_id": "EVC-031-A7",
+      "action": "git pull na VPS"
+    },
+    {
+      "agent": "A7",
+      "tier": "Tier5",
+      "doc": "VPS",
+      "section": "Container tsiapp-orthoplus",
+      "claim": "Rodando",
+      "reality": "Ausente",
+      "severity": "CRITICAL",
+      "evidence_id": "EVC-032-A7",
+      "action": "Verificar container tsiapp-orthoplus"
+    },
+    {
+      "agent": "A7",
+      "tier": "Tier5",
+      "doc": "VPS",
+      "section": "Container tsiapp-orthoplus-backend",
+      "claim": "Rodando",
+      "reality": "Ausente",
+      "severity": "CRITICAL",
+      "evidence_id": "EVC-032-A7",
+      "action": "Verificar container tsiapp-orthoplus-backend"
+    },
+    {
+      "agent": "A7",
+      "tier": "Tier5",
+      "doc": "VPS",
+      "section": "Container orthoplus-redis",
+      "claim": "Rodando",
+      "reality": "Ausente",
+      "severity": "CRITICAL",
+      "evidence_id": "EVC-032-A7",
+      "action": "Verificar container orthoplus-redis"
+    },
+    {
+      "agent": "A8",
+      "tier": "Tier5",
+      "doc": "VPS",
+      "section": "Port mapping",
+      "claim": "8083:8080",
+      "reality": "Divergente",
+      "severity": "HIGH",
+      "evidence_id": "EVC-034-A8",
+      "action": "Corrigir port mapping"
+    },
+    {
+      "agent": "A10",
+      "tier": "Tier1",
+      "doc": "Backend",
+      "section": "Registration",
+      "claim": ">=37",
+      "reality": "0",
+      "severity": "HIGH",
+      "evidence_id": "EVC-038-A10",
+      "action": "Registrar routers faltantes"
+    },
+    {
+      "agent": "A10",
+      "tier": "Tier1",
+      "doc": "Backend",
+      "section": "clinicGuard",
+      "claim": "Todos os routers",
+      "reality": "Faltando em: ['ai', 'auth']",
+      "severity": "CRITICAL",
+      "evidence_id": "EVC-039-A10",
+      "action": "Adicionar clinicGuard"
+    },
+    {
+      "agent": "A12",
+      "tier": "Tier1",
+      "doc": "DB",
+      "section": "Models vs Tables",
+      "claim": "180 == 1",
+      "reality": "Divergencia",
+      "severity": "HIGH",
+      "evidence_id": "EVC-042-A12",
+      "action": "Sincronizar schema"
+    },
+    {
+      "agent": "A14",
+      "tier": "Tier1",
+      "doc": "Workers",
+      "section": "Cron jobs",
+      "claim": ">=9",
+      "reality": "0",
+      "severity": "MEDIUM",
+      "evidence_id": "EVC-049-A14",
+      "action": "Verificar registro de workers"
+    }
+  ],
+  "severity_counts": {
+    "HIGH": 7,
+    "MEDIUM": 2,
+    "CRITICAL": 4,
+    "LOW": 0
+  }
+}

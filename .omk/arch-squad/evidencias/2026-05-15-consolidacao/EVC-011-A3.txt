@@ -1,0 +1,7 @@
+EVIDENCIA: EVC-011-A3
+AGENTE: A3
+TIMESTAMP: 2026-05-15T16:36:48.596162
+HASH: 8666330e11ea6d5f
+CMD: canonical_module_count
+---
+expected=37

@@ -1,0 +1,8 @@
+EVIDENCIA: EVC-046-A13
+AGENTE: A13
+TIMESTAMP: 2026-05-15T16:36:50.244702
+HASH: 3101fd439fe04777
+CMD: helmet
+---
+5:import helmet from "helmet";
+216:app.use(helmet());

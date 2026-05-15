@@ -1,0 +1,8 @@
+EVIDENCIA: EVC-033-A7
+AGENTE: A7
+TIMESTAMP: 2026-05-15T16:36:49.475384
+HASH: a594fd7ca801f5c5
+CMD: vps_health
+---
+Warning: Permanently added '100.111.74.69' (ED25519) to the list of known hosts.
+{"status":"ok","time":"2026-05-15T19:36:49.449Z","uptime":20867.139224367}

@@ -1,0 +1,15 @@
+EVIDENCIA: EVC-048-A14
+AGENTE: A14
+TIMESTAMP: 2026-05-15T16:36:50.256326
+HASH: ac6f811e80a51a21
+CMD: workers
+---
+backend/src/workers/jobs/adminJobs.ts
+backend/src/workers/jobs/backupJobs.ts
+backend/src/workers/jobs/cryptoJobs.ts
+backend/src/workers/jobs/estoqueJobs.ts
+backend/src/workers/jobs/financeiroJobs.ts
+backend/src/workers/jobs/gamificationJobs.ts
+backend/src/workers/jobs/marketingJobs.ts
+backend/src/workers/jobs/scheduleAppointments.ts
+backend/src/workers/jobs/scheduleBiExport.ts
