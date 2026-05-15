@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "date": "2026-05-15",
+    "time": "14:10",
+    "validator": "validate_triple_final.py"
+  },
+  "local": {
+    "commit_full": "69dbd4944",
+    "commit_short": "69dbd494",
+    "branch": "main",
+    "dirty": true,
+    "dirty_files": [
+      "m .omk/open-design",
+      "?? docs/CANONICAL-2026-05-14-FORENSIC-REPORT.md"
+    ],
+    "last_msg": "feat(omk): forensic validation round 2",
+    "backend_build": true,
+    "frontend_build": true,
+    "backend_ts_errors": 0,
+    "frontend_ts_errors": 0,
+    "backend_health": "200",
+    "frontend_health": "200",
+    "db_tables": 180,
+    "db_version": "PostgreSQL 16.x",
+    "containers": [
+      "tsiapp-orthoplus|orthoplus-frontend:v2.9.9|Up 2h (healthy)",
+      "tsiapp-orthoplus-backend|orthoplus-backend:v2.5.3|Up 2h",
+      "orthoplus-redis|redis:7-alpine|Up 2h"
+    ]
+  },
+  "github": {
+    "commit_full": "69dbd4944",
+    "commit_short": "69dbd494",
+    "branch": "main",
+    "reachable": true,
+    "last_msg": "feat(omk): forensic validation round 2"
+  },
+  "vps": {
+    "ssh_ok": true,
+    "hostname": "TSiAPP",
+    "uptime": "up 2 weeks, 5 days, 19h, 11m",
+    "node_version": "v20.20.2",
+    "directories": {
+      "/home/ubuntu/OrthoPlus-Enterprise": {
+        "commit_short": "86a3841",
+        "branch": "main",
+        "dirty": true,
+        "dirty_count": 560,
+        "last_msg": "docs: update README, create AGENTS.md, refresh ARCHITECTURE",
+        "status": "LEGACY \u2014 desatualizado, 560 arquivos modificados"
+      },
+      "/home/tsi/OrthoPlus-Enterprise": {
+        "commit_short": "89aa485",
+        "branch": "main",
+        "dirty": false,
+        "dirty_count": 0,
+        "last_msg": "fix(docker): update Dockerfile and nginx-frontend.conf for v2.5 deploy",
+        "status": "ACTIVE \u2014 mais recente, working tree limpo",
+        "origin_sync": "origin/main na VPS aponta para 89aa485 (nao fez fetch do 69dbd494)"
+      }
+    },
+    "containers": [
+      "tsiapp-orthoplus-backend|orthoplus-backend:v2.5.3|Up 3h",
+      "tsiapp-orthoplus|orthoplus-frontend:v2.9.9|Up 3h",
+      "tsiapp-tsiview|apps-tsiview:wrapper-v2|Up 4d",
+      "tsiapp-tsimusic|apps-tsimusic|Up 4d",
+      "tsiapp-landpages|apps-landpages|Up 4d",
+      "tsiapp-smith-agent|apps-smith-agent|Up 4d"
+    ],
+    "backend_health": "200",
+    "frontend_health": "200",
+    "nginx_health": "308",
+    "db_accessible": false,
+    "db_note": "PostgreSQL nao roda em container Docker na VPS",
+    "pm2": "Nao utilizado"
+  },
+  "comparison": {
+    "local_eq_github": true,
+    "local_eq_vps_tsi": false,
+    "github_eq_vps_tsi": false,
+    "all_sync": false,
+    "vps_behind_local": true,
+    "vps_behind_commits": "tsi: ~10+ commits, ubuntu: ~20+ commits",
+    "images_sync": true,
+    "health_sync": true
+  }
+}
