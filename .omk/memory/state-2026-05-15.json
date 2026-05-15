@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-05-15T19:25:00.000000",
-  "commit": "79fd4532",
+  "timestamp": "2026-05-15T19:35:00.000000",
+  "commit": "301f9e63",
   "validation_status": "CONSOLIDATED",
   "environments": {
     "local": {
-      "commit": "79fd4532",
+      "commit": "301f9e63",
       "status": "current"
     },
     "github": {
-      "commit": "79fd4532",
+      "commit": "301f9e63",
       "status": "current"
     },
     "vps_tsi": {
-      "commit": "3e7f0f9d",
-      "status": "behind_1_commit"
+      "commit": "301f9e63",
+      "status": "current"
     }
   },
   "metrics": {
@@ -33,21 +33,6 @@
     "backend_test_suites": 17
   },
   "issues": [
-    {
-      "id": "DEV-001",
-      "desc": "Backend Dockerfile sem HEALTHCHECK",
-      "severity": "medium"
-    },
-    {
-      "id": "VPS-SYNC",
-      "desc": "VPS 1 commit atras (3e7f0f9d vs 79fd4532)",
-      "severity": "medium"
-    },
-    {
-      "id": "RELATION-MODE",
-      "desc": "relationMode = 'prisma' ausente no schema.prisma (1124 relacoes cross-schema)",
-      "severity": "medium"
-    },
     {
       "id": "STUBS-DEF",
       "desc": "Definicao de 'completo' vs 'stub' nao formalizada (8 modulos)",
