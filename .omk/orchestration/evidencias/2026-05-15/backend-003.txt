@@ -1,0 +1,5 @@
+EVIDENCIA: backend-003
+COMANDO: cd backend && pnpm run build 2>&1 | tail -5
+OUTPUT:
+> orthoplus-backend@1.0.0 build /home/b0yz4kr14/Projects/OrthoPlus-Enterprise/backend
+> tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json

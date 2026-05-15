@@ -1,0 +1,4 @@
+EVIDENCIA: frontend-001
+COMANDO: grep -o 'path="[^"]*"' apps/web/src/routes/AppRoutes.tsx | wc -l
+OUTPUT:
+60

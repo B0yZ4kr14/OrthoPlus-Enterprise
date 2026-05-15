@@ -1,0 +1,8 @@
+EVIDENCIA: frontend-003
+COMANDO: cd apps/web && pnpm run build 2>&1 | tail -5
+OUTPUT:
+(!) Some chunks are larger than 1000 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 9.57s

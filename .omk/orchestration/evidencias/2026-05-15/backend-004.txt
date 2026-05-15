@@ -1,0 +1,4 @@
+EVIDENCIA: backend-004
+COMANDO: ls backend/src/workers/jobs/*.ts | wc -l
+OUTPUT:
+9

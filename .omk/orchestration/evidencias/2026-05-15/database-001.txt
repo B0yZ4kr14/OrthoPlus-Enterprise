@@ -1,0 +1,4 @@
+EVIDENCIA: database-001
+COMANDO: grep -c '^model ' backend/prisma/schema.prisma
+OUTPUT:
+180
