@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-14 | **Branch:** main | **Commit:** 331645b6d | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.8
+> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** db3b177d4 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
 
 ---
 
@@ -288,8 +288,8 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
 - ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
 - ✅ **Módulos em branco corrigidos**: `pacientes`, `financeiro`, `crm`, `agenda` — todos carregam corretamente (v2.9.5)
-- ✅ **Backend imagem v2.5.2**: Deployada com sucesso (container persistente, health OK)
-- ✅ **Frontend imagem v2.9.8**: Deployada com sucesso (estoque fix aplicado)
+- ✅ **Backend imagem v2.5.3**: Deployada com sucesso (docs canonical, container persistente, health OK)
+- ✅ **Frontend imagem v2.9.9**: Deployada com sucesso (docs canonical, estoque fix aplicado)
 - ✅ **Validação orquestrada 52 rotas**: 41/41 rotas reais OK, 16 stubs identificados, 0 erros 403
   - Clínica: 12/12 OK (incluindo Dentistas e Funcionários)
   - Financeiro: 3/8 OK (5 stubs: conciliação, PDV, inadimplência, split, crypto)
@@ -331,15 +331,15 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - **TSi-Vault orquestração:** `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
 
 ### Contexto de Deploy
-- **Imagem frontend atual:** `orthoplus-frontend:v2.9.7` (blank pages fix, ADMIN_ONLY fix, hasModuleAccess fallback, dbRouters)
-- **Imagem backend atual:** `orthoplus-backend:v2.5.2` (health check public, Prisma relations, MODULE_CATALOG completo, dbRouters)
+- **Imagem frontend atual:** `orthoplus-frontend:v2.9.9` (blank pages fix, ADMIN_ONLY fix, hasModuleAccess fallback, dbRouters, docs canonical)
+- **Imagem backend atual:** `orthoplus-backend:v2.5.3` (health check public, Prisma relations, MODULE_CATALOG completo, dbRouters, docs canonical)
 - **Container frontend:** `tsiapp-orthoplus` (porta 8083)
 - **Container backend:** `tsiapp-orthoplus-backend` (porta 3005, network=host)
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
 
 ### Deploy VPS (2026-05-14) — ESTADO ATUAL VERIFICADO
-- ✅ **Frontend v2.9.7 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.9.7`
-- ✅ **Backend v2.5.2 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.5.2`
+- ✅ **Frontend v2.9.9 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.9.9`
+- ✅ **Backend v2.5.3 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.5.3`
 - ✅ **Banco recriado** com schema Prisma completo: 180 tabelas em 16 schemas
 - ✅ **module_catalog sincronizado**: 31 módulos ativos
 - ✅ **clinic_modules**: 31 associações ativas para clinic do admin

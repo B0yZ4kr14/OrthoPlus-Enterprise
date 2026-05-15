@@ -2,7 +2,7 @@
 
 > **Status:** CANONICAL  
 > **Data:** 2026-05-14  
-> **Versão:** v2.9.8 (frontend) / v2.5.2 (backend)  
+> **Versão:** v2.9.9 (frontend) / v2.5.3 (backend)  
 > **Branch:** main  
 > **Commit:** 331645b6d  
 > **Anterior:** [LEGACY] `docs/STATUS-FINAL-2026-05-14.md`, `docs/SESSION-ORQUESTRACAO.md`, `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md`, `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
@@ -216,8 +216,8 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 ### Containers Docker
 | Componente | Imagem | Container | Porta | Network |
 |------------|--------|-----------|-------|---------|
-| Frontend | `orthoplus-frontend:v2.9.8` | `tsiapp-orthoplus` | 127.0.0.1:8083→8080 | bridge |
-| Backend | `orthoplus-backend:v2.5.2` | `tsiapp-orthoplus-backend` | 3005 (host) | host |
+| Frontend | `orthoplus-frontend:v2.9.9` | `tsiapp-orthoplus` | 127.0.0.1:8083→8080 | bridge |
+| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | host |
 
 ### Health Checks
 | Endpoint | Status |
