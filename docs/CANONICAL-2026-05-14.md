@@ -4,7 +4,7 @@
 > **Data:** 2026-05-14  
 > **Versão:** v2.9.9 (frontend) / v2.5.3 (backend)  
 > **Branch:** main  
-> **Commit:** 331645b6d  
+> **Commit:** f7c4a40e2  
 > **Anterior:** [LEGACY] `docs/STATUS-FINAL-2026-05-14.md`, `docs/SESSION-ORQUESTRACAO.md`, `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md`, `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
 
 ---
@@ -16,7 +16,7 @@ O **OrthoPlus Enterprise** é um monorepo full-stack de gestão odontológica co
 - **Frontend**: React 19 + Vite 6 + Tailwind CSS v4 (porta 3000 dev / 5173 legacy)
 - **Backend**: Node.js 20 + Express 4 + Prisma 6 + PostgreSQL 16 (porta 3005)
 - **Agent Service**: Python 3.14 + FastAPI + Agno 2.5 (porta 8000)
-- **Banco de Dados**: PostgreSQL 16, 180 tabelas, 16 schemas, role `orthoplus`
+- **Banco de Dados**: PostgreSQL 16, 180 tabelas, 17 schemas (16 custom + public), role `orthoplus`
 - **Cache**: Redis 7 (autenticado, porta 6379)
 - **Proxy**: Nginx + Cloudflare (TLS)
 
@@ -29,13 +29,13 @@ OrthoPlus-Enterprise/
 ├── apps/web/                  # Frontend React 19 + Vite 6
 │   ├── src/modules/           # Módulos de domínio
 │   ├── src/contexts/          # AuthContext, etc.
-│   ├── src/routes/            # AppRoutes.tsx (52 rotas)
+│   ├── src/routes/            # AppRoutes.tsx (60 rotas)
 │   └── dist/                  # Build output (nginx serve)
 ├── backend/                   # Backend Node.js 20 + Express 4
-│   ├── src/modules/           # 36 módulos de domínio
+│   ├── src/modules/           # 37 módulos de domínio
 │   ├── src/middleware/        # authMiddleware, clinicGuard, rateLimit
 │   ├── src/routes/            # modulesRouter, dbRouter
-│   ├── prisma/schema.prisma   # 180 models, 16 schemas
+│   ├── prisma/schema.prisma   # 180 models, 17 schemas (16 custom + public)
 │   ├── workers/               # 9 cron jobs
 │   └── dist/                  # Build output (node serve)
 ├── agent-service/             # FastAPI + Agno 2.5 (porta 8000)
@@ -105,41 +105,42 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 | # | Módulo | Router | Controller | Prisma | Stubs | Status |
 |---|--------|--------|------------|--------|-------|--------|
 | 0 | `admin_tools` | ✅ | ✅ | ❌ | 0 | Sem persistência |
-| 1 | `agenda` | ✅ | ✅ | ✅ | 0 | Completo |
-| 2 | `analytics` | ✅ | ✅ | ✅ | 1 | Fallback mockado |
-| 3 | `auth` | ✅ | ✅ | ✅ | 0 | Completo |
-| 4 | `backups` | ✅ | ✅ | ❌ | 12 | Simulação (sem storage real) |
-| 5 | `bi` | ✅ | ✅ | ✅ | 0 | Completo |
-| 6 | `comm` | ✅ | ✅ | ❌ | 2 | Stub quando não configurado |
-| 7 | `configuracoes` | ✅ | ✅ | ❌ | 3 | 3 endpoints mockados |
-| 8 | `contratos` | ✅ | ✅ | ✅ | 0 | Completo |
-| 9 | `crm` | ✅ | ✅ | ✅ | 0 | Completo |
-| 10 | `crypto_config` | ✅ | ✅ | ✅ | 2 | Mock address + sync simplificado |
-| 11 | `dashboard` | ✅ | ✅ | ❌ | 1 | 503 quando sem DB |
-| 12 | `database_admin` | ✅ | ✅ | ✅ | 0 | Completo |
-| 13 | `faturamento` | ✅ | ✅ | ✅ | 0 | Completo |
-| 14 | `fidelidade` | ✅ | ✅ | ✅ | 0 | Completo |
-| 15 | `files` | ✅ | ✅ | ✅ | 0 | Completo |
-| 16 | `financeiro` | ✅ | ✅ | ✅ | 0 | Completo |
-| 17 | `funcionarios` | ✅ | ✅ | ✅ | 0 | Completo |
-| 18 | `github_tools` | ✅ | ✅ | ❌ | 5 | Hardcoded mock data |
-| 19 | `inadimplencia` | ✅ | ✅ | ✅ | 0 | Completo |
-| 20 | `inventario` | ✅ | ✅ | ✅ | 0 | Completo |
-| 21 | `lgpd` | ✅ | ✅ | ✅ | 0 | Completo |
-| 22 | `marketing` | ✅ | ✅ | ✅ | 0 | Completo |
-| 23 | `nfe` | ✅ | ✅ | ✅ | 0 | Completo (fallback 42P01) |
-| 24 | `notifications` | ✅ | ✅ | ✅ | 0 | Completo |
-| 25 | `orcamentos` | ✅ | ✅ | ✅ | 0 | Completo |
-| 26 | `pacientes` | ✅ | ✅ | ✅ | 0 | Completo |
-| 27 | `pdv` | ✅ | ✅ | ✅ | 0 | Completo |
-| 28 | `pep` | ✅ | ✅ | ✅ | 0 | Completo |
-| 29 | `procedimentos` | ✅ | ✅ | ✅ | 0 | Completo |
-| 30 | `split_pagamento` | ✅ | ✅ | ✅ | 0 | Completo |
-| 31 | `teleodonto` | ✅ | ✅ | ✅ | 0 | Completo |
-| 32 | `terminal` | ✅ | ✅ | ❌ | 2 | 501 "disabled" |
-| 33 | `tiss` | ✅ | ✅ | ✅ | 0 | Completo |
-| 34 | `usuarios` | ✅ | ✅ | ✅ | 0 | Completo |
-| 35 | `agents` | ✅ | ✅ | ❌ | 0 | Proxy para agent-service |
+| 1 | `ai` | ✅ | ✅ | ❌ | 0 | Proxy para serviços de IA |
+| 2 | `agenda` | ✅ | ✅ | ✅ | 0 | Completo |
+| 3 | `analytics` | ✅ | ✅ | ✅ | 1 | Fallback mockado |
+| 4 | `auth` | ✅ | ✅ | ✅ | 0 | Completo |
+| 5 | `backups` | ✅ | ✅ | ❌ | 12 | Simulação (sem storage real) |
+| 6 | `bi` | ✅ | ✅ | ✅ | 0 | Completo |
+| 7 | `comm` | ✅ | ✅ | ❌ | 2 | Stub quando não configurado |
+| 8 | `configuracoes` | ✅ | ✅ | ❌ | 3 | 3 endpoints mockados |
+| 9 | `contratos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 10 | `crm` | ✅ | ✅ | ✅ | 0 | Completo |
+| 11 | `crypto_config` | ✅ | ✅ | ✅ | 2 | Mock address + sync simplificado |
+| 12 | `dashboard` | ✅ | ✅ | ❌ | 1 | 503 quando sem DB |
+| 13 | `database_admin` | ✅ | ✅ | ✅ | 0 | Completo |
+| 14 | `faturamento` | ✅ | ✅ | ✅ | 0 | Completo |
+| 15 | `fidelidade` | ✅ | ✅ | ✅ | 0 | Completo |
+| 16 | `files` | ✅ | ✅ | ✅ | 0 | Completo |
+| 17 | `financeiro` | ✅ | ✅ | ✅ | 0 | Completo |
+| 18 | `funcionarios` | ✅ | ✅ | ✅ | 0 | Completo |
+| 19 | `github_tools` | ✅ | ✅ | ❌ | 5 | Hardcoded mock data |
+| 20 | `inadimplencia` | ✅ | ✅ | ✅ | 0 | Completo |
+| 21 | `inventario` | ✅ | ✅ | ✅ | 0 | Completo |
+| 22 | `lgpd` | ✅ | ✅ | ✅ | 0 | Completo |
+| 23 | `marketing` | ✅ | ✅ | ✅ | 0 | Completo |
+| 24 | `nfe` | ✅ | ✅ | ✅ | 0 | Completo (fallback 42P01) |
+| 25 | `notifications` | ✅ | ✅ | ✅ | 0 | Completo |
+| 26 | `orcamentos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 27 | `pacientes` | ✅ | ✅ | ✅ | 0 | Completo |
+| 28 | `pdv` | ✅ | ✅ | ✅ | 0 | Completo |
+| 29 | `pep` | ✅ | ✅ | ✅ | 0 | Completo |
+| 30 | `procedimentos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 31 | `split_pagamento` | ✅ | ✅ | ✅ | 0 | Completo |
+| 32 | `teleodonto` | ✅ | ✅ | ✅ | 0 | Completo |
+| 33 | `terminal` | ✅ | ✅ | ❌ | 2 | 501 "disabled" |
+| 34 | `tiss` | ✅ | ✅ | ✅ | 0 | Completo |
+| 35 | `usuarios` | ✅ | ✅ | ✅ | 0 | Completo |
+| 36 | `agents` | ✅ | ✅ | ❌ | 0 | Proxy para agent-service |
 
 **Legenda:** ✅ Completo (CRUD real) | ❌ Sem persistência Prisma | ⚠️ Parcial
 
@@ -188,7 +189,7 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 6. `gamificationJobs` — Gamificação
 7. `scheduleAppointments` — Agendamentos
 8. `scheduleBiExport` — Exportação BI
-9. `notificationJobs` — Notificações push
+9. `marketingJobs` — Marketing automation
 
 ---
 
@@ -231,7 +232,7 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 - **Host**: 127.0.0.1:5432
 - **Database**: `orthoplus`
 - **Role**: `orthoplus` (não superuser)
-- **Schemas**: 17 (public, core, operacional, comercial, clinico, administrativo, pacientes, financeiro, faturamento, pdv, pep, inventario, configuracoes, backups, crypto_config, github_tools, terminal)
+- **Schemas**: 17 (public + 16 custom: core, operacional, comercial, clinico, administrativo, pacientes, financeiro, faturamento, pdv, pep, inventario, configuracoes, backups, crypto_config, github_tools, terminal)
 - **Tabelas**: 180
 - **module_catalog**: 37 módulos cadastrados
 - **clinic_modules**: 37 associações ativas para a clínica principal
@@ -250,7 +251,7 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 ## 11. Validação de Navegação (Orquestrada)
 
 **Data**: 2026-05-14  
-**Metodologia**: 5 agentes firecrawl paralelos, login admin, 52 rotas testadas
+**Metodologia**: 5 agentes firecrawl paralelos, login admin, 60 rotas testadas
 
 ### Resultados
 | Grupo | Rotas | OK | Stubs | Erros 403 |
@@ -260,7 +261,7 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 | Marketing | 11 | 11 | 0 | 0 |
 | Admin | 14 | 3 | 11 | 0 |
 | Outros | 8 | 8 | 0 | 0 |
-| **TOTAL** | **53** | **37** | **16** | **0** |
+| **TOTAL** | **60** | **37** | **16** | **0** |
 
 **Correções aplicadas durante validação:**
 - `/dentistas` e `/funcionarios`: 403 resolvido (módulos adicionados ao banco)

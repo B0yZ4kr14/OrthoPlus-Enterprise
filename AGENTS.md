@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** db3b177d4 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
+> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** f7c4a40e2 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
 
 ---
 
@@ -20,10 +20,10 @@ O **OrthoPlus Enterprise** é um monorepo full-stack de gestão odontológica co
 OrthoPlus-Enterprise/
 ├── apps/web/                  # Frontend React
 ├── backend/                   # Backend Node.js
-│   ├── src/modules/           # 35 módulos de domínio
+│   ├── src/modules/           # 37 módulos de domínio
 │   ├── src/middleware/        # Middleware Express
 │   ├── src/routes/            # Rotas (modulesRouter)
-│   ├── prisma/schema.prisma   # 178 models
+│   ├── prisma/schema.prisma   # 180 models
 │   └── workers/               # 9 cron jobs
 ├── agent-service/             # Serviço Python/FastAPI
 ├── shared-types/              # Tipos TypeScript
@@ -78,48 +78,49 @@ cd agent-service && python src/main.py
 
 ---
 
-## Módulos Backend (36)
+## Módulos Backend (37)
 
-Todos os 36 módulos possuem router registrado em `backend/src/index.ts` e `clinicGuard` aplicado.
+Todos os 37 módulos possuem router registrado em `backend/src/index.ts` e `clinicGuard` aplicado.
 
 | # | Módulo | Router | Controller | Prisma | Stubs | Status |
 |---|--------|--------|------------|--------|-------|--------|
 | 0 | `admin_tools` | ✅ | ✅ | ❌ | 0 | Sem persistência |
-| 1 | `agenda` | ✅ | ✅ | ✅ | 0 | Completo |
-| 2 | `analytics` | ✅ | ✅ | ✅ | 1 | Fallback mockado |
-| 3 | `auth` | ✅ | ✅ | ✅ | 0 | Completo |
-| 4 | `backups` | ✅ | ✅ | ❌ | 12 | Simulação (sem storage real) |
-| 5 | `bi` | ✅ | ✅ | ✅ | 0 | Completo |
-| 6 | `comm` | ✅ | ✅ | ❌ | 2 | Agora stub quando não configurado |
-| 7 | `configuracoes` | ✅ | ✅ | ❌ | 3 | 3 endpoints mockados |
-| 8 | `contratos` | ✅ | ✅ | ✅ | 0 | Completo |
-| 9 | `crm` | ✅ | ✅ | ✅ | 0 | Completo |
-| 10 | `crypto_config` | ✅ | ✅ | ✅ | 2 | Mock address + sync simplificado |
-| 11 | `dashboard` | ✅ | ✅ | ❌ | 1 | 503 quando sem DB |
-| 12 | `database_admin` | ✅ | ✅ | ✅ | 0 | Completo |
-| 13 | `faturamento` | ✅ | ✅ | ✅ | 0 | Completo |
-| 14 | `fidelidade` | ✅ | ✅ | ✅ | 0 | Completo |
-| 15 | `files` | ✅ | ✅ | ✅ | 0 | Completo |
-| 16 | `financeiro` | ✅ | ✅ | ✅ | 0 | Completo |
-| 17 | `funcionarios` | ✅ | ✅ | ✅ | 0 | Completo |
-| 18 | `github_tools` | ✅ | ✅ | ❌ | 5 | Hardcoded mock data |
-| 19 | `inadimplencia` | ✅ | ✅ | ✅ | 0 | Completo |
-| 20 | `inventario` | ✅ | ✅ | ✅ | 0 | Completo |
-| 21 | `lgpd` | ✅ | ✅ | ✅ | 0 | Completo |
-| 22 | `marketing` | ✅ | ✅ | ✅ | 0 | Completo |
-| 23 | `nfe` | ✅ | ✅ | ✅ | 0 | Completo (fallback 42P01) |
-| 24 | `notifications` | ✅ | ✅ | ✅ | 0 | Completo |
-| 25 | `orcamentos` | ✅ | ✅ | ✅ | 0 | Completo |
-| 26 | `pacientes` | ✅ | ✅ | ✅ | 0 | Completo |
-| 27 | `pdv` | ✅ | ✅ | ✅ | 0 | Completo |
-| 28 | `pep` | ✅ | ✅ | ✅ | 0 | Completo |
-| 29 | `procedimentos` | ✅ | ✅ | ✅ | 0 | Completo |
-| 30 | `split_pagamento` | ✅ | ✅ | ✅ | 0 | Completo |
-| 31 | `teleodonto` | ✅ | ✅ | ✅ | 0 | Completo |
-| 32 | `terminal` | ✅ | ✅ | ❌ | 2 | 501 "disabled" |
-| 33 | `tiss` | ✅ | ✅ | ✅ | 0 | Completo |
-| 34 | `usuarios` | ✅ | ✅ | ✅ | 0 | Completo |
-| 35 | `agents` | ✅ | ✅ | ❌ | 0 | Proxy para agent-service |
+| 1 | `ai` | ✅ | ✅ | ❌ | 0 | Proxy para serviços de IA |
+| 2 | `agenda` | ✅ | ✅ | ✅ | 0 | Completo |
+| 3 | `analytics` | ✅ | ✅ | ✅ | 1 | Fallback mockado |
+| 4 | `auth` | ✅ | ✅ | ✅ | 0 | Completo |
+| 5 | `backups` | ✅ | ✅ | ❌ | 12 | Simulação (sem storage real) |
+| 6 | `bi` | ✅ | ✅ | ✅ | 0 | Completo |
+| 7 | `comm` | ✅ | ✅ | ❌ | 2 | Agora stub quando não configurado |
+| 8 | `configuracoes` | ✅ | ✅ | ❌ | 3 | 3 endpoints mockados |
+| 9 | `contratos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 10 | `crm` | ✅ | ✅ | ✅ | 0 | Completo |
+| 11 | `crypto_config` | ✅ | ✅ | ✅ | 2 | Mock address + sync simplificado |
+| 12 | `dashboard` | ✅ | ✅ | ❌ | 1 | 503 quando sem DB |
+| 13 | `database_admin` | ✅ | ✅ | ✅ | 0 | Completo |
+| 14 | `faturamento` | ✅ | ✅ | ✅ | 0 | Completo |
+| 15 | `fidelidade` | ✅ | ✅ | ✅ | 0 | Completo |
+| 16 | `files` | ✅ | ✅ | ✅ | 0 | Completo |
+| 17 | `financeiro` | ✅ | ✅ | ✅ | 0 | Completo |
+| 18 | `funcionarios` | ✅ | ✅ | ✅ | 0 | Completo |
+| 19 | `github_tools` | ✅ | ✅ | ❌ | 5 | Hardcoded mock data |
+| 20 | `inadimplencia` | ✅ | ✅ | ✅ | 0 | Completo |
+| 21 | `inventario` | ✅ | ✅ | ✅ | 0 | Completo |
+| 22 | `lgpd` | ✅ | ✅ | ✅ | 0 | Completo |
+| 23 | `marketing` | ✅ | ✅ | ✅ | 0 | Completo |
+| 24 | `nfe` | ✅ | ✅ | ✅ | 0 | Completo (fallback 42P01) |
+| 25 | `notifications` | ✅ | ✅ | ✅ | 0 | Completo |
+| 26 | `orcamentos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 27 | `pacientes` | ✅ | ✅ | ✅ | 0 | Completo |
+| 28 | `pdv` | ✅ | ✅ | ✅ | 0 | Completo |
+| 29 | `pep` | ✅ | ✅ | ✅ | 0 | Completo |
+| 30 | `procedimentos` | ✅ | ✅ | ✅ | 0 | Completo |
+| 31 | `split_pagamento` | ✅ | ✅ | ✅ | 0 | Completo |
+| 32 | `teleodonto` | ✅ | ✅ | ✅ | 0 | Completo |
+| 33 | `terminal` | ✅ | ✅ | ❌ | 2 | 501 "disabled" |
+| 34 | `tiss` | ✅ | ✅ | ✅ | 0 | Completo |
+| 35 | `usuarios` | ✅ | ✅ | ✅ | 0 | Completo |
+| 36 | `agents` | ✅ | ✅ | ❌ | 0 | Proxy para agent-service |
 
 **Legenda:**
 - ✅ Completo (CRUD real)
@@ -169,7 +170,7 @@ Todos os 36 módulos possuem router registrado em `backend/src/index.ts` e `clin
 6. `gamificationJobs` — Gamificação
 7. `scheduleAppointments` — Agendamentos
 8. `scheduleBiExport` — Exportação BI
-9. `notificationJobs` — Notificações push
+9. `marketingJobs` — Marketing automation
 
 ---
 
@@ -263,7 +264,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **Landing page embeddada**: SPA serve landing page em `/` com pricing tiers
 - ✅ **Redesign premium v4**: Completo (StatCards, ChartCards, Sidebar, Dashboard Layout, A11y)
 - ✅ **Orquestração Loops 1-5**: Concluída — builds, testes, lint, VPS health, E2E validados
-- ✅ **Banco sincronizado com Prisma**: 180 tabelas em 16 schemas (zero em public), recriado do zero via `prisma db push`
+- ✅ **Banco sincronizado com Prisma**: 180 tabelas em 17 schemas (16 custom + public) (zero em public), recriado do zero via `prisma db push`
 - ✅ **Login VPS funcional**: `admin@orthoplus.com` / `admin123!` autentica via `/api/auth/token` → 200
 - ✅ **403 nos módulos resolvido**: `/api/clinics/{id}/active-modules` retorna 31 módulos ativos; `hasModuleAccess` funciona para ADMIN (case-insensitive)
 - ✅ **Erro 500 /financeiro/resumo corrigido**: Fallback `caixasAbertos=0` quando `cash_registers` não existe (P2021)
@@ -280,7 +281,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ### Pendências Ativas
 - ✅ **Frontend TS errors**: 0 erros (tsc --noEmit passa), 107 warnings pré-existentes
-- 🟡 **~28 mock/stub endpoints** (não 156): Apenas 8 módulos têm endpoints mockados — backups (12), github_tools (5), configuracoes (3), terminal (2), comm (2), crypto_config (2), analytics (1), dashboard (1). Todos os demais 29 módulos estão completos com CRUD real.
+- 🟡 **~16 mock/stub endpoints** nos principais módulos: Apenas 8 módulos têm endpoints mockados — backups (12), github_tools (5), configuracoes (3), terminal (2), comm (2), crypto_config (2), analytics (1), dashboard (1). Todos os demais 29 módulos estão completos com CRUD real.
   - **backups**: necessita integração com storage real (S3/MinIO)
   - **github_tools**: necessita token GitHub real + Octokit
   - **terminal**: feature flag `TERMINAL_ENABLED` (segurança)
@@ -288,9 +289,9 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
 - ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
 - ✅ **Módulos em branco corrigidos**: `pacientes`, `financeiro`, `crm`, `agenda` — todos carregam corretamente (v2.9.5)
-- ✅ **Backend imagem v2.5.3**: Deployada com sucesso (docs canonical, container persistente, health OK)
-- ✅ **Frontend imagem v2.9.9**: Deployada com sucesso (docs canonical, estoque fix aplicado)
-- ✅ **Validação orquestrada 52 rotas**: 41/41 rotas reais OK, 16 stubs identificados, 0 erros 403
+- ✅ **Backend imagem v2.5.3**: Deployada com sucesso no VPS (docs canonical, container persistente, health OK)
+- ✅ **Frontend imagem v2.9.9**: Deployada com sucesso no VPS (docs canonical, estoque fix aplicado)
+- ✅ **Validação orquestrada 60 rotas**: 41/41 rotas reais OK, 16 stubs identificados, 0 erros 403
   - Clínica: 12/12 OK (incluindo Dentistas e Funcionários)
   - Financeiro: 3/8 OK (5 stubs: conciliação, PDV, inadimplência, split, crypto)
   - Marketing: 11/11 OK
@@ -333,16 +334,17 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 ### Contexto de Deploy
 - **Imagem frontend atual:** `orthoplus-frontend:v2.9.9` (blank pages fix, ADMIN_ONLY fix, hasModuleAccess fallback, dbRouters, docs canonical)
 - **Imagem backend atual:** `orthoplus-backend:v2.5.3` (health check public, Prisma relations, MODULE_CATALOG completo, dbRouters, docs canonical)
-- **Container frontend:** `tsiapp-orthoplus` (porta 8083)
-- **Container backend:** `tsiapp-orthoplus-backend` (porta 3005, network=host)
+- **Container frontend (VPS):** `tsiapp-orthoplus` (porta 8083, imagem `orthoplus-frontend:v2.9.9`)
+- **Container backend (VPS):** `tsiapp-orthoplus-backend` (porta 3005, network=host, imagem `orthoplus-backend:v2.5.3`)
+- **Nota:** Containers v2.9.9/v2.5.3 estão no VPS; localmente as imagens máximas são v2.9.6/v2.5.2
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
 
 ### Deploy VPS (2026-05-14) — ESTADO ATUAL VERIFICADO
 - ✅ **Frontend v2.9.9 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.9.9`
 - ✅ **Backend v2.5.3 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.5.3`
-- ✅ **Banco recriado** com schema Prisma completo: 180 tabelas em 16 schemas
-- ✅ **module_catalog sincronizado**: 31 módulos ativos
-- ✅ **clinic_modules**: 31 associações ativas para clinic do admin
+- ✅ **Banco recriado** com schema Prisma completo: 180 tabelas em 17 schemas (16 custom + public)
+- ✅ **module_catalog sincronizado**: 37 módulos cadastrados
+- ✅ **clinic_modules**: 37 associações ativas para clinic do admin
 - ✅ **Login funcional** — `admin@orthoplus.com` / `admin123!` → redireciona para `/dashboard`
 - ✅ **hasModuleAccess case-insensitive**: compara `moduleKey.toLowerCase()` com `activeModules`
 - ✅ **8 stubs 404 resolvidos** — rotas raiz retornam 200

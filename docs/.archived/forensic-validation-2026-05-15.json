@@ -1,0 +1,333 @@
+{
+  "meta": {
+    "date": "2026-05-15",
+    "commit": "f7c4a40e2",
+    "prisma_models": 180,
+    "prisma_schemas": [
+      "administrativo",
+      "backups",
+      "clinico",
+      "comercial",
+      "configuracoes",
+      "core",
+      "crypto_config",
+      "faturamento",
+      "financeiro",
+      "github_tools",
+      "inventario",
+      "operacional",
+      "pacientes",
+      "pdv",
+      "pep",
+      "terminal"
+    ],
+    "backend_modules": [
+      "admin_tools",
+      "agenda",
+      "agents",
+      "ai",
+      "analytics",
+      "auth",
+      "backups",
+      "bi",
+      "comm",
+      "configuracoes",
+      "contratos",
+      "crm",
+      "crypto_config",
+      "dashboard",
+      "database_admin",
+      "faturamento",
+      "fidelidade",
+      "files",
+      "financeiro",
+      "funcionarios",
+      "github_tools",
+      "inadimplencia",
+      "inventario",
+      "lgpd",
+      "marketing",
+      "nfe",
+      "notifications",
+      "orcamentos",
+      "pacientes",
+      "pdv",
+      "pep",
+      "procedimentos",
+      "split_pagamento",
+      "teleodonto",
+      "terminal",
+      "tiss",
+      "usuarios"
+    ],
+    "frontend_routes": 60,
+    "workers": [
+      "adminJobs",
+      "backupJobs",
+      "cryptoJobs",
+      "estoqueJobs",
+      "financeiroJobs",
+      "gamificationJobs",
+      "marketingJobs",
+      "scheduleAppointments",
+      "scheduleBiExport"
+    ],
+    "docker_images": [
+      "orthoplus-backend:v2.5.2",
+      "orthoplus-frontend:v2.9.6",
+      "orthoplus-backend:v2.5.1",
+      "orthoplus-frontend:v2.9.5",
+      "orthoplus-backend:v2.5",
+      "orthoplus-frontend:v2.9.4",
+      "orthoplus-frontend:v2.9.3",
+      "orthoplus-frontend:v2.9.2",
+      "orthoplus-frontend:v2.9.1",
+      "orthoplus-backend:v2.3",
+      "orthoplus-frontend:v2.6",
+      "orthoplus-frontend:v2.5",
+      "orthoplus-backend:latest",
+      "orthoplus-backend:debian",
+      "tsiapp-orthoplus:latest",
+      "tsiapp-orthoplus:test"
+    ],
+    "docker_containers": [
+      "tsiapp-nginx|nginx:alpine|Up 35 hours",
+      "tsiapp-tsimusic|tsiapp-tsimusic|Up 35 hours",
+      "tsiapp-landpages|tsiapp-landpages|Up 35 hours",
+      "tsiapp-tsiview|tsiapp-tsiview|Up 35 hours",
+      "tsiapp-orthoplus|tsiapp-orthoplus|Up 35 hours (unhealthy)",
+      "tsiapp-smith-agent|tsiapp-smith-agent|Up 35 hours",
+      "agentic-postgres|pgvector/pgvector:pg16|Exited (0) 5 days ago",
+      "tsimusic-frontend|tsimusic-frontend:local|Up 35 hours (healthy)",
+      "tsimusic-music-assistant|ghcr.io/music-assistant/server:2.8.6|Up 35 hours (healthy)",
+      "smith-grafana|grafana/grafana:11.5.0|Up 35 hours",
+      "smith-prometheus|prom/prometheus:v3.2.0|Exited (127) 2 weeks ago"
+    ]
+  },
+  "findings": [
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Cabe\u00e7alho",
+      "claim": "Commit: 331645b6d",
+      "reality": "Commit atual: f7c4a40e2",
+      "severity": "HIGH",
+      "evidence": "git rev-parse --short HEAD = f7c4a40e2"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Cabe\u00e7alho",
+      "claim": "Vers\u00e3o: v2.9.9 (frontend) / v2.5.3 (backend)",
+      "reality": "package.json frontend: 1.0.0, backend: 1.0.0",
+      "severity": "MEDIUM",
+      "evidence": "Vers\u00f5es de Docker n\u00e3o refletidas em package.json"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 1 (Vis\u00e3o Geral) - linha 19",
+      "claim": "180 tabelas, 16 schemas",
+      "reality": "180 models, 16 schemas expl\u00edcitos no Prisma. No PostgreSQL: 16 custom + public = 17 total",
+      "severity": "MEDIUM",
+      "evidence": "Schemas Prisma: administrativo, backups, clinico, comercial, configuracoes, core, crypto_config, faturamento, financeiro, github_tools, inventario, operacional, pacientes, pdv, pep, terminal"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 10 (Deploy VPS) - linha 234",
+      "claim": "Schemas: 17 (public + 16 custom)",
+      "reality": "Correto: 17 schemas no PostgreSQL (16 custom + public)",
+      "severity": "INFO",
+      "evidence": "Inconsist\u00eancia INTERNA no documento: se\u00e7\u00e3o 1 diz 16, se\u00e7\u00e3o 10 diz 17"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 5 (M\u00f3dulos Backend)",
+      "claim": "36 m\u00f3dulos (0-35)",
+      "reality": "37 m\u00f3dulos encontrados em backend/src/modules/",
+      "severity": "HIGH",
+      "evidence": "M\u00f3dulos: admin_tools, agenda, agents, ai, analytics, auth, backups, bi, comm, configuracoes, contratos, crm, crypto_config, dashboard, database_admin, faturamento, fidelidade, files, financeiro, funcionarios, github_tools, inadimplencia, inventario, lgpd, marketing, nfe, notifications, orcamentos, pacientes, pdv, pep, procedimentos, split_pagamento, teleodonto, terminal, tiss, usuarios"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 5 (M\u00f3dulos Backend)",
+      "claim": "M\u00f3dulo 'ai' n\u00e3o listado na tabela",
+      "reality": "M\u00f3dulo 'ai' existe em backend/src/modules/ e tem router /api/ai registrado em index.ts",
+      "severity": "HIGH",
+      "evidence": "Router /api/ai registrado em backend/src/index.ts"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 2 (Estrutura) / Se\u00e7\u00e3o 11",
+      "claim": "52 rotas em AppRoutes.tsx",
+      "reality": "60 rotas encontradas (incluindo /403)",
+      "severity": "MEDIUM",
+      "evidence": "Primeiras rotas: /, /demo, /auth, /dashboard, /pacientes, /pacientes/novo, /pacientes/:id, /agenda..."
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 8 (Workers)",
+      "claim": "notificationJobs \u2014 Notifica\u00e7\u00f5es push (9o worker)",
+      "reality": "Arquivo real: marketingJobs.ts (n\u00e3o notificationJobs)",
+      "severity": "HIGH",
+      "evidence": "Workers reais: adminJobs, backupJobs, cryptoJobs, estoqueJobs, financeiroJobs, gamificationJobs, marketingJobs, scheduleAppointments, scheduleBiExport"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 10 (Deploy VPS)",
+      "claim": "Imagem local: orthoplus-frontend:v2.9.9",
+      "reality": "Imagem N\u00c3O existe localmente. Vers\u00f5es locais: ['orthoplus-frontend:v2.9.6', 'orthoplus-frontend:v2.9.5', 'orthoplus-frontend:v2.9.4', 'orthoplus-frontend:v2.9.3', 'orthoplus-frontend:v2.9.2', 'orthoplus-frontend:v2.9.1']",
+      "severity": "CRITICAL",
+      "evidence": "docker images | grep orthoplus-frontend"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 10 (Deploy VPS)",
+      "claim": "Imagem local: orthoplus-backend:v2.5.3",
+      "reality": "Imagem N\u00c3O existe localmente. Vers\u00f5es locais: ['orthoplus-backend:v2.5.2', 'orthoplus-backend:v2.5.1', 'orthoplus-backend:v2.5']",
+      "severity": "CRITICAL",
+      "evidence": "docker images | grep orthoplus-backend"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 10 (Deploy VPS)",
+      "claim": "Container backend: tsiapp-orthoplus-backend rodando localmente",
+      "reality": "Container N\u00c3O existe localmente. Containers orthoplus: ['tsiapp-orthoplus']",
+      "severity": "CRITICAL",
+      "evidence": "docker ps -a | grep backend"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 10 (Deploy VPS)",
+      "claim": "Container frontend: tsiapp-orthoplus rodando orthoplus-frontend:v2.9.9",
+      "reality": "Container existe mas usa imagem 'tsiapp-orthoplus' (n\u00e3o 'orthoplus-frontend:v2.9.9'). Status: Up 35 hours (unhealthy)",
+      "severity": "HIGH",
+      "evidence": "docker inspect tsiapp-orthoplus --format='{{.Config.Image}}' = tsiapp-orthoplus"
+    },
+    {
+      "document": "CANONICAL-2026-05-14.md",
+      "section": "Se\u00e7\u00e3o 12 (Checklist)",
+      "claim": "Testes passam (367 OK)",
+      "reality": "367 tests passando em 17/17 suites",
+      "severity": "INFO",
+      "evidence": "cd backend && pnpm test"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Cabe\u00e7alho - linha 4",
+      "claim": "Commit: db3b177d4",
+      "reality": "Commit atual: f7c4a40e2",
+      "severity": "HIGH",
+      "evidence": "git rev-parse --short HEAD = f7c4a40e2"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Cabe\u00e7alho - linha 4",
+      "claim": "Atualizado: 2026-05-15",
+      "reality": "Commit atual de 2026-05-14",
+      "severity": "LOW",
+      "evidence": "Poss\u00edvel data futura ou erro de digita\u00e7\u00e3o"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Estrutura de Diret\u00f3rios - linha 23",
+      "claim": "35 m\u00f3dulos de dom\u00ednio",
+      "reality": "37 m\u00f3dulos reais",
+      "severity": "HIGH",
+      "evidence": "Inconsist\u00eancia: diagrama diz 35, tabela diz 36, realidade \u00e9 37"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "M\u00f3dulos Backend (Tabela) - linha 81",
+      "claim": "36 m\u00f3dulos (0-35)",
+      "reality": "37 m\u00f3dulos (falta 'ai' na tabela)",
+      "severity": "HIGH",
+      "evidence": "M\u00f3dulo 'ai' \u00e9 o #36 na lista real"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Estrutura de Diret\u00f3rios - linha 26",
+      "claim": "178 models",
+      "reality": "180 models",
+      "severity": "MEDIUM",
+      "evidence": "grep -c '^model ' prisma/schema.prisma"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Workers (9 cron jobs) - linha 172",
+      "claim": "notificationJobs \u2014 Notifica\u00e7\u00f5es push",
+      "reality": "Arquivo real: marketingJobs.ts",
+      "severity": "HIGH",
+      "evidence": "Workers reais: adminJobs, backupJobs, cryptoJobs, estoqueJobs, financeiroJobs, gamificationJobs, marketingJobs, scheduleAppointments, scheduleBiExport"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Rotas e Endpoints - linha 135",
+      "claim": "Produ\u00e7\u00e3o: https://vps-tsi-02.tailbda57.ts.net/api",
+      "reality": "CANONICAL diz: https://tsiapp.io/api",
+      "severity": "MEDIUM",
+      "evidence": "Inconsist\u00eancia INTERNA entre AGENTS.md e CANONICAL"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Deploy VPS - linha 344",
+      "claim": "module_catalog sincronizado: 31 m\u00f3dulos ativos",
+      "reality": "CANONICAL diz: 37 m\u00f3dulos cadastrados",
+      "severity": "HIGH",
+      "evidence": "Inconsist\u00eancia INTERNA: AGENTS.md diz 31, CANONICAL diz 37"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Deploy VPS - linha 345",
+      "claim": "clinic_modules: 31 associa\u00e7\u00f5es ativas",
+      "reality": "CANONICAL diz: 37 associa\u00e7\u00f5es ativas",
+      "severity": "HIGH",
+      "evidence": "Inconsist\u00eancia INTERNA: AGENTS.md diz 31, CANONICAL diz 37"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Contexto de Deploy - linha 337",
+      "claim": "Container backend: tsiapp-orthoplus-backend (porta 3005, network=host)",
+      "reality": "Container N\u00c3O existe localmente",
+      "severity": "CRITICAL",
+      "evidence": "docker ps -a n\u00e3o mostra container backend"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Pend\u00eancias Ativas - linha 283",
+      "claim": "~28 mock/stub endpoints",
+      "reality": "CANONICAL conta 16 stubs nas rotas do frontend",
+      "severity": "MEDIUM",
+      "evidence": "Inconsist\u00eancia na contagem de stubs"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Pend\u00eancias Ativas - linha 293",
+      "claim": "Valida\u00e7\u00e3o orquestrada 52 rotas: 41/41 rotas reais OK, 16 stubs",
+      "reality": "AppRoutes.tsx tem 60 rotas definidas",
+      "severity": "MEDIUM",
+      "evidence": "Contagem inconsistente de rotas"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Estado Atual - linha 258",
+      "claim": "Frontend lint: 0 errors, ~98 warnings",
+      "reality": "Contexto compaction anterior indicava 107 warnings",
+      "severity": "LOW",
+      "evidence": "Poss\u00edvel altera\u00e7\u00e3o n\u00e3o documentada"
+    },
+    {
+      "document": "AGENTS.md",
+      "section": "Rotas e Endpoints",
+      "claim": "M\u00f3dulos (requerem JWT + clinicGuard)",
+      "reality": "Backend tem 53 endpoints /api \u00fanicos registrados (incluindo aliases e /db)",
+      "severity": "INFO",
+      "evidence": "Exemplos: /api, /api/admin, /api/agenda, /api/agents, /api/ai, /api/analytics, /api/auth, /api/backups..."
+    },
+    {
+      "document": "CROSS-DOC",
+      "section": "Vers\u00f5es de Deploy",
+      "claim": "CANONICAL e AGENTS.md divergem em commits, datas, schema counts, module counts, stub counts",
+      "reality": "M\u00faltiplas inconsist\u00eancias internas entre os dois documentos principais",
+      "severity": "HIGH",
+      "evidence": "Compara\u00e7\u00e3o linha-a-linha realizada neste relat\u00f3rio"
+    }
+  ]
+}
