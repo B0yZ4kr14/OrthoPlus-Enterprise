@@ -4,7 +4,7 @@
 > **Data:** 2026-05-14  
 > **Versão:** v2.9.8 (frontend) / v2.5.2 (backend)  
 > **Branch:** main  
-> **Commit:** 6fdba4517  
+> **Commit:** 331645b6d  
 > **Anterior:** [LEGACY] `docs/STATUS-FINAL-2026-05-14.md`, `docs/SESSION-ORQUESTRACAO.md`, `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md`, `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
 
 ---
@@ -231,7 +231,7 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 - **Host**: 127.0.0.1:5432
 - **Database**: `orthoplus`
 - **Role**: `orthoplus` (não superuser)
-- **Schemas**: 16 (public, core, operacional, comercial, clinico, administrativo, pacientes, financeiro, faturamento, pdv, pep, inventario, configuracoes, backups, fiscal, marketing)
+- **Schemas**: 17 (public, core, operacional, comercial, clinico, administrativo, pacientes, financeiro, faturamento, pdv, pep, inventario, configuracoes, backups, crypto_config, github_tools, terminal)
 - **Tabelas**: 180
 - **module_catalog**: 37 módulos cadastrados
 - **clinic_modules**: 37 associações ativas para a clínica principal
