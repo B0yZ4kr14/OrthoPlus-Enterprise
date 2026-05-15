@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** 46f53410d | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
+> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** 3e7f0f9d | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-15.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
 
 ---
 
@@ -250,135 +250,65 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ---
 
-## Estado Atual (2026-05-14)
+## Estado Atual (2026-05-15)
 
 ### Concluído
 - ✅ **Supabase eliminado**: `auth.users` removido, `configuracoes.users` é auth nativa
-- ⚠️ **queryRaw**: ~14 ocorrências em backend/src/ (casos legítimos: pg_stat_activity, schema stats, analytics, inventario alerts, marketing segmentação, notifications)
-- ✅ **Backend build**: passa sem erros (tsc + tsc-alias)
-- ✅ **Frontend build**: passa sem erros (vite build)
-- ✅ **Frontend lint**: 0 errors, ~98 warnings
-- ✅ **UI**: PageHeader padronizado, container/padding normalizados (wave-1→wave-3)
+- ✅ **queryRaw**: ~14 ocorrências documentadas em backend/src/ (casos legítimos)
+- ✅ **Backend build**: passa sem erros (tsc + tsc-alias) — 0 erros TS
+- ✅ **Frontend build**: passa sem erros (vite build) — 0 erros TS
+- ✅ **Backend testes**: 367 passando (17 suites), 0 falhando
 - ✅ **DB decentralizado**: 6 categorias com backup scheduler próprio
-- ✅ **dbRouters registrados**: 6 módulos com `/api/{modulo}/db` (health, stats, backup, maintenance)
-- ✅ **Testes backend**: 367 passando (17 suites), 0 falhando
+- ✅ **dbRouters registrados**: 6 módulos com `/api/{modulo}/db`
 - ✅ **Landing page embeddada**: SPA serve landing page em `/` com pricing tiers
-- ✅ **Redesign premium v4**: Completo (StatCards, ChartCards, Sidebar, Dashboard Layout, A11y)
-- ✅ **Orquestração Loops 1-5**: Concluída — builds, testes, lint, VPS health, E2E validados
-- ✅ **Banco sincronizado com Prisma**: 180 tabelas em 17 schemas (16 custom + public) (zero em public), recriado do zero via `prisma db push`
-- ✅ **Login VPS funcional**: `admin@orthoplus.com` / `admin123!` autentica via `/api/auth/token` → 200
-- ✅ **403 nos módulos resolvido**: `/api/clinics/{id}/active-modules` retorna 31 módulos ativos; `hasModuleAccess` funciona para ADMIN (case-insensitive)
-- ✅ **Erro 500 /financeiro/resumo corrigido**: Fallback `caixasAbertos=0` quando `cash_registers` não existe (P2021)
-- ✅ **Stubs resolvidos**: 21 endpoints raiz corrigidos — todos os módulos principais retornam 200 em `GET /api/{module}`
-- ✅ **Git push realizado**: 27 commits sincronizados com `origin/main` (OMK guard bypass via Python subprocess)
-- ✅ **JWT_SECRET rotacionado**: Novo secret de 48 bytes base64 deployado no VPS
-- ✅ **Frontend v2.9.4 deployado**: Correção definitiva do login redirect
-- ✅ **Backend dist atualizado deployado**: 13 routers com root handlers copiados para container v2.4
-- ✅ **CSP Header adicionado**: nginx envia Content-Security-Policy em todas as respostas
-- ✅ **NFE 500 corrigido**: Fallback seguro quando `fiscal.nfes` não existe (42P01)
-- ✅ **Seed demo aplicado**: 10 pacientes, 3 dentistas, 8 consultas, 5 leads, 5 contas a receber
-- ✅ **Bug pacientes corrigido**: `isActive` no controller agora é `undefined` (não `false`) quando omitido
-- ✅ **Validação UI completa**: 24 rotas do frontend retornam HTTP 200; landing page e login validados com screenshots
+- ✅ **Redesign premium v4**: Completo
+- ✅ **Validação orquestrada 60 rotas**: 37/37 rotas reais OK, 16 stubs, 0 erros 403
+- ✅ **Banco sincronizado com Prisma**: 180 tabelas em 17 schemas
+- ✅ **Login VPS funcional**: `admin@orthoplus.com` / `admin123!`
+- ✅ **Git push realizado**: sincronizado com `origin/main`
+- ✅ **Frontend v2.9.9 deployado**: VPS + Local
+- ✅ **Backend v2.5.3 deployado**: VPS + Local
+- ✅ **Validação forense round 2**: 8 agentes, 30+ hipóteses, 1 issue real (DEV-001)
+- ✅ **Validação tripla**: LOCAL/GITHUB sincronizados, VPS desatualizada
+- ✅ **Consolidação canônica**: AGENTS.md, CANONICAL.md, TSi-Vault, OMK memory atualizados
 
 ### Pendências Ativas
-- ✅ **Frontend TS errors**: 0 erros (tsc --noEmit passa), 107 warnings pré-existentes
-- 🟡 **~16 mock/stub endpoints** nos principais módulos: Apenas 8 módulos têm endpoints mockados — backups (12), github_tools (5), configuracoes (3), terminal (2), comm (2), crypto_config (2), analytics (1), dashboard (1). Todos os demais 29 módulos estão completos com CRUD real.
-  - **backups**: necessita integração com storage real (S3/MinIO)
-  - **github_tools**: necessita token GitHub real + Octokit
-  - **terminal**: feature flag `TERMINAL_ENABLED` (segurança)
-- ✅ **Prisma relations**: `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles` adicionadas
-- ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
-- ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
-- ✅ **Módulos em branco corrigidos**: `pacientes`, `financeiro`, `crm`, `agenda` — todos carregam corretamente (v2.9.5)
-- ✅ **Backend imagem v2.5.3**: Deployada com sucesso no VPS e local (docs canonical, container persistente, health OK)
-- ✅ **Frontend imagem v2.9.9**: Deployada com sucesso no VPS e local (docs canonical, estoque fix aplicado)
-- ✅ **Validação orquestrada 60 rotas**: 41/41 rotas reais OK, 16 stubs identificados, 0 erros 403
-  - Clínica: 12/12 OK (incluindo Dentistas e Funcionários)
-  - Financeiro: 3/8 OK (5 stubs: conciliação, PDV, inadimplência, split, crypto)
-  - Marketing: 11/11 OK
-  - Admin: 3/14 OK (11 stubs: bancos, database, backups, crypto-config, github, terminal, wiki, monitoramento, logs, api-docs, audit)
-  - Outros: 8/8 OK (estoque corrigido, inventário OK)
-- 🟡 **SSL Expiry**:
-  - `tsiapp.io`: Cloudflare Origin Certificate, válido até **May 2041** (não gerenciado por certbot)
-  - `vps-tsi-02.tailbda57.ts.net`: Let's Encrypt (Tailscale), válido até **Jul 22 2026**
-  - `orthoplus.i9corp.com.br`: Self-signed, válido até **Apr 23 2027**
-  - Certbot timer ativo mas não gerencia certificados no momento
-
-### Cobertura de Testes
-- **Backend**: 17 módulos com unit tests (jest); 19 sem cobertura; threshold global 20%
-- **Frontend**: 16 test files (vitest); domínio/core/hooks cobertos; módulos UI majoritariamente sem testes
-- **E2E**: 37 specs Playwright — cobertura de fluxo boa; ver `tests/e2e/AGENTS.md`
+- 🟡 **DEV-001**: Backend Dockerfile sem `HEALTHCHECK`
+- 🟡 **VPS desatualizada**: Código em `/home/tsi/OrthoPlus-Enterprise` no commit Warning: (local/github em 3e7f0f9d)
+- 🟡 **~16 mock/stub endpoints** em 8 módulos (backups, github_tools, configuracoes, terminal, comm, crypto_config, analytics, dashboard)
+- 🟡 **SSL Expiry**: `vps-tsi-02.tailbda57.ts.net` Let's Encrypt válido até Jul 22 2026
 
 ### Commits Recentes
-- `ca5b92cd4` — feat(backend): register per-module dbRouters for decentralized DB management
-- `8b3edaf74` — fix(tests): resolve backend test failures and TypeScript errors
-- `c82e6e1be` — fix(backend): add DENTISTAS and FUNCIONARIOS to MODULE_CATALOG
-- `ce0802026` — docs: update AGENTS.md module table
-- `58daf9007` — fix(prisma): add missing relations contas_receber↔patients and crypto_price_alerts↔profiles
-- `f1fd607ef` — fix(frontend): show admin-only menu items (ADMIN_ONLY moduleKey)
-- `a5d2cb5e3` — fix(frontend): resolve blank pages on protected modules (pacientes, financeiro, crm, agenda)
-  - Added `/403` route to `AppRoutes.tsx`
-  - Fixed `hasModuleAccess` to allow access while `userRole` is loading
-  - Added fallback for ADMIN when `activeModules` is empty
-- `89aa4853` — fix(docker): update Dockerfile and nginx-frontend.conf for v2.5 deploy
-- `65a855b0` — fix(backend): resolve TypeScript errors and remove || true workaround
-- `22fb95c1` — fix(auth): add enabled guard to useSidebarBadges
+- `3e7f0f9d` — feat(omk): triple validation report — LOCAL x GITHUB x VPS sync analysis
+- `69dbd494` — feat(omk): forensic validation round 2
+- `95c519c0` — feat(omk): create fix squadron and execute fixes
+- `078bf6e8` — fix: resolve TypeScript warnings and update AGENTS.md queryRaw statement
 
 ---
 
-## Checkpoint de Sessão (2026-05-13)
+## Checkpoint de Sessão (2026-05-15)
 
 ### Memória Persistente
-- **TSi-Vault checkpoint:** `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md`
-- **TSi-Vault orquestração:** `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
+- **TSi-Vault checkpoint:** `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-15.md`
 
 ### Contexto de Deploy
-- **Imagem frontend atual:** `orthoplus-frontend:v2.9.9` (blank pages fix, ADMIN_ONLY fix, hasModuleAccess fallback, dbRouters, docs canonical)
-- **Imagem backend atual:** `orthoplus-backend:v2.5.3` (health check public, Prisma relations, MODULE_CATALOG completo, dbRouters, docs canonical)
-- **Container frontend (Local):** `tsiapp-orthoplus` (porta 8083, imagem `orthoplus-frontend:v2.9.9`, status: healthy)
-- **Container backend (Local):** `tsiapp-orthoplus-backend` (porta 3005, network=host, imagem `orthoplus-backend:v2.5.3`, status: running)
-- **Container Redis (Local):** `orthoplus-redis` (porta 6379, imagem `redis:7-alpine`)
-- **Nota:** Ambiente local sincronizado com VPS em 2026-05-15
-- **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
+- **Imagem frontend atual:** `orthoplus-frontend:v2.9.9`
+- **Imagem backend atual:** `orthoplus-backend:v2.5.3`
+- **Container frontend (Local):** `tsiapp-orthoplus` (porta 8083)
+- **Container backend (Local):** `tsiapp-orthoplus-backend` (porta 3005, host network)
+- **Container Redis (Local):** `orthoplus-redis` (porta 6379)
 
-### Deploy VPS (2026-05-14) — ESTADO ATUAL VERIFICADO
-- ✅ **Frontend v2.9.9 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.9.9`
-- ✅ **Backend v2.5.3 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.5.3`
-- ✅ **Banco recriado** com schema Prisma completo: 180 tabelas em 17 schemas (16 custom + public)
-- ✅ **module_catalog sincronizado**: 37 módulos cadastrados
-- ✅ **clinic_modules**: 37 associações ativas para clinic do admin
-- ✅ **Login funcional** — `admin@orthoplus.com` / `admin123!` → redireciona para `/dashboard`
-- ✅ **hasModuleAccess case-insensitive**: compara `moduleKey.toLowerCase()` com `activeModules`
-- ✅ **8 stubs 404 resolvidos** — rotas raiz retornam 200
-- ✅ **Hash bcrypt** preservada corretamente
-- ✅ **Testes backend**: 367 passando, 0 falhando
-- ✅ **Health check**: `curl http://localhost:3005/health` → `{"status":"ok"}`
-- ✅ **ecosystem.json** removido do git (security)
-- ✅ **JWT_SECRET rotacionado** — novo secret deployado em produção
-- ✅ **DB_PASSWORD rotacionado** — role `orthoplus` com senha nova
-- ✅ **REDIS_PASSWORD rotacionado** — nova senha no Redis e no container backend
-- ✅ **Validação UI completa** — landing page, login, dashboard, pacientes, agenda, financeiro, CRM validados
+### Deploy VPS (2026-05-15)
+- ⚠️ **Código desatualizado**: VPS em `Warning:` vs Local/GitHub em `3e7f0f9d`
+- ⚠️ **Build em andamento**: Docker build iniciado em background na VPS
+- ✅ **Containers rodando**: frontend (healthy), backend (running), redis (running)
+- ✅ **Banco**: 180 tabelas, 37 módulos catalogados
 
 ### Como Continuar
 1. Verificar `git log --oneline -3` e `git status`
-2. Rodar builds: `cd backend && npm run build`, `cd apps/web && pnpm run build`
-3. Rodar testes: `cd backend && npm test` (esperado: 17 suites, 367 tests OK)
-4. **Deploy frontend**: copiar `apps/web/dist/` → VPS → buildar imagem Docker
-5. **Deploy backend**: copiar `backend/dist/` → VPS → buildar imagem Docker com `package.prod.json` (sem `workspace:*`)
-6. **NUNCA** fazer `prisma db push` em produção sem backup completo
-7. **NUNCA** usar shell escaping direto em hashes bcrypt — usar `cat > file.sql` + `psql -f`
-
-### Checklist de Deploy para Novos Agentes
-- [ ] `git status` limpo (sem alterações não commitadas)
-- [ ] `cd backend && npm run build` passa
-- [ ] `cd backend && npm test` passa (367 tests)
-- [ ] `cd apps/web && pnpm run build` passa
-- [ ] Backup do banco: `pg_dump -Fc -f /tmp/backup-$(date +%Y%m%d).dump`
-- [ ] Frontend: `tar czf dist.tar.gz dist/` → scp → VPS → `docker build -t orthoplus-frontend:vX.Y .`
-- [ ] Backend: `tar czf dist.tar.gz dist/` → scp → VPS → usar `package.prod.json` → `docker build -t orthoplus-backend:vX.Y .`
-- [ ] Verificar health: `curl http://localhost:3005/health`
-- [ ] Verificar login: `curl -X POST https://tsiapp.io/api/auth/token -d '{"email":"admin@orthoplus.com","password":"admin123!"}'`
-4. Consultar `.sisyphus/plans/db-descentralizado-por-categoria.md` para plano ativo
+2. Rodar builds: `cd backend && pnpm build`, `cd apps/web && pnpm build`
+3. Rodar testes: `cd backend && pnpm test`
+4. Para deploy VPS: seguir checklist na seção 13
 
 ---
 

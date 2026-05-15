@@ -1,10 +1,10 @@
 # OrthoPlus Enterprise — Documentação Canônica
 
 > **Status:** CANONICAL  
-> **Data:** 2026-05-14  
+> **Data:** 2026-05-15  
 > **Versão:** v2.9.9 (frontend) / v2.5.3 (backend)  
 > **Branch:** main  
-> **Commit:** 46f53410d  
+> **Commit:** 3e7f0f9d  
 > **Anterior:** [LEGACY] `docs/STATUS-FINAL-2026-05-14.md`, `docs/SESSION-ORQUESTRACAO.md`, `orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-13.md`, `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
 
 ---
@@ -212,7 +212,50 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 
 ---
 
-## 10. Estado Atual do Deploy VPS (2026-05-14)
+## 10. Estado Atual do Deploy VPS (2026-05-15)
+
+### Sincronia de Código
+| Ambiente | Commit | Status |
+|----------|--------|--------|
+| LOCAL | `3e7f0f9d` | ✅ Atual |
+| GITHUB | `3e7f0f9d` | ✅ Atual |
+| VPS (`/home/tsi/OrthoPlus-Enterprise`) | `Warning:` | ⚠️ Desatualizado |
+
+**Nota:** VPS está ~10+ commits atrás. Build Docker em andamento para atualização.
+
+### Containers Docker (Local + VPS)
+| Componente | Imagem | Container | Porta | Network | Status |
+|------------|--------|-----------|-------|---------|--------|
+| Frontend | `orthoplus-frontend:v2.9.9` | `tsiapp-orthoplus` | 127.0.0.1:8083→8080 | bridge | ✅ healthy |
+| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | host | ✅ running |
+| Redis | `redis:7-alpine` | `orthoplus-redis` | 127.0.0.1:6379 | host | ✅ running |
+
+### Health Checks
+| Endpoint | Status |
+|----------|--------|
+| `GET /health` | ✅ 200 |
+| `GET /api/health` | ✅ 200 |
+| `POST /api/auth/token` | ✅ 200 (admin@orthoplus.com / admin123!) |
+| `GET /api/clinics/{id}/active-modules` | ✅ 37 módulos |
+
+### Banco de Dados
+- **Host**: 127.0.0.1:5432
+- **Database**: `orthoplus`
+- **Role**: `orthoplus` (não superuser)
+- **Schemas**: 17 (public + 16 custom)
+- **Tabelas**: 180
+- **module_catalog**: 37 módulos cadastrados
+- **clinic_modules**: 37 associações ativas
+
+### Redis
+- **Host**: 127.0.0.1:6379
+- **Autenticado**: Sim (requirepass)
+- **Container**: `orthoplus-redis`
+
+### Nginx
+- Config: `/etc/nginx/sites-enabled/tsiapp-https`
+- CSP Header ativo
+- Case-insensitive para `/orthoplus-enterprise/`
 
 ### Containers Docker (Local + VPS)
 | Componente | Imagem | Container | Porta | Network | Status |

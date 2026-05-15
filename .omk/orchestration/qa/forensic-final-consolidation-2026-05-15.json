@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "date": "2026-05-15",
+    "commit": "3e7f0f9d",
+    "agents": 8
+  },
+  "metrics": {
+    "local_commit": "3e7f0f9d",
+    "github_commit": "3e7f0f9d",
+    "vps_commit": "Warning:",
+    "local_branch": "main",
+    "module_count": 37,
+    "models": 180,
+    "schema_count": 17,
+    "custom_schemas": 16,
+    "route_count": 60,
+    "worker_count": 9,
+    "db_tables": 180,
+    "mc_count": 37,
+    "cm_count": 37
+  },
+  "findings": [
+    {
+      "agent": "F1",
+      "claim": "LOCAL == GITHUB",
+      "reality": "OK",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F1",
+      "claim": "LOCAL == VPS",
+      "reality": "FAIL (VPS behind)",
+      "severity": "MEDIUM",
+      "action": ""
+    },
+    {
+      "agent": "F3",
+      "claim": "Backend build",
+      "reality": "PASS",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F3",
+      "claim": "Frontend build",
+      "reality": "PASS",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F4",
+      "claim": "Backend TS errors == 0",
+      "reality": "0",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F4",
+      "claim": "Frontend TS errors == 0",
+      "reality": "0",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F5",
+      "claim": "Backend health 200",
+      "reality": "200",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F5",
+      "claim": "Frontend health 200",
+      "reality": "200",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F6",
+      "claim": "DB tables == 180",
+      "reality": "180",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F6",
+      "claim": "module_catalog == 37",
+      "reality": "37",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F6",
+      "claim": "clinic_modules == 37",
+      "reality": "37",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F7",
+      "claim": "All 37 modules have routers",
+      "reality": "OK (37/37)",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F8",
+      "claim": "TSi-Vault has current commit",
+      "reality": "OK",
+      "severity": "LOW",
+      "action": ""
+    },
+    {
+      "agent": "F8",
+      "claim": "OMK memory has current commit",
+      "reality": "OK",
+      "severity": "LOW",
+      "action": ""
+    }
+  ],
+  "summary": {
+    "total": 14,
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 13
+  }
+}
