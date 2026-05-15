@@ -9,7 +9,7 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // Root route — module status
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.json({
     module: "bi",
     version: "1.0.0",

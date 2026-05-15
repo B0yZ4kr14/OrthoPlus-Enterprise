@@ -41,6 +41,7 @@ OrthoPlus-Enterprise/
 - **Error handling**: Usar `ApiError` de `@/errors/ApiError`
 - **Clinic context**: Todo router deve usar `clinicGuard` middleware
 - **Prisma**: Preferir Prisma Client sobre `queryRaw`
+- **queryRaw**: ~14 ocorrências em backend/src/ (admin_tools, analytics, inventario, marketing, notifications, database admin) — usado para queries administrativas PostgreSQL e agregações complexas
 
 ### TypeScript (Frontend)
 - **Hooks**: Custom hooks em `hooks/` ou `components/*/use*.ts`
@@ -253,7 +254,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 
 ### Concluído
 - ✅ **Supabase eliminado**: `auth.users` removido, `configuracoes.users` é auth nativa
-- ✅ **queryRaw**: zero ocorrências em backend/src
+- ⚠️ **queryRaw**: ~14 ocorrências em backend/src/ (casos legítimos: pg_stat_activity, schema stats, analytics, inventario alerts, marketing segmentação, notifications)
 - ✅ **Backend build**: passa sem erros (tsc + tsc-alias)
 - ✅ **Frontend build**: passa sem erros (vite build)
 - ✅ **Frontend lint**: 0 errors, ~98 warnings

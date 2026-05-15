@@ -7,7 +7,7 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // Root route — module status
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.json({
     module: "tiss",
     version: "1.0.0",
@@ -18,21 +18,21 @@ router.get("/", (req, res) => {
 });
 
 // Guias TISS
-router.get("/guias", (req, res) => controller.listGuias(req, res));
-router.get("/guias/:id", (req, res) => controller.getGuiaById(req, res));
-router.post("/guias", (req, res) => controller.createGuia(req, res));
-router.patch("/guias/:id", (req, res) => controller.updateGuia(req, res));
-router.delete("/guias/:id", (req, res) => controller.deleteGuia(req, res));
+router.get("/guias", (_req, res) => controller.listGuias(_req, res));
+router.get("/guias/:id", (_req, res) => controller.getGuiaById(_req, res));
+router.post("/guias", (_req, res) => controller.createGuia(_req, res));
+router.patch("/guias/:id", (_req, res) => controller.updateGuia(_req, res));
+router.delete("/guias/:id", (_req, res) => controller.deleteGuia(_req, res));
 
 // Lotes TISS
-router.get("/lotes", (req, res) => controller.listLotes(req, res));
-router.post("/lotes", (req, res) => controller.createLote(req, res));
-router.patch("/lotes/:id", (req, res) => controller.updateLote(req, res));
+router.get("/lotes", (_req, res) => controller.listLotes(_req, res));
+router.post("/lotes", (_req, res) => controller.createLote(_req, res));
+router.patch("/lotes/:id", (_req, res) => controller.updateLote(_req, res));
 
 // Batch submission — group guides and submit to insurance
-router.post("/lotes/submit", (req, res) => controller.submitBatch(req, res));
+router.post("/lotes/submit", (_req, res) => controller.submitBatch(_req, res));
 
 // Statistics
-router.get("/statistics", (req, res) => controller.getStatistics(req, res));
+router.get("/statistics", (_req, res) => controller.getStatistics(_req, res));
 
 export default router;

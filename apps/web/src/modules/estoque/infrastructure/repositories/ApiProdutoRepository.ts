@@ -5,9 +5,12 @@ import { apiClient } from "@/lib/api/apiClient";
 // Backend estoque returns { success, data, meta } envelope instead of raw array
 function unwrapData<T>(response: T | { data?: T }): T {
   if (response && typeof response === "object" && "data" in response) {
-    return (response as { data?: T }).data as T;
+    const r = response as { data?: T };
+    if (r.data !== undefined) {
+      return r.data;
+    }
   }
-  return response;
+  return response as T;
 }
 
 /**

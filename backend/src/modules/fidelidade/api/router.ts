@@ -7,7 +7,7 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // Root route — module status
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.json({
     module: "fidelidade",
     version: "1.0.0",
@@ -18,19 +18,19 @@ router.get("/", (req, res) => {
 });
 
 // Pontos
-router.get("/pontos", (req, res) => controller.getPoints(req, res));
-router.post("/pontos", (req, res) => controller.addPoints(req, res));
+router.get("/pontos", (_req, res) => controller.getPoints(_req, res));
+router.post("/pontos", (_req, res) => controller.addPoints(_req, res));
 
 // Badges
-router.get("/badges", (req, res) => controller.listBadges(req, res));
-router.post("/badges", (req, res) => controller.createBadge(req, res));
+router.get("/badges", (_req, res) => controller.listBadges(_req, res));
+router.post("/badges", (_req, res) => controller.createBadge(_req, res));
 
 // Recompensas
-router.get("/recompensas", (req, res) => controller.listRecompensas(req, res));
-router.post("/recompensas", (req, res) => controller.createRecompensa(req, res));
+router.get("/recompensas", (_req, res) => controller.listRecompensas(_req, res));
+router.post("/recompensas", (_req, res) => controller.createRecompensa(_req, res));
 
 // Indicações
-router.get("/indicacoes", (req, res) => controller.listIndicacoes(req, res));
-router.post("/indicacoes", (req, res) => controller.createIndicacao(req, res));
+router.get("/indicacoes", (_req, res) => controller.listIndicacoes(_req, res));
+router.post("/indicacoes", (_req, res) => controller.createIndicacao(_req, res));
 
 export default router;

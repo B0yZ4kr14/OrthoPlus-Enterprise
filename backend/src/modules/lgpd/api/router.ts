@@ -7,7 +7,7 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // Root route — module status
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.json({
     module: "lgpd",
     version: "1.0.0",
@@ -18,12 +18,12 @@ router.get("/", (req, res) => {
 });
 
 // Consentimentos
-router.get("/consentimentos", (req, res) => controller.listConsentimentos(req, res));
-router.post("/consentimentos", (req, res) => controller.createConsentimento(req, res));
+router.get("/consentimentos", (_req, res) => controller.listConsentimentos(_req, res));
+router.post("/consentimentos", (_req, res) => controller.createConsentimento(_req, res));
 
 // Solicitações
-router.get("/solicitacoes", (req, res) => controller.listSolicitacoes(req, res));
-router.post("/solicitacoes", (req, res) => controller.createSolicitacao(req, res));
-router.patch("/solicitacoes/:id", (req, res) => controller.updateSolicitacao(req, res));
+router.get("/solicitacoes", (_req, res) => controller.listSolicitacoes(_req, res));
+router.post("/solicitacoes", (_req, res) => controller.createSolicitacao(_req, res));
+router.patch("/solicitacoes/:id", (_req, res) => controller.updateSolicitacao(_req, res));
 
 export default router;

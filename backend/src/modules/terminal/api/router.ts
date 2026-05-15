@@ -11,7 +11,7 @@ export function createTerminalRouter(): Router {
 router.use(clinicGuard);
 
   // Root route — module status
-  router.get("/", (req, res) => {
+  router.get("/", (_req, res) => {
     res.json({
       module: "terminal",
       version: "1.0.0",
@@ -22,10 +22,10 @@ router.use(clinicGuard);
   });
   const controller = new TerminalController();
 
-  router.post('/sessions', (req, res) => controller.createSession(req, res));
-  router.post('/execute', (req, res) => controller.executeCommand(req, res));
-  router.get('/sessions/:sessionId/history', (req, res) => controller.getCommandHistory(req, res));
-  router.delete('/sessions/:sessionId', (req, res) => controller.terminateSession(req, res));
+  router.post('/sessions', (_req, res) => controller.createSession(_req, res));
+  router.post('/execute', (_req, res) => controller.executeCommand(_req, res));
+  router.get('/sessions/:sessionId/history', (_req, res) => controller.getCommandHistory(_req, res));
+  router.delete('/sessions/:sessionId', (_req, res) => controller.terminateSession(_req, res));
 
   return router;
 }

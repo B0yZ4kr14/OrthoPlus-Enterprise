@@ -7,7 +7,7 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // Root route — module status
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.json({
     module: "split_pagamento",
     version: "1.0.0",
@@ -18,18 +18,18 @@ router.get("/", (req, res) => {
 });
 
 // Config
-router.get("/config", (req, res) => controller.getConfig(req, res));
-router.put("/config", (req, res) => controller.upsertConfig(req, res));
-router.post("/config", (req, res) => controller.upsertConfig(req, res));  // alias for frontend compatibility
+router.get("/config", (_req, res) => controller.getConfig(_req, res));
+router.put("/config", (_req, res) => controller.upsertConfig(_req, res));
+router.post("/config", (_req, res) => controller.upsertConfig(_req, res));  // alias for frontend compatibility
 
 // Comissões
-router.get("/comissoes", (req, res) => controller.listComissoes(req, res));
-router.post("/comissoes", (req, res) => controller.createComissao(req, res));
+router.get("/comissoes", (_req, res) => controller.listComissoes(_req, res));
+router.post("/comissoes", (_req, res) => controller.createComissao(_req, res));
 
 // Transações
-router.get("/transacoes", (req, res) => controller.listTransacoes(req, res));
+router.get("/transacoes", (_req, res) => controller.listTransacoes(_req, res));
 
 // Calculate split distribution
-router.post("/calculate", (req, res) => controller.calculateSplit(req, res));
+router.post("/calculate", (_req, res) => controller.calculateSplit(_req, res));
 
 export default router;

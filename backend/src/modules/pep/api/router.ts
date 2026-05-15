@@ -32,7 +32,7 @@ router.use(clinicGuard);
   const controller = new PepController();
 
   // Rota raiz
-  router.get('/', (req: Request, res: Response) => {
+  router.get('/', (_req: Request, res: Response) => {
     res.json({
       module: 'pep',
       message: 'Prontuário Eletrônico do Paciente — use /prontuarios/patient/:patientId para listar prontuários',

@@ -7,7 +7,7 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // Root route — module status
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.json({
     module: "inadimplencia",
     version: "1.0.0",
@@ -18,13 +18,13 @@ router.get("/", (req, res) => {
 });
 
 // Inadimplentes
-router.get("/inadimplentes", (req, res) => controller.listInadimplentes(req, res));
-router.get("/inadimplentes/:id", (req, res) => controller.getInadimplente(req, res));
-router.patch("/inadimplentes/:id", (req, res) => controller.updateInadimplente(req, res));
+router.get("/inadimplentes", (_req, res) => controller.listInadimplentes(_req, res));
+router.get("/inadimplentes/:id", (_req, res) => controller.getInadimplente(_req, res));
+router.patch("/inadimplentes/:id", (_req, res) => controller.updateInadimplente(_req, res));
 
 // Campanhas de cobrança
-router.get("/campanhas", (req, res) => controller.listCampanhasCobranca(req, res));
-router.post("/campanhas", (req, res) => controller.createCampanhaCobranca(req, res));
-router.patch("/campanhas/:id", (req, res) => controller.updateCampanhaCobranca(req, res));
+router.get("/campanhas", (_req, res) => controller.listCampanhasCobranca(_req, res));
+router.post("/campanhas", (_req, res) => controller.createCampanhaCobranca(_req, res));
+router.patch("/campanhas/:id", (_req, res) => controller.updateCampanhaCobranca(_req, res));
 
 export default router;
