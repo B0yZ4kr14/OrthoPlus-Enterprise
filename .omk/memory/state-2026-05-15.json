@@ -1,8 +1,9 @@
 {
   "timestamp": "2026-05-15T20:15:00-03:00",
-  "commit": "96533ddd4",
-  "forensic_status": "VALIDATED",
-  "discrepancies": 0,
+  "commit": "95c519c01",
+  "forensic_status": "VALIDATED_ROUND2",
+  "discrepancies_found": 3,
+  "discrepancies_real": 1,
   "agents_executed": 8,
   "evidence": {
     "prisma_models": 180,
@@ -10,7 +11,7 @@
     "backend_modules": 37,
     "frontend_routes": 60,
     "workers": 9,
-    "backend_routers": 53,
+    "backend_routers": 37,
     "db_tables": 180,
     "db_module_catalog": 37,
     "db_clinic_modules": 37,
@@ -19,6 +20,8 @@
     "login_works": true,
     "backend_build": true,
     "frontend_build": true,
+    "backend_typecheck": true,
+    "frontend_typecheck": true,
     "docker_frontend": "orthoplus-frontend:v2.9.9",
     "docker_backend": "orthoplus-backend:v2.5.3",
     "docker_redis": "orthoplus-redis"
@@ -33,22 +36,33 @@
   },
   "pending_issues": [
     {
-      "file": "apps/web/src/modules/estoque/infrastructure/repositories/ApiProdutoRepository.ts",
-      "line": 10,
-      "issue": "TS2322: Type 'T | { data?: T | undefined; }' is not assignable to type 'T'",
-      "severity": "low",
-      "blocking": false
+      "issue": "DEV-001: Container backend sem HEALTHCHECK no Dockerfile",
+      "severity": "medium",
+      "blocking": false,
+      "action": "Adicionar HEALTHCHECK ao backend/Dockerfile"
+    }
+  ],
+  "resolved_issues": [
+    {
+      "issue": "BE-002: TS6133 unused 'req' parameters",
+      "files": ["bi", "fidelidade", "inadimplencia", "lgpd", "split_pagamento", "terminal", "tiss"],
+      "resolution": "Renamed req -> _req in 7 routers; PEP root handler fixed; internal PEP handlers retain req (active usage)",
+      "commit": "95c519c01"
     },
     {
-      "files": ["lgpd", "pep", "split_pagamento", "terminal", "tiss"],
-      "issue": "TS6133: 'req' is declared but its value is never read",
-      "severity": "low",
-      "blocking": false
+      "issue": "FE-001: TS2322 ApiProdutoRepository.unwrapData",
+      "resolution": "Refactored with strict type narrowing T | { data: T } and existence checks",
+      "commit": "95c519c01"
     },
     {
-      "issue": "Container backend sem healthcheck Docker configurado",
-      "severity": "low",
-      "blocking": false
+      "issue": "BE-001: queryRaw falsely documented as zero",
+      "resolution": "Updated AGENTS.md to accurately reflect ~14 occurrences in 6 files",
+      "commit": "078bf6e8d"
+    },
+    {
+      "issue": "Falso Positivo A7: '24 rotas' no AGENTS.md",
+      "resolution": "Identified as historical log entry (line 281); actual total 60 correctly documented on line 282",
+      "action": "None required"
     }
   ]
 }

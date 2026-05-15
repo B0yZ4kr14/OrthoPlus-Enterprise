@@ -1,0 +1,6 @@
+EVIDENCIA: A5-001
+CMD: docker inspect
+OUT:
+
+NO_HEALTH
+

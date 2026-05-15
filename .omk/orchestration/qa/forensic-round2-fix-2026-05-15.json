@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "date": "2026-05-15",
+    "commit": "95c519c01",
+    "agents": 8
+  },
+  "findings": [
+    {
+      "agent": "A5",
+      "doc": "Docker",
+      "section": "Health Backend",
+      "claim": "Healthcheck configurado",
+      "reality": "Sem healthcheck",
+      "severity": "MEDIUM",
+      "evidence_id": "A5-001",
+      "command": "docker inspect",
+      "output": "\nNO_HEALTH\n",
+      "action": "Adicionar HEALTHCHECK ao Dockerfile"
+    },
+    {
+      "agent": "A7",
+      "doc": "AGENTS.md",
+      "section": "Numero rotas",
+      "claim": "rotas: 24",
+      "reality": "Real: 60",
+      "severity": "HIGH",
+      "evidence_id": "A7-002",
+      "command": "grep",
+      "output": "24 vs 60",
+      "action": "Atualizar AGENTS.md: rotas = 60"
+    },
+    {
+      "agent": "A7",
+      "doc": "Cross-Doc",
+      "section": "Inconsistencia rotas",
+      "claim": "AGENTS: 24",
+      "reality": "CANONICAL: 60",
+      "severity": "HIGH",
+      "evidence_id": "A7-003",
+      "command": "comparacao",
+      "output": "24 != 60",
+      "action": "Sincronizar: rotas = 60"
+    }
+  ],
+  "severity_counts": {
+    "MEDIUM": 1,
+    "HIGH": 2,
+    "CRITICAL": 0,
+    "LOW": 0
+  }
+}

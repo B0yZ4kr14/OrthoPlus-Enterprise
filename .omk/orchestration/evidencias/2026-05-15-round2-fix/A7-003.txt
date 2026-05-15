@@ -1,0 +1,4 @@
+EVIDENCIA: A7-003
+CMD: comparacao
+OUT:
+24 != 60

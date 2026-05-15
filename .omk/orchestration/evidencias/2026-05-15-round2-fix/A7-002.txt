@@ -1,0 +1,4 @@
+EVIDENCIA: A7-002
+CMD: grep
+OUT:
+24 vs 60
