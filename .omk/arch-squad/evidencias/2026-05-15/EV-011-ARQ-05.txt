@@ -1,0 +1,27 @@
+EVIDENCIA: EV-011-ARQ-05
+AGENTE: ARQ-05
+TIMESTAMP: 2026-05-15T16:21:53.961061
+HASH: 88042a488dbcab30
+CMD: security headers
+---
+HTTP/1.1 200 OK
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Origin-Agent-Cluster: ?1
+Referrer-Policy: no-referrer
+Strict-Transport-Security: max-age=15552000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-DNS-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-XSS-Protection: 0
+Content-Type: application/json; charset=utf-8
+Content-Length: 74
+ETag: W/"4a-BA3vJW9XeW2cTpWKEj5tO9cUqXE"
+Date: Fri, 15 May 2026 19:21:53 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5

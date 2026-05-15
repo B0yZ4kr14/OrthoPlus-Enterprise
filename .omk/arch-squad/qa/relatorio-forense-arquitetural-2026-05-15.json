@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "date": "2026-05-15",
+    "time": "16:21:53",
+    "commit": "79fd4532",
+    "agents": 10,
+    "methodology": "Socratic + Popperian + Forensic",
+    "evidence_count": 18,
+    "evidence_dir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/.omk/arch-squad/evidencias/2026-05-15"
+  },
+  "environments": {
+    "local": "79fd4532",
+    "github": "79fd4532",
+    "vps": "Warning:"
+  },
+  "metrics": {
+    "modules": 37,
+    "models": 180,
+    "schemas": 17,
+    "routes": 60,
+    "workers": 9,
+    "db_tables": 1,
+    "module_catalog": 37,
+    "clinic_modules": 37
+  },
+  "findings": [
+    {
+      "agent": "ARQ-01",
+      "doc": "Codigo",
+      "section": "clinicGuard",
+      "claim": "clinicGuard em 37 routers",
+      "reality": "Apenas 0",
+      "severity": "HIGH",
+      "evidence_id": "EV-001-ARQ-01",
+      "action": "Verificar routers sem clinicGuard"
+    },
+    {
+      "agent": "ARQ-01",
+      "doc": "Codigo",
+      "section": "queryRaw",
+      "claim": "queryRaw: 16 ocorrencias",
+      "reality": "Documentado como ~14",
+      "severity": "MEDIUM",
+      "evidence_id": "EV-002-ARQ-01",
+      "action": "Reclassificar se necessario"
+    },
+    {
+      "agent": "ARQ-03",
+      "doc": "DB",
+      "section": "Models vs Tables",
+      "claim": "Models (180) == Tables (1)",
+      "reality": "Divergencia",
+      "severity": "HIGH",
+      "evidence_id": null,
+      "action": "Sincronizar schema"
+    },
+    {
+      "agent": "ARQ-03",
+      "doc": "Schema",
+      "section": "@@schema",
+      "claim": "Todos models tem @@schema",
+      "reality": "Models sem schema",
+      "severity": "HIGH",
+      "evidence_id": "EV-007-ARQ-03",
+      "action": "Adicionar @@schema"
+    },
+    {
+      "agent": "ARQ-03",
+      "doc": "Schema",
+      "section": "relationMode",
+      "claim": "relationMode = 'prisma'",
+      "reality": "Nao encontrado",
+      "severity": "CRITICAL",
+      "evidence_id": "EV-008-ARQ-03",
+      "action": "Adicionar relationMode"
+    },
+    {
+      "agent": "ARQ-04",
+      "doc": "Docker",
+      "section": "HEALTHCHECK",
+      "claim": "Backend Dockerfile tem HEALTHCHECK",
+      "reality": "Nao encontrado",
+      "severity": "MEDIUM",
+      "evidence_id": "EV-009-ARQ-04",
+      "action": "Adicionar HEALTHCHECK (DEV-001)"
+    },
+    {
+      "agent": "ARQ-08",
+      "doc": "Arquitetura",
+      "section": "queryRaw",
+      "claim": "Criterio claro para 'legitimo'",
+      "reality": "Ocorrencias sem classificacao formal",
+      "severity": "MEDIUM",
+      "evidence_id": "EV-016-ARQ-08",
+      "action": "Criar documento de classificacao"
+    },
+    {
+      "agent": "ARQ-08",
+      "doc": "Arquitetura",
+      "section": "Stub Definition",
+      "claim": "8 modulos com stubs",
+      "reality": "Definicao de 'completo' vs 'stub' nao formalizada",
+      "severity": "MEDIUM",
+      "evidence_id": "EV-017-ARQ-08",
+      "action": "Documentar criterios de completude"
+    },
+    {
+      "agent": "ARQ-09",
+      "doc": "VPS",
+      "section": "Sync",
+      "claim": "VPS sincronizada com GitHub",
+      "reality": "VPS: Warning: vs LOCAL: 79fd4532",
+      "severity": "MEDIUM",
+      "evidence_id": null,
+      "action": "git pull na VPS"
+    },
+    {
+      "agent": "ARQ-10",
+      "doc": "Sync",
+      "section": "DB",
+      "claim": "Models == DB Tables",
+      "reality": "180 != 1",
+      "severity": "HIGH",
+      "evidence_id": null,
+      "action": "Sincronizar"
+    },
+    {
+      "agent": "ARQ-10",
+      "doc": "Sync",
+      "section": "TSi-Vault",
+      "claim": "TSi-Vault tem commit atual",
+      "reality": "DESATUALIZADO",
+      "severity": "HIGH",
+      "evidence_id": null,
+      "action": "Atualizar checkpoint"
+    },
+    {
+      "agent": "ARQ-10",
+      "doc": "Sync",
+      "section": "OMK",
+      "claim": "OMK tem commit atual",
+      "reality": "DESATUALIZADO",
+      "severity": "HIGH",
+      "evidence_id": null,
+      "action": "Atualizar OMK"
+    }
+  ],
+  "severity_counts": {
+    "HIGH": 6,
+    "MEDIUM": 5,
+    "CRITICAL": 1,
+    "LOW": 0
+  }
+}

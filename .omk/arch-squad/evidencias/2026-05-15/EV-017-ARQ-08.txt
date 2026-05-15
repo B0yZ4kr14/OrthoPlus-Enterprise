@@ -1,0 +1,7 @@
+EVIDENCIA: EV-017-ARQ-08
+AGENTE: ARQ-08
+TIMESTAMP: 2026-05-15T16:21:53.984228
+HASH: 544bd84f43d5133c
+CMD: stub modules
+---
+['backups', 'github_tools', 'configuracoes', 'terminal', 'comm', 'crypto_config', 'analytics', 'dashboard']

@@ -1,0 +1,54 @@
+EVIDENCIA: EV-003-ARQ-01
+AGENTE: ARQ-01
+TIMESTAMP: 2026-05-15T16:21:53.908675
+HASH: 38d7ea8c05c8e849
+CMD: find controllers
+---
+backend/src/modules/admin_tools/api/controller.ts
+backend/src/modules/agenda/api/agendaController.ts
+backend/src/modules/agents/api/AgentsController.ts
+backend/src/modules/analytics/api/analyticsController.ts
+backend/src/modules/auth/api/AuthController.ts
+backend/src/modules/backups/api/backupController.ts
+backend/src/modules/bi/api/controller.ts
+backend/src/modules/comm/api/CommController.ts
+backend/src/modules/configuracoes/api/ModulosController.ts
+backend/src/modules/contratos/api/controller.ts
+backend/src/modules/crm/api/controller.ts
+backend/src/modules/crypto_config/api/CryptoConfigController.ts
+backend/src/modules/crypto_config/api/CryptoController.ts
+backend/src/modules/dashboard/controllers
+backend/src/modules/dashboard/controllers/DashboardController.ts
+backend/src/modules/database_admin/api/DatabaseAdminController.ts
+backend/src/modules/faturamento/api/FaturamentoCommandController.ts
+backend/src/modules/faturamento/api/FaturamentoController.ts
+backend/src/modules/faturamento/api/FaturamentoQueryController.ts
+backend/src/modules/fidelidade/api/controller.ts
+backend/src/modules/files/api/filesController.ts
+backend/src/modules/files/api/reportController.ts
+backend/src/modules/financeiro/api/FinanceiroController.ts
+backend/src/modules/funcionarios/api/controller.ts
+backend/src/modules/github_tools/api/GitHubToolsController.ts
+backend/src/modules/inadimplencia/api/controller.ts
+backend/src/modules/inventario/api/InventarioController.ts
+backend/src/modules/inventario/api/ProdutoCommandController.ts
+backend/src/modules/inventario/api/ProdutoQueryController.ts
+backend/src/modules/lgpd/api/controller.ts
+backend/src/modules/marketing/api/controller.ts
+backend/src/modules/nfe/api/controller.ts
+backend/src/modules/notifications/api/notificationController.ts
+backend/src/modules/orcamentos/api/controller.ts
+backend/src/modules/pacientes/api/commands/PatientCommandController.ts
+backend/src/modules/pacientes/api/PacientesController.ts
+backend/src/modules/pacientes/api/queries/PatientQueryController.ts
+backend/src/modules/pdv/api/controller.ts
+backend/src/modules/pdv/api/PdvCommandController.ts
+backend/src/modules/pdv/api/PdvController.ts
+backend/src/modules/pdv/api/PdvQueryController.ts
+backend/src/modules/pep/api/PepController.ts
+backend/src/modules/procedimentos/api/controller.ts
+backend/src/modules/split_pagamento/api/controller.ts
+backend/src/modules/teleodonto/api/controller.ts
+backend/src/modules/terminal/api/TerminalController.ts
+backend/src/modules/tiss/api/controller.ts
+backend/src/modules/usuarios/api/usuariosController.ts

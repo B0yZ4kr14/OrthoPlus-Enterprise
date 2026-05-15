@@ -1,0 +1,7 @@
+EVIDENCIA: EV-010-ARQ-04
+AGENTE: ARQ-04
+TIMESTAMP: 2026-05-15T16:21:53.952405
+HASH: 31641560779906d8
+CMD: HEALTHCHECK frontend
+---
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/ || exit 1

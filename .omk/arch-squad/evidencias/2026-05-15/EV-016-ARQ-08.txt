@@ -1,0 +1,22 @@
+EVIDENCIA: EV-016-ARQ-08
+AGENTE: ARQ-08
+TIMESTAMP: 2026-05-15T16:21:53.984066
+HASH: ee1bdf567e8273ab
+CMD: queryRaw classification
+---
+backend/src/modules/admin_tools/api/controller.ts:134:      .$queryRaw<{ count: number }[]>`SELECT count(*) FROM pg_stat_activity`
+backend/src/modules/admin_tools/api/controller.ts:138:      .$queryRaw<{ table: string; size: string }[]>`
+backend/src/modules/analytics/api/analyticsController.ts:541:    // Let's assume Prisma has the tables, else we will have to use $queryRawUnsafe
+backend/src/modules/auth/__tests__/auth.test.ts:11:    $queryRaw: jest.fn(),
+backend/src/modules/auth/__tests__/auth.test.ts:55:      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([]);
+backend/src/modules/auth/__tests__/auth.test.ts:64:      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([
+backend/src/modules/auth/__tests__/auth.test.ts:82:      (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([
+backend/src/modules/auth/__tests__/auth.test.ts:176:      (prisma.$queryRaw as jest.Mock).mockRejectedValueOnce(new Error("DB down"));
+backend/src/modules/inventario/api/InventarioController.ts:127:          const lowStockProducts = await prisma.$queryRaw<Array<{
+backend/src/modules/inventario/api/InventarioController.ts:263:          const alertProducts = await prisma.$queryRaw<Array<{
+backend/src/modules/marketing/api/controller.ts:201:        recipients = await prisma.$queryRaw<typeof recipients>`
+backend/src/modules/notifications/api/notificationController.ts:74:      const overduePayments = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
+backend/src/modules/notifications/api/notificationController.ts:99:      const lowStockProducts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
+backend/src/modules/notifications/api/notificationController.ts:122:      const birthdayPatients = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
+backend/src/modules/notifications/api/notificationController.ts:314:      const alerts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
+backend/src/modules/notifications/api/notificationController.ts:490:      const produtos = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
