@@ -1,3 +1,11 @@
+> ⚠️ **LEGACY — DOCUMENTO HISTÓRICO**
+> Este documento foi substituído pela documentação canônica em:
+> `docs/CANONICAL-2026-05-14.md`
+> Não use este documento como referência para o estado atual do projeto.
+> Data de arquivamento: 2026-05-14
+
+---
+
 # Status Final — OrthoPlus Enterprise 100% Produção
 
 > Data: 2026-05-14
@@ -74,4 +82,3 @@
 - Push GitHub (15 commits à frente do origin/main)
 - Monitorar logs do backend
 - Criar testes E2E para tema toggle
-

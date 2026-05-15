@@ -1,3 +1,11 @@
+> ⚠️ **LEGACY — DOCUMENTO HISTÓRICO**
+> Este documento foi substituído pela documentação canônica em:
+> `docs/CANONICAL-2026-05-14.md`
+> Não use este documento como referência para o estado atual do projeto.
+> Data de arquivamento: 2026-05-14
+
+---
+
 # Status Report - OrthoPlus Enterprise
 
 **Data:** 2026-05-13  

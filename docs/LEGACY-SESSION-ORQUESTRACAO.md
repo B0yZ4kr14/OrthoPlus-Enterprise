@@ -1,3 +1,11 @@
+> ⚠️ **LEGACY — DOCUMENTO HISTÓRICO**
+> Este documento foi substituído pela documentação canônica em:
+> `docs/CANONICAL-2026-05-14.md`
+> Não use este documento como referência para o estado atual do projeto.
+> Data de arquivamento: 2026-05-14
+
+---
+
 # Documento Mestre de Continuidade — Orquestracao Frontend/VPS
 
 > Sessao: 2026-05-14 | Branch: main | Commit: e317732a5 | Status: Concluido
