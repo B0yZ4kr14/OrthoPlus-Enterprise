@@ -355,4 +355,4 @@ categories/@orthoplus/
 
 - [Arquitetura](ARCHITECTURE.md)
 - [Contribuição](CONTRIBUTING.md)
-- [Database Config](../categories/@orthoplus/admin-devops/packages/database-config/README.md)
+- [Database Config](../categories/@orthoplus/admin-devops/README.md)

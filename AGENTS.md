@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** f7c4a40e2 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
+> **Atualizado:** 2026-05-15 | **Branch:** main | **Commit:** 13a7d50bb | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.9
 
 ---
 
@@ -133,7 +133,7 @@ Todos os 37 módulos possuem router registrado em `backend/src/index.ts` e `clin
 
 ### Base URL
 - Local: `http://localhost:3005/api`
-- Produção: `https://vps-tsi-02.tailbda57.ts.net/api`
+- Produção: `https://tsiapp.io/api` (via nginx proxy)
 
 ### Auth (público)
 - `POST /api/auth/token` — Login

@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🔐 Security
 - **Secret rotation**: JWT_SECRET, DB_PASSWORD, REDIS_PASSWORD rotacionados e deployados no VPS
-- **PostgreSQL role**: Criada role dedicada `orthoplus` com LOGIN e permissions nos 16 schemas
+- **PostgreSQL role**: Criada role dedicada `orthoplus` com LOGIN e permissions nos 17 schemas (16 custom + public)
 - **CSP Header**: Adicionado `Content-Security-Policy` ao nginx (`tsiapp-https`)
 
 ### 🏗️ Backend
@@ -36,7 +36,7 @@ All notable changes to this project will be documented in this file.
 - **5 contas a receber** inseridas em `financeiro.contas_receber`
 
 ### 🧪 Validação Frontend
-- **24 rotas** validadas com HTTP 200 (todas as páginas do SPA)
+- **37 rotas** validadas com HTTP 200 (todas as páginas do SPA reais)
 - **Screenshots**: Landing page e login confirmados visualmente
 - **APIs com dados**: Pacientes (10), Agenda (8), Financeiro (5), CRM (5)
 
@@ -55,14 +55,14 @@ All notable changes to this project will be documented in this file.
   - Criado model `comunicacao_logs` no schema Prisma (schema `operacional`)
   - Criado model `analytics_events` no schema Prisma (schema `operacional`)
 - **TypeScript fixes**: Adicionado `return next(e)` em `analyticsController.ts` (TS7030)
-- **Prisma schema**: `@@schema("public")` removido de todos os 178 modelos (zero ocorrências)
+- **Prisma schema**: `@@schema("public")` removido de todos os 180 modelos (zero ocorrências)
 
 ### 🧪 Tests
 - **AuthController tests**: Corrigidos 18 testes quebrados
   - Mock de `asyncHandler` como pass-through com try/catch
   - Atualizados mocks do Prisma Client (`users.findUnique`, `patients.findFirst`)
   - Ajustadas mensagens de erro para refletir factories `Errors.*` / `ApiError`
-  - Resultado: **17 suites passed, 363 tests passed, 0 failures**
+  - Resultado: **17 suites passed, 367 tests passed, 0 failures**
 
 ### 🎨 Frontend
 - **React Compiler fix**: `Auth.tsx` — substituído `window.location.href` por `navigate()` do react-router-dom (2 erros `react-hooks/immutability`)
