@@ -13,7 +13,7 @@
 
 O **OrthoPlus Enterprise** é um monorepo full-stack de gestão odontológica com:
 
-- **Frontend**: React 19 + Vite 6 + Tailwind CSS v4 (porta 3000 dev / 5173 legacy)
+- **Frontend**: React 18.3 + Vite 8 + Tailwind CSS 3.4 (porta 3000 dev / 5173 legacy)
 - **Backend**: Node.js 20 + Express 4 + Prisma 6 + PostgreSQL 16 (porta 3005)
 - **Agent Service**: Python 3.14 + FastAPI + Agno 2.5 (porta 8000)
 - **Banco de Dados**: PostgreSQL 16, 180 tabelas, 17 schemas (16 custom + public), role `orthoplus`
@@ -26,7 +26,7 @@ O **OrthoPlus Enterprise** é um monorepo full-stack de gestão odontológica co
 
 ```
 OrthoPlus-Enterprise/
-├── apps/web/                  # Frontend React 19 + Vite 6
+├── apps/web/                  # Frontend React 18.3 + Vite 8
 │   ├── src/modules/           # Módulos de domínio
 │   ├── src/contexts/          # AuthContext, etc.
 │   ├── src/routes/            # AppRoutes.tsx (60 rotas)
