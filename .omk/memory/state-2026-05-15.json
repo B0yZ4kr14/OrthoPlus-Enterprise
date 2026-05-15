@@ -1,57 +1,54 @@
 {
-  "project": "OrthoPlus-Enterprise",
-  "status": "CANONICAL",
-  "date": "2026-05-15",
-  "commit": "f3622030e",
-  "versions": {
-    "frontend_docker": "v2.9.9",
-    "backend_docker": "v2.5.3",
-    "root_package": "5.5.0",
-    "frontend_package": "1.0.0",
-    "backend_package": "1.0.0"
+  "timestamp": "2026-05-15T20:15:00-03:00",
+  "commit": "96533ddd4",
+  "forensic_status": "VALIDATED",
+  "discrepancies": 0,
+  "agents_executed": 8,
+  "evidence": {
+    "prisma_models": 180,
+    "prisma_schemas": 17,
+    "backend_modules": 37,
+    "frontend_routes": 60,
+    "workers": 9,
+    "backend_routers": 53,
+    "db_tables": 180,
+    "db_module_catalog": 37,
+    "db_clinic_modules": 37,
+    "backend_health": "200",
+    "frontend_health": "200",
+    "login_works": true,
+    "backend_build": true,
+    "frontend_build": true,
+    "docker_frontend": "orthoplus-frontend:v2.9.9",
+    "docker_backend": "orthoplus-backend:v2.5.3",
+    "docker_redis": "orthoplus-redis"
   },
-  "infrastructure": {
-    "local": {
-      "frontend_container": "tsiapp-orthoplus",
-      "frontend_image": "orthoplus-frontend:v2.9.9",
-      "frontend_status": "healthy",
-      "frontend_port": "8083",
-      "backend_container": "tsiapp-orthoplus-backend",
-      "backend_image": "orthoplus-backend:v2.5.3",
-      "backend_status": "running",
-      "backend_port": "3005",
-      "backend_network": "host",
-      "redis_container": "orthoplus-redis",
-      "redis_image": "redis:7-alpine",
-      "redis_port": "6379",
-      "postgres_host": "localhost:5432",
-      "postgres_database": "orthoplus",
-      "postgres_role": "orthoplus",
-      "postgres_schemas": 17,
-      "postgres_tables": 180
+  "sync_status": {
+    "local": true,
+    "github": true,
+    "docker": true,
+    "database": true,
+    "tsi_vault": true,
+    "omk_memory": true
+  },
+  "pending_issues": [
+    {
+      "file": "apps/web/src/modules/estoque/infrastructure/repositories/ApiProdutoRepository.ts",
+      "line": 10,
+      "issue": "TS2322: Type 'T | { data?: T | undefined; }' is not assignable to type 'T'",
+      "severity": "low",
+      "blocking": false
     },
-    "vps": {
-      "host": "100.111.74.69",
-      "frontend_container": "tsiapp-orthoplus",
-      "frontend_image": "orthoplus-frontend:v2.9.9",
-      "backend_container": "tsiapp-orthoplus-backend",
-      "backend_image": "orthoplus-backend:v2.5.3",
-      "url": "https://tsiapp.io/OrthoPlus-Enterprise/"
+    {
+      "files": ["lgpd", "pep", "split_pagamento", "terminal", "tiss"],
+      "issue": "TS6133: 'req' is declared but its value is never read",
+      "severity": "low",
+      "blocking": false
+    },
+    {
+      "issue": "Container backend sem healthcheck Docker configurado",
+      "severity": "low",
+      "blocking": false
     }
-  },
-  "validation": {
-    "frontend_build": "pass",
-    "backend_build": "pass",
-    "backend_tests": "367/367",
-    "backend_test_suites": "17/17",
-    "forensic_round3": "0 discrepancies"
-  },
-  "sources_of_truth": {
-    "code": "GitHub B0yZ4kr14/OrthoPlus-Enterprise main@f3622030e",
-    "docs_repo": "docs/CANONICAL-2026-05-14.md + AGENTS.md",
-    "docs_vault": "TSi-Vault/orthoplus/canonical/",
-    "memory_omk": ".omk/memory/state-2026-05-15.json",
-    "vps": "Docker containers v2.9.9/v2.5.3",
-    "local": "Docker containers v2.9.9/v2.5.3"
-  }
+  ]
 }
