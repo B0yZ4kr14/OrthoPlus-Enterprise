@@ -2,6 +2,14 @@ import { Produto } from "@/domain/entities/Produto";
 import { IProdutoRepository } from "@/domain/repositories/IProdutoRepository";
 import { apiClient } from "@/lib/api/apiClient";
 
+// Backend estoque returns { success, data, meta } envelope instead of raw array
+function unwrapData<T>(response: T | { data?: T }): T {
+  if (response && typeof response === "object" && "data" in response) {
+    return (response as { data?: T }).data as T;
+  }
+  return response;
+}
+
 /**
  * Implementação do repositório de Produto usando apiClient
  */
@@ -40,17 +48,17 @@ export class ApiProdutoRepository implements IProdutoRepository {
   }
 
   async findByClinicId(clinicId: string): Promise<Produto[]> {
-    const data = await apiClient.get<Produto[]>("/estoque/produtos", {
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
       params: { clinicId },
     });
-    return data || [];
+    return unwrapData(response) || [];
   }
 
   async findActiveByClinicId(clinicId: string): Promise<Produto[]> {
-    const data = await apiClient.get<Produto[]>("/estoque/produtos", {
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
       params: { clinicId, ativo: true },
     });
-    return data || [];
+    return unwrapData(response) || [];
   }
 
   async findByCategoria(
@@ -62,24 +70,24 @@ export class ApiProdutoRepository implements IProdutoRepository {
       | "CONSUMIVEL"
       | "OUTRO",
   ): Promise<Produto[]> {
-    const data = await apiClient.get<Produto[]>("/estoque/produtos", {
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
       params: { clinicId, categoria },
     });
-    return data || [];
+    return unwrapData(response) || [];
   }
 
   async findEstoqueBaixo(clinicId: string): Promise<Produto[]> {
-    const data = await apiClient.get<Produto[]>("/estoque/produtos", {
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
       params: { clinicId, filter: "baixo_estoque" },
     });
-    return data || [];
+    return unwrapData(response) || [];
   }
 
   async findEstoqueZerado(clinicId: string): Promise<Produto[]> {
-    const data = await apiClient.get<Produto[]>("/estoque/produtos", {
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
       params: { clinicId, filter: "zerado" },
     });
-    return data || [];
+    return unwrapData(response) || [];
   }
 
   async save(produto: Produto): Promise<void> {

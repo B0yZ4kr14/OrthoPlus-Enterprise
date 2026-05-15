@@ -1,7 +1,7 @@
 # AGENTS.md — OrthoPlus Enterprise
 
 > Arquivo de referência para agentes de IA que trabalham neste projeto.
-> **Atualizado:** 2026-05-14 | **Branch:** main | **Commit:** ca5b92cd4 | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.6
+> **Atualizado:** 2026-05-14 | **Branch:** main | **Commit:** c82e6e1be | **Checkpoint:** TSi-Vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-14.md | **Plano Ativo:** `docs/plans/correcao-orquestrada-2026-05-14.md` | **Frontend:** v2.9.7
 
 ---
 
@@ -279,7 +279,7 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **Validação UI completa**: 24 rotas do frontend retornam HTTP 200; landing page e login validados com screenshots
 
 ### Pendências Ativas
-- 🟡 **Frontend TS errors**: `crypto-pagamentos`, `marketing-auto`, `dentistas`, `usuarios`, `tour` (não impedem build)
+- ✅ **Frontend TS errors**: 0 erros (tsc --noEmit passa), 107 warnings pré-existentes
 - 🟡 **~28 mock/stub endpoints** (não 156): Apenas 8 módulos têm endpoints mockados — backups (12), github_tools (5), configuracoes (3), terminal (2), comm (2), crypto_config (2), analytics (1), dashboard (1). Todos os demais 29 módulos estão completos com CRUD real.
   - **backups**: necessita integração com storage real (S3/MinIO)
   - **github_tools**: necessita token GitHub real + Octokit
@@ -288,7 +288,14 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
 - ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
 - ✅ **Módulos em branco corrigidos**: `pacientes`, `financeiro`, `crm`, `agenda` — todos carregam corretamente (v2.9.5)
-- ✅ **Backend imagem v2.5**: Deployada com sucesso
+- ✅ **Backend imagem v2.5.2**: Deployada com sucesso (container persistente, health OK)
+- ✅ **Frontend imagem v2.9.8**: Deployada com sucesso (estoque fix aplicado)
+- ✅ **Validação orquestrada 52 rotas**: 41/41 rotas reais OK, 16 stubs identificados, 0 erros 403
+  - Clínica: 12/12 OK (incluindo Dentistas e Funcionários)
+  - Financeiro: 3/8 OK (5 stubs: conciliação, PDV, inadimplência, split, crypto)
+  - Marketing: 11/11 OK
+  - Admin: 3/14 OK (11 stubs: bancos, database, backups, crypto-config, github, terminal, wiki, monitoramento, logs, api-docs, audit)
+  - Outros: 8/8 OK (estoque corrigido, inventário OK)
 - 🟡 **SSL Expiry**:
   - `tsiapp.io`: Cloudflare Origin Certificate, válido até **May 2041** (não gerenciado por certbot)
   - `vps-tsi-02.tailbda57.ts.net`: Let's Encrypt (Tailscale), válido até **Jul 22 2026**
@@ -303,7 +310,11 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 ### Commits Recentes
 - `ca5b92cd4` — feat(backend): register per-module dbRouters for decentralized DB management
 - `8b3edaf74` — fix(tests): resolve backend test failures and TypeScript errors
-- **v2.9.5 (não commitado)** — fix(frontend): resolve blank pages on protected modules (pacientes, financeiro, crm, agenda)
+- `c82e6e1be` — fix(backend): add DENTISTAS and FUNCIONARIOS to MODULE_CATALOG
+- `ce0802026` — docs: update AGENTS.md module table
+- `58daf9007` — fix(prisma): add missing relations contas_receber↔patients and crypto_price_alerts↔profiles
+- `f1fd607ef` — fix(frontend): show admin-only menu items (ADMIN_ONLY moduleKey)
+- `a5d2cb5e3` — fix(frontend): resolve blank pages on protected modules (pacientes, financeiro, crm, agenda)
   - Added `/403` route to `AppRoutes.tsx`
   - Fixed `hasModuleAccess` to allow access while `userRole` is loading
   - Added fallback for ADMIN when `activeModules` is empty
@@ -320,15 +331,15 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - **TSi-Vault orquestração:** `orthoplus/checkpoints/OrthoPlus-Orchestration-Prompt-2026-05-13.md`
 
 ### Contexto de Deploy
-- **Imagem frontend atual:** `orthoplus-frontend:v2.9.4` (fix login redirect via AuthContext + useEffect, toast import, type-check clean)
-- **Imagem backend atual:** `orthoplus-backend:v2.4` (imagem Docker limpa, prisma generate funcionando)
+- **Imagem frontend atual:** `orthoplus-frontend:v2.9.7` (blank pages fix, ADMIN_ONLY fix, hasModuleAccess fallback, dbRouters)
+- **Imagem backend atual:** `orthoplus-backend:v2.5.2` (health check public, Prisma relations, MODULE_CATALOG completo, dbRouters)
 - **Container frontend:** `tsiapp-orthoplus` (porta 8083)
 - **Container backend:** `tsiapp-orthoplus-backend` (porta 3005, network=host)
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
 
 ### Deploy VPS (2026-05-14) — ESTADO ATUAL VERIFICADO
-- ✅ **Frontend v2.9.3 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.9.3`
-- ✅ **Backend v2.4 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.4`
+- ✅ **Frontend v2.9.7 deployado** — container `tsiapp-orthoplus` rodando `orthoplus-frontend:v2.9.7`
+- ✅ **Backend v2.5.2 deployado** — container `tsiapp-orthoplus-backend` rodando `orthoplus-backend:v2.5.2`
 - ✅ **Banco recriado** com schema Prisma completo: 180 tabelas em 16 schemas
 - ✅ **module_catalog sincronizado**: 31 módulos ativos
 - ✅ **clinic_modules**: 31 associações ativas para clinic do admin
