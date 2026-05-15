@@ -1,0 +1,57 @@
+{
+  "project": "OrthoPlus-Enterprise",
+  "status": "CANONICAL",
+  "date": "2026-05-15",
+  "commit": "f3622030e",
+  "versions": {
+    "frontend_docker": "v2.9.9",
+    "backend_docker": "v2.5.3",
+    "root_package": "5.5.0",
+    "frontend_package": "1.0.0",
+    "backend_package": "1.0.0"
+  },
+  "infrastructure": {
+    "local": {
+      "frontend_container": "tsiapp-orthoplus",
+      "frontend_image": "orthoplus-frontend:v2.9.9",
+      "frontend_status": "healthy",
+      "frontend_port": "8083",
+      "backend_container": "tsiapp-orthoplus-backend",
+      "backend_image": "orthoplus-backend:v2.5.3",
+      "backend_status": "running",
+      "backend_port": "3005",
+      "backend_network": "host",
+      "redis_container": "orthoplus-redis",
+      "redis_image": "redis:7-alpine",
+      "redis_port": "6379",
+      "postgres_host": "localhost:5432",
+      "postgres_database": "orthoplus",
+      "postgres_role": "orthoplus",
+      "postgres_schemas": 17,
+      "postgres_tables": 180
+    },
+    "vps": {
+      "host": "100.111.74.69",
+      "frontend_container": "tsiapp-orthoplus",
+      "frontend_image": "orthoplus-frontend:v2.9.9",
+      "backend_container": "tsiapp-orthoplus-backend",
+      "backend_image": "orthoplus-backend:v2.5.3",
+      "url": "https://tsiapp.io/OrthoPlus-Enterprise/"
+    }
+  },
+  "validation": {
+    "frontend_build": "pass",
+    "backend_build": "pass",
+    "backend_tests": "367/367",
+    "backend_test_suites": "17/17",
+    "forensic_round3": "0 discrepancies"
+  },
+  "sources_of_truth": {
+    "code": "GitHub B0yZ4kr14/OrthoPlus-Enterprise main@f3622030e",
+    "docs_repo": "docs/CANONICAL-2026-05-14.md + AGENTS.md",
+    "docs_vault": "TSi-Vault/orthoplus/canonical/",
+    "memory_omk": ".omk/memory/state-2026-05-15.json",
+    "vps": "Docker containers v2.9.9/v2.5.3",
+    "local": "Docker containers v2.9.9/v2.5.3"
+  }
+}
