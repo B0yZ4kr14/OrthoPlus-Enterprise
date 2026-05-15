@@ -289,8 +289,8 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - ✅ **CI unificado**: todos os workflows padronizados para `pnpm`
 - ✅ **package.json workspaces**: inclui `backend` e `shared-types` (alinhado com `pnpm-workspace.yaml`)
 - ✅ **Módulos em branco corrigidos**: `pacientes`, `financeiro`, `crm`, `agenda` — todos carregam corretamente (v2.9.5)
-- ✅ **Backend imagem v2.5.3**: Deployada com sucesso no VPS (docs canonical, container persistente, health OK)
-- ✅ **Frontend imagem v2.9.9**: Deployada com sucesso no VPS (docs canonical, estoque fix aplicado)
+- ✅ **Backend imagem v2.5.3**: Deployada com sucesso no VPS e local (docs canonical, container persistente, health OK)
+- ✅ **Frontend imagem v2.9.9**: Deployada com sucesso no VPS e local (docs canonical, estoque fix aplicado)
 - ✅ **Validação orquestrada 60 rotas**: 41/41 rotas reais OK, 16 stubs identificados, 0 erros 403
   - Clínica: 12/12 OK (incluindo Dentistas e Funcionários)
   - Financeiro: 3/8 OK (5 stubs: conciliação, PDV, inadimplência, split, crypto)
@@ -334,9 +334,10 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 ### Contexto de Deploy
 - **Imagem frontend atual:** `orthoplus-frontend:v2.9.9` (blank pages fix, ADMIN_ONLY fix, hasModuleAccess fallback, dbRouters, docs canonical)
 - **Imagem backend atual:** `orthoplus-backend:v2.5.3` (health check public, Prisma relations, MODULE_CATALOG completo, dbRouters, docs canonical)
-- **Container frontend (VPS):** `tsiapp-orthoplus` (porta 8083, imagem `orthoplus-frontend:v2.9.9`)
-- **Container backend (VPS):** `tsiapp-orthoplus-backend` (porta 3005, network=host, imagem `orthoplus-backend:v2.5.3`)
-- **Nota:** Containers v2.9.9/v2.5.3 estão no VPS; localmente as imagens máximas são v2.9.6/v2.5.2
+- **Container frontend (Local):** `tsiapp-orthoplus` (porta 8083, imagem `orthoplus-frontend:v2.9.9`, status: healthy)
+- **Container backend (Local):** `tsiapp-orthoplus-backend` (porta 3005, network=host, imagem `orthoplus-backend:v2.5.3`, status: running)
+- **Container Redis (Local):** `orthoplus-redis` (porta 6379, imagem `redis:7-alpine`)
+- **Nota:** Ambiente local sincronizado com VPS em 2026-05-15
 - **Nginx:** `location = / { return 301 /OrthoPlus-Enterprise/; }` + `/orthoplus-enterprise/` case-insensitive
 
 ### Deploy VPS (2026-05-14) — ESTADO ATUAL VERIFICADO

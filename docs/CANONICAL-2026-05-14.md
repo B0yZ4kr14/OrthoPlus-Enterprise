@@ -214,18 +214,19 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 
 ## 10. Estado Atual do Deploy VPS (2026-05-14)
 
-### Containers Docker
-| Componente | Imagem | Container | Porta | Network |
-|------------|--------|-----------|-------|---------|
-| Frontend | `orthoplus-frontend:v2.9.9` | `tsiapp-orthoplus` | 127.0.0.1:8083→8080 | bridge |
-| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | host |
+### Containers Docker (Local + VPS)
+| Componente | Imagem | Container | Porta | Network | Status |
+|------------|--------|-----------|-------|---------|--------|
+| Frontend | `orthoplus-frontend:v2.9.9` | `tsiapp-orthoplus` | 127.0.0.1:8083→8080 | bridge | ✅ healthy |
+| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | host | ✅ running |
+| Redis | `redis:7-alpine` | `orthoplus-redis` | 127.0.0.1:6379 | host | ✅ running |
 
 ### Health Checks
 | Endpoint | Status |
 |----------|--------|
 | `GET /health` | ✅ 200 |
 | `GET /api/health` | ✅ 200 |
-| `POST /api/auth/token` | ✅ 200 |
+| `POST /api/auth/token` | ✅ 200 (admin@orthoplus.com / admin123!) |
 | `GET /api/clinics/{id}/active-modules` | ✅ 37 módulos |
 
 ### Banco de Dados
@@ -235,11 +236,12 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 - **Schemas**: 17 (public + 16 custom: core, operacional, comercial, clinico, administrativo, pacientes, financeiro, faturamento, pdv, pep, inventario, configuracoes, backups, crypto_config, github_tools, terminal)
 - **Tabelas**: 180
 - **module_catalog**: 37 módulos cadastrados
-- **clinic_modules**: 37 associações ativas para a clínica principal
+- **clinic_modules**: 37 associações ativas para clinic-001
 
 ### Redis
 - **Host**: 127.0.0.1:6379
 - **Autenticado**: Sim (requirepass)
+- **Container**: `orthoplus-redis` (local)
 
 ### Nginx
 - Config: `/etc/nginx/sites-enabled/tsiapp-https`
