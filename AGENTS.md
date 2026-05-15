@@ -299,11 +299,12 @@ O frontend aplica Clean Architecture de forma **parcial** — não uniforme entr
 - **Container Redis (Local):** `orthoplus-redis` (porta 6379)
 
 ### Deploy VPS (2026-05-15)
-- ⚠️ **Código desatualizado**: VPS em `Warning:` vs Local/GitHub em `3e7f0f9d`
-- ⚠️ **Build em andamento**: Docker build iniciado em background na VPS
+- ⚠️ **Código desatualizado**: VPS em `89aa485` vs Local/GitHub em `3e7f0f9`
+- ✅ **Build concluído**: Imagem `apps-orthoplus` buildada e deployada
+- ✅ **Docker compose fix**: Port mapping corrigido de `8083:80` para `8083:8080`
 - ✅ **Containers rodando**: frontend (healthy), backend (running), redis (running)
 - ✅ **Banco**: 180 tabelas, 37 módulos catalogados
-
+- ✅ **Login funcional**: `admin@orthoplus.com` / `admin123!`
 ### Como Continuar
 1. Verificar `git log --oneline -3` e `git status`
 2. Rodar builds: `cd backend && pnpm build`, `cd apps/web && pnpm build`

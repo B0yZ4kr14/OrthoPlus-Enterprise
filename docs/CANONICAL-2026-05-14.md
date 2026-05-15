@@ -217,6 +217,38 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 ### Sincronia de Código
 | Ambiente | Commit | Status |
 |----------|--------|--------|
+| LOCAL | `3e7f0f9` | ✅ Atual |
+| GITHUB | `3e7f0f9` | ✅ Atual |
+| VPS (`/home/tsi/apps/orthoplus-enterprise`) | `3e7f0f9` | ✅ Atual (build concluído) |
+
+**Nota:** Build Docker concluído. Port mapping corrigido `8083:8080`. Frontend e backend respondendo 200.
+
+### Containers Docker (VPS)
+| Componente | Imagem | Container | Porta | Status |
+|------------|--------|-----------|-------|--------|
+| Frontend | `apps-orthoplus:latest` | `tsiapp-orthoplus` | 127.0.0.1:8083→8080 | ✅ healthy |
+| Backend | `orthoplus-backend:v2.5.3` | `tsiapp-orthoplus-backend` | 3005 (host) | ✅ running |
+| Redis | `redis:7-alpine` | `orthoplus-redis` | 127.0.0.1:6379 | ✅ running |
+
+### Health Checks
+| Endpoint | Status |
+|----------|--------|
+| `GET /health` | ✅ 200 |
+| `GET /api/health` | ✅ 200 |
+| `POST /api/auth/token` | ✅ 200 |
+| Frontend `/` | ✅ 200 |
+
+### Banco de Dados
+- **Host**: 127.0.0.1:5432
+- **Database**: `orthoplus`
+- **Role**: `orthoplus`
+- **Schemas**: 17 (public + 16 custom)
+- **Tabelas**: 180
+- **module_catalog**: 37 módulos cadastrados
+- **clinic_modules**: 37 associações ativas
+### Sincronia de Código
+| Ambiente | Commit | Status |
+|----------|--------|--------|
 | LOCAL | `3e7f0f9d` | ✅ Atual |
 | GITHUB | `3e7f0f9d` | ✅ Atual |
 | VPS (`/home/tsi/OrthoPlus-Enterprise`) | `Warning:` | ⚠️ Desatualizado |
