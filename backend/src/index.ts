@@ -73,6 +73,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import { prisma } from "./infrastructure/database/prismaClient";
 import { redisInstance, redisPublisher, redisSubscriber } from "./infrastructure/redis/redisClient";
 import { logger } from "./infrastructure/logger";
+import { prometheusMetrics } from "./infrastructure/metrics/PrometheusMetrics";
 
 dotenv.config();
 
@@ -222,6 +223,12 @@ app.get("/health", (_req, res) => {
 });
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
+});
+
+// Prometheus metrics endpoint (internal network only — no auth required)
+app.get("/metrics", async (_req, res) => {
+  res.set("Content-Type", "text/plain; version=0.0.4; charset=utf-8");
+  res.send(await prometheusMetrics.getMetrics());
 });
 
 // Auth middleware — populates req.clinicId from JWT for all routes

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Database, Server, Activity, HardDrive, Layers, Globe, Shield } from "lucide-react";
+import { Database, Server, Activity, HardDrive, Layers, Globe, Shield, BarChart3, ExternalLink } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { DatabaseAdvancedPanel } from "../components/database/DatabaseAdvancedPanel";
 import { BackupLocalCard } from "../components/database/BackupLocalCard";
@@ -201,6 +201,31 @@ export default function DatabaseManagementPage() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Observabilidade / Prometheus */}
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <BarChart3 className="h-5 w-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-medium">Observabilidade</p>
+                    <p className="text-xs text-muted-foreground">
+                      Métricas Prometheus coletadas a cada 10s
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href="/grafana"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                >
+                  Grafana <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Health por Categoria */}
           <Card>

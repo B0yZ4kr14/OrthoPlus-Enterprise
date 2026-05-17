@@ -9,9 +9,12 @@ import { logger } from "@/infrastructure/logger";
 import { MasterDatabaseManager } from "../infrastructure/MasterDatabaseManager";
 import { circuitBreakerRegistry } from "@/infrastructure/database/CategoryCircuitBreaker";
 import { BackupSchedulerService } from "../infrastructure/BackupSchedulerService";
+import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics";
+import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector";
 
 const masterManager = new MasterDatabaseManager();
 const backupService = new BackupSchedulerService();
+const metricsCollector = getMetricsCollector(prometheusMetrics.getRegistry());
 
 export class MasterDatabaseController {
   // ─── Categories ───
@@ -41,6 +44,16 @@ export class MasterDatabaseController {
         return;
       }
       const health = await masterManager.getHealth();
+
+      // Emitir métricas
+      for (const cat of health.categories) {
+        metricsCollector.database.recordHealthCheck(
+          cat.category,
+          cat.latencyMs,
+          cat.status
+        );
+      }
+
       res.json(health);
     } catch (error) {
       logger.error("Error getting master health", { error });
@@ -56,6 +69,16 @@ export class MasterDatabaseController {
         return;
       }
       const stats = await masterManager.getStats();
+
+      // Emitir métricas
+      for (const cat of stats.categories) {
+        metricsCollector.database.recordStats(
+          cat.category,
+          cat.tableCount,
+          cat.sizeBytes
+        );
+      }
+
       res.json(stats);
     } catch (error) {
       logger.error("Error getting master stats", { error });
@@ -106,6 +129,10 @@ export class MasterDatabaseController {
         return;
       }
       const metrics = circuitBreakerRegistry.getAllMetrics();
+
+      // Emitir métricas Prometheus
+      metricsCollector.circuitBreaker.collect();
+
       res.json({ metrics });
     } catch (error) {
       logger.error("Error getting circuit metrics", { error });
@@ -162,7 +189,20 @@ export class MasterDatabaseController {
 
       const { category } = req.params;
       const { compress } = req.body;
+
       const result = await backupService.executeBackup(category, { compress });
+
+      // Emitir métricas Prometheus
+      if (result.success) {
+        metricsCollector.backup.recordSuccess(
+          category,
+          result.durationMs,
+          result.sizeBytes
+        );
+      } else {
+        metricsCollector.backup.recordFailure(category);
+      }
+
       res.json(result);
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Internal server error";

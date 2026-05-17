@@ -20,12 +20,9 @@ rule_files:
 scrape_configs:
   # Backend API Metrics
   - job_name: 'orthoplus-backend'
-    dns_sd_configs:
-      - names:
-          - 'tasks.backend'
-        type: 'A'
-        port: 3005
     metrics_path: '/metrics'
+    static_configs:
+      - targets: ["backend:3005"]
     scrape_interval: 10s
 
   # PostgreSQL Databases
@@ -78,13 +75,4 @@ scrape_configs:
 
   # Node Exporter (System Metrics)
   - job_name: 'node-exporter'
-    dns_sd_configs:
-      - names:
-          - 'tasks.node-exporter'
-        type: 'A'
-        port: 9100
-
-  # Prometheus Self-monitoring
-  - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
