@@ -100,6 +100,7 @@ export class PacientesController {
         addressState: req.body.addressState,
         addressZipcode: req.body.addressZipcode,
         notes: req.body.notes,
+        photoUrl: req.body.photoUrl,
         updatedBy: user.id,
       };
 

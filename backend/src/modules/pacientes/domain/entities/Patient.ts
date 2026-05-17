@@ -38,6 +38,9 @@ export interface PatientProps {
   // Dados comerciais
   dadosComerciais?: DadosComerciaisVO;
 
+  // Foto
+  photoUrl?: string;
+
   // Observações
   notes?: string;
   totalDebt?: number;
@@ -96,6 +99,10 @@ export class Patient {
 
   get cpf(): string | undefined {
     return this.props.cpf;
+  }
+
+  get photoUrl(): string | undefined {
+    return this.props.photoUrl;
   }
 
   get email(): string | undefined {
@@ -201,6 +208,15 @@ export class Patient {
   }
 
   // Business logic: Atualizar dados pessoais e de contato
+  atualizarFoto(photoUrl: string | undefined, updatedBy: string): void {
+    this.props.photoUrl = photoUrl;
+    this.props.updatedAt = new Date();
+    this.props.updatedBy = updatedBy;
+    this.domainEvents.push(
+      new DomainEvent("PatientPhotoUpdated", { patientId: this.props.id, photoUrl }),
+    );
+  }
+
   atualizarDadosPessoais(
     dados: Partial<PatientProps>,
     updatedBy: string,

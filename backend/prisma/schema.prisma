@@ -1798,6 +1798,7 @@ model patients {
   clinical_observations          String?
   cnpj_empresa                   String?
   cpf                            String?
+  photo_url                      String?
   created_at                     DateTime @default(now())
   created_by                     String?
   current_medications            String[]

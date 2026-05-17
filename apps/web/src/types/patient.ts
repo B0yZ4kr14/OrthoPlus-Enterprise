@@ -95,4 +95,7 @@ export interface Patient {
   marketing_source?: string | null;
   marketing_event?: string | null;
   marketing_promoter?: string | null;
+
+  // Photo
+  photo_url?: string | null;
 }

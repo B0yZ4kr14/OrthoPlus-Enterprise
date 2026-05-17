@@ -20,6 +20,7 @@ export interface UpdatePatientDTO {
   addressState?: string;
   addressZipcode?: string;
   notes?: string;
+  photoUrl?: string;
   clinicId: string;
   updatedBy: string;
 }
@@ -54,6 +55,10 @@ export class UpdatePatientCommand {
         addressZipcode: data.addressZipcode,
         notes: data.notes,
       }, data.updatedBy);
+
+      if (data.photoUrl !== undefined) {
+        patient.atualizarFoto(data.photoUrl, data.updatedBy);
+      }
 
       await this.patientRepository.update(patient);
 

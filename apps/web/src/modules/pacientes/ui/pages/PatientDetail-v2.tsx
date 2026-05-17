@@ -1,3 +1,4 @@
+import { PatientPhotoUpload } from "../../components/PatientPhotoUpload";
 import { useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
@@ -56,6 +57,7 @@ interface PatientAPIData {
   updatedAt: string;
   createdBy?: string;
   updatedBy?: string;
+  photoUrl?: string;
 }
 
 function TimelineTab({ patientId }: { patientId: string | undefined }) {
@@ -111,6 +113,15 @@ export default function PatientDetail() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
+          <PatientPhotoUpload
+            patientId={patient.id}
+            currentPhotoUrl={patient.photo_url ?? undefined}
+            patientName={patient.full_name}
+            onPhotoUpdated={(url) => {
+              // Atualiza localmente sem refetch completo
+              patient.photo_url = url;
+            }}
+          />
           <div>
             <h1 className="text-3xl font-bold">{patient.full_name}</h1>
             <div className="flex items-center gap-3 mt-1">
