@@ -11,11 +11,13 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Plus, FileText, Clock, CheckCircle, XCircle, Calculator } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils/formatting.utils";
 import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function OrcamentosPage() {
+  const navigate = useNavigate();
   const {
     orcamentos,
     loading,

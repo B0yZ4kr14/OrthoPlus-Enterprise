@@ -1,9 +1,15 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
+import { OrcamentoService, CreateOrcamentoInput, AddItemInput } from "../application/services/OrcamentoService";
 import { createOrcamentoSchema, updateOrcamentoSchema, addItemSchema } from "./schemas";
 
 export class OrcamentosController {
+  private service: OrcamentoService;
+
+  constructor() {
+    this.service = new OrcamentoService();
+  }
+
   async list(req: Request, res: Response) {
     try {
       const clinicId = req.user?.clinicId;
@@ -12,13 +18,11 @@ export class OrcamentosController {
         return;
       }
       const { patient_id, status } = req.query;
-      const where: Record<string, unknown> = { clinic_id: clinicId };
-      if (patient_id) where.patient_id = String(patient_id);
-      if (status) where.status = String(status);
-      const data = await (prisma as any).orcamentos.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where,
-        orderBy: { created_at: "desc" },
-      });
+      const filters = {
+        ...(patient_id && { patient_id: String(patient_id) }),
+        ...(status && { status: String(status) }),
+      };
+      const data = await this.service.list(clinicId, filters);
       res.json(data);
     } catch (error) {
       logger.error("Error listing orcamentos", { error });
@@ -34,7 +38,7 @@ export class OrcamentosController {
         return;
       }
       const { id } = req.params;
-      const data = await (prisma as any).orcamentos.findFirst({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await this.service.getById(id, clinicId);
       if (!data) {
         res.status(404).json({ error: "Orçamento not found" });
         return;
@@ -49,7 +53,8 @@ export class OrcamentosController {
   async create(req: Request, res: Response) {
     try {
       const clinicId = req.user?.clinicId;
-      if (!clinicId) {
+      const createdBy = req.user?.id;
+      if (!clinicId || !createdBy) {
         res.status(401).json({ error: "Missing clinic context" });
         return;
       }
@@ -58,9 +63,7 @@ export class OrcamentosController {
         res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
         return;
       }
-      const data = await (prisma as any).orcamentos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId },
-      });
+      const data = await this.service.create({ ...parsed.data, created_by: createdBy } as CreateOrcamentoInput, clinicId);
       res.status(201).json(data);
     } catch (error) {
       logger.error("Error creating orcamento", { error });
@@ -76,20 +79,16 @@ export class OrcamentosController {
         return;
       }
       const { id } = req.params;
-      const existing = await (prisma as any).orcamentos.findFirst({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (!existing) {
-        res.status(404).json({ error: "Orçamento not found" });
-        return;
-      }
       const parsed = updateOrcamentoSchema.safeParse(req.body);
       if (!parsed.success) {
         res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
         return;
       }
-      const data = await (prisma as any).orcamentos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id },
-        data: parsed.data,
-      });
+      const data = await this.service.update(id, parsed.data, clinicId);
+      if (!data) {
+        res.status(404).json({ error: "Orçamento not found" });
+        return;
+      }
       res.json(data);
     } catch (error) {
       logger.error("Error updating orcamento", { error });
@@ -105,16 +104,86 @@ export class OrcamentosController {
         return;
       }
       const { id } = req.params;
-      const existing = await (prisma as any).orcamentos.findFirst({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (!existing) {
+      const deleted = await this.service.delete(id, clinicId);
+      if (!deleted) {
         res.status(404).json({ error: "Orçamento not found" });
         return;
       }
-      await (prisma as any).orcamentos.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       res.status(204).send();
     } catch (error) {
       logger.error("Error deleting orcamento", { error });
       res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  // --- Ações de workflow ---
+  async enviar(req: Request, res: Response) {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Missing clinic context" });
+        return;
+      }
+      const { id } = req.params;
+      const data = await this.service.enviar(id, clinicId);
+      if (!data) {
+        res.status(404).json({ error: "Orçamento not found" });
+        return;
+      }
+      res.json(data);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Internal server error";
+      logger.error("Error enviando orcamento", { error });
+      res.status(400).json({ error: msg });
+    }
+  }
+
+  async aprovar(req: Request, res: Response) {
+    try {
+      const clinicId = req.user?.clinicId;
+      const aprovadoPor = req.user?.id;
+      if (!clinicId || !aprovadoPor) {
+        res.status(401).json({ error: "Missing clinic context" });
+        return;
+      }
+      const { id } = req.params;
+      const data = await this.service.aprovar(id, aprovadoPor, clinicId);
+      if (!data) {
+        res.status(404).json({ error: "Orçamento not found" });
+        return;
+      }
+      res.json(data);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Internal server error";
+      logger.error("Error aprovando orcamento", { error });
+      res.status(400).json({ error: msg });
+    }
+  }
+
+  async rejeitar(req: Request, res: Response) {
+    try {
+      const clinicId = req.user?.clinicId;
+      const rejeitadoPor = req.user?.id;
+      if (!clinicId || !rejeitadoPor) {
+        res.status(401).json({ error: "Missing clinic context" });
+        return;
+      }
+      const { id } = req.params;
+      const { motivo } = req.body;
+      if (!motivo || typeof motivo !== "string") {
+        res.status(400).json({ error: "Motivo de rejeição é obrigatório" });
+        return;
+      }
+      const data = await this.service.rejeitar(id, rejeitadoPor, motivo, clinicId);
+      if (!data) {
+        res.status(404).json({ error: "Orçamento not found" });
+        return;
+      }
+      res.json(data);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Internal server error";
+      logger.error("Error rejeitando orcamento", { error });
+      res.status(400).json({ error: msg });
     }
   }
 
@@ -127,10 +196,7 @@ export class OrcamentosController {
         return;
       }
       const { orcamento_id } = req.params;
-      const data = await (prisma as any).orcamento_itens.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { orcamento_id, orcamento: { clinic_id: clinicId } },
-        orderBy: { created_at: "asc" },
-      });
+      const data = await this.service.listItems(orcamento_id, clinicId);
       res.json(data);
     } catch (error) {
       logger.error("Error listing orcamento items", { error });
@@ -146,21 +212,16 @@ export class OrcamentosController {
         return;
       }
       const { orcamento_id } = req.params;
-      const orcamento = await (prisma as any).orcamentos.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: orcamento_id, clinic_id: clinicId },
-      });
-      if (!orcamento) {
-        res.status(404).json({ error: "Orçamento not found" });
-        return;
-      }
       const parsed = addItemSchema.safeParse(req.body);
       if (!parsed.success) {
         res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
         return;
       }
-      const data = await (prisma as any).orcamento_itens.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, orcamento_id },
-      });
+      const data = await this.service.addItem(orcamento_id, parsed.data as AddItemInput, clinicId);
+      if (!data) {
+        res.status(404).json({ error: "Orçamento not found" });
+        return;
+      }
       res.status(201).json(data);
     } catch (error) {
       logger.error("Error adding orcamento item", { error });

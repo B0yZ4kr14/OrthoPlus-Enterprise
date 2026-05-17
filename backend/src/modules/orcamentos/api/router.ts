@@ -13,6 +13,11 @@ router.patch("/:id", (req, res) => controller.update(req, res));
 router.put("/:id", (req, res) => controller.update(req, res));  // alias for frontend compatibility
 router.delete("/:id", (req, res) => controller.delete(req, res));
 
+// Workflow actions
+router.patch("/:id/enviar", (req, res) => controller.enviar(req, res));
+router.patch("/:id/aprovar", (req, res) => controller.aprovar(req, res));
+router.patch("/:id/rejeitar", (req, res) => controller.rejeitar(req, res));
+
 // Items
 router.get("/:orcamento_id/items", (req, res) => controller.listItems(req, res));
 router.post("/:orcamento_id/items", (req, res) => controller.addItem(req, res));

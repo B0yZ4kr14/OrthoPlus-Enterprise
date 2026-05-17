@@ -30,6 +30,9 @@ const ProcedimentosPage = lazy(() => import("@/modules/procedimentos").then((m) 
 const OrcamentosPage = lazy(
   () => import("@/modules/orcamentos/ui/pages/OrcamentosPage"),
 );
+const OrcamentoFormPage = lazy(
+  () => import("@/modules/orcamentos/ui/pages/OrcamentoFormPage"),
+);
 
 // Financeiro sub-pages
 const ContasReceber = lazy(
@@ -233,6 +236,8 @@ const AppRoutes = () => (
 
     {/* Orçamentos */}
     <Route path="/orcamentos" element={protectedRoute(<OrcamentosPage />, { moduleKey: "ORCAMENTOS" })} />
+    <Route path="/orcamentos/novo" element={protectedRoute(<OrcamentoFormPage />, { moduleKey: "ORCAMENTOS" })} />
+    <Route path="/orcamentos/editar/:id" element={protectedRoute(<OrcamentoFormPage />, { moduleKey: "ORCAMENTOS" })} />
 
     {/* Procedimentos */}
     <Route path="/procedimentos" element={protectedRoute(<ProcedimentosPage />, { moduleKey: "PROCEDIMENTOS" })} />
