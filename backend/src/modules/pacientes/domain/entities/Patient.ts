@@ -6,6 +6,7 @@
  */
 
 import { DomainEvent } from "@/shared/events/DomainEvent";
+import { PatientPhotoUpdatedEvent } from "../events/PatientPhotoUpdatedEvent";
 import { DadosComerciaisVO } from "../value-objects/DadosComerciaisVO";
 import { PatientStatus } from "../value-objects/PatientStatus";
 
@@ -213,7 +214,7 @@ export class Patient {
     this.props.updatedAt = new Date();
     this.props.updatedBy = updatedBy;
     this.domainEvents.push(
-      new DomainEvent("PatientPhotoUpdated", { patientId: this.props.id, photoUrl }),
+      new PatientPhotoUpdatedEvent(this.props.id, photoUrl),
     );
   }
 

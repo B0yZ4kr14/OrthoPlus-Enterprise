@@ -153,6 +153,23 @@ T001-T004 (Audit) → T101-T110 (Backend) → T201-T205 (Frontend Foundation)
 
 ---
 
+## Phase 7: Post-Implementation Security Hardening
+
+Executed via `/speckit-security-review` + `/speckit-checkpoint` + `/speckit-verify` + `/speckit-ripple`.
+
+- [x] SEC-001 Auto-create `uploads/` directory on server bootstrap (`backend/src/index.ts`)
+- [x] SEC-002 Multer `fileFilter` whitelist: PDF, JPG, PNG, DOCX, XLSX, DICOM (`backend/src/modules/files/api/router.ts`)
+- [x] SEC-003 Enforce 50MB file size limit via multer `limits`
+- [x] SEC-004 Sanitize `originalname` to prevent path traversal (`../`, `/`, `\\`, `:`)
+- [ ] SEC-005 Enforce visibility ACL by user role (PUBLICO/RESTRITO/CONFIDENCIAL) — **P2**
+- [ ] SEC-006 Virus/malware scan on upload — **P2**
+
+**Commits:**
+- `9e9c3889c` — feat(files): MVP implementation
+- `32faf40d8` — security(files): SEC-001 to SEC-004 upload hardening
+
+---
+
 ## Notes
 
 - **[P]** = Parallelizable (different files, no dependencies)
