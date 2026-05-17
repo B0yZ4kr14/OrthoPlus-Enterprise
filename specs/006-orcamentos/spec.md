@@ -80,29 +80,32 @@
 
 ## 3. Functional Requirements
 
-### FR-001: CRUD de Orçamentos
+### FR-001: CRUD de Orçamentos ✅ PARCIAL
 **Description**: Sistema deve permitir criar, ler, atualizar e excluir orçamentos de tratamento.
 **Priority**: Must Have
+**Status**: ✅ Scaffolding completo (2026-05-17)
 **Acceptance Criteria**:
-- Vinculação a paciente existente
-- Seleção múltipla de procedimentos
-- Cálculo automático do total
-- Aplicação de desconto percentual ou fixo
-- Validade configurável (padrão 30 dias)
+- ✅ Vinculação a paciente existente (via PatientSelector)
+- Seleção múltipla de procedimentos — pendente
+- ✅ Cálculo automático do total
+- ✅ Aplicação de desconto percentual ou fixo
+- ✅ Validade configurável (padrão 30 dias)
 
-### FR-002: Aprovação Digital
+### FR-002: Aprovação Digital ✅ PARCIAL
 **Description**: Paciente aprova ou rejeita orçamento via portal.
 **Priority**: Must Have
+**Status**: ✅ Backend workflow implementado (2026-05-17)
 **Acceptance Criteria**:
-- Link único enviado por email/SMS
-- Visualização responsiva (mobile)
-- Assinatura digital simples (clique para confirmar)
-- Rejeição com campo de motivo
-- Notificação automática à clínica
+- Link único enviado por email/SMS — pendente
+- Visualização responsiva (mobile) — pendente
+- ✅ Assinatura digital simples (workflow aprovar/rejeitar)
+- ✅ Rejeição com campo de motivo
+- Notificação automática à clínica — pendente
 
 ### FR-003: Geração de Contas a Receber
 **Description**: Ao aprovar, gera parcelas no financeiro.
 **Priority**: Must Have
+**Status**: ⏳ Pendente
 **Acceptance Criteria**:
 - Configuração de parcelamento (1x a 12x)
 - Vencimento mensal ajustável

@@ -4,7 +4,7 @@
 
 **Input**: Feature specification from `specs/006-orcamentos/spec.md`
 
-**Status**: Draft Plan — awaiting `/speckit-tasks` breakdown
+**Status**: Partially Implemented — scaffolding completo, user stories em progresso
 
 ---
 

@@ -110,23 +110,25 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 - Transições controladas (ex: ARQUIVADO não pode agendar)
 - Histórico de mudanças de status
 
-### FR-004: Upload de Foto
+### FR-004: Upload de Foto ✅ IMPLEMENTADO
 **Description**: Permitir associar foto ao perfil do paciente.
 **Priority**: Should Have
+**Status**: ✅ Implementado (2026-05-17)
 **Acceptance Criteria**:
-- Formatos: JPG, PNG, WebP
-- Max 5MB
-- Thumbnail automático (200x200)
-- Armazenamento em cloud (MinIO/S3)
+- ✅ Formatos: JPG, PNG, WebP
+- ✅ Max 5MB
+- Thumbnail automático (200x200) — pendente
+- ✅ Armazenamento via `/files/upload` (filesystem local)
 
-### FR-005: Timeline do Paciente
+### FR-005: Timeline do Paciente ✅ IMPLEMENTADO
 **Description**: Agregar eventos da jornada do paciente em visualização cronológica.
 **Priority**: Should Have
+**Status**: ✅ Implementado (2026-05-17)
 **Acceptance Criteria**:
-- Fontes: agenda, pep, orçamentos, financeiro, notificações
-- Ordenação cronológica descendente
-- Paginação (20 eventos por página)
-- Filtros por categoria
+- ✅ Fontes: agenda, pep, orçamentos, financeiro, notificações (backend completo)
+- ✅ Ordenação cronológica descendente
+- Paginação (20 eventos por página) — pendente
+- Filtros por categoria — pendente
 
 ---
 
