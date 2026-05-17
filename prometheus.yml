@@ -15,6 +15,7 @@ alerting:
 
 # Load rules
 rule_files:
+  - "prometheus-alerts.yml"
   # - "alerts.yml"
 
 scrape_configs:
