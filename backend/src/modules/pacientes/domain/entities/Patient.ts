@@ -134,6 +134,102 @@ export class Patient {
     return this.props.updatedAt;
   }
 
+  get rg(): string | undefined {
+    return this.props.rg;
+  }
+
+  get birthDate(): Date | undefined {
+    return this.props.birthDate;
+  }
+
+  get gender(): string | undefined {
+    return this.props.gender;
+  }
+
+  get phone(): string | undefined {
+    return this.props.phone;
+  }
+
+  get mobile(): string | undefined {
+    return this.props.mobile;
+  }
+
+  get addressStreet(): string | undefined {
+    return this.props.addressStreet;
+  }
+
+  get addressNumber(): string | undefined {
+    return this.props.addressNumber;
+  }
+
+  get addressComplement(): string | undefined {
+    return this.props.addressComplement;
+  }
+
+  get addressNeighborhood(): string | undefined {
+    return this.props.addressNeighborhood;
+  }
+
+  get addressCity(): string | undefined {
+    return this.props.addressCity;
+  }
+
+  get addressState(): string | undefined {
+    return this.props.addressState;
+  }
+
+  get addressZipcode(): string | undefined {
+    return this.props.addressZipcode;
+  }
+
+  get notes(): string | undefined {
+    return this.props.notes;
+  }
+
+  get createdBy(): string | undefined {
+    return this.props.createdBy;
+  }
+
+  get updatedBy(): string | undefined {
+    return this.props.updatedBy;
+  }
+
+  /**
+   * Serializa o aggregate para persistência no Prisma.
+   * Retorna todos os campos mapeados em snake_case.
+   */
+  toPersistence(): Record<string, unknown> {
+    return {
+      id: this.props.id,
+      clinic_id: this.props.clinicId,
+      full_name: this.props.fullName,
+      cpf: this.props.cpf ?? null,
+      rg: this.props.rg ?? null,
+      birth_date: this.props.birthDate ? this.props.birthDate.toISOString() : null,
+      gender: this.props.gender ?? null,
+      email: this.props.email ?? null,
+      phone_primary: this.props.phone ?? null,
+      phone_secondary: this.props.mobile ?? null,
+      address_street: this.props.addressStreet ?? null,
+      address_number: this.props.addressNumber ?? null,
+      address_complement: this.props.addressComplement ?? null,
+      address_neighborhood: this.props.addressNeighborhood ?? null,
+      address_city: this.props.addressCity ?? null,
+      address_state: this.props.addressState ?? null,
+      address_zipcode: this.props.addressZipcode ?? null,
+      status: this.props.status.code,
+      photo_url: this.props.photoUrl ?? null,
+      notes: this.props.notes ?? null,
+      is_active: this.props.isActive,
+      created_at: this.props.createdAt,
+      updated_at: this.props.updatedAt,
+      created_by: this.props.createdBy ?? null,
+      updated_by: this.props.updatedBy ?? null,
+      // Campos avançados (médicos, hábitos, LGPD) ficam null no MVP
+      // até serem modelados no domínio. O schema Prisma já os suporta.
+    };
+  }
+
   // Business logic: Alterar status
   alterarStatus(
     novoStatus: PatientStatus,

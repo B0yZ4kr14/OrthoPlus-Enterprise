@@ -72,9 +72,8 @@ export function usePatientsAPI(): UsePatientsReturn {
     patientData: Partial<Patient>,
   ) => {
     try {
-      await apiClient.patch(`/pacientes/${patientId}/status`, {
-        newStatus: patientData.status,
-      });
+      const apiData = PatientAdapter.toAPI(patientData);
+      await apiClient.put(`/pacientes/${patientId}`, apiData);
 
       toast.success("Paciente atualizado com sucesso!");
       await loadPatients();

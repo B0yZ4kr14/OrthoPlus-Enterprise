@@ -166,32 +166,14 @@ export class PatientRepositoryPostgres implements IPatientRepository {
 
   async save(patient: Patient): Promise<void> {
     await prisma.patients.create({
-      data: {
-        id: patient.id,
-        clinic_id: patient.clinicId,
-        full_name: patient.fullName,
-        cpf: patient.cpf ?? null,
-        email: patient.email ?? null,
-        status: patient.statusCode,
-        birth_date: new Date().toISOString(),
-        phone_primary: '',
-        created_at: patient.createdAt,
-        updated_at: patient.updatedAt,
-      },
+      data: patient.toPersistence() as unknown as Parameters<typeof prisma.patients.create>[0]["data"],
     });
   }
 
   async update(patient: Patient): Promise<void> {
     await prisma.patients.updateMany({
       where: { id: patient.id, clinic_id: patient.clinicId },
-      data: {
-        full_name: patient.fullName,
-        cpf: patient.cpf ?? null,
-        email: patient.email ?? null,
-        photo_url: patient.photoUrl ?? null,
-        status: patient.statusCode,
-        updated_at: patient.updatedAt,
-      },
+      data: patient.toPersistence() as unknown as Parameters<typeof prisma.patients.updateMany>[0]["data"],
     });
   }
 
@@ -210,12 +192,27 @@ export class PatientRepositoryPostgres implements IPatientRepository {
       clinicId: row.clinic_id as string,
       fullName: row.full_name as string,
       cpf: row.cpf as string | undefined,
+      rg: row.rg as string | undefined,
+      birthDate: row.birth_date ? new Date(row.birth_date as string) : undefined,
+      gender: row.gender as string | undefined,
       email: row.email as string | undefined,
+      phone: row.phone_primary as string | undefined,
+      mobile: row.phone_secondary as string | undefined,
+      addressStreet: row.address_street as string | undefined,
+      addressNumber: row.address_number as string | undefined,
+      addressComplement: row.address_complement as string | undefined,
+      addressNeighborhood: row.address_neighborhood as string | undefined,
+      addressCity: row.address_city as string | undefined,
+      addressState: row.address_state as string | undefined,
+      addressZipcode: row.address_zipcode as string | undefined,
       photoUrl: row.photo_url as string | undefined,
+      notes: row.clinical_observations as string | undefined,
       status: PatientStatus.fromCode(statusCode),
       isActive: activeStatuses.includes(statusCode),
       createdAt: new Date(row.created_at as string),
       updatedAt: new Date(row.updated_at as string),
+      createdBy: row.created_by as string | undefined,
+      updatedBy: row.updated_by as string | undefined,
     });
   }
 }

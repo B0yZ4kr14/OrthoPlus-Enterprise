@@ -1,12 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { History, Calendar } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
+import { PatientTimeline } from "@/modules/pacientes/components/PatientTimeline";
+import { usePatientTimeline } from "@/modules/pacientes/hooks/usePatientTimeline";
 
 interface HistoricoTabProps {
-  patient: Record<string, any>;
+  patient: Record<string, unknown>;
 }
 
 export function HistoricoTab({ patient }: HistoricoTabProps) {
+  const { data: events = [], isLoading } = usePatientTimeline(patient.id as string);
+
   return (
     <div className="space-y-6">
       {/* Resumo do Histórico */}
@@ -24,7 +28,7 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
             </label>
             <p className="text-lg font-semibold mt-2">
               {patient.first_appointment_date
-                ? new Date(patient.first_appointment_date).toLocaleDateString(
+                ? new Date(patient.first_appointment_date as string).toLocaleDateString(
                     "pt-BR",
                   )
                 : "Não registrado"}
@@ -37,7 +41,7 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
             </label>
             <p className="text-lg font-semibold mt-2">
               {patient.last_appointment_date
-                ? new Date(patient.last_appointment_date).toLocaleDateString(
+                ? new Date(patient.last_appointment_date as string).toLocaleDateString(
                     "pt-BR",
                   )
                 : "Nunca consultou"}
@@ -55,7 +59,7 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
         </CardContent>
       </Card>
 
-      {/* Timeline de Eventos - Placeholder */}
+      {/* Timeline de Eventos */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -64,14 +68,7 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-12 text-muted-foreground">
-            <History className="h-16 w-16 mx-auto mb-4 opacity-50" />
-            <p>Timeline de eventos em desenvolvimento</p>
-            <p className="text-sm mt-2">
-              Aqui será exibida uma timeline completa com todas as consultas,
-              procedimentos, pagamentos e eventos relacionados ao paciente
-            </p>
-          </div>
+          <PatientTimeline events={events} isLoading={isLoading} />
         </CardContent>
       </Card>
 

@@ -8,30 +8,22 @@ import { dbRouter } from "./dbRouter";
 
 import { Router } from "express";
 import { AlterarStatusPacienteUseCase } from "../application/use-cases/AlterarStatusPacienteUseCase";
+import { CadastrarPacienteUseCase } from "../application/use-cases/CadastrarPacienteUseCase";
+import { AtualizarPacienteUseCase } from "../application/use-cases/AtualizarPacienteUseCase";
 import { PatientRepositoryPostgres } from "../infrastructure/repositories/PatientRepositoryPostgres";
 import { PacientesController } from "./PacientesController";
-import { CommandBus } from "@/shared/cqrs/CommandBus";
-import { QueryBus } from "@/shared/cqrs/QueryBus";
-import { CreatePatientCommand } from "../application/commands/CreatePatientCommand";
-import { UpdatePatientCommand } from "../application/commands/UpdatePatientCommand";
-import { GetPatientQuery } from "../application/queries/GetPatientQuery";
+
 
 // Injeção de dependências
 const patientRepository = new PatientRepositoryPostgres();
 
-const commandBus = new CommandBus();
-const queryBus = new QueryBus();
-
-// Handlers Registros
-commandBus.register("CreatePatientCommand", new CreatePatientCommand(patientRepository));
-commandBus.register("UpdatePatientCommand", new UpdatePatientCommand(patientRepository));
-queryBus.register("GetPatientQuery", new GetPatientQuery(patientRepository));
-
-const alterarStatusUseCase = new AlterarStatusPacienteUseCase(
-  patientRepository,
-);
+const cadastrarUseCase = new CadastrarPacienteUseCase(patientRepository);
+const atualizarUseCase = new AtualizarPacienteUseCase(patientRepository);
+const alterarStatusUseCase = new AlterarStatusPacienteUseCase(patientRepository);
 
 const controller = new PacientesController(
+  cadastrarUseCase,
+  atualizarUseCase,
   alterarStatusUseCase,
   patientRepository,
 );

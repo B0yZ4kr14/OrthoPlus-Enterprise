@@ -9,32 +9,28 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { AlterarStatusPacienteUseCase } from "../application/use-cases/AlterarStatusPacienteUseCase";
+import { CadastrarPacienteUseCase, CadastrarPacienteDTO } from "../application/use-cases/CadastrarPacienteUseCase";
+import { AtualizarPacienteUseCase, AtualizarPacienteDTO } from "../application/use-cases/AtualizarPacienteUseCase";
 import { IPatientRepository } from "../domain/repositories/IPatientRepository";
-import { CreatePatientCommand, CreatePatientDTO } from "../application/commands/CreatePatientCommand";
-import { UpdatePatientCommand, UpdatePatientDTO } from "../application/commands/UpdatePatientCommand";
 import { GetPatientQuery, GetPatientDTO } from "../application/queries/GetPatientQuery";
 
 export class PacientesController {
   constructor(
+    private cadastrarUseCase: CadastrarPacienteUseCase,
+    private atualizarUseCase: AtualizarPacienteUseCase,
     private alterarStatusUseCase: AlterarStatusPacienteUseCase,
     private patientRepository: IPatientRepository,
   ) {}
 
   /**
    * POST /api/pacientes
-   * Cadastra novo paciente
+   * Cadastra novo paciente (com deduplicação CPF/email)
    */
   async create(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;
 
-      /* Build the full DTO from request body.
-         NOTE: The CommandBus cannot be used correctly here because this codebase's
-         CQRS implementation conflates the command handler class with the command DTO
-         (both share the same constructor name, which the bus uses for routing).
-         We call the command handler directly — the same pattern used by
-         PatientCommandController (api/commands/PatientCommandController.ts). */
-      const data: CreatePatientDTO = {
+      const data: CadastrarPacienteDTO = {
         fullName: req.body.fullName,
         email: req.body.email,
         phone: req.body.phone,
@@ -56,8 +52,7 @@ export class PacientesController {
         createdBy: user.id,
       };
 
-      const handler = new CreatePatientCommand(this.patientRepository);
-      const result = await handler.execute(data);
+      const result = await this.cadastrarUseCase.execute(data);
 
       res.status(201).json({
         success: true,
@@ -65,23 +60,24 @@ export class PacientesController {
       });
     } catch (error: unknown) {
       logger.error("Error creating patient", { error, body: req.body });
+      const message = error instanceof Error ? error.message : "Erro ao criar paciente";
       res.status(400).json({
         success: false,
-        error: "Erro ao criar paciente",
+        error: message,
       });
     }
   }
 
   /**
    * PUT /api/pacientes/:id
-   * Atualiza dados de paciente existente
+   * Atualiza dados de paciente existente (com deduplicação CPF/email)
    */
   async update(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;
       const { id } = req.params;
 
-      const data: UpdatePatientDTO = {
+      const data: AtualizarPacienteDTO = {
         id,
         clinicId: user.clinicId,
         fullName: req.body.fullName,
@@ -100,12 +96,10 @@ export class PacientesController {
         addressState: req.body.addressState,
         addressZipcode: req.body.addressZipcode,
         notes: req.body.notes,
-        photoUrl: req.body.photoUrl,
         updatedBy: user.id,
       };
 
-      const handler = new UpdatePatientCommand(this.patientRepository);
-      await handler.execute(data);
+      await this.atualizarUseCase.execute(data);
 
       res.status(200).json({
         success: true,
@@ -117,9 +111,10 @@ export class PacientesController {
         body: req.body,
         patientId: req.params.id,
       });
+      const message = error instanceof Error ? error.message : "Erro ao atualizar paciente";
       res.status(400).json({
         success: false,
-        error: "Erro ao atualizar paciente",
+        error: message,
       });
     }
   }
