@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Database, Server, Activity, HardDrive, Layers, Globe } from "lucide-react";
+import { Database, Server, Activity, HardDrive, Layers, Globe, Shield } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { DatabaseAdvancedPanel } from "../components/database/DatabaseAdvancedPanel";
 import { BackupLocalCard } from "../components/database/BackupLocalCard";
@@ -14,6 +14,7 @@ import {
 } from "@orthoplus/core-ui/select";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import { useDatabaseCategories } from "../../hooks/useDatabaseCategories";
+import { CategoryBackupPanel } from "../components/database/CategoryBackupPanel";
 
 /** Mapeamento estático de schemas por categoria (fallback) */
 const CATEGORY_SCHEMAS: Record<string, string[]> = {
@@ -290,6 +291,9 @@ export default function DatabaseManagementPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Backups por Categoria */}
+          <CategoryBackupPanel />
         </div>
       )}
 

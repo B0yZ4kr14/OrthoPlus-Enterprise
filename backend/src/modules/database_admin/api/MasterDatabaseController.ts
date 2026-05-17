@@ -7,10 +7,15 @@ import { Request, Response } from "express";
 import { z } from "zod";
 import { logger } from "@/infrastructure/logger";
 import { MasterDatabaseManager } from "../infrastructure/MasterDatabaseManager";
+import { circuitBreakerRegistry } from "@/infrastructure/database/CategoryCircuitBreaker";
+import { BackupSchedulerService } from "../infrastructure/BackupSchedulerService";
 
 const masterManager = new MasterDatabaseManager();
+const backupService = new BackupSchedulerService();
 
 export class MasterDatabaseController {
+  // ─── Categories ───
+
   async getCategories(req: Request, res: Response): Promise<void> {
     try {
       const clinicId = req.user?.clinicId;
@@ -25,6 +30,8 @@ export class MasterDatabaseController {
       res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  // ─── Health & Stats ───
 
   async getMasterHealth(req: Request, res: Response): Promise<void> {
     try {
@@ -56,6 +63,8 @@ export class MasterDatabaseController {
     }
   }
 
+  // ─── Cross Query ───
+
   async crossQuery(req: Request, res: Response): Promise<void> {
     try {
       const clinicId = req.user?.clinicId;
@@ -83,6 +92,81 @@ export class MasterDatabaseController {
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Internal server error";
       logger.error("Error running cross-query", { error });
+      res.status(400).json({ error: msg });
+    }
+  }
+
+  // ─── Circuit Breaker ───
+
+  async getCircuitMetrics(req: Request, res: Response): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Não autenticado" });
+        return;
+      }
+      const metrics = circuitBreakerRegistry.getAllMetrics();
+      res.json({ metrics });
+    } catch (error) {
+      logger.error("Error getting circuit metrics", { error });
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async resetCircuit(req: Request, res: Response): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Não autenticado" });
+        return;
+      }
+
+      const { category } = req.params;
+      if (category) {
+        circuitBreakerRegistry.resetCategory(category);
+        res.json({ message: `Circuit breaker reset for ${category}` });
+      } else {
+        circuitBreakerRegistry.resetAll();
+        res.json({ message: "All circuit breakers reset" });
+      }
+    } catch (error) {
+      logger.error("Error resetting circuit breaker", { error });
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  // ─── Backup Scheduler ───
+
+  async getBackupStatus(req: Request, res: Response): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Não autenticado" });
+        return;
+      }
+      const status = await backupService.getAllBackupStatus();
+      res.json({ categories: status });
+    } catch (error) {
+      logger.error("Error getting backup status", { error });
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async executeBackup(req: Request, res: Response): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        res.status(401).json({ error: "Não autenticado" });
+        return;
+      }
+
+      const { category } = req.params;
+      const { compress } = req.body;
+      const result = await backupService.executeBackup(category, { compress });
+      res.json(result);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Internal server error";
+      logger.error("Error executing backup", { error });
       res.status(400).json({ error: msg });
     }
   }

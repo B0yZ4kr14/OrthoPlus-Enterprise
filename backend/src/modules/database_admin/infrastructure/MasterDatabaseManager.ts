@@ -2,20 +2,25 @@
  * MasterDatabaseManager — Federation Hub para Categorias de BD
  * 
  * Responsabilidades:
- * - Agregar health checks de todas as categorias
+ * - Agregar health checks de todas as categorias (com Circuit Breaker)
  * - Consolidar estatísticas (tamanho, tabelas, backups)
  * - Fornecer camada de federation para queries cross-schema (read-only)
- * - Gerenciar conexões entre categorias (routing)
+ * - Gerenciar conexões entre categorias (routing + circuit breaker)
  * 
  * Princípios DevSecOps:
+ * - Circuit Breaker por categoria (evita cascade failure)
  * - Read-only por padrão (princípio do menor privilégio)
  * - Schema isolation preservado
- * - Observabilidade agregada (métricas, health)
+ * - Observabilidade agregada (métricas, health, circuit state)
  * - Nunca faz WRITE cross-schema diretamente
  */
 
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Pool } from "pg";
+import {
+  circuitBreakerRegistry,
+  type CircuitBreakerConfig,
+} from "@/infrastructure/database/CategoryCircuitBreaker";
 
 export interface CategoryConfig {
   name: string;
@@ -26,10 +31,11 @@ export interface CategoryConfig {
 
 export interface CategoryHealth {
   category: string;
-  status: "healthy" | "degraded" | "down";
+  status: "healthy" | "degraded" | "down" | "circuit_open";
   schemas: string[];
   schemasFound: string[];
   latencyMs: number;
+  circuitState?: string;
 }
 
 export interface CategoryStats {
@@ -106,6 +112,14 @@ export const DB_CATEGORIES: CategoryConfig[] = [
   },
 ];
 
+const CB_CONFIG: CircuitBreakerConfig = {
+  failureThreshold: 3,
+  successThreshold: 2,
+  timeoutMs: 3000,
+  recoveryTimeoutMs: 15000,
+  halfOpenMaxCalls: 3,
+};
+
 export class MasterDatabaseManager {
   private pgPool: Pool | null = null;
 
@@ -128,13 +142,22 @@ export class MasterDatabaseManager {
     let overallStatus: "healthy" | "degraded" | "down" = "healthy";
 
     for (const cat of DB_CATEGORIES) {
+      const cb = circuitBreakerRegistry.getBreaker(cat.name, CB_CONFIG);
       const catStart = Date.now();
+
       try {
-        const result = await prisma.$queryRaw<{ schema_name: string }[]>`
-          SELECT schema_name
-          FROM information_schema.schemata
-          WHERE schema_name = ANY(${cat.schemas}::text[])
-        `;
+        const result = await cb.execute(
+          async () => {
+            const result = await prisma.$queryRaw<{ schema_name: string }[]>`
+              SELECT schema_name
+              FROM information_schema.schemata
+              WHERE schema_name = ANY(${cat.schemas}::text[])
+            `;
+            return result;
+          },
+          () => [] as { schema_name: string }[] // fallback: assume nenhum schema encontrado
+        );
+
         const foundSchemas = result.map((r) => r.schema_name);
         const allPresent = cat.schemas.every((s) => foundSchemas.includes(s));
         const status = allPresent ? "healthy" : "degraded";
@@ -149,6 +172,7 @@ export class MasterDatabaseManager {
           schemas: cat.schemas,
           schemasFound: foundSchemas,
           latencyMs: Date.now() - catStart,
+          circuitState: cb.getState(),
         });
       } catch {
         overallStatus = overallStatus === "healthy" ? "degraded" : "down";
@@ -158,6 +182,7 @@ export class MasterDatabaseManager {
           schemas: cat.schemas,
           schemasFound: [],
           latencyMs: Date.now() - catStart,
+          circuitState: cb.getState(),
         });
       }
     }
@@ -176,32 +201,41 @@ export class MasterDatabaseManager {
     let totalSizeBytes = 0;
 
     for (const cat of DB_CATEGORIES) {
+      const cb = circuitBreakerRegistry.getBreaker(cat.name, CB_CONFIG);
+
       try {
-        const tableCountResult = await prisma.$queryRaw<{ count: bigint }[]>`
-          SELECT COUNT(*) as count
-          FROM information_schema.tables
-          WHERE table_schema = ANY(${cat.schemas}::text[])
-            AND table_type = 'BASE TABLE'
-        `;
-        const tableCount = Number(tableCountResult[0]?.count ?? 0);
+        const result = await cb.execute(
+          async () => {
+            const tableCountResult = await prisma.$queryRaw<{ count: bigint }[]>`
+              SELECT COUNT(*) as count
+              FROM information_schema.tables
+              WHERE table_schema = ANY(${cat.schemas}::text[])
+                AND table_type = 'BASE TABLE'
+            `;
+            const tableCount = Number(tableCountResult[0]?.count ?? 0);
 
-        const sizeResult = await prisma.$queryRaw<{ total_size: bigint }[]>`
-          SELECT COALESCE(SUM(pg_total_relation_size(quote_ident(schemaname) || '.' || quote_ident(tablename))), 0) as total_size
-          FROM pg_tables
-          WHERE schemaname = ANY(${cat.schemas}::text[])
-        `;
-        const sizeBytes = Number(sizeResult[0]?.total_size ?? 0);
+            const sizeResult = await prisma.$queryRaw<{ total_size: bigint }[]>`
+              SELECT COALESCE(SUM(pg_total_relation_size(quote_ident(schemaname) || '.' || quote_ident(tablename))), 0) as total_size
+              FROM pg_tables
+              WHERE schemaname = ANY(${cat.schemas}::text[])
+            `;
+            const sizeBytes = Number(sizeResult[0]?.total_size ?? 0);
 
-        totalTables += tableCount;
-        totalSizeBytes += sizeBytes;
+            return { tableCount, sizeBytes };
+          },
+          () => ({ tableCount: 0, sizeBytes: 0 }) // fallback
+        );
+
+        totalTables += result.tableCount;
+        totalSizeBytes += result.sizeBytes;
 
         categories.push({
           category: cat.name,
           schemas: cat.schemas,
-          tableCount,
-          sizeBytes,
-          sizeHuman: this.formatBytes(sizeBytes),
-          lastBackup: null, // TODO: integrar com backup services
+          tableCount: result.tableCount,
+          sizeBytes: result.sizeBytes,
+          sizeHuman: this.formatBytes(result.sizeBytes),
+          lastBackup: null,
         });
       } catch {
         categories.push({
@@ -255,7 +289,7 @@ export class MasterDatabaseManager {
       throw new Error(`Schemas não autorizados: ${invalidSchemas.join(", ")}`);
     }
 
-    // Substituir placeholders de schema (ex: {{schema}}.tabela → "schema".tabela)
+    // Substituir placeholders de schema
     let finalQuery = sql;
     for (const schema of targetSchemas) {
       finalQuery = finalQuery.replace(
