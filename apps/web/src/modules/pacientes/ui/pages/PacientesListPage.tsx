@@ -14,6 +14,7 @@ import { StatsCard } from "@/components/shared/StatsCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import type { Patient } from "@/types/patient";
 import { getStatusTextColor } from "@/lib/utils/status.utils";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 export default function PacientesListPage() {
   const { clinicId } = useAuth();
@@ -126,7 +127,7 @@ export default function PacientesListPage() {
 
       {/* Patient List Premium */}
       <Card className="glass-card overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+        <CardTopBorder color="interactive" opacity={30} />
         <div className="divide-y divide-border/50">
           {filteredPatients.length === 0 ? (
             <div className="py-12">

@@ -100,6 +100,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [userPermissions, setUserPermissions] = useState<string[]>([]);
   const [activeModules, setActiveModules] = useState<string[]>([]); // Lista de module_keys ativos
+  // NOTE: Dual source of truth — AuthContext holds module keys (string[]) for fast access control.
+  // ModulesContext (below in provider tree) holds full Module objects for configuration UI.
+  // Future refactor: delegate hasModuleAccess() to useModulesContext() when safe to do so.
 
   // Derived state moved to bottom to avoid redeclaration
 

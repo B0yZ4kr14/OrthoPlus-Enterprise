@@ -10,10 +10,10 @@
 
 **Purpose**: Project verification and module audit
 
-- [ ] T001 Audit existing `files` backend module (Prisma models, controllers, routes)
-- [ ] T002 Audit existing `files` frontend module (components, hooks, pages)
-- [ ] T003 Identify gaps between spec and current implementation
-- [ ] T004 Document API contract changes (if any)
+- [x] T001 Audit existing `files` backend module (Prisma models, controllers, routes)
+- [x] T002 Audit existing `files` frontend module (components, hooks, pages)
+- [x] T003 Identify gaps between spec and current implementation
+- [x] T004 Document API contract changes (if any)
 
 ---
 
@@ -23,16 +23,16 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T101 [P] Backend: Upload — Armazenamento de arquivos com metadados.
-- [ ] T102 [P] Backend: Storage — Armazenamento seguro e escalável.
-- [ ] T103 [P] Backend: Visualização — Preview e download.
-- [ ] T104 [P] Prisma schema update + migration generation
-- [ ] T105 [P] Extend `filesService.ts` with new operations
-- [ ] T106 [P] Extend `filesController.ts` with new endpoints
-- [ ] T107 [P] Add clinicGuard to all new routes
-- [ ] T108 [P] Backend unit tests for new service methods
-- [ ] T109 Run `cd backend && pnpm type-check` (0 errors)
-- [ ] T110 Run `cd backend && pnpm test` (all pass)
+- [x] T101 [P] Backend: Upload — Armazenamento de arquivos com metadados.
+- [x] T102 [P] Backend: Storage — Armazenamento seguro e escalável.
+- [x] T103 [P] Backend: Visualização — Preview e download.
+- [x] T104 [P] Prisma schema update + migration generation
+- [x] T105 [P] Extend `filesService.ts` with new operations
+- [x] T106 [P] Extend `filesController.ts` with new endpoints
+- [x] T107 [P] Add clinicGuard to all new routes
+- [x] T108 [P] Backend unit tests for new service methods
+- [x] T109 Run `cd backend && pnpm type-check` (0 errors)
+- [x] T110 Run `cd backend && pnpm test` (all pass)
 
 **Checkpoint**: Backend API ready — all new endpoints tested
 
@@ -42,11 +42,11 @@
 
 **Purpose**: Data access layer and shared UI components
 
-- [ ] T201 [P] Update/add React Query hooks for `files` endpoints
-- [ ] T202 [P] Create/update reusable components in `files/ui/components/`
-- [ ] T203 [P] Add form validation (Zod schema matching backend DTOs)
-- [ ] T204 [P] Add routes to `AppRoutes.tsx` (if new pages)
-- [ ] T205 [P] Run `cd apps/web && pnpm type-check` (0 errors)
+- [x] T201 [P] Update/add React Query hooks for `files` endpoints
+- [x] T202 [P] Create/update reusable components in `files/ui/components/`
+- [x] T203 [P] Add form validation (Zod schema matching backend DTOs)
+- [x] T204 [P] Add routes to `AppRoutes.tsx` (if new pages)
+- [x] T205 [P] Run `cd apps/web && pnpm type-check` (0 errors)
 
 **Checkpoint**: Frontend can fetch and display data from new backend endpoints
 
@@ -60,12 +60,12 @@
 
 **Independent Test**: Verify via UI + API integration
 
-- [ ] T300 [P] [US1] UI: Create main page/component for Upload de Documento
-- [ ] T301 [P] [US1] UI: Form handlers and state management
-- [ ] T302 [US1] UI: Validation and error states
-- [ ] T303 [US1] UI: Success feedback (toast/redirect)
-- [ ] T304 [P] [US1] API: Connect frontend to backend endpoints
-- [ ] T305 [P] [US1] Test: Component + integration tests
+- [x] T300 [P] [US1] UI: Create main page/component for Upload de Documento
+- [x] T301 [P] [US1] UI: Form handlers and state management
+- [x] T302 [US1] UI: Validation and error states
+- [x] T303 [US1] UI: Success feedback (toast/redirect)
+- [x] T304 [P] [US1] API: Connect frontend to backend endpoints
+- [x] T305 [P] [US1] Test: Component + integration tests
 
 #### US2: Visualização e Download (Priority: P1) 🎯 MVP
 
@@ -73,12 +73,12 @@
 
 **Independent Test**: Verify via UI + API integration
 
-- [ ] T310 [P] [US2] UI: Create main page/component for Visualização e Download
-- [ ] T311 [P] [US2] UI: Form handlers and state management
-- [ ] T312 [US2] UI: Validation and error states
-- [ ] T313 [US2] UI: Success feedback (toast/redirect)
-- [ ] T314 [P] [US2] API: Connect frontend to backend endpoints
-- [ ] T315 [P] [US2] Test: Component + integration tests
+- [x] T310 [P] [US2] UI: Create main page/component for Visualização e Download
+- [x] T311 [P] [US2] UI: Form handlers and state management
+- [x] T312 [US2] UI: Validation and error states
+- [x] T313 [US2] UI: Success feedback (toast/redirect)
+- [x] T314 [P] [US2] API: Connect frontend to backend endpoints
+- [x] T315 [P] [US2] Test: Component + integration tests
 
 #### US3: OCR e Indexação (Priority: P2) 🎯 MVP
 
@@ -110,9 +110,9 @@
 
 ## Phase 5: Edge Cases & Polish
 
-- [ ] T401 Handle edge case: Dados Inválidos — Validação retorna erro 400 com mensagem específica. Nenhum dado é persistido.
-- [ ] T402 Handle edge case: Acesso Não Autorizado — Resposta 403 com mensagem "Acesso negado"
-- [ ] T403 Handle edge case: clinicId Inválido — clinicGuard rejeita com 403
+- [x] T401 Handle edge case: Dados Inválidos — Validação retorna erro 400 com mensagem específica. Nenhum dado é persistido.
+- [x] T402 Handle edge case: Acesso Não Autorizado — Resposta 403 com mensagem "Acesso negado"
+- [x] T403 Handle edge case: clinicId Inválido — clinicGuard rejeita com 403
 
 ---
 
@@ -120,16 +120,16 @@
 
 ## Phase 6: Quality Gates
 
-- [ ] T501 `pnpm type-check` passes (0 errors) — backend
-- [ ] T502 `pnpm type-check` passes (0 errors) — frontend
-- [ ] T503 `pnpm lint` passes (0 errors)
-- [ ] T504 `pnpm build` succeeds
-- [ ] T505 Backend tests pass
-- [ ] T506 clinicGuard applied to all new routes
-- [ ] T507 No new `as any` or `@ts-ignore`
-- [ ] T508 `@orthoplus/core-ui` used for generic UI components
-- [ ] T509 `date.utils.ts` used for date formatting (not date-fns directly)
-- [ ] T510 AGENTS.md updated if architecture changed
+- [x] T501 `pnpm type-check` passes (0 errors) — backend
+- [x] T502 `pnpm type-check` passes (0 errors) — frontend
+- [x] T503 `pnpm lint` passes (0 errors)
+- [x] T504 `pnpm build` succeeds
+- [x] T505 Backend tests pass
+- [x] T506 clinicGuard applied to all new routes
+- [x] T507 No new `as any` or `@ts-ignore`
+- [x] T508 `@orthoplus/core-ui` used for generic UI components
+- [x] T509 `date.utils.ts` used for date formatting (not date-fns directly)
+- [x] T510 AGENTS.md updated if architecture changed
 
 ---
 

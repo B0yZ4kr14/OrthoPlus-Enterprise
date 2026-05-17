@@ -10,7 +10,7 @@
 
 **Purpose**: Project verification and module audit
 
-- [ ] T001 Audit existing `pacientes` backend module (Prisma models, controllers, routes)
+- [x] T001 Audit existing `pacientes` backend module (Prisma models, controllers, routes)
 - [ ] T002 Audit existing `pacientes` frontend module (components, hooks, pages)
 - [ ] T003 Identify gaps between spec and current implementation
 - [ ] T004 Document API contract changes (if any)
@@ -26,7 +26,7 @@
 - [ ] T101 [P] Backend: Cadastro de Paciente — Sistema deve permitir criar, ler, atualizar e excluir registros de pacientes com validações de dados brasileiros.
 - [ ] T102 [P] Backend: Deduplicação por CPF — Impedir cadastro duplicado de mesmo CPF na mesma clínica.
 - [ ] T103 [P] Backend: Gestão de Status — Pacientes devem ter status controlado com transições válidas.
-- [ ] T104 [P] Prisma schema update + migration generation
+- [x] T104 [P] Prisma schema update + migration generation
 - [ ] T105 [P] Extend `pacientesService.ts` with new operations
 - [ ] T106 [P] Extend `pacientesController.ts` with new endpoints
 - [ ] T107 [P] Add clinicGuard to all new routes
@@ -60,7 +60,7 @@
 
 **Independent Test**: Verify via UI + API integration
 
-- [ ] T300 [P] [US1] UI: Create main page/component for Cadastro de Novo Paciente
+- [x] T300 [P] [US1] UI: Create main page/component for Cadastro de Novo Paciente
 - [ ] T301 [P] [US1] UI: Form handlers and state management
 - [ ] T302 [US1] UI: Validation and error states
 - [ ] T303 [US1] UI: Success feedback (toast/redirect)

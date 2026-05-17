@@ -256,3 +256,38 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - Backend: módulo `agenda` com Prisma (appointments, blocked_times, dentist_schedules)
 - Frontend: Clean Architecture completa (domain, application, infrastructure, presentation)
 - WebSocket ou SSE para atualização em tempo real
+
+
+---
+
+## 6. Security & Compliance
+
+### Authentication & Authorization
+- **Auth method**: JWT (HS256, 24h expiry) via HttpOnly cookie with SameSite=Strict
+- **Multi-tenancy**: All data access scoped by `clinicId`; `clinicGuard` mandatory on all protected routes
+- **Role-based access**: Module-level permissions enforced via `ModulesContext`
+- **Patient portal auth**: CPF + OTP (separate from staff auth flow)
+
+### Data Protection (LGPD)
+- **Sensitive data**: Patient data classified as "sensível" under LGPD Art. 5, II
+- **Encryption at rest**: Required for patient documents, radiographs, and financial records
+- **Encryption in transit**: TLS 1.2+ mandatory; no plaintext data over network
+- **Right to erasure**: Patient data must be deletable within 30 days of request
+- **Audit logging**: All CRUD operations on patient data logged with userId, timestamp, IP
+
+### Rate Limiting & Abuse Prevention
+- Auth endpoints: 10 requests / 15 min
+- Upload endpoints: 50 requests / hour
+- General API: 500 requests / 15 min
+- Nginx layer: additional IP-based limits in production
+
+### Input Validation & Sanitization
+- All inputs validated via Zod schemas (backend) and form validators (frontend)
+- File uploads: MIME-type validation + magic bytes check + size limits
+- SQL injection: Prevented by Prisma ORM (no raw queries for user-facing endpoints)
+- XSS: React auto-escaping + CSP headers in nginx
+
+### Security Testing
+- `pnpm audit --moderate` in CI (weekly)
+- ESLint security plugin scan
+- Dependabot alerts enabled

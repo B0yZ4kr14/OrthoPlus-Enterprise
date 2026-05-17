@@ -27,7 +27,7 @@ This plan implements **Gestão de Orçamentos** for OrthoPlus Enterprise, a brow
 | **Testing** | Playwright (e2e), Vitest, backend unit tests |
 | **Target Platform** | Web SPA (React + Vite), Node.js REST API |
 | **Project Type** | Monorepo web application (brownfield enhancement) |
-| **Performance Goals** | API < 300ms (p99), Frontend render < 100ms |
+| **Performance Goals** | API < 300ms (p99) for CRUD; PDF generation < 1.5s; approval workflow < 500ms; budget search < 200ms |
 | **Constraints** | clinicId multi-tenancy mandatory; zero `as any` / `@ts-ignore` |
 
 ---
@@ -45,6 +45,16 @@ This plan implements **Gestão de Orçamentos** for OrthoPlus Enterprise, a brow
 | **DB-1** Prisma for CRUD | `$queryRaw` only for aggregations | ✅ Existing |
 | **FE-1** core-ui components | Use `@orthoplus/core-ui` | 🔍 Enforce |
 | **TP-2** Quality gates | build, type-check, lint, test pass | 🔍 Enforce |
+| **AP-4** Database Federation | Use MasterDatabaseManager for cross-category ops; read-only SELECT across schemas | ✅ Existing |
+| **CQ-2** Error Handling | Use ApiError + RFC 7807 Problem Details for operational errors | 🔍 Enforce |
+| **CQ-3** Security by Default | Rate limiting + CSRF + Helmet on all new endpoints | 🔍 Enforce |
+| **DB-2** Schema Integrity | Regenerate `database.ts` after schema changes; never edit manually | ✅ Existing |
+| **FE-2** Date Handling | Use `lib/utils/date.utils.ts`; never import date-fns directly | 🔍 Enforce |
+| **FE-3** Authentication | Use `useAuth()` from AuthContext; never check localStorage manually | 🔍 Enforce |
+| **DP-2** Observability & Health | Container HEALTHCHECK + Prometheus metrics + Grafana dashboard | ✅ Existing |
+| **INF-1** Infrastructure Resilience | CategoryCircuitBreaker protection for DB operations | ✅ Existing |
+| **INF-2** Observability Metrics | Emit `orthoplus_*` metrics with category label for new modules | 🔍 Enforce |
+| **INF-3** Backup & DR | Per-category pg_dump via BackupSchedulerService; 10-backup retention | ✅ Existing |
 
 ---
 

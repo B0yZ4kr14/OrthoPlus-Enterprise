@@ -3,6 +3,10 @@
  *
  * Este context substitui a gestão estática de módulos por uma
  * integração dinâmica com a REST API Node.js do backend.
+ *
+ * NOTE: activeModules here are full Module objects (for config UI).
+ * AuthContext (parent provider) holds module keys as string[] (for access control).
+ * Keep both sources in sync by fetching from the same backend endpoint.
  */
 import React, { createContext, useContext, ReactNode } from "react";
 import { useModulos } from "@/hooks/api/useModulos";

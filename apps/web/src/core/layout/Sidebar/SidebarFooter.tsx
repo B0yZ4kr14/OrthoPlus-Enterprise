@@ -19,7 +19,7 @@ export function SidebarFooter() {
             </span>
           </div>
           <span className="text-[10px] font-mono text-slate-400 dark:text-[hsl(var(--muted-foreground))]">
-            v3.1.0
+            v2.9.9
           </span>
         </div>
       )}

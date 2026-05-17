@@ -28,6 +28,7 @@ import { Appointment } from "../../domain/entities/Appointment";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Card } from "@orthoplus/core-ui/card";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 function AgendaContent() {
   const { clinicId } = useAuth();
@@ -174,7 +175,7 @@ function AgendaContent() {
 
         <TabsContent value="calendar" className="mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <CardTopBorder color="interactive" opacity={30} />
             <div className="p-1">
               <WeekCalendar
                 appointments={appointments}
@@ -192,7 +193,7 @@ function AgendaContent() {
             <LoadingState variant="grid" rows={3} />
           ) : appointments.length === 0 ? (
             <Card className="glass-card overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+              <CardTopBorder color="warning" opacity={40} />
               <EmptyState
                 icon={CalendarDays}
                 message="Nenhum agendamento"

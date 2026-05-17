@@ -42,7 +42,7 @@ const features = [
     title: "Gestão de Pacientes",
     description:
       "Cadastro completo, histórico clínico, anamnese digital e acompanhamento de tratamentos em um só lugar.",
-    gradient: "from-teal-400 to-emerald-500",
+    gradient: "from-[hsl(var(--interactive))] to-[hsl(var(--success))]",
   },
   {
     icon: Calendar,
@@ -77,7 +77,7 @@ const features = [
     title: "Marketing Automático",
     description:
       "Recall de pacientes, campanhas de fidelidade, avaliações automáticas e portal do paciente integrado.",
-    gradient: "from-cyan-400 to-teal-500",
+    gradient: "from-[hsl(var(--interactive))] to-[hsl(var(--interactive))]",
   },
 ];
 
@@ -145,7 +145,7 @@ export default function Landpage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F0FDFA] to-[#ECFDF5] dark:from-slate-950 dark:to-slate-900 text-slate-900 dark:text-slate-50">
+    <div className="min-h-screen bg-gradient-to-b from-[hsl(var(--interactive)/0.05)] to-[hsl(var(--success)/0.05)] dark:from-slate-950 dark:to-slate-900 text-slate-900 dark:text-slate-50">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/70 backdrop-blur-lg dark:border-slate-800/50 dark:bg-slate-950/70">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -185,7 +185,7 @@ export default function Landpage() {
             <motion.div variants={motionVariants} initial="hidden" animate="visible">
               <Badge
                 variant="outline"
-                className="mb-6 rounded-full border-teal-300 bg-teal-50 px-4 py-1.5 text-sm font-medium text-teal-700 dark:border-teal-800 dark:bg-teal-950/50 dark:text-teal-300"
+                className="mb-6 rounded-full border-[hsl(var(--interactive)/0.3)] bg-[hsl(var(--interactive)/0.1)] px-4 py-1.5 text-sm font-medium text-[hsl(var(--interactive))] dark:border-[hsl(var(--interactive)/0.2)] dark:bg-[hsl(var(--interactive)/0.05)] dark:text-[hsl(var(--interactive))]"
               >
                 Versão 5.6 — Multi-clínica & Multi-tenant
               </Badge>
@@ -198,7 +198,7 @@ export default function Landpage() {
               className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl dark:text-white"
             >
               OrthoPlus{ }
-              <span className="bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[hsl(var(--interactive))] to-[hsl(var(--success))] bg-clip-text text-transparent">
                 Enterprise
               </span>
               <br />
@@ -227,7 +227,7 @@ export default function Landpage() {
                 onClick={handleCta}
                 size="lg"
                 variant="elevated"
-                className="rounded-full px-8 py-6 text-base shadow-xl shadow-teal-500/20"
+                className="rounded-full px-8 py-6 text-base shadow-xl shadow-[hsl(var(--interactive)/0.2)]"
               >
                 Entrar no Sistema
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -248,8 +248,8 @@ export default function Landpage() {
         </div>
 
         {/* Decorative blur orbs */}
-        <div className="pointer-events-none absolute top-0 left-1/4 h-72 w-72 rounded-full bg-teal-400/20 blur-3xl dark:bg-teal-500/10" />
-        <div className="pointer-events-none absolute right-1/4 bottom-0 h-72 w-72 rounded-full bg-emerald-400/20 blur-3xl dark:bg-emerald-500/10" />
+        <div className="pointer-events-none absolute top-0 left-1/4 h-72 w-72 rounded-full bg-[hsl(var(--interactive)/0.2)] blur-3xl dark:bg-[hsl(var(--interactive)/0.1)]" />
+        <div className="pointer-events-none absolute right-1/4 bottom-0 h-72 w-72 rounded-full bg-[hsl(var(--success)/0.2)] blur-3xl dark:bg-[hsl(var(--success)/0.1)]" />
       </section>
 
       {/* Features Section */}
@@ -323,13 +323,13 @@ export default function Landpage() {
                 <div className="relative h-full">
                   {plan.highlighted && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                      <Badge className="rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 px-4 py-1 text-xs font-semibold text-white shadow-lg">
+                      <Badge className="rounded-full bg-gradient-to-r from-[hsl(var(--interactive))] to-[hsl(var(--success))] px-4 py-1 text-xs font-semibold text-white shadow-lg">
                         Recomendado
                       </Badge>
                     </div>
                   )}
                   <Card
-                    className={"h-full border bg-white/70 backdrop-blur-md dark:bg-slate-900 " + (plan.highlighted ? "border-teal-400/50 shadow-2xl shadow-teal-500/10 dark:border-teal-500/30" : "border-white/50 dark:border-slate-800")}
+                    className={"h-full border bg-white/70 backdrop-blur-md dark:bg-slate-900 " + (plan.highlighted ? "border-[hsl(var(--interactive)/0.5)] shadow-2xl shadow-[hsl(var(--interactive)/0.1)] dark:border-[hsl(var(--interactive)/0.3)]" : "border-white/50 dark:border-slate-800")}
                   >
                     <CardHeader className="pb-4 text-center">
                       <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -356,7 +356,7 @@ export default function Landpage() {
                             key={f}
                             className="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300"
                           >
-                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-teal-500" />
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-[hsl(var(--interactive))]" />
                             <span>{f}</span>
                           </li>
                         ))}
@@ -364,7 +364,7 @@ export default function Landpage() {
                       <Button
                         onClick={handleCta}
                         variant={plan.highlighted ? "elevated" : "outline"}
-                        className={"mt-4 w-full rounded-xl " + (plan.highlighted ? "shadow-lg shadow-teal-500/20" : "")}
+                        className={"mt-4 w-full rounded-xl " + (plan.highlighted ? "shadow-lg shadow-[hsl(var(--interactive)/0.2)]" : "")}
                       >
                         {plan.cta}
                       </Button>
@@ -395,16 +395,16 @@ export default function Landpage() {
             <nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-600 dark:text-slate-400">
               <button
                 onClick={handleCta}
-                className="transition-colors hover:text-teal-600 dark:hover:text-teal-400"
+                className="transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]"
               >
                 Entrar no Sistema
               </button>
               <span className="hidden text-slate-300 dark:text-slate-700 sm:inline">|</span>
-              <span className="cursor-pointer transition-colors hover:text-teal-600 dark:hover:text-teal-400">
+              <span className="cursor-pointer transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]">
                 Termos de Uso
               </span>
               <span className="hidden text-slate-300 dark:text-slate-700 sm:inline">|</span>
-              <span className="cursor-pointer transition-colors hover:text-teal-600 dark:hover:text-teal-400">
+              <span className="cursor-pointer transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]">
                 Privacidade
               </span>
             </nav>
@@ -413,7 +413,7 @@ export default function Landpage() {
               <Mail className="h-4 w-4" />
               <a
                 href="mailto:contato@tsiapp.io"
-                className="transition-colors hover:text-teal-600 dark:hover:text-teal-400"
+                className="transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]"
               >
                 contato@tsiapp.io
               </a>

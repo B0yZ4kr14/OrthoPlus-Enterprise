@@ -95,3 +95,15 @@ ecosystem.json
 
 # Test evidence artifacts (screenshots, reports)
 tests/evidence/
+
+# === spec-kit extensions ===
+.specify/
+.specify.backup.manual.*/
+
+# === Agent infrastructure (not project code) ===
+.agents/skills/
+.claude/skills/
+.cursor/skills/
+.kimi/skills/
+CLAUDE.md
+KIMI.md

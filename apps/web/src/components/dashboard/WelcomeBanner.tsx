@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, Lightbulb } from "lucide-react";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 interface WelcomeBannerProps {
   userName: string;
@@ -51,7 +52,7 @@ export function WelcomeBanner({ userName }: WelcomeBannerProps) {
           transition={reduced ? { duration: 0 } : { duration: 0.35, ease: [0, 0, 0.2, 1] }}
           className="relative overflow-hidden glass-card rounded-2xl p-5 border border-[hsl(var(--interactive))]/20"
         >
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-40" />
+          <CardTopBorder color="interactive" opacity={40} />
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-[hsl(var(--interactive))]/5 rounded-full blur-3xl" />
           <div className="absolute -left-4 -bottom-4 w-24 h-24 bg-[hsl(var(--interactive))]/3 rounded-full blur-2xl" />
           <div className="flex items-start justify-between gap-4">

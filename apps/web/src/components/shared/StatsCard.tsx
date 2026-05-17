@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/car
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
+import { CardTopBorder } from "./CardTopBorder";
 
 interface StatsCardProps {
   title: string;
@@ -59,7 +60,7 @@ export const StatsCard = memo(function StatsCard({
         className
       )}
     >
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+      <CardTopBorder color="interactive" opacity={30} />
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           {title}

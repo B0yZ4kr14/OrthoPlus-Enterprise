@@ -3027,6 +3027,30 @@ model bi_export_jobs {
   @@schema("administrativo")
 }
 
+model arquivo {
+  id            String   @id @default(uuid())
+  clinic_id     String
+  paciente_id   String?
+  consulta_id   String?
+  orcamento_id  String?
+  nome_original String
+  nome_storage  String
+  mime_type     String
+  tamanho_bytes Int
+  categoria     String   @default("OUTRO")
+  visibilidade  String   @default("RESTRITO")
+  url_temp      String?
+  expira_em     DateTime?
+  uploaded_by   String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([clinic_id, paciente_id])
+  @@index([clinic_id, categoria])
+  @@index([clinic_id, created_at])
+  @@schema("administrativo")
+}
+
 model estoque_alertas {
   id                   String   @id @default(uuid())
   produto_id           String

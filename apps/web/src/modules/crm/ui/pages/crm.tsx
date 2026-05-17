@@ -8,6 +8,7 @@ import { StatsCard } from "@/components/shared/StatsCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Input } from "@orthoplus/core-ui/input";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 interface Lead {
   id: string;
@@ -113,7 +114,7 @@ export default function CRMPage() {
 
         <TabsContent value="funil" className="mt-6">
           <Card className="glass-card overflow-hidden p-6">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <CardTopBorder color="interactive" opacity={30} />
             <div className="flex flex-col items-center justify-center py-12 space-y-4">
               <Filter className="h-16 w-16 text-muted-foreground/30" />
               <p className="text-muted-foreground">Visualização do funil em desenvolvimento</p>
@@ -123,7 +124,7 @@ export default function CRMPage() {
 
         <TabsContent value="leads" className="mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <CardTopBorder color="interactive" opacity={30} />
             {filtered.length === 0 ? (
               <EmptyState
                 icon={Users}
@@ -160,7 +161,7 @@ export default function CRMPage() {
 
         <TabsContent value="relatorios" className="mt-6">
           <Card className="glass-card overflow-hidden p-6">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+            <CardTopBorder color="warning" opacity={40} />
             <EmptyState icon={TrendingUp} message="Relatórios em desenvolvimento" description="Análises e métricas de conversão em breve." />
           </Card>
         </TabsContent>

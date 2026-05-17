@@ -3,7 +3,7 @@
 **Short Name**: `budget-management`
 **Feature Branch**: `[006-orcamentos]`
 **Created**: 2026-05-17
-**Status**: Draft
+**Status**: In Progress
 **Project**: OrthoPlus Enterprise
 **Priority**: P2 — Revenue
 

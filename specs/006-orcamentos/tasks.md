@@ -23,8 +23,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T101 [P] Backend: CRUD de Orçamentos — Sistema deve permitir criar, ler, atualizar e excluir orçamentos de tratamento.
-- [ ] T102 [P] Backend: Aprovação Digital — Paciente aprova ou rejeita orçamento via portal.
+- [x] T101 [P] Backend: CRUD de Orçamentos — Sistema deve permitir criar, ler, atualizar e excluir orçamentos de tratamento.
+- [x] T102 [P] Backend: Aprovação Digital — Paciente aprova ou rejeita orçamento via portal.
 - [ ] T103 [P] Backend: Geração de Contas a Receber — Ao aprovar, gera parcelas no financeiro.
 - [ ] T104 [P] Prisma schema update + migration generation
 - [ ] T105 [P] Extend `orcamentosService.ts` with new operations
@@ -43,9 +43,9 @@
 **Purpose**: Data access layer and shared UI components
 
 - [ ] T201 [P] Update/add React Query hooks for `orcamentos` endpoints
-- [ ] T202 [P] Create/update reusable components in `orcamentos/ui/components/`
+- [x] T202 [P] Create/update reusable components in `orcamentos/ui/components/`
 - [ ] T203 [P] Add form validation (Zod schema matching backend DTOs)
-- [ ] T204 [P] Add routes to `AppRoutes.tsx` (if new pages)
+- [x] T204 [P] Add routes to `AppRoutes.tsx` (if new pages)
 - [ ] T205 [P] Run `cd apps/web && pnpm type-check` (0 errors)
 
 **Checkpoint**: Frontend can fetch and display data from new backend endpoints

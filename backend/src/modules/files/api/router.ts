@@ -5,7 +5,7 @@ import multer from "multer";
 // Configure multer storage (for local testing/uploads)
 const storage = multer.diskStorage({
   destination: function (_req, _file, cb) {
-    cb(null, "uploads/"); // Assumes an existing 'uploads' repo dir
+    cb(null, "uploads/");
   },
   filename: function (_req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -23,14 +23,21 @@ const filesController = new FilesController();
 const reportController = new ReportController();
 
 // ----------------------------------------
-// generic File Upload routes
+// File Management routes
 // ----------------------------------------
-// Handles basic file uploads using local storage
+router.get("/", filesController.listFiles.bind(filesController));
 router.post(
   "/upload",
   upload.single("file"),
   filesController.uploadFile.bind(filesController),
 );
+router.get("/:id", filesController.getFile.bind(filesController));
+router.get("/:id/download", filesController.downloadFile.bind(filesController));
+router.delete("/:id", filesController.deleteFile.bind(filesController));
+
+// ----------------------------------------
+// Cloud Backup routes
+// ----------------------------------------
 router.post(
   "/upload-cloud",
   filesController.uploadBackupToCloud.bind(filesController),

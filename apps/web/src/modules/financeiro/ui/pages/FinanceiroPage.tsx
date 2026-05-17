@@ -9,6 +9,7 @@ import { DollarSign, TrendingUp, TrendingDown, Wallet, BarChart3, List, Tags, Ar
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatsCard } from "@/components/shared/StatsCard";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 export function FinanceiroPage() {
   const [period] = useState(Period.currentMonth());
@@ -98,7 +99,7 @@ export function FinanceiroPage() {
 
         <TabsContent value="dashboard" className="space-y-4 mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-40" />
+            <CardTopBorder color="interactive" opacity={40} />
             <CardHeader>
               <CardTitle className="text-lg font-semibold tracking-tight">Fluxo de Caixa</CardTitle>
             </CardHeader>
@@ -149,7 +150,7 @@ export function FinanceiroPage() {
 
         <TabsContent value="transacoes" className="mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+            <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
               <CardTitle className="text-lg font-semibold tracking-tight">Transações Financeiras</CardTitle>
             </CardHeader>
@@ -165,7 +166,7 @@ export function FinanceiroPage() {
 
         <TabsContent value="categorias" className="mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+            <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
               <CardTitle className="text-lg font-semibold tracking-tight">Categorias</CardTitle>
             </CardHeader>
@@ -181,7 +182,7 @@ export function FinanceiroPage() {
 
         <TabsContent value="caixa" className="mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+            <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
               <CardTitle className="text-lg font-semibold tracking-tight">Controle de Caixa</CardTitle>
             </CardHeader>
@@ -197,7 +198,7 @@ export function FinanceiroPage() {
 
         <TabsContent value="relatorios" className="mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+            <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
               <CardTitle className="text-lg font-semibold tracking-tight">Relatórios</CardTitle>
             </CardHeader>

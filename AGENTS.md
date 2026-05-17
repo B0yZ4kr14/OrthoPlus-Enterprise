@@ -415,7 +415,7 @@ uvicorn src.main:app --reload --port 8000  # Alternativa com reload
 - **Sem ponto e virgula:** O projeto nao usa `;` no final das linhas (padrao do Prettier).
 
 ### Backend
-- **Erros:** Sempre usar `ApiError` (de `@/middleware/errorHandler`). Nunca enviar `Error` raw para clientes.
+- **Erros:** Sempre usar `ApiError` (de `@/middleware/errorHandler`). Retornar `application/problem+json` (RFC 7807). Nunca enviar `Error` raw para clientes.
 - **clinicGuard:** Todo router de modulo deve usa-lo.
 - **Controllers:** Nunca acessar Prisma diretamente. Delegar para Service/Repository.
 - **Logging:** Usar Winston (`src/infrastructure/logger/index.ts`). JSON em producao, colorido em dev.
@@ -701,7 +701,7 @@ Configurados em `.specify/extensions.yml`:
 - `auth/Auth.tsx`, `pacientes/PacientesListPage.tsx` — variant `cta` nao existe no Button.
 
 **Arquivos criticos — NUNCA editar manualmente:**
-- `apps/web/src/types/database.ts` — ~8929 linhas, autogenerado pelo Prisma. Regenerar via migration se necessario.
+- `apps/web/src/types/database.ts` — ~8929 linhas, autogenerado pelo Prisma. **Regenerar obrigatoriamente após `prisma migrate dev` ou qualquer alteração em `schema.prisma`. Nunca editar manualmente.**
 
 **ESLint:**
 - `eslint.config.js` na raiz desabilita a **maioria** das regras TypeScript (incluindo `no-explicit-any`, `no-floating-promises`, `no-misused-promises`, etc.).

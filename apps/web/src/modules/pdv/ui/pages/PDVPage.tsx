@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 type FormaPagamentoType = PDVPagamento["forma_pagamento"];
 
@@ -129,7 +130,7 @@ export default function PDVPage() {
 
       {!caixaAberto ? (
         <Card className="glass-card overflow-hidden border-l-destructive/40">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--destructive))] to-transparent opacity-40" />
+          <CardTopBorder color="destructive" opacity={40} />
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
@@ -150,7 +151,7 @@ export default function PDVPage() {
         </Card>
       ) : (
         <Card className="glass-card overflow-hidden border-l-success/40">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--success))] to-transparent opacity-40" />
+          <CardTopBorder color="success" opacity={40} />
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
@@ -179,7 +180,7 @@ export default function PDVPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <CardTopBorder color="interactive" opacity={30} />
             <CardHeader>
               <CardTitle className="text-lg font-semibold tracking-tight">Adicionar Item</CardTitle>
             </CardHeader>
@@ -254,7 +255,7 @@ export default function PDVPage() {
 
         <div className="space-y-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <CardTopBorder color="interactive" opacity={30} />
             <CardHeader>
               <CardTitle className="text-lg font-semibold tracking-tight">Pagamento</CardTitle>
             </CardHeader>

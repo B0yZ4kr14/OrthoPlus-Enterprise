@@ -52,6 +52,8 @@ const ContratosPage = lazy(
 
 // Cobranca / Inadimplência
 const InadimplenciaPage = lazy(() => import("@/modules/cobranca").then((m) => ({ default: m.InadimplenciaPage })));
+const FileListPage = lazy(() => import("@/modules/files/ui/pages/FileListPage"));
+const FileUploadPage = lazy(() => import("@/modules/files/ui/pages/FileUploadPage"));
 
 // Crypto
 const CryptoPaymentPage = lazy(() => import("@/modules/crypto").then((m) => ({ default: m.CryptoPaymentPage })));
@@ -267,6 +269,8 @@ const AppRoutes = () => (
 
     {/* Conformidade & Legal */}
     <Route path="/lgpd" element={protectedRoute(<LGPDPage />, { moduleKey: "LGPD" })} />
+    <Route path="/files" element={protectedRoute(<FileListPage />, { moduleKey: "FILES" })} />
+    <Route path="/files/upload" element={protectedRoute(<FileUploadPage />, { moduleKey: "FILES" })} />
     <Route path="/faturamento-tiss" element={protectedRoute(<TISSPage />, { moduleKey: "TISS" })} />
     <Route path="/teleodonto" element={protectedRoute(<TeleodontoPage />, { moduleKey: "TELEODONTO" })} />
 

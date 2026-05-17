@@ -1,4 +1,5 @@
 import { LogOut, Building2, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@orthoplus/core-ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@orthoplus/core-ui/button";
@@ -166,10 +167,10 @@ export function DashboardHeader({
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer">
-                  <a href="/settings/profile" className="flex items-center">
+                  <Link to="/settings/profile" className="flex items-center">
                     <User className="mr-2 h-4 w-4" />
                     Meu Perfil
-                  </a>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

@@ -11,6 +11,7 @@ import { StatsCard } from "@/components/shared/StatsCard";
 import { Card } from "@orthoplus/core-ui/card";
 // @ts-expect-error — TS2307
 import type { Produto } from "../../domain/entities/Produto";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 export const EstoquePage = () => {
   const [showProdutoForm, setShowProdutoForm] = useState(false);
@@ -95,7 +96,7 @@ export const EstoquePage = () => {
 
         <TabsContent value="todos" className="mt-6">
           <Card className="glass-card overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-30" />
+            <CardTopBorder color="interactive" opacity={30} />
             <div className="p-1">
               <ProdutoList
                 produtos={produtos as unknown as Produto[]}
@@ -108,7 +109,7 @@ export const EstoquePage = () => {
 
         <TabsContent value="alertas" className="mt-6">
           <Card className="glass-card overflow-hidden border-l-warning/40">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--warning))] to-transparent opacity-40" />
+            <CardTopBorder color="warning" opacity={40} />
             <div className="p-1">
               <ProdutoList
                 produtos={produtosEstoqueBaixo as unknown as Produto[]}
@@ -121,7 +122,7 @@ export const EstoquePage = () => {
 
         <TabsContent value="zerados" className="mt-6">
           <Card className="glass-card overflow-hidden border-l-destructive/40">
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--destructive))] to-transparent opacity-40" />
+            <CardTopBorder color="destructive" opacity={40} />
             <div className="p-1">
               <ProdutoList
                 produtos={produtosZerados as unknown as Produto[]}

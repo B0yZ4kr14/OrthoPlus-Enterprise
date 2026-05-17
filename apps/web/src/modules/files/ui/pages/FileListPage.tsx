@@ -1,0 +1,191 @@
+import { useFiles, useDeleteFile, useDownloadFile, type FileRecord } from "@/hooks/api/useFiles";
+import { Button } from "@orthoplus/core-ui";
+import { File, Trash2, Download, Upload } from "lucide-react";
+import { toast } from "sonner";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const CATEGORIAS: Record<string, string> = {
+  RADIOGRAFIA: "Radiografia",
+  FOTO: "Foto",
+  RECEITA: "Receita",
+  CONTRATO: "Contrato",
+  OUTRO: "Outro",
+};
+
+export default function FileListPage() {
+  const [categoriaFilter, setCategoriaFilter] = useState("");
+  const filesQuery = useFiles(
+    categoriaFilter ? { categoria: categoriaFilter } : undefined
+  );
+  const deleteMutation = useDeleteFile();
+  const downloadFile = useDownloadFile();
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Tem certeza que deseja excluir este arquivo?")) return;
+
+    try {
+      await deleteMutation.mutateAsync(id);
+      toast.success("Arquivo excluído com sucesso");
+    } catch (err) {
+      toast.error("Erro ao excluir arquivo");
+      console.error(err);
+    }
+  };
+
+  const handleDownload = async (id: string, nomeOriginal: string) => {
+    try {
+      await downloadFile(id, nomeOriginal);
+      toast.success("Download iniciado");
+    } catch (err) {
+      toast.error("Erro ao baixar arquivo");
+      console.error(err);
+    }
+  };
+
+  const formatSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  if (filesQuery.isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center py-12">Carregando arquivos...</div>
+      </div>
+    );
+  }
+
+  if (filesQuery.error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center py-12 text-red-600">
+          Erro ao carregar arquivos
+        </div>
+      </div>
+    );
+  }
+
+  const files = filesQuery.data?.data ?? [];
+
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Documentos</h1>
+        <Link to="/files/upload">
+          <Button className="flex items-center gap-2">
+            <Upload className="h-4 w-4" />
+            Novo Upload
+          </Button>
+        </Link>
+      </div>
+
+      <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <div className="flex items-center gap-4">
+          <label className="text-sm font-medium">Filtrar por categoria:</label>
+          <select
+            value={categoriaFilter}
+            onChange={(e) => setCategoriaFilter(e.target.value)}
+            className="border rounded-md px-3 py-2 text-sm"
+          >
+            <option value="">Todas</option>
+            {Object.entries(CATEGORIAS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {files.length === 0 ? (
+        <div className="bg-white rounded-lg shadow p-12 text-center">
+          <File className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+          <p className="text-gray-500">Nenhum documento encontrado</p>
+          <p className="text-sm text-gray-400 mt-1">
+            Faça o upload do primeiro documento
+          </p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  Nome
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  Categoria
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  Tamanho
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  Data
+                </th>
+                <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {files.map((file: FileRecord) => (
+                <tr key={file.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <File className="h-5 w-5 text-gray-400" />
+                      <div>
+                        <p className="text-sm font-medium">{file.nomeOriginal}</p>
+                        <p className="text-xs text-gray-500">{file.mimeType}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {CATEGORIAS[file.categoria] ?? file.categoria}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-600">
+                    {formatSize(file.tamanhoBytes)}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-600">
+                    {formatDate(file.createdAt)}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleDownload(file.id, file.nomeOriginal)}
+                        className="p-2 hover:bg-gray-100 rounded-md"
+                        title="Download"
+                      >
+                        <Download className="h-4 w-4 text-gray-600" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(file.id)}
+                        className="p-2 hover:bg-red-50 rounded-md"
+                        title="Excluir"
+                      >
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}

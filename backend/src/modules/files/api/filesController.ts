@@ -1,7 +1,10 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
+import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler";
 import { NextFunction, Request, Response } from "express";
-
+import { FilesService } from "../application/services/FilesService";
+import path from "path";
+import fs from "fs";
 
 interface S3Config {
   accessKeyId: string;
@@ -23,61 +26,243 @@ interface DropboxConfig {
 }
 
 export class FilesController {
-  // Generic file upload handle mapped downstream
+  private filesService = new FilesService();
+
   async uploadFile(
     req: Request,
     res: Response,
     _next: NextFunction,
-  ): Promise<any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): Promise<void> {
     try {
       if (!req.file) {
-        return res.status(400).json({ error: "No file provided" });
+        throw Errors.validation("No file provided");
       }
 
-      // Multer handled it:
-      const uploadedInfo = {
-        filename: req.file.filename,
-        path: `/uploads/${req.file.filename}`, // Adjust for static serving
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-      };
+      const clinicId = req.user?.clinicId as string;
+      const userId = req.user?.id as string;
 
-      res.status(200).json({
+      if (!clinicId || !userId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const { pacienteId, consultaId, orcamentoId, categoria, visibilidade } =
+        req.body;
+
+      const fileRecord = await this.filesService.create({
+        clinicId,
+        pacienteId,
+        consultaId,
+        orcamentoId,
+        nomeOriginal: req.file.originalname,
+        nomeStorage: req.file.filename,
+        mimeType: req.file.mimetype,
+        tamanhoBytes: req.file.size,
+        categoria: categoria ?? "OUTRO",
+        visibilidade: visibilidade ?? "RESTRITO",
+        uploadedBy: userId,
+      });
+
+      res.status(201).json({
         success: true,
-        message: "File uploaded successfully",
-        data: uploadedInfo,
+        data: fileRecord,
       });
     } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
       logger.error("[FilesController] uploadFile error:", { error });
-      res.status(500).json({ error: "File upload failed" });
+      const apiError = Errors.internal("File upload failed");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
     }
   }
 
-  // Edge Function: upload-to-cloud
+  async listFiles(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const { pacienteId, consultaId, orcamentoId, categoria, visibilidade } =
+        req.query;
+
+      const files = await this.filesService.list({
+        clinicId,
+        pacienteId: pacienteId as string | undefined,
+        consultaId: consultaId as string | undefined,
+        orcamentoId: orcamentoId as string | undefined,
+        categoria: categoria as string | undefined,
+        visibilidade: visibilidade as string | undefined,
+      });
+
+      res.status(200).json({
+        success: true,
+        count: files.length,
+        data: files,
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] listFiles error:", { error });
+      const apiError = Errors.internal("Failed to list files");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  async getFile(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { id } = req.params;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const file = await this.filesService.getById(id, clinicId);
+
+      if (!file) {
+        throw Errors.notFound("File", id);
+      }
+
+      const uploadDir = process.env.UPLOAD_DIR ?? "uploads";
+      const filePath = path.join(uploadDir, file.nomeStorage);
+      const exists = fs.existsSync(filePath);
+
+      res.status(200).json({
+        success: true,
+        data: {
+          ...file,
+          storagePath: file.nomeStorage,
+          existsOnDisk: exists,
+        },
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] getFile error:", { error });
+      const apiError = Errors.internal("Failed to get file");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  async downloadFile(
+    req: Request,
+    res: Response,
+    _next: NextFunction,
+  ): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { id } = req.params;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const file = await this.filesService.getById(id, clinicId);
+
+      if (!file) {
+        throw Errors.notFound("File", id);
+      }
+
+      const uploadDir = process.env.UPLOAD_DIR ?? "uploads";
+      const filePath = path.join(uploadDir, file.nomeStorage);
+
+      if (!fs.existsSync(filePath)) {
+        throw Errors.notFound("File on disk", id);
+      }
+
+      res.setHeader("Content-Type", file.mimeType);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${encodeURIComponent(file.nomeOriginal)}"`,
+      );
+
+      const stream = fs.createReadStream(filePath);
+      stream.pipe(res);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] downloadFile error:", { error });
+      const apiError = Errors.internal("Failed to download file");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  async deleteFile(
+    req: Request,
+    res: Response,
+    _next: NextFunction,
+  ): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { id } = req.params;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const file = await this.filesService.getById(id, clinicId);
+
+      if (!file) {
+        throw Errors.notFound("File", id);
+      }
+
+      const deleted = await this.filesService.delete(id, clinicId);
+
+      if (!deleted) {
+        throw Errors.internal("Failed to delete file record");
+      }
+
+      const uploadDir = process.env.UPLOAD_DIR ?? "uploads";
+      const filePath = path.join(uploadDir, file.nomeStorage);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "File deleted successfully",
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] deleteFile error:", { error });
+      const apiError = Errors.internal("Failed to delete file");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  // Edge Function: upload-to-cloud (kept for backward compatibility)
   async uploadBackupToCloud(
     req: Request,
     res: Response,
     _next: NextFunction,
-  ): Promise<any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): Promise<void> {
     try {
       const { backupId, provider, config } = req.body;
 
       if (!backupId || !provider || !config) {
-        return res.status(400).json({
-          error: "Missing required fields: backupId, provider, config",
-        });
+        throw Errors.validation("Missing required fields: backupId, provider, config");
       }
 
-      // Get backup data
       const backup = await prisma.backup_history.findUnique({
         where: { id: backupId },
       });
 
       if (!backup) {
-        return res.status(404).json({ error: "Backup not found" });
+        throw Errors.notFound("Backup", backupId);
       }
 
-      // Original logic extracted metadata. In Express we do the same
       const dataToUpload = JSON.stringify(backup.metadata);
       const fileName = `orthoplus_backup_${backup.clinic_id}_${new Date().toISOString().replace(/:/g, "-")}.json`;
 
@@ -85,31 +270,18 @@ export class FilesController {
 
       switch (provider) {
         case "s3":
-          uploadUrl = await this.uploadToS3(
-            dataToUpload,
-            fileName,
-            config as S3Config,
-          );
+          uploadUrl = await this.uploadToS3(dataToUpload, fileName, config as S3Config);
           break;
         case "google_drive":
-          uploadUrl = await this.uploadToGoogleDrive(
-            dataToUpload,
-            fileName,
-            config as GoogleDriveConfig,
-          );
+          uploadUrl = await this.uploadToGoogleDrive(dataToUpload, fileName, config as GoogleDriveConfig);
           break;
         case "dropbox":
-          uploadUrl = await this.uploadToDropbox(
-            dataToUpload,
-            fileName,
-            config as DropboxConfig,
-          );
+          uploadUrl = await this.uploadToDropbox(dataToUpload, fileName, config as DropboxConfig);
           break;
         default:
-          return res.status(400).json({ error: "Unsupported provider" });
+          throw new ApiError(400, ErrorCodes.VALIDATION_ERROR, "Unsupported provider", "Provider must be one of: s3, google_drive, dropbox");
       }
 
-      // Update backup record with cloud URL
       await prisma.backup_history.update({
         where: { id: backupId },
         data: {
@@ -124,16 +296,19 @@ export class FilesController {
         },
       });
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         uploadUrl,
         provider,
       });
     } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
       logger.error("[FilesController] uploadBackupToCloud error", { error });
-      res.status(500).json({
-        error: "Internal server error",
-      });
+      const apiError = Errors.internal("Cloud upload failed");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
     }
   }
 
@@ -144,9 +319,7 @@ export class FilesController {
   ): Promise<string> {
     const encoder = new TextEncoder();
     const dataBuffer = encoder.encode(data);
-
     const date = new Date().toISOString().split("T")[0].replace(/-/g, "");
-
     const url = `https://${config.bucket}.s3.${config.region}.amazonaws.com/${fileName}`;
 
     const response = await fetch(url, {
@@ -155,7 +328,7 @@ export class FilesController {
         "Content-Type": "application/json",
         "x-amz-date": date,
       },
-      body: dataBuffer as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      body: dataBuffer,
     });
 
     if (!response.ok) {
@@ -206,7 +379,7 @@ export class FilesController {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-        body: form as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        body: form,
       },
     );
 
@@ -223,7 +396,7 @@ export class FilesController {
     fileName: string,
     config: DropboxConfig,
   ): Promise<string> {
-    const path = config.folder
+    const dropboxPath = config.folder
       ? `/${config.folder}/${fileName}`
       : `/${fileName}`;
 
@@ -234,7 +407,7 @@ export class FilesController {
         headers: {
           Authorization: `Bearer ${config.accessToken}`,
           "Dropbox-API-Arg": JSON.stringify({
-            path,
+            path: dropboxPath,
             mode: "add",
             autorename: true,
             mute: false,

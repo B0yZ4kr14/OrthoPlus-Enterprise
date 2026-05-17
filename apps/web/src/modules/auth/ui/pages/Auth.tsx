@@ -27,6 +27,7 @@ import { ForgotPassword } from "@/components/auth/ForgotPassword";
 import { PasswordStrengthIndicator } from "@/components/auth/PasswordStrengthIndicator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Mail, Key, Eye, EyeOff } from "lucide-react";
+import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Informe seu email ou usuário"),
@@ -153,7 +154,7 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md glass-card shadow-[0_0_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_40px_rgba(0,0,0,0.3)]">
         <CardHeader className="space-y-6 text-center pb-2 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[hsl(var(--interactive))] to-transparent opacity-40" />
+          <CardTopBorder color="interactive" opacity={40} />
           <div className="absolute right-0 top-0">
             <ThemeToggle />
           </div>
