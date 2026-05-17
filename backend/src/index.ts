@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import fs from "fs";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
@@ -143,6 +144,10 @@ function validateEnvironment() {
 }
 
 validateEnvironment();
+
+// Ensure upload directory exists (security: prevents ENOENT crashes on first upload)
+const uploadDir = process.env.UPLOAD_DIR ?? "uploads";
+fs.mkdirSync(uploadDir, { recursive: true });
 
 const app = express();
 
