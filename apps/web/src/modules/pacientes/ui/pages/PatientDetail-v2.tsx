@@ -13,6 +13,8 @@ import {
   User,
   ArrowLeft,
 } from "lucide-react";
+import { PatientTimeline } from "../../components/PatientTimeline";
+import { usePatientTimeline } from "../../hooks/usePatientTimeline";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
@@ -54,6 +56,11 @@ interface PatientAPIData {
   updatedAt: string;
   createdBy?: string;
   updatedBy?: string;
+}
+
+function TimelineTab({ patientId }: { patientId: string | undefined }) {
+  const { data: events = [], isLoading } = usePatientTimeline(patientId);
+  return <PatientTimeline events={events} isLoading={isLoading} />;
 }
 
 export default function PatientDetail() {
@@ -320,16 +327,7 @@ export default function PatientDetail() {
         </TabsContent>
 
         <TabsContent value="timeline">
-          <Card>
-            <CardHeader>
-              <CardTitle>Timeline de Eventos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Histórico completo será exibido aqui
-              </p>
-            </CardContent>
-          </Card>
+          <TimelineTab patientId={patientId} />
         </TabsContent>
       </Tabs>
     </div>
