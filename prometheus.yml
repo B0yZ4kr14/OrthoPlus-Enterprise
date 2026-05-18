@@ -69,7 +69,7 @@ scrape_configs:
         labels:
           module: 'configuracoes'
 
-  ***REMOVED*** Cache
+  # Redis Cache
   - job_name: 'redis'
     static_configs:
       - targets: ['redis:6379']
