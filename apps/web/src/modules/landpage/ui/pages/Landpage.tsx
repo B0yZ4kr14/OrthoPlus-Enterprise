@@ -56,7 +56,7 @@ const features = [
     title: "Financeiro Completo",
     description:
       "Controle de receitas, despesas, conciliação bancária, contas a receber e relatórios financeiros detalhados.",
-    gradient: "from-amber-400 to-orange-500",
+    gradient: "from-warning to-orange-500",
   },
   {
     icon: FileText,

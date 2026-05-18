@@ -68,7 +68,7 @@ export const STATUS_COLORS: Record<PatientStatus, string> = {
     "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
   CONTENCAO:
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
-  ERUPCAO: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200",
+  ERUPCAO: "bg-info/10 text-info dark:bg-info/20 dark:text-info",
   AFASTAMENTO_TEMPORARIO:
     "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
   CONCLUIDO:
@@ -85,7 +85,7 @@ export const STATUS_COLORS: Record<PatientStatus, string> = {
   TRANSFERENCIA:
     "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-200",
   RESPONSAVEL:
-    "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200",
+    "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning",
 };
 
 /**

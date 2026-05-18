@@ -51,5 +51,5 @@ export const EXCHANGES: Exchange[] = [
   { name: "Coinbase", color: "bg-blue-500/10 border-blue-500/20" },
   { name: "Kraken", color: "bg-purple-500/10 border-purple-500/20" },
   { name: "Bybit", color: "bg-orange-500/10 border-orange-500/20" },
-  { name: "Mercado Bitcoin", color: "bg-cyan-500/10 border-cyan-500/20" },
+  { name: "Mercado Bitcoin", color: "bg-info/10 border-info/20" },
 ];
