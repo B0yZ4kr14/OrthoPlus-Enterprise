@@ -7,62 +7,14 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Check, Sun, Moon, Palette, Diamond } from "lucide-react";
+import { Check, Diamond } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
 const themes = [
   {
-    id: "light",
-    name: "Light",
-    description: "Tema claro clássico",
-    icon: Sun,
-    preview: {
-      background: "bg-white",
-      card: "bg-gray-50",
-      text: "text-gray-900",
-      accent: "bg-teal-500",
-    },
-  },
-  {
-    id: "dark",
-    name: "Dark",
-    description: "Tema escuro padrão",
-    icon: Moon,
-    preview: {
-      background: "bg-slate-900",
-      card: "bg-slate-800",
-      text: "text-slate-100",
-      accent: "bg-teal-500",
-    },
-  },
-  {
-    id: "professional-dark",
-    name: "Professional Dark",
-    description: "Tema dark premium (Padrão)",
-    icon: Palette,
-    preview: {
-      background: "bg-[#0f1419]",
-      card: "bg-[#1a1f28]",
-      text: "text-slate-100",
-      accent: "bg-teal-400",
-    },
-  },
-  {
-    id: "dark-gold",
-    name: "Dark Gold",
-    description: "Tema escuro premium com acentos dourados",
-    icon: Palette,
-    preview: {
-      background: "bg-[#0d0f12]",
-      card: "bg-[#13151a]",
-      text: "text-warning/50",
-      accent: "bg-warning/40",
-    },
-  },
-  {
     id: "premium-light",
-    name: "Clínica Cristal",
+    name: "Light",
     description: "Tema premium claro com acentos azul clínico",
     icon: Diamond,
     preview: {
@@ -74,7 +26,7 @@ const themes = [
   },
   {
     id: "premium-dental-dark",
-    name: "Noite Clínica",
+    name: "Dark",
     description: "Tema premium escuro com tons frios azulados",
     icon: Diamond,
     preview: {

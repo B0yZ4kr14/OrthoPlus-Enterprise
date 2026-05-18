@@ -5,7 +5,7 @@
 A correção do tema premium segue uma abordagem em 3 camadas:
 
 1. **Auditoria** → Inventário completo das ocorrências legadas
-2. **Foundation** → Utility de cores semânticas em `tokens-v3.ts`
+2. **Foundation** → Utility de cores semânticas em `semantic-colors.ts` (exportado via `theme/index.ts`)
 3. **Refatoração** → Substituição sistemática em componentes por prioridade
 
 ## Phases

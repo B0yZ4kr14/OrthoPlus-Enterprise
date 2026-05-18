@@ -9,7 +9,7 @@
 ## Overview
 O OrthoPlus Enterprise implementou um redesign premium (v3) com design tokens semânticos e CSS variables para controle de tema via `ThemeContext`. Os temas premium (`premium-light`, `premium-dental-dark`) definem paletas de cores consistentes através de CSS variables injetadas na classe `:root` do `<html>`.
 
-No entanto, **58 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-500`, `bg-amber`, `text-amber`, `bg-cyan`, `text-cyan`) persistem em componentes React espalhados pelo codebase. Essas cores não respondem ao tema selecionado pelo usuário, criando inconsistências visuais quando o tema premium está ativo.
+No entanto, **52 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-500`, `bg-amber`, `text-amber`, `bg-cyan`, `text-cyan`) foram identificadas em componentes React espalhados pelo codebase (conforme inventário completo em `audit-colors.md`). Essas cores não respondem ao tema selecionado pelo usuário, criando inconsistências visuais quando o tema premium está ativo.
 
 ## Problem Statement
 - Componentes com cores hardcoded (`amber-500`, `cyan-500`) ignoram o tema ativo
@@ -40,17 +40,16 @@ No entanto, **58 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-5
   - Cards e alertas em CRM, Configurações
 
 ### FR-4: Validação Visual
-- Verificar que todos os temas (light, dark, premium-light, premium-dental-dark) renderizam cores consistentes
-- Garantir que não há regressões no tema padrão (`light`)
+- Verificar que ambos os temas premium (`premium-light`, `premium-dental-dark`) renderizam cores consistentes
 
 ## Success Criteria
 
 | ID | Criterion | Measurement |
 |----|-----------|-------------|
 | SC-1 | Zero ocorrências de `amber-500`/`cyan-500` hardcoded em componentes | `grep` retorna vazio |
-| SC-2 | Todos os componentes de alerta usam cores semânticas via CSS vars | Inspeção visual em todos os 4 temas |
+| SC-2 | Todos os componentes de alerta usam cores semânticas via CSS vars | `grep` confirma zero hardcoded + build passa em ambos os temas premium (`premium-light`, `premium-dental-dark`) |
 | SC-3 | Build do frontend passa sem erros | `pnpm build` em `apps/web` completa com 0 erros |
-| SC-4 | Não há regressões no tema `light` padrão | Comparação visual antes/depois |
+| SC-4 | Não há regressões entre `premium-light` e `premium-dental-dark` | Comparação visual antes/depois |
 
 ## User Stories
 
@@ -67,7 +66,7 @@ No entanto, **58 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-5
 
 - **TC-1**: Não alterar `index.css` (CSS vars já estão definidos corretamente)
 - **TC-2**: Não introduzir novas dependências
-- **TC-3**: Manter compatibilidade com temas legados (`orthoplus-v2`, `dark-gold`)
+- **TC-3**: Temas suportados: `premium-light` (padrão) e `premium-dental-dark`
 - **TC-4**: Build deve continuar passando (`pnpm build` 0 erros)
 
 ## Out of Scope
