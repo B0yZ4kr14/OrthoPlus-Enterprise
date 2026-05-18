@@ -20,6 +20,28 @@ All notable changes to this project will be documented in this file.
 ### 🔐 Security
 - **SEED_ADMIN_PASSWORD**: Variável de ambiente controla criação automática de usuários admin
 - **No secrets in code**: Hash bcrypt gerado em runtime, nunca hardcoded
+## [Unreleased] - 2026-05-18 (continuação)
+
+### 🧪 Quality Assurance
+- **Backend tests**: 375 tests passing em 18 suites (0 failures)
+- **Backend lint**: 0 erros, 90 warnings (conhecidos `no-explicit-any`)
+- **Playwright fix**: Versão 1.60.0 sincronizada, E2E framework operacional
+
+### 📊 Monitoring & Observability
+- **Redis Exporter**: Adicionado ao docker-compose, target Prometheus `up`
+- **Node Exporter**: Adicionado ao docker-compose, métricas de sistema coletadas
+- **Prometheus Alerts**: 9 alertas configurados em 2 grupos:
+  - `orthoplus-backend`: BackendDown, BackendHighErrorRate, BackendHighLatency
+  - `orthoplus-infrastructure`: NodeExporterDown, RedisExporterDown, RedisDisconnected, HighMemoryUsage, HighCPUUsage, DiskSpaceLow
+- **Grafana Dashboards**: 2 dashboards provisionados (System Overview + Database Observability)
+- **Grafana Datasource**: Prometheus provisionado via `datasource.yml`
+- **Container Healthchecks**: Adicionados a redis-exporter e node-exporter
+
+### 🔧 DevOps Fixes
+- **Nginx conflicts**: Removido backup `tsiapp-https.bak.20260513_234700` de `sites-enabled/`
+- **Grafana provisioning**: Corrigido formato JSON dos dashboards (export → provision)
+- **Grafana restart loop**: Resolvido removendo volume `grafana-data` corrompido e re-provisionando
+
 
 ## [Unreleased] - 2026-05-14
 
