@@ -64,7 +64,7 @@ export default function ProgramaFidelidade() {
       case "PRATA":
         return "text-gray-400";
       case "BRONZE":
-        return "text-amber-700";
+        return "text-warning";
       default:
         return "text-muted-foreground";
     }

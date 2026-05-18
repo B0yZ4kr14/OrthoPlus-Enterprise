@@ -131,7 +131,7 @@ export function CryptoExchangesView({
                       <span className="text-muted-foreground">
                         Taxa de Processamento:{" "}
                       </span>
-                      <span className="font-semibold text-amber-600 dark:text-amber-400">
+                      <span className="font-semibold text-warning">
                         {exchange.processing_fee_percentage}%
                       </span>
                     </div>

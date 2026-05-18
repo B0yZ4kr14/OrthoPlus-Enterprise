@@ -67,9 +67,9 @@ export function ModuleCard({
         )}
 
         {!canToggle && !module.active && missingDeps.length > 0 && (
-          <div className="flex items-start gap-2 p-3 bg-amber-500/10 rounded-lg border border-amber-500/20">
-            <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-amber-600 dark:text-amber-400">
+          <div className="flex items-start gap-2 p-3 bg-warning/10 rounded-lg border border-warning/20">
+            <AlertTriangle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-warning">
               Requer:{" "}
               <strong>
                 {missingDeps

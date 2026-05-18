@@ -56,8 +56,8 @@ const themes = [
     preview: {
       background: "bg-[#0d0f12]",
       card: "bg-[#13151a]",
-      text: "text-amber-50",
-      accent: "bg-amber-400",
+      text: "text-warning/50",
+      accent: "bg-warning/40",
     },
   },
   {

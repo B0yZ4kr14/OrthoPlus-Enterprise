@@ -61,8 +61,8 @@ export function CryptoWalletsView({
         <Card depth="normal" className="p-8">
           <div className="text-center space-y-6">
             <div className="flex justify-center">
-              <div className="rounded-full bg-amber-500/10 p-6">
-                <Info className="h-12 w-12 text-amber-500" />
+              <div className="rounded-full bg-warning/10 p-6">
+                <Info className="h-12 w-12 text-warning" />
               </div>
             </div>
             <div className="space-y-2">

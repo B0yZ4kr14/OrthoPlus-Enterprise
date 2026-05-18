@@ -236,7 +236,7 @@ export function BitcoinQRCodeDialog({
                   3. Confirme o valor de {amount} {wallet?.coin_type}
                 </p>
                 <p>4. Envie a transação</p>
-                <p className="mt-2 text-amber-600 dark:text-amber-400">
+                <p className="mt-2 text-warning">
                   ⚠️ Aguarde 3 confirmações na blockchain para confirmação
                   completa
                 </p>

@@ -228,15 +228,15 @@ export default function CryptoPagamentos() {
       <BitcoinInfoCard />
 
       {!clinicId && (
-        <Card variant="default" className="border-amber-500/50 bg-amber-500/5">
+        <Card variant="default" className="border-warning/50 bg-warning/5">
           <CardContent className="py-4">
             <div className="flex items-start gap-3">
-              <Info className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+              <Info className="h-5 w-5 text-warning shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
+                <p className="text-sm font-medium text-warning">
                   Nenhuma clínica selecionada
                 </p>
-                <p className="text-sm text-amber-700 dark:text-amber-200 mt-1">
+                <p className="text-sm text-warning mt-1">
                   Selecione uma clínica no menu superior para gerenciar
                   pagamentos em criptomoedas.
                 </p>

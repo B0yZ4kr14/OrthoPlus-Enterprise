@@ -237,7 +237,7 @@ export function CryptoTransactionsView({
                           <span className="text-muted-foreground">
                             Taxa de Processamento:
                           </span>
-                          <p className="font-semibold text-amber-600 dark:text-amber-400">
+                          <p className="font-semibold text-warning">
                             - R${" "}
                             {tx.processing_fee_brl?.toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,
