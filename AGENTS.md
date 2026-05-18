@@ -208,6 +208,7 @@ src/modules/{modulo}/
 - **Schemas:** `public`, `pacientes`, `inventario`, `pdv`, `financeiro`, `pep`, `faturamento`, `configuracoes`, `database_admin`, `backups`, `crypto_config`, `github_tools`, `terminal`, `core`, `comercial`, `clinico`, `operacional`, `administrativo`.
 - **Client:** Singleton em `backend/src/infrastructure/database/prismaClient.ts`. Auto-disconnect em `beforeExit`.
 - **Migrations:** Nunca editar `migrations/` manualmente. Usar `prisma migrate dev`.
+- **Seed:** `backend/prisma/seed.ts` — cria clinica padrao (`cli-orthoplus-001`) e usuarios admin (`admin@orthoplus.com`, `Admin`) se `SEED_ADMIN_PASSWORD` estiver definida. Executar via `npx prisma db seed` (configurado em `backend/package.json`).
 - **`$queryRaw`:** ~14 ocorrencias legitimas em `backend/src/` (admin_tools, analytics, inventario, marketing, notifications, database_admin) para agregacoes complexas ou queries administrativas. Preferir Prisma Client puro para CRUD.
 
 ### 4.5 Workers (Cron Jobs)
