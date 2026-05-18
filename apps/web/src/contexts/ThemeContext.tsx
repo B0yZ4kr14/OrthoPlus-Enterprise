@@ -103,9 +103,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     const stored = localStorage.getItem("ortho-theme") as Theme | null;
-    // Migrar legacy "orthoplus-v2" → "light" automaticamente
-    if (!stored || stored === "orthoplus-v2" || stored === "dark-gold") {
-      return "light";
+    // Migrar temas legacy e basicos para premium
+    if (!stored || stored === "orthoplus-v2" || stored === "dark-gold" || stored === "light") {
+      return "premium-light";
+    }
+    if (stored === "dark") {
+      return "premium-dental-dark";
     }
     return stored;
   });

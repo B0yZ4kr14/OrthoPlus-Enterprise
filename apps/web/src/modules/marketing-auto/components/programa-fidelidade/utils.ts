@@ -4,7 +4,7 @@ import type { NivelFidelidade, StatusIndicacao } from "./types";
 export function getNivelColor(nivel: NivelFidelidade): string {
   switch (nivel) {
     case "DIAMANTE":
-      return "text-cyan-500";
+      return "text-info";
     case "PLATINA":
       return "text-slate-400";
     case "OURO":
@@ -12,7 +12,7 @@ export function getNivelColor(nivel: NivelFidelidade): string {
     case "PRATA":
       return "text-gray-400";
     case "BRONZE":
-      return "text-amber-700";
+      return "text-warning";
     default:
       return "text-muted-foreground";
   }

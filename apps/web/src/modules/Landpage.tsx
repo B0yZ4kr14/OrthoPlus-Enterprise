@@ -50,7 +50,7 @@ const features = [
     title: "Financeiro Completo",
     description:
       "Controle de receitas, despesas, conciliação bancária, contas a receber e relatórios financeiros detalhados.",
-    gradient: "from-amber-400 to-orange-500",
+    gradient: "from-warning to-orange-500",
   },
   {
     icon: FileText,
@@ -71,7 +71,7 @@ const features = [
     title: "Marketing Automático",
     description:
       "Recall de pacientes, campanhas de fidelidade, avaliações automáticas e portal do paciente integrado.",
-    gradient: "from-cyan-400 to-teal-500",
+    gradient: "from-info to-teal-500",
   },
 ];
 
