@@ -163,7 +163,7 @@ export function ModuleCard({ module, onToggle }: ModuleCardProps) {
                       disabled={isDisabled}
                     />
                     {isDisabled && tooltipContent && (
-                      <AlertCircle className="h-4 w-4 text-amber-500 animate-pulse" />
+                      <AlertCircle className="h-4 w-4 text-warning animate-pulse" />
                     )}
                   </div>
                 </TooltipTrigger>

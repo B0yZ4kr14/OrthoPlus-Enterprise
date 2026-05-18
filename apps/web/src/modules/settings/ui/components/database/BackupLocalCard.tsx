@@ -76,17 +76,17 @@ export function BackupLocalCard() {
                 </ul>
 
                 <div className="space-y-3">
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2">
-                    <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-amber-800">Faça backups diários após o expediente.</p>
+                  <div className="p-3 bg-warning/5 border border-warning/20 rounded-lg flex items-start gap-2">
+                    <Lightbulb className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-warning">Faça backups diários após o expediente.</p>
                   </div>
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2">
-                    <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-amber-800">Mantenha os backups em um disco externo ou nuvem.</p>
+                  <div className="p-3 bg-warning/5 border border-warning/20 rounded-lg flex items-start gap-2">
+                    <Lightbulb className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-warning">Mantenha os backups em um disco externo ou nuvem.</p>
                   </div>
-                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-2">
-                    <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-amber-800">Teste as restaurações periodicamente.</p>
+                  <div className="p-3 bg-warning/5 border border-warning/20 rounded-lg flex items-start gap-2">
+                    <Lightbulb className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-warning">Teste as restaurações periodicamente.</p>
                   </div>
                 </div>
               </div>

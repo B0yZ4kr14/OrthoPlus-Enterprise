@@ -75,9 +75,9 @@ export function StepDependencies() {
         </div>
       </div>
 
-      <Card className="p-6 bg-amber-500/10 border-amber-500/20">
+      <Card className="p-6 bg-warning/10 border-warning/20">
         <h3 className="font-semibold mb-3 flex items-center gap-2">
-          <AlertCircle className="h-5 w-5 text-amber-500" />
+          <AlertCircle className="h-5 w-5 text-warning" />
           Exemplos Práticos
         </h3>
         <ul className="space-y-2 text-sm text-muted-foreground">

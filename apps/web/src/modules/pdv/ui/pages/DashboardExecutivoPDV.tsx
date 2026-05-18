@@ -333,7 +333,7 @@ export default function DashboardExecutivoPDV() {
                         <Award className="h-5 w-5 text-muted-foreground" />
                       )}
                       {index === 2 && (
-                        <Award className="h-5 w-5 text-amber-600" />
+                        <Award className="h-5 w-5 text-warning" />
                       )}
                       {index > 2 && (
                         <span className="font-bold text-sm">{index + 1}</span>

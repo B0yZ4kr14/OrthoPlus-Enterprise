@@ -67,7 +67,7 @@ export function BackupRestoreDialog({
       case 3:
         return (
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-amber-600">
+            <div className="flex items-center gap-2 text-warning">
               <AlertTriangle className="h-5 w-5" />
               <span className="font-medium">Confirmação</span>
             </div>

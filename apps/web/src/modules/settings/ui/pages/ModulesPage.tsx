@@ -66,7 +66,7 @@ export default function ModulesPage() {
           <CardHeader className="pb-3">
             <CardDescription>Disponíveis</CardDescription>
             <CardTitle className="text-3xl flex items-center gap-2">
-              <Lock className="h-6 w-6 text-amber-500" />
+              <Lock className="h-6 w-6 text-warning" />
               {stats.available}
             </CardTitle>
           </CardHeader>
