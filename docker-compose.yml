@@ -42,6 +42,12 @@ services:
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://orthoplus.i9corp.com.br}
       - SEED_ADMIN_PASSWORD=${SEED_ADMIN_PASSWORD:-}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_USER=orthoplus
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=orthoplus
+      - DB_SCHEMA=public
     depends_on:
       postgres:
         condition: service_healthy
