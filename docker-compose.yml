@@ -132,6 +132,7 @@ services:
     # Port not exposed to host — accessible only within orthoplus-network
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus-alerts.yml:/etc/prometheus/prometheus-alerts.yml:ro
       - prometheus-data:/prometheus
     networks:
       - orthoplus-network
@@ -147,6 +148,9 @@ services:
     image: grafana/grafana:latest
     container_name: orthoplus-grafana
     # Port not exposed to host — accessible only within orthoplus-network
+    ports:
+      - "3000:3000"
+
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:?GRAFANA_PASSWORD must be set}
       - GF_SERVER_ROOT_URL=http://localhost:3000

@@ -1,115 +1,14 @@
-# Prometheus Alert Rules — OrthoPlus Enterprise
-# DevSecOps: Regras de alerta críticas para SaaS odontológico multi-tenant
+# Prometheus Alert Rules for OrthoPlus Enterprise
+# To add alerts, define groups below following Prometheus alert format:
+# groups:
+#   - name: orthoplus-alerts
+#     rules:
+#       - alert: BackendDown
+#         expr: up{job="orthoplus-backend"} == 0
+#         for: 1m
+#         labels:
+#           severity: critical
+#         annotations:
+#           summary: "OrthoPlus backend is down"
 
-groups:
-  - name: database_circuit_breaker
-    interval: 30s
-    rules:
-      - alert: CircuitBreakerOpen
-        expr: orthoplus_circuit_breaker_state == 2
-        for: 1m
-        labels:
-          severity: critical
-          team: devops
-        annotations:
-          summary: "Circuit breaker OPEN para categoria {{ $labels.category }}"
-          description: "A categoria {{ $labels.category }} está com circuito aberto há mais de 1 minuto. Serviço indisponível."
-
-      - alert: CircuitBreakerHalfOpen
-        expr: orthoplus_circuit_breaker_state == 1
-        for: 2m
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Circuit breaker HALF_OPEN para categoria {{ $labels.category }}"
-          description: "A categoria {{ $labels.category }} está em estado HALF_OPEN por mais de 2 minutos. Pode indicar instabilidade."
-
-      - alert: CircuitBreakerHighRejections
-        expr: rate(orthoplus_circuit_breaker_rejected_calls_total[5m]) > 10
-        for: 1m
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Alto número de chamadas rejeitadas em {{ $labels.category }}"
-          description: "Mais de 10 chamadas rejeitadas por minuto na categoria {{ $labels.category }}."
-
-  - name: database_health
-    interval: 30s
-    rules:
-      - alert: DatabaseCategoryDown
-        expr: orthoplus_db_category_health == 0
-        for: 1m
-        labels:
-          severity: critical
-          team: devops
-        annotations:
-          summary: "Categoria de BD DOWN: {{ $labels.category }}"
-          description: "A categoria {{ $labels.category }} está indisponível. Todos os schemas podem estar inacessíveis."
-
-      - alert: DatabaseCategoryDegraded
-        expr: orthoplus_db_category_health == 1
-        for: 3m
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Categoria de BD DEGRADED: {{ $labels.category }}"
-          description: "A categoria {{ $labels.category }} está degradada. Alguns schemas podem estar ausentes."
-
-      - alert: DatabaseHighLatency
-        expr: histogram_quantile(0.95, sum(rate(orthoplus_db_category_latency_ms_bucket[5m])) by (le, category)) > 1000
-        for: 2m
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Alta latência em {{ $labels.category }}"
-          description: "Latência p95 da categoria {{ $labels.category }} excedeu 1000ms por mais de 2 minutos."
-
-  - name: backups
-    interval: 60s
-    rules:
-      - alert: BackupFailure
-        expr: increase(orthoplus_backup_failure_total[1h]) > 0
-        for: 0m
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Falha em backup da categoria {{ $labels.category }}"
-          description: "O backup da categoria {{ $labels.category }} falhou na última hora."
-
-      - alert: BackupStale
-        expr: time() - orthoplus_backup_success_total > 86400
-        for: 1h
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Backup desatizado para {{ $labels.category }}"
-          description: "Nenhum backup bem-sucedido para {{ $labels.category }} nas últimas 24 horas."
-
-  - name: system
-    interval: 30s
-    rules:
-      - alert: HighHTTPErrorRate
-        expr: rate(http_request_errors_total[5m]) / rate(http_requests_total[5m]) > 0.05
-        for: 2m
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Alta taxa de erro HTTP"
-          description: "Taxa de erro HTTP > 5% nas últimas 5 minutos."
-
-      - alert: HighActiveConnections
-        expr: active_connections > 1000
-        for: 1m
-        labels:
-          severity: warning
-          team: devops
-        annotations:
-          summary: "Alto número de conexões ativas"
-          description: "Mais de 1000 conexões ativas no backend."
+groups: []
