@@ -65,7 +65,7 @@ EXPOSE 3005
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3005/health || exit 1
 
-COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY backend/scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
