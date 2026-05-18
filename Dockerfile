@@ -1,5 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
+# Install build tools required for native modules (canvas, bcrypt, etc.)
+RUN apk add --no-cache python3 make g++ pkgconfig pixman-dev cairo-dev pango-dev libpng-dev jpeg-dev giflib-dev
 RUN npm install -g pnpm@10.33.0
 COPY package.json pnpm-workspace.yaml turbo.json ./
 COPY tsconfig*.json ./ tailwind.config.ts ./

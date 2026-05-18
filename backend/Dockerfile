@@ -3,6 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Install build tools required for native modules (bcrypt, etc.)
+RUN apk add --no-cache python3 make g++
+
 # Install pnpm and prisma for build
 RUN npm install -g pnpm@10.33.0 prisma@6.19.3
 
