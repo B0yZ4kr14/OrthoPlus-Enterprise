@@ -153,7 +153,8 @@ services:
 
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:?GRAFANA_PASSWORD must be set}
-      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_SERVER_ROOT_URL=https://tsiapp.io/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
       - GF_AUTH_ANONYMOUS_ENABLED=false
     volumes:
       - grafana-data:/var/lib/grafana
