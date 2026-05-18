@@ -1,14 +1,88 @@
 # Prometheus Alert Rules for OrthoPlus Enterprise
-# To add alerts, define groups below following Prometheus alert format:
-# groups:
-#   - name: orthoplus-alerts
-#     rules:
-#       - alert: BackendDown
-#         expr: up{job="orthoplus-backend"} == 0
-#         for: 1m
-#         labels:
-#           severity: critical
-#         annotations:
-#           summary: "OrthoPlus backend is down"
+# Docs: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
 
-groups: []
+groups:
+  - name: orthoplus-backend
+    rules:
+      - alert: BackendDown
+        expr: up{job="orthoplus-backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "OrthoPlus backend is down"
+          description: "The orthoplus-backend target has been down for more than 1 minute."
+
+      - alert: BackendHighErrorRate
+        expr: rate(http_request_errors_total[5m]) / rate(http_requests_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backend high error rate"
+          description: "Error rate is above 10% for more than 2 minutes."
+
+      - alert: BackendHighLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backend high latency"
+          description: "95th percentile latency is above 2 seconds for more than 3 minutes."
+
+  - name: orthoplus-infrastructure
+    rules:
+      - alert: NodeExporterDown
+        expr: up{job="node-exporter"} == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Node exporter is down"
+          description: "Cannot collect system metrics from node-exporter."
+
+      - alert: RedisExporterDown
+        expr: up{job="redis-exporter"} == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis exporter is down"
+          description: "Cannot collect Redis metrics from redis-exporter."
+
+      - alert: RedisDisconnected
+        expr: redis_connected_clients == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis has no connected clients"
+          description: "Redis may be down or unreachable."
+
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is above 85% for more than 5 minutes."
+
+      - alert: HighCPUUsage
+        expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is above 80% for more than 5 minutes."
+
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Disk space low"
+          description: "Less than 10% disk space remaining on root partition."
