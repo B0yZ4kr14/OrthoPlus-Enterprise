@@ -7,7 +7,7 @@ WORKDIR /app
 RUN apk add --no-cache python3 make g++
 
 # Install pnpm and prisma for build
-RUN npm install -g pnpm@10.33.0 prisma@6.19.3
+RUN npm install -g pnpm@10.33.0 prisma@6.19.3 tsx@4.22.1
 
 # Copy root configurations
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -38,7 +38,7 @@ WORKDIR /app
 RUN apk add --no-cache postgresql-client
 
 # Install pnpm and prisma for production
-RUN npm install -g pnpm@10.33.0 prisma@6.19.3
+RUN npm install -g pnpm@10.33.0 prisma@6.19.3 tsx@4.22.1
 
 # Copy root configurations and lockfile
 COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
