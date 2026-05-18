@@ -43,6 +43,12 @@ No entanto, **58 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-5
 - Verificar que todos os temas (light, dark, premium-light, premium-dental-dark) renderizam cores consistentes
 - Garantir que não há regressões no tema padrão (`light`)
 
+### FR-5: Simplificação do Seletor de Temas
+- Remover os temas básicos `light` e `dark` do dropdown de seleção de tema
+- Manter apenas os temas Premium: `premium-light` (renomeado para "Light") e `premium-dental-dark` (renomeado para "Dark")
+- Atualizar o tema padrão de `light` para `premium-light`
+- Garantir migração automática de usuários com temas legados para os novos temas Premium
+
 ## Success Criteria
 
 | ID | Criterion | Measurement |
@@ -51,11 +57,13 @@ No entanto, **58 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-5
 | SC-2 | Todos os componentes de alerta usam cores semânticas via CSS vars | Inspeção visual em todos os 4 temas |
 | SC-3 | Build do frontend passa sem erros | `pnpm build` em `apps/web` completa com 0 erros |
 | SC-4 | Não há regressões no tema `light` padrão | Comparação visual antes/depois |
+| SC-5 | Seletor de temas mostra apenas Light e Dark (ambos Premium) | Inspeção visual do dropdown |
 
 ## User Stories
 
 - **US-1**: Como usuário do tema premium-light, quero que os alertas de aviso usem a cor âmbar consistente do meu tema, não uma cor hardcoded que não combina.
 - **US-2**: Como desenvolvedor, quero usar utilitários semânticos (`warning`, `info`, `accent`) em vez de hardcodar cores Tailwind, para que meus componentes sejam automaticamente compatíveis com todos os temas.
+- **US-3**: Como usuário, quero um seletor de temas simplificado com apenas duas opções claras (Light e Dark), eliminando a confusão entre temas básicos e premium.
 
 ## Edge Cases
 
