@@ -154,12 +154,7 @@ services:
     depends_on:
       - redis
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "sh -c 'cat < /dev/null > /dev/tcp/localhost/9121'"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+    # Note: No HEALTHCHECK — image is scratch-based. Prometheus monitors via scrape target.
 
   # Node Exporter (System Metrics)
   node-exporter:
