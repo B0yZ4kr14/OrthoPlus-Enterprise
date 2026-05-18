@@ -20,6 +20,17 @@ All notable changes to this project will be documented in this file.
 ### 🔐 Security
 - **SEED_ADMIN_PASSWORD**: Variável de ambiente controla criação automática de usuários admin
 - **No secrets in code**: Hash bcrypt gerado em runtime, nunca hardcoded
+## [Unreleased] - 2026-05-18 (security patches)
+
+### 🔐 Security Patches
+- **CVE Fixes**: 23 vulnerabilidades resolvidas (4 high → 0, 18 moderate → 0, 1 low → 0)
+- **axios**: `1.14.0` → `1.16.1` — 4 high CVEs (prototype pollution, header injection, SSRF, credential hijack) + 1 low (null byte injection)
+- **nodemailer**: `8.0.4` → `8.0.7` — CRLF SMTP command injection
+- **uuid**: `13.0.0` → `13.0.1` — moderate CVE
+- **express-rate-limit**: `8.3.1` → `8.5.2` — ip-address XSS transitivo
+- **dompurify**: Forçado `>=3.4.0` via pnpm override — 4 moderate XSS bypasses
+- **pnpm audit --prod**: 0 vulnerabilidades encontradas
+
 ## [Unreleased] - 2026-05-18 (continuação)
 
 ### 🧪 Quality Assurance

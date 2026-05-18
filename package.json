@@ -48,6 +48,9 @@
       "core-js",
       "esbuild",
       "prisma"
-    ]
+    ],
+    "overrides": {
+      "dompurify": ">=3.4.0"
+    }
   }
 }
