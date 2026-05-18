@@ -11,7 +11,7 @@ services:
         - VITE_API_BASE_URL=${VITE_API_BASE_URL}
     container_name: orthoplus-app
     ports:
-      - "8080:80"
+      - "127.0.0.1:8083:8080"
     environment:
       - NODE_ENV=production
     networks:
@@ -34,7 +34,7 @@ services:
       dockerfile: ./backend/Dockerfile
     container_name: orthoplus-backend
     ports:
-      - "3005:3005"
+      - "127.0.0.1:3005:3005"
     environment:
       - NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL}
@@ -147,9 +147,9 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: orthoplus-grafana
-    # Port not exposed to host — accessible only within orthoplus-network
+    # Exposed only on localhost — use host nginx reverse proxy for external access
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
 
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:?GRAFANA_PASSWORD must be set}

@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-05-18
+
+### 🎨 Frontend
+- **Theme Premium Fix**: 52 ocorrências de cores hardcoded (`amber-500`, `cyan-500`) substituídas por cores semânticas (`warning`, `info`) via CSS variables
+- **23 componentes** refatorados: auth, onboarding, settings, financeiro, crypto, CRM, marketing, pacientes, PDV
+- **PR #2**: Mergeado para `main` — [theme-premium-color-fix](https://github.com/B0yZ4kr14/OrthoPlus-Enterprise/pull/2)
+- **Build**: `pnpm build` 0 erros, 0 warnings TypeScript
+
+### 🚀 Infrastructure & DevOps
+- **Prometheus**: Config validada — removidos targets PostgreSQL fantasmas, criado `prometheus-alerts.yml`
+- **Grafana**: Porta 3000 exposta ao host para acesso externo
+- **Backend Entrypoint**: `docker-entrypoint.sh` aguarda PostgreSQL e executa `prisma db seed` automaticamente se `SEED_ADMIN_PASSWORD` estiver definido
+- **Backup Docker**: `scripts/backup-postgres-docker.sh` — backup diário automático via cron (02:00 AM, retenção 7 dias)
+- **Docker Compose**: Adicionadas env vars `DB_*` e `SEED_ADMIN_PASSWORD` ao backend; healthchecks corrigidos
+
+### 🔐 Security
+- **SEED_ADMIN_PASSWORD**: Variável de ambiente controla criação automática de usuários admin
+- **No secrets in code**: Hash bcrypt gerado em runtime, nunca hardcoded
+
 ## [Unreleased] - 2026-05-14
 
 ### 🔐 Security
