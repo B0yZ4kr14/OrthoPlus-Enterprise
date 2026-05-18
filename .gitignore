@@ -107,3 +107,5 @@ tests/evidence/
 .kimi/skills/
 CLAUDE.md
 KIMI.md
+test-results/
+tests/e2e/.auth/
