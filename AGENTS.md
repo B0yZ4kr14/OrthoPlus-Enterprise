@@ -507,7 +507,7 @@ specs/017-omk-governance-integration/plan.md
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **OrthoPlus-Enterprise** (33855 symbols, 71081 relationships, 288 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **OrthoPlus-Enterprise** (33916 symbols, 71142 relationships, 288 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

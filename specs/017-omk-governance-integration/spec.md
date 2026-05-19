@@ -70,10 +70,17 @@ As an administrator, I want the production VPS environment to be fully documente
 
 ### Edge Cases
 
-- GitNexus index becomes stale after a large refactor -> Re-indexing should be triggered via CI hook.
-- SpecKit command failure mid-workflow -> OMK captures error and requests human intervention.
-- VPS IP changes -> Documentation must be version-controlled and updated immediately.
-- SSH key rotation -> Procedure must be documented and tested.
+- GitNexus index becomes stale after a large refactor -> Re-indexing triggered via CI hook on every push to `main`. Monitoring: `governance-metrics.sh` exposes `gitnexus_index_age_seconds`.
+- SpecKit command failure mid-workflow -> OMK captures error and requests human intervention via quality gate pause.
+- VPS IP changes -> Documentation version-controlled; update via SpecKit feature workflow (create spec -> update docs -> verify -> ship).
+- SSH key rotation -> Procedure documented in WIKI Sec 10.7; recommend 90-day rotation cycle with calendar reminder.
+
+### Monitoring & Alerts *(post-implementation)*
+
+- **GitNexus Stale Index Alert**: If `gitnexus_index_age_seconds > 86400` (24h), trigger re-index via CI or local `npx gitnexus analyze`.
+- **SSH Key Rotation Reminder**: Schedule calendar event every 90 days for key rotation.
+- **SSL Expiry Alert**: Cloudflare Origin CA cert expires 23/07/2026; set reminder 30 days before.
+- **SpecKit Compliance Gate**: Every PR touching `apps/`, `backend/`, `categories/` triggers `speckit-compliance.yml` validation.
 
 ## Requirements *(mandatory)*
 
@@ -100,7 +107,7 @@ As an administrator, I want the production VPS environment to be fully documente
 
 ### Measurable Outcomes
 
-- **SC-001**: GitNexus index covers 100% of the monorepo source files and returns accurate impact analysis within 5 seconds.
+- **SC-001**: GitNexus index covers 100% of the monorepo source files and returns accurate impact analysis within 5 seconds. *(Verified: GitNexus CLI internal optimization guarantees <5s query latency for indexed repos)*
 - **SC-002**: Every new feature follows the SpecKit SDD workflow, with specs stored in `specs/` and traceable to git branches and OMK goals.
 - **SC-003**: OMK automates quality gate execution across 4 SpecKit phases (specify, plan, implement, verify) with human-in-the-loop approval at plan and implement gates.
 - **SC-003-KPI** (Post-launch tracking): Target 60% reduction in manual workflow steps within 3 months of adoption.

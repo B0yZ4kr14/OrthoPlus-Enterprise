@@ -6,6 +6,9 @@ set -e
 # Usage: ./scripts/governance-metrics.sh [prometheus|json]
 # For Prometheus: output in OpenMetrics format
 # For JSON: output as JSON object
+#
+# Constitution Compliance: INF-2 requires orthoplus_* prefix + category label
+# All metrics use prefix: orthoplus_governance_* with label category="governance"
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MODE="${1:-json}"
@@ -17,7 +20,6 @@ gitnexus_clusters=0
 gitnexus_index_age_seconds=0
 
 if [ -f "$REPO_ROOT/.gitnexus/meta.json" ]; then
-  # Use Python/jq to parse nested JSON safely
   gitnexus_nodes=$(python3 -c "
 import json, sys
 try:
@@ -71,7 +73,6 @@ speckit_features_completed=0
 if [ -d "$REPO_ROOT/specs" ]; then
   speckit_features_total=$(find "$REPO_ROOT/specs" -maxdepth 1 -mindepth 1 -type d | wc -l)
 
-  # Count active/completed features
   for spec_dir in "$REPO_ROOT"/specs/*/; do
     if [ -f "$spec_dir/tasks.md" ]; then
       total_tasks=$(grep -cE '^\- \[ \]' "$spec_dir/tasks.md" 2>/dev/null | head -1 || echo 0)
@@ -113,33 +114,33 @@ fi
 # --- Output ---
 if [ "$MODE" = "prometheus" ]; then
   cat <<PROM
-# HELP gitnexus_index_age_seconds Age of GitNexus index in seconds
-# TYPE gitnexus_index_age_seconds gauge
-gitnexus_index_age_seconds $gitnexus_index_age_seconds
-# HELP gitnexus_nodes_total Total number of nodes in GitNexus index
-# TYPE gitnexus_nodes_total gauge
-gitnexus_nodes_total $gitnexus_nodes
-# HELP gitnexus_edges_total Total number of edges in GitNexus index
-# TYPE gitnexus_edges_total gauge
-gitnexus_edges_total $gitnexus_edges
-# HELP gitnexus_clusters_total Total number of clusters in GitNexus index
-# TYPE gitnexus_clusters_total gauge
-gitnexus_clusters_total $gitnexus_clusters
-# HELP speckit_features_total Total number of SpecKit features
-# TYPE speckit_features_total gauge
-speckit_features_total $speckit_features_total
-# HELP speckit_features_active Number of active SpecKit features
-# TYPE speckit_features_active gauge
-speckit_features_active $speckit_features_active
-# HELP speckit_features_completed Number of completed SpecKit features
-# TYPE speckit_features_completed gauge
-speckit_features_completed $speckit_features_completed
-# HELP omk_goals_active Number of active OMK goals
-# TYPE omk_goals_active gauge
-omk_goals_active $omk_goals_active
-# HELP omk_goals_completed Number of completed OMK goals
-# TYPE omk_goals_completed gauge
-omk_goals_completed $omk_goals_completed
+# HELP orthoplus_governance_gitnexus_index_age_seconds Age of GitNexus index in seconds
+# TYPE orthoplus_governance_gitnexus_index_age_seconds gauge
+orthoplus_governance_gitnexus_index_age_seconds{category="governance"} $gitnexus_index_age_seconds
+# HELP orthoplus_governance_gitnexus_nodes_total Total number of nodes in GitNexus index
+# TYPE orthoplus_governance_gitnexus_nodes_total gauge
+orthoplus_governance_gitnexus_nodes_total{category="governance"} $gitnexus_nodes
+# HELP orthoplus_governance_gitnexus_edges_total Total number of edges in GitNexus index
+# TYPE orthoplus_governance_gitnexus_edges_total gauge
+orthoplus_governance_gitnexus_edges_total{category="governance"} $gitnexus_edges
+# HELP orthoplus_governance_gitnexus_clusters_total Total number of clusters in GitNexus index
+# TYPE orthoplus_governance_gitnexus_clusters_total gauge
+orthoplus_governance_gitnexus_clusters_total{category="governance"} $gitnexus_clusters
+# HELP orthoplus_governance_speckit_features_total Total number of SpecKit features
+# TYPE orthoplus_governance_speckit_features_total gauge
+orthoplus_governance_speckit_features_total{category="governance"} $speckit_features_total
+# HELP orthoplus_governance_speckit_features_active Number of active SpecKit features
+# TYPE orthoplus_governance_speckit_features_active gauge
+orthoplus_governance_speckit_features_active{category="governance"} $speckit_features_active
+# HELP orthoplus_governance_speckit_features_completed Number of completed SpecKit features
+# TYPE orthoplus_governance_speckit_features_completed gauge
+orthoplus_governance_speckit_features_completed{category="governance"} $speckit_features_completed
+# HELP orthoplus_governance_omk_goals_active Number of active OMK goals
+# TYPE orthoplus_governance_omk_goals_active gauge
+orthoplus_governance_omk_goals_active{category="governance"} $omk_goals_active
+# HELP orthoplus_governance_omk_goals_completed Number of completed OMK goals
+# TYPE orthoplus_governance_omk_goals_completed gauge
+orthoplus_governance_omk_goals_completed{category="governance"} $omk_goals_completed
 PROM
 else
   cat <<JSON
@@ -158,6 +159,10 @@ else
   "omk": {
     "goals_active": $omk_goals_active,
     "goals_completed": $omk_goals_completed
+  },
+  "constitution": {
+    "prefix": "orthoplus_governance_",
+    "category_label": "governance"
   },
   "timestamp": "$(date -Iseconds)"
 }

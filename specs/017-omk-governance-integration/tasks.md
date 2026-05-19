@@ -132,6 +132,13 @@
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
+### Monitoring & Observability (Post-Implementation)
+
+- [X] T053 [P] [OMK] Configure governance metrics with `orthoplus_governance_*` prefix and `category=governance` label per INF-2
+- [X] T054 [P] [GitNexus] Document stale index detection procedure: `gitnexus_index_age_seconds > 86400` triggers re-index
+- [X] T055 [P] [SpecKit] Add dry-run test for speckit-compliance.yml workflow (validate YAML syntax and job structure)
+- [X] T056 [P] [OMK] Document SSH key rotation 90-day cycle and SSL expiry reminder (23/07/2026)
+
 **Purpose**: Metrics, monitoring, and final documentation
 
 - [X] T045 [P] Add GitNexus index freshness metric to Prometheus: `gitnexus_index_age_seconds` (governance-metrics.sh)
