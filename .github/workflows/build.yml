@@ -40,14 +40,14 @@ jobs:
       
       - name: Check bundle size
         run: |
-          BUNDLE_SIZE=$(du -sh dist/ | cut -f1)
+          BUNDLE_SIZE=$(du -sh apps/web/dist/ | cut -f1)
           echo "Bundle size: $BUNDLE_SIZE"
           
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist/
+          path: apps/web/dist/
           retention-days: 7
 
   backend-build:

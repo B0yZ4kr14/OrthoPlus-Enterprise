@@ -19,7 +19,8 @@ log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
 log_warn()    { echo -e "${YELLOW}[AVISO]${NC} $1"; }
 log_error()   { echo -e "${RED}[ERRO]${NC} $1"; exit 1; }
 
-VPS_IP="100.111.74.69"
+# DEVOPS-2 FIX: Extracted hardcoded IP to environment variable for multi-environment support
+VPS_HOST=${VPS_HOST:-"100.111.74.69"}
 VPS_USER="ubuntu"
 SSH_KEY="$HOME/.ssh/id_ed25519_b0yz4kr14"
 SSH_OPTS="-i $SSH_KEY -o StrictHostKeyChecking=no -o ConnectTimeout=10"
@@ -38,8 +39,8 @@ echo ""
 log_success "Chave SSH: $SSH_KEY"
 
 log_info "Testando conectividade com VPS..."
-ssh $SSH_OPTS "$VPS_USER@$VPS_IP" "echo CONNECTED" > /dev/null 2>&1 || log_error "Sem acesso ao VPS!"
-log_success "VPS acessível: $VPS_IP"
+ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" "echo CONNECTED" > /dev/null 2>&1 || log_error "Sem acesso ao VPS!"
+log_success "VPS acessível: $VPS_HOST"
 
 # --- [1/5] Build Frontend ---
 log_info "[1/5] Build do frontend (Vite)..."
@@ -66,15 +67,15 @@ log_info "[3/5] Sincronizando frontend e nginx.conf para VPS..."
 rsync -avz --delete \
   -e "ssh $SSH_OPTS" \
   "$LOCAL_ROOT/apps/web/dist/" \
-  "$VPS_USER@$VPS_IP:/tmp/orthoplus-frontend/"
+  "$VPS_USER@$VPS_HOST:/tmp/orthoplus-frontend/"
 
 # Sync corrected nginx.conf
 rsync -avz -e "ssh $SSH_OPTS" \
   "$LOCAL_ROOT/nginx.conf" \
-  "$VPS_USER@$VPS_IP:/tmp/nginx-orthoplus.conf"
+  "$VPS_USER@$VPS_HOST:/tmp/nginx-orthoplus.conf"
 
 # Validate + reload nginx, then copy frontend
-ssh $SSH_OPTS "$VPS_USER@$VPS_IP" "
+ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" "
   sudo nginx -t -c /tmp/nginx-orthoplus.conf 2>&1 && \
   sudo cp /tmp/nginx-orthoplus.conf /etc/nginx/nginx.conf && \
   sudo systemctl reload nginx && echo 'nginx ✓ reloaded' || echo 'nginx config invalid — keeping current'
@@ -91,19 +92,19 @@ rsync -avz --delete \
   --exclude='node_modules' \
   --exclude='.turbo' \
   "$LOCAL_ROOT/backend/dist/" \
-  "$VPS_USER@$VPS_IP:$REMOTE_BACKEND/dist/"
+  "$VPS_USER@$VPS_HOST:$REMOTE_BACKEND/dist/"
 
 rsync -avz \
   -e "ssh $SSH_OPTS" \
   "$LOCAL_ROOT/backend/package.json" \
   "$LOCAL_ROOT/backend/prisma/" \
-  "$VPS_USER@$VPS_IP:$REMOTE_BACKEND/"
+  "$VPS_USER@$VPS_HOST:$REMOTE_BACKEND/"
 
 log_success "Backend sincronizado para $REMOTE_BACKEND"
 
 # --- [5/5] Migrations + PM2 Reload ---
 log_info "[5/5] Aplicando migrações Prisma e recarregando PM2..."
-ssh $SSH_OPTS "$VPS_USER@$VPS_IP" << 'REMOTE'
+ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
   set -e
   cd /home/ubuntu/OrthoPlus-Enterprise-backend
 
@@ -112,7 +113,10 @@ ssh $SSH_OPTS "$VPS_USER@$VPS_IP" << 'REMOTE'
 
   # Prisma migrate deploy
   echo "[VPS] Aplicando migrações Prisma..."
-  pnpm exec prisma migrate deploy || pnpm exec prisma db push --accept-data-loss
+  # DEVOPS-2 FIX: Removed dangerous prisma db push --accept-data-loss fallback.
+  # Using db push with --accept-data-loss can cause IRREVERSIBLE DATA LOSS in production.
+  # Now the deploy aborts if migrations fail, requiring manual investigation.
+  pnpm exec prisma migrate deploy || { echo "Migration failed! Aborting deploy."; exit 1; }
 
   # Gerar Prisma client atualizado
   pnpm exec prisma generate
@@ -137,7 +141,7 @@ log_success "Migrações aplicadas, PM2 recarregado"
 log_info "Aguardando backend inicializar..."
 sleep 5
 
-HEALTH=$(ssh $SSH_OPTS "$VPS_USER@$VPS_IP" "curl -s http://127.0.0.1/health" 2>/dev/null || echo "FAIL")
+HEALTH=$(ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" "curl -s http://127.0.0.1/health" 2>/dev/null || echo "FAIL")
 if echo "$HEALTH" | grep -q '"status"'; then
   log_success "Health check: OK — $HEALTH"
 else
@@ -148,8 +152,8 @@ echo ""
 echo -e "${GREEN}╔══════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║             DEPLOY CONCLUÍDO COM SUCESSO! 🎉              ║${NC}"
 echo -e "${GREEN}╠══════════════════════════════════════════════════════════╣${NC}"
-echo -e "${GREEN}║  Frontend: http://$VPS_IP/                     ║${NC}"
-echo -e "${GREEN}║  Health:   http://$VPS_IP/health               ║${NC}"
-echo -e "${GREEN}║  API:      http://$VPS_IP/api/                 ║${NC}"
+echo -e "${GREEN}║  Frontend: http://$VPS_HOST/                     ║${NC}"
+echo -e "${GREEN}║  Health:   http://$VPS_HOST/health               ║${NC}"
+echo -e "${GREEN}║  API:      http://$VPS_HOST/api/                 ║${NC}"
 echo -e "${GREEN}╚══════════════════════════════════════════════════════════╝${NC}"
 echo ""

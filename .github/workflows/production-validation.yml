@@ -80,7 +80,7 @@ jobs:
         run: pnpm run build
         env:
           NODE_ENV: production
-          VITE_API_BASE_URL: "https://example.com/api"
+          VITE_API_BASE_URL: ${{ secrets.PROD_API_BASE_URL || 'https://example.com/api' }}
 
       - name: Build backend (production)
         run: pnpm --filter orthoplus-backend run build

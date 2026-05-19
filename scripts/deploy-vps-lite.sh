@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e
 
-VPS_IP="${1:-100.111.74.69}"
+# DEVOPS-2 FIX: Extracted hardcoded IP to environment variable for multi-environment support
+# Keeps backward compatibility with positional argument usage.
+VPS_HOST=${VPS_HOST:-"${1:-100.111.74.69}"}
 SSH_KEY="${2:-$HOME/.ssh/id_ed25519_b0yz4kr14}"
 VPS_USER="ubuntu"
 REMOTE_DIR="/home/ubuntu/OrthoPlus-Enterprise"
 
-echo "[DEPLOY-LITE] Target VPS: $VPS_USER@$VPS_IP"
+echo "[DEPLOY-LITE] Target VPS: $VPS_USER@$VPS_HOST"
 
 # Ensure local builds exist
 if [ ! -d "$(dirname $0)/../apps/web/dist" ]; then
@@ -21,37 +23,41 @@ fi
 # Sync root workspace files
 rsync -avz \
   -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
-  "$(dirname $0)/../pnpm-lock.yaml" "$VPS_USER@$VPS_IP:$REMOTE_DIR/"
+  "$(dirname $0)/../pnpm-lock.yaml" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/"
 
 rsync -avz \
   -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
-  "$(dirname $0)/../pnpm-workspace.yaml" "$VPS_USER@$VPS_IP:$REMOTE_DIR/"
+  "$(dirname $0)/../pnpm-workspace.yaml" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/"
 
 # Sync backend production artifacts
 rsync -avz --delete \
   -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
-  "$(dirname $0)/../backend/dist/" "$VPS_USER@$VPS_IP:$REMOTE_DIR/backend/dist/"
+  "$(dirname $0)/../backend/dist/" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/backend/dist/"
 
 rsync -avz --delete \
   -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
-  "$(dirname $0)/../backend/prisma/" "$VPS_USER@$VPS_IP:$REMOTE_DIR/backend/prisma/"
+  "$(dirname $0)/../backend/prisma/" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/backend/prisma/"
 
 rsync -avz \
   -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
-  "$(dirname $0)/../backend/package.json" "$VPS_USER@$VPS_IP:$REMOTE_DIR/backend/"
+  "$(dirname $0)/../backend/package.json" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/backend/"
 
 # Sync frontend static files
 rsync -avz --delete \
   -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
-  "$(dirname $0)/../apps/web/dist/" "$VPS_USER@$VPS_IP:$REMOTE_DIR/apps/web/dist/"
+  "$(dirname $0)/../apps/web/dist/" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/apps/web/dist/"
 
 # Sync nginx configs
 rsync -avz \
   -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
-  "$(dirname $0)/../nginx.conf" "$VPS_USER@$VPS_IP:$REMOTE_DIR/"
+  "$(dirname $0)/../nginx.conf" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/"
 
 # Remote setup
-ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << REMOTE
+# DEVOPS-2 FIX: Generate secure random Redis password instead of using insecure hardcoded fallback.
+# If REDIS_PASSWORD is not set locally, a strong random password is generated.
+REDIS_PASSWORD="${REDIS_PASSWORD:-$(openssl rand -base64 32)}"
+
+ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" << REMOTE
   set -e
   cd "$REMOTE_DIR"
 
@@ -75,7 +81,7 @@ ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$VPS_USER@$VPS_IP" << REMOTE
       -p 127.0.0.1:6379:6379 \
       -v redis-data:/data \
       redis:7-alpine \
-      redis-server --requirepass "\${REDIS_PASSWORD:-<REMOVED>}"
+      redis-server --requirepass "$REDIS_PASSWORD"
   fi
 
   # Nginx config

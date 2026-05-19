@@ -4,11 +4,14 @@ set -e
 # OrthoPlus VPS Deploy Script
 # Usage: ./scripts/deploy-vps.sh [VPS_IP] [SSH_KEY]
 
-VPS_IP="${1:-100.111.74.69}"
+# DEVOPS-2 FIX: Extracted hardcoded IP to environment variable for multi-environment support
+# Keeps backward compatibility with positional argument usage.
+VPS_HOST=${VPS_HOST:-"${1:-100.111.74.69}"}
 VPS_TARGET="vps-orthoplus"
 REMOTE_DIR="/home/ubuntu/OrthoPlus-Enterprise"
 
 echo "[DEPLOY] Target VPS: $VPS_TARGET"
+echo "[DEPLOY] VPS Host: $VPS_HOST"
 echo "[DEPLOY] Syncing project files..."
 
 rsync -avz --delete \
@@ -22,6 +25,10 @@ rsync -avz --delete \
   --exclude='tests' \
   ~/Projects/OrthoPlus-Enterprise/ \
   "$VPS_TARGET:$REMOTE_DIR/"
+
+# DEVOPS-2 FIX: Generate secure random Redis password instead of using insecure hardcoded fallback.
+# If REDIS_PASSWORD is not set locally, a strong random password is generated.
+REDIS_PASSWORD="${REDIS_PASSWORD:-$(openssl rand -base64 32)}"
 
 echo "[DEPLOY] Installing pnpm and dependencies on VPS..."
 ssh -F ~/.ssh/config -o StrictHostKeyChecking=no "$VPS_TARGET" << REMOTE
@@ -58,7 +65,7 @@ ssh -F ~/.ssh/config -o StrictHostKeyChecking=no "$VPS_TARGET" << REMOTE
       -p 6379:6379 \
       -v redis-data:/data \
       redis:7-alpine \
-      redis-server --requirepass \${REDIS_PASSWORD:-<REMOVED>}
+      redis-server --requirepass "$REDIS_PASSWORD"
   fi
   
   # Write minimal nginx config for SPA + API proxy

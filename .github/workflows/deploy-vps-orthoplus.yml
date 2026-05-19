@@ -40,6 +40,9 @@ jobs:
       - name: Build Frontend
         run: pnpm --filter @orthoplus/web build
 
+      - name: Validate Docker Compose
+        run: docker compose config
+
       - name: Deploy to VPS
         uses: appleboy/scp-action@v0.1.7
         with:

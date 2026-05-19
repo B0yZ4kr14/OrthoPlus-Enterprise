@@ -109,7 +109,7 @@ services:
       NODE_ENV: production
       PORT: 3005
       # Database - APENAS PostgreSQL suportado
-      DATABASE_URL: postgresql://<user>:<password>@postgres:5432/orthoplus?schema=public
+      DATABASE_URL: postgresql://orthoplus:${DB_PASSWORD}@postgres:5432/orthoplus?schema=public
       ***REMOVED***
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       # Security
@@ -147,6 +147,43 @@ services:
       options:
         max-size: "100m"
         max-file: "5"
+
+  # ==========================================================================
+  # Agent Service - Python/FastAPI
+  # ==========================================================================
+  agent-service:
+    build:
+      context: ./agent-service
+      dockerfile: Dockerfile
+    container_name: orthoplus-agent
+    hostname: agent-service
+    environment:
+      PYTHONPATH: /app
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
   # ==========================================================================
   # Frontend - React SPA servido via Nginx
