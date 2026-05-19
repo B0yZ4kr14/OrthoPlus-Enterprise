@@ -218,6 +218,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (data && data.user) {
           setSession(data.session ? { access_token: data.session } : { access_token: "cookie" });
           setUser(data.user);
+          
+          // Set role immediately from /auth/me response (fallback if fetchUserMetadata fails)
+          const meRole = data.user.role;
+          if (meRole) {
+            const normalizedRole = meRole === "ROOT" ? "ADMIN" : meRole;
+            setUserRole(normalizedRole as "ADMIN" | "MEMBER");
+            setUserProfile(normalizedRole as UserProfile);
+          }
+          
           fetchUserMetadata(data.user.id);
         } else {
           setSession(null);
@@ -308,6 +317,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       setSession(token ? { access_token: token } : { access_token: "cookie" });
       setUser(response.user ?? null);
+      
+      // Set role immediately from login response (fallback if fetchUserMetadata fails)
+      const loginRole = response.user?.role;
+      if (loginRole) {
+        const normalizedRole = loginRole === "ROOT" ? "ADMIN" : loginRole;
+        setUserRole(normalizedRole as "ADMIN" | "MEMBER");
+        setUserProfile(normalizedRole as UserProfile);
+      }
+      
       toast.success("Login realizado com sucesso!");
 
       if (response.user?.id) {
