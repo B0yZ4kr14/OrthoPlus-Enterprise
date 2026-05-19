@@ -109,3 +109,7 @@ CLAUDE.md
 KIMI.md
 test-results/
 tests/e2e/.auth/
+
+# SpecKit project memory (versioned)
+!.specify/memory/
+!.specify/memory/**

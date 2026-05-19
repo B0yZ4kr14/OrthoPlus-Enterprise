@@ -501,7 +501,11 @@ shell commands, and other important information, read the current plan:
 specs/017-omk-governance-integration/plan.md
 
 **Active Feature**: 017-omk-governance-integration (OMK Governance Integration)
-**Status**: Completed
+**Status**: Completed and Archived
+**Archived**: 2026-05-19 in `.specify/memory/` (spec.md, plan.md, changelog.md)
+
+**Recent Changes**:
+- 2026-05-19: Feature 017 — OMK Governance Integration (GitNexus + SpecKit + OMK + VPS docs)
 <!-- SPECKIT END -->
 
 <!-- gitnexus:start -->
