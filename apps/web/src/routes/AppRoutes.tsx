@@ -16,6 +16,7 @@ import Landpage from "@/modules/landpage/ui/pages/Landpage";
 const PacientesListPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PacientesListPage })));
 const PatientFormPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PatientFormPage })));
 const PatientDetailPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PatientDetailPage })));
+const PatientSearchPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PatientSearchPage })));
 const AgendaPage = lazy(() => import("@/modules/agenda").then((m) => ({ default: m.AgendaPage })));
 const FinanceiroPage = lazy(() => import("@/modules/financeiro").then((m) => ({ default: m.FinanceiroPage })));
 const PEPPage = lazy(() => import("@/modules/pep").then((m) => ({ default: m.PEPPage })));
@@ -201,6 +202,7 @@ const AppRoutes = () => (
     <Route path="/pacientes" element={protectedRoute(<PacientesListPage />, { moduleKey: "PACIENTES" })} />
     <Route path="/pacientes/novo" element={protectedRoute(<PatientFormPage />, { moduleKey: "PACIENTES" })} />
     <Route path="/pacientes/:id" element={protectedRoute(<PatientDetailPage />, { moduleKey: "PACIENTES" })} />
+    <Route path="/pacientes/busca" element={protectedRoute(<PatientSearchPage />, { moduleKey: "PACIENTES" })} />
 
     {/* Agenda Module */}
     <Route path="/agenda" element={protectedRoute(<AgendaPage />, { moduleKey: "AGENDA" })} />

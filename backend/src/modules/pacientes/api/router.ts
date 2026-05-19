@@ -38,6 +38,9 @@ router.post("/", (req, res) => controller.create(req, res));
 // PUT /api/pacientes/:id - Atualizar paciente
 router.put("/:id", (req, res) => controller.update(req, res));
 
+// GET /api/pacientes/search - Busca avançada
+router.get("/search", (req, res) => controller.search(req, res));
+
 // GET /api/pacientes - Listar pacientes
 router.get("/", (req, res) => controller.list(req, res));
 

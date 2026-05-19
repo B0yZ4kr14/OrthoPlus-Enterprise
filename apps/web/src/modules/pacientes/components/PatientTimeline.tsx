@@ -22,6 +22,9 @@ import type { TimelineEvent } from "../hooks/usePatientTimeline";
 interface PatientTimelineProps {
   events: TimelineEvent[];
   isLoading: boolean;
+  filterType?: string;
+  dateFrom?: string;
+  dateTo?: string;
 }
 
 const ICON_MAP = {
@@ -54,6 +57,9 @@ const LABEL_MAP: Record<string, string> = {
 export const PatientTimeline = memo(function PatientTimeline({
   events,
   isLoading,
+  filterType,
+  dateFrom,
+  dateTo,
 }: PatientTimelineProps) {
   if (isLoading) {
     return (
@@ -76,24 +82,36 @@ export const PatientTimeline = memo(function PatientTimeline({
     );
   }
 
-  if (!events.length) {
+  const filteredEvents = events.filter((event) => {
+    if (filterType && event.type !== filterType) return false;
+    if (dateFrom && new Date(event.date) < new Date(dateFrom)) return false;
+    if (dateTo && new Date(event.date) > new Date(dateTo)) return false;
+    return true;
+  });
+
+  const sortedEvents = [...filteredEvents].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
+  if (!sortedEvents.length) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Timeline de Eventos</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Activity className="h-5 w-5" />
+            Timeline de Eventos
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-center py-8">
-            Nenhum evento registrado para este paciente.
+            {events.length > 0
+              ? "Nenhum evento corresponde aos filtros aplicados."
+              : "Nenhum evento registrado para este paciente."}
           </p>
         </CardContent>
       </Card>
     );
   }
-
-  const sortedEvents = [...events].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
 
   return (
     <Card>

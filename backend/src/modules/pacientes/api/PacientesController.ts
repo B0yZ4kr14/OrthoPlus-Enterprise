@@ -13,6 +13,7 @@ import { CadastrarPacienteUseCase, CadastrarPacienteDTO } from "../application/u
 import { AtualizarPacienteUseCase, AtualizarPacienteDTO } from "../application/use-cases/AtualizarPacienteUseCase";
 import { IPatientRepository } from "../domain/repositories/IPatientRepository";
 import { GetPatientQuery, GetPatientDTO } from "../application/queries/GetPatientQuery";
+import { PacienteSearchService, SearchPacientesFilters } from "../application/services/PacienteSearchService";
 
 export class PacientesController {
   constructor(
@@ -258,6 +259,44 @@ export class PacientesController {
    * GET /api/pacientes/stats/by-status
    * Estatísticas por status
    */
+  /**
+   * GET /api/pacientes/search
+   * Busca avançada de pacientes
+   */
+  async search(req: Request, res: Response): Promise<void> {
+    try {
+      const user = req.user;
+      const clinicId = user?.clinicId;
+
+      if (!clinicId) {
+        res.status(401).json({ error: "Clinic ID not found" });
+        return;
+      }
+
+      const filters: SearchPacientesFilters = {
+        query: req.query.q as string | undefined,
+        status: req.query.status as string | undefined,
+        dentistaId: req.query.dentistaId as string | undefined,
+        page: req.query.page ? parseInt(req.query.page as string, 10) : undefined,
+        limit: req.query.limit ? parseInt(req.query.limit as string, 10) : undefined,
+      };
+
+      const searchService = new PacienteSearchService();
+      const result = await searchService.search(clinicId, filters);
+
+      res.json({
+        success: true,
+        data: result,
+      });
+    } catch (error: unknown) {
+      logger.error("Error searching patients", { error });
+      res.status(500).json({
+        success: false,
+        error: "Erro ao buscar pacientes",
+      });
+    }
+  }
+
   async statsByStatus(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;

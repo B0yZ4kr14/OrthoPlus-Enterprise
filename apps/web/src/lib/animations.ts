@@ -23,6 +23,31 @@ export const slideInFromTop: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0, 0, 0.2, 1] } },
 };
 
+// ─── Sidebar Category Collapse Variants ────────────────────────────────────
+
+export const categoryContent: Variants = {
+  hidden: {
+    opacity: 0,
+    height: 0,
+    transition: { duration: 0.25, ease: [0, 0, 0.2, 1] },
+  },
+  visible: {
+    opacity: 1,
+    height: "auto",
+    transition: { duration: 0.3, ease: [0, 0, 0.2, 1], staggerChildren: 0.04 },
+  },
+};
+
+export const categoryItem: Variants = {
+  hidden: { opacity: 0, x: -8 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.25, ease: [0, 0, 0.2, 1] } },
+};
+
+export const chevronRotate: Variants = {
+  collapsed: { rotate: 0, transition: { duration: 0.25, ease: [0, 0, 0.2, 1] } },
+  expanded: { rotate: 180, transition: { duration: 0.25, ease: [0, 0, 0.2, 1] } },
+};
+
 export function useAccessibleAnimation() {
   const shouldReduceMotion = useReducedMotion();
   return {

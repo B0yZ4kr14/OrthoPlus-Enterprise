@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidCPF } from "@/lib/validators/cpfValidator";
 
 // Schema de validação completo para pacientes
 export const patientFormSchema = z.object({
@@ -10,7 +11,13 @@ export const patientFormSchema = z.object({
   social_name: z.string().max(200).optional().nullable(),
   cpf: z
     .string()
-    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido")
+    .refine(
+      (val) => {
+        if (!val || val.length === 0) return true;
+        return isValidCPF(val);
+      },
+      { message: "CPF inválido. Verifique os dígitos." },
+    )
     .optional()
     .nullable(),
   rg: z.string().max(20).optional().nullable(),

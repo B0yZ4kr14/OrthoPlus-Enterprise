@@ -4,3 +4,4 @@
 export { default as PacientesListPage } from "./ui/pages/PacientesListPage";
 export { default as PatientDetailPage } from "./ui/pages/PatientDetailPage";
 export { default as PatientFormPage } from "./ui/pages/PatientFormPage";
+export { default as PatientSearchPage } from "./ui/pages/PatientSearchPage";

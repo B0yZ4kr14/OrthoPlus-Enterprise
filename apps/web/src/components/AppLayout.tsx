@@ -7,6 +7,7 @@ import { Sheet, SheetContent } from "@orthoplus/core-ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useFocusMode } from "@/hooks/useFocusMode";
 import { SkipLink } from "@/components/SkipLink";
+import { SidebarCategoryProvider } from "@/contexts/SidebarCategoryContext";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -29,14 +30,18 @@ export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
       <div className="flex min-h-screen w-full bg-background">
         {!isMobile && !isFocusMode && (
           <nav data-tour="sidebar" className="transition-all duration-300 ease-out">
-            <AppSidebar />
+            <SidebarCategoryProvider>
+              <AppSidebar />
+            </SidebarCategoryProvider>
           </nav>
         )}
 
         {isMobile && (
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetContent side="left" className="w-[280px] p-0 border-r border-border">
-              <AppSidebar onNavigate={() => setMobileMenuOpen(false)} />
+              <SidebarCategoryProvider>
+                <AppSidebar onNavigate={() => setMobileMenuOpen(false)} />
+              </SidebarCategoryProvider>
             </SheetContent>
           </Sheet>
         )}
