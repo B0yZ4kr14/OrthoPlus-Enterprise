@@ -18,12 +18,6 @@
 - Email: `admin@orthoplus.com`
 - Senha: `Admin123!`
 
-## 🔐 Credenciais de Acesso
-
-**Administrador Padrão:**
-- Email: `admin@orthoplus.com`
-- Senha: `Admin123!`
-
 ## 🏗️ Arquitetura do Sistema
 
 ```

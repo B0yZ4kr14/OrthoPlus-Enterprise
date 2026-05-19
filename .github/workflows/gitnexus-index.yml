@@ -22,11 +22,13 @@ jobs:
           node-version: '20'
 
       - name: Install GitNexus
-        run: npm install -g gitnexus@latest
+        run: npm install -g gitnexus@1.6.5  # Pinned version for reproducibility
 
       - name: Run GitNexus analysis
         run: npx gitnexus analyze
         env:
+          # NOTE: Configure GITNEXUS_API_KEY in repository secrets if API access is needed
+          # For local indexing without API, this can be omitted
           GITNEXUS_API_KEY: ${{ secrets.GITNEXUS_API_KEY }}
 
       - name: Upload index artifacts

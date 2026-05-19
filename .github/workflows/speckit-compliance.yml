@@ -1,0 +1,61 @@
+name: SpecKit Compliance Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'apps/**'
+      - 'backend/**'
+      - 'shared-types/**'
+      - 'categories/**'
+
+jobs:
+  check-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for associated spec
+        run: |
+          # Get the PR branch name
+          PR_BRANCH="${{ github.head_ref }}"
+          
+          # Check if branch follows feature naming convention
+          if [[ "$PR_BRANCH" =~ ^[0-9]+- ]]; then
+            FEATURE_NUM=$(echo "$PR_BRANCH" | grep -oP '^\d+')
+            echo "Detected feature number: $FEATURE_NUM"
+            
+            # Check if spec directory exists
+            if [ -d "specs/$(printf '%03d' $FEATURE_NUM)-*" ] || [ -d "specs/$FEATURE_NUM-"* ]; then
+              echo "✅ Spec directory found for feature $FEATURE_NUM"
+              exit 0
+            else
+              echo "❌ No spec directory found for feature $FEATURE_NUM"
+              echo "Expected: specs/$(printf '%03d' $FEATURE_NUM)-<feature-name>/"
+              echo "Run /speckit-specify before submitting PR"
+              exit 1
+            fi
+          else
+            echo "⚠️ Branch '$PR_BRANCH' does not follow feature naming convention"
+            echo "Feature branches should be named like: 001-feature-name"
+            echo "Skipping spec check (may be a hotfix or docs PR)"
+            exit 0
+          fi
+        shell: bash
+
+      - name: Validate spec structure
+        run: |
+          SPECS_FOUND=0
+          for spec_dir in specs/*/; do
+            if [ -f "$spec_dir/spec.md" ] && [ -f "$spec_dir/plan.md" ] && [ -f "$spec_dir/tasks.md" ]; then
+              SPECS_FOUND=$((SPECS_FOUND + 1))
+            fi
+          done
+          echo "Total valid specs found: $SPECS_FOUND"
+          if [ "$SPECS_FOUND" -lt 1 ]; then
+            echo "❌ No valid specs found in repository"
+            exit 1
+          fi

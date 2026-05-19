@@ -501,7 +501,7 @@ shell commands, and other important information, read the current plan:
 specs/017-omk-governance-integration/plan.md
 
 **Active Feature**: 017-omk-governance-integration (OMK Governance Integration)
-**Status**: In Progress
+**Status**: Completed
 <!-- SPECKIT END -->
 
 <!-- gitnexus:start -->
