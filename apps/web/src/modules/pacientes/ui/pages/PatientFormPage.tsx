@@ -112,7 +112,7 @@ export default function PatientFormPage() {
               reason: "Atualização de formulário",
             });
           } catch (e) {
-            console.warn("Status update failed:", e);
+            // Status update failed — handled by error boundary
           }
         }
 

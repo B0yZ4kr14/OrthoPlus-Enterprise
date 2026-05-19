@@ -45,7 +45,7 @@ export default function ProgramaFidelidade() {
         await navigator.share({ text: shareText });
         toast.success("Badge compartilhado com sucesso!");
       } catch (error) {
-        console.debug("Compartilhamento cancelado ou indisponível:", error);
+        // Sharing cancelled or unavailable — no action needed
       }
     } else {
       navigator.clipboard.writeText(shareText);
