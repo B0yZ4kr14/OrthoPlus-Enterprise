@@ -21,6 +21,8 @@ const FinanceiroPage = lazy(() => import("@/modules/financeiro").then((m) => ({ 
 const PEPPage = lazy(() => import("@/modules/pep").then((m) => ({ default: m.PEPPage })));
 const EstoquePage = lazy(() => import("@/modules/estoque").then((m) => ({ default: m.EstoquePage })));
 const PDVPage = lazy(() => import("@/modules/pdv").then((m) => ({ default: m.PDVPage })));
+const PDVDashboardPage = lazy(() => import("@/modules/pdv").then((m) => ({ default: m.DashboardExecutivoPDV })));
+const PDVMetasPage = lazy(() => import("@/modules/pdv").then((m) => ({ default: m.MetasGamificacao })));
 const CRMPage = lazy(() => import("@/modules/crm").then((m) => ({ default: m.CRMPage })));
 
 // Outros lazy imports (diretos)
@@ -229,6 +231,8 @@ const AppRoutes = () => (
 
     {/* PDV Module */}
     <Route path="/pdv" element={protectedRoute(<PDVPage />, { moduleKey: "PDV" })} />
+    <Route path="/pdv/dashboard" element={protectedRoute(<PDVDashboardPage />, { moduleKey: "PDV" })} />
+    <Route path="/pdv/metas" element={protectedRoute(<PDVMetasPage />, { moduleKey: "PDV" })} />
 
     {/* CRM Module */}
     <Route path="/crm" element={protectedRoute(<CRMPage />, { moduleKey: "CRM" })} />
