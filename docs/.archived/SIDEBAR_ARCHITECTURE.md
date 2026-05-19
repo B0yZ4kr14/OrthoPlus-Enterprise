@@ -1,8 +1,8 @@
-# Arquitetura da Sidebar - Ortho+ V5.1
+# Arquitetura da Sidebar - OrthoPlus Enterprise V5.1
 
 ## Visão Geral
 
-A sidebar do Ortho+ foi projetada com base em **Domain-Driven Design (DDD)** e organizada em **6 Bounded Contexts** principais, refletindo a arquitetura modular do sistema.
+A sidebar do OrthoPlus Enterprise foi projetada com base em **Domain-Driven Design (DDD)** e organizada em **6 Bounded Contexts** principais, refletindo a arquitetura modular do sistema.
 
 ## Estrutura de Bounded Contexts
 
@@ -212,4 +212,4 @@ Se o usuário não tiver permissão para o módulo, será redirecionado para `/4
 ---
 
 **Última Atualização:** V5.3 COHERENCE (2024)  
-**Responsável:** Arquitetura de Front-End Ortho+
+**Responsável:** Arquitetura de Front-End OrthoPlus Enterprise

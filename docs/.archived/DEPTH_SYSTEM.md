@@ -1,7 +1,7 @@
-# Sistema de Profundidade 3D - Ortho+
+# Sistema de Profundidade 3D - OrthoPlus Enterprise
 
 ## Visão Geral
-O sistema de profundidade 3D do Ortho+ utiliza três níveis de intensidade para criar hierarquia visual através de sombras, bordas arredondadas e efeitos de hover.
+O sistema de profundidade 3D do OrthoPlus Enterprise utiliza três níveis de intensidade para criar hierarquia visual através de sombras, bordas arredondadas e efeitos de hover.
 
 ## Níveis de Profundidade
 

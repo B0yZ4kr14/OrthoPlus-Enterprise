@@ -1,4 +1,4 @@
-# 🛡️ Plano de Remediação de Segurança - Ortho+
+# 🛡️ Plano de Remediação de Segurança - OrthoPlus Enterprise
 
 **Data de Criação**: 2025-11-17  
 **Severidade Máxima Identificada**: CRÍTICA  

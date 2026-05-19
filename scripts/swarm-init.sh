@@ -1,9 +1,9 @@
 #!/bin/bash
-# Ortho+ Docker Swarm Initialization Script
+# OrthoPlus Enterprise Docker Swarm Initialization Script
 
 set -e
 
-echo "🚀 Initializing Docker Swarm for Ortho+..."
+echo "🚀 Initializing Docker Swarm for OrthoPlus Enterprise..."
 
 # Initialize Swarm
 if ! docker info | grep -q "Swarm: active"; then

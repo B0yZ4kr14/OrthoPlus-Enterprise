@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This document catalogues known technical debt in the Ortho+ codebase. All items listed here are **non-blocking** - the system is production-ready and all validations pass. This debt represents opportunities for incremental improvement.
+This document catalogues known technical debt in the OrthoPlus Enterprise codebase. All items listed here are **non-blocking** - the system is production-ready and all validations pass. This debt represents opportunities for incremental improvement.
 
 ## 1. ESLint Warnings (58 warnings)
 

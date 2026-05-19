@@ -1,7 +1,7 @@
-# Animações Stagger na Sidebar - Ortho+
+# Animações Stagger na Sidebar - OrthoPlus Enterprise
 
 ## Visão Geral
-A sidebar do Ortho+ implementa animações de entrada progressiva (stagger) onde cada grupo de menu aparece sequencialmente com efeito fade-in e slide-in, criando uma experiência visual fluida e profissional. Além disso, o header e footer têm efeito 3D completo com cantos arredondados, sombras e sem linhas divisórias.
+A sidebar do OrthoPlus Enterprise implementa animações de entrada progressiva (stagger) onde cada grupo de menu aparece sequencialmente com efeito fade-in e slide-in, criando uma experiência visual fluida e profissional. Além disso, o header e footer têm efeito 3D completo com cantos arredondados, sombras e sem linhas divisórias.
 
 ## Animação Stagger
 

@@ -1,14 +1,14 @@
 # Security Policy
 
-## 🔒 Política de Segurança do Ortho+
+## 🔒 Política de Segurança do OrthoPlus Enterprise
 
-Este documento descreve as políticas de segurança do Ortho+, o processo de relato de vulnerabilidades e nosso compromisso com a proteção de dados sensíveis de clínicas odontológicas.
+Este documento descreve as políticas de segurança do OrthoPlus Enterprise, o processo de relato de vulnerabilidades e nosso compromisso com a proteção de dados sensíveis de clínicas odontológicas.
 
 ---
 
 ## Versões Suportadas
 
-Apenas a versão mais recente do Ortho+ recebe atualizações de segurança. Recomendamos fortemente que todas as clínicas mantenham seus sistemas atualizados.
+Apenas a versão mais recente do OrthoPlus Enterprise recebe atualizações de segurança. Recomendamos fortemente que todas as clínicas mantenham seus sistemas atualizados.
 
 | Versão | Suportada          |
 | ------ | ------------------ |
@@ -22,7 +22,7 @@ Apenas a versão mais recente do Ortho+ recebe atualizações de segurança. Rec
 
 ### Processo de Responsible Disclosure
 
-Levamos a segurança extremamente a sério. Se você descobriu uma vulnerabilidade de segurança no Ortho+, por favor **NÃO** crie uma issue pública. Em vez disso, siga o processo de divulgação responsável:
+Levamos a segurança extremamente a sério. Se você descobriu uma vulnerabilidade de segurança no OrthoPlus Enterprise, por favor **NÃO** crie uma issue pública. Em vez disso, siga o processo de divulgação responsável:
 
 ### 1. Contato Confidencial
 
@@ -74,7 +74,7 @@ Prova de Conceito (PoC):
 [Código, screenshots, vídeo, etc.]
 
 Ambiente Afetado:
-- Versão do Ortho+: [ex: 4.2.1]
+- Versão do OrthoPlus Enterprise: [ex: 4.2.1]
 - Navegador: [ex: Chrome 120]
 - Sistema Operacional: [ex: Windows 11]
 
@@ -97,7 +97,7 @@ Nos comprometemos a responder dentro dos seguintes prazos:
 
 ### 4. Recompensas (Bug Bounty)
 
-Agradecemos pesquisadores de segurança que nos ajudam a manter o Ortho+ seguro. Oferecemos recompensas baseadas na severidade:
+Agradecemos pesquisadores de segurança que nos ajudam a manter o OrthoPlus Enterprise seguro. Oferecemos recompensas baseadas na severidade:
 
 | Severidade | Recompensa |
 |------------|-----------|
@@ -336,7 +336,7 @@ Consulte o [PRODUCTION-CHECKLIST.md](PRODUCTION-CHECKLIST.md) para o checklist c
 
 ## 🙏 Agradecimentos
 
-Agradecemos aos seguintes pesquisadores de segurança que nos ajudaram a manter o Ortho+ seguro:
+Agradecemos aos seguintes pesquisadores de segurança que nos ajudaram a manter o OrthoPlus Enterprise seguro:
 
 **2025:**
 - João Silva (@joaosilva) - IDOR em API de pacientes

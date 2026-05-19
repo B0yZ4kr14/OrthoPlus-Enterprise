@@ -1,8 +1,8 @@
-# Mapeamento de Rotas - Ortho+ V5.1
+# Mapeamento de Rotas - OrthoPlus Enterprise V5.1
 
 ## Visão Geral
 
-Este documento mapeia todas as rotas públicas e protegidas do sistema Ortho+, organizadas por Bounded Context.
+Este documento mapeia todas as rotas públicas e protegidas do sistema OrthoPlus Enterprise, organizadas por Bounded Context.
 
 ## Estrutura de Rotas
 

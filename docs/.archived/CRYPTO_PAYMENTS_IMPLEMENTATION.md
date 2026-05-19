@@ -999,4 +999,4 @@ console.error('[ExchangeFactory] Failed to validate credentials:', error);
 
 *Última atualização: 15/11/2025*
 *Versão: 1.0*
-*Ortho+ © 2025*
+*OrthoPlus Enterprise © 2025*

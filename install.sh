@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###############################################################################
-# Ortho+ - Script de Instalação Automática
+# OrthoPlus Enterprise - Script de Instalação Automática
 # Desenvolvido por TSI Telecom
 # Ubuntu 24.04.3 LTS
 ###############################################################################
@@ -62,7 +62,7 @@ if ! grep -q "Ubuntu 24.04" /etc/os-release; then
     fi
 fi
 
-log_info "Iniciando instalação do Ortho+..."
+log_info "Iniciando instalação do OrthoPlus Enterprise..."
 
 # Atualizar sistema
 log_info "Atualizando sistema..."
@@ -175,7 +175,7 @@ systemctl enable nginx
 systemctl start nginx
 log_success "Nginx instalado"
 
-# Configurar Nginx para Ortho+
+# Configurar Nginx para OrthoPlus Enterprise
 log_info "Configurando Nginx..."
 cat > /etc/nginx/sites-available/orthoplus << 'EOF'
 server {
@@ -345,8 +345,8 @@ ufw allow from 127.0.0.1 to any port 5432
 echo "y" | ufw enable
 log_success "UFW configurado e ativado"
 
-# Clonar repositório Ortho+
-log_info "Clonando repositório Ortho+..."
+# Clonar repositório OrthoPlus Enterprise
+log_info "Clonando repositório OrthoPlus Enterprise..."
 INSTALL_DIR="/var/www/orthoplus"
 mkdir -p /var/www
 cd /var/www
@@ -390,11 +390,11 @@ EOF
 
 log_success "Arquivo .env criado"
 
-# Criar serviço systemd para Ortho+
+# Criar serviço systemd para OrthoPlus Enterprise
 log_info "Criando serviço systemd..."
 cat > /etc/systemd/system/orthoplus.service << EOF
 [Unit]
-Description=Ortho+ Application
+Description=OrthoPlus Enterprise Application
 After=network.target postgresql.service
 
 [Service]
@@ -412,7 +412,7 @@ EOF
 systemctl daemon-reload
 systemctl enable orthoplus
 systemctl start orthoplus
-log_success "Serviço Ortho+ criado e iniciado"
+log_success "Serviço OrthoPlus Enterprise criado e iniciado"
 
 # Configurar log rotation
 log_info "Configurando log rotation..."
@@ -475,7 +475,7 @@ log_success "============================================"
 log_success "Instalação concluída com sucesso!"
 log_success "============================================"
 echo ""
-log_info "Ortho+ está rodando em: http://$(hostname -I | awk '{print $1}')"
+log_info "OrthoPlus Enterprise está rodando em: http://$(hostname -I | awk '{print $1}')"
 log_info "Grafana: http://$(hostname -I | awk '{print $1}')/grafana"
 log_info "Prometheus: http://$(hostname -I | awk '{print $1}')/prometheus"
 echo ""

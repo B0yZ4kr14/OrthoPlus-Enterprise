@@ -1,4 +1,4 @@
-# Ortho+ Docker Swarm Stack
+# OrthoPlus Enterprise Docker Swarm Stack
 # Orquestração completa para deployment cloud e on-premises
 
 version: "3.9"

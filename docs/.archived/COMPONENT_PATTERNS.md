@@ -1,8 +1,8 @@
-# Guia de Padrões de Componentes - Ortho+
+# Guia de Padrões de Componentes - OrthoPlus Enterprise
 
 ## Visão Geral
 
-Este guia define os padrões visuais e de interação para componentes do sistema Ortho+, garantindo consistência e qualidade em toda a aplicação.
+Este guia define os padrões visuais e de interação para componentes do sistema OrthoPlus Enterprise, garantindo consistência e qualidade em toda a aplicação.
 
 ## Card Variants
 

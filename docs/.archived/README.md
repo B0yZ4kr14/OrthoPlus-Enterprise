@@ -2,7 +2,7 @@
 
 ## 🦷 Sobre o Sistema
 
-**Ortho+** é uma plataforma SaaS B2B multitenant completa para gestão de clínicas odontológicas, desenvolvida com foco em modularidade, escalabilidade e experiência do usuário.
+**OrthoPlus Enterprise** é uma plataforma SaaS B2B multitenant completa para gestão de clínicas odontológicas, desenvolvida com foco em modularidade, escalabilidade e experiência do usuário.
 
 ### Desenvolvido por TSI Telecom
 **Copyright © 2025 TSI Telecom - Todos os direitos reservados**
@@ -81,7 +81,7 @@ docker-compose down -v
 ```
 
 **Serviços disponíveis:**
-- Ortho+: `http://localhost:5173`
+- OrthoPlus Enterprise: `http://localhost:5173`
 - Grafana: `http://localhost:3000` (admin/admin)
 - Prometheus: `http://localhost:9090`
 - PostgreSQL: `localhost:5432`
@@ -141,7 +141,7 @@ sudo ./install.sh
 O script instala automaticamente:
 - Node.js, PostgreSQL, Nginx
 - Prometheus, Grafana, UFW
-- Configuração completa do Ortho+
+- Configuração completa do OrthoPlus Enterprise
 - Backups automáticos diários
 
 **Documentação completa:** [INSTALLATION.md](./INSTALLATION.md)

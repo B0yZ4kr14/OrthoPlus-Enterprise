@@ -1,7 +1,7 @@
-# Sistema de Efeito 3D na Sidebar - Ortho+
+# Sistema de Efeito 3D na Sidebar - OrthoPlus Enterprise
 
 ## Visão Geral
-A sidebar do Ortho+ implementa um sistema completo de efeito 3D com profundidade visual através de cards elevados, sombras profundas, títulos em negrito e divisões visuais entre grupos de menu. Este sistema está aplicado e funciona em **todos os temas** (light, dark, professional-dark, high-contrast, high-contrast-dark).
+A sidebar do OrthoPlus Enterprise implementa um sistema completo de efeito 3D com profundidade visual através de cards elevados, sombras profundas, títulos em negrito e divisões visuais entre grupos de menu. Este sistema está aplicado e funciona em **todos os temas** (light, dark, professional-dark, high-contrast, high-contrast-dark).
 
 ## Características do Design 3D
 

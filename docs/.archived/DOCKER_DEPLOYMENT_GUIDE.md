@@ -1,6 +1,6 @@
 # 🐳 GUIA DE DEPLOYMENT - Docker Swarm
 
-**Objetivo**: Orquestração completa do Ortho+ usando Docker Swarm para alta disponibilidade e escalabilidade.
+**Objetivo**: Orquestração completa do OrthoPlus Enterprise usando Docker Swarm para alta disponibilidade e escalabilidade.
 
 ---
 

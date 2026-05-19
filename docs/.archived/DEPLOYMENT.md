@@ -1,8 +1,8 @@
-# Guia de Deploy - Ortho+ V5.2
+# Guia de Deploy - OrthoPlus Enterprise V5.2
 
 ## Visão Geral
 
-O Ortho+ V5.2 suporta dois ambientes de deploy:
+O OrthoPlus Enterprise V5.2 suporta dois ambientes de deploy:
 1. **Cloud**: Usando banco gerenciado (production-ready)
 2. **On-Premises**: Usando PostgreSQL local + Docker Swarm
 

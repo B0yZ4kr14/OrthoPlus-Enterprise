@@ -1,8 +1,8 @@
-# Guia do Usuário - Ortho+ v4.0
+# Guia do Usuário - OrthoPlus Enterprise v4.0
 
 ## 🎉 Bem-vindo à Nova Versão!
 
-O Ortho+ v4.0 traz melhorias significativas na organização, usabilidade e funcionalidades do sistema. Este guia irá ajudá-lo a se familiarizar com as mudanças.
+O OrthoPlus Enterprise v4.0 traz melhorias significativas na organização, usabilidade e funcionalidades do sistema. Este guia irá ajudá-lo a se familiarizar com as mudanças.
 
 ---
 

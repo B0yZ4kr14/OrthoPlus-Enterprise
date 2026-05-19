@@ -1,8 +1,8 @@
-# Arquitetura V5.2 - Ortho+ SaaS Multitenant
+# Arquitetura V5.2 - OrthoPlus Enterprise SaaS Multitenant
 
 ## Visão Geral
 
-O Ortho+ é um SaaS B2B multitenant modular para clínicas odontológicas, implementando **Domain-Driven Design (DDD)** com arquitetura **plug-and-play descentralizada**.
+O OrthoPlus Enterprise é um SaaS B2B multitenant modular para clínicas odontológicas, implementando **Domain-Driven Design (DDD)** com arquitetura **plug-and-play descentralizada**.
 
 ## Princípios Arquiteturais
 

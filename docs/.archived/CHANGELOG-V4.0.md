@@ -1,4 +1,4 @@
-# 📝 Changelog - Ortho+ V4.0
+# 📝 Changelog - OrthoPlus Enterprise V4.0
 
 **Data de Release**: 15 de Novembro de 2025  
 **Versão Anterior**: V3.2  
@@ -273,6 +273,6 @@ git push --tags
 
 ---
 
-**Aprovado por**: Equipe Ortho+  
+**Aprovado por**: Equipe OrthoPlus Enterprise  
 **Revisado por**: Lovable AI  
 **Data**: 15 de Novembro de 2025

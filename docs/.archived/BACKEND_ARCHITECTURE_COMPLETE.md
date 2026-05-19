@@ -8,7 +8,7 @@
 
 ## 📊 VISÃO GERAL
 
-O Ortho+ v2.0 implementa uma arquitetura **modular monolítica** com **Domain-Driven Design (DDD)** e **descentralização de dados** via **Schema-per-Module**. Cada módulo possui:
+O OrthoPlus Enterprise v2.0 implementa uma arquitetura **modular monolítica** com **Domain-Driven Design (DDD)** e **descentralização de dados** via **Schema-per-Module**. Cada módulo possui:
 
 - ✅ Schema PostgreSQL dedicado
 - ✅ Entidades de domínio ricas
@@ -299,4 +299,4 @@ Endpoint: `GET /metrics`
 
 ---
 
-**Backend Ortho+ v2.0** - Production-ready com 13 módulos implementados 🚀
+**Backend OrthoPlus Enterprise v2.0** - Production-ready com 13 módulos implementados 🚀

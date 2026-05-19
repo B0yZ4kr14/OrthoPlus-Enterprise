@@ -1,4 +1,4 @@
-# 🔑 Guia do Superusuário ROOT - Ortho+ Enterprise v2.0
+# 🔑 Guia do Superusuário ROOT - OrthoPlus Enterprise Enterprise v2.0
 
 ## ⚠️ ATENÇÃO CRÍTICA
 

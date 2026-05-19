@@ -1,12 +1,12 @@
 #!/bin/bash
-# Ortho+ Docker Swarm Deploy Script
+# OrthoPlus Enterprise Docker Swarm Deploy Script
 
 set -e
 
 STACK_NAME="orthoplus"
 VERSION="${VERSION:-latest}"
 
-echo "🚀 Deploying Ortho+ Stack to Docker Swarm..."
+echo "🚀 Deploying OrthoPlus Enterprise Stack to Docker Swarm..."
 echo "Stack: $STACK_NAME"
 echo "Version: $VERSION"
 

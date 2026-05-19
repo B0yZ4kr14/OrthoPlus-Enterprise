@@ -1,7 +1,7 @@
 {
   "name": "orthoplus-backend",
   "version": "2.5.4",
-  "description": "Ortho+ Backend - Modular Monolith with API Gateway",
+  "description": "OrthoPlus Enterprise Backend - Modular Monolith with API Gateway",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --exec tsx -r tsconfig-paths/register src/index.ts",

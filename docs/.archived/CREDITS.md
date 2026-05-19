@@ -1,8 +1,8 @@
-# Créditos | Ortho+ System
+# Créditos | OrthoPlus Enterprise System
 
 ## 🏢 TSI Telecom
 
-**Sistema Ortho+ - Gestão Odontológica Completa**
+**Sistema OrthoPlus Enterprise - Gestão Odontológica Completa**
 
 Desenvolvido integralmente pela equipe **TSI Telecom**, empresa líder em soluções tecnológicas para o setor de saúde.
 

@@ -197,7 +197,7 @@ export default function Landpage() {
               animate="visible"
               className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl dark:text-white"
             >
-              OrthoPlus{ }
+              OrthoPlus{" "}
               <span className="bg-gradient-to-r from-[hsl(var(--interactive))] to-[hsl(var(--success))] bg-clip-text text-transparent">
                 Enterprise
               </span>
@@ -227,7 +227,7 @@ export default function Landpage() {
                 onClick={handleCta}
                 size="lg"
                 variant="elevated"
-                className="rounded-full px-8 py-6 text-base shadow-xl shadow-[hsl(var(--interactive)/0.2)]"
+                className="rounded-full px-8 py-6 text-base shadow-[hsl(var(--interactive)/0.2)]"
               >
                 Entrar no Sistema
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -279,7 +279,7 @@ export default function Landpage() {
                 >
                   <CardHeader className="pb-4">
                     <div
-                      className={"mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br " + feature.gradient + " shadow-lg"}
+                      className={"mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br " + feature.gradient + " shadow-[hsl(var(--interactive)/0.2)]"}
                     >
                       <feature.icon className="h-6 w-6 text-white" />
                     </div>
@@ -329,7 +329,7 @@ export default function Landpage() {
                     </div>
                   )}
                   <Card
-                    className={"h-full border bg-white/70 backdrop-blur-md dark:bg-slate-900 " + (plan.highlighted ? "border-[hsl(var(--interactive)/0.5)] shadow-2xl shadow-[hsl(var(--interactive)/0.1)] dark:border-[hsl(var(--interactive)/0.3)]" : "border-white/50 dark:border-slate-800")}
+                    className={"h-full border bg-white/70 backdrop-blur-md dark:bg-slate-900 " + (plan.highlighted ? "border-[hsl(var(--interactive)/0.5)] shadow-[hsl(var(--interactive)/0.1)] dark:border-[hsl(var(--interactive)/0.3)]" : "border-white/50 dark:border-slate-800")}
                   >
                     <CardHeader className="pb-4 text-center">
                       <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -364,7 +364,7 @@ export default function Landpage() {
                       <Button
                         onClick={handleCta}
                         variant={plan.highlighted ? "elevated" : "outline"}
-                        className={"mt-4 w-full rounded-xl " + (plan.highlighted ? "shadow-lg shadow-[hsl(var(--interactive)/0.2)]" : "")}
+                        className={"mt-4 w-full rounded-xl " + (plan.highlighted ? "shadow-[hsl(var(--interactive)/0.2)]" : "")}
                       >
                         {plan.cta}
                       </Button>

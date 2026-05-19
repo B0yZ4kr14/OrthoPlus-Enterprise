@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Este relatório documenta a conformidade do sistema Ortho+ com as diretrizes **WCAG 2.1 Level AA** implementadas durante a FASE 5 da refatoração de frontend.
+Este relatório documenta a conformidade do sistema OrthoPlus Enterprise com as diretrizes **WCAG 2.1 Level AA** implementadas durante a FASE 5 da refatoração de frontend.
 
 **Status Geral:** ✅ **CONFORMIDADE WCAG AA ALCANÇADA**
 
@@ -417,7 +417,7 @@ className="... min-h-[44px]"
 
 **Declaração de Conformidade:**
 
-O sistema **Ortho+ SaaS Odontológico** foi validado e está em **CONFORMIDADE com WCAG 2.1 Level AA** conforme documentado neste relatório.
+O sistema **OrthoPlus Enterprise SaaS Odontológico** foi validado e está em **CONFORMIDADE com WCAG 2.1 Level AA** conforme documentado neste relatório.
 
 **Data de Validação:** Janeiro 2025  
 **Fase de Implementação:** FASE 5 - Refinamentos Visuais e Performance  
@@ -428,6 +428,6 @@ O sistema **Ortho+ SaaS Odontológico** foi validado e está em **CONFORMIDADE c
 ---
 
 **Desenvolvido por:** TSI Telecom  
-**Projeto:** Ortho+ SaaS Odontológico  
+**Projeto:** OrthoPlus Enterprise SaaS Odontológico  
 **Fase:** 5 de 6  
 **Status:** ✅ WCAG AA COMPLIANT

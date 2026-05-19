@@ -2,7 +2,7 @@
 
 ## 🎯 Visão Geral
 
-O módulo **Pagamentos em Criptomoedas** do Ortho+ permite que sua clínica aceite pagamentos em **Bitcoin (BTC)**, **Ethereum (ETH)**, **Tether (USDT)** e outras criptomoedas de forma segura e descentralizada.
+O módulo **Pagamentos em Criptomoedas** do OrthoPlus Enterprise permite que sua clínica aceite pagamentos em **Bitcoin (BTC)**, **Ethereum (ETH)**, **Tether (USDT)** e outras criptomoedas de forma segura e descentralizada.
 
 **Principais benefícios:**
 - ✅ Pagamentos globais sem intermediários
@@ -68,7 +68,7 @@ O módulo **Pagamentos em Criptomoedas** do Ortho+ permite que sua clínica acei
    2. Vá em **Configurações → API**
    3. Gere uma nova chave com permissões de leitura
 
-4. **Configure no Ortho+**
+4. **Configure no OrthoPlus Enterprise**
    - Cole a **API Key** e **API Secret**
    - Clique em **"Testar Conexão"**
    - Selecione as moedas aceitas (BTC, ETH, USDT, BNB, USDC)
@@ -118,7 +118,7 @@ O módulo **Pagamentos em Criptomoedas** do Ortho+ permite que sua clínica acei
    2. Selecione **Wallet Export → Electrum**
    3. Copie a xPub exibida na tela
 
-3. **Configure no Ortho+**
+3. **Configure no OrthoPlus Enterprise**
    - **Nome da Wallet**: Ex: "Trezor Principal", "Coldcard Implantes"
    - **Tipo de Hardware**: Selecione o fabricante
    - **Extended Public Key (xPub)**: Cole a xPub copiada
@@ -143,13 +143,13 @@ O módulo **Pagamentos em Criptomoedas** do Ortho+ permite que sua clínica acei
    - Derivation path está correto? (BIP84, BIP49, BIP44)
 
 5. **Pronto!** 🎉
-   - O Ortho+ irá gerar um **novo endereço único** para cada pagamento
+   - O OrthoPlus Enterprise irá gerar um **novo endereço único** para cada pagamento
    - Você **mantém controle total** das chaves privadas
    - Os fundos vão **direto para sua wallet** (sem intermediários)
 
 #### 🔐 Segurança:
 
-> ✅ **O Ortho+ NUNCA tem acesso às suas chaves privadas.**
+> ✅ **O OrthoPlus Enterprise NUNCA tem acesso às suas chaves privadas.**
 > 
 > A xPub permite apenas **gerar endereços de recebimento** (somente leitura). Para **gastar** os fundos, você precisará da **chave privada** (que fica na sua Hardware Wallet).
 
@@ -246,9 +246,9 @@ Acesse **Financeiro → Crypto Pagamentos** para ver:
 
 **Sim!** Se você usar **BTCPay Server** (auto-hospedado), pode aceitar pagamentos via Lightning Network (confirmação instantânea).
 
-### 4. As chaves privadas ficam no Ortho+?
+### 4. As chaves privadas ficam no OrthoPlus Enterprise?
 
-**NÃO!** O Ortho+ **NUNCA** tem acesso às suas chaves privadas.
+**NÃO!** O OrthoPlus Enterprise **NUNCA** tem acesso às suas chaves privadas.
 
 - **Exchanges**: As chaves ficam na exchange (custódia)
 - **Wallets Offline**: As chaves ficam na **sua** Hardware Wallet (você controla)
@@ -306,9 +306,9 @@ Mas atenção:
 **Sim!** Receitas em criptomoedas devem ser declaradas.
 
 **Recomendações:**
-- Mantenha registro de todas as transações (o Ortho+ faz isso automaticamente)
+- Mantenha registro de todas as transações (o OrthoPlus Enterprise faz isso automaticamente)
 - Consulte um contador especializado em criptomoedas
-- Use os relatórios do Ortho+ para facilitar a declaração
+- Use os relatórios do OrthoPlus Enterprise para facilitar a declaração
 
 ---
 
@@ -354,7 +354,7 @@ Mas atenção:
 ### Tutoriais em Vídeo
 
 - [Como Configurar Binance API](https://youtube.com/...)
-- [Como Usar Trezor com Ortho+](https://youtube.com/...)
+- [Como Usar Trezor com OrthoPlus Enterprise](https://youtube.com/...)
 - [Recebendo Primeiro Pagamento Bitcoin](https://youtube.com/...)
 
 ### Livros Recomendados
@@ -394,4 +394,4 @@ Antes de começar a aceitar pagamentos crypto, verifique:
 
 *Última atualização: 15/11/2025*
 *Versão: 1.0*
-*Ortho+ © 2025 - Todos os direitos reservados*
+*OrthoPlus Enterprise © 2025 - Todos os direitos reservados*

@@ -1,4 +1,4 @@
-# Security Fixes - Ortho+ 🔒
+# Security Fixes - OrthoPlus Enterprise 🔒
 
 ## Status das Correções de Segurança
 

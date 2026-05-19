@@ -1,6 +1,6 @@
-# 🤝 Contributing to Ortho+
+# 🤝 Contributing to OrthoPlus Enterprise
 
-Obrigado por considerar contribuir para o Ortho+! Este documento fornece diretrizes para contribuições.
+Obrigado por considerar contribuir para o OrthoPlus Enterprise! Este documento fornece diretrizes para contribuições.
 
 ## 📋 Código de Conduta
 
@@ -285,4 +285,4 @@ Todos os contribuidores são listados em [CONTRIBUTORS.md](./CONTRIBUTORS.md)!
 
 ---
 
-**Obrigado por tornar o Ortho+ melhor! 🦷✨**
+**Obrigado por tornar o OrthoPlus Enterprise melhor! 🦷✨**

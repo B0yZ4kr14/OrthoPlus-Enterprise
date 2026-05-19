@@ -234,7 +234,7 @@ The request asked to:
 
 ## Conclusion
 
-**The Ortho+ codebase is production-ready and well-architected.**
+**The OrthoPlus Enterprise codebase is production-ready and well-architected.**
 
 Technical debt exists (as it does in all non-trivial systems), but it is:
 - ✅ Well-documented
