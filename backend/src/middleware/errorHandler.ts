@@ -120,7 +120,7 @@ export class ApiError extends Error {
     this.code = code;
     this.title = title;
     this.errors = errors;
-    this.type = type || `https://orthoplus.i9corp.com.br/errors/${this.toKebabCase(code)}`;
+    this.type = type || `https://tsiapp.io/errors/${this.toKebabCase(code)}`;
     this.timestamp = new Date().toISOString();
     this.requestId = this.generateRequestId();
     
@@ -238,7 +238,7 @@ export function errorHandler(
     const isDev = process.env.NODE_ENV === "development";
     
     problemDetail = {
-      type: "https://orthoplus.i9corp.com.br/errors/internal-error",
+      type: "https://tsiapp.io/errors/internal-error",
       title: "Internal Server Error",
       status: 500,
       detail: isDev ? err.message : "An unexpected error occurred. Please try again later.",

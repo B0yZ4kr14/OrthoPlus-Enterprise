@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'ortho-plus-modules',
   webDir: 'dist',
   server: {
-    url: 'https://orthoplus.i9corp.com.br',
+    url: 'https://tsiapp.io',
     cleartext: true
   },
   plugins: {
