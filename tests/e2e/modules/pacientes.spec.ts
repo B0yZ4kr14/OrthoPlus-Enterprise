@@ -10,7 +10,7 @@ test.describe('Módulo PACIENTES - E2E Tests', () => {
     const response = await request.post(`${API_BASE_URL}/api/auth/login`, {
       data: {
         email: 'admin@orthoplus.com',
-        password: 'Admin123!',
+        password: 'admin123!',
       },
     });
 

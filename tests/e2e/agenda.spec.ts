@@ -3,7 +3,7 @@ import { test, expect } from "./fixtures";
 test.describe("Gestão de Agenda", () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
-    await page.goto("/agenda");
+    await page.goto("./agenda");
     await page.waitForLoadState("domcontentloaded");
   });
 

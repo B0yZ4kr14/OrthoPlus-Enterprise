@@ -1,0 +1,185 @@
+# OrthoPlus Enterprise — Extension Configuration
+# Generated: 2026-05-17 | Spec-Kit v0.8.11
+# 33 extensions installed + 1 bundled (git)
+# 5 extensions skipped due to manifest validation errors (upstream bugs)
+
+installed:
+  # === BUNDLED ===
+  - git
+
+  # === TIER 1: ESSENTIALS (Brownfield + Governance) ===
+  - brownfield          # Bootstrap spec-kit para codebase existente
+  - architecture-guard  # Governança de arquitetura contínua
+  - repoindex           # Indexar repositório existente
+  - blueprint           # Blueprint review antes de implementar
+  - status              # Status/progresso do projeto
+  - doctor              # Diagnóstico de saúde do projeto
+  - memory-loader       # Carregar .specify/memory/ no contexto
+  - checkpoint          # Commits durante implementação
+
+  # === TIER 2: QUALITY & REVIEW (TypeScript Strict) ===
+  - staff-review        # Staff-level code review
+  - verify              # Quality gate pós-implementação
+  - verify-tasks        # Detectar tasks fantasmas
+  - cleanup             # Cleanup pós-implementação (scout rule)
+  - fix-findings        # Auto analyze-fix-reanalyze
+  - fixit               # Bugfix spec-aware
+  - ripple              # Detectar side effects
+  - security-review     # Security audits
+
+  # === TIER 3: SPEC EVOLUTION ===
+  - iterate             # Iterar specs mid-implementation
+  - refine              # Atualizar specs in-place
+  - red-team            # Adversarial review de specs
+  - critique            # Dual-lens review (produto + engenharia)
+  - sync                # Detectar drift specs vs código
+  - reconcile           # Reconciliar drift
+
+  # === TIER 4: PROJECT MANAGEMENT & VISIBILITY ===
+  - scope               # Estimação de esforço
+  - version-guard       # Verificar versões do tech stack
+  - diagram             # Mermaid diagrams de workflow
+
+  # === TIER 5: INTEGRATION (GitHub/CI) ===
+  - github-issues       # Sync com GitHub Issues
+  - ship                # Pipeline de release
+
+  # === TIER 6: GOVERNANCE & MULTI-AGENT ===
+  - agent-governance    # Governança local de agentes
+  - memorylint          # Auditar AGENTS.md vs constitution
+  - squad               # Squad agent team
+
+  # === TIER 7: ARCHITECTURE ===
+  - arch                # 4+1 architecture views
+
+  # === TIER 8: RETROSPECTIVE ===
+  - retrospective       # Retrospectiva pós-implementação
+  - retro               # Sprint retrospective
+
+  # === TIER 9: MEMORY & DOCS ===
+  - archive             # Arquivar features merged
+
+# === GLOBAL SETTINGS ===
+settings:
+  auto_execute_hooks: false   # Hooks são opcionais por padrão (human-in-the-loop)
+  notify_on_drift: true       # Alertar quando drift é detectado
+  enable_memory_loader: true  # Carregar memory automaticamente
+
+# === HOOK CONFIGURATION ===
+# OrthoPlus workflow: specify → plan → tasks → implement → verify
+hooks:
+  # Após geração de spec: carregar contexto + adversarial review
+  after_specify:
+    - extension: memory-loader
+      command: speckit.memory-loader.load
+      enabled: true
+      optional: false
+      prompt: "Carregar contexto de memória do projeto"
+    - extension: red-team
+      command: speckit.red-team.review
+      enabled: true
+      optional: true
+      prompt: "Executar adversarial review na spec?"
+
+  # Após planning: blueprint + scope validation
+  after_plan:
+    - extension: blueprint
+      command: speckit.blueprint.generate
+      enabled: true
+      optional: true
+      prompt: "Gerar blueprint de código antes de implementar?"
+    - extension: scope
+      command: speckit.scope.estimate
+      enabled: true
+      optional: true
+      prompt: "Validar estimativa de esforço do plano?"
+    - extension: architecture-guard
+      command: speckit.architecture-guard.governed-plan
+      enabled: true
+      optional: true
+      prompt: "Validar plano contra arquitetura?"
+
+  # Após tasks: detectar phantom completions
+  after_tasks:
+    - extension: verify-tasks
+      command: speckit.verify-tasks.check
+      enabled: true
+      optional: true
+      prompt: "Verificar tasks fantasmas?"
+    - extension: squad
+      command: speckit.squad.bootstrap
+      enabled: true
+      optional: true
+      prompt: "Bootstrap squad agents para esta feature?"
+
+  # Antes de implementar: blueprint validation
+  before_implement:
+    - extension: blueprint
+      command: speckit.blueprint.validate
+      enabled: true
+      optional: true
+      prompt: "Validar blueprint antes de implementar?"
+    - extension: architecture-guard
+      command: speckit.architecture-guard.governed-implement
+      enabled: true
+      optional: true
+      prompt: "Aplicar governança arquitetural na implementação?"
+
+  # Após implementação: quality gates em cascata
+  after_implement:
+    - extension: checkpoint
+      command: speckit.checkpoint.commit
+      enabled: true
+      optional: true
+      prompt: "Criar checkpoint commit?"
+    - extension: verify
+      command: speckit.verify.validate
+      enabled: true
+      optional: true
+      prompt: "Validar implementação contra spec?"
+    - extension: ripple
+      command: speckit.ripple.analyze
+      enabled: true
+      optional: true
+      prompt: "Analisar side effects (ripple)?"
+    - extension: security-review
+      command: speckit.security-review.audit
+      enabled: true
+      optional: true
+      prompt: "Executar security review?"
+    - extension: staff-review
+      command: speckit.staff-review.review
+      enabled: true
+      optional: true
+      prompt: "Executar staff-level review?"
+    - extension: cleanup
+      command: speckit.cleanup.run
+      enabled: true
+      optional: true
+      prompt: "Executar cleanup (scout rule)?"
+    - extension: architecture-guard
+      command: speckit.architecture-guard.architecture-verify
+      enabled: true
+      optional: true
+      prompt: "Verificar drift arquitetural?"
+
+  # Após análise cruzada: dual-lens critique
+  after_analyze:
+    - extension: critique
+      command: speckit.critique.review
+      enabled: true
+      optional: true
+      prompt: "Executar dual-lens critique?"
+    - extension: memorylint
+      command: speckit.memorylint.audit
+      enabled: true
+      optional: true
+      prompt: "Auditar consistência AGENTS.md vs constitution?"
+
+  # Após retrospectiva: arquivar feature
+  after_retrospective:
+    - extension: archive
+      command: speckit.archive.run
+      enabled: true
+      optional: true
+      prompt: "Arquivar feature no project memory?"

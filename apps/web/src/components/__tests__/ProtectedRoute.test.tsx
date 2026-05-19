@@ -1,27 +1,49 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter, Routes, Route } from "react-router-dom"
-import * as AuthContext from "@/contexts/AuthContext"
+import { AuthContext } from "@/contexts/AuthContext"
+import type { AuthContextType } from "@/contexts/AuthContext"
+import { ProtectedRoute } from "../ProtectedRoute"
+import { ReactNode } from "react"
 
-const mockAuthState: any = {
+const mockAuthState: AuthContextType = {
   user: null,
+  session: null,
   loading: false,
+  userRole: null,
+  userProfile: null,
+  clinicId: null,
   isAdmin: false,
   isMember: false,
   isPatient: false,
+  availableClinics: [],
+  selectedClinic: null,
+  userPermissions: [],
+  activeModules: [],
+  switchClinic: vi.fn(),
+  hasRole: vi.fn(() => false),
   hasModuleAccess: vi.fn(() => false),
+  fetchUserMetadata: vi.fn(),
+  signUp: vi.fn(),
+  registerStaffUser: vi.fn(),
+  signIn: vi.fn(),
+  signInPatient: vi.fn(),
+  signOut: vi.fn(),
 }
 
-const mockUseAuth = vi.fn(() => mockAuthState)
-
-// Mutate the module export BEFORE ProtectedRoute is imported
-// @ts-ignore
-AuthContext.useAuth = mockUseAuth
-
-const { ProtectedRoute } = await import("../ProtectedRoute")
+function MockAuthProvider({
+  children,
+  overrides,
+}: {
+  children: ReactNode
+  overrides?: Partial<AuthContextType>
+}) {
+  const value = { ...mockAuthState, ...overrides }
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
 
 function renderProtectedRoute(
-  authOverrides: Partial<typeof mockAuthState> = {},
+  authOverrides: Partial<AuthContextType> = {},
   routeProps: {
     requireAdmin?: boolean
     requireStaff?: boolean
@@ -29,16 +51,6 @@ function renderProtectedRoute(
     moduleKey?: string
   } = {},
 ) {
-  Object.assign(mockAuthState, {
-    user: null,
-    loading: false,
-    isAdmin: false,
-    isMember: false,
-    isPatient: false,
-    hasModuleAccess: vi.fn(() => false),
-    ...authOverrides,
-  })
-
   return render(
     <MemoryRouter initialEntries={["/protected"]}>
       <Routes>
@@ -47,9 +59,11 @@ function renderProtectedRoute(
         <Route
           path="/protected"
           element={
-            <ProtectedRoute {...routeProps}>
-              <div data-testid="protected-content">Protected Content</div>
-            </ProtectedRoute>
+            <MockAuthProvider overrides={authOverrides}>
+              <ProtectedRoute {...routeProps}>
+                <div data-testid="protected-content">Protected Content</div>
+              </ProtectedRoute>
+            </MockAuthProvider>
           }
         />
       </Routes>
@@ -60,22 +74,13 @@ function renderProtectedRoute(
 describe("ProtectedRoute", () => {
   beforeEach(() => {
     vi.resetAllMocks()
-    Object.assign(mockAuthState, {
-      user: null,
-      loading: false,
-      isAdmin: false,
-      isMember: false,
-      isPatient: false,
-      hasModuleAccess: vi.fn(() => false),
-    })
-    mockUseAuth.mockImplementation(() => mockAuthState)
   })
 
   it("should render spinner while loading", () => {
     const { container } = renderProtectedRoute({ loading: true })
 
-    expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument()
-    expect(screen.queryByText("Acesso Negado")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("protected-content")).toBeNull()
+    expect(screen.queryByText("Acesso Negado")).toBeNull()
     expect(container.querySelector("svg")).toBeTruthy()
   })
 
@@ -83,7 +88,7 @@ describe("ProtectedRoute", () => {
     renderProtectedRoute({ user: null })
 
     expect(screen.getByTestId("auth-page")).toBeTruthy()
-    expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("protected-content")).toBeNull()
   })
 
   it("should render children when authenticated with no restrictions", () => {
@@ -99,7 +104,7 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByText("Acesso Negado")).toBeTruthy()
-    expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("protected-content")).toBeNull()
   })
 
   it("should render children when requireAdmin=true and is admin", () => {
@@ -109,7 +114,7 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByTestId("protected-content")).toBeTruthy()
-    expect(screen.queryByText("Acesso Negado")).not.toBeInTheDocument()
+    expect(screen.queryByText("Acesso Negado")).toBeNull()
   })
 
   it('should show "Acesso Negado" when requireStaff=true and is patient', () => {
@@ -119,7 +124,7 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByText("Acesso Negado")).toBeTruthy()
-    expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("protected-content")).toBeNull()
   })
 
   it("should render children when requireStaff=true and is member", () => {
@@ -129,7 +134,7 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByTestId("protected-content")).toBeTruthy()
-    expect(screen.queryByText("Acesso Negado")).not.toBeInTheDocument()
+    expect(screen.queryByText("Acesso Negado")).toBeNull()
   })
 
   it('should show "Acesso Negado" when requirePatient=true and not patient', () => {
@@ -139,7 +144,7 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByText("Acesso Negado")).toBeTruthy()
-    expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("protected-content")).toBeNull()
   })
 
   it("should render children when requirePatient=true and is patient", () => {
@@ -149,7 +154,7 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByTestId("protected-content")).toBeTruthy()
-    expect(screen.queryByText("Acesso Negado")).not.toBeInTheDocument()
+    expect(screen.queryByText("Acesso Negado")).toBeNull()
   })
 
   it("should redirect to /403 when moduleKey provided but hasModuleAccess returns false", () => {
@@ -159,7 +164,7 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByTestId("forbidden-page")).toBeTruthy()
-    expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("protected-content")).toBeNull()
   })
 
   it("should render children when moduleKey provided and access granted", () => {
@@ -169,6 +174,6 @@ describe("ProtectedRoute", () => {
     )
 
     expect(screen.getByTestId("protected-content")).toBeTruthy()
-    expect(screen.queryByTestId("forbidden-page")).not.toBeInTheDocument()
+    expect(screen.queryByTestId("forbidden-page")).toBeNull()
   })
 })

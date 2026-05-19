@@ -22,7 +22,7 @@ export default defineConfig({
   ],
 
   use: {
-    baseURL: "http://localhost:8080",
+    baseURL: "http://localhost:8080/OrthoPlus-Enterprise/",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -62,8 +62,8 @@ export default defineConfig({
       timeout: 60000,
     },
     {
-      command: "npm run dev",
-      url: "http://localhost:8080",
+      command: "python3 tests/e2e/test-server.py 8080",
+      url: "http://localhost:8080/OrthoPlus-Enterprise/",
       reuseExistingServer: !process.env.CI,
       timeout: 60000,
     },

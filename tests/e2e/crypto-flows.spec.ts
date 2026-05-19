@@ -5,8 +5,8 @@ test.describe("Crypto Payment Flows", () => {
     // Auth token injected via fixtures.ts
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
-    await page.waitForURL("/dashboard");
-    await page.goto("/financeiro/crypto");
+    await page.waitForURL(/.*\/dashboard/);
+    await page.goto("./financeiro/crypto");
   });
 
   test("should display crypto dashboard", async ({ page }) => {

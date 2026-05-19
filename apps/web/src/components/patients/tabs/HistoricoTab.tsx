@@ -3,9 +3,10 @@ import { History, Calendar } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { PatientTimeline } from "@/modules/pacientes/components/PatientTimeline";
 import { usePatientTimeline } from "@/modules/pacientes/hooks/usePatientTimeline";
+import type { Patient } from "@/types/patient";
 
 interface HistoricoTabProps {
-  patient: Record<string, unknown>;
+  patient: Patient;
 }
 
 export function HistoricoTab({ patient }: HistoricoTabProps) {
@@ -83,7 +84,7 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
               Data de Cadastro
             </label>
             <p className="text-lg mt-2">
-              {new Date(patient.created_at).toLocaleString("pt-BR")}
+              {new Date(patient.created_at as string).toLocaleString("pt-BR")}
             </p>
           </div>
           <div>
@@ -91,7 +92,7 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
               Última Atualização
             </label>
             <p className="text-lg mt-2">
-              {new Date(patient.updated_at).toLocaleString("pt-BR")}
+              {new Date(patient.updated_at as string).toLocaleString("pt-BR")}
             </p>
           </div>
           <div>
@@ -109,7 +110,7 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
                 }
                 className="text-base py-1.5"
               >
-                {patient.status}
+                {patient.status || "N/A"}
               </Badge>
             </div>
           </div>

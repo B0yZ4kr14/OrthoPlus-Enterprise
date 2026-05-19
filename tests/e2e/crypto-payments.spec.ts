@@ -9,7 +9,7 @@ test.describe("Crypto Payments Module", () => {
 
   test("should navigate to crypto payments page", async ({ page }) => {
     // Navigate directly to crypto payments page
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
     await page.waitForLoadState("domcontentloaded");
 
     // Verificar elementos principais da página
@@ -17,7 +17,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should configure exchange", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Clicar na tab de Exchanges
     await page.click('button:has-text("Exchanges")');
@@ -44,7 +44,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should create wallet", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Clicar na tab de Carteiras
     await page.click('button:has-text("Carteiras")');
@@ -70,7 +70,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should generate payment QR code", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Assumindo que há uma carteira já criada
     // Clicar em botão para gerar pagamento
@@ -91,7 +91,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should display transaction list", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Verificar se a tabela de transações existe
     await expect(page.locator("table")).toBeVisible();
@@ -104,7 +104,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should filter transactions by status", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Aplicar filtro de status
     await page.selectOption('select[name="status_filter"]', "CONFIRMADO");
@@ -123,7 +123,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should convert crypto to BRL", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Assumindo que há uma transação confirmada
     // Clicar em botão de conversão
@@ -145,7 +145,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should sync wallet balance", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Clicar na tab de Carteiras
     await page.click('button:has-text("Carteiras")');
@@ -164,7 +164,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should display dashboard metrics", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Verificar KPIs principais
     await expect(page.getByText(/total em btc/i)).toBeVisible();
@@ -174,7 +174,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should handle empty states gracefully", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Se não houver transações, verificar mensagem de estado vazio
     const emptyState = page.getByText(/nenhuma transação/i);
@@ -188,7 +188,7 @@ test.describe("Crypto Payments Module", () => {
   test("should validate required fields in exchange config", async ({
     page,
   }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Clicar na tab de Exchanges
     await page.click('button:has-text("Exchanges")');
@@ -205,7 +205,7 @@ test.describe("Crypto Payments Module", () => {
   });
 
   test("should validate Bitcoin address format", async ({ page }) => {
-    await page.goto("/financeiro/crypto-pagamentos");
+    await page.goto("./financeiro/crypto-pagamentos");
 
     // Clicar na tab de Carteiras
     await page.click('button:has-text("Carteiras")');

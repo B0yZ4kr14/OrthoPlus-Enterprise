@@ -8,14 +8,14 @@ test.describe("CRM Workflow", () => {
   });
 
   test("should navigate to CRM page", async ({ page }) => {
-    await page.goto("/crm-kanban");
+    await page.goto("./crm-kanban");
     await page.waitForLoadState("domcontentloaded");
-    await expect(page).toHaveURL("/crm-kanban");
+    await expect(page).toHaveURL(/.*\/crm-kanban/);
     await expect(page.locator("h1")).toContainText("CRM");
   });
 
   test("should display lead kanban board", async ({ page }) => {
-    await page.goto("/crm-kanban");
+    await page.goto("./crm-kanban");
 
     // Verificar colunas do kanban
     await expect(page.getByText("Novos")).toBeVisible();
@@ -25,7 +25,7 @@ test.describe("CRM Workflow", () => {
   });
 
   test("should open lead creation dialog", async ({ page }) => {
-    await page.goto("/crm-kanban");
+    await page.goto("./crm-kanban");
     await page.click('button:has-text("Novo Lead")');
 
     // Verificar se o dialog abriu
@@ -33,7 +33,7 @@ test.describe("CRM Workflow", () => {
   });
 
   test("should create a new lead", async ({ page }) => {
-    await page.goto("/crm-kanban");
+    await page.goto("./crm-kanban");
     await page.click('button:has-text("Novo Lead")');
 
     // Preencher formulário

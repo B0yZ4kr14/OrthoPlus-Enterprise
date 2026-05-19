@@ -231,11 +231,10 @@ apps/web/
 
 ### External Dependencies
 
-- `id` — module must be functional before this feature
-- `clinicId` — module must be functional before this feature
-- `patientId` — module must be functional before this feature
-- `dentistId` — module must be functional before this feature
-- `startTime` — module must be functional before this feature
+- `pacientes` — busca rápida de paciente durante marcação de consulta
+- `procedimentos` — duração e tipo de procedimento para agendamento
+- `funcionarios` — lista de dentistas disponíveis e horários de trabalho
+- `notifications` — envio de confirmações automáticas (SMS/WhatsApp/email)
 
 ---
 

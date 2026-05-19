@@ -80,7 +80,7 @@
 - [ ] T314 [P] [US2] API: Connect frontend to backend endpoints
 - [ ] T315 [P] [US2] Test: Component + integration tests
 
-#### US3: Timeline do Paciente (Priority: P2) 🎯 MVP
+#### US3: Timeline do Paciente (Priority: P2)
 
 **Goal**: Implement timeline do paciente per spec Story 3
 
@@ -93,7 +93,7 @@
 - [ ] T324 [P] [US3] API: Connect frontend to backend endpoints
 - [ ] T325 [P] [US3] Test: Component + integration tests
 
-#### US4: Portal do Paciente (Priority: P3) 🎯 MVP
+#### US4: Portal do Paciente (Priority: P3)
 
 **Goal**: Implement portal do paciente per spec Story 4
 

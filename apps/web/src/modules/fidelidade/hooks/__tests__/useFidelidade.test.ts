@@ -207,7 +207,7 @@ describe("useFidelidade", () => {
     // After create, loadData runs again
     setupLoadDataMocks()
 
-    mockPost.mockResolvedValueOnce({ id: "config-new", ...mockConfig })
+    mockPost.mockResolvedValueOnce({ ...mockConfig, id: "config-new" })
 
     const { result } = renderHook(() => useFidelidade())
     await waitFor(() => expect(result.current.loading).toBe(false))
@@ -303,7 +303,7 @@ describe("useFidelidade", () => {
     setupLoadDataMocks()
     setupLoadDataMocks()
 
-    mockPost.mockResolvedValueOnce({ id: "recompensa-new", ...mockRecompensas[0] })
+    mockPost.mockResolvedValueOnce({ ...mockRecompensas[0], id: "recompensa-new" })
 
     const { result } = renderHook(() => useFidelidade())
     await waitFor(() => expect(result.current.loading).toBe(false))
@@ -463,7 +463,7 @@ describe("useFidelidade", () => {
     setupLoadDataMocks()
     setupLoadDataMocks()
 
-    mockPost.mockResolvedValueOnce({ id: "badge-new", ...mockBadges[0] })
+    mockPost.mockResolvedValueOnce({ ...mockBadges[0], id: "badge-new" })
 
     const { result } = renderHook(() => useFidelidade())
     await waitFor(() => expect(result.current.loading).toBe(false))

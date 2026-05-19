@@ -442,7 +442,7 @@ describe("useEstoqueStore", () => {
       } as any)
     })
 
-    const alertaId = result.current.alertas[0].id
+    const alertaId = result.current.alertas[0]!.id as string
 
     act(() => {
       result.current.marcarAlertaComoLido(alertaId)
@@ -477,7 +477,7 @@ describe("useEstoqueStore", () => {
     expect(result.current.alertas).toHaveLength(2)
 
     act(() => {
-      result.current.marcarAlertaComoLido(result.current.alertas[0].id)
+      result.current.marcarAlertaComoLido(result.current.alertas[0]!.id as string)
     })
 
     act(() => {
@@ -506,7 +506,7 @@ describe("useEstoqueStore", () => {
     expect(result.current.categorias).toHaveLength(4)
     expect(result.current.categorias[3].nome).toBe("Nova Categoria")
 
-    const categoriaId = result.current.categorias[3].id
+    const categoriaId = result.current.categorias[3]!.id as string
 
     act(() => {
       result.current.updateCategoria(categoriaId, { nome: "Categoria Atualizada" })
@@ -554,7 +554,7 @@ describe("useEstoqueStore", () => {
     expect(result.current.fornecedores).toHaveLength(3)
     expect(result.current.fornecedores[2].nome).toBe("Novo Fornecedor")
 
-    const fornecedorId = result.current.fornecedores[2].id
+    const fornecedorId = result.current.fornecedores[2]!.id as string
 
     act(() => {
       result.current.updateFornecedor(fornecedorId, { nome: "Fornecedor Atualizado" })
@@ -602,7 +602,7 @@ describe("useEstoqueStore", () => {
     expect(result.current.requisicoes).toHaveLength(1)
     expect(result.current.requisicoes[0].status).toBe("PENDENTE")
 
-    const requisicaoId = result.current.requisicoes[0].id
+    const requisicaoId = result.current.requisicoes[0]!.id as string
 
     act(() => {
       result.current.aprovarRequisicao(requisicaoId, "admin-1")
@@ -639,7 +639,7 @@ describe("useEstoqueStore", () => {
       } as any)
     })
 
-    const id = result.current.requisicoes[0].id
+    const id = result.current.requisicoes[0]!.id as string
     expect(result.current.getRequisicaoById(id)?.motivo).toBe("Teste")
     expect(result.current.getRequisicaoById("999")).toBeUndefined()
   })
@@ -657,7 +657,7 @@ describe("useEstoqueStore", () => {
       } as any)
     })
 
-    const id = result.current.movimentacoes[0].id
+    const id = result.current.movimentacoes[0]!.id as string
     expect(result.current.getMovimentacaoById(id)?.tipo).toBe("ENTRADA")
     expect(result.current.getMovimentacaoById("999")).toBeUndefined()
   })

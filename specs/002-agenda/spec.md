@@ -179,88 +179,11 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 **When** o paciente liga para cancelar
 **Then** a recepcionista marca como cancelado, o horário fica livre, e uma mensagem é enviada ao dentista
 
----
-
-## 7. Edge Cases
-
-### EC-001: Paciente Não Encontrado
-**Condition**: Paciente ainda não cadastrado durante a marcação
-**Expected Behavior**: Shortcut para cadastro rápido sem sair da tela de agenda
-
-### EC-002: Dentista em Férias
-**Condition**: Tentativa de agendar durante férias do dentista
-**Expected Behavior**: Horários aparecem como bloqueados. Mensagem: "Dr. Silva em férias de X a Y."
-
-### EC-003: Consulta Passada
-**Condition**: Tentativa de editar agendamento de data passada
-**Expected Behavior**: Edição bloqueada. Apenas visualização e adição de notas.
-
----
-
-## 8. Key Entities
-
-### Entity: Appointment
-**Attributes**:
-- `id` (UUID)
-- `clinicId` (String)
-- `patientId` (UUID) → Patient
-- `dentistId` (UUID) → Funcionário
-- `startTime` (DateTime)
-- `endTime` (DateTime)
-- `procedureId` (UUID) → Procedimento
-- `status` (Enum): AGENDADO, CONFIRMADO, CANCELADO, CONCLUIDO, FALTOU
-- `notes` (String)
-- `confirmationSentAt` (DateTime)
-- `confirmedAt` (DateTime)
-- `createdAt`, `updatedAt`
-
-### Entity: BlockedTime
-**Attributes**:
-- `id` (UUID)
-- `clinicId` (String)
-- `dentistId` (UUID)
-- `startTime` (DateTime)
-- `endTime` (DateTime)
-- `reason` (String)
-- `isRecurring` (Boolean)
-- `recurrenceRule` (String) — iCal RRULE format
-
----
-
-## 9. Dependencies & Assumptions
-
-### Dependencies
-- `pacientes` — busca de paciente
-- `procedimentos` — duração e tipo
-- `funcionarios` — dentistas disponíveis
-- `notifications` — envio de confirmações
-
-### Assumptions
-- Cada consulta tem duração definida pelo procedimento
-- Dentistas têm horário de trabalho configurado
-- Fuso horário é America/Sao_Paulo
-
----
-
-## 10. Out of Scope
-
-- Integração com Google Calendar / Outlook
-- Videochamada (teleodonto)
-- Gestão de fila de espera
-- Chat entre paciente e clínica
-
----
-
-## 11. Notes
-
-- Backend: módulo `agenda` com Prisma (appointments, blocked_times, dentist_schedules)
-- Frontend: Clean Architecture completa (domain, application, infrastructure, presentation)
-- WebSocket ou SSE para atualização em tempo real
 
 
 ---
 
-## 6. Security & Compliance
+## 7. Security & Compliance
 
 ### Authentication & Authorization
 - **Auth method**: JWT (HS256, 24h expiry) via HttpOnly cookie with SameSite=Strict
@@ -291,3 +214,81 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - `pnpm audit --moderate` in CI (weekly)
 - ESLint security plugin scan
 - Dependabot alerts enabled
+
+---
+
+## 8. Edge Cases
+
+### EC-001: Paciente Não Encontrado
+**Condition**: Paciente ainda não cadastrado durante a marcação
+**Expected Behavior**: Shortcut para cadastro rápido sem sair da tela de agenda
+
+### EC-002: Dentista em Férias
+**Condition**: Tentativa de agendar durante férias do dentista
+**Expected Behavior**: Horários aparecem como bloqueados. Mensagem: "Dr. Silva em férias de X a Y."
+
+### EC-003: Consulta Passada
+**Condition**: Tentativa de editar agendamento de data passada
+**Expected Behavior**: Edição bloqueada. Apenas visualização e adição de notas.
+
+---
+
+## 9. Key Entities
+
+### Entity: Appointment
+**Attributes**:
+- `id` (UUID)
+- `clinicId` (String)
+- `patientId` (UUID) → Patient
+- `dentistId` (UUID) → Funcionário
+- `startTime` (DateTime)
+- `endTime` (DateTime)
+- `procedureId` (UUID) → Procedimento
+- `status` (Enum): AGENDADO, CONFIRMADO, CANCELADO, CONCLUIDO, FALTOU
+- `notes` (String)
+- `confirmationSentAt` (DateTime)
+- `confirmedAt` (DateTime)
+- `createdAt`, `updatedAt`
+
+### Entity: BlockedTime
+**Attributes**:
+- `id` (UUID)
+- `clinicId` (String)
+- `dentistId` (UUID)
+- `startTime` (DateTime)
+- `endTime` (DateTime)
+- `reason` (String)
+- `isRecurring` (Boolean)
+- `recurrenceRule` (String) — iCal RRULE format
+
+---
+
+## 10. Dependencies & Assumptions
+
+### Dependencies
+- `pacientes` — busca de paciente
+- `procedimentos` — duração e tipo
+- `funcionarios` — dentistas disponíveis
+- `notifications` — envio de confirmações
+
+### Assumptions
+- Cada consulta tem duração definida pelo procedimento
+- Dentistas têm horário de trabalho configurado
+- Fuso horário é America/Sao_Paulo
+
+---
+
+## 11. Out of Scope
+
+- Integração com Google Calendar / Outlook
+- Videochamada (teleodonto)
+- Gestão de fila de espera
+- Chat entre paciente e clínica
+
+---
+
+## 12. Notes
+
+- Backend: módulo `agenda` com Prisma (appointments, blocked_times, dentist_schedules)
+- Frontend: Clean Architecture completa (domain, application, infrastructure, presentation)
+- WebSocket ou SSE para atualização em tempo real

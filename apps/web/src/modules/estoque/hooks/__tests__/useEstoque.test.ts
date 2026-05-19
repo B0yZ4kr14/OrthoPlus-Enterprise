@@ -269,7 +269,7 @@ describe("useEstoque", () => {
 
   it("should add a produto and reload data", async () => {
     mockAllEndpoints({ produtos: [mockProdutoApi] })
-    mockPost.mockResolvedValueOnce({ id: "p2", ...mockProdutoApi })
+    mockPost.mockResolvedValueOnce({ ...mockProdutoApi, id: "p2" })
 
     const { result } = renderHook(() => useEstoque())
 

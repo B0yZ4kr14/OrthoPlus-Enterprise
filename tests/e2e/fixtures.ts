@@ -29,7 +29,7 @@ export const test = base.extend({
     if (token) {
       // Inject token into localStorage before any navigation
       await page.addInitScript((t: string) => {
-        window.localStorage.setItem('access_token', t);
+        window.localStorage.setItem('accessToken', t);
       }, token);
     }
     await use(page);

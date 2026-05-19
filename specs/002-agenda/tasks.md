@@ -80,7 +80,7 @@
 - [ ] T314 [P] [US2] API: Connect frontend to backend endpoints
 - [ ] T315 [P] [US2] Test: Component + integration tests
 
-#### US3: Confirmação Automática (Priority: P2) 🎯 MVP
+#### US3: Confirmação Automática (Priority: P2)
 
 **Goal**: Implement confirmação automática per spec Story 3
 
@@ -93,7 +93,7 @@
 - [ ] T324 [P] [US3] API: Connect frontend to backend endpoints
 - [ ] T325 [P] [US3] Test: Component + integration tests
 
-#### US4: Bloqueio de Horário (Priority: P2) 🎯 MVP
+#### US4: Bloqueio de Horário (Priority: P2)
 
 **Goal**: Implement bloqueio de horário per spec Story 4
 

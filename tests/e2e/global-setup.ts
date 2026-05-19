@@ -21,8 +21,8 @@ async function globalSetup(config: FullConfig) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: 'admin@orthomais.com',
-        password: 'Admin123!',
+        email: 'admin@orthoplus.com',
+        password: 'admin123!',
       }),
     });
 
@@ -35,7 +35,7 @@ async function globalSetup(config: FullConfig) {
     }
 
     const data = await response.json();
-    const token = data.access_token || data.token || '';
+    const token = data.accessToken || data.access_token || data.token || '';
 
     fs.mkdirSync(path.dirname(AUTH_FILE), { recursive: true });
     fs.writeFileSync(AUTH_FILE, JSON.stringify({ token }));

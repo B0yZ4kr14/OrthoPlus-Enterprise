@@ -173,7 +173,7 @@ apps/web/
 
 **Goal**: Implement timeline do paciente per spec Story 3
 
-**Independent Test**: os campos rua, bairro, cidade e estado são preenchidos automaticamente
+**Independent Test**: eventos da jornada do paciente aparecem em ordem cronológica descendente com filtros por categoria
 
 ---
 

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { renderHook, waitFor, act } from "@testing-library/react"
 
-const authState = {
+const authState: { user: { id: string; email: string }; clinicId: string | null } = {
   user: { id: "user-1", email: "test@test.com" },
   clinicId: "clinic-1",
 }

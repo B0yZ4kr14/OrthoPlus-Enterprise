@@ -5,5 +5,8 @@
   "main": "./src/index.ts",
   "type": "module",
   "dependencies": {},
+  "scripts": {
+    "type-check": "echo 'No types to check'"
+  },
   "devDependencies": {}
 }

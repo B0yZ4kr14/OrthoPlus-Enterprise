@@ -107,9 +107,11 @@ describe("useInadimplentes", () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     expect(result.current.inadimplentes).toHaveLength(1)
-    expect(result.current.inadimplentes[0].id).toBe("ind-1")
+    const inadimplentesList = result.current.inadimplentes as Array<Record<string, any>>
+    expect(inadimplentesList[0].id).toBe("ind-1")
     expect(result.current.campanhas).toHaveLength(1)
-    expect(result.current.campanhas[0].id).toBe("camp-1")
+    const campanhasList = result.current.campanhas as Array<Record<string, any>>
+    expect(campanhasList[0].id).toBe("camp-1")
     expect(mockGet).toHaveBeenCalledWith("/inadimplentes", {
       params: { clinic_id: "clinic-1", sort: "valor_total_devido.desc" },
     })
@@ -238,7 +240,8 @@ describe("useInadimplentes", () => {
     await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     expect(result.current.inadimplentes).toHaveLength(2)
-    expect(result.current.inadimplentes[1].paciente.nome).toBe("Maria Santos")
+    const lista = result.current.inadimplentes as Array<Record<string, any>>
+    expect(lista[1].paciente.nome).toBe("Maria Santos")
     expect(result.current.campanhas).toHaveLength(1)
   })
 })
