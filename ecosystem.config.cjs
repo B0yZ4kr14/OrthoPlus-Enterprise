@@ -33,7 +33,7 @@ module.exports = {
       user: 'deploy',
       host: ['orthoplus.i9corp.com.br'],
       ref: 'origin/main',
-      repo: 'https://github.com/SynkraAI/ortho-plus.git',
+      repo: 'https://github.com/B0yZ4kr14/OrthoPlus-Enterprise.git',
       path: '/var/www/orthoplus',
       'post-deploy': 'npm install && npm run build && pm2 reload ecosystem.config.js --env production'
     }

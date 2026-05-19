@@ -1,6 +1,6 @@
 {
   "name": "orthoplus-backend",
-  "version": "1.0.0",
+  "version": "2.5.4",
   "description": "Ortho+ Backend - Modular Monolith with API Gateway",
   "main": "dist/index.js",
   "scripts": {

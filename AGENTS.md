@@ -2,7 +2,7 @@
   AGENTS.md — OrthoPlus Enterprise (Root)
   Arquivo de referencia canonico para agentes de IA.
   Idioma principal do projeto: Portugues (codigo e documentacao).
-  **Atualizado:** 2026-05-17
+  **Atualizado:** 2026-05-19
 -->
 
 # AGENTS.md — OrthoPlus Enterprise
@@ -47,7 +47,7 @@ OrthoPlus-Enterprise/
 │   │   ├── App.tsx               # Providers globais
 │   │   ├── routes/AppRoutes.tsx  # React Router v6 (lazy-loaded)
 │   │   ├── components/           # ~1116 componentes compartilhados
-│   │   ├── modules/              # 37 modulos de UI
+│   │   ├── modules/              # 39 modulos de UI (37 de negocio + 2 de infraestrutura: core, ui)
 │   │   ├── domain/               # 24 entidades, 19 repos (Clean Arch parcial)
 │   │   ├── application/use-cases/# 60 use-cases
 │   │   ├── infrastructure/       # 15 repos concretos, DI, event bus
@@ -62,7 +62,7 @@ OrthoPlus-Enterprise/
 │   ├── src/
 │   │   ├── index.ts              # Ponto de entrada (~425 linhas)
 │   │   ├── middleware/           # auth, clinicGuard, errorHandler, lgpd
-│   │   ├── modules/              # 37 modulos de dominio
+│   │   ├── modules/              # 38 modulos de dominio
 │   │   ├── workers/              # 9 cron jobs + scheduler de backup
 │   │   ├── infrastructure/       # Prisma singleton, logger (Winston), Redis
 │   │   ├── shared/               # CQRS bus, event registry
@@ -342,7 +342,7 @@ packages:
 ### Backend — Jest + ts-jest
 - **Config:** `backend/jest.config.js`
 - **Diretorio:** `backend/tests/unit/` (17 arquivos `.test.ts`)
-- **Suites:** agenda, auth, contratos, dashboard, financeiro, health, nfe, pdv, pep, produto, splitPagamento, teleodonto, tiss, transaction
+- **Suites:** agenda, auth, contratos, dashboard, financeiro, health, nfe, pdv, pep, split-pagamento, teleodonto, tiss, inadimplencia, fidelidade, estoque, lgpd
 - **Coverage:** threshold global de **20%** (branches, functions, lines, statements).
 - **Module name mapper:** `@/` -> `src/`, `@modules/` -> `src/modules/`, etc.
 
@@ -391,7 +391,60 @@ packages:
 
 ---
 
-## 12. Checklist antes de Commit
+## 12. Glossario de Nomes — Frontend vs Backend
+
+> Mapeamento oficial de nomes entre camadas. Sempre usar estes nomes em novos artefatos.
+
+### Modulos com Nomes Divergentes
+
+| Funcionalidade | Diretorio Frontend | Diretorio Backend | Rota Frontend | Rota API |
+|----------------|-------------------|-------------------|---------------|----------|
+| Administracao | `admin` | `admin_tools` | `/admin/*` | `/api/admin` |
+| Configuracoes | `settings` | `configuracoes` | `/configuracoes/*` | `/api/configuracoes` |
+| Crypto Pagamentos | `crypto` | `crypto_config` | `/crypto-payment` | `/api/crypto`, `/api/crypto_config` |
+| Financeiro/Fiscal | `financeiro` | `faturamento` | `/financeiro/*` | `/api/faturamento`, `/api/fiscal` |
+| Marketing | `marketing-auto` | `marketing` | `/marketing-auto`, `/recall` | `/api/marketing` |
+| IA Radiografia | `ia-radiografia` | `ai` | `/ia-radiografia` | `/api/ai` |
+| Cobranca/Inadimplencia | `cobranca` / `inadimplencia` | `inadimplencia` | `/inadimplencia` | `/api/inadimplencia` |
+| Estoque/Inventario | `estoque` / `inventario` | `inventario` | `/estoque/*`, `/inventario/dashboard` | `/api/estoque`, `/api/inventario` |
+| Split Pagamento | `split-pagamento` | `split_pagamento` | `/split-pagamento` | `/api/split-pagamento`, `/api/split` |
+
+### Modulos com Nomes Identicos
+
+`agenda`, `auth`, `bi`, `contratos`, `crm`, `dashboard`, `fidelidade`, `files`, `funcionarios`, `lgpd`, `orcamentos`, `pacientes`, `pdv`, `pep`, `procedimentos`, `teleodonto`, `tiss`
+
+### Modulos Backend sem Frontend Dedicado
+
+| Backend | Rota API | Observacao |
+|---------|----------|------------|
+| `analytics` | `/api/analytics` | APIs internas de metricas |
+| `comm` | `/api/comm` | APIs de comunicacao |
+| `notifications` | `/api/notifications` | Notificacoes push |
+| `nfe` | `/api/nfe` | Nota Fiscal Eletronica |
+| `agents` | `/api/agents` | Usa agent-service externo (porta 8000) |
+
+### Modulos Frontend sem Backend Dedicado
+
+| Frontend | Rota | Observacao |
+|----------|------|------------|
+| `landpage` | `/` | Pagina publica (sem API) |
+| `portal-paciente` | `/portal-paciente` | Portal do paciente |
+| `odontograma` | `/odontograma` | Reusa dados de pacientes |
+| `tratamentos` | `/tratamentos` | Reusa modulo PEP |
+
+### Modulos de Infraestrutura (nao de negocio)
+
+| Diretorio | Camada | Proposito |
+|-----------|--------|-----------|
+| `application` | Frontend | Configuracao de aplicacao |
+| `core` | Frontend | Pacotes internos re-exportados |
+| `domain` | Frontend | Tipos/entidades compartilhados |
+| `ui` | Frontend | Componentes internos do modulo admin |
+| `dashboards` | Frontend | Dashboards comerciais secundarios |
+
+---
+
+## 13. Checklist antes de Commit
 
 - [ ] `cd backend && pnpm build` passa sem erros (tsc + tsc-alias sao estritos).
 - [ ] `cd apps/web && pnpm type-check` passa (erros pre-existentes listados acima sao esperados).
@@ -405,7 +458,7 @@ packages:
 
 ---
 
-## 13. Referencia Rapida de Arquivos
+## 14. Referencia Rapida de Arquivos
 
 | Proposito | Caminho |
 |-----------|---------|
