@@ -29,7 +29,7 @@ export function EmptyChartCard({
         height="64"
         viewBox="0 0 96 64"
         fill="none"
-        className="mb-4 text-slate-300"
+        className="mb-4 text-muted-foreground/50"
         aria-hidden="true"
       >
         <rect

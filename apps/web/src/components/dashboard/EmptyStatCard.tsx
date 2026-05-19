@@ -58,10 +58,10 @@ export function EmptyStatCard({
         <ToothIcon className="mx-auto" />
       </div>
 
-      <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">
+      <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
         {title}
       </p>
-      <p className="text-xs text-slate-400 mt-1">{description}</p>
+      <p className="text-xs text-muted-foreground/70 mt-1">{description}</p>
 
       {onCtaClick && (
         <Button
