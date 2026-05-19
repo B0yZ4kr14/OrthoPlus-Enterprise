@@ -61,8 +61,8 @@ function ChartTooltip({
 }) {
   if (!active || !payload || payload.length === 0) return null;
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-lg p-3 border border-slate-100 dark:border-slate-700 min-w-[140px]">
-      <p className="text-xs font-medium text-slate-500 mb-2">{String(label)}</p>
+    <div className="bg-card shadow-lg rounded-lg p-3 border border-border min-w-[140px]">
+      <p className="text-xs font-medium text-muted-foreground mb-2">{String(label)}</p>
       <div className="space-y-1.5">
         {payload.map((item) => (
           <div
@@ -74,11 +74,11 @@ function ChartTooltip({
                 className="w-2 h-2 rounded-full"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="text-xs text-slate-600 dark:text-slate-300">
+              <span className="text-xs text-muted-foreground">
                 {item.name}
               </span>
             </div>
-            <span className="text-sm font-bold text-slate-900 dark:text-slate-100">
+            <span className="text-sm font-bold text-foreground">
               {formatter ? formatter(item.value) : item.value}
             </span>
           </div>

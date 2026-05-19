@@ -60,14 +60,14 @@ export function WelcomeBanner({ userName }: WelcomeBannerProps) {
               <h2 className="text-lg font-semibold text-foreground font-display">
                 {getGreeting()}, {userName}
               </h2>
-              <div className="mt-2 flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <div className="mt-2 flex items-start gap-2 text-sm text-muted-foreground">
                 <Lightbulb className="h-4 w-4 mt-0.5 text-[hsl(var(--interactive))] shrink-0 drop-shadow-[0_0_4px_hsl(var(--interactive)/0.3)]" aria-hidden="true" />
                 <p className="text-muted-foreground">{tips[tipIndex]}</p>
               </div>
             </div>
             <button
               onClick={handleDismiss}
-              className="shrink-0 p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="shrink-0 p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-2 focus-visible:outline-none"
               aria-label="Fechar banner de boas-vindas"
             >
               <X className="h-4 w-4" aria-hidden="true" />

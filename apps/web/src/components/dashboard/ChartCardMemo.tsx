@@ -67,8 +67,8 @@ function CustomTooltip({
     currentIndex > 0 ? (data[currentIndex - 1] as Record<string, number>) : null;
 
   return (
-    <div className="bg-white dark:bg-[hsl(var(--card))] shadow-lg rounded-lg p-3 border border-slate-100 dark:border-[hsl(var(--border))] min-w-[140px]">
-      <p className="text-xs font-medium text-slate-500 mb-2">{String(label)}</p>
+    <div className="bg-card shadow-lg rounded-lg p-3 border border-border min-w-[140px]">
+      <p className="text-xs font-medium text-muted-foreground mb-2">{String(label)}</p>
       <div className="space-y-1.5">
         {payload.map((item) => {
           const prevValue = prevData ? prevData[item.dataKey] : null;
@@ -95,12 +95,12 @@ function CustomTooltip({
                   className="w-2 h-2 rounded-full"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-xs text-slate-600 dark:text-[hsl(var(--muted-foreground))]">
+                <span className="text-xs text-muted-foreground">
                   {item.name}
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-sm font-bold text-slate-900 dark:text-[hsl(var(--foreground))] block">
+                <span className="text-sm font-bold text-foreground block">
                   {formattedValue}
                 </span>
                 {delta !== null && (
@@ -152,8 +152,8 @@ function CustomLegend({
             className={cn(
               "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all border min-h-[44px] focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none",
               isHidden
-                ? "bg-slate-100 text-slate-400 border-slate-200 dark:bg-[hsl(var(--card))] dark:text-[hsl(var(--muted-foreground))] dark:border-[hsl(var(--border))] opacity-60 line-through"
-                : "bg-white text-slate-700 border-slate-200 dark:bg-[hsl(var(--card))] dark:text-[hsl(var(--foreground))] dark:border-[hsl(var(--border))] shadow-sm hover:shadow-md"
+                ? "bg-muted text-muted-foreground border-border opacity-60 line-through"
+                : "bg-card text-foreground border-border shadow-sm hover:shadow-md"
             )}
           >
             <span

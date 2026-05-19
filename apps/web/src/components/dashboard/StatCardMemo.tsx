@@ -79,8 +79,8 @@ export const StatCardMemo = memo(function StatCardMemo({
         aria-label={`${title}: ${value}`}
         className={cn(
           "relative overflow-hidden",
-          "bg-white/80 dark:bg-card/80 backdrop-blur-sm",
-          "border border-sage-100/50 dark:border-sage-800/30",
+          "bg-card/80 backdrop-blur-sm",
+          "border border-border/50",
           "hover:shadow-lg hover:-translate-y-0.5",
           "transition-all duration-200"
         )}
@@ -88,10 +88,10 @@ export const StatCardMemo = memo(function StatCardMemo({
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <div className="space-y-2 flex-1">
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
                 {title}
               </p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100 tabular-nums tracking-tight">
+              <p className="text-3xl font-bold text-foreground tabular-nums tracking-tight">
                 {hasAnimation ? (
                   <motion.span>{display}</motion.span>
                 ) : (
@@ -117,7 +117,7 @@ export const StatCardMemo = memo(function StatCardMemo({
                     {Math.abs(trend.value)}%
                   </span>
                   {subtitle && (
-                    <span className="text-slate-400 dark:text-slate-500 text-xs">
+                    <span className="text-muted-foreground text-xs">
                       {subtitle}
                     </span>
                   )}

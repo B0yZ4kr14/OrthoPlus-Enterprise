@@ -42,12 +42,12 @@ function PieTooltip({
   const total = data.reduce((sum, entry) => sum + entry.value, 0);
   const percent = total > 0 ? ((item.value / total) * 100).toFixed(1) : "0.0";
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-lg p-3 border border-slate-100 dark:border-slate-700 min-w-[120px]">
-      <p className="text-xs font-medium text-slate-500 mb-1">{item.name}</p>
-      <p className="text-sm font-bold text-slate-900 dark:text-slate-100">
+    <div className="bg-card shadow-lg rounded-lg p-3 border border-border min-w-[120px]">
+      <p className="text-xs font-medium text-muted-foreground mb-1">{item.name}</p>
+      <p className="text-sm font-bold text-foreground">
         {item.value}
       </p>
-      <p className="text-xs text-slate-500 mt-0.5">{percent}%</p>
+      <p className="text-xs text-muted-foreground mt-0.5">{percent}%</p>
     </div>
   );
 }
@@ -172,16 +172,16 @@ export const PieChartCard = memo(function PieChartCard({
               return (
                 <div
                   key={entry.name}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-card border-border shadow-sm"
                 >
                   <span
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: entry.color }}
                   />
-                  <span className="text-slate-600 dark:text-slate-300">
+                  <span className="text-muted-foreground">
                     {entry.name}
                   </span>
-                  <span className="font-semibold text-slate-900 dark:text-slate-100">
+                  <span className="font-semibold text-foreground">
                     {percent}%
                   </span>
                 </div>

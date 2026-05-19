@@ -28,7 +28,7 @@ export function DashboardSkeleton() {
       </div>
 
       {/* Tabs Skeleton */}
-      <div className="bg-slate-100/50 dark:bg-[hsl(var(--card)/0.5)] rounded-full p-1 inline-flex">
+      <div className="bg-muted/50 rounded-full p-1 inline-flex">
         {[1, 2, 3, 4].map((i) => (
           <ShimmerBlock
             key={i}
