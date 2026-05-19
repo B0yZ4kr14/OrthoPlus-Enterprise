@@ -4,7 +4,7 @@ import traceback
 import sys
 from playwright.sync_api import sync_playwright
 
-def e2e_login_test(target_url="https://orthoplus.i9corp.com.br"):
+def e2e_login_test(target_url="https://tsiapp.io"):
     result = {"status": "pending", "logs": []}
     
     def log(msg):
@@ -76,5 +76,5 @@ def e2e_login_test(target_url="https://orthoplus.i9corp.com.br"):
     print(json.dumps(result, indent=2))
 
 if __name__ == "__main__":
-    url = sys.argv[1] if len(sys.argv) > 1 else "https://orthoplus.i9corp.com.br"
+    url = sys.argv[1] if len(sys.argv) > 1 else "https://tsiapp.io"
     e2e_login_test(url)

@@ -5,8 +5,8 @@ set -e
 # Keeps backward compatibility with positional argument usage.
 VPS_HOST=${VPS_HOST:-"${1:-100.111.74.69}"}
 SSH_KEY="${2:-$HOME/.ssh/id_ed25519_b0yz4kr14}"
-VPS_USER="ubuntu"
-REMOTE_DIR="/home/ubuntu/OrthoPlus-Enterprise"
+VPS_USER="tsi"
+REMOTE_DIR="/home/tsi/OrthoPlus-Enterprise"
 
 echo "[DEPLOY-LITE] Target VPS: $VPS_USER@$VPS_HOST"
 

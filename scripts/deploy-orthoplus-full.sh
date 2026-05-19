@@ -21,10 +21,10 @@ log_error()   { echo -e "${RED}[ERRO]${NC} $1"; exit 1; }
 
 # DEVOPS-2 FIX: Extracted hardcoded IP to environment variable for multi-environment support
 VPS_HOST=${VPS_HOST:-"100.111.74.69"}
-VPS_USER="ubuntu"
+VPS_USER="tsi"
 SSH_KEY="$HOME/.ssh/id_ed25519_b0yz4kr14"
 SSH_OPTS="-i $SSH_KEY -o StrictHostKeyChecking=no -o ConnectTimeout=10"
-REMOTE_BACKEND="/home/ubuntu/OrthoPlus-Enterprise-backend"
+REMOTE_BACKEND="/home/tsi/OrthoPlus-Enterprise-backend"
 REMOTE_FRONTEND="/var/www/orthoplus"
 LOCAL_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
@@ -106,7 +106,7 @@ log_success "Backend sincronizado para $REMOTE_BACKEND"
 log_info "[5/5] Aplicando migrações Prisma e recarregando PM2..."
 ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
   set -e
-  cd /home/ubuntu/OrthoPlus-Enterprise-backend
+  cd /home/tsi/OrthoPlus-Enterprise-backend
 
   # Instalar/atualizar deps do backend (sem devDependencies)
   pnpm install --prod

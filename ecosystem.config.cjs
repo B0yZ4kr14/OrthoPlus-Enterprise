@@ -31,7 +31,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'deploy',
-      host: ['orthoplus.i9corp.com.br'],
+      host: ['tsiapp.io'],
       ref: 'origin/main',
       repo: 'https://github.com/B0yZ4kr14/OrthoPlus-Enterprise.git',
       path: '/var/www/orthoplus',

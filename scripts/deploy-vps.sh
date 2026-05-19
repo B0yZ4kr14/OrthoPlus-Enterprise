@@ -8,7 +8,7 @@ set -e
 # Keeps backward compatibility with positional argument usage.
 VPS_HOST=${VPS_HOST:-"${1:-100.111.74.69}"}
 VPS_TARGET="vps-orthoplus"
-REMOTE_DIR="/home/ubuntu/OrthoPlus-Enterprise"
+REMOTE_DIR="/home/tsi/OrthoPlus-Enterprise"
 
 echo "[DEPLOY] Target VPS: $VPS_TARGET"
 echo "[DEPLOY] VPS Host: $VPS_HOST"

@@ -5,7 +5,7 @@
 | Ambiente | URL | Status |
 |----------|-----|--------|
 | Tailscale HTTP | http://100.111.74.69 | ✅ Funcionando |
-| IP Público HTTP | http://179.190.9.199 | ✅ Funcionando |
+| IP Público HTTP | http://179.190.15.116 | ✅ Funcionando |
 | Tailscale HTTPS | https://100.111.74.69 | ✅ SSL Configurado |
 
 ## 🔐 Credenciais de Acesso
