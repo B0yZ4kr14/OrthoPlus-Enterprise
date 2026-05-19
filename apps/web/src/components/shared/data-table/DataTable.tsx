@@ -1,6 +1,7 @@
 // cspell:disable
 import { Table } from "@orthoplus/core-ui/table";
 import { Card, CardContent } from "@orthoplus/core-ui/card";
+import { EmptyState } from "@/components/shared/EmptyState";
 import { useDataTable } from "./useDataTable";
 import { DataTableHeader } from "./TableHeader";
 import { DataTableBody } from "./TableBody";
@@ -27,6 +28,20 @@ export function DataTable<T extends Record<string, unknown>>({
     handleSort,
     handlePageChange,
   } = useDataTable(data, searchable, searchKeys, initialPageSize);
+
+  if (data.length === 0) {
+    return (
+      <Card>
+        <CardContent className="p-0">
+          <EmptyState
+            message="Nenhum dado encontrado"
+            description="Não há registros para exibir na tabela."
+            variant="no-data"
+          />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
