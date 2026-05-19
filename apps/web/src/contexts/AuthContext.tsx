@@ -132,7 +132,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Definir role (ADMIN ou MEMBER) — mapear ROOT → ADMIN
-      const rawRole = roleData?.role || "MEMBER";
+      // Preservar userRole existente (setado pelo /auth/me ou login) quando roleData nao esta presente
+      const rawRole = roleData?.role || userRole || "MEMBER";
       const role = rawRole === "ROOT" ? "ADMIN" : rawRole;
       setUserRole(role as "ADMIN" | "MEMBER");
       setUserProfile(role as UserProfile);
