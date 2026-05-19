@@ -304,7 +304,10 @@ DB_PORT=5432
 DB_NAME=orthoplus
 DB_USER=orthoplus
 DB_PASSWORD=$DB_PASSWORD
-DB_SSL=false
+# DEVOPS-2 FIX: Changed DB_SSL from false to true.
+# validate-production.sh requires DB_SSL=true in production.
+# Running with DB_SSL=false causes a critical validation failure.
+DB_SSL=true
 
 # Connection string usada pelo Prisma
 DATABASE_URL=<REMOVED><user>:<password>@postgres:5432/orthoplus?schema=public

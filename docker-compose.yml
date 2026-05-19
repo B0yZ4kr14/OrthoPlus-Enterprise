@@ -63,6 +63,30 @@ services:
       retries: 3
       start_period: 40s
 
+  # Agent Service - Python/FastAPI
+  agent-service:
+    build:
+      context: ./agent-service
+    container_name: orthoplus-agent
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      - backend
+    networks:
+      - orthoplus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.orthoplus.description=OrthoPlus Agent Service"
+      - "com.orthoplus.vendor=TSI Telecom"
+
   # PostgreSQL (opcional, para ambiente local completo)
   postgres:
     image: postgres:16-alpine
@@ -185,7 +209,7 @@ services:
     container_name: orthoplus-grafana
     # Exposed only on localhost — use host nginx reverse proxy for external access
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3100:3000"
 
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:?GRAFANA_PASSWORD must be set}

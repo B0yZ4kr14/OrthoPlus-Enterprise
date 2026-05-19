@@ -30,6 +30,24 @@ services:
       timeout: 10s
       retries: 3
 
+  agent-service:
+    image: orthoplus/agent-service:latest
+    container_name: orthoplus-agent
+    restart: always
+    expose:
+      - "8000"
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      - backend
+    networks:
+      - orthoplus-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   orthoplus:
     image: orthoplus/frontend:latest
     container_name: orthoplus-app
@@ -55,10 +73,10 @@ services:
     networks:
       - orthoplus-network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 
 
