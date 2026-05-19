@@ -18,6 +18,7 @@ import { PatientTimeline } from "../../components/PatientTimeline";
 import { usePatientTimeline } from "../../hooks/usePatientTimeline";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { PatientAdapter } from "@/lib/adapters/patientAdapter";
 import {
@@ -78,6 +79,13 @@ export default function PatientDetail() {
     enabled: !!patientId,
   });
 
+  const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if (patient?.photo_url) {
+      setPhotoUrl(patient.photo_url);
+    }
+  }, [patient?.photo_url]);
+
 
   if (isLoading) {
     return (
@@ -115,11 +123,11 @@ export default function PatientDetail() {
           </Button>
           <PatientPhotoUpload
             patientId={patient.id}
-            currentPhotoUrl={patient.photo_url ?? undefined}
+            currentPhotoUrl={photoUrl}
             patientName={patient.full_name}
             onPhotoUpdated={(url) => {
               // Atualiza localmente sem refetch completo
-              patient.photo_url = url;
+              setPhotoUrl(url);
             }}
           />
           <div>
