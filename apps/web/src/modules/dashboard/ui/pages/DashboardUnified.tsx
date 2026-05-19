@@ -69,18 +69,18 @@ export default function DashboardUnified() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList
             aria-label="Categorias do dashboard"
-            className="bg-slate-100/50 dark:bg-slate-800/30 rounded-full p-1 inline-flex h-auto backdrop-blur-sm border border-border/20"
+            className="bg-muted/50 rounded-full p-1 inline-flex h-auto backdrop-blur-sm border border-border/20"
           >
             {tabItems.map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="relative min-h-[44px] px-4 py-1.5 rounded-full border-0 bg-transparent shadow-none text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-emerald-600 data-[state=active]:font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="relative min-h-[44px] px-4 py-1.5 rounded-full border-0 bg-transparent shadow-none text-muted-foreground hover:text-foreground transition-colors duration-200 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-[hsl(var(--interactive))] data-[state=active]:font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 {activeTab === tab.value && (
                   <motion.div
                     layoutId="activeTabIndicator"
-                    className="absolute inset-0 bg-white dark:bg-slate-800 shadow-sm rounded-full -z-10"
+                    className="absolute inset-0 bg-card shadow-sm rounded-full -z-10"
                     transition={{
                       type: "spring",
                       bounce: 0.15,
