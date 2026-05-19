@@ -5,6 +5,7 @@ import {
   useState,
   ReactNode,
   useCallback,
+  useRef,
 } from "react";
 
 import { apiClient } from "@/lib/api/apiClient";
@@ -51,7 +52,7 @@ export interface PatientUser {
   role: "PATIENT";
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | PatientUser | null;
   session: Session | null;
   loading: boolean;
@@ -94,6 +95,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<"ADMIN" | "MEMBER" | null>(null);
+  const userRoleRef = useRef<"ADMIN" | "MEMBER" | null>(null);
+  userRoleRef.current = userRole;
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [clinicId, setClinicId] = useState<string | null>(null);
   const [availableClinics, setAvailableClinics] = useState<Clinic[]>([]);
@@ -133,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Definir role (ADMIN ou MEMBER) — mapear ROOT → ADMIN
       // Preservar userRole existente (setado pelo /auth/me ou login) quando roleData nao esta presente
-      const rawRole = roleData?.role || userRole || "MEMBER";
+      const rawRole = roleData?.role || userRoleRef.current || "MEMBER";
       const role = rawRole === "ROOT" ? "ADMIN" : rawRole;
       setUserRole(role as "ADMIN" | "MEMBER");
       setUserProfile(role as UserProfile);
@@ -451,6 +454,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     </AuthContext.Provider>
   );
 }
+
+export { AuthContext }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
