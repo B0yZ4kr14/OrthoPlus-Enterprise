@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFuncionarios } from "@/modules/funcionarios/hooks/useFuncionarios";
 import { FuncionariosList } from "@/modules/funcionarios/components/FuncionariosList";
-import { FuncionarioForm } from "@/modules/funcionarios/components/FuncionarioForm";
+import { FuncionarioForm } from "@/modules/funcionarios/components/funcionario-form";
 import { FuncionarioDetails } from "@/modules/funcionarios/components/FuncionarioDetails";
 import { Funcionario } from "@/modules/funcionarios/types/funcionario.types";
 import {

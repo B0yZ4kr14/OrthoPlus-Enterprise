@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDentistasStore } from "@/modules/dentistas/hooks/useDentistasStore";
 import { DentistasList } from "@/modules/dentistas/components/DentistasList";
-import { DentistaForm } from "@/modules/dentistas/components/DentistaForm";
+import { DentistaForm } from "@/modules/dentistas/components/dentista-form";
 import { DentistaDetails } from "@/modules/dentistas/components/DentistaDetails";
 import { Dentista } from "@/modules/dentistas/types/dentista.types";
 import {
