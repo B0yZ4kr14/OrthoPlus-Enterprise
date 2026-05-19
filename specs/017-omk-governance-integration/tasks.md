@@ -120,10 +120,10 @@
 - [X] T037 [P] [US4] Validate frontend endpoint: `https://tsiapp.io/OrthoPlus-Enterprise/` returns 200
 - [X] T038 [P] [US4] Validate API health endpoint: `https://tsiapp.io/api/orthoplus/health` returns 200
 - [X] T039 [P] [US4] Validate wiki endpoint: `https://tsiapp.io/OrthoPlus-Enterprise/WiKi` returns 200
-- [ ] T040 [US4] Validate SSL certificate: Cloudflare Origin CA cert is valid and not expiring within 30 days
-- [ ] T041 [US4] Validate Docker containers: all orthoplus-* containers are `healthy`
-- [ ] T042 [US4] Validate SSH access: `ssh tsi@TSiAPP_IP_TAILSCALE` succeeds without password prompt
-- [ ] T043 [US4] Scan for stale domain references: `grep -r 'orthoplus.i9corp.com.br'` should return zero matches
+- [X] T040 [P] [US4] Validate SSL certificate: Cloudflare Origin CA cert is valid and not expiring within 30 days (expires 23/07/2026)
+- [X] T041 [P] [US4] Validate Docker containers: all orthoplus-* containers are `healthy` (backend, app, db, redis healthy)
+- [X] T042 [P] [US4] Validate SSH access: `ssh tsi@100.111.74.69` succeeds without password prompt
+- [X] T043 [P] [US4] Scan for stale domain references: `grep -r 'orthoplus.i9corp.com.br'` returns zero matches
 - [X] T044 [US4] Document SSH key rotation procedure in `docs/WIKI.md` (Secao 10.7)
 
 **Checkpoint**: All user stories should now be independently functional. VPS is fully documented and validated.

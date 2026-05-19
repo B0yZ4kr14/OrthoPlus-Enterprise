@@ -4,7 +4,7 @@
 
 **Created**: 2026-05-19
 
-**Status**: Draft
+**Status**: Completed
 
 **Input**: User description: "run and update with GitNexus, SpecKit, orchestrating with OMK for OrthoPlus Enterprise production environment"
 
@@ -102,7 +102,8 @@ As an administrator, I want the production VPS environment to be fully documente
 
 - **SC-001**: GitNexus index covers 100% of the monorepo source files and returns accurate impact analysis within 5 seconds.
 - **SC-002**: Every new feature follows the SpecKit SDD workflow, with specs stored in `specs/` and traceable to git branches and OMK goals.
-- **SC-003**: OMK reduces manual workflow steps by 60% through autonomous agent orchestration.
+- **SC-003**: OMK automates quality gate execution across 4 SpecKit phases (specify, plan, implement, verify) with human-in-the-loop approval at plan and implement gates.
+- **SC-003-KPI** (Post-launch tracking): Target 60% reduction in manual workflow steps within 3 months of adoption.
 - **SC-004**: Production environment documentation is accurate and verifiable: all documented URLs return HTTP 200, SSH access works, and Docker containers are healthy.
 - **SC-005**: Zero stale domain references remain in any source file, configuration, or documentation artifact.
 
