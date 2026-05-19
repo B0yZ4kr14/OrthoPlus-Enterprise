@@ -1,8 +1,8 @@
-# Architecture Improvements - Ortho+ 🏗️
+# Architecture Improvements - OrthoPlus Enterprise 🏗️
 
 ## Overview
 
-Este documento consolida todas as melhorias arquiteturais implementadas no Ortho+ durante a **FASE 4** (Consolidação & Refatoração).
+Este documento consolida todas as melhorias arquiteturais implementadas no OrthoPlus Enterprise durante a **FASE 4** (Consolidação & Refatoração).
 
 **Data**: 2025-11-15  
 **Duração**: 14 horas efetivas (de 24h planejadas)  

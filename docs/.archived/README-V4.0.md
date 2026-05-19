@@ -8,7 +8,7 @@
 
 ## 🎯 SOBRE O PROJETO
 
-Ortho+ é um sistema SaaS B2B multitenant de **gestão odontológica enterprise** construído com arquitetura DDD (Domain-Driven Design) e stack moderna.
+OrthoPlus Enterprise é um sistema SaaS B2B multitenant de **gestão odontológica enterprise** construído com arquitetura DDD (Domain-Driven Design) e stack moderna.
 
 ### Diferenciais Competitivos
 - ✅ **100% Cloud-native** (vs desktop legacy dos concorrentes)
@@ -292,7 +292,7 @@ npm run validate:quality
 
 ## 📄 LICENÇA
 
-Proprietária - © 2025 Ortho+
+Proprietária - © 2025 OrthoPlus Enterprise
 
 ---
 
@@ -309,7 +309,7 @@ Proprietária - © 2025 Ortho+
 
 Desenvolvido com ❤️ por:
 - **Lovable AI** - Arquitetura e Implementação
-- **Equipe Ortho+** - Product & UX Design
+- **Equipe OrthoPlus Enterprise** - Product & UX Design
 - **Comunidade Open Source** - Bibliotecas incríveis
 
 ---

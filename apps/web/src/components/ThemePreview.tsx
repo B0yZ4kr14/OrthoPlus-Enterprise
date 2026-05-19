@@ -7,14 +7,81 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Check, Diamond } from "lucide-react";
+import {
+  Check,
+  Diamond,
+  Sun,
+  Moon,
+  Briefcase,
+  Contrast,
+} from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
 const themes = [
   {
+    id: "light",
+    name: "Light (Sage)",
+    description: "Tema claro padrão com acentos sage green",
+    icon: Sun,
+    preview: {
+      background: "bg-emerald-50",
+      card: "bg-white",
+      text: "text-slate-800",
+      accent: "bg-emerald-600",
+    },
+  },
+  {
+    id: "dark",
+    name: "Dark",
+    description: "Tema escuro com acentos sage green",
+    icon: Moon,
+    preview: {
+      background: "bg-slate-900",
+      card: "bg-slate-800",
+      text: "text-slate-100",
+      accent: "bg-emerald-500",
+    },
+  },
+  {
+    id: "professional-dark",
+    name: "Professional Dark",
+    description: "Tema escuro profissional com tons sóbrios",
+    icon: Briefcase,
+    preview: {
+      background: "bg-slate-950",
+      card: "bg-slate-900",
+      text: "text-slate-200",
+      accent: "bg-slate-500",
+    },
+  },
+  {
+    id: "high-contrast",
+    name: "Alto Contraste",
+    description: "Máximo contraste para acessibilidade",
+    icon: Contrast,
+    preview: {
+      background: "bg-white",
+      card: "bg-white",
+      text: "text-black",
+      accent: "bg-black",
+    },
+  },
+  {
+    id: "high-contrast-dark",
+    name: "Alto Contraste Escuro",
+    description: "Alto contraste em fundo escuro",
+    icon: Contrast,
+    preview: {
+      background: "bg-black",
+      card: "bg-neutral-900",
+      text: "text-white",
+      accent: "bg-white",
+    },
+  },
+  {
     id: "premium-light",
-    name: "Light",
+    name: "Premium Light",
     description: "Tema premium claro com acentos azul clínico",
     icon: Diamond,
     preview: {
@@ -26,7 +93,7 @@ const themes = [
   },
   {
     id: "premium-dental-dark",
-    name: "Dark",
+    name: "Premium Dark",
     description: "Tema premium escuro com tons frios azulados",
     icon: Diamond,
     preview: {
@@ -42,7 +109,7 @@ export function ThemePreview() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {themes.map((themeOption) => {
         const Icon = themeOption.icon;
         const isActive = theme === themeOption.id;

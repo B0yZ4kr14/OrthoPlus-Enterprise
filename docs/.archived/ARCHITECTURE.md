@@ -1,8 +1,8 @@
-# 🏗️ Arquitetura do Sistema Ortho+ (Modernizada)
+# 🏗️ Arquitetura do Sistema OrthoPlus Enterprise (Modernizada)
 
 ## 📐 Visão Geral da Arquitetura
 
-O **Ortho+** foi refatorado a partir de sua arquitetura baseada em Serverless (Supabase Edge Functions) para uma arquitetura robusta, baseada em instâncias self-hosted. Seguimos os princípios rigorosos de **Clean Architecture**, **Domain-Driven Design (DDD)** e modularidade estrita.
+O **OrthoPlus Enterprise** foi refatorado a partir de sua arquitetura baseada em Serverless (Supabase Edge Functions) para uma arquitetura robusta, baseada em instâncias self-hosted. Seguimos os princípios rigorosos de **Clean Architecture**, **Domain-Driven Design (DDD)** e modularidade estrita.
 
 ### Desenvolvido por TSI Telecom
 

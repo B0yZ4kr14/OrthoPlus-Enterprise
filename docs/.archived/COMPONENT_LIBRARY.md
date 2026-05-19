@@ -1,8 +1,8 @@
-# 📚 Biblioteca de Componentes Reutilizáveis - Ortho+
+# 📚 Biblioteca de Componentes Reutilizáveis - OrthoPlus Enterprise
 
 ## Visão Geral
 
-Este documento cataloga todos os componentes reutilizáveis do Ortho+, organizados por categoria. Use estes componentes ao invés de criar novos para manter consistência visual e reduzir duplicação de código.
+Este documento cataloga todos os componentes reutilizáveis do OrthoPlus Enterprise, organizados por categoria. Use estes componentes ao invés de criar novos para manter consistência visual e reduzir duplicação de código.
 
 ---
 
@@ -442,7 +442,7 @@ export default StatsCard;
 
 ## 🎨 Design System
 
-Todos os componentes seguem o design system do Ortho+:
+Todos os componentes seguem o design system do OrthoPlus Enterprise:
 
 - **Cores:** Tokens semânticos do index.css
 - **Tipografia:** Fonte Inter (variável)

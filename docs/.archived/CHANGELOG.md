@@ -1,4 +1,4 @@
-# Changelog | Ortho+ by TSI Telecom
+# Changelog | OrthoPlus Enterprise by TSI Telecom
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 

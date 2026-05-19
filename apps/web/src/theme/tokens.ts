@@ -1,3 +1,6 @@
+// ⚠️ LEGACY TOKEN FILE — Deprecated. Use tokens-v3.ts for all new work.
+// This file is kept for backward compatibility only.
+
 /**
  * OrthoPlus Design Tokens - Fonte de Verdade
  * Baseado na análise do LandPages/OrthoPlus Enterprise-v00

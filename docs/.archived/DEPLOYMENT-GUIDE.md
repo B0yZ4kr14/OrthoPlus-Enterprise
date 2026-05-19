@@ -1,4 +1,4 @@
-# 🚀 Guia de Deploy - Ortho+ V4.0
+# 🚀 Guia de Deploy - OrthoPlus Enterprise V4.0
 
 ## 📋 Pré-requisitos
 
@@ -237,7 +237,7 @@ Acessar via:
 
 3. **Contato**:
    - Discord Lovable: https://discord.gg/lovable
-   - Suporte Ortho+: suporte@orthoplus.com
+   - Suporte OrthoPlus Enterprise: suporte@orthoplus.com
 
 ---
 

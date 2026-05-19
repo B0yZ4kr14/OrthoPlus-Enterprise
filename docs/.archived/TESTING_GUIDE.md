@@ -1,8 +1,8 @@
-# Testing Guide - Ortho+ V5.2
+# Testing Guide - OrthoPlus Enterprise V5.2
 
 ## Overview
 
-Este guia cobre a estratégia de testes do Ortho+, incluindo **E2E (Playwright)**, **Unit Tests (Vitest)** e **Integration Tests**.
+Este guia cobre a estratégia de testes do OrthoPlus Enterprise, incluindo **E2E (Playwright)**, **Unit Tests (Vitest)** e **Integration Tests**.
 
 ## Stack de Testes
 

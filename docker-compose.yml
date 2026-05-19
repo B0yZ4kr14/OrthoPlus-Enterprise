@@ -1,8 +1,8 @@
-# Ortho+ Docker Compose
+# OrthoPlus Enterprise Docker Compose
 # Desenvolvido por TSI Telecom © 2025
 
 services:
-  # Aplicação Ortho+
+  # Aplicação OrthoPlus Enterprise
   orthoplus:
     build:
       context: .
@@ -24,7 +24,7 @@ services:
       retries: 3
       start_period: 40s
     labels:
-      - "com.orthoplus.description=Ortho+ Main Application"
+      - "com.orthoplus.description=OrthoPlus Enterprise Main Application"
       - "com.orthoplus.vendor=TSI Telecom"
 
   # Backend Node.js API

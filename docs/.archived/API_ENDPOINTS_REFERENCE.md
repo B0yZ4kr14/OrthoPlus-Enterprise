@@ -639,4 +639,4 @@ http_request_duration_seconds_bucket{le="0.1"} 1200
 
 ---
 
-**API Ortho+ v2.0** - 13 módulos, 80+ endpoints 🚀
+**API OrthoPlus Enterprise v2.0** - 13 módulos, 80+ endpoints 🚀

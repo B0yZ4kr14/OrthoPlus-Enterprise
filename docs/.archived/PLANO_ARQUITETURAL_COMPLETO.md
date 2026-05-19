@@ -1,8 +1,8 @@
-# 🏗️ Plano Arquitetural Completo - Ortho+ Modular
+# 🏗️ Plano Arquitetural Completo - OrthoPlus Enterprise Modular
 
 ## 📊 Visão Geral do Sistema
 
-O Ortho+ é um sistema SaaS B2B multitenant para clínicas odontológicas, construído sobre arquitetura modular descentralizada baseada em Domain-Driven Design (DDD).
+O OrthoPlus Enterprise é um sistema SaaS B2B multitenant para clínicas odontológicas, construído sobre arquitetura modular descentralizada baseada em Domain-Driven Design (DDD).
 
 ### Princípios Arquiteturais
 

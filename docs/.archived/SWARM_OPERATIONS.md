@@ -1,4 +1,4 @@
-# Ortho+ Docker Swarm Operations Guide
+# OrthoPlus Enterprise Docker Swarm Operations Guide
 
 ## 📋 Pré-requisitos
 
@@ -130,7 +130,7 @@ rate(http_requests_total[5m])
 
 Acesse Grafana em `http://<manager-ip>:3000` e importe dashboards:
 - Docker Swarm & Container Overview
-- Ortho+ Backend Metrics
+- OrthoPlus Enterprise Backend Metrics
 - PostgreSQL Database Metrics
 
 ## 🗄️ Backup de Bancos de Dados

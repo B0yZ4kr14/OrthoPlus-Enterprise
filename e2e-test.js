@@ -23,7 +23,7 @@ import { chromium } from 'playwright';
   await page.waitForTimeout(5000); 
   
   const html = await page.content();
-  if (html.includes('Ortho+') && !html.includes('seu@email.com')) {
+  if (html.includes('OrthoPlus Enterprise') && !html.includes('seu@email.com')) {
     console.log("✅ SUCCESS: Successfully logged in and dashboard loaded!");
     
     // Check navigation context

@@ -1,8 +1,8 @@
-# Catálogo de Módulos - Ortho+ V5.1
+# Catálogo de Módulos - OrthoPlus Enterprise V5.1
 
 ## Visão Geral
 
-Este documento lista todos os módulos disponíveis no sistema Ortho+, suas dependências e categorizações.
+Este documento lista todos os módulos disponíveis no sistema OrthoPlus Enterprise, suas dependências e categorizações.
 
 ## Tabela: `module_catalog`
 

@@ -1,7 +1,7 @@
 # Baseline Técnica e Fonte de Verdade
 
 ## Objetivo
-Este documento consolida a **fonte de verdade técnica** do frontend do Ortho+ após a nova rodada de validação.
+Este documento consolida a **fonte de verdade técnica** do frontend do OrthoPlus Enterprise após a nova rodada de validação.
 
 ## Fonte de verdade (código)
 - Branch atual com os commits mais recentes de correção e validação.

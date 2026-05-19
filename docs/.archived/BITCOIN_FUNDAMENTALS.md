@@ -3,7 +3,7 @@
 **Documento:** Fundamentos de Bitcoin e Blockchain  
 **Versão:** 1.0  
 **Data:** 14/11/2025  
-**Público-Alvo:** Clínicas Odontológicas usando Ortho+
+**Público-Alvo:** Clínicas Odontológicas usando OrthoPlus Enterprise
 
 ---
 
@@ -494,10 +494,10 @@ Zero risco de fraude de estorno
    - Exemplo: `bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh`
    - É um endereço público (seguro compartilhar)
 
-#### **Passo 2: Gerar QR Code (Ortho+ Faz Automaticamente)**
+#### **Passo 2: Gerar QR Code (OrthoPlus Enterprise Faz Automaticamente)**
 
 ```
-Sistema Ortho+ gera QR Code automaticamente:
+Sistema OrthoPlus Enterprise gera QR Code automaticamente:
 - Endereço da carteira da clínica
 - Valor em BTC (convertido da cotação atual)
 - Descrição (ex: "Consulta - Paciente João Silva")
@@ -526,7 +526,7 @@ Sistema Ortho+ gera QR Code automaticamente:
 - Reserva de valor de longo prazo
 
 **Opção B: Converter Automaticamente**
-- Sistema Ortho+ converte via exchange (Binance, Mercado Bitcoin)
+- Sistema OrthoPlus Enterprise converte via exchange (Binance, Mercado Bitcoin)
 - Deposita em conta bancária da clínica
 - Atualiza automaticamente Contas a Receber
 
@@ -789,7 +789,7 @@ BITCOIN (Layer 1) - Blockchain
 
 ## 📞 Suporte Técnico
 
-Para dúvidas sobre a implementação de Bitcoin no Ortho+:
+Para dúvidas sobre a implementação de Bitcoin no OrthoPlus Enterprise:
 - 📧 E-mail: suporte@orthoplus.com.br
 - 💬 Chat: Disponível 24/7 no sistema
 - 📚 Documentação: `/docs/crypto-payments`

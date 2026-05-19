@@ -129,7 +129,7 @@ export default function ApiDocsPage() {
         <TabsContent value="overview" className="space-y-4">
           <Card variant="elevated" className="glass-card">
             <CardHeader>
-              <CardTitle>Bem-vindo à API do Ortho+</CardTitle>
+              <CardTitle>Bem-vindo à API do OrthoPlus Enterprise</CardTitle>
               <CardDescription>
                 Sistema de APIs RESTful baseado em Node.js (Express)
               </CardDescription>

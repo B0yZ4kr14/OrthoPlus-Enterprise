@@ -1,8 +1,8 @@
-# API Reference - Ortho+ V5.2
+# API Reference - OrthoPlus Enterprise V5.2
 
 ## Visão Geral
 
-Esta documentação descreve todas as APIs REST disponíveis no backend Node.js do Ortho+ V5.2, organizadas por módulo seguindo Domain-Driven Design (DDD).
+Esta documentação descreve todas as APIs REST disponíveis no backend Node.js do OrthoPlus Enterprise V5.2, organizadas por módulo seguindo Domain-Driven Design (DDD).
 
 ## Índice
 
