@@ -15,7 +15,14 @@ const mockSetValue = vi.fn()
 const mockRegister = vi.fn(() => ({}))
 const mockWatch = vi.fn(() => "")
 
-const mockUseDentistaForm = vi.fn(() => ({
+vi.mock("@/modules/dentistas/components/dentista-form/useDentistaForm", () => ({
+  useDentistaForm: vi.fn(),
+}))
+
+import { useDentistaForm } from "../useDentistaForm"
+const mockUseDentistaForm = vi.mocked(useDentistaForm)
+
+const defaultReturnValue = {
   avatarUrl: null,
   setAvatarUrl: mockSetAvatarUrl,
   register: mockRegister,
@@ -38,11 +45,7 @@ const mockUseDentistaForm = vi.fn(() => ({
   selectedEspecialidades: [],
   setSelectedEspecialidades: mockSetSelectedEspecialidades,
   handleFormSubmit: mockHandleFormSubmit,
-}))
-
-vi.mock("@/modules/dentistas/components/dentista-form/useDentistaForm", () => ({
-  useDentistaForm: (...args: any[]) => mockUseDentistaForm(...args),
-}))
+}
 
 vi.mock("@orthoplus/core-ui/tabs", () => ({
   Tabs: ({ children, defaultValue }: any) => (
@@ -76,6 +79,7 @@ vi.mock("@/modules/dentistas/components/dentista-form/ConfiguracoesTab", () => (
 describe("DentistaForm", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockUseDentistaForm.mockReturnValue(defaultReturnValue as any)
   })
 
   it("should render create mode when no dentista is provided", () => {

@@ -39,7 +39,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
-import { PrevisaoReposicao } from "@/modules/estoque/components/PrevisaoReposicao";
+import { PrevisaoReposicao } from "@/modules/estoque/components/previsao-reposicao";
 import {
   format,
   subDays,

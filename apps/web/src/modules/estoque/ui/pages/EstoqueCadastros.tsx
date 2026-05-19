@@ -22,7 +22,7 @@ import { Package, Users, Building2, Plus, Scan } from "lucide-react";
 import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
 import { ProdutoForm } from "@/modules/estoque/components/ProdutoForm";
 import { ProdutosList } from "@/modules/estoque/components/ProdutosList";
-import { FornecedorForm } from "@/modules/estoque/components/FornecedorForm";
+import { FornecedorForm } from "@/modules/estoque/components/fornecedor-form";
 import { FornecedoresList } from "@/modules/estoque/components/FornecedoresList";
 import { CategoriaForm } from "@/modules/estoque/components/CategoriaForm";
 import { CategoriasList } from "@/modules/estoque/components/CategoriasList";

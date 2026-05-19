@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orth
 import { Button } from "@orthoplus/core-ui/button";
 import { Plus } from "lucide-react";
 import { SearchInput } from "@/components/shared/SearchInput";
-import { FornecedorForm } from "../../components/FornecedorForm";
+import { FornecedorForm } from "../../components/fornecedor-form";
 import { FornecedoresList } from "../../components/FornecedoresList";
 import type { Fornecedor } from "../../types/estoque.types";
 import type { ViewMode } from "./types";
