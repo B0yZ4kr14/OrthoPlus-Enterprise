@@ -187,7 +187,7 @@ export default function Landpage() {
               variants={fadeInUp}
               className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl dark:text-white"
             >
-              OrthoPlus{ }
+              OrthoPlus{" "}
               <span className="bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent">
                 Enterprise
               </span>

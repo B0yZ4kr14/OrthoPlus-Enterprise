@@ -197,7 +197,7 @@ export default function Landpage() {
               animate="visible"
               className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl dark:text-white"
             >
-              OrthoPlus{ }
+              OrthoPlus{" "}
               <span className="bg-gradient-to-r from-[hsl(var(--interactive))] to-[hsl(var(--success))] bg-clip-text text-transparent">
                 Enterprise
               </span>
