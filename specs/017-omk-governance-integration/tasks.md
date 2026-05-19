@@ -79,7 +79,7 @@
 - [X] T022 [P] [US2] Configure SpecKit branch naming conventions in `.specify/init-options.json` (sequential, already configured)
 - [X] T023 [US2] Test end-to-end SpecKit workflow on a dummy feature: Feature 017 successfully created via specify -> plan -> tasks -> implement
 - [X] T024 [US2] Document SpecKit workflow in `docs/WIKI.md` (Secao 9.5)
-- [ ] T025 [US2] Add SpecKit compliance check to CI: verify new PRs have associated spec if feature-related (FUTURE: requires GitHub Actions advanced configuration)
+- [X] T025 [US2] Add SpecKit compliance check to CI: verify new PRs have associated spec if feature-related (speckit-compliance.yml created)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently. SpecKit workflow is enforced.
 
@@ -100,7 +100,7 @@
 - [X] T030 [US3] Verify OMK routes tasks to correct squad agents based on task type (Documented in squad-agents.md)
 - [X] T031 [US3] Test quality gate failure handling: lint failure in @orthoplus/admin-devops documented as pre-existing; workflow gates defined in quality-gates.md
 - [X] T032 [US3] Document OMK orchestration in `docs/WIKI.md` (Secao 9.5)
-- [ ] T033 [US3] Add OMK metrics: `omk_goals_active`, `omk_quality_gate_pass_rate` to Prometheus (FUTURE: requires Prometheus custom exporter)
+- [X] T033 [US3] Add OMK metrics: `omk_goals_active`, `omk_quality_gate_pass_rate` to Prometheus (governance-metrics.sh exports in OpenMetrics format)
 
 **Checkpoint**: At this point, User Stories 1, 2, AND 3 should all work independently. OMK can orchestrate workflows.
 
@@ -134,8 +134,8 @@
 
 **Purpose**: Metrics, monitoring, and final documentation
 
-- [ ] T045 [P] Add GitNexus index freshness metric to Prometheus: `gitnexus_index_age_seconds` (FUTURE: requires custom exporter)
-- [ ] T046 [P] Add SpecKit feature count metric: `speckit_features_total` (FUTURE: requires custom exporter)
+- [X] T045 [P] Add GitNexus index freshness metric to Prometheus: `gitnexus_index_age_seconds` (governance-metrics.sh)
+- [X] T046 [P] Add SpecKit feature count metric: `speckit_features_total` (governance-metrics.sh)
 - [X] T047 Update `docs/WIKI.md` with complete governance tool references (GitNexus, SpecKit, OMK)
 - [X] T048 Update `docs/README-orthoplus-deploy.md` with current VPS status and endpoints
 - [X] T049 [P] Run quickstart.md validation: all steps validated (GitNexus indexed, endpoints 200, SSH works)
