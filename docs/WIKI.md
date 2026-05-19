@@ -113,7 +113,31 @@ Upstreams: backend (3005), agent-service (8000), MinIO (9000).
 - [ ] `clinicGuard` em novos routers
 - [ ] Backup executado
 
-### 1.8 Gaps Criticos (Prioridade)
+### 1.8 VPS Health Check
+
+```bash
+# Verificar saude completa do VPS
+./scripts/vps-health-check.sh
+
+# Checagens incluidas:
+# - Frontend HTTPS 200
+# - API Health HTTPS 200
+# - Wiki HTTPS 200
+# - SSL valido
+# - SSH via Tailscale
+# - Docker containers healthy
+# - Zero stale domains
+```
+
+**VPS TSiAPP:**
+- Tailscale: `100.111.74.69`
+- Public IP: `179.190.15.116`
+- Domain: `tsiapp.io`
+- SSL: Cloudflare Origin CA (expira 23/07/2026)
+- Usuario: `tsi`
+- SSH Key: `id_ed25519_b0yz4kr14`
+
+### 1.9 Gaps Criticos (Prioridade)
 
 | Prioridade | Gap | Acao |
 |---|---|---|
@@ -534,8 +558,72 @@ Falha = commit abortado.
 | Componentes frontend | ~1.116 |
 | Modulos backend | 38 |
 | Models Prisma | 180 |
-| GitNexus nodes | 33.682 |
-| GitNexus edges | 70.900 |
+| GitNexus nodes | 33.855 |
+| GitNexus edges | 71.081 |
+| GitNexus clusters | 706 |
+| GitNexus flows | 288 |
+| SpecKit features | 17 |
+
+### 9.5 Ferramentas de Governanca
+
+#### GitNexus (Code Intelligence)
+
+Indexacao completa do monorepo para analise de impacto e navegacao segura.
+
+```bash
+# Re-indexar codebase
+npx gitnexus analyze
+
+# Verificar status do index
+npx gitnexus status
+
+# Query de impacto (exemplo)
+gitnexus_impact({target: "AuthController", direction: "upstream"})
+```
+
+- **Index**: 33.855 nodes, 71.081 edges, 706 clusters
+- **CI**: Re-index automatico em push para `main` (`.github/workflows/gitnexus-index.yml`)
+- **Docs**: `.claude/skills/gitnexus-*`
+
+#### SpecKit (SDD Workflow)
+
+Workflow de especificacao-driven development para todas as features.
+
+```bash
+# Criar nova feature
+/speckit-specify "Descricao da feature"
+
+# Gerar plano
+/speckit-plan
+
+# Gerar tasks
+/speckit-tasks
+
+# Implementar
+/speckit-implement
+
+# Verificar
+/speckit-verify
+```
+
+- **Specs**: `specs/<NNN>-<nome>/`
+- **Feature ativa**: `017-omk-governance-integration`
+- **Config**: `.specify/` (v0.8.11)
+
+#### OMK (Multi-Agent Orchestration)
+
+Orquestracao autonoma do workflow SpecKit via squad agents.
+
+| Agente | Fase | Funcao |
+|--------|------|--------|
+| Planner | specify/plan/tasks | Arquitetura e especificacao |
+| Implementer | implement | Desenvolvimento |
+| Reviewer | review | Analise de impacto e seguranca |
+| Verifier | verify | Testes e quality gates |
+
+- **Quality Gates**: lint, type-check, test, build
+- **Playbooks**: `.omk/orchestration/`
+- **Memoria**: `.omk/memory/`
 
 ---
 
@@ -597,6 +685,20 @@ pm2 reload backend
 - Documentacao: docs/WIKI.md
 - Rota interna: /admin/wiki (acesso admin)
 
+### 10.6 Documentacao de Governanca
+
+| Recurso | Local |
+|---|---|
+| Feature Spec (ativa) | `specs/017-omk-governance-integration/spec.md` |
+| Plan de Implementacao | `specs/017-omk-governance-integration/plan.md` |
+| Tasks | `specs/017-omk-governance-integration/tasks.md` |
+| VPS Topology | `specs/017-omk-governance-integration/vps-topology.md` |
+| VPS Services | `specs/017-omk-governance-integration/vps-services.md` |
+| GitNexus Skills | `.claude/skills/gitnexus-*` |
+| OMK Squad | `.omk/orchestration/squad-agents.md` |
+| OMK Quality Gates | `.omk/orchestration/quality-gates.md` |
+| Health Check Script | `scripts/vps-health-check.sh` |
+
 ---
 
 > **Nota:** Esta Wiki e um documento vivo. Para sugestoes, abra uma issue ou atualize via PR.
@@ -605,3 +707,30 @@ pm2 reload backend
 
 *OrthoPlus Enterprise — Gestao Odontologica Inteligente*  
 *Ultima atualizacao: 2026-05-19*
+
+### 10.7 Rotacao de Chave SSH
+
+**Procedimento:**
+
+1. Gerar nova chave Ed25519:
+   ```bash
+   ssh-keygen -t ed25519 -C "tsi@$(date +%Y%m%d)" -f ~/.ssh/id_ed25519_b0yz4kr14_new
+   ```
+
+2. Adicionar chave publica ao VPS:
+   ```bash
+   ssh-copy-id -i ~/.ssh/id_ed25519_b0yz4kr14_new.pub tsi@100.111.74.69
+   ```
+
+3. Testar acesso com nova chave:
+   ```bash
+   ssh -i ~/.ssh/id_ed25519_b0yz4kr14_new tsi@100.111.74.69 "echo OK"
+   ```
+
+4. Remover chave antiga do `~/.ssh/authorized_keys` no VPS
+
+5. Atualizar scripts e documentacao referenciando a nova chave
+
+6. Revogar chave antiga em todos os locais
+
+**Frequencia**: A cada 90 dias ou apos rotacao de pessoal.

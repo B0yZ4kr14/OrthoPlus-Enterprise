@@ -497,13 +497,17 @@ packages:
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+shell commands, and other important information, read the current plan:
+specs/017-omk-governance-integration/plan.md
+
+**Active Feature**: 017-omk-governance-integration (OMK Governance Integration)
+**Status**: In Progress
 <!-- SPECKIT END -->
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **OrthoPlus-Enterprise** (33682 symbols, 70900 relationships, 288 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **OrthoPlus-Enterprise** (33855 symbols, 71081 relationships, 288 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

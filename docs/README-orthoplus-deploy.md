@@ -1,12 +1,22 @@
 # OrthoPlus Enterprise - Documentação de Deploy
 
+**Atualizado**: 2026-05-19 | **Feature Ativa**: 017-omk-governance-integration
+
 ## 🌐 Acesso ao Sistema
 
 | Ambiente | URL | Status |
 |----------|-----|--------|
-| Tailscale HTTP | http://100.111.74.69 | ✅ Funcionando |
-| IP Público HTTP | http://179.190.15.116 | ✅ Funcionando |
-| Tailscale HTTPS | https://100.111.74.69 | ✅ SSL Configurado |
+| Produção HTTPS | https://tsiapp.io/OrthoPlus-Enterprise/ | ✅ HTTP 200 |
+| API Health | https://tsiapp.io/api/orthoplus/health | ✅ HTTP 200 |
+| Wiki | https://tsiapp.io/OrthoPlus-Enterprise/WiKi | ✅ HTTP 200 |
+| Tailscale | http://100.111.74.69 | ✅ Funcionando |
+| IP Público | http://179.190.15.116 | ✅ Funcionando |
+
+## 🔐 Credenciais de Acesso
+
+**Administrador Padrão:**
+- Email: `admin@orthoplus.com`
+- Senha: `Admin123!`
 
 ## 🔐 Credenciais de Acesso
 
