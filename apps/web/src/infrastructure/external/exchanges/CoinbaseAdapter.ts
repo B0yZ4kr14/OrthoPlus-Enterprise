@@ -3,7 +3,7 @@
  * Integração com Coinbase API
  */
 
-import { ICryptoExchange } from "./ExchangeFactory";
+import { ICryptoExchange } from "./types";
 
 export class CoinbaseAdapter implements ICryptoExchange {
   private apiKey: string;

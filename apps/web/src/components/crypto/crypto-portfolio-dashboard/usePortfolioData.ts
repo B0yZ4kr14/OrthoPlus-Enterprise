@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { logger } from "@/lib/logger";
+import { getSimplePrice } from "@/lib/api/cryptoMarketApi";
 import type {
   CryptoWallet,
   CryptoTransaction,
@@ -18,13 +19,7 @@ export function usePortfolioData(
   const fetchRealRates = useCallback(async (): Promise<Record<string, number>> => {
     try {
       const coins = Object.values(COIN_IDS);
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${coins.join(",")}&vs_currencies=brl`,
-      );
-
-      if (!response.ok) throw new Error("Erro ao buscar cotações");
-
-      const data = await response.json();
+      const data = await getSimplePrice(coins, ["brl"]);
 
       return {
         BTC: data.bitcoin?.brl || DEFAULT_RATES.BTC,

@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
+import { broadcastTransaction as broadcastTx } from "@/lib/api/cryptoInternalApi";
 import type { KruxStatus } from "./types";
 
 export function useKruxIntegration() {
@@ -27,13 +28,7 @@ export function useKruxIntegration() {
 
   const broadcastTransaction = useCallback(async () => {
     try {
-      const response = await fetch("/api/crypto/broadcast", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ signedPsbt: signedPSBT }),
-      });
-
-      const data = await response.json();
+      const data = await broadcastTx({ signedPsbt: signedPSBT });
       toast.success(`Transação enviada! TxID: ${data.txId.substring(0, 12)}...`);
       setStatus("idle");
       setSignedPSBT("");

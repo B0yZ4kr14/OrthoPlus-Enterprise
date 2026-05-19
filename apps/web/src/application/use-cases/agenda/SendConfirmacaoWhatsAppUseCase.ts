@@ -66,26 +66,12 @@ export class SendConfirmacaoWhatsAppUseCase {
         await this.confirmacaoRepository.save(confirmacao);
       }
 
-      // Aqui fazemos a integração via backend API REST/Twilio
-      const webhookUrl =
-        import.meta.env.VITE_WHATSAPP_API_URL ||
-        "/api/rest/notifications/whatsapp";
-
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: input.phoneNumber,
-          message: messageContent,
-          agendamentoId: input.agendamentoId,
-        }),
+      const { sendWhatsAppNotification } = await import("@/lib/api/cryptoInternalApi");
+      await sendWhatsAppNotification({
+        to: input.phoneNumber,
+        message: messageContent,
+        agendamentoId: input.agendamentoId,
       });
-
-      if (!response.ok) {
-        throw new Error(
-          `Falha ao disparar integração WhatsApp: HTTP ${response.status}`,
-        );
-      }
     } catch (error) {
       // Se houver erro no envio, marcar como erro
       const errorMessage =

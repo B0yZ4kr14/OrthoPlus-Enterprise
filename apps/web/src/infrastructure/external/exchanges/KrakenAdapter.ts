@@ -3,7 +3,7 @@
  * Integração com Kraken API
  */
 
-import { ICryptoExchange } from "./ExchangeFactory";
+import { ICryptoExchange } from "./types";
 import crypto from "crypto";
 
 export class KrakenAdapter implements ICryptoExchange {

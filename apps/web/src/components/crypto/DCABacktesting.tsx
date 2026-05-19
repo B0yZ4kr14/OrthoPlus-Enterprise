@@ -57,21 +57,19 @@ export function DCABacktesting() {
       const endDate = new Date();
       const startDate = subMonths(endDate, period);
 
-      // Buscar dados históricos reais do CoinGecko
       const coinId =
         coinType === "BTC"
           ? "bitcoin"
           : coinType === "ETH"
             ? "ethereum"
             : "tether";
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart/range?vs_currency=brl&from=${Math.floor(startDate.getTime() / 1000)}&to=${Math.floor(endDate.getTime() / 1000)}`,
+      const { getMarketChartRange } = await import("@/lib/api/cryptoMarketApi");
+      const chartData = await getMarketChartRange(
+        coinId,
+        Math.floor(startDate.getTime() / 1000),
+        Math.floor(endDate.getTime() / 1000),
       );
-
-      if (!response.ok) throw new Error("Erro ao buscar dados históricos");
-
-      const data = await response.json();
-      const prices = data.prices;
+      const prices = chartData.map((p) => [p.timestamp, p.price]);
 
       // Calcular preços mensais
       const monthlyPrices: { date: Date; price: number }[] = [];

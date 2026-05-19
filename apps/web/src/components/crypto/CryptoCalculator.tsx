@@ -122,28 +122,19 @@ export function CryptoCalculator() {
 
   const handleRefreshRates = async () => {
     try {
-      // Buscar cotações reais da CoinGecko
-      const coins = ["bitcoin", "ethereum", "tether"];
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${coins.join(",")}&vs_currencies=brl`,
-      );
+      const { getSimplePrice } = await import("@/lib/api/cryptoMarketApi");
+      const data = await getSimplePrice(["bitcoin", "ethereum", "tether"], ["brl"]);
+      const newRates = {
+        BTC: data.bitcoin?.brl || rates.BTC,
+        ETH: data.ethereum?.brl || rates.ETH,
+        USDT: data.tether?.brl || rates.USDT,
+        BRL: 1,
+      };
 
-      if (response.ok) {
-        const data = await response.json();
-        const newRates = {
-          BTC: data.bitcoin?.brl || rates.BTC,
-          ETH: data.ethereum?.brl || rates.ETH,
-          USDT: data.tether?.brl || rates.USDT,
-          BRL: 1,
-        };
-
-        setRates(newRates);
-        setLastUpdate(new Date());
-        await fetchHistory24h(); // Atualizar histórico também
-        toast.success("Cotações atualizadas com sucesso!");
-      } else {
-        throw new Error("Erro ao buscar cotações");
-      }
+      setRates(newRates);
+      setLastUpdate(new Date());
+      await fetchHistory24h();
+      toast.success("Cotações atualizadas com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar cotações:", error);
       toast.error("Erro ao atualizar cotações. Usando valores em cache.");

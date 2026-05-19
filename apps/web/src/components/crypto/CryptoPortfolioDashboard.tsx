@@ -41,14 +41,11 @@ export function CryptoPortfolioDashboard({
 
   const fetchRealRates = useCallback(async (): Promise<Record<string, number>> => {
     try {
-      const coins = ["bitcoin", "ethereum", "tether", "binancecoin", "usd-coin"];
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${coins.join(",")}&vs_currencies=brl`,
+      const { getSimplePrice } = await import("@/lib/api/cryptoMarketApi");
+      const data = await getSimplePrice(
+        ["bitcoin", "ethereum", "tether", "binancecoin", "usd-coin"],
+        ["brl"],
       );
-
-      if (!response.ok) throw new Error("Erro ao buscar cotações");
-
-      const data = await response.json();
 
       return {
         BTC: data.bitcoin?.brl || DEFAULT_RATES.BTC,

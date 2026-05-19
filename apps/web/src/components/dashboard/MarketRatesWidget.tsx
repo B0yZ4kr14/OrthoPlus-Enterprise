@@ -1,61 +1,10 @@
-import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Bitcoin, DollarSign, TrendingUp, TrendingDown } from "lucide-react";
-
-interface MarketRate {
-  name: string;
-  symbol: string;
-  price: number;
-  change24h: number;
-}
+import { useMarketRates } from "./market-rates-widget/hooks/useMarketRates";
 
 export function MarketRatesWidget() {
-  const [rates, setRates] = useState<MarketRate[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchMarketRates();
-    // Atualizar a cada 5 minutos
-    const interval = setInterval(fetchMarketRates, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const fetchMarketRates = async () => {
-    try {
-      // Buscar Bitcoin (BRL)
-      const btcResponse = await fetch(
-        "https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL",
-      );
-      const btcData = await btcResponse.json();
-
-      // Buscar USD (BRL) usando API pública
-      const usdResponse = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/USD",
-      );
-      const usdData = await usdResponse.json();
-      const usdRate = usdData.rates.BRL;
-
-      setRates([
-        {
-          name: "Bitcoin",
-          symbol: "BTC",
-          price: parseFloat(btcData.lastPrice),
-          change24h: parseFloat(btcData.priceChangePercent),
-        },
-        {
-          name: "Dólar Americano",
-          symbol: "USD",
-          price: usdRate,
-          change24h: 0, // Exchange rate API não fornece variação
-        },
-      ]);
-    } catch (error) {
-      console.error("Error fetching market rates:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { rates, loading } = useMarketRates();
 
   if (loading) {
     return (

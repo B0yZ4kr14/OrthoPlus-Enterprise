@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
+import { createPSBT } from "@/lib/api/cryptoInternalApi";
 import type { PSBTFormData, PSBTResponse } from "./types";
 
 export function usePSBTBuilder() {
@@ -16,16 +17,10 @@ export function usePSBTBuilder() {
     }
 
     try {
-      const response = await fetch("/api/crypto/create-psbt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipient,
-          amount: parseFloat(amount),
-        }),
+      const data = await createPSBT({
+        recipient,
+        amount: parseFloat(amount),
       });
-
-      const data = (await response.json()) as PSBTResponse;
       setPsbtBase64(data.psbt);
       toast.success("PSBT gerado com sucesso!");
     } catch (error) {

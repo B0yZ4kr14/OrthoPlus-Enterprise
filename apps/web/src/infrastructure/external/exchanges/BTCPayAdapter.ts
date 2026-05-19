@@ -3,7 +3,7 @@
  * Integração completa com BTCPay Server para pagamentos Bitcoin
  */
 
-import { ICryptoExchange } from "./ExchangeFactory";
+import { ICryptoExchange } from "./types";
 import crypto from "crypto";
 
 export interface BTCPayInvoice {

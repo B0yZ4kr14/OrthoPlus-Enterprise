@@ -1,4 +1,4 @@
-import { Odontograma3DLazy } from "../lazy";
+import { Odontograma3DLazy } from "../lazy/Odontograma3DLazy";
 
 interface OdontogramaContentProps {
   patientId: string;

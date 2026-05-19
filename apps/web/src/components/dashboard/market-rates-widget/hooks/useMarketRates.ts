@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { logger } from "@/lib/logger";
+import { getBTCTicker, getUSDRates } from "@/lib/api/cryptoMarketApi";
 import type { MarketRate, UseMarketRatesReturn } from "../types";
 
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
@@ -14,18 +15,10 @@ export function useMarketRates(): UseMarketRatesReturn {
     setError(null);
 
     try {
-      // Buscar Bitcoin (BRL)
-      const btcResponse = await fetch(
-        "https://api.binance.com/api/v3/ticker/24hr?symbol=BTCBRL"
-      );
-      const btcData = await btcResponse.json();
-
-      // Buscar USD (BRL) usando API pública
-      const usdResponse = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/USD"
-      );
-      const usdData = await usdResponse.json();
-      const usdRate = usdData.rates.BRL;
+      const [btcData, usdData] = await Promise.all([
+        getBTCTicker(),
+        getUSDRates(),
+      ]);
 
       setRates([
         {
@@ -37,8 +30,8 @@ export function useMarketRates(): UseMarketRatesReturn {
         {
           name: "Dólar Americano",
           symbol: "USD",
-          price: usdRate,
-          change24h: 0, // Exchange rate API não fornece variação
+          price: usdData.rates.BRL,
+          change24h: 0,
         },
       ]);
     } catch (err) {

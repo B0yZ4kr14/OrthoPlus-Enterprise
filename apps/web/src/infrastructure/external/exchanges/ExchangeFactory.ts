@@ -3,19 +3,9 @@
  * Suporta múltiplas exchanges de forma unificada
  */
 
-export interface ICryptoExchange {
-  getWalletBalance(coin: string): Promise<number>;
-  generateDepositAddress(coin: string): Promise<string>;
-  getExchangeRate(from: string, to: string): Promise<number>;
-  validateCredentials(): Promise<boolean>;
-}
+import type { ICryptoExchange, ExchangeName } from "./types";
 
-export type ExchangeName =
-  | "BINANCE"
-  | "COINBASE"
-  | "KRAKEN"
-  | "MERCADO_BITCOIN"
-  | "BTCPAY";
+export type { ICryptoExchange, ExchangeName } from "./types";
 
 export class ExchangeFactory {
   static async create(

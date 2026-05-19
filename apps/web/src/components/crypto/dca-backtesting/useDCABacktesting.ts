@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { format, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
+import { getMarketChartRange } from "@/lib/api/cryptoMarketApi";
 import type { CoinType, BacktestResult, BacktestSummary, MonthlyPrice } from "./types";
 
 const COIN_IDS: Record<CoinType, string> = {
@@ -24,16 +25,12 @@ export function useDCABacktesting() {
     startDate: Date,
     endDate: Date
   ): Promise<number[][]> => {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart/range?vs_currency=brl&from=${Math.floor(
-        startDate.getTime() / 1000
-      )}&to=${Math.floor(endDate.getTime() / 1000)}`
+    const prices = await getMarketChartRange(
+      coinId,
+      Math.floor(startDate.getTime() / 1000),
+      Math.floor(endDate.getTime() / 1000),
     );
-
-    if (!response.ok) throw new Error("Erro ao buscar dados históricos");
-
-    const data = await response.json();
-    return data.prices;
+    return prices.map((p) => [p.timestamp, p.price]);
   }, []);
 
   const calculateMonthlyPrices = useCallback((

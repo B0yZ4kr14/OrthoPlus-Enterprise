@@ -3,7 +3,7 @@
  * Integração com API brasileira de criptomoedas
  */
 
-import { ICryptoExchange } from "./ExchangeFactory";
+import { ICryptoExchange } from "./types";
 
 export class MercadoBitcoinAdapter implements ICryptoExchange {
   private apiKey: string;

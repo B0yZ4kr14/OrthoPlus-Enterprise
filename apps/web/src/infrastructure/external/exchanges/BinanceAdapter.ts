@@ -3,7 +3,7 @@
  * Integração com Binance API para operações crypto
  */
 
-import { ICryptoExchange } from "./ExchangeFactory";
+import { ICryptoExchange } from "./types";
 import crypto from "crypto";
 
 export class BinanceAdapter implements ICryptoExchange {

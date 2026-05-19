@@ -34,17 +34,11 @@ export function PSBTBuilder() {
         return;
       }
 
-      // Chamar backend para criar PSBT
-      const response = await fetch("/api/crypto/create-psbt", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipient,
-          amount: parseFloat(amount),
-        }),
+      const { createPSBT } = await import("@/lib/api/cryptoInternalApi");
+      const data = await createPSBT({
+        recipient,
+        amount: parseFloat(amount),
       });
-
-      const data = await response.json();
       setPsbtBase64(data.psbt);
       toast.success("PSBT gerado com sucesso!");
     } catch (error) {

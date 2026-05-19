@@ -9,7 +9,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { PatientAdapter } from "@/lib/adapters/patientAdapter";
 import { toast } from "sonner";
 import type { Patient } from "@/types/patient";
-import type { UsePatientsReturn } from "./usePatientsUnified";
+import type { UsePatientsReturn } from "./types";
 
 export function usePatientsAPI(): UsePatientsReturn {
   const { clinicId } = useAuth();
