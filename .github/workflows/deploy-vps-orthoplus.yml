@@ -52,9 +52,9 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.VPS_TSI_02_HOST }}
-          username: ${{ secrets.VPS_TSI_02_USER }}
-          key: ${{ secrets.VPS_TSI_02_SSH_KEY }}
+          host: ${{ secrets.VPS_TSiAPP_HOST }}
+          username: ${{ secrets.VPS_TSiAPP_USER }}
+          key: ${{ secrets.VPS_TSiAPP_SSH_KEY }}
           source: "backend/dist/"
           target: "/home/ubuntu/OrthoPlus-Enterprise-backend/"
           strip_components: 1
@@ -63,9 +63,9 @@ jobs:
       - name: Deploy Frontend
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.VPS_TSI_02_HOST }}
-          username: ${{ secrets.VPS_TSI_02_USER }}
-          key: ${{ secrets.VPS_TSI_02_SSH_KEY }}
+          host: ${{ secrets.VPS_TSiAPP_HOST }}
+          username: ${{ secrets.VPS_TSiAPP_USER }}
+          key: ${{ secrets.VPS_TSiAPP_SSH_KEY }}
           source: "apps/web/dist/"
           target: "/tmp/orthoplus-dist/"
           strip_components: 1
@@ -74,9 +74,9 @@ jobs:
       - name: Restart Services
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VPS_TSI_02_HOST }}
-          username: ${{ secrets.VPS_TSI_02_USER }}
-          key: ${{ secrets.VPS_TSI_02_SSH_KEY }}
+          host: ${{ secrets.VPS_TSiAPP_HOST }}
+          username: ${{ secrets.VPS_TSiAPP_USER }}
+          key: ${{ secrets.VPS_TSiAPP_SSH_KEY }}
           script: |
             # Move frontend to correct location
             sudo rm -rf /var/www/orthoplus/*
@@ -97,4 +97,4 @@ jobs:
       - name: Health Check (External)
         run: |
           sleep 10
-          curl -s http://${{ secrets.VPS_TSI_02_HOST }}:3005/health || echo "⚠️ Health check failed"
+          curl -s http://${{ secrets.VPS_TSiAPP_HOST }}:3005/health || echo "⚠️ Health check failed"
