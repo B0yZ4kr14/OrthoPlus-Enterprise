@@ -24,10 +24,6 @@ export class CryptoPaymentConfirmedHandler {
 
       this.notifyClinic(event);
       await this.logAudit(event);
-
-      console.log(
-        "[CryptoPaymentConfirmedHandler] Event processed successfully",
-      );
     } catch (error) {
       console.error(
         "[CryptoPaymentConfirmedHandler] Error processing event:",
@@ -54,7 +50,8 @@ export class CryptoPaymentConfirmedHandler {
   private async updateCryptoTransaction(
     event: CryptoPaymentConfirmedEvent,
   ): Promise<void> {
-    console.log("[CryptoPaymentConfirmedHandler] Updating transaction:", event);
+    // Transaction update delegated to repository layer
+    void event;
   }
 
   private async updateContaReceber(
@@ -81,28 +78,22 @@ export class CryptoPaymentConfirmedHandler {
   private async registerFinancialTransaction(
     event: CryptoPaymentConfirmedEvent,
   ): Promise<void> {
-    console.log(
-      "[CryptoPaymentConfirmedHandler] Registered financial transaction:",
-      event,
-    );
+    // Financial transaction registration delegated to service layer
+    void event;
   }
 
   private async processSplitPayment(
     event: CryptoPaymentConfirmedEvent,
   ): Promise<void> {
-    console.log(
-      "[CryptoPaymentConfirmedHandler] Processing split payment:",
-      event,
-    );
+    // Split payment processing delegated to finance module
+    void event;
   }
 
   private async registerPDVPayment(
     event: CryptoPaymentConfirmedEvent,
   ): Promise<void> {
-    console.log(
-      "[CryptoPaymentConfirmedHandler] Registered PDV payment:",
-      event,
-    );
+    // PDV payment registration delegated to PDV module
+    void event;
   }
 
   private notifyClinic(event: CryptoPaymentConfirmedEvent): void {

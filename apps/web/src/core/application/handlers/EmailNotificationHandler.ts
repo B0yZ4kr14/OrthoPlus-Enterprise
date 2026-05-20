@@ -1,4 +1,5 @@
 import { IEventHandler } from "@/core/domain/events/EventBus";
+import { apiClient } from "@/lib/api/apiClient";
 import { AppointmentScheduledEvent } from "@/modules/agenda/domain/events/AppointmentScheduledEvent";
 import { LeadConvertedEvent } from "@/modules/crm/domain/events/LeadConvertedEvent";
 
@@ -25,20 +26,12 @@ export class EmailNotificationHandler implements IEventHandler<
       import.meta.env.VITE_EMAIL_API_URL || "/api/rest/notifications/email";
 
     try {
-      const response = await fetch(emailEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "APPOINTMENT_CONFIRMATION",
-          agendamentoId: event.data.appointmentId,
-          patientId: event.data.patientId,
-          timestamp: new Date().toISOString(),
-        }),
+      await apiClient.post(emailEndpoint, {
+        type: "APPOINTMENT_CONFIRMATION",
+        agendamentoId: event.data.appointmentId,
+        patientId: event.data.patientId,
+        timestamp: new Date().toISOString(),
       });
-
-      if (!response.ok) {
-        throw new Error(`Email dispatch failed: HTTP ${response.status}`);
-      }
     } catch (error) {
       console.warn(
         "Email integration unavailable for appointment event.",
@@ -52,20 +45,12 @@ export class EmailNotificationHandler implements IEventHandler<
       import.meta.env.VITE_EMAIL_API_URL || "/api/rest/notifications/email";
 
     try {
-      const response = await fetch(emailEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "WELCOME_LEAD_CONVERTED",
-          leadId: event.data.leadId,
-          patientId: event.data.patientId,
-          timestamp: new Date().toISOString(),
-        }),
+      await apiClient.post(emailEndpoint, {
+        type: "WELCOME_LEAD_CONVERTED",
+        leadId: event.data.leadId,
+        patientId: event.data.patientId,
+        timestamp: new Date().toISOString(),
       });
-
-      if (!response.ok) {
-        throw new Error(`Email dispatch failed: HTTP ${response.status}`);
-      }
     } catch (error) {
       console.warn(
         "Email integration unavailable for lead-conversion event.",
