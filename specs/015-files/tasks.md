@@ -30,9 +30,11 @@
 - [x] T105 [P] Extend `filesService.ts` with new operations
 - [x] T106 [P] Extend `filesController.ts` with new endpoints
 - [x] T107 [P] Add clinicGuard to all new routes
-- [ ] T107a [P] Add rate limiting to upload endpoint (CQ-3: 50/hour)
+- [x] T107a [P] Add rate limiting to upload endpoint (CQ-3: 50/hour)
+  - **Status**: IMPLEMENTED — `uploadLimiter` already applied to `/api/files` in `backend/src/index.ts`
 - [ ] T107b [P] Add CategoryCircuitBreaker for file DB operations (INF-1)
-- [ ] T107c [P] Add Prometheus metrics `orthoplus_files_upload_total`, `orthoplus_files_download_total` (INF-2)
+- [x] T107c [P] Add Prometheus metrics `orthoplus_files_upload_total`, `orthoplus_files_download_total` (INF-2)
+  - **Status**: IMPLEMENTED — `FilesMetrics` class added; instrumented upload/download/delete in controller
 - [x] T108 [P] Backend unit tests for new service methods
 - [x] T109 Run `cd backend && pnpm type-check` (0 errors)
 - [x] T110 Run `cd backend && pnpm test` (all pass)
@@ -180,8 +182,8 @@ Executed via `/speckit-security-review` + `/speckit-checkpoint` + `/speckit-veri
   - **Status**: IMPLEMENTED — commit `04f980d56`
 - [ ] SEC-006 Virus/malware scan on upload
   - **Status**: NOT IMPLEMENTED — requires ClamAV/CloudScan integration
-- [ ] SEC-007 Audit log for file access (download/view)
-  - **Status**: NOT IMPLEMENTED — requires audit table + middleware
+- [x] SEC-007 Audit log for file access (download/view)
+  - **Status**: IMPLEMENTED — `prisma.audit_logs.create()` on download; records fileId, fileName, userId, clinicId, IP, userAgent
 - [ ] SEC-008 Permission inheritance from patient record
   - **Status**: NOT IMPLEMENTED — requires patient-permission cascade logic
 

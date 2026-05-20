@@ -3,8 +3,12 @@ import { logger } from "@/infrastructure/logger";
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler";
 import { NextFunction, Request, Response } from "express";
 import { FilesService } from "../application/services/FilesService";
+import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector";
+import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics";
 import path from "path";
 import fs from "fs";
+
+const metricsCollector = getMetricsCollector(prometheusMetrics.getRegistry());
 
 interface S3Config {
   accessKeyId: string;
@@ -48,6 +52,7 @@ export class FilesController {
       const { pacienteId, consultaId, orcamentoId, categoria, visibilidade } =
         req.body;
 
+      const startTime = Date.now();
       const fileRecord = await this.filesService.create({
         clinicId,
         pacienteId,
@@ -61,12 +66,14 @@ export class FilesController {
         visibilidade: visibilidade as string | undefined,
         uploadedBy: userId,
       });
+      metricsCollector.files.recordUpload(clinicId, fileRecord.categoria, Date.now() - startTime);
 
       res.status(201).json({
         success: true,
         data: fileRecord,
       });
     } catch (error) {
+      metricsCollector.files.recordError((req.user?.clinicId as string) ?? "unknown", "upload");
       if (error instanceof ApiError) {
         res.status(error.status).json(error.toProblemDetail(req.originalUrl));
         return;
@@ -166,6 +173,7 @@ export class FilesController {
         throw Errors.unauthorized("Authentication required");
       }
 
+      const startTime = Date.now();
       const file = await this.filesService.getById(id, clinicId);
 
       if (!file) {
@@ -179,6 +187,21 @@ export class FilesController {
         throw Errors.notFound("File on disk", id);
       }
 
+      // Audit log for file download (SEC-007)
+      await prisma.audit_logs.create({
+        data: {
+          action: "FILE_DOWNLOAD",
+          action_type: "read",
+          clinic_id: clinicId,
+          user_id: req.user?.id as string | undefined,
+          details: { fileId: id, fileName: file.nomeOriginal },
+          ip_address: req.ip ? { ip: req.ip } : {},
+          user_agent: req.headers["user-agent"] ?? null,
+        },
+      });
+
+      metricsCollector.files.recordDownload(clinicId, Date.now() - startTime);
+
       res.setHeader("Content-Type", file.mimeType);
       res.setHeader(
         "Content-Disposition",
@@ -188,6 +211,7 @@ export class FilesController {
       const stream = fs.createReadStream(filePath);
       stream.pipe(res);
     } catch (error) {
+      metricsCollector.files.recordError((req.user?.clinicId as string) ?? "unknown", "download");
       if (error instanceof ApiError) {
         res.status(error.status).json(error.toProblemDetail(req.originalUrl));
         return;
@@ -229,11 +253,14 @@ export class FilesController {
         fs.unlinkSync(filePath);
       }
 
+      metricsCollector.files.recordDelete(clinicId);
+
       res.status(200).json({
         success: true,
         message: "File deleted successfully",
       });
     } catch (error) {
+      metricsCollector.files.recordError((req.user?.clinicId as string) ?? "unknown", "delete");
       if (error instanceof ApiError) {
         res.status(error.status).json(error.toProblemDetail(req.originalUrl));
         return;

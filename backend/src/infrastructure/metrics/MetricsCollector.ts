@@ -13,16 +13,19 @@ import { Registry } from "prom-client";
 import { CircuitBreakerMetrics } from "./CircuitBreakerMetrics";
 import { BackupMetrics } from "./BackupMetrics";
 import { DatabaseCategoryMetrics } from "./DatabaseCategoryMetrics";
+import { FilesMetrics } from "./FilesMetrics";
 
 class MetricsCollector {
   circuitBreaker: CircuitBreakerMetrics;
   backup: BackupMetrics;
   database: DatabaseCategoryMetrics;
+  files: FilesMetrics;
 
   constructor(registry: Registry) {
     this.circuitBreaker = new CircuitBreakerMetrics(registry);
     this.backup = new BackupMetrics(registry);
     this.database = new DatabaseCategoryMetrics(registry);
+    this.files = new FilesMetrics(registry);
   }
 }
 
