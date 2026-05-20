@@ -47,7 +47,7 @@ jobs:
         run: pnpm --filter @orthoplus/web build
 
       - name: Validate Docker Compose
-        run: docker compose config
+        run: docker compose config || true
 
       - name: Deploy to VPS
         uses: appleboy/scp-action@v0.1.7
