@@ -13,6 +13,12 @@ const CATEGORIAS: Record<string, string> = {
   OUTRO: "Outro",
 };
 
+const VISIBILIDADE_CONFIG: Record<string, { label: string; className: string }> = {
+  PUBLICO: { label: "Público", className: "bg-green-100 text-green-800" },
+  RESTRITO: { label: "Restrito", className: "bg-yellow-100 text-yellow-800" },
+  CONFIDENCIAL: { label: "Confidencial", className: "bg-red-100 text-red-800" },
+};
+
 export default function FileListPage() {
   const [categoriaFilter, setCategoriaFilter] = useState("");
   const filesQuery = useFiles(
@@ -129,6 +135,9 @@ export default function FileListPage() {
                   Categoria
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  Visibilidade
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
                   Tamanho
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
@@ -155,6 +164,20 @@ export default function FileListPage() {
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                       {CATEGORIAS[file.categoria] ?? file.categoria}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {(() => {
+                      const vis = VISIBILIDADE_CONFIG[file.visibilidade];
+                      return vis ? (
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${vis.className}`}>
+                          {vis.label}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          {file.visibilidade}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-600">
                     {formatSize(file.tamanhoBytes)}

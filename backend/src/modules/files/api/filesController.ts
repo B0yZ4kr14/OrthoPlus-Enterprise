@@ -58,7 +58,7 @@ export class FilesController {
         mimeType: req.file.mimetype,
         tamanhoBytes: req.file.size,
         categoria: categoria ?? "OUTRO",
-        visibilidade: visibilidade ?? "RESTRITO",
+        visibilidade: visibilidade as string | undefined,
         uploadedBy: userId,
       });
 
@@ -80,6 +80,7 @@ export class FilesController {
   async listFiles(req: Request, res: Response, _next: NextFunction): Promise<void> {
     try {
       const clinicId = req.user?.clinicId as string;
+      const userRole = req.user?.role as "ADMIN" | "MEMBER" | "PATIENT" | undefined;
 
       if (!clinicId) {
         throw Errors.unauthorized("Authentication required");
@@ -90,6 +91,7 @@ export class FilesController {
 
       const files = await this.filesService.list({
         clinicId,
+        userRole,
         pacienteId: pacienteId as string | undefined,
         consultaId: consultaId as string | undefined,
         orcamentoId: orcamentoId as string | undefined,

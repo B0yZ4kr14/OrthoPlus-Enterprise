@@ -1,4 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, VisibilidadeArquivo } from "@prisma/client";
+
+export { VisibilidadeArquivo };
 
 /**
  * Global PrismaClient singleton.

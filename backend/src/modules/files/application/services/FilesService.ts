@@ -1,5 +1,17 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { prisma, VisibilidadeArquivo } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
+
+export { VisibilidadeArquivo };
+
+function parseVisibilidade(value: string | undefined): VisibilidadeArquivo | undefined {
+  if (!value) return undefined
+  const map: Record<string, VisibilidadeArquivo> = {
+    PUBLICO: VisibilidadeArquivo.PUBLICO,
+    RESTRITO: VisibilidadeArquivo.RESTRITO,
+    CONFIDENCIAL: VisibilidadeArquivo.CONFIDENCIAL,
+  }
+  return map[value] ?? VisibilidadeArquivo.RESTRITO
+}
 
 export interface CreateFileInput {
   clinicId: string;
@@ -15,6 +27,7 @@ export interface CreateFileInput {
   uploadedBy: string;
 }
 
+
 export interface FileFilters {
   clinicId: string;
   pacienteId?: string;
@@ -22,6 +35,7 @@ export interface FileFilters {
   orcamentoId?: string;
   categoria?: string;
   visibilidade?: string;
+  userRole?: string;
 }
 
 export class FilesService {
@@ -46,7 +60,7 @@ export class FilesService {
         mime_type: data.mimeType,
         tamanho_bytes: data.tamanhoBytes,
         categoria: data.categoria ?? "OUTRO",
-        visibilidade: data.visibilidade ?? "RESTRITO",
+        visibilidade: parseVisibilidade(data.visibilidade) ?? VisibilidadeArquivo.RESTRITO,
         uploaded_by: data.uploadedBy,
       },
     });
@@ -83,7 +97,19 @@ export class FilesService {
     if (filters.consultaId) where.consulta_id = filters.consultaId;
     if (filters.orcamentoId) where.orcamento_id = filters.orcamentoId;
     if (filters.categoria) where.categoria = filters.categoria;
-    if (filters.visibilidade) where.visibilidade = filters.visibilidade;
+
+    // Visibility filter based on user role (AP-1: clinic isolation + ACL)
+    if (filters.visibilidade) {
+      where.visibilidade = parseVisibilidade(filters.visibilidade);
+    } else if (filters.userRole) {
+      const role = filters.userRole;
+      if (role === "PATIENT") {
+        where.visibilidade = "PUBLICO";
+      } else if (role === "MEMBER") {
+        where.visibilidade = { in: ["PUBLICO", "RESTRITO"] };
+      }
+      // ADMIN sees all — no visibility filter needed
+    }
 
     const records = await prisma.arquivo.findMany({
       where,

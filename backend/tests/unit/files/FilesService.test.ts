@@ -11,6 +11,11 @@ jest.mock("../../../src/infrastructure/database/prismaClient", () => ({
       updateMany: jest.fn(),
     },
   },
+  VisibilidadeArquivo: {
+    PUBLICO: "PUBLICO",
+    RESTRITO: "RESTRITO",
+    CONFIDENCIAL: "CONFIDENCIAL",
+  },
 }));
 
 import { prisma } from "@/infrastructure/database/prismaClient";

@@ -12,9 +12,16 @@ const CATEGORIAS = [
   { value: "OUTRO", label: "Outro" },
 ];
 
+const VISIBILIDADES = [
+  { value: "PUBLICO", label: "Público", description: "Visível para todos os usuários" },
+  { value: "RESTRITO", label: "Restrito", description: "Visível apenas para staff da clínica" },
+  { value: "CONFIDENCIAL", label: "Confidencial", description: "Visível apenas para administradores" },
+];
+
 export default function FileUploadPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [categoria, setCategoria] = useState("OUTRO");
+  const [visibilidade, setVisibilidade] = useState("RESTRITO");
   const [pacienteId, setPacienteId] = useState("");
   const uploadMutation = useUploadFile();
 
@@ -46,6 +53,7 @@ export default function FileUploadPage() {
         await uploadMutation.mutateAsync({
           file,
           categoria,
+          visibilidade,
           pacienteId: pacienteId || undefined,
         });
         toast.success(`"${file.name}" enviado com sucesso`);
@@ -69,7 +77,7 @@ export default function FileUploadPage() {
       <h1 className="text-2xl font-bold mb-6">Upload de Documentos</h1>
 
       <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium mb-1">Categoria</label>
             <select
@@ -80,6 +88,21 @@ export default function FileUploadPage() {
               {CATEGORIAS.map((cat) => (
                 <option key={cat.value} value={cat.value}>
                   {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Visibilidade</label>
+            <select
+              value={visibilidade}
+              onChange={(e) => setVisibilidade(e.target.value)}
+              className="w-full border rounded-md px-3 py-2"
+              title={VISIBILIDADES.find((v) => v.value === visibilidade)?.description}
+            >
+              {VISIBILIDADES.map((vis) => (
+                <option key={vis.value} value={vis.value}>
+                  {vis.label}
                 </option>
               ))}
             </select>
