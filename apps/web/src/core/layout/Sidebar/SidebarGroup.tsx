@@ -26,9 +26,10 @@ interface SidebarGroupProps {
   group: MenuGroup;
   index: number;
   onNavigate?: () => void;
+  disableToggle?: boolean;
 }
 
-export function SidebarGroup({ group, onNavigate }: SidebarGroupProps) {
+export function SidebarGroup({ group, onNavigate, disableToggle = false }: SidebarGroupProps) {
   const { state } = useSidebar();
   const { hasModuleAccess } = useAuth();
   const { isExpanded, toggleGroup } = useSidebarCategory();
@@ -74,13 +75,14 @@ export function SidebarGroup({ group, onNavigate }: SidebarGroupProps) {
       {showHeader && (
         <button
           type="button"
-          onClick={handleToggle}
-          onKeyDown={handleKeyDown}
-          className="flex w-full items-center justify-between px-3 pt-4 pb-1 text-left outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-md"
+          onClick={disableToggle ? undefined : handleToggle}
+          onKeyDown={disableToggle ? undefined : handleKeyDown}
+          className={`flex w-full items-center justify-between px-3 pt-4 pb-1 text-left outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-md ${disableToggle ? "opacity-60 cursor-default" : ""}`}
           aria-expanded={isGroupExpanded}
           aria-controls={`sidebar-group-${group.boundedContext}`}
+          disabled={disableToggle}
         >
-          <SidebarGroupLabel className="px-0 pt-0 pb-0 text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--sidebar-foreground))]/60 cursor-pointer select-none">
+          <SidebarGroupLabel className={`px-0 pt-0 pb-0 text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--sidebar-foreground))]/60 select-none ${disableToggle ? "" : "cursor-pointer"}`}>
             {group.label}
           </SidebarGroupLabel>
           <motion.span

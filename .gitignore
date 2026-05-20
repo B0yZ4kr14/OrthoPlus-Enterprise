@@ -113,3 +113,4 @@ tests/e2e/.auth/
 # SpecKit project memory (versioned)
 !.specify/memory/
 !.specify/memory/**
+graphify-out/.graphify_*

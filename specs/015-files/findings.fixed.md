@@ -50,9 +50,23 @@
   - `downloadFile`: audit log now fire-and-forget; metric recorded after stream starts
   - `getFile`: added fire-and-forget audit log for FILE_VIEW
 
+## Iteration 2 (Security Audit Remediation)
+
+### Findings Identified
+- [Critical] A01-1 — `getFile`/`downloadFile` bypass visibility ACL
+- [High] A01-2 — `uploadFile` allows any role to set CONFIDENCIAL visibility
+- [High] A09-1 — Missing audit logs for FILE_UPLOAD and FILE_DELETE
+- [High] A06-1 — Non-atomic file deletion (DB before disk)
+
+### Fixes Applied
+- **A01-1**: Added `enforceVisibilityAcl()` helper and applied it in `getFile` and `downloadFile` after fetching the file record. PATIENT→PUBLICO only, MEMBER→no CONFIDENCIAL, ADMIN→no restriction.
+- **A01-2**: Added `sanitizeUploadVisibility()` helper. PATIENT forced to PUBLICO; MEMBER blocked from CONFIDENCIAL (falls back to RESTRITO).
+- **A09-1**: Added fire-and-forget audit logs for FILE_UPLOAD (after successful creation) and FILE_DELETE (after successful deletion).
+- **A06-1**: Reversed deletion order — disk file removed first, then DB record. Prevents orphan files if DB deletion fails.
+
 ## Verification
 
 - `cd backend && pnpm build` — ✅ PASS
 - `cd backend && pnpm test` — ✅ 511/511 tests pass
 - `cd apps/web && pnpm type-check` — ✅ PASS
-- `cd apps/web && pnpm lint` — ✅ 0 errors
+- `cd apps/web && pnpm lint` — ✅ 0 errors (104 pre-existing warnings)

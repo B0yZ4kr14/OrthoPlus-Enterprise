@@ -4,6 +4,7 @@ import { File, Trash2, Download, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { formatDateTime } from "@/lib/utils/date.utils";
 
 const CATEGORIAS: Record<string, string> = {
   RADIOGRAFIA: "Radiografia",
@@ -56,13 +57,7 @@ export default function FileListPage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return formatDateTime(dateString);
   };
 
   if (filesQuery.isLoading) {

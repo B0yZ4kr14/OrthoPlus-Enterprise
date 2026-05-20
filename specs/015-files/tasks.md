@@ -183,14 +183,26 @@ Executed via `/speckit-security-review` + `/speckit-checkpoint` + `/speckit-veri
   - **Status**: IMPLEMENTED — commit `04f980d56`
 - [ ] SEC-006 Virus/malware scan on upload
   - **Status**: NOT IMPLEMENTED — requires ClamAV/CloudScan integration
-- [x] SEC-007 Audit log for file access (download/view)
-  - **Status**: IMPLEMENTED — `prisma.audit_logs.create()` on download; records fileId, fileName, userId, clinicId, IP, userAgent
+- [x] SEC-007 Audit log for file access (download/view/upload/delete)
+  - **Status**: IMPLEMENTED — `prisma.audit_logs.create()` on download, view, upload, delete; records fileId, fileName, userId, clinicId, IP, userAgent
 - [ ] SEC-008 Permission inheritance from patient record
   - **Status**: NOT IMPLEMENTED — requires patient-permission cascade logic
 
 **Commits:**
 - `9e9c3889c` — feat(files): MVP implementation
 - `32faf40d8` — security(files): SEC-001 to SEC-004 upload hardening
+
+### Security Audit Remediation (2026-05-18)
+
+- [x] A01-1 Fix `getFile`/`downloadFile` visibility ACL bypass — `enforceVisibilityAcl()` helper
+- [x] A01-2 Fix `uploadFile` role-based visibility restrictions — `sanitizeUploadVisibility()` helper
+- [x] A06-1 Fix non-atomic file deletion — disk-first then DB
+- [x] A09-1 Add missing FILE_UPLOAD and FILE_DELETE audit logs
+
+### Cross-Artifact Analysis Remediation (2026-05-18)
+
+- [x] C9 Fix FE-2 date handling violation — FileListPage now uses `formatDateTime()` from `lib/utils/date.utils.ts`
+- [x] C1 Verified false positive — CSRF protection exists globally in `backend/src/index.ts:203-220` (Origin header validation)
 
 ---
 

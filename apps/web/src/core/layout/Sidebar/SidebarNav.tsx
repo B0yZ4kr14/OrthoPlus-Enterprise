@@ -49,6 +49,9 @@ export function SidebarNav({ onNavigate }: SidebarNavProps = {}) {
     }));
   }, [badges]);
 
+  const nonGeneralGroups = enrichedGroups.filter(g => g.label !== "VISÃO GERAL" && g.items.length > 0);
+  const isSingleVisibleGroup = nonGeneralGroups.length <= 1;
+
   return (
     <div className="pb-6 flex flex-col">
       {enrichedGroups.map((group, index) => (
@@ -57,6 +60,7 @@ export function SidebarNav({ onNavigate }: SidebarNavProps = {}) {
           group={group}
           index={index}
           onNavigate={onNavigate}
+          disableToggle={isSingleVisibleGroup && group.label !== "VISÃO GERAL"}
         />
       ))}
 

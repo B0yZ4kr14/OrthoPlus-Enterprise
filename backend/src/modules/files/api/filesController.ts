@@ -29,6 +29,25 @@ interface DropboxConfig {
   folder?: string;
 }
 
+function enforceVisibilityAcl(file: { visibilidade: string }, userRole: string | undefined): void {
+  if (userRole === "ADMIN") return;
+  if (userRole === "PATIENT" && file.visibilidade !== "PUBLICO") {
+    throw Errors.forbidden("Patients can only access PUBLICO files");
+  }
+  if (userRole === "MEMBER" && file.visibilidade === "CONFIDENCIAL") {
+    throw Errors.forbidden("MEMBER users cannot access CONFIDENCIAL files");
+  }
+}
+
+function sanitizeUploadVisibility(visibilidade: string | undefined, userRole: string | undefined): string {
+  if (userRole === "PATIENT") return "PUBLICO";
+  if (userRole === "MEMBER") {
+    if (visibilidade === "CONFIDENCIAL") return "RESTRITO";
+    return visibilidade ?? "RESTRITO";
+  }
+  return visibilidade ?? "RESTRITO";
+}
+
 export class FilesController {
   private filesService = new FilesService();
 
@@ -49,8 +68,10 @@ export class FilesController {
         throw Errors.unauthorized("Authentication required");
       }
 
-      const { pacienteId, consultaId, orcamentoId, categoria, visibilidade } =
+      const { pacienteId, consultaId, orcamentoId, categoria, visibilidade: rawVisibilidade } =
         req.body;
+      const userRole = req.user?.role as string | undefined;
+      const visibilidade = sanitizeUploadVisibility(rawVisibilidade as string | undefined, userRole);
 
       const startTime = Date.now();
       const fileRecord = await this.filesService.create({
@@ -67,6 +88,21 @@ export class FilesController {
         uploadedBy: userId,
       });
       metricsCollector.files.recordUpload(clinicId, fileRecord.categoria, Date.now() - startTime);
+
+      // Audit log for file upload (SEC-007) — fire-and-forget
+      prisma.audit_logs.create({
+        data: {
+          action: "FILE_UPLOAD",
+          action_type: "create",
+          clinic_id: clinicId,
+          user_id: userId,
+          details: { fileId: fileRecord.id, fileName: fileRecord.nomeOriginal, categoria: fileRecord.categoria },
+          ip_address: req.ip ? { ip: req.ip } : {},
+          user_agent: req.headers["user-agent"] ?? null,
+        },
+      }).catch((err) => {
+        logger.warn("[FilesController] Audit log failed (non-blocking):", err);
+      });
 
       res.status(201).json({
         success: true,
@@ -137,6 +173,8 @@ export class FilesController {
         throw Errors.notFound("File", id);
       }
 
+      enforceVisibilityAcl(file, req.user?.role as string | undefined);
+
       const uploadDir = process.env.UPLOAD_DIR ?? "uploads";
       const filePath = path.join(uploadDir, file.nomeStorage);
       const exists = fs.existsSync(filePath);
@@ -194,6 +232,8 @@ export class FilesController {
       if (!file) {
         throw Errors.notFound("File", id);
       }
+
+      enforceVisibilityAcl(file, req.user?.role as string | undefined);
 
       const uploadDir = process.env.UPLOAD_DIR ?? "uploads";
       const filePath = path.join(uploadDir, file.nomeStorage);
@@ -260,19 +300,35 @@ export class FilesController {
         throw Errors.notFound("File", id);
       }
 
-      const deleted = await this.filesService.delete(id, clinicId);
-
-      if (!deleted) {
-        throw Errors.internal("Failed to delete file record");
-      }
-
+      // Delete from disk first, then DB — ensures no orphan files if DB fails
       const uploadDir = process.env.UPLOAD_DIR ?? "uploads";
       const filePath = path.join(uploadDir, file.nomeStorage);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
 
+      const deleted = await this.filesService.delete(id, clinicId);
+
+      if (!deleted) {
+        throw Errors.internal("Failed to delete file record");
+      }
+
       metricsCollector.files.recordDelete(clinicId);
+
+      // Audit log for file delete (SEC-007) — fire-and-forget
+      prisma.audit_logs.create({
+        data: {
+          action: "FILE_DELETE",
+          action_type: "delete",
+          clinic_id: clinicId,
+          user_id: req.user?.id as string | undefined,
+          details: { fileId: id, fileName: file.nomeOriginal },
+          ip_address: req.ip ? { ip: req.ip } : {},
+          user_agent: req.headers["user-agent"] ?? null,
+        },
+      }).catch((err) => {
+        logger.warn("[FilesController] Audit log failed (non-blocking):", err);
+      });
 
       res.status(200).json({
         success: true,
