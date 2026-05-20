@@ -80,18 +80,18 @@ specs/015-files/
 ```text
 backend/
 ├── src/
-│   ├── modules/file_management/
-│   │   ├── file_managementController.ts    # Extend existing
-│   │   ├── file_managementService.ts       # Add business logic
-│   │   ├── file_managementRoutes.ts        # Register endpoints
-│   │   └── types/                           # DTOs, enums
+│   ├── modules/files/
+│   │   ├── api/filesController.ts           # Extend existing
+│   │   ├── application/services/FilesService.ts  # Add business logic
+│   │   ├── api/router.ts                    # Register endpoints
+│   │   └── application/dto/                 # DTOs, enums
 │   └── prisma/schema.prisma                 # Add/extend models
 ├── tests/
-│   └── file_management.test.ts             # Integration tests
+│   └── unit/files/FilesService.test.ts      # Unit tests
 
 apps/web/
 ├── src/
-│   ├── modules/filemanagement/
+│   ├── modules/files/
 │   │   ├── ui/pages/                        # React pages
 │   │   ├── ui/components/                   # Feature components
 │   │   ├── hooks/                           # Custom hooks
@@ -124,6 +124,9 @@ apps/web/
 - [ ] P004 [P] Extend Controller with new endpoints
 - [ ] P005 [P] Add DTOs/validation (Zod or class-validator)
 - [ ] P006 [P] Add clinicGuard to new routes
+- [ ] P006a [P] Add rate limiting to upload endpoint (CQ-3: 50/h)
+- [ ] P006b [P] Add CategoryCircuitBreaker for file DB ops (INF-1)
+- [ ] P006c [P] Add Prometheus metrics `orthoplus_files_*` (INF-2)
 - [ ] P007 [P] Write backend unit tests
 - [ ] P008 Run `pnpm type-check` and `pnpm test` (backend)
 

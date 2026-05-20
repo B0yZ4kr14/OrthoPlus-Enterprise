@@ -30,6 +30,9 @@
 - [x] T105 [P] Extend `filesService.ts` with new operations
 - [x] T106 [P] Extend `filesController.ts` with new endpoints
 - [x] T107 [P] Add clinicGuard to all new routes
+- [ ] T107a [P] Add rate limiting to upload endpoint (CQ-3: 50/hour)
+- [ ] T107b [P] Add CategoryCircuitBreaker for file DB operations (INF-1)
+- [ ] T107c [P] Add Prometheus metrics `orthoplus_files_upload_total`, `orthoplus_files_download_total` (INF-2)
 - [x] T108 [P] Backend unit tests for new service methods
 - [x] T109 Run `cd backend && pnpm type-check` (0 errors)
 - [x] T110 Run `cd backend && pnpm test` (all pass)
@@ -173,10 +176,14 @@ Executed via `/speckit-security-review` + `/speckit-checkpoint` + `/speckit-veri
 - [x] SEC-002 Multer `fileFilter` whitelist: PDF, JPG, PNG, DOCX, XLSX, DICOM (`backend/src/modules/files/api/router.ts`)
 - [x] SEC-003 Enforce 50MB file size limit via multer `limits`
 - [x] SEC-004 Sanitize `originalname` to prevent path traversal (`../`, `/`, `\\`, `:`)
-- [ ] SEC-005 Enforce visibility ACL by user role (PUBLICO/RESTRITO/CONFIDENCIAL)
-  - **Status**: NOT IMPLEMENTED — requires RBAC enhancement
+- [x] SEC-005 Enforce visibility ACL by user role (PUBLICO/RESTRITO/CONFIDENCIAL)
+  - **Status**: IMPLEMENTED — commit `04f980d56`
 - [ ] SEC-006 Virus/malware scan on upload
   - **Status**: NOT IMPLEMENTED — requires ClamAV/CloudScan integration
+- [ ] SEC-007 Audit log for file access (download/view)
+  - **Status**: NOT IMPLEMENTED — requires audit table + middleware
+- [ ] SEC-008 Permission inheritance from patient record
+  - **Status**: NOT IMPLEMENTED — requires patient-permission cascade logic
 
 **Commits:**
 - `9e9c3889c` — feat(files): MVP implementation
