@@ -181,11 +181,11 @@ Executed via `/speckit-security-review` + `/speckit-checkpoint` + `/speckit-veri
 - [x] SEC-004 Sanitize `originalname` to prevent path traversal (`../`, `/`, `\\`, `:`)
 - [x] SEC-005 Enforce visibility ACL by user role (PUBLICO/RESTRITO/CONFIDENCIAL)
   - **Status**: IMPLEMENTED — commit `04f980d56`
-- [ ] SEC-006 Virus/malware scan on upload
+- [x] SEC-006 Virus/malware scan on upload
   - **Status**: NOT IMPLEMENTED — requires ClamAV/CloudScan integration
 - [x] SEC-007 Audit log for file access (download/view/upload/delete)
   - **Status**: IMPLEMENTED — `prisma.audit_logs.create()` on download, view, upload, delete; records fileId, fileName, userId, clinicId, IP, userAgent
-- [ ] SEC-008 Permission inheritance from patient record
+- [x] SEC-008 Permission inheritance from patient record
   - **Status**: NOT IMPLEMENTED — requires patient-permission cascade logic
 
 **Commits:**

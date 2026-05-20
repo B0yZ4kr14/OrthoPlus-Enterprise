@@ -2,7 +2,7 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler";
 import { NextFunction, Request, Response } from "express";
-import { FilesService } from "../application/services/FilesService";
+import { FilesService, parseVisibilidade } from "../application/services/FilesService";
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector";
 import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics";
 import path from "path";
@@ -71,7 +71,35 @@ export class FilesController {
       const { pacienteId, consultaId, orcamentoId, categoria, visibilidade: rawVisibilidade } =
         req.body;
       const userRole = req.user?.role as string | undefined;
-      const visibilidade = sanitizeUploadVisibility(rawVisibilidade as string | undefined, userRole);
+      let visibilidade = sanitizeUploadVisibility(rawVisibilidade as string | undefined, userRole);
+
+      // SEC-006: Virus/malware scan
+      const scanResult = await this.filesService.scanFileHash(req.file.path);
+      if (scanResult.status === "BLOCKED") {
+        // Delete the blocked file
+        fs.unlinkSync(req.file.path);
+        throw Errors.validation(`Upload blocked: ${scanResult.reason}`);
+      }
+      if (scanResult.status === "SUSPICIOUS") {
+        logger.warn("[FilesController] Suspicious file upload detected", {
+          fileName: req.file.originalname,
+          hash: scanResult.hash,
+          reason: scanResult.reason,
+        });
+      }
+
+      // SEC-008: Permission inheritance from patient record
+      if (pacienteId && visibilidade) {
+        const parsedVis = parseVisibilidade(visibilidade);
+        if (parsedVis) {
+          const inheritedVis = await this.filesService.inheritPermissionFromPatient(
+            pacienteId,
+            parsedVis,
+            clinicId,
+          );
+          visibilidade = inheritedVis.toString();
+        }
+      }
 
       const startTime = Date.now();
       const fileRecord = await this.filesService.create({

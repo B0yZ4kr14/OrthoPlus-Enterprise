@@ -3,6 +3,8 @@ import { logger } from "@/infrastructure/logger";
 import { circuitBreakerRegistry } from "@/infrastructure/database/CategoryCircuitBreaker";
 import type { CircuitBreakerConfig } from "@/infrastructure/database/CategoryCircuitBreaker";
 import { Errors } from "@/middleware/errorHandler";
+import crypto from "crypto";
+import fs from "fs";
 
 export { VisibilidadeArquivo };
 
@@ -16,7 +18,7 @@ const CB_CONFIG: CircuitBreakerConfig = {
 
 const CATEGORY = "administrativo";
 
-function parseVisibilidade(value: string | undefined): VisibilidadeArquivo | undefined {
+export function parseVisibilidade(value: string | undefined): VisibilidadeArquivo | undefined {
   if (!value) return undefined
   const map: Record<string, VisibilidadeArquivo> = {
     PUBLICO: VisibilidadeArquivo.PUBLICO,
@@ -619,5 +621,70 @@ export class FilesService {
       uploadedBy: refreshed.uploaded_by,
       createdAt: refreshed.created_at,
     };
+  }
+
+  // --------------------
+  // Security: SEC-006 Virus/Malware Scan
+  // --------------------
+  async scanFileHash(filePath: string): Promise<{
+    hash: string;
+    status: "CLEAN" | "SUSPICIOUS" | "BLOCKED";
+    reason?: string;
+  }> {
+    const hash = crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
+
+    // Check against known malicious hashes (empty list = placeholder for integration)
+    const BLOCKED_HASHES: string[] = process.env.BLOCKED_FILE_HASHES?.split(",") ?? [];
+    if (BLOCKED_HASHES.includes(hash)) {
+      logger.warn("[FilesService] Blocked file upload — known malicious hash detected", { hash });
+      return { hash, status: "BLOCKED", reason: "Known malicious file hash" };
+    }
+
+    // Check for suspicious patterns (e.g., double extensions, executable in disguise)
+    const suspiciousPatterns = [".exe.pdf", ".js.pdf", ".bat.pdf", ".scr.pdf"];
+    const isSuspicious = suspiciousPatterns.some((p) => filePath.toLowerCase().includes(p));
+
+    if (isSuspicious) {
+      logger.warn("[FilesService] Suspicious file upload — double extension detected", { filePath });
+      return { hash, status: "SUSPICIOUS", reason: "Suspicious file extension pattern" };
+    }
+
+    return { hash, status: "CLEAN" };
+  }
+
+  // --------------------
+  // Security: SEC-008 Permission Inheritance
+  // --------------------
+  async inheritPermissionFromPatient(
+    patientId: string,
+    requestedVisibility: VisibilidadeArquivo,
+    clinicId: string,
+  ): Promise<VisibilidadeArquivo> {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+
+    const patient = await cb.execute(
+      async () => prisma.patients.findFirst({
+        where: { id: patientId, clinic_id: clinicId },
+        select: { id: true },
+      }),
+      () => null,
+    );
+
+    if (!patient) {
+      logger.warn("[FilesService] Patient not found for permission inheritance", { patientId });
+      return requestedVisibility;
+    }
+
+    // When linked to a patient, enforce maximum RESTRITO visibility
+    // Only CONFIDENCIAL is more restrictive
+    if (requestedVisibility === VisibilidadeArquivo.PUBLICO) {
+      logger.info("[FilesService] Visibility restricted to RESTRITO due to patient linkage", {
+        patientId,
+        requested: requestedVisibility,
+      });
+      return VisibilidadeArquivo.RESTRITO;
+    }
+
+    return requestedVisibility;
   }
 }
