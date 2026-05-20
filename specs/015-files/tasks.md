@@ -86,12 +86,18 @@
 
 **Independent Test**: Verify via UI + API integration
 
-- [ ] T320 [P] [US3] UI: Create main page/component for OCR e Indexação
-- [ ] T321 [P] [US3] UI: Form handlers and state management
-- [ ] T322 [US3] UI: Validation and error states
-- [ ] T323 [US3] UI: Success feedback (toast/redirect)
-- [ ] T324 [P] [US3] API: Connect frontend to backend endpoints
+- [ ] T320 [P] [US3] UI: OCR e Indexação
+  - **Status**: NOT IMPLEMENTED — requires OCR engine integration (Tesseract/Cloud Vision)
+- [ ] T321 [P] [US3] UI: Form handlers
+  - **Status**: NOT IMPLEMENTED — blocked by T320
+- [ ] T322 [US3] UI: Validation
+  - **Status**: NOT IMPLEMENTED — blocked by T320
+- [ ] T323 [US3] UI: Success feedback
+  - **Status**: NOT IMPLEMENTED — blocked by T320
+- [ ] T324 [P] [US3] API: Connect frontend to backend
+  - **Status**: NOT IMPLEMENTED — blocked by T320
 - [ ] T325 [P] [US3] Test: Component + integration tests
+  - **Status**: NOT IMPLEMENTED — blocked by T320
 
 #### US4: Versionamento (Priority: P3) 🎯 MVP
 
@@ -99,12 +105,18 @@
 
 **Independent Test**: Verify via UI + API integration
 
-- [ ] T330 [P] [US4] UI: Create main page/component for Versionamento
-- [ ] T331 [P] [US4] UI: Form handlers and state management
-- [ ] T332 [US4] UI: Validation and error states
-- [ ] T333 [US4] UI: Success feedback (toast/redirect)
-- [ ] T334 [P] [US4] API: Connect frontend to backend endpoints
+- [ ] T330 [P] [US4] UI: Versionamento
+  - **Status**: NOT IMPLEMENTED — requires document versioning system
+- [ ] T331 [P] [US4] UI: Form handlers
+  - **Status**: NOT IMPLEMENTED — blocked by T330
+- [ ] T332 [US4] UI: Validation
+  - **Status**: NOT IMPLEMENTED — blocked by T330
+- [ ] T333 [US4] UI: Success feedback
+  - **Status**: NOT IMPLEMENTED — blocked by T330
+- [ ] T334 [P] [US4] API: Connect frontend to backend
+  - **Status**: NOT IMPLEMENTED — blocked by T330
 - [ ] T335 [P] [US4] Test: Component + integration tests
+  - **Status**: NOT IMPLEMENTED — blocked by T330
 
 ---
 
@@ -161,8 +173,10 @@ Executed via `/speckit-security-review` + `/speckit-checkpoint` + `/speckit-veri
 - [x] SEC-002 Multer `fileFilter` whitelist: PDF, JPG, PNG, DOCX, XLSX, DICOM (`backend/src/modules/files/api/router.ts`)
 - [x] SEC-003 Enforce 50MB file size limit via multer `limits`
 - [x] SEC-004 Sanitize `originalname` to prevent path traversal (`../`, `/`, `\\`, `:`)
-- [ ] SEC-005 Enforce visibility ACL by user role (PUBLICO/RESTRITO/CONFIDENCIAL) — **P2**
-- [ ] SEC-006 Virus/malware scan on upload — **P2**
+- [ ] SEC-005 Enforce visibility ACL by user role (PUBLICO/RESTRITO/CONFIDENCIAL)
+  - **Status**: NOT IMPLEMENTED — requires RBAC enhancement
+- [ ] SEC-006 Virus/malware scan on upload
+  - **Status**: NOT IMPLEMENTED — requires ClamAV/CloudScan integration
 
 **Commits:**
 - `9e9c3889c` — feat(files): MVP implementation
