@@ -13,7 +13,7 @@ const themes = [
     preview: {
       bg: "bg-sky-50",
       primary: "bg-sky-500",
-      accent: "bg-cyan-500",
+      accent: "bg-info",
     },
   },
   {
@@ -24,7 +24,7 @@ const themes = [
     preview: {
       bg: "bg-slate-900",
       primary: "bg-sky-400",
-      accent: "bg-cyan-400",
+      accent: "bg-info",
     },
   },
 ];
