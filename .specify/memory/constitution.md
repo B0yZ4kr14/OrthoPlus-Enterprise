@@ -1,181 +1,151 @@
 <!--
 SYNC IMPACT REPORT
-- Version change: 1.0.0 → 1.1.0
-- Modified principles: DP-2 expanded (Health Checks → Observability & Health)
-- Added sections:
-  - AP-4: Database Federation
-  - INF-1: Infrastructure Resilience (Circuit Breaker)
-  - INF-2: Observability (Prometheus/Grafana/Alertmanager)
-  - INF-3: Backup & Disaster Recovery
-- Removed sections: none
-- Templates requiring updates:
-  - ✅ plan-template.md (Constitution Check gate now includes INF principles)
-  - ✅ AGENTS.md (seção 13 adicionada na sessão 2026-05-17)
-  - ⚠️ .specify/templates/spec-template.md (não tem referências diretas, mas
-    desenvolvedores devem consultar INF principles para features de infra)
-- Follow-up TODOs: none
+- Version change: 1.1.0 → 1.2.0
+- Added: Reference to architecture_constitution.md and security_constitution.md
+- Refactored: Moved detailed architecture and security rules to dedicated files
+- Unchanged: Governance principles, amendment procedure
 -->
 
 # Project Constitution — OrthoPlus Enterprise
 
-**Version**: 1.1.0
-**Ratification Date**: 2026-05-17
-**Last Amended Date**: 2026-05-17
+**Version**: 1.2.0
+**Ratification Date**: 2026-05-20
+**Last Amended Date**: 2026-05-20
 **Authority**: Non-negotiable within spec-kit analysis scope
 
 ---
 
-## 1. Architecture Principles
+## Related Documents
 
-### AP-1: Multi-Tenancy via Clinic Isolation
-**MUST**: Every data access in the backend MUST be scoped by clinicId. The clinicGuard middleware is mandatory on all protected routers.
-**RATIONALE**: Patient data isolation is both a business requirement and LGPD compliance necessity.
-
-### AP-2: Clean Architecture Boundaries
-**MUST**: Controllers NEVER access Prisma directly. Always delegate to Service/Repository layers.
-**SHOULD**: Use Clean Architecture patterns (Domain/Application/Infrastructure) in modules where they already exist.
-**NOTE**: Do NOT force Clean Architecture where it does not exist yet.
-
-### AP-3: Frontend State Management
-**MUST**: Server state uses TanStack React Query (useQuery/useMutation).
-**MUST**: Never use fetch or raw axios — always use apiClient from lib/api/apiClient.ts.
-**SHOULD**: Client state uses Zustand stores within modules/{modulo}/hooks/.
-
-### AP-4: Database Federation (Category Master)
-**MUST**: The system operates with 6 database categories (CORE, FINANCEIRO, OPERACIONAL, COMERCIAL, CLINICO, ADMINISTRATIVO).
-**MUST**: Cross-schema queries are read-only (SELECT) and validated against a schema whitelist.
-**MUST**: The MasterDatabaseManager is the single entry point for cross-category operations.
-**MUST NOT**: Allow direct cross-schema writes — use domain events or service orchestration.
-**RATIONALE**: Decentralized database architecture enables per-category backup, scaling, and failure isolation.
+- **Architecture Constitution**: `.specify/memory/architecture_constitution.md` — Enforceable architecture standards, layer boundaries, module rules
+- **Security Constitution**: `.specify/memory/security_constitution.md` — Security rules, trust boundaries, compliance requirements
+- **Architecture Views**: `.specify/memory/architecture*.md` — 4+1 architecture artifacts
 
 ---
 
-## 2. Code Quality Principles
+## 1. Engineering Philosophy
+
+### EP-1: Clarity Over Cleverness
+Prefer explicit, readable code over terse optimizations. Code is read more than written.
+
+### EP-2: Pragmatic Architecture
+Adopt Clean Architecture where it adds value. Do NOT force it where it creates friction in brownfield modules.
+
+### EP-3: Security by Default
+Every feature starts with "how could this be misused?" Security is not a separate phase.
+
+### EP-4: Observability as Feature
+Every new module must emit at least one custom metric. Blind systems cannot be operated.
+
+---
+
+## 2. Governance Principles
+
+### GP-1: Multi-Tenancy via Clinic Isolation
+Every data access MUST be scoped by clinicId. clinicGuard is mandatory on all protected routers.
+
+### GP-2: Audit for Sensitive Operations
+All CRUD on patient data, financial records, and file access MUST produce immutable audit logs.
+
+### GP-3: Human-in-the-Loop for AI
+AI-generated suggestions MUST NOT bypass approval. Clinical decisions remain human responsibility.
+
+### GP-4: Immutable Financial Records
+Invoices, once closed, cannot be modified. Corrections create new records.
+
+---
+
+## 3. Code Quality Principles
 
 ### CQ-1: TypeScript Strictness
-**MUST**: Backend builds with tsc (strict mode). Build failures are blocking.
-**MUST NOT**: Add new as any or @ts-ignore. Existing ones are technical debt, not precedent.
-**NOTE**: ~98 ESLint warnings are tolerated; 0 errors.
+Backend builds with tsc (strict mode). Build failures are blocking. ~98 ESLint warnings tolerated; 0 errors.
 
-### CQ-2: Error Handling
-**MUST**: Use ApiError from @/middleware/errorHandler for operational errors.
-**MUST**: Return RFC 7807 Problem Details (application/problem+json) for API errors.
-**SHOULD**: Log with Winston (JSON in production, colored in dev).
+### CQ-2: No New Technical Debt Patterns
+Do NOT add new `as any` or `@ts-ignore`. Existing ones are debt, not precedent.
 
-### CQ-3: Security by Default
-**MUST**: Rate limiting on all public endpoints (auth: 10/15min, upload: 50/h, API: 500/15min).
-**MUST**: CSRF protection for state-changing requests with cookies.
-**MUST**: Helmet headers on all responses.
-**MUST NOT**: Hardcode secrets or credentials in code.
+### CQ-3: Error Handling
+Use ApiError from `@/middleware/errorHandler`. Return RFC 7807 Problem Details. Log with Winston.
 
 ---
 
-## 3. Database Principles
+## 4. Database Principles
 
 ### DB-1: Prisma as Primary ORM
-**MUST**: Use Prisma Client for CRUD operations.
-**MAY**: Use $queryRaw only for complex aggregations or administrative queries (~14 legitimate occurrences documented).
-**MUST NOT**: Edit migration files manually. Use prisma migrate dev.
+Use Prisma Client for CRUD. `$queryRaw` only for complex aggregations (documented).
 
-### DB-2: Schema Integrity
-**MUST**: The Prisma schema (backend/prisma/schema.prisma) is the single source of truth.
-**MUST**: Regenerate apps/web/src/types/database.ts after schema changes (autogenerated, never edit manually).
-**NOTE**: 180 models across 18 PostgreSQL schemas.
+### DB-2: Schema as Source of Truth
+`backend/prisma/schema.prisma` is authoritative. Regenerate types after changes. Never edit `database.ts` manually.
+
+### DB-3: Federated Categories
+6 categories (CORE, FINANCEIRO, OPERACIONAL, COMERCIAL, CLINICO, ADMINISTRATIVO). Cross-schema reads only. Writes via events or orchestration.
 
 ---
 
-## 4. Frontend Principles
+## 5. Frontend Principles
 
 ### FE-1: Design System
-**MUST**: Use @orthoplus/core-ui for UI components. Do not create local shadcn components if they exist in core-ui.
-**MUST**: Use lucide-react for icons.
-**MUST**: Use cn() utility for className composition.
+Use `@orthoplus/core-ui` and `lucide-react`. Use `cn()` for className composition.
 
 ### FE-2: Date Handling
-**MUST**: Always use lib/utils/date.utils.ts. Never import date-fns directly.
+Always use `lib/utils/date.utils.ts`. Never import date-fns directly.
 
-### FE-3: Authentication
-**MUST**: Use useAuth() from AuthContext. Never check localStorage manually.
+### FE-3: Auth Pattern
+Use `useAuth()` from AuthContext. Never check localStorage manually.
+
+### FE-4: State Management
+Server state: TanStack React Query. Client state: Zustand (module-level).
 
 ---
 
-## 5. Testing Principles
+## 6. Testing Principles
 
 ### TP-1: Test Coverage
-**MUST**: Backend tests pass before merge (367 tests, 17 suites).
-**SHOULD**: Frontend unit tests with Vitest + jsdom.
-**SHOULD**: E2E tests with Playwright for critical user flows.
+Backend: 522 tests, 24 suites — MUST pass before merge. Frontend: Vitest + jsdom. E2E: Playwright for critical flows.
 
 ### TP-2: Quality Gates
-**MUST**: pnpm build passes (backend + frontend).
-**MUST**: pnpm type-check passes.
-**MUST**: pnpm lint passes.
-**MUST**: pnpm test passes.
+`pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test` — all MUST pass.
 
 ---
 
-## 6. Deployment Principles
+## 7. Deployment Principles
 
 ### DP-1: Environment Safety
-**MUST NOT**: Enable AUTH_ALLOW_MOCK or ENABLE_DANGEROUS_ADMIN_ENDPOINTS in production.
-**MUST**: Validate .env before deploy (no placeholders, no mock flags).
+NEVER enable AUTH_ALLOW_MOCK or ENABLE_DANGEROUS_ADMIN_ENDPOINTS in production. Validate .env before deploy.
 
-### DP-2: Observability & Health Checks
-**MUST**: All containers expose a HEALTHCHECK (backend: /health, frontend: wget localhost).
-**MUST**: Backend exposes Prometheus metrics at /metrics (before auth, internal network only).
-**MUST**: Grafana dashboards are versioned in grafana/provisioning/dashboards/.
-**MUST**: Alertmanager rules are versioned in prometheus-alerts.yml.
-**SHOULD**: Every new backend module emits at least one custom metric (latency, throughput, or error rate).
-**RATIONALE**: SaaS multi-tenant requires 99.9% uptime; blind systems cannot meet SLAs.
+### DP-2: Observability
+All containers expose HEALTHCHECK. Prometheus metrics at /metrics. Grafana dashboards versioned.
+
+### DP-3: Backup & Recovery
+Per-category backup via pg_dump. Retain 10 most recent. Observable status.
 
 ---
 
-## 7. Documentation Principles
+## 8. Documentation Principles
 
 ### DOC-1: AGENTS.md Authority
-**MUST**: Update AGENTS.md when modifying conventions, scripts, or workflows it describes.
-**SHOULD**: Subdirectory AGENTS.md files override parent rules where more specific.
+Update AGENTS.md when modifying conventions, scripts, or workflows it describes.
 
 ### DOC-2: Spec-Kit Traceability
-**MUST**: Every feature MUST have spec.md before planning.
-**MUST**: Every plan MUST trace back to requirements in spec.md.
-**MUST**: Every task MUST map to at least one requirement or user story.
+Every feature MUST have spec.md → plan.md → tasks.md → implementation.md with full traceability.
 
 ---
 
-## 8. Infrastructure Principles (DevSecOps)
-
-### INF-1: Infrastructure Resilience (Circuit Breaker)
-**MUST**: Every database category has a Circuit Breaker protecting its health checks and operations.
-**MUST**: Circuit Breaker thresholds are configurable per category.
-**MUST**: Fallback behavior is defined for OPEN state (degraded response, never cascade failure).
-**MUST NOT**: Skip Circuit Breaker on new category endpoints.
-**RATIONALE**: Prevents single-category failures from degrading the entire SaaS platform.
-
-### INF-2: Observability (Prometheus / Grafana / Alertmanager)
-**MUST**: All custom metrics use the prefix orthoplus_.
-**MUST**: Metrics include category label for per-tenant observability.
-**MUST**: Alert rules cover: circuit breaker OPEN, DB DOWN, backup failure, high latency (>1s p95).
-**SHOULD**: Dashboard panels are organized by category (CORE, FINANCEIRO, etc.).
-**RATIONALE**: Operational visibility is non-negotiable for production SaaS.
-
-### INF-3: Backup & Disaster Recovery
-**MUST**: Each database category has independent backup capability via pg_dump.
-**MUST**: Backups retain at least 10 most recent files (auto-pruning).
-**MUST**: Backup status is observable via API and Prometheus metrics.
-**SHOULD**: Backup schedules are configurable per category (hourly/daily/weekly).
-**MUST NOT**: Rely solely on full-cluster backups for per-category restore.
-**RATIONALE**: Decentralized architecture requires decentralized recovery.
-
----
-
-## 9. Governance
+## 9. Governance & Evolution
 
 ### Amendment Procedure
-**MINOR bump (x.Y.z)**: New principle/section added or materially expanded guidance.
-**PATCH bump (x.y.Z)**: Clarifications, wording, typo fixes.
-**MAJOR bump (X.y.z)**: Backward incompatible governance/principle removals.
+- **MINOR bump (x.Y.z)**: New principle/section added
+- **PATCH bump (x.y.Z)**: Clarifications, wording fixes
+- **MAJOR bump (X.y.z)**: Backward incompatible removals
 
 ### Compliance Review
-**MUST**: Re-review constitution before each major release (vX.0.0).
-**SHOULD**: Automated check that new specs reference at least one principle.
+- Re-review constitution before each major release (vX.0.0)
+- Architecture Guard validates against architecture_constitution.md
+- Security review validates against security_constitution.md
+
+### Constitution Hierarchy
+1. `constitution.md` — Governance philosophy (this file)
+2. `architecture_constitution.md` — Architecture enforcement rules
+3. `security_constitution.md` — Security standards
+4. `architecture.md` — 4+1 architecture views
+
+No duplication across files. Architecture details live in architecture_constitution.md. Security details live in security_constitution.md.
