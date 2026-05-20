@@ -96,15 +96,10 @@ export function useDeleteFile() {
 
 export function useDownloadFile() {
   return async (id: string, nomeOriginal: string) => {
-    const response = await fetch(`/api/files/${id}/download`, {
-      credentials: "include",
+    const blob = await apiClient.get<Blob>(`/files/${id}/download`, {
+      responseType: "blob",
     });
 
-    if (!response.ok) {
-      throw new Error("Download failed");
-    }
-
-    const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
