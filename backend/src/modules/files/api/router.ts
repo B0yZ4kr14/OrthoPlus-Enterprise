@@ -65,6 +65,7 @@ const reportController = new ReportController();
 // File Management routes
 // ----------------------------------------
 router.get("/", filesController.listFiles.bind(filesController));
+router.get("/search", filesController.searchFilesByText.bind(filesController));
 router.post(
   "/upload",
   upload.single("file"),
@@ -73,6 +74,23 @@ router.post(
 router.get("/:id", filesController.getFile.bind(filesController));
 router.get("/:id/download", filesController.downloadFile.bind(filesController));
 router.delete("/:id", filesController.deleteFile.bind(filesController));
+
+// ----------------------------------------
+// OCR routes (US3)
+// ----------------------------------------
+router.post("/:id/ocr", filesController.triggerOCR.bind(filesController));
+router.get("/:id/ocr", filesController.getOCRResult.bind(filesController));
+
+// ----------------------------------------
+// Versioning routes (US4)
+// ----------------------------------------
+router.post(
+  "/:id/versions",
+  upload.single("file"),
+  filesController.createVersion.bind(filesController),
+);
+router.get("/:id/versions", filesController.listVersions.bind(filesController));
+router.post("/:id/versions/:versionId/restore", filesController.restoreVersion.bind(filesController));
 
 // ----------------------------------------
 // Cloud Backup routes

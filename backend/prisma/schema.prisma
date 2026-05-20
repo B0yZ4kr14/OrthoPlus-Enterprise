@@ -3050,12 +3050,42 @@ model arquivo {
   url_temp      String?
   expira_em     DateTime?
   uploaded_by   String
+  versao_atual_id String?
+  ocr_status    String?  @default("PENDENTE")
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
   @@index([clinic_id, paciente_id])
   @@index([clinic_id, categoria])
   @@index([clinic_id, created_at])
+  @@schema("administrativo")
+}
+
+model arquivo_ocr {
+  id             String   @id @default(uuid())
+  arquivo_id     String
+  texto_extraido String?
+  status         String   @default("PENDENTE")
+  idioma         String?  @default("pt")
+  confidence     Float?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@index([arquivo_id])
+  @@schema("administrativo")
+}
+
+model arquivo_versao {
+  id             String   @id @default(uuid())
+  arquivo_id     String
+  numero_versao  Int
+  nome_storage   String
+  tamanho_bytes  Int
+  url_temp       String?
+  created_by     String
+  created_at     DateTime @default(now())
+
+  @@index([arquivo_id, numero_versao])
   @@schema("administrativo")
 }
 

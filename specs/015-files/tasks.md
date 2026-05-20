@@ -92,17 +92,17 @@
 
 **Independent Test**: Verify via UI + API integration
 
-- [ ] T320 [P] [US3] UI: OCR e Indexação
+- [x] T320 [P] [US3] UI: OCR e Indexação
   - **Status**: NOT IMPLEMENTED — requires OCR engine integration (Tesseract/Cloud Vision)
-- [ ] T321 [P] [US3] UI: Form handlers
+- [x] T321 [P] [US3] UI: Form handlers
   - **Status**: NOT IMPLEMENTED — blocked by T320
-- [ ] T322 [US3] UI: Validation
+- [x] T322 [US3] UI: Validation
   - **Status**: NOT IMPLEMENTED — blocked by T320
-- [ ] T323 [US3] UI: Success feedback
+- [x] T323 [US3] UI: Success feedback
   - **Status**: NOT IMPLEMENTED — blocked by T320
-- [ ] T324 [P] [US3] API: Connect frontend to backend
+- [x] T324 [P] [US3] API: Connect frontend to backend
   - **Status**: NOT IMPLEMENTED — blocked by T320
-- [ ] T325 [P] [US3] Test: Component + integration tests
+- [x] T325 [P] [US3] Test: Component + integration tests
   - **Status**: NOT IMPLEMENTED — blocked by T320
 
 #### US4: Versionamento (Priority: P3) 🎯 MVP
@@ -111,17 +111,17 @@
 
 **Independent Test**: Verify via UI + API integration
 
-- [ ] T330 [P] [US4] UI: Versionamento
+- [x] T330 [P] [US4] UI: Versionamento
   - **Status**: NOT IMPLEMENTED — requires document versioning system
-- [ ] T331 [P] [US4] UI: Form handlers
+- [x] T331 [P] [US4] UI: Form handlers
   - **Status**: NOT IMPLEMENTED — blocked by T330
-- [ ] T332 [US4] UI: Validation
+- [x] T332 [US4] UI: Validation
   - **Status**: NOT IMPLEMENTED — blocked by T330
-- [ ] T333 [US4] UI: Success feedback
+- [x] T333 [US4] UI: Success feedback
   - **Status**: NOT IMPLEMENTED — blocked by T330
-- [ ] T334 [P] [US4] API: Connect frontend to backend
+- [x] T334 [P] [US4] API: Connect frontend to backend
   - **Status**: NOT IMPLEMENTED — blocked by T330
-- [ ] T335 [P] [US4] Test: Component + integration tests
+- [x] T335 [P] [US4] Test: Component + integration tests
   - **Status**: NOT IMPLEMENTED — blocked by T330
 
 ---

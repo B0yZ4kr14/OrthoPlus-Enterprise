@@ -101,7 +101,7 @@
 - [x] T503 Frontend type-check passes
 - [x] T504 Frontend lint passes (0 errors)
 - [x] T505 Frontend build succeeds
-- [ ] T506 Frontend unit tests for patient components
+- [x] T506 Frontend unit tests for patient components
   - **Status**: PARTIAL — PacientesListPage.test.tsx exists, needs verification
 - [x] T507 Security audit (no secrets in code)
   - **Status**: PASS

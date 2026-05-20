@@ -1,8 +1,30 @@
-import { useFiles, useDeleteFile, useDownloadFile, type FileRecord } from "@/hooks/api/useFiles";
-import { Button } from "@orthoplus/core-ui";
-import { File, Trash2, Download, Upload } from "lucide-react";
-import { toast } from "sonner";
 import { useState } from "react";
+import {
+  useFiles,
+  useDeleteFile,
+  useDownloadFile,
+  type FileRecord,
+} from "@/hooks/api/useFiles";
+import { FileOCRPanel } from "../components/FileOCRPanel";
+import { FileVersionPanel } from "../components/FileVersionPanel";
+import { FileSearchOCR } from "../components/FileSearchOCR";
+import { Button } from "@orthoplus/core-ui";
+import { Badge } from "@orthoplus/core-ui";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@orthoplus/core-ui/dialog";
+import {
+  File,
+  Trash2,
+  Download,
+  Upload,
+  FileText,
+  GitBranch,
+} from "lucide-react";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { formatDateTime } from "@/lib/utils/date.utils";
 
@@ -20,13 +42,26 @@ const VISIBILIDADE_CONFIG: Record<string, { label: string; className: string }> 
   CONFIDENCIAL: { label: "Confidencial", className: "bg-red-100 text-red-800" },
 };
 
+const OCR_STATUS_CONFIG: Record<
+  string,
+  { label: string; className: string }
+> = {
+  PENDENTE: { label: "Pendente", className: "bg-gray-100 text-gray-600" },
+  PROCESSANDO: { label: "Processando", className: "bg-yellow-100 text-yellow-700" },
+  CONCLUIDO: { label: "Concluído", className: "bg-green-100 text-green-700" },
+  ERRO: { label: "Erro", className: "bg-red-100 text-red-700" },
+};
+
 export default function FileListPage() {
   const [categoriaFilter, setCategoriaFilter] = useState("");
   const filesQuery = useFiles(
-    categoriaFilter ? { categoria: categoriaFilter } : undefined
+    categoriaFilter ? { categoria: categoriaFilter } : undefined,
   );
   const deleteMutation = useDeleteFile();
   const downloadFile = useDownloadFile();
+
+  const [selectedFileForOCR, setSelectedFileForOCR] = useState<FileRecord | null>(null);
+  const [selectedFileForVersions, setSelectedFileForVersions] = useState<FileRecord | null>(null);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir este arquivo?")) return;
@@ -92,7 +127,7 @@ export default function FileListPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <div className="bg-white rounded-lg shadow p-4 mb-6 space-y-4">
         <div className="flex items-center gap-4">
           <label className="text-sm font-medium">Filtrar por categoria:</label>
           <select
@@ -108,6 +143,7 @@ export default function FileListPage() {
             ))}
           </select>
         </div>
+        <FileSearchOCR />
       </div>
 
       {files.length === 0 ? (
@@ -131,6 +167,9 @@ export default function FileListPage() {
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
                   Visibilidade
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  OCR
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
                   Tamanho
@@ -174,6 +213,16 @@ export default function FileListPage() {
                       );
                     })()}
                   </td>
+                  <td className="px-4 py-3">
+                    {(() => {
+                      const ocr = OCR_STATUS_CONFIG[file.ocrStatus ?? "PENDENTE"];
+                      return (
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${ocr.className}`}>
+                          {ocr.label}
+                        </span>
+                      );
+                    })()}
+                  </td>
                   <td className="px-4 py-3 text-sm text-gray-600">
                     {formatSize(file.tamanhoBytes)}
                   </td>
@@ -182,6 +231,20 @@ export default function FileListPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => setSelectedFileForOCR(file)}
+                        className="p-2 hover:bg-gray-100 rounded-md"
+                        title="OCR"
+                      >
+                        <FileText className="h-4 w-4 text-gray-600" />
+                      </button>
+                      <button
+                        onClick={() => setSelectedFileForVersions(file)}
+                        className="p-2 hover:bg-gray-100 rounded-md"
+                        title="Versões"
+                      >
+                        <GitBranch className="h-4 w-4 text-gray-600" />
+                      </button>
                       <button
                         onClick={() => handleDownload(file.id, file.nomeOriginal)}
                         className="p-2 hover:bg-gray-100 rounded-md"
@@ -204,6 +267,24 @@ export default function FileListPage() {
           </table>
         </div>
       )}
+
+      <Dialog open={!!selectedFileForOCR} onOpenChange={(open) => !open && setSelectedFileForOCR(null)}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>OCR — {selectedFileForOCR?.nomeOriginal}</DialogTitle>
+          </DialogHeader>
+          {selectedFileForOCR && <FileOCRPanel file={selectedFileForOCR} />}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!selectedFileForVersions} onOpenChange={(open) => !open && setSelectedFileForVersions(null)}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Versões — {selectedFileForVersions?.nomeOriginal}</DialogTitle>
+          </DialogHeader>
+          {selectedFileForVersions && <FileVersionPanel file={selectedFileForVersions} />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

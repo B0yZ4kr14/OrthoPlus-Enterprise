@@ -51,6 +51,13 @@ export interface FileFilters {
   userRole?: string;
 }
 
+export interface VersionData {
+  nomeStorage: string;
+  tamanhoBytes: number;
+  urlTemp?: string;
+  createdBy: string;
+}
+
 export class FilesService {
   async create(data: CreateFileInput): Promise<{
     id: string;
@@ -253,5 +260,364 @@ export class FilesService {
       logger.error("[FilesService] updateUrlTemp error:", { error });
       return false;
     }
+  }
+
+  // --------------------
+  // OCR Methods (US3)
+  // --------------------
+  async extractOCR(arquivoId: string, clinicId: string): Promise<{
+    id: string;
+    arquivoId: string;
+    textoExtraido: string | null;
+    status: string;
+    idioma: string | null;
+    confidence: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }> {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+
+    const file = await cb.execute(
+      async () => prisma.arquivo.findFirst({
+        where: { id: arquivoId, clinic_id: clinicId },
+      }),
+      () => null
+    );
+
+    if (!file) {
+      throw Errors.notFound("File", arquivoId);
+    }
+
+    const record = await cb.execute(
+      async () => prisma.arquivo_ocr.create({
+        data: {
+          arquivo_id: arquivoId,
+          status: "PROCESSANDO",
+          texto_extraido: null,
+          idioma: "pt",
+          confidence: null,
+        },
+      }),
+      () => { throw Errors.externalService("Database"); }
+    );
+
+    await cb.execute(
+      async () => prisma.arquivo.updateMany({
+        where: { id: arquivoId, clinic_id: clinicId },
+        data: { ocr_status: "PROCESSANDO" },
+      }),
+      () => { throw Errors.externalService("Database"); }
+    );
+
+    return {
+      id: record.id,
+      arquivoId: record.arquivo_id,
+      textoExtraido: record.texto_extraido,
+      status: record.status,
+      idioma: record.idioma,
+      confidence: record.confidence,
+      createdAt: record.created_at,
+      updatedAt: record.updated_at,
+    };
+  }
+
+  async getOCRResult(arquivoId: string, clinicId: string): Promise<{
+    id: string;
+    arquivoId: string;
+    textoExtraido: string | null;
+    status: string;
+    idioma: string | null;
+    confidence: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+  } | null> {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+
+    const file = await cb.execute(
+      async () => prisma.arquivo.findFirst({
+        where: { id: arquivoId, clinic_id: clinicId },
+      }),
+      () => null
+    );
+
+    if (!file) {
+      throw Errors.notFound("File", arquivoId);
+    }
+
+    const record = await cb.execute(
+      async () => prisma.arquivo_ocr.findFirst({
+        where: { arquivo_id: arquivoId },
+        orderBy: { created_at: "desc" },
+      }),
+      () => null
+    );
+
+    if (!record) return null;
+
+    return {
+      id: record.id,
+      arquivoId: record.arquivo_id,
+      textoExtraido: record.texto_extraido,
+      status: record.status,
+      idioma: record.idioma,
+      confidence: record.confidence,
+      createdAt: record.created_at,
+      updatedAt: record.updated_at,
+    };
+  }
+
+  async searchFilesByText(clinicId: string, searchTerm: string): Promise<
+    Array<{
+      id: string;
+      nomeOriginal: string;
+      mimeType: string;
+      tamanhoBytes: number;
+      categoria: string;
+      visibilidade: string;
+      pacienteId: string | null;
+      createdAt: Date;
+    }>
+  > {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+
+    const ocrRecords = await cb.execute(
+      async () => prisma.arquivo_ocr.findMany({
+        where: {
+          texto_extraido: { contains: searchTerm, mode: "insensitive" },
+        },
+        select: { arquivo_id: true },
+      }),
+      () => []
+    );
+
+    const arquivoIds = ocrRecords.map((r) => r.arquivo_id);
+    if (arquivoIds.length === 0) return [];
+
+    const files = await cb.execute(
+      async () => prisma.arquivo.findMany({
+        where: {
+          id: { in: arquivoIds },
+          clinic_id: clinicId,
+        },
+        orderBy: { created_at: "desc" },
+        take: 1000,
+      }),
+      () => []
+    );
+
+    return files.map((f) => ({
+      id: f.id,
+      nomeOriginal: f.nome_original,
+      mimeType: f.mime_type,
+      tamanhoBytes: f.tamanho_bytes,
+      categoria: f.categoria,
+      visibilidade: f.visibilidade,
+      pacienteId: f.paciente_id,
+      createdAt: f.created_at,
+    }));
+  }
+
+  // --------------------
+  // Versioning Methods (US4)
+  // --------------------
+  async createVersion(
+    arquivoId: string,
+    data: VersionData,
+    clinicId: string,
+  ): Promise<{
+    id: string;
+    arquivoId: string;
+    numeroVersao: number;
+    nomeStorage: string;
+    tamanhoBytes: number;
+    urlTemp: string | null;
+    createdBy: string;
+    createdAt: Date;
+  }> {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+
+    const file = await cb.execute(
+      async () => prisma.arquivo.findFirst({
+        where: { id: arquivoId, clinic_id: clinicId },
+      }),
+      () => null
+    );
+
+    if (!file) {
+      throw Errors.notFound("File", arquivoId);
+    }
+
+    const lastVersion = await cb.execute(
+      async () => prisma.arquivo_versao.findFirst({
+        where: { arquivo_id: arquivoId },
+        orderBy: { numero_versao: "desc" },
+      }),
+      () => null
+    );
+
+    const nextVersionNumber = (lastVersion?.numero_versao ?? 0) + 1;
+
+    const record = await cb.execute(
+      async () => prisma.arquivo_versao.create({
+        data: {
+          arquivo_id: arquivoId,
+          numero_versao: nextVersionNumber,
+          nome_storage: data.nomeStorage,
+          tamanho_bytes: data.tamanhoBytes,
+          url_temp: data.urlTemp ?? null,
+          created_by: data.createdBy,
+        },
+      }),
+      () => { throw Errors.externalService("Database"); }
+    );
+
+    await cb.execute(
+      async () => prisma.arquivo.updateMany({
+        where: { id: arquivoId, clinic_id: clinicId },
+        data: { versao_atual_id: record.id },
+      }),
+      () => { throw Errors.externalService("Database"); }
+    );
+
+    return {
+      id: record.id,
+      arquivoId: record.arquivo_id,
+      numeroVersao: record.numero_versao,
+      nomeStorage: record.nome_storage,
+      tamanhoBytes: record.tamanho_bytes,
+      urlTemp: record.url_temp,
+      createdBy: record.created_by,
+      createdAt: record.created_at,
+    };
+  }
+
+  async listVersions(arquivoId: string, clinicId: string): Promise<
+    Array<{
+      id: string;
+      arquivoId: string;
+      numeroVersao: number;
+      nomeStorage: string;
+      tamanhoBytes: number;
+      urlTemp: string | null;
+      createdBy: string;
+      createdAt: Date;
+    }>
+  > {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+
+    const file = await cb.execute(
+      async () => prisma.arquivo.findFirst({
+        where: { id: arquivoId, clinic_id: clinicId },
+      }),
+      () => null
+    );
+
+    if (!file) {
+      throw Errors.notFound("File", arquivoId);
+    }
+
+    const records = await cb.execute(
+      async () => prisma.arquivo_versao.findMany({
+        where: { arquivo_id: arquivoId },
+        orderBy: { numero_versao: "desc" },
+      }),
+      () => []
+    );
+
+    return records.map((r) => ({
+      id: r.id,
+      arquivoId: r.arquivo_id,
+      numeroVersao: r.numero_versao,
+      nomeStorage: r.nome_storage,
+      tamanhoBytes: r.tamanho_bytes,
+      urlTemp: r.url_temp,
+      createdBy: r.created_by,
+      createdAt: r.created_at,
+    }));
+  }
+
+  async restoreVersion(
+    arquivoId: string,
+    versionId: string,
+    clinicId: string,
+  ): Promise<{
+    id: string;
+    nomeOriginal: string;
+    nomeStorage: string;
+    mimeType: string;
+    tamanhoBytes: number;
+    categoria: string;
+    visibilidade: string;
+    pacienteId: string | null;
+    consultaId: string | null;
+    orcamentoId: string | null;
+    uploadedBy: string;
+    createdAt: Date;
+  }> {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+
+    const file = await cb.execute(
+      async () => prisma.arquivo.findFirst({
+        where: { id: arquivoId, clinic_id: clinicId },
+      }),
+      () => null
+    );
+
+    if (!file) {
+      throw Errors.notFound("File", arquivoId);
+    }
+
+    const version = await cb.execute(
+      async () => prisma.arquivo_versao.findFirst({
+        where: { id: versionId, arquivo_id: arquivoId },
+      }),
+      () => null
+    );
+
+    if (!version) {
+      throw Errors.notFound("Version", versionId);
+    }
+
+    const updated = await cb.execute(
+      async () => prisma.arquivo.updateMany({
+        where: { id: arquivoId, clinic_id: clinicId },
+        data: {
+          nome_storage: version.nome_storage,
+          tamanho_bytes: version.tamanho_bytes,
+          versao_atual_id: version.id,
+        },
+      }),
+      () => ({ count: 0 })
+    );
+
+    if (updated.count === 0) {
+      throw Errors.internal("Failed to restore version");
+    }
+
+    const refreshed = await cb.execute(
+      async () => prisma.arquivo.findFirst({
+        where: { id: arquivoId, clinic_id: clinicId },
+      }),
+      () => null
+    );
+
+    if (!refreshed) {
+      throw Errors.internal("Failed to retrieve updated file after restore");
+    }
+
+    return {
+      id: refreshed.id,
+      nomeOriginal: refreshed.nome_original,
+      nomeStorage: refreshed.nome_storage,
+      mimeType: refreshed.mime_type,
+      tamanhoBytes: refreshed.tamanho_bytes,
+      categoria: refreshed.categoria,
+      visibilidade: refreshed.visibilidade,
+      pacienteId: refreshed.paciente_id,
+      consultaId: refreshed.consulta_id,
+      orcamentoId: refreshed.orcamento_id,
+      uploadedBy: refreshed.uploaded_by,
+      createdAt: refreshed.created_at,
+    };
   }
 }

@@ -529,4 +529,192 @@ export class FilesController {
     const result = (await response.json()) as { path_display: string };
     return result.path_display;
   }
+
+  // --------------------
+  // OCR Endpoints (US3)
+  // --------------------
+  async triggerOCR(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { id } = req.params;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const ocrRecord = await this.filesService.extractOCR(id, clinicId);
+
+      res.status(202).json({
+        success: true,
+        message: "OCR extraction started",
+        data: ocrRecord,
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] triggerOCR error:", { error });
+      const apiError = Errors.internal("Failed to start OCR extraction");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  async getOCRResult(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { id } = req.params;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const ocrRecord = await this.filesService.getOCRResult(id, clinicId);
+
+      if (!ocrRecord) {
+        res.status(200).json({
+          success: true,
+          data: null,
+          message: "No OCR result found for this file",
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: ocrRecord,
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] getOCRResult error:", { error });
+      const apiError = Errors.internal("Failed to get OCR result");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  async searchFilesByText(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { query } = req.query;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      if (!query || typeof query !== "string") {
+        throw Errors.validation("Search query is required");
+      }
+
+      const files = await this.filesService.searchFilesByText(clinicId, query);
+
+      res.status(200).json({
+        success: true,
+        count: files.length,
+        data: files,
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] searchFilesByText error:", { error });
+      const apiError = Errors.internal("Failed to search files");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  // --------------------
+  // Versioning Endpoints (US4)
+  // --------------------
+  async createVersion(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      if (!req.file) {
+        throw Errors.validation("No file provided");
+      }
+
+      const clinicId = req.user?.clinicId as string;
+      const userId = req.user?.id as string;
+      const { id } = req.params;
+
+      if (!clinicId || !userId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const version = await this.filesService.createVersion(id, {
+        nomeStorage: req.file.filename,
+        tamanhoBytes: req.file.size,
+        createdBy: userId,
+      }, clinicId);
+
+      res.status(201).json({
+        success: true,
+        data: version,
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] createVersion error:", { error });
+      const apiError = Errors.internal("Failed to create version");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  async listVersions(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { id } = req.params;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const versions = await this.filesService.listVersions(id, clinicId);
+
+      res.status(200).json({
+        success: true,
+        count: versions.length,
+        data: versions,
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] listVersions error:", { error });
+      const apiError = Errors.internal("Failed to list versions");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
+
+  async restoreVersion(req: Request, res: Response, _next: NextFunction): Promise<void> {
+    try {
+      const clinicId = req.user?.clinicId as string;
+      const { id, versionId } = req.params;
+
+      if (!clinicId) {
+        throw Errors.unauthorized("Authentication required");
+      }
+
+      const file = await this.filesService.restoreVersion(id, versionId, clinicId);
+
+      res.status(200).json({
+        success: true,
+        message: "Version restored successfully",
+        data: file,
+      });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        res.status(error.status).json(error.toProblemDetail(req.originalUrl));
+        return;
+      }
+      logger.error("[FilesController] restoreVersion error:", { error });
+      const apiError = Errors.internal("Failed to restore version");
+      res.status(500).json(apiError.toProblemDetail(req.originalUrl));
+    }
+  }
 }

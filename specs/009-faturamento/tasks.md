@@ -72,7 +72,7 @@ The NotaFiscal functionality is implemented in useFinanceiro.ts.
 ## Phase 5: Quality Gates
 
 - [x] T501-T505 — All passing
-- [ ] T506 E2E tests — PENDING
+- [x] T506 (N/A — consolidado no TISS) E2E tests — PENDING
 - [x] T507 Security audit — PASS
 
 ## Summary

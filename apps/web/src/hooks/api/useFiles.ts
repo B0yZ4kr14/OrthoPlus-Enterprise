@@ -10,6 +10,27 @@ export interface FileRecord {
   visibilidade: string;
   pacienteId: string | null;
   createdAt: string;
+  ocrStatus?: "PENDENTE" | "PROCESSANDO" | "CONCLUIDO" | "ERRO" | null;
+}
+
+export interface FileOCR {
+  id: string;
+  arquivoId: string;
+  textoExtraido: string | null;
+  status: "PENDENTE" | "PROCESSANDO" | "CONCLUIDO" | "ERRO";
+  idioma: string | null;
+  confidence: number | null;
+  createdAt: string;
+}
+
+export interface FileVersion {
+  id: string;
+  arquivoId: string;
+  numeroVersao: number;
+  nomeStorage: string;
+  tamanhoBytes: number;
+  createdBy: string;
+  createdAt: string;
 }
 
 export interface UploadFileInput {
@@ -109,4 +130,111 @@ export function useDownloadFile() {
     link.remove();
     window.URL.revokeObjectURL(url);
   };
+}
+
+// ── OCR Hooks ──
+
+export function useFileOCR(fileId: string) {
+  return useQuery<FileOCR>({
+    queryKey: ["files", fileId, "ocr"],
+    queryFn: async () => {
+      return await apiClient.get<FileOCR>(`/files/${fileId}/ocr`);
+    },
+    enabled: !!fileId,
+  });
+}
+
+export function useRequestOCR() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (fileId: string) => {
+      return await apiClient.post<FileOCR>(`/files/${fileId}/ocr`);
+    },
+    onSuccess: (_data, fileId) => {
+      queryClient.invalidateQueries({ queryKey: ["files", fileId, "ocr"] });
+      queryClient.invalidateQueries({ queryKey: [FILES_QUERY_KEY] });
+    },
+  });
+}
+
+export interface SearchFilesByTextResult {
+  id: string;
+  nomeOriginal: string;
+  mimeType: string;
+  categoria: string;
+  visibilidade: string;
+  snippet: string;
+  ocrStatus: string | null;
+}
+
+export function useSearchFilesByText(query: string) {
+  return useQuery<SearchFilesByTextResult[]>({
+    queryKey: ["files", "search", query],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      params.append("query", query);
+      return await apiClient.get<SearchFilesByTextResult[]>(`/files/search?${params.toString()}`);
+    },
+    enabled: query.length >= 2,
+  });
+}
+
+// ── Versioning Hooks ──
+
+export function useFileVersions(fileId: string) {
+  return useQuery<FileVersion[]>({
+    queryKey: ["files", fileId, "versions"],
+    queryFn: async () => {
+      return await apiClient.get<FileVersion[]>(`/files/${fileId}/versions`);
+    },
+    enabled: !!fileId,
+  });
+}
+
+export interface CreateVersionInput {
+  fileId: string;
+  file: File;
+}
+
+export function useCreateVersion() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: CreateVersionInput) => {
+      const formData = new FormData();
+      formData.append("file", input.file);
+
+      return await apiClient.post<FileVersion>(`/files/${input.fileId}/versions`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    onSuccess: (_data, input) => {
+      queryClient.invalidateQueries({ queryKey: ["files", input.fileId, "versions"] });
+      queryClient.invalidateQueries({ queryKey: [FILES_QUERY_KEY] });
+    },
+  });
+}
+
+export interface RestoreVersionInput {
+  fileId: string;
+  versionId: string;
+}
+
+export function useRestoreVersion() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: RestoreVersionInput) => {
+      return await apiClient.post<FileVersion>(
+        `/files/${input.fileId}/versions/${input.versionId}/restore`,
+      );
+    },
+    onSuccess: (_data, input) => {
+      queryClient.invalidateQueries({ queryKey: ["files", input.fileId, "versions"] });
+      queryClient.invalidateQueries({ queryKey: [FILES_QUERY_KEY] });
+    },
+  });
 }

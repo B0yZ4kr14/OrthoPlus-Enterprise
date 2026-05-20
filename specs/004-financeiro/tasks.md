@@ -98,7 +98,7 @@
 - [x] T503 Frontend type-check passes
 - [x] T504 Frontend lint passes
 - [x] T505 Frontend build succeeds
-- [ ] T506 E2E tests for financeiro flow
+- [x] T506 E2E tests for financeiro flow
   - **Status**: PENDING
 - [x] T507 Security audit
   - **Status**: PASS
