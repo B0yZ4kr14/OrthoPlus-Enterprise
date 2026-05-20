@@ -147,7 +147,7 @@ export function PEPPage() {
 
       {prontuarioId && (
         <AssinaturaDigital
-          onSave={(_signature) => {}}
+          onSave={() => undefined}
         />
       )}
     </div>
