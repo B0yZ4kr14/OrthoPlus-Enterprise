@@ -46,48 +46,51 @@ OrthoPlus-Enterprise/
 │   │   ├── main.tsx              # Ponto de entrada
 │   │   ├── App.tsx               # Providers globais
 │   │   ├── routes/AppRoutes.tsx  # React Router v6 (lazy-loaded)
-│   │   ├── components/           # ~1116 componentes compartilhados
-│   │   ├── modules/              # 39 modulos de UI (37 de negocio + 2 de infraestrutura: core, ui)
-│   │   ├── domain/               # 24 entidades, 19 repos (Clean Arch parcial)
-│   │   ├── application/use-cases/# 60 use-cases
-│   │   ├── infrastructure/       # 15 repos concretos, DI, event bus
+│   │   ├── components/           # ~32 pastas de componentes compartilhados
+│   │   ├── modules/              # 39 modulos de UI (37 negocio + 2 infra: core, ui)
+│   │   ├── domain/               # Entidades, repos, events, value-objects
+│   │   ├── application/use-cases/# Casos de uso por dominio
+│   │   ├── infrastructure/       # Repos concretos, DI, event bus, mappers
 │   │   ├── hooks/                # Hooks globais + hooks de API
 │   │   ├── contexts/             # AuthContext, ModulesContext, ThemeContext
 │   │   ├── lib/                  # apiClient, utils, adapters, schemas
-│   │   └── types/database.ts     # ~8929 linhas, AUTOGERADO (nao editar)
+│   │   └── types/database.ts     # ~8928 linhas, AUTOGERADO (nao editar)
 │   ├── vite.config.ts            # Alias, proxy /api -> :3005, chunks manuais
 │   └── vitest.config.ts          # Testes unitarios (jsdom)
 │
 ├── backend/                      # Backend Node.js / Express
 │   ├── src/
-│   │   ├── index.ts              # Ponto de entrada (~425 linhas)
+│   │   ├── index.ts              # Ponto de entrada (~437 linhas)
 │   │   ├── middleware/           # auth, clinicGuard, errorHandler, lgpd
 │   │   ├── modules/              # 38 modulos de dominio
-│   │   ├── workers/              # 9 cron jobs + scheduler de backup
+│   │   ├── workers/              # Cron jobs + scheduler de backup
 │   │   ├── infrastructure/       # Prisma singleton, logger (Winston), Redis
 │   │   ├── shared/               # CQRS bus, event registry
 │   │   ├── routes/modules.ts     # Rotas legadas de gerenciamento de modulos
 │   │   └── custom.d.ts           # Extensao de Request (user, clinicId)
-│   ├── prisma/schema.prisma      # 180 models, 18 schemas PostgreSQL
-│   ├── tests/unit/               # 17 suites de teste (Jest)
+│   ├── prisma/schema.prisma      # ~3102 linhas, multi-schema PostgreSQL
+│   ├── tests/unit/               # 26 suites de teste (Jest)
 │   └── jest.config.js            # ts-jest, coverage threshold 20%
 │
 ├── agent-service/                # Microservico Python/FastAPI
 │   ├── src/main.py               # FastAPI app, endpoints /api/agents/*
 │   ├── src/config.py             # Env vars, API keys, contexto do projeto
 │   ├── src/agents/               # Backend, Frontend, Database agents
+│   ├── src/models/               # Providers LLM (Google GenAI, OpenAI)
 │   ├── src/workflows/            # crud, bugfix, refactor
 │   └── src/tools/                # ReadFile, WriteFile, SearchCode, PrismaTools
 │
 ├── shared-types/                 # Tipos TypeScript cross-stack
-│   └── src/index.ts              # ApiResponse, auth, pacientes, agenda, crypto...
+│   └── src/index.ts              # ApiResponse, auth, pacientes, agenda...
 │
 ├── categories/@orthoplus/        # Pacotes internos (source-only, exceto shared-types)
 │   └── core/packages/
-│       ├── ui/                   # 50+ componentes (Radix + CVA + Tailwind)
+│       ├── ui/                   # Componentes (Radix + CVA + Tailwind)
 │       ├── hooks/                # useToast (sonner wrapper)
 │       ├── types/                # Tipos globais frontend
 │       └── utils/                # formatDate, formatCurrency, cn
+│   └── admin-devops/packages/
+│       └── database-config/      # Configuracao de banco de dados
 │
 ├── scripts/                      # Scripts de deploy (bash)
 │   ├── deploy-orthoplus-full.sh  # Deploy completo para VPS
@@ -96,7 +99,7 @@ OrthoPlus-Enterprise/
 │   ├── deploy-ubuntu.sh          # Bootstrap Ubuntu Server
 │   └── validate-production.sh    # Validacao de variaveis antes do deploy
 │
-├── .github/workflows/            # 15 workflows (CI/CD, E2E, security, deploy)
+├── .github/workflows/            # 15+ workflows (CI/CD, E2E, security, deploy)
 ├── docker-compose.yml            # Stack completo local
 ├── docker-compose.prod.yml       # Producao (sem Postgres — DB externo)
 ├── docker-compose.ubuntu.yml     # Ubuntu Server LTS
@@ -116,30 +119,40 @@ OrthoPlus-Enterprise/
 - `jsonwebtoken` ^9.0.2 — JWT
 - `bcrypt` ^6.0.0 — Hash de senhas
 - `helmet` ^7.1.0 — Headers de seguranca HTTP
-- `express-rate-limit` ^8.3.1 — Rate limiting
+- `express-rate-limit` ^8.5.2 — Rate limiting
 - `zod` ^3.25.76 — Validacao de schemas
 - `winston` ^3.11.0 — Logging
 - `ioredis` ^5.10.0 — Client Redis
 - `node-cron` ^4.2.1 — Cron jobs
 - `prom-client` ^15.1.0 — Metricas Prometheus
 - `pg` ^8.11.3 — Driver PostgreSQL nativo
+- `multer` ^2.1.1 — Upload de arquivos
+- `nodemailer` ^8.0.7 — Envio de e-mail
+- `cookie-parser` ^1.4.7 — Parsing de cookies
+- `cors` ^2.8.5 — CORS
+- `dotenv` ^16.3.1 — Variaveis de ambiente
+- `axios` ^1.16.1 — HTTP client
 
 ### Frontend
 - `react` ^18.3.1 + `react-dom` ^18.3.1
 - `vite` ^8.0.0 (plugin `@vitejs/plugin-react-swc`)
 - `tailwindcss` ^3.4.17 + `postcss` + `autoprefixer`
 - `@tanstack/react-query` ^5.96.1 — Server state
-- `zustand` ^5.x (via lockfile) — Client state (modulos selecionados)
 - `react-router-dom` ^6.30.1 — Roteamento
 - `react-hook-form` ^7.72.0 + `@hookform/resolvers` — Formularios
 - `zod` ^4.3.6 — Validacao frontend
-- `axios` ^1.14.0 — HTTP client (wrappado por `apiClient`)
+- `axios` ^1.16.1 — HTTP client (wrappado por `apiClient`)
 - `lucide-react` ^0.462.0 — Icones
 - `framer-motion` ^12.38.0 — Animacoes
 - `date-fns` ^4.1.0 — Manipulacao de datas (sempre via `date.utils.ts`)
 - `recharts` ^2.15.4 — Graficos
 - `sonner` ^1.7.4 — Toasts
 - `fabric`, `jspdf`, `html2canvas`, `exceljs` — PDF, canvas, Excel
+- `@dnd-kit/core` ^6.3.1 — Drag and drop
+- `@react-three/fiber` + `@react-three/drei` — 3D rendering
+- `qrcode` ^1.5.4 — Geracao de QR codes
+- `uuid` ^13.0.1 — UUIDs
+- `canvas-confetti` ^1.9.4 — Efeitos visuais
 
 ### Agent Service
 - Python 3.14
@@ -147,6 +160,7 @@ OrthoPlus-Enterprise/
 - `agno` ^2.5.14 — Framework de agentes LLM
 - `pydantic` ^2.12.5 — Validacao
 - `google-genai`, `openai` — Providers LLM
+- `GitPython` ^3.1.46 — Integracao Git
 
 ---
 
@@ -172,7 +186,7 @@ cd backend
 pnpm dev              # nodemon + tsx (hot reload)
 pnpm build            # tsc -p tsconfig.build.json && tsc-alias (ESTRITO — falha em erro)
 pnpm start            # node dist/index.js
-pnpm test             # jest (17 suites, ~367 testes)
+pnpm test             # jest (26 suites, ~450+ testes)
 pnpm lint             # ESLINT_USE_FLAT_CONFIG=false eslint src --ext .ts
 pnpm predeploy        # Valida env vars criticas e flags de seguranca
 ```
@@ -184,6 +198,7 @@ pnpm dev              # Vite dev server (porta 3000)
 pnpm build            # vite build (terser, drop_console, chunks manuais)
 pnpm lint             # eslint . --report-unused-disable-directives
 pnpm type-check       # tsc --noEmit
+pnpm preview          # Preview do build de producao
 ```
 
 ### Agent Service
@@ -227,6 +242,8 @@ Se qualquer comando falhar, o commit e abortado.
 | `deploy.yml` | push em `main`, `master` | Deploy para Proxmox VM200 via SSH |
 | `cd.yml` | push em `main` | CD autonomo para VM200 |
 | `zscan.yml` | push/PR em `main` | Zimperium zScan (mobile security) — continue-on-error ate configurado |
+| `gitnexus-index.yml` | push em `main` | Reindexacao automatica do GitNexus |
+| `speckit-compliance.yml` | push/PR em `main` | Validacao de conformidade com SpecKit |
 
 ### Concorrencia
 - Todos os workflows usam `concurrency: group: <workflow>-${{ github.ref }}` com `cancel-in-progress: true`, exceto deploys que usam `cancel-in-progress: false`.
@@ -239,14 +256,15 @@ Se qualquer comando falhar, o commit e abortado.
 
 | Arquivo | Ambiente | Observacao |
 |---------|----------|------------|
-| `docker-compose.yml` | Local/Dev | Stack completo: frontend, backend, Postgres, Redis, nginx, Prometheus, Grafana. |
-| `docker-compose.prod.yml` | Producao (cloud) | Backend + Frontend + Redis. **Sem Postgres** — espera DB externo via connection string. |
-| `docker-compose.ubuntu.yml` | Ubuntu Server LTS | Stack completo com limites de recurso, volumes bind-mounted em `/opt/orthoplus/data`, PostgreSQL otimizado. |
-| `docker-compose.onprem.yml` | On-premise | + MinIO S3, 3 redes segregadas, replicas frontend (2) e backend (3), node-exporter. |
+| `docker-compose.yml` | Local/Dev | Stack completo: frontend, backend, Postgres, Redis, nginx, Prometheus, Grafana, Agent Service, node-exporter, redis-exporter |
+| `docker-compose.prod.yml` | Producao (cloud) | Backend + Frontend + Redis. **Sem Postgres** — espera DB externo via connection string |
+| `docker-compose.ubuntu.yml` | Ubuntu Server LTS | Stack completo com limites de recurso, volumes bind-mounted em `/opt/orthoplus/data`, PostgreSQL otimizado |
+| `docker-compose.onprem.yml` | On-premise | + MinIO S3, 3 redes segregadas, replicas frontend (2) e backend (3), node-exporter |
 
 ### Dockerfiles
-- **Frontend (`Dockerfile`):** Multi-stage (node:20-alpine builder -> nginx:1.25-alpine). Expoe 8080. Healthcheck via wget.
+- **Frontend (`Dockerfile`):** Multi-stage (node:20-alpine builder -> nginx:1.25-alpine). Expoe 8080. Healthcheck via wget. Build inclui geracao de CSS Tailwind.
 - **Backend (`backend/Dockerfile`):** Multi-stage (node:20-alpine builder + prisma generate -> node:20-alpine production com `postgresql-client` para backups). Expoe 3005. Healthcheck via wget.
+- **Agent Service (`agent-service/Dockerfile`):** Python slim com FastAPI.
 
 ### Scripts de Deploy
 - **`scripts/deploy-orthoplus-full.sh`** — Deploy completo para VPS:
@@ -265,6 +283,8 @@ Se qualquer comando falhar, o commit e abortado.
 - `try_files` fallback para `index.html` (SPA).
 - Cache de assets estaticos: 1 ano.
 - Rate limiting por zona.
+- TLS 1.3 com cipher suites fortes.
+- Headers de seguranca (CSP, HSTS, X-Frame-Options, etc.).
 
 ---
 
@@ -278,11 +298,11 @@ Se qualquer comando falhar, o commit e abortado.
 | `.env.ubuntu.example` | Configuracao para deploy em Ubuntu Server LTS |
 
 ### Variaveis Criticas (nunca commitar)
-- Chave de assinatura do token de autenticacao — minimo 256 bits de entropia.
-- Connection string do banco de dados PostgreSQL.
-- Senhas de Redis, PostgreSQL e Grafana.
-- Flag de mock de autenticacao — **proibido em producao** (`predeploy` falha se ativada).
-- Flag de endpoints admin perigosos — **proibido em producao**.
+- `JWT_SECRET` — Chave de assinatura do token de autenticacao (minimo 256 bits de entropia).
+- `DATABASE_URL` — Connection string do banco de dados PostgreSQL.
+- `REDIS_PASSWORD` / `POSTGRES_PASSWORD` / `GRAFANA_PASSWORD` — Senhas de servicos.
+- `AUTH_ALLOW_MOCK` — Flag de mock de autenticacao — **proibido em producao** (`predeploy` falha se ativada).
+- Endpoints admin perigosos — **proibidos em producao**.
 
 ### Validacoes de Seguranca no CI/CD
 - `production-validation.yml` executa `validate-production.sh` com `NODE_ENV=production`.
@@ -309,6 +329,11 @@ packages:
 - `dev` e `clean` tem `cache: false`.
 - `lint`, `type-check`, `test` nao tem dependencias explicitas.
 
+### TypeScript
+- **Frontend (`apps/web/tsconfig.json`):** Target ES2020, Module ESNext, Strict true.
+- **Backend (`backend/tsconfig.json`):** Target ES2022, Module CommonJS, Strict true, `noUnusedLocals: true`, `noUnusedParameters: true`.
+- **Shared Types (`shared-types/tsconfig.json`):** Target ES2020, gera `.d.ts`.
+
 ### ESLint
 - **Root (`eslint.config.js`):** Flat config com `typescript-eslint`, `react-hooks`, `react-refresh`. A maioria das regras TypeScript esta desabilitada (incluindo `no-explicit-any`, `no-floating-promises`, `no-misused-promises`). Target: 0 erros, warnings tolerados (~98).
 - **Backend:** Usa `ESLINT_USE_FLAT_CONFIG=false` porque ainda depende de ESLint v8 com config legacy (`@typescript-eslint/eslint-plugin` v7).
@@ -317,6 +342,15 @@ packages:
 - Executado via `pnpm format` no root.
 - Scope: `**/*.{ts,tsx,json,md}`.
 - Padrao: sem ponto e virgula no final das linhas.
+
+### Tailwind CSS
+- Configuracao central em `tailwind.config.ts` (raiz do monorepo).
+- `darkMode: ["class"]` — classe CSS controla tema escuro.
+- Cores customizadas via CSS variables (HSL): `--interactive`, `--primary`, `--background`, etc.
+- Fontes: Inter (sans), Plus Jakarta Sans (display), JetBrains Mono (mono).
+- Animacoes customizadas: fade-in, slide-in, shimmer, shake, glow, ripple, pulse-border.
+- Safelist extensa para cores dinamicas.
+- Plugin: `tailwindcss-animate`.
 
 ---
 
@@ -333,7 +367,24 @@ packages:
 - `set -e` na segunda linha
 - Funcoes de log coloridas padronizadas (copiar de scripts existentes)
 
-> **Nota:** Convencoes especificas de backend e frontend (uso de ApiError, clinicGuard, apiClient, useAuth, gerenciamento de estado, etc.) estao documentadas na constituicao do projeto (`.specify/memory/constitution.md`).
+### Frontend
+- **Path aliases:** `@/` -> `src/`, `@/components`, `@/hooks`, `@/lib`, `@/modules`, etc.
+- **API Client:** Sempre usar `apiClient` (wrapper do axios em `src/lib/api/apiClient.ts`).
+- **Formularios:** Sempre usar `react-hook-form` + `zod` para validacao.
+- **Datas:** Sempre usar `date-fns` via utilitarios em `src/lib/utils/date.utils.ts`.
+- **Estado global:** React Query para server state; Zustand para client state (modulos selecionados).
+- **Icones:** Sempre usar `lucide-react`.
+- **Componentes UI:** Pacote interno `@orthoplus/core-ui` (baseado em Radix + Tailwind + CVA).
+
+### Backend
+- **Path aliases:** `@/` -> `src/`, `@modules/` -> `src/modules/`, `@infrastructure/` -> `src/infrastructure/`, `@shared/` -> `src/shared/`.
+- **Routers:** Cada modulo expoe um router via `api/router.ts`.
+- **Middleware:** `authMiddleware` + `tenantGuard` (clinicGuard) em todas as rotas protegidas.
+- **Erros:** Sempre usar `ApiError` do middleware de erro.
+- **Prisma:** Usar singleton em `src/infrastructure/database/prismaClient.ts`.
+- **Logging:** Winston logger em `src/infrastructure/logger/index.ts`.
+
+> **Nota:** Convencoes especificas detalhadas (uso de ApiError, clinicGuard, apiClient, useAuth, gerenciamento de estado, etc.) estao documentadas na constituicao do projeto (`.specify/memory/constitution.md`).
 
 ---
 
@@ -341,21 +392,22 @@ packages:
 
 ### Backend — Jest + ts-jest
 - **Config:** `backend/jest.config.js`
-- **Diretorio:** `backend/tests/unit/` (17 arquivos `.test.ts`)
-- **Suites:** agenda, auth, contratos, dashboard, financeiro, health, nfe, pdv, pep, split-pagamento, teleodonto, tiss, inadimplencia, fidelidade, estoque, lgpd
+- **Diretorio:** `backend/tests/unit/` (26 arquivos `.test.ts`)
+- **Suites:** agenda, auth, contratos, crm, dashboard, fidelidade, financeiro, health, nfe, orcamentos, pacientes, pacienteSearch, pdv, pep, procedimentos, produto, splitPagamento, teleodonto, tiss, transaction
 - **Coverage:** threshold global de **20%** (branches, functions, lines, statements).
 - **Module name mapper:** `@/` -> `src/`, `@modules/` -> `src/modules/`, etc.
 
 ### Frontend — Vitest + jsdom
-- **Config:** `apps/web/vitest.config.ts`
+- **Config:** `vitest.config.ts` (raiz do monorepo)
 - **Padrao:** `src/**/*.{test,spec}.{ts,tsx}`
 - **Bibliotecas:** `@testing-library/react` para component tests.
-- **Exemplo:** `src/contexts/__tests__/AuthContext.test.tsx`.
+- **Setup:** `src/test/setup.ts`
+- **Exemplo:** `src/contexts/__tests__/AuthContext.test.tsx`, `src/lib/sync/__tests__/`.
 
 ### E2E — Playwright
 - **Config:** `playwright.config.ts` (raiz do monorepo)
 - **Diretorio:** `tests/e2e/`
-- **Base URL:** `http://localhost:8080`
+- **Base URL:** `http://localhost:8080/OrthoPlus-Enterprise/`
 - **Global setup:** `tests/e2e/global-setup.ts` (login + storage state)
 - **Projetos:** Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari.
 - **Timeout:** 120s global, 15s expect, 15s action, 30s navigation.
@@ -383,7 +435,7 @@ packages:
 - `auth/Auth.tsx`, `pacientes/PacientesListPage.tsx` — variant `cta` nao existe no Button.
 
 **Arquivos criticos — NUNCA editar manualmente:**
-- `apps/web/src/types/database.ts` — ~8929 linhas, autogenerado pelo Prisma. **Regenerar obrigatoriamente apos `prisma migrate dev` ou qualquer alteracao em `schema.prisma`. Nunca editar manualmente.**
+- `apps/web/src/types/database.ts` — ~8928 linhas, autogenerado pelo Prisma. **Regenerar obrigatoriamente apos `prisma migrate dev` ou qualquer alteracao em `schema.prisma`. Nunca editar manualmente.**
 
 **ESLint:**
 - `eslint.config.js` na raiz desabilita a **maioria** das regras TypeScript (incluindo `no-explicit-any`, `no-floating-promises`, `no-misused-promises`, etc.).
@@ -479,7 +531,7 @@ packages:
 | E2E tests | `tests/e2e/` |
 | Playwright config | `playwright.config.ts` |
 | ESLint config | `eslint.config.js` |
-| Tailwind config | `frontend/tailwind.config.js` |
+| Tailwind config | `tailwind.config.ts` |
 | Vite config | `apps/web/vite.config.ts` |
 | Root package.json | `package.json` |
 | Turbo config | `turbo.json` |

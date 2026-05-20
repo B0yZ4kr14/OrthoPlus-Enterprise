@@ -20,7 +20,7 @@ export function RSICard({ rsi, rsiSignal }: RSICardProps) {
       value={rsi.toFixed(2)}
       badgeText={rsiSignal}
       badgeVariant={getVariant()}
-      icon={<Activity className="h-8 w-8 text-muted-foreground opacity-20" />}
+      icon={<Activity className="h-8 w-8 text-muted-foreground opacity-50" />}
     />
   );
 }

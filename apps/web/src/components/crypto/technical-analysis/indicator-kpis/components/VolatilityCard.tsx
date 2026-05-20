@@ -13,7 +13,7 @@ export function VolatilityCard({ volatility, period }: VolatilityCardProps) {
       value={`${volatility}%`}
       badgeText={`Período ${period}`}
       badgeVariant="outline"
-      icon={<BarChart3 className="h-8 w-8 text-muted-foreground opacity-20" />}
+      icon={<BarChart3 className="h-8 w-8 text-muted-foreground opacity-50" />}
     />
   );
 }

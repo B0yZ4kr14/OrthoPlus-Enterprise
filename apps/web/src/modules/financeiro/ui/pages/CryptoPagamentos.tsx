@@ -265,7 +265,7 @@ export default function CryptoPagamentos() {
                 {dashboardData.totalBTC.toFixed(8)} BTC
               </p>
             </div>
-            <Bitcoin className="h-10 w-10 text-orange-500 opacity-20 shrink-0" />
+            <Bitcoin className="h-10 w-10 text-orange-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -286,7 +286,7 @@ export default function CryptoPagamentos() {
                 })}
               </p>
             </div>
-            <TrendingUp className="h-10 w-10 text-green-500 opacity-20 shrink-0" />
+            <TrendingUp className="h-10 w-10 text-green-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -304,7 +304,7 @@ export default function CryptoPagamentos() {
                 {dashboardData.pendingTransactions}
               </p>
             </div>
-            <ArrowRightLeft className="h-10 w-10 text-yellow-500 opacity-20 shrink-0" />
+            <ArrowRightLeft className="h-10 w-10 text-yellow-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -318,7 +318,7 @@ export default function CryptoPagamentos() {
                 {dashboardData.confirmedToday}
               </p>
             </div>
-            <Wallet className="h-10 w-10 text-blue-500 opacity-20 shrink-0" />
+            <Wallet className="h-10 w-10 text-blue-500 opacity-50 shrink-0" />
           </div>
         </Card>
       </div>

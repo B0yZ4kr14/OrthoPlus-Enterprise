@@ -189,7 +189,7 @@ export function CryptoComparativeDashboard({
                 })}
               </p>
             </div>
-            <Percent className="h-10 w-10 text-orange-500 opacity-20 shrink-0" />
+            <Percent className="h-10 w-10 text-orange-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -213,7 +213,7 @@ export function CryptoComparativeDashboard({
                 vs métodos tradicionais
               </p>
             </div>
-            <TrendingUp className="h-10 w-10 text-green-500 opacity-20 shrink-0" />
+            <TrendingUp className="h-10 w-10 text-green-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -228,7 +228,7 @@ export function CryptoComparativeDashboard({
               </p>
               <p className="text-xs text-muted-foreground mt-1">menos taxas</p>
             </div>
-            <TrendingDown className="h-10 w-10 text-blue-500 opacity-20 shrink-0" />
+            <TrendingDown className="h-10 w-10 text-blue-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -253,7 +253,7 @@ export function CryptoComparativeDashboard({
                 recebido após taxas
               </p>
             </div>
-            <DollarSign className="h-10 w-10 text-purple-500 opacity-20 shrink-0" />
+            <DollarSign className="h-10 w-10 text-purple-500 opacity-50 shrink-0" />
           </div>
         </Card>
       </div>

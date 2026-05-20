@@ -32,7 +32,7 @@ export function IndicatorKPIs({ indicators, period }: IndicatorKPIsProps) {
                 {indicators.rsiSignal}
               </Badge>
             </div>
-            <Activity className="h-8 w-8 text-muted-foreground opacity-20" />
+            <Activity className="h-8 w-8 text-muted-foreground opacity-50" />
           </div>
         </CardContent>
       </Card>
@@ -54,7 +54,7 @@ export function IndicatorKPIs({ indicators, period }: IndicatorKPIsProps) {
                 Sinal de {indicators.macdSignal}
               </Badge>
             </div>
-            <TrendingUp className="h-8 w-8 text-muted-foreground opacity-20" />
+            <TrendingUp className="h-8 w-8 text-muted-foreground opacity-50" />
           </div>
         </CardContent>
       </Card>
@@ -73,9 +73,9 @@ export function IndicatorKPIs({ indicators, period }: IndicatorKPIsProps) {
               </Badge>
             </div>
             {indicators.trend === "ALTA" ? (
-              <TrendingUp className="h-8 w-8 text-success opacity-20" />
+              <TrendingUp className="h-8 w-8 text-success opacity-50" />
             ) : (
-              <TrendingDown className="h-8 w-8 text-destructive opacity-20" />
+              <TrendingDown className="h-8 w-8 text-destructive opacity-50" />
             )}
           </div>
         </CardContent>
@@ -91,7 +91,7 @@ export function IndicatorKPIs({ indicators, period }: IndicatorKPIsProps) {
                 Período {period}
               </Badge>
             </div>
-            <BarChart3 className="h-8 w-8 text-muted-foreground opacity-20" />
+            <BarChart3 className="h-8 w-8 text-muted-foreground opacity-50" />
           </div>
         </CardContent>
       </Card>

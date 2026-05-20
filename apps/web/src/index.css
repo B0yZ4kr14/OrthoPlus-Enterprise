@@ -17,298 +17,66 @@
 
 
 @layer base {
-  /* ── LIGHT THEME (padrão clínico) ─────────── */
+  /* ── PREMIUM LIGHT (Clínica Cristal) — padrão ─ */
   :root {
-    /* Superfícies */
-    --background:        210 40% 98%;   /* slate-50  #F8FAFC */
-    --foreground:        222 47% 11%;   /* slate-900 #0F172A */
-
+    --background:        210 40% 98%;   /* slate-50 */
+    --foreground:        215 28% 17%;   /* slate-800 */
     --card:              0 0% 100%;     /* white */
-    --card-foreground:   222 47% 11%;
-
+    --card-foreground:   215 28% 17%;
     --popover:           0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-
-    /* Primary (navy — texto e superfícies de autoridade) */
-    --primary:           222 47% 11%;   /* #0F172A */
+    --popover-foreground: 215 28% 17%;
+    --primary:           199 89% 48%;   /* sky-500 */
     --primary-foreground: 0 0% 100%;
-
-    /* Interactive (sage green — CTAs, links, foco) */
-    --interactive:       160 84% 30%;   /* #059669 */
+    --interactive:       189 94% 43%;   /* cyan-500 */
     --interactive-foreground: 0 0% 100%;
-    --interactive-hover: 160 84% 24%;   /* #047857 */
-
-    /* Secondary / Muted */
-    --secondary:         210 40% 96%;   /* slate-100 #F1F5F9 */
-    --secondary-foreground: 222 47% 11%;
-
+    --interactive-hover: 192 91% 36%;   /* cyan-600 */
+    --secondary:         210 40% 96%;   /* slate-100 */
+    --secondary-foreground: 215 28% 17%;
     --muted:             210 40% 96%;
-    --muted-foreground:  215 16% 47%;   /* slate-500 #64748B */
-
-    /* Accent (sage-50 — background de highlights suaves) */
-    --accent:            152 55% 95%;   /* #ECFDF5 */
-    --accent-foreground: 160 84% 24%;   /* #047857 */
-
-    /* Estados semânticos */
-    --destructive:        0 84% 60%;   /* #EF4444 */
+    --muted-foreground:  215 16% 47%;   /* slate-500 */
+    --accent:            204 100% 97%;  /* sky-50 */
+    --accent-foreground: 201 96% 32%;   /* sky-700 */
+    --destructive:        0 84% 60%;   /* red-500 */
     --destructive-foreground: 0 0% 100%;
-
-    --success:           142 76% 36%;  /* #16A34A */
+    --success:           160 84% 39%;   /* emerald-500 */
     --success-foreground: 0 0% 100%;
-
-    --warning:           32 95% 44%;   /* #CA8A04 */
+    --warning:           38 92% 50%;   /* amber-500 */
     --warning-foreground: 0 0% 100%;
-
-    --info:              199 89% 48%;  /* #0EA5E9 */
+    --info:              199 89% 48%;   /* sky-500 */
     --info-foreground:   0 0% 100%;
-
-    /* Bordas e inputs */
-    --border:            214 32% 91%;  /* slate-200 #E2E8F0 */
+    --border:            214 32% 91%;  /* slate-200 */
     --input:             214 32% 91%;
-    --ring:              160 84% 30%;  /* sage-600 (foco) */
-
-    /* Radius padrão — 8px flat & clean */
-    --radius: 0.5rem;
-
-    /* Sidebar (white sidebar no light) */
+    --ring:              199 89% 48%;  /* sky-500 */
     --sidebar-background:          0 0% 100%;
-    --sidebar-foreground:          222 47% 11%;
-    --sidebar-primary:             160 84% 30%;
+    --sidebar-foreground:          215 28% 17%;
+    --sidebar-primary:             199 89% 48%;
     --sidebar-primary-foreground:  0 0% 100%;
     --sidebar-accent:              210 40% 96%;
-    --sidebar-accent-foreground:   222 47% 11%;
+    --sidebar-accent-foreground:   215 28% 17%;
     --sidebar-border:              214 32% 91%;
-    --sidebar-ring:                160 84% 30%;
-
-    /* Módulos (cores semânticas para ícones do sidebar) */
+    --sidebar-ring:                199 89% 48%;
     --module-blue:    217 91% 60%;
     --module-purple:  270 60% 65%;
     --module-yellow:  45 93% 47%;
     --module-orange:  25 95% 53%;
-    --module-cyan:    160 84% 30%;  /* sage no light */
+    --module-cyan:    199 89% 48%;
     --module-pink:    330 70% 60%;
-    --module-green:   142 76% 36%;
+    --module-green:   160 84% 39%;
     --module-red:     0 84% 60%;
-
-    /* Stats */
     --stat-blue-bg:   217 91% 60%;
     --stat-purple-bg: 270 60% 65%;
-    --stat-green-bg:  142 76% 36%;
+    --stat-green-bg:  160 84% 39%;
     --stat-orange-bg: 25 95% 53%;
-
-    /* Sombras (flat — sutis) */
     --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-    --shadow-card-hover: 0 4px 12px 0 rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.08);
-    --shadow-interactive: 0 0 0 3px hsl(160 84% 30% / 0.15);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+    --shadow-card: 0 4px 24px 0 rgb(148 163 184 / 0.08);
+    --shadow-card-hover: 0 8px 32px 0 rgb(148 163 184 / 0.12);
+    --shadow-interactive: 0 0 0 3px hsl(199 89% 48% / 0.15);
   }
 
-  /* ── DARK THEME ───────────────────────────── */
-  .dark {
-    --background:        222 47% 6%;   /* #0B1120 */
-    --foreground:        210 40% 98%;  /* #F8FAFC */
-
-    --card:              222 47% 8%;   /* #0F172A */
-    --card-foreground:   210 40% 98%;
-
-    --popover:           222 47% 8%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary:           210 40% 98%;
-    --primary-foreground: 222 47% 6%;
-
-    --interactive:       160 60% 45%;
-    --interactive-foreground: 222 47% 6%;
-    --interactive-hover: 160 60% 50%;
-
-    --secondary:         217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted:             217 33% 17%;
-    --muted-foreground:  215 20% 65%;
-
-    --accent:            160 30% 15%;
-    --accent-foreground: 160 60% 50%;
-
-    --destructive:        0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    --success:           142 65% 42%;
-    --success-foreground: 222 47% 6%;
-
-    --warning:           38 92% 50%;
-    --warning-foreground: 222 47% 6%;
-
-    --info:              199 89% 55%;
-    --info-foreground:   222 47% 6%;
-
-    --border:            217 33% 20%;
-    --input:             217 33% 20%;
-    --ring:              160 60% 45%;
-
-    --sidebar-background:         222 47% 6%;
-    --sidebar-foreground:         210 40% 98%;
-    --sidebar-primary:            160 60% 45%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent:             217 33% 17%;
-    --sidebar-accent-foreground:  210 40% 98%;
-    --sidebar-border:             217 33% 20%;
-    --sidebar-ring:               160 60% 45%;
-
-    --module-blue:    217 91% 60%;
-    --module-purple:  270 60% 65%;
-    --module-yellow:  45 93% 47%;
-    --module-orange:  25 95% 53%;
-    --module-cyan:    160 60% 45%;
-    --module-pink:    330 70% 60%;
-    --module-green:   142 65% 42%;
-    --module-red:     0 84% 60%;
-
-    --stat-blue-bg:   217 91% 60%;
-    --stat-purple-bg: 270 60% 65%;
-    --stat-green-bg:  142 65% 42%;
-    --stat-orange-bg: 25 95% 53%;
-
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.2);
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.2);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.2);
-    --shadow-card-hover: 0 4px 12px 0 rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    --shadow-interactive: 0 0 0 3px hsl(160 60% 45% / 0.25);
-  }
-
-  /* ── PROFESSIONAL DARK ────────────────────── */
-  .professional-dark {
-    --background:        220 26% 8%;
-    --foreground:        213 31% 91%;
-    --card:              220 26% 10%;
-    --card-foreground:   213 31% 91%;
-    --popover:           220 26% 10%;
-    --popover-foreground: 213 31% 91%;
-    --primary:           213 31% 91%;
-    --primary-foreground: 220 26% 8%;
-    --interactive:       160 60% 42%;
-    --interactive-foreground: 220 26% 8%;
-    --interactive-hover: 160 60% 48%;
-    --secondary:         220 26% 14%;
-    --secondary-foreground: 213 31% 91%;
-    --muted:             220 26% 14%;
-    --muted-foreground:  215 20% 55%;
-    --accent:            160 25% 14%;
-    --accent-foreground: 160 60% 48%;
-    --destructive:        0 84% 60%;
-    --destructive-foreground: 213 31% 91%;
-    --success:           142 65% 42%;
-    --success-foreground: 220 26% 8%;
-    --warning:           38 92% 50%;
-    --warning-foreground: 220 26% 8%;
-    --info:              199 89% 55%;
-    --info-foreground:   220 26% 8%;
-    --border:            220 26% 18%;
-    --input:             220 26% 18%;
-    --ring:              160 60% 42%;
-    --sidebar-background:         220 26% 7%;
-    --sidebar-foreground:         213 31% 91%;
-    --sidebar-primary:            160 60% 42%;
-    --sidebar-primary-foreground: 220 26% 8%;
-    --sidebar-accent:             220 26% 14%;
-    --sidebar-accent-foreground:  213 31% 91%;
-    --sidebar-border:             220 26% 15%;
-    --sidebar-ring:               160 60% 42%;
-    --module-blue:    217 91% 60%;
-    --module-purple:  270 60% 65%;
-    --module-yellow:  45 93% 47%;
-    --module-orange:  25 95% 53%;
-    --module-cyan:    160 60% 42%;
-    --module-pink:    330 70% 60%;
-    --module-green:   142 65% 42%;
-    --module-red:     0 84% 60%;
-    --stat-blue-bg:   217 91% 60%;
-    --stat-purple-bg: 270 60% 65%;
-    --stat-green-bg:  142 65% 42%;
-    --stat-orange-bg: 25 95% 53%;
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.25);
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.35);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.35);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.45);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.55);
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.35);
-    --shadow-card-hover: 0 4px 12px 0 rgb(0 0 0 / 0.45);
-    --shadow-interactive: 0 0 0 3px hsl(160 60% 42% / 0.25);
-  }
-
-  /* ── HIGH CONTRAST ────────────────────────── */
-  .high-contrast {
-    --background:        0 0% 100%;
-    --foreground:        0 0% 0%;
-    --card:              0 0% 100%;
-    --card-foreground:   0 0% 0%;
-    --primary:           0 0% 0%;
-    --primary-foreground: 0 0% 100%;
-    --interactive:       160 100% 20%;
-    --interactive-foreground: 0 0% 100%;
-    --interactive-hover: 160 100% 15%;
-    --muted:             0 0% 96%;
-    --muted-foreground:  0 0% 20%;
-    --border:            0 0% 0%;
-    --input:             0 0% 0%;
-    --ring:              160 100% 20%;
-    --destructive:        0 100% 40%;
-    --destructive-foreground: 0 0% 100%;
-    --success:           142 100% 25%;
-    --success-foreground: 0 0% 100%;
-    --warning:           32 100% 30%;
-    --warning-foreground: 0 0% 100%;
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 0%;
-    --sidebar-border:     0 0% 0%;
-    --sidebar-primary:    160 100% 20%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent:     0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-ring:       160 100% 20%;
-    --shadow-card: none;
-    --shadow-card-hover: none;
-  }
-
-  .high-contrast-dark {
-    --background:        0 0% 0%;
-    --foreground:        0 0% 100%;
-    --card:              0 0% 5%;
-    --card-foreground:   0 0% 100%;
-    --primary:           0 0% 100%;
-    --primary-foreground: 0 0% 0%;
-    --interactive:       160 80% 55%;
-    --interactive-foreground: 0 0% 0%;
-    --interactive-hover: 160 80% 65%;
-    --muted:             0 0% 10%;
-    --muted-foreground:  0 0% 70%;
-    --border:            0 0% 50%;
-    --input:             0 0% 50%;
-    --ring:              160 80% 55%;
-    --destructive:        0 100% 60%;
-    --destructive-foreground: 0 0% 0%;
-    --success:           142 80% 50%;
-    --success-foreground: 0 0% 0%;
-    --warning:           38 100% 55%;
-    --warning-foreground: 0 0% 0%;
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-border:     0 0% 50%;
-    --sidebar-primary:    160 80% 55%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent:     0 0% 10%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-ring:       160 80% 55%;
-    --shadow-card: none;
-    --shadow-card-hover: none;
-  }
   /* ── PREMIUM LIGHT (Clínica Cristal) ──────── */
   .premium-light {
     --background:        210 40% 98%;   /* slate-50 */

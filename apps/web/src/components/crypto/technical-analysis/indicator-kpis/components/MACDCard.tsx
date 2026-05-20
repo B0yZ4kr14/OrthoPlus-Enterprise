@@ -13,7 +13,7 @@ export function MACDCard({ macd, macdSignal }: MACDCardProps) {
       value={macd.toFixed(2)}
       badgeText={`Sinal de ${macdSignal}`}
       badgeVariant={macdSignal === "ALTA" ? "success" : "destructive"}
-      icon={<TrendingUp className="h-8 w-8 text-muted-foreground opacity-20" />}
+      icon={<TrendingUp className="h-8 w-8 text-muted-foreground opacity-50" />}
     />
   );
 }

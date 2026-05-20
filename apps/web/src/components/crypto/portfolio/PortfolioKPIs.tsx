@@ -26,7 +26,7 @@ export function PortfolioKPIs({ totalBRL, gains, losses }: PortfolioKPIsProps) {
               <p className="text-xs text-muted-foreground mb-1">Valor Total</p>
               <p className="text-2xl font-bold">{formatBRL(totalBRL)}</p>
             </div>
-            <Wallet className="h-8 w-8 text-primary opacity-20" />
+            <Wallet className="h-8 w-8 text-primary opacity-50" />
           </div>
         </CardContent>
       </Card>
@@ -42,7 +42,7 @@ export function PortfolioKPIs({ totalBRL, gains, losses }: PortfolioKPIsProps) {
                 +{formatBRL(gains)}
               </p>
             </div>
-            <TrendingUp className="h-8 w-8 text-success opacity-20" />
+            <TrendingUp className="h-8 w-8 text-success opacity-50" />
           </div>
         </CardContent>
       </Card>
@@ -58,7 +58,7 @@ export function PortfolioKPIs({ totalBRL, gains, losses }: PortfolioKPIsProps) {
                 -{formatBRL(losses)}
               </p>
             </div>
-            <TrendingDown className="h-8 w-8 text-destructive opacity-20" />
+            <TrendingDown className="h-8 w-8 text-destructive opacity-50" />
           </div>
         </CardContent>
       </Card>
@@ -81,7 +81,7 @@ export function PortfolioKPIs({ totalBRL, gains, losses }: PortfolioKPIsProps) {
               </p>
             </div>
             <DollarSign
-              className={`h-8 w-8 opacity-20 ${isProfit ? "text-success" : "text-destructive"}`}
+              className={`h-8 w-8 opacity-50 ${isProfit ? "text-success" : "text-destructive"}`}
             />
           </div>
         </CardContent>

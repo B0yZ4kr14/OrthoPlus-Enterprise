@@ -292,7 +292,7 @@ export function VolatilityAlerts() {
           <div className="space-y-3">
             {alerts.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-20" />
+                <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p>Nenhum alerta de volatilidade configurado</p>
                 <p className="text-sm mt-2">
                   Clique em "Novo Alerta" para criar seu primeiro alerta

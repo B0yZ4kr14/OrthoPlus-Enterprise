@@ -174,7 +174,7 @@ export default function EstoqueDashboard() {
                 {metrics.totalProdutos}
               </p>
             </div>
-            <Package className="h-10 w-10 text-primary opacity-20 shrink-0" />
+            <Package className="h-10 w-10 text-primary opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -192,7 +192,7 @@ export default function EstoqueDashboard() {
                 {metrics.produtosEstoqueBaixo}
               </p>
             </div>
-            <AlertTriangle className="h-10 w-10 text-orange-500 opacity-20 shrink-0" />
+            <AlertTriangle className="h-10 w-10 text-orange-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -210,7 +210,7 @@ export default function EstoqueDashboard() {
                 {metrics.requisiçõesPendentes}
               </p>
             </div>
-            <Clock className="h-10 w-10 text-yellow-500 opacity-20 shrink-0" />
+            <Clock className="h-10 w-10 text-yellow-500 opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -231,7 +231,7 @@ export default function EstoqueDashboard() {
                 })}
               </p>
             </div>
-            <DollarSign className="h-10 w-10 text-green-500 opacity-20 shrink-0" />
+            <DollarSign className="h-10 w-10 text-green-500 opacity-50 shrink-0" />
           </div>
         </Card>
       </div>
