@@ -298,7 +298,7 @@ export function InventarioHistoricoComparacao() {
             <YAxis yAxisId="left" />
             <YAxis yAxisId="right" orientation="right" />
             <Tooltip />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Line
               yAxisId="left"
               type="monotone"

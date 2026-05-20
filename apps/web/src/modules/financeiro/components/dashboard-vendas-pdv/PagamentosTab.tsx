@@ -63,7 +63,7 @@ export function PagamentosTab({ pagamentosData, tempoData }: PagamentosTabProps)
             <XAxis dataKey="data" />
             <YAxis />
             <Tooltip formatter={(value: number) => formatCurrency(value)} />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Line
               type="monotone"
               dataKey="valor"

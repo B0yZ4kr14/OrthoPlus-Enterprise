@@ -141,7 +141,7 @@ export function UsagePatternsTab() {
               <XAxis dataKey="data" />
               <YAxis />
               <Tooltip />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Line type="monotone" dataKey="usuarios_ativos" stroke="hsl(var(--primary))" strokeWidth={2} name="Usuários Ativos" />
               <Line type="monotone" dataKey="sessoes" stroke="hsl(var(--chart-2))" strokeWidth={2} name="Sessões" />
             </LineChart>

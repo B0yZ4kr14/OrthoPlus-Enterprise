@@ -252,7 +252,7 @@ export default function EstoqueDashboardPage() {
                   />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
+                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Bar dataKey="atual" fill="#ef4444" name="Quantidade Atual" />
                   <Bar
                     dataKey="minimo"
@@ -282,7 +282,7 @@ export default function EstoqueDashboardPage() {
                 <XAxis dataKey="data" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Line
                   type="monotone"
                   dataKey="Entradas"

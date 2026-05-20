@@ -202,7 +202,7 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                           />
                         )}
                       />
-                      <Legend />
+                      <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                       <Bar
                         dataKey="agendadas"
                         fill="url(#gradientAgendadas)"
@@ -329,7 +329,7 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                           />
                         )}
                       />
-                      <Legend />
+                      <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                       <Area
                         type="monotone"
                         dataKey="receita"

@@ -93,7 +93,7 @@ export function RevenueDistributionChart({
               align="right"
               layout="vertical"
               iconType="circle"
-            />
+             wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           </PieChart>
         </ResponsiveContainer>
       </ChartContainer>

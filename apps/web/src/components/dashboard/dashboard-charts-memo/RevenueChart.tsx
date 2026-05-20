@@ -41,7 +41,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
                 borderRadius: "6px",
               }}
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Line
               type="monotone"
               dataKey="receita"

@@ -78,7 +78,7 @@ export function AnalysisTabs({
                       borderRadius: "8px",
                     }}
                   />
-                  <Legend />
+                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Line
                     type="monotone"
                     dataKey="BTC"
@@ -128,7 +128,7 @@ export function AnalysisTabs({
                     borderRadius: "8px",
                   }}
                 />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="volume"
                   fill="hsl(var(--primary))"

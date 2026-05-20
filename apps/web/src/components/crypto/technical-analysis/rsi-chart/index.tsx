@@ -34,9 +34,9 @@ export function RSIChart({ chartData }: RSIChartProps) {
               }
               className="text-xs"
             />
-            <YAxis domain={[0, 100]} className="text-xs" />
+            <YAxis domain={[0, 100]} className="text-xs"  stroke="hsl(var(--muted-foreground))" />
             <Tooltip content={<RSITooltip />} />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <RSILine />
             <OverboughtLine />
             <OversoldLine />

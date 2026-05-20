@@ -21,8 +21,8 @@ export function TrendChart({ data }: TrendChartProps) {
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
+          <XAxis dataKey="date"  stroke="hsl(var(--muted-foreground))" />
+          <YAxis  stroke="hsl(var(--muted-foreground))" />
           <Tooltip />
           <Bar dataKey="success" fill="hsl(var(--success))" name="Sucesso" />
           <Bar dataKey="failed" fill="hsl(var(--destructive))" name="Falha" />

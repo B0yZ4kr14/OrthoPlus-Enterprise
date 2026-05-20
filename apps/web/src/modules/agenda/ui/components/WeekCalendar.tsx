@@ -101,10 +101,10 @@ export function WeekCalendar({
                         className="p-2 mb-1 cursor-pointer hover:shadow-md transition-shadow"
                         onClick={() => onAppointmentClick?.(apt)}
                       >
-                        <div className="text-xs font-medium truncate">
+                        <div className="text-xs font-medium truncate" title={format(apt.scheduledDatetime, "HH:mm")}>
                           {format(apt.scheduledDatetime, "HH:mm")}
                         </div>
-                        <div className="text-xs text-muted-foreground truncate">
+                        <div className="text-xs text-muted-foreground truncate" title={`Paciente: ${apt.patientId}`}>
                           Paciente: {apt.patientId.slice(0, 8)}
                         </div>
                       </Card>

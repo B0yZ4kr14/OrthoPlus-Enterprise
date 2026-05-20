@@ -193,7 +193,7 @@ export default function BusinessIntelligence() {
                     border: "1px solid hsl(var(--border))",
                   }}
                 />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Line
                   type="monotone"
                   dataKey="receita"

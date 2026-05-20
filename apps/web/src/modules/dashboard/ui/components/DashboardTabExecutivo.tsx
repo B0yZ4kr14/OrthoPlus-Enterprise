@@ -132,7 +132,7 @@ export default function DashboardTabExecutivo({
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Legend />
+                    <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                     <Bar dataKey="agendadas" fill="hsl(168, 45%, 52%)" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="realizadas" fill="hsl(158, 32%, 50%)" radius={[4, 4, 0, 0]} />
                   </BarChart>
@@ -179,7 +179,7 @@ export default function DashboardTabExecutivo({
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Legend />
+                    <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                     <Line
                       type="monotone"
                       dataKey="receita"
@@ -252,7 +252,7 @@ export default function DashboardTabExecutivo({
                     ))}
                   </Pie>
                   <Tooltip />
-                  <Legend />
+                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>

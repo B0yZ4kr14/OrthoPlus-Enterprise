@@ -30,7 +30,7 @@ export function SavingsChart({ data }: SavingsChartProps) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="method" />
+            <XAxis dataKey="method"  stroke="hsl(var(--muted-foreground))" />
             <YAxis
               label={{
                 value: "Economia (R$)",
@@ -44,7 +44,7 @@ export function SavingsChart({ data }: SavingsChartProps) {
                 `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
               }
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar
               dataKey="savings"
               name="Economia em Taxas"

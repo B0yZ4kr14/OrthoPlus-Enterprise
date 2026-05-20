@@ -31,7 +31,7 @@ export function LineChartView({
             borderRadius: "8px",
           }}
         />
-        <Legend />
+        <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
         <Line
           type="monotone"
           dataKey={dataKey}

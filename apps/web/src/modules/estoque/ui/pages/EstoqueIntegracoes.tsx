@@ -357,10 +357,10 @@ export default function EstoqueIntegracoes() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={historicoData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="data" />
-                <YAxis />
+                <XAxis dataKey="data"  stroke="hsl(var(--muted-foreground))" />
+                <YAxis  stroke="hsl(var(--muted-foreground))" />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar dataKey="enviados" fill="#10b981" name="Enviados" />
                 <Bar dataKey="falhos" fill="#ef4444" name="Falhos" />
               </BarChart>

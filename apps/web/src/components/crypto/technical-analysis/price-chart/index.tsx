@@ -39,9 +39,9 @@ export function PriceChart({ chartData }: PriceChartProps) {
               }
               className="text-xs"
             />
-            <YAxis className="text-xs" />
+            <YAxis className="text-xs"  stroke="hsl(var(--muted-foreground))" />
             <Tooltip content={<PriceTooltip />} />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <UpperBandArea />
             <LowerBandArea />
             <SMALine />

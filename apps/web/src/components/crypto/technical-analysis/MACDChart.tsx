@@ -64,7 +64,7 @@ export function MACDChart({ chartData }: MACDChartProps) {
                 );
               }}
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar
               dataKey="histogram"
               fill="hsl(var(--muted))"

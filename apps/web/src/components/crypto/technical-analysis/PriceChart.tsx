@@ -76,7 +76,7 @@ export function PriceChart({ chartData }: PriceChartProps) {
                 );
               }}
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Area
               type="monotone"
               dataKey="upperBand"

@@ -372,7 +372,7 @@ export default function EstoqueAnalisePedidos() {
                 formatter={(value: unknown) => formatCurrency(value)}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
               />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Bar dataKey="total" fill="hsl(160, 84%, 30%)" name="Valor Total" />
             </BarChart>
           </ResponsiveContainer>
@@ -387,7 +387,7 @@ export default function EstoqueAnalisePedidos() {
               <XAxis type="number" />
               <YAxis dataKey="nome" type="category" width={120} fontSize={12} />
               <Tooltip />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Bar dataKey="quantidade" fill="hsl(217, 91%, 60%)" name="Quantidade" />
             </BarChart>
           </ResponsiveContainer>
@@ -402,7 +402,7 @@ export default function EstoqueAnalisePedidos() {
               <XAxis dataKey="mes" />
               <YAxis />
               <Tooltip />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Line
                 type="monotone"
                 dataKey="manual"

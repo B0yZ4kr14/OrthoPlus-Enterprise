@@ -317,7 +317,7 @@ export default function DashboardVendasPDV() {
                       }).format(value)
                     }
                   />
-                  <Legend />
+                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Bar
                     dataKey="total"
                     fill="hsl(var(--primary))"
@@ -337,7 +337,7 @@ export default function DashboardVendasPDV() {
                   <XAxis dataKey="vendedor" />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
+                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Bar
                     dataKey="quantidade"
                     fill="hsl(var(--success))"
@@ -360,7 +360,7 @@ export default function DashboardVendasPDV() {
                 <XAxis type="number" />
                 <YAxis dataKey="produto" type="category" width={150} />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="quantidade"
                   fill="hsl(var(--primary))"
@@ -383,7 +383,7 @@ export default function DashboardVendasPDV() {
                 <YAxis yAxisId="left" />
                 <YAxis yAxisId="right" orientation="right" />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Area
                   yAxisId="left"
                   type="monotone"
@@ -461,7 +461,7 @@ export default function DashboardVendasPDV() {
                       }).format(value)
                     }
                   />
-                  <Legend />
+                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Line
                     type="monotone"
                     dataKey="valor"

@@ -23,10 +23,10 @@ export function ProdutosTab({ data }: ProdutosTabProps) {
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="number" />
-          <YAxis dataKey="produto" type="category" width={150} />
+          <XAxis type="number"  stroke="hsl(var(--muted-foreground))" />
+          <YAxis dataKey="produto" type="category" width={150}  stroke="hsl(var(--muted-foreground))" />
           <Tooltip />
-          <Legend />
+          <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           <Bar
             dataKey="quantidade"
             fill="hsl(var(--primary))"

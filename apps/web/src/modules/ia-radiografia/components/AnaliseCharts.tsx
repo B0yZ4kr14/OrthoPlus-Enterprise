@@ -192,7 +192,7 @@ export function AnaliseCharts({ analises }: AnaliseChartsProps) {
                     borderRadius: "8px",
                   }}
                 />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="total"
                   name="Total de Análises"
@@ -319,7 +319,7 @@ export function AnaliseCharts({ analises }: AnaliseChartsProps) {
                   }}
                   formatter={(value: number) => [`${value}%`, "Precisão"]}
                 />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Line
                   type="monotone"
                   dataKey="precisao"

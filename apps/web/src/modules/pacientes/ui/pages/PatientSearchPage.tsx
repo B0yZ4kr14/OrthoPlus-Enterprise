@@ -178,7 +178,7 @@ export default function PatientSearchPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium truncate">
+                      <p className="font-medium truncate" title={patient.fullName}>
                         {patient.fullName}
                       </p>
                       <Badge variant="outline" className="text-xs">

@@ -27,7 +27,7 @@ export function HorariosTab({ data }: HorariosTabProps) {
           <YAxis yAxisId="left" />
           <YAxis yAxisId="right" orientation="right" />
           <Tooltip />
-          <Legend />
+          <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           <Area
             yAxisId="left"
             type="monotone"

@@ -40,7 +40,7 @@ export function Charts({ analytics }: ChartsProps) {
               <XAxis dataKey="step_name" angle={-45} textAnchor="end" height={100} />
               <YAxis />
               <Tooltip />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Bar dataKey="completions" fill="#2dd4bf" name="Conclusões" />
             </BarChart>
           </ResponsiveContainer>
@@ -59,7 +59,7 @@ export function Charts({ analytics }: ChartsProps) {
               <XAxis dataKey="step_name" angle={-45} textAnchor="end" height={100} />
               <YAxis />
               <Tooltip formatter={(value: number) => formatTime(value)} />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Line type="monotone" dataKey="average_time" stroke="#14b8a6" strokeWidth={2} name="Tempo Médio" />
             </LineChart>
           </ResponsiveContainer>
@@ -82,7 +82,7 @@ export function Charts({ analytics }: ChartsProps) {
                 <XAxis dataKey="step_name" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar dataKey="abandoned" fill="#ef4444" name="Abandonos" />
               </BarChart>
             </ResponsiveContainer>

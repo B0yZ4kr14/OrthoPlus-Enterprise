@@ -140,7 +140,7 @@ export const PatientTimeline = memo(function PatientTimeline({
                   </div>
                   <div className="flex-1 min-w-0 pb-2">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-medium truncate">
+                      <p className="text-sm font-medium truncate" title={event.title}>
                         {event.title}
                       </p>
                       <Badge variant="outline" className="shrink-0 text-xs">

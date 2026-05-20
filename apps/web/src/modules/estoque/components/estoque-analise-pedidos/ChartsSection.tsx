@@ -57,7 +57,7 @@ export function ChartsSection({
               formatter={(value: any) => formatCurrency(value as number)}
               labelStyle={{ color: "hsl(var(--foreground))" }}
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar dataKey="total" fill="#0088FE" name="Valor Total" />
           </BarChart>
         </ResponsiveContainer>
@@ -71,7 +71,7 @@ export function ChartsSection({
             <XAxis type="number" />
             <YAxis dataKey="nome" type="category" width={120} fontSize={12} />
             <Tooltip />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar dataKey="quantidade" fill="#00C49F" name="Quantidade" />
           </BarChart>
         </ResponsiveContainer>
@@ -85,7 +85,7 @@ export function ChartsSection({
             <XAxis dataKey="mes" />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Line
               type="monotone"
               dataKey="manual"

@@ -112,10 +112,10 @@ export default function DashboardComercial() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={metrics.campaignROI}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="campaign" />
-                <YAxis />
+                <XAxis dataKey="campaign"  stroke="hsl(var(--muted-foreground))" />
+                <YAxis  stroke="hsl(var(--muted-foreground))" />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="conversionRate"
                   fill="hsl(var(--primary))"

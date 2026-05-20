@@ -68,7 +68,7 @@ export function ContasReceberChart({
             <Tooltip
               formatter={(value: number) => formatBRL(value)}
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>

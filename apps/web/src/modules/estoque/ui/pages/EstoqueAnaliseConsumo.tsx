@@ -265,7 +265,7 @@ export default function EstoqueAnaliseConsumo() {
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={tendenciasUso}>
-                  <CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="periodo" /><YAxis /><Tooltip /><Legend />
+                  <CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="periodo" /><YAxis /><Tooltip /><Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Line type="monotone" dataKey="consumo" stroke="hsl(var(--primary))" strokeWidth={2} name="Consumo (unidades)" />
                 </LineChart>
               </ResponsiveContainer>

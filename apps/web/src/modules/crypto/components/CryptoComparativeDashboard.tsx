@@ -289,7 +289,7 @@ export function CryptoComparativeDashboard({
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={comparisonData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="method" />
+                <XAxis dataKey="method"  stroke="hsl(var(--muted-foreground))" />
                 <YAxis
                   label={{
                     value: "Taxa (R$)",
@@ -309,7 +309,7 @@ export function CryptoComparativeDashboard({
                   }}
                   labelFormatter={(label) => `Método: ${label}`}
                 />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="fee"
                   name="Taxa Cobrada"
@@ -369,7 +369,7 @@ export function CryptoComparativeDashboard({
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={savingsData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="method" />
+              <XAxis dataKey="method"  stroke="hsl(var(--muted-foreground))" />
               <YAxis
                 label={{
                   value: "Economia (R$)",
@@ -384,7 +384,7 @@ export function CryptoComparativeDashboard({
                   `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
                 }
               />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Bar
                 dataKey="savings"
                 name="Economia em Taxas"

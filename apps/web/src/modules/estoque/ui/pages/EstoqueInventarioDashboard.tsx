@@ -393,7 +393,7 @@ export default function EstoqueInventarioDashboard() {
                 <XAxis dataKey="mes" />
                 <YAxis domain={[0, 100]} />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Line
                   type="monotone"
                   dataKey="acuracidade"
@@ -424,7 +424,7 @@ export default function EstoqueInventarioDashboard() {
                 <XAxis dataKey="mes" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
+                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="perdas"
                   fill="hsl(var(--destructive))"

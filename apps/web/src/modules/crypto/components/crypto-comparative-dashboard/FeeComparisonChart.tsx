@@ -30,7 +30,7 @@ export function FeeComparisonChart({ data }: FeeComparisonChartProps) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="method" />
+            <XAxis dataKey="method"  stroke="hsl(var(--muted-foreground))" />
             <YAxis
               label={{
                 value: "Taxa (R$)",
@@ -45,7 +45,7 @@ export function FeeComparisonChart({ data }: FeeComparisonChartProps) {
               }
               labelFormatter={(label) => `Método: ${label}`}
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar
               dataKey="fee"
               name="Taxa Cobrada"

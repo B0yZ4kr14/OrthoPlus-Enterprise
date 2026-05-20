@@ -72,7 +72,7 @@ export function RSIChart({ chartData }: RSIChartProps) {
                 );
               }}
             />
-            <Legend />
+            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Line
               type="monotone"
               dataKey="rsi"

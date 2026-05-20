@@ -269,8 +269,8 @@ export const RelatorioFechamentoCaixa = ({
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
+              <XAxis dataKey="name"  stroke="hsl(var(--muted-foreground))" />
+              <YAxis  stroke="hsl(var(--muted-foreground))" />
               <Tooltip
                 formatter={(value: number) =>
                   new Intl.NumberFormat("pt-BR", {
@@ -279,7 +279,7 @@ export const RelatorioFechamentoCaixa = ({
                   }).format(value)
                 }
               />
-              <Legend />
+              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Bar dataKey="valor" fill="hsl(var(--primary))" name="Valor" />
               <Bar
                 dataKey="quantidade"
