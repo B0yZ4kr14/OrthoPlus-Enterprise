@@ -172,3 +172,25 @@ All notable changes to this project will be documented in this file.
 - TypeScript errors reduced from 1869 to 137
 - Git commits synchronized to GitHub
 
+
+## [2.9.10] - 2026-05-20
+
+### Fixed
+- Remove 6 console.log debug statements from CryptoPaymentConfirmedHandler
+- Migrate 3 fetch() calls to apiClient (AP-3 Constitution compliance)
+  - EmailNotificationHandler: 2 calls
+  - useFiles download: 1 call
+- Fix empty arrow function warning in PEPPage.tsx (105→104 warnings)
+
+### Documented
+- Audit specs 001 (Pacientes), 005 (Auth), 018 (Sidebar)
+- Mark 102/105 tasks as implemented retroactively
+- Generate quality gates report (all passing)
+- Generate deploy report (successful, 0 downtime)
+
+### Quality
+- Backend: 511/511 tests passing
+- Frontend: 0 errors, build 20.97s
+- GitNexus: 34.435 nodes, 71.690 edges (fresh index)
+- VPS: 15 containers healthy
+
