@@ -141,6 +141,21 @@ export class FilesController {
       const filePath = path.join(uploadDir, file.nomeStorage);
       const exists = fs.existsSync(filePath);
 
+      // Audit log for file view (SEC-007) — fire-and-forget
+      prisma.audit_logs.create({
+        data: {
+          action: "FILE_VIEW",
+          action_type: "read",
+          clinic_id: clinicId,
+          user_id: req.user?.id as string | undefined,
+          details: { fileId: id, fileName: file.nomeOriginal },
+          ip_address: req.ip ? { ip: req.ip } : {},
+          user_agent: req.headers["user-agent"] ?? null,
+        },
+      }).catch((err) => {
+        logger.warn("[FilesController] Audit log failed (non-blocking):", err);
+      });
+
       res.status(200).json({
         success: true,
         data: {
@@ -187,8 +202,9 @@ export class FilesController {
         throw Errors.notFound("File on disk", id);
       }
 
-      // Audit log for file download (SEC-007)
-      await prisma.audit_logs.create({
+      // Audit log for file download (SEC-007) — fire-and-forget so DB failures
+      // never block the primary file download operation.
+      prisma.audit_logs.create({
         data: {
           action: "FILE_DOWNLOAD",
           action_type: "read",
@@ -198,9 +214,9 @@ export class FilesController {
           ip_address: req.ip ? { ip: req.ip } : {},
           user_agent: req.headers["user-agent"] ?? null,
         },
+      }).catch((err) => {
+        logger.warn("[FilesController] Audit log failed (non-blocking):", err);
       });
-
-      metricsCollector.files.recordDownload(clinicId, Date.now() - startTime);
 
       res.setHeader("Content-Type", file.mimeType);
       res.setHeader(
@@ -210,6 +226,9 @@ export class FilesController {
 
       const stream = fs.createReadStream(filePath);
       stream.pipe(res);
+
+      // Record download metric after stream starts (metadata phase duration)
+      metricsCollector.files.recordDownload(clinicId, Date.now() - startTime);
     } catch (error) {
       metricsCollector.files.recordError((req.user?.clinicId as string) ?? "unknown", "download");
       if (error instanceof ApiError) {
