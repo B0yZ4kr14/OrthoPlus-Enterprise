@@ -31,6 +31,12 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
+      - name: Build Shared Types
+        run: pnpm --filter @orthoplus/shared-types build
+
+      - name: Generate Prisma Client
+        run: pnpm --filter orthoplus-backend exec prisma generate
+
       - name: Type Check Backend
         run: pnpm --filter orthoplus-backend type-check || true
 
