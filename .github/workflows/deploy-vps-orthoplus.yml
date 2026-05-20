@@ -56,7 +56,7 @@ jobs:
           username: ${{ secrets.VPS_TSiAPP_USER }}
           key: ${{ secrets.VPS_TSiAPP_SSH_KEY }}
           source: "backend/dist/"
-          target: "/home/ubuntu/OrthoPlus-Enterprise-backend/"
+          target: "/home/tsi/OrthoPlus-Enterprise-backend/"
           strip_components: 1
           rm: true
 
@@ -78,21 +78,27 @@ jobs:
           username: ${{ secrets.VPS_TSiAPP_USER }}
           key: ${{ secrets.VPS_TSiAPP_SSH_KEY }}
           script: |
-            # Move frontend to correct location
-            sudo rm -rf /var/www/orthoplus/*
-            sudo cp -r /tmp/orthoplus-dist/* /var/www/orthoplus/
-            sudo chown -R www-data:www-data /var/www/orthoplus
-            sudo chmod -R 755 /var/www/orthoplus
+            # Deploy backend into running Docker container
+            sudo docker cp /home/tsi/OrthoPlus-Enterprise-backend/. orthoplus-backend:/app/dist/
+            sudo docker restart orthoplus-backend
+            
+            # Deploy frontend into running Docker container
+            sudo docker cp /tmp/orthoplus-dist/index.html orthoplus-app:/usr/share/nginx/html/index.html
+            sudo docker exec orthoplus-app sh -c 'rm -rf /usr/share/nginx/html/assets/*'
+            sudo docker cp /tmp/orthoplus-dist/assets/. orthoplus-app:/usr/share/nginx/html/assets/
+            sudo docker exec orthoplus-app nginx -s reload
+            
+            # Cleanup
             rm -rf /tmp/orthoplus-dist
             
-            # Reload PM2
-            pm2 reload orthoplus-backend
-            
-            # Health check
+            # Health checks
             sleep 5
-            curl -s http://127.0.0.1:3005/health
+            echo "=== Backend Health ==="
+            curl -sf http://127.0.0.1:3005/health || echo "Backend health check failed"
+            echo "=== Frontend Health ==="
+            curl -sfI http://127.0.0.1:8083/ | head -1 || echo "Frontend health check failed"
             
-            echo "✅ Deploy completed successfully"
+            echo "Deploy completed successfully"
 
       - name: Health Check (External)
         run: |
