@@ -3,7 +3,8 @@
  *
  * Persistência via localStorage com chave user-scoped.
  * Comportamento padrão: todas as categorias recolhidas.
- * Categoria ativa é expandida automaticamente.
+ * Categoria ativa é expandida automaticamente na primeira navegação,
+ * mas respeita a preferência manual do usuário (toggle) na mesma sessão.
  */
 
 import {
@@ -13,6 +14,7 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  useRef,
   type ReactNode,
 } from "react";
 import { useLocation } from "react-router-dom";
@@ -87,10 +89,13 @@ export function SidebarCategoryProvider({
     loadExpandedGroups(userId),
   );
 
-  // Auto-expand active category on route change
+  // Track groups that the user manually collapsed — don't auto-expand them again
+  const manuallyCollapsedRef = useRef<Set<string>>(new Set());
+
+  // Auto-expand active category on route change, but respect manual toggles
   useEffect(() => {
     const active = getActiveBoundedContext(pathname);
-    if (active) {
+    if (active && !manuallyCollapsedRef.current.has(active)) {
       setExpandedGroups((prev) => {
         if (prev.has(active)) return prev;
         const next = new Set(prev);
@@ -106,8 +111,10 @@ export function SidebarCategoryProvider({
         const next = new Set(prev);
         if (next.has(boundedContext)) {
           next.delete(boundedContext);
+          manuallyCollapsedRef.current.add(boundedContext);
         } else {
           next.add(boundedContext);
+          manuallyCollapsedRef.current.delete(boundedContext);
         }
         saveExpandedGroups(userId, next);
         return next;

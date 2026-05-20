@@ -115,11 +115,12 @@ export function SidebarMenuItem({
       to={item.url || "#"}
       onClick={handleClick}
       className={isSubItem ? subItemClasses : baseClasses}
+      aria-current={isItemActive ? "page" : undefined}
     >
       <IconComponent className={`${iconClasses} ${isSubItem ? "h-3.5 w-3.5" : "h-4 w-4"}`} aria-hidden="true" />
       {!collapsed && (
         <>
-          <span className={`${isSubItem ? "text-xs" : "text-sm"} flex-1 truncate`}>
+          <span className={`${isSubItem ? "text-xs" : "text-sm"} flex-1 truncate`} title={item.title}>
             {item.title}
           </span>
           {item.badge && Number(item.badge.count) > 0 && (

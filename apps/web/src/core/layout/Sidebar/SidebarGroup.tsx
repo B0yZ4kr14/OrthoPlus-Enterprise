@@ -80,14 +80,14 @@ export function SidebarGroup({ group, onNavigate }: SidebarGroupProps) {
           aria-expanded={isGroupExpanded}
           aria-controls={`sidebar-group-${group.boundedContext}`}
         >
-          <SidebarGroupLabel className="px-0 pt-0 pb-0 text-[11px] font-semibold tracking-widest uppercase text-slate-400 dark:text-[hsl(var(--muted-foreground))] cursor-pointer select-none">
+          <SidebarGroupLabel className="px-0 pt-0 pb-0 text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--sidebar-foreground))]/60 cursor-pointer select-none">
             {group.label}
           </SidebarGroupLabel>
           <motion.span
             variants={chevronRotate}
             initial="collapsed"
             animate={isGroupExpanded ? "expanded" : "collapsed"}
-            className="text-slate-400 dark:text-[hsl(var(--muted-foreground))]"
+            className="text-[hsl(var(--sidebar-foreground))]/60"
           >
             <ChevronDown className="h-3.5 w-3.5" />
           </motion.span>

@@ -18,7 +18,7 @@ export function SidebarFooter() {
               Sistema Online
             </span>
           </div>
-          <span className="text-[10px] font-mono text-slate-400 dark:text-[hsl(var(--muted-foreground))]">
+          <span className="text-[10px] font-mono text-[hsl(var(--sidebar-foreground))]/60">
             v2.9.9
           </span>
         </div>

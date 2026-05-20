@@ -62,10 +62,10 @@ export function SidebarNav({ onNavigate }: SidebarNavProps = {}) {
 
       {isAdmin && (
         <>
-          <Separator className="my-2 bg-slate-100 dark:bg-[hsl(var(--sidebar-accent))]" />
-          <ShadcnSidebarGroup className="space-y-1 py-2 bg-slate-50/50 dark:bg-[hsl(var(--sidebar-accent))] rounded-lg mx-2">
+          <Separator className="my-2 bg-[hsl(var(--sidebar-border))]" />
+          <ShadcnSidebarGroup className="space-y-1 py-2 bg-[hsl(var(--sidebar-accent))]/30 rounded-lg mx-2">
             {!collapsed && (
-              <SidebarGroupLabel className="px-3 pt-4 pb-1 text-[11px] font-semibold tracking-widest uppercase text-slate-400 dark:text-[hsl(var(--muted-foreground))]">
+              <SidebarGroupLabel className="px-3 pt-4 pb-1 text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--sidebar-foreground))]/60">
                 ADMINISTRAÇÃO
               </SidebarGroupLabel>
             )}
