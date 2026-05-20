@@ -1,7 +1,20 @@
 import { prisma, VisibilidadeArquivo } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
+import { circuitBreakerRegistry } from "@/infrastructure/database/CategoryCircuitBreaker";
+import type { CircuitBreakerConfig } from "@/infrastructure/database/CategoryCircuitBreaker";
+import { Errors } from "@/middleware/errorHandler";
 
 export { VisibilidadeArquivo };
+
+const CB_CONFIG: CircuitBreakerConfig = {
+  failureThreshold: 3,
+  successThreshold: 2,
+  timeoutMs: 3000,
+  recoveryTimeoutMs: 15000,
+  halfOpenMaxCalls: 3,
+};
+
+const CATEGORY = "administrativo";
 
 function parseVisibilidade(value: string | undefined): VisibilidadeArquivo | undefined {
   if (!value) return undefined
@@ -49,21 +62,25 @@ export class FilesService {
     visibilidade: string;
     createdAt: Date;
   }> {
-    const record = await prisma.arquivo.create({
-      data: {
-        clinic_id: data.clinicId,
-        paciente_id: data.pacienteId ?? null,
-        consulta_id: data.consultaId ?? null,
-        orcamento_id: data.orcamentoId ?? null,
-        nome_original: data.nomeOriginal,
-        nome_storage: data.nomeStorage,
-        mime_type: data.mimeType,
-        tamanho_bytes: data.tamanhoBytes,
-        categoria: data.categoria ?? "OUTRO",
-        visibilidade: parseVisibilidade(data.visibilidade) ?? VisibilidadeArquivo.RESTRITO,
-        uploaded_by: data.uploadedBy,
-      },
-    });
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+    const record = await cb.execute(
+      async () => prisma.arquivo.create({
+        data: {
+          clinic_id: data.clinicId,
+          paciente_id: data.pacienteId ?? null,
+          consulta_id: data.consultaId ?? null,
+          orcamento_id: data.orcamentoId ?? null,
+          nome_original: data.nomeOriginal,
+          nome_storage: data.nomeStorage,
+          mime_type: data.mimeType,
+          tamanho_bytes: data.tamanhoBytes,
+          categoria: data.categoria ?? "OUTRO",
+          visibilidade: parseVisibilidade(data.visibilidade) ?? VisibilidadeArquivo.RESTRITO,
+          uploaded_by: data.uploadedBy,
+        },
+      }),
+      () => { throw Errors.externalService("Database"); }
+    );
 
     return {
       id: record.id,
@@ -89,33 +106,50 @@ export class FilesService {
       createdAt: Date;
     }>
   > {
-    const where: Record<string, unknown> = {
-      clinic_id: filters.clinicId,
+    type ArquivoRecord = {
+      id: string;
+      nome_original: string;
+      mime_type: string;
+      tamanho_bytes: number;
+      categoria: string;
+      visibilidade: string;
+      paciente_id: string | null;
+      created_at: Date;
     };
 
-    if (filters.pacienteId) where.paciente_id = filters.pacienteId;
-    if (filters.consultaId) where.consulta_id = filters.consultaId;
-    if (filters.orcamentoId) where.orcamento_id = filters.orcamentoId;
-    if (filters.categoria) where.categoria = filters.categoria;
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+    const records = await cb.execute<ArquivoRecord[]>(
+      async () => {
+        const where: Record<string, unknown> = {
+          clinic_id: filters.clinicId,
+        };
 
-    // Visibility filter based on user role (AP-1: clinic isolation + ACL)
-    if (filters.visibilidade) {
-      where.visibilidade = parseVisibilidade(filters.visibilidade);
-    } else if (filters.userRole) {
-      const role = filters.userRole;
-      if (role === "PATIENT") {
-        where.visibilidade = "PUBLICO";
-      } else if (role === "MEMBER") {
-        where.visibilidade = { in: ["PUBLICO", "RESTRITO"] };
-      }
-      // ADMIN sees all — no visibility filter needed
-    }
+        if (filters.pacienteId) where.paciente_id = filters.pacienteId;
+        if (filters.consultaId) where.consulta_id = filters.consultaId;
+        if (filters.orcamentoId) where.orcamento_id = filters.orcamentoId;
+        if (filters.categoria) where.categoria = filters.categoria;
 
-    const records = await prisma.arquivo.findMany({
-      where,
-      orderBy: { created_at: "desc" },
-      take: 1000,
-    });
+        // Visibility filter based on user role (AP-1: clinic isolation + ACL)
+        if (filters.visibilidade) {
+          where.visibilidade = parseVisibilidade(filters.visibilidade);
+        } else if (filters.userRole) {
+          const role = filters.userRole;
+          if (role === "PATIENT") {
+            where.visibilidade = "PUBLICO";
+          } else if (role === "MEMBER") {
+            where.visibilidade = { in: ["PUBLICO", "RESTRITO"] };
+          }
+          // ADMIN sees all — no visibility filter needed
+        }
+
+        return prisma.arquivo.findMany({
+          where,
+          orderBy: { created_at: "desc" },
+          take: 1000,
+        }) as Promise<ArquivoRecord[]>;
+      },
+      () => []
+    );
 
     return records.map((r) => ({
       id: r.id,
@@ -143,12 +177,16 @@ export class FilesService {
     uploadedBy: string;
     createdAt: Date;
   } | null> {
-    const record = await prisma.arquivo.findFirst({
-      where: {
-        id,
-        clinic_id: clinicId,
-      },
-    });
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
+    const record = await cb.execute(
+      async () => prisma.arquivo.findFirst({
+        where: {
+          id,
+          clinic_id: clinicId,
+        },
+      }),
+      () => null
+    );
 
     if (!record) return null;
 
@@ -169,13 +207,17 @@ export class FilesService {
   }
 
   async delete(id: string, clinicId: string): Promise<boolean> {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     try {
-      const result = await prisma.arquivo.deleteMany({
-        where: {
-          id,
-          clinic_id: clinicId,
-        },
-      });
+      const result = await cb.execute(
+        async () => prisma.arquivo.deleteMany({
+          where: {
+            id,
+            clinic_id: clinicId,
+          },
+        }),
+        () => ({ count: 0 })
+      );
 
       return result.count > 0;
     } catch (error) {
@@ -190,17 +232,21 @@ export class FilesService {
     urlTemp: string,
     expiraEm: Date,
   ): Promise<boolean> {
+    const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     try {
-      const result = await prisma.arquivo.updateMany({
-        where: {
-          id,
-          clinic_id: clinicId,
-        },
-        data: {
-          url_temp: urlTemp,
-          expira_em: expiraEm,
-        },
-      });
+      const result = await cb.execute(
+        async () => prisma.arquivo.updateMany({
+          where: {
+            id,
+            clinic_id: clinicId,
+          },
+          data: {
+            url_temp: urlTemp,
+            expira_em: expiraEm,
+          },
+        }),
+        () => ({ count: 0 })
+      );
 
       return result.count > 0;
     } catch (error) {

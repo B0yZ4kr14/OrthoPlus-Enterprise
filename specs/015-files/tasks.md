@@ -32,7 +32,8 @@
 - [x] T107 [P] Add clinicGuard to all new routes
 - [x] T107a [P] Add rate limiting to upload endpoint (CQ-3: 50/hour)
   - **Status**: IMPLEMENTED — `uploadLimiter` already applied to `/api/files` in `backend/src/index.ts`
-- [ ] T107b [P] Add CategoryCircuitBreaker for file DB operations (INF-1)
+- [x] T107b [P] Add CategoryCircuitBreaker for file DB operations (INF-1)
+  - **Status**: IMPLEMENTED — All FilesService methods (create, list, getById, delete, updateUrlTemp) wrapped with `circuitBreakerRegistry.getBreaker("administrativo", CB_CONFIG)`
 - [x] T107c [P] Add Prometheus metrics `orthoplus_files_upload_total`, `orthoplus_files_download_total` (INF-2)
   - **Status**: IMPLEMENTED — `FilesMetrics` class added; instrumented upload/download/delete in controller
 - [x] T108 [P] Backend unit tests for new service methods
