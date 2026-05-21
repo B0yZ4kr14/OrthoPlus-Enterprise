@@ -103,6 +103,44 @@
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
 
+### Multi-Tenancy Requirements *(OrthoPlus-specific)*
+
+<!--
+  All data access MUST be scoped by clinicId (Constitution GP-1).
+  Every feature involving data MUST explicitly declare how clinic isolation works.
+-->
+
+- **MT-001**: All database queries MUST filter by `clinicId`
+- **MT-002**: Backend routes MUST use `clinicGuard` middleware
+- **MT-003**: Frontend localStorage keys MUST be scoped by `userId + clinicId`
+- **MT-004**: Cross-clinic data access MUST be blocked at API level
+
+### Database Requirements *(Prisma/PostgreSQL)*
+
+<!--
+  If feature involves schema changes:
+  - Document models and relationships
+  - Note cross-schema constraints (6 categories: CORE, FINANCEIRO, OPERACIONAL, COMERCIAL, CLINICO, ADMINISTRATIVO)
+  - Plan for database.ts regeneration after schema changes
+-->
+
+- **DB-001**: [Model changes or N/A]
+- **DB-002**: [Cross-category reads/writes or N/A]
+- **DB-003**: [Migration strategy or N/A]
+
+### Frontend/Backend Split *(full-stack features)*
+
+<!--
+  For features touching both frontend and backend:
+  - Define API contract (endpoints, request/response shape)
+  - Specify which frontend modules are affected
+  - Note shared-types changes needed
+-->
+
+- **API-001**: [Endpoint definition or N/A]
+- **FE-001**: [Affected frontend modules or N/A]
+- **ST-001**: [Shared-types changes or N/A]
+
 ## Success Criteria *(mandatory)*
 
 <!--

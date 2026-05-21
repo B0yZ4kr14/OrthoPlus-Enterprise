@@ -75,51 +75,68 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
+
+OrthoPlus is a **pnpm monorepo** with Turbo orchestration. Default structure:
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
+apps/web/                          # Frontend React SPA
 ├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
+│   ├── components/               # Shared UI components (~1116)
+│   ├── modules/                  # 37 UI modules
+│   ├── domain/                   # Entities, repositories (Clean Arch)
+│   ├── application/use-cases/    # 60 use-cases
+│   ├── infrastructure/           # Concrete repos, DI, event bus
+│   ├── hooks/                    # Global + API hooks
+│   ├── contexts/                 # AuthContext, ModulesContext
+│   ├── lib/                      # apiClient, utils, adapters
+│   ├── stores/                   # Zustand stores
+│   ├── routes/                   # React Router v6
+│   └── types/database.ts         # AUTO-GENERATED from Prisma
+├── vite.config.ts                # Base: /OrthoPlus-Enterprise/
+└── vitest.config.ts              # Unit tests (jsdom)
 
-frontend/
+backend/                           # Backend Node.js / Express
 ├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
+│   ├── index.ts                  # Entry point
+│   ├── middleware/               # auth, clinicGuard, errorHandler
+│   ├── modules/                  # 37 domain modules
+│   ├── workers/                  # Cron jobs + backup scheduler
+│   ├── infrastructure/           # Prisma, Winston, Redis
+│   └── shared/                   # CQRS bus, event registry
+├── prisma/schema.prisma          # 186 models, 18 schemas
+└── tests/unit/                   # Jest suites
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
+shared-types/                      # Cross-stack TypeScript types
+└── src/index.ts
 
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+categories/@orthoplus/core/packages/
+├── ui/                           # Radix + CVA + Tailwind components
+├── hooks/                        # useToast (sonner wrapper)
+├── types/                        # Global frontend types
+└── utils/                        # formatDate, formatCurrency, cn
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: This feature uses the monorepo layout above. Frontend changes go in `apps/web/src/`, backend in `backend/src/`, shared types in `shared-types/`.
+
+## Deployment Context *(OrthoPlus-specific)*
+
+### Build Strategy
+- **Frontend**: `cd apps/web && pnpm build` → Vite build with base `/OrthoPlus-Enterprise/`
+- **Backend**: `cd backend && pnpm build` → `tsc -p tsconfig.build.json` (strict, fails on errors)
+- **Deploy**: Build locally, rsync `dist/` folders to VPS. Do NOT build on VPS.
+
+### VPS Environment
+- **Host**: `tsi@100.111.74.69` (Tailscale) / `179.190.15.116` (public)
+- **URL**: `https://tsiapp.io/OrthoPlus-Enterprise/`
+- **Backend**: Docker container `orthoplus-backend` on port 3005 (PM2 also present but Docker is primary)
+- **Nginx**: Host nginx (not Docker) with Cloudflare origin SSL
+- **Database**: PostgreSQL 16 (Docker container)
+
+### Quality Gates (MUST pass before deploy)
+1. `pnpm type-check` — 0 errors
+2. `pnpm lint` — 0 errors (warnings tolerated)
+3. `pnpm test` — all pass
+4. `cd backend && pnpm build` — strict TypeScript, 0 errors
 
 ## Complexity Tracking
 

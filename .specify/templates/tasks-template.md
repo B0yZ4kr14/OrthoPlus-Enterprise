@@ -21,10 +21,17 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+OrthoPlus is a **pnpm monorepo**. Default paths:
+
+- **Frontend**: `apps/web/src/` — React SPA (Vite + Tailwind)
+- **Backend**: `backend/src/` — Express API (Prisma + PostgreSQL)
+- **Shared types**: `shared-types/src/` — Cross-stack TypeScript
+- **Internal packages**: `categories/@orthoplus/core/packages/`
+- **Tests**:
+  - Frontend unit: `apps/web/src/**/*.test.{ts,tsx}` (Vitest + jsdom)
+  - Backend unit: `backend/tests/unit/**/*.test.ts` (Jest + ts-jest)
+  - E2E: `tests/e2e/` (Playwright)
+- Paths shown below use monorepo conventions — adjust per feature scope
 
 <!--
   ============================================================================
@@ -84,17 +91,22 @@ Examples of foundational tasks (adjust based on your project):
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T010 [P] [US1] Frontend unit test in `apps/web/src/[module]/__tests__/[feature].test.tsx`
+- [ ] T011 [P] [US1] Backend unit test in `backend/tests/unit/[module]/[feature].test.ts`
+- [ ] T012 [P] [US1] E2E test in `tests/e2e/[feature].spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T013 [P] [US1] Create/update Prisma model in `backend/prisma/schema.prisma`
+- [ ] T014 [P] [US1] Generate types: `cd backend && npx prisma generate`
+- [ ] T015 [US1] Implement backend service in `backend/src/modules/[module]/services/[service].ts`
+- [ ] T016 [US1] Implement backend controller in `backend/src/modules/[module]/controllers/[controller].ts`
+- [ ] T017 [US1] Add route with clinicGuard in `backend/src/modules/[module]/routes/[routes].ts`
+- [ ] T018 [US1] Implement frontend component/page in `apps/web/src/modules/[module]/[Component].tsx`
+- [ ] T019 [US1] Add frontend hook in `apps/web/src/hooks/use[Feature].ts`
+- [ ] T020 [US1] Add/update shared types in `shared-types/src/index.ts`
+- [ ] T021 [US1] Add validation (Zod schema) in `apps/web/src/lib/schemas/` or `backend/src/modules/[module]/schemas/`
+- [ ] T022 [US1] Add error handling (ApiError + RFC 7807)
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -108,15 +120,14 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T023 [P] [US2] Frontend unit test in `apps/web/src/[module]/__tests__/[feature].test.tsx`
+- [ ] T024 [P] [US2] Backend unit test in `backend/tests/unit/[module]/[feature].test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T023 [US2] Integrate with User Story 1 components (if needed)
+- [ ] T025 [P] [US2] Implement backend changes in `backend/src/modules/[module]/`
+- [ ] T026 [US2] Implement frontend changes in `apps/web/src/modules/[module]/`
+- [ ] T027 [US2] Integrate with User Story 1 components (if needed)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -130,14 +141,14 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T028 [P] [US3] Frontend unit test in `apps/web/src/[module]/__tests__/[feature].test.tsx`
+- [ ] T029 [P] [US3] Backend unit test in `backend/tests/unit/[module]/[feature].test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T030 [P] [US3] Implement backend changes in `backend/src/modules/[module]/`
+- [ ] T031 [US3] Implement frontend changes in `apps/web/src/modules/[module]/`
+- [ ] T032 [US3] Implement [endpoint/feature] in `apps/web/src/` or `backend/src/`
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -151,11 +162,12 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] TXXX [P] Documentation updates in docs/
-- [ ] TXXX Code cleanup and refactoring
-- [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
+- [ ] TXXX [P] Regenerate `apps/web/src/types/database.ts` if Prisma schema changed
+- [ ] TXXX Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
+- [ ] TXXX Run backend build: `cd backend && pnpm build` (strict, must pass)
+- [ ] TXXX Code cleanup — no new `as any` or `@ts-ignore` (Constitution CQ-2)
+- [ ] TXXX [P] Documentation updates in `docs/`
+- [ ] TXXX Security hardening — clinicGuard on all new routes, rate limiting
 - [ ] TXXX Run quickstart.md validation
 
 ---
@@ -164,7 +176,7 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Ensure feature is observable and resilient in production
 
-- [ ] TXXX [P] Add monitoring/alerting for critical metrics (Prometheus, Grafana, etc.)
+- [ ] TXXX [P] Add Prometheus metric emission (`orthoplus_*` with category label)
 - [ ] TXXX [P] Document edge case handling procedures
 - [ ] TXXX [P] Add health checks or validation scripts
 - [ ] TXXX Verify all edge cases from spec.md have mitigation in place
@@ -212,12 +224,13 @@ Examples of foundational tasks (adjust based on your project):
 
 ```bash
 # Launch all tests for User Story 1 together (if tests requested):
-Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
-Task: "Integration test for [user journey] in tests/integration/test_[name].py"
+Task: "Frontend unit test in apps/web/src/[module]/__tests__/[feature].test.tsx"
+Task: "Backend unit test in backend/tests/unit/[module]/[feature].test.ts"
 
-# Launch all models for User Story 1 together:
-Task: "Create [Entity1] model in src/models/[entity1].py"
-Task: "Create [Entity2] model in src/models/[entity2].py"
+# Launch frontend and backend implementation in parallel:
+Task: "Implement backend service in backend/src/modules/[module]/services/"
+Task: "Implement frontend component in apps/web/src/modules/[module]/"
+Task: "Add shared types in shared-types/src/index.ts"
 ```
 
 ---

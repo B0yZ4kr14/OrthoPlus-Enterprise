@@ -20,17 +20,42 @@
   ============================================================================
 -->
 
-## [Category 1]
+## Quality Gates (MUST pass)
 
-- [ ] CHK001 First checklist item with clear action
-- [ ] CHK002 Second checklist item
-- [ ] CHK003 Third checklist item
+- [ ] CHK001 `pnpm type-check` — 0 TypeScript errors
+- [ ] CHK002 `pnpm lint` — 0 errors (warnings tolerated)
+- [ ] CHK003 `pnpm test` — all tests pass
+- [ ] CHK004 `cd backend && pnpm build` — strict TypeScript, 0 errors
+- [ ] CHK005 No new `as any` or `@ts-ignore` added (Constitution CQ-2)
 
-## [Category 2]
+## Multi-Tenancy & Security
 
-- [ ] CHK004 Another category item
-- [ ] CHK005 Item with specific criteria
-- [ ] CHK006 Final item in this category
+- [ ] CHK006 All backend routes use `clinicGuard` middleware
+- [ ] CHK007 All DB queries filter by `clinicId`
+- [ ] CHK08 Frontend localStorage keys scoped by `userId + clinicId`
+- [ ] CHK009 Rate limiting + Helmet headers on new endpoints
+- [ ] CHK010 No secrets or credentials in code
+
+## Database (if schema changed)
+
+- [ ] CHK011 Prisma schema updated and migrated
+- [ ] CHK012 `database.ts` regenerated (`npx prisma generate`)
+- [ ] CHK013 Cross-category constraints documented
+- [ ] CHK014 Seed data updated if needed
+
+## Frontend
+
+- [ ] CHK015 Uses `@orthoplus/core-ui` components (Constitution FE-1)
+- [ ] CHK016 Date handling via `lib/utils/date.utils.ts` (Constitution FE-2)
+- [ ] CHK017 Auth via `useAuth()` — no direct localStorage checks (Constitution FE-3)
+- [ ] CHK018 State: TanStack Query (server), Zustand (client) (Constitution FE-4)
+- [ ] CHK019 ARIA attributes and keyboard support where applicable
+
+## Observability
+
+- [ ] CHK020 Prometheus metric emitted for new module
+- [ ] CHK021 Winston logging for sensitive operations
+- [ ] CHK022 Health check endpoint updated if needed
 
 ## Notes
 
