@@ -15,7 +15,7 @@ export function useAIModelConfig({ selectedClinic }: UseAIModelConfigProps) {
   const [saving, setSaving] = useState(false);
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
   const [config, setConfig] = useState<AIModelConfig>({
-    default_provider: "lovable",
+    default_provider: "local",
     temperature: 0.7,
     max_tokens: 2000,
   });

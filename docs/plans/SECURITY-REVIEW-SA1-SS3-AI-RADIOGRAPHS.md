@@ -8,16 +8,18 @@
 
 ---
 
-## 0. Descoberta Critica: Codigo Orfao no Frontend
+## 0. Remediacao Aplicada (2026-05-21)
 
-O modulo `ia-radiografia` esta **100% implementado no frontend** (28+ arquivos) mas **INEXISTENTE no backend**:
+**Status**: `LovableAIService.ts` e todas as referencias a "Lovable" foram **removidas do codebase**.
 
-- Frontend chama `/ia-radiografia/upload-e-analisar` → **404 no backend**
-- Frontend chama `/api/lovable-ai/analyze` → **404 no backend**
-- `LovableAIService.ts` envia `imageBase64` diretamente para endpoint inexistente
-- Se ativado, dados de saude seriam perdidos em requisicoes falhas
+- `apps/web/src/infrastructure/external/LovableAIService.ts` → **DELETADO**
+- Todas as referencias a "lovable" em `ai-model-config/` → **SUBSTITUIDAS por "local" (self-hosted)**
+- Todas as referencias a "Lovable AI" em `AIModelConfig.tsx` → **SUBSTITUIDAS por "Local / Self-Hosted"**
+- Referencia em `CryptoPaymentPage.tsx` → **SUBSTITUIDA**
 
-**Imediato**: Codigo orfao deve ser removido ou completamente refatorado antes de qualquer ativacao.
+O modulo `ia-radiografia` (28+ arquivos) ainda existe no frontend como codigo orfao sem backend, mas **nao pode mais se conectar a servicos externos** via Lovable.
+
+**Imediato**: O modulo `ia-radiografia` ainda deve ser avaliado para remocao completa ou reimplementacao segura.
 
 ---
 
@@ -178,16 +180,20 @@ O `LovableAIService.ts` envia `imageBase64` — **nao ha stripping de metadados*
 
 ## 3. Recomendacoes Adversariais
 
-### Opcao A: Proibicao Total (Recomendada pelo Security Review)
+### Opcao A: Proibicao Total (Recomendada pelo Security Review) — PARCIALMENTE APLICADA
 **Descricao**: Remover completamente o modulo `ia-radiografia` do codebase.
-**Pros**: Zero risco legal, zero risco LGPD, zero risco medico
-**Contras**: Perda de funcionalidade diferenciadora
-**Implementacao**:
+**Status**: 
+- ✅ `LovableAIService.ts` removido
+- ✅ Todas as referencias a "Lovable" removidas/substituidas
+- ⏳ `ia-radiografia/` (28+ arquivos frontend) ainda existe como codigo orfao
+- ⏳ `AnalyzeRadiografiaWithAIUseCase.ts` ainda existe
+- ⏳ Spec 003-pep ainda menciona Story 4
+
+**Implementacao restante**:
 1. Delete `apps/web/src/modules/ia-radiografia/`
 2. Delete `apps/web/src/application/use-cases/radiografia/AnalyzeRadiografiaWithAIUseCase.ts`
-3. Delete `apps/web/src/infrastructure/external/LovableAIService.ts`
-4. Remover referencias no ` OdontogramaAIAnalysis` component
-5. Atualizar spec 003-pep: Story 4 removido ou marcado como "Postponed indefinidamente"
+3. Remover referencias no `OdontogramaAIAnalysis` component
+4. Atualizar spec 003-pep: Story 4 removido ou marcado como "Postponed indefinidamente"
 
 ### Opcao B: Reimplementacao Segura (Aprovada com condicoes)
 **Descricao**: Reimplementar do zero com controles de seguranca obrigatorios.

@@ -21,13 +21,13 @@ export interface AIProvider {
 
 export const AI_PROVIDERS: AIProvider[] = [
   {
-    id: "lovable",
-    name: "Lovable AI (Padrão)",
+    id: "local",
+    name: "Local / Self-Hosted",
     free: true,
     models: [
-      "google/gemini-2.5-flash",
-      "google/gemini-2.5-pro",
-      "openai/gpt-5",
+      "local/llama-3.3",
+      "local/qwen-2.5",
+      "local/deepseek-r1",
     ],
   },
   {

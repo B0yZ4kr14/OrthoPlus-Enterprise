@@ -52,7 +52,7 @@ export function AIModelConfig() {
       </CardHeader>
       <CardContent className="space-y-6">
         <ProviderSelect
-          value={config.default_provider || "lovable"}
+          value={config.default_provider || "local"}
           onChange={(value) => updateConfig({ default_provider: value })}
         />
 
