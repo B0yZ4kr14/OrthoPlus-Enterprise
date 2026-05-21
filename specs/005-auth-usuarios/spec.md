@@ -24,7 +24,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 - Permissões por módulo
 - Multi-tenancy (isolação por clinicId)
 - Rate limiting e proteção CSRF
-- Portal do paciente (autenticação separada)
+- Portal do paciente (autenticação separada — Auth fornece JWT/segurança; Pacientes (001) own as features do portal)
 
 **Exclui:**
 - SSO/SAML (futuro)

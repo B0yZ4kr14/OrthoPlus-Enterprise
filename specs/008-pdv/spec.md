@@ -101,14 +101,14 @@
 - Geração de QR Code PIX
 
 ### FR-003: Controle de Caixa
-**Description**: Abertura, movimentação e fechamento.
+**Description**: Operação diária de caixa. **Owner: Financeiro (entidade); PDV (operação)** — PDV abre, movimenta e solicita fechamento; Financeiro consolida e torna o fechamento irreversível.
 **Priority**: Must Have
 **Acceptance Criteria**:
-- Abertura com saldo inicial
-- Registro de sangria e reforço
-- Fechamento com conferência
-- Relatório em PDF
-- Bloqueio pós-fechamento (apenas admin reabre)
+- Abertura com saldo inicial (via API do Financeiro)
+- Registro de sangria e reforço (eventos para Financeiro)
+- Fechamento solicitado pelo PDV, consolidado e bloqueado pelo Financeiro
+- Relatório em PDF gerado pelo Financeiro
+- Bloqueio pós-fechamento (apenas admin reabre via Financeiro)
 
 ### FR-004: Integração Financeira
 **Description**: Vendas refletem no financeiro.

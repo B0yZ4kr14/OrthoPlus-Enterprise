@@ -111,13 +111,14 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - Impede agendamento sobreposto
 
 ### FR-004: Confirmações
-**Description**: Sistema de confirmação de consultas.
+**Description**: Sistema de confirmação de consultas. **Owner: Agenda (estado)** — módulo Notificações é consumidor do evento de envio.
 **Priority**: Should Have
 **Acceptance Criteria**:
-- Envio automático X horas antes
-- Canais: SMS, WhatsApp, email
-- Resposta do paciente atualiza status
-- Reenvio manual pela recepção
+- Estado da confirmação (pendente, confirmado, cancelado) é propriedade da Agenda
+- Envio automático X horas antes emitido como evento `AppointmentConfirmationRequested`
+- Canais: SMS, WhatsApp, email (entregues por Notificações)
+- Resposta do paciente atualiza status na Agenda via callback/evento
+- Reenvio manual pela recepção reemite o evento
 
 ### FR-005: Recall de Pacientes
 **Description**: Sugestão automática de retorno baseada no tratamento.

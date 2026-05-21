@@ -98,13 +98,14 @@ Dentistas e administradores precisam:
 - Recorrência (mensal, anual)
 
 ### FR-002: Caixa Registradora
-**Description**: Controle de entradas e saídas do dia.
+**Description**: Controle de entradas e saídas do dia. **Owner: Financeiro** — PDV opera o caixa no dia-a-dia, mas o registro histórico e fechamento oficial são do Financeiro.
 **Priority**: Must Have
 **Acceptance Criteria**:
+- Entidade `Caixa` pertence ao bounded context Financeiro
 - Abertura de caixa com saldo inicial
-- Registro de todas as transações do PDV
-- Sangria e reforço de caixa
-- Fechamento com conferência
+- Transações do PDV alimentam o caixa via eventos `SaleCompleted`
+- Sangria e reforço de caixa registrados no Financeiro
+- Fechamento com conferência (irreversível, apenas admin reabre)
 - Múltiplos caixas por clínica
 
 ### FR-003: Contas a Receber
