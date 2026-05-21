@@ -3,14 +3,36 @@
  *
  * Substitui o SidebarCategoryContext (React Context) para alinhar com Constitution FE-4.
  * Persistência via Zustand persist middleware (localStorage) — alinha com Constitution FE-3.
+ * Validação de schema via Zod — ARCH-003.
  */
 
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { persist, type StorageValue } from "zustand/middleware"
+import { z } from "zod"
 import { useAuth } from "@/contexts/AuthContext"
 import { useLocation } from "react-router-dom"
 import { useEffect, useRef, useCallback } from "react"
 import { menuGroups } from "@/core/layout/Sidebar/sidebar.config"
+
+// ─── Zod Schema for Persisted State ───────────────────────────────────────
+
+const persistedSidebarSchema = z.object({
+  state: z.object({
+    expandedGroups: z.array(z.string()).default([]),
+  }),
+  version: z.number().optional(),
+})
+
+function validatePersistedState(raw: unknown): { expandedGroups: string[] } | null {
+  try {
+    const parsed = persistedSidebarSchema.parse(raw)
+    return parsed.state
+  } catch {
+    return null
+  }
+}
+
+// ─── Store Interface ──────────────────────────────────────────────────────
 
 interface SidebarState {
   expandedGroups: string[]
@@ -32,6 +54,7 @@ function getActiveBoundedContext(pathname: string): string | null {
 }
 
 const STORAGE_KEY_PREFIX = "orthoplus:sidebar:groups"
+const PERSIST_VERSION = 1
 
 export const useSidebarStore = create<SidebarState>()(
   persist(
@@ -73,7 +96,32 @@ export const useSidebarStore = create<SidebarState>()(
     }),
     {
       name: STORAGE_KEY_PREFIX,
+      version: PERSIST_VERSION,
       partialize: (state) => ({ expandedGroups: state.expandedGroups }),
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.warn("[sidebarStore] Failed to rehydrate, using defaults")
+          return
+        }
+        if (!state) return
+        // Validate rehydrated state against Zod schema
+        const storageKey = `${STORAGE_KEY_PREFIX}-storage`
+        try {
+          const raw = localStorage.getItem(storageKey)
+          if (raw) {
+            const parsed = JSON.parse(raw)
+            const validated = validatePersistedState(parsed)
+            if (!validated) {
+              console.warn("[sidebarStore] Invalid persisted state detected, resetting")
+              localStorage.removeItem(storageKey)
+              state.expandedGroups = []
+            }
+          }
+        } catch {
+          console.warn("[sidebarStore] Error reading storage, using defaults")
+          state.expandedGroups = []
+        }
+      },
     },
   ),
 )

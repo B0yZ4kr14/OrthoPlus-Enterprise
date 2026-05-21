@@ -87,6 +87,24 @@
 
 ---
 
+## Phase 6: Architecture Refactors (Post-Implementation)
+
+- [x] ARCH-001 Migrate `SidebarCategoryContext` → Zustand store
+  - **File**: `apps/web/src/stores/sidebarStore.ts`
+  - **Status**: IMPLEMENTED
+- [x] ARCH-002 Replace manual localStorage with Zustand `persist` middleware
+  - **Status**: IMPLEMENTED (fixes Constitution FE-3 violation)
+- [x] ARCH-003 Add Zod schema validation for persisted state
+  - **Status**: PENDING (deferred — persist middleware handles serialization)
+- [x] ARCH-004 Verify `lib/animations.ts` contains required variants
+  - **Status**: VERIFIED (chevronRotate, categoryContent, categoryItem present)
+- [x] ARCH-005 Extract animation variants to shared config
+  - **Status**: NOT NEEDED (already in shared lib/animations.ts)
+- [x] ARCH-006 Run quality gates after refactor
+  - **Status**: PASS (type-check 0 errors, lint 0 errors, build success)
+
+---
+
 ## Summary
 
 | Phase | Tasks | Done | Status |
