@@ -17,19 +17,29 @@ O **OrthoPlus Enterprise** é um sistema de gestão odontológica completo, comp
 
 | Variável | Valor |
 |----------|-------|
-| HOSTNAME | TSiAPP |
-| USER | tsi |
-| PORT | 22 |
-| KEY | `~/.ssh/keys/private/TSiHomeLab` |
+| Variável | Valor | Descrição |
+|----------|-------|-----------|
+| `VPS_TSiAPP_HOSTNAME` | `TSiAPP` | Hostname do servidor |
+| `VPS_TSiAPP_IP_PUBLIC` | `179.190.15.116` | IP público (Internet) |
+| `VPS_TSiAPP_IP_TAILSCALE` | `100.111.74.69` | IP Tailscale (rede privada) |
+| `VPS_TSiAPP_KEY` | `~/.ssh/keys/private/TSiHomeLab` | Chave SSH canônica |
+| `VPS_TSiAPP_USER` | `tsi` | Usuário padrão |
+| `VPS_TSiAPP_PORT` | `22` | Porta SSH |
 
 ### Acesso SSH (passwordless)
 
 ```bash
-# Usuário tsi (padrão)
-ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@<IP>
+# Usuário tsi — Tailscale (rede privada)
+ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@100.111.74.69
 
-# Usuário root (emergência)
-ssh -i ~/.ssh/keys/private/TSiHomeLab root@<IP>
+# Usuário tsi — IP público (fallback)
+ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@179.190.15.116
+
+# Usuário root — Tailscale
+ssh -i ~/.ssh/keys/private/TSiHomeLab root@100.111.74.69
+
+# Usuário root — IP público
+ssh -i ~/.ssh/keys/private/TSiHomeLab root@179.190.15.116
 ```
 
 ### Deploy
@@ -42,11 +52,11 @@ docker compose ps
 
 ### Healthchecks
 
-| Serviço | URL |
-|---------|-----|
-| Backend | `http://localhost:3005/health` |
-| Frontend | `http://localhost:8083/` |
-| Agent | `http://localhost:8000/` |
+| Serviço | URL Local | Via Nginx |
+|---------|-----------|-----------|
+| Backend API | `http://127.0.0.1:3005/health` | `https://tsiapp.io/api/orthoplus/health` |
+| Frontend SPA | `http://127.0.0.1:8083/` | `https://tsiapp.io/` |
+| Agent Service | `http://127.0.0.1:8000/` | `https://tsiapp.io/api/agent/` |
 
 ## Estrutura do Monorepo
 

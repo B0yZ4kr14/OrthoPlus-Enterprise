@@ -18,7 +18,7 @@ Deploy automático para a VPS vps-tsi-02 (Tailscale: 100.111.74.69).
 
 **Secrets necessários:**
 - `VPS_TSI_02_HOST`: 100.111.74.69 (ou IP público quando DNS configurado)
-- `VPS_TSI_02_USER`: ubuntu
+- `VPS_TSI_02_USER`: tsi
 - `VPS_TSI_02_SSH_KEY`: Chave SSH privada (id_ed25519_b0yz4kr14)
 
 ### Outros Workflows

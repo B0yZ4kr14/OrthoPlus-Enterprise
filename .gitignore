@@ -119,3 +119,4 @@ tests/e2e/.auth/
 !.specify/memory/**
 graphify-out/.graphify_*
 .omk/open-design/
+.env.vps.credentials

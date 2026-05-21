@@ -118,7 +118,7 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 **Objetivo**: Validar VPS como fonte de verdade e executar health checks
 
 **Tarefas**:
-- [ ] Comparar código local com VPS (`~/OrthoPlus-Enterprise/`)
+- [ ] Comparar código local com VPS (`/home/tsi/OrthoPlus-Enterprise/`)
 - [ ] Verificar se build está atualizado (`/var/www/orthoplus/`)
 - [ ] Confirmar que banco está sincronizado
 - [ ] Validar que usuários criados estão na VPS
@@ -244,7 +244,7 @@ Antes de executar, garantir:
 
 2. **Acesso à VPS configurado**:
    ```bash
-   ssh ubuntu@100.111.74.69 "echo 'VPS OK'"
+   ssh tsi@100.111.74.69 "echo 'VPS OK'"
    ```
 
 3. **Credenciais de teste disponíveis**:

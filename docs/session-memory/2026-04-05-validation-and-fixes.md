@@ -133,8 +133,8 @@ opensquad/squads/
 
 ### 1. Prisma Migrations (Alta)
 ```bash
-ssh ubuntu@100.111.74.69
-cd ~/OrthoPlus-Enterprise-backend
+ssh tsi@100.111.74.69
+cd /home/tsi/OrthoPlus-Enterprise
 npx prisma migrate resolve --applied 00_initial_baseline
 npx prisma generate
 ```
