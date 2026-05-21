@@ -7,7 +7,7 @@ import {
 } from "@orthoplus/core-ui/sidebar";
 import { useSidebar } from "@orthoplus/core-ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSidebarCategory } from "@/contexts/SidebarCategoryContext";
+import { useSidebarCategory } from "@/stores/sidebarStore";
 import { SidebarMenuItem } from "./SidebarMenuItem";
 import { MenuGroup } from "./sidebar.config";
 import { motion, AnimatePresence } from "framer-motion";
