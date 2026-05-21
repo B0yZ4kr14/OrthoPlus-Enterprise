@@ -13,7 +13,7 @@
 This plan implements **collapsible sidebar categories with premium animations** for OrthoPlus Enterprise. The approach is incremental: create a state management layer, enhance existing Sidebar components, and add persistence.
 
 **Primary requirement**: All sidebar categories start collapsed by default, with smooth expand/collapse animations and localStorage persistence.
-**Technical approach**: React Context → Sidebar component enhancement → Animation integration → Persistence layer
+**Technical approach**: Zustand Store → Sidebar component enhancement → Animation integration → Persistence layer
 
 ---
 
@@ -56,9 +56,10 @@ apps/web/src/
 │   ├── SidebarNav.tsx             # MODIFY — integrate state context
 │   ├── sidebar.config.ts          # (no change)
 │   └── index.tsx                  # (no change)
-├── contexts/
-│   └── SidebarCategoryContext.tsx # NEW — state management + localStorage + hook
-│       └── useSidebarCategory     # Exported hook for category state
+├── stores/
+│   └── sidebarStore.ts            # NEW — Zustand store + localStorage + hook
+│       └── useSidebarStore        # Exported store for category state
+│       └── useSidebarCategory     # Hook integrating store with routing + persistence
 └── lib/animations.ts              # MODIFY — add collapse variants
 ```
 
@@ -68,12 +69,12 @@ apps/web/src/
 
 ### Phase 1: State Management Foundation
 
-- [x] P001 Create `SidebarCategoryContext` with React Context
-- [x] P002 Create `useSidebarCategory` hook (in context file)
-- [x] P003 Add localStorage persistence (save/load/clear)
+- [x] P001 Create `sidebarStore.ts` with Zustand store
+- [x] P002 Create `useSidebarCategory` hook (integrates store + routing + persistence)
+- [x] P003 Add localStorage persistence (save/load/clear) with multi-tenant isolation
 - [x] P004 Add default state logic (all collapsed)
 - [x] P005 Add auto-expand for active category
-- [x] P006 Add error handling for corrupted localStorage
+- [x] P006 Add error handling for corrupted localStorage + Zod validation
 
 ### Phase 2: Component Enhancement
 

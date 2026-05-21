@@ -147,48 +147,35 @@ export const useSidebarStore = create<SidebarState>()((set, get) => ({
 }))
 
 /**
- * Hook que integra o store com roteamento, auto-expand e persistência
- * por usuário + clínica (multi-tenant isolation).
+ * Hook de persistência: carrega/salva estado no localStorage com isolamento multi-tenant.
  */
-export function useSidebarCategory(): Pick<
-  SidebarState,
-  "expandedGroups" | "toggleGroup" | "isExpanded"
-> {
-  const { user, clinicId } = useAuth()
-  const { pathname } = useLocation()
-
-  const store = useSidebarStore()
-  const manuallyCollapsedRef = useRef<Set<string>>(new Set())
+function useSidebarPersistence(
+  userId: string | undefined,
+  clinicId: string | null,
+  store: SidebarState,
+): void {
   const storageKeyRef = useRef<string>("")
 
   // Load persisted state on user/clinic change
   useEffect(() => {
     const initStart = performance.now()
-    const key = buildStorageKey(user?.id, clinicId)
+    const key = buildStorageKey(userId, clinicId)
     storageKeyRef.current = key
 
-    // Try scoped key first
     let groups = loadPersistedState(key)
-
-    // Fall back to legacy key (migration)
-    if (groups === null && user?.id && clinicId) {
+    if (groups === null && userId && clinicId) {
       groups = migrateLegacyState(key)
     }
 
-    if (groups !== null) {
-      store.setExpandedGroups(groups)
-    } else {
-      store.setExpandedGroups([])
-    }
+    store.setExpandedGroups(groups ?? [])
 
-    const initDuration = performance.now() - initStart
     console.info("[sidebar:metric] init", {
-      durationMs: Math.round(initDuration),
+      durationMs: Math.round(performance.now() - initStart),
       expandedCount: groups?.length ?? 0,
-      userId: user?.id,
+      userId,
       clinicId,
     })
-  }, [user?.id, clinicId, store])
+  }, [userId, clinicId, store])
 
   // Persist state on every change
   useEffect(() => {
@@ -196,14 +183,40 @@ export function useSidebarCategory(): Pick<
     if (!key) return
     savePersistedState(key, store.expandedGroups)
   }, [store.expandedGroups])
+}
 
-  // Auto-expand active category on route change, but respect manual toggles
+/**
+ * Hook de auto-expand: expande a categoria ativa baseada na rota atual.
+ */
+function useSidebarAutoExpand(
+  pathname: string,
+  store: SidebarState,
+  manuallyCollapsedRef: React.RefObject<Set<string>>,
+): void {
   useEffect(() => {
     const active = getActiveBoundedContext(pathname)
-    if (active && !manuallyCollapsedRef.current.has(active)) {
+    if (active && !manuallyCollapsedRef.current?.has(active)) {
       store.expandGroup(active)
     }
-  }, [pathname, store])
+  }, [pathname, store, manuallyCollapsedRef])
+}
+
+/**
+ * Hook que integra o store com roteamento, auto-expand e persistência
+ * por usuário + clínica (multi-tenant isolation).
+ * Composition hook — delegates to useSidebarPersistence and useSidebarAutoExpand.
+ */
+export function useSidebarCategory(): Pick<
+  SidebarState,
+  "expandedGroups" | "toggleGroup" | "isExpanded"
+> {
+  const { user, clinicId } = useAuth()
+  const { pathname } = useLocation()
+  const store = useSidebarStore()
+  const manuallyCollapsedRef = useRef<Set<string>>(new Set())
+
+  useSidebarPersistence(user?.id, clinicId, store)
+  useSidebarAutoExpand(pathname, store, manuallyCollapsedRef)
 
   const toggleGroup = useCallback(
     (boundedContext: string) => {

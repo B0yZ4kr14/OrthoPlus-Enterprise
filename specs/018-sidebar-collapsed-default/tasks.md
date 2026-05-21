@@ -6,14 +6,14 @@
 
 ## Phase 1: State Management Foundation
 
-- [x] T001 Create `SidebarCategoryContext` — React Context with expandedGroups state
-  - **File**: `apps/web/src/contexts/SidebarCategoryContext.tsx`
+- [x] T001 Create `sidebarStore.ts` — Zustand store with expandedGroups state
+  - **File**: `apps/web/src/stores/sidebarStore.ts`
   - **Status**: IMPLEMENTED
-- [x] T002 Create `useSidebarCategoryState` hook — wraps context + localStorage
-  - **File**: `apps/web/src/contexts/SidebarCategoryContext.tsx` (useSidebarCategory)
+- [x] T002 Create `useSidebarCategory` hook — wraps store + localStorage + routing
+  - **File**: `apps/web/src/stores/sidebarStore.ts` (useSidebarCategory)
   - **Status**: IMPLEMENTED
-- [x] T003 Implement localStorage save/load with key `orthoplus:sidebar:groups:{userId}`
-  - **Status**: IMPLEMENTED (STORAGE_KEY_PREFIX = "orthoplus:sidebar:groups")
+- [x] T003 Implement localStorage save/load with key `orthoplus:sidebar:groups:{userId}:{clinicId}`
+  - **Status**: IMPLEMENTED (STORAGE_KEY_PREFIX = "orthoplus:sidebar:groups", multi-tenant isolation)
 - [x] T004 Implement default state: all groups collapsed
   - **Status**: IMPLEMENTED (useState initializes from localStorage or empty Set)
 - [x] T005 Implement auto-expand for active category (based on current route)
@@ -96,13 +96,18 @@
 - [x] ARCH-002 Replace manual localStorage with Zustand `persist` middleware
   - **Status**: IMPLEMENTED (fixes Constitution FE-3 violation)
 - [x] ARCH-003 Add Zod schema validation for persisted state
-  - **Status**: PENDING (deferred — persist middleware handles serialization)
+  - **File**: `apps/web/src/stores/sidebarStore.ts` (lines 18-32)
+  - **Status**: IMPLEMENTED
 - [x] ARCH-004 Verify `lib/animations.ts` contains required variants
   - **Status**: VERIFIED (chevronRotate, categoryContent, categoryItem present)
 - [x] ARCH-005 Extract animation variants to shared config
   - **Status**: NOT NEEDED (already in shared lib/animations.ts)
 - [x] ARCH-006 Run quality gates after refactor
   - **Status**: PASS (type-check 0 errors, lint 0 errors, build success)
+- [x] ARCH-007 Decompose `useSidebarCategory` into single-responsibility hooks
+  - **File**: `apps/web/src/stores/sidebarStore.ts`
+  - **Details**: Extracted `useSidebarPersistence` (load/save localStorage) and `useSidebarAutoExpand` (route-based expansion) from the composition hook. Keeps public API unchanged.
+  - **Status**: IMPLEMENTED (type-check 0 errors)
 
 ---
 
