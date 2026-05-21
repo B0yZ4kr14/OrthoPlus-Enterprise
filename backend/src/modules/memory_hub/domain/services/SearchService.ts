@@ -1,3 +1,4 @@
+import { logger } from "@/infrastructure/logger"
 import { OllamaEmbeddingClient } from "../../infrastructure/OllamaEmbeddingClient"
 import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
 
@@ -73,7 +74,7 @@ export class SearchService {
     }))
 
     const duration = Date.now() - startTime
-    console.log(`[SearchService] Query "${query}" returned ${results.length} results in ${duration}ms`)
+    logger.info(`[SearchService] Query completed`, { query, resultCount: results.length, durationMs: duration })
 
     return { results, total: deduped.length }
   }

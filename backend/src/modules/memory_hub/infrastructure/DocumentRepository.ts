@@ -15,6 +15,20 @@ export interface MemoryDocument {
   frontmatter: string
 }
 
+interface DocumentRow {
+  id: string
+  source_path: string
+  doc_type: string
+  title: string
+  content_hash: string
+  last_indexed: number
+  last_modified: number
+  version: number
+  word_count: number
+  is_archived: number
+  frontmatter: string
+}
+
 export class DocumentRepository {
   private db: Database.Database
 
@@ -22,21 +36,39 @@ export class DocumentRepository {
     this.db = db
   }
 
+  private mapRow(row: DocumentRow): MemoryDocument {
+    return {
+      id: row.id,
+      sourcePath: row.source_path,
+      docType: row.doc_type,
+      title: row.title,
+      contentHash: row.content_hash,
+      lastIndexed: row.last_indexed,
+      lastModified: row.last_modified,
+      version: row.version,
+      wordCount: row.word_count,
+      isArchived: Boolean(row.is_archived),
+      frontmatter: row.frontmatter,
+    }
+  }
+
   upsert(doc: Omit<MemoryDocument, "id" | "version" | "lastIndexed">): MemoryDocument {
-    const existing = this.db
+    const existingRow = this.db
       .prepare("SELECT * FROM documents WHERE source_path = ?")
-      .get(doc.sourcePath) as MemoryDocument | undefined
+      .get(doc.sourcePath) as DocumentRow | undefined
 
     const now = Date.now()
     const contentHash = doc.contentHash
 
-    if (existing) {
+    if (existingRow) {
+      const existing = this.mapRow(existingRow)
+
       if (existing.contentHash === contentHash) {
         // No change, just update last_indexed
         this.db.prepare(
           "UPDATE documents SET last_indexed = ? WHERE id = ?",
         ).run(now, existing.id)
-        return { ...existing, last_indexed: now } as MemoryDocument
+        return { ...existing, lastIndexed: now }
       }
 
       // Content changed, increment version
@@ -73,11 +105,13 @@ export class DocumentRepository {
   }
 
   findById(id: string): MemoryDocument | undefined {
-    return this.db.prepare("SELECT * FROM documents WHERE id = ?").get(id) as MemoryDocument | undefined
+    const row = this.db.prepare("SELECT * FROM documents WHERE id = ?").get(id) as DocumentRow | undefined
+    return row ? this.mapRow(row) : undefined
   }
 
   findByPath(sourcePath: string): MemoryDocument | undefined {
-    return this.db.prepare("SELECT * FROM documents WHERE source_path = ?").get(sourcePath) as MemoryDocument | undefined
+    const row = this.db.prepare("SELECT * FROM documents WHERE source_path = ?").get(sourcePath) as DocumentRow | undefined
+    return row ? this.mapRow(row) : undefined
   }
 
   archive(sourcePath: string): void {
@@ -85,7 +119,8 @@ export class DocumentRepository {
   }
 
   listAll(): MemoryDocument[] {
-    return this.db.prepare("SELECT * FROM documents ORDER BY last_indexed DESC").all() as MemoryDocument[]
+    const rows = this.db.prepare("SELECT * FROM documents ORDER BY last_indexed DESC").all() as DocumentRow[]
+    return rows.map((r) => this.mapRow(r))
   }
 
   count(): number {

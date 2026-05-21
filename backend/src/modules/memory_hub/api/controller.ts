@@ -1,5 +1,8 @@
 import { Request, Response } from "express"
 import Database from "better-sqlite3"
+import { logger } from "@/infrastructure/logger"
+import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
+import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics"
 import { SearchService } from "../domain/services/SearchService"
 import { ContextBriefService } from "../domain/services/ContextBriefService"
 import { IndexingService } from "../domain/services/IndexingService"
@@ -10,6 +13,8 @@ import { FileWatcher } from "../infrastructure/FileWatcher"
 
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
 const db = new Database(dbPath)
+
+const metrics = getMetricsCollector(prometheusMetrics.getRegistry())
 
 const embedder = new OllamaEmbeddingClient()
 const embeddings = new EmbeddingRepository(db)
@@ -28,7 +33,7 @@ if (process.env.MEMORY_HUB_ENABLED === "true") {
         try {
           await indexingService.indexFile(evt.filePath)
         } catch (err) {
-          console.error(`[MemoryHub] Auto-index failed for ${evt.filePath}:`, err)
+          logger.error(`[MemoryHub] Auto-index failed for ${evt.filePath}`, { error: err })
         }
       }
     }
@@ -44,6 +49,7 @@ if (process.env.MEMORY_HUB_ENABLED === "true") {
 
 export class MemoryHubController {
   async search(req: Request, res: Response) {
+    const startTime = Date.now()
     try {
       const { query, filters, limit = 10, offset = 0 } = req.body
 
@@ -58,17 +64,21 @@ export class MemoryHubController {
         Number(offset),
       )
 
+      const duration = (Date.now() - startTime) / 1000
+      metrics.memoryHub.searchDuration.observe({ category: "memory_hub" }, duration)
+
       return res.json({
         ...result,
         query_time_ms: Date.now(),
       })
     } catch (error) {
-      console.error("[MemoryHub] Search error:", error)
+      logger.error("[MemoryHub] Search error", { error, query: req.body.query })
       return res.status(500).json({ error: "Search failed" })
     }
   }
 
   async reindex(_req: Request, res: Response) {
+    const startTime = Date.now()
     try {
       const watchDirs = (process.env.MEMORY_HUB_WATCH_DIRS || "specs/,docs/,categories/")
         .split(",")
@@ -76,14 +86,19 @@ export class MemoryHubController {
 
       await indexingService.reindexAll(watchDirs)
 
+      const duration = (Date.now() - startTime) / 1000
+      metrics.memoryHub.indexDuration.observe({ category: "memory_hub" }, duration)
+      metrics.memoryHub.documentsIndexed.inc({ category: "memory_hub" })
+
       return res.json({ message: "Reindex complete" })
     } catch (error) {
-      console.error("[MemoryHub] Reindex error:", error)
+      logger.error("[MemoryHub] Reindex error", { error })
       return res.status(500).json({ error: "Reindex failed" })
     }
   }
 
   async contextBrief(req: Request, res: Response) {
+    const startTime = Date.now()
     try {
       const { topic, max_tokens = 80000, include_related = true } = req.body
 
@@ -97,9 +112,12 @@ export class MemoryHubController {
         Boolean(include_related),
       )
 
+      const duration = (Date.now() - startTime) / 1000
+      metrics.memoryHub.briefGenerationDuration.observe({ category: "memory_hub" }, duration)
+
       return res.json(brief)
     } catch (error) {
-      console.error("[MemoryHub] Context brief error:", error)
+      logger.error("[MemoryHub] Context brief error", { error, topic: req.body.topic })
       return res.status(500).json({ error: "Context brief generation failed" })
     }
   }
@@ -115,6 +133,9 @@ export class MemoryHubController {
       // Coverage: docs indexed in last 7 days vs total markdown files
       const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
       const recentlyIndexed = allDocs.filter((d) => d.lastIndexed > oneWeekAgo).length
+      const coveragePercent = totalDocs > 0 ? Math.round((recentlyIndexed / totalDocs) * 100) : 0
+
+      metrics.memoryHub.coveragePercent.set({ category: "memory_hub" }, coveragePercent)
 
       return res.json({
         index_status: totalDocs > 0 ? "healthy" : "empty",
@@ -123,10 +144,10 @@ export class MemoryHubController {
           ? new Date(allDocs[0].lastIndexed).toISOString()
           : null,
         drift_count: driftCount.c,
-        coverage_percent: totalDocs > 0 ? Math.round((recentlyIndexed / totalDocs) * 100) : 0,
+        coverage_percent: coveragePercent,
       })
     } catch (error) {
-      console.error("[MemoryHub] Health error:", error)
+      logger.error("[MemoryHub] Health error", { error })
       return res.status(500).json({ error: "Health check failed" })
     }
   }

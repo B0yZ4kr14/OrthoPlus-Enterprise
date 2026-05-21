@@ -1,6 +1,7 @@
 import Database from "better-sqlite3"
 import fs from "fs"
 import crypto from "crypto"
+import { logger } from "@/infrastructure/logger"
 import { MarkdownParser } from "../../infrastructure/MarkdownParser"
 import { DocumentChunker } from "../../infrastructure/DocumentChunker"
 import { OllamaEmbeddingClient } from "../../infrastructure/OllamaEmbeddingClient"
@@ -78,7 +79,7 @@ export class IndexingService {
       this.embeddings.bulkInsert(embeddings)
     }
 
-    console.log(`[IndexingService] Indexed ${filePath}: ${storedChunks.length} chunks`)
+    logger.info(`[IndexingService] Indexed file`, { filePath, chunkCount: storedChunks.length })
   }
 
   async reindexAll(watchDirs: string[]): Promise<void> {
@@ -93,13 +94,13 @@ export class IndexingService {
           await this.indexFile(file)
           count++
         } catch (err) {
-          console.error(`[IndexingService] Failed to index ${file}:`, err)
+          logger.error(`[IndexingService] Failed to index file`, { file, error: err })
         }
       }
     }
 
     const duration = (Date.now() - startTime) / 1000
-    console.log(`[IndexingService] Reindexed ${count} files in ${duration}s`)
+    logger.info(`[IndexingService] Reindex complete`, { fileCount: count, durationSeconds: duration })
   }
 
   archiveFile(filePath: string): void {

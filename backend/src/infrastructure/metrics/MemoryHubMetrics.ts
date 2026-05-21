@@ -6,6 +6,7 @@ export class MemoryHubMetrics {
   briefGenerationDuration: Histogram
   driftDetected: Counter
   coveragePercent: Gauge
+  documentsIndexed: Counter
 
   constructor(registry: Registry) {
     this.searchDuration = new Histogram({
@@ -42,6 +43,13 @@ export class MemoryHubMetrics {
     this.coveragePercent = new Gauge({
       name: "orthoplus_memory_hub_coverage_percent",
       help: "Percentage of documents indexed recently",
+      labelNames: ["category"],
+      registers: [registry],
+    })
+
+    this.documentsIndexed = new Counter({
+      name: "orthoplus_memory_hub_documents_indexed_total",
+      help: "Total documents indexed",
       labelNames: ["category"],
       registers: [registry],
     })

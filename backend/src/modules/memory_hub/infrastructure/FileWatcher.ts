@@ -1,5 +1,6 @@
 import { FSWatcher, watch } from "chokidar"
 import path from "path"
+import { logger } from "@/infrastructure/logger"
 
 export type FileChangeType = "add" | "change" | "unlink"
 
@@ -40,7 +41,7 @@ export class FileWatcher {
     this.watcher.on("change", (filePath) => this.queueEvent("change", filePath))
     this.watcher.on("unlink", (filePath) => this.queueEvent("unlink", filePath))
 
-    console.log("[MemoryHub] FileWatcher started for:", absoluteDirs)
+    logger.info("[MemoryHub] FileWatcher started", { watchDirs: absoluteDirs })
   }
 
   stop(): void {
@@ -50,7 +51,7 @@ export class FileWatcher {
     }
     this.watcher?.close()
     this.watcher = null
-    console.log("[MemoryHub] FileWatcher stopped")
+    logger.info("[MemoryHub] FileWatcher stopped")
   }
 
   private queueEvent(type: FileChangeType, filePath: string): void {
