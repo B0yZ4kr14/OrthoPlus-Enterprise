@@ -81,8 +81,15 @@ export const useRadiografia = () => {
 
   const marcarComoRevisado = async (analiseId: string, observacoes: string) => {
     try {
+      if (!user) throw new Error("Usuário não autenticado");
+
+      // Generate a simple digital signature for audit trail
+      const timestamp = Date.now().toString();
+      const assinaturaDigital = `${user.id}:${analiseId}:${timestamp}`;
+
       await apiClient.patch(`/ia-radiografia/analises/${analiseId}/revisar`, {
         observacoes_dentista: observacoes,
+        assinatura_digital: assinaturaDigital,
       });
 
       toast({
