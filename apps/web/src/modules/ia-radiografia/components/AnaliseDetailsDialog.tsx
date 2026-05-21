@@ -78,7 +78,7 @@ export function AnaliseDetailsDialog({
                 <dt className="text-sm font-medium text-muted-foreground mb-1">
                   Paciente
                 </dt>
-                <dd className="text-lg font-semibold">{analise.patient_name || "Paciente não identificado"}</dd>
+                <dd className="text-lg font-semibold">{analise.paciente_name || "Paciente não identificado"}</dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-muted-foreground mb-1">
@@ -103,11 +103,11 @@ export function AnaliseDetailsDialog({
                   Status
                 </dt>
                 <dd
-                  className={`flex items-center gap-2 ${getStatusColor(analise.status_analise)}`}
+                  className={`flex items-center gap-2 ${getStatusColor(analise.status)}`}
                 >
-                  {getStatusIcon(analise.status_analise)}
+                  {getStatusIcon(analise.status)}
                   <span className="font-medium capitalize">
-                    {analise.status_analise.toLowerCase()}
+                    {analise.status.toLowerCase()}
                   </span>
                 </dd>
               </div>
@@ -227,7 +227,7 @@ export function AnaliseDetailsDialog({
               <p className="text-sm whitespace-pre-wrap">
                 {analise.observacoes_dentista}
               </p>
-              {analise.revisado_por_dentista && (
+              {analise.revisada && (
                 <p className="text-xs text-muted-foreground mt-4">
                   Revisado pelo profissional responsável
                 </p>

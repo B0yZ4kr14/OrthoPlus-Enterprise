@@ -7,6 +7,8 @@ import { DicomMetadataStripper } from "../domain/services/DicomMetadataStripper"
 import { LocalAIService } from "../domain/services/LocalAIService"
 import { AcaoAuditIA, TipoRadiografia } from "@prisma/client"
 import crypto from "crypto"
+import fs from "fs"
+import path from "path"
 
 const consentimentoService = new IAConsentimentoService()
 const auditService = new IAAuditService()
@@ -47,9 +49,12 @@ export class IARadiografiaController {
         return res.status(400).json({ error: "Imagem contem possiveis metadados PII" })
       }
 
-      // 3. Salvar arquivo em storage (placeholder — usar S3/MinIO/local)
-      const storagePath = `uploads/ia-radiografia/${clinicId}/${patient_id}/${Date.now()}.png`
-      // TODO: implementar upload real para storage
+      // 3. Salvar arquivo em storage local
+      const storageDir = path.join(process.cwd(), "uploads", "ia-radiografia", clinicId, patient_id)
+      fs.mkdirSync(storageDir, { recursive: true })
+      const storageFileName = `${Date.now()}.png`
+      const storagePath = path.join(storageDir, storageFileName)
+      fs.writeFileSync(storagePath, cleanBuffer)
 
       // 4. Criar registro de analise
       const analise = await prisma.ia_radiografia_analise.create({
@@ -59,7 +64,7 @@ export class IARadiografiaController {
           prontuario_id: prontuario_id || null,
           dentista_id: dentistaId,
           imagem_hash: originalHash,
-          imagem_storage_path: storagePath,
+          imagem_storage_path: `uploads/ia-radiografia/${clinicId}/${patient_id}/${storageFileName}`,
           tipo_radiografia: tipo_radiografia as TipoRadiografia,
           status: "PENDENTE",
           modelo_usado: process.env.AI_LOCAL_MODEL || "local/llama-3.3",
@@ -216,6 +221,31 @@ export class IARadiografiaController {
     } catch (error) {
       console.error("[IA-Radiografia] Get error:", error)
       return res.status(500).json({ error: "Erro ao obter analise" })
+    }
+  }
+
+  /**
+   * GET /ia-radiografia/analises/:id/audit
+   */
+  async obterAuditoriaAnalise(req: Request, res: Response) {
+    try {
+      const clinicId = req.clinicId as string
+      const { id } = req.params
+
+      const analise = await prisma.ia_radiografia_analise.findFirst({
+        where: { id, clinic_id: clinicId },
+      })
+
+      if (!analise) {
+        return res.status(404).json({ error: "Analise nao encontrada" })
+      }
+
+      const auditoria = await auditService.obterAuditoriaPorAnalise(id)
+
+      return res.json(auditoria)
+    } catch (error) {
+      console.error("[IA-Radiografia] Audit get error:", error)
+      return res.status(500).json({ error: "Erro ao obter auditoria" })
     }
   }
 

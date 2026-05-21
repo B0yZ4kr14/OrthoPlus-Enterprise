@@ -8,13 +8,13 @@ function makeAnalise(overrides: Partial<AnaliseComplete> = {}): AnaliseComplete 
   return {
     id: "a1",
     clinic_id: "c1",
-    patient_id: "p1",
+    paciente_id: "p1",
     tipo_radiografia: "PANORAMICA",
     imagem_url: "https://example.com/img.jpg",
     imagem_storage_path: "/path/img.jpg",
-    status_analise: "CONCLUIDA",
-    revisado_por_dentista: false,
-    problemas_detectados: 0,
+    status: "CONCLUIDA",
+    revisada: false,
+    
     confidence_score: 0,
     ...overrides,
   }
@@ -38,9 +38,9 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
-            { tipo: "CARIE", localizacao: "Dente 16", severidade: "MODERADA" } as any,
-            { tipo: "FRATURA", localizacao: "Dente 21", severidade: "GRAVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 16", severidade: "MODERADA" } as any,
+            { tipo_problema: "FRATURA", localizacao: "Dente 21", severidade: "GRAVE" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -49,8 +49,8 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
-            { tipo: "PERIODONTAL", localizacao: "Dente 36", severidade: "MODERADA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
+            { tipo_problema: "PERIODONTAL", localizacao: "Dente 36", severidade: "MODERADA" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -61,9 +61,9 @@ describe("useIAInsights", () => {
     const { result } = renderHook(() => useIAInsights(analises))
 
     expect(result.current.padroesMaisComuns).toEqual([
-      { tipo: "CARIE", ocorrencias: 3 },
-      { tipo: "FRATURA", ocorrencias: 1 },
-      { tipo: "PERIODONTAL", ocorrencias: 1 },
+      { tipo_problema: "CARIE", ocorrencias: 3 },
+      { tipo_problema: "FRATURA", ocorrencias: 1 },
+      { tipo_problema: "PERIODONTAL", ocorrencias: 1 },
     ])
   })
 
@@ -72,8 +72,8 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Arcada Superior", severidade: "LEVE" } as any,
-            { tipo: "CARIE", localizacao: "Arcada Superior", severidade: "MODERADA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Arcada Superior", severidade: "LEVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Arcada Superior", severidade: "MODERADA" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -82,7 +82,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Arcada Inferior", severidade: "LEVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Arcada Inferior", severidade: "LEVE" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -103,8 +103,8 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as any,
-            { tipo: "CARIE", localizacao: "Dente 16", severidade: "MEDIA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 16", severidade: "MEDIA" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -113,7 +113,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -139,8 +139,8 @@ describe("useIAInsights", () => {
     const { result } = renderHook(() => useIAInsights(analises))
 
     expect(result.current.tiposMaisAnalisados).toEqual([
-      { tipo: "Panorâmica", quantidade: 2 },
-      { tipo: "Periapical", quantidade: 1 },
+      { tipo_problema: "Panorâmica", quantidade: 2 },
+      { tipo_problema: "Periapical", quantidade: 1 },
     ])
   })
 
@@ -185,7 +185,7 @@ describe("useIAInsights", () => {
         problemas_detectados: 1,
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -221,7 +221,7 @@ describe("useIAInsights", () => {
   it("should generate recomendacao manutencao when no issues and many analises", () => {
     const analises: AnaliseComplete[] = Array.from({ length: 6 }, () =>
       makeAnalise({
-        problemas_detectados: 0,
+        
         resultado_ia: {
           problemas_detectados: [],
           sugestoes_tratamento: [],
@@ -244,7 +244,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE", localizacao: "Dente 14" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -264,7 +264,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo: "CARIE" } as any,
+            { tipo_problema: "CARIE" } as any,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",

@@ -61,7 +61,7 @@ export function ComparativoPDFExport({
 
       pdf.setFontSize(10);
       pdf.setFont("helvetica", "normal");
-      pdf.text(`Nome: ${analise1.patient_name}`, margin, yPosition);
+      pdf.text(`Nome: ${analise1.paciente_name}`, margin, yPosition);
       yPosition += 6;
       pdf.text(
         `Data do Relatório: ${new Date().toLocaleDateString("pt-BR")}`,
@@ -195,7 +195,7 @@ export function ComparativoPDFExport({
       try {
         const img1 = new Image();
         img1.crossOrigin = "anonymous";
-        img1.src = analise1.imagem_url;
+        img1.src = analise1.imagem_url || "";
         await new Promise((resolve) => {
           img1.onload = resolve;
         });
@@ -251,7 +251,7 @@ export function ComparativoPDFExport({
       try {
         const img2 = new Image();
         img2.crossOrigin = "anonymous";
-        img2.src = analise2.imagem_url;
+        img2.src = analise2.imagem_url || "";
         await new Promise((resolve) => {
           img2.onload = resolve;
         });
@@ -285,7 +285,7 @@ export function ComparativoPDFExport({
 
       // Salvar PDF
       // @ts-expect-error — TS18048
-      const fileName = `comparativo_${analise1.patient_name.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`;
+      const fileName = `comparativo_${analise1.paciente_name.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`;
       pdf.save(fileName);
 
       toast.success("PDF exportado com sucesso!");

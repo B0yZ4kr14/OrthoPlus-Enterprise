@@ -1,14 +1,16 @@
 import crypto from "crypto"
 
-const ENCRYPTION_KEY = process.env.IA_ENCRYPTION_KEY || ""
+const ENCRYPTION_KEY = process.env.IA_ENCRYPTION_KEY
 
 if (!ENCRYPTION_KEY || ENCRYPTION_KEY.length < 32) {
-  console.warn("[SECURITY] IA_ENCRYPTION_KEY nao configurada ou muito curta. Usando fallback DEV ONLY.")
+  throw new Error(
+    "[SECURITY] IA_ENCRYPTION_KEY must be set and at least 32 characters long. " +
+    "This is required for AES-256-GCM encryption of AI radiography results."
+  )
 }
 
 function deriveKey(analiseId: string): Buffer {
-  const base = ENCRYPTION_KEY || "dev-only-fallback-key-32-chars!!"
-  return crypto.scryptSync(base, analiseId, 32)
+  return crypto.scryptSync(ENCRYPTION_KEY!, analiseId, 32)
 }
 
 export class IAEncryptionService {

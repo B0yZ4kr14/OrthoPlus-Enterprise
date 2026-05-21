@@ -27,7 +27,7 @@ export function RadiografiaComparison({ analises }: RadiografiaComparisonProps) 
   } = useRadiografiaComparison(analises);
 
   const pacienteAnalises = analise1
-    ? analisesPorPaciente.find((p) => p.patientId === analise1.patient_id)?.analises || []
+    ? analisesPorPaciente.find((p) => p.patientId === analise1.paciente_id)?.analises || []
     : [];
 
   return (
@@ -43,7 +43,7 @@ export function RadiografiaComparison({ analises }: RadiografiaComparisonProps) 
         <div className="space-y-6">
           <PatientSelector
             pacientes={analisesPorPaciente}
-            selectedPatientId={analise1?.patient_id || ""}
+            selectedPatientId={analise1?.paciente_id || ""}
             onSelect={handlePacienteSelect}
           />
 

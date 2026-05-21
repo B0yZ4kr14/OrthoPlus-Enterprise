@@ -8,12 +8,12 @@ function makeAnalise(overrides: Partial<AnaliseComplete> = {}): AnaliseComplete 
   return {
     id: "a1",
     clinic_id: "c1",
-    patient_id: "p1",
+    paciente_id: "p1",
     tipo_radiografia: "PANORAMICA",
     imagem_url: "https://example.com/img.jpg",
     imagem_storage_path: "/path/img.jpg",
-    status_analise: "CONCLUIDA",
-    revisado_por_dentista: false,
+    status: "CONCLUIDA",
+    revisada: false,
     problemas_detectados: 0,
     confidence_score: 0,
     created_at: "2024-01-15T10:00:00Z",
@@ -35,9 +35,9 @@ describe("useRadiografiaComparison", () => {
 
   it("should group analises by patient with at least 2 entries", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1", patient_name: "João", created_at: "2024-01-20T10:00:00Z" }),
-      makeAnalise({ id: "a2", patient_id: "p1", patient_name: "João", created_at: "2024-01-15T10:00:00Z" }),
-      makeAnalise({ id: "a3", patient_id: "p2", patient_name: "Maria", created_at: "2024-01-10T10:00:00Z" }),
+      makeAnalise({ id: "a1", paciente_id: "p1", paciente_name: "João", created_at: "2024-01-20T10:00:00Z" }),
+      makeAnalise({ id: "a2", paciente_id: "p1", paciente_name: "João", created_at: "2024-01-15T10:00:00Z" }),
+      makeAnalise({ id: "a3", paciente_id: "p2", paciente_name: "Maria", created_at: "2024-01-10T10:00:00Z" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -54,8 +54,8 @@ describe("useRadiografiaComparison", () => {
 
   it("should find analise by id when selected", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1" }),
-      makeAnalise({ id: "a2", patient_id: "p1" }),
+      makeAnalise({ id: "a1", paciente_id: "p1" }),
+      makeAnalise({ id: "a2", paciente_id: "p1" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -71,8 +71,8 @@ describe("useRadiografiaComparison", () => {
 
   it("should compute comparacao with aumentou tendencia", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1", problemas_detectados: 2, confidence_score: 80, created_at: "2024-01-15T10:00:00Z" }),
-      makeAnalise({ id: "a2", patient_id: "p1", problemas_detectados: 5, confidence_score: 90, created_at: "2024-01-20T10:00:00Z" }),
+      makeAnalise({ id: "a1", paciente_id: "p1", problemas_detectados: 2, confidence_score: 80, created_at: "2024-01-15T10:00:00Z" }),
+      makeAnalise({ id: "a2", paciente_id: "p1", problemas_detectados: 5, confidence_score: 90, created_at: "2024-01-20T10:00:00Z" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -93,8 +93,8 @@ describe("useRadiografiaComparison", () => {
 
   it("should compute comparacao with diminuiu tendencia", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1", problemas_detectados: 5, confidence_score: 90, created_at: "2024-01-15T10:00:00Z" }),
-      makeAnalise({ id: "a2", patient_id: "p1", problemas_detectados: 2, confidence_score: 80, created_at: "2024-01-20T10:00:00Z" }),
+      makeAnalise({ id: "a1", paciente_id: "p1", problemas_detectados: 5, confidence_score: 90, created_at: "2024-01-15T10:00:00Z" }),
+      makeAnalise({ id: "a2", paciente_id: "p1", problemas_detectados: 2, confidence_score: 80, created_at: "2024-01-20T10:00:00Z" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -111,8 +111,8 @@ describe("useRadiografiaComparison", () => {
 
   it("should compute comparacao with manteve tendencia", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1", problemas_detectados: 3, confidence_score: 85, created_at: "2024-01-15T10:00:00Z" }),
-      makeAnalise({ id: "a2", patient_id: "p1", problemas_detectados: 3, confidence_score: 85, created_at: "2024-01-20T10:00:00Z" }),
+      makeAnalise({ id: "a1", paciente_id: "p1", problemas_detectados: 3, confidence_score: 85, created_at: "2024-01-15T10:00:00Z" }),
+      makeAnalise({ id: "a2", paciente_id: "p1", problemas_detectados: 3, confidence_score: 85, created_at: "2024-01-20T10:00:00Z" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -128,8 +128,8 @@ describe("useRadiografiaComparison", () => {
 
   it("should return null comparacao when only one analise selected", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1" }),
-      makeAnalise({ id: "a2", patient_id: "p1" }),
+      makeAnalise({ id: "a1", paciente_id: "p1" }),
+      makeAnalise({ id: "a2", paciente_id: "p1" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -143,9 +143,9 @@ describe("useRadiografiaComparison", () => {
 
   it("should handlePacienteSelect set both analises", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1", created_at: "2024-01-20T10:00:00Z" }),
-      makeAnalise({ id: "a2", patient_id: "p1", created_at: "2024-01-15T10:00:00Z" }),
-      makeAnalise({ id: "a3", patient_id: "p1", created_at: "2024-01-10T10:00:00Z" }),
+      makeAnalise({ id: "a1", paciente_id: "p1", created_at: "2024-01-20T10:00:00Z" }),
+      makeAnalise({ id: "a2", paciente_id: "p1", created_at: "2024-01-15T10:00:00Z" }),
+      makeAnalise({ id: "a3", paciente_id: "p1", created_at: "2024-01-10T10:00:00Z" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -158,10 +158,10 @@ describe("useRadiografiaComparison", () => {
     expect(result.current.analise2Id).toBe("a2")
   })
 
-  it("should default patient name to Paciente when patient_name missing", () => {
+  it("should default patient name to Paciente when paciente_name missing", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1", patient_name: undefined }),
-      makeAnalise({ id: "a2", patient_id: "p1", patient_name: undefined }),
+      makeAnalise({ id: "a1", paciente_id: "p1", paciente_name: undefined }),
+      makeAnalise({ id: "a2", paciente_id: "p1", paciente_name: undefined }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))
@@ -171,8 +171,8 @@ describe("useRadiografiaComparison", () => {
 
   it("should handle problemas1 zero for percentual calculation", () => {
     const analises: AnaliseComplete[] = [
-      makeAnalise({ id: "a1", patient_id: "p1", problemas_detectados: 0, created_at: "2024-01-15T10:00:00Z" }),
-      makeAnalise({ id: "a2", patient_id: "p1", problemas_detectados: 3, created_at: "2024-01-20T10:00:00Z" }),
+      makeAnalise({ id: "a1", paciente_id: "p1", problemas_detectados: 0, created_at: "2024-01-15T10:00:00Z" }),
+      makeAnalise({ id: "a2", paciente_id: "p1", problemas_detectados: 3, created_at: "2024-01-20T10:00:00Z" }),
     ]
 
     const { result } = renderHook(() => useRadiografiaComparison(analises))

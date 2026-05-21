@@ -28,13 +28,13 @@ const mockAnalises: AnaliseComplete[] = [
   {
     id: "a1",
     clinic_id: "c1",
-    patient_id: "p1",
+    paciente_id: "p1",
     tipo_radiografia: "PANORAMICA",
     imagem_url: "https://example.com/img1.jpg",
     imagem_storage_path: "/path/img1.jpg",
-    status_analise: "CONCLUIDA",
-    revisado_por_dentista: false,
-    patient_name: "João Silva",
+    status: "CONCLUIDA",
+    revisada: false,
+    paciente_name: "João Silva",
     problemas_detectados: 3,
     confidence_score: 87,
     created_at: "2024-01-15T10:00:00Z",
@@ -42,13 +42,13 @@ const mockAnalises: AnaliseComplete[] = [
   {
     id: "a2",
     clinic_id: "c1",
-    patient_id: "p2",
+    paciente_id: "p2",
     tipo_radiografia: "PERIAPICAL",
     imagem_url: "https://example.com/img2.jpg",
     imagem_storage_path: "/path/img2.jpg",
-    status_analise: "PROCESSANDO",
-    revisado_por_dentista: false,
-    patient_name: "Maria Souza",
+    status: "PROCESSANDO",
+    revisada: false,
+    paciente_name: "Maria Souza",
     problemas_detectados: 1,
     confidence_score: 92,
     created_at: "2024-01-20T14:30:00Z",
@@ -159,7 +159,7 @@ describe("AnaliseList", () => {
 
     expect(mockOnViewDetails).toHaveBeenCalledTimes(1)
     expect(mockOnViewDetails).toHaveBeenCalledWith(
-      expect.objectContaining({ id: "a1", patient_name: "João Silva" }),
+      expect.objectContaining({ id: "a1", paciente_name: "João Silva" }),
     )
   })
 
@@ -167,7 +167,7 @@ describe("AnaliseList", () => {
     const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
       ...mockAnalises[0],
       id: `a${i + 1}`,
-      patient_name: `Paciente ${i + 1}`,
+      paciente_name: `Paciente ${i + 1}`,
     }))
 
     render(
@@ -192,7 +192,7 @@ describe("AnaliseList", () => {
     const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
       ...mockAnalises[0],
       id: `a${i + 1}`,
-      patient_name: `Paciente ${i + 1}`,
+      paciente_name: `Paciente ${i + 1}`,
     }))
 
     render(
@@ -220,7 +220,7 @@ describe("AnaliseList", () => {
     const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
       ...mockAnalises[0],
       id: `a${i + 1}`,
-      patient_name: `Paciente ${i + 1}`,
+      paciente_name: `Paciente ${i + 1}`,
     }))
 
     render(
@@ -254,7 +254,7 @@ describe("AnaliseList", () => {
     const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
       ...mockAnalises[0],
       id: `a${i + 1}`,
-      patient_name: `Paciente ${i + 1}`,
+      paciente_name: `Paciente ${i + 1}`,
     }))
 
     render(

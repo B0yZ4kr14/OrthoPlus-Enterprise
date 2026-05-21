@@ -29,6 +29,7 @@ router.post(
 )
 router.get("/analises", controller.listarAnalises)
 router.get("/analises/:id", controller.obterAnalise)
+router.get("/analises/:id/audit", controller.obterAuditoriaAnalise)
 router.patch("/analises/:id/revisar", controller.revisarAnalise)
 
 export default router

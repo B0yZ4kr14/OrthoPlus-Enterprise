@@ -80,7 +80,7 @@ export const PatientRadiographyTimeline = () => {
           analisesData.length > 0
         ) {
           const firstPatientWithAnalysis = patientsData.find((p) =>
-            analisesData.some((a) => a.patient_id === p.id),
+            analisesData.some((a) => a.paciente_id === p.id),
           );
           if (firstPatientWithAnalysis) {
             setSelectedPatientId(firstPatientWithAnalysis.id);
@@ -99,7 +99,7 @@ export const PatientRadiographyTimeline = () => {
   const patientAnalises = useMemo(() => {
     if (!selectedPatientId) return [];
     return analises
-      .filter((a) => a.patient_id === selectedPatientId)
+      .filter((a) => a.paciente_id === selectedPatientId)
       .sort((a, b) => {
         const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
         const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
@@ -118,7 +118,7 @@ export const PatientRadiographyTimeline = () => {
       problemas: analise.problemas_detectados || 0,
       confianca: Math.round((analise.confidence_score || 0) * (analise.confidence_score && analise.confidence_score <= 1 ? 100 : 1)),
       tipo: analise.tipo_radiografia,
-      status: analise.status_analise,
+      status: analise.status,
     }));
   }, [patientAnalises]);
 
@@ -329,13 +329,13 @@ export const PatientRadiographyTimeline = () => {
                         </Badge>
                         <Badge
                           variant={
-                            analise.status_analise === "CONCLUIDA"
+                            analise.status === "CONCLUIDA"
                               ? "success"
                               : "warning"
                           }
                           className="text-[10px] h-5 px-1.5"
                         >
-                          {analise.status_analise}
+                          {analise.status}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">

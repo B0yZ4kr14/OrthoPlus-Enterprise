@@ -18,16 +18,28 @@ export interface RevisarAnaliseDTO {
   assinaturaDigital: string
 }
 
+export interface ProblemaDetectado {
+  tipo_problema: string
+  dente_codigo?: string
+  localizacao?: string
+  severidade: "LEVE" | "MODERADA" | "GRAVE"
+  confianca: number
+  descricao?: string
+  sugestao_tratamento?: string
+  urgente: boolean
+}
+
+export interface SugestaoTratamento {
+  tratamento: string
+  descricao: string
+  prioridade: "BAIXA" | "MEDIA" | "ALTA"
+}
+
 export interface ResultadoIA {
-  problemas_detectados: Array<{
-    tipo: string
-    localizacao: string
-    severidade: string
-    descricao: string
-    recomendacao: string
-  }>
-  observacoes_gerais: string
-  dentes_avaliados: number[]
-  qualidade_imagem: string
-  requer_avaliacao_especialista: boolean
+  problemas_detectados: ProblemaDetectado[]
+  sugestoes_tratamento: SugestaoTratamento[]
+  observacoes_ia: string
+  dentes_avaliados?: number[]
+  qualidade_imagem?: string
+  requer_avaliacao_especialista?: boolean
 }

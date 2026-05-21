@@ -38,7 +38,7 @@ export function RadiografiaComparison({
     const pacientes = new Map<string, AnaliseComplete[]>();
 
     analises.forEach((analise) => {
-      const patientId = analise.patient_id;
+      const patientId = analise.paciente_id;
       if (!pacientes.has(patientId)) {
         pacientes.set(patientId, []);
       }
@@ -50,7 +50,7 @@ export function RadiografiaComparison({
       .filter(([_, analisesArr]) => analisesArr.length >= 2)
       .map(([patientId, analisesArr]) => ({
         patientId,
-        patientName: analisesArr[0].patient_name,
+        patientName: analisesArr[0].paciente_name,
         analises: analisesArr.sort(
           (a, b) =>
             new Date(b.created_at ?? "").getTime() - new Date(a.created_at ?? "").getTime(),
@@ -158,7 +158,7 @@ export function RadiografiaComparison({
               Selecione um Paciente
             </label>
             <Select
-              value={analise1?.patient_id || ""}
+              value={analise1?.paciente_id || ""}
               onValueChange={(patientId) => {
                 const paciente = analisesPorPaciente.find(
                   (p) => p.patientId === patientId,
@@ -434,7 +434,7 @@ export function RadiografiaComparison({
                     </SelectTrigger>
                     <SelectContent>
                       {analisesPorPaciente
-                        .find((p) => p.patientId === analise1.patient_id)
+                        .find((p) => p.patientId === analise1.paciente_id)
                         ?.analises.map((analise) => (
                           <SelectItem key={analise.id ?? ""} value={analise.id ?? ""}>
                             {new Date(analise.created_at ?? "").toLocaleDateString(
@@ -462,7 +462,7 @@ export function RadiografiaComparison({
                     </SelectTrigger>
                     <SelectContent>
                       {analisesPorPaciente
-                        .find((p) => p.patientId === analise2.patient_id)
+                        .find((p) => p.patientId === analise2.paciente_id)
                         ?.analises.map((analise) => (
                           <SelectItem key={analise.id ?? ""} value={analise.id ?? ""}>
                             {new Date(analise.created_at ?? "").toLocaleDateString(

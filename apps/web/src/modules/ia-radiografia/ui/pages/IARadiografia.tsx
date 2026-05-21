@@ -49,7 +49,7 @@ export default function IARadiografia() {
     let filtered = [...analises];
 
     if (filterStatus !== "TODOS") {
-      filtered = filtered.filter((a) => a.status_analise === filterStatus);
+      filtered = filtered.filter((a) => a.status === filterStatus);
     }
     if (filterTipo !== "TODOS") {
       filtered = filtered.filter((a) => a.tipo_radiografia === filterTipo);
@@ -143,7 +143,7 @@ export default function IARadiografia() {
           </Card>
           <Card className="p-6">
             <div className="text-sm text-muted-foreground">Em Processamento</div>
-            <div className="text-3xl font-bold mt-2">{analises.filter((a) => a.status_analise === "PROCESSANDO" || a.status_analise === "PENDENTE").length}</div>
+            <div className="text-3xl font-bold mt-2">{analises.filter((a) => a.status === "PROCESSANDO" || a.status === "PENDENTE").length}</div>
             <div className="flex items-center gap-1 mt-2 text-sm text-muted-foreground"><Clock className="h-3 w-3" />Processando...</div>
           </Card>
         </div>

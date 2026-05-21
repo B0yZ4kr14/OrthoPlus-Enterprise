@@ -1,8 +1,26 @@
-import { ResultadoIA } from "../entities/analise"
+// LocalAIResponse types defined below
+
+interface ProblemaDetectado {
+  tipo_problema: string
+  dente_codigo?: string
+  localizacao?: string
+  severidade: "LEVE" | "MODERADA" | "GRAVE"
+  confianca: number
+  descricao?: string
+  sugestao_tratamento?: string
+  urgente: boolean
+}
+
+interface SugestaoTratamento {
+  tratamento: string
+  descricao: string
+  prioridade: "BAIXA" | "MEDIA" | "ALTA"
+}
 
 interface LocalAIResponse {
-  problemas_detectados: ResultadoIA["problemas_detectados"]
-  observacoes_gerais: string
+  problemas_detectados: ProblemaDetectado[]
+  sugestoes_tratamento: SugestaoTratamento[]
+  observacoes_ia: string
   dentes_avaliados: number[]
   qualidade_imagem: string
   requer_avaliacao_especialista: boolean
@@ -60,20 +78,30 @@ export class LocalAIService {
 {
   "problemas_detectados": [
     {
-      "tipo": "cárie|fratura|reabsorcao|lesao|outro",
-      "localizacao": "dente(s) afetado(s) em notacao FDI",
-      "severidade": "baixa|moderada|alta|critica",
+      "tipo_problema": "CARIE|FRATURA|PERIODONTAL|IMPLANTE_NECESSARIO|CANAL|LESAO_PERIAPICAL|OUTROS",
+      "dente_codigo": "11",
+      "localizacao": "mesial|distal|oclusal|vestibular|lingual|raiz",
+      "severidade": "LEVE|MODERADA|GRAVE",
+      "confianca": 85,
       "descricao": "descricao detalhada do achado",
-      "recomendacao": "tratamento recomendado"
+      "sugestao_tratamento": "tratamento recomendado",
+      "urgente": false
     }
   ],
-  "observacoes_gerais": "observacoes gerais sobre a radiografia",
+  "sugestoes_tratamento": [
+    {
+      "tratamento": "nome do tratamento",
+      "descricao": "descricao do tratamento",
+      "prioridade": "BAIXA|MEDIA|ALTA"
+    }
+  ],
+  "observacoes_ia": "observacoes gerais sobre a radiografia",
   "dentes_avaliados": [11, 12, ...],
   "qualidade_imagem": "baixa|regular|boa|excelente",
   "requer_avaliacao_especialista": true|false
 }
 
-IMPORTANTE: Seja conservador. Sempre indique quando ha necessidade de avaliacao humana. Use nomenclatura FDI.`
+IMPORTANTE: Seja conservador. Sempre indique quando ha necessidade de avaliacao humana. Use nomenclatura FDI. Inclua sugestoes_tratamento separadas dos problemas.`
 
     const specific: Record<string, string> = {
       PERIAPICAL: "Foque em: apices radiculares, lesoes periapicais, tratamentos endodonticos.",
@@ -90,7 +118,8 @@ IMPORTANTE: Seja conservador. Sempre indique quando ha necessidade de avaliacao 
     // Fallback extremamente basico quando modelo nao retorna JSON
     return {
       problemas_detectados: [],
-      observacoes_gerais: `Analise indisponivel no momento. Tipo: ${tipo}. Texto raw: ${rawText.slice(0, 200)}`,
+      sugestoes_tratamento: [],
+      observacoes_ia: `Analise indisponivel no momento. Tipo: ${tipo}. Texto raw: ${rawText.slice(0, 200)}`,
       dentes_avaliados: [],
       qualidade_imagem: "regular",
       requer_avaliacao_especialista: true,
@@ -103,7 +132,7 @@ IMPORTANTE: Seja conservador. Sempre indique quando ha necessidade de avaliacao 
     if (resultado.problemas_detectados.length > 0) score += 0.1
     if (resultado.qualidade_imagem === "boa" || resultado.qualidade_imagem === "excelente") score += 0.1
     if (resultado.requer_avaliacao_especialista) score += 0.1
-    if (resultado.observacoes_gerais.length > 50) score += 0.1
+    if (resultado.observacoes_ia.length > 50) score += 0.1
     return Math.min(score, 0.99)
   }
 }

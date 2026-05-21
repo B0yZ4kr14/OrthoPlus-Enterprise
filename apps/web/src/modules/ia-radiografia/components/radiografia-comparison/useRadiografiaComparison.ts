@@ -11,7 +11,7 @@ export function useRadiografiaComparison(analises: AnaliseComplete[]) {
     const pacientes = new Map<string, AnaliseComplete[]>();
 
     analises.forEach((analise) => {
-      const patientId = analise.patient_id;
+      const patientId = analise.paciente_id;
       if (!pacientes.has(patientId)) {
         pacientes.set(patientId, []);
       }
@@ -22,7 +22,7 @@ export function useRadiografiaComparison(analises: AnaliseComplete[]) {
       .filter(([_, analisesArr]) => analisesArr.length >= 2)
       .map(([patientId, analisesArr]) => ({
         patientId,
-        patientName: analisesArr[0]?.patient_name || "Paciente",
+        patientName: analisesArr[0]?.paciente_name || "Paciente",
         analises: analisesArr.sort(
           (a, b) =>
             new Date(b.created_at ?? "").getTime() - new Date(a.created_at ?? "").getTime(),

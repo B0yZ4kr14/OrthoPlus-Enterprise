@@ -3,21 +3,21 @@ import { z } from "zod";
 export const analiseRadiograficaSchema = z.object({
   id: z.string().uuid().optional(),
   clinic_id: z.string().uuid(),
-  patient_id: z.string().uuid(),
+  paciente_id: z.string().uuid(),
   prontuario_id: z.string().uuid().optional(),
   tipo_radiografia: z.enum([
     "PANORAMICA",
     "PERIAPICAL",
     "BITE_WING",
-    "CEFALOMETRICA",
-    "TOMOGRAFIA",
+    "OCLUSAL",
+    "LATERAL",
   ]),
-  imagem_url: z.string().url(),
+  imagem_url: z.string().url().optional(),
   imagem_storage_path: z.string(),
-  status_analise: z
+  status: z
     .enum(["PENDENTE", "PROCESSANDO", "CONCLUIDA", "ERRO"])
     .default("PENDENTE"),
-  revisado_por_dentista: z.boolean().default(false),
+  revisada: z.boolean().default(false),
   observacoes_dentista: z.string().optional(),
 });
 
@@ -46,7 +46,7 @@ export type AnaliseRadiografica = z.infer<typeof analiseRadiograficaSchema>;
 export type ProblemaRadiografico = z.infer<typeof problemaRadiograficoSchema>;
 
 export interface AnaliseComplete extends AnaliseRadiografica {
-  patient_name?: string;
+  paciente_name?: string;
   problemas_detectados?: number;
   confidence_score?: number;
   created_at?: string;
@@ -57,7 +57,7 @@ export interface AnaliseComplete extends AnaliseRadiografica {
       descricao: string;
       prioridade: "BAIXA" | "MEDIA" | "ALTA";
     }>;
-    observacoes_ia: string;
+    observacoes_ia?: string;
     qualidade_imagem?: "baixa" | "regular" | "boa" | "excelente";
     dentes_avaliados?: number[];
     requer_avaliacao_especialista?: boolean;
@@ -70,8 +70,8 @@ export const tipoRadiografiaLabels: Record<string, string> = {
   PANORAMICA: "Panorâmica",
   PERIAPICAL: "Periapical",
   BITE_WING: "Bite-Wing",
-  CEFALOMETRICA: "Cefalométrica",
-  TOMOGRAFIA: "Tomografia",
+  OCLUSAL: "Oclusal",
+  LATERAL: "Lateral",
 };
 
 export const tipoProblemaLabels: Record<string, string> = {

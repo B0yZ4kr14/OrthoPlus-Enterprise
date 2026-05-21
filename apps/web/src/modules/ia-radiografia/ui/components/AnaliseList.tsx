@@ -94,7 +94,7 @@ export function AnaliseList({
           >
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="font-semibold">{analise.patient_name}</h3>
+                <h3 className="font-semibold">{analise.paciente_name}</h3>
                 <Badge variant="outline">
                   {
                     tipoRadiografiaLabels[
@@ -103,10 +103,10 @@ export function AnaliseList({
                   }
                 </Badge>
                 <div
-                  className={`flex items-center gap-1 text-sm ${getStatusColor(analise.status_analise)}`}
+                  className={`flex items-center gap-1 text-sm ${getStatusColor(analise.status)}`}
                 >
-                  {getStatusIcon(analise.status_analise)}
-                  <span className="capitalize">{analise.status_analise}</span>
+                  {getStatusIcon(analise.status)}
+                  <span className="capitalize">{analise.status}</span>
                 </div>
               </div>
               <div className="text-sm text-muted-foreground space-y-1">

@@ -35,13 +35,13 @@ import type { AnaliseComplete } from "../../types/radiografia.types"
 const mockAnalise: AnaliseComplete = {
   id: "analise-1",
   clinic_id: "clinic-1",
-  patient_id: "patient-1",
+  paciente_id: "patient-1",
   tipo_radiografia: "PANORAMICA",
   imagem_url: "https://example.com/img1.jpg",
   imagem_storage_path: "/path/img1.jpg",
-  status_analise: "CONCLUIDA",
-  revisado_por_dentista: false,
-  patient_name: "João Silva",
+  status: "CONCLUIDA",
+  revisada: false,
+  paciente_name: "João Silva",
   problemas_detectados: 3,
   confidence_score: 87,
   created_at: "2024-01-15T10:00:00Z",
@@ -57,13 +57,13 @@ const mockAnalise: AnaliseComplete = {
 const mockAnalise2: AnaliseComplete = {
   id: "analise-2",
   clinic_id: "clinic-1",
-  patient_id: "patient-1",
+  paciente_id: "patient-1",
   tipo_radiografia: "PERIAPICAL",
   imagem_url: "https://example.com/img2.jpg",
   imagem_storage_path: "/path/img2.jpg",
-  status_analise: "PROCESSANDO",
-  revisado_por_dentista: false,
-  patient_name: "João Silva",
+  status: "PROCESSANDO",
+  revisada: false,
+  paciente_name: "João Silva",
   problemas_detectados: 1,
   confidence_score: 92,
   created_at: "2024-01-20T10:00:00Z",
@@ -98,7 +98,7 @@ describe("useRadiografia", () => {
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     expect(result.current.analises).toHaveLength(2)
-    expect(result.current.analises[0].patient_name).toBe("João Silva")
+    expect(result.current.analises[0].paciente_name).toBe("João Silva")
     expect(mockGet).toHaveBeenCalledWith("/ia-radiografia/analises")
   })
 
@@ -265,7 +265,7 @@ describe("useRadiografia", () => {
   it("should marcar como revisado and reload data", async () => {
     mockGet.mockResolvedValueOnce([mockAnalise])
     mockPatch.mockResolvedValueOnce({})
-    mockGet.mockResolvedValueOnce([{ ...mockAnalise, revisado_por_dentista: true }])
+    mockGet.mockResolvedValueOnce([{ ...mockAnalise, revisada: true }])
 
     const { result } = renderHook(() => useRadiografia())
     await waitFor(() => expect(result.current.loading).toBe(false))

@@ -68,7 +68,7 @@ export function AnaliseCharts({ analises }: AnaliseChartsProps) {
 
       const entry = meses.get(mesAno)!;
       entry.total++;
-      if (analise.status_analise === "CONCLUIDA") {
+      if (analise.status === "CONCLUIDA") {
         entry.concluidas++;
       }
       entry.problemas += analise.problemas_detectados || 0;
@@ -101,8 +101,8 @@ export function AnaliseCharts({ analises }: AnaliseChartsProps) {
 
     analises.forEach((analise) => {
       status.set(
-        analise.status_analise,
-        (status.get(analise.status_analise) || 0) + 1,
+        analise.status,
+        (status.get(analise.status) || 0) + 1,
       );
     });
 
