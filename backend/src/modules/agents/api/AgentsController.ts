@@ -12,6 +12,7 @@
 
 import { Request, Response } from 'express';
 import { z } from 'zod';
+import { logger } from '@/infrastructure/logger';
 import { 
   AgentProxyService,
   CRUDRequest,
@@ -145,7 +146,7 @@ export class AgentsController {
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      console.error('[AgentsController.createCRUD] Error:', errorMessage);
+      logger.error('[AgentsController.createCRUD] Error:', errorMessage);
       res.status(500).json({
         error: 'Erro ao gerar CRUD',
         message: errorMessage,
@@ -186,7 +187,7 @@ export class AgentsController {
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      console.error('[AgentsController.createCRUDSimple] Error:', errorMessage);
+      logger.error('[AgentsController.createCRUDSimple] Error:', errorMessage);
       res.status(500).json({
         error: 'Erro ao gerar CRUD simples',
         message: errorMessage,
@@ -230,7 +231,7 @@ export class AgentsController {
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      console.error('[AgentsController.fixBug] Error:', errorMessage);
+      logger.error('[AgentsController.fixBug] Error:', errorMessage);
       res.status(500).json({
         error: 'Erro ao analisar bug',
         message: errorMessage,
@@ -276,7 +277,7 @@ export class AgentsController {
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      console.error('[AgentsController.refactor] Error:', errorMessage);
+      logger.error('[AgentsController.refactor] Error:', errorMessage);
       res.status(500).json({
         error: 'Erro ao gerar plano de refatoração',
         message: errorMessage,
@@ -320,7 +321,7 @@ export class AgentsController {
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      console.error('[AgentsController.codeReview] Error:', errorMessage);
+      logger.error('[AgentsController.codeReview] Error:', errorMessage);
       res.status(500).json({
         error: 'Erro ao realizar code review',
         message: errorMessage,

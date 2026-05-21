@@ -265,7 +265,7 @@ export class CryptoConfigController {
       const webhookSignature = req.headers["x-webhook-signature"];
 
       if (!webhookSignature) {
-        console.warn(
+        logger.warn(
           "Webhook without signature - validation skipped for development",
         );
       }

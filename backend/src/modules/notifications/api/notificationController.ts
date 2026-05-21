@@ -1,6 +1,7 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { NextFunction, Request, Response } from "express";
 import nodemailer from "nodemailer";
+import { logger } from "@/infrastructure/logger";
 
 
 /**
@@ -287,7 +288,7 @@ export class NotificationController {
             });
           }
         } catch (e) {
-          console.error(e);
+          logger.error(e);
         }
       }
 
@@ -386,7 +387,7 @@ export class NotificationController {
             });
             alertsSent++;
           } catch (e) {
-            console.error("Failed to send email", e);
+            logger.error("Failed to send email", e);
           }
         }
 
@@ -458,7 +459,7 @@ export class NotificationController {
             html: `<p>Verifique o estoque no sistema. Detalhes: ${JSON.stringify(resumo)}</p>`,
           });
         } catch (e) {
-          console.error("Email failed", e);
+          logger.error("Email failed", e);
         }
 
         await (prisma as any).audit_logs.create({

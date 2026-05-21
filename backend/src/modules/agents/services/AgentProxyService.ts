@@ -6,6 +6,7 @@
  */
 
 import axios, { AxiosInstance, AxiosError } from 'axios';
+import { logger } from '@/infrastructure/logger';
 
 // ============================================================================
 // TIPOS
@@ -107,7 +108,7 @@ export class AgentProxyService {
 
     // Log de debug em desenvolvimento
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[AgentProxyService] Conectado a: ${this.baseURL}`);
+      logger.info(`[AgentProxyService] Conectado a: ${this.baseURL}`);
     }
   }
 

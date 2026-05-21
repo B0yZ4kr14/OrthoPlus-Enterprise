@@ -12,7 +12,7 @@
 | LOCAL | `69dbd494` | Atual |
 | GITHUB | `69dbd494` | Atual |
 | VPS (/home/tsi) | `89aa485` | Desatualizado (~10+ commits atras) |
-| VPS (/home/ubuntu) | `86a3841` | Muito desatualizado (~20+ commits, 560 arquivos sujos) |
+| VPS (/home/tsi) | `86a3841` | Muito desatualizado (~20+ commits, 560 arquivos sujos) |
 
 ---
 
@@ -35,7 +35,7 @@
 
 ### Diretorios
 
-**`/home/ubuntu/OrthoPlus-Enterprise`** (LEGACY)
+**`/home/tsi/OrthoPlus-Enterprise`** (LEGACY)
 - Commit `86a3841` — muito antigo
 - 560 arquivos modificados
 - Status: NAO USAR
@@ -68,5 +68,5 @@
 
 1. Atualizar VPS: git fetch && git pull origin main em /home/tsi/OrthoPlus-Enterprise
 2. Reconstruir imagens Docker apos o pull
-3. Limpar diretorio legado /home/ubuntu/OrthoPlus-Enterprise
+3. Limpar diretorio legado /home/tsi/OrthoPlus-Enterprise
 4. Configurar deploy automatico via GitHub Actions

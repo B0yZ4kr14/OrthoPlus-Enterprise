@@ -38,7 +38,7 @@ Adicione os seguintes secrets:
 
 ```
 VPS_TSI_02_HOST=100.111.74.69
-VPS_TSI_02_USER=ubuntu
+VPS_TSI_02_USER=tsi
 VPS_TSI_02_SSH_KEY=-----BEGIN OPENSSH PRIVATE KEY-----
 ...
 -----END OPENSSH PRIVATE KEY-----

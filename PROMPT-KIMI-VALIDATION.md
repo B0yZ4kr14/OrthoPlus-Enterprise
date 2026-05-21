@@ -122,7 +122,7 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 - [ ] Verificar se build está atualizado (`/var/www/orthoplus/`)
 - [ ] Confirmar que banco está sincronizado
 - [ ] Validar que usuários criados estão na VPS
-- [ ] Executar health check completo (`/home/ubuntu/dashboard.sh`)
+- [ ] Executar health check completo (`/home/tsi/OrthoPlus-Enterprise/scripts/vps/dashboard.sh`)
 - [ ] Verificar logs de sincronização
 - [ ] Confirmar backup automático funcionando
 - [ ] Validar SSL certificado (válido até Apr 2027)

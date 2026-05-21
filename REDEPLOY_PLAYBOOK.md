@@ -11,7 +11,7 @@ rsync -avz --delete \\
   --exclude=".git" \\
   --exclude="dist" \\
   -e "ssh -i deploy_key" \\
-  . ubuntu@100.111.74.69:/home/ubuntu/OrthoPlus-Enterprise/
+  . tsi@100.111.74.69:/home/tsi/OrthoPlus-Enterprise/
 \`\`\`
 
 ## 2. Fluxo de Build (Remoto)

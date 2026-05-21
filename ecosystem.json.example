@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "orthoplus-backend",
-      "script": "/data/home/ubuntu/OrthoPlus/backend/dist/index.js",
+      "script": "/data/home/tsi/OrthoPlus/backend/dist/index.js",
       "instances": 2,
       "exec_mode": "cluster",
       "cwd": "/data/home/ubuntu/OrthoPlus",
@@ -10,8 +10,8 @@
       "restart_delay": 3000,
       "max_restarts": 10,
       "min_uptime": "10s",
-      "output": "/data/home/ubuntu/OrthoPlus/logs/backend-out.log",
-      "error_file": "/data/home/ubuntu/OrthoPlus/logs/backend-err.log",
+      "output": "/data/home/tsi/OrthoPlus/logs/backend-out.log",
+      "error_file": "/data/home/tsi/OrthoPlus/logs/backend-err.log",
       "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
       "merge_logs": true,
       "env": {

@@ -1,10 +1,11 @@
 import { z } from "zod";
+import { logger } from "@/infrastructure/logger";
 
 const AI_GATEWAY_URL = "https://ai-gateway.vercel.sh/v1/chat/completions";
 const AI_GATEWAY_API_KEY = process.env.VERCEL_AI_GATEWAY_API_KEY || process.env.AI_GATEWAY_API_KEY;
 
 if (!AI_GATEWAY_API_KEY) {
-  console.warn("[AI] VERCEL_AI_GATEWAY_API_KEY não configurada. Módulo AI desativado.");
+  logger.warn("[AI] VERCEL_AI_GATEWAY_API_KEY não configurada. Módulo AI desativado.");
 }
 
 export const TriagemSchema = z.object({
@@ -84,7 +85,7 @@ export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult
     const parsed = JSON.parse(jsonStr);
     return TriagemResultSchema.parse(parsed);
   } catch (e) {
-    console.error("[AI] Falha ao parsear resposta da triagem:", content);
+    logger.error("[AI] Falha ao parsear resposta da triagem:", content);
     throw new Error("Resposta da IA em formato inválido");
   }
 }

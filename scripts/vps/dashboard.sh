@@ -46,8 +46,8 @@ echo ""
 # 5. Backup Verification
 echo "💾 PERSISTÊNCIA (Backups)"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-COUNT=$(ls -1 /home/ubuntu/backups/ 2>/dev/null | wc -l)
-LAST=$(ls -t /home/ubuntu/backups/ 2>/dev/null | head -1)
+COUNT=$(ls -1 /home/tsi/backups/ 2>/dev/null | wc -l)
+LAST=$(ls -t /home/tsi/backups/ 2>/dev/null | head -1)
 echo "  Total de Backups: $COUNT"
 echo "  Último Backup:    $LAST"
 echo ""

@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../../../middleware/authMiddleware";
 import { clinicGuard } from "../../../middleware/clinicGuard";
+import { logger } from "@/infrastructure/logger";
 import { triagemVirtual, TriagemSchema, healthCheckAI } from "../ai.service";
 
 const router: Router = Router();
@@ -34,7 +35,7 @@ router.post("/triagem", authMiddleware, async (req: Request, res: Response) => {
     const result = await triagemVirtual(parsed.data);
     res.json(result);
   } catch (error: any) {
-    console.error("[AI/Triagem] Erro:", error.message);
+    logger.error("[AI/Triagem] Erro:", error.message);
     res.status(500).json({
       error: "Erro ao processar triagem",
       message: error.message,

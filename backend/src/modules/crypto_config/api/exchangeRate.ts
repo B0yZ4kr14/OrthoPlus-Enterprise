@@ -1,3 +1,5 @@
+import { logger } from "@/infrastructure/logger";
+
 const FALLBACK_RATES: Record<string, number> = {
   BTC: 500000,
   ETH: 25000,
@@ -30,7 +32,7 @@ export async function fetchExchangeRateBRL(coin: string): Promise<number> {
       }
     }
   } catch (error) {
-    console.warn(
+    logger.warn(
       `[crypto] Failed to fetch live exchange rate for ${normalizedCoin}, using fallback.`,
       error,
     );

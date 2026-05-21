@@ -231,8 +231,8 @@ POST /api/agents/review    → Python FastAPI
 pnpm --filter orthoplus-backend build
 
 # Deploy manual
-ssh ubuntu@100.111.74.69
-cd /home/ubuntu/OrthoPlus-Enterprise
+ssh tsi@100.111.74.69
+cd /home/tsi/OrthoPlus-Enterprise
 git pull origin main
 pnpm install
 pnpm --filter @orthoplus/shared-types build

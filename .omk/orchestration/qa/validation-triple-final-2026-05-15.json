@@ -41,7 +41,7 @@
     "uptime": "up 2 weeks, 5 days, 19h, 11m",
     "node_version": "v20.20.2",
     "directories": {
-      "/home/ubuntu/OrthoPlus-Enterprise": {
+      "/home/tsi/OrthoPlus-Enterprise": {
         "commit_short": "86a3841",
         "branch": "main",
         "dirty": true,

@@ -5,6 +5,7 @@
 
 import { Request, Response } from 'express';
 import { z } from 'zod';
+import { logger } from '@/infrastructure/logger';
 import { GitHubRepository } from '../domain/entities/GitHubRepository';
 
 export class GitHubToolsController {
@@ -38,7 +39,7 @@ export class GitHubToolsController {
         repositories: repos.map(r => r.toJSON()),
       });
     } catch (error) {
-      console.error('Error listing repositories:', error);
+      logger.error('Error listing repositories:', error);
       res.status(500).json({ error: 'Erro ao listar repositórios' });
     }
   }
@@ -84,7 +85,7 @@ export class GitHubToolsController {
         res.status(400).json({ error: 'Dados inválidos', details: error.errors });
         return;
       }
-      console.error('Error connecting repository:', error);
+      logger.error('Error connecting repository:', error);
       res.status(500).json({ error: 'Erro ao conectar repositório' });
     }
   }
@@ -108,7 +109,7 @@ export class GitHubToolsController {
 
       res.json({ repoId, branches });
     } catch (error) {
-      console.error('Error getting branches:', error);
+      logger.error('Error getting branches:', error);
       res.status(500).json({ error: 'Erro ao obter branches' });
     }
   }
@@ -145,7 +146,7 @@ export class GitHubToolsController {
 
       res.json({ repoId, pullRequests });
     } catch (error) {
-      console.error('Error getting pull requests:', error);
+      logger.error('Error getting pull requests:', error);
       res.status(500).json({ error: 'Erro ao obter pull requests' });
     }
   }
@@ -180,7 +181,7 @@ export class GitHubToolsController {
 
       res.json({ repoId, workflows });
     } catch (error) {
-      console.error('Error getting workflows:', error);
+      logger.error('Error getting workflows:', error);
       res.status(500).json({ error: 'Erro ao obter workflows' });
     }
   }
