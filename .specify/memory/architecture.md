@@ -19,7 +19,7 @@
 
 ## Architecture Intent
 
-The five views together stabilize a multi-tenant dental clinic management platform where clinic isolation is invariant, clinical and financial workflows are cross-module but loosely coupled through events, and the development structure mirrors domain capabilities without introducing premature distribution. The architecture makes explicit: who acts, what they achieve, which objects carry authority, how runtime handoffs cross boundaries, how components depend on each other, and where runtime units execute.
+The five views together stabilize a multi-tenant dental clinic management platform where clinic isolation is invariant, clinical and financial workflows are cross-module but loosely coupled through events, and the development structure mirrors domain capabilities without introducing premature distribution. The architecture makes explicit: who acts, what they achieve, which objects carry authority, how runtime handoffs cross boundaries, how components depend on each other, and where runtime units execute. A scoped exception introduces self-hosted medical imaging AI for radiograph analysis, ensuring patient data never leaves the clinic boundary for AI processing.
 
 ## Central Design Forces
 
@@ -27,9 +27,9 @@ The five views together stabilize a multi-tenant dental clinic management platfo
 
 2. **Event-driven cross-module collaboration**: The Logical view assigns object ownership to capabilities. The Process view translates this into event handoffs rather than direct calls. The Development view enforces this through module isolation and event bus contracts. The Physical view places the event bus inside the backend runtime unit, keeping handoffs local to the application layer.
 
-3. **Human authority over AI**: The Scenario view defines AI as advisory. The Logical view does not grant AI ownership of clinical objects. The Process view places an approval gate between AI suggestions and state changes. The Development view isolates the Agent Service as a separate runtime component with no direct data access. The Physical view places the Agent Service outside the production data boundary.
+3. **Human authority over AI**: The Scenario view defines AI as advisory. The Logical view does not grant AI ownership of clinical objects. The Process view places an approval gate between AI suggestions and state changes. The Development view isolates the Agent Service as a separate runtime component with no direct data access. The Physical view places the Agent Service outside the production data boundary. Medical imaging AI operates within the clinic boundary but remains advisory; Dentista approval is required for clinical adoption.
 
-4. **Monolithic runtime with modular boundaries**: The Development view preserves module-level isolation within a single backend component. The Physical view deploys this as a single runtime unit. This tradeoff favors operational simplicity over independent scalability, with the change axis clearly identified for future extraction.
+4. **Monolithic runtime with modular boundaries**: The Development view preserves module-level isolation within a single backend component. The Physical view deploys this as a single runtime unit. This tradeoff favors operational simplicity over independent scalability, with the change axis clearly identified for future extraction. Self-hosted medical imaging AI runs as a separate local runtime unit to ensure data residency.
 
 ## Primary Tradeoffs
 
@@ -38,8 +38,9 @@ The five views together stabilize a multi-tenant dental clinic management platfo
 | Monolith vs microservices | Modular monolith (single backend runtime, 37 internal modules) | Simpler deployment and transaction consistency; scaling requires scaling entire unit | Single module requires independent scaling or deployment cadence |
 | Synchronous vs asynchronous cross-module updates | Synchronous within capability; asynchronous events across capabilities | Strong consistency for booking and billing within module; eventual consistency for notifications and analytics | Cross-module transaction requirements emerge (e.g., inventory-treatment-atomic) |
 | Single-VPS vs distributed deployment | Single host with Docker Compose | Operational simplicity; single point of failure | Availability requirements exceed single-host tolerance |
-| External AI vs self-hosted | External AI provider via gateway | No GPU infrastructure; latency and cost externalized | AI latency or cost becomes unacceptable; data residency requires local inference |
+| External AI vs self-hosted | External AI for development assistance; self-hosted vision model for medical imaging | Development AI has no GPU overhead; medical images never leave clinic boundary; local inference ensures LGPD compliance | General AI latency becomes unacceptable; medical imaging requires model upgrade or scaling |
 | Colocated database vs external managed database | PostgreSQL in container alongside backend | Full control; backup and recovery are operator responsibility | Operational burden exceeds team capacity |
+| Self-hosted medical AI vs external medical AI service | Self-hosted vision model within clinic boundary | Patient data never leaves clinic; no external transfer; LGPD compliant | GPU infrastructure insufficient; model management exceeds team capacity |
 | SPA vs server-rendered frontend | Single-page application | Rich client interactions; frontend owns presentation state | SEO or initial load time becomes critical |
 
 ## Stable Boundaries
@@ -51,6 +52,7 @@ The five views together stabilize a multi-tenant dental clinic management platfo
 | Invoice immutability after closure | Logical, Process, Physical | Tax and legal compliance | Any update, delete, or silent correction to a closed invoice |
 | Document version append-only | Logical, Process, Physical | Legal evidence chain | Overwrite, deletion, or reordering of historical versions |
 | Agent Service isolation from production data | Scenario, Process, Development, Physical | AI must not access patient data directly | Direct database connection, file system access, or unauthenticated API calls from Agent Service |
+| Medical Imaging AI data residency | Scenario, Logical, Process, Physical | Medical images must never leave clinic boundary for AI processing | External transfer of medical images; processing without LGPD consent; clinical adoption without Dentista approval |
 | Frontend-backend contract via shared types | Development | Type safety across stack | Frontend depending on backend internals; backend depending on frontend structure |
 | Module internal implementation isolation | Development, Process | Safe refactoring and parallel development | Direct imports between backend modules; shared mutable state |
 
@@ -60,6 +62,7 @@ The five views together stabilize a multi-tenant dental clinic management platfo
 |-----------------|-------------|----------------|--------------------------|
 | New clinical module | Backend module boundary; Frontend module boundary | Development, Logical | New capability added without existing module changes |
 | New AI capability | Agent Service boundary; AI provider boundary | Physical, Process | New workflow type; no impact on clinical data or runtime |
+| New medical imaging AI model | Local AI Runtime unit boundary | Physical, Process | Model binary update; no data boundary change; no external impact |
 | New payment method | Financial Management capability; payment gateway boundary | Scenario, Process, Physical | Invoice lifecycle stable; only payment execution path changes |
 | Compliance evolution (LGPD) | Consent object; Audit infrastructure | Scenario, Logical, Physical | New consent checkpoint scenarios; audit retention changes |
 | Scale-out requirement | Backend runtime unit; Database runtime unit | Physical, Development | May require decomposition of monolith or database sharding |
@@ -72,6 +75,7 @@ The five views together stabilize a multi-tenant dental clinic management platfo
 | Cross-clinic data query | Violates clinic tenant isolation invariant | Scenario, Logical, Process, Physical |
 | Backend module direct import | Breaks module isolation; creates cascade changes | Development, Process |
 | AI autonomous clinical decision | Violates human authority over AI | Scenario, Logical, Process |
+| Transfer of medical images to external AI without consent | Violates LGPD, data residency, and clinic trust | Scenario, Logical, Process, Physical |
 | Closed invoice mutation | Violates financial immutability invariant | Logical, Process |
 | Agent Service direct database access | Violates Agent Service isolation boundary | Development, Physical |
 | Frontend embedding business logic | Breaks frontend-backend contract; causes drift | Development, Scenario |

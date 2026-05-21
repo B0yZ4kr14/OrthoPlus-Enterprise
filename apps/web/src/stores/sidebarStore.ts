@@ -7,7 +7,6 @@
  */
 
 import { create } from "zustand"
-import { persist, type StorageValue } from "zustand/middleware"
 import { z } from "zod"
 import { useAuth } from "@/contexts/AuthContext"
 import { useLocation } from "react-router-dom"
@@ -40,6 +39,7 @@ interface SidebarState {
   isExpanded: (boundedContext: string) => boolean
   expandGroup: (boundedContext: string) => void
   collapseGroup: (boundedContext: string) => void
+  setExpandedGroups: (groups: string[]) => void
 }
 
 function getActiveBoundedContext(pathname: string): string | null {
@@ -54,91 +54,139 @@ function getActiveBoundedContext(pathname: string): string | null {
 }
 
 const STORAGE_KEY_PREFIX = "orthoplus:sidebar:groups"
-const PERSIST_VERSION = 1
 
-export const useSidebarStore = create<SidebarState>()(
-  persist(
-    (set, get) => ({
-      expandedGroups: [],
+function buildStorageKey(userId: string | undefined, clinicId: string | null): string {
+  const uid = userId || "anonymous"
+  const cid = clinicId || "no-clinic"
+  return `${STORAGE_KEY_PREFIX}:${uid}:${cid}`
+}
 
-      toggleGroup: (boundedContext: string) => {
-        set((state) => {
-          const next = new Set(state.expandedGroups)
-          if (next.has(boundedContext)) {
-            next.delete(boundedContext)
-          } else {
-            next.add(boundedContext)
-          }
-          return { expandedGroups: Array.from(next) }
-        })
-      },
+function loadPersistedState(key: string): string[] | null {
+  try {
+    const raw = localStorage.getItem(key)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    const validated = validatePersistedState(parsed)
+    return validated?.expandedGroups ?? null
+  } catch {
+    return null
+  }
+}
 
-      isExpanded: (boundedContext: string) => {
-        return get().expandedGroups.includes(boundedContext)
-      },
+function savePersistedState(key: string, expandedGroups: string[]) {
+  try {
+    localStorage.setItem(
+      key,
+      JSON.stringify({ state: { expandedGroups }, version: 1 }),
+    )
+  } catch (err) {
+    console.warn("[sidebarStore] Failed to save state:", err)
+  }
+}
 
-      expandGroup: (boundedContext: string) => {
-        set((state) => {
-          if (state.expandedGroups.includes(boundedContext)) return state
-          return {
-            expandedGroups: [...state.expandedGroups, boundedContext],
-          }
-        })
-      },
+/** Migrate from legacy key (without user/clinic isolation) to scoped key */
+function migrateLegacyState(newKey: string): string[] | null {
+  try {
+    const legacyRaw = localStorage.getItem(`${STORAGE_KEY_PREFIX}-storage`)
+    if (!legacyRaw) return null
+    const parsed = JSON.parse(legacyRaw)
+    const validated = validatePersistedState(parsed)
+    if (validated) {
+      // Save to new scoped key
+      savePersistedState(newKey, validated.expandedGroups)
+      // Clear legacy key to prevent cross-user leakage
+      localStorage.removeItem(`${STORAGE_KEY_PREFIX}-storage`)
+      console.info("[sidebarStore] Migrated legacy state to scoped key")
+      return validated.expandedGroups
+    }
+  } catch {
+    // ignore
+  }
+  return null
+}
 
-      collapseGroup: (boundedContext: string) => {
-        set((state) => ({
-          expandedGroups: state.expandedGroups.filter(
-            (g) => g !== boundedContext,
-          ),
-        }))
-      },
-    }),
-    {
-      name: STORAGE_KEY_PREFIX,
-      version: PERSIST_VERSION,
-      partialize: (state) => ({ expandedGroups: state.expandedGroups }),
-      onRehydrateStorage: () => (state, error) => {
-        if (error) {
-          console.warn("[sidebarStore] Failed to rehydrate, using defaults")
-          return
-        }
-        if (!state) return
-        // Validate rehydrated state against Zod schema
-        const storageKey = `${STORAGE_KEY_PREFIX}-storage`
-        try {
-          const raw = localStorage.getItem(storageKey)
-          if (raw) {
-            const parsed = JSON.parse(raw)
-            const validated = validatePersistedState(parsed)
-            if (!validated) {
-              console.warn("[sidebarStore] Invalid persisted state detected, resetting")
-              localStorage.removeItem(storageKey)
-              state.expandedGroups = []
-            }
-          }
-        } catch {
-          console.warn("[sidebarStore] Error reading storage, using defaults")
-          state.expandedGroups = []
-        }
-      },
-    },
-  ),
-)
+export const useSidebarStore = create<SidebarState>()((set, get) => ({
+  expandedGroups: [],
+
+  setExpandedGroups: (groups: string[]) => {
+    set({ expandedGroups: groups })
+  },
+
+  toggleGroup: (boundedContext: string) => {
+    set((state) => {
+      const next = new Set(state.expandedGroups)
+      if (next.has(boundedContext)) {
+        next.delete(boundedContext)
+      } else {
+        next.add(boundedContext)
+      }
+      return { expandedGroups: Array.from(next) }
+    })
+  },
+
+  isExpanded: (boundedContext: string) => {
+    return get().expandedGroups.includes(boundedContext)
+  },
+
+  expandGroup: (boundedContext: string) => {
+    set((state) => {
+      if (state.expandedGroups.includes(boundedContext)) return state
+      return {
+        expandedGroups: [...state.expandedGroups, boundedContext],
+      }
+    })
+  },
+
+  collapseGroup: (boundedContext: string) => {
+    set((state) => ({
+      expandedGroups: state.expandedGroups.filter(
+        (g) => g !== boundedContext,
+      ),
+    }))
+  },
+}))
 
 /**
- * Hook que integra o store com roteamento e auto-expand.
- * Substitui o SidebarCategoryProvider + useSidebarCategory.
+ * Hook que integra o store com roteamento, auto-expand e persistência
+ * por usuário + clínica (multi-tenant isolation).
  */
 export function useSidebarCategory(): Pick<
   SidebarState,
   "expandedGroups" | "toggleGroup" | "isExpanded"
 > {
-  const { user } = useAuth()
+  const { user, clinicId } = useAuth()
   const { pathname } = useLocation()
 
   const store = useSidebarStore()
   const manuallyCollapsedRef = useRef<Set<string>>(new Set())
+  const storageKeyRef = useRef<string>("")
+
+  // Load persisted state on user/clinic change
+  useEffect(() => {
+    const key = buildStorageKey(user?.id, clinicId)
+    storageKeyRef.current = key
+
+    // Try scoped key first
+    let groups = loadPersistedState(key)
+
+    // Fall back to legacy key (migration)
+    if (groups === null && user?.id && clinicId) {
+      groups = migrateLegacyState(key)
+    }
+
+    if (groups !== null) {
+      store.setExpandedGroups(groups)
+    } else {
+      store.setExpandedGroups([])
+    }
+  }, [user?.id, clinicId, store])
+
+  // Persist state on every change
+  useEffect(() => {
+    const key = storageKeyRef.current
+    if (!key) return
+    savePersistedState(key, store.expandedGroups)
+  }, [store.expandedGroups])
 
   // Auto-expand active category on route change, but respect manual toggles
   useEffect(() => {

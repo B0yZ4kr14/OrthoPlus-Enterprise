@@ -14,7 +14,7 @@ Preserve the physical meaning of tenant isolation: each deployment unit carries 
 |---------|----------------------------|----------------------|
 | Single-VPS simplicity vs horizontal scalability | Single host deployment with Docker Compose; no orchestrator | All containers share host resources; scaling requires host upgrade |
 | Database colocation with application vs external DB | PostgreSQL runs in container alongside backend | Backup and recovery are host-local; external DB would require network security |
-| AI service external vs self-hosted | AI provider accessed via API gateway | No GPU infrastructure on host; latency to external provider |
+| AI service external vs self-hosted | External AI for development assistance; self-hosted local vision model for medical images to ensure data residency | Medical images never leave clinic boundary; development AI uses external provider; medical AI runs locally |
 | File storage local vs external S3 | MinIO S3 available for on-premise; external S3 for cloud | On-premise keeps data local; external offloads storage management |
 | Session state in Redis vs database | Redis for transient session and cache data | Redis loss means re-authentication required; no permanent data loss |
 
@@ -26,6 +26,7 @@ Preserve the physical meaning of tenant isolation: each deployment unit carries 
 | Frontend runtime unit | Static SPA assets served to browsers | Dynamic data; API execution |
 | Backend runtime unit | All business logic execution; API request handling | Frontend assets; AI model inference |
 | Agent Service runtime unit | Development-assistance workloads | Production patient data; business logic mutation |
+| Local AI Runtime unit | Medical image inference; advisory findings generation | Patient metadata; direct database access; clinical decision authority |
 | Database runtime unit | Authoritative persistent state for all domain objects | Business logic; session cache |
 | Cache runtime unit | Transient session and rate-limiting state | Permanent business data |
 | Object Storage runtime unit | File binaries and versions | File metadata; indexing state |
@@ -37,6 +38,7 @@ Preserve the physical meaning of tenant isolation: each deployment unit carries 
 |-----------------|-------------|-----------------|
 | Increased user load | Backend and frontend runtime units | Horizontal scaling would require load balancer and stateless backend |
 | New external AI provider | Agent Service runtime unit | API endpoint change; no impact on backend or frontend |
+| New medical imaging AI model | Local AI Runtime unit | Model binary update; no data boundary change; no external impact |
 | New compliance region | Deployment environment boundary | New VPS or region; data residency requirement |
 | New notification provider | External notification gateway boundary | New integration endpoint; no runtime unit changes |
 | Storage growth | Object Storage runtime unit | Volume expansion or migration; no application changes |
@@ -60,7 +62,7 @@ Preserve the physical meaning of tenant isolation: each deployment unit carries 
 |-------------------------|-----------------------------------|
 | Kubernetes or orchestrator deployment | Current scale and team size do not justify orchestrator complexity |
 | Multi-region active-active deployment | Single-tenant clinic use case does not require geographic distribution |
-| Self-hosted LLM inference | GPU infrastructure and model management are out of scope |
+| Self-hosted general-purpose LLM inference | GPU infrastructure and model management for general LLMs are out of scope; scoped exception for medical imaging vision model |
 | Database sharding by clinic | Current data volume does not justify sharding complexity |
 | CDN for static assets | Single-region deployment; CDN adds unnecessary complexity |
 | Real-time backup to external cloud | Backup strategy is operational, not architecture; local and offsite backup are sufficient |
@@ -78,6 +80,7 @@ Preserve the physical meaning of tenant isolation: each deployment unit carries 
 | Object Storage | File binaries; document versions; backups | Storage layer | Host storage volumes or external S3 | Files are portable; metadata remains in Database |
 | Observability Stack | Metrics; logs; dashboards | Monitoring layer | Backend logs and metrics endpoints | Independent lifecycle; read-only from application perspective |
 | External AI Provider | LLM inference; code generation; analysis | External AI layer | Internet connectivity | No operational control; fallback to degraded mode if unavailable |
+| Local AI Runtime (Medical Imaging) | Vision model inference for dental radiographs | Clinic-internal AI layer | Host GPU or CPU resources | Analysis unavailable; Dentista proceeds without AI assistance |
 | External Notification Gateway | SMS delivery; email delivery | External communication layer | Internet connectivity | No operational control; retry and queue managed by Backend |
 
 ## External System Collaboration
