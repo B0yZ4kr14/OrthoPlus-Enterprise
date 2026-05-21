@@ -16,17 +16,20 @@ import {
 } from "lucide-react";
 import type { AnaliseComplete, ProblemaRadiografico } from "../types/radiografia.types";
 import { tipoRadiografiaLabels, tipoProblemaLabels } from "../types/radiografia.types";
+import type { AuditLogEntry } from "../hooks/useAuditTrail";
 
 interface AnaliseDetailsDialogProps {
   analise: AnaliseComplete | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  auditLogs?: AuditLogEntry[];
 }
 
 export function AnaliseDetailsDialog({
   analise,
   open,
   onOpenChange,
+  auditLogs = [],
 }: AnaliseDetailsDialogProps) {
   if (!analise) return null;
 
@@ -232,6 +235,38 @@ export function AnaliseDetailsDialog({
                   Revisado pelo profissional responsável
                 </p>
               )}
+            </Card>
+          )}
+
+          {/* Audit Trail */}
+          {auditLogs.length > 0 && (
+            <Card className="p-6" depth="normal">
+              <h3 className="text-lg font-semibold mb-4">Trilha de Auditoria</h3>
+              <div className="space-y-3">
+                {auditLogs.map((log) => (
+                  <div
+                    key={log.id}
+                    className="flex items-start gap-3 p-3 bg-accent/30 rounded-lg text-sm"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs">
+                          {log.acao}
+                        </Badge>
+                        <span className="text-muted-foreground text-xs">
+                          {new Date(log.timestamp).toLocaleString("pt-BR")}
+                        </span>
+                      </div>
+                      {log.detalhes && Object.keys(log.detalhes).length > 0 && (
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          {JSON.stringify(log.detalhes).slice(0, 120)}
+                          {JSON.stringify(log.detalhes).length > 120 ? "..." : ""}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </Card>
           )}
         </div>

@@ -6,9 +6,13 @@ import { IAEncryptionService } from "../domain/services/IAEncryptionService"
 import { DicomMetadataStripper } from "../domain/services/DicomMetadataStripper"
 import { LocalAIService } from "../domain/services/LocalAIService"
 import { AcaoAuditIA, TipoRadiografia } from "@prisma/client"
+import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
+import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics"
 import crypto from "crypto"
 import fs from "fs"
 import path from "path"
+
+const metrics = getMetricsCollector(prometheusMetrics.getRegistry())
 
 const consentimentoService = new IAConsentimentoService()
 const auditService = new IAAuditService()
@@ -83,6 +87,13 @@ export class IARadiografiaController {
         detalhes: { originalHash, cleanHash, tipoRadiografia: tipo_radiografia } as any,
       })
 
+      // 5.1 Metrics
+      metrics.iaRadiografia.uploadsTotal.inc({
+        category: "pep",
+        tipo_radiografia: tipo_radiografia as string,
+        status: "success",
+      })
+
       // 6. Processar analise IA (async — idealmente em worker)
       // Aqui processamos sincrono para simplificar; em producao usar fila
       await this.processarAnalise(analise.id, cleanBuffer, tipo_radiografia, clinicId, patient_id, dentistaId)
@@ -112,9 +123,16 @@ export class IARadiografiaController {
         data: { status: "PROCESSANDO" },
       })
 
+      const startTime = Date.now()
       const { resultado, confidence, processingTimeMs } = await aiService.analyzeRadiografia(
         imageBuffer,
         tipoRadiografia,
+      )
+      const durationSeconds = (Date.now() - startTime) / 1000
+
+      metrics.iaRadiografia.analysisDuration.observe(
+        { category: "pep", modelo: process.env.AI_LOCAL_MODEL || "local/llama-3.3" },
+        durationSeconds,
       )
 
       const encrypted = encryptionService.encrypt(resultado, analiseId)
@@ -149,6 +167,10 @@ export class IARadiografiaController {
         dentistaId,
         acao: AcaoAuditIA.ANALISAR,
         detalhes: { erro: error instanceof Error ? error.message : "Erro desconhecido" },
+      })
+      metrics.iaRadiografia.analysisErrors.inc({
+        category: "pep",
+        error_type: error instanceof Error ? error.name : "unknown",
       })
     }
   }
@@ -295,6 +317,8 @@ export class IARadiografiaController {
         detalhes: { assinaturaHash },
       })
 
+      metrics.iaRadiografia.reviewsTotal.inc({ category: "pep" })
+
       return res.json({ message: "Analise revisada com sucesso" })
     } catch (error) {
       console.error("[IA-Radiografia] Review error:", error)
@@ -348,6 +372,62 @@ export class IARadiografiaController {
   }
 
   /**
+   * GET /ia-radiografia/insights
+   */
+  async obterInsights(req: Request, res: Response) {
+    try {
+      const clinicId = req.clinicId as string
+      const { from, to } = req.query as { from?: string; to?: string }
+
+      const dateFilter: { gte?: Date; lte?: Date } = {}
+      if (from) dateFilter.gte = new Date(from)
+      if (to) dateFilter.lte = new Date(to)
+
+      const where = {
+        clinic_id: clinicId,
+        ...(Object.keys(dateFilter).length > 0 ? { created_at: dateFilter } : {}),
+      }
+
+      const [
+        totalAnalises,
+        analisesConcluidas,
+        analisesRevisadas,
+        avgConfidence,
+        avgProcessingTime,
+      ] = await Promise.all([
+        prisma.ia_radiografia_analise.count({ where }),
+        prisma.ia_radiografia_analise.count({ where: { ...where, status: "CONCLUIDA" } }),
+        prisma.ia_radiografia_analise.count({ where: { ...where, revisada: true } }),
+        prisma.ia_radiografia_analise.aggregate({
+          where: { ...where, confidence_score: { not: null } },
+          _avg: { confidence_score: true },
+        }),
+        prisma.ia_radiografia_analise.aggregate({
+          where: { ...where, processamento_ms: { not: null } },
+          _avg: { processamento_ms: true },
+        }),
+      ])
+
+      const taxaRevisao = totalAnalises > 0 ? (analisesRevisadas / totalAnalises) * 100 : 0
+
+      return res.json({
+        total_analises: totalAnalises,
+        analises_concluidas: analisesConcluidas,
+        taxa_sucesso: totalAnalises > 0 ? (analisesConcluidas / totalAnalises) * 100 : 0,
+        taxa_revisao: taxaRevisao,
+        precisao_media: Math.round(avgConfidence._avg.confidence_score || 0),
+        tempo_medio_processamento_ms: Math.round(avgProcessingTime._avg.processamento_ms || 0),
+        // Nota: distribuicao_problemas requer descriptografia individual (GAP-005)
+        // sera implementado quando problema_radiografico table for criada
+        distribuicao_problemas: [],
+      })
+    } catch (error) {
+      console.error("[IA-Radiografia] Insights error:", error)
+      return res.status(500).json({ error: "Erro ao obter insights" })
+    }
+  }
+
+  /**
    * DELETE /ia-radiografia/consentimento/:pacienteId
    */
   async revogarConsentimento(req: Request, res: Response) {
@@ -369,6 +449,8 @@ export class IARadiografiaController {
         acao: AcaoAuditIA.REVOGAR_CONSENTIMENTO,
         detalhes: { motivo },
       })
+
+      metrics.iaRadiografia.consentRevocationsTotal.inc({ category: "pep" })
 
       return res.json(result)
     } catch (error) {

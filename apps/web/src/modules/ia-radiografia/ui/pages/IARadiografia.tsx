@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Scan, Upload } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";
@@ -16,6 +16,8 @@ import {
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import { CheckCircle, Clock, Filter } from "lucide-react";
 import { useRadiografia } from "@/modules/ia-radiografia/hooks/useRadiografia";
+import { useConsentimento } from "@/modules/ia-radiografia/hooks/useConsentimento";
+import { useAuditTrail } from "@/modules/ia-radiografia/hooks/useAuditTrail";
 import { tipoRadiografiaLabels } from "@/modules/ia-radiografia/types/radiografia.types";
 import type { AnaliseComplete } from "@/modules/ia-radiografia/types/radiografia.types";
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +28,7 @@ import { RadiografiaComparison } from "@/modules/ia-radiografia/components/Radio
 import { PatientRadiographyTimeline } from "@/modules/ia-radiografia/components/PatientRadiographyTimeline";
 import { UploadDialog } from "../components/UploadDialog";
 import { AnaliseList } from "../components/AnaliseList";
+import type { ConsentStatus } from "../components/UploadDialog";
 
 export default function IARadiografia() {
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
@@ -35,6 +38,8 @@ export default function IARadiografia() {
   const [selectedAnalise, setSelectedAnalise] =
     useState<AnaliseComplete | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [consentStatus, setConsentStatus] = useState<ConsentStatus>("loading");
+  const [checkingConsent, setCheckingConsent] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState<string>("TODOS");
   const [filterTipo, setFilterTipo] = useState<string>("TODOS");
@@ -43,6 +48,8 @@ export default function IARadiografia() {
   const itemsPerPage = 10;
 
   const { analises, loading, uploadRadiografia } = useRadiografia();
+  const { verificarConsentimento, registrarConsentimento } = useConsentimento();
+  const { logs: auditLogs, fetchAuditTrail } = useAuditTrail();
   const { toast } = useToast();
 
   const filteredAnalises = useMemo(() => {
@@ -73,9 +80,57 @@ export default function IARadiografia() {
     return filteredAnalises.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredAnalises, currentPage]);
 
+  const handleCheckConsent = useCallback(
+    async (patientId: string) => {
+      if (!patientId) {
+        setConsentStatus("loading");
+        return;
+      }
+      setCheckingConsent(true);
+      try {
+        const status = await verificarConsentimento(patientId);
+        if (status?.ativo) {
+          setConsentStatus("consented");
+        } else if (status?.historico.some((h) => h.revogado)) {
+          setConsentStatus("revoked");
+        } else {
+          setConsentStatus("missing");
+        }
+      } catch {
+        setConsentStatus("missing");
+      } finally {
+        setCheckingConsent(false);
+      }
+    },
+    [verificarConsentimento],
+  );
+
+  const handlePatientChange = (value: string) => {
+    setSelectedPatient(value);
+    if (value) {
+      handleCheckConsent(value);
+    } else {
+      setConsentStatus("loading");
+    }
+  };
+
+  const handleRegisterConsent = async () => {
+    if (!selectedPatient) return;
+    try {
+      await registrarConsentimento(selectedPatient);
+      setConsentStatus("consented");
+    } catch (error) {
+      console.error("Erro ao registrar consentimento:", error);
+    }
+  };
+
   const handleUpload = async () => {
     if (!selectedFile || !selectedPatient || !selectedTipo) {
       toast({ title: "Campos obrigatórios", description: "Preencha todos os campos antes de enviar", variant: "destructive" });
+      return;
+    }
+    if (consentStatus !== "consented") {
+      toast({ title: "Consentimento necessário", description: "O paciente precisa consentir com o processamento de IA", variant: "destructive" });
       return;
     }
     try {
@@ -84,9 +139,18 @@ export default function IARadiografia() {
       setSelectedFile(null);
       setSelectedPatient("");
       setSelectedTipo("");
+      setConsentStatus("loading");
     } catch (error) {
       console.error("Erro no upload:", error);
     }
+  };
+
+  const handleViewDetails = (analise: AnaliseComplete) => {
+    setSelectedAnalise(analise);
+    if (analise.id) {
+      fetchAuditTrail(analise.id);
+    }
+    setDetailsDialogOpen(true);
   };
 
   return (
@@ -103,7 +167,10 @@ export default function IARadiografia() {
         open={uploadDialogOpen}
         onOpenChange={setUploadDialogOpen}
         selectedPatient={selectedPatient}
-        onPatientChange={setSelectedPatient}
+        onPatientChange={handlePatientChange}
+        consentStatus={consentStatus}
+        onRegisterConsent={handleRegisterConsent}
+        checkingConsent={checkingConsent}
         selectedTipo={selectedTipo}
         onTipoChange={setSelectedTipo}
         selectedFile={selectedFile}
@@ -229,11 +296,11 @@ export default function IARadiografia() {
           totalItems={filteredAnalises.length}
           itemsPerPage={itemsPerPage}
           onPageChange={setCurrentPage}
-          onViewDetails={(analise) => { setSelectedAnalise(analise); setDetailsDialogOpen(true); }}
+          onViewDetails={handleViewDetails}
         />
       </Card>
 
-      <AnaliseDetailsDialog analise={selectedAnalise} open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen} />
+      <AnaliseDetailsDialog analise={selectedAnalise} open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen} auditLogs={auditLogs} />
     </div>
   );
 }
