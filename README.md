@@ -11,6 +11,43 @@ O **OrthoPlus Enterprise** é um sistema de gestão odontológica completo, comp
 - **Agent Service** — Python 3.14 + FastAPI + Agno (IA generativa)
 - **Infraestrutura** — Docker, PM2, Nginx, Redis
 
+## VPS TSiAPP — Deploy Canônico
+
+> **Arquivo de configuração:** `VPS-TSiAPP.md`
+
+| Variável | Valor |
+|----------|-------|
+| HOSTNAME | TSiAPP |
+| USER | tsi |
+| PORT | 22 |
+| KEY | `~/.ssh/keys/private/TSiHomeLab` |
+
+### Acesso SSH (passwordless)
+
+```bash
+# Usuário tsi (padrão)
+ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@<IP>
+
+# Usuário root (emergência)
+ssh -i ~/.ssh/keys/private/TSiHomeLab root@<IP>
+```
+
+### Deploy
+
+```bash
+cd /home/tsi/OrthoPlus-Enterprise
+docker compose up -d
+docker compose ps
+```
+
+### Healthchecks
+
+| Serviço | URL |
+|---------|-----|
+| Backend | `http://localhost:3005/health` |
+| Frontend | `http://localhost:8083/` |
+| Agent | `http://localhost:8000/` |
+
 ## Estrutura do Monorepo
 
 ```
