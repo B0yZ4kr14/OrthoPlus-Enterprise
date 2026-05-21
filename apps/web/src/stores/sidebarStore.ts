@@ -163,6 +163,7 @@ export function useSidebarCategory(): Pick<
 
   // Load persisted state on user/clinic change
   useEffect(() => {
+    const initStart = performance.now()
     const key = buildStorageKey(user?.id, clinicId)
     storageKeyRef.current = key
 
@@ -179,6 +180,14 @@ export function useSidebarCategory(): Pick<
     } else {
       store.setExpandedGroups([])
     }
+
+    const initDuration = performance.now() - initStart
+    console.info("[sidebar:metric] init", {
+      durationMs: Math.round(initDuration),
+      expandedCount: groups?.length ?? 0,
+      userId: user?.id,
+      clinicId,
+    })
   }, [user?.id, clinicId, store])
 
   // Persist state on every change
@@ -205,8 +214,15 @@ export function useSidebarCategory(): Pick<
         manuallyCollapsedRef.current.delete(boundedContext)
       }
       store.toggleGroup(boundedContext)
+      console.info("[sidebar:metric] toggle", {
+        boundedContext,
+        action: isCurrentlyExpanded ? "collapse" : "expand",
+        totalExpanded: store.expandedGroups.length + (isCurrentlyExpanded ? -1 : 1),
+        userId: user?.id,
+        clinicId,
+      })
     },
-    [store],
+    [store, user?.id, clinicId],
   )
 
   return {

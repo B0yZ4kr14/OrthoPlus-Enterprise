@@ -380,6 +380,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setUserRole(null);
       setClinicId(null);
+      // Clear sidebar state from localStorage to prevent cross-user leakage
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("orthoplus:sidebar:groups")) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach((key) => localStorage.removeItem(key));
       toast.success("Logout realizado com sucesso");
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Erro desconhecido";
