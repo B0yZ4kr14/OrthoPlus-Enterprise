@@ -56,7 +56,7 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 
 **Acceptance Criteria:**
 - Clique no cabeçalho da categoria alterna entre expandido/recolhido
-- Apenas uma categoria pode estar expandida por vez (modo acordeão opcional)
+- Múltiplas categorias podem estar expandidas simultaneamente (sem modo acordeão nesta versão)
 - A transição é animada e suave
 - Ícone de seta (chevron) gira 180° ao expandir
 
@@ -99,8 +99,9 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 **Description**: O usuário deve poder expandir/recolher categorias clicando no cabeçalho.
 **Priority**: Must Have
 **Acceptance Criteria**:
-- Clique no cabeçalho da categoria alterna o estado
-- Ícone chevron indica o estado atual
+- Clique no cabeçalho da categoria alterna o estado (expande se recolhida, recolhe se expandida)
+- Múltiplas categorias podem estar expandidas simultaneamente
+- Ícone chevron indica o estado atual (rotaciona 180° quando expandida)
 - Cursor pointer no cabeçalho
 - Suporte a teclado (Enter/Espaço)
 

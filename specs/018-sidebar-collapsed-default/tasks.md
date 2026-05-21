@@ -81,7 +81,8 @@
 - [x] T401 `cd apps/web && pnpm lint` passes (0 errors)
 - [x] T402 `pnpm build` succeeds
 - [x] T403 Component tests for SidebarGroup pass
-  - **Status**: VERIFIED — Feature validated via type-check (0 errors) + build success. No dedicated component test suite exists for layout components; integration coverage via Playwright E2E tests.
+  - **File**: `apps/web/src/core/layout/Sidebar/SidebarGroup.test.tsx`
+  - **Status**: PASS — 2 tests (renders without crashing, calls toggleGroup on click)
 - [x] T404 No new `as any` or `@ts-ignore`
 - [x] T405 `@orthoplus/core-ui` used for all generic UI
 
