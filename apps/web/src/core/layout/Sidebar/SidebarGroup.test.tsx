@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { SidebarGroup } from "./SidebarGroup"
 import type { MenuGroup } from "./sidebar.config"
+import { Users } from "lucide-react"
 
 const mockToggle = vi.fn()
 const mockIsExpanded = vi.fn().mockReturnValue(false)
@@ -50,9 +51,9 @@ vi.mock("react-router-dom", () => ({
 const mockGroup: MenuGroup = {
   label: "CLÍNICA",
   boundedContext: "clinica",
-  icon: "Users",
+  category: "CLINICA",
   items: [
-    { title: "Pacientes", url: "/pacientes", icon: "Users", moduleKey: "pacientes" },
+    { title: "Pacientes", url: "/pacientes", icon: Users, moduleKey: "pacientes" },
   ],
 }
 

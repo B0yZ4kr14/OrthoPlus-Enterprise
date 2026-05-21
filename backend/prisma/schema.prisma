@@ -3138,3 +3138,108 @@ model analytics_events {
   @@index([event_type, created_at])
   @@schema("operacional")
 }
+
+// ============================================================
+// IA-Radiografia — Modelos de Seguranca (Security Review SA-1/SS-3)
+// ============================================================
+
+enum TipoConsentimentoIA {
+  IA_RADIOGRAFIA
+
+  @@schema("pep")
+}
+
+enum TipoRadiografia {
+  PERIAPICAL
+  PANORAMICA
+  BITE_WING
+  OCLUSAL
+  LATERAL
+
+  @@schema("pep")
+}
+
+enum StatusAnaliseIA {
+  PENDENTE
+  PROCESSANDO
+  CONCLUIDA
+  ERRO
+
+  @@schema("pep")
+}
+
+enum AcaoAuditIA {
+  UPLOAD
+  ANALISAR
+  REVISAR
+  EXPORTAR
+  REVOGAR_CONSENTIMENTO
+  VISUALIZAR
+
+  @@schema("pep")
+}
+
+model paciente_consentimento_ia {
+  id                 String              @id @default(uuid())
+  paciente_id        String
+  clinic_id          String
+  tipo_consentimento TipoConsentimentoIA
+  consentido         Boolean             @default(false)
+  data_consentimento DateTime?
+  ip_consentimento   String?
+  hash_termo         String?
+  revogado           Boolean             @default(false)
+  data_revogacao     DateTime?
+  motivo_revogacao   String?
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+
+  @@index([paciente_id, tipo_consentimento])
+  @@index([clinic_id])
+  @@schema("pep")
+}
+
+model ia_radiografia_analise {
+  id                   String           @id @default(uuid())
+  clinic_id            String
+  paciente_id          String
+  prontuario_id        String?
+  dentista_id          String
+  imagem_hash          String
+  imagem_storage_path  String
+  tipo_radiografia     TipoRadiografia
+  status               StatusAnaliseIA  @default(PENDENTE)
+  resultado_ia         Json?
+  confidence_score     Float?
+  processamento_ms     Int?
+  revisada             Boolean          @default(false)
+  dentista_revisor_id  String?
+  observacoes_dentista String?
+  assinatura_digital   String?
+  modelo_usado         String           @default("local/llama-3.3")
+  created_at           DateTime         @default(now())
+  updated_at           DateTime         @updatedAt
+
+  @@index([clinic_id, status])
+  @@index([paciente_id])
+  @@index([dentista_id])
+  @@schema("pep")
+}
+
+model ia_radiografia_audit_log {
+  id          String      @id @default(uuid())
+  analise_id  String?
+  clinic_id   String
+  paciente_id String
+  dentista_id String
+  acao        AcaoAuditIA
+  timestamp   DateTime    @default(now())
+  ip_address  String?
+  user_agent  String?
+  detalhes    Json?
+
+  @@index([analise_id])
+  @@index([paciente_id])
+  @@index([clinic_id, timestamp])
+  @@schema("pep")
+}
