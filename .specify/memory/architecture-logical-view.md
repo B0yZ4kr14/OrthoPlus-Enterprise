@@ -60,6 +60,7 @@ Preserve logical separation between clinical, financial, operational, and admini
 | Capability depending on another capability's internal objects | External references use identity only; no foreign-key-like coupling across boundaries |
 | Bi-directional aggregate references | Aggregates reference others by identity only; bidirectional navigation creates coupling |
 | Storing AI-generated content as authoritative clinical record | AI output is advisory; only Dentista-approved content becomes part of the clinical record |
+| AI analysis without patient consent | Violates LGPD; consent is mandatory before any AI processing of patient data |
 
 ## Capability Boundaries
 
@@ -73,6 +74,7 @@ Preserve logical separation between clinical, financial, operational, and admini
 | Communication | Deliver notifications via SMS, email, or in-app | Notification request with content and recipient | Delivery status | Message content generation | Dispatch Notification scenario |
 | System Administration | Manage users, roles, permissions, clinic configuration, and module enablement | User creation; role assignment; config change | User account; Permission set; Clinic config | Clinical data; financial data | Manage User Permissions scenario |
 | AI Assistance | Generate development artifacts, analyze code, assist with database queries | Code snippets; entity descriptions; bug reports | Suggestions; scaffolding; analysis | No access to production patient data | AI Agent response scenario |
+| Medical Imaging AI | Analyze dental radiographs and produce advisory findings | Medical image; patient reference; consent state | Structured findings; confidence score; advisory flag | Clinical decision authority; treatment plan modification | Analyze Medical Image with AI scenario |
 
 ## Domain Objects and Relationships
 
@@ -89,6 +91,8 @@ Preserve logical separation between clinical, financial, operational, and admini
 | Clinic | Tenant boundary containing all other objects | System Administration | Has Users, Patients, Configurations | System initialization | Isolation boundary; no cross-clinic references |
 | InventoryItem | Trackable material or product in clinic stock | Operations | Linked to consumption records; has reorder threshold | Inventory Update scenario | Quantity non-negative |
 | Consent | Patient authorization for data use or communication | Patient Management | Belongs to Patient; has purpose and expiry | LGPD compliance gap | Revocable; logged |
+| AIAnalysis | Advisory result of medical image analysis | Medical Imaging AI | Belongs to Patient; references Image; requires Consent | Analyze Medical Image scenario | Advisory only; immutable after review; clinic-scoped |
+| AuditLog | Immutable record of sensitive operations | System Administration | Belongs to operation; references Actor and Object | All sensitive scenarios | Append-only; tamper-evident; retention per LGPD |
 
 ## State and Lifecycle
 

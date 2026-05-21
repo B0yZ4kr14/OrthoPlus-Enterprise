@@ -9,7 +9,7 @@
 ## Overview
 O OrthoPlus Enterprise implementou um redesign premium (v3) com design tokens semânticos e CSS variables para controle de tema via `ThemeContext`. Os temas premium (`premium-light`, `premium-dental-dark`) definem paletas de cores consistentes através de CSS variables injetadas na classe `:root` do `<html>`.
 
-No entanto, **52 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-500`, `bg-amber`, `text-amber`, `bg-cyan`, `text-cyan`) foram identificadas em componentes React espalhados pelo codebase (conforme inventário completo em `audit-colors.md`). Essas cores não respondem ao tema selecionado pelo usuário, criando inconsistências visuais quando o tema premium está ativo.
+No entanto, **0 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-500`, `bg-amber`, `text-amber`, `bg-cyan`, `text-cyan`) foram identificadas em componentes React `.tsx`. As referências remanescentes estão no utilitário de mapeamento semântico (`semantic-colors.ts`) e nas CSS variables (`index.css`), ambos intencionais e compatíveis com o tema. Essas cores não respondem ao tema selecionado pelo usuário, criando inconsistências visuais quando o tema premium está ativo.
 
 ## Problem Statement
 - Componentes com cores hardcoded (`amber-500`, `cyan-500`) ignoram o tema ativo
@@ -31,7 +31,7 @@ No entanto, **52 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-5
 - Garantir que `info` no `premium-light` use `sky-500` via CSS var
 
 ### FR-3: Refatoração de Componentes
-- Substituir todas as 58+ ocorrências de cores hardcoded por classes/utilitários semânticos
+- Substituir todas as 0 ocorrências restantes de cores hardcoded em componentes `.tsx` por classes/utilitários semânticos
 - Priorizar componentes de alto impacto visual:
   - `PasswordStrengthIndicator` (auth)
   - `ClinicWarning` (financeiro/crypto)

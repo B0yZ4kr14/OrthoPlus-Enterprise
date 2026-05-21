@@ -54,6 +54,7 @@ import tissRouter from "./modules/tiss/api/router";
 // Batch 10 Module Routers
 import inadimplenciaRouter from "./modules/inadimplencia/api/router";
 import splitPagamentoRouter from "./modules/split_pagamento/api/router";
+import iaRadiografiaRouter from "./modules/ia_radiografia/api/router";
 
 // Patch — previously unregistered modules
 import { createPepRouter } from "./modules/pep/api/router";
@@ -277,6 +278,7 @@ app.use("/api/crm", crmRouter);
 app.use("/api/crm/db", crmDbRouter);
 app.use("/api/funcionarios", funcionariosRouter);
 app.use("/api/lgpd", lgpdRouter);
+app.use("/api/ia-radiografia", iaRadiografiaRouter);
 app.use("/api/orcamentos", orcamentosRouter);
 app.use("/api/procedimentos", procedimentosRouter);
 app.use("/api/teleodonto", teleodontoRouter);

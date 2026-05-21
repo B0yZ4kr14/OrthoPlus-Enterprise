@@ -74,10 +74,12 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 **So that** eu tenha transparência sobre minha saúde bucal
 
 **Acceptance Criteria:**
-- Login com CPF + senha ou OTP por SMS
+- Login com CPF + senha ou OTP por SMS (camada de Auth; features do portal pertencem a Pacientes)
 - Visualização de próximos agendamentos
 - Acesso a orçamentos pendentes
 - Download de documentos (receitas, atestados)
+
+> **Boundary Note**: Auth (005) own a camada de autenticação (JWT, permissões). Pacientes (001) own as features e dados expostos no portal.
 
 ---
 

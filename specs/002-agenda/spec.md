@@ -111,13 +111,14 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - Impede agendamento sobreposto
 
 ### FR-004: Confirmações
-**Description**: Sistema de confirmação de consultas.
+**Description**: Sistema de confirmação de consultas. **Owner: Agenda (estado)** — módulo Notificações é consumidor do evento de envio.
 **Priority**: Should Have
 **Acceptance Criteria**:
-- Envio automático X horas antes
-- Canais: SMS, WhatsApp, email
-- Resposta do paciente atualiza status
-- Reenvio manual pela recepção
+- Estado da confirmação (pendente, confirmado, cancelado) é propriedade da Agenda
+- Envio automático X horas antes emitido como evento `AppointmentConfirmationRequested`
+- Canais: SMS, WhatsApp, email (entregues por Notificações)
+- Resposta do paciente atualiza status na Agenda via callback/evento
+- Reenvio manual pela recepção reemite o evento
 
 ### FR-005: Recall de Pacientes
 **Description**: Sugestão automática de retorno baseada no tratamento.
@@ -186,7 +187,7 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 ## 7. Security & Compliance
 
 ### Authentication & Authorization
-- **Auth method**: JWT (HS256, 24h expiry) via HttpOnly cookie with SameSite=Strict
+- **Auth method**: JWT (HS256, 15 min access + 7 day refresh) via HttpOnly cookie with SameSite=Strict
 - **Multi-tenancy**: All data access scoped by `clinicId`; `clinicGuard` mandatory on all protected routes
 - **Role-based access**: Module-level permissions enforced via `ModulesContext`
 - **Patient portal auth**: CPF + OTP (separate from staff auth flow)

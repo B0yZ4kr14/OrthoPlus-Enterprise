@@ -17,7 +17,7 @@
 ### Scope
 **Inclui:**
 - Must Have: Notificações via WhatsApp, SMS e email.
-- Must Have: Lembrete e confirmação de consulta.
+- Must Have: Lembrete e confirmação de consulta (canal de entrega; estado da confirmação pertence à Agenda)
 - Must Have: Lembrete de retorno programado.
 - Should Have: Alertas dentro do sistema.
 - Should Have: Editor de templates.

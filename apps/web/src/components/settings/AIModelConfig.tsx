@@ -37,13 +37,13 @@ interface AIModelConfig {
 
 const AI_PROVIDERS = [
   {
-    id: "lovable",
-    name: "Lovable AI (Padrão)",
+    id: "local",
+    name: "Local / Self-Hosted",
     free: true,
     models: [
-      "google/gemini-2.5-flash",
-      "google/gemini-2.5-pro",
-      "openai/gpt-5",
+      "local/llama-3.3",
+      "local/qwen-2.5",
+      "local/deepseek-r1",
     ],
   },
   {
@@ -85,7 +85,7 @@ export function AIModelConfig() {
   const [saving, setSaving] = useState(false);
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
   const [config, setConfig] = useState<AIModelConfig>({
-    default_provider: "lovable",
+    default_provider: "local",
     temperature: 0.7,
     max_tokens: 2000,
   });
@@ -175,7 +175,7 @@ export function AIModelConfig() {
         <div className="space-y-2">
           <Label htmlFor="provider">Provedor de IA Padrão</Label>
           <Select
-            value={config.default_provider || "lovable"}
+            value={config.default_provider || "local"}
             onValueChange={(value) =>
               setConfig({ ...config, default_provider: value })
             }
@@ -457,9 +457,9 @@ export function AIModelConfig() {
 
         <div className="p-4 bg-warning/10 border border-warning/20 rounded-lg">
           <p className="text-sm text-warning">
-            <strong>💡 Recomendação:</strong> Use Lovable AI (gratuito) para
-            começar. Configure outros provedores apenas se precisar de modelos
-            específicos.
+            <strong>💡 Recomendação:</strong> Use modelos locais (self-hosted)
+            para máxima privacidade de dados. Configure provedores externos
+            apenas se necessário e com aprovação de compliance.
           </p>
         </div>
 

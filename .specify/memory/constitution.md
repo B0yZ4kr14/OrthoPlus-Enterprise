@@ -128,6 +128,21 @@ Update AGENTS.md when modifying conventions, scripts, or workflows it describes.
 ### DOC-2: Spec-Kit Traceability
 Every feature MUST have spec.md → plan.md → tasks.md → implementation.md with full traceability.
 
+#### DOC-2a: Hotfix Exception
+A **hotfix** é uma correção crítica em produção que não pode aguardar o ciclo completo de especificação. Critérios para classificação:
+- **Segurança**: vulnerabilidade ativa com CVE ou exposição de dados
+- **Indisponibilidade**: sistema inoperante para usuários finais
+- **Integridade**: perda ou corrupção de dados financeiros/clínicos
+
+**Processo abreviado**:
+1. Aprovação explícita de um maintainer + registro em incidente
+2. Implementação direta em branch `hotfix/*` a partir de `main`
+3. Deploy com rollback plan documentado
+4. **Pós-deploy (≤ 24h)**: retroactive spec update — criar/atualizar spec.md com descrição do hotfix e lições aprendidas
+5. Merge em `develop` na próxima sincronização
+
+**NÃO qualifica como hotfix**: novas features, refatorações, melhorias de UX, débitos técnicos não críticos.
+
 ---
 
 ## 9. Governance & Evolution

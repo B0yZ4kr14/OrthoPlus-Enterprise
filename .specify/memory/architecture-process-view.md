@@ -16,6 +16,7 @@ Preserve the runtime meaning of cross-boundary handoffs: how clinical decisions 
 | Strong consistency within boundary vs eventual consistency across boundaries | Single-boundary operations are ACID; cross-boundary uses events | Invoice creation within Financial Management is synchronous; treatment-to-invoice handoff is event-driven |
 | Tenant isolation at runtime vs query performance | Every runtime link includes clinic context validation; no caching bypasses isolation | clinicGuard validates on every request; no shared cache across clinics |
 | AI integration vs human oversight | AI operates asynchronously; human approval gates sensitive outputs | AI suggestions are delivered as events; Dentista approval required for clinical adoption |
+| Self-hosted medical AI vs external AI provider | Self-hosted vision model for medical images to ensure data residency and LGPD compliance | Medical images never leave clinic infrastructure; inference runs locally; no external data transfer |
 
 ## Stable Boundaries
 
@@ -45,6 +46,8 @@ Preserve the runtime meaning of cross-boundary handoffs: how clinical decisions 
 | clinicGuard validates clinic context before business logic | All runtime links include clinic context | Cross-clinic data access |
 | Cross-boundary state changes use events, not direct calls | Logical decision: event-driven cross-module updates | Tight coupling; cascade failures |
 | Sensitive operations produce audit event before completion | Audit runtime boundary | Non-repudiation failure |
+| Medical image analysis requires explicit LGPD consent | Consent verification runtime link | Unauthorized AI processing; LGPD violation; loss of patient trust |
+| AI analysis results are advisory and require Dentista approval before clinical adoption | Medical Imaging AI runtime boundary | Autonomous AI decisions; patient safety risk; liability |
 | Document OCR does not block upload completion | Document Upload scenario path | User-facing timeout; poor UX |
 | Invoice generation does not block treatment closure | Treatment Planning scenario path | Clinical workflow blocked by financial system |
 
@@ -54,6 +57,7 @@ Preserve the runtime meaning of cross-boundary handoffs: how clinical decisions 
 |-------------------------|-----------------------------------|
 | Distributed transactions across boundaries | Eventual consistency with compensation is preferred; 2PC would couple boundaries |
 | Synchronous AI processing in critical path | AI latency is unpredictable; must not block clinical workflows |
+| Transferring medical images to external AI without consent | Violates LGPD and clinic data residency; patient data must never leave clinic boundary for AI processing |
 | Runtime shared state between clinics | Would violate tenant isolation invariant |
 | Process orchestration engine | Scenarios are domain-specific; a generic engine would obscure semantics |
 | Real-time bidirectional sync between modules | Eventual consistency is sufficient; real-time sync adds complexity |
@@ -73,6 +77,9 @@ Preserve the runtime meaning of cross-boundary handoffs: how clinical decisions 
 | Inventory Consumption | Procedure executed | Clinical Operations (event) | Operations (event handler) | Material usage | Stock decremented; threshold checked |
 | Audit Logging | Sensitive operation | Any capability | Audit boundary | Operation details; actor; timestamp | Log entry persisted |
 | AI Agent Request | Development task | Client / System | AI Agent boundary | Code context; task description | Structured response returned |
+| Medical Image Analysis Request | Dentista requests analysis | Client | Clinical Operations (AI module) | Image reference; analysis type | Consent verified; analysis queued; advisory result returned |
+| Consent Verification | AI analysis requested | Clinical Operations | Patient Management | Patient identity; consent purpose | Consent state returned; audit logged |
+| AI Local Inference | Analysis queued | Clinical Operations (AI module) | Self-hosted AI runtime | Image bytes (anonymized); model parameters | Structured findings; confidence score; processing metadata |
 | Permission Check | Any request | Auth boundary | System Administration | User identity; requested action | Permission granted or denied |
 
 ## Handoffs and Approvals

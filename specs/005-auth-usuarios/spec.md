@@ -24,7 +24,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 - Permissões por módulo
 - Multi-tenancy (isolação por clinicId)
 - Rate limiting e proteção CSRF
-- Portal do paciente (autenticação separada)
+- Portal do paciente (autenticação separada — Auth fornece JWT/segurança; Pacientes (001) own as features do portal)
 
 **Exclui:**
 - SSO/SAML (futuro)
@@ -42,8 +42,8 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 
 **Acceptance Criteria:**
 - Senha com mínimo 8 caracteres, maiúscula, número e símbolo
-- JWT com expiração de 24h
-- Cookie HttpOnly + SameSite=Strict
+- JWT access token com expiração de 15 minutos + refresh token de 7 dias
+- Cookie HttpOnly + SameSite=Strict (access token) + refresh token em cookie separado
 - Rate limit: 10 tentativas / 15 min
 - Mensagem genérica em caso de erro (não revela se email existe)
 
@@ -143,7 +143,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 
 ### Security
 - JWT secret com 256+ bits de entropia
-- Senhas hasheadas com bcrypt (salt 10+)
+- Senhas hasheadas com bcrypt (cost 12)
 - Headers de segurança (Helmet)
 - CSRF protection para mutations
 - Nunca expor stack traces em produção
@@ -276,7 +276,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 
 - Backend: módulo auth com Prisma (users, profiles, login_attempts)
 - Frontend: AuthContext com useAuth() hook
-- JWT: HS256, expiração 24h
+- JWT: HS256, 15 min access + 7 day refresh
 - clinicGuard middleware obrigatório em todos os routers protegidos
 - Rate limiting: express-rate-limit com tiers distintos
 - LGPD: middleware dedicado para compliance

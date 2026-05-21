@@ -65,6 +65,7 @@ Stabilize the actor-goal-scenario semantics for a multi-tenant dental clinic man
 | Paciente | Access personal records, schedule appointments, receive communications | View own history, request appointments, receive notifications, consent management | Self-service portal; own data only |
 | Sistema | Execute automated workflows, generate reports, enforce policies | Cron jobs, backup, audit logging, notification dispatch, AI preprocessing | Automated; no direct UI interaction |
 | AI Agent | Assist with code generation, document analysis, and development tasks | CRUD scaffolding, bugfix suggestions, code review, database queries | Development-assistance only; no production patient data access |
+| AI Médica (Local) | Analisar imagens radiográficas e sugerir achados clinicos | Processamento de imagem; extracao de caracteristicas; sugestao de diagnóstico | Advisory only; nunca toma decisões clínicas; requer consentimento LGPD do paciente |
 
 ## Use Cases
 
@@ -79,6 +80,8 @@ Stabilize the actor-goal-scenario semantics for a multi-tenant dental clinic man
 | Manage Inventory | Staff / Member | Track stock levels, orders, and consumption | Authenticated; inventory module enabled | Operations |
 | Run Analytics Report | Admin, Dentista | Generate operational or financial insights | Data exists; permissions for report type | System Administration |
 | Execute Teleodontology Consultation | Dentista, Paciente | Remote consultation with video and chat | Both authenticated; teleodontology enabled | Clinical Operations |
+| Analyze Medical Image with AI | Dentista, Sistema | Generate advisory findings from dental radiographs | Patient consent for AI analysis; image uploaded; AI service enabled | Clinical Operations |
+| Manage LGPD Consent | Staff, Paciente | Register, review, or revoke patient consent for AI and data use | Patient exists; authenticated | Patient Management |
 | Manage User Permissions | Admin | Grant or revoke module access for clinic staff | Authenticated as Admin | System Administration |
 | Dispatch Notification | Sistema | Send SMS, email, or in-app message to patient | Patient contact info exists; consent given | Communication |
 | Audit Sensitive Operation | Sistema | Log access or modification to patient data | Operation triggered; audit system active | System Administration |

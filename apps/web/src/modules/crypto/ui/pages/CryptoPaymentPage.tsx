@@ -70,7 +70,7 @@ export default function CryptoPaymentPage() {
         });
       } else if (_e.message?.includes("Payment required")) {
         toast.error("Créditos insuficientes", {
-          description: "Adicione créditos ao workspace Lovable",
+          description: "Adicione créditos à sua conta",
         });
       } else {
         toast.error("Erro ao criar invoice", {

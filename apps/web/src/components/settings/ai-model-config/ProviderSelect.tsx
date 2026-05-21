@@ -21,7 +21,7 @@ export function ProviderSelect({ value, onChange }: ProviderSelectProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="provider">Provedor de IA Padrão</Label>
-      <Select value={value || "lovable"} onValueChange={onChange}>
+      <Select value={value || "local"} onValueChange={onChange}>
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
