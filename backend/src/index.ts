@@ -34,7 +34,8 @@ import { startAllWorkers } from "./workers/index";
 import { authMiddleware, tenantGuard } from "./middleware/authMiddleware";
 
 // Batch 8 Module Routers
-import adminToolsRouter from "./modules/admin_tools/api/router";
+import adminToolsRouter from "./modules/admin_tools/api/router"
+import memoryHubRouter from "./modules/memory_hub/api/router";
 import contratosRouter from "./modules/contratos/api/router";
 import crmRouter from "./modules/crm/api/router";
 import { dbRouter as crmDbRouter } from "./modules/crm/api/dbRouter";
@@ -314,6 +315,7 @@ app.use("/api/modules", modulesRouter);
 // Agents Module — Integration with Agno Agent Service (Python/FastAPI on port 8000)
 app.use("/api/agents", createAgentsRouter());
 app.use("/api/ai", aiRouter);
+app.use("/api/memory-hub", memoryHubRouter);
 
 // Active modules endpoint: returns module keys for a clinic from the database.
 // Falls back to returning all modules when AUTH_ALLOW_MOCK=true to unblock frontend in dev/test.

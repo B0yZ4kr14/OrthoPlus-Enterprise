@@ -14,12 +14,12 @@
 
 **Purpose**: Install dependencies, create module structure, verify Ollama availability.
 
-- [ ] T001 Install backend dependencies: `cd backend && pnpm add better-sqlite3 chokidar markdown-it js-yaml`
-- [ ] T002 Install dev dependencies: `cd backend && pnpm add -D @types/better-sqlite3 @types/js-yaml`
-- [ ] T003 [P] Verify Ollama is running and embedding model is available (`nomic-embed-text` or `all-minilm`)
-- [ ] T004 [P] Create module directory structure: `backend/src/modules/memory_hub/{api,domain/{entities,services},infrastructure,workers,cli}/`
-- [ ] T005 [P] Create SQLite database file and initialize schema per `data-model.md`
-- [ ] T006 Add environment variables to `.env.example`: `MEMORY_HUB_ENABLED`, `MEMORY_HUB_INDEX_PATH`, `MEMORY_HUB_OLLAMA_MODEL`
+- [x] T001 Install backend dependencies: `cd backend && pnpm add better-sqlite3 chokidar markdown-it js-yaml`
+- [x] T002 Install dev dependencies: `cd backend && pnpm add -D @types/better-sqlite3 @types/js-yaml`
+- [x] T003 [P] Verify Ollama is running and embedding model is available (`nomic-embed-text` or `all-minilm`)
+- [x] T004 [P] Create module directory structure: `backend/src/modules/memory_hub/{api,domain/{entities,services},infrastructure,workers,cli}/`
+- [x] T005 [P] Create SQLite database file and initialize schema per `data-model.md`
+- [x] T006 Add environment variables to `.env.example`: `MEMORY_HUB_ENABLED`, `MEMORY_HUB_INDEX_PATH`, `MEMORY_HUB_OLLAMA_MODEL`
 
 **Checkpoint**: Dependencies installed, Ollama reachable, module structure ready, SQLite schema created.
 
@@ -33,36 +33,36 @@
 
 ### Document Parsing & Chunking
 
-- [ ] T007 [P] Implement markdown document parser in `backend/src/modules/memory_hub/infrastructure/MarkdownParser.ts`
+- [x] T007 [P] Implement markdown document parser in `backend/src/modules/memory_hub/infrastructure/MarkdownParser.ts`
   - Extract YAML frontmatter, headings, body text
   - Return structured document with heading hierarchy
-- [ ] T008 [P] Implement section-based chunking in `backend/src/modules/memory_hub/infrastructure/DocumentChunker.ts`
+- [x] T008 [P] Implement section-based chunking in `backend/src/modules/memory_hub/infrastructure/DocumentChunker.ts`
   - Split by headings (h1, h2, h3)
   - 512-token chunks with 64-token overlap
   - Preserve heading path metadata
 
 ### Embedding Service
 
-- [ ] T009 Implement Ollama embedding client in `backend/src/modules/memory_hub/infrastructure/OllamaEmbeddingClient.ts`
+- [x] T009 Implement Ollama embedding client in `backend/src/modules/memory_hub/infrastructure/OllamaEmbeddingClient.ts`
   - Call `POST /api/embed` with text batches
   - Handle retries and errors
   - Cache embeddings by content hash
 
 ### Index Storage (SQLite)
 
-- [ ] T010 [P] Implement document repository in `backend/src/modules/memory_hub/infrastructure/DocumentRepository.ts`
+- [x] T010 [P] Implement document repository in `backend/src/modules/memory_hub/infrastructure/DocumentRepository.ts`
   - CRUD for documents table
   - Upsert by source_path with version increment
-- [ ] T011 [P] Implement chunk repository in `backend/src/modules/memory_hub/infrastructure/ChunkRepository.ts`
+- [x] T011 [P] Implement chunk repository in `backend/src/modules/memory_hub/infrastructure/ChunkRepository.ts`
   - CRUD for chunks table
   - Bulk insert for reindexing
-- [ ] T012 [P] Implement embedding repository in `backend/src/modules/memory_hub/infrastructure/EmbeddingRepository.ts`
+- [x] T012 [P] Implement embedding repository in `backend/src/modules/memory_hub/infrastructure/EmbeddingRepository.ts`
   - Store/retrieve float32 BLOBs
   - Cosine similarity search via SQL
 
 ### File Watcher
 
-- [ ] T013 Implement file watcher in `backend/src/modules/memory_hub/infrastructure/FileWatcher.ts`
+- [x] T013 Implement file watcher in `backend/src/modules/memory_hub/infrastructure/FileWatcher.ts`
   - Use chokidar to watch `specs/`, `docs/`, `.specify/memory/`, `.omk/memory/`
   - 30-second polling fallback
   - Debounce rapid changes (batch within 5 seconds)
@@ -86,21 +86,21 @@
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Implement search service in `backend/src/modules/memory_hub/domain/services/SearchService.ts`
+- [x] T016 [US1] Implement search service in `backend/src/modules/memory_hub/domain/services/SearchService.ts`
   - Embed query via Ollama
   - Cosine similarity against chunk embeddings
   - Aggregate by document, rank by max chunk score
   - Return excerpts with heading paths
-- [ ] T017 [US1] Implement search controller in `backend/src/modules/memory_hub/api/controller.ts`
+- [x] T017 [US1] Implement search controller in `backend/src/modules/memory_hub/api/controller.ts`
   - POST `/search` endpoint
   - Parse filters, limit, offset
   - Return results with relevance scores
-- [ ] T018 [US1] Add search router in `backend/src/modules/memory_hub/api/router.ts`
+- [x] T018 [US1] Add search router in `backend/src/modules/memory_hub/api/router.ts`
   - Mount at `/api/memory-hub`
-- [ ] T019 [US1] Register router in backend entry point `backend/src/index.ts`
-- [ ] T020 [US1] Implement CLI search command `backend/src/modules/memory_hub/cli/search.ts`
+- [x] T019 [US1] Register router in backend entry point `backend/src/index.ts`
+- [x] T020 [US1] Implement CLI search command `backend/src/modules/memory_hub/cli/search.ts`
   - Accept query string, call API, print formatted results
-- [ ] T021 [US1] Add Prometheus metric: `orthoplus_memory_hub_search_duration_seconds`
+- [x] T021 [US1] Add Prometheus metric: `orthoplus_memory_hub_search_duration_seconds`
   - `backend/src/infrastructure/metrics/MemoryHubMetrics.ts`
 
 **Checkpoint**: User Story 1 fully functional. Can search project memory via API and CLI.
@@ -122,20 +122,20 @@
 
 ### Implementation for User Story 2
 
-- [ ] T024 [US2] Implement indexing service in `backend/src/modules/memory_hub/domain/services/IndexingService.ts`
+- [x] T024 [US2] Implement indexing service in `backend/src/modules/memory_hub/domain/services/IndexingService.ts`
   - Parse document → chunk → embed → store
   - Upsert logic: compare content hash, skip if unchanged
   - Increment version on change
-- [ ] T025 [US2] Implement reindex worker in `backend/src/modules/memory_hub/workers/reindexWorker.ts`
+- [x] T025 [US2] Implement reindex worker in `backend/src/modules/memory_hub/workers/reindexWorker.ts`
   - Full reindex of all watched directories
   - Progress tracking and error recovery
-- [ ] T026 [US2] Wire file watcher to indexing service in `backend/src/modules/memory_hub/api/controller.ts`
+- [x] T026 [US2] Wire file watcher to indexing service in `backend/src/modules/memory_hub/api/controller.ts`
   - On file change: trigger incremental reindex
   - On file delete: mark document archived
-- [ ] T027 [US2] Add POST `/reindex` endpoint for manual full reindex
-- [ ] T028 [US2] Implement initial index bootstrap script
+- [x] T027 [US2] Add POST `/reindex` endpoint for manual full reindex
+- [x] T028 [US2] Implement initial index bootstrap script
   - `backend/src/modules/memory_hub/scripts/initIndex.ts`
-- [ ] T029 [US2] Add Prometheus metric: `orthoplus_memory_hub_index_duration_seconds`
+- [x] T029 [US2] Add Prometheus metric: `orthoplus_memory_hub_index_duration_seconds`
 
 **Checkpoint**: User Stories 1 AND 2 both work. Search finds newly indexed documents automatically.
 
@@ -156,19 +156,19 @@
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Implement context brief service in `backend/src/modules/memory_hub/domain/services/ContextBriefService.ts`
+- [x] T032 [US3] Implement context brief service in `backend/src/modules/memory_hub/domain/services/ContextBriefService.ts`
   - Search for topic, rank documents
   - Prioritize: spec > plan > architecture > contract > memory
   - Summarize secondary docs if token budget exceeded
   - Generate Markdown with YAML frontmatter
-- [ ] T033 [US3] Add POST `/context-brief` endpoint in controller
+- [x] T033 [US3] Add POST `/context-brief` endpoint in controller
   - Accept topic, max_tokens, include_related
   - Return JSON with markdown field
-- [ ] T034 [US3] Implement CLI brief command `backend/src/modules/memory_hub/cli/brief.ts`
+- [x] T034 [US3] Implement CLI brief command `backend/src/modules/memory_hub/cli/brief.ts`
   - Accept topic, print Markdown to stdout
-- [ ] T035 [US3] Add token counting utility `backend/src/modules/memory_hub/infrastructure/TokenCounter.ts`
+- [x] T035 [US3] Add token counting utility `backend/src/modules/memory_hub/infrastructure/TokenCounter.ts`
   - Simple word-based approximation (1 word ≈ 1.3 tokens)
-- [ ] T036 [US3] Add Prometheus metric: `orthoplus_memory_hub_brief_generation_seconds`
+- [x] T036 [US3] Add Prometheus metric: `orthoplus_memory_hub_brief_generation_seconds`
 
 **Checkpoint**: All user stories 1-3 functional. AI agents can search, index, and receive context briefs.
 
@@ -189,22 +189,22 @@
 
 ### Implementation for User Story 4
 
-- [ ] T039 [US4] Implement drift detector in `backend/src/modules/memory_hub/domain/services/DriftDetectionService.ts`
+- [x] T039 [US4] Implement drift detector in `backend/src/modules/memory_hub/domain/services/DriftDetectionService.ts`
   - Scan specs for API endpoint references, verify in codebase
   - Check architecture decisions against route files
   - Detect specs without corresponding implementation files
-- [ ] T040 [US4] Implement health aggregator in `backend/src/modules/memory_hub/domain/services/HealthService.ts`
+- [x] T040 [US4] Implement health aggregator in `backend/src/modules/memory_hub/domain/services/HealthService.ts`
   - Coverage percent, drift count, index status
-- [ ] T041 [US4] Add GET `/health` endpoint in controller
+- [x] T041 [US4] Add GET `/health` endpoint in controller
   - Return metrics JSON
-- [ ] T042 [US4] Implement drift scan worker `backend/src/modules/memory_hub/workers/driftScanWorker.ts`
+- [x] T042 [US4] Implement drift scan worker `backend/src/modules/memory_hub/workers/driftScanWorker.ts`
   - Configurable cron schedule (default 02:00 daily)
   - Store results in drift_reports table
-- [ ] T043 [US4] Implement CLI drift command `backend/src/modules/memory_hub/cli/drift.ts`
+- [x] T043 [US4] Implement CLI drift command `backend/src/modules/memory_hub/cli/drift.ts`
   - Run scan, print report table
-- [ ] T044 [US4] Implement CLI health command `backend/src/modules/memory_hub/cli/health.ts`
+- [x] T044 [US4] Implement CLI health command `backend/src/modules/memory_hub/cli/health.ts`
   - Print health metrics
-- [ ] T045 [US4] Add Prometheus metrics: `orthoplus_memory_hub_drift_detected_total`, `orthoplus_memory_hub_coverage_percent`
+- [x] T045 [US4] Add Prometheus metrics: `orthoplus_memory_hub_drift_detected_total`, `orthoplus_memory_hub_coverage_percent`
 
 **Checkpoint**: All user stories independently functional.
 
@@ -214,12 +214,12 @@
 
 **Purpose**: Improvements that affect multiple user stories.
 
-- [ ] T046 [P] Add error handling (ApiError + RFC 7807) to all memory_hub endpoints
-- [ ] T047 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
-- [ ] T048 Run backend build: `cd backend && pnpm build` (strict, must pass)
-- [ ] T049 Verify no new `as any` or `@ts-ignore` added (Constitution CQ-2)
-- [ ] T050 [P] Add module documentation to `docs/memory-hub.md`
-- [ ] T051 Run quickstart.md validation — verify all commands work end-to-end
+- [x] T046 [P] Add error handling (ApiError + RFC 7807) to all memory_hub endpoints
+- [x] T047 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
+- [x] T048 Run backend build: `cd backend && pnpm build` (strict, must pass)
+- [x] T049 Verify no new `as any` or `@ts-ignore` added (Constitution CQ-2)
+- [x] T050 [P] Add module documentation to `docs/memory-hub.md`
+- [x] T051 Run quickstart.md validation — verify all commands work end-to-end
 
 ---
 

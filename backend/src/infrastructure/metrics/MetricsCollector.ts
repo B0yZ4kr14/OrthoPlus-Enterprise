@@ -15,6 +15,7 @@ import { BackupMetrics } from "./BackupMetrics";
 import { DatabaseCategoryMetrics } from "./DatabaseCategoryMetrics";
 import { FilesMetrics } from "./FilesMetrics";
 import { IARadiografiaMetrics } from "./IARadiografiaMetrics";
+import { MemoryHubMetrics } from "./MemoryHubMetrics";
 
 class MetricsCollector {
   circuitBreaker: CircuitBreakerMetrics;
@@ -22,6 +23,7 @@ class MetricsCollector {
   database: DatabaseCategoryMetrics;
   files: FilesMetrics;
   iaRadiografia: IARadiografiaMetrics;
+  memoryHub: MemoryHubMetrics;
 
   constructor(registry: Registry) {
     this.circuitBreaker = new CircuitBreakerMetrics(registry);
@@ -29,6 +31,7 @@ class MetricsCollector {
     this.database = new DatabaseCategoryMetrics(registry);
     this.files = new FilesMetrics(registry);
     this.iaRadiografia = new IARadiografiaMetrics(registry);
+    this.memoryHub = new MemoryHubMetrics(registry);
   }
 }
 
