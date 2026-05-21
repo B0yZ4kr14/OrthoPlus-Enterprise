@@ -186,7 +186,7 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 ## 7. Security & Compliance
 
 ### Authentication & Authorization
-- **Auth method**: JWT (HS256, 24h expiry) via HttpOnly cookie with SameSite=Strict
+- **Auth method**: JWT (HS256, 15 min access + 7 day refresh) via HttpOnly cookie with SameSite=Strict
 - **Multi-tenancy**: All data access scoped by `clinicId`; `clinicGuard` mandatory on all protected routes
 - **Role-based access**: Module-level permissions enforced via `ModulesContext`
 - **Patient portal auth**: CPF + OTP (separate from staff auth flow)

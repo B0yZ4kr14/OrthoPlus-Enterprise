@@ -20,7 +20,7 @@
 - Must Have: Entradas e saídas com rastreabilidade.
 - Should Have: Notificações de estoque crítico.
 - Should Have: Análise de consumo e perdas.
-- Could Have: Baixa automática em vendas.
+- Must Have: Baixa automática em vendas.
 
 **Exclui:**
 - Compras e cotações
@@ -121,7 +121,7 @@
 
 ### FR-005: Integração com PDV
 **Description**: Baixa automática em vendas.
-**Priority**: Could Have
+**Priority**: Must Have
 **Acceptance Criteria**:
 - Baixa ao vender no PDV
 - Baixa ao registrar procedimento (consumo de material)
