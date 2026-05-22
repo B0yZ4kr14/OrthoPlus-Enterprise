@@ -74,6 +74,7 @@ export class IndexingService {
 
     // Embed in batches of 10
     const batchSize = 10
+    const useCompression = process.env.MEMORY_HUB_COMPRESSION === "true"
     for (let i = 0; i < storedChunks.length; i += batchSize) {
       const batch = storedChunks.slice(i, i + batchSize)
       const texts = batch.map((c) => c.content)
@@ -86,7 +87,7 @@ export class IndexingService {
         createdAt: Date.now(),
       }))
 
-      this.embeddings.bulkInsert(embeddings)
+      this.embeddings.bulkInsert(embeddings, useCompression)
     }
 
     logger.info(`[IndexingService] Indexed file`, { filePath, chunkCount: storedChunks.length })

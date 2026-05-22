@@ -1,10 +1,24 @@
 import Database from "better-sqlite3"
+import {
+  quantize,
+  cosineSimilarityQuantized,
+  packInt8,
+  unpackInt8,
+  type QuantizedEmbedding,
+} from "./Quantization"
 
 export interface MemoryEmbedding {
   chunkId: string
   embedding: number[]
   model: string
   createdAt: number
+}
+
+export interface CompressionStats {
+  totalEmbeddings: number
+  compressedEmbeddings: number
+  compressionRatio: number
+  spaceSavedBytes: number
 }
 
 export class EmbeddingRepository {
@@ -14,30 +28,73 @@ export class EmbeddingRepository {
     this.db = db
   }
 
-  insert(embedding: MemoryEmbedding): void {
-    const buffer = Buffer.from(new Float32Array(embedding.embedding).buffer)
-    this.db.prepare(
-      `INSERT INTO embeddings (chunk_id, embedding, model, created_at)
-       VALUES (?, ?, ?, ?)
-       ON CONFLICT(chunk_id, model) DO UPDATE SET
-         embedding = excluded.embedding,
-         created_at = excluded.created_at`,
-    ).run(embedding.chunkId, buffer, embedding.model, embedding.createdAt)
+  insert(embedding: MemoryEmbedding, useCompression = false): void {
+    if (useCompression) {
+      const quantized = quantize(embedding.embedding)
+      const buffer = packInt8(quantized.values)
+      this.db.prepare(
+        `INSERT INTO embeddings (chunk_id, embedding, model, is_compressed, quant_min, quant_max, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)
+         ON CONFLICT(chunk_id, model) DO UPDATE SET
+           embedding = excluded.embedding,
+           is_compressed = excluded.is_compressed,
+           quant_min = excluded.quant_min,
+           quant_max = excluded.quant_max,
+           created_at = excluded.created_at`,
+      ).run(
+        embedding.chunkId,
+        buffer,
+        embedding.model,
+        1,
+        quantized.min,
+        quantized.max,
+        embedding.createdAt,
+      )
+    } else {
+      const buffer = Buffer.from(new Float32Array(embedding.embedding).buffer)
+      this.db.prepare(
+        `INSERT INTO embeddings (chunk_id, embedding, model, is_compressed, quant_min, quant_max, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)
+         ON CONFLICT(chunk_id, model) DO UPDATE SET
+           embedding = excluded.embedding,
+           is_compressed = excluded.is_compressed,
+           quant_min = excluded.quant_min,
+           quant_max = excluded.quant_max,
+           created_at = excluded.created_at`,
+      ).run(
+        embedding.chunkId,
+        buffer,
+        embedding.model,
+        0,
+        null,
+        null,
+        embedding.createdAt,
+      )
+    }
   }
 
-  bulkInsert(embeddings: MemoryEmbedding[]): void {
+  bulkInsert(embeddings: MemoryEmbedding[], useCompression = false): void {
     const insert = this.db.prepare(
-      `INSERT INTO embeddings (chunk_id, embedding, model, created_at)
-       VALUES (?, ?, ?, ?)
+      `INSERT INTO embeddings (chunk_id, embedding, model, is_compressed, quant_min, quant_max, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(chunk_id, model) DO UPDATE SET
          embedding = excluded.embedding,
+         is_compressed = excluded.is_compressed,
+         quant_min = excluded.quant_min,
+         quant_max = excluded.quant_max,
          created_at = excluded.created_at`,
     )
 
     const insertAll = this.db.transaction((items: typeof embeddings) => {
       for (const e of items) {
-        const buffer = Buffer.from(new Float32Array(e.embedding).buffer)
-        insert.run(e.chunkId, buffer, e.model, e.createdAt)
+        if (useCompression) {
+          const quantized = quantize(e.embedding)
+          const buffer = packInt8(quantized.values)
+          insert.run(e.chunkId, buffer, e.model, 1, quantized.min, quantized.max, e.createdAt)
+        } else {
+          const buffer = Buffer.from(new Float32Array(e.embedding).buffer)
+          insert.run(e.chunkId, buffer, e.model, 0, null, null, e.createdAt)
+        }
       }
     })
 
@@ -74,19 +131,16 @@ export class EmbeddingRepository {
     headingPath: string
     relevanceScore: number
   }> {
-    // SQLite doesn't have native vector search.
-    // For MVP, load all embeddings for the model and compute cosine similarity in memory.
-    // This is acceptable for < 10k chunks. For larger scale, migrate to pgvector or dedicated vector DB.
     const queryBuffer = Buffer.from(new Float32Array(embedding).buffer)
     const queryVec = new Float32Array(queryBuffer.buffer, queryBuffer.byteOffset, queryBuffer.length / 4)
 
-    let sql = `SELECT e.chunk_id, e.embedding, c.document_id, c.content, c.heading_path,
-              d.source_path, d.author, d.feature_number, d.last_modified
+    let sql = `SELECT e.chunk_id, e.embedding, e.is_compressed, e.quant_min, e.quant_max,
+              c.document_id, c.content, c.heading_path, d.source_path
        FROM embeddings e
        JOIN chunks c ON e.chunk_id = c.id
        JOIN documents d ON c.document_id = d.id
        WHERE e.model = ? AND d.is_archived = 0 AND d.clinic_id = ?`
-    const params: (string | number)[] = [model, clinicId]
+    const params: (string | number | null)[] = [model, clinicId]
 
     if (docTypes && docTypes.length > 0) {
       const placeholders = docTypes.map(() => "?").join(", ")
@@ -117,6 +171,9 @@ export class EmbeddingRepository {
     const rows = this.db.prepare(sql).all(...params) as Array<{
       chunk_id: string
       embedding: Buffer
+      is_compressed: number
+      quant_min: number | null
+      quant_max: number | null
       document_id: string
       content: string
       heading_path: string
@@ -124,8 +181,19 @@ export class EmbeddingRepository {
     }>
 
     const scored = rows.map((row) => {
-      const vec = new Float32Array(row.embedding.buffer, row.embedding.byteOffset, row.embedding.length / 4)
-      const score = this.cosineSimilarity(queryVec, vec)
+      let score: number
+      if (row.is_compressed === 1 && row.quant_min !== null && row.quant_max !== null) {
+        const quantized: QuantizedEmbedding = {
+          values: unpackInt8(row.embedding),
+          min: row.quant_min,
+          max: row.quant_max,
+          compressionRatio: 4,
+        }
+        score = cosineSimilarityQuantized(queryVec, quantized)
+      } else {
+        const vec = new Float32Array(row.embedding.buffer, row.embedding.byteOffset, row.embedding.length / 4)
+        score = this.cosineSimilarity(queryVec, vec)
+      }
       return {
         chunkId: row.chunk_id,
         documentId: row.document_id,
@@ -138,6 +206,27 @@ export class EmbeddingRepository {
 
     scored.sort((a, b) => b.relevanceScore - a.relevanceScore)
     return scored.slice(0, limit)
+  }
+
+  getCompressionStats(): CompressionStats {
+    const totalRow = this.db.prepare("SELECT COUNT(*) as c FROM embeddings").get() as { c: number }
+    const compressedRow = this.db.prepare(
+      "SELECT COUNT(*) as c FROM embeddings WHERE is_compressed = 1",
+    ).get() as { c: number }
+
+    const total = totalRow.c
+    const compressed = compressedRow.c
+
+    const spaceSaved = compressed > 0
+      ? compressed * 4 * 768 * 4
+      : 0
+
+    return {
+      totalEmbeddings: total,
+      compressedEmbeddings: compressed,
+      compressionRatio: total > 0 ? (compressed * 4 + (total - compressed)) / total : 1,
+      spaceSavedBytes: spaceSaved,
+    }
   }
 
   private cosineSimilarity(a: Float32Array, b: Float32Array): number {

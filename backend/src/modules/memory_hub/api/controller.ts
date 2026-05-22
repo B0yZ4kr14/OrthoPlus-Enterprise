@@ -248,9 +248,15 @@ export class MemoryHubController {
 
       metrics.memoryHub.coveragePercent.set({ category: "memory_hub" }, coveragePercent)
 
+      // T054: Compression stats
+      const compressionStats = embeddings.getCompressionStats()
+
       return res.json({
         indexStatus: totalDocs > 0 ? "healthy" : "empty",
         totalDocuments: totalDocs,
+        compressionRatio: Math.round(compressionStats.compressionRatio * 100) / 100,
+        compressedEmbeddings: compressionStats.compressedEmbeddings,
+        spaceSavedBytes: compressionStats.spaceSavedBytes,
         lastScan: allDocs[0]?.lastIndexed
           ? new Date(allDocs[0].lastIndexed).toISOString()
           : null,

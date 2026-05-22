@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS embeddings (
   chunk_id TEXT NOT NULL REFERENCES chunks(id) ON DELETE CASCADE,
   embedding BLOB NOT NULL,
   model TEXT NOT NULL,
+  is_compressed INTEGER DEFAULT 0,
+  quant_min REAL,
+  quant_max REAL,
   created_at INTEGER,
   PRIMARY KEY (chunk_id, model)
 );
