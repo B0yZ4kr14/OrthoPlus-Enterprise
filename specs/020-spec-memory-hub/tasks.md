@@ -79,9 +79,9 @@
 
 ### Tests for User Story 1
 
-- [ ] T014 [P] [US1] Backend unit test: semantic search returns results ordered by relevance
+- [x] T014 [P] [US1] Backend unit test: semantic search returns results ordered by relevance
   - `backend/tests/unit/memory_hub/search.test.ts`
-- [ ] T015 [P] [US1] Backend unit test: search filters by doc_type and archived status
+- [x] T015 [P] [US1] Backend unit test: search filters by doc_type and archived status
   - `backend/tests/unit/memory_hub/searchFilters.test.ts`
 
 ### Implementation for User Story 1
@@ -115,9 +115,9 @@
 
 ### Tests for User Story 2
 
-- [ ] T022 [P] [US2] Backend unit test: file watcher detects create/update/delete events
+- [x] T022 [P] [US2] Backend unit test: file watcher detects create/update/delete events
   - `backend/tests/unit/memory_hub/fileWatcher.test.ts`
-- [ ] T023 [P] [US2] Backend unit test: reindexing preserves version history
+- [x] T023 [P] [US2] Backend unit test: reindexing preserves version history
   - `backend/tests/unit/memory_hub/versioning.test.ts`
 
 ### Implementation for User Story 2
@@ -149,9 +149,9 @@
 
 ### Tests for User Story 3
 
-- [ ] T030 [P] [US3] Backend unit test: context brief includes top-N relevant documents
+- [x] T030 [P] [US3] Backend unit test: context brief includes top-N relevant documents
   - `backend/tests/unit/memory_hub/contextBrief.test.ts`
-- [ ] T031 [P] [US3] Backend unit test: context brief respects token budget
+- [x] T031 [P] [US3] Backend unit test: context brief respects token budget
   - `backend/tests/unit/memory_hub/tokenBudget.test.ts`
 
 ### Implementation for User Story 3
@@ -182,9 +182,9 @@
 
 ### Tests for User Story 4
 
-- [ ] T037 [P] [US4] Backend unit test: drift scan detects broken API references
+- [x] T037 [P] [US4] Backend unit test: drift scan detects broken API references
   - `backend/tests/unit/memory_hub/driftDetection.test.ts`
-- [ ] T038 [P] [US4] Backend unit test: drift scan detects missing implementations
+- [x] T038 [P] [US4] Backend unit test: drift scan detects missing implementations
   - `backend/tests/unit/memory_hub/driftCoverage.test.ts`
 
 ### Implementation for User Story 4
