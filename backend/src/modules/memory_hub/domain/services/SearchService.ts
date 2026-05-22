@@ -15,6 +15,10 @@ export interface SearchResult {
 export interface SearchFilters {
   docTypes?: string[]
   excludeArchived?: boolean
+  author?: string
+  featureNumber?: string
+  dateFrom?: number // timestamp ms
+  dateTo?: number // timestamp ms
 }
 
 export class SearchService {
@@ -42,6 +46,10 @@ export class SearchService {
       limit + offset,
       filters.docTypes,
       clinicId,
+      filters.author,
+      filters.featureNumber,
+      filters.dateFrom,
+      filters.dateTo,
     )
 
     const filtered = rawResults

@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS documents (
   content_hash TEXT NOT NULL,
   last_indexed INTEGER,
   last_modified INTEGER,
+  author TEXT,
+  feature_number TEXT,
   version INTEGER DEFAULT 1,
   word_count INTEGER,
   is_archived INTEGER DEFAULT 0,
@@ -61,6 +63,9 @@ CREATE INDEX IF NOT EXISTS idx_documents_clinic ON documents(clinic_id);
 CREATE INDEX IF NOT EXISTS idx_documents_doc_type ON documents(doc_type);
 CREATE INDEX IF NOT EXISTS idx_documents_archived ON documents(is_archived);
 CREATE INDEX IF NOT EXISTS idx_documents_clinic_source ON documents(clinic_id, source_path);
+CREATE INDEX IF NOT EXISTS idx_documents_author ON documents(author);
+CREATE INDEX IF NOT EXISTS idx_documents_feature ON documents(feature_number);
+CREATE INDEX IF NOT EXISTS idx_documents_last_modified ON documents(last_modified);
 CREATE INDEX IF NOT EXISTS idx_chunks_document ON chunks(document_id);
 CREATE INDEX IF NOT EXISTS idx_embeddings_chunk ON embeddings(chunk_id);
 CREATE TABLE IF NOT EXISTS document_versions (

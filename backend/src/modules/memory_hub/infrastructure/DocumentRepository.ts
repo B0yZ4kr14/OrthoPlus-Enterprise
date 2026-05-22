@@ -10,6 +10,8 @@ export interface MemoryDocument {
   contentHash: string
   lastIndexed: number
   lastModified: number
+  author: string | null
+  featureNumber: string | null
   version: number
   wordCount: number
   isArchived: boolean
@@ -25,6 +27,8 @@ interface DocumentRow {
   content_hash: string
   last_indexed: number
   last_modified: number
+  author: string | null
+  feature_number: string | null
   version: number
   word_count: number
   is_archived: number
@@ -48,6 +52,8 @@ export class DocumentRepository {
       contentHash: row.content_hash,
       lastIndexed: row.last_indexed,
       lastModified: row.last_modified,
+      author: row.author,
+      featureNumber: row.feature_number,
       version: row.version,
       wordCount: row.word_count,
       isArchived: Boolean(row.is_archived),
@@ -55,7 +61,7 @@ export class DocumentRepository {
     }
   }
 
-  upsert(doc: Omit<MemoryDocument, "id" | "version" | "lastIndexed">): MemoryDocument {
+  upsert(doc: Omit<MemoryDocument, "id" | "version" | "lastIndexed" | "author" | "featureNumber"> & { author?: string | null; featureNumber?: string | null }): MemoryDocument {
     const clinicId = doc.clinicId || "default"
     const now = Date.now()
     const contentHash = doc.contentHash
@@ -82,13 +88,13 @@ export class DocumentRepository {
         this.db.prepare(
           `UPDATE documents SET
             doc_type = ?, title = ?, content_hash = ?, last_indexed = ?,
-            last_modified = ?, version = ?, word_count = ?, is_archived = ?,
-            frontmatter = ?
+            last_modified = ?, author = ?, feature_number = ?, version = ?,
+            word_count = ?, is_archived = ?, frontmatter = ?
           WHERE id = ?`,
         ).run(
           doc.docType, doc.title, contentHash, now,
-          doc.lastModified, newVersion, doc.wordCount,
-          doc.isArchived ? 1 : 0, doc.frontmatter, existing.id,
+          doc.lastModified, doc.author, doc.featureNumber, newVersion,
+          doc.wordCount, doc.isArchived ? 1 : 0, doc.frontmatter, existing.id,
         )
 
         // Save previous version to history
@@ -109,11 +115,11 @@ export class DocumentRepository {
       this.db.prepare(
         `INSERT INTO documents
           (id, clinic_id, source_path, doc_type, title, content_hash, last_indexed,
-           last_modified, version, word_count, is_archived, frontmatter)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+           last_modified, author, feature_number, version, word_count, is_archived, frontmatter)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       ).run(
         id, clinicId, doc.sourcePath, doc.docType, doc.title, contentHash, now,
-        doc.lastModified, 1, doc.wordCount,
+        doc.lastModified, doc.author, doc.featureNumber, 1, doc.wordCount,
         doc.isArchived ? 1 : 0, doc.frontmatter,
       )
 

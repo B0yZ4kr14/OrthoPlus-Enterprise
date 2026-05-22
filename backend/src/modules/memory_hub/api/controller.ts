@@ -90,9 +90,26 @@ export class MemoryHubController {
       const numLimit = Math.min(Math.max(Number(limit) || 10, 1), 100)
       const numOffset = Math.max(Number(offset) || 0, 0)
 
+      // Build advanced filters (T053)
+      const searchFilters: any = filters || {}
+      if (filters?.author && typeof filters.author === "string") {
+        searchFilters.author = filters.author
+      }
+      if (filters?.featureNumber && typeof filters.featureNumber === "string") {
+        searchFilters.featureNumber = filters.featureNumber
+      }
+      if (filters?.dateFrom) {
+        const d = Number(filters.dateFrom)
+        if (!isNaN(d)) searchFilters.dateFrom = d
+      }
+      if (filters?.dateTo) {
+        const d = Number(filters.dateTo)
+        if (!isNaN(d)) searchFilters.dateTo = d
+      }
+
       let result = await searchService.search(
         query,
-        filters || {},
+        searchFilters,
         numLimit,
         numOffset,
         clinicId,

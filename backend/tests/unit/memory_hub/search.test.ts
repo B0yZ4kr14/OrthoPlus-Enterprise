@@ -241,6 +241,10 @@ describe("SearchService", () => {
         10,
         ["spec", "plan"],
         "default",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
       )
     })
 
@@ -259,6 +263,10 @@ describe("SearchService", () => {
         10,
         undefined,
         "default",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
       )
     })
 
@@ -291,6 +299,10 @@ describe("SearchService", () => {
         expect.any(Number),
         ["spec"],
         "default",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
       )
     })
 
@@ -309,6 +321,107 @@ describe("SearchService", () => {
         expect.any(Number),
         [],
         "default",
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      )
+    })
+  })
+
+  describe("T053: advanced filtering by author, feature number, and date range", () => {
+    it("passes author filter to EmbeddingRepository", async () => {
+      mockEmbedder.embedSingle = jest.fn().mockResolvedValue({
+        embedding: [1, 0, 0],
+        model: "nomic-embed-text",
+      })
+      mockEmbeddings.searchSimilar = jest.fn().mockReturnValue([])
+
+      await searchService.search("rate limiting", { author: "alice" })
+
+      expect(mockEmbeddings.searchSimilar).toHaveBeenCalledWith(
+        [1, 0, 0],
+        "nomic-embed-text",
+        10,
+        undefined,
+        "default",
+        "alice",
+        undefined,
+        undefined,
+        undefined,
+      )
+    })
+
+    it("passes featureNumber filter to EmbeddingRepository", async () => {
+      mockEmbedder.embedSingle = jest.fn().mockResolvedValue({
+        embedding: [1, 0, 0],
+        model: "nomic-embed-text",
+      })
+      mockEmbeddings.searchSimilar = jest.fn().mockReturnValue([])
+
+      await searchService.search("patient", { featureNumber: "001-pacientes" })
+
+      expect(mockEmbeddings.searchSimilar).toHaveBeenCalledWith(
+        [1, 0, 0],
+        "nomic-embed-text",
+        10,
+        undefined,
+        "default",
+        undefined,
+        "001-pacientes",
+        undefined,
+        undefined,
+      )
+    })
+
+    it("passes date range filters to EmbeddingRepository", async () => {
+      mockEmbedder.embedSingle = jest.fn().mockResolvedValue({
+        embedding: [1, 0, 0],
+        model: "nomic-embed-text",
+      })
+      mockEmbeddings.searchSimilar = jest.fn().mockReturnValue([])
+
+      const dateFrom = new Date("2026-01-01").getTime()
+      const dateTo = new Date("2026-12-31").getTime()
+
+      await searchService.search("schedule", { dateFrom, dateTo })
+
+      expect(mockEmbeddings.searchSimilar).toHaveBeenCalledWith(
+        [1, 0, 0],
+        "nomic-embed-text",
+        10,
+        undefined,
+        "default",
+        undefined,
+        undefined,
+        dateFrom,
+        dateTo,
+      )
+    })
+
+    it("passes combined filters to EmbeddingRepository", async () => {
+      mockEmbedder.embedSingle = jest.fn().mockResolvedValue({
+        embedding: [1, 0, 0],
+        model: "nomic-embed-text",
+      })
+      mockEmbeddings.searchSimilar = jest.fn().mockReturnValue([])
+
+      await searchService.search("test", {
+        docTypes: ["spec"],
+        author: "bob",
+        featureNumber: "020-spec-memory-hub",
+      })
+
+      expect(mockEmbeddings.searchSimilar).toHaveBeenCalledWith(
+        [1, 0, 0],
+        "nomic-embed-text",
+        10,
+        ["spec"],
+        "default",
+        "bob",
+        "020-spec-memory-hub",
+        undefined,
+        undefined,
       )
     })
   })

@@ -35,6 +35,12 @@ export class IndexingService {
     const docType = this.inferDocType(filePath)
     const parsed = this.parser.parse(filePath, content)
 
+    // Extract author and feature number from frontmatter for advanced filtering (T053)
+    const author = typeof parsed.frontmatter?.author === "string" ? parsed.frontmatter.author : null
+    const featureNumber = typeof parsed.frontmatter?.feature === "string" ? parsed.frontmatter.feature
+      : typeof parsed.frontmatter?.feature_number === "string" ? parsed.frontmatter.feature_number
+      : null
+
     const doc = this.documents.upsert({
       clinicId: "default",
       sourcePath: filePath,
@@ -42,6 +48,8 @@ export class IndexingService {
       title: parsed.title,
       contentHash,
       lastModified: stat.mtimeMs,
+      author,
+      featureNumber,
       wordCount: content.split(/\s+/).length,
       isArchived: false,
       frontmatter: JSON.stringify(parsed.frontmatter),

@@ -25,6 +25,8 @@ describe("DocumentRepository Versioning", () => {
         content_hash TEXT NOT NULL,
         last_indexed INTEGER NOT NULL,
         last_modified INTEGER NOT NULL,
+        author TEXT,
+        feature_number TEXT,
         version INTEGER NOT NULL DEFAULT 1,
         word_count INTEGER NOT NULL,
         is_archived INTEGER NOT NULL DEFAULT 0,

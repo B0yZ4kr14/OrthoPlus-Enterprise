@@ -62,6 +62,10 @@ export class EmbeddingRepository {
     limit = 10,
     docTypes?: string[],
     clinicId = "default",
+    author?: string,
+    featureNumber?: string,
+    dateFrom?: number,
+    dateTo?: number,
   ): Array<{
     chunkId: string
     documentId: string
@@ -77,7 +81,7 @@ export class EmbeddingRepository {
     const queryVec = new Float32Array(queryBuffer.buffer, queryBuffer.byteOffset, queryBuffer.length / 4)
 
     let sql = `SELECT e.chunk_id, e.embedding, c.document_id, c.content, c.heading_path,
-              d.source_path
+              d.source_path, d.author, d.feature_number, d.last_modified
        FROM embeddings e
        JOIN chunks c ON e.chunk_id = c.id
        JOIN documents d ON c.document_id = d.id
@@ -88,6 +92,26 @@ export class EmbeddingRepository {
       const placeholders = docTypes.map(() => "?").join(", ")
       sql += ` AND d.doc_type IN (${placeholders})`
       params.push(...docTypes)
+    }
+
+    if (author) {
+      sql += ` AND d.author = ?`
+      params.push(author)
+    }
+
+    if (featureNumber) {
+      sql += ` AND d.feature_number = ?`
+      params.push(featureNumber)
+    }
+
+    if (dateFrom) {
+      sql += ` AND d.last_modified >= ?`
+      params.push(dateFrom)
+    }
+
+    if (dateTo) {
+      sql += ` AND d.last_modified <= ?`
+      params.push(dateTo)
     }
 
     const rows = this.db.prepare(sql).all(...params) as Array<{

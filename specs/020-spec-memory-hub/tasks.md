@@ -229,7 +229,7 @@
 
 **Purpose**: Non-blocking improvements for future iterations.
 
-- [ ] T053 [P] Advanced filtering (date range, author, feature number)
+- [x] T053 [P] Advanced filtering (date range, author, feature number)
   - Extend `SearchService.ts` and `EmbeddingRepository.ts` with additional SQL filters
   - Frontend: Add filter controls to `MemoryHubSearch.tsx`
 - [ ] T054 [P] Index compression for large embedding datasets
