@@ -11,6 +11,7 @@ import { OllamaEmbeddingClient } from "../infrastructure/OllamaEmbeddingClient"
 import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository"
 import { DocumentRepository } from "../infrastructure/DocumentRepository"
 import { FileWatcher } from "../infrastructure/FileWatcher"
+import { GraphService } from "../domain/services/GraphService"
 
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
 
@@ -50,6 +51,7 @@ const documents = new DocumentRepository(db)
 const searchService = new SearchService(embedder, embeddings)
 const contextBriefService = new ContextBriefService(searchService, documents)
 const indexingService = new IndexingService(db)
+const graphService = new GraphService(documents)
 
 // Auto-start file watcher if enabled
 if (process.env.MEMORY_HUB_ENABLED === "true") {
@@ -266,6 +268,17 @@ export class MemoryHubController {
     } catch (error) {
       logger.error("[MemoryHub] Health error", { error })
       return res.status(500).json({ error: "Health check failed" })
+    }
+  }
+
+  async graph(req: Request, res: Response) {
+    try {
+      const clinicId = (req as any).user?.clinicId || "default"
+      const graphData = graphService.buildGraph(clinicId)
+      return res.json(graphData)
+    } catch (error) {
+      logger.error("[MemoryHub] Graph error", { error })
+      return res.status(500).json({ error: "Graph generation failed" })
     }
   }
 }

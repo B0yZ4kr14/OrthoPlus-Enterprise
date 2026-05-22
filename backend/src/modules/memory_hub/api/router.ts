@@ -39,5 +39,6 @@ router.post("/reindex", reindexLimit, controller.reindex)
 router.post("/context-brief", briefLimit, controller.contextBrief)
 router.get("/versions", searchLimit, controller.versions)
 router.get("/health", searchLimit, controller.health)
+router.get("/graph", searchLimit, controller.graph)
 
 export default router

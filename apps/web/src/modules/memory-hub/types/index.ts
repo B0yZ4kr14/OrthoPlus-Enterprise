@@ -34,3 +34,21 @@ export interface ContextBrief {
   markdown: string
   confidentialExcluded: number
 }
+
+export interface GraphNode {
+  id: string
+  label: string
+  docType: string
+  sourcePath: string
+}
+
+export interface GraphEdge {
+  source: string
+  target: string
+  type: "links-to" | "referenced-by"
+}
+
+export interface GraphData {
+  nodes: GraphNode[]
+  edges: GraphEdge[]
+}
