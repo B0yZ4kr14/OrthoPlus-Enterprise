@@ -7,12 +7,21 @@ const router: Router = Router()
 const controller = new MemoryHubController()
 
 // Rate limiting per Constitution CQ-3
-const memoryHubLimit = rateLimit({
+// F-RT-020-013: Separate stricter limits for expensive endpoints
+const searchLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 30,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: "Too many requests to memory hub. Please try again later." },
+  message: { error: "Too many search requests. Please try again later." },
+})
+
+const briefLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // stricter: context-brief triggers expensive Ollama embedding generation
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many context brief requests. Please try again later." },
 })
 
 const reindexLimit = rateLimit({
@@ -24,12 +33,11 @@ const reindexLimit = rateLimit({
 })
 
 router.use(clinicGuard)
-router.use(memoryHubLimit)
 
-router.post("/search", controller.search)
+router.post("/search", searchLimit, controller.search)
 router.post("/reindex", reindexLimit, controller.reindex)
-router.post("/context-brief", controller.contextBrief)
-router.get("/versions", controller.versions)
-router.get("/health", controller.health)
+router.post("/context-brief", briefLimit, controller.contextBrief)
+router.get("/versions", searchLimit, controller.versions)
+router.get("/health", searchLimit, controller.health)
 
 export default router

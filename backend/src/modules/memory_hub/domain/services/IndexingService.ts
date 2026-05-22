@@ -17,6 +17,7 @@ export class IndexingService {
   private chunks: ChunkRepository
   private embeddings: EmbeddingRepository
 
+
   constructor(db: Database.Database) {
     this.parser = new MarkdownParser()
     this.chunker = new DocumentChunker()

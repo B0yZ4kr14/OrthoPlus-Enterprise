@@ -57,65 +57,70 @@ export class DocumentRepository {
 
   upsert(doc: Omit<MemoryDocument, "id" | "version" | "lastIndexed">): MemoryDocument {
     const clinicId = doc.clinicId || "default"
-    const existingRow = this.db
-      .prepare("SELECT * FROM documents WHERE clinic_id = ? AND source_path = ?")
-      .get(clinicId, doc.sourcePath) as DocumentRow | undefined
-
     const now = Date.now()
     const contentHash = doc.contentHash
 
-    if (existingRow) {
-      const existing = this.mapRow(existingRow)
+    // Wrap document update + version insert in a transaction (F-RT-020-020)
+    const upsertTransaction = this.db.transaction(() => {
+      const existingRow = this.db
+        .prepare("SELECT * FROM documents WHERE clinic_id = ? AND source_path = ?")
+        .get(clinicId, doc.sourcePath) as DocumentRow | undefined
 
-      if (existing.contentHash === contentHash) {
-        // No change, just update last_indexed
+      if (existingRow) {
+        const existing = this.mapRow(existingRow)
+
+        if (existing.contentHash === contentHash) {
+          // No change, just update last_indexed
+          this.db.prepare(
+            "UPDATE documents SET last_indexed = ? WHERE id = ?",
+          ).run(now, existing.id)
+          return { ...existing, lastIndexed: now }
+        }
+
+        // Content changed, increment version and archive old version
+        const newVersion = (existing.version || 1) + 1
         this.db.prepare(
-          "UPDATE documents SET last_indexed = ? WHERE id = ?",
-        ).run(now, existing.id)
-        return { ...existing, lastIndexed: now }
+          `UPDATE documents SET
+            doc_type = ?, title = ?, content_hash = ?, last_indexed = ?,
+            last_modified = ?, version = ?, word_count = ?, is_archived = ?,
+            frontmatter = ?
+          WHERE id = ?`,
+        ).run(
+          doc.docType, doc.title, contentHash, now,
+          doc.lastModified, newVersion, doc.wordCount,
+          doc.isArchived ? 1 : 0, doc.frontmatter, existing.id,
+        )
+
+        // Save previous version to history
+        this.db.prepare(
+          `INSERT INTO document_versions
+            (id, document_id, version, content_hash, title, word_count, frontmatter, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        ).run(
+          crypto.randomUUID(), existing.id, existing.version, existing.contentHash,
+          existing.title, existing.wordCount, existing.frontmatter, now,
+        )
+
+        return this.findById(existing.id)!
       }
 
-      // Content changed, increment version and archive old version
-      const newVersion = (existing.version || 1) + 1
+      // New document
+      const id = crypto.randomUUID()
       this.db.prepare(
-        `UPDATE documents SET
-          doc_type = ?, title = ?, content_hash = ?, last_indexed = ?,
-          last_modified = ?, version = ?, word_count = ?, is_archived = ?,
-          frontmatter = ?
-        WHERE id = ?`,
+        `INSERT INTO documents
+          (id, clinic_id, source_path, doc_type, title, content_hash, last_indexed,
+           last_modified, version, word_count, is_archived, frontmatter)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       ).run(
-        doc.docType, doc.title, contentHash, now,
-        doc.lastModified, newVersion, doc.wordCount,
-        doc.isArchived ? 1 : 0, doc.frontmatter, existing.id,
+        id, clinicId, doc.sourcePath, doc.docType, doc.title, contentHash, now,
+        doc.lastModified, 1, doc.wordCount,
+        doc.isArchived ? 1 : 0, doc.frontmatter,
       )
 
-      // Save previous version to history
-      this.db.prepare(
-        `INSERT INTO document_versions
-          (id, document_id, version, content_hash, title, word_count, frontmatter, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      ).run(
-        crypto.randomUUID(), existing.id, existing.version, existing.contentHash,
-        existing.title, existing.wordCount, existing.frontmatter, now,
-      )
+      return this.findById(id)!
+    })
 
-      return this.findById(existing.id)!
-    }
-
-    // New document
-    const id = crypto.randomUUID()
-    this.db.prepare(
-      `INSERT INTO documents
-        (id, clinic_id, source_path, doc_type, title, content_hash, last_indexed,
-         last_modified, version, word_count, is_archived, frontmatter)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    ).run(
-      id, clinicId, doc.sourcePath, doc.docType, doc.title, contentHash, now,
-      doc.lastModified, 1, doc.wordCount,
-      doc.isArchived ? 1 : 0, doc.frontmatter,
-    )
-
-    return this.findById(id)!
+    return upsertTransaction()
   }
 
   findById(id: string): MemoryDocument | undefined {

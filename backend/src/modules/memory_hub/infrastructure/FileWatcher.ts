@@ -1,5 +1,6 @@
 import { FSWatcher, watch } from "chokidar"
 import path from "path"
+import fs from "fs"
 import { logger } from "@/infrastructure/logger"
 
 export type FileChangeType = "add" | "change" | "unlink"
@@ -58,8 +59,8 @@ export class FileWatcher {
   }
 
   private queueEvent(type: FileChangeType, filePath: string): void {
-    // Only watch markdown files
-    if (!filePath.endsWith(".md")) return
+    // Only watch markdown files (case-insensitive, F-RT-020-018)
+    if (!filePath.toLowerCase().endsWith(".md")) return
 
     this.pendingEvents.push({ type, filePath })
 
@@ -68,9 +69,21 @@ export class FileWatcher {
     }
 
     this.debounceTimer = setTimeout(() => {
-      const events = [...this.pendingEvents]
+      // Validate files still exist after debounce (F-RT-020-018)
+      const validEvents = this.pendingEvents.filter((evt) => {
+        if (evt.type === "unlink") return true
+        try {
+          fs.statSync(evt.filePath)
+          return true
+        } catch {
+          logger.warn("[MemoryHub] File disappeared during debounce", { filePath: evt.filePath })
+          return false
+        }
+      })
       this.pendingEvents = []
-      this.onChange(events)
+      if (validEvents.length > 0) {
+        this.onChange(validEvents)
+      }
     }, this.debounceMs)
   }
 }

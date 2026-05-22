@@ -52,7 +52,7 @@ function sanitizeExcerpt(text: string): string {
 function sanitizeTopic(topic: string): string {
   // Allow only alphanumeric, hyphens, underscores, dots, and slashes (feature IDs)
   // Reject control characters, newlines, and YAML metacharacters
-  const safe = topic.replace(/[^\w\-\.\/\s]/g, "")
+  const safe = topic.replace(/[^\w\-.\s/]/g, "")
   if (safe !== topic) {
     logger.warn("[ContextBriefService] Topic contained unsafe characters, sanitized", {
       original: topic.slice(0, 100),

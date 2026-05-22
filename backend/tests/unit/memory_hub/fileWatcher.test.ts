@@ -10,6 +10,17 @@ jest.mock("chokidar", () => ({
   watch: (...args: any[]) => (mockWatch as any)(...args),
 }))
 
+// Mock fs.statSync so that mocked file paths appear to exist (F-RT-020-018 validation)
+jest.mock("fs", () => ({
+  ...jest.requireActual("fs"),
+  statSync: (path: string) => {
+    if (path.startsWith("/tmp/test/")) {
+      return { isFile: () => true } as any
+    }
+    throw new Error("ENOENT")
+  },
+}))
+
 import { FileWatcher, FileChangeEvent } from "../../../src/modules/memory_hub/infrastructure/FileWatcher"
 
 describe("FileWatcher", () => {

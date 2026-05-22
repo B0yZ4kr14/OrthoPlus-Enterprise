@@ -90,13 +90,26 @@ export class MemoryHubController {
       const numLimit = Math.min(Math.max(Number(limit) || 10, 1), 100)
       const numOffset = Math.max(Number(offset) || 0, 0)
 
-      const result = await searchService.search(
+      let result = await searchService.search(
         query,
         filters || {},
         numLimit,
         numOffset,
         clinicId,
       )
+
+      // Filter out confidential documents from search results (F-RT-020-008)
+      let confidentialExcluded = 0
+      const filteredResults = result.results.filter((r) => {
+        const doc = documents.findByPath(r.sourcePath, clinicId)
+        if (!doc) return false
+        if (documents.isConfidential(doc)) {
+          confidentialExcluded++
+          return false
+        }
+        return true
+      })
+      result = { ...result, results: filteredResults }
 
       const duration = (Date.now() - startTime) / 1000
       metrics.memoryHub.searchDuration.observe({ category: "memory_hub" }, duration)
@@ -117,6 +130,7 @@ export class MemoryHubController {
 
       return res.json({
         ...result,
+        confidential_excluded: confidentialExcluded,
         query_time_ms: Date.now(),
       })
     } catch (error) {
@@ -218,13 +232,13 @@ export class MemoryHubController {
       metrics.memoryHub.coveragePercent.set({ category: "memory_hub" }, coveragePercent)
 
       return res.json({
-        index_status: totalDocs > 0 ? "healthy" : "empty",
-        documents_indexed: totalDocs,
-        last_scan_at: allDocs[0]?.lastIndexed
+        indexStatus: totalDocs > 0 ? "healthy" : "empty",
+        totalDocuments: totalDocs,
+        lastScan: allDocs[0]?.lastIndexed
           ? new Date(allDocs[0].lastIndexed).toISOString()
           : null,
-        drift_count: driftCount.c,
-        coverage_percent: coveragePercent,
+        driftCount: driftCount.c,
+        coveragePercent: coveragePercent,
       })
     } catch (error) {
       logger.error("[MemoryHub] Health error", { error })
