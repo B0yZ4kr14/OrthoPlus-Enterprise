@@ -143,3 +143,46 @@ dropped_findings: 0
 lens_failures: 0
 wall_clock_minutes: ~7
 ```
+
+---
+
+## Post-Remediation Update (2026-05-22)
+
+### Fixes Applied
+
+| Finding ID | Fix | Commit |
+|------------|-----|--------|
+| F-RT-020-001 | Added `sanitizeExcerpt()` and `sanitizeTopic()` functions; default-deny confidentiality guard | 4455d42e2 |
+| F-RT-020-002 | Default-deny when `findByPath` returns undefined (fixed alongside F-RT-020-001) | 4455d42e2 |
+| F-RT-020-003 | Hard token budget cap — removed `selected.length >= 3` bypass | 4455d42e2 |
+| F-RT-020-006 | Added `clinic_id` to schema; clinic-scoped filtering in all queries | 4455d42e2 |
+| F-RT-020-010 | Added `user_id` and `clinic_id` to `search_queries` table | 4455d42e2 |
+| F-RT-020-012 | Validate `max_tokens` is positive finite integer, clamp to 128000 | 4455d42e2 |
+| F-RT-020-014 | Enforce `limit <= 100` and `offset >= 0` on search endpoint | 4455d42e2 |
+| F-RT-020-015 | Validate `sourcePath` against allowlist in versions endpoint | 4455d42e2 |
+| F-RT-020-016 | SQLite file permissions 0o600 + backup index on startup | 4455d42e2 |
+
+### Quality Gates (Post-Fix)
+
+| Gate | Status |
+|------|--------|
+| Backend Build | ✅ 0 errors |
+| Frontend Type-Check | ✅ 0 errors |
+| Backend Tests | ✅ 565/565 passing |
+| Memory Hub Tests | ✅ 43/43 passing |
+
+### Remaining Findings (Not Yet Addressed)
+
+| ID | Severity | Summary |
+|----|----------|---------|
+| F-RT-020-004 | MEDIUM | No mandatory inclusion for security-critical sources |
+| F-RT-020-005 | MEDIUM | Topic injection via YAML/markdown (partially mitigated by sanitizeTopic) |
+| F-RT-020-007 | HIGH | No .gitignore parsing or PII scanning |
+| F-RT-020-008 | HIGH | Search endpoint returns confidential documents |
+| F-RT-020-009 | MEDIUM | No LGPD lawful basis mapping |
+| F-RT-020-011 | HIGH | API contract drift (health endpoint snake_case vs camelCase) |
+| F-RT-020-013 | MEDIUM | Shared 30 req/min rate limit too permissive |
+| F-RT-020-017 | HIGH | ON DELETE CASCADE destroys version history |
+| F-RT-020-018 | HIGH | Symlink attack via chokidar followSymlinks |
+| F-RT-020-019 | MEDIUM | Drift worker unsandboxed with full filesystem privileges |
+| F-RT-020-020 | MEDIUM | Multi-statement operations lack SQLite transactions |
