@@ -1,6 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import fs from "fs";
 import helmet from "helmet";
@@ -77,8 +79,6 @@ import { prisma } from "./infrastructure/database/prismaClient";
 import { redisInstance, redisPublisher, redisSubscriber } from "./infrastructure/redis/redisClient";
 import { logger } from "./infrastructure/logger";
 import { prometheusMetrics } from "./infrastructure/metrics/PrometheusMetrics";
-
-dotenv.config();
 
 
 /**

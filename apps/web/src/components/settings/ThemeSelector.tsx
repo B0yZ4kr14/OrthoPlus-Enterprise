@@ -11,8 +11,8 @@ const themes = [
     description: "Tema claro premium com acentos sky/cyan",
     icon: Sun,
     preview: {
-      bg: "bg-sky-50",
-      primary: "bg-sky-500",
+      bg: "bg-accent",
+      primary: "bg-interactive",
       accent: "bg-info",
     },
   },
@@ -23,7 +23,7 @@ const themes = [
     icon: Moon,
     preview: {
       bg: "bg-slate-900",
-      primary: "bg-sky-400",
+      primary: "bg-interactive",
       accent: "bg-info",
     },
   },

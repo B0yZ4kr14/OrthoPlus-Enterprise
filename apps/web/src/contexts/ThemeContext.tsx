@@ -14,9 +14,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 const CSS_CLASS_THEMES: Theme[] = ["premium-light", "premium-dental-dark"];
 
 // Mapa: tema → classe CSS aplicada em <html>
-// premium-light usa :root (sem classe adicional)
 const THEME_CLASS_MAP: Record<Theme, string> = {
-  "premium-light":       "",
+  "premium-light":       "premium-light",
   "premium-dental-dark": "premium-dental-dark",
 };
 
@@ -61,7 +60,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       "premium-dental-dark",
     );
 
-    // 2. Aplica classe do tema atual (premium-light usa :root, sem classe)
+    // 2. Aplica classe do tema atual
     const cssClass = THEME_CLASS_MAP[theme];
     if (cssClass) {
       root.classList.add(cssClass);

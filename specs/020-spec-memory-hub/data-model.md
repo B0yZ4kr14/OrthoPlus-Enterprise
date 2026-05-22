@@ -39,6 +39,19 @@
 | `model` | TEXT | NOT NULL | Embedding model name |
 | `created_at` | INTEGER | | Unix timestamp |
 
+### Table: `document_versions`
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | TEXT | PRIMARY KEY | UUID v4 |
+| `document_id` | TEXT | NOT NULL, FK → documents.id | Parent document |
+| `version` | INTEGER | NOT NULL | Version number at time of snapshot |
+| `content_hash` | TEXT | NOT NULL | SHA-256 of content at this version |
+| `title` | TEXT | | Title at this version |
+| `word_count` | INTEGER | | Word count at this version |
+| `frontmatter` | TEXT | | Frontmatter JSON at this version |
+| `created_at` | INTEGER | | Unix timestamp when version was archived |
+
 ### Table: `drift_reports`
 
 | Column | Type | Constraints | Description |

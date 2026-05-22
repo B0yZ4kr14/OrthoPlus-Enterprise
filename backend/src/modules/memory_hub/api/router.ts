@@ -10,6 +10,7 @@ router.use(clinicGuard)
 router.post("/search", controller.search)
 router.post("/reindex", controller.reindex)
 router.post("/context-brief", controller.contextBrief)
+router.get("/versions", controller.versions)
 router.get("/health", controller.health)
 
 export default router

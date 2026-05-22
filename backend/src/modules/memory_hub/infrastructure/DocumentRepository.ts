@@ -71,7 +71,7 @@ export class DocumentRepository {
         return { ...existing, lastIndexed: now }
       }
 
-      // Content changed, increment version
+      // Content changed, increment version and archive old version
       const newVersion = (existing.version || 1) + 1
       this.db.prepare(
         `UPDATE documents SET
@@ -83,6 +83,16 @@ export class DocumentRepository {
         doc.docType, doc.title, contentHash, now,
         doc.lastModified, newVersion, doc.wordCount,
         doc.isArchived ? 1 : 0, doc.frontmatter, existing.id,
+      )
+
+      // Save previous version to history
+      this.db.prepare(
+        `INSERT INTO document_versions
+          (id, document_id, version, content_hash, title, word_count, frontmatter, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      ).run(
+        crypto.randomUUID(), existing.id, existing.version, existing.contentHash,
+        existing.title, existing.wordCount, existing.frontmatter, now,
       )
 
       return this.findById(existing.id)!
@@ -126,5 +136,55 @@ export class DocumentRepository {
   count(): number {
     const row = this.db.prepare("SELECT COUNT(*) as c FROM documents").get() as { c: number }
     return row.c
+  }
+
+  findVersions(sourcePath: string): Array<{
+    version: number
+    contentHash: string
+    title: string
+    wordCount: number
+    createdAt: number
+  }> {
+    const doc = this.findByPath(sourcePath)
+    if (!doc) return []
+
+    const rows = this.db.prepare(
+      `SELECT version, content_hash, title, word_count, created_at
+       FROM document_versions
+       WHERE document_id = ?
+       ORDER BY version DESC`
+    ).all(doc.id) as Array<{
+      version: number
+      content_hash: string
+      title: string
+      word_count: number
+      created_at: number
+    }>
+
+    return rows.map((r) => ({
+      version: r.version,
+      contentHash: r.content_hash,
+      title: r.title,
+      wordCount: r.word_count,
+      createdAt: r.created_at,
+    }))
+  }
+
+  /**
+   * Check if a document is marked as confidential based on its frontmatter.
+   * Supports: `confidential: true`, `private: true`, `visibility: "private"|"confidential"`
+   */
+  isConfidential(doc: MemoryDocument): boolean {
+    if (!doc.frontmatter) return false
+    try {
+      const fm = JSON.parse(doc.frontmatter) as Record<string, unknown>
+      if (fm.confidential === true) return true
+      if (fm.private === true) return true
+      const visibility = String(fm.visibility || "").toLowerCase()
+      if (visibility === "private" || visibility === "confidential") return true
+      return false
+    } catch {
+      return false
+    }
   }
 }

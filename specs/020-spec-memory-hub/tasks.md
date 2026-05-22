@@ -248,11 +248,11 @@
 - [x] TD003 [P] Replace `console.error` with Winston `logger` and wire Prometheus metrics in controller — Constitution CQ-3 / EP-4 violation
 - [x] TD004 [P] Fix `DocumentRepository` column name mapping — SQLite returns `snake_case` but `MemoryDocument` interface uses `camelCase`, causing `lastIndexed` to be undefined at runtime (health metrics always show 0% coverage)
 - [x] TD005 Create `docs/memory-hub.md` module documentation — Task T050 artifact missing
-- [ ] TD006 Wire `docType` filtering in `SearchService` — FR-007 partially implemented; placeholder at line 45-48
-- [ ] TD007 Implement confidentiality marker checks (FR-008) — Parse `confidential`/`private` frontmatter flags and exclude from context briefs
-- [ ] TD008 Add version history retrieval endpoint (FR-009) — Track versions but no API to retrieve previous versions
+- [x] TD006 Wire `docType` filtering in `SearchService` — FR-007 implemented; SQL-level filter in EmbeddingRepository.searchSimilar with parameterized IN clause
+- [x] TD007 Implement confidentiality marker checks (FR-008) — Parse `confidential`/`private` frontmatter flags and exclude from context briefs; `confidentialExcluded` counter added to ContextBrief response
+- [x] TD008 Add version history retrieval endpoint (FR-009) — `document_versions` table added to schema; DocumentRepository saves previous versions on upsert; GET `/api/memory-hub/versions?sourcePath=` endpoint added
 - [x] TD009 Emit Prometheus metrics from controller endpoints — Metrics class exists but controller does not call `memoryHubMetrics.searchDuration.observe()` etc.
-- [ ] TD010 Add `usePolling: true` fallback in `FileWatcher` when `inotify` is unavailable — NFR-002 requires 30s polling fallback; currently hardcoded `usePolling: false`
+- [x] TD010 Add `usePolling: true` fallback in `FileWatcher` when `inotify` is unavailable — NFR-002 implemented; env var `MEMORY_HUB_USE_POLLING` controls polling mode; defaults to false
 
 ---
 

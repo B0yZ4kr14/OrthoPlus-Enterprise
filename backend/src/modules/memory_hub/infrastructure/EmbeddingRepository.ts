@@ -56,7 +56,12 @@ export class EmbeddingRepository {
     ).run(documentId)
   }
 
-  searchSimilar(embedding: number[], model: string, limit = 10): Array<{
+  searchSimilar(
+    embedding: number[],
+    model: string,
+    limit = 10,
+    docTypes?: string[],
+  ): Array<{
     chunkId: string
     documentId: string
     sourcePath: string
@@ -70,14 +75,21 @@ export class EmbeddingRepository {
     const queryBuffer = Buffer.from(new Float32Array(embedding).buffer)
     const queryVec = new Float32Array(queryBuffer.buffer, queryBuffer.byteOffset, queryBuffer.length / 4)
 
-    const rows = this.db.prepare(
-      `SELECT e.chunk_id, e.embedding, c.document_id, c.content, c.heading_path,
+    let sql = `SELECT e.chunk_id, e.embedding, c.document_id, c.content, c.heading_path,
               d.source_path
        FROM embeddings e
        JOIN chunks c ON e.chunk_id = c.id
        JOIN documents d ON c.document_id = d.id
-       WHERE e.model = ? AND d.is_archived = 0`,
-    ).all(model) as Array<{
+       WHERE e.model = ? AND d.is_archived = 0`
+    const params: (string | number)[] = [model]
+
+    if (docTypes && docTypes.length > 0) {
+      const placeholders = docTypes.map(() => "?").join(", ")
+      sql += ` AND d.doc_type IN (${placeholders})`
+      params.push(...docTypes)
+    }
+
+    const rows = this.db.prepare(sql).all(...params) as Array<{
       chunk_id: string
       embedding: Buffer
       document_id: string

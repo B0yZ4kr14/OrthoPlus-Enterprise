@@ -203,10 +203,10 @@ export default {
         },
         "glow": {
           "0%, 100%": { 
-            boxShadow: "0 0 20px rgba(45, 212, 191, 0.3)" 
+            boxShadow: "0 0 20px hsl(160 84% 30% / 0.3)" 
           },
           "50%": { 
-            boxShadow: "0 0 30px rgba(45, 212, 191, 0.5)" 
+            boxShadow: "0 0 30px hsl(160 84% 30% / 0.5)" 
           }
         },
         "shimmer": {

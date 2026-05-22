@@ -39,15 +39,10 @@ export class SearchService {
       embedding.embedding,
       embedding.model,
       limit + offset,
+      filters.docTypes,
     )
 
-    // Apply filters
     const filtered = rawResults
-    if (filters.docTypes && filters.docTypes.length > 0) {
-      // We need docType info which isn't in the embedding query result
-      // For MVP, we'll skip docType filtering at the embedding level
-      // and apply it in the controller if needed
-    }
 
     // Deduplicate by document, keep highest scoring chunk per doc
     const byDocument = new Map<string, typeof rawResults[0]>()

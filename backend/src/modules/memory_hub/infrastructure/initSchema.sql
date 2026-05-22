@@ -57,4 +57,16 @@ CREATE INDEX IF NOT EXISTS idx_documents_doc_type ON documents(doc_type);
 CREATE INDEX IF NOT EXISTS idx_documents_archived ON documents(is_archived);
 CREATE INDEX IF NOT EXISTS idx_chunks_document ON chunks(document_id);
 CREATE INDEX IF NOT EXISTS idx_embeddings_chunk ON embeddings(chunk_id);
+CREATE TABLE IF NOT EXISTS document_versions (
+  id TEXT PRIMARY KEY,
+  document_id TEXT NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  version INTEGER NOT NULL,
+  content_hash TEXT NOT NULL,
+  title TEXT,
+  word_count INTEGER,
+  frontmatter TEXT,
+  created_at INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_versions_document ON document_versions(document_id, version);
+
 CREATE INDEX IF NOT EXISTS idx_drift_severity ON drift_reports(severity, resolved_at);

@@ -13,13 +13,13 @@ const THEME_OPTIONS = [
     value: "premium-light" as const,
     label: "Clínica Cristal",
     icon: Sun,
-    iconClass: "text-sky-500",
+    iconClass: "text-interactive",
   },
   {
     value: "premium-dental-dark" as const,
     label: "Noite Clínica",
     icon: Moon,
-    iconClass: "text-sky-400",
+    iconClass: "text-interactive"
   },
 ];
 
@@ -29,9 +29,9 @@ export const ThemeToggle = memo(function ThemeToggle() {
   const currentIcon = useMemo(() => {
     switch (theme) {
       case "premium-light":
-        return <Sun className="h-5 w-5 text-sky-500" />;
+        return <Sun className="h-5 w-5 text-interactive" />;
       case "premium-dental-dark":
-        return <Moon className="h-5 w-5 text-sky-400" />;
+        return <Moon className="h-5 w-5 text-interactive" />;
       default:
         return <Diamond className="h-5 w-5" />;
     }

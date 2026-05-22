@@ -27,12 +27,15 @@ export class FileWatcher {
   start(watchDirs: string[], pollingInterval = 30000): void {
     const absoluteDirs = watchDirs.map((d) => path.resolve(d))
 
+    // NFR-002: fallback to polling when inotify is unavailable (e.g. Docker, NFS, WSL)
+    const usePolling = process.env.MEMORY_HUB_USE_POLLING === "true"
+
     this.watcher = watch(absoluteDirs, {
       ignored: /(^|[/\\])\../, // ignore dotfiles
       persistent: true,
       ignoreInitial: true,
       awaitWriteFinish: { stabilityThreshold: 500 },
-      usePolling: false,
+      usePolling,
       interval: pollingInterval,
       binaryInterval: pollingInterval,
     })

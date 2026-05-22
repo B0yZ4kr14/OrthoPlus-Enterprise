@@ -122,6 +122,21 @@ export class MemoryHubController {
     }
   }
 
+  async versions(req: Request, res: Response) {
+    try {
+      const { sourcePath } = req.query
+      if (!sourcePath || typeof sourcePath !== "string") {
+        return res.status(400).json({ error: "sourcePath query parameter is required" })
+      }
+
+      const versions = documents.findVersions(sourcePath)
+      return res.json({ sourcePath, versions, count: versions.length })
+    } catch (error) {
+      logger.error("[MemoryHub] Versions error", { error, sourcePath: req.query.sourcePath })
+      return res.status(500).json({ error: "Version retrieval failed" })
+    }
+  }
+
   async health(_req: Request, res: Response) {
     try {
       const totalDocs = documents.count()

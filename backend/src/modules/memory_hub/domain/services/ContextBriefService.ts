@@ -11,13 +11,16 @@ export interface ContextBrief {
     summary: string
   }>
   markdown: string
+  confidentialExcluded: number
 }
 
 export class ContextBriefService {
   private searchService: SearchService
+  private documents: DocumentRepository
 
-  constructor(searchService: SearchService, _documents: DocumentRepository) {
+  constructor(searchService: SearchService, documents: DocumentRepository) {
     this.searchService = searchService
+    this.documents = documents
   }
 
   async generateBrief(
@@ -36,12 +39,24 @@ export class ContextBriefService {
       return b.relevanceScore - a.relevanceScore
     })
 
+    // Filter out confidential documents (Constitution GP-3 / FR-008)
+    let confidentialExcluded = 0
+    const accessible: typeof ranked = []
+    for (const r of ranked) {
+      const doc = this.documents.findByPath(r.sourcePath)
+      if (doc && this.documents.isConfidential(doc)) {
+        confidentialExcluded++
+        continue
+      }
+      accessible.push(r)
+    }
+
     // Select documents within token budget
     const selected: ContextBrief["documents"] = []
     let tokenCount = 0
     const tokensPerChar = 0.25
 
-    for (const r of ranked) {
+    for (const r of accessible) {
       const docTokens = Math.ceil(r.excerpt.length / tokensPerChar) + 500 // overhead for metadata
       if (tokenCount + docTokens > maxTokens && selected.length >= 3) {
         break
@@ -63,6 +78,7 @@ export class ContextBriefService {
       tokenCount,
       documents: selected,
       markdown,
+      confidentialExcluded,
     }
   }
 
