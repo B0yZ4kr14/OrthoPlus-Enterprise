@@ -1,0 +1,6 @@
+export { MemoryHubDashboard } from "./components/MemoryHubDashboard"
+export { MemoryHubSearch } from "./components/MemoryHubSearch"
+export { MemoryHubHealth } from "./components/MemoryHubHealth"
+export { useMemoryHubSearch } from "./hooks/useMemoryHubSearch"
+export { useMemoryHubHealth } from "./hooks/useMemoryHubHealth"
+export type { SearchResult, SearchFilters, HealthMetrics, ContextBrief } from "./types"
