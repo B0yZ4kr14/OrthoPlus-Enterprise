@@ -1,4 +1,5 @@
 import Database from "better-sqlite3"
+import { logger } from "@/infrastructure/logger"
 import { IndexingService } from "../domain/services/IndexingService"
 
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
@@ -11,12 +12,12 @@ const indexer = new IndexingService(db)
 
 indexer.reindexAll(watchDirs)
   .then(() => {
-    console.log("[ReindexWorker] Complete")
+    logger.info("[ReindexWorker] Complete")
     db.close()
     process.exit(0)
   })
   .catch((err) => {
-    console.error("[ReindexWorker] Failed:", err)
+    logger.error("[ReindexWorker] Failed:", { error: err })
     db.close()
     process.exit(1)
   })
