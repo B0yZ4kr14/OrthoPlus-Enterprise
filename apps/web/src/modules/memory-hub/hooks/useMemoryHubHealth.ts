@@ -1,44 +1,35 @@
-import { useState, useEffect } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { apiClient } from "@/lib/api/apiClient"
 import { HealthMetrics } from "../types"
 
-interface UseMemoryHubHealthReturn {
-  metrics: HealthMetrics | null
-  loading: boolean
-  error: string | null
-  refresh: () => Promise<void>
+interface HealthResponse {
+  totalDocuments: number
+  coveragePercent: number
+  driftCount: number
+  lastScan: string
 }
 
-export function useMemoryHubHealth(): UseMemoryHubHealthReturn {
-  const [metrics, setMetrics] = useState<HealthMetrics | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const refresh = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch("/api/memory-hub/health")
-      if (!response.ok) {
-        throw new Error(`Health check failed: ${response.status}`)
-      }
-      const data = await response.json()
-      setMetrics({
+export function useMemoryHubHealth() {
+  const query = useQuery<HealthMetrics, Error>({
+    queryKey: ["memory-hub", "health"],
+    queryFn: async () => {
+      const data = await apiClient.get<HealthResponse>("/memory-hub/health")
+      return {
         totalDocuments: data.totalDocuments || 0,
         coveragePercent: data.coveragePercent || 0,
         driftCount: data.driftCount || 0,
         lastScan: data.lastScan || new Date().toISOString(),
-      })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Health check failed")
-      setMetrics(null)
-    } finally {
-      setLoading(false)
-    }
+      }
+    },
+    staleTime: 1000 * 60, // 1 minuto
+  })
+
+  return {
+    metrics: query.data || null,
+    loading: query.isLoading,
+    error: query.error ? query.error.message : null,
+    refresh: async () => {
+      await query.refetch()
+    },
   }
-
-  useEffect(() => {
-    refresh()
-  }, [])
-
-  return { metrics, loading, error, refresh }
 }

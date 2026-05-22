@@ -1,33 +1,37 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import { MemoryHubHealth } from "../components/MemoryHubHealth"
-
-const mockFetch = vi.fn()
-global.fetch = mockFetch
+import { apiClient } from "../../../lib/api/apiClient"
+import { TestWrapper } from "./test-utils"
 
 describe("MemoryHubHealth", () => {
   beforeEach(() => {
-    mockFetch.mockClear()
+    vi.spyOn(apiClient, "get").mockReset()
   })
 
   it("displays loading state initially", () => {
-    mockFetch.mockReturnValue(new Promise(() => {}))
-    render(<MemoryHubHealth />)
+    vi.spyOn(apiClient, "get").mockReturnValue(new Promise(() => {}))
+    render(
+      <TestWrapper>
+        <MemoryHubHealth />
+      </TestWrapper>,
+    )
     expect(screen.getByTestId("health-loading")).toBeTruthy()
   })
 
   it("displays health metrics after loading", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        totalDocuments: 150,
-        coveragePercent: 87,
-        driftCount: 3,
-        lastScan: "2026-05-22T00:00:00Z",
-      }),
+    vi.spyOn(apiClient, "get").mockResolvedValueOnce({
+      totalDocuments: 150,
+      coveragePercent: 87,
+      driftCount: 3,
+      lastScan: "2026-05-22T00:00:00Z",
     })
 
-    render(<MemoryHubHealth />)
+    render(
+      <TestWrapper>
+        <MemoryHubHealth />
+      </TestWrapper>,
+    )
 
     await waitFor(() => {
       expect(screen.getByTestId("metric-documents")).toBeTruthy()
@@ -38,12 +42,15 @@ describe("MemoryHubHealth", () => {
   })
 
   it("displays error on API failure", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      status: 500,
-    })
+    vi.spyOn(apiClient, "get").mockRejectedValueOnce(
+      new Error("Health check failed: 500"),
+    )
 
-    render(<MemoryHubHealth />)
+    render(
+      <TestWrapper>
+        <MemoryHubHealth />
+      </TestWrapper>,
+    )
 
     await waitFor(() => {
       expect(screen.getByTestId("health-error")).toBeTruthy()

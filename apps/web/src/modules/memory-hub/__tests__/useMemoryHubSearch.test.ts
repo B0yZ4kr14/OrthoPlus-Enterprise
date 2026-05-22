@@ -1,31 +1,36 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { useMemoryHubSearch } from "../hooks/useMemoryHubSearch"
-
-const mockFetch = vi.fn()
-global.fetch = mockFetch
+import { apiClient } from "../../../lib/api/apiClient"
+import { TestWrapper } from "./test-utils"
 
 describe("useMemoryHubSearch", () => {
   beforeEach(() => {
-    mockFetch.mockClear()
+    vi.spyOn(apiClient, "post").mockReset()
   })
 
   it("returns initial state", () => {
-    const { result } = renderHook(() => useMemoryHubSearch())
+    const { result } = renderHook(() => useMemoryHubSearch(), {
+      wrapper: TestWrapper,
+    })
     expect(result.current.results).toEqual([])
     expect(result.current.loading).toBe(false)
     expect(result.current.error).toBeNull()
   })
 
   it("sets loading while searching", async () => {
-    mockFetch.mockReturnValue(new Promise(() => {}))
-    const { result } = renderHook(() => useMemoryHubSearch())
+    vi.spyOn(apiClient, "post").mockReturnValue(new Promise(() => {}))
+    const { result } = renderHook(() => useMemoryHubSearch(), {
+      wrapper: TestWrapper,
+    })
 
     act(() => {
       result.current.search("test")
     })
 
-    expect(result.current.loading).toBe(true)
+    await waitFor(() => {
+      expect(result.current.loading).toBe(true)
+    })
   })
 
   it("returns results on success", async () => {
@@ -41,57 +46,70 @@ describe("useMemoryHubSearch", () => {
       },
     ]
 
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ results: mockResults }),
+    vi.spyOn(apiClient, "post").mockResolvedValueOnce({
+      results: mockResults,
+      total: 1,
     })
 
-    const { result } = renderHook(() => useMemoryHubSearch())
+    const { result } = renderHook(() => useMemoryHubSearch(), {
+      wrapper: TestWrapper,
+    })
 
-    await act(async () => {
-      await result.current.search("test")
+    act(() => {
+      result.current.search("test")
+    })
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false)
     })
 
     expect(result.current.results).toEqual(mockResults)
-    expect(result.current.loading).toBe(false)
     expect(result.current.error).toBeNull()
   })
 
   it("returns error on failure", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      status: 500,
+    vi.spyOn(apiClient, "post").mockRejectedValueOnce(
+      new Error("Search failed: 500"),
+    )
+
+    const { result } = renderHook(() => useMemoryHubSearch(), {
+      wrapper: TestWrapper,
     })
 
-    const { result } = renderHook(() => useMemoryHubSearch())
+    act(() => {
+      result.current.search("test")
+    })
 
-    await act(async () => {
-      await result.current.search("test")
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false)
     })
 
     expect(result.current.error).toBe("Search failed: 500")
     expect(result.current.results).toEqual([])
-    expect(result.current.loading).toBe(false)
   })
 
   it("sends filters in request body", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ results: [] }),
+    vi.spyOn(apiClient, "post").mockResolvedValueOnce({
+      results: [],
+      total: 0,
     })
 
-    const { result } = renderHook(() => useMemoryHubSearch())
+    const { result } = renderHook(() => useMemoryHubSearch(), {
+      wrapper: TestWrapper,
+    })
     const filters = { docTypes: ["spec", "plan"] }
 
-    await act(async () => {
-      await result.current.search("test", filters)
+    act(() => {
+      result.current.search("test", filters)
     })
 
-    expect(mockFetch).toHaveBeenCalledWith(
-      "/api/memory-hub/search",
-      expect.objectContaining({
-        body: JSON.stringify({ query: "test", filters }),
-      }),
-    )
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false)
+    })
+
+    expect(apiClient.post).toHaveBeenCalledWith("/memory-hub/search", {
+      query: "test",
+      filters,
+    })
   })
 })

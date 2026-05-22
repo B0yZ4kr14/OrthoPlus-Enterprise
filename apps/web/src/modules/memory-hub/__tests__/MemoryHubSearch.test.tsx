@@ -1,28 +1,35 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { MemoryHubSearch } from "../components/MemoryHubSearch"
-
-const mockFetch = vi.fn()
-global.fetch = mockFetch
+import { apiClient } from "../../../lib/api/apiClient"
+import { TestWrapper } from "./test-utils"
 
 describe("MemoryHubSearch", () => {
   beforeEach(() => {
-    mockFetch.mockClear()
+    vi.spyOn(apiClient, "post").mockReset()
   })
 
   it("renders search input and button", () => {
-    render(<MemoryHubSearch />)
+    render(
+      <TestWrapper>
+        <MemoryHubSearch />
+      </TestWrapper>,
+    )
     expect(screen.getByTestId("search-input")).toBeTruthy()
     expect(screen.getByTestId("search-button")).toBeTruthy()
   })
 
   it("calls API on form submit", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ results: [] }),
+    vi.spyOn(apiClient, "post").mockResolvedValueOnce({
+      results: [],
+      total: 0,
     })
 
-    render(<MemoryHubSearch />)
+    render(
+      <TestWrapper>
+        <MemoryHubSearch />
+      </TestWrapper>,
+    )
     const input = screen.getByTestId("search-input")
     const button = screen.getByTestId("search-button")
 
@@ -30,35 +37,34 @@ describe("MemoryHubSearch", () => {
     fireEvent.click(button)
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith(
-        "/api/memory-hub/search",
-        expect.objectContaining({
-          method: "POST",
-          body: JSON.stringify({ query: "rate limiting", filters: undefined }),
-        }),
-      )
+      expect(apiClient.post).toHaveBeenCalledWith("/memory-hub/search", {
+        query: "rate limiting",
+        filters: undefined,
+      })
     })
   })
 
   it("displays search results", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        results: [
-          {
-            id: "chunk-1",
-            sourcePath: "specs/test.md",
-            docType: "spec",
-            title: "Test Spec",
-            excerpt: "Test content",
-            relevanceScore: 0.95,
-            headingPath: [],
-          },
-        ],
-      }),
+    vi.spyOn(apiClient, "post").mockResolvedValueOnce({
+      results: [
+        {
+          id: "chunk-1",
+          sourcePath: "specs/test.md",
+          docType: "spec",
+          title: "Test Spec",
+          excerpt: "Test content",
+          relevanceScore: 0.95,
+          headingPath: [],
+        },
+      ],
+      total: 1,
     })
 
-    render(<MemoryHubSearch />)
+    render(
+      <TestWrapper>
+        <MemoryHubSearch />
+      </TestWrapper>,
+    )
     const input = screen.getByTestId("search-input")
     const button = screen.getByTestId("search-button")
 
@@ -73,12 +79,15 @@ describe("MemoryHubSearch", () => {
   })
 
   it("displays error on API failure", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      status: 500,
-    })
+    vi.spyOn(apiClient, "post").mockRejectedValueOnce(
+      new Error("Search failed: 500"),
+    )
 
-    render(<MemoryHubSearch />)
+    render(
+      <TestWrapper>
+        <MemoryHubSearch />
+      </TestWrapper>,
+    )
     const input = screen.getByTestId("search-input")
     const button = screen.getByTestId("search-button")
 
@@ -91,12 +100,16 @@ describe("MemoryHubSearch", () => {
   })
 
   it("does not search with empty query", async () => {
-    render(<MemoryHubSearch />)
+    render(
+      <TestWrapper>
+        <MemoryHubSearch />
+      </TestWrapper>,
+    )
     const button = screen.getByTestId("search-button")
     fireEvent.click(button)
 
     await waitFor(() => {
-      expect(mockFetch).not.toHaveBeenCalled()
+      expect(apiClient.post).not.toHaveBeenCalled()
     })
   })
 })

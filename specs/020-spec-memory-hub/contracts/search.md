@@ -71,6 +71,66 @@ Generate a structured context brief for an AI agent.
 }
 ```
 
+### POST `/reindex`
+
+Trigger a full manual reindex of all watched directories. Requires authentication.
+
+**Request Body**: (optional)
+```json
+{
+  "force": false
+}
+```
+
+**Response 200 OK**:
+```json
+{
+  "status": "started",
+  "documentsProcessed": 0,
+  "message": "Reindexing started"
+}
+```
+
+**Response 202 Accepted**: If reindex is already in progress.
+
+**Response 429 Too Many Requests**: If rate limit exceeded (5 req/5min).
+
+---
+
+### GET `/versions`
+
+Retrieve version history for a specific document.
+
+**Query Parameters**:
+- `sourcePath` (string, required) — Relative path to the document
+
+**Response 200 OK**:
+```json
+{
+  "sourcePath": "specs/019-ia-radiografia/spec.md",
+  "versions": [
+    {
+      "version": 3,
+      "contentHash": "sha256:abc...",
+      "title": "IA Radiografia",
+      "wordCount": 1205,
+      "createdAt": "2026-05-18T14:00:00Z"
+    },
+    {
+      "version": 2,
+      "contentHash": "sha256:def...",
+      "title": "IA Radiografia",
+      "wordCount": 980,
+      "createdAt": "2026-05-17T10:00:00Z"
+    }
+  ]
+}
+```
+
+**Response 404 Not Found**: If document not found.
+
+---
+
 ### GET `/health`
 
 Memory hub health metrics.

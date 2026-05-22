@@ -111,12 +111,19 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 
 ## Success Criteria
 
+### Buildable Success Criteria (Validatable During Implementation)
+
 1. **A developer can find relevant project context in under 10 seconds** via semantic search, compared to 2+ minutes of manual browsing.
-2. **AI agents produce 50% fewer architecture violations** when using memory hub context briefs versus static prompts.
 3. **Memory drift is detected within 24 hours** of a spec-implementation divergence occurring.
 4. **95% of project documents are indexed and searchable** within 60 seconds of being created or modified.
-5. **Context briefs maintain 90%+ relevance score** as measured by developer feedback on usefulness.
-6. **Zero sensitive data leaks** into AI agent context (verified by automated scan of context briefs).
+
+### Post-Launch Business KPIs (Outcome Metrics)
+
+> These metrics require production telemetry and user feedback loops. They are tracked via analytics, not build tasks.
+
+2. **AI agents produce 50% fewer architecture violations** when using memory hub context briefs versus static prompts. *(Requires: baseline measurement of architecture violations pre- and post-deployment; tracked quarterly)*
+5. **Context briefs maintain 90%+ relevance score** as measured by developer feedback on usefulness. *(Requires: in-app feedback mechanism; tracked monthly)*
+6. **Zero sensitive data leaks** into AI agent context (verified by automated scan of context briefs). *(Requires: automated sensitive-data detection pipeline; tracked per release)*
 
 ---
 

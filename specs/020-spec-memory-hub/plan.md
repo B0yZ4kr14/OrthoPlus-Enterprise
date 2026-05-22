@@ -128,9 +128,9 @@ categories/@orthoplus/core/packages/
 ### VPS Environment
 - **Host**: `tsi@100.111.74.69` (Tailscale) / `179.190.15.116` (public)
 - **URL**: `https://tsiapp.io/OrthoPlus-Enterprise/`
-- **Backend**: Docker container `orthoplus-backend` on port 3005 (PM2 also present but Docker is primary)
+- **Backend**: PM2 process `orthoplus-backend` on port 3005 (Docker available for auxiliary services only)
 - **Nginx**: Host nginx (not Docker) with Cloudflare origin SSL
-- **Database**: PostgreSQL 16 (Docker container)
+- **Database**: PostgreSQL 16 (native host installation on port 5432)
 
 ### Quality Gates (MUST pass before deploy)
 1. `pnpm type-check` — 0 errors

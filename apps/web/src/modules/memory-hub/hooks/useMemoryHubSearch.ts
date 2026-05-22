@@ -1,39 +1,47 @@
-import { useState, useCallback } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { apiClient } from "@/lib/api/apiClient"
 import { SearchResult, SearchFilters } from "../types"
+
+interface SearchResponse {
+  results: SearchResult[]
+  total: number
+}
 
 interface UseMemoryHubSearchReturn {
   results: SearchResult[]
   loading: boolean
   error: string | null
-  search: (query: string, filters?: SearchFilters) => Promise<void>
+  search: (query: string, filters?: SearchFilters) => void
 }
 
 export function useMemoryHubSearch(): UseMemoryHubSearchReturn {
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const search = useCallback(async (query: string, filters?: SearchFilters) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch("/api/memory-hub/search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, filters }),
+  const mutation = useMutation({
+    mutationFn: async ({
+      query,
+      filters,
+    }: {
+      query: string
+      filters?: SearchFilters
+    }) => {
+      return await apiClient.post<SearchResponse>("/memory-hub/search", {
+        query,
+        filters,
       })
-      if (!response.ok) {
-        throw new Error(`Search failed: ${response.status}`)
-      }
-      const data = await response.json()
-      setResults(data.results || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Search failed")
-      setResults([])
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+    },
+  })
 
-  return { results, loading, error, search }
+  const search = (query: string, filters?: SearchFilters) => {
+    mutation.mutate({ query, filters })
+  }
+
+  return {
+    results: mutation.data?.results || [],
+    loading: mutation.isPending,
+    error: mutation.error
+      ? mutation.error instanceof Error
+        ? mutation.error.message
+        : "Search failed"
+      : null,
+    search,
+  }
 }
