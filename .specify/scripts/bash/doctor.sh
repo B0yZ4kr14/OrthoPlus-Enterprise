@@ -16,8 +16,8 @@ ERRORS=0
 WARNINGS=0
 
 log_ok() { echo -e "${GREEN}✓${NC} $1"; }
-log_warn() { echo -e "${YELLOW}⚠${NC} $1"; ((WARNINGS++)); }
-log_err() { echo -e "${RED}✗${NC} $1"; ((ERRORS++)); }
+log_warn() { echo -e "${YELLOW}⚠${NC} $1"; WARNINGS=$((WARNINGS + 1)); }
+log_err() { echo -e "${RED}✗${NC} $1"; ERRORS=$((ERRORS + 1)); }
 log_info() { echo -e "${BLUE}ℹ${NC} $1"; }
 
 section() {
@@ -51,7 +51,7 @@ AGENT_COUNT=0
 for d in .claude .cursor .kimi .agents; do
   if [ -d "$d" ]; then
     log_ok "Agent dir: $d"
-    ((AGENT_COUNT++))
+    AGENT_COUNT=$((AGENT_COUNT + 1))
   else
     log_warn "Missing agent dir: $d"
   fi
@@ -79,12 +79,12 @@ for f in specs/*/; do
 
   if [ -f "$spec" ] && [ -f "$plan" ] && [ -f "$tasks" ]; then
     log_ok "$name: spec=$has_spec plan=$has_plan tasks=$has_tasks"
-    ((COMPLETE_FEATURES++))
+    COMPLETE_FEATURES=$((COMPLETE_FEATURES + 1))
   else
     log_err "$name: spec=$has_spec plan=$has_plan tasks=$has_tasks"
-    ((INCOMPLETE_FEATURES++))
+    INCOMPLETE_FEATURES=$((INCOMPLETE_FEATURES + 1))
   fi
-  ((FEATURE_COUNT++))
+  FEATURE_COUNT=$((FEATURE_COUNT + 1))
 done
 
 log_info "Features: $FEATURE_COUNT total, $COMPLETE_FEATURES complete, $INCOMPLETE_FEATURES incomplete"
@@ -102,9 +102,9 @@ for s in .specify/scripts/bash/*.sh; do
     log_ok "$name (executable)"
   else
     log_warn "$name (not executable)"
-    ((NON_EXEC++))
+    NON_EXEC=$((NON_EXEC + 1))
   fi
-  ((SCRIPT_COUNT++))
+  SCRIPT_COUNT=$((SCRIPT_COUNT + 1))
 done
 
 log_info "Bash scripts: $SCRIPT_COUNT total, $NON_EXEC non-executable"
