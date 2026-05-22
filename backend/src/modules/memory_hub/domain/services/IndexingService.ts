@@ -8,6 +8,7 @@ import { OllamaEmbeddingClient } from "../../infrastructure/OllamaEmbeddingClien
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 import { ChunkRepository } from "../../infrastructure/ChunkRepository"
 import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
+import { loadGitignoreForPath } from "../../infrastructure/GitignoreParser"
 
 export class IndexingService {
   private parser: MarkdownParser
@@ -131,9 +132,16 @@ export class IndexingService {
   private findMarkdownFiles(dir: string): string[] {
     const results: string[] = []
     const entries = fs.readdirSync(dir, { withFileTypes: true })
+    const gitignore = loadGitignoreForPath(dir)
 
     for (const entry of entries) {
       const fullPath = `${dir}/${entry.name}`
+
+      // Skip .gitignore'd files and directories (P2)
+      if (gitignore?.isIgnored(fullPath, dir)) {
+        continue
+      }
+
       if (entry.isDirectory() && !entry.name.startsWith(".")) {
         results.push(...this.findMarkdownFiles(fullPath))
       } else if (entry.isFile() && entry.name.endsWith(".md")) {

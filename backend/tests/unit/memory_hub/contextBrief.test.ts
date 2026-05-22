@@ -139,8 +139,8 @@ describe("ContextBriefService", () => {
 
   describe("T031: context brief respects token budget", () => {
     it("limits documents when token budget exceeded", async () => {
-      // Each excerpt is ~100 words = ~400 tokens + 500 overhead = ~900 tokens per doc
-      const excerpt = "word ".repeat(100)
+      // Each excerpt is ~500 words = ~700 tokens + header overhead
+      const excerpt = "word ".repeat(500)
       const results = Array.from({ length: 10 }, (_, i) => ({
         id: `chunk-${i}`,
         sourcePath: `specs/doc${i}.md`,
@@ -155,12 +155,12 @@ describe("ContextBriefService", () => {
       mockDocuments.findByPath = jest.fn().mockReturnValue({ id: "doc-1", frontmatter: "{}" })
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false)
 
-      const brief = await service.generateBrief("test", 20000)
+      const brief = await service.generateBrief("test", 2000)
 
       // Should include some but not all documents due to hard token budget cap
       expect(brief.documents.length).toBeLessThan(10)
       expect(brief.documents.length).toBeGreaterThanOrEqual(1)
-      expect(brief.tokenCount).toBeLessThanOrEqual(20000)
+      expect(brief.tokenCount).toBeLessThanOrEqual(2000)
     })
 
     it("respects hard token budget and excludes documents that would exceed", async () => {
@@ -169,7 +169,7 @@ describe("ContextBriefService", () => {
         sourcePath: `specs/doc${i}.md`,
         docType: "spec",
         title: `Doc ${i}`,
-        excerpt: "content",
+        excerpt: "content that uses many tokens to exceed the budget ".repeat(20),
         relevanceScore: 0.9 - i * 0.01,
         headingPath: [],
       }))
@@ -178,11 +178,11 @@ describe("ContextBriefService", () => {
       mockDocuments.findByPath = jest.fn().mockReturnValue({ id: "doc-1", frontmatter: "{}" })
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false)
 
-      const brief = await service.generateBrief("test", 100)
+      const brief = await service.generateBrief("test", 50)
 
-      // With a 100-token budget, no documents should be included (each has ~500 tokens overhead)
+      // With a 50-token budget, no documents should be included
       expect(brief.documents.length).toBe(0)
-      expect(brief.tokenCount).toBe(0)
+      expect(brief.tokenCount).toBeLessThanOrEqual(50)
     })
   })
 })

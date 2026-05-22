@@ -1,5 +1,6 @@
 import { SearchService } from "./SearchService"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
+import { TokenCounter } from "../../infrastructure/TokenCounter"
 import { logger } from "@/infrastructure/logger"
 
 /**
@@ -121,14 +122,13 @@ export class ContextBriefService {
       accessible.push(r)
     }
 
-    // Select documents within token budget
+    // Select documents within token budget using accurate token counting (P3)
     const selected: ContextBrief["documents"] = []
-    let tokenCount = 0
-    const tokensPerChar = 0.25
+    let tokenCount = TokenCounter.count(`# Context Brief: ${topic}\n\n`) // overhead for header
 
     for (const r of accessible) {
       const sanitizedExcerpt = sanitizeExcerpt(r.excerpt)
-      const docTokens = Math.ceil(sanitizedExcerpt.length / tokensPerChar) + 500 // overhead for metadata
+      const docTokens = TokenCounter.count(sanitizedExcerpt) + TokenCounter.count(`\n## ${r.sourcePath}\n\n`)
       // Hard token budget cap — never exceed regardless of document count (F-RT-020-003)
       if (tokenCount + docTokens > maxTokens) {
         break

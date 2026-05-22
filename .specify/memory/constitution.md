@@ -73,8 +73,12 @@ Use ApiError from `@/middleware/errorHandler`. Return RFC 7807 Problem Details. 
 ### DB-1: Prisma as Primary ORM
 Use Prisma Client for CRUD. `$queryRaw` only for complex aggregations (documented).
 
+> **Exception — Local-First Semantic Index**: The Spec Kit Memory Hub (`backend/src/modules/memory_hub/`) uses SQLite (`better-sqlite3`) directly for its local vector index. This is intentional: the index is a derived, ephemeral cache of project documentation (specs, architecture decisions, API contracts) — not business data. It must work offline without a running PostgreSQL instance and must be reconstructible from source documents. This exception applies **only** to the memory hub's `initSchema.sql` and `index.db`.
+
 ### DB-2: Schema as Source of Truth
 `backend/prisma/schema.prisma` is authoritative. Regenerate types after changes. Never edit `database.ts` manually.
+
+> **Exception — Memory Hub Index Schema**: The memory hub's SQLite schema (`backend/src/modules/memory_hub/infrastructure/initSchema.sql`) is maintained separately because it is not part of the PostgreSQL multi-schema architecture managed by Prisma. Changes to `initSchema.sql` require re-indexing but do not affect `schema.prisma`.
 
 ### DB-3: Federated Categories
 6 categories (CORE, FINANCEIRO, OPERACIONAL, COMERCIAL, CLINICO, ADMINISTRATIVO). Cross-schema reads only. Writes via events or orchestration.

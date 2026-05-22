@@ -1,3 +1,5 @@
+import { TokenCounter } from "./TokenCounter"
+
 export interface DocumentChunk {
   content: string
   headingPath: string[]
@@ -61,40 +63,57 @@ export class DocumentChunker {
     headingPath: string[],
     startLineOffset: number,
   ): DocumentChunk[] {
-    const words = text.split(/\s+/)
-    const maxWords = Math.floor(this.maxTokens / 1.3)
-    const overlapWords = Math.floor(this.overlapTokens / 1.3)
+    // Use accurate token counting (P3)
+    const totalTokens = TokenCounter.count(text)
 
-    if (words.length <= maxWords) {
+    if (totalTokens <= this.maxTokens) {
       return [{
         content: text,
         headingPath,
         startLine: startLineOffset,
         endLine: startLineOffset + text.split("\n").length,
-        tokenCount: Math.ceil(words.length * 1.3),
+        tokenCount: totalTokens,
       }]
     }
 
+    // Fallback: character-based chunking for large texts
+    const charsPerToken = 4
+    const maxChars = this.maxTokens * charsPerToken
+    const overlapChars = this.overlapTokens * charsPerToken
+
     const chunks: DocumentChunk[] = []
-    let i = 0
+    let pos = 0
     let lineCounter = startLineOffset
 
-    while (i < words.length) {
-      const end = Math.min(i + maxWords, words.length)
-      const chunkWords = words.slice(i, end)
-      const chunkText = chunkWords.join(" ")
+    while (pos < text.length) {
+      const end = Math.min(pos + maxChars, text.length)
+      // Try to break at paragraph boundary
+      let breakPoint = end
+      const paragraphBreak = text.lastIndexOf("\n\n", end)
+      if (paragraphBreak > pos + maxChars * 0.5) {
+        breakPoint = paragraphBreak
+      } else {
+        const sentenceBreak = text.lastIndexOf(". ", end)
+        if (sentenceBreak > pos + maxChars * 0.5) {
+          breakPoint = sentenceBreak + 2
+        }
+      }
+
+      const chunkText = text.slice(pos, breakPoint)
       const linesInChunk = chunkText.split("\n").length
+      const chunkTokens = TokenCounter.count(chunkText)
 
       chunks.push({
         content: chunkText,
         headingPath,
         startLine: lineCounter,
         endLine: lineCounter + linesInChunk,
-        tokenCount: Math.ceil(chunkWords.length * 1.3),
+        tokenCount: chunkTokens,
       })
 
       lineCounter += linesInChunk
-      i += maxWords - overlapWords
+      pos = breakPoint - overlapChars
+      if (pos <= 0 || pos >= text.length - overlapChars) pos = breakPoint
     }
 
     return chunks
