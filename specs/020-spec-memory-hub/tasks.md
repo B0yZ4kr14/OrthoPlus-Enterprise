@@ -82,7 +82,7 @@
 - [x] T014 [P] [US1] Backend unit test: semantic search returns results ordered by relevance
   - `backend/tests/unit/memory_hub/search.test.ts`
 - [x] T015 [P] [US1] Backend unit test: search filters by doc_type and archived status
-  - `backend/tests/unit/memory_hub/searchFilters.test.ts`
+  - `backend/tests/unit/memory_hub/search.test.ts` (filter assertions within search suite)
 
 ### Implementation for User Story 1
 
@@ -185,7 +185,7 @@
 - [x] T037 [P] [US4] Backend unit test: drift scan detects broken API references
   - `backend/tests/unit/memory_hub/driftDetection.test.ts`
 - [x] T038 [P] [US4] Backend unit test: drift scan detects missing implementations
-  - `backend/tests/unit/memory_hub/driftCoverage.test.ts`
+  - `backend/tests/unit/memory_hub/driftDetection.test.ts` (coverage assertions within drift suite)
 
 ### Implementation for User Story 4
 
@@ -220,6 +220,8 @@
 - [x] T049 Verify no new `as any` or `@ts-ignore` added (Constitution CQ-2)
 - [x] T050 [P] Add module documentation to `docs/memory-hub.md`
 - [x] T051 Run quickstart.md validation — verify all commands work end-to-end
+- [x] T052 [P] Frontend web UI for search and health dashboard
+  - `apps/web/src/modules/memory-hub/`
 
 ---
 
@@ -227,11 +229,15 @@
 
 **Purpose**: Non-blocking improvements for future iterations.
 
-- [x] T052 [P] Frontend web UI for search and health dashboard
-  - `apps/web/src/modules/memory-hub/`
 - [ ] T053 [P] Advanced filtering (date range, author, feature number)
+  - Extend `SearchService.ts` and `EmbeddingRepository.ts` with additional SQL filters
+  - Frontend: Add filter controls to `MemoryHubSearch.tsx`
 - [ ] T054 [P] Index compression for large embedding datasets
+  - Implement quantization (float32 → int8) for embedding vectors
+  - Add compression ratio metrics to health dashboard
 - [ ] T055 [P] Cross-reference graph visualization
+  - Build graph data structure from document links and references
+  - Frontend: Add graph viz component using D3 or Cytoscape.js
 
 ---
 
@@ -307,11 +313,13 @@
 | Metric | Count |
 |--------|-------|
 | **Total tasks** | 55 |
+| **Tech debt tasks** | 10 (TD001-TD010) |
+| **Combined total** | 65 |
 | **Critical gap fixes** | 7 (Phase 2) |
 | **US1 tasks** | 8 (P1 — MVP) |
 | **US2 tasks** | 8 (P2) |
 | **US3 tasks** | 6 (P2) |
 | **US4 tasks** | 9 (P3) |
-| **Polish tasks** | 6 |
-| **Future tasks** | 4 (deferred) |
+| **Polish tasks** | 7 (includes T052 frontend UI) |
+| **Future tasks** | 3 (deferred: T053-T055) |
 | **Test tasks** | 8 |
