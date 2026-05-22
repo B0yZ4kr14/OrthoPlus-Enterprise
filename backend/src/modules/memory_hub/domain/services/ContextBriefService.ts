@@ -1,5 +1,66 @@
 import { SearchService } from "./SearchService"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
+import { logger } from "@/infrastructure/logger"
+
+/**
+ * Sanitize document excerpts to prevent prompt injection attacks.
+ * Removes known instruction-override patterns and markdown boundary breakers.
+ */
+function sanitizeExcerpt(text: string): string {
+  if (!text) return ""
+
+  // Known prompt-injection patterns
+  const injectionPatterns = [
+    /ignore all previous instructions/gi,
+    /ignore previous instructions/gi,
+    /forget all prior instructions/gi,
+    /disregard (all |previous )?instructions/gi,
+    /you are now /gi,
+    /your new role is /gi,
+    /system:\s*override/gi,
+    /override (previous|all) (instructions|prompts)/gi,
+    /new instructions?:/gi,
+    /\[SYSTEM\]/gi,
+    /\[INST\]/gi,
+    /\[\/INST\]/gi,
+    /<system>/gi,
+    /<\/system>/gi,
+    /<instruction>/gi,
+    /<\/instruction>/gi,
+    /---\s*\n\s*system/gi,
+  ]
+
+  let sanitized = text
+  for (const pattern of injectionPatterns) {
+    sanitized = sanitized.replace(pattern, "[REDACTED]")
+  }
+
+  // Escape markdown metacharacters that could break brief structure
+  // But preserve basic formatting for readability
+  sanitized = sanitized
+    .replace(/\n---\s*\n/g, "\n---\n") // Normalize horizontal rules
+    .replace(/\n# /g, "\n\\# ") // Escape headings that could break structure
+    .replace(/\n## /g, "\n\\## ")
+    .replace(/\n### /g, "\n\\### ")
+
+  return sanitized
+}
+
+/**
+ * Validate and sanitize a topic string for safe interpolation into YAML frontmatter.
+ */
+function sanitizeTopic(topic: string): string {
+  // Allow only alphanumeric, hyphens, underscores, dots, and slashes (feature IDs)
+  // Reject control characters, newlines, and YAML metacharacters
+  const safe = topic.replace(/[^\w\-\.\/\s]/g, "")
+  if (safe !== topic) {
+    logger.warn("[ContextBriefService] Topic contained unsafe characters, sanitized", {
+      original: topic.slice(0, 100),
+      sanitized: safe.slice(0, 100),
+    })
+  }
+  return safe.trim()
+}
 
 export interface ContextBrief {
   topic: string
@@ -27,8 +88,9 @@ export class ContextBriefService {
     topic: string,
     maxTokens = 80000,
     _includeRelated = true,
+    clinicId = "default",
   ): Promise<ContextBrief> {
-    const { results } = await this.searchService.search(topic, {}, 20, 0)
+    const { results } = await this.searchService.search(topic, {}, 20, 0, clinicId)
 
     // Priority ranking: spec > plan > architecture > contract > memory > doc
     const priorityOrder = ["spec", "plan", "architecture", "contract", "memory", "doc"]
@@ -40,11 +102,19 @@ export class ContextBriefService {
     })
 
     // Filter out confidential documents (Constitution GP-3 / FR-008)
+    // Default-deny: if doc record is missing, exclude (F-RT-020-002)
     let confidentialExcluded = 0
     const accessible: typeof ranked = []
     for (const r of ranked) {
       const doc = this.documents.findByPath(r.sourcePath)
-      if (doc && this.documents.isConfidential(doc)) {
+      if (!doc) {
+        logger.warn("[ContextBriefService] Document record missing for search result, excluding", {
+          sourcePath: r.sourcePath,
+        })
+        confidentialExcluded++
+        continue
+      }
+      if (this.documents.isConfidential(doc)) {
         confidentialExcluded++
         continue
       }
@@ -57,15 +127,17 @@ export class ContextBriefService {
     const tokensPerChar = 0.25
 
     for (const r of accessible) {
-      const docTokens = Math.ceil(r.excerpt.length / tokensPerChar) + 500 // overhead for metadata
-      if (tokenCount + docTokens > maxTokens && selected.length >= 3) {
+      const sanitizedExcerpt = sanitizeExcerpt(r.excerpt)
+      const docTokens = Math.ceil(sanitizedExcerpt.length / tokensPerChar) + 500 // overhead for metadata
+      // Hard token budget cap — never exceed regardless of document count (F-RT-020-003)
+      if (tokenCount + docTokens > maxTokens) {
         break
       }
       selected.push({
         sourcePath: r.sourcePath,
         docType: r.docType,
         relevance: r.relevanceScore,
-        summary: r.excerpt.slice(0, 500),
+        summary: sanitizedExcerpt.slice(0, 500),
       })
       tokenCount += docTokens
     }
@@ -86,26 +158,28 @@ export class ContextBriefService {
     topic: string,
     documents: ContextBrief["documents"],
   ): string {
+    const safeTopic = sanitizeTopic(topic)
     const lines: string[] = [
       "---",
-      `topic: ${topic}`,
+      `topic: ${safeTopic}`,
       `document_count: ${documents.length}`,
       `generated_at: ${new Date().toISOString()}`,
       "---",
       "",
-      `# Context Brief: ${topic}`,
+      `# Context Brief: ${safeTopic}`,
       "",
       "## Relevant Documents",
       "",
     ]
 
     for (const doc of documents) {
+      const safeSummary = sanitizeExcerpt(doc.summary)
       lines.push(`### ${doc.sourcePath.split("/").pop()} (${doc.docType})`)
       lines.push(``)
       lines.push(`- **Relevance**: ${doc.relevance}`)
       lines.push(`- **Path**: ${doc.sourcePath}`)
       lines.push(``)
-      lines.push(doc.summary)
+      lines.push(safeSummary)
       lines.push(``)
     }
 

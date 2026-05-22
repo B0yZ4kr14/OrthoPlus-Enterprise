@@ -3,7 +3,8 @@
 
 CREATE TABLE IF NOT EXISTS documents (
   id TEXT PRIMARY KEY,
-  source_path TEXT NOT NULL UNIQUE,
+  clinic_id TEXT NOT NULL DEFAULT 'default',
+  source_path TEXT NOT NULL,
   doc_type TEXT NOT NULL,
   title TEXT,
   content_hash TEXT NOT NULL,
@@ -12,7 +13,8 @@ CREATE TABLE IF NOT EXISTS documents (
   version INTEGER DEFAULT 1,
   word_count INTEGER,
   is_archived INTEGER DEFAULT 0,
-  frontmatter TEXT
+  frontmatter TEXT,
+  UNIQUE(clinic_id, source_path)
 );
 
 CREATE TABLE IF NOT EXISTS chunks (
@@ -46,6 +48,8 @@ CREATE TABLE IF NOT EXISTS drift_reports (
 
 CREATE TABLE IF NOT EXISTS search_queries (
   id TEXT PRIMARY KEY,
+  clinic_id TEXT NOT NULL DEFAULT 'default',
+  user_id TEXT,
   query_text TEXT NOT NULL,
   results_count INTEGER,
   duration_ms INTEGER,
@@ -53,8 +57,10 @@ CREATE TABLE IF NOT EXISTS search_queries (
 );
 
 -- Indexes
+CREATE INDEX IF NOT EXISTS idx_documents_clinic ON documents(clinic_id);
 CREATE INDEX IF NOT EXISTS idx_documents_doc_type ON documents(doc_type);
 CREATE INDEX IF NOT EXISTS idx_documents_archived ON documents(is_archived);
+CREATE INDEX IF NOT EXISTS idx_documents_clinic_source ON documents(clinic_id, source_path);
 CREATE INDEX IF NOT EXISTS idx_chunks_document ON chunks(document_id);
 CREATE INDEX IF NOT EXISTS idx_embeddings_chunk ON embeddings(chunk_id);
 CREATE TABLE IF NOT EXISTS document_versions (

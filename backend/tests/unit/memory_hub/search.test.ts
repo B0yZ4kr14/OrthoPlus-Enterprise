@@ -240,6 +240,7 @@ describe("SearchService", () => {
         "nomic-embed-text",
         10,
         ["spec", "plan"],
+        "default",
       )
     })
 
@@ -257,6 +258,7 @@ describe("SearchService", () => {
         "nomic-embed-text",
         10,
         undefined,
+        "default",
       )
     })
 
@@ -288,6 +290,7 @@ describe("SearchService", () => {
         expect.any(String),
         expect.any(Number),
         ["spec"],
+        "default",
       )
     })
 
@@ -305,6 +308,7 @@ describe("SearchService", () => {
         expect.any(String),
         expect.any(Number),
         [],
+        "default",
       )
     })
   })

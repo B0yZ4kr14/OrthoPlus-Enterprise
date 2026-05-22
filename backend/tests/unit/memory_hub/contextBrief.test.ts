@@ -36,7 +36,7 @@ describe("ContextBriefService", () => {
         ],
         total: 1,
       })
-      mockDocuments.findByPath = jest.fn().mockReturnValue(null)
+      mockDocuments.findByPath = jest.fn().mockReturnValue({ id: "doc-1", frontmatter: "{}" })
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false)
 
       const brief = await service.generateBrief("patient management")
@@ -79,7 +79,7 @@ describe("ContextBriefService", () => {
         ],
         total: 3,
       })
-      mockDocuments.findByPath = jest.fn().mockReturnValue(null)
+      mockDocuments.findByPath = jest.fn().mockReturnValue({ id: "doc-1", frontmatter: "{}" })
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false)
 
       const brief = await service.generateBrief("patient")
@@ -139,29 +139,31 @@ describe("ContextBriefService", () => {
 
   describe("T031: context brief respects token budget", () => {
     it("limits documents when token budget exceeded", async () => {
-      const longExcerpt = "word ".repeat(1000)
+      // Each excerpt is ~100 words = ~400 tokens + 500 overhead = ~900 tokens per doc
+      const excerpt = "word ".repeat(100)
       const results = Array.from({ length: 10 }, (_, i) => ({
         id: `chunk-${i}`,
         sourcePath: `specs/doc${i}.md`,
         docType: "spec",
         title: `Doc ${i}`,
-        excerpt: longExcerpt,
+        excerpt: excerpt,
         relevanceScore: 0.9 - i * 0.01,
         headingPath: [],
       }))
 
       mockSearchService.search = jest.fn().mockResolvedValue({ results, total: 10 })
-      mockDocuments.findByPath = jest.fn().mockReturnValue(null)
+      mockDocuments.findByPath = jest.fn().mockReturnValue({ id: "doc-1", frontmatter: "{}" })
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false)
 
       const brief = await service.generateBrief("test", 20000)
 
-      // At least 3 docs are always included, so tokenCount may exceed maxTokens
+      // Should include some but not all documents due to hard token budget cap
       expect(brief.documents.length).toBeLessThan(10)
-      expect(brief.documents.length).toBeGreaterThanOrEqual(3)
+      expect(brief.documents.length).toBeGreaterThanOrEqual(1)
+      expect(brief.tokenCount).toBeLessThanOrEqual(20000)
     })
 
-    it("includes at least 3 documents even if budget exceeded", async () => {
+    it("respects hard token budget and excludes documents that would exceed", async () => {
       const results = Array.from({ length: 5 }, (_, i) => ({
         id: `chunk-${i}`,
         sourcePath: `specs/doc${i}.md`,
@@ -173,12 +175,14 @@ describe("ContextBriefService", () => {
       }))
 
       mockSearchService.search = jest.fn().mockResolvedValue({ results, total: 5 })
-      mockDocuments.findByPath = jest.fn().mockReturnValue(null)
+      mockDocuments.findByPath = jest.fn().mockReturnValue({ id: "doc-1", frontmatter: "{}" })
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false)
 
       const brief = await service.generateBrief("test", 100)
 
-      expect(brief.documents.length).toBeGreaterThanOrEqual(3)
+      // With a 100-token budget, no documents should be included (each has ~500 tokens overhead)
+      expect(brief.documents.length).toBe(0)
+      expect(brief.tokenCount).toBe(0)
     })
   })
 })

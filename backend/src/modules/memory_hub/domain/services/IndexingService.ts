@@ -35,6 +35,7 @@ export class IndexingService {
     const parsed = this.parser.parse(filePath, content)
 
     const doc = this.documents.upsert({
+      clinicId: "default",
       sourcePath: filePath,
       docType,
       title: parsed.title,

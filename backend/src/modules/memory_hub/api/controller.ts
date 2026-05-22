@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import Database from "better-sqlite3"
+import crypto from "crypto"
 import { logger } from "@/infrastructure/logger"
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
 import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics"
@@ -12,7 +13,34 @@ import { DocumentRepository } from "../infrastructure/DocumentRepository"
 import { FileWatcher } from "../infrastructure/FileWatcher"
 
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
+
+// Ensure parent directory exists with restricted permissions (F-RT-020-016)
+import fs from "fs"
+import path from "path"
+const dbDir = path.dirname(dbPath)
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true, mode: 0o700 })
+}
+
 const db = new Database(dbPath)
+
+// Restrict SQLite file permissions to owner only (F-RT-020-016)
+try {
+  fs.chmodSync(dbPath, 0o600)
+} catch {
+  logger.warn("[MemoryHub] Could not set SQLite file permissions")
+}
+
+// Backup index mechanism: copy DB to .backup on startup (F-RT-020-016)
+const backupPath = dbPath + ".backup"
+try {
+  if (fs.existsSync(dbPath)) {
+    fs.copyFileSync(dbPath, backupPath)
+    fs.chmodSync(backupPath, 0o600)
+  }
+} catch {
+  logger.warn("[MemoryHub] Could not create backup index")
+}
 
 const metrics = getMetricsCollector(prometheusMetrics.getRegistry())
 
@@ -52,20 +80,40 @@ export class MemoryHubController {
     const startTime = Date.now()
     try {
       const { query, filters, limit = 10, offset = 0 } = req.body
+      const clinicId = (req as any).user?.clinicId || "default"
 
       if (!query || typeof query !== "string") {
         return res.status(400).json({ error: "Query is required" })
       }
 
+      // Validate limit and offset bounds (F-RT-020-014)
+      const numLimit = Math.min(Math.max(Number(limit) || 10, 1), 100)
+      const numOffset = Math.max(Number(offset) || 0, 0)
+
       const result = await searchService.search(
         query,
         filters || {},
-        Number(limit),
-        Number(offset),
+        numLimit,
+        numOffset,
+        clinicId,
       )
 
       const duration = (Date.now() - startTime) / 1000
       metrics.memoryHub.searchDuration.observe({ category: "memory_hub" }, duration)
+
+      // Log search query with clinic and user attribution (F-RT-020-010)
+      db.prepare(
+        `INSERT INTO search_queries (id, clinic_id, user_id, query_text, results_count, duration_ms, timestamp)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).run(
+        crypto.randomUUID(),
+        clinicId,
+        (req as any).user?.id || null,
+        query,
+        result.results.length,
+        Math.round(duration * 1000),
+        Date.now(),
+      )
 
       return res.json({
         ...result,
@@ -101,15 +149,23 @@ export class MemoryHubController {
     const startTime = Date.now()
     try {
       const { topic, max_tokens = 80000, include_related = true } = req.body
+      const clinicId = (req as any).user?.clinicId || "default"
 
       if (!topic || typeof topic !== "string") {
         return res.status(400).json({ error: "Topic is required" })
       }
 
+      // Validate max_tokens is a positive finite integer (F-RT-020-012)
+      const numMaxTokens = Number(max_tokens)
+      const safeMaxTokens = Number.isFinite(numMaxTokens) && numMaxTokens > 0
+        ? Math.min(numMaxTokens, 128000)
+        : 80000
+
       const brief = await contextBriefService.generateBrief(
         topic,
-        Number(max_tokens),
+        safeMaxTokens,
         Boolean(include_related),
+        clinicId,
       )
 
       const duration = (Date.now() - startTime) / 1000
@@ -129,7 +185,15 @@ export class MemoryHubController {
         return res.status(400).json({ error: "sourcePath query parameter is required" })
       }
 
-      const versions = documents.findVersions(sourcePath)
+      // Validate sourcePath against allowlist (F-RT-020-015)
+      const allowedPrefixes = ["specs/", "docs/", ".specify/memory/", ".omk/memory/", "categories/"]
+      const isAllowed = allowedPrefixes.some((prefix) => sourcePath.startsWith(prefix))
+      if (!isAllowed) {
+        return res.status(400).json({ error: "Invalid sourcePath" })
+      }
+
+      const clinicId = (req as any).user?.clinicId || "default"
+      const versions = documents.findVersions(sourcePath, clinicId)
       return res.json({ sourcePath, versions, count: versions.length })
     } catch (error) {
       logger.error("[MemoryHub] Versions error", { error, sourcePath: req.query.sourcePath })
@@ -137,10 +201,11 @@ export class MemoryHubController {
     }
   }
 
-  async health(_req: Request, res: Response) {
+  async health(req: Request, res: Response) {
     try {
-      const totalDocs = documents.count()
-      const allDocs = documents.listAll()
+      const clinicId = (req as any).user?.clinicId || "default"
+      const totalDocs = documents.count(clinicId)
+      const allDocs = documents.listAll(clinicId)
       const driftCount = db.prepare(
         "SELECT COUNT(*) as c FROM drift_reports WHERE resolved_at IS NULL",
       ).get() as { c: number }

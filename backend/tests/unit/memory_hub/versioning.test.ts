@@ -18,7 +18,8 @@ describe("DocumentRepository Versioning", () => {
     db.exec(`
       CREATE TABLE documents (
         id TEXT PRIMARY KEY,
-        source_path TEXT UNIQUE NOT NULL,
+        clinic_id TEXT NOT NULL DEFAULT 'default',
+        source_path TEXT NOT NULL,
         doc_type TEXT NOT NULL,
         title TEXT NOT NULL,
         content_hash TEXT NOT NULL,
@@ -27,7 +28,8 @@ describe("DocumentRepository Versioning", () => {
         version INTEGER NOT NULL DEFAULT 1,
         word_count INTEGER NOT NULL,
         is_archived INTEGER NOT NULL DEFAULT 0,
-        frontmatter TEXT DEFAULT '{}'
+        frontmatter TEXT DEFAULT '{}',
+        UNIQUE(clinic_id, source_path)
       );
 
       CREATE TABLE document_versions (
@@ -54,6 +56,7 @@ describe("DocumentRepository Versioning", () => {
   describe("T023: reindexing preserves version history", () => {
     it("creates new document with version 1", () => {
       const doc = repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec",
@@ -71,6 +74,7 @@ describe("DocumentRepository Versioning", () => {
 
     it("increments version when content hash changes", () => {
       const doc1 = repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec",
@@ -84,6 +88,7 @@ describe("DocumentRepository Versioning", () => {
       expect(doc1.version).toBe(1)
 
       const doc2 = repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec Updated",
@@ -100,6 +105,7 @@ describe("DocumentRepository Versioning", () => {
 
     it("does not increment version when content hash is unchanged", () => {
       const doc1 = repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec",
@@ -112,6 +118,7 @@ describe("DocumentRepository Versioning", () => {
 
       // Small delay to ensure lastIndexed changes
       const doc2 = repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec",
@@ -128,6 +135,7 @@ describe("DocumentRepository Versioning", () => {
 
     it("saves previous version to document_versions table", () => {
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec v1",
@@ -139,6 +147,7 @@ describe("DocumentRepository Versioning", () => {
       })
 
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec v2",
@@ -160,6 +169,7 @@ describe("DocumentRepository Versioning", () => {
     it("saves multiple versions on successive changes", () => {
       for (let i = 1; i <= 3; i++) {
         repo.upsert({
+        clinicId: "default",
           sourcePath: "specs/test.md",
           docType: "spec",
           title: `Test Spec v${i}`,
@@ -185,6 +195,7 @@ describe("DocumentRepository Versioning", () => {
     it("returns versions ordered by version descending", () => {
       for (let i = 1; i <= 3; i++) {
         repo.upsert({
+        clinicId: "default",
           sourcePath: "specs/test.md",
           docType: "spec",
           title: `Test Spec v${i}`,
@@ -202,6 +213,7 @@ describe("DocumentRepository Versioning", () => {
 
     it("archives document marking isArchived true", () => {
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/test.md",
         docType: "spec",
         title: "Test Spec",
@@ -221,6 +233,7 @@ describe("DocumentRepository Versioning", () => {
     it("counts documents correctly", () => {
       for (let i = 0; i < 5; i++) {
         repo.upsert({
+        clinicId: "default",
           sourcePath: `specs/doc${i}.md`,
           docType: "spec",
           title: `Doc ${i}`,
@@ -238,6 +251,7 @@ describe("DocumentRepository Versioning", () => {
     it("lists all documents ordered by lastIndexed DESC", () => {
       for (let i = 0; i < 3; i++) {
         repo.upsert({
+        clinicId: "default",
           sourcePath: `specs/doc${i}.md`,
           docType: "spec",
           title: `Doc ${i}`,

@@ -31,6 +31,7 @@ export class SearchService {
     filters: SearchFilters = {},
     limit = 10,
     offset = 0,
+    clinicId = "default",
   ): Promise<{ results: SearchResult[]; total: number }> {
     const startTime = Date.now()
 
@@ -40,6 +41,7 @@ export class SearchService {
       embedding.model,
       limit + offset,
       filters.docTypes,
+      clinicId,
     )
 
     const filtered = rawResults

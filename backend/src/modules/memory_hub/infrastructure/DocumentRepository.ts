@@ -3,6 +3,7 @@ import crypto from "crypto"
 
 export interface MemoryDocument {
   id: string
+  clinicId: string
   sourcePath: string
   docType: string
   title: string
@@ -17,6 +18,7 @@ export interface MemoryDocument {
 
 interface DocumentRow {
   id: string
+  clinic_id: string
   source_path: string
   doc_type: string
   title: string
@@ -39,6 +41,7 @@ export class DocumentRepository {
   private mapRow(row: DocumentRow): MemoryDocument {
     return {
       id: row.id,
+      clinicId: row.clinic_id,
       sourcePath: row.source_path,
       docType: row.doc_type,
       title: row.title,
@@ -53,9 +56,10 @@ export class DocumentRepository {
   }
 
   upsert(doc: Omit<MemoryDocument, "id" | "version" | "lastIndexed">): MemoryDocument {
+    const clinicId = doc.clinicId || "default"
     const existingRow = this.db
-      .prepare("SELECT * FROM documents WHERE source_path = ?")
-      .get(doc.sourcePath) as DocumentRow | undefined
+      .prepare("SELECT * FROM documents WHERE clinic_id = ? AND source_path = ?")
+      .get(clinicId, doc.sourcePath) as DocumentRow | undefined
 
     const now = Date.now()
     const contentHash = doc.contentHash
@@ -102,11 +106,11 @@ export class DocumentRepository {
     const id = crypto.randomUUID()
     this.db.prepare(
       `INSERT INTO documents
-        (id, source_path, doc_type, title, content_hash, last_indexed,
+        (id, clinic_id, source_path, doc_type, title, content_hash, last_indexed,
          last_modified, version, word_count, is_archived, frontmatter)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).run(
-      id, doc.sourcePath, doc.docType, doc.title, contentHash, now,
+      id, clinicId, doc.sourcePath, doc.docType, doc.title, contentHash, now,
       doc.lastModified, 1, doc.wordCount,
       doc.isArchived ? 1 : 0, doc.frontmatter,
     )
@@ -119,8 +123,9 @@ export class DocumentRepository {
     return row ? this.mapRow(row) : undefined
   }
 
-  findByPath(sourcePath: string): MemoryDocument | undefined {
-    const row = this.db.prepare("SELECT * FROM documents WHERE source_path = ?").get(sourcePath) as DocumentRow | undefined
+  findByPath(sourcePath: string, clinicId = "default"): MemoryDocument | undefined {
+    const row = this.db.prepare("SELECT * FROM documents WHERE clinic_id = ? AND source_path = ?")
+      .get(clinicId, sourcePath) as DocumentRow | undefined
     return row ? this.mapRow(row) : undefined
   }
 
@@ -128,24 +133,26 @@ export class DocumentRepository {
     this.db.prepare("UPDATE documents SET is_archived = 1 WHERE source_path = ?").run(sourcePath)
   }
 
-  listAll(): MemoryDocument[] {
-    const rows = this.db.prepare("SELECT * FROM documents ORDER BY last_indexed DESC").all() as DocumentRow[]
+  listAll(clinicId = "default"): MemoryDocument[] {
+    const rows = this.db.prepare("SELECT * FROM documents WHERE clinic_id = ? ORDER BY last_indexed DESC")
+      .all(clinicId) as DocumentRow[]
     return rows.map((r) => this.mapRow(r))
   }
 
-  count(): number {
-    const row = this.db.prepare("SELECT COUNT(*) as c FROM documents").get() as { c: number }
+  count(clinicId = "default"): number {
+    const row = this.db.prepare("SELECT COUNT(*) as c FROM documents WHERE clinic_id = ?")
+      .get(clinicId) as { c: number }
     return row.c
   }
 
-  findVersions(sourcePath: string): Array<{
+  findVersions(sourcePath: string, clinicId = "default"): Array<{
     version: number
     contentHash: string
     title: string
     wordCount: number
     createdAt: number
   }> {
-    const doc = this.findByPath(sourcePath)
+    const doc = this.findByPath(sourcePath, clinicId)
     if (!doc) return []
 
     const rows = this.db.prepare(

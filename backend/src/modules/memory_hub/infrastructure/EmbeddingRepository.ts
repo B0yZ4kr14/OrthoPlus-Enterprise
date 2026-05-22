@@ -61,6 +61,7 @@ export class EmbeddingRepository {
     model: string,
     limit = 10,
     docTypes?: string[],
+    clinicId = "default",
   ): Array<{
     chunkId: string
     documentId: string
@@ -80,8 +81,8 @@ export class EmbeddingRepository {
        FROM embeddings e
        JOIN chunks c ON e.chunk_id = c.id
        JOIN documents d ON c.document_id = d.id
-       WHERE e.model = ? AND d.is_archived = 0`
-    const params: (string | number)[] = [model]
+       WHERE e.model = ? AND d.is_archived = 0 AND d.clinic_id = ?`
+    const params: (string | number)[] = [model, clinicId]
 
     if (docTypes && docTypes.length > 0) {
       const placeholders = docTypes.map(() => "?").join(", ")

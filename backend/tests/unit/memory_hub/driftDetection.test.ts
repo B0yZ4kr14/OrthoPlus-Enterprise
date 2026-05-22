@@ -21,7 +21,8 @@ describe("DriftDetectionService", () => {
     db.exec(`
       CREATE TABLE documents (
         id TEXT PRIMARY KEY,
-        source_path TEXT UNIQUE NOT NULL,
+        clinic_id TEXT NOT NULL DEFAULT 'default',
+        source_path TEXT NOT NULL,
         doc_type TEXT NOT NULL,
         title TEXT NOT NULL,
         content_hash TEXT NOT NULL,
@@ -30,7 +31,8 @@ describe("DriftDetectionService", () => {
         version INTEGER NOT NULL DEFAULT 1,
         word_count INTEGER NOT NULL,
         is_archived INTEGER NOT NULL DEFAULT 0,
-        frontmatter TEXT DEFAULT '{}'
+        frontmatter TEXT DEFAULT '{}',
+        UNIQUE(clinic_id, source_path)
       );
 
       CREATE TABLE drift_reports (
@@ -62,6 +64,7 @@ describe("DriftDetectionService", () => {
 
     it("stores detected issues in drift_reports table", async () => {
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/old-feature/spec.md",
         docType: "spec",
         title: "Old Feature",
@@ -108,6 +111,7 @@ describe("DriftDetectionService", () => {
 
     it("does not flag recently indexed docs as orphan", async () => {
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/new-feature/spec.md",
         docType: "spec",
         title: "New Feature",
@@ -152,6 +156,7 @@ describe("DriftDetectionService", () => {
 
     it("detects missing implementations for specs without backend/frontend modules", async () => {
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/999-nonexistent-feature/spec.md",
         docType: "spec",
         title: "Nonexistent Feature",
@@ -182,6 +187,7 @@ describe("DriftDetectionService", () => {
       })
 
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/memory_hub/spec.md",
         docType: "spec",
         title: "Memory Hub",
@@ -220,6 +226,7 @@ describe("DriftDetectionService", () => {
       )
 
       repo.upsert({
+        clinicId: "default",
         sourcePath: "specs/999-nonexistent-feature/spec.md",
         docType: "spec",
         title: "Nonexistent Feature",
