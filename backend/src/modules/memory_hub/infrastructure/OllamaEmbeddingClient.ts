@@ -1,4 +1,5 @@
 import crypto from "crypto"
+import { logger } from "@/infrastructure/logger"
 
 export interface EmbeddingResult {
   embedding: number[]
@@ -61,11 +62,8 @@ export class OllamaEmbeddingClient {
         results[uncached[i].index] = { embedding, model: this.model }
       }
     } catch (error) {
-      console.error("[OllamaEmbeddingClient] Embed error:", error)
-      // Fallback: return zero vectors so indexing doesn't fail completely
-      for (const u of uncached) {
-        results[u.index] = { embedding: new Array(768).fill(0), model: this.model }
-      }
+      logger.error("[OllamaEmbeddingClient] Embed error — failing fast to prevent index corruption", { error, model: this.model })
+      throw error instanceof Error ? error : new Error("Ollama embedding failed")
     }
 
     return results
