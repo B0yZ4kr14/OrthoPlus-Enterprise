@@ -17,6 +17,7 @@ import { useAppointments } from "../../presentation/hooks/useAppointments";
 import { useDentistSchedules } from "../../presentation/hooks/useDentistSchedules";
 import { useBlockedTimes } from "../../presentation/hooks/useBlockedTimes";
 import { useAuth } from "@/contexts/AuthContext";
+import { AppointmentType } from "../../domain/entities/Appointment";
 import { WeekCalendar } from "../components/WeekCalendar";
 import { AppointmentForm } from "../components/AppointmentForm";
 import { AppointmentCard } from "../components/AppointmentCard";
@@ -71,7 +72,7 @@ function AgendaContent() {
     dentistId: string;
     scheduledDatetime: Date;
     durationMinutes: number;
-    appointmentType: string;
+    appointmentType: AppointmentType;
     notes?: string;
   }) => {
     createAppointment(

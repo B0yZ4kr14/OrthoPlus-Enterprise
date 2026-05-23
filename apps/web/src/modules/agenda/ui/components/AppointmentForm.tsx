@@ -29,6 +29,7 @@ import {
 } from "@orthoplus/core-ui/select";
 import { Textarea } from "@orthoplus/core-ui/textarea";
 import { cn } from "@/lib/utils";
+import { AppointmentType } from "../../domain/entities/Appointment";
 
 const appointmentSchema = z.object({
   patientId: z.string().min(1, "Selecione um paciente"),
@@ -37,7 +38,7 @@ const appointmentSchema = z.object({
   date: z.date({ required_error: "Selecione uma data" }),
   time: z.string().min(1, "Informe o horário"),
   duration: z.string().min(1, "Informe a duração"),
-  appointmentType: z.string().min(1, "Selecione o tipo"),
+  appointmentType: z.enum(["CONSULTA", "RETORNO", "EMERGENCIA", "AVALIACAO", "PROCEDIMENTO"]),
   notes: z.string().optional(),
 });
 
@@ -49,7 +50,7 @@ interface AppointmentFormProps {
     dentistId: string;
     scheduledDatetime: Date;
     durationMinutes: number;
-    appointmentType: string;
+    appointmentType: AppointmentType;
     notes?: string;
   }) => void;
   isLoading?: boolean;

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
-import { PatientAdapter } from "@/lib/adapters/patientAdapter";
+import { PatientAdapter, PatientAPI } from "@/lib/adapters/patientAdapter";
 import { toast } from "sonner";
 import { Button } from "@orthoplus/core-ui/button";
 import { Form } from "@orthoplus/core-ui/form";
@@ -47,15 +47,14 @@ export default function PatientFormPage() {
 
     const fetchPatient = async () => {
       try {
-        const response = await apiClient.get<any>(
+        const response = await apiClient.get<PatientAPI>(
           `/pacientes/${id}`,
         );
 
         if (response) {
           // Converter data da API para o formato do formulário
           const formData = PatientAdapter.toFrontend(response);
-          // @ts-expect-error — TS2345
-          form.reset(formData);
+          form.reset(patientFormSchema.parse(formData));
         }
       } catch (error: unknown) {
         toast.error("Erro ao carregar paciente", {

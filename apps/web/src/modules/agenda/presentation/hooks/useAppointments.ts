@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { CancelAppointmentUseCase } from "../../application/useCases/CancelAppointmentUseCase";
 import { ConfirmAppointmentUseCase } from "../../application/useCases/ConfirmAppointmentUseCase";
 import { CreateAppointmentUseCase } from "../../application/useCases/CreateAppointmentUseCase";
+import { AppointmentType } from "../../domain/entities/Appointment";
 import { ListAppointmentsUseCase } from "../../application/useCases/ListAppointmentsUseCase";
 import { UpdateAppointmentUseCase } from "../../application/useCases/UpdateAppointmentUseCase";
 import { AppointmentRepositoryApi } from "../../infrastructure/repositories/AppointmentRepositoryApi";
@@ -42,7 +43,7 @@ export function useAppointments(filters?: {
       dentistId: string;
       scheduledDatetime: Date;
       durationMinutes: number;
-      appointmentType: string;
+      appointmentType: AppointmentType;
       notes?: string;
     }) => {
       const useCase = new CreateAppointmentUseCase(

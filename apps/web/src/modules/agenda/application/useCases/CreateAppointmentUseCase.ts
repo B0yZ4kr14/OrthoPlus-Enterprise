@@ -1,6 +1,7 @@
 import {
   Appointment,
   AppointmentProps,
+  AppointmentType,
 } from "../../domain/entities/Appointment";
 import { IAppointmentRepository } from "../../domain/repositories/IAppointmentRepository";
 import { IBlockedTimeRepository } from "../../domain/repositories/IBlockedTimeRepository";
@@ -11,7 +12,7 @@ interface CreateAppointmentInput {
   dentistId: string;
   scheduledDatetime: Date;
   durationMinutes: number;
-  appointmentType: string;
+  appointmentType: AppointmentType;
   notes?: string;
   createdBy: string;
 }
@@ -60,8 +61,7 @@ export class CreateAppointmentUseCase {
       scheduledDatetime: input.scheduledDatetime,
       durationMinutes: input.durationMinutes,
       status: "AGENDADO",
-      // @ts-expect-error — TS2322
-      appointmentType: input.appointmentType as unknown,
+      appointmentType: input.appointmentType,
       notes: input.notes,
       noShow: false,
       createdBy: input.createdBy,

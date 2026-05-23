@@ -4,7 +4,7 @@
  */
 
 // API Format (from REST API - camelCase, matching PatientProps in domain)
-interface PatientAPI {
+export interface PatientAPI {
   id: string;
   clinicId: string;
   fullName: string;
@@ -54,8 +54,7 @@ export class PatientAdapter {
       social_name: null,
       cpf: apiPatient.cpf || null,
       rg: apiPatient.rg || null,
-      // @ts-expect-error — TS2322
-      birth_date: apiPatient.birthDate || null,
+      birth_date: apiPatient.birthDate || "",
       gender: apiPatient.gender || null,
       marital_status: null,
       nationality: null,

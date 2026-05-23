@@ -37,7 +37,7 @@ describe("CreateAppointmentUseCase", () => {
     dentistId: "dentist-1",
     scheduledDatetime: new Date("2025-06-01T10:00:00Z"),
     durationMinutes: 30,
-    appointmentType: "CONSULTA",
+    appointmentType: "CONSULTA" as const,
     notes: "Primeira consulta",
     createdBy: "user-1",
   }
