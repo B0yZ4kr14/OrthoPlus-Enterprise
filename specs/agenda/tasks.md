@@ -118,7 +118,7 @@
 | Gap | Description | Suggested Action |
 |-----|-------------|------------------|
 | GAP-1 | ~~Backend `agendaController.ts` has `@ts-nocheck`~~ | ✅ Resolved — `@ts-nocheck` removed on 2026-05-23. File compiles under strict mode. |
-| GAP-2 | `CreateAppointmentUseCase` has `@ts-expect-error` | Fix appointmentType enum mapping |
+| GAP-2 | ~~`CreateAppointmentUseCase` has `@ts-expect-error`~~ | ✅ Resolved — `AppointmentType` used instead of `string` on 2026-05-23. |
 | GAP-3 | Backend controller doesn't use domain commands | Align backend to use `CreateAppointmentCommand` |
 | GAP-4 | ~~E2E tests use fragile locators~~ | ✅ Resolved — 20+ `data-testid` attributes added on 2026-05-23. |
 | GAP-5 | No rate limiting on `/api/agenda/*` | Add Express rate limiter |

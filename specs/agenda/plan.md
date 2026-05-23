@@ -41,7 +41,7 @@ Sistema de agenda odontologica implementado com Clean Architecture no frontend e
 | Principle | Status | Detail |
 |-----------|--------|--------|
 | CQ-1 TypeScript Strictness | Pass | Frontend uses strict types. Backend controller compiles under strict mode (`@ts-nocheck` removed). |
-| CQ-2 No new `as any` | Violation | `CreateAppointmentUseCase` uses `@ts-expect-error` + `as unknown`. |
+| CQ-2 No new `as any` | Pass | `@ts-expect-error` removed from `CreateAppointmentUseCase`. `AppointmentType` used strictly. |
 | FE-5 Component Placement | Pass | All agenda components live in `modules/agenda/`. |
 | FE-6 Barrel File Policy | Pass | `index.ts` files at each layer boundary. |
 | SEC-2.4 Token Storage | Warning | `useAuth()` reads from context — verify not using localStorage. |
