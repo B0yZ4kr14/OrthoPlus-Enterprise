@@ -162,7 +162,7 @@ export function AppointmentDetailsDialog({
                   value={status}
                   onValueChange={(v) => setStatus(v as AppointmentStatus)}
                 >
-                  <SelectTrigger id="edit-status">
+                  <SelectTrigger id="edit-status" data-testid="appointment-detail-status">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -187,7 +187,7 @@ export function AppointmentDetailsDialog({
         </div>
 
         <div className="flex justify-between gap-2">
-          <Button variant="outline" size="sm" onClick={handleSendReminder}>
+          <Button variant="outline" size="sm" onClick={handleSendReminder} data-testid="appointment-detail-reminder">
             <Bell className="mr-2 h-4 w-4" />
             Lembrete
           </Button>
@@ -199,15 +199,16 @@ export function AppointmentDetailsDialog({
                   variant="outline"
                   size="sm"
                   onClick={() => setIsEditing(false)}
+                  data-testid="appointment-detail-edit-cancel"
                 >
                   Cancelar
                 </Button>
-                <Button size="sm" onClick={handleSave} disabled={isUpdating}>
+                <Button size="sm" onClick={handleSave} disabled={isUpdating} data-testid="appointment-detail-save">
                   Salvar
                 </Button>
               </>
             ) : (
-              <Button variant="outline" size="sm" onClick={handleEdit}>
+              <Button variant="outline" size="sm" onClick={handleEdit} data-testid="appointment-detail-edit">
                 Editar
               </Button>
             )}

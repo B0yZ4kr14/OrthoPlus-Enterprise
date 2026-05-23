@@ -358,8 +358,6 @@ packages:
 
 ### TypeScript / Geral
 - **ES Modules:** `import/export` obrigatorio. Nunca `require`.
-- **Strict mode:** Tipagem obrigatoria (embora muitas regras ESLint estejam desabilitadas — ver secao 8).
-- **Async/await:** Nunca callbacks. Sempre `async/await` ou Promises.
 - **Sem ponto e virgula:** O projeto nao usa `;` no final das linhas (padrao do Prettier).
 
 ### Bash (Scripts)
@@ -369,22 +367,11 @@ packages:
 
 ### Frontend
 - **Path aliases:** `@/` -> `src/`, `@/components`, `@/hooks`, `@/lib`, `@/modules`, etc.
-- **API Client:** Sempre usar `apiClient` (wrapper do axios em `src/lib/api/apiClient.ts`).
-- **Formularios:** Sempre usar `react-hook-form` + `zod` para validacao.
-- **Datas:** Sempre usar `date-fns` via utilitarios em `src/lib/utils/date.utils.ts`.
-- **Estado global:** React Query para server state; Zustand para client state (modulos selecionados).
-- **Icones:** Sempre usar `lucide-react`.
-- **Componentes UI:** Pacote interno `@orthoplus/core-ui` (baseado em Radix + Tailwind + CVA).
 
 ### Backend
 - **Path aliases:** `@/` -> `src/`, `@modules/` -> `src/modules/`, `@infrastructure/` -> `src/infrastructure/`, `@shared/` -> `src/shared/`.
-- **Routers:** Cada modulo expoe um router via `api/router.ts`.
-- **Middleware:** `authMiddleware` + `tenantGuard` (clinicGuard) em todas as rotas protegidas.
-- **Erros:** Sempre usar `ApiError` do middleware de erro.
-- **Prisma:** Usar singleton em `src/infrastructure/database/prismaClient.ts`.
-- **Logging:** Winston logger em `src/infrastructure/logger/index.ts`.
 
-> **Nota:** Convencoes especificas detalhadas (uso de ApiError, clinicGuard, apiClient, useAuth, gerenciamento de estado, etc.) estao documentadas na constituicao do projeto (`.specify/memory/constitution.md`).
+> **Nota:** Todas as convencoes arquiteturais detalhadas (Clean Architecture, uso de ApiError, clinicGuard, apiClient, useAuth, gerenciamento de estado, formularios, datas, icones, componentes UI, Prisma, logging, etc.) estao documentadas na constituicao do projeto (`.specify/memory/constitution.md`).
 
 ---
 
@@ -417,12 +404,9 @@ packages:
 
 ---
 
-## 11. Anti-Padroes e TS Errors Conhecidos
+## 11. TS Errors Conhecidos (Nao Regredir)
 
-**Nao adicionar novos:**
-- `as any` — ja existem amplamente (ex: `FinanceiroController.ts` tem ~38). Nao aumentar.
-- `@ts-ignore` — ja existem. Nao adicionar novos.
-- `@ts-expect-error` inuteis — remover se encontrados.
+> **Nota:** As regras gerais de qualidade de codigo (proibicao de `as any`, `@ts-ignore`, `@ts-expect-error` inuteis) estao na constituicao (CQ-2). Esta secao lista apenas os erros pre-existentes que nao devem ser aumentados.
 
 **Erros TypeScript pre-existentes (nao regredir):**
 - `agenda/api/agendaController.ts` — 4 erros de mismatch Prisma (String vs relacao).
@@ -563,7 +547,7 @@ specs/017-omk-governance-integration/plan.md
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **OrthoPlus-Enterprise** (36550 symbols, 75079 relationships, 286 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **OrthoPlus-Enterprise** (36608 symbols, 75146 relationships, 286 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

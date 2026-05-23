@@ -37,6 +37,7 @@ export function WeekCalendar({
             size="sm"
             onClick={goToPreviousWeek}
             aria-label="anterior"
+            data-testid="calendar-previous-week"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -45,6 +46,7 @@ export function WeekCalendar({
             size="sm"
             onClick={goToToday}
             aria-label="Hoje"
+            data-testid="calendar-today"
           >
             Hoje
           </Button>
@@ -53,6 +55,7 @@ export function WeekCalendar({
             size="sm"
             onClick={goToNextWeek}
             aria-label="próximo"
+            data-testid="calendar-next-week"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>

@@ -8,6 +8,14 @@ import { logger } from "@/infrastructure/logger";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
+
+const PATIENT_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict" as const,
+  maxAge: 24 * 3600 * 1000, // 24 hours
+  path: "/",
+};
 import { AlterarStatusPacienteUseCase } from "../application/use-cases/AlterarStatusPacienteUseCase";
 import { CadastrarPacienteUseCase, CadastrarPacienteDTO } from "../application/use-cases/CadastrarPacienteUseCase";
 import { AtualizarPacienteUseCase, AtualizarPacienteDTO } from "../application/use-cases/AtualizarPacienteUseCase";
@@ -474,9 +482,9 @@ export class PacientesController {
           },
         });
 
+        res.cookie("patient_session", sessionId, PATIENT_COOKIE_OPTIONS);
+
         res.status(200).json({
-          token: sessionId,
-          sessionId,
           patient: {
             id: account.patient_id,
             email: account.email,
@@ -494,12 +502,13 @@ export class PacientesController {
       }
 
       if (action === "logout") {
-        const sessionId = req.headers["x-session-id"] as string;
+        const sessionId = req.cookies?.patient_session as string | undefined;
         if (sessionId) {
           await prisma.patient_sessions.deleteMany({
             where: { id: sessionId },
           });
         }
+        res.clearCookie("patient_session", { path: "/" });
         res.status(200).json({ success: true });
         return;
       }

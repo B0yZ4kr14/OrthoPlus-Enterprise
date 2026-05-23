@@ -86,7 +86,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
               <FormLabel>Paciente</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="appointment-form-patient">
                     <SelectValue placeholder="Selecione um paciente" />
                   </SelectTrigger>
                 </FormControl>
@@ -108,7 +108,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
               <FormLabel>Dentista</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="appointment-form-dentist">
                     <SelectValue placeholder="Selecione um dentista" />
                   </SelectTrigger>
                 </FormControl>
@@ -137,6 +137,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
                         "w-full pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground",
                       )}
+                      data-testid="appointment-form-date"
                     >
                       {field.value ? (
                         format(field.value, "PPP")
@@ -172,7 +173,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
               <FormItem>
                 <FormLabel>Horário</FormLabel>
                 <FormControl>
-                  <Input type="time" {...field} />
+                  <Input type="time" {...field} data-testid="appointment-form-time" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -190,7 +191,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger data-testid="appointment-form-duration">
                       <SelectValue placeholder="Duração" />
                     </SelectTrigger>
                   </FormControl>
@@ -215,7 +216,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
               <FormLabel>Tipo</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="appointment-form-type">
                     <SelectValue placeholder="Tipo de consulta" />
                   </SelectTrigger>
                 </FormControl>
@@ -242,6 +243,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
                 <Textarea
                   placeholder="Observações sobre o agendamento"
                   {...field}
+                  data-testid="appointment-form-notes"
                 />
               </FormControl>
               <FormMessage />
@@ -249,7 +251,7 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full" disabled={isLoading} data-testid="appointment-form-submit">
           {isLoading ? "Agendando..." : "Agendar Consulta"}
         </Button>
       </form>

@@ -1,7 +1,7 @@
 # Security Constitution — OrthoPlus Enterprise
 
-**Version**: 1.0.0
-**Derived from**: constitution.md v1.1.0
+**Version**: 1.1.0
+**Derived from**: constitution.md v1.3.0
 **Scope**: Security rules, standards, and requirements
 
 ---
@@ -40,6 +40,13 @@
 - **MUST**: HttpOnly, Secure, SameSite=Strict cookies for refresh
 - **MUST**: Password hashing with bcrypt (cost ≥ 12)
 - **MUST NOT**: Store plaintext passwords
+
+### 2.4 Token Storage (Frontend)
+- **MUST NOT**: Store authentication tokens (accessToken, refreshToken, JWT) in `localStorage` or `sessionStorage`
+- **REASON**: DOM-accessible storage is vulnerable to XSS extraction
+- **MUST**: Use HttpOnly, Secure, SameSite=Strict cookies for all tokens
+- **MUST**: Use `useAuth()` from AuthContext for token management; never access storage APIs directly
+- **EXCEPTION**: Non-sensitive UI preferences (theme, sidebar state) MAY use `localStorage`
 
 ### 2.2 Authorization
 - **MUST**: Role-based access control (RBAC)

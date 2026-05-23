@@ -83,7 +83,7 @@ export function AppointmentCard({
 
         <div className="flex gap-2 pt-2">
           {appointment.canBeConfirmed && onConfirm && (
-            <Button size="sm" onClick={onConfirm} disabled={isLoading}>
+            <Button size="sm" onClick={onConfirm} disabled={isLoading} data-testid="appointment-confirm-button">
               Confirmar
             </Button>
           )}
@@ -93,6 +93,7 @@ export function AppointmentCard({
               variant="outline"
               onClick={onReschedule}
               disabled={isLoading}
+              data-testid="appointment-reschedule-button"
             >
               Reagendar
             </Button>
@@ -103,6 +104,7 @@ export function AppointmentCard({
               variant="destructive"
               onClick={onCancel}
               disabled={isLoading}
+              data-testid="appointment-cancel-button"
             >
               Cancelar
             </Button>

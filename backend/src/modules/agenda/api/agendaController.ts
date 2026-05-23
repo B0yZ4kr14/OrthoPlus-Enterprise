@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { logger } from "@/infrastructure/logger";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";

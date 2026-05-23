@@ -116,7 +116,7 @@ function AgendaContent() {
           <div className="flex items-center gap-2">
             <Dialog open={isScheduleDialogOpen} onOpenChange={setIsScheduleDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2" data-testid="agenda-schedules-button">
                   <Settings className="h-4 w-4" />
                   Horários
                 </Button>
@@ -131,7 +131,7 @@ function AgendaContent() {
 
             <Dialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2" data-testid="agenda-block-button">
                   <Clock className="h-4 w-4" />
                   Bloquear
                 </Button>
@@ -146,7 +146,7 @@ function AgendaContent() {
 
             <Dialog open={isAppointmentDialogOpen} onOpenChange={setIsAppointmentDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="gap-2 glow-interactive">
+                <Button className="gap-2 glow-interactive" data-testid="agenda-new-appointment-button">
                   <Plus className="h-4 w-4" />
                   Novo Agendamento
                 </Button>
@@ -164,11 +164,11 @@ function AgendaContent() {
 
       <Tabs defaultValue="calendar" className="w-full">
         <TabsList className="grid w-full grid-cols-2 bg-muted/30 backdrop-blur-sm border border-border/50 rounded-xl p-1 max-w-md">
-          <TabsTrigger value="calendar" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger value="calendar" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground" data-testid="agenda-tab-calendar">
             <Calendar className="h-4 w-4" />
             Calendário
           </TabsTrigger>
-          <TabsTrigger value="list" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger value="list" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground" data-testid="agenda-tab-list">
             Lista
           </TabsTrigger>
         </TabsList>
