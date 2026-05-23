@@ -16,7 +16,7 @@ const db = new Database(dbPath)
 const embedder = new OllamaEmbeddingClient()
 const embeddings = new EmbeddingRepository(db)
 const documents = new DocumentRepository(db)
-const searchService = new SearchService(embedder, embeddings)
+const searchService = new SearchService(embedder, embeddings, documents)
 const briefService = new ContextBriefService(searchService, documents)
 
 briefService.generateBrief(topic)

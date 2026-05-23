@@ -1,0 +1,3 @@
+---
+agent: speckit.schedule.portfolio
+---

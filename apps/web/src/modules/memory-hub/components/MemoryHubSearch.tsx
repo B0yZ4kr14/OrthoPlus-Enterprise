@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { Input } from "@orthoplus/core-ui"
+import { Button } from "@orthoplus/core-ui"
 import { useMemoryHubSearch } from "../hooks/useMemoryHubSearch"
 
 export function MemoryHubSearch() {
@@ -15,22 +17,21 @@ export function MemoryHubSearch() {
   return (
     <div className="space-y-4">
       <form onSubmit={handleSubmit} className="flex gap-2">
-        <input
+        <Input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
           placeholder="Search project memory..."
-          className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className="flex-1"
           data-testid="search-input"
         />
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           data-testid="search-button"
         >
           {loading ? "Searching..." : "Search"}
-        </button>
+        </Button>
       </form>
 
       {error && (

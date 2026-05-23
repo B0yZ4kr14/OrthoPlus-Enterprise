@@ -113,7 +113,7 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 
 ### Buildable Success Criteria (Validatable During Implementation)
 
-1. **A developer can find relevant project context in under 10 seconds** via semantic search, compared to 2+ minutes of manual browsing.
+1. **A developer can find relevant project context in under 2 seconds** via semantic search, compared to 2+ minutes of manual browsing. (Aligned with NFR-001: search < 2s for 1000 documents)
 3. **Memory drift is detected within 24 hours** of a spec-implementation divergence occurring.
 4. **95% of project documents are indexed and searchable** within 60 seconds of being created or modified.
 

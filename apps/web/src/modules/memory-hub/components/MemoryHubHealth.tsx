@@ -1,3 +1,4 @@
+import { Button } from "@orthoplus/core-ui"
 import { useMemoryHubHealth } from "../hooks/useMemoryHubHealth"
 
 export function MemoryHubHealth() {
@@ -11,7 +12,7 @@ export function MemoryHubHealth() {
     return (
       <div className="rounded-md bg-destructive/10 p-4 text-sm text-destructive" data-testid="health-error">
         {error}
-        <button onClick={refresh} className="ml-2 underline">Retry</button>
+        <Button variant="link" onClick={refresh} className="ml-2 h-auto p-0">Retry</Button>
       </div>
     )
   }

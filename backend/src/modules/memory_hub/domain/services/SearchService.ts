@@ -1,6 +1,7 @@
 import { logger } from "@/infrastructure/logger"
 import { OllamaEmbeddingClient } from "../../infrastructure/OllamaEmbeddingClient"
 import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
+import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 
 export interface SearchResult {
   id: string
@@ -24,10 +25,12 @@ export interface SearchFilters {
 export class SearchService {
   private embedder: OllamaEmbeddingClient
   private embeddings: EmbeddingRepository
+  private documents: DocumentRepository
 
-  constructor(embedder: OllamaEmbeddingClient, embeddings: EmbeddingRepository) {
+  constructor(embedder: OllamaEmbeddingClient, embeddings: EmbeddingRepository, documents: DocumentRepository) {
     this.embedder = embedder
     this.embeddings = embeddings
+    this.documents = documents
   }
 
   async search(
@@ -82,6 +85,29 @@ export class SearchService {
     logger.info(`[SearchService] Query completed`, { query, resultCount: results.length, durationMs: duration })
 
     return { results, total: deduped.length }
+  }
+
+  async searchWithConfidentialityFilter(
+    query: string,
+    filters: SearchFilters = {},
+    limit = 10,
+    offset = 0,
+    clinicId = "default",
+  ): Promise<{ results: SearchResult[]; total: number; confidentialExcluded: number }> {
+    const { results, total } = await this.search(query, filters, limit, offset, clinicId)
+
+    let confidentialExcluded = 0
+    const filteredResults = results.filter((r) => {
+      const doc = this.documents.findByPath(r.sourcePath, clinicId)
+      if (!doc) return false
+      if (this.documents.isConfidential(doc)) {
+        confidentialExcluded++
+        return false
+      }
+      return true
+    })
+
+    return { results: filteredResults, total, confidentialExcluded }
   }
 
   private inferDocType(sourcePath: string): string {

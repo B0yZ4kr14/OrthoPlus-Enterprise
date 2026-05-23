@@ -2,6 +2,7 @@ import Database from "better-sqlite3"
 import fs from "fs"
 import path from "path"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
+import { PathSandbox } from "../../infrastructure/PathSandbox"
 
 export interface DriftIssue {
   type: "missing_impl" | "broken_ref" | "outdated_decision" | "orphan_doc"
@@ -14,10 +15,12 @@ export interface DriftIssue {
 export class DriftDetectionService {
   private documents: DocumentRepository
   private db: Database.Database
+  private sandbox?: PathSandbox
 
-  constructor(db: Database.Database) {
+  constructor(db: Database.Database, sandbox?: PathSandbox) {
     this.db = db
     this.documents = new DocumentRepository(db)
+    this.sandbox = sandbox
   }
 
   async detect(): Promise<DriftIssue[]> {
@@ -77,6 +80,12 @@ export class DriftDetectionService {
       const featureName = path.basename(path.dirname(spec.sourcePath))
       const implPath = path.join("backend/src/modules", featureName)
       const frontendPath = path.join("apps/web/src/modules", featureName)
+
+      // F-RT-020-019: Enforce sandbox boundaries before filesystem access
+      if (this.sandbox) {
+        this.sandbox.assertAllowed(implPath)
+        this.sandbox.assertAllowed(frontendPath)
+      }
 
       if (!fs.existsSync(implPath) && !fs.existsSync(frontendPath)) {
         issues.push({

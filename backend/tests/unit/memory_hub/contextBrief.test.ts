@@ -11,7 +11,7 @@ describe("ContextBriefService", () => {
   let mockDocuments: jest.Mocked<DocumentRepository>
 
   beforeEach(() => {
-    mockSearchService = new SearchService({} as any, {} as any) as jest.Mocked<SearchService>
+    mockSearchService = new SearchService({} as any, {} as any, {} as any) as jest.Mocked<SearchService>
     mockDocuments = new DocumentRepository({} as any) as jest.Mocked<DocumentRepository>
     service = new ContextBriefService(mockSearchService, mockDocuments)
   })

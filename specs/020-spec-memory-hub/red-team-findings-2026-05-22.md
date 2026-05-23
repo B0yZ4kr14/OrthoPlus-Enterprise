@@ -177,12 +177,17 @@ wall_clock_minutes: ~7
 |----|----------|---------|
 | F-RT-020-004 | MEDIUM | No mandatory inclusion for security-critical sources |
 | F-RT-020-005 | MEDIUM | Topic injection via YAML/markdown (partially mitigated by sanitizeTopic) |
-| F-RT-020-007 | HIGH | No .gitignore parsing or PII scanning |
-| F-RT-020-008 | HIGH | Search endpoint returns confidential documents |
+| F-RT-020-007 | HIGH | No PII scanning (gitignore parsing fixed separately) |
 | F-RT-020-009 | MEDIUM | No LGPD lawful basis mapping |
-| F-RT-020-011 | HIGH | API contract drift (health endpoint snake_case vs camelCase) |
 | F-RT-020-013 | MEDIUM | Shared 30 req/min rate limit too permissive |
-| F-RT-020-017 | HIGH | ON DELETE CASCADE destroys version history |
-| F-RT-020-018 | HIGH | Symlink attack via chokidar followSymlinks |
 | F-RT-020-019 | MEDIUM | Drift worker unsandboxed with full filesystem privileges |
-| F-RT-020-020 | MEDIUM | Multi-statement operations lack SQLite transactions |
+
+### Findings Resolved Since Initial Report
+
+| ID | Severity | Resolution | Verified By |
+|----|----------|-----------|-------------|
+| F-RT-020-008 | HIGH | Confidentiality filtering added to search endpoint | Code audit: controller.ts:120-131 |
+| F-RT-020-011 | HIGH | Backend and frontend now both use camelCase consistently | Code audit: controller.ts + useMemoryHubHealth.ts |
+| F-RT-020-017 | HIGH | Removed ON DELETE CASCADE from document_versions FK | Code audit: initSchema.sql:74-83 |
+| F-RT-020-018 | HIGH | Added `followSymlinks: false` to FileWatcher | Code change + tests pass |
+| F-RT-020-020 | MEDIUM | All repositories use better-sqlite3 transactions | Code audit: DocumentRepository, ChunkRepository, EmbeddingRepository |

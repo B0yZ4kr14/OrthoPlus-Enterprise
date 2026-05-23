@@ -1,83 +1,49 @@
 import { Request, Response } from "express"
-import Database from "better-sqlite3"
-import crypto from "crypto"
+
 import { logger } from "@/infrastructure/logger"
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
-import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics"
+type MetricsCollector = ReturnType<typeof getMetricsCollector>
 import { SearchService } from "../domain/services/SearchService"
 import { ContextBriefService } from "../domain/services/ContextBriefService"
 import { IndexingService } from "../domain/services/IndexingService"
-import { OllamaEmbeddingClient } from "../infrastructure/OllamaEmbeddingClient"
-import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository"
-import { DocumentRepository } from "../infrastructure/DocumentRepository"
-import { FileWatcher } from "../infrastructure/FileWatcher"
 import { GraphService } from "../domain/services/GraphService"
+import { HealthService } from "../domain/services/HealthService"
+import { DocumentRepository } from "../infrastructure/DocumentRepository"
 
-const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
+import { SearchAuditRepository } from "../infrastructure/SearchAuditRepository"
 
-// Ensure parent directory exists with restricted permissions (F-RT-020-016)
-import fs from "fs"
-import path from "path"
-const dbDir = path.dirname(dbPath)
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true, mode: 0o700 })
-}
-
-const db = new Database(dbPath)
-
-// Restrict SQLite file permissions to owner only (F-RT-020-016)
-try {
-  fs.chmodSync(dbPath, 0o600)
-} catch {
-  logger.warn("[MemoryHub] Could not set SQLite file permissions")
-}
-
-// Backup index mechanism: copy DB to .backup on startup (F-RT-020-016)
-const backupPath = dbPath + ".backup"
-try {
-  if (fs.existsSync(dbPath)) {
-    fs.copyFileSync(dbPath, backupPath)
-    fs.chmodSync(backupPath, 0o600)
-  }
-} catch {
-  logger.warn("[MemoryHub] Could not create backup index")
-}
-
-const metrics = getMetricsCollector(prometheusMetrics.getRegistry())
-
-const embedder = new OllamaEmbeddingClient()
-const embeddings = new EmbeddingRepository(db)
-const documents = new DocumentRepository(db)
-const searchService = new SearchService(embedder, embeddings)
-const contextBriefService = new ContextBriefService(searchService, documents)
-const indexingService = new IndexingService(db)
-const graphService = new GraphService(documents)
-
-// Auto-start file watcher if enabled
-if (process.env.MEMORY_HUB_ENABLED === "true") {
-  const watcher = new FileWatcher(async (events) => {
-    for (const evt of events) {
-      if (evt.type === "unlink") {
-        indexingService.archiveFile(evt.filePath)
-      } else {
-        try {
-          await indexingService.indexFile(evt.filePath)
-        } catch (err) {
-          logger.error(`[MemoryHub] Auto-index failed for ${evt.filePath}`, { error: err })
-        }
-      }
-    }
-  })
-
-  const watchDirs = (process.env.MEMORY_HUB_WATCH_DIRS || "specs/,docs/,categories/")
-    .split(",")
-    .map((d) => d.trim())
-  const pollingInterval = parseInt(process.env.MEMORY_HUB_POLLING_INTERVAL_MS || "30000", 10)
-
-  watcher.start(watchDirs, pollingInterval)
+export interface MemoryHubControllerDeps {
+  searchService: SearchService
+  contextBriefService: ContextBriefService
+  indexingService: IndexingService
+  graphService: GraphService
+  documents: DocumentRepository
+  auditRepository: SearchAuditRepository
+  healthService: HealthService
+  metrics: MetricsCollector
 }
 
 export class MemoryHubController {
+  private searchService: SearchService
+  private contextBriefService: ContextBriefService
+  private indexingService: IndexingService
+  private graphService: GraphService
+  private documents: DocumentRepository
+  private auditRepository: SearchAuditRepository
+  private healthService: HealthService
+  private metrics: MetricsCollector
+
+  constructor(deps: MemoryHubControllerDeps) {
+    this.searchService = deps.searchService
+    this.contextBriefService = deps.contextBriefService
+    this.indexingService = deps.indexingService
+    this.graphService = deps.graphService
+    this.documents = deps.documents
+    this.auditRepository = deps.auditRepository
+    this.healthService = deps.healthService
+    this.metrics = deps.metrics
+  }
+
   async search(req: Request, res: Response) {
     const startTime = Date.now()
     try {
@@ -109,46 +75,30 @@ export class MemoryHubController {
         if (!isNaN(d)) searchFilters.dateTo = d
       }
 
-      let result = await searchService.search(
-        query,
-        searchFilters,
-        numLimit,
-        numOffset,
-        clinicId,
-      )
-
-      // Filter out confidential documents from search results (F-RT-020-008)
-      let confidentialExcluded = 0
-      const filteredResults = result.results.filter((r) => {
-        const doc = documents.findByPath(r.sourcePath, clinicId)
-        if (!doc) return false
-        if (documents.isConfidential(doc)) {
-          confidentialExcluded++
-          return false
-        }
-        return true
-      })
-      result = { ...result, results: filteredResults }
+      const { results: filteredResults, total, confidentialExcluded } =
+        await this.searchService.searchWithConfidentialityFilter(
+          query,
+          searchFilters,
+          numLimit,
+          numOffset,
+          clinicId,
+        )
 
       const duration = (Date.now() - startTime) / 1000
-      metrics.memoryHub.searchDuration.observe({ category: "memory_hub" }, duration)
+      this.metrics.memoryHub.searchDuration.observe({ category: "memory_hub" }, duration)
 
       // Log search query with clinic and user attribution (F-RT-020-010)
-      db.prepare(
-        `INSERT INTO search_queries (id, clinic_id, user_id, query_text, results_count, duration_ms, timestamp)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`
-      ).run(
-        crypto.randomUUID(),
+      this.auditRepository.logQuery(
         clinicId,
         (req as any).user?.id || null,
         query,
-        result.results.length,
+        filteredResults.length,
         Math.round(duration * 1000),
-        Date.now(),
       )
 
       return res.json({
-        ...result,
+        results: filteredResults,
+        total,
         confidential_excluded: confidentialExcluded,
         query_time_ms: Date.now(),
       })
@@ -165,11 +115,11 @@ export class MemoryHubController {
         .split(",")
         .map((d) => d.trim())
 
-      await indexingService.reindexAll(watchDirs)
+      await this.indexingService.reindexAll(watchDirs)
 
       const duration = (Date.now() - startTime) / 1000
-      metrics.memoryHub.indexDuration.observe({ category: "memory_hub" }, duration)
-      metrics.memoryHub.documentsIndexed.inc({ category: "memory_hub" })
+      this.metrics.memoryHub.indexDuration.observe({ category: "memory_hub" }, duration)
+      this.metrics.memoryHub.documentsIndexed.inc({ category: "memory_hub" })
 
       return res.json({ message: "Reindex complete" })
     } catch (error) {
@@ -194,7 +144,7 @@ export class MemoryHubController {
         ? Math.min(numMaxTokens, 128000)
         : 80000
 
-      const brief = await contextBriefService.generateBrief(
+      const brief = await this.contextBriefService.generateBrief(
         topic,
         safeMaxTokens,
         Boolean(include_related),
@@ -202,7 +152,7 @@ export class MemoryHubController {
       )
 
       const duration = (Date.now() - startTime) / 1000
-      metrics.memoryHub.briefGenerationDuration.observe({ category: "memory_hub" }, duration)
+      this.metrics.memoryHub.briefGenerationDuration.observe({ category: "memory_hub" }, duration)
 
       return res.json(brief)
     } catch (error) {
@@ -226,7 +176,7 @@ export class MemoryHubController {
       }
 
       const clinicId = (req as any).user?.clinicId || "default"
-      const versions = documents.findVersions(sourcePath, clinicId)
+      const versions = this.documents.findVersions(sourcePath, clinicId)
       return res.json({ sourcePath, versions, count: versions.length })
     } catch (error) {
       logger.error("[MemoryHub] Versions error", { error, sourcePath: req.query.sourcePath })
@@ -237,34 +187,11 @@ export class MemoryHubController {
   async health(req: Request, res: Response) {
     try {
       const clinicId = (req as any).user?.clinicId || "default"
-      const totalDocs = documents.count(clinicId)
-      const allDocs = documents.listAll(clinicId)
-      const driftCount = db.prepare(
-        "SELECT COUNT(*) as c FROM drift_reports WHERE resolved_at IS NULL",
-      ).get() as { c: number }
+      const metrics = this.healthService.getMetrics(clinicId)
 
-      // Coverage: docs indexed in last 7 days vs total markdown files
-      const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000
-      const recentlyIndexed = allDocs.filter((d) => d.lastIndexed > oneWeekAgo).length
-      const coveragePercent = totalDocs > 0 ? Math.round((recentlyIndexed / totalDocs) * 100) : 0
+      this.metrics.memoryHub.coveragePercent.set({ category: "memory_hub" }, metrics.coveragePercent)
 
-      metrics.memoryHub.coveragePercent.set({ category: "memory_hub" }, coveragePercent)
-
-      // T054: Compression stats
-      const compressionStats = embeddings.getCompressionStats()
-
-      return res.json({
-        indexStatus: totalDocs > 0 ? "healthy" : "empty",
-        totalDocuments: totalDocs,
-        compressionRatio: Math.round(compressionStats.compressionRatio * 100) / 100,
-        compressedEmbeddings: compressionStats.compressedEmbeddings,
-        spaceSavedBytes: compressionStats.spaceSavedBytes,
-        lastScan: allDocs[0]?.lastIndexed
-          ? new Date(allDocs[0].lastIndexed).toISOString()
-          : null,
-        driftCount: driftCount.c,
-        coveragePercent: coveragePercent,
-      })
+      return res.json(metrics)
     } catch (error) {
       logger.error("[MemoryHub] Health error", { error })
       return res.status(500).json({ error: "Health check failed" })
@@ -274,7 +201,7 @@ export class MemoryHubController {
   async graph(req: Request, res: Response) {
     try {
       const clinicId = (req as any).user?.clinicId || "default"
-      const graphData = graphService.buildGraph(clinicId)
+      const graphData = this.graphService.buildGraph(clinicId)
       return res.json(graphData)
     } catch (error) {
       logger.error("[MemoryHub] Graph error", { error })

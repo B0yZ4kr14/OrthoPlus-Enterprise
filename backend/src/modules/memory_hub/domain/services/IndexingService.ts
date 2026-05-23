@@ -9,6 +9,7 @@ import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 import { ChunkRepository } from "../../infrastructure/ChunkRepository"
 import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
 import { loadGitignoreForPath } from "../../infrastructure/GitignoreParser"
+import { piiDetector } from "../../infrastructure/PIIDetector"
 
 export class IndexingService {
   private parser: MarkdownParser
@@ -35,6 +36,19 @@ export class IndexingService {
 
     const docType = this.inferDocType(filePath)
     const parsed = this.parser.parse(filePath, content)
+
+    // F-RT-020-007: PII scanning before indexing
+    const piiCheck = piiDetector.shouldBlockIndexing(
+      content,
+      parsed.frontmatter ?? {},
+    )
+    if (piiCheck.blocked) {
+      logger.warn(`[IndexingService] Blocked indexing due to PII detection`, {
+        filePath,
+        reason: piiCheck.reason,
+      })
+      return
+    }
 
     // Extract author and feature number from frontmatter for advanced filtering (T053)
     const author = typeof parsed.frontmatter?.author === "string" ? parsed.frontmatter.author : null

@@ -1,6 +1,7 @@
 import { SearchService } from "../../../src/modules/memory_hub/domain/services/SearchService"
 import { OllamaEmbeddingClient } from "../../../src/modules/memory_hub/infrastructure/OllamaEmbeddingClient"
 import { EmbeddingRepository } from "../../../src/modules/memory_hub/infrastructure/EmbeddingRepository"
+import { DocumentRepository } from "../../../src/modules/memory_hub/infrastructure/DocumentRepository"
 
 // Mocks
 jest.mock("../../../src/modules/memory_hub/infrastructure/OllamaEmbeddingClient")
@@ -10,11 +11,13 @@ describe("SearchService", () => {
   let searchService: SearchService
   let mockEmbedder: jest.Mocked<OllamaEmbeddingClient>
   let mockEmbeddings: jest.Mocked<EmbeddingRepository>
+  let mockDocuments: jest.Mocked<DocumentRepository>
 
   beforeEach(() => {
     mockEmbedder = new OllamaEmbeddingClient() as jest.Mocked<OllamaEmbeddingClient>
     mockEmbeddings = new EmbeddingRepository({} as any) as jest.Mocked<EmbeddingRepository>
-    searchService = new SearchService(mockEmbedder, mockEmbeddings)
+    mockDocuments = new DocumentRepository({} as any) as jest.Mocked<DocumentRepository>
+    searchService = new SearchService(mockEmbedder, mockEmbeddings, mockDocuments)
   })
 
   afterEach(() => {

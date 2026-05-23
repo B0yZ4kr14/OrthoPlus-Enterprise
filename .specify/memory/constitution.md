@@ -167,4 +167,84 @@ A **hotfix** é uma correção crítica em produção que não pode aguardar o c
 3. `security_constitution.md` — Security standards
 4. `architecture.md` — 4+1 architecture views
 
+---
+
+## 10. Agent Service Principles
+
+### AS-1: Python Boundary
+The Agent Service (`agent-service/`) is a Python 3.14 + FastAPI microservice. It MUST NOT import TypeScript code or share runtime with the Node.js backend. Cross-stack communication via HTTP only (`/api/agent/*` → port 8000).
+
+### AS-2: Agno Framework
+Agents are built with Agno 2.5. Use Pydantic v2 for all input/output schemas. Never bypass Agno's tool registry for file operations.
+
+### AS-3: Environment Isolation
+Agent Service reads `.env` independently. Never share `JWT_SECRET` or database credentials with the backend's env. Use `agent-service/src/config.py` as the single source of truth for Python env vars.
+
+### AS-4: Logging
+Use Python `logging` (not `print`). Log level controlled by `LOG_LEVEL` env var. Structured logs compatible with backend Winston JSON format.
+
+---
+
+## 11. Monorepo Principles
+
+### MP-1: Workspace Boundaries
+pnpm workspaces are defined in `pnpm-workspace.yaml`:
+- `apps/*` — Deployable applications (currently: `apps/web`)
+- `backend` — Node.js API server
+- `shared-types` — Cross-stack TypeScript types
+- `categories/@orthoplus/*` — Internal UI/hooks/utils packages
+
+### MP-2: Dependency Direction
+- Frontend MAY depend on `shared-types` and `@orthoplus/*` packages
+- Backend MAY depend on `shared-types`
+- `shared-types` MUST NOT depend on frontend or backend
+- Internal packages MUST NOT depend on apps or backend
+
+### MP-3: Turbo Pipeline
+`turbo.json` defines build dependencies:
+- `build` depends on `^build` (topological)
+- `dev` and `clean` have `cache: false`
+- Always run `pnpm build` at root before deploying any workspace
+
+### MP-4: No Cross-Package Imports
+Never import from `apps/web/src/` into `backend/src/` or vice versa. Shared code belongs in `shared-types/` or `categories/@orthoplus/*`.
+
+---
+
+## 12. Branch & Commit Conventions
+
+### BR-1: Branch Naming
+- `main` — Production-ready
+- `develop` — Integration branch
+- `feat/[description]` — New features
+- `fix/[description]` — Bug fixes
+- `chore/[description]` — Maintenance
+- `hotfix/[description]` — Production hotfixes (see DOC-2a)
+- `omk/flow-[name]-[YYYYMMDD-HHMMSS]` — OMK orchestration branches
+
+### BR-2: Commit Style
+Conventional Commits with Portuguese descriptions:
+- `feat(scope): descrição`
+- `fix(scope): descrição`
+- `docs(scope): descrição`
+- `security(scope): descrição`
+- `refactor(scope): descrição`
+- `test(scope): descrição`
+- `chore(scope): descrição`
+
+Scope should match module name (e.g., `feat(memory-hub):`, `fix(auth):`).
+
+### BR-3: Pre-Commit Gates
+`.husky/pre-commit` runs:
+1. `pnpm lint`
+2. `pnpm type-check`
+
+If either fails, commit is aborted.
+
+### BR-4: Merge Requirements
+All PRs to `main` and `develop` MUST pass:
+- CI build (type-check + build + test)
+- Security audit (`security.yml`)
+- E2E tests (`e2e-tests.yml`) for frontend changes
+
 No duplication across files. Architecture details live in architecture_constitution.md. Security details live in security_constitution.md.

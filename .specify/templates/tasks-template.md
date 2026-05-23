@@ -274,4 +274,22 @@ With multiple developers:
 - Verify tests fail before implementing
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
+
+---
+
+## Agent Service Path Conventions *(if applicable)*
+
+Only include these tasks if the feature touches the Python Agent Service.
+
+### Python Paths
+- **Agent definitions**: `agent-service/src/agents/`
+- **Workflows**: `agent-service/src/workflows/`
+- **Tools**: `agent-service/src/tools/`
+- **Config**: `agent-service/src/config.py`
+- **Main app**: `agent-service/src/main.py`
+
+### Python Testing
+- No formal test framework detected; use `pytest` if adding tests
+- Run: `cd agent-service && python -m pytest` or `uvicorn src.main:app --reload --port 8000`
+- Validate OpenAPI schema at `http://localhost:8000/docs`
 - Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence

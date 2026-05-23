@@ -2,6 +2,7 @@ import Database from "better-sqlite3"
 import { SearchService } from "../domain/services/SearchService"
 import { OllamaEmbeddingClient } from "../infrastructure/OllamaEmbeddingClient"
 import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository"
+import { DocumentRepository } from "../infrastructure/DocumentRepository"
 
 const query = process.argv.slice(2).join(" ")
 if (!query) {
@@ -13,7 +14,8 @@ const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
 const db = new Database(dbPath)
 const embedder = new OllamaEmbeddingClient()
 const embeddings = new EmbeddingRepository(db)
-const searchService = new SearchService(embedder, embeddings)
+const documents = new DocumentRepository(db)
+const searchService = new SearchService(embedder, embeddings, documents)
 
 searchService.search(query, {}, 10)
   .then(({ results, total }) => {

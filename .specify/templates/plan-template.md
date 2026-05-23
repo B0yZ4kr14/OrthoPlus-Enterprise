@@ -59,6 +59,10 @@
 | **INF-1** Infrastructure Resilience | CategoryCircuitBreaker protection for DB operations | ✅ Existing |
 | **INF-2** Observability Metrics | Emit `orthoplus_*` metrics with category label for new modules | 🔍 Enforce |
 | **INF-3** Backup & DR | Per-category pg_dump via BackupSchedulerService; 10-backup retention | ✅ Existing |
+| **AS-1** Agent Service Boundary | Python FastAPI isolated from Node.js backend; HTTP-only communication | ✅ Existing |
+| **AS-2** Agent Schemas | Pydantic v2 for all agent I/O; Agno 2.5+ tool registry | 🔍 Enforce |
+| **MP-1** Workspace Boundaries | No cross-package imports between apps/backend/shared-types | ✅ Existing |
+| **MP-2** Turbo Pipeline | `build` depends on `^build`; run `pnpm build` at root before deploy | ✅ Existing |
 
 ## Project Structure
 

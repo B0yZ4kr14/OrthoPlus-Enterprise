@@ -170,4 +170,24 @@
 - [Assumption about target users, e.g., "Users have stable internet connectivity"]
 - [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
 - [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
+
+## Agent Service Requirements *(if applicable)*
+
+<!--
+  Only include this section if the feature requires changes to the Python Agent Service.
+  Most features only touch frontend + backend.
+-->
+
+### When to Include
+- Feature requires a new AI agent or workflow
+- Feature modifies existing agent behavior (backend, frontend, or database agents)
+- Feature needs new tools in `agent-service/src/tools/`
+
+### Requirements
+- [ ] Pydantic v2 schema for all agent inputs/outputs
+- [ ] FastAPI endpoint registered in `agent-service/src/main.py`
+- [ ] Agno 2.5+ agent definition with explicit tool registry
+- [ ] Independent env var configuration in `agent-service/src/config.py`
+- [ ] Python logging (not print statements)
+- [ ] No shared secrets with Node.js backend
 - [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]

@@ -36,6 +36,7 @@ export class FileWatcher {
       persistent: true,
       ignoreInitial: true,
       awaitWriteFinish: { stabilityThreshold: 500 },
+      followSymlinks: false, // F-RT-020-018: prevent symlink traversal attacks
       usePolling,
       interval: pollingInterval,
       binaryInterval: pollingInterval,
