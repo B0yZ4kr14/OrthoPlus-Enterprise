@@ -120,3 +120,5 @@ tests/e2e/.auth/
 graphify-out/.graphify_*
 .omk/open-design/
 .env.vps.credentials
+.worktrees/
+.worktrees/
