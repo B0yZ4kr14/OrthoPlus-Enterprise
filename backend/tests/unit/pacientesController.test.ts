@@ -90,6 +90,8 @@ const mockRes = () => {
   res.status = jest.fn().mockReturnValue(res)
   res.json = jest.fn().mockReturnValue(res)
   res.send = jest.fn().mockReturnValue(res)
+  res.cookie = jest.fn().mockReturnValue(res)
+  res.clearCookie = jest.fn().mockReturnValue(res)
   return res as Response
 }
 
@@ -279,7 +281,7 @@ describe('PacientesController', () => {
 
   // ── POST /api/pacientes/auth (login) ────────────────────────────────────
   describe('patientAuth', () => {
-    it('returns token on valid login', async () => {
+    it('returns 200 and sets cookie on valid login', async () => {
       ;(prisma.patient_accounts.findFirst as jest.Mock).mockResolvedValueOnce({
         patient_id: 'pid-1',
         email: 'joao@email.com',
@@ -291,7 +293,14 @@ describe('PacientesController', () => {
       const res = mockRes()
       await controller.patientAuth(req as Request, res)
       expect(res.status).toHaveBeenCalledWith(200)
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ token: expect.any(String) }))
+      expect(res.cookie).toHaveBeenCalledWith(
+        'patient_session',
+        expect.any(String),
+        expect.objectContaining({ httpOnly: true }),
+      )
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        patient: expect.any(Object),
+      }))
     })
 
     it('returns 401 when account not found', async () => {
