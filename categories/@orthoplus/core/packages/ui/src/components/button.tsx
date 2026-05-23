@@ -24,10 +24,10 @@ const buttonVariants = cva(
         "elevated-secondary":
           "bg-gradient-to-br from-card to-card/90 text-card-foreground shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 border-0 backdrop-blur-sm",
         success:
-          "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 hover:-translate-y-0.5 active:translate-y-0",
+          "bg-success text-success-foreground shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
         warning:
-          "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 hover:-translate-y-0.5 active:translate-y-0",
-        info: "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0",
+          "bg-warning text-warning-foreground shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
+        info: "bg-info text-info-foreground shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -68,6 +68,9 @@ export default {
           md: "var(--shadow-md)",
           lg: "var(--shadow-lg)",
           xl: "var(--shadow-xl)",
+          card: "var(--shadow-card)",
+          "card-hover": "var(--shadow-card-hover)",
+          interactive: "var(--shadow-interactive)",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

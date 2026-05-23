@@ -56,12 +56,21 @@ function useCountUp(value: string | number) {
   return { display, hasAnimation: target !== null };
 }
 
+const variantIconStyles: Record<string, string> = {
+  blue: "from-[hsl(var(--module-blue))] to-[hsl(var(--info))]",
+  purple: "from-[hsl(var(--module-purple))] to-[hsl(var(--module-pink))]",
+  green: "from-[hsl(var(--module-green))] to-[hsl(var(--success))]",
+  orange: "from-[hsl(var(--module-orange))] to-[hsl(var(--warning))]",
+  red: "from-[hsl(var(--module-red))] to-[hsl(var(--destructive))]",
+};
+
 export const StatCardMemo = memo(function StatCardMemo({
   title,
   value,
   icon: Icon,
   trend,
   subtitle,
+  variant = "green",
   index = 0,
 }: StatCardMemoProps) {
   const { display, hasAnimation } = useCountUp(value);
@@ -105,8 +114,8 @@ export const StatCardMemo = memo(function StatCardMemo({
                     className={cn(
                       "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium",
                       trend.isPositive
-                        ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                        : "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400"
+                        ? "bg-success/10 text-success dark:bg-success/20"
+                        : "bg-destructive/10 text-destructive dark:bg-destructive/20"
                     )}
                   >
                     {trend.isPositive ? (
@@ -126,7 +135,10 @@ export const StatCardMemo = memo(function StatCardMemo({
             </div>
 
             <div
-              className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shrink-0"
+              className={cn(
+                "h-12 w-12 rounded-xl bg-gradient-to-br flex items-center justify-center shadow-lg shrink-0",
+                variantIconStyles[variant] || variantIconStyles.green
+              )}
               aria-hidden="true"
             >
               <Icon className="h-6 w-6 text-white" aria-hidden="true" />

@@ -49,28 +49,28 @@ const features = [
     title: "Agenda Inteligente",
     description:
       "Agendamento otimizado com lembretes automáticos, integração multi-clínica e controle de confirmações.",
-    gradient: "from-sky-400 to-blue-500",
+    gradient: "from-[hsl(var(--info))] to-[hsl(var(--module-blue))]",
   },
   {
     icon: DollarSign,
     title: "Financeiro Completo",
     description:
       "Controle de receitas, despesas, conciliação bancária, contas a receber e relatórios financeiros detalhados.",
-    gradient: "from-warning to-orange-500",
+    gradient: "from-[hsl(var(--warning))] to-[hsl(var(--module-orange))]",
   },
   {
     icon: FileText,
     title: "Prontuário Eletrônico",
     description:
       "PEP completo com odontograma digital, radiografias, planos de tratamento e assinatura ICP-Brasil.",
-    gradient: "from-violet-400 to-purple-500",
+    gradient: "from-[hsl(var(--module-purple))] to-[hsl(var(--module-pink))]",
   },
   {
     icon: Receipt,
     title: "Faturamento TISS",
     description:
       "Geração de guias TISS, integração com operadoras e controle de glosas de forma automatizada.",
-    gradient: "from-rose-400 to-pink-500",
+    gradient: "from-[hsl(var(--module-red))] to-[hsl(var(--module-pink))]",
   },
   {
     icon: Megaphone,
