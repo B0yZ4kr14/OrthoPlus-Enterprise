@@ -17,7 +17,8 @@
     "test": "turbo run test",
     "type-check": "turbo run type-check",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "guard": "node scripts/guard.cjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",

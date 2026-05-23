@@ -108,6 +108,9 @@ const FluxoDigital = lazy(
   () => import("@/modules/pep/ui/pages/FluxoDigital"),
 );
 
+// Memory Hub
+const MemoryHubDashboard = lazy(() => import("@/modules/memory-hub").then((m) => ({ default: m.MemoryHubDashboard })));
+
 // Admin pages
 const DatabaseMaintenancePage = lazy(
   () => import("@/modules/admin/ui/pages/DatabaseMaintenancePage"),
@@ -279,6 +282,9 @@ const AppRoutes = () => (
     <Route path="/files/upload" element={protectedRoute(<FileUploadPage />, { moduleKey: "FILES" })} />
     <Route path="/faturamento-tiss" element={protectedRoute(<TISSPage />, { moduleKey: "TISS" })} />
     <Route path="/teleodonto" element={protectedRoute(<TeleodontoPage />, { moduleKey: "TELEODONTO" })} />
+
+    {/* Memory Hub */}
+    <Route path="/memory-hub" element={protectedRoute(<MemoryHubDashboard />, { moduleKey: "MEMORY_HUB" })} />
 
     {/* Inovação & Tecnologia */}
     <Route path="/ia-radiografia" element={protectedRoute(<IARadiografia />, { moduleKey: "IA" })} />

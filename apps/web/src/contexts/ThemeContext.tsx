@@ -1,32 +1,40 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 // ─── Temas suportados (Spec 016 — TC-3) ───────────────────────────────────
-// Apenas premium-light e premium-dental-dark são temas oficiais.
-type Theme = "premium-light" | "premium-dental-dark";
+// premium-light, premium-dental-dark e system (auto-detect) são temas oficiais.
+type Theme = "premium-light" | "premium-dental-dark" | "system";
 
 interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
+  resolvedTheme: "premium-light" | "premium-dental-dark";
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const CSS_CLASS_THEMES: Theme[] = ["premium-light", "premium-dental-dark"];
+const CSS_CLASS_THEMES: Theme[] = ["premium-light", "premium-dental-dark", "system"];
 
 // Mapa: tema → classe CSS aplicada em <html>
-const THEME_CLASS_MAP: Record<Theme, string> = {
+const THEME_CLASS_MAP: Record<Exclude<Theme, "system">, string> = {
   "premium-light":       "premium-light",
   "premium-dental-dark": "premium-dental-dark",
 };
 
 // Temas legados removidos — mapear para o padrão mais próximo
-const LEGACY_THEME_MAP: Record<string, Theme> = {
+const LEGACY_THEME_MAP: Record<string, Exclude<Theme, "system">> = {
   "light":              "premium-light",
   "dark":               "premium-dental-dark",
   "professional-dark":  "premium-dental-dark",
   "high-contrast":      "premium-light",
   "high-contrast-dark": "premium-dental-dark",
 };
+
+function getSystemTheme(): "premium-light" | "premium-dental-dark" {
+  if (typeof window === "undefined") return "premium-light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "premium-dental-dark"
+    : "premium-light";
+}
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -47,6 +55,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     return stored as Theme;
   });
 
+  const resolvedTheme: "premium-light" | "premium-dental-dark" =
+    theme === "system" ? getSystemTheme() : theme;
+
   useEffect(() => {
     const root = document.documentElement;
 
@@ -60,14 +71,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       "premium-dental-dark",
     );
 
-    // 2. Aplica classe do tema atual
-    const cssClass = THEME_CLASS_MAP[theme];
+    // 2. Aplica classe do tema resolvido
+    const cssClass = THEME_CLASS_MAP[resolvedTheme];
     if (cssClass) {
       root.classList.add(cssClass);
     }
 
     // 3. Persiste
     localStorage.setItem("ortho-theme", theme);
+  }, [theme, resolvedTheme]);
+
+  // Listener para mudança de prefers-color-scheme quando em modo system
+  useEffect(() => {
+    if (theme !== "system") return;
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => {
+      setThemeState("system"); // Força re-render para aplicar novo resolvedTheme
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
@@ -79,6 +101,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         theme,
         setTheme,
+        resolvedTheme,
       }}
     >
       {children}
