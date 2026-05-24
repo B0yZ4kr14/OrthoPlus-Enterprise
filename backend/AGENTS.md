@@ -1,7 +1,7 @@
 # AGENTS.md — backend/
 
 > Contexto específico do backend Node.js. Não repete o root AGENTS.md.
-> **Atualizado:** 2026-04-25
+> **Atualizado:** 2026-05-24
 
 ---
 

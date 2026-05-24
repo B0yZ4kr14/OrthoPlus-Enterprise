@@ -135,7 +135,7 @@ Authorized top-level directories under `apps/web/src/`:
 ## 6. Testing Principles
 
 ### TP-1: Test Coverage
-Backend: 522 tests, 24 suites — MUST pass before merge. Frontend: Vitest + jsdom. E2E: Playwright for critical flows.
+Backend: 636 tests, 39 suites — MUST pass before merge. Frontend: Vitest + jsdom. E2E: Playwright for critical flows.
 
 ### TP-2: Quality Gates
 `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test` — all MUST pass.
