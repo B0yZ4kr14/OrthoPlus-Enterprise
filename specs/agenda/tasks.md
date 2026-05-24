@@ -137,11 +137,21 @@
 - [ ] TD002 [P] `agendaController.ts` — respostas de erro 500 retornam `{ error: "Internal server error" }` em vez de RFC 7807 Problem Details (CQ-3). Deve propagar erros para o `errorHandler` middleware ou usar `ApiError`.
 - [ ] TD003 [P] `CreateAppointmentUseCase.ts` — `throw new Error("Horário bloqueado...")` e `throw new Error("Já existe um agendamento...")` usam strings genéricas. Deve usar erros de domínio tipados (e.g., `BlockedTimeError`, `SchedulingConflictError`).
 
+## Instrumentation Tasks (EP-4 — Observability as Feature)
+
+**Added**: 2026-05-24 (post `/speckit.analyze`)
+**Priority**: Next iteration
+
+- [ ] T080 [P2] Add Prometheus histogram `appointment_create_duration_ms` in `CreateAppointmentCommandHandler`
+- [ ] T081 [P2] Add Prometheus histogram `calendar_load_duration_ms` in `getAppointments` controller
+- [ ] T082 [P2] Add `appointments_total` counter with labels for `status` and `clinic_id`
+- [ ] T083 [P3] Create Grafana dashboard panel for agenda latency metrics
+
 ## Task Statistics
 
 | Status | Count |
 |--------|-------|
 | Completed | 79/79 (100%) |
-| Pending | 3 (TD001–TD003) |
+| Pending | 7 (TD001–TD003, T080–T083) |
 
-**All tasks marked complete — feature fully implemented.**
+**All core tasks marked complete — feature fully implemented. Instrumentation pending next iteration.**

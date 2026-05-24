@@ -86,7 +86,7 @@ AND o status muda para "CANCELADO"
 
 ```
 GIVEN um agendamento "AGENDADO" ou "CONFIRMADO"
-WHHEN reagendo para uma nova data futura
+WHEN reagendo para uma nova data futura
 THEN o status volta para "AGENDADO"
 AND o horário anterior fica liberado
 ```
@@ -209,12 +209,21 @@ AND o envio é registrado no histórico de confirmações
 
 ---
 
+## Known Limitations / Backlog
+
+| Item | Description | Decision |
+|------|-------------|----------|
+| US7 — Lembretes Automáticos | Envio de notificações (SMS/app/push) para pacientes antes de consultas. Requer integração com módulo de notificações (014-notificacoes). | **Backlog** — Fora do escopo da migração brownfield. Será implementado quando o módulo 014-notificacoes for integrado. |
+| NFR1-NFR2 — Performance Metrics | Instrumentação de latência (`appointment_create_duration_ms`, `calendar_load_duration_ms`) não implementada. | **Next iteration** — Adicionar tasks de instrumentação (EP-4). |
+
+---
+
 ## Gaps Identified (Post-Migration)
 
 | Gap | Severity | Description |
 |-----|----------|-------------|
 | GAP-1 | ~~Medium~~ ✅ **RESOLVED** | ~~Backend controller (`agendaController.ts`) uses `@ts-nocheck`~~ — Removed on 2026-05-23. File compiles under strict mode. |
-| GAP-2 | Medium | `CreateAppointmentUseCase` has `@ts-expect-error` for appointmentType casting |
-| GAP-3 | Low | Backend duplicates business logic instead of reusing frontend use cases (architectural mismatch) |
+| GAP-2 | ~~Medium~~ ✅ **RESOLVED** | ~~`CreateAppointmentUseCase` has `@ts-expect-error` for appointmentType casting~~ — `AppointmentType` union literal used strictly. `@ts-expect-error` removed on 2026-05-23. |
+| GAP-3 | ~~Low~~ ✅ **PARTIALLY RESOLVED** | ~~Backend duplicates business logic instead of using domain commands~~ — `createAppointment` now uses `CreateAppointmentCommandHandler` + `AppointmentRepositoryPostgres` (2026-05-23). `updateAppointment`, `deleteAppointment`, `getAppointments` still use direct Prisma. Gradual migration in progress. |
 | GAP-4 | ~~Low~~ ✅ **RESOLVED** | ~~E2E tests rely on fragile locators~~ — 20+ `data-testid` attributes added to Agenda components on 2026-05-23. |
-| GAP-5 | Low | No rate limiting on agenda endpoints specifically |
+| GAP-5 | ~~Low~~ ✅ **RESOLVED** | ~~No rate limiting on agenda endpoints~~ — `agendaLimiter` (200 req/15min) added to router on 2026-05-23. |

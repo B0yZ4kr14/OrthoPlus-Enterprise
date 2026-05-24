@@ -112,7 +112,7 @@ apps/web/src/modules/agenda/
 backend/src/modules/agenda/
 ├── api/
 │   ├── router.ts                   # Express router with all CRUD routes
-│   └── agendaController.ts         # Route handlers (688 lines, @ts-nocheck)
+│   └── agendaController.ts         # Route handlers (~700 lines, strict mode)
 ├── application/
 │   └── commands/
 │       └── CreateAppointmentCommand.ts
@@ -159,7 +159,7 @@ tests/e2e/agenda.spec.ts            # 10 E2E scenarios
 1. **Clean Architecture on Frontend**: Domain entities encapsulate business rules (status transitions, conflict detection, validation). This isolates business logic from React components.
 2. **Repository Pattern**: Interfaces in domain, concrete API implementations in infrastructure. Enables swapping API for local storage in tests.
 3. **TanStack Query + Use Cases**: Presentation hooks compose use cases with React Query for caching, optimistic updates, and error handling.
-4. **Backend CRUD (not Clean Architecture)**: Controller directly uses Prisma. Only partial CA adoption (domain entity + command exist but are not used by controller).
+4. **Backend Partial Clean Architecture**: `createAppointment` delegates to `CreateAppointmentCommandHandler` + `AppointmentRepositoryPostgres`. Other endpoints (update, delete, list) still use direct Prisma — gradual migration in progress.
 5. **Zod Validation**: All request bodies validated before Prisma operations.
 6. **clinicGuard Middleware**: Centralized multi-tenant isolation at router level.
 
@@ -169,7 +169,7 @@ tests/e2e/agenda.spec.ts            # 10 E2E scenarios
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Backend `@ts-nocheck` hides type errors | High | Medium | Remove `@ts-nocheck` and fix errors incrementally |
+| Backend strict mode compliance | Low | Low | File compiles under `tsc` strict mode since 2026-05-23 |
 | Frontend/backend logic divergence | Medium | High | Align backend to use domain entities/commands |
 | E2E tests flaky | Medium | Low | Add `data-testid` attributes to key elements |
 | Performance with large datasets | Low | Medium | Add pagination to list endpoints |

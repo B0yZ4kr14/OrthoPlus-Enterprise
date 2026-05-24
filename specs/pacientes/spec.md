@@ -142,12 +142,21 @@ AND o IMC e calculado automaticamente a partir de peso e altura
 
 ---
 
+## Known Limitations / Backlog
+
+| Item | Description | Decision |
+|------|-------------|----------|
+| FR4 — Timeline Cross-Module | Agregação de appointments + tratamentos + orçamentos em timeline única. Atualmente `GET /:id/timeline` retorna apenas dados do módulo pacientes. | **Backlog** — Requer orquestração cross-module via event bus ou API composition. Será tratado na evolução do módulo. |
+| NFR1-NFR2 — Performance Metrics | Instrumentação de latência (`patient_create_duration_ms`, `patient_search_duration_ms`) não implementada. | **Next iteration** — Adicionar tasks de instrumentação (EP-4). |
+
+---
+
 ## Gaps Identified (Post-Migration)
 
 | Gap | Severity | Description |
 |-----|----------|-------------|
-| GAP-1 | Medium | PatientFormPage uses `any` type for API response |
-| GAP-2 | Medium | PatientFormPage has `@ts-expect-error` on `form.reset()` |
-| GAP-3 | Low | Patient form uses apiClient directly instead of use cases (architectural mismatch vs agenda module) |
-| GAP-4 | Low | E2E tests use text-based locators instead of `data-testid` consistently |
+| GAP-1 | ~~Medium~~ ✅ **RESOLVED** | ~~PatientFormPage uses `any` type for API response~~ — Uses `PatientAPI` type via `apiClient.get<PatientAPI>` on 2026-05-23. |
+| GAP-2 | ~~Medium~~ ✅ **RESOLVED** | ~~PatientFormPage has `@ts-expect-error` on `form.reset()`~~ — Uses `patientFormSchema.parse(formData)` for type-safe reset on 2026-05-23. |
+| GAP-3 | ~~Low~~ ✅ **RESOLVED** | ~~Patient form uses apiClient directly instead of use cases~~ — Clean Architecture applied: `PatientRepositoryApi`, `ListPatientsUseCase`, `AddPatientUseCase`, `UpdatePatientUseCase`, `DeletePatientUseCase`, `usePatientsClean` on 2026-05-23. |
+| GAP-4 | ~~Low~~ ✅ **RESOLVED** | ~~E2E tests use text-based locators~~ — `data-testid` attributes added to `PacientesListPage`, `PatientFormPage` on 2026-05-23. |
 | GAP-5 | ~~Low~~ ✅ **RESOLVED** | ~~Patient portal auth returns key in body~~ — Migrated to HttpOnly/Secure/SameSite=Strict cookie (`patient_session`) on 2026-05-23. |

@@ -144,11 +144,21 @@
 - [ ] TD001 [P] `PatientEntity.ts` — é apenas um alias de tipo (`export type { Patient as PatientEntity }`). Uma entidade de domínio real deveria ter validação, métodos factory, regras de transição de status. Refatorar para entidade completa ou remover se não for necessária.
 - [ ] TD002 [P] `PatientRepositoryApi.ts:13` — usa import inline de tipo (`import("@/lib/adapters/patientAdapter").PatientAPI`) em vez de importar `PatientAPI` no topo do arquivo. Mover para seção de imports.
 
+## Instrumentation Tasks (EP-4 — Observability as Feature)
+
+**Added**: 2026-05-24 (post `/speckit.analyze`)
+**Priority**: Next iteration
+
+- [ ] T081 [P2] Add Prometheus histogram `patient_create_duration_ms` in `CadastrarPacienteUseCase`
+- [ ] T082 [P2] Add Prometheus histogram `patient_search_duration_ms` in `PacienteSearchService`
+- [ ] T083 [P2] Add `patients_total` gauge with labels for `status` and `clinic_id`
+- [ ] T084 [P3] Create Grafana dashboard panel for pacientes latency metrics
+
 ## Task Statistics
 
 | Status | Count |
 |--------|-------|
 | Completed | 80/80 (100%) |
-| Pending | 2 (TD001–TD002) |
+| Pending | 6 (TD001–TD002, T081–T084) |
 
-**All tasks marked complete — feature fully implemented.**
+**All core tasks marked complete — feature fully implemented. Instrumentation pending next iteration.**
