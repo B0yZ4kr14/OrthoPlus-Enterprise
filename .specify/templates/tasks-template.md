@@ -266,6 +266,54 @@ With multiple developers:
 
 ---
 
+## Worker Task Pattern *(for BullMQ async features)*
+
+When a feature requires background processing, add these tasks:
+
+```markdown
+- [ ] TXXX Create BullMQ queue in `backend/src/workers/{module}Worker.ts`
+  - Queue name: `{module}-{action}` (e.g., `ia-radiografia-analysis`)
+  - Connection: `redisInstance` from `@/infrastructure/redis/redisClient`
+  - Default options: `{ attempts: 3, backoff: { type: "exponential", delay: 5000 } }`
+
+- [ ] TXXX Implement worker processor function
+  - Update status to `PROCESSANDO` at start
+  - Call AI service / business logic
+  - Update status to `CONCLUIDA` or `ERRO`
+  - Log audit trail for sensitive operations
+
+- [ ] TXXX Update controller to enqueue jobs instead of synchronous processing
+  - Return 201 with `{ status: "PENDENTE", job_id: job.id }`
+  - Do NOT await processing completion
+
+- [ ] TXXX Add frontend polling in hook (`use{Feature}.ts`)
+  - `setInterval` every 10s to check status
+  - Cleanup on unmount
+  - Show progress UI while `status === "PROCESSANDO"`
+```
+
+## Build Gate Checklist *(run before marking feature complete)*
+
+```bash
+# 1. Backend build (strict — fails on any TS error)
+cd backend && pnpm build
+
+# 2. Frontend type-check
+cd apps/web && pnpm type-check
+
+# 3. Lint (warnings tolerated, 0 errors)
+pnpm lint
+
+# 4. Unit tests — backend
+cd backend && npx jest --testPathPattern="{module}"
+
+# 5. Unit tests — frontend (if applicable)
+cd apps/web && npx vitest run
+
+# 6. E2E tests (requires backend + frontend running)
+npx playwright test tests/e2e/{feature}.spec.ts --project=chromium
+```
+
 ## Notes
 
 - [P] tasks = different files, no dependencies
@@ -274,6 +322,8 @@ With multiple developers:
 - Verify tests fail before implementing
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
+- **Test naming**: New tests MUST use English (`should...`). Portuguese tests (`deve...`) are legacy debt.
+- **Schema changes**: Always run Prisma migration + generate before writing code that references new tables
 
 ---
 

@@ -68,7 +68,46 @@ cd backend && npx tsx src/modules/memory_hub/cli/drift.ts
 
 # Check health
 cd backend && npx tsx src/modules/memory_hub/cli/health.ts
+
+# Run full reindex
+cd backend && npx tsx src/modules/memory_hub/cli/reindex.ts
 ```
+
+## API Reference
+
+### GET `/drift`
+
+Retrieve open drift reports.
+
+**Query Parameters**:
+- `severity` (optional): Filter by `low`, `medium`, `high`, or `critical`
+- `limit` (optional): Max results, default 50, max 200
+- `offset` (optional): Pagination offset, default 0
+
+**Example**:
+```bash
+curl "http://localhost:3005/api/memory-hub/drift?severity=medium&limit=10"
+```
+
+**Response 200 OK**:
+```json
+{
+  "issues": [
+    {
+      "id": "uuid",
+      "type": "missing_impl",
+      "severity": "medium",
+      "source_document": "specs/021-teleodontologia/spec.md",
+      "description": "Spec has no corresponding implementation"
+    }
+  ],
+  "total": 5,
+  "limit": 10,
+  "offset": 0
+}
+```
+
+---
 
 ## Integration with AI Agents
 

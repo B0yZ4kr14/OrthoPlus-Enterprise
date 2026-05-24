@@ -26,24 +26,35 @@ interface LocalAIResponse {
   requer_avaliacao_especialista: boolean
 }
 
+export interface AIModelConfig {
+  endpoint: string
+  model: string
+  version?: string
+}
+
 export class LocalAIService {
-  private endpoint = process.env.AI_LOCAL_ENDPOINT || "http://localhost:11434"
-  private model = process.env.AI_LOCAL_MODEL || "llava"
+  private defaultEndpoint = process.env.AI_LOCAL_ENDPOINT || "http://localhost:11434"
+  private defaultModel = process.env.AI_LOCAL_MODEL || "llava"
 
   async analyzeRadiografia(
     imageBuffer: Buffer,
     tipoRadiografia: string,
-  ): Promise<{ resultado: LocalAIResponse; confidence: number; processingTimeMs: number }> {
+    modelConfig?: AIModelConfig,
+  ): Promise<{ resultado: LocalAIResponse; confidence: number; processingTimeMs: number; modelUsed: string; modelVersion?: string }> {
     const startTime = Date.now()
+
+    const endpoint = modelConfig?.endpoint || this.defaultEndpoint
+    const model = modelConfig?.model || this.defaultModel
+    const modelVersion = modelConfig?.version
 
     const prompt = this.buildPrompt(tipoRadiografia)
     const imageBase64 = imageBuffer.toString("base64")
 
-    const response = await fetch(`${this.endpoint}/api/generate`, {
+    const response = await fetch(`${endpoint}/api/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: this.model,
+        model,
         prompt,
         images: [imageBase64],
         stream: false,
@@ -69,7 +80,7 @@ export class LocalAIService {
     // Confidence heuristico: baseado na estrutura do resultado
     const confidence = this.calculateConfidence(resultado)
 
-    return { resultado, confidence, processingTimeMs }
+    return { resultado, confidence, processingTimeMs, modelUsed: model, modelVersion }
   }
 
   private buildPrompt(tipoRadiografia: string): string {

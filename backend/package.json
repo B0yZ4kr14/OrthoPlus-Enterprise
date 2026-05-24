@@ -17,6 +17,7 @@
     "axios": "^1.16.1",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.10.0",
+    "bullmq": "^5.77.1",
     "chokidar": "^5.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

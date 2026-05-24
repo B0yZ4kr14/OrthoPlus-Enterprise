@@ -122,11 +122,27 @@
   - Document models and relationships
   - Note cross-schema constraints (6 categories: CORE, FINANCEIRO, OPERACIONAL, COMERCIAL, CLINICO, ADMINISTRATIVO)
   - Plan for database.ts regeneration after schema changes
+  - Use @@schema("pep") for clinical/operational tables
 -->
 
 - **DB-001**: [Model changes or N/A]
 - **DB-002**: [Cross-category reads/writes or N/A]
 - **DB-003**: [Migration strategy or N/A]
+- **DB-004**: [Enum additions/changes or N/A]
+- **DB-005**: [database.ts regeneration needed? Yes/No]
+
+### Async Processing Requirements *(BullMQ/Redis)*
+
+<!--
+  Only include if feature requires background jobs.
+  Reference Constitution WP-1 through WP-4 for conventions.
+-->
+
+- **ASYNC-001**: [Does this feature need async processing? Yes/No]
+- **ASYNC-002**: [Queue name: `{module}-{action}`]
+- **ASYNC-003**: [Worker file location: `backend/src/workers/{name}Worker.ts`]
+- **ASYNC-004**: [Frontend polling strategy or webhook callback]
+- **ASYNC-005**: [Job retry policy: attempts, backoff type]
 
 ### Frontend/Backend Split *(full-stack features)*
 

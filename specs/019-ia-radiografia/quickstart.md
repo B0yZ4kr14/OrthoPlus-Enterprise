@@ -1,94 +1,105 @@
-# Quickstart: IA Radiografia Module
+# Quickstart: IA Radiografia
 
 ## Prerequisites
 
-- Ollama running locally with `llava` or `llama-3.3` model pulled
-- `ENABLE_AI_RADIOGRAPHY=true` in backend `.env`
-- `IA_ENCRYPTION_KEY` set to a 32+ character string in backend `.env`
+- Docker Compose running (`pnpm dev` or `docker-compose up`)
+- Ollama available at `OLLAMA_HOST` (default: http://localhost:11434)
+- Backend env vars: `ENABLE_AI_RADIOGRAPHY=true`, `IA_ENCRYPTION_KEY` (32+ chars)
 
-## Running the Module
-
-### 1. Start the AI Service
+## 1. Verify Ollama
 
 ```bash
-# Install Ollama
-curl -fsSL https://ollama.com/install.sh | sh
-
-# Pull the vision model
-ollama pull llava
-
-# Verify it's running
-curl http://localhost:11434/api/tags
+curl http://localhost:11434/api/tags | grep llava
 ```
 
-### 2. Enable the Feature Flag
-
-Add to backend `.env`:
+If llava is not available, pull it:
 ```bash
-ENABLE_AI_RADIOGRAPHY=true
-IA_ENCRYPTION_KEY=your-32-char-minimum-key-here-123
+curl -X POST http://localhost:11434/api/pull -d '{"name":"llava"}'
 ```
 
-### 3. Verify Prisma Models
+## 2. Seed Test Data
 
 ```bash
 cd backend
-npx prisma generate
-npx prisma migrate status
+npx tsx scripts/seed-ia-radiografia.ts
 ```
 
-Ensure `ia_radiografia_analise`, `ia_radiografia_audit_log`, and `paciente_consentimento_ia` are in the `pep` schema.
+Or create a patient and consent via API (see step 3).
 
-### 4. Test the API
+## 3. Register Patient Consent
 
 ```bash
-# Register consent
 curl -X POST http://localhost:3005/api/ia-radiografia/consentimento \
-  -H "Authorization: Bearer YOUR_JWT" \
+  -H "Authorization: Bearer TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"paciente_id":"...","consentido":true,"hash_termo":"..."}'
+  -d '{"paciente_id":"PATIENT_UUID","consentido":true,"hash_termo":"abc123"}'
+```
 
-# Upload and analyze
+## 4. Upload and Analyze
+
+```bash
 curl -X POST http://localhost:3005/api/ia-radiografia/upload-e-analisar \
-  -H "Authorization: Bearer YOUR_JWT" \
-  -F "file=@xray.png" \
-  -F "patient_id=..." \
+  -H "Authorization: Bearer TOKEN" \
+  -F "file=@test.png" \
+  -F "patient_id=PATIENT_UUID" \
   -F "tipo_radiografia=PANORAMICA"
 ```
 
-## Known Issues During Development
-
-| Issue | Workaround |
-|-------|------------|
-| Upload is faked (local path) | Images are not actually stored; path is a placeholder |
-| AI runs synchronously | Large images will block the request; use small test images |
-| Review endpoint fails from frontend | Send `assinatura_digital` manually in the request body |
-| Rate limiter resets on restart | In-memory only; restart server to reset limits |
-| Hardcoded encryption fallback | Set `IA_ENCRYPTION_KEY` to avoid using dev-only fallback |
-
-## Frontend Development
-
-```bash
-cd apps/web
-pnpm dev
+Expected response (201):
+```json
+{
+  "id": "analise-uuid",
+  "job_id": "bullmq-job-id",
+  "status": "PENDENTE",
+  "message": "Analise enfileirada"
+}
 ```
 
-Navigate to `/ia-radiografia` (requires "IA" module enabled for the clinic).
+> **Note**: The analysis is now processed asynchronously via BullMQ worker. Poll `GET /api/ia-radiografia/analises` or check the frontend for status updates.
 
-The module uses:
-- `useRadiografia.ts` hook for data fetching and upload
-- Zod schemas in `types/radiografia.types.ts`
-- `@orthoplus/core-ui` components
 
-## Testing
+## 5. View Results
+
+Open http://localhost:3000/ia-radiografia and verify:
+- Analysis card appears in the list
+- Confidence score is displayed
+- Problems detected are listed
+
+## 6. Review Analysis
 
 ```bash
-# Backend tests
-cd backend && pnpm test
-
-# Frontend tests
-cd apps/web && pnpm test
-
-# E2E tests
-cd tests/e2e && pnpm test
+curl -X PATCH http://localhost:3005/api/ia-radiografia/analises/ANALISE_UUID/revisar \
+  -H "Authorization: Bearer TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"observacoes_dentista":"Caries confirmada na regiao 14","assinatura_digital":"dentista-uuid:analise-uuid:timestamp"}'
 ```
+
+## 7. View Insights
+
+```bash
+curl http://localhost:3005/api/ia-radiografia/insights \
+  -H "Authorization: Bearer TOKEN"
+```
+
+## 8. Run Tests
+
+```bash
+# Backend unit tests
+cd backend && npx jest --testPathPattern="iaRadiografiaController"
+
+# Frontend type-check
+cd apps/web && pnpm type-check
+
+# E2E (requires backend + frontend running)
+npx playwright test tests/e2e/ia-radiografia-upload.spec.ts
+```
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `FEATURE_DISABLED` | Set `ENABLE_AI_RADIOGRAPHY=true` in backend `.env` |
+| `CONSENTIMENTO_AUSENTE` | Register consent for the patient first (step 3) |
+| `Rate limit excedido` | Wait 1 hour (dentist) or 24 hours (clinic) |
+| AI returns empty result | Check Ollama is running and llava model is loaded |
+| Upload fails with 500 | Check `IA_ENCRYPTION_KEY` is set and >= 32 characters |

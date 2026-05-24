@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Request, Response, NextFunction } from "express"
 import { MemoryHubController } from "../../../src/modules/memory_hub/api/controller"
 import { SearchService } from "../../../src/modules/memory_hub/domain/services/SearchService"
 import { ContextBriefService } from "../../../src/modules/memory_hub/domain/services/ContextBriefService"
@@ -6,10 +6,8 @@ import { IndexingService } from "../../../src/modules/memory_hub/domain/services
 import { GraphService } from "../../../src/modules/memory_hub/domain/services/GraphService"
 import { HealthService } from "../../../src/modules/memory_hub/domain/services/HealthService"
 import { DocumentRepository } from "../../../src/modules/memory_hub/infrastructure/DocumentRepository"
-
 import { SearchAuditRepository } from "../../../src/modules/memory_hub/infrastructure/SearchAuditRepository"
 
-// Mock all dependencies
 const createMockMetrics = () => ({
   memoryHub: {
     searchDuration: { observe: jest.fn() },
@@ -26,6 +24,8 @@ const createMockResponse = (): Partial<Response> & { json: jest.Mock; status: je
   res.json = jest.fn().mockReturnValue(res)
   return res
 }
+
+const createMockNext = (): NextFunction => jest.fn() as unknown as NextFunction
 
 describe("MemoryHubController", () => {
   let controller: MemoryHubController
@@ -81,11 +81,10 @@ describe("MemoryHubController", () => {
       indexingService: mockIndexingService,
       graphService: mockGraphService,
       documents: mockDocuments,
-
       auditRepository: mockAuditRepository,
       healthService: mockHealthService,
       metrics: mockMetrics as any,
-
+      db: {} as any,
     })
   })
 
@@ -100,6 +99,7 @@ describe("MemoryHubController", () => {
         user: { clinicId: "clinic-1", id: "user-1" },
       } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockSearchService.searchWithConfidentialityFilter.mockResolvedValue({
         results: [{ id: "1", sourcePath: "specs/test.md", docType: "spec", title: "Test", excerpt: "...", relevanceScore: 0.9, headingPath: [] }],
@@ -107,7 +107,7 @@ describe("MemoryHubController", () => {
         confidentialExcluded: 0,
       })
 
-      await controller.search(req, res as unknown as Response)
+      await controller.search(req, res as unknown as Response, next)
 
       expect(mockSearchService.searchWithConfidentialityFilter).toHaveBeenCalledWith(
         "test query",
@@ -121,16 +121,18 @@ describe("MemoryHubController", () => {
         total: 1,
         confidential_excluded: 0,
       }))
+      expect(next).not.toHaveBeenCalled()
     })
 
-    it("should return 400 when query is missing", async () => {
+    it("should call next with error when query is missing", async () => {
       const req = { body: { limit: 10 }, user: { clinicId: "clinic-1" } } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
-      await controller.search(req, res as unknown as Response)
+      await controller.search(req, res as unknown as Response, next)
 
-      expect(res.status).toHaveBeenCalledWith(400)
-      expect(res.json).toHaveBeenCalledWith({ error: "Query is required" })
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({ status: 400 }))
+      expect(res.json).not.toHaveBeenCalled()
     })
 
     it("should clamp limit to max 100", async () => {
@@ -139,6 +141,7 @@ describe("MemoryHubController", () => {
         user: { clinicId: "clinic-1", id: "user-1" },
       } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockSearchService.searchWithConfidentialityFilter.mockResolvedValue({
         results: [],
@@ -146,7 +149,7 @@ describe("MemoryHubController", () => {
         confidentialExcluded: 0,
       })
 
-      await controller.search(req, res as unknown as Response)
+      await controller.search(req, res as unknown as Response, next)
 
       expect(mockSearchService.searchWithConfidentialityFilter).toHaveBeenCalledWith(
         "test",
@@ -163,6 +166,7 @@ describe("MemoryHubController", () => {
         user: { clinicId: "clinic-1", id: "user-1" },
       } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockSearchService.searchWithConfidentialityFilter.mockResolvedValue({
         results: [{ id: "1", sourcePath: "specs/test.md", docType: "spec", title: "Test", excerpt: "...", relevanceScore: 0.9, headingPath: [] }],
@@ -170,7 +174,7 @@ describe("MemoryHubController", () => {
         confidentialExcluded: 0,
       })
 
-      await controller.search(req, res as unknown as Response)
+      await controller.search(req, res as unknown as Response, next)
 
       expect(mockAuditRepository.logQuery).toHaveBeenCalledWith(
         "clinic-1",
@@ -186,6 +190,7 @@ describe("MemoryHubController", () => {
     it("should return health metrics from HealthService", async () => {
       const req = { user: { clinicId: "clinic-1" } } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockHealthService.getMetrics.mockReturnValue({
         indexStatus: "healthy",
@@ -198,7 +203,7 @@ describe("MemoryHubController", () => {
         coveragePercent: 95,
       })
 
-      await controller.health(req, res as unknown as Response)
+      await controller.health(req, res as unknown as Response, next)
 
       expect(mockHealthService.getMetrics).toHaveBeenCalledWith("clinic-1")
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
@@ -213,10 +218,11 @@ describe("MemoryHubController", () => {
     it("should trigger reindex and return success", async () => {
       const req = { user: { clinicId: "clinic-1" } } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockIndexingService.reindexAll.mockResolvedValue(undefined)
 
-      await controller.reindex(req, res as unknown as Response)
+      await controller.reindex(req, res as unknown as Response, next)
 
       expect(mockIndexingService.reindexAll).toHaveBeenCalled()
       expect(res.json).toHaveBeenCalledWith({ message: "Reindex complete" })
@@ -227,10 +233,11 @@ describe("MemoryHubController", () => {
     it("should return graph data from GraphService", async () => {
       const req = { user: { clinicId: "clinic-1" } } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockGraphService.buildGraph.mockReturnValue({ nodes: [], edges: [] })
 
-      await controller.graph(req, res as unknown as Response)
+      await controller.graph(req, res as unknown as Response, next)
 
       expect(mockGraphService.buildGraph).toHaveBeenCalledWith("clinic-1")
       expect(res.json).toHaveBeenCalledWith({ nodes: [], edges: [] })
@@ -241,10 +248,11 @@ describe("MemoryHubController", () => {
     it("should return versions for a valid sourcePath", async () => {
       const req = { query: { sourcePath: "specs/test.md" }, user: { clinicId: "clinic-1" } } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockDocuments.findVersions.mockReturnValue([{ version: 1, contentHash: "abc", title: "Test", wordCount: 100, createdAt: Date.now() }])
 
-      await controller.versions(req, res as unknown as Response)
+      await controller.versions(req, res as unknown as Response, next)
 
       expect(mockDocuments.findVersions).toHaveBeenCalledWith("specs/test.md", "clinic-1")
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
@@ -254,14 +262,15 @@ describe("MemoryHubController", () => {
       }))
     })
 
-    it("should reject invalid sourcePath", async () => {
+    it("should call next with error for invalid sourcePath", async () => {
       const req = { query: { sourcePath: "/etc/passwd" }, user: { clinicId: "clinic-1" } } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
-      await controller.versions(req, res as unknown as Response)
+      await controller.versions(req, res as unknown as Response, next)
 
-      expect(res.status).toHaveBeenCalledWith(400)
-      expect(res.json).toHaveBeenCalledWith({ error: "Invalid sourcePath" })
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({ status: 400 }))
+      expect(res.json).not.toHaveBeenCalled()
     })
   })
 
@@ -272,6 +281,7 @@ describe("MemoryHubController", () => {
         user: { clinicId: "clinic-1" },
       } as unknown as Request
       const res = createMockResponse()
+      const next = createMockNext()
 
       mockContextBriefService.generateBrief.mockResolvedValue({
         markdown: "# Auth Flow\n...",
@@ -281,11 +291,11 @@ describe("MemoryHubController", () => {
         confidentialExcluded: 0,
       })
 
-      await controller.contextBrief(req, res as unknown as Response)
+      await controller.contextBrief(req, res as unknown as Response, next)
 
       expect(mockContextBriefService.generateBrief).toHaveBeenCalledWith(
         "auth flow",
-        128000, // clamped
+        128000,
         true,
         "clinic-1",
       )

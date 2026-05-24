@@ -284,3 +284,71 @@ All PRs to `main` and `develop` MUST pass:
 - E2E tests (`e2e-tests.yml`) for frontend changes
 
 No duplication across files. Architecture details live in architecture_constitution.md. Security details live in security_constitution.md.
+
+---
+
+## 13. Worker & Async Processing Principles
+
+### WP-1: BullMQ for Background Jobs
+Features requiring async processing MUST use BullMQ with Redis:
+- Queue name format: `{module-name}-{action}` (e.g., `ia-radiografia-analysis`)
+- Worker file: `backend/src/workers/{module}Worker.ts`
+- Default retry: 3 attempts with exponential backoff (5s base)
+- Concurrency: 2 per worker process (adjust per workload)
+
+### WP-2: Job Status Tracking
+Async jobs MUST update a persistent status field:
+- `PENDENTE` → enqueued
+- `PROCESSANDO` → worker picked up
+- `CONCLUIDA` → success
+- `ERRO` → failure (with `erro_processamento` logged)
+
+### WP-3: Frontend Polling
+When backend is async, frontend MUST poll via `useEffect` + `setInterval`:
+- Poll interval: 10s (adjust per UX requirements)
+- Cleanup interval on unmount
+- Show progress indicator while `status === "PROCESSANDO"`
+
+### WP-4: Worker Error Handling
+Workers MUST:
+- Catch all errors and update analysis status to `ERRO`
+- Log to audit trail via the module's audit service or equivalent
+- Never leave records in `PROCESSANDO` indefinitely
+
+---
+
+## 14. Test Naming Convention
+
+### TN-1: New Tests in English
+All NEW test descriptions MUST be in English (`should...`, `must...`).
+Existing Portuguese tests (`deve...`) are legacy debt — do NOT refactor unless modifying the file for other reasons.
+
+### TN-2: Test File Location
+- Backend unit: `backend/tests/unit/{Module}Controller.test.ts`
+- Frontend unit: `apps/web/src/modules/{feature}/**/*.test.{ts,tsx}`
+- E2E: `tests/e2e/{feature}-{flow}.spec.ts`
+
+### TN-3: Test Attributes
+Interactive elements MUST include `data-testid` for E2E selectors. Prefer `data-testid="upload-button"` over text-based locators.
+
+---
+
+## 15. Prisma Schema Change Protocol
+
+### PS-1: Migration Checklist
+When modifying `backend/prisma/schema.prisma`:
+1. Run `cd backend && npx prisma migrate dev --name {descriptive_name}`
+2. Run `cd backend && npx prisma generate`
+3. Verify Prisma Client is regenerated (`npx prisma generate` updates `@prisma/client`)
+4. If the feature affects Supabase types, verify `apps/web/src/types/database.ts` is regenerated
+5. Run `cd backend && pnpm build` — MUST pass
+6. Run `cd apps/web && pnpm type-check` — MUST pass
+
+### PS-2: Schema-First Design
+New tables MUST be defined in Prisma schema before any code references them. Never write code that assumes a table exists before the migration is created.
+
+### PS-3: Enum Changes
+Adding/modifying enums requires:
+- Prisma migration
+- Type mapping functions in workers/services (for string→enum conversion)
+- Frontend type updates if enum is exposed via API

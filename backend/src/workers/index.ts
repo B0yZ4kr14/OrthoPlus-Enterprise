@@ -6,6 +6,7 @@ import { startFinanceiroJobsCron } from "./jobs/financeiroJobs";
 import { startGamificationJobs } from './jobs/gamificationJobs';
 import { startAdminJobs } from './jobs/adminJobs';
 import { startMarketingJobsCron } from './jobs/marketingJobs';
+import { startMemoryHubDriftCron } from "./jobs/memoryHubDrift";
 import { startScheduleAppointmentsCron } from "./jobs/scheduleAppointments";
 import { startScheduleBiExportCron } from "./jobs/scheduleBiExport";
 
@@ -21,6 +22,7 @@ export const startAllWorkers = () => {
   startGamificationJobs();
   startAdminJobs();
   startMarketingJobsCron();
+  startMemoryHubDriftCron();
 
   logger.info("Background workers started.");
 };

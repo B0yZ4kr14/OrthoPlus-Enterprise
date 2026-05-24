@@ -142,6 +142,35 @@ categories/@orthoplus/core/packages/
 3. `pnpm test` — all pass
 4. `cd backend && pnpm build` — strict TypeScript, 0 errors
 
+### Module Registration Checklist *(for new backend modules)*
+
+When creating a new backend module, verify:
+- [ ] Router registered in `backend/src/index.ts` or route aggregator
+- [ ] `clinicGuard` applied to all protected routes
+- [ ] Feature flag guard (`aiFeatureFlagGuard` pattern) if applicable
+- [ ] Rate limiter configured if module has external API calls
+- [ ] Prometheus metrics emitted (at least one custom metric)
+- [ ] Audit logging for sensitive operations
+- [ ] Error handling uses `ApiError` + RFC 7807 format
+
+### Prisma Schema Gate *(for schema changes)*
+
+Before any code references new tables/columns:
+- [ ] Model defined in `backend/prisma/schema.prisma` with `@@schema("pep")` or appropriate category
+- [ ] Migration created: `npx prisma migrate dev --name {name}`
+- [ ] Client regenerated: `npx prisma generate`
+- [ ] `database.ts` regenerated (if applicable)
+- [ ] Backend build passes: `cd backend && pnpm build`
+- [ ] Frontend type-check passes: `cd apps/web && pnpm type-check`
+
+### Turbo Build Order *(for monorepo changes)*
+
+When adding cross-workspace dependencies:
+- [ ] `shared-types` builds first (no upstream deps)
+- [ ] `categories/@orthoplus/*` builds second
+- [ ] `apps/web` and `backend` build last
+- [ ] Verify `turbo.json` `build` task includes new workspace
+
 ## Complexity Tracking
 
 > **Fill ONLY if Constitution Check has violations that must be justified**

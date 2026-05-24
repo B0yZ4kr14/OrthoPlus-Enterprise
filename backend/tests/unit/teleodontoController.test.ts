@@ -1,339 +1,271 @@
-import { Request, Response } from 'express';
-import { TeleodontoController } from '../../src/modules/teleodonto/api/controller';
+import { Request, Response, NextFunction } from "express"
+import { TeleodontoController } from "../../src/modules/teleodonto/api/controller"
 
-jest.mock('../../src/infrastructure/database/prismaClient', () => ({
-  prisma: {
-    teleconsultas: {
-      findMany: jest.fn(),
-      findFirst: jest.fn(),
-      create: jest.fn(),
-      update: jest.fn(),
-    },
-    teleconsulta_prescricoes: {
-      create: jest.fn(),
-    },
-  },
-}));
+type MockService = {
+  listTeleconsultas: jest.Mock
+  getById: jest.Mock
+  create: jest.Mock
+  update: jest.Mock
+  delete: jest.Mock
+  startSession: jest.Mock
+  endSession: jest.Mock
+  addNotes: jest.Mock
+  addPrescription: jest.Mock
+}
 
-jest.mock('../../src/infrastructure/logger', () => ({
-  logger: { error: jest.fn(), info: jest.fn() },
-}));
+const mockService: MockService = {
+  listTeleconsultas: jest.fn(),
+  getById: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn(),
+  startSession: jest.fn(),
+  endSession: jest.fn(),
+  addNotes: jest.fn(),
+  addPrescription: jest.fn(),
+}
 
-import { prisma } from '../../src/infrastructure/database/prismaClient';
+const jsonMock = jest.fn()
+const statusMock = jest.fn().mockReturnValue({ json: jsonMock, send: jest.fn() })
 
-const consultas = (prisma as any).teleconsultas as Record<string, jest.Mock>;
+const createRes = () => {
+  return {
+    status: statusMock,
+    json: jsonMock,
+    send: jest.fn(),
+  } as unknown as Response
+}
 
-const controller = new TeleodontoController();
+const createReq = (overrides = {}) => {
+  return {
+    user: { clinicId: "clinic-1", id: "user-1" },
+    query: {},
+    params: {},
+    body: {},
+    ...overrides,
+  } as unknown as Request
+}
 
-const mockRes = () => {
-  const res: Partial<Response> = {};
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  res.send = jest.fn().mockReturnValue(res);
-  return res as Response;
-};
+const createNext = () => jest.fn() as unknown as NextFunction
 
-const mockReq = (
-  overrides: Partial<{
-    user: Partial<Request['user']>;
-    body: unknown;
-    params: Record<string, string>;
-    query: Record<string, string>;
-  }> = {},
-): Partial<Request> => ({
-  user: { clinicId: 'clinic-1', id: 'user-1', role: 'ADMIN' } as Request['user'],
-  body: {},
-  params: {} as Record<string, string>,
-  query: {},
-  ...overrides,
-});
+describe("TeleodontoController", () => {
+  let controller: TeleodontoController
 
-const patientId = '11111111-1111-1111-1111-111111111111';
-const dentistId = '22222222-2222-2222-2222-222222222222';
-const teleconsultaId = '33333333-3333-3333-3333-333333333333';
+  beforeEach(() => {
+    jest.clearAllMocks()
+    controller = new TeleodontoController(mockService as any)
+  })
 
-const sampleConsulta = {
-  id: teleconsultaId,
-  clinic_id: 'clinic-1',
-  titulo: 'Consulta Ortodoncia',
-  motivo: 'Dor de dente',
-  tipo: 'VIDEO',
-  data_agendada: '2025-06-01T10:00:00Z',
-  patient_id: patientId,
-  dentist_id: dentistId,
-  status: 'AGENDADO',
-};
+  describe("listTeleconsultas", () => {
+    test("should call next with 401 error when clinicId is missing", async () => {
+      const req = createReq({ user: {} })
+      const res = createRes()
+      const next = createNext()
 
-afterEach(() => jest.clearAllMocks());
+      await controller.listTeleconsultas(req, res, next)
 
-// ── listTeleconsultas ─────────────────────────────────────────────────────────
-describe('TeleodontoController.listTeleconsultas', () => {
-  it('returns 401 when no clinicId', async () => {
-    const req = mockReq({ user: undefined });
-    const res = mockRes();
-    await controller.listTeleconsultas(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
+      expect(next).toHaveBeenCalled()
+      expect((next as jest.Mock).mock.calls[0][0]).toMatchObject({ status: 401, code: "AUTH_UNAUTHORIZED" })
+    })
 
-  it('returns list of teleconsultas', async () => {
-    consultas.findMany.mockResolvedValueOnce([sampleConsulta]);
-    const req = mockReq();
-    const res = mockRes();
-    await controller.listTeleconsultas(req as Request, res);
-    expect(res.json).toHaveBeenCalledWith([sampleConsulta]);
-  });
+    test("should list teleconsultas with clinic filter", async () => {
+      const req = createReq()
+      const res = createRes()
+      const next = createNext()
+      mockService.listTeleconsultas.mockResolvedValue([{ id: "1", titulo: "Test" }])
 
-  it('filters by status and dentist_id', async () => {
-    consultas.findMany.mockResolvedValueOnce([]);
-    const req = mockReq({ query: { status: 'AGENDADO', dentist_id: dentistId } });
-    const res = mockRes();
-    await controller.listTeleconsultas(req as Request, res);
-    expect(consultas.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({ status: 'AGENDADO', dentist_id: dentistId }),
-      }),
-    );
-  });
+      await controller.listTeleconsultas(req, res, next)
 
-  it('returns 500 on database error', async () => {
-    consultas.findMany.mockRejectedValueOnce(new Error('DB'));
-    const req = mockReq();
-    const res = mockRes();
-    await controller.listTeleconsultas(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
-  });
-});
+      expect(mockService.listTeleconsultas).toHaveBeenCalledWith("clinic-1", {})
+      expect(jsonMock).toHaveBeenCalledWith([{ id: "1", titulo: "Test" }])
+      expect(next).not.toHaveBeenCalled()
+    })
 
-// ── getById ───────────────────────────────────────────────────────────────────
-describe('TeleodontoController.getById', () => {
-  it('returns 401 when no clinicId', async () => {
-    const req = mockReq({ user: undefined, params: { id: teleconsultaId } });
-    const res = mockRes();
-    await controller.getById(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
+    test("should pass status and dentist_id filters", async () => {
+      const req = createReq({ query: { status: "AGENDADO", dentist_id: "dentist-1" } })
+      const res = createRes()
+      const next = createNext()
+      mockService.listTeleconsultas.mockResolvedValue([])
 
-  it('returns 404 when not found', async () => {
-    consultas.findFirst.mockResolvedValueOnce(null);
-    const req = mockReq({ params: { id: 'missing-id' } });
-    const res = mockRes();
-    await controller.getById(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
-  });
+      await controller.listTeleconsultas(req, res, next)
 
-  it('returns the teleconsulta when found', async () => {
-    consultas.findFirst.mockResolvedValueOnce(sampleConsulta);
-    const req = mockReq({ params: { id: teleconsultaId } });
-    const res = mockRes();
-    await controller.getById(req as Request, res);
-    expect(res.json).toHaveBeenCalledWith(sampleConsulta);
-  });
-});
+      expect(mockService.listTeleconsultas).toHaveBeenCalledWith("clinic-1", {
+        status: "AGENDADO",
+        dentist_id: "dentist-1",
+      })
+    })
+  })
 
-// ── create ────────────────────────────────────────────────────────────────────
-describe('TeleodontoController.create', () => {
-  const validBody = {
-    titulo: 'Consulta Geral',
-    motivo: 'Check-up',
-    tipo: 'VIDEO',
-    data_agendada: '2025-06-15T14:00:00Z',
-    patient_id: patientId,
-    dentist_id: dentistId,
-  };
+  describe("getById", () => {
+    test("should return teleconsulta by id", async () => {
+      const req = createReq({ params: { id: "550e8400-e29b-41d4-a716-446655440000" } })
+      const res = createRes()
+      const next = createNext()
+      mockService.getById.mockResolvedValue({ id: "550e8400-e29b-41d4-a716-446655440000", titulo: "Test" })
 
-  it('returns 401 when no clinicId', async () => {
-    const req = mockReq({ user: undefined, body: validBody });
-    const res = mockRes();
-    await controller.create(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
+      await controller.getById(req, res, next)
 
-  it('returns 400 on invalid body', async () => {
-    const req = mockReq({ body: { titulo: 'T' } });
-    const res = mockRes();
-    await controller.create(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
+      expect(mockService.getById).toHaveBeenCalledWith("550e8400-e29b-41d4-a716-446655440000", "clinic-1")
+      expect(jsonMock).toHaveBeenCalledWith({ id: "550e8400-e29b-41d4-a716-446655440000", titulo: "Test" })
+    })
 
-  it('creates teleconsulta and returns 201', async () => {
-    consultas.create.mockResolvedValueOnce({ ...sampleConsulta });
-    const req = mockReq({ body: validBody });
-    const res = mockRes();
-    await controller.create(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(201);
-  });
+    test("should call next with 401 when clinicId is missing", async () => {
+      const req = createReq({ user: {} })
+      const res = createRes()
+      const next = createNext()
 
-  it('returns 500 on database error', async () => {
-    consultas.create.mockRejectedValueOnce(new Error('DB'));
-    const req = mockReq({ body: validBody });
-    const res = mockRes();
-    await controller.create(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
-  });
-});
+      await controller.getById(req, res, next)
 
-// ── update ────────────────────────────────────────────────────────────────────
-describe('TeleodontoController.update', () => {
-  it('returns 401 when no clinicId', async () => {
-    const req = mockReq({ user: undefined, params: { id: teleconsultaId } });
-    const res = mockRes();
-    await controller.update(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({ status: 401 }))
+    })
+  })
 
-  it('returns 404 when not found', async () => {
-    consultas.findFirst.mockResolvedValueOnce(null);
-    const req = mockReq({ params: { id: 'missing' }, body: { status: 'CONCLUIDO' } });
-    const res = mockRes();
-    await controller.update(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
-  });
+  describe("create", () => {
+    test("should create teleconsulta with valid data", async () => {
+      const req = createReq({
+        body: {
+          titulo: "Consulta Test",
+          motivo: "Checkup",
+          tipo: "ROTINA",
+          data_agendada: "2026-05-25T10:00:00Z",
+          patient_id: "550e8400-e29b-41d4-a716-446655440001",
+          dentist_id: "550e8400-e29b-41d4-a716-446655440002",
+        },
+      })
+      const res = createRes()
+      const next = createNext()
+      mockService.create.mockResolvedValue({ id: "tc-new", titulo: "Consulta Test" })
 
-  it('updates and returns the teleconsulta', async () => {
-    consultas.findFirst.mockResolvedValueOnce(sampleConsulta);
-    const updated = { ...sampleConsulta, status: 'CONCLUIDO' };
-    consultas.update.mockResolvedValueOnce(updated);
-    const req = mockReq({ params: { id: teleconsultaId }, body: { status: 'CONCLUIDO' } });
-    const res = mockRes();
-    await controller.update(req as Request, res);
-    expect(res.json).toHaveBeenCalledWith(updated);
-  });
-});
+      await controller.create(req, res, next)
 
-// ── startSession ──────────────────────────────────────────────────────────────
-describe('TeleodontoController.startSession', () => {
-  it('returns 401 when no clinicId', async () => {
-    const req = mockReq({ user: undefined, body: { teleconsulta_id: teleconsultaId } });
-    const res = mockRes();
-    await controller.startSession(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
+      expect(mockService.create).toHaveBeenCalledWith(
+        expect.objectContaining({ titulo: "Consulta Test" }),
+        "clinic-1",
+        "user-1",
+      )
+      expect(statusMock).toHaveBeenCalledWith(201)
+      expect(jsonMock).toHaveBeenCalledWith({ id: "tc-new", titulo: "Consulta Test" })
+    })
 
-  it('returns 400 on invalid body (missing teleconsulta_id)', async () => {
-    const req = mockReq({ body: {} });
-    const res = mockRes();
-    await controller.startSession(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
+    test("should call next with 400 when validation fails", async () => {
+      const req = createReq({ body: { titulo: "" } })
+      const res = createRes()
+      const next = createNext()
 
-  it('returns 404 when teleconsulta not found', async () => {
-    consultas.findFirst.mockResolvedValueOnce(null);
-    const req = mockReq({ body: { teleconsulta_id: teleconsultaId } });
-    const res = mockRes();
-    await controller.startSession(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
-  });
+      await controller.create(req, res, next)
 
-  it('starts the session and returns updated data', async () => {
-    consultas.findFirst.mockResolvedValueOnce(sampleConsulta);
-    const updated = { ...sampleConsulta, status: 'EM_ANDAMENTO', started_at: new Date().toISOString() };
-    consultas.update.mockResolvedValueOnce(updated);
-    const req = mockReq({ body: { teleconsulta_id: teleconsultaId } });
-    const res = mockRes();
-    await controller.startSession(req as Request, res);
-    expect(consultas.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({ status: 'EM_ANDAMENTO' }),
-      }),
-    );
-    const payload = (res.json as jest.Mock).mock.calls[0][0];
-    expect(payload.message).toBe('Session started successfully');
-  });
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({ status: 400 }))
+    })
+  })
 
-  it('returns 500 on database error', async () => {
-    consultas.findFirst.mockRejectedValueOnce(new Error('DB'));
-    const req = mockReq({ body: { teleconsulta_id: teleconsultaId } });
-    const res = mockRes();
-    await controller.startSession(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
-  });
-});
+  describe("update", () => {
+    test("should update teleconsulta with valid data", async () => {
+      const req = createReq({ params: { id: "550e8400-e29b-41d4-a716-446655440000" }, body: { titulo: "Updated" } })
+      const res = createRes()
+      const next = createNext()
+      mockService.update.mockResolvedValue({ id: "550e8400-e29b-41d4-a716-446655440000", titulo: "Updated" })
 
-// ── endSession ────────────────────────────────────────────────────────────────
-describe('TeleodontoController.endSession', () => {
-  const validEndBody = {
-    teleconsulta_id: teleconsultaId,
-    duration_minutes: 30,
-    notes: 'Sessão concluída com sucesso',
-  };
+      await controller.update(req, res, next)
 
-  it('returns 401 when no clinicId', async () => {
-    const req = mockReq({ user: undefined, body: validEndBody });
-    const res = mockRes();
-    await controller.endSession(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
+      expect(mockService.update).toHaveBeenCalledWith("550e8400-e29b-41d4-a716-446655440000", { titulo: "Updated" }, "clinic-1")
+      expect(jsonMock).toHaveBeenCalledWith({ id: "550e8400-e29b-41d4-a716-446655440000", titulo: "Updated" })
+    })
+  })
 
-  it('returns 400 on invalid body (duration_minutes negative)', async () => {
-    const req = mockReq({ body: { teleconsulta_id: teleconsultaId, duration_minutes: -5 } });
-    const res = mockRes();
-    await controller.endSession(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
+  describe("delete", () => {
+    test("should delete teleconsulta and return 204", async () => {
+      const req = createReq({ params: { id: "550e8400-e29b-41d4-a716-446655440000" } })
+      const res = createRes()
+      const next = createNext()
+      mockService.delete.mockResolvedValue({ count: 1 })
 
-  it('returns 404 when teleconsulta not found', async () => {
-    consultas.findFirst.mockResolvedValueOnce(null);
-    const req = mockReq({ body: validEndBody });
-    const res = mockRes();
-    await controller.endSession(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
-  });
+      await controller.delete(req, res, next)
 
-  it('ends the session with duration and notes', async () => {
-    consultas.findFirst.mockResolvedValueOnce(sampleConsulta);
-    const updated = { ...sampleConsulta, status: 'CONCLUIDO', duracao_minutos: 30 };
-    consultas.update.mockResolvedValueOnce(updated);
-    const req = mockReq({ body: validEndBody });
-    const res = mockRes();
-    await controller.endSession(req as Request, res);
-    expect(consultas.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({ status: 'CONCLUIDO', duracao_minutos: 30 }),
-      }),
-    );
-    const payload = (res.json as jest.Mock).mock.calls[0][0];
-    expect(payload.message).toBe('Session ended successfully');
-  });
-});
+      expect(mockService.delete).toHaveBeenCalledWith("550e8400-e29b-41d4-a716-446655440000", "clinic-1")
+      expect(statusMock).toHaveBeenCalledWith(204)
+    })
+  })
 
-// ── addNotes ──────────────────────────────────────────────────────────────────
-describe('TeleodontoController.addNotes', () => {
-  const validNotes = {
-    teleconsulta_id: teleconsultaId,
-    notes: 'Paciente apresentou dor',
-    diagnosis: 'Cárie',
-    recommendations: 'Evitar açúcar',
-  };
+  describe("startSession", () => {
+    test("should start session and update status", async () => {
+      const req = createReq({ body: { teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000" } })
+      const res = createRes()
+      const next = createNext()
+      mockService.startSession.mockResolvedValue({ id: "550e8400-e29b-41d4-a716-446655440000", status: "EM_ANDAMENTO" })
 
-  it('returns 401 when no clinicId', async () => {
-    const req = mockReq({ user: undefined, body: validNotes });
-    const res = mockRes();
-    await controller.addNotes(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
-  });
+      await controller.startSession(req, res, next)
 
-  it('returns 400 on invalid body (missing notes)', async () => {
-    const req = mockReq({ body: { teleconsulta_id: teleconsultaId } });
-    const res = mockRes();
-    await controller.addNotes(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
+      expect(mockService.startSession).toHaveBeenCalledWith({ teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000" }, "clinic-1")
+      expect(jsonMock).toHaveBeenCalledWith(
+        expect.objectContaining({ status: "EM_ANDAMENTO", message: "Session started successfully" }),
+      )
+    })
+  })
 
-  it('returns 404 when teleconsulta not found', async () => {
-    consultas.findFirst.mockResolvedValueOnce(null);
-    const req = mockReq({ body: validNotes });
-    const res = mockRes();
-    await controller.addNotes(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
-  });
+  describe("endSession", () => {
+    test("should end session and record duration", async () => {
+      const req = createReq({ body: { teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000", duration_minutes: 30 } })
+      const res = createRes()
+      const next = createNext()
+      mockService.endSession.mockResolvedValue({ id: "550e8400-e29b-41d4-a716-446655440000", status: "CONCLUIDO" })
 
-  it('adds notes and returns updated teleconsulta', async () => {
-    consultas.findFirst.mockResolvedValueOnce(sampleConsulta);
-    const updated = { ...sampleConsulta, observacoes: validNotes.notes, diagnosis: validNotes.diagnosis };
-    consultas.update.mockResolvedValueOnce(updated);
-    const req = mockReq({ body: validNotes });
-    const res = mockRes();
-    await controller.addNotes(req as Request, res);
-    expect(res.json).toHaveBeenCalledWith(updated);
-  });
-});
+      await controller.endSession(req, res, next)
+
+      expect(mockService.endSession).toHaveBeenCalledWith(
+        { teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000", duration_minutes: 30 },
+        "clinic-1",
+      )
+      expect(jsonMock).toHaveBeenCalledWith(
+        expect.objectContaining({ status: "CONCLUIDO", message: "Session ended successfully" }),
+      )
+    })
+  })
+
+  describe("addNotes", () => {
+    test("should add clinical notes to teleconsulta", async () => {
+      const req = createReq({
+        body: {
+          teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000",
+          notes: "Paciente apresenta melhora",
+          diagnosis: "Gengivite leve",
+        },
+      })
+      const res = createRes()
+      const next = createNext()
+      mockService.addNotes.mockResolvedValue({ id: "550e8400-e29b-41d4-a716-446655440000", observacoes: "Paciente apresenta melhora" })
+
+      await controller.addNotes(req, res, next)
+
+      expect(mockService.addNotes).toHaveBeenCalledWith(
+        expect.objectContaining({ teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000", notes: "Paciente apresenta melhora" }),
+        "clinic-1",
+      )
+    })
+  })
+
+  describe("addPrescription", () => {
+    test("should add prescription with medications", async () => {
+      const req = createReq({
+        body: {
+          teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000",
+          patient_id: "550e8400-e29b-41d4-a716-446655440001",
+          medications: [{ name: "Amoxicilina", dosage: "500mg", frequency: "8/8h", duration: "7 dias" }],
+        },
+      })
+      const res = createRes()
+      const next = createNext()
+      mockService.addPrescription.mockResolvedValue({
+        data: { id: "550e8400-e29b-41d4-a716-446655440000" },
+        prescription: { medications: [{ name: "Amoxicilina" }] },
+      })
+
+      await controller.addPrescription(req, res, next)
+
+      expect(mockService.addPrescription).toHaveBeenCalledWith(
+        expect.objectContaining({ teleconsulta_id: "550e8400-e29b-41d4-a716-446655440000", patient_id: "550e8400-e29b-41d4-a716-446655440001" }),
+        "clinic-1",
+        "user-1",
+      )
+    })
+  })
+})

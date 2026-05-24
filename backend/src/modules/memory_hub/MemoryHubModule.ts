@@ -77,6 +77,7 @@ export function createMemoryHubModule(
     auditRepository,
     healthService,
     metrics,
+    db,
   })
 
   let fileWatcher: FileWatcher | null = null

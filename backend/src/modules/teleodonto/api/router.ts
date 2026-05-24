@@ -8,22 +8,22 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // Rota raiz
-router.get("/", (req, res) => controller.listTeleconsultas(req, res));
+router.get("/", controller.listTeleconsultas);
 
 // Teleconsultas CRUD
-router.get("/teleconsultas", (req, res) => controller.listTeleconsultas(req, res));
-router.get("/teleconsultas/:id", (req, res) => controller.getById(req, res));
-router.post("/teleconsultas", (req, res) => controller.create(req, res));
-router.patch("/teleconsultas/:id", (req, res) => controller.update(req, res));
-router.delete("/teleconsultas/:id", (req, res) => controller.delete(req, res));
+router.get("/teleconsultas", controller.listTeleconsultas);
+router.get("/teleconsultas/:id", controller.getById);
+router.post("/teleconsultas", controller.create);
+router.patch("/teleconsultas/:id", controller.update);
+router.delete("/teleconsultas/:id", controller.delete);
 
 // Session management
-router.post("/sessions/start", (req, res) => controller.startSession(req, res));
-router.post("/sessions/end", (req, res) => controller.endSession(req, res));
+router.post("/sessions/start", controller.startSession);
+router.post("/sessions/end", controller.endSession);
 
 // Clinical notes and prescriptions
-router.post("/notes", (req, res) => controller.addNotes(req, res));
-router.post("/prescriptions", (req, res) => controller.addPrescription(req, res));
+router.post("/notes", controller.addNotes);
+router.post("/prescriptions", controller.addPrescription);
 
 router.use("/db", dbRouter);
 

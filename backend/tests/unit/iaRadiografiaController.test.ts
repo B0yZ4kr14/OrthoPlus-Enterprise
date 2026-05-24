@@ -55,6 +55,13 @@ jest.mock('../../src/infrastructure/database/prismaClient', () => ({
   },
 }))
 
+// Mock BullMQ queue
+jest.mock('../../src/workers/iaRadiografiaWorker', () => ({
+  iaRadiografiaQueue: {
+    add: jest.fn().mockResolvedValue({ id: 'job-1' }),
+  },
+}))
+
 // Mock services
 const mockVerificarConsentimento = jest.fn()
 const mockRegistrarAcao = jest.fn()
@@ -109,6 +116,7 @@ jest.mock('fs', () => ({
 // ── Imports pós-mock ────────────────────────────────────────────────────────
 
 import { IARadiografiaController } from '../../src/modules/ia_radiografia/api/controller'
+import { iaRadiografiaQueue } from '../../src/workers/iaRadiografiaWorker'
 
 describe('IARadiografiaController', () => {
   let controller: IARadiografiaController
@@ -156,11 +164,6 @@ describe('IARadiografiaController', () => {
         originalHash: 'orig-hash',
         cleanHash: 'clean-hash',
       })
-      mockAnalyzeRadiografia.mockResolvedValue({
-        resultado: { problemas_detectados: [], confianca: 0.9 },
-        confidence: 0.9,
-        processingTimeMs: 1200,
-      })
       mockPrismaCreate.mockResolvedValue({
         id: 'analise-1',
         paciente_id: 'patient-1',
@@ -171,8 +174,12 @@ describe('IARadiografiaController', () => {
 
       await controller.uploadEAnalisar(req as Request, res as Response)
 
-      expect(statusMock).toHaveBeenCalledWith(201)
+      expect(statusMock).toHaveBeenCalledWith(202)
       expect(mockPrismaCreate).toHaveBeenCalled()
+      expect(iaRadiografiaQueue.add).toHaveBeenCalled()
+      expect(jsonMock).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 'PENDENTE' })
+      )
     })
   })
 
@@ -200,7 +207,7 @@ describe('IARadiografiaController', () => {
 
   // ── T015: AI service returns structured JSON with problemas_detectados ───
   describe('uploadEAnalisar — AI analysis result', () => {
-    it('should return structured analysis with problemas_detectados', async () => {
+    it('should enqueue analysis job and return 202 with PENDENTE status', async () => {
       mockVerificarConsentimento.mockResolvedValue(true)
       mockValidateNoPII.mockResolvedValue(true)
       mockStrip.mockResolvedValue({
@@ -208,17 +215,6 @@ describe('IARadiografiaController', () => {
         originalHash: 'orig-hash',
         cleanHash: 'clean-hash',
       })
-      const aiResult = {
-        resultado: {
-          problemas_detectados: [
-            { tipo: 'CÁRIE', regiao: 'molar-superior-esq', confianca: 0.92 },
-          ],
-          confianca: 0.88,
-        },
-        confidence: 0.88,
-        processingTimeMs: 1200,
-      }
-      mockAnalyzeRadiografia.mockResolvedValue(aiResult)
       mockPrismaCreate.mockResolvedValue({
         id: 'analise-1',
         paciente_id: 'patient-1',
@@ -230,7 +226,15 @@ describe('IARadiografiaController', () => {
 
       await controller.uploadEAnalisar(req as Request, res as Response)
 
-      expect(statusMock).toHaveBeenCalledWith(201)
+      expect(statusMock).toHaveBeenCalledWith(202)
+      expect(iaRadiografiaQueue.add).toHaveBeenCalledWith(
+        'analyze',
+        expect.objectContaining({
+          analiseId: 'analise-1',
+          tipoRadiografia: 'PANORAMICA',
+        }),
+        expect.objectContaining({ attempts: 2 })
+      )
       expect(jsonMock).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 'analise-1',

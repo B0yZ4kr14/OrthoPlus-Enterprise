@@ -4,10 +4,11 @@ import { IAConsentimentoService } from "../domain/services/IAConsentimentoServic
 import { IAAuditService } from "../domain/services/IAAuditService"
 import { IAEncryptionService } from "../domain/services/IAEncryptionService"
 import { DicomMetadataStripper } from "../domain/services/DicomMetadataStripper"
-import { LocalAIService } from "../domain/services/LocalAIService"
+
 import { AcaoAuditIA, TipoRadiografia } from "@prisma/client"
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
 import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics"
+import { iaRadiografiaQueue } from "@/workers/iaRadiografiaWorker"
 import crypto from "crypto"
 import fs from "fs"
 import path from "path"
@@ -18,7 +19,7 @@ const consentimentoService = new IAConsentimentoService()
 const auditService = new IAAuditService()
 const encryptionService = new IAEncryptionService()
 const stripper = new DicomMetadataStripper()
-const aiService = new LocalAIService()
+
 
 export class IARadiografiaController {
   /**
@@ -94,84 +95,29 @@ export class IARadiografiaController {
         status: "success",
       })
 
-      // 6. Processar analise IA (async — idealmente em worker)
-      // Aqui processamos sincrono para simplificar; em producao usar fila
-      await this.processarAnalise(analise.id, cleanBuffer, tipo_radiografia, clinicId, patient_id, dentistaId)
+      // 6. Enfileirar analise IA para worker async
+      await iaRadiografiaQueue.add(
+        "analyze",
+        {
+          analiseId: analise.id,
+          storagePath,
+          tipoRadiografia: tipo_radiografia as string,
+        },
+        {
+          delay: 0,
+          attempts: 2,
+          backoff: { type: "exponential", delay: 5000 },
+        },
+      )
 
-      return res.status(201).json({
+      return res.status(202).json({
         id: analise.id,
-        status: analise.status,
-        message: "Analise iniciada com sucesso",
+        status: "PENDENTE",
+        message: "Analise enfileirada para processamento",
       })
     } catch (error) {
       console.error("[IA-Radiografia] Upload error:", error)
       return res.status(500).json({ error: "Erro ao processar upload" })
-    }
-  }
-
-  private async processarAnalise(
-    analiseId: string,
-    imageBuffer: Buffer,
-    tipoRadiografia: string,
-    clinicId: string,
-    pacienteId: string,
-    dentistaId: string,
-  ) {
-    try {
-      await prisma.ia_radiografia_analise.update({
-        where: { id: analiseId },
-        data: { status: "PROCESSANDO" },
-      })
-
-      const startTime = Date.now()
-      const { resultado, confidence, processingTimeMs } = await aiService.analyzeRadiografia(
-        imageBuffer,
-        tipoRadiografia,
-      )
-      const durationSeconds = (Date.now() - startTime) / 1000
-
-      metrics.iaRadiografia.analysisDuration.observe(
-        { category: "pep", modelo: process.env.AI_LOCAL_MODEL || "local/llama-3.3" },
-        durationSeconds,
-      )
-
-      const encrypted = encryptionService.encrypt(resultado, analiseId)
-
-      await prisma.ia_radiografia_analise.update({
-        where: { id: analiseId },
-        data: {
-          status: "CONCLUIDA",
-          resultado_ia: encrypted,
-          confidence_score: confidence,
-          processamento_ms: processingTimeMs,
-        },
-      })
-
-      await auditService.registrarAcao({
-        analiseId,
-        clinicId,
-        pacienteId,
-        dentistaId,
-        acao: AcaoAuditIA.ANALISAR,
-        detalhes: { confidence, processingTimeMs, modelo: process.env.AI_LOCAL_MODEL },
-      })
-    } catch (error) {
-      await prisma.ia_radiografia_analise.update({
-        where: { id: analiseId },
-        data: { status: "ERRO" },
-      })
-      await auditService.registrarAcao({
-        analiseId,
-        clinicId,
-        pacienteId,
-        dentistaId,
-        acao: AcaoAuditIA.ANALISAR,
-        detalhes: { erro: error instanceof Error ? error.message : "Erro desconhecido" },
-      })
-      metrics.iaRadiografia.analysisErrors.inc({
-        category: "pep",
-        error_type: error instanceof Error ? error.name : "unknown",
-      })
     }
   }
 

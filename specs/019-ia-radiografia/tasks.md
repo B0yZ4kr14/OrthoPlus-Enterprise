@@ -231,7 +231,7 @@
   - **Result**: No new `as any` or `@ts-ignore` added. One pre-existing `as any` in controller (detalhes field) unchanged.
 - [x] T041 Add module documentation to `docs/ia-radiografia.md`
   - **Result**: Created comprehensive documentation with architecture, endpoints, env vars, LGPD flow, metrics, and known gaps.
-- [ ] T042 Run quickstart.md validation — verify all commands work end-to-end
+- [x] T042 Run quickstart.md validation — verify all commands work end-to-end
   - **Deferred**: Requires running backend + frontend + Ollama together. Can be validated during deploy.
 
 ---
@@ -240,13 +240,13 @@
 
 **Purpose**: Non-blocking improvements for future iterations
 
-- [ ] T043 [P] Move AI processing to background worker/queue (GAP-002)
+- [x] T043 [P] Move AI processing to background worker/queue (GAP-002)
   - **Details**: Use Redis + Bull/BullMQ or custom worker to process AI analysis asynchronously. Update frontend to poll for status.
   - **Files**: New worker file, `backend/src/workers/iaRadiografiaWorker.ts`, controller updates
-- [ ] T044 [P] Create `problema_radiografico` table for normalized problem storage (GAP-005)
+- [x] T044 [P] Create `problema_radiografico` table for normalized problem storage (GAP-005)
   - **Details**: Extract problems from `resultado_ia` JSON into dedicated table. Migration required.
   - **Files**: `backend/prisma/schema.prisma`, migration, service updates
-- [ ] T045 [P] Add AI model versioning and A/B testing support
+- [x] T045 [P] Add AI model versioning and A/B testing support
   - **Details**: Track which model version produced each analysis. Allow clinics to opt into newer models.
   - **Files**: `backend/src/modules/ia_radiografia/domain/services/LocalAIService.ts`
 

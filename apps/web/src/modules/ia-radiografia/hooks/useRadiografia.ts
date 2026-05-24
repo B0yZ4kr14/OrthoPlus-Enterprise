@@ -114,14 +114,17 @@ export const useRadiografia = () => {
     if (clinicId) {
       loadData();
 
-      // Realtime subscriptions replaced with polling
+      // Adaptive polling: 5s when pending analyses exist, 30s otherwise
+      const hasPending = analises.some((a) => a.status === "PENDENTE" || a.status === "PROCESSANDO");
+      const intervalMs = hasPending ? 5000 : 30000;
+
       const interval = setInterval(() => {
         loadData();
-      }, 10000);
+      }, intervalMs);
 
       return () => clearInterval(interval);
     }
-  }, [clinicId, user]);
+  }, [clinicId, user, analises]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
   return {

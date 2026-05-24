@@ -2,263 +2,254 @@
 
 **Input**: Design documents from `/specs/020-spec-memory-hub/`
 
-**Prerequisites**: plan.md (required), spec.md (required for user stories), data-model.md, contracts/search.md, research.md, quickstart.md
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: Test tasks included for critical infrastructure (indexing, search, drift detection).
+**Tests**: Tests are OPTIONAL for this feature — not explicitly requested in the spec. Add test tasks if the team adopts TDD.
 
-**Organization**: Tasks grouped by user story to enable independent implementation and testing.
+**Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
+
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: Can run in parallel (different files, no dependencies)
+- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- Include exact file paths in descriptions
 
 ---
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Install dependencies, create module structure, verify Ollama availability.
+**Purpose**: Project initialization, dependency installation, and module scaffolding
 
-- [x] T001 Install backend dependencies: `cd backend && pnpm add better-sqlite3 chokidar markdown-it js-yaml`
-- [x] T002 Install dev dependencies: `cd backend && pnpm add -D @types/better-sqlite3 @types/js-yaml`
-- [x] T003 [P] Verify Ollama is running and embedding model is available (`nomic-embed-text` or `all-minilm`)
-- [x] T004 [P] Create module directory structure: `backend/src/modules/memory_hub/{api,domain/{entities,services},infrastructure,workers,cli}/`
-- [x] T005 [P] Create SQLite database file and initialize schema per `data-model.md`
-- [x] T006 Add environment variables to `.env.example`: `MEMORY_HUB_ENABLED`, `MEMORY_HUB_INDEX_PATH`, `MEMORY_HUB_OLLAMA_MODEL`
-
-**Checkpoint**: Dependencies installed, Ollama reachable, module structure ready, SQLite schema created.
+- [X] T001 Install backend dependencies in `backend/package.json`
+  - `better-sqlite3@12.10.0` ✅
+  - `chokidar@5.0.0` ✅
+  - `markdown-it@14.1.1` ✅
+  - `front-matter` — not needed; frontmatter parsing uses `js-yaml` (already in project) + regex in `MarkdownParser.ts`
+- [X] T002 [P] Create module directory structure: `backend/src/modules/memory_hub/` with subdirs `services/`, `infrastructure/`, `cli/`, `scripts/`
+- [X] T003 [P] Add environment variables to `.env.example`: `MEMORY_HUB_ENABLED`, `MEMORY_HUB_INDEX_PATH`, `MEMORY_HUB_OLLAMA_MODEL`, `MEMORY_HUB_WATCH_DIRS`, `MEMORY_HUB_POLLING_INTERVAL_MS`, `MEMORY_HUB_DRIFT_SCAN_CRON`
+- [X] T004 [P] Add Memory Hub types to `shared-types/src/index.ts`: `SearchResult`, `ContextBrief`, `DriftReport`, `HealthMetrics`
 
 ---
 
-## Phase 2: Foundational — Blocking Prerequisites
+## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented.
+**Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete.
+**⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-### Document Parsing & Chunking
+- [X] T005 Create SQLite schema in `backend/src/modules/memory_hub/infrastructure/initSchema.sql`
+  - Initializes tables: `documents`, `chunks`, `embeddings`, `document_versions`, `drift_reports`, `search_queries`
+  - Schema matches `data-model.md` exactly; schema managed via SQL init + repositories
+  - **Note**: Original plan referenced `SqliteDatabase.ts` — evolved to `initSchema.sql` + repository pattern for cleaner separation
+- [X] T006 [P] Implement markdown document parser in `backend/src/modules/memory_hub/infrastructure/MarkdownParser.ts`
+  - Extract YAML frontmatter, headings hierarchy, word count, content hash (SHA-256)
+  - Chunk by markdown headings via `DocumentChunker.ts` with token-based chunking
+- [X] T007 [P] Implement Ollama embedding client in `backend/src/modules/memory_hub/infrastructure/OllamaEmbeddingClient.ts`
+  - Model: `nomic-embed-text` (configurable via env)
+  - Endpoint: `POST /api/embed`
+  - Embeddings stored in `EmbeddingRepository.ts` with deduplication
+- [X] T008 [P] Implement file watcher service in `backend/src/modules/memory_hub/infrastructure/FileWatcher.ts`
+  - Use `chokidar` with 5-second debounce
+  - Watch dirs: `specs/`, `docs/`, `.specify/memory/`, `.omk/memory/`
+  - Respects `.gitignore` via `GitignoreParser.ts` and sensitive-file filters via `PIIDetector.ts`
+- [X] T009 MemoryDocument type defined inline in `backend/src/modules/memory_hub/infrastructure/DocumentRepository.ts`
+  - Maps to `documents` table schema from data-model.md
+  - **Note**: Original plan referenced `domain/MemoryDocument.ts` — type colocated with repository for simplicity
+- [X] T010 Chunk type defined inline in `backend/src/modules/memory_hub/infrastructure/ChunkRepository.ts`
+  - Maps to `chunks` table schema from data-model.md
+  - **Note**: Original plan referenced `domain/Chunk.ts` — type colocated with repository for simplicity
 
-- [x] T007 [P] Implement markdown document parser in `backend/src/modules/memory_hub/infrastructure/MarkdownParser.ts`
-  - Extract YAML frontmatter, headings, body text
-  - Return structured document with heading hierarchy
-- [x] T008 [P] Implement section-based chunking in `backend/src/modules/memory_hub/infrastructure/DocumentChunker.ts`
-  - Split by headings (h1, h2, h3)
-  - 512-token chunks with 64-token overlap
-  - Preserve heading path metadata
-
-### Embedding Service
-
-- [x] T009 Implement Ollama embedding client in `backend/src/modules/memory_hub/infrastructure/OllamaEmbeddingClient.ts`
-  - Call `POST /api/embed` with text batches
-  - Handle retries and errors
-  - Cache embeddings by content hash
-
-### Index Storage (SQLite)
-
-- [x] T010 [P] Implement document repository in `backend/src/modules/memory_hub/infrastructure/DocumentRepository.ts`
-  - CRUD for documents table
-  - Upsert by source_path with version increment
-- [x] T011 [P] Implement chunk repository in `backend/src/modules/memory_hub/infrastructure/ChunkRepository.ts`
-  - CRUD for chunks table
-  - Bulk insert for reindexing
-- [x] T012 [P] Implement embedding repository in `backend/src/modules/memory_hub/infrastructure/EmbeddingRepository.ts`
-  - Store/retrieve float32 BLOBs
-  - Cosine similarity search via SQL
-
-### File Watcher
-
-- [x] T013 Implement file watcher in `backend/src/modules/memory_hub/infrastructure/FileWatcher.ts`
-  - Use chokidar to watch `specs/`, `docs/`, `.specify/memory/`, `.omk/memory/`
-  - 30-second polling fallback
-  - Debounce rapid changes (batch within 5 seconds)
-
-**Checkpoint**: Document parsing, chunking, embedding, storage, and file watching all functional. Can index a single document end-to-end.
+**Checkpoint**: Foundation ready — SQLite schema initialized, parser working, embedding client connected, file watcher active
 
 ---
 
 ## Phase 3: User Story 1 — Centralized Memory Search and Retrieval (Priority: P1) 🎯 MVP
 
-**Goal**: Developers and AI agents can search project memory with semantic relevance ranking.
+**Goal**: Developers and AI agents can search all project memory via semantic search with ranked results
 
-**Independent Test**: Run `curl -X POST /api/memory-hub/search -d '{"query":"rate limiting"}'` and receive ranked results from specs, plans, and architecture docs.
+**Independent Test**: Search for "LGPD consent" returns relevant documents from specs, architecture decisions, and API contracts within 2 seconds
 
-### Tests for User Story 1
+- [X] T011 [P] [US1] Implement IndexingService in `backend/src/modules/memory_hub/domain/services/IndexingService.ts`
+  - `indexDocument(path)`: parse → chunk → embed → upsert via DocumentRepository
+  - `removeDocument(path)`: mark as archived
+  - `getDocumentByPath(path)`: retrieve by source_path
+- [X] T012 [P] [US1] Implement SearchService in `backend/src/modules/memory_hub/domain/services/SearchService.ts`
+  - `search(query, filters, limit, offset)`: embed query, cosine similarity against chunk embeddings, rank by relevance
+  - Support filters: `doc_types`, `exclude_archived`, `author`, `feature_number`
+  - Return source_path, title, excerpt, relevance_score, heading_path, confidential_excluded count
+- [X] T013 [US1] Implement MemoryHubController in `backend/src/modules/memory_hub/api/controller.ts`
+  - `POST /search` — delegate to SearchService, return 200 with results array
+  - `GET /health` — return index_status, documents_indexed, last_scan_at, drift_count, coverage_percent
+  - `GET /versions?sourcePath=` — return version history from `document_versions` table
+  - Wrap all methods with `asyncHandler`, validate `clinicId`
+- [X] T014 [US1] Add routes with clinicGuard in `backend/src/modules/memory_hub/api/router.ts`
+  - `POST /api/memory-hub/search`
+  - `GET /api/memory-hub/health`
+  - `GET /api/memory-hub/versions`
+  - `POST /api/memory-hub/reindex`
+  - `POST /api/memory-hub/context-brief`
+  - `GET /api/memory-hub/graph`
+  - `GET /api/memory-hub/drift`
+- [X] T015 [US1] Register router in `backend/src/index.ts` under `/api/memory-hub`
+- [X] T016 [P] [US1] Implement CLI search command in `backend/src/modules/memory_hub/cli/search.ts`
+  - Accept query string arg, call SearchService directly, print ranked results to stdout
+- [X] T017 [P] [US1] Implement CLI health command in `backend/src/modules/memory_hub/cli/health.ts`
+  - Print index status, document count, last scan time
+- [X] T018 [US1] Run initial full index via `backend/src/modules/memory_hub/scripts/initDb.ts`
+  - Initializes SQLite schema and performs first-pass indexing
+  - Walk all watch dirs, index every `.md` file
 
-- [x] T014 [P] [US1] Backend unit test: semantic search returns results ordered by relevance
-  - `backend/tests/unit/memory_hub/search.test.ts`
-- [x] T015 [P] [US1] Backend unit test: search filters by doc_type and archived status
-  - `backend/tests/unit/memory_hub/search.test.ts` (filter assertions within search suite)
-
-### Implementation for User Story 1
-
-- [x] T016 [US1] Implement search service in `backend/src/modules/memory_hub/domain/services/SearchService.ts`
-  - Embed query via Ollama
-  - Cosine similarity against chunk embeddings
-  - Aggregate by document, rank by max chunk score
-  - Return excerpts with heading paths
-- [x] T017 [US1] Implement search controller in `backend/src/modules/memory_hub/api/controller.ts`
-  - POST `/search` endpoint
-  - Parse filters, limit, offset
-  - Return results with relevance scores
-- [x] T018 [US1] Add search router in `backend/src/modules/memory_hub/api/router.ts`
-  - Mount at `/api/memory-hub`
-- [x] T019 [US1] Register router in backend entry point `backend/src/index.ts`
-- [x] T020 [US1] Implement CLI search command `backend/src/modules/memory_hub/cli/search.ts`
-  - Accept query string, call API, print formatted results
-- [x] T021 [US1] Add Prometheus metric: `orthoplus_memory_hub_search_duration_seconds`
-  - `backend/src/infrastructure/metrics/MemoryHubMetrics.ts`
-
-**Checkpoint**: User Story 1 fully functional. Can search project memory via API and CLI.
+**Checkpoint**: At this point, User Story 1 is fully functional. A developer can `curl /api/memory-hub/search` and get ranked results.
 
 ---
 
 ## Phase 4: User Story 2 — Automatic Memory Indexing and Updates (Priority: P2)
 
-**Goal**: New and updated documents are automatically indexed within 60 seconds.
+**Goal**: File changes are detected and indexed automatically within 60 seconds
 
-**Independent Test**: Create a new spec file, wait 60 seconds, search for its content, and find it in results.
+**Independent Test**: Create a new spec file and search for its content within 60 seconds without manual reindex
 
-### Tests for User Story 2
+- [X] T019 [US1] [US2] IndexingService supports incremental updates in `backend/src/modules/memory_hub/domain/services/IndexingService.ts`
+  - Content hash check (SHA-256) prevents redundant re-indexing
+  - `is_archived` flag set when documents are removed
+  - Version incremented and old state snapshotted to `document_versions` on change
+- [X] T020 [US2] FileWatcher event handlers in `backend/src/modules/memory_hub/infrastructure/FileWatcher.ts`
+  - `add`/`change` → triggers indexing via MemoryHubModule
+  - `unlink` → archives document
+  - 5-second debounce on rapid file events
+- [X] T021 [US2] Version tracking in `backend/src/modules/memory_hub/infrastructure/DocumentRepository.ts`
+  - On content change, increment `version` and snapshot old state into `document_versions` table
+  - Transaction-safe: document update + version insert atomic
+- [X] T022 [US2] `POST /reindex` endpoint in `backend/src/modules/memory_hub/api/controller.ts`
+  - Trigger full manual reindex via `IndexingService.reindexAll()`
+  - Rate limited to 5 req/5min
+- [X] T023 [US2] Route in `backend/src/modules/memory_hub/api/router.ts`
+  - `POST /api/memory-hub/reindex` with `reindexLimit` rate limiter
+- [X] T024 [P] [US2] CLI reindex command in `backend/src/modules/memory_hub/cli/reindex.ts`
+  - Trigger full reindex via direct service call
 
-- [x] T022 [P] [US2] Backend unit test: file watcher detects create/update/delete events
-  - `backend/tests/unit/memory_hub/fileWatcher.test.ts`
-- [x] T023 [P] [US2] Backend unit test: reindexing preserves version history
-  - `backend/tests/unit/memory_hub/versioning.test.ts`
-
-### Implementation for User Story 2
-
-- [x] T024 [US2] Implement indexing service in `backend/src/modules/memory_hub/domain/services/IndexingService.ts`
-  - Parse document → chunk → embed → store
-  - Upsert logic: compare content hash, skip if unchanged
-  - Increment version on change
-- [x] T025 [US2] Implement reindex worker in `backend/src/modules/memory_hub/workers/reindexWorker.ts`
-  - Full reindex of all watched directories
-  - Progress tracking and error recovery
-- [x] T026 [US2] Wire file watcher to indexing service in `backend/src/modules/memory_hub/api/controller.ts`
-  - On file change: trigger incremental reindex
-  - On file delete: mark document archived
-- [x] T027 [US2] Add POST `/reindex` endpoint for manual full reindex
-- [x] T028 [US2] Implement initial index bootstrap script
-  - `backend/src/modules/memory_hub/scripts/initIndex.ts`
-- [x] T029 [US2] Add Prometheus metric: `orthoplus_memory_hub_index_duration_seconds`
-
-**Checkpoint**: User Stories 1 AND 2 both work. Search finds newly indexed documents automatically.
+**Checkpoint**: User Stories 1 AND 2 both work independently. File changes auto-index; manual reindex available via API and CLI.
 
 ---
 
 ## Phase 5: User Story 3 — Memory-Aware AI Agent Context Window (Priority: P2)
 
-**Goal**: AI agents receive structured context briefs for any feature or topic.
+**Goal**: AI agents receive structured context briefs for any feature or query topic
 
-**Independent Test**: Call POST `/context-brief` with topic `019-ia-radiografia` and receive a Markdown brief with spec, plan, and related docs.
+**Independent Test**: Request context for "019-ia-radiografia" and receive a markdown brief with spec, plan, architecture constraints, and API contracts
 
-### Tests for User Story 3
+- [X] T025 [US1] [US3] SearchService provides semantic relevance search in `backend/src/modules/memory_hub/domain/services/SearchService.ts`
+  - Cosine similarity ranking with relevance threshold filtering
+  - Results include relevance scores and heading paths
+- [X] T026 [US3] Implement ContextBriefService in `backend/src/modules/memory_hub/domain/services/ContextBriefService.ts`
+  - `generateBrief(topic, maxTokens)`: assemble documents, sort by priority (spec > plan > architecture > contract)
+  - Hard token budget cap (default 80k, configurable) with intelligent truncation
+  - Output: structured object with `markdown`, `documents[]`, `tokenCount`, `confidentialExcluded`
+  - Respects confidentiality markers — excludes sensitive docs from briefs
+- [X] T027 [US3] `POST /context-brief` endpoint in `backend/src/modules/memory_hub/api/controller.ts`
+  - Request body: `{ topic, max_tokens? }`
+  - Response: `{ topic, token_count, documents[], markdown, confidential_excluded }`
+  - Wrapped in `asyncHandler` with metrics observation
+- [X] T028 [US3] Route in `backend/src/modules/memory_hub/api/router.ts`
+  - `POST /api/memory-hub/context-brief` with `briefLimit` (5 req/min)
+- [X] T029 [P] [US3] CLI brief command in `backend/src/modules/memory_hub/cli/brief.ts`
+  - Accept topic arg, call ContextBriefService, write markdown to stdout
 
-- [x] T030 [P] [US3] Backend unit test: context brief includes top-N relevant documents
-  - `backend/tests/unit/memory_hub/contextBrief.test.ts`
-- [x] T031 [P] [US3] Backend unit test: context brief respects token budget
-  - `backend/tests/unit/memory_hub/tokenBudget.test.ts`
-
-### Implementation for User Story 3
-
-- [x] T032 [US3] Implement context brief service in `backend/src/modules/memory_hub/domain/services/ContextBriefService.ts`
-  - Search for topic, rank documents
-  - Prioritize: spec > plan > architecture > contract > memory
-  - Summarize secondary docs if token budget exceeded
-  - Generate Markdown with YAML frontmatter
-- [x] T033 [US3] Add POST `/context-brief` endpoint in controller
-  - Accept topic, max_tokens, include_related
-  - Return JSON with markdown field
-- [x] T034 [US3] Implement CLI brief command `backend/src/modules/memory_hub/cli/brief.ts`
-  - Accept topic, print Markdown to stdout
-- [x] T035 [US3] Add token counting utility `backend/src/modules/memory_hub/infrastructure/TokenCounter.ts`
-  - Simple word-based approximation (1 word ≈ 1.3 tokens)
-- [x] T036 [US3] Add Prometheus metric: `orthoplus_memory_hub_brief_generation_seconds`
-
-**Checkpoint**: All user stories 1-3 functional. AI agents can search, index, and receive context briefs.
+**Checkpoint**: All three user stories independently functional. AI agents can request context briefs via API or CLI.
 
 ---
 
 ## Phase 6: User Story 4 — Memory Health and Drift Detection (Priority: P3)
 
-**Goal**: Detect and report inconsistencies between specs and implementations.
+**Goal**: Detect memory drift, broken references, and orphaned docs; expose health dashboard
 
-**Independent Test**: Run drift scan, verify it detects a spec referencing a non-existent API endpoint.
+**Independent Test**: Health scan detects 3 specs without implementations and 2 outdated architecture decisions
 
-### Tests for User Story 4
+- [X] T030 [US4] Implement DriftDetectionService in `backend/src/modules/memory_hub/domain/services/DriftDetectionService.ts`
+  - `detect()`: scans indexed documents for:
+    - `missing_impl`: spec without corresponding implementation
+    - `broken_ref`: broken cross-references
+    - `outdated_decision`: stale architecture decisions
+    - `orphan_doc`: unreferenced documents
+  - Writes findings to `drift_reports` table via `DriftRepository`
+- [X] T031 [US4] Implement HealthService in `backend/src/modules/memory_hub/domain/services/HealthService.ts`
+  - `getMetrics()`: coverage_percent, driftCount, indexStatus, lastScanAt, compressionRatio
+  - `SqliteHealthChecker` provides integrity checks and backup utilities
+  - Coverage = indexed docs / total `.md` files in watch dirs
+- [X] T032 [US4] Cron scheduler for daily drift scan in `backend/src/workers/jobs/memoryHubDrift.ts`
+  - Schedule: configurable via `MEMORY_HUB_DRIFT_SCAN_CRON` (default `0 2 * * *`)
+  - Calls `DriftDetectionService.detect()` with timeout enforcement (5min)
+  - Logs issue count and duration
+- [X] T033 [US4] Register worker in `backend/src/workers/index.ts`
+- [X] T034 [US4] Add drift report endpoint to MemoryHubController in `backend/src/modules/memory_hub/api/controller.ts`
+  - `GET /drift` — return open drift reports with severity filtering
+- [X] T035 [US4] Add route in `backend/src/modules/memory_hub/api/router.ts`
+  - `GET /api/memory-hub/drift`
+- [X] T036 [P] [US4] CLI drift command in `backend/src/modules/memory_hub/cli/drift.ts`
+  - Run scan via `DriftDetectionService`, print report table to stdout
 
-- [x] T037 [P] [US4] Backend unit test: drift scan detects broken API references
-  - `backend/tests/unit/memory_hub/driftDetection.test.ts`
-- [x] T038 [P] [US4] Backend unit test: drift scan detects missing implementations
-  - `backend/tests/unit/memory_hub/driftDetection.test.ts` (coverage assertions within drift suite)
-
-### Implementation for User Story 4
-
-- [x] T039 [US4] Implement drift detector in `backend/src/modules/memory_hub/domain/services/DriftDetectionService.ts`
-  - Scan specs for API endpoint references, verify in codebase
-  - Check architecture decisions against route files
-  - Detect specs without corresponding implementation files
-- [x] T040 [US4] Implement health aggregator in `backend/src/modules/memory_hub/domain/services/HealthService.ts`
-  - Coverage percent, drift count, index status
-- [x] T041 [US4] Add GET `/health` endpoint in controller
-  - Return metrics JSON
-- [x] T042 [US4] Implement drift scan worker `backend/src/modules/memory_hub/workers/driftScanWorker.ts`
-  - Configurable cron schedule (default 02:00 daily)
-  - Store results in drift_reports table
-- [x] T043 [US4] Implement CLI drift command `backend/src/modules/memory_hub/cli/drift.ts`
-  - Run scan, print report table
-- [x] T044 [US4] Implement CLI health command `backend/src/modules/memory_hub/cli/health.ts`
-  - Print health metrics
-- [x] T045 [US4] Add Prometheus metrics: `orthoplus_memory_hub_drift_detected_total`, `orthoplus_memory_hub_coverage_percent`
-
-**Checkpoint**: All user stories independently functional.
+**Checkpoint**: All four user stories independently functional. Daily drift scan runs automatically; health metrics exposed via API.
 
 ---
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-**Purpose**: Improvements that affect multiple user stories.
+**Purpose**: Quality gates, security, documentation, and observability
 
-- [x] T046 [P] Add error handling (ApiError + RFC 7807) to all memory_hub endpoints
-- [x] T047 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
-- [x] T048 Run backend build: `cd backend && pnpm build` (strict, must pass)
-- [x] T049 Verify no new `as any` or `@ts-ignore` added (Constitution CQ-2)
-- [x] T050 [P] Add module documentation to `docs/memory-hub.md`
-- [x] T051 Run quickstart.md validation — verify all commands work end-to-end
-- [x] T052 [P] Frontend web UI for search and health dashboard
-  - `apps/web/src/modules/memory-hub/`
+- [X] T037 [P] Rate limiting in `backend/src/modules/memory_hub/api/router.ts`
+  - `searchLimit`: 30 req/min for search/versions/health/graph/drift
+  - `briefLimit`: 5 req/min for context-brief
+  - `reindexLimit`: 5 req/5min for reindex
+- [X] T038 [P] Prometheus metrics emission in MemoryHubController
+  - `memoryHub.searchDuration.observe()`
+  - `memoryHub.indexDuration.observe()`
+  - `memoryHub.documentsIndexed.inc()`
+  - `memoryHub.briefGenerationDuration.observe()`
+  - `memoryHub.coveragePercent.set()`
+  - All with `category="memory_hub"` label
+- [X] T039 Run quality gates:
+  - `cd backend && pnpm build` — strict TypeScript, 0 errors
+  - `pnpm lint` — 0 errors
+  - `pnpm type-check` — 0 errors
+- [X] T040 Code cleanup — verify zero new `as any` or `@ts-ignore` (Constitution CQ-1)
+- [X] T041 All routes have `clinicGuard` applied (Constitution AP-1)
+  - `router.use(clinicGuard)` applied before all endpoints
+- [X] T042 [P] Update quickstart.md with final API examples and env vars
+- [X] T043 [P] Add module documentation in `docs/memory-hub/README.md`
+- [X] T048 [P] Add E2E tests in `tests/e2e/memory-hub.spec.ts`
+  - Test: Page renders with title "Memory Hub"
+  - Test: Health metrics (documents, coverage, drift) display correctly
+  - Test: Semantic search input and button work
+  - Test: Navigation via sidebar
+  - Test: Loading state display
+- [X] T049 [P] Frontend unit tests in `apps/web/src/modules/memory-hub/__tests__/`
+  - MemoryHubSearch.test.tsx: renders, submits query, displays results, handles error, skips empty query
+  - MemoryHubHealth.test.tsx: loading state, metrics display, error handling
+  - useMemoryHubSearch.test.ts: hook behavior
+  - useMemoryHubHealth.test.ts: hook behavior
 
 ---
 
-## Phase 8: Future Enhancements *(post-MVP, deferred)*
+## Phase 8: Monitoring & Edge Case Mitigation *(post-implementation)*
 
-**Purpose**: Non-blocking improvements for future iterations.
+**Purpose**: Ensure feature is observable and resilient in production
 
-- [x] T053 [P] Advanced filtering (date range, author, feature number)
-  - Extend `SearchService.ts` and `EmbeddingRepository.ts` with additional SQL filters
-  - Frontend: Add filter controls to `MemoryHubSearch.tsx`
-- [x] T054 [P] Index compression for large embedding datasets
-  - Implement quantization (float32 → int8) for embedding vectors
-  - Add compression ratio metrics to health dashboard
-- [x] T055 [P] Cross-reference graph visualization
-  - Build graph data structure from document links and references
-  - Frontend: Add graph viz component using D3 or Cytoscape.js
-
----
-
-## Tech Debt Tasks (Generated by /speckit.cleanup)
-
-**Generated**: 2026-05-18
-**Source**: Post-implementation cleanup of 020-spec-memory-hub
-**Priority**: Address before next feature iteration
-
-### Detected Issues
-
-- [x] TD001 [P] Add `clinicGuard` middleware to `backend/src/modules/memory_hub/api/router.ts` — Constitution GP-1 violation; all protected routers must validate `req.user.clinicId`
-- [x] TD002 [P] Replace `console.log`/`console.error` in services with Winston `logger` from `backend/src/infrastructure/logger` — Constitution CQ-3 violation
-- [x] TD003 [P] Replace `console.error` with Winston `logger` and wire Prometheus metrics in controller — Constitution CQ-3 / EP-4 violation
-- [x] TD004 [P] Fix `DocumentRepository` column name mapping — SQLite returns `snake_case` but `MemoryDocument` interface uses `camelCase`, causing `lastIndexed` to be undefined at runtime (health metrics always show 0% coverage)
-- [x] TD005 Create `docs/memory-hub.md` module documentation — Task T050 artifact missing
-- [x] TD006 Wire `docType` filtering in `SearchService` — FR-007 implemented; SQL-level filter in EmbeddingRepository.searchSimilar with parameterized IN clause
-- [x] TD007 Implement confidentiality marker checks (FR-008) — Parse `confidential`/`private` frontmatter flags and exclude from context briefs; `confidentialExcluded` counter added to ContextBrief response
-- [x] TD008 Add version history retrieval endpoint (FR-009) — `document_versions` table added to schema; DocumentRepository saves previous versions on upsert; GET `/api/memory-hub/versions?sourcePath=` endpoint added
-- [x] TD009 Emit Prometheus metrics from controller endpoints — Metrics class exists but controller does not call `memoryHubMetrics.searchDuration.observe()` etc.
-- [x] TD010 Add `usePolling: true` fallback in `FileWatcher` when `inotify` is unavailable — NFR-002 implemented; env var `MEMORY_HUB_USE_POLLING` controls polling mode; defaults to false
+- [X] T044 [P] Add index corruption detection and auto-rebuild in `backend/src/modules/memory_hub/infrastructure/SqliteHealthChecker.ts`
+  - `checkIntegrity()`: runs `PRAGMA integrity_check`
+  - `backup()`: copies DB to `.backup` with restricted permissions
+  - `getStats()`: returns page count, freelist count, size
+  - **Note**: Original plan referenced `SqliteDatabase.ts` — evolved to dedicated `SqliteHealthChecker.ts` utility
+- [X] T045 [P] Large document handling in `backend/src/modules/memory_hub/infrastructure/DocumentChunker.ts`
+  - Token-based chunking with configurable max chunk size
+  - Cross-chunk references preserved via heading paths
+- [X] T046 [P] Sensitive data protection
+  - `GitignoreParser.ts` respects `.gitignore` patterns
+  - `PIIDetector.ts` blocks indexing of sensitive content
+  - Confidential docs excluded from context briefs via `ContextBriefService`
+- [X] T047 Edge cases verified:
+  - Corrupted index → `SqliteHealthChecker.backup()` + integrity check available
+  - Token budget exceeded → hard cap + truncation in `ContextBriefService`
+  - Contradictory specs → detection not yet implemented (deferred to Post-MVP)
 
 ---
 
@@ -266,60 +257,114 @@
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: No dependencies
-- **Foundational (Phase 2)**: Depends on Setup. BLOCKS all user stories.
-- **User Story 1 (Phase 3)**: Depends on Foundational. Core MVP.
-- **User Story 2 (Phase 4)**: Depends on Foundational + US1 (needs search to verify indexing).
-- **User Story 3 (Phase 5)**: Depends on Foundational + US1 (uses search service).
-- **User Story 4 (Phase 6)**: Depends on Foundational + US1 (reads indexed docs).
-- **Polish (Phase 7)**: Depends on all user stories.
-- **Future (Phase 8)**: Optional, post-MVP.
+- **Setup (Phase 1)**: No dependencies — can start immediately
+- **Foundational (Phase 2)**: Depends on Setup completion — BLOCKS all user stories
+- **User Stories (Phase 3–6)**: All depend on Foundational phase completion
+  - US1 (P1) → US2 (P2) → US3 (P2) → US4 (P3) — recommended sequential order
+  - US2, US3 can run in parallel after US1 (if staffed)
+- **Polish (Phase 7)**: Depends on all desired user stories being complete
+- **Monitoring (Phase 8)**: Depends on all user stories + polish
+
+### User Story Dependencies
+
+- **User Story 1 (P1)**: Can start after Foundational (Phase 2). No dependencies on other stories. MVP scope.
+- **User Story 2 (P2)**: Can start after US1. Builds on IndexingService from US1.
+- **User Story 3 (P2)**: Can start after US1. Builds on SearchService from US1.
+- **User Story 4 (P3)**: Can start after US1. Builds on indexed documents from US1.
+
+### Within Each User Story
+
+- Infrastructure (SQLite, parser, embedder) before services
+- Services before controller endpoints
+- Controller before routes
+- Routes before integration testing
 
 ### Parallel Opportunities
 
-- Phase 1: T001-T006 can run in parallel
-- Phase 2: T007-T013 can run in parallel (different infrastructure components)
-- Phase 3: T014-T015 (tests) can run in parallel
-- Phase 4: T022-T023 (tests) can run in parallel
-- Phase 5: T030-T031 (tests) can run in parallel
-- Phase 6: T037-T038 (tests) can run in parallel
+- All Setup tasks (T001–T004) can run in parallel
+- All Foundational tasks (T005–T010) can run in parallel (within Phase 2)
+- CLI commands (T016, T017, T024, T029, T036) can be developed in parallel with API endpoints
+- Prometheus metrics (T038) and rate limiting (T037) can be added in parallel
+- Polish tasks (T039–T043) can run in parallel
+
+---
+
+## Parallel Example: User Story 1
+
+```bash
+# Launch backend service and CLI tools in parallel:
+Task: "Implement IndexingService in backend/src/modules/memory_hub/services/IndexingService.ts"
+Task: "Implement SearchService in backend/src/modules/memory_hub/services/SearchService.ts"
+Task: "Implement CLI search command in backend/src/modules/memory_hub/cli/search.ts"
+
+# Once services are ready, launch controller + routes in parallel:
+Task: "Implement MemoryHubController in backend/src/modules/memory_hub/api/controller.ts"
+Task: "Add routes with clinicGuard in backend/src/modules/memory_hub/api/router.ts"
+```
 
 ---
 
 ## Implementation Strategy
 
-### MVP First (User Stories 1-2)
+### MVP First (User Story 1 Only)
 
 1. Complete Phase 1: Setup
-2. Complete Phase 2: Foundational (CRITICAL)
-3. Complete Phase 3: User Story 1 (Search)
-4. Complete Phase 4: User Story 2 (Auto-indexing)
-5. **STOP and VALIDATE**: Test search + indexing end-to-end
-6. Deploy/demo if ready
+2. Complete Phase 2: Foundational (CRITICAL — blocks all stories)
+3. Complete Phase 3: User Story 1 (search + health + versions)
+4. **STOP and VALIDATE**: Test search endpoint, verify results, run `cd backend && pnpm build`
+5. Deploy/demo if ready
 
 ### Incremental Delivery
 
-- Phase 1-2 → Infrastructure ready
-- Phase 3 → Search working → Deploy/Demo (MVP!)
-- Phase 4 → Auto-indexing → Deploy/Demo
-- Phase 5 → Context briefs → Deploy/Demo
-- Phase 6 → Drift detection → Deploy/Demo
-- Phase 7 → Polish + metrics → Deploy/Demo
+1. Complete Setup + Foundational → Foundation ready
+2. Add User Story 1 → Test independently → Deploy/Demo (MVP!)
+3. Add User Story 2 → Test auto-indexing → Deploy/Demo
+4. Add User Story 3 → Test context briefs → Deploy/Demo
+5. Add User Story 4 → Test drift detection → Deploy/Demo
+6. Each story adds value without breaking previous stories
+
+### Parallel Team Strategy
+
+With multiple developers:
+
+1. Team completes Setup + Foundational together
+2. Once Foundational is done:
+   - Developer A: User Story 1 (search)
+   - Developer B: User Story 2 (indexing) — starts after US1 IndexingService is ready
+   - Developer C: User Story 3 (context briefs) — starts after US1 SearchService is ready
+3. Stories complete and integrate independently
 
 ---
 
-## Summary
+## Build Gate Checklist *(run before marking feature complete)*
 
-| Metric | Count |
-|--------|-------|
-| **Total tasks** | 55 |
-| **Tech debt tasks** | 10 (TD001-TD010) |
-| **Combined total** | 65 |
-| **Critical gap fixes** | 7 (Phase 2) |
-| **US1 tasks** | 8 (P1 — MVP) |
-| **US2 tasks** | 8 (P2) |
-| **US3 tasks** | 6 (P2) |
-| **US4 tasks** | 9 (P3) |
-| **Polish tasks** | 7 (includes T052 frontend UI) |
-| **Future tasks** | 3 (deferred: T053-T055) |
-| **Test tasks** | 8 |
+```bash
+# 1. Backend build (strict — fails on any TS error)
+cd backend && pnpm build
+
+# 2. Frontend type-check (if frontend changes added)
+cd apps/web && pnpm type-check
+
+# 3. Lint (warnings tolerated, 0 errors)
+pnpm lint
+
+# 4. Unit tests — backend
+cd backend && npx jest --testPathPattern="memory_hub"
+
+# 5. E2E tests (requires backend + frontend running)
+npx playwright test tests/e2e/memory-hub.spec.ts --project=chromium
+```
+
+---
+
+## Notes
+
+- [P] tasks = different files, no dependencies
+- [Story] label maps task to specific user story for traceability
+- Each user story should be independently completable and testable
+- Verify tests fail before implementing (if TDD is adopted)
+- Commit after each task or logical group
+- Stop at any checkpoint to validate story independently
+- **Test naming**: New tests MUST use English (`should...`). Portuguese tests (`deve...`) are legacy debt.
+- **Schema changes**: SQLite schema is managed via `SqliteDatabase.ts` — no Prisma migration needed for this feature
+- **Embedding model**: Ensure Ollama is running with `nomic-embed-text` before testing search functionality

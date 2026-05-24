@@ -2525,6 +2525,7 @@ model teleconsultas {
   motivo          String
   observacoes     String?
   patient_id      String
+  prescricao      String?
   recording_url   String?
   status          String
   tipo            String
@@ -3217,12 +3218,69 @@ model ia_radiografia_analise {
   observacoes_dentista String?
   assinatura_digital   String?
   modelo_usado         String           @default("local/llama-3.3")
+  modelo_version       String?
+  experiment_id        String?
+  erro_processamento   String?
   created_at           DateTime         @default(now())
   updated_at           DateTime         @updatedAt
+
+  problemas_detectados problema_radiografico[]
 
   @@index([clinic_id, status])
   @@index([paciente_id])
   @@index([dentista_id])
+  @@schema("pep")
+}
+
+model problema_radiografico {
+  id                  String   @id @default(uuid())
+  analise_id          String
+  tipo_problema       TipoProblemaRadiografico
+  dente_codigo        String?
+  localizacao         String?
+  severidade          SeveridadeProblema
+  confianca           Float
+  descricao           String?
+  sugestao_tratamento String?
+  urgente             Boolean  @default(false)
+  created_at          DateTime @default(now())
+
+  analise ia_radiografia_analise @relation(fields: [analise_id], references: [id], onDelete: Cascade)
+
+  @@index([analise_id])
+  @@index([tipo_problema])
+  @@schema("pep")
+}
+
+enum TipoProblemaRadiografico {
+  CARIE
+  FRATURA
+  PERIODONTAL
+  IMPLANTE_NECESSARIO
+  TARTARO
+  MAL_POSICAO
+  OUTRO
+
+  @@schema("pep")
+}
+
+enum SeveridadeProblema {
+  LEVE
+  MODERADA
+  GRAVE
+  CRITICA
+
+  @@schema("pep")
+}
+
+model ia_modelo_config {
+  id              String   @id @default(uuid())
+  clinic_id       String
+  modelo_ativo    String   @default("local/llama-3.3")
+  aceita_beta     Boolean  @default(false)
+  updated_at      DateTime @updatedAt
+
+  @@unique([clinic_id])
   @@schema("pep")
 }
 
