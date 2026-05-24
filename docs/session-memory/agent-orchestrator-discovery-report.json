@@ -1,0 +1,178 @@
+{
+  "generated_at": "2026-05-24T23:30:00-03:00",
+  "project": "OrthoPlus Enterprise",
+  "repositories_scanned": 1,
+  "repositories": [
+    {
+      "name": "OrthoPlus Enterprise",
+      "path": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise",
+      "type": "current",
+      "agents_md": 23,
+      "skills": 1850,
+      "agent_md": 0,
+      "copilot_instructions": 5,
+      "prompts": 297,
+      "extensions": 93,
+      "workflows": 1
+    }
+  ],
+  "discovered_agents": [
+    {
+      "name": "OrthoPlus Enterprise Root Agent",
+      "type": "AGENTS.md",
+      "location": "./AGENTS.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Frontend Web Agent",
+      "type": "AGENTS.md",
+      "location": "./apps/web/AGENTS.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Backend Agent",
+      "type": "AGENTS.md",
+      "location": "./backend/AGENTS.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Agent Service Agent",
+      "type": "AGENTS.md",
+      "location": "./agent-service/AGENTS.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Financeiro Module Agent",
+      "type": "AGENTS.md",
+      "location": "./backend/src/modules/financeiro/AGENTS.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Core UI Package Agent",
+      "type": "AGENTS.md",
+      "location": "./categories/@orthoplus/core/packages/ui/AGENTS.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "E2E Tests Agent",
+      "type": "AGENTS.md",
+      "location": "./tests/e2e/AGENTS.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "GitHub Copilot Instructions",
+      "type": "copilot-instructions.md",
+      "location": "./.github/copilot-instructions.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Speckit Agent Orchestrator Discover",
+      "type": "SKILL.md",
+      "location": ".agents/skills/speckit-agent-orchestrator-discover/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Speckit Brownfield Scan",
+      "type": "SKILL.md",
+      "location": ".agents/skills/speckit-brownfield-scan/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Speckit Verify Run",
+      "type": "SKILL.md",
+      "location": ".agents/skills/speckit-verify-run/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Speckit Sync Analyze",
+      "type": "SKILL.md",
+      "location": ".agents/skills/speckit-sync-analyze/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Speckit Status",
+      "type": "SKILL.md",
+      "location": ".agents/skills/speckit-status/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "GitNexus CLI",
+      "type": "SKILL.md",
+      "location": ".claude/skills/gitnexus/gitnexus-cli/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "GitNexus Impact Analysis",
+      "type": "SKILL.md",
+      "location": ".claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "OMK Flow Bugfix",
+      "type": "SKILL.md",
+      "location": ".kimi/skills/omk-flow-bugfix/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "OMK Flow Feature Dev",
+      "type": "SKILL.md",
+      "location": ".kimi/skills/omk-flow-feature-dev/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "OMK Quality Gate",
+      "type": "SKILL.md",
+      "location": ".kimi/skills/omk-quality-gate/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    },
+    {
+      "name": "Memory MD Capture",
+      "type": "SKILL.md",
+      "location": ".kimi/skills/speckit-memory-md-capture/SKILL.md",
+      "repo": "OrthoPlus Enterprise"
+    }
+  ],
+  "skill_summary": {
+    "total_skills": 1850,
+    "by_scope": {
+      ".agents/skills": 377,
+      ".claude/skills": 383,
+      ".cursor/skills": 377,
+      ".kimi/skills": 382,
+      ".omk/open-design/skills": 107
+    },
+    "by_category": {
+      "speckit-core": 350,
+      "speckit-architecture-guard": 80,
+      "speckit-brownkit": 60,
+      "speckit-canon-drift": 40,
+      "speckit-product-forge": 80,
+      "speckit-security-review": 40,
+      "speckit-verify": 20,
+      "speckit-sync": 20,
+      "speckit-squad": 10,
+      "gitnexus": 10,
+      "omk-flows": 15,
+      "other": 1115
+    }
+  },
+  "extensions": {
+    "total": 93,
+    "by_type": {
+      "memory-md": 5,
+      "verify": 3,
+      "orchestrator": 4,
+      "other": 81
+    }
+  },
+  "workflows": {
+    "total": 1,
+    "names": [
+      "memory-hub-drift-scan"
+    ]
+  },
+  "prompts": {
+    "total": 297,
+    "location": ".github/prompts/"
+  }
+}
