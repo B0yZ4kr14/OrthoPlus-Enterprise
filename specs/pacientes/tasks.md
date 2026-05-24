@@ -172,4 +172,4 @@
 ### Detected Issues
 
 - [x] TD003 [P2] Extract manual `Date.now()` timing pattern into shared `withTiming()` helper — duplicated in `CadastrarPacienteUseCase` and `PacienteSearchService`. — Fixed on 2026-05-24. Refactored both use cases to use shared `withTiming()` helper.
-- [ ] TD004 [P2] `patients_total` Gauge does not decrement on patient deletion or status change — current implementation only increments on creation. Consider migrating to a Counter or adding reconciliation logic.
+- [X] TD004 [P2] `patients_total` Gauge does not decrement on patient deletion or status change — current implementation only increments on creation. Consider migrating to a Counter or adding reconciliation logic.
