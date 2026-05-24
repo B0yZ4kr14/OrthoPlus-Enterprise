@@ -25,9 +25,9 @@
 ## Phase 4: Polish
 
 - [x] T010 Add ProgramaFidelidade container with KPICards
-- [ ] T011 Backend unit test: point addition is atomic
-- [ ] T012 Backend unit test: badge unlock logic
-- [ ] T013 Run quality gates
+- [x] T011 Backend unit test: point addition is atomic
+- [x] T012 Backend unit test: badge unlock logic
+- [x] T013 Run quality gates
 
 ---
 
@@ -36,5 +36,5 @@
 | Metric | Count |
 |--------|-------|
 | **Total tasks** | 13 |
-| **Completed** | 10 |
-| **Pending** | 3 |
+| **Completed** | 13 |
+| **Pending** | 0 |

@@ -2,9 +2,14 @@ import { Request, Response } from "express";
 
 jest.mock("../../src/infrastructure/database/prismaClient", () => ({
   prisma: {
+    $transaction: jest.fn((ops: unknown[]) => Promise.all(ops)),
     fidelidade_pontos: {
       findMany: jest.fn(),
       create: jest.fn(),
+    },
+    fidelidade_pacientes: {
+      findUnique: jest.fn(),
+      upsert: jest.fn(),
     },
     fidelidade_badges: {
       findMany: jest.fn(),
@@ -102,19 +107,47 @@ describe("FidelidadeController", () => {
       expect(res.status).toHaveBeenCalledWith(400);
     });
 
-    it("creates points and returns 201", async () => {
+    it("creates points atomically and returns 201 with accumulated points", async () => {
       const payload = { patient_id: "550e8400-e29b-41d4-a716-446655440000", pontos: 10, descricao: "Visita" };
       const created = { id: "p3", ...payload, clinic_id: "clinic-1" };
-      (prisma as any).fidelidade_pontos.create.mockResolvedValueOnce(created);
+      const badges = [{ id: "b1", name: "Bronze", pontos_necessarios: 5 }];
+      (prisma as any).fidelidade_pontos.create.mockResolvedValue(created);
+      (prisma as any).fidelidade_pacientes.upsert.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 25 });
+      (prisma as any).fidelidade_badges.findMany.mockResolvedValue(badges);
+      (prisma as any).fidelidade_pacientes.findUnique.mockResolvedValue({ pontos_acumulados: 25 });
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: payload, query: {}, params: {} };
       const res = mockRes();
       await controller.addPoints(req as Request, res);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(created);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        id: "p3",
+        pontos_acumulados: 25,
+        badges_desbloqueados: badges,
+      }));
+    });
+
+    it("unlocks badges when accumulated points reach threshold", async () => {
+      const payload = { patient_id: "550e8400-e29b-41d4-a716-446655440000", pontos: 50, descricao: "Compra" };
+      const created = { id: "p4", ...payload, clinic_id: "clinic-1" };
+      const badges = [
+        { id: "b1", name: "Bronze", pontos_necessarios: 10 },
+        { id: "b2", name: "Silver", pontos_necessarios: 50 },
+      ];
+      (prisma as any).fidelidade_pontos.create.mockResolvedValue(created);
+      (prisma as any).fidelidade_pacientes.upsert.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 50 });
+      (prisma as any).fidelidade_badges.findMany.mockResolvedValue(badges);
+      (prisma as any).fidelidade_pacientes.findUnique.mockResolvedValue({ pontos_acumulados: 50 });
+      const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: payload, query: {}, params: {} };
+      const res = mockRes();
+      await controller.addPoints(req as Request, res);
+      expect(res.status).toHaveBeenCalledWith(201);
+      const responseData = (res.json as jest.Mock).mock.calls[0][0];
+      expect(responseData.badges_desbloqueados).toHaveLength(2);
+      expect(responseData.badges_desbloqueados[1].name).toBe("Silver");
     });
 
     it("returns 500 when database throws", async () => {
-      (prisma as any).fidelidade_pontos.create.mockRejectedValueOnce(new Error("DB fail"));
+      (prisma as any).$transaction.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { patient_id: "550e8400-e29b-41d4-a716-446655440000", pontos: 10 }, query: {}, params: {} };
       const res = mockRes();
       await controller.addPoints(req as Request, res);

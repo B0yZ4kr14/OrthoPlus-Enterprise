@@ -71,10 +71,39 @@ export class FidelidadeController {
       if (!parsed.success) {
         return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
       }
-      const data = await (prisma as any).fidelidade_pontos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId },
+
+      const { patient_id, pontos } = parsed.data;
+
+      // Atomic transaction: create point record + update patient balance + check badge unlocks
+      const [pointRecord, , unlockedBadges] = await prisma.$transaction([
+        (prisma as any).fidelidade_pontos.create({
+          data: { ...parsed.data, clinic_id: clinicId },
+        }),
+        (prisma as any).fidelidade_pacientes.upsert({
+          where: { clinic_id_patient_id: { clinic_id: clinicId, patient_id } },
+          update: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date() },
+          create: { clinic_id: clinicId, patient_id, pontos_acumulados: pontos, nivel: "BRONZE" },
+        }),
+        (prisma as any).fidelidade_badges.findMany({
+          where: { clinic_id: clinicId, is_active: true },
+          orderBy: { pontos_necessarios: "asc" },
+        }),
+      ]);
+
+      // Determine newly unlocked badges based on new total
+      const patientRecord = await (prisma as any).fidelidade_pacientes.findUnique({
+        where: { clinic_id_patient_id: { clinic_id: clinicId, patient_id } },
       });
-      return res.status(201).json(data);
+      const totalPoints = patientRecord?.pontos_acumulados || pontos;
+      const newlyUnlocked = (unlockedBadges || []).filter(
+        (badge: { pontos_necessarios: number }) => totalPoints >= badge.pontos_necessarios
+      );
+
+      return res.status(201).json({
+        ...pointRecord,
+        pontos_acumulados: totalPoints,
+        badges_desbloqueados: newlyUnlocked.length > 0 ? newlyUnlocked : undefined,
+      });
     } catch (error) {
       logger.error("Error adding points", { error });
       return res.status(500).json({ error: "Internal server error" });
