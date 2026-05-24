@@ -10,7 +10,7 @@ export interface CreateAppointmentCommand {
   dentistId: string;
   startTime: Date;
   endTime: Date;
-  type: 'CONSULTA' | 'RETORNO' | 'EMERGENCIA' | 'PROCEDIMENTO';
+  type: 'CONSULTA' | 'RETORNO' | 'EMERGENCIA' | 'AVALIACAO' | 'PROCEDIMENTO';
   notes?: string;
   clinicId: string;
   createdBy: string;

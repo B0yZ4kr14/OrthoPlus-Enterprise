@@ -133,7 +133,7 @@
 
 ### Detected Issues
 
-- [ ] TD001 [P] `agendaController.ts:188` — `appointmentCreateSchema` usa campo `status: z.string()` em vez de `appointment_type: z.enum([...])`. O cast `as AppointmentType` na linha 188 é inseguro. Refatorar schema para validar o tipo de agendamento corretamente.
+- [x] TD001 [P] `agendaController.ts:188` — `appointmentCreateSchema` usa campo `status: z.string()` em vez de validar tipo. ~~O cast `as AppointmentType` na linha 188 é inseguro.~~ — Fixed on 2026-05-24. `title` field now uses `z.enum(["CONSULTA", "RETORNO", "EMERGENCIA", "AVALIACAO", "PROCEDIMENTO"])`. Controller uses `parsed.data.title` directly. `CreateAppointmentCommand` type updated to include `"AVALIACAO"`.
 - [ ] TD002 [P] `agendaController.ts` — respostas de erro 500 retornam `{ error: "Internal server error" }` em vez de RFC 7807 Problem Details (CQ-3). Deve propagar erros para o `errorHandler` middleware ou usar `ApiError`.
 - [x] TD003 [P] `CreateAppointmentUseCase.ts` — `throw new Error("Horário bloqueado...")` e `throw new Error("Já existe um agendamento...")` usam strings genéricas. ~~Deve usar erros de domínio tipados~~ — Fixed on 2026-05-24. Added `BlockedTimeError` and `SchedulingConflictError` domain error classes.
 
