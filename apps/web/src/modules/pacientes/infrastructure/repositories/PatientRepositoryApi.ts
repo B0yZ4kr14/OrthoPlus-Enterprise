@@ -10,13 +10,13 @@ export class PatientRepositoryApi implements IPatientRepository {
   }
 
   async findById(id: string): Promise<Patient | null> {
-    const response = await apiClient.get<import("@/lib/adapters/patientAdapter").PatientAPI>(`/pacientes/${id}`);
+    const response = await apiClient.get<PatientAPI>(`/pacientes/${id}`);
     return PatientAdapter.toFrontend(response);
   }
 
   async save(patient: Partial<Patient>): Promise<Patient> {
     const apiData = PatientAdapter.toAPI(patient);
-    const response = await apiClient.post<import("@/lib/adapters/patientAdapter").PatientAPI>("/pacientes", apiData);
+    const response = await apiClient.post<PatientAPI>("/pacientes", apiData);
     return PatientAdapter.toFrontend(response);
   }
 

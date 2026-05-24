@@ -142,7 +142,7 @@
 ### Detected Issues
 
 - [ ] TD001 [P] `PatientEntity.ts` — é apenas um alias de tipo (`export type { Patient as PatientEntity }`). Uma entidade de domínio real deveria ter validação, métodos factory, regras de transição de status. Refatorar para entidade completa ou remover se não for necessária.
-- [ ] TD002 [P] `PatientRepositoryApi.ts:13` — usa import inline de tipo (`import("@/lib/adapters/patientAdapter").PatientAPI`) em vez de importar `PatientAPI` no topo do arquivo. Mover para seção de imports.
+- [x] TD002 [P] `PatientRepositoryApi.ts:13` — usa import inline de tipo (`import("@/lib/adapters/patientAdapter").PatientAPI`) em vez de importar `PatientAPI` no topo do arquivo. ~~Mover para seção de imports.~~ — Fixed on 2026-05-24. Inline type imports replaced with direct `PatientAPI` usage.
 
 ## Instrumentation Tasks (EP-4 — Observability as Feature)
 
