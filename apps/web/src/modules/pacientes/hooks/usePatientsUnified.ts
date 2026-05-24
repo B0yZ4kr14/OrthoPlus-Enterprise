@@ -3,13 +3,13 @@
  * Gerencia operações de pacientes através da REST API
  */
 
-import { usePatientsAPI } from "./usePatientsAPI";
+import { usePatientsClean } from "./usePatientsClean";
 import type { UsePatientsReturn } from "./types";
 
 export type { UsePatientsReturn } from "./types";
 
 export function usePatientsUnified(): UsePatientsReturn {
-  return usePatientsAPI();
+  return usePatientsClean();
 }
 
 export { usePatientsUnified as usePatients };

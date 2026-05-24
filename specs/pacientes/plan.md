@@ -20,7 +20,7 @@ Sistema de gestao de pacientes com ficha clinica multi-aba, busca avancada, time
 - TanStack React Query (server state)
 - React Hook Form + Zod (form validation)
 - Tailwind CSS + Radix UI via `@orthoplus/core-ui`
-- Direct `apiClient` usage (not use-case based like agenda module)
+- ✅ Clean Architecture applied: `PatientRepositoryApi`, use cases, `usePatientsClean` hook
 
 ### Backend Stack
 - Express 4 + TypeScript (strict)
@@ -146,7 +146,7 @@ tests/e2e/modules/pacientes.spec.ts
 3. **Value Objects**: `PatientStatus` and `DadosComerciaisVO` encapsulate validation and immutability.
 4. **Repository Pattern**: `IPatientRepository` with Prisma implementation. Supports pagination, filtering, search.
 5. **Form Tabs**: Patient form split into 7 tabs via `PatientFormTabs` component, each tab receiving `form` prop from RHF.
-6. **Direct API Client**: Frontend uses `apiClient` directly instead of use-case layer (unlike agenda module).
+6. **Clean Architecture Frontend**: `usePatientsClean` uses `PatientRepositoryApi` + use cases (List, Add, Update, Delete) instead of direct `apiClient` calls.
 
 ---
 
@@ -154,7 +154,7 @@ tests/e2e/modules/pacientes.spec.ts
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Frontend architectural mismatch | High | Medium | Align pacientes frontend with agenda's use-case pattern |
+| Frontend architectural mismatch | Low | Medium | ✅ Aligned — `usePatientsClean` uses repository + use-case pattern |
 | Patient auth key in body | High | High | Migrate to HttpOnly cookies per SEC-2.4 |
 | Document validation in frontend + backend | Medium | Low | Ensure both use same validation logic |
 | Large patient list performance | Medium | Medium | Add virtual scrolling + server-side search |
