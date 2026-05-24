@@ -116,9 +116,12 @@ ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
   # DEVOPS-2 FIX: Removed dangerous prisma db push --accept-data-loss fallback.
   # Using db push with --accept-data-loss can cause IRREVERSIBLE DATA LOSS in production.
   # Now the deploy aborts if migrations fail, requiring manual investigation.
+  # Carregar .env e rodar migrations
+  set -a && source .env && set +a
+
   # Rodar migrations e gerar Prisma client
-  npx prisma migrate deploy --schema=backend/prisma/schema.prisma || { echo "Migration failed! Aborting deploy."; exit 1; }
-  npx prisma generate --schema=backend/prisma/schema.prisma
+  ./backend/node_modules/.bin/prisma migrate deploy --schema=backend/prisma/schema.prisma || { echo "Migration failed! Aborting deploy."; exit 1; }
+  ./backend/node_modules/.bin/prisma generate --schema=backend/prisma/schema.prisma
 
   # PM2 reload
   if pm2 list | grep -q "orthoplus-backend"; then
