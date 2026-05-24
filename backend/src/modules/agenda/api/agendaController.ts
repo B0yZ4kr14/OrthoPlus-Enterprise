@@ -1,6 +1,6 @@
 import { logger } from "@/infrastructure/logger";
 import { prisma } from "@/infrastructure/database/prismaClient";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import { CreateAppointmentCommandHandler } from "../application/commands/CreateAppointmentCommand";
 import { AppointmentRepositoryPostgres } from "../infrastructure/repositories/AppointmentRepositoryPostgres";
@@ -96,7 +96,7 @@ const dentistScheduleUpdateSchema = z.object({
 // Appointments
 // ---------------------------------------------------------------------------
 
-export const getAppointments = async (req: Request, res: Response) => {
+export const getAppointments = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -140,11 +140,12 @@ export const getAppointments = async (req: Request, res: Response) => {
     res.json(appointments);
   } catch (error) {
     logger.error("Error fetching appointments:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const getAppointmentById = async (req: Request, res: Response) => {
+export const getAppointmentById = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -162,14 +163,15 @@ export const getAppointmentById = async (req: Request, res: Response) => {
     res.json(appointment);
   } catch (error) {
     logger.error("Error fetching appointment:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
 const appointmentRepo = new AppointmentRepositoryPostgres();
 const createAppointmentHandler = new CreateAppointmentCommandHandler(appointmentRepo, eventBus);
 
-export const createAppointment = async (req: Request, res: Response) => {
+export const createAppointment = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -193,11 +195,12 @@ export const createAppointment = async (req: Request, res: Response) => {
     res.status(201).json(appointment);
   } catch (error) {
     logger.error("Error creating appointment:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const updateAppointment = async (req: Request, res: Response) => {
+export const updateAppointment = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -225,11 +228,12 @@ export const updateAppointment = async (req: Request, res: Response) => {
     res.json(appointment);
   } catch (error) {
     logger.error("Error updating appointment:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const deleteAppointment = async (req: Request, res: Response) => {
+export const deleteAppointment = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -248,11 +252,12 @@ export const deleteAppointment = async (req: Request, res: Response) => {
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting appointment:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const checkConflict = async (req: Request, res: Response) => {
+export const checkConflict = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -287,7 +292,8 @@ export const checkConflict = async (req: Request, res: Response) => {
     res.json({ hasConflict: conflicts.length > 0, count: conflicts.length });
   } catch (error) {
     logger.error("Error checking conflict:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
@@ -297,7 +303,7 @@ export const checkConflict = async (req: Request, res: Response) => {
 // enforced by verifying the linked appointment belongs to the clinic.
 // ---------------------------------------------------------------------------
 
-export const getConfirmations = async (req: Request, res: Response) => {
+export const getConfirmations = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -327,11 +333,12 @@ export const getConfirmations = async (req: Request, res: Response) => {
     res.json(confirmations);
   } catch (error) {
     logger.error("Error fetching confirmations:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const getConfirmationById = async (req: Request, res: Response) => {
+export const getConfirmationById = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -357,11 +364,12 @@ export const getConfirmationById = async (req: Request, res: Response) => {
     res.json(confirmation);
   } catch (error) {
     logger.error("Error fetching confirmation:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const createConfirmation = async (req: Request, res: Response) => {
+export const createConfirmation = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -387,11 +395,12 @@ export const createConfirmation = async (req: Request, res: Response) => {
     res.status(201).json(confirmation);
   } catch (error) {
     logger.error("Error creating confirmation:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const updateConfirmation = async (req: Request, res: Response) => {
+export const updateConfirmation = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -428,11 +437,12 @@ export const updateConfirmation = async (req: Request, res: Response) => {
     res.json(confirmation);
   } catch (error) {
     logger.error("Error updating confirmation:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const deleteConfirmation = async (req: Request, res: Response) => {
+export const deleteConfirmation = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -460,7 +470,8 @@ export const deleteConfirmation = async (req: Request, res: Response) => {
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting confirmation:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
@@ -468,7 +479,7 @@ export const deleteConfirmation = async (req: Request, res: Response) => {
 // Blocked Times
 // ---------------------------------------------------------------------------
 
-export const getBlockedTimes = async (req: Request, res: Response) => {
+export const getBlockedTimes = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -502,11 +513,12 @@ export const getBlockedTimes = async (req: Request, res: Response) => {
     res.json(items);
   } catch (error) {
     logger.error("Error fetching blocked times:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const getBlockedTimeById = async (req: Request, res: Response) => {
+export const getBlockedTimeById = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -522,11 +534,12 @@ export const getBlockedTimeById = async (req: Request, res: Response) => {
     res.json(item);
   } catch (error) {
     logger.error("Error fetching blocked time:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const createBlockedTime = async (req: Request, res: Response) => {
+export const createBlockedTime = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -543,11 +556,12 @@ export const createBlockedTime = async (req: Request, res: Response) => {
     res.status(201).json(item);
   } catch (error) {
     logger.error("Error creating blocked time:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const deleteBlockedTime = async (req: Request, res: Response) => {
+export const deleteBlockedTime = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -566,7 +580,8 @@ export const deleteBlockedTime = async (req: Request, res: Response) => {
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting blocked time:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
@@ -574,7 +589,7 @@ export const deleteBlockedTime = async (req: Request, res: Response) => {
 // Dentist Schedules
 // ---------------------------------------------------------------------------
 
-export const getDentistSchedules = async (req: Request, res: Response) => {
+export const getDentistSchedules = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -599,11 +614,12 @@ export const getDentistSchedules = async (req: Request, res: Response) => {
     res.json(items);
   } catch (error) {
     logger.error("Error fetching dentist schedules:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const getDentistScheduleById = async (req: Request, res: Response) => {
+export const getDentistScheduleById = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -619,11 +635,12 @@ export const getDentistScheduleById = async (req: Request, res: Response) => {
     res.json(item);
   } catch (error) {
     logger.error("Error fetching dentist schedule:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const createDentistSchedule = async (req: Request, res: Response) => {
+export const createDentistSchedule = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -640,11 +657,12 @@ export const createDentistSchedule = async (req: Request, res: Response) => {
     res.status(201).json(item);
   } catch (error) {
     logger.error("Error creating dentist schedule:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const updateDentistSchedule = async (req: Request, res: Response) => {
+export const updateDentistSchedule = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -672,11 +690,12 @@ export const updateDentistSchedule = async (req: Request, res: Response) => {
     res.json(item);
   } catch (error) {
     logger.error("Error updating dentist schedule:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
 
-export const deleteDentistSchedule = async (req: Request, res: Response) => {
+export const deleteDentistSchedule = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
@@ -695,6 +714,7 @@ export const deleteDentistSchedule = async (req: Request, res: Response) => {
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting dentist schedule:", { error });
-    res.status(500).json({ error: "Internal server error" });
+    next(error);
+    return;
   }
 };
