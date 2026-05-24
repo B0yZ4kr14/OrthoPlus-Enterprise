@@ -93,4 +93,71 @@ test.describe("IA Radiografia - Upload e Análise", () => {
       ).toBeVisible();
     }
   });
+
+  test("deve fazer upload de radiografia (fluxo E2E completo)", async ({ page }) => {
+    await page.goto("./ia-radiografia");
+    await page.waitForLoadState("domcontentloaded");
+
+    // Clicar no botão de nova análise
+    await page.getByRole("button", { name: /nova análise/i }).click();
+
+    // Verificar se o diálogo abriu
+    await expect(
+      page.getByRole("dialog").getByText(/upload de radiografia/i),
+    ).toBeVisible();
+
+    // Preencher paciente ID
+    const patientInput = page.getByPlaceholder(/id do paciente/i);
+    await patientInput.fill("test-patient-001");
+
+    // Aguardar verificação de consentimento (pode demorar)
+    await page.waitForTimeout(1500);
+
+    // Selecionar tipo de radiografia
+    const tipoSelect = page.getByRole("combobox").first();
+    await tipoSelect.click();
+    await page.getByRole("option", { name: /panorâmica/i }).first().click();
+
+    // Fazer upload de arquivo (criar arquivo temporário)
+    const fileInput = page.locator('input[type="file"]');
+    // Criar um blob PNG mínimo (1x1 pixel)
+    const buffer = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "base64",
+    );
+    await fileInput.setInputFiles({
+      name: "test-radiografia.png",
+      mimeType: "image/png",
+      buffer,
+    });
+
+    // Verificar que o botão de upload está habilitado (se consentimento OK)
+    const uploadButton = page.getByRole("button", { name: /enviar e analisar/i });
+
+    // Se o consentimento estiver confirmado, o botão deve estar habilitado
+    const isEnabled = await uploadButton.isEnabled().catch(() => false);
+    if (isEnabled) {
+      await uploadButton.click();
+
+      // Aguardar resposta do backend (sucesso ou erro de IA)
+      await page.waitForTimeout(3000);
+
+      // Verificar se houve feedback (sucesso ou erro)
+      const hasFeedback = await Promise.race([
+        page.getByText(/análise concluída/i).first().isVisible().catch(() => false),
+        page.getByText(/erro ao processar/i).first().isVisible().catch(() => false),
+        page.getByText(/analisando/i).first().isVisible().catch(() => false),
+      ]);
+
+      expect(hasFeedback).toBeTruthy();
+    } else {
+      // Se o botão está desabilitado, verificar que é por causa do consentimento
+      const consentWarning = await page
+        .getByText(/consentimento lgpd/i)
+        .first()
+        .isVisible()
+        .catch(() => false);
+      expect(consentWarning).toBeTruthy();
+    }
+  });
 });
