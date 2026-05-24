@@ -3,6 +3,7 @@ import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
 import { createCampanhaSchema, updateCampanhaSchema, createEnvioSchema, createRecallSchema } from "./schemas";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
+import { marketingMetrics } from "@/infrastructure/metrics/MarketingMetrics";
 
 export class MarketingController {
   // --- Campanhas ---
@@ -48,6 +49,7 @@ export class MarketingController {
     const data = await (prisma as any).marketing_campaigns.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
       data: { ...parsed.data, clinic_id: clinicId },
     });
+    marketingMetrics.incCampaignsCreated(clinicId)
     res.status(201).json(data);
   });
 
@@ -109,6 +111,7 @@ export class MarketingController {
     const data = await (prisma as any).campanha_envios.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
       data: parsed.data,
     });
+    marketingMetrics.incEnviosCreated(clinicId)
     res.status(201).json(data);
   });
 
@@ -328,6 +331,7 @@ export class MarketingController {
       triggered,
     });
 
+    marketingMetrics.incTriggersFired(clinicId)
     res.json({
       success: true,
       triggersChecked: activeTriggers.length,
@@ -401,6 +405,7 @@ export class MarketingController {
       processed++;
     }
 
+    marketingMetrics.incRecallsProcessed(clinicId)
     res.json({
       success: true,
       pending: pendingRecalls.length,

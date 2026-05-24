@@ -37,9 +37,9 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 1
 
-- [ ] T004 [P] [US1] Backend unit test: create campaign with valid data
-- [ ] T005 [P] [US1] Backend unit test: list campaigns filters by clinicId
-- [ ] T006 [P] [US1] Frontend unit test: `ListCampaignsUseCase`
+- [x] T004 [P] [US1] Backend unit test: create campaign with valid data
+- [x] T005 [P] [US1] Backend unit test: list campaigns filters by clinicId
+- [x] T006 [P] [US1] Frontend unit test: `ListCampaignsUseCase`
 
 ### Implementation for User Story 1
 
@@ -60,8 +60,8 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 2
 
-- [ ] T015 [P] [US2] Backend unit test: create envio with campaign link
-- [ ] T016 [P] [US2] Backend unit test: process recalls batch
+- [x] T015 [P] [US2] Backend unit test: create envio with campaign link
+- [x] T016 [P] [US2] Backend unit test: process recalls batch
 
 ### Implementation for User Story 2
 
@@ -82,8 +82,8 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 3
 
-- [ ] T025 [P] [US3] Frontend unit test: badge unlock logic
-- [ ] T026 [P] [US3] Frontend unit test: referral reward calculation
+- [x] T025 [P] [US3] Frontend unit test: badge unlock logic
+- [x] T026 [P] [US3] Frontend unit test: referral reward calculation
 
 ### Implementation for User Story 3
 
@@ -104,10 +104,10 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 - [x] T034 [P] Add `GetCampaignMetricsUseCase` for analytics
 - [x] T035 [P] Add `UpdateCampaignStatusUseCase` for workflow
 - [x] T036 [P] Add campaign metrics dashboard UI
-- [ ] T037 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
-- [ ] T038 Run backend build: `cd backend && pnpm build`
-- [ ] T039 Code cleanup — no new `as any` or `@ts-ignore`
-- [ ] T040 Add module documentation to `docs/marketing.md`
+- [x] T037 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
+- [x] T038 Run backend build: `cd backend && pnpm build`
+- [x] T039 Code cleanup — no new `as any` or `@ts-ignore`
+- [x] T040 Add module documentation to `docs/marketing.md`
 
 ---
 
@@ -115,9 +115,9 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 **Purpose**: Observability and resilience
 
-- [ ] T041 [P] Add Prometheus metric emission for marketing operations
-- [ ] T042 [P] Document edge case handling for batch recall failures
-- [ ] T043 Verify all edge cases from spec.md have mitigation in place
+- [x] T041 [P] Add Prometheus metric emission for marketing operations
+- [x] T042 [P] Document edge case handling for batch recall failures
+- [x] T043 Verify all edge cases from spec.md have mitigation in place
 
 ---
 
@@ -138,11 +138,11 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 | Metric | Count |
 |--------|-------|
 | **Total tasks** | 43 |
-| **Completed** | 30 |
-| **Pending** | 13 |
-| **Backend tests missing** | 4 |
-| **Quality gates missing** | 3 |
-| **Observability missing** | 3 |
+| **Completed** | 43 |
+| **Pending** | 0 |
+| **Backend tests missing** | 0 |
+| **Quality gates missing** | 0 |
+| **Observability missing** | 0 |
 
 ---
 
