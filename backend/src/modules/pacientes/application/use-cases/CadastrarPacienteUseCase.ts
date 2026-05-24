@@ -11,6 +11,8 @@ import { DadosComerciaisVO } from '../../domain/value-objects/DadosComerciaisVO'
 import { IPatientRepository } from '../../domain/repositories/IPatientRepository';
 import { eventBus } from '@/shared/events/EventBus';
 import { logger } from '@/infrastructure/logger';
+import { pacientesMetrics } from '@/infrastructure/metrics/PacientesMetrics';
+import { withTiming } from '@/infrastructure/metrics/withTiming';
 
 export interface CadastrarPacienteDTO {
   clinicId: string;
@@ -55,124 +57,137 @@ export class CadastrarPacienteUseCase {
   constructor(private patientRepository: IPatientRepository) {}
 
   async execute(dto: CadastrarPacienteDTO): Promise<{ patientId: string }> {
-    logger.info('CadastrarPacienteUseCase: Starting', {
-      clinicId: dto.clinicId,
-      fullName: dto.fullName,
-    });
-
-    // Validar duplicação por CPF
-    if (dto.cpf) {
-      const existingByCPF = await this.patientRepository.findByCPF(
-        dto.cpf,
-        dto.clinicId
-      );
-      if (existingByCPF) {
-        throw new Error('Já existe paciente cadastrado com este CPF');
-      }
-    }
-
-    // Validar duplicação por email
-    if (dto.email) {
-      const existingByEmail = await this.patientRepository.findByEmail(
-        dto.email,
-        dto.clinicId
-      );
-      if (existingByEmail) {
-        throw new Error('Já existe paciente cadastrado com este email');
-      }
-    }
-
-    // Criar status inicial
     const status = dto.statusCode
       ? PatientStatus.fromCode(dto.statusCode)
       : PatientStatus.prospect();
 
-    // Criar dados comerciais se fornecidos
-    const dadosComerciais = this.hasDadosComerciais(dto)
-      ? new DadosComerciaisVO({
-          campanhaOrigemId: dto.campanhaOrigemId,
-          origemId: dto.origemId,
-          promotorId: dto.promotorId,
-          eventoId: dto.eventoId,
-          telemarketingAgent: dto.telemarketingAgent,
-          escolaridade: dto.escolaridade as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-          estadoCivil: dto.estadoCivil as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-          profissao: dto.profissao,
-          empresa: dto.empresa,
-          rendaMensal: dto.rendaMensal,
-        })
-      : undefined;
+    return withTiming(
+      async () => {
+        logger.info('CadastrarPacienteUseCase: Starting', {
+          clinicId: dto.clinicId,
+          fullName: dto.fullName,
+        });
 
-    // Criar aggregate Patient
-    const patient = Patient.create({
-      clinicId: dto.clinicId,
-      fullName: dto.fullName,
-      cpf: dto.cpf,
-      rg: dto.rg,
-      birthDate: dto.birthDate ? new Date(dto.birthDate) : undefined,
-      gender: dto.gender,
-      email: dto.email,
-      phone: dto.phone,
-      mobile: dto.mobile,
-      addressStreet: dto.addressStreet,
-      addressNumber: dto.addressNumber,
-      addressComplement: dto.addressComplement,
-      addressNeighborhood: dto.addressNeighborhood,
-      addressCity: dto.addressCity,
-      addressState: dto.addressState,
-      addressZipcode: dto.addressZipcode,
-      status,
-      dadosComerciais,
-      notes: dto.notes,
-      isActive: true,
-      createdBy: dto.createdBy,
-    });
+        // Validar duplicação por CPF
+        if (dto.cpf) {
+          const existingByCPF = await this.patientRepository.findByCPF(
+            dto.cpf,
+            dto.clinicId
+          );
+          if (existingByCPF) {
+            throw new Error('Já existe paciente cadastrado com este CPF');
+          }
+        }
 
-    // Persistir
-    await this.patientRepository.save(patient);
+        // Validar duplicação por email
+        if (dto.email) {
+          const existingByEmail = await this.patientRepository.findByEmail(
+            dto.email,
+            dto.clinicId
+          );
+          if (existingByEmail) {
+            throw new Error('Já existe paciente cadastrado com este email');
+          }
+        }
 
-    // Registrar histórico de status inicial
-    await this.patientRepository.saveStatusHistory(
-      patient.id,
-      null,
-      status.code,
-      'Cadastro inicial',
-      dto.createdBy || 'system'
-    );
+        // Criar dados comerciais se fornecidos
+        const dadosComerciais = this.hasDadosComerciais(dto)
+          ? new DadosComerciaisVO({
+              campanhaOrigemId: dto.campanhaOrigemId,
+              origemId: dto.origemId,
+              promotorId: dto.promotorId,
+              eventoId: dto.eventoId,
+              telemarketingAgent: dto.telemarketingAgent,
+              escolaridade: dto.escolaridade as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              estadoCivil: dto.estadoCivil as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              profissao: dto.profissao,
+              empresa: dto.empresa,
+              rendaMensal: dto.rendaMensal,
+            })
+          : undefined;
 
-    // Publicar eventos de domínio em paralelo (PacienteCadastrado + eventos do aggregate)
-    const events = patient.getDomainEvents();
-    
-    await Promise.all([
-      eventBus.publish({
-        eventId: crypto.randomUUID(),
-        eventType: 'Pacientes.PacienteCadastrado',
-        occurredOn: new Date(),
-        aggregateId: patient.id,
-        aggregateType: 'Patient',
-        payload: {
+        // Criar aggregate Patient
+        const patient = Patient.create({
+          clinicId: dto.clinicId,
+          fullName: dto.fullName,
+          cpf: dto.cpf,
+          rg: dto.rg,
+          birthDate: dto.birthDate ? new Date(dto.birthDate) : undefined,
+          gender: dto.gender,
+          email: dto.email,
+          phone: dto.phone,
+          mobile: dto.mobile,
+          addressStreet: dto.addressStreet,
+          addressNumber: dto.addressNumber,
+          addressComplement: dto.addressComplement,
+          addressNeighborhood: dto.addressNeighborhood,
+          addressCity: dto.addressCity,
+          addressState: dto.addressState,
+          addressZipcode: dto.addressZipcode,
+          status,
+          dadosComerciais,
+          notes: dto.notes,
+          isActive: true,
+          createdBy: dto.createdBy,
+        });
+
+        // Persistir
+        await this.patientRepository.save(patient);
+
+        // Registrar histórico de status inicial
+        await this.patientRepository.saveStatusHistory(
+          patient.id,
+          null,
+          status.code,
+          'Cadastro inicial',
+          dto.createdBy || 'system'
+        );
+
+        // Publicar eventos de domínio em paralelo (PacienteCadastrado + eventos do aggregate)
+        const events = patient.getDomainEvents();
+        
+        await Promise.all([
+          eventBus.publish({
+            eventId: crypto.randomUUID(),
+            eventType: 'Pacientes.PacienteCadastrado',
+            occurredOn: new Date(),
+            aggregateId: patient.id,
+            aggregateType: 'Patient',
+            payload: {
+              patientId: patient.id,
+              patientName: patient.fullName,
+              statusCode: status.code,
+              clinicId: dto.clinicId,
+            },
+            metadata: {
+              userId: dto.createdBy,
+              clinicId: dto.clinicId,
+              timestamp: new Date().toISOString(),
+            },
+          }),
+          ...events.map((event) => eventBus.publish(event)),
+        ]);
+
+        patient.clearDomainEvents();
+
+        logger.info('CadastrarPacienteUseCase: Success', {
           patientId: patient.id,
           patientName: patient.fullName,
-          statusCode: status.code,
-          clinicId: dto.clinicId,
+        });
+
+        return { patientId: patient.id };
+      },
+      {
+        onSuccess: (durationMs) => {
+          pacientesMetrics.observePatientCreateDuration(dto.clinicId, durationMs);
+          pacientesMetrics.incPatientsTotal(status.code, dto.clinicId);
         },
-        metadata: {
-          userId: dto.createdBy,
-          clinicId: dto.clinicId,
-          timestamp: new Date().toISOString(),
+        onError: (durationMs, error) => {
+          pacientesMetrics.observePatientCreateDuration(dto.clinicId, durationMs);
+          logger.error('CadastrarPacienteUseCase: Error', { error, clinicId: dto.clinicId });
         },
-      }),
-      ...events.map((event) => eventBus.publish(event)),
-    ]);
-
-    patient.clearDomainEvents();
-
-    logger.info('CadastrarPacienteUseCase: Success', {
-      patientId: patient.id,
-      patientName: patient.fullName,
-    });
-
-    return { patientId: patient.id };
+      }
+    );
   }
 
   private hasDadosComerciais(dto: CadastrarPacienteDTO): boolean {

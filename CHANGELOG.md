@@ -1,5 +1,39 @@
 # Changelog — OrthoPlus Enterprise
 
+## [IA Radiografia] - 2026-05-24
+
+### Added
+- AI-powered dental radiograph analysis with local Ollama/llava vision model
+- LGPD consent management (register, check, revoke) with immutable audit trail
+- Upload flow with DICOM/EXIF metadata stripping and PII validation
+- Dentist review workflow with digital signature and observations
+- Aggregated insights dashboard with KPIs and charts
+- Side-by-side radiograph comparison with trend analysis
+- Patient radiography timeline with Recharts visualization
+- PDF export for comparative analyses via jsPDF
+- Prometheus metrics emission for ia_radiografia module
+- Redis-backed rate limiting (10/hr per dentist, 100/day per clinic)
+- Environment feature flag gating (`ENABLE_AI_RADIOGRAPHY`)
+- `withTiming()` shared helper for metrics-instrumented async operations
+- Grafana dashboards for Agenda and Pacientes modules
+
+### Changed
+- Unified rate limiter from in-memory to Redis-backed (`iaRateLimiter.ts`)
+- Frontend Zod schemas synced with Prisma enum definitions
+
+### Fixed
+- Removed hardcoded dev encryption fallback in `IAEncryptionService`
+- Fixed `user-agent` undefined crash in audit logging
+- Aligned mock expectations with `LocalAIService.analyzeRadiografia` response shape
+
+### Technical Notes
+- Storage uses local filesystem (`uploads/ia-radiografia/`) — MinIO/S3 migration planned
+- AI analysis is synchronous — background worker (BullMQ) deferred to post-MVP
+- Problem normalization into dedicated table deferred to post-MVP (GAP-005)
+- Model versioning and A/B testing support deferred to post-MVP
+
+---
+
 ## [OMK Governance Integration] - 2026-05-19
 
 ### Added

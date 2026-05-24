@@ -17,7 +17,7 @@ import {
 } from "@orthoplus/core-ui/select";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { tipoRadiografiaLabels } from "@/modules/ia-radiografia/types/radiografia.types";
-import { ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
+import { ShieldCheck, ShieldAlert, ShieldX, Loader2 } from "lucide-react";
 
 export type ConsentStatus = "loading" | "consented" | "missing" | "revoked";
 
@@ -34,6 +34,8 @@ interface UploadDialogProps {
   consentStatus?: ConsentStatus;
   onRegisterConsent?: () => void;
   checkingConsent?: boolean;
+  isUploading?: boolean;
+  uploadError?: string | null;
 }
 
 export function UploadDialog({
@@ -49,9 +51,11 @@ export function UploadDialog({
   consentStatus = "loading",
   onRegisterConsent,
   checkingConsent = false,
+  isUploading = false,
+  uploadError = null,
 }: UploadDialogProps) {
   const canUpload =
-    selectedFile && selectedPatient && selectedTipo && consentStatus === "consented";
+    selectedFile && selectedPatient && selectedTipo && consentStatus === "consented" && !isUploading;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -133,12 +137,27 @@ export function UploadDialog({
             <Label>Arquivo de Imagem</Label>
             <Input type="file" accept="image/*" onChange={onFileChange} />
           </div>
+          {uploadError && (
+            <Alert className="bg-destructive/10 border-destructive/30">
+              <ShieldAlert className="h-4 w-4 text-destructive" />
+              <AlertDescription className="text-destructive">
+                {uploadError}
+              </AlertDescription>
+            </Alert>
+          )}
           <Button
             onClick={onUpload}
             disabled={!canUpload}
             className="w-full"
           >
-            Enviar e Analisar com IA
+            {isUploading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Enviando e analisando...
+              </>
+            ) : (
+              "Enviar e Analisar com IA"
+            )}
           </Button>
         </div>
       </DialogContent>

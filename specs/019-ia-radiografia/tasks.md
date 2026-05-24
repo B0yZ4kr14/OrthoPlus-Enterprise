@@ -41,7 +41,7 @@
   - **Result**: Service now throws if IA_ENCRYPTION_KEY is missing or < 32 chars. No fallback.
   - **Details**: Remove fallback key. Service MUST throw if `IA_ENCRYPTION_KEY` is missing or < 32 chars.
   - **File**: `backend/src/modules/ia_radiografia/domain/services/IAEncryptionService.ts`
-- [ ] T007 Replace in-memory rate limiter with Redis-backed limiter in `backend/src/modules/ia_radiografia/api/iaRateLimiter.ts`
+- [x] T007 Replace in-memory rate limiter with Redis-backed limiter in `backend/src/modules/ia_radiografia/api/iaRateLimiter.ts`
   - **Deferred**: Non-blocking for MVP. In-memory limiter works for single-instance deploy.
   - **Details**: Use `ioredis` (already in backend deps) to store counters. Keys: `rate:ia:dentista:{dentistaId}` (10/hr) and `rate:ia:clinica:{clinicId}` (100/day).
   - **File**: `backend/src/modules/ia_radiografia/api/iaRateLimiter.ts`
@@ -83,11 +83,11 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T013 [P] [US1] Backend unit test: consent verification blocks upload without consent
+- [x] T013 [P] [US1] Backend unit test: consent verification blocks upload without consent
   - **File**: `backend/tests/unit/ia-radiografia/consentimento.test.ts`
-- [ ] T014 [P] [US1] Backend unit test: metadata stripper removes PII from DICOM/EXIF
+- [x] T014 [P] [US1] Backend unit test: metadata stripper removes PII from DICOM/EXIF
   - **File**: `backend/tests/unit/ia-radiografia/metadata-stripper.test.ts`
-- [ ] T015 [P] [US1] Backend unit test: AI service returns structured JSON with problemas_detectados
+- [x] T015 [P] [US1] Backend unit test: AI service returns structured JSON with problemas_detectados
   - **File**: `backend/tests/unit/ia-radiografia/ai-service.test.ts`
 - [ ] T016 [P] [US1] E2E test: upload flow from frontend to backend
   - **File**: `tests/e2e/ia-radiografia-upload.spec.ts`
@@ -110,7 +110,7 @@
   - **Result**: Hook already handles response correctly. FormData field name preserved as `patient_id` for API compatibility.
   - **Details**: Ensure hook correctly parses the upload response and refreshes analysis list.
   - **File**: `apps/web/src/modules/ia-radiografia/hooks/useRadiografia.ts`
-- [ ] T021 [US1] Add loading and error states to `UploadDialog.tsx`
+- [x] T021 [US1] Add loading and error states to `UploadDialog.tsx`
   - **Deferred**: Dialog already has basic structure; full error state enhancement can be done with US2/US3.
   - **Details**: Show spinner during upload/analysis, display error messages (consent missing, PII detected, AI error).
   - **File**: `apps/web/src/modules/ia-radiografia/ui/components/UploadDialog.tsx`
@@ -127,9 +127,9 @@
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T022 [P] [US2] Backend unit test: review endpoint requires both fields
+- [x] T022 [P] [US2] Backend unit test: review endpoint requires both fields
   - **File**: `backend/tests/unit/ia-radiografia/review.test.ts`
-- [ ] T023 [P] [US2] Backend unit test: review creates audit log entry
+- [x] T023 [P] [US2] Backend unit test: review creates audit log entry
   - **File**: `backend/tests/unit/ia-radiografia/audit.test.ts`
 
 ### Implementation for User Story 2
@@ -302,6 +302,8 @@
 | Metric | Count |
 |--------|-------|
 | **Total tasks** | 45 |
+| **Completed** | 35 |
+| **Pending** | 10 |
 | **Critical gap fixes** | 8 (Phase 2) |
 | **US1 tasks** | 9 (P1 — MVP) |
 | **US2 tasks** | 5 (P2) |

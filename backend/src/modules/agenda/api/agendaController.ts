@@ -5,6 +5,7 @@ import { z } from "zod";
 import { CreateAppointmentCommandHandler } from "../application/commands/CreateAppointmentCommand";
 import { AppointmentRepositoryPostgres } from "../infrastructure/repositories/AppointmentRepositoryPostgres";
 import { eventBus } from "@/shared/events/EventBus";
+import { agendaMetrics } from "@/infrastructure/metrics/AgendaMetrics";
 
 // ---------------------------------------------------------------------------
 // Auth helper — returns clinicId from JWT or sends 401 and returns null
@@ -100,6 +101,7 @@ export const getAppointments = async (req: Request, res: Response, next: NextFun
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
 
+  const start = Date.now();
   try {
     const { dentist_id, patient_id, status, start_date, end_date } = req.query;
 
@@ -137,8 +139,12 @@ export const getAppointments = async (req: Request, res: Response, next: NextFun
       orderBy: { start_time: "asc" },
     });
 
+    const duration = Date.now() - start;
+    agendaMetrics.observeCalendarLoadDuration(clinicId, duration);
     res.json(appointments);
   } catch (error) {
+    const duration = Date.now() - start;
+    agendaMetrics.observeCalendarLoadDuration(clinicId, duration);
     logger.error("Error fetching appointments:", { error });
     next(error);
     return;

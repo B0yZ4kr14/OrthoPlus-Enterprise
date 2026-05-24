@@ -1,44 +1,42 @@
 import { Request, Response, NextFunction } from "express"
-
-// Rate limiting em memoria (substituir por Redis em producao)
-const counters = new Map<string, { count: number; resetAt: number }>()
+import { redisInstance } from "@/infrastructure/redis/redisClient"
 
 function getKey(prefix: string, id: string): string {
-  return `${prefix}:${id}`
+  return `rate_limit:${prefix}:${id}`
 }
 
-function isLimited(key: string, max: number, windowMs: number): boolean {
+async function isLimited(key: string, max: number, windowMs: number): Promise<boolean> {
   const now = Date.now()
-  const entry = counters.get(key)
+  const windowKey = `${key}:${Math.floor(now / windowMs)}`
 
-  if (!entry || now > entry.resetAt) {
-    counters.set(key, { count: 1, resetAt: now + windowMs })
-    return false
+  const current = await redisInstance.incr(windowKey)
+  if (current === 1) {
+    await redisInstance.pexpire(windowKey, windowMs)
   }
 
-  if (entry.count >= max) {
-    return true
-  }
-
-  entry.count++
-  return false
+  return current > max
 }
 
-export function iaRateLimiter(req: Request, res: Response, next: NextFunction): void {
+export async function iaRateLimiter(req: Request, res: Response, next: NextFunction): Promise<void> {
   const dentistId = req.user?.id as string
   const clinicId = req.clinicId as string
 
-  // Por dentista: 10 uploads/analises por hora
-  if (isLimited(getKey("ia:dentist", dentistId), 10, 60 * 60 * 1000)) {
-    res.status(429).json({ error: "Rate limit excedido (dentista)", retryAfter: 3600 })
-    return
-  }
+  try {
+    // Por dentista: 10 uploads/analises por hora
+    if (await isLimited(getKey("ia:dentist", dentistId), 10, 60 * 60 * 1000)) {
+      res.status(429).json({ error: "Rate limit excedido (dentista)", retryAfter: 3600 })
+      return
+    }
 
-  // Por clinica: 100 analises por dia
-  if (isLimited(getKey("ia:clinic", clinicId), 100, 24 * 60 * 60 * 1000)) {
-    res.status(429).json({ error: "Rate limit excedido (clinica)", retryAfter: 86400 })
-    return
-  }
+    // Por clinica: 100 analises por dia
+    if (await isLimited(getKey("ia:clinic", clinicId), 100, 24 * 60 * 60 * 1000)) {
+      res.status(429).json({ error: "Rate limit excedido (clinica)", retryAfter: 86400 })
+      return
+    }
 
-  next()
+    next()
+  } catch (error) {
+    // Fallback: allow request if Redis is unavailable
+    next()
+  }
 }

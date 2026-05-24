@@ -7,6 +7,8 @@
 
 import { prisma } from "@/infrastructure/database/prismaClient"
 import { logger } from "@/infrastructure/logger"
+import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics"
+import { withTiming } from "@/infrastructure/metrics/withTiming"
 
 export interface SearchPacientesFilters {
   query?: string
@@ -73,49 +75,61 @@ export class PacienteSearchService {
 
     const orderBy = this.buildOrderBy(filters.orderBy ?? "relevance", filters.query)
 
-    const [patients, total] = await Promise.all([
-      prisma.patients.findMany({
-        where,
-        orderBy,
-        skip,
-        take: limit,
-        select: {
-          id: true,
-          full_name: true,
-          cpf: true,
-          phone_primary: true,
-          email: true,
-          status: true,
-          birth_date: true,
-          photo_url: true,
-          last_appointment_date: true,
+    return withTiming(
+      async () => {
+        const [patients, total] = await Promise.all([
+          prisma.patients.findMany({
+            where,
+            orderBy,
+            skip,
+            take: limit,
+            select: {
+              id: true,
+              full_name: true,
+              cpf: true,
+              phone_primary: true,
+              email: true,
+              status: true,
+              birth_date: true,
+              photo_url: true,
+              last_appointment_date: true,
+            },
+          }),
+          prisma.patients.count({ where }),
+        ])
+
+        logger.info("PacienteSearchService: found", {
+          clinicId,
+          total,
+          returned: patients.length,
+        })
+
+        return {
+          patients: patients.map((p) => ({
+            id: p.id,
+            fullName: p.full_name,
+            cpf: p.cpf,
+            phone: p.phone_primary,
+            email: p.email,
+            status: p.status ?? "",
+            birthDate: p.birth_date,
+            photoUrl: p.photo_url,
+            lastVisit: p.last_appointment_date,
+          })),
+          total,
+          page,
+          limit,
+        }
+      },
+      {
+        onSuccess: (durationMs) => {
+          pacientesMetrics.observePatientSearchDuration(clinicId, durationMs);
         },
-      }),
-      prisma.patients.count({ where }),
-    ])
-
-    logger.info("PacienteSearchService: found", {
-      clinicId,
-      total,
-      returned: patients.length,
-    })
-
-    return {
-      patients: patients.map((p) => ({
-        id: p.id,
-        fullName: p.full_name,
-        cpf: p.cpf,
-        phone: p.phone_primary,
-        email: p.email,
-        status: p.status ?? "",
-        birthDate: p.birth_date,
-        photoUrl: p.photo_url,
-        lastVisit: p.last_appointment_date,
-      })),
-      total,
-      page,
-      limit,
-    }
+        onError: (durationMs) => {
+          pacientesMetrics.observePatientSearchDuration(clinicId, durationMs);
+        },
+      }
+    );
   }
 
   private buildOrderBy(
