@@ -36,7 +36,8 @@ export async function iaRateLimiter(req: Request, res: Response, next: NextFunct
 
     next()
   } catch (error) {
-    // Fallback: allow request if Redis is unavailable
+    // Fallback: allow request but log warning if Redis is unavailable
+    console.warn("[IA-RateLimiter] Redis unavailable, allowing request:", error)
     next()
   }
 }

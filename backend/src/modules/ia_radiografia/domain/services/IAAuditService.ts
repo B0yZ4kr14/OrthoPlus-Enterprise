@@ -1,4 +1,5 @@
 import { prisma } from "@/infrastructure/database/prismaClient"
+import { Prisma } from "@prisma/client"
 import { RegistrarAcaoAuditDTO } from "../entities/audit"
 
 export class IAAuditService {
@@ -12,7 +13,7 @@ export class IAAuditService {
         acao: dto.acao,
         ip_address: dto.ipAddress,
         user_agent: dto.userAgent,
-        detalhes: (dto.detalhes ?? {}) as any,
+        detalhes: (dto.detalhes ?? {}) as Prisma.InputJsonValue,
       },
     })
   }

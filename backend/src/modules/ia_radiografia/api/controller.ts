@@ -84,7 +84,7 @@ export class IARadiografiaController {
         acao: AcaoAuditIA.UPLOAD,
         ipAddress: req.ip,
         userAgent: req.headers["user-agent"],
-        detalhes: { originalHash, cleanHash, tipoRadiografia: tipo_radiografia } as any,
+        detalhes: { originalHash, cleanHash, tipoRadiografia: tipo_radiografia },
       })
 
       // 5.1 Metrics
@@ -141,7 +141,7 @@ export class IARadiografiaController {
         where: { id: analiseId },
         data: {
           status: "CONCLUIDA",
-          resultado_ia: encrypted as any,
+          resultado_ia: encrypted,
           confidence_score: confidence,
           processamento_ms: processingTimeMs,
         },

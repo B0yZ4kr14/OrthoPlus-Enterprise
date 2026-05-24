@@ -165,12 +165,8 @@ export function ComparativoPDFExport({
 
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
-      pdf.text(
-        // @ts-expect-error — TS2769
-        `Data: ${new Date(analise1.created_at).toLocaleDateString("pt-BR")}`,
-        margin,
-        yPosition,
-      );
+      const data1 = analise1.created_at ? new Date(analise1.created_at).toLocaleDateString("pt-BR") : "Data não disponível"
+      pdf.text(`Data: ${data1}`, margin, yPosition)
       yPosition += 4;
       pdf.text(
         `Tipo: ${tipoRadiografiaLabels[analise1.tipo_radiografia as keyof typeof tipoRadiografiaLabels]}`,
@@ -196,8 +192,10 @@ export function ComparativoPDFExport({
         const img1 = new Image();
         img1.crossOrigin = "anonymous";
         img1.src = analise1.imagem_url || "";
-        await new Promise((resolve) => {
-          img1.onload = resolve;
+        await new Promise<void>((resolve, reject) => {
+          img1.onload = () => resolve();
+          img1.onerror = () => reject(new Error("Image 1 load failed"));
+          setTimeout(() => reject(new Error("Image 1 load timeout")), 5000);
         });
 
         const imgWidth = pageWidth - 2 * margin;
@@ -208,8 +206,8 @@ export function ComparativoPDFExport({
         pdf.addImage(img1, "JPEG", margin, yPosition, imgWidth, finalHeight);
         yPosition += finalHeight + 15;
       } catch (error) {
-        console.error("Erro ao carregar imagem 1:", error);
-        pdf.text("[Imagem não disponível]", margin, yPosition);
+        console.warn("Imagem 1 nao disponivel para exportacao:", error);
+        pdf.text("[Imagem nao disponivel para exportacao]", margin, yPosition);
         yPosition += 10;
       }
 
@@ -221,12 +219,8 @@ export function ComparativoPDFExport({
 
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
-      pdf.text(
-        // @ts-expect-error — TS2769
-        `Data: ${new Date(analise2.created_at).toLocaleDateString("pt-BR")}`,
-        margin,
-        yPosition,
-      );
+      const data2 = analise2.created_at ? new Date(analise2.created_at).toLocaleDateString("pt-BR") : "Data não disponível"
+      pdf.text(`Data: ${data2}`, margin, yPosition)
       yPosition += 4;
       pdf.text(
         `Tipo: ${tipoRadiografiaLabels[analise2.tipo_radiografia as keyof typeof tipoRadiografiaLabels]}`,
@@ -252,8 +246,10 @@ export function ComparativoPDFExport({
         const img2 = new Image();
         img2.crossOrigin = "anonymous";
         img2.src = analise2.imagem_url || "";
-        await new Promise((resolve) => {
-          img2.onload = resolve;
+        await new Promise<void>((resolve, reject) => {
+          img2.onload = () => resolve();
+          img2.onerror = () => reject(new Error("Image 2 load failed"));
+          setTimeout(() => reject(new Error("Image 2 load timeout")), 5000);
         });
 
         const imgWidth = pageWidth - 2 * margin;
@@ -264,8 +260,8 @@ export function ComparativoPDFExport({
         pdf.addImage(img2, "JPEG", margin, yPosition, imgWidth, finalHeight);
         yPosition += finalHeight + 10;
       } catch (error) {
-        console.error("Erro ao carregar imagem 2:", error);
-        pdf.text("[Imagem não disponível]", margin, yPosition);
+        console.warn("Imagem 2 nao disponivel para exportacao:", error);
+        pdf.text("[Imagem nao disponivel para exportacao]", margin, yPosition);
         yPosition += 10;
       }
 
@@ -284,8 +280,8 @@ export function ComparativoPDFExport({
       }
 
       // Salvar PDF
-      // @ts-expect-error — TS18048
-      const fileName = `comparativo_${analise1.paciente_name.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`;
+      const safeName = (analise1.paciente_name || "paciente").replace(/\s+/g, "_")
+      const fileName = `comparativo_${safeName}_${new Date().toISOString().split("T")[0]}.pdf`
       pdf.save(fileName);
 
       toast.success("PDF exportado com sucesso!");

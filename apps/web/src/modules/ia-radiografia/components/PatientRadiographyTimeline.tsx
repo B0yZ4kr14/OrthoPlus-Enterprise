@@ -67,7 +67,7 @@ export const PatientRadiographyTimeline = () => {
 
         // Carregar todas as análises
         const analisesData = await apiClient.get<AnaliseComplete[]>(
-          "/ia/analises-radiograficas",
+          "/ia-radiografia/analises",
         );
 
         setAnalises(analisesData || []);

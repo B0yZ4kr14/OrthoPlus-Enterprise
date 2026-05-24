@@ -16,6 +16,8 @@ jest.mock('../../src/infrastructure/metrics/MetricsCollector', () => ({
       uploadsTotal: { inc: jest.fn() },
       analysisDuration: { observe: jest.fn() },
       reviewsTotal: { inc: jest.fn() },
+      consentRevocationsTotal: { inc: jest.fn() },
+      analysisErrors: { inc: jest.fn() },
     },
     histogram: jest.fn(() => ({ observe: jest.fn() })),
     counter: jest.fn(() => ({ inc: jest.fn() })),
@@ -56,6 +58,7 @@ jest.mock('../../src/infrastructure/database/prismaClient', () => ({
 // Mock services
 const mockVerificarConsentimento = jest.fn()
 const mockRegistrarAcao = jest.fn()
+const mockObterAuditoriaPorAnalise = jest.fn()
 const mockStrip = jest.fn()
 const mockValidateNoPII = jest.fn()
 const mockAnalyzeRadiografia = jest.fn()
@@ -71,7 +74,7 @@ jest.mock('../../src/modules/ia_radiografia/domain/services/IAConsentimentoServi
 jest.mock('../../src/modules/ia_radiografia/domain/services/IAAuditService', () => ({
   IAAuditService: jest.fn().mockImplementation(() => ({
     registrarAcao: mockRegistrarAcao,
-    obterAuditoriaPorAnalise: jest.fn(),
+    obterAuditoriaPorAnalise: mockObterAuditoriaPorAnalise,
   })),
 }))
 
@@ -304,6 +307,62 @@ describe('IARadiografiaController', () => {
       expect(jsonMock).toHaveBeenCalledWith(
         expect.objectContaining({ message: expect.stringContaining('revisada') })
       )
+    })
+  })
+
+  // ── T027: Consent revocation blocks future uploads ─────────────────────────
+  describe('revogarConsentimento — blocks uploads', () => {
+    it('should return 403 when uploading after consent is revoked', async () => {
+      // Step 1: revoke consent
+      req.params = { pacienteId: 'patient-1' }
+      req.body = { motivo: 'Paciente solicitou' }
+
+      await controller.revogarConsentimento(req as Request, res as Response)
+      expect(jsonMock).toHaveBeenCalled()
+
+      // Step 2: attempt upload — consent check should now fail
+      mockVerificarConsentimento.mockResolvedValue(false)
+      req.body = { patient_id: 'patient-1', tipo_radiografia: 'PANORAMICA' }
+      req.file = { buffer: Buffer.from('fake-image') } as any
+
+      await controller.uploadEAnalisar(req as Request, res as Response)
+
+      expect(statusMock).toHaveBeenCalledWith(403)
+      expect(jsonMock).toHaveBeenCalledWith(
+        expect.objectContaining({ code: 'CONSENTIMENTO_AUSENTE' })
+      )
+    })
+  })
+
+  // ── T028: Audit log GET returns clinic-scoped records ──────────────────────
+  describe('obterAuditoriaAnalise — clinic-scoped', () => {
+    it('should return 404 for analysis from another clinic', async () => {
+      mockPrismaFindFirst.mockResolvedValue(null)
+      req.params = { id: 'analise-other-clinic' }
+
+      await controller.obterAuditoriaAnalise(req as Request, res as Response)
+
+      expect(statusMock).toHaveBeenCalledWith(404)
+    })
+
+    it('should return audit records for analysis in same clinic', async () => {
+      mockPrismaFindFirst.mockResolvedValue({
+        id: 'analise-1',
+        clinic_id: 'clinic-123',
+        paciente_id: 'patient-1',
+      })
+      const mockAuditRecords = [
+        { id: 'audit-1', acao: 'UPLOAD', created_at: new Date() },
+        { id: 'audit-2', acao: 'REVISAR', created_at: new Date() },
+      ]
+      mockObterAuditoriaPorAnalise.mockResolvedValue(mockAuditRecords)
+
+      req.params = { id: 'analise-1' }
+
+      await controller.obterAuditoriaAnalise(req as Request, res as Response)
+
+      // res.status(200) is implicit; controller calls res.json() directly
+      expect(jsonMock).toHaveBeenCalledWith(mockAuditRecords)
     })
   })
 })
