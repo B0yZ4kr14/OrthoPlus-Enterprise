@@ -9,6 +9,7 @@ import { IPatientRepository } from '../../domain/repositories/IPatientRepository
 import { PatientStatus } from '../../domain/value-objects/PatientStatus';
 import { eventBus } from '@/shared/events/EventBus';
 import { logger } from '@/infrastructure/logger';
+import { pacientesMetrics } from '@/infrastructure/metrics/PacientesMetrics';
 
 export interface AlterarStatusPacienteDTO {
   patientId: string;
@@ -61,6 +62,10 @@ export class AlterarStatusPacienteUseCase {
       dto.changedBy,
       dto.metadata
     );
+
+    // Atualizar métricas: decrementar status anterior, incrementar novo (TD004)
+    pacientesMetrics.decPatientsTotal(statusAnterior.code, dto.clinicId);
+    pacientesMetrics.incPatientsTotal(novoStatus.code, dto.clinicId);
 
     // Publicar eventos de domínio em paralelo
     const events = patient.getDomainEvents();

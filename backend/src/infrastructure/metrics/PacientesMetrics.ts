@@ -49,6 +49,10 @@ export class PacientesMetrics {
   incPatientsTotal(status: string, clinicId: string): void {
     this.patientsTotal.inc({ status, clinic_id: clinicId })
   }
+
+  decPatientsTotal(status: string, clinicId: string): void {
+    this.patientsTotal.dec({ status, clinic_id: clinicId })
+  }
 }
 
 export const pacientesMetrics = new PacientesMetrics()

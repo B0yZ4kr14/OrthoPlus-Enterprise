@@ -5,6 +5,7 @@
  */
 
 import { logger } from "@/infrastructure/logger";
+import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
@@ -532,9 +533,17 @@ export class PacientesController {
         res.status(401).json({ error: "Missing clinic context" });
         return;
       }
+      // Fetch patient status before deletion for metrics (TD004)
+      const patient = await prisma.patients.findFirst({
+        where: { id, clinic_id: clinicId },
+        select: { status: true },
+      });
       await prisma.patients.deleteMany({
         where: { id, clinic_id: clinicId },
       });
+      if (patient && patient.status) {
+        pacientesMetrics.decPatientsTotal(patient.status, clinicId);
+      }
       res.status(200).json({ success: true, message: "Paciente removido" });
     } catch (error: unknown) {
       logger.error("Error deleting patient", { error });
