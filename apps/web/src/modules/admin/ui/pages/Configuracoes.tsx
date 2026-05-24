@@ -22,8 +22,7 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
-import { useAuth } from "@/contexts/AuthContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ModulesSimple from "@/modules/settings/ui/pages/ModulesSimple";
 import DatabaseBackupTab from "@/components/settings/DatabaseBackupTab";
 import { UserManagementTab } from "@/components/settings/UserManagementTab";
@@ -37,16 +36,10 @@ import { AIModelConfig } from "@/components/settings/AIModelConfig";
 import { BackendSelector } from "@/components/settings/BackendSelector";
 
 export default function Configuracoes() {
-  const { user, hasRole } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("modules");
   const [showExportWizard, setShowExportWizard] = useState(false);
   const [showImportWizard, setShowImportWizard] = useState(false);
-
-  // Apenas ADMINs podem acessar configurações
-  if (!hasRole("ADMIN")) {
-    return <Navigate to="/" replace />;
-  }
 
   const configSections = [
     {
