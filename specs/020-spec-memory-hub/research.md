@@ -74,3 +74,33 @@
 - Fixed-size chunks (e.g., 512 tokens): Simpler but may split coherent sections
 - Sentence-based: Too granular, increases index size
 - Paragraph-based: May create oversized chunks for long paragraphs
+
+---
+
+### ADR-006: API-Key LLM Providers vs Ollama Local para Embeddings
+
+**Status**: Accepted
+**Date**: 2026-05-24
+**Context**: Iteration pós-implementação para alinhar especificação com arquitetura desejada.
+
+**Problem**: O spec original definia Ollama como único provider de embeddings, satisfazendo NFR-004 (local-first). Entretanto, Ollama local requer GPU/CPU significativa, não escala horizontalmente, e a qualidade dos embeddings é inferior a providers cloud como OpenAI.
+
+**Decision**: Adotar API-key providers como padrão em produção, com Ollama como fallback de desenvolvimento.
+
+**Rationale**:
+- API-key providers (OpenAI, Anthropic, Google) oferecem embeddings de maior qualidade e dimensionalidade
+- Escalabilidade horizontal via chamadas HTTP assíncronas
+- Custo previsível e controlável via budget alerts (NFR-008)
+- Failover entre providers garante alta disponibilidade (NFR-007)
+
+**Consequences**:
+- Necessidade de gerenciamento de secrets (NFR-006: AES-256-GCM encryption)
+- Monitoramento de custos por clinic/workspace (NFR-008)
+- Failover entre providers (NFR-007)
+- Conformidade LGPD para dados enviados à cloud (PII detection + audit logging)
+- Ollama mantido como fallback dev/air-gapped
+
+**Alternatives considered**:
+- Manter Ollama único: Simples mas limitado em qualidade e escala
+- Usar pgvector no PostgreSQL: Overkill, adiciona complexidade ao schema Prisma
+- Implementar embeddings próprios: Invável em termos de recursos e expertise

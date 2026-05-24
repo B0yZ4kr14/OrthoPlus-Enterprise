@@ -81,6 +81,9 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 - **How does the system handle very large documents (10k+ lines)?** Large documents are chunked for indexing, with cross-chunk references preserved. Search results point to specific sections.
 - **What about sensitive information in memory?** The memory hub respects `.gitignore` and sensitive-file filters. Documents marked as confidential are excluded from AI agent context.
 - **How does this interact with existing .omk/memory/ and .specify/memory/?** The memory hub unifies both sources, treating `.specify/memory/` as canonical project memory and `.omk/memory/` as operational/orchestration memory.
+- **API key exhaustion**: When monthly quota is reached, the system MUST queue requests and notify administrators, falling back to cached embeddings or local Ollama if available.
+- **Provider outage**: When the primary API provider is unreachable, the system MUST retry with exponential backoff and failover to secondary provider.
+- **LGPD compliance for cloud embeddings**: Before sending document content to external APIs, the system MUST verify no PII/sensitive data is present (via PIIDetector.ts) and log all outbound requests for audit.
 
 ---
 
@@ -98,13 +101,19 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 - **FR-008**: The system MUST respect document confidentiality markers and exclude sensitive content from AI agent context.
 - **FR-009**: The system MUST maintain version history for indexed documents, allowing retrieval of previous versions.
 - **FR-010**: The system MUST expose both a CLI interface (for developers) and an API interface (for AI agents and integrations).
+- **FR-011**: The system MUST validate API key permissions (read/test call) on startup and fail fast with descriptive error if invalid.
+- **FR-012**: The system MUST support hot-swapping of API keys without restart (via file watcher on `.env` or SIGHUP).
 
 ### Non-Functional Requirements
 
 - **NFR-001**: Search queries MUST return results within 2 seconds for datasets up to 1000 documents.
 - **NFR-002**: The index update latency MUST be under 60 seconds for file changes. Inotify/fswatch provides near-real-time updates; polling fallback checks every 30 seconds.
 - **NFR-003**: Context briefs for AI agents MUST fit within a 128k token budget, with intelligent summarization for overflow.
-- **NFR-004**: The system MUST be operable without external cloud dependencies (local-first architecture).
+- **NFR-004**: The system SHOULD be operable without external cloud dependencies (local-first architecture). Ollama fallback ensures local operation; API-key providers are optional enhancements for production environments.
+- **NFR-006**: API keys MUST be stored encrypted at rest (AES-256-GCM) and never logged or exposed in error messages.
+- **NFR-007**: The system MUST support provider failover: if the primary API fails (timeout, rate limit, invalid key), fallback to secondary provider or queue for retry.
+- **NFR-008**: API usage costs MUST be trackable per clinic/workspace with monthly budget alerts configurable via environment.
+- **NFR-009**: Embedding requests MUST include request ID for provider-side tracing and cost attribution.
 - **NFR-005**: Health scan MUST complete within 5 minutes for the current project size (~300 documents).
 
 ---
@@ -145,7 +154,9 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 
 - Access to project filesystem for reading docs, specs, and memory files
 - File watcher capability (inotify/fswatch primary, 30-second polling fallback)
-- Embedding model: Ollama embeddings (local endpoint, consistent with existing ia-radiografia module)
+- Embedding providers: OpenAI (text-embedding-3-small, text-embedding-3-large, ada-002), Anthropic, Google, or any OpenAI-compatible provider via custom base URL
+- Configuration via environment variables: `MEMORY_HUB_EMBEDDING_PROVIDER`, `MEMORY_HUB_API_KEY`, `MEMORY_HUB_API_BASE_URL` (optional, for proxies/custom endpoints)
+- Fallback to Ollama local maintained as development option via `MEMORY_HUB_EMBEDDING_PROVIDER=ollama`
 - Storage for search index: SQLite primary (ACID, structured queries), JSON/flat file fallback for read-only deployments
 
 ### Assumptions
@@ -154,6 +165,9 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 - Documents follow predictable directory structure (specs/NNN-*/, docs/, .specify/memory/)
 - AI agents can consume structured context briefs (JSON/markdown)
 - Developers will periodically review and act on drift reports
+- API provider accounts have sufficient quota for embedding operations
+- Network connectivity to API provider endpoints is available in production
+- API provider SLAs meet the project's latency requirements (<2s per search query)
 
 ---
 
@@ -166,6 +180,8 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 - **Q**: What is the primary file change detection strategy? → **A**: inotify/fswatch as primary with 30-second polling fallback for environments where native watchers are unavailable (e.g., Docker, network mounts).
 - **Q**: What format should AI agent context briefs use? → **A**: Markdown with YAML frontmatter (consistent with existing project documentation; human-readable and parseable by both humans and agents).
 - **Q**: When should the daily drift detection scan run? → **A**: Configurable via environment variable, defaulting to 02:00 local time daily (low-traffic window; aligns with existing backup/worker schedules in the project).
+- **Q**: Which embedding provider should be used in production? → **A**: API-key based providers (OpenAI, Anthropic, Google) for production; Ollama for local development and air-gapped environments.
+- **Q**: How are API keys managed across clinics? → **A**: API keys are configured per deployment (not per clinic) via environment variables. Multi-tenancy uses separate deployments or provider API sub-accounts.
 
 ---
 

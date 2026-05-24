@@ -1,5 +1,5 @@
 ---
-status: pending
+status: applied
 created: 2026-05-24
 change_request: "Resolver conflitos no spec.md antes de qualquer implementação. Adicionar NFR para API keys: segurança, custos, failover. Atualizar Dependencies: remover Ollama, adicionar providers suportados. Documentar LGPD compliance para envio de dados a APIs externas."
 scope: "Feature-wide"
