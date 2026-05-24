@@ -24,7 +24,7 @@ VPS_HOST=${VPS_HOST:-"100.111.74.69"}
 VPS_USER="tsi"
 SSH_KEY="$HOME/.ssh/id_ed25519_b0yz4kr14"
 SSH_OPTS="-i $SSH_KEY -o StrictHostKeyChecking=no -o ConnectTimeout=10"
-REMOTE_BACKEND="/home/tsi/OrthoPlus-Enterprise-backend"
+REMOTE_BACKEND="/home/tsi/OrthoPlus-Enterprise"
 REMOTE_FRONTEND="/var/www/orthoplus"
 LOCAL_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
@@ -106,20 +106,19 @@ log_success "Backend sincronizado para $REMOTE_BACKEND"
 log_info "[5/5] Aplicando migrações Prisma e recarregando PM2..."
 ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
   set -e
-  cd /home/tsi/OrthoPlus-Enterprise-backend
+  cd /home/tsi/OrthoPlus-Enterprise
 
-  # Instalar/atualizar deps do backend (sem devDependencies)
-  pnpm install --prod
+  # Instalar/atualizar deps do backend (incluindo prisma para migrations)
+  pnpm install
 
   # Prisma migrate deploy
   echo "[VPS] Aplicando migrações Prisma..."
   # DEVOPS-2 FIX: Removed dangerous prisma db push --accept-data-loss fallback.
   # Using db push with --accept-data-loss can cause IRREVERSIBLE DATA LOSS in production.
   # Now the deploy aborts if migrations fail, requiring manual investigation.
-  pnpm exec prisma migrate deploy || { echo "Migration failed! Aborting deploy."; exit 1; }
-
-  # Gerar Prisma client atualizado
-  pnpm exec prisma generate
+  # Rodar migrations e gerar Prisma client
+  npx prisma migrate deploy --schema=backend/prisma/schema.prisma || { echo "Migration failed! Aborting deploy."; exit 1; }
+  npx prisma generate --schema=backend/prisma/schema.prisma
 
   # PM2 reload
   if pm2 list | grep -q "orthoplus-backend"; then
@@ -127,7 +126,7 @@ ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
     pm2 reload orthoplus-backend --update-env
   else
     echo "[VPS] Iniciando backend no PM2..."
-    pm2 start dist/index.js --name orthoplus-backend --env production
+    pm2 start backend/dist/index.js --name orthoplus-backend --env production
     pm2 save
   fi
 
