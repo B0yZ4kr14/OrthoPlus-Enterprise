@@ -159,10 +159,12 @@
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T027 [P] [US3] Backend unit test: consent revocation blocks future uploads
-  - **File**: `backend/tests/unit/ia-radiografia/consentimento.test.ts`
-- [ ] T028 [P] [US3] Backend unit test: audit log GET endpoint returns clinic-scoped records
-  - **File**: `backend/tests/unit/ia-radiografia/audit.test.ts`
+- [x] T027 [P] [US3] Backend unit test: consent revocation blocks future uploads
+  - **File**: `backend/tests/unit/iaRadiografiaController.test.ts`
+  - **Result**: Test passes — verifies that after `revogarConsentimento`, `uploadEAnalisar` returns 403 with `CONSENTIMENTO_AUSENTE`.
+- [x] T028 [P] [US3] Backend unit test: audit log GET endpoint returns clinic-scoped records
+  - **File**: `backend/tests/unit/iaRadiografiaController.test.ts`
+  - **Result**: Two tests pass — 404 for cross-clinic access, 200 with audit records for same-clinic access.
 
 ### Implementation for User Story 3
 
@@ -199,14 +201,14 @@
   - **Result**: IAInsightsDashboard already receives `analises` prop and computes insights client-side. Backend endpoint available for future server-side aggregation.
   - **Details**: Replace mock/static data with real API data from T032.
   - **File**: `apps/web/src/modules/ia-radiografia/components/IAInsightsDashboard.tsx`
-- [ ] T034 [US4] Fix `RadiografiaComparison.tsx` to use real analysis data
-  - **Details**: Ensure component fetches and displays selected analyses side-by-side.
+- [x] T034 [US4] Fix `RadiografiaComparison.tsx` to use real analysis data
+  - **Result**: Component already receives `analises` prop and groups by patient. Verified `AnaliseComplete` type aligns with backend response. No code changes needed.
   - **File**: `apps/web/src/modules/ia-radiografia/components/RadiografiaComparison.tsx`
-- [ ] T035 [US4] Fix `PatientRadiographyTimeline.tsx` to use real data
-  - **Details**: Fetch analyses by patient ID, sort by date, render timeline.
+- [x] T035 [US4] Fix `PatientRadiographyTimeline.tsx` to use real data
+  - **Result**: Fixed endpoint path from `/ia/analises-radiograficas` to `/ia-radiografia/analises`. Component fetches patients and analyses, renders Recharts timeline.
   - **File**: `apps/web/src/modules/ia-radiografia/components/PatientRadiographyTimeline.tsx`
-- [ ] T036 [US4] Verify `ComparativoPDFExport.tsx` works with real data
-  - **Details**: Test PDF generation with actual analysis objects. Fix any field name mismatches.
+- [x] T036 [US4] Verify `ComparativoPDFExport.tsx` works with real data
+  - **Result**: Added CORS timeout + `onerror` fallback for image loading. Removed 3 `@ts-expect-error` suppressions. Added safe filename generation for undefined `paciente_name`.
   - **File**: `apps/web/src/modules/ia-radiografia/components/ComparativoPDFExport.tsx`
 
 **Checkpoint**: All user stories independently functional.
