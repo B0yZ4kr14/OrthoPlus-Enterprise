@@ -6,6 +6,20 @@ import {
 import { IAppointmentRepository } from "../../domain/repositories/IAppointmentRepository";
 import { IBlockedTimeRepository } from "../../domain/repositories/IBlockedTimeRepository";
 
+export class BlockedTimeError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "BlockedTimeError"
+  }
+}
+
+export class SchedulingConflictError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "SchedulingConflictError"
+  }
+}
+
 interface CreateAppointmentInput {
   clinicId: string;
   patientId: string;
@@ -35,7 +49,7 @@ export class CreateAppointmentUseCase {
       );
 
     if (blockedTimes.length > 0) {
-      throw new Error("Horário bloqueado para este dentista");
+      throw new BlockedTimeError("Horário bloqueado para este dentista")
     }
 
     // Verificar conflitos de agendamento
@@ -49,7 +63,7 @@ export class CreateAppointmentUseCase {
     );
 
     if (conflicts.length > 0) {
-      throw new Error("Já existe um agendamento neste horário");
+      throw new SchedulingConflictError("Já existe um agendamento neste horário")
     }
 
     // Criar a entidade
