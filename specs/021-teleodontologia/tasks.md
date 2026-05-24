@@ -53,9 +53,9 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 1
 
-- [ ] T004 [P] [US1] Backend unit test: create teleconsulta with valid data
-- [ ] T005 [P] [US1] Backend unit test: list teleconsultas filters by clinicId
-- [ ] T006 [P] [US1] Frontend unit test: `useTeleconsultas` hook
+- [x] T004 [P] [US1] Backend unit test: create teleconsulta with valid data
+- [x] T005 [P] [US1] Backend unit test: list teleconsultas filters by clinicId
+- [x] T006 [P] [US1] Frontend unit test: `useTeleconsultas` hook
 
 ### Implementation for User Story 1
 
@@ -78,8 +78,8 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 2
 
-- [ ] T015 [P] [US2] Backend unit test: start session creates record
-- [ ] T016 [P] [US2] Backend unit test: end session records duration
+- [x] T015 [P] [US2] Backend unit test: start session creates record
+- [x] T016 [P] [US2] Backend unit test: end session records duration
 
 ### Implementation for User Story 2
 
@@ -98,8 +98,8 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 3
 
-- [ ] T021 [P] [US3] Backend unit test: add notes with diagnosis
-- [ ] T022 [P] [US3] Backend unit test: prescription validates medication array
+- [x] T021 [P] [US3] Backend unit test: add notes with diagnosis
+- [x] T022 [P] [US3] Backend unit test: prescription validates medication array
 
 ### Implementation for User Story 3
 
@@ -117,10 +117,10 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 - [x] T027 [P] Add `TeleodontoDashboard` with stats cards
 - [x] T028 [P] Add `TeleodontoSessionList` with status indicators
 - [x] T029 Add frontend page at `apps/web/src/modules/teleodonto/ui/pages/teleodonto.tsx`
-- [ ] T030 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
-- [ ] T031 Run backend build: `cd backend && pnpm build`
-- [ ] T032 Code cleanup — no new `as any` or `@ts-ignore`
-- [ ] T033 Add module documentation to `docs/teleodontologia.md`
+- [x] T030 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
+- [x] T031 Run backend build: `cd backend && pnpm build`
+- [x] T032 Code cleanup — no new `as any` or `@ts-ignore`
+- [x] T033 Add module documentation to `docs/teleodontologia.md`
 
 ---
 
@@ -128,9 +128,9 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 **Purpose**: Observability and resilience
 
-- [ ] T034 [P] Add Prometheus metric emission for teleodonto operations
-- [ ] T035 [P] Document edge case handling procedures
-- [ ] T036 Verify all edge cases from spec.md have mitigation in place
+- [x] T034 [P] Add Prometheus metric emission for teleodonto operations
+- [x] T035 [P] Document edge case handling procedures
+- [x] T036 Verify all edge cases from spec.md have mitigation in place
 
 ---
 
@@ -157,11 +157,11 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 | Metric | Count |
 |--------|-------|
 | **Total tasks** | 36 |
-| **Completed** | 22 |
-| **Pending** | 14 |
-| **Backend tests missing** | 6 |
-| **Quality gates missing** | 3 |
-| **Observability missing** | 3 |
+| **Completed** | 36 |
+| **Pending** | 0 |
+| **Backend tests missing** | 0 |
+| **Quality gates missing** | 0 |
+| **Observability missing** | 0 |
 
 ---
 

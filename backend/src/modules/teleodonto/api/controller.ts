@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { asyncHandler, Errors } from "@/middleware/errorHandler"
+import { teleodontoMetrics } from "@/infrastructure/metrics/TeleodontoMetrics"
 import { TeleodontoService } from "../services/TeleodontoService"
 import {
   createTeleconsultaSchema,
@@ -54,7 +55,10 @@ export class TeleodontoController {
       throw Errors.validation("Invalid input", parsed.error.errors as unknown as Array<{ field: string; message: string; code: string }>)
     }
 
+    const start = Date.now()
     const data = await this.service.create(parsed.data, clinicId, req.user?.id)
+    teleodontoMetrics.observeCreateDuration(clinicId, Date.now() - start)
+    teleodontoMetrics.incTeleconsultasTotal(clinicId, data.status || "scheduled")
     res.status(201).json(data)
   })
 
@@ -97,6 +101,7 @@ export class TeleodontoController {
     }
 
     const data = await this.service.startSession(parsed.data, clinicId)
+    teleodontoMetrics.incSessionsStarted(clinicId)
     res.json({ ...data, message: "Session started successfully" })
   })
 
@@ -112,6 +117,10 @@ export class TeleodontoController {
     }
 
     const data = await this.service.endSession(parsed.data, clinicId)
+    teleodontoMetrics.incSessionsEnded(clinicId)
+    if (data.duracao_minutos) {
+      teleodontoMetrics.observeSessionDuration(clinicId, data.status || "completed", (data.duracao_minutos as number) * 60)
+    }
     res.json({ ...data, message: "Session ended successfully" })
   })
 
@@ -146,6 +155,7 @@ export class TeleodontoController {
       clinicId,
       req.user?.id,
     )
+    teleodontoMetrics.incPrescriptions(clinicId)
     res.json({ ...data, prescription })
   })
 }
