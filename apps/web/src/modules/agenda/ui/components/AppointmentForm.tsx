@@ -34,8 +34,7 @@ import { AppointmentType } from "../../domain/entities/Appointment";
 const appointmentSchema = z.object({
   patientId: z.string().min(1, "Selecione um paciente"),
   dentistId: z.string().min(1, "Selecione um dentista"),
-  // @ts-expect-error — TS2353
-  date: z.date({ required_error: "Selecione uma data" }),
+  date: z.date({ message: "Selecione uma data válida" }),
   time: z.string().min(1, "Informe o horário"),
   duration: z.string().min(1, "Informe a duração"),
   appointmentType: z.enum(["CONSULTA", "RETORNO", "EMERGENCIA", "AVALIACAO", "PROCEDIMENTO"]),

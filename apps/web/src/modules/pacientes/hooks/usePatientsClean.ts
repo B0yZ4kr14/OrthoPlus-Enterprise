@@ -31,7 +31,6 @@ export function usePatientsClean(): UsePatientsReturn {
       setPatients(result);
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error loading patients:", error);
       toast.error("Erro ao carregar pacientes: " + _e.message);
     } finally {
       setLoading(false);
