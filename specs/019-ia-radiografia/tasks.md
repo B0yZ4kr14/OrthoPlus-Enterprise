@@ -89,7 +89,7 @@
   - **File**: `backend/tests/unit/ia-radiografia/metadata-stripper.test.ts`
 - [x] T015 [P] [US1] Backend unit test: AI service returns structured JSON with problemas_detectados
   - **File**: `backend/tests/unit/ia-radiografia/ai-service.test.ts`
-- [ ] T016 [P] [US1] E2E test: upload flow from frontend to backend
+- [X] T016 [P] [US1] E2E test: upload flow from frontend to backend
   - **File**: `tests/e2e/ia-radiografia-upload.spec.ts`
 
 ### Implementation for User Story 1
