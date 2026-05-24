@@ -12,14 +12,14 @@
 
 ## Phase 2: Tests (Missing)
 
-- [ ] T004 Backend unit test: create NF-e with valid data
-- [ ] T005 Backend unit test: cancellation creates audit record
-- [ ] T006 Backend unit test: clinic isolation enforced
+- [x] T004 Backend unit test: create NF-e with valid data
+- [x] T005 Backend unit test: cancellation creates audit record
+- [x] T006 Backend unit test: clinic isolation enforced
 
 ## Phase 3: Polish
 
-- [ ] T007 Add frontend UI for NF-e management
-- [ ] T008 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
+- [x] T007 Add frontend UI for NF-e management
+- [x] T008 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
 
 ---
 
@@ -28,5 +28,5 @@
 | Metric | Count |
 |--------|-------|
 | **Total tasks** | 8 |
-| **Completed** | 3 |
-| **Pending** | 5 |
+| **Completed** | 8 |
+| **Pending** | 0 |

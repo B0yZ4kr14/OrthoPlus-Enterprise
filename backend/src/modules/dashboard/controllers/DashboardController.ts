@@ -5,6 +5,7 @@
 import { Request, Response } from 'express';
 import { IDatabaseConnection } from '@/infrastructure/database/IDatabaseConnection';
 import { logger } from '@/infrastructure/logger';
+import { dashboardMetrics } from '@/infrastructure/metrics/DashboardMetrics';
 
 export class DashboardController {
   constructor(private db: IDatabaseConnection) {}
@@ -14,10 +15,10 @@ export class DashboardController {
    * Retorna dados consolidados do dashboard
    */
   async getOverview(req: Request, res: Response): Promise<void> {
+    const clinicId = req.user?.clinicId;
     try {
-      const clinicId = req.user?.clinicId;
-
       if (!clinicId) {
+        dashboardMetrics.incRequests('unknown', 'error_missing_clinic')
         res.status(400).json({ error: 'Clinic ID is required' });
         return;
       }
@@ -31,7 +32,8 @@ export class DashboardController {
           this.getTreatmentsByStatus(clinicId).catch(() => []),
         ]);
 
-      res.json({
+        dashboardMetrics.incRequests(clinicId, 'success')
+        res.json({
         stats,
         appointmentsData,
         revenueData,
@@ -39,7 +41,8 @@ export class DashboardController {
       });
     } catch (error) {
       logger.error('[DashboardController] Error fetching overview:', error);
-      res.status(500).json({ error: 'Failed to fetch dashboard data' });
+        dashboardMetrics.incRequests(clinicId || 'unknown', 'error')
+        res.status(500).json({ error: 'Failed to fetch dashboard data' });
     }
   }
 

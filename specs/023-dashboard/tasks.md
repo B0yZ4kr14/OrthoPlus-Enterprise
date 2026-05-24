@@ -12,14 +12,14 @@
 
 ## Phase 2: Tests (Missing)
 
-- [ ] T004 Backend unit test: overview aggregates data correctly
-- [ ] T005 Backend unit test: cache key includes clinicId
-- [ ] T006 Backend unit test: returns 503 when DB unavailable
+- [x] T004 Backend unit test: overview aggregates data correctly
+- [x] T005 Backend unit test: cache key includes clinicId
+- [x] T006 Backend unit test: returns 503 when DB unavailable
 
 ## Phase 3: Polish
 
-- [ ] T007 Add Prometheus metrics for cache hit/miss rates
-- [ ] T008 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
+- [x] T007 Add Prometheus metrics for cache hit/miss rates
+- [x] T008 Run quality gates: `pnpm type-check`, `pnpm lint`, `pnpm test`
 
 ---
 
@@ -28,5 +28,5 @@
 | Metric | Count |
 |--------|-------|
 | **Total tasks** | 8 |
-| **Completed** | 3 |
-| **Pending** | 5 |
+| **Completed** | 8 |
+| **Pending** | 0 |

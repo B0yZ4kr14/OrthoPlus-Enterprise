@@ -1,4 +1,5 @@
 import { logger } from "@/infrastructure/logger";
+import { nfeMetrics } from "@/infrastructure/metrics/NFeMetrics";
 import { Request, Response } from "express";
 import { NFeRepositoryPostgres } from "../infrastructure/repositories/NFeRepositoryPostgres";
 import { NFe } from "../domain/entities/NFe";
@@ -9,8 +10,8 @@ const repository = new NFeRepositoryPostgres();
 
 export class NFeController {
   async list(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
     try {
-      const clinicId = req.user?.clinicId;
       if (!clinicId) {
         res.status(401).json({ error: "Missing clinic context" });
         return;
@@ -51,8 +52,8 @@ export class NFeController {
   }
 
   async create(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
     try {
-      const clinicId = req.user?.clinicId;
       if (!clinicId) {
         res.status(401).json({ error: "Missing clinic context" });
         return;
@@ -82,9 +83,11 @@ export class NFeController {
         updatedAt: now,
       });
       await repository.save(nfe);
+      nfeMetrics.incCreated(clinicId, parsed.data.tipo)
       res.status(201).json(nfe);
     } catch (error) {
       logger.error("Error creating NF-e", { error });
+      nfeMetrics.incErrors(clinicId || "unknown", "create_error")
       res.status(500).json({ error: "Internal server error" });
     }
   }
