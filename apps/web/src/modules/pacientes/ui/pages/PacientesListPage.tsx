@@ -63,7 +63,7 @@ export default function PacientesListPage() {
         title="Pacientes"
         description="Gestão completa de pacientes com ficha clínica profissional"
         actions={
-          <Button variant="default" onClick={() => navigate("/pacientes/novo")} className="gap-2 glow-interactive">
+          <Button variant="default" onClick={() => navigate("/pacientes/novo")} className="gap-2 glow-interactive" data-testid="patients-new-button">
             <Plus className="h-4 w-4" />
             Novo Paciente
           </Button>
@@ -74,6 +74,7 @@ export default function PacientesListPage() {
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
         searchPlaceholder="Buscar por nome, CPF ou telefone..."
+        data-testid="patients-filter"
         filters={[
           {
             label: "Status",
@@ -126,7 +127,7 @@ export default function PacientesListPage() {
       </div>
 
       {/* Patient List Premium */}
-      <Card className="glass-card overflow-hidden">
+      <Card className="glass-card overflow-hidden" data-testid="patients-list-card">
         <CardTopBorder color="interactive" opacity={30} />
         <div className="divide-y divide-border/50">
           {filteredPatients.length === 0 ? (
@@ -144,6 +145,7 @@ export default function PacientesListPage() {
                 key={patient.id}
                 onClick={() => navigate(`/pacientes/${patient.id}`)}
                 className="p-4 hover:bg-muted/30 cursor-pointer transition-all duration-200 group"
+                data-testid={`patient-list-item-${patient.id}`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">

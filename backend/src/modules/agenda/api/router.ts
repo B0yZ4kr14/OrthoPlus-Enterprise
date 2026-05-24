@@ -1,5 +1,6 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import {
   getAppointments,
   getAppointmentById,
@@ -24,6 +25,16 @@ import {
 } from "./agendaController";
 
 const router: Router = Router();
+
+// Rate limiting for agenda endpoints — clinical operations need higher limits
+// than general API but still protected against abuse
+const agendaLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200,
+  message: "Too many agenda requests from this IP, please try again later.",
+});
+
+router.use(agendaLimiter);
 router.use(clinicGuard);
 
 // Root route - lista appointments (alias para /appointments)

@@ -121,7 +121,7 @@
 | GAP-2 | ~~`CreateAppointmentUseCase` has `@ts-expect-error`~~ | ✅ Resolved — `AppointmentType` used instead of `string` on 2026-05-23. |
 | GAP-3 | Backend controller doesn't use domain commands | Align backend to use `CreateAppointmentCommand` |
 | GAP-4 | ~~E2E tests use fragile locators~~ | ✅ Resolved — 20+ `data-testid` attributes added on 2026-05-23. |
-| GAP-5 | No rate limiting on `/api/agenda/*` | Add Express rate limiter |
+| GAP-5 | ~~No rate limiting on `/api/agenda/*`~~ | ✅ Resolved — Express rate limiter added (200 req/15min) on 2026-05-23. |
 
 ---
 

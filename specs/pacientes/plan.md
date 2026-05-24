@@ -41,7 +41,7 @@ Sistema de gestao de pacientes com ficha clinica multi-aba, busca avancada, time
 |-----------|--------|--------|
 | CQ-1 TypeScript Strictness | Partial | Backend strict. Frontend uses `any` in API calls. |
 | CQ-2 No new `as any` | Pass | `apiClient.get<any>` replaced with `PatientAPI`. `@ts-expect-error` removed from `form.reset()`. |
-| FE-5 Component Placement | Warning | Form tabs imported from `@/components/patients/` (cross-cutting) instead of `modules/pacientes/`. |
+| FE-5 Component Placement | Pass | Form tabs migrated to `modules/pacientes/ui/tabs/`. |
 | FE-6 Barrel File Policy | Pass | `index.ts` at layer boundaries. |
 | SEC-2.4 Token Storage | Pass | Patient auth uses HttpOnly/Secure/SameSite=Strict cookie (`patient_session`). |
 | DB-1 Prisma as Primary ORM | Pass | All persistence via Prisma. |

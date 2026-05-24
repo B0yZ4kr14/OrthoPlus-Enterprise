@@ -77,35 +77,35 @@ vi.mock("@/lib/adapters/patientAdapter", () => ({
 }))
 
 // Mock heavy form tab components
-vi.mock("@/components/patients/PatientFormTabs", () => ({
+vi.mock("@/modules/pacientes/ui/components/PatientFormTabs", () => ({
   PatientFormTabs: ({ children }: any) => <div data-testid="form-tabs">{children}</div>,
 }))
 
-vi.mock("@/components/patients/form-tabs/PersonalDataTab", () => ({
+vi.mock("@/modules/pacientes/ui/tabs/PersonalDataTab", () => ({
   PersonalDataTab: () => <div data-testid="tab-personal">Dados Pessoais</div>,
 }))
 
-vi.mock("@/components/patients/form-tabs/ContactAddressTab", () => ({
+vi.mock("@/modules/pacientes/ui/tabs/ContactAddressTab", () => ({
   ContactAddressTab: () => <div data-testid="tab-contact">Contato</div>,
 }))
 
-vi.mock("@/components/patients/form-tabs/MedicalHistoryTab", () => ({
+vi.mock("@/modules/pacientes/ui/tabs/MedicalHistoryTab", () => ({
   MedicalHistoryTab: () => <div data-testid="tab-medical">Histórico Médico</div>,
 }))
 
-vi.mock("@/components/patients/form-tabs/HabitsMeasuresTab", () => ({
+vi.mock("@/modules/pacientes/ui/tabs/HabitsMeasuresTab", () => ({
   HabitsMeasuresTab: () => <div data-testid="tab-habits">Hábitos</div>,
 }))
 
-vi.mock("@/components/patients/form-tabs/DentalTab", () => ({
+vi.mock("@/modules/pacientes/ui/tabs/DentalTab", () => ({
   DentalTab: () => <div data-testid="tab-dental">Odontológico</div>,
 }))
 
-vi.mock("@/components/patients/form-tabs/OtherTab", () => ({
+vi.mock("@/modules/pacientes/ui/tabs/OtherTab", () => ({
   OtherTab: () => <div data-testid="tab-other">Outros</div>,
 }))
 
-vi.mock("@/components/patients/form-tabs/MarketingTrackingTab", () => ({
+vi.mock("@/modules/pacientes/ui/tabs/MarketingTrackingTab", () => ({
   MarketingTrackingTab: () => <div data-testid="tab-marketing">Marketing</div>,
 }))
 

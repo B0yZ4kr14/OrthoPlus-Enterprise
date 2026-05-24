@@ -127,9 +127,9 @@
 | GAP-1 | ~~PatientFormPage uses `apiClient.get<any>`~~ | ✅ Resolved — Uses `PatientAPI` type on 2026-05-23. |
 | GAP-2 | ~~PatientFormPage has `@ts-expect-error` on `form.reset()`~~ | ✅ Resolved — Uses `patientFormSchema.parse()` for type-safe conversion on 2026-05-23. |
 | GAP-3 | Frontend uses direct API client (not use cases) | Align with agenda module's Clean Architecture |
-| GAP-4 | Form tabs live in `components/patients/` not `modules/pacientes/` | Migrate per FE-5 |
+| GAP-4 | ~~Form tabs live in `components/patients/`~~ | ✅ Resolved — Form tabs migrated to `modules/pacientes/ui/tabs/` on 2026-05-23. |
 | GAP-5 | ~~Patient portal auth returns key in response body~~ | ✅ Resolved — Migrated to HttpOnly/Secure/SameSite=Strict cookie (`patient_session`) on 2026-05-23. |
-| GAP-6 | E2E tests lack consistent `data-testid` | Add test IDs to list items and form fields |
+| GAP-6 | ~~E2E tests lack consistent `data-testid`~~ | ✅ Resolved — `data-testid` added to list items, form, buttons on 2026-05-23. |
 
 ---
 

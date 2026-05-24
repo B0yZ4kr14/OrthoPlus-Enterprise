@@ -9,14 +9,14 @@ import { toast } from "sonner";
 import { Button } from "@orthoplus/core-ui/button";
 import { Form } from "@orthoplus/core-ui/form";
 import { ArrowLeft, Save } from "lucide-react";
-import { PatientFormTabs } from "@/components/patients/PatientFormTabs";
-import { PersonalDataTab } from "@/components/patients/form-tabs/PersonalDataTab";
-import { ContactAddressTab } from "@/components/patients/form-tabs/ContactAddressTab";
-import { MedicalHistoryTab } from "@/components/patients/form-tabs/MedicalHistoryTab";
-import { HabitsMeasuresTab } from "@/components/patients/form-tabs/HabitsMeasuresTab";
-import { DentalTab } from "@/components/patients/form-tabs/DentalTab";
-import { OtherTab } from "@/components/patients/form-tabs/OtherTab";
-import { MarketingTrackingTab } from "@/components/patients/form-tabs/MarketingTrackingTab";
+import { PatientFormTabs } from "@/modules/pacientes/ui/components/PatientFormTabs";
+import { PersonalDataTab } from "@/modules/pacientes/ui/tabs/PersonalDataTab";
+import { ContactAddressTab } from "@/modules/pacientes/ui/tabs/ContactAddressTab";
+import { MedicalHistoryTab } from "@/modules/pacientes/ui/tabs/MedicalHistoryTab";
+import { HabitsMeasuresTab } from "@/modules/pacientes/ui/tabs/HabitsMeasuresTab";
+import { DentalTab } from "@/modules/pacientes/ui/tabs/DentalTab";
+import { OtherTab } from "@/modules/pacientes/ui/tabs/OtherTab";
+import { MarketingTrackingTab } from "@/modules/pacientes/ui/tabs/MarketingTrackingTab";
 import {
   patientFormSchema,
   type PatientFormValues,
@@ -153,6 +153,7 @@ export default function PatientFormPage() {
           variant="ghost"
           size="icon"
           onClick={() => navigate("/pacientes")}
+          data-testid="patient-form-back"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -168,6 +169,7 @@ export default function PatientFormPage() {
           onClick={form.handleSubmit(onSubmit)}
           disabled={isLoading}
           className="gap-2"
+          data-testid="patient-form-submit"
         >
           <Save className="h-4 w-4" />
           {isLoading ? "Salvando..." : "Salvar"}
@@ -176,7 +178,7 @@ export default function PatientFormPage() {
 
       {/* Form */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} data-testid="patient-form">
           <PatientFormTabs>
             <PersonalDataTab form={form} />
             <ContactAddressTab form={form} />
