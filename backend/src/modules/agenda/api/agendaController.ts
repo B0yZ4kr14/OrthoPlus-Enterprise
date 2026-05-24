@@ -2,6 +2,9 @@ import { logger } from "@/infrastructure/logger";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
 import { z } from "zod";
+import { CreateAppointmentCommandHandler } from "../application/commands/CreateAppointmentCommand";
+import { AppointmentRepositoryPostgres } from "../infrastructure/repositories/AppointmentRepositoryPostgres";
+import { eventBus } from "@/shared/events/EventBus";
 
 // ---------------------------------------------------------------------------
 // Auth helper — returns clinicId from JWT or sends 401 and returns null
@@ -163,6 +166,9 @@ export const getAppointmentById = async (req: Request, res: Response) => {
   }
 };
 
+const appointmentRepo = new AppointmentRepositoryPostgres();
+const createAppointmentHandler = new CreateAppointmentCommandHandler(appointmentRepo, eventBus);
+
 export const createAppointment = async (req: Request, res: Response) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
@@ -174,8 +180,15 @@ export const createAppointment = async (req: Request, res: Response) => {
       return;
     }
 
-    const appointment = await prisma.appointments.create({
-      data: { ...parsed.data, clinic_id: clinicId },
+    const appointment = await createAppointmentHandler.execute({
+      patientId: parsed.data.patient_id,
+      dentistId: parsed.data.dentist_id,
+      startTime: new Date(parsed.data.start_time),
+      endTime: new Date(parsed.data.end_time),
+      type: parsed.data.status as 'CONSULTA' | 'RETORNO' | 'EMERGENCIA' | 'PROCEDIMENTO',
+      notes: parsed.data.description,
+      clinicId,
+      createdBy: parsed.data.created_by,
     });
     res.status(201).json(appointment);
   } catch (error) {
