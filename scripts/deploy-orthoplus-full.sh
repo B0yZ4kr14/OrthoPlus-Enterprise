@@ -143,8 +143,9 @@ log_success "Migrações aplicadas, PM2 recarregado"
 log_info "Aguardando backend inicializar..."
 sleep 5
 
-HEALTH=$(ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" "curl -s http://127.0.0.1/health" 2>/dev/null || echo "FAIL")
-if echo "$HEALTH" | grep -q '"status"'; then
+# DEVOPS-2 FIX: Health check via porta 3005 diretamente (evita dependência do nginx Host header)
+HEALTH=$(ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" "curl -s http://127.0.0.1:3005/health" 2>/dev/null || echo "FAIL")
+if echo "$HEALTH" | grep -qE '"status"|ok|healthy'; then
   log_success "Health check: OK — $HEALTH"
 else
   log_warn "Health check não respondeu como esperado: $HEALTH"
