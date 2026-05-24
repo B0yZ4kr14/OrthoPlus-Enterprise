@@ -60,8 +60,7 @@ export function ModulesProvider({ children }: ModulesProviderProps) {
         getModulesByCategory,
         toggleModule,
         isTogglingModule: isToggling,
-        // @ts-expect-error — TS2322
-        dependencies,
+        dependencies: dependencies || { dependencies: {} },
       }}
     >
       {children}

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// @ts-expect-error — TS2305, TS2613
 import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
 
 export function CryptoTour() {
@@ -41,7 +40,6 @@ export function CryptoTour() {
           </p>
         </div>
       ),
-      // @ts-expect-error — TS2353
       disableBeacon: true,
     },
     {
@@ -55,7 +53,6 @@ export function CryptoTour() {
           </p>
         </div>
       ),
-      // @ts-expect-error — TS2353
       disableBeacon: true,
     },
     {
@@ -69,7 +66,6 @@ export function CryptoTour() {
           </p>
         </div>
       ),
-      // @ts-expect-error — TS2353
       disableBeacon: true,
     },
     {
@@ -83,7 +79,6 @@ export function CryptoTour() {
           </p>
         </div>
       ),
-      // @ts-expect-error — TS2353
       disableBeacon: true,
     },
     {
@@ -97,7 +92,6 @@ export function CryptoTour() {
           </p>
         </div>
       ),
-      // @ts-expect-error — TS2353
       disableBeacon: true,
     },
   ];

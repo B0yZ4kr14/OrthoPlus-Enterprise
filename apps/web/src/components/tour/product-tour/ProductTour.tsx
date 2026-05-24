@@ -1,5 +1,4 @@
 // cspell:disable
-// @ts-expect-error — TS2305, TS2613
 import Joyride from "react-joyride";
 import { useProductTour } from "./useProductTour";
 import { tourSteps } from "./TourSteps";

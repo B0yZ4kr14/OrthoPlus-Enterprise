@@ -21,6 +21,10 @@ interface ModulesResponse {
   modules: Module[];
 }
 
+interface ModuleDependencies {
+  dependencies: Record<string, string[]>;
+}
+
 export const useModulos = () => {
   const queryClient = useQueryClient();
 
@@ -59,7 +63,7 @@ export const useModulos = () => {
   });
 
   // Obter dependências entre módulos
-  const { data: dependencies } = useQuery({
+  const { data: dependencies } = useQuery<ModuleDependencies>({
     queryKey: ["modulos", "dependencies"],
     queryFn: async () => {
       return await apiClient.get("/configuracoes/modulos/dependencies");

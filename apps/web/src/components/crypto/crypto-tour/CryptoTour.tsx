@@ -1,4 +1,3 @@
-// @ts-expect-error — TS2305, TS2613
 import Joyride, { Step } from "react-joyride";
 import { useCryptoTour } from "./useCryptoTour";
 import { WelcomeContent, StepContent } from "./TourContent";

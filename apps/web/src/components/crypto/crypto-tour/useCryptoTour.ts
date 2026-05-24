@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-// @ts-expect-error — TS2305, TS2613
 import type { CallBackProps, STATUS } from "react-joyride";
 
 export function useCryptoTour() {
