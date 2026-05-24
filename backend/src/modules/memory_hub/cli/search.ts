@@ -1,6 +1,6 @@
 import Database from "better-sqlite3"
 import { SearchService } from "../domain/services/SearchService"
-import { OllamaEmbeddingClient } from "../infrastructure/OllamaEmbeddingClient"
+import { EmbeddingClientFactory } from "../infrastructure/EmbeddingClientFactory"
 import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository"
 import { DocumentRepository } from "../infrastructure/DocumentRepository"
 
@@ -12,7 +12,8 @@ if (!query) {
 
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
 const db = new Database(dbPath)
-const embedder = new OllamaEmbeddingClient()
+EmbeddingClientFactory.validateConfig()
+const embedder = EmbeddingClientFactory.create()
 const embeddings = new EmbeddingRepository(db)
 const documents = new DocumentRepository(db)
 const searchService = new SearchService(embedder, embeddings, documents)

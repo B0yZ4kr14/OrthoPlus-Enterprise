@@ -4,7 +4,8 @@ import crypto from "crypto"
 import { logger } from "@/infrastructure/logger"
 import { MarkdownParser } from "../../infrastructure/MarkdownParser"
 import { DocumentChunker } from "../../infrastructure/DocumentChunker"
-import { OllamaEmbeddingClient } from "../../infrastructure/OllamaEmbeddingClient"
+import { EmbeddingClient } from "../../infrastructure/EmbeddingClient"
+import { EmbeddingClientFactory } from "../../infrastructure/EmbeddingClientFactory"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 import { ChunkRepository } from "../../infrastructure/ChunkRepository"
 import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
@@ -14,7 +15,7 @@ import { piiDetector } from "../../infrastructure/PIIDetector"
 export class IndexingService {
   private parser: MarkdownParser
   private chunker: DocumentChunker
-  private embedder: OllamaEmbeddingClient
+  private embedder: EmbeddingClient
   private documents: DocumentRepository
   private chunks: ChunkRepository
   private embeddings: EmbeddingRepository
@@ -23,7 +24,7 @@ export class IndexingService {
   constructor(db: Database.Database) {
     this.parser = new MarkdownParser()
     this.chunker = new DocumentChunker()
-    this.embedder = new OllamaEmbeddingClient()
+    this.embedder = EmbeddingClientFactory.create()
     this.documents = new DocumentRepository(db)
     this.chunks = new ChunkRepository(db)
     this.embeddings = new EmbeddingRepository(db)

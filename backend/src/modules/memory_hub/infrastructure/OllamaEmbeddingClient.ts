@@ -1,45 +1,24 @@
-import crypto from "crypto"
+import { EmbeddingClient, EmbeddingResult } from "./EmbeddingClient"
 import { logger } from "@/infrastructure/logger"
 
-export interface EmbeddingResult {
-  embedding: number[]
-  model: string
-}
-
-export class OllamaEmbeddingClient {
+export class OllamaEmbeddingClient extends EmbeddingClient {
   private endpoint: string
-  private model: string
-  private cache: Map<string, number[]>
 
   constructor(
     endpoint = process.env.AI_LOCAL_ENDPOINT || "http://localhost:11434",
     model = process.env.MEMORY_HUB_OLLAMA_MODEL || "nomic-embed-text",
   ) {
-    this.endpoint = endpoint
-    this.model = model
-    this.cache = new Map()
+    super(model)
+    this.endpoint = endpoint.replace(/\/$/, "")
   }
 
   async embed(texts: string[]): Promise<EmbeddingResult[]> {
-    const results: EmbeddingResult[] = []
-    const uncached: { text: string; index: number; hash: string }[] = []
-
-    // Check cache
-    for (let i = 0; i < texts.length; i++) {
-      const hash = this.hash(texts[i])
-      const cached = this.cache.get(hash)
-      if (cached) {
-        results[i] = { embedding: cached, model: this.model }
-      } else {
-        uncached.push({ text: texts[i], index: i, hash })
-      }
-    }
+    const { results, uncached } = this.getCached(texts)
 
     if (uncached.length === 0) {
-      return results
+      return results as EmbeddingResult[]
     }
 
-    // Batch embed via Ollama
     try {
       const response = await fetch(`${this.endpoint}/api/embed`, {
         method: "POST",
@@ -56,25 +35,11 @@ export class OllamaEmbeddingClient {
 
       const data = await response.json() as { embeddings: number[][] }
 
-      for (let i = 0; i < uncached.length; i++) {
-        const embedding = data.embeddings[i]
-        this.cache.set(uncached[i].hash, embedding)
-        results[uncached[i].index] = { embedding, model: this.model }
-      }
+      const embeddings = data.embeddings
+      return this.storeInCache(uncached, embeddings, results)
     } catch (error) {
-      logger.error("[OllamaEmbeddingClient] Embed error — failing fast to prevent index corruption", { error, model: this.model })
+      logger.error("[OllamaEmbeddingClient] Embed error — failing fast to prevent index corruption", { error: (error as Error).message, model: this.model })
       throw error instanceof Error ? error : new Error("Ollama embedding failed")
     }
-
-    return results
-  }
-
-  async embedSingle(text: string): Promise<EmbeddingResult> {
-    const results = await this.embed([text])
-    return results[0]
-  }
-
-  private hash(text: string): string {
-    return crypto.createHash("sha256").update(text).digest("hex")
   }
 }

@@ -9,7 +9,7 @@ import { SearchService } from "./domain/services/SearchService"
 import { ContextBriefService } from "./domain/services/ContextBriefService"
 import { IndexingService } from "./domain/services/IndexingService"
 import { GraphService } from "./domain/services/GraphService"
-import { OllamaEmbeddingClient } from "./infrastructure/OllamaEmbeddingClient"
+import { EmbeddingClientFactory } from "./infrastructure/EmbeddingClientFactory"
 import { EmbeddingRepository } from "./infrastructure/EmbeddingRepository"
 import { DocumentRepository } from "./infrastructure/DocumentRepository"
 import { FileWatcher } from "./infrastructure/FileWatcher"
@@ -58,7 +58,8 @@ export function createMemoryHubModule(
 
   const metrics = getMetricsCollector(prometheusMetrics.getRegistry())
 
-  const embedder = new OllamaEmbeddingClient()
+  EmbeddingClientFactory.validateConfig()
+  const embedder = EmbeddingClientFactory.create()
   const embeddings = new EmbeddingRepository(db)
   const documents = new DocumentRepository(db)
   const auditRepository = new SearchAuditRepository(db)

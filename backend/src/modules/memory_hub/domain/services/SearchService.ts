@@ -1,5 +1,5 @@
 import { logger } from "@/infrastructure/logger"
-import { OllamaEmbeddingClient } from "../../infrastructure/OllamaEmbeddingClient"
+import { EmbeddingClient } from "../../infrastructure/EmbeddingClient"
 import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 
@@ -23,11 +23,11 @@ export interface SearchFilters {
 }
 
 export class SearchService {
-  private embedder: OllamaEmbeddingClient
+  private embedder: EmbeddingClient
   private embeddings: EmbeddingRepository
   private documents: DocumentRepository
 
-  constructor(embedder: OllamaEmbeddingClient, embeddings: EmbeddingRepository, documents: DocumentRepository) {
+  constructor(embedder: EmbeddingClient, embeddings: EmbeddingRepository, documents: DocumentRepository) {
     this.embedder = embedder
     this.embeddings = embeddings
     this.documents = documents
