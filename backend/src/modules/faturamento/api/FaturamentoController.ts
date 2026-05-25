@@ -1,96 +1,47 @@
-import { FaturamentoRepository } from "@/modules/faturamento/infrastructure/FaturamentoRepository";
-import { Request, Response } from 'express';
-import { z } from 'zod';
-import { logger } from '@/infrastructure/logger';
-import { asyncHandler, Errors } from "@/middleware/errorHandler";
-
-const createNFeSchema = z.object({
-  vendaId: z.string().uuid().optional(),
-  tipoNota: z.enum(['NFE', 'NFCE', 'NFSE']),
-  numero: z.number().int().positive(),
-  serie: z.number().int().positive().default(1),
-  chaveAcesso: z.string().length(44),
-  valorTotal: z.number().positive(),
-  dataEmissao: z.string().datetime(),
-});
+import { Request, Response } from "express";
+import { Errors, asyncHandler } from "@/middleware/errorHandler";
+import { FaturamentoControllerService } from "@/modules/faturamento/application/FaturamentoControllerService";
 
 export class FaturamentoController {
-  private repo = new FaturamentoRepository()
-  createNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const validatedData = createNFeSchema.parse(req.body);
-    const clinicId = req.user?.clinicId;
+  private service = new FaturamentoControllerService();
 
+  createNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
-
-    await this.repo.createNFe({
-      clinic_id: clinicId,
-      chave_acesso: validatedData.chaveAcesso,
-      valor_total: validatedData.valorTotal,
-      tipo_nota: validatedData.tipoNota,
-      status: "PROCESSANDO",
-    }).catch(err => logger.debug('NFE create error', err));
-
-    logger.info('NFe created', { clinicId, chaveAcesso: validatedData.chaveAcesso });
-    res.status(201).json({ message: 'NFe created successfully', data: validatedData });
+    const result = await this.service.createNFe(clinicId, req.body);
+    res.status(201).json({ message: "NFe created successfully", data: result });
   });
 
   listNFes = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const clinicId = req.user?.clinicId;
-
     if (!clinicId) {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
-
-    let nfes: any[] = [];
-    try {
-      nfes = await this.repo.findNFesByClinic(clinicId);
-    } catch (err) {
-      logger.debug('NFE findMany error', err);
-    }
-
-    logger.info('Listing NFes', { clinicId, count: nfes.length });
-    res.status(200).json({ nfes });
+    const result = await this.service.listNFes(clinicId);
+    res.status(200).json({ nfes: result });
   });
 
   autorizarNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { protocolo, xml } = req.body;
-
     if (!protocolo || !xml) {
       throw Errors.validation("Protocolo and XML are required");
     }
-
-    await this.repo.updateNFeStatus(id, {
-      status: "AUTORIZADA",
-      protocolo,
-      xml_autorizacao: xml,
-    }).catch(err => logger.debug('NFE autorizar error', err));
-
-    logger.info('NFe authorized', { id, protocolo });
-    res.status(200).json({ message: 'NFe authorized successfully', protocolo });
+    await this.service.autorizarNFe(id, protocolo, xml);
+    res.status(200).json({ message: "NFe authorized successfully", protocolo });
   });
 
   cancelarNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { motivo } = req.body;
-
     if (!motivo) {
       throw Errors.validation("Motivo is required");
     }
-
-    await this.repo.updateNFeStatus(id, {
-      status: "CANCELADA",
-      motivo_cancelamento: motivo,
-      data_cancelamento: new Date(),
-    }).catch(err => logger.debug('NFE cancelar error', err));
-
-    logger.info('NFe canceled', { id, motivo });
-    res.status(200).json({ message: 'NFe canceled successfully' });
+    await this.service.cancelarNFe(id, motivo);
+    res.status(200).json({ message: "NFe canceled successfully" });
   });
-
-  // ═══════════════════ LEGACY FISCAL ENDPOINTS ═══════════════════
 
   autorizarNfceSefaz = asyncHandler(async (req: Request, res: Response) => {
     const { nfceId, ambiente } = req.body;
@@ -103,7 +54,6 @@ export class FaturamentoController {
       nfceId,
       ambiente,
     });
-    return;
   });
 
   cartaCorrecaoNfce = asyncHandler(async (req: Request, res: Response) => {
@@ -112,10 +62,9 @@ export class FaturamentoController {
       throw Errors.validation("nfceId and correcao are required");
     }
     if (correcao.length < 15) {
-      throw Errors.validation("Correção deve ter no mínimo 15 caracteres");
+      throw Errors.validation("Correcao deve ter no minimo 15 caracteres");
     }
-    res.status(200).json({ message: "Carta de correção processed", nfceId });
-    return;
+    res.status(200).json({ message: "Carta de correcao processed", nfceId });
   });
 
   emitirNfce = asyncHandler(async (req: Request, res: Response) => {
@@ -132,19 +81,17 @@ export class FaturamentoController {
       vendaId,
       status: "PROCESSING",
     });
-    return;
   });
 
   inutilizarNumeracaoNfce = asyncHandler(async (req: Request, res: Response) => {
     const { numeroInicial, numeroFinal } = req.body;
     if (numeroFinal < numeroInicial) {
-      throw Errors.validation("Número final deve ser maior que número inicial");
+      throw Errors.validation("Numero final deve ser maior que numero inicial");
     }
     res.status(200).json({
-      message: "Inutilização processada",
+      message: "Inutilizacao processada",
       protocolo: `IN-${Date.now()}`,
     });
-    return;
   });
 
   sincronizarNfceContingencia = asyncHandler(async (req: Request, res: Response) => {
@@ -156,13 +103,12 @@ export class FaturamentoController {
       message: "Contingency synchronization running",
       clinicId,
     });
-    return;
   });
 
   validateFiscalXml = asyncHandler(async (req: Request, res: Response) => {
     const { xmlContent } = req.body;
     if (!xmlContent || (!xmlContent.trim().startsWith("<") && !xmlContent.trim().startsWith("|"))) {
-      throw Errors.validation("Documento não é XML ou SPED válido");
+      throw Errors.validation("Documento nao e XML ou SPED valido");
     }
     res.status(200).json({
       message: "XML validation complete",
@@ -170,7 +116,6 @@ export class FaturamentoController {
       warnings: [],
       isValid: true,
     });
-    return;
   });
 
   imprimirCupomSat = asyncHandler(async (req: Request, res: Response) => {
@@ -179,7 +124,6 @@ export class FaturamentoController {
       message: "SAT/MFe print request sent to queue",
       vendaId,
     });
-    return;
   });
 
   gerarSpedFiscal = asyncHandler(async (req: Request, res: Response) => {
@@ -192,7 +136,6 @@ export class FaturamentoController {
       clinicId,
       status: "QUEUE",
     });
-    return;
   });
 
   enviarDadosContabilidade = asyncHandler(async (req: Request, res: Response) => {
@@ -206,6 +149,5 @@ export class FaturamentoController {
       clinicId,
       tipoDocumento,
     });
-    return;
   });
 }
