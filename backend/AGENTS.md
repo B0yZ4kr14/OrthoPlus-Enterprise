@@ -68,7 +68,7 @@ src/modules/{modulo}/
 
 - `agenda/api/agendaController.ts` — 4 erros Prisma type mismatch (String vs relação)
 - `auth/api/AuthController.ts` — 1 erro `@orthoplus/shared-types` não resolvido
-- Build usa `tsc || true` — passa mesmo com erros. Verificar manualmente antes de deploy.
+- Build usa `tsc -p tsconfig.build.json` — **strict, falha em erros**. Executar `cd backend && pnpm build` antes de deploy.
 
 ---
 

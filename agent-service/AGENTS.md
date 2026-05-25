@@ -1,7 +1,7 @@
 # AGENTS.md — agent-service/
 
 > Contexto específico do serviço Python/FastAPI/Agno. Não repete o root AGENTS.md.
-> **Atualizado:** 2026-04-25
+> **Atualizado:** 2026-05-24
 
 ---
 

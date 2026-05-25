@@ -1,7 +1,7 @@
 # AGENTS.md — tests/e2e/
 
 > Suite Playwright de testes end-to-end. Não repete o root AGENTS.md.
-> **Atualizado:** 2026-04-25
+> **Atualizado:** 2026-05-24
 
 ---
 

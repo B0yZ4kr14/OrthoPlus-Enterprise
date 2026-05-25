@@ -1,7 +1,7 @@
 # AGENTS.md — backend/src/modules/financeiro/
 
 > Módulo financeiro — o maior e mais complexo do backend. Não repete backend/AGENTS.md.
-> **Atualizado:** 2026-04-25
+> **Atualizado:** 2026-05-24
 
 ---
 
