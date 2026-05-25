@@ -1,5 +1,7 @@
 import { Errors } from "@/middleware/errorHandler"
 import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
+import { MetricsEmitter } from "@/infrastructure/metrics"
 import bcrypt from "bcrypt"
 
 export interface RegisterUserResult {
@@ -14,6 +16,7 @@ export interface RegisterUserResult {
  */
 export class RegisterUserUseCase {
   private repo = new UserRepository()
+  private audit = new AuditLogRepository()
 
   async execute(
     email: string,
@@ -35,6 +38,21 @@ export class RegisterUserUseCase {
       clinic_id: clinicId,
       is_active: true,
     })
+
+    MetricsEmitter.incrementCounter("auth_user_registered", "New user registrations", { role, clinicId })
+
+    try {
+      await this.audit.createLog({
+        table_name: "users",
+        record_id: newUser.id,
+        action: "CREATE",
+        clinic_id: clinicId,
+        user_id: newUser.id,
+        old_data: null,
+        new_data: { id: newUser.id, email: newUser.email, role: newUser.role, clinic_id: clinicId },
+        created_at: new Date(),
+      })
+    } catch { /* audit failure is non-blocking */ }
 
     return {
       id: newUser.id,

@@ -15,8 +15,8 @@
 ## Phase 1: Introduce Repositories
 - [ ] T1.1 Create FinanceiroRepository with CRUD + aggregation methods
 - [x] ~~T1.2 Refactor FinanceiroController to use FinanceiroRepository~~ (OBSOLETO — merged into T0.3)
-- [ ] T1.3 Create UserRepository for prisma.users access
-- [ ] T1.4 Create AuditLogRepository para operações financeiras/pacientes (GP-2 compliance)
+- [x] T1.3 Create UserRepository for prisma.users access ✅ (already existed at backend/src/modules/auth/infrastructure/UserRepository.ts)
+- [x] T1.4 Create AuditLogRepository para operações financeiras/pacientes (GP-2 compliance) ✅ (already existed at backend/src/modules/database_admin/infrastructure/AuditLogRepository.ts)
 
 ## Phase 2: Extract Use-Cases (a partir de AuthService e FinanceiroService)
 - [x] T2.1 Create CreateTransactionUseCase from FinanceiroService
@@ -24,12 +24,12 @@
   - Acceptance: Every transaction creation produces immutable audit log entry via AuditLogRepository ✅
 - [ ] T2.2 GetDashboardOverviewUseCase from AnalyticsController
   - Acceptance: UseCase emits `analytics.dashboard.queried` counter with label {clinicId}
-- [ ] T2.3 AuthenticateUserUseCase from AuthService
-  - Acceptance: UseCase emits `auth.login.success` / `auth.login.failure` counters with label {role}
-  - Acceptance: Failed auth attempts log to `audit_logs` with userId, clinicId, action=AUTH_FAILURE
-- [ ] T2.4 RegisterUserUseCase from AuthService
-  - Acceptance: UseCase emits `auth.user.registered` counter with label {role, clinicId}
-  - Acceptance: User registration produces audit log entry with before/after snapshot
+- [x] T2.3 AuthenticateUserUseCase from AuthService
+  - Acceptance: UseCase emits `auth_login_success` / `auth_login_failure` counters with label {role} ✅
+  - Acceptance: Failed auth attempts log to `audit_logs` with userId, clinicId, action=AUTH_FAILURE ✅
+- [x] T2.4 RegisterUserUseCase from AuthService
+  - Acceptance: UseCase emits `auth_user_registered` counter with label {role, clinicId} ✅
+  - Acceptance: User registration produces audit log entry with before/after snapshot ✅
 - [ ] T2.5 Thin Controller: Reduce agendaController.ts to <150 lines
   - Acceptance: Agenda mutations (create/update/delete) emit audit logs for patient-linked appointments
 - [ ] T2.6 Thin Controller: Reduce filesController.ts to <150 lines

@@ -1,5 +1,7 @@
 import { Errors } from "@/middleware/errorHandler"
 import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
+import { MetricsEmitter } from "@/infrastructure/metrics"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
@@ -27,25 +29,78 @@ export interface AuthenticateUserResult {
  */
 export class AuthenticateUserUseCase {
   private repo = new UserRepository()
+  private audit = new AuditLogRepository()
 
   async execute(email: string, password: string): Promise<AuthenticateUserResult | null> {
     const user = await this.repo.findUserByEmail(email)
 
     if (!user) {
+      MetricsEmitter.incrementCounter("auth_login_failure", "Failed authentication attempts", { role: "unknown" })
+      try {
+        await this.audit.createLog({
+          table_name: "users",
+          record_id: "unknown",
+          action: "AUTH_FAILURE",
+          clinic_id: "unknown",
+          user_id: "unknown",
+          old_data: { email },
+          new_data: null,
+          created_at: new Date(),
+        })
+      } catch { /* audit failure is non-blocking */ }
       return null
     }
 
     if (!user.is_active) {
+      MetricsEmitter.incrementCounter("auth_login_failure", "Failed authentication attempts", { role: user.role })
+      try {
+        await this.audit.createLog({
+          table_name: "users",
+          record_id: user.id,
+          action: "AUTH_FAILURE",
+          clinic_id: user.clinic_id ?? "unknown",
+          user_id: user.id,
+          old_data: { email, reason: "inactive" },
+          new_data: null,
+          created_at: new Date(),
+        })
+      } catch { /* audit failure is non-blocking */ }
       throw Errors.invalidCredentials()
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password_hash)
     if (!passwordMatch) {
+      MetricsEmitter.incrementCounter("auth_login_failure", "Failed authentication attempts", { role: user.role })
+      try {
+        await this.audit.createLog({
+          table_name: "users",
+          record_id: user.id,
+          action: "AUTH_FAILURE",
+          clinic_id: user.clinic_id ?? "unknown",
+          user_id: user.id,
+          old_data: { email, reason: "wrong_password" },
+          new_data: null,
+          created_at: new Date(),
+        })
+      } catch { /* audit failure is non-blocking */ }
       throw Errors.invalidCredentials()
     }
 
     const clinicId = user.clinic_id
     if (!clinicId) {
+      MetricsEmitter.incrementCounter("auth_login_failure", "Failed authentication attempts", { role: user.role })
+      try {
+        await this.audit.createLog({
+          table_name: "users",
+          record_id: user.id,
+          action: "AUTH_FAILURE",
+          clinic_id: "unknown",
+          user_id: user.id,
+          old_data: { email, reason: "no_clinic" },
+          new_data: null,
+          created_at: new Date(),
+        })
+      } catch { /* audit failure is non-blocking */ }
       throw Errors.noClinicAssigned()
     }
 
@@ -60,6 +115,8 @@ export class AuthenticateUserUseCase {
       requireJwtSecret(),
       { expiresIn: "7d" },
     )
+
+    MetricsEmitter.incrementCounter("auth_login_success", "Successful authentication attempts", { role: user.role })
 
     return {
       user: { id: user.id, email: user.email, role: user.role, clinicId },

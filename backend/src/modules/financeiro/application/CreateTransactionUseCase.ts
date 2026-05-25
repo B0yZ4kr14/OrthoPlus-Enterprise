@@ -25,16 +25,18 @@ export class CreateTransactionUseCase {
       1
     )
 
-    await this.audit.createLog({
-      table_name: "transactions",
-      record_id: tx.id,
-      action: "CREATE",
-      clinic_id: clinicId,
-      user_id: userId,
-      old_data: null,
-      new_data: tx,
-      created_at: new Date(),
-    })
+    try {
+      await this.audit.createLog({
+        table_name: "transactions",
+        record_id: tx.id,
+        action: "CREATE",
+        clinic_id: clinicId,
+        user_id: userId,
+        old_data: null,
+        new_data: tx,
+        created_at: new Date(),
+      })
+    } catch { /* audit failure is non-blocking */ }
 
     return tx
   }
