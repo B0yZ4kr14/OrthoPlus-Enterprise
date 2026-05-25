@@ -1,5 +1,6 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
+import { FinanceiroRepository } from "../infrastructure/FinanceiroRepository";
 
 import { Request, Response } from "express";
 import { z } from "zod";
@@ -173,6 +174,8 @@ const updateNotaFiscalSchema = z.object({
 });
 
 export class FinanceiroController {
+  private repo = new FinanceiroRepository();
+
   // ═══════════════════ TRANSACTIONS ═══════════════════
 
   async listTransactions(req: Request, res: Response): Promise<void> {
@@ -182,19 +185,14 @@ export class FinanceiroController {
 
       const { type, status, category, payment_method, start_date, end_date } = req.query;
 
-      const where: any = { clinic_id: clinicId }; // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (type) where.type = type;
-      if (status) where.status = status;
-      if (category) where.category = category;
-      if (payment_method) where.payment_method = payment_method;
-      if (start_date || end_date) {
-        where.transaction_date = {};
-        if (start_date) where.transaction_date.gte = start_date as string;
-        if (end_date) where.transaction_date.lte = end_date as string;
-      }
-
-      const data = await (prisma as any).financial_transactions.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where, orderBy: { transaction_date: "desc" },
+      const data = await this.repo.listTransactions({
+        clinicId,
+        type: type as string | undefined,
+        status: status as string | undefined,
+        category: category as string | undefined,
+        paymentMethod: payment_method as string | undefined,
+        startDate: start_date as string | undefined,
+        endDate: end_date as string | undefined,
       });
       res.json(data);
     } catch (error) {
@@ -207,7 +205,7 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const data = await (prisma as any).financial_transactions.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await this.repo.getTransaction(req.params.id, clinicId);
       if (!data) { res.status(404).json({ error: "Not found" }); return; }
       res.json(data);
     } catch (error) {
@@ -228,9 +226,11 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).financial_transactions.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId, created_by: userId },
-      });
+      const data = await this.repo.createTransaction({
+        ...parsed.data,
+        clinic_id: clinicId,
+        created_by: userId,
+      } as any);
       res.status(201).json(data);
     } catch (error) {
       logger.error("Error creating transaction", { error });
@@ -242,7 +242,7 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await (prisma as any).financial_transactions.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await this.repo.getTransaction(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
 
       const parsed = updateTransactionSchema.safeParse(req.body);
@@ -251,9 +251,7 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).financial_transactions.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: req.params.id }, data: parsed.data,
-      });
+      const data = await this.repo.updateTransaction(req.params.id, parsed.data as any);
       res.json(data);
     } catch (error) {
       logger.error("Error updating transaction", { error });
@@ -265,9 +263,9 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await (prisma as any).financial_transactions.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await this.repo.getTransaction(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
-      await (prisma as any).financial_transactions.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await this.repo.deleteTransaction(req.params.id);
       res.status(204).send();
     } catch (error) {
       logger.error("Error deleting transaction", { error });
