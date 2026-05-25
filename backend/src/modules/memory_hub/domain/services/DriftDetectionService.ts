@@ -1,6 +1,7 @@
 import Database from "better-sqlite3"
 import fs from "fs"
 import path from "path"
+import { IDocumentRepository } from "../ports/IDocumentRepository"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 import { PathSandbox } from "../../infrastructure/PathSandbox"
 
@@ -13,13 +14,13 @@ export interface DriftIssue {
 }
 
 export class DriftDetectionService {
-  private documents: DocumentRepository
+  private documents: IDocumentRepository
   private db: Database.Database
   private sandbox?: PathSandbox
 
-  constructor(db: Database.Database, sandbox?: PathSandbox) {
+  constructor(db: Database.Database, documents?: IDocumentRepository, sandbox?: PathSandbox) {
     this.db = db
-    this.documents = new DocumentRepository(db)
+    this.documents = documents || new DocumentRepository(db)
     this.sandbox = sandbox
   }
 

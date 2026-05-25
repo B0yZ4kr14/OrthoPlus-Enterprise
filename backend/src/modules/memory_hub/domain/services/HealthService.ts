@@ -1,6 +1,6 @@
 import Database from "better-sqlite3"
-import { DocumentRepository } from "../../infrastructure/DocumentRepository"
-import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
+import { IDocumentRepository } from "../ports/IDocumentRepository"
+import { IEmbeddingRepository } from "../ports/IEmbeddingRepository"
 
 export interface HealthMetrics {
   indexStatus: "healthy" | "empty"
@@ -15,13 +15,13 @@ export interface HealthMetrics {
 
 export class HealthService {
   private db: Database.Database
-  private documents: DocumentRepository
-  private embeddings: EmbeddingRepository
+  private documents: IDocumentRepository
+  private embeddings: IEmbeddingRepository
 
   constructor(
     db: Database.Database,
-    documents: DocumentRepository,
-    embeddings: EmbeddingRepository,
+    documents: IDocumentRepository,
+    embeddings: IEmbeddingRepository,
   ) {
     this.db = db
     this.documents = documents

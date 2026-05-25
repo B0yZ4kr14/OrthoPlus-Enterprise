@@ -1,4 +1,5 @@
 import Database from "better-sqlite3"
+import { IEmbeddingRepository } from "../domain/ports/IEmbeddingRepository"
 import {
   quantize,
   cosineSimilarityQuantized,
@@ -21,7 +22,7 @@ export interface CompressionStats {
   spaceSavedBytes: number
 }
 
-export class EmbeddingRepository {
+export class EmbeddingRepository implements IEmbeddingRepository {
   private db: Database.Database
 
   constructor(db: Database.Database) {

@@ -1,4 +1,5 @@
 import Database from "better-sqlite3"
+import { IChunkRepository } from "../domain/ports/IChunkRepository"
 import crypto from "crypto"
 
 export interface MemoryChunk {
@@ -11,7 +12,7 @@ export interface MemoryChunk {
   tokenCount: number
 }
 
-export class ChunkRepository {
+export class ChunkRepository implements IChunkRepository {
   private db: Database.Database
 
   constructor(db: Database.Database) {

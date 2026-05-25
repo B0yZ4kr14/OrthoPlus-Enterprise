@@ -1,5 +1,6 @@
 import Database from "better-sqlite3"
 import crypto from "crypto"
+import { IDocumentRepository } from "../domain/ports/IDocumentRepository"
 
 export interface MemoryDocument {
   id: string
@@ -35,7 +36,7 @@ interface DocumentRow {
   frontmatter: string
 }
 
-export class DocumentRepository {
+export class DocumentRepository implements IDocumentRepository {
   private db: Database.Database
 
   constructor(db: Database.Database) {

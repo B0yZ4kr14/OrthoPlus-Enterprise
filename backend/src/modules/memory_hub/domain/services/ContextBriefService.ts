@@ -1,5 +1,5 @@
 import { SearchService } from "./SearchService"
-import { DocumentRepository } from "../../infrastructure/DocumentRepository"
+import { IDocumentRepository } from "../ports/IDocumentRepository"
 import { TokenCounter } from "../../infrastructure/TokenCounter"
 import { logger } from "@/infrastructure/logger"
 
@@ -78,9 +78,9 @@ export interface ContextBrief {
 
 export class ContextBriefService {
   private searchService: SearchService
-  private documents: DocumentRepository
+  private documents: IDocumentRepository
 
-  constructor(searchService: SearchService, documents: DocumentRepository) {
+  constructor(searchService: SearchService, documents: IDocumentRepository) {
     this.searchService = searchService
     this.documents = documents
   }

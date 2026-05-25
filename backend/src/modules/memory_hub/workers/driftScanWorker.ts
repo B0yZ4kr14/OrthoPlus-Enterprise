@@ -10,7 +10,7 @@ const timeoutMs = parseInt(process.env.MEMORY_HUB_DRIFT_TIMEOUT || "300000", 10)
 // F-RT-020-019: Sandbox drift worker to project root only
 const sandbox = new PathSandbox(projectRoot)
 const db = new Database(dbPath)
-const detector = new DriftDetectionService(db, sandbox)
+const detector = new DriftDetectionService(db, undefined, sandbox)
 
 const startTime = Date.now()
 

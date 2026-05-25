@@ -1,5 +1,5 @@
 import { logger } from "@/infrastructure/logger"
-import { DocumentRepository } from "../../infrastructure/DocumentRepository"
+import { IDocumentRepository } from "../ports/IDocumentRepository"
 
 export interface GraphNode {
   id: string
@@ -24,9 +24,9 @@ export interface GraphData {
  * Extracts markdown links [text](path) and wiki-style links [[doc-name]].
  */
 export class GraphService {
-  private documents: DocumentRepository
+  private documents: IDocumentRepository
 
-  constructor(documents: DocumentRepository) {
+  constructor(documents: IDocumentRepository) {
     this.documents = documents
   }
 

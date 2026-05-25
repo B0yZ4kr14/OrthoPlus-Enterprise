@@ -4,30 +4,42 @@ import crypto from "crypto"
 import { logger } from "@/infrastructure/logger"
 import { MarkdownParser } from "../../infrastructure/MarkdownParser"
 import { DocumentChunker } from "../../infrastructure/DocumentChunker"
-import { EmbeddingClient } from "../../infrastructure/EmbeddingClient"
 import { EmbeddingClientFactory } from "../../infrastructure/EmbeddingClientFactory"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 import { ChunkRepository } from "../../infrastructure/ChunkRepository"
 import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
+import { IDocumentRepository } from "../ports/IDocumentRepository"
+import { IChunkRepository } from "../ports/IChunkRepository"
+import { IEmbeddingRepository } from "../ports/IEmbeddingRepository"
+import { IEmbeddingClient } from "../ports/IEmbeddingClient"
 import { loadGitignoreForPath } from "../../infrastructure/GitignoreParser"
 import { piiDetector } from "../../infrastructure/PIIDetector"
 
 export class IndexingService {
   private parser: MarkdownParser
   private chunker: DocumentChunker
-  private embedder: EmbeddingClient
-  private documents: DocumentRepository
-  private chunks: ChunkRepository
-  private embeddings: EmbeddingRepository
+  private embedder: IEmbeddingClient
+  private documents: IDocumentRepository
+  private chunks: IChunkRepository
+  private embeddings: IEmbeddingRepository
 
-
-  constructor(db: Database.Database) {
-    this.parser = new MarkdownParser()
-    this.chunker = new DocumentChunker()
-    this.embedder = EmbeddingClientFactory.create()
-    this.documents = new DocumentRepository(db)
-    this.chunks = new ChunkRepository(db)
-    this.embeddings = new EmbeddingRepository(db)
+  constructor(
+    db: Database.Database,
+    deps?: {
+      parser?: MarkdownParser
+      chunker?: DocumentChunker
+      embedder?: IEmbeddingClient
+      documents?: IDocumentRepository
+      chunks?: IChunkRepository
+      embeddings?: IEmbeddingRepository
+    },
+  ) {
+    this.parser = deps?.parser || new MarkdownParser()
+    this.chunker = deps?.chunker || new DocumentChunker()
+    this.embedder = deps?.embedder || EmbeddingClientFactory.create()
+    this.documents = deps?.documents || new DocumentRepository(db)
+    this.chunks = deps?.chunks || new ChunkRepository(db)
+    this.embeddings = deps?.embeddings || new EmbeddingRepository(db)
   }
 
   async indexFile(filePath: string): Promise<void> {

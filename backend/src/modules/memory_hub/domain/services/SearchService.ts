@@ -1,7 +1,7 @@
 import { logger } from "@/infrastructure/logger"
-import { EmbeddingClient } from "../../infrastructure/EmbeddingClient"
-import { EmbeddingRepository } from "../../infrastructure/EmbeddingRepository"
-import { DocumentRepository } from "../../infrastructure/DocumentRepository"
+import { IEmbeddingClient } from "../ports/IEmbeddingClient"
+import { IEmbeddingRepository } from "../ports/IEmbeddingRepository"
+import { IDocumentRepository } from "../ports/IDocumentRepository"
 
 export interface SearchResult {
   id: string
@@ -23,11 +23,11 @@ export interface SearchFilters {
 }
 
 export class SearchService {
-  private embedder: EmbeddingClient
-  private embeddings: EmbeddingRepository
-  private documents: DocumentRepository
+  private embedder: IEmbeddingClient
+  private embeddings: IEmbeddingRepository
+  private documents: IDocumentRepository
 
-  constructor(embedder: EmbeddingClient, embeddings: EmbeddingRepository, documents: DocumentRepository) {
+  constructor(embedder: IEmbeddingClient, embeddings: IEmbeddingRepository, documents: IDocumentRepository) {
     this.embedder = embedder
     this.embeddings = embeddings
     this.documents = documents
