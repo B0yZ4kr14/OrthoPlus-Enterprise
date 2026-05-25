@@ -68,7 +68,7 @@ export class IndexingService {
       featureNumber,
       wordCount: content.split(/\s+/).length,
       isArchived: false,
-      frontmatter: JSON.stringify(parsed.frontmatter),
+      frontmatter: JSON.stringify({ ...parsed.frontmatter, rawContent: content }),
     })
 
     // Delete old chunks and embeddings
