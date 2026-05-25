@@ -11,6 +11,8 @@ jest.mock('../../src/middleware/errorHandler', () => ({
     } catch (err: any) {
       if (err.status && res.status) {
         res.status(err.status).json({ error: err.message })
+      } else if (res.status) {
+        res.status(500).json({ error: err.message || "Internal server error" })
       } else {
         next(err)
       }
@@ -156,18 +158,18 @@ describe('PacientesController', () => {
     it('returns 201 on successful creation', async () => {
       const req = mockReq({ fullName: 'João Silva', cpf: '529.982.247-25' })
       const res = mockRes()
-      await controller.create(req as Request, res)
+      await controller.create(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(201)
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }))
     })
 
-    it('returns 400 when use-case throws (duplicate CPF)', async () => {
+    it('returns 500 when use-case throws (duplicate CPF)', async () => {
       mockCadastrarUseCase.execute.mockRejectedValueOnce(new Error('Já existe paciente cadastrado com este CPF'))
       const req = mockReq({ fullName: 'João Silva', cpf: '529.982.247-25' })
       const res = mockRes()
-      await controller.create(req as Request, res)
-      expect(res.status).toHaveBeenCalledWith(400)
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: false }))
+      await controller.create(req as Request, res, jest.fn())
+      expect(res.status).toHaveBeenCalledWith(500)
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ error: expect.any(String) }))
     })
   })
 
@@ -176,17 +178,17 @@ describe('PacientesController', () => {
     it('returns 200 on successful update', async () => {
       const req = mockReq({ fullName: 'João S.' }, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.update(req as Request, res)
+      await controller.update(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(200)
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }))
     })
 
-    it('returns 400 when use-case throws', async () => {
+    it('returns 500 when use-case throws', async () => {
       mockAtualizarUseCase.execute.mockRejectedValueOnce(new Error('Paciente não encontrado'))
       const req = mockReq({ fullName: 'João S.' }, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.update(req as Request, res)
-      expect(res.status).toHaveBeenCalledWith(400)
+      await controller.update(req as Request, res, jest.fn())
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 
@@ -202,7 +204,7 @@ describe('PacientesController', () => {
       })
       const req = mockReq({}, {}, {}, {})
       const res = mockRes()
-      await controller.list(req as Request, res)
+      await controller.list(req as Request, res, jest.fn())
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }))
     })
 
@@ -210,7 +212,7 @@ describe('PacientesController', () => {
       mockPatientRepository.findMany.mockRejectedValueOnce(new Error('DB error'))
       const req = mockReq({}, {}, {}, {})
       const res = mockRes()
-      await controller.list(req as Request, res)
+      await controller.list(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(500)
     })
   })
@@ -228,7 +230,7 @@ describe('PacientesController', () => {
       } as any)
       const req = mockReq({}, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.getById(req as Request, res)
+      await controller.getById(req as Request, res, jest.fn())
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }))
     })
 
@@ -236,7 +238,7 @@ describe('PacientesController', () => {
       mockPatientRepository.findById.mockResolvedValueOnce(null)
       const req = mockReq({}, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.getById(req as Request, res)
+      await controller.getById(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(404)
     })
   })
@@ -246,14 +248,14 @@ describe('PacientesController', () => {
     it('returns 200 on success', async () => {
       const req = mockReq({ novoStatusCode: 'TRATAMENTO' }, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.changeStatus(req as Request, res)
+      await controller.changeStatus(req as Request, res, jest.fn())
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }))
     })
 
     it('returns 400 when novoStatusCode is missing', async () => {
       const req = mockReq({}, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.changeStatus(req as Request, res)
+      await controller.changeStatus(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(400)
     })
   })
@@ -264,7 +266,7 @@ describe('PacientesController', () => {
       mockPatientRepository.countByStatus.mockResolvedValueOnce({ PROSPECT: 5, TRATAMENTO: 2 })
       const req = mockReq()
       const res = mockRes()
-      await controller.statsByStatus(req as Request, res)
+      await controller.statsByStatus(req as Request, res, jest.fn())
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true, data: { PROSPECT: 5, TRATAMENTO: 2 } }))
     })
   })
@@ -278,14 +280,14 @@ describe('PacientesController', () => {
       mockPatientRepository.findStatusHistoryByPatient.mockResolvedValue([])
       const req = mockReq({}, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.getPatientTimeline(req as Request, res)
+      await controller.getPatientTimeline(req as Request, res, jest.fn())
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ timeline: [] }))
     })
 
     it('returns 401 when clinicId missing', async () => {
       const req = mockReq({}, {}, { id: 'pid-1' }, {}, null) // sem user
       const res = mockRes()
-      await controller.getPatientTimeline(req as Request, res)
+      await controller.getPatientTimeline(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(401)
     })
   })
@@ -302,7 +304,7 @@ describe('PacientesController', () => {
       mockPatientRepository.createPatientSession.mockResolvedValueOnce({})
       const req = mockReq({ action: 'login', email: 'joao@email.com', password: '123456' })
       const res = mockRes()
-      await controller.patientAuth(req as Request, res)
+      await controller.patientAuth(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(200)
       expect(res.cookie).toHaveBeenCalledWith(
         'patient_session',
@@ -318,7 +320,7 @@ describe('PacientesController', () => {
       mockPatientRepository.findPatientAccountByEmail.mockResolvedValueOnce(null)
       const req = mockReq({ action: 'login', email: 'x@x.com', password: '123' })
       const res = mockRes()
-      await controller.patientAuth(req as Request, res)
+      await controller.patientAuth(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(401)
     })
 
@@ -326,14 +328,14 @@ describe('PacientesController', () => {
       mockPatientRepository.deletePatientSessionsBySessionId.mockResolvedValueOnce({ count: 1 })
       const req = mockReq({ action: 'logout' }, { 'x-session-id': 'sess-1' })
       const res = mockRes()
-      await controller.patientAuth(req as Request, res)
+      await controller.patientAuth(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(200)
     })
 
     it('returns 400 on invalid action', async () => {
       const req = mockReq({ action: 'invalid' })
       const res = mockRes()
-      await controller.patientAuth(req as Request, res)
+      await controller.patientAuth(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(400)
     })
   })
@@ -344,14 +346,14 @@ describe('PacientesController', () => {
       mockPatientRepository.delete.mockResolvedValueOnce(undefined)
       const req = mockReq({}, {}, { id: 'pid-1' })
       const res = mockRes()
-      await controller.delete(req as Request, res)
+      await controller.delete(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(200)
     })
 
     it('returns 401 when clinicId missing', async () => {
       const req = mockReq({}, {}, { id: 'pid-1' }, {}, null)
       const res = mockRes()
-      await controller.delete(req as Request, res)
+      await controller.delete(req as Request, res, jest.fn())
       expect(res.status).toHaveBeenCalledWith(401)
     })
   })

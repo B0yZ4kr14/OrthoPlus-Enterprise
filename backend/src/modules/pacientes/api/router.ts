@@ -13,7 +13,6 @@ import { AtualizarPacienteUseCase } from "../application/use-cases/AtualizarPaci
 import { PatientRepositoryPostgres } from "../infrastructure/repositories/PatientRepositoryPostgres";
 import { PacientesController } from "./PacientesController";
 
-
 // Injeção de dependências
 const patientRepository = new PatientRepositoryPostgres();
 
@@ -33,38 +32,34 @@ const router: Router = Router();
 router.use(clinicGuard);
 
 // POST /api/pacientes - Cadastrar paciente
-router.post("/", (req, res) => controller.create(req, res));
+router.post("/", controller.create);
 
 // PUT /api/pacientes/:id - Atualizar paciente
-router.put("/:id", (req, res) => controller.update(req, res));
+router.put("/:id", controller.update);
 
 // GET /api/pacientes/search - Busca avançada
-router.get("/search", (req, res) => controller.search(req, res));
+router.get("/search", controller.search);
 
 // GET /api/pacientes - Listar pacientes
-router.get("/", (req, res) => controller.list(req, res));
+router.get("/", controller.list);
 
 // GET /api/pacientes/:id - Buscar paciente
-router.get("/:id", (req, res) => controller.getById(req, res));
+router.get("/:id", controller.getById);
 
 // DELETE /api/pacientes/:id - Remover paciente
-router.delete("/:id", (req, res) => controller.delete(req, res));
+router.delete("/:id", controller.delete);
 
 // PATCH /api/pacientes/:id/status - Alterar status
-router.patch("/:id/status", (req, res) => controller.changeStatus(req, res));
+router.patch("/:id/status", controller.changeStatus);
 
 // GET /api/pacientes/stats/by-status - Estatísticas por status
-router.get("/stats/by-status", (req, res) =>
-  controller.statsByStatus(req, res),
-);
+router.get("/stats/by-status", controller.statsByStatus);
 
 // POST /api/pacientes/auth - Auth de pacientes
-router.post("/auth", (req, res) => controller.patientAuth(req, res));
+router.post("/auth", controller.patientAuth);
 
 // GET /api/pacientes/:id/timeline - Timeline de paciente
-router.get("/:id/timeline", (req, res) =>
-  controller.getPatientTimeline(req, res),
-);
+router.get("/:id/timeline", controller.getPatientTimeline);
 
 router.use("/db", dbRouter);
 
