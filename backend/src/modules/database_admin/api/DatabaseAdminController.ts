@@ -7,11 +7,12 @@ import { logger } from '@/infrastructure/logger';
 import crypto from "crypto";
 import { Request, Response } from "express";
 import { z } from "zod";
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository";
 import { db } from "@/infrastructure/database/connection";
 import { DatabaseHealth } from "../domain/entities/DatabaseHealth";
 
 export class DatabaseAdminController {
+  private auditRepo = new AuditLogRepository()
   async getHealth(req: Request, res: Response): Promise<void> {
     try {
       const clinicId = req.user?.clinicId;
@@ -156,7 +157,7 @@ export class DatabaseAdminController {
         }
       }
 
-      const logs = await prisma.audit_logs.findMany({
+      const logs = await this.auditRepo.findLogs({
         where,
         orderBy: { created_at: "desc" },
         take: 100,
@@ -166,7 +167,7 @@ export class DatabaseAdminController {
         ...new Set(logs.map((l) => l.user_id).filter(Boolean)),
       ] as string[];
 
-      const profiles = await prisma.profiles.findMany({
+      const profiles = await this.auditRepo.findProfiles({
         where: { id: { in: userIds } },
         select: { id: true, full_name: true },
       });
@@ -418,15 +419,13 @@ export class DatabaseAdminController {
         return;
       }
       const { action, actionType, details } = req.body;
-      const log = await prisma.audit_logs.create({
-        data: {
-          clinic_id: clinicId,
-          user_id: req.user?.id,
-          action: action || "CREATE",
-          action_type: actionType || "unknown",
-          details: details || {},
-          ip_address: req.ip || "unknown",
-        },
+      const log = await this.auditRepo.createLog({
+        clinic_id: clinicId,
+        user_id: req.user?.id,
+        action: action || "CREATE",
+        action_type: actionType || "unknown",
+        details: details || {},
+        ip_address: req.ip || "unknown",
       });
       res.status(201).json(log);
     } catch (error) {
