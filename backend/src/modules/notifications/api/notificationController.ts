@@ -1,4 +1,5 @@
 import { NotificationRepository } from "@/modules/notifications/infrastructure/NotificationRepository";
+import { Errors } from "@/middleware/errorHandler";
 import { NextFunction, Request, Response } from "express";
 import nodemailer from "nodemailer";
 import { logger } from "@/infrastructure/logger";
@@ -127,8 +128,7 @@ export class NotificationController {
         req.body;
 
       if (!clinic_id || !tipo || !titulo || !mensagem) {
-        res.status(400).json({ error: "Missing required fields" });
-        return;
+        throw Errors.validation("Missing required fields: clinic_id, tipo, titulo, mensagem")
       }
 
       const notif = await this.repo.createNotification({
@@ -361,8 +361,7 @@ export class NotificationController {
       const { previsoes, resumo } = req.body;
 
       if (!previsoes || previsoes.length === 0) {
-        res.status(400).json({ error: "Nenhuma previsão fornecida" });
-        return;
+        throw Errors.validation("Nenhuma previsão fornecida")
       }
 
       const clinic_id = req.user?.clinicId;

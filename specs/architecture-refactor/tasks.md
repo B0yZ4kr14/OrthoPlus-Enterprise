@@ -10,10 +10,10 @@
 - [x] T0.4 Extract AuthService from AuthController.ts → mover bcrypt/JWT/token logic para AuthService.ts
 - [x] T0.5 Standardize error responses in refactored controllers to RFC 7807 Problem Details (ApiError)
   - Scope: FinanceiroController (completed with wrap()/withClinic() helpers)
-  - Partial: AuthController already uses ApiError for validation; notificationController and InventarioController still use inline res.status().json() — deferred to Phase 6 brownfield
+  - Partial: AuthController already uses ApiError for validation; notificationController migrated (2 inline res.status() replaced with Errors.validation); InventarioController still uses inline res.status().json() — deferred to Phase 6 brownfield
 
 ## Phase 1: Introduce Repositories
-- [ ] T1.1 Create FinanceiroRepository with CRUD + aggregation methods
+- [x] T1.1 Create FinanceiroRepository with CRUD + aggregation methods ✅ (54 async methods covering transactions, categories, cash registers, movimentos, incidentes, contas receber/pagar, notas fiscais, vendas PDV, extratos)
 - [x] ~~T1.2 Refactor FinanceiroController to use FinanceiroRepository~~ (OBSOLETO — merged into T0.3)
 - [x] T1.3 Create UserRepository for prisma.users access ✅ (already existed at backend/src/modules/auth/infrastructure/UserRepository.ts)
 - [x] T1.4 Create AuditLogRepository para operações financeiras/pacientes (GP-2 compliance) ✅ (already existed at backend/src/modules/database_admin/infrastructure/AuditLogRepository.ts)
