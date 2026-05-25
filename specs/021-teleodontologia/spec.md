@@ -70,19 +70,19 @@ Durante ou após a teleconsulta, o dentista registra anotações clínicas e emi
 
 ### Functional Requirements
 
-- **FR-001**: CRUD operations for teleconsultations (title, reason, type, scheduled date, patient, dentist)
-- **FR-002**: Session lifecycle management (start, end, duration tracking)
-- **FR-003**: Clinical notes capture (notes, diagnosis, recommendations)
-- **FR-004**: Digital prescription with medication list (name, dosage, frequency, duration, instructions)
-- **FR-005**: Dashboard with teleconsultation statistics (sessions today, average duration, completion rate, satisfaction)
-- **FR-006**: Video room integration (link generation for external video service)
-- **FR-007**: Clinic-scoped data access — all queries filter by `clinic_id`
+- **TEL-FR-001**: CRUD operations for teleconsultations (title, reason, type, scheduled date, patient, dentist)
+- **TEL-FR-002**: Session lifecycle management (start, end, duration tracking)
+- **TEL-FR-003**: Clinical notes capture (notes, diagnosis, recommendations)
+- **TEL-FR-004**: Digital prescription with medication list (name, dosage, frequency, duration, instructions)
+- **TEL-FR-005**: Dashboard with teleconsultation statistics (sessions today, average duration, completion rate, satisfaction)
+- **TEL-FR-006**: Video room integration (link generation for external video service)
+- **TEL-FR-007**: Clinic-scoped data access — all queries filter by `clinic_id`
 
 ### Non-Functional Requirements
 
-- **NFR-001**: Response time < 200ms for list operations
-- **NFR-002**: Support up to 1000 teleconsultations per clinic
-- **NFR-003**: All clinical data encrypted at rest (follows LGPD)
+- **TEL-NFR-001**: Response time < 200ms for list operations
+- **TEL-NFR-002**: Support up to 1000 teleconsultations per clinic
+- **TEL-NFR-003**: All clinical data encrypted at rest (follows LGPD)
 
 ---
 
@@ -123,10 +123,10 @@ Durante ou após a teleconsulta, o dentista registra anotações clínicas e emi
 
 ### Measurable Outcomes
 
-- **SC-001**: All 9 API endpoints respond with < 200ms p95
-- **SC-002**: All routes protected by `clinicGuard`
-- **SC-003**: Zero new `as any` or `@ts-ignore` added
-- **SC-004**: Prescription schema validates medication array (1-20 items)
+- **TEL-SC-001**: All 9 API endpoints respond with < 200ms p95
+- **TEL-SC-002**: All routes protected by `clinicGuard`
+- **TEL-SC-003**: Zero new `as any` or `@ts-ignore` added
+- **TEL-SC-004**: Prescription schema validates medication array (1-20 items)
 
 ### Post-Launch KPIs
 

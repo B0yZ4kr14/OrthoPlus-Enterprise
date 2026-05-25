@@ -54,16 +54,16 @@ Pacientes resgatam recompensas com pontos acumulados e indicam amigos para ganha
 
 ### Functional Requirements
 
-- **FR-001**: Points management (add, view balance, history)
-- **FR-002**: Badge system (create, unlock, list)
-- **FR-003**: Reward catalog and redemption
-- **FR-004**: Referral tracking with bonus points
-- **FR-005**: Clinic-scoped data access
+- **FID-FR-001**: Points management (add, view balance, history)
+- **FID-FR-002**: Badge system (create, unlock, list)
+- **FID-FR-003**: Reward catalog and redemption
+- **FID-FR-004**: Referral tracking with bonus points
+- **FID-FR-005**: Clinic-scoped data access
 
 ### Non-Functional Requirements
 
-- **NFR-001**: Point transactions are atomic (no double-counting)
-- **NFR-002**: Badge calculations are idempotent
+- **FID-NFR-001**: Point transactions are atomic (no double-counting)
+- **FID-NFR-002**: Badge calculations are idempotent
 
 ---
 
@@ -103,9 +103,9 @@ Pacientes resgatam recompensas com pontos acumulados e indicam amigos para ganha
 
 ### Measurable Outcomes
 
-- **SC-001**: Point addition is atomic (no race conditions)
-- **SC-002**: Badge unlocks are calculated correctly
-- **SC-003**: All routes protected by `clinicGuard`
+- **FID-SC-001**: Point addition is atomic (no race conditions)
+- **FID-SC-002**: Badge unlocks are calculated correctly
+- **FID-SC-003**: All routes protected by `clinicGuard`
 
 ---
 

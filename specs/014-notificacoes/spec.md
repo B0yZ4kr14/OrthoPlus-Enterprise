@@ -80,7 +80,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: Envio Multi-Canal
+### NOT-FR-001: Envio Multi-Canal
 **Description**: Notificações via WhatsApp, SMS e email.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -89,7 +89,7 @@
 - Templates por canal
 - Agendamento de envio
 
-### FR-002: Confirmação de Agendamento
+### NOT-FR-002: Confirmação de Agendamento
 **Description**: Lembrete e confirmação de consulta.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -98,7 +98,7 @@
 - Atualização automática do status na agenda
 - Reenvio manual pela recepção
 
-### FR-003: Alertas de Recall
+### NOT-FR-003: Alertas de Recall
 **Description**: Lembrete de retorno programado.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -107,7 +107,7 @@
 - Link para agendamento online
 - Acompanhamento de conversão
 
-### FR-004: Notificações In-App
+### NOT-FR-004: Notificações In-App
 **Description**: Alertas dentro do sistema.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -117,7 +117,7 @@
 - Marcação como lida/arquivada
 - Filtros por tipo e data
 
-### FR-005: Template Builder
+### NOT-FR-005: Template Builder
 **Description**: Editor de templates.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -150,17 +150,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### NOT-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### NOT-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### NOT-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

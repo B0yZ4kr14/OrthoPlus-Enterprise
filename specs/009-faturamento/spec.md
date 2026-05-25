@@ -81,7 +81,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: Emissão de NF-e
+### FAT-FR-001: Emissão de NF-e
 **Description**: Emissão completa de nota fiscal eletrônica de serviços.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -93,7 +93,7 @@
 - Retorno: chave de acesso, protocolo
 - Download XML e PDF DANFSE
 
-### FR-002: Configuração Fiscal
+### FAT-FR-002: Configuração Fiscal
 **Description**: Setup por clínica.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -103,7 +103,7 @@
 - Configuração de impostos
 - Ambiente: homologação/produção
 
-### FR-003: Consulta e Cancelamento
+### FAT-FR-003: Consulta e Cancelamento
 **Description**: Gestão do ciclo de vida da NF-e.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -112,7 +112,7 @@
 - Carta de correção (CC-e)
 - Inutilização de numeração
 
-### FR-004: Relatórios Fiscais
+### FAT-FR-004: Relatórios Fiscais
 **Description**: Exportação para contabilidade.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -121,7 +121,7 @@
 - Exportação CSV/Excel
 - Totalizadores por imposto (ISS, PIS, COFINS, etc.)
 
-### FR-005: Integração Orçamento → NF-e
+### FAT-FR-005: Integração Orçamento → NF-e
 **Description**: Fluxo direto de aprovação a faturamento.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -153,17 +153,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### FAT-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### FAT-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### FAT-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

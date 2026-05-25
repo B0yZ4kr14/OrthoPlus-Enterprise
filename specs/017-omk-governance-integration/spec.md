@@ -86,15 +86,15 @@ As an administrator, I want the production VPS environment to be fully documente
 
 ### Functional Requirements
 
-- **FR-001**: System MUST index the entire OrthoPlus Enterprise monorepo with GitNexus, including all TypeScript/JavaScript sources, Python agents, and configuration files.
-- **FR-002**: System MUST provide queryable code intelligence via GitNexus for impact analysis, debugging traces, and refactoring operations.
-- **FR-003**: System MUST support the full SpecKit SDD workflow: specify -> clarify -> plan -> tasks -> implement -> verify -> ship.
-- **FR-004**: System MUST integrate SpecKit with the existing project structure.
-- **FR-005**: System MUST orchestrate SpecKit workflows via OMK multi-agent system.
-- **FR-006**: System MUST document the production VPS environment including network config, SSH access, service URLs, and Docker container topology.
-- **FR-007**: System MUST validate that production endpoints are reachable and responding correctly.
-- **FR-008**: System MUST ensure all domain references in code, configs, and documentation point to the canonical production domain.
-- **FR-009**: System MUST maintain a canonical source of truth for VPS configuration that is version-controlled and auditable.
+- **OMG-FR-001**: System MUST index the entire OrthoPlus Enterprise monorepo with GitNexus, including all TypeScript/JavaScript sources, Python agents, and configuration files.
+- **OMG-FR-002**: System MUST provide queryable code intelligence via GitNexus for impact analysis, debugging traces, and refactoring operations.
+- **OMG-FR-003**: System MUST support the full SpecKit SDD workflow: specify -> clarify -> plan -> tasks -> implement -> verify -> ship.
+- **OMG-FR-004**: System MUST integrate SpecKit with the existing project structure.
+- **OMG-FR-005**: System MUST orchestrate SpecKit workflows via OMK multi-agent system.
+- **OMG-FR-006**: System MUST document the production VPS environment including network config, SSH access, service URLs, and Docker container topology.
+- **OMG-FR-007**: System MUST validate that production endpoints are reachable and responding correctly.
+- **OMG-FR-008**: System MUST ensure all domain references in code, configs, and documentation point to the canonical production domain.
+- **OMG-FR-009**: System MUST maintain a canonical source of truth for VPS configuration that is version-controlled and auditable.
 
 ### Key Entities
 
@@ -107,12 +107,12 @@ As an administrator, I want the production VPS environment to be fully documente
 
 ### Measurable Outcomes
 
-- **SC-001**: GitNexus index covers 100% of the monorepo source files and returns accurate impact analysis within 5 seconds. *(Verified: GitNexus CLI internal optimization guarantees <5s query latency for indexed repos)*
-- **SC-002**: Every new feature follows the SpecKit SDD workflow, with specs stored in `specs/` and traceable to git branches and OMK goals.
-- **SC-003**: OMK automates quality gate execution across 4 SpecKit phases (specify, plan, implement, verify) with human-in-the-loop approval at plan and implement gates.
-- **SC-003-KPI** (Post-launch tracking): Target 60% reduction in manual workflow steps within 3 months of adoption.
-- **SC-004**: Production environment documentation is accurate and verifiable: all documented URLs return HTTP 200, SSH access works, and Docker containers are healthy.
-- **SC-005**: Zero stale domain references remain in any source file, configuration, or documentation artifact.
+- **OMG-SC-001**: GitNexus index covers 100% of the monorepo source files and returns accurate impact analysis within 5 seconds. *(Verified: GitNexus CLI internal optimization guarantees <5s query latency for indexed repos)*
+- **OMG-SC-002**: Every new feature follows the SpecKit SDD workflow, with specs stored in `specs/` and traceable to git branches and OMK goals.
+- **OMG-SC-003**: OMK automates quality gate execution across 4 SpecKit phases (specify, plan, implement, verify) with human-in-the-loop approval at plan and implement gates.
+- **OMG-SC-003-KPI** (Post-launch tracking): Target 60% reduction in manual workflow steps within 3 months of adoption.
+- **OMG-SC-004**: Production environment documentation is accurate and verifiable: all documented URLs return HTTP 200, SSH access works, and Docker containers are healthy.
+- **OMG-SC-005**: Zero stale domain references remain in any source file, configuration, or documentation artifact.
 
 ## Assumptions
 

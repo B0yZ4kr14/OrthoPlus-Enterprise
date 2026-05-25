@@ -83,7 +83,7 @@ O PEP substitui prontuários em papel, garantindo registro permanente e auditáv
 
 ## 3. Functional Requirements
 
-### FR-001: Odontograma Interativo
+### PEP-FR-001: Odontograma Interativo
 **Description**: Visualização e edição gráfica da arcada dentária.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -93,7 +93,7 @@ O PEP substitui prontuários em papel, garantindo registro permanente e auditáv
 - Undo/redo de alterações
 - Snapshot do odontograma por data
 
-### FR-002: Ficha Clínica Estruturada
+### PEP-FR-002: Ficha Clínica Estruturada
 **Description**: Formulário completo de anamnese e histórico.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -102,7 +102,7 @@ O PEP substitui prontuários em papel, garantindo registro permanente e auditáv
 - Exame clínico geral
 - Consentimentos informados (LGPD)
 
-### FR-003: Evoluções Clínicas
+### PEP-FR-003: Evoluções Clínicas
 **Description**: Registro cronológico de atendimentos.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -112,7 +112,7 @@ O PEP substitui prontuários em papel, garantindo registro permanente e auditáv
 - Anexos ilimitados por evolução
 - Busca e filtro por data/procedimento
 
-### FR-004: Prescrições e Receituário
+### PEP-FR-004: Prescrições e Receituário
 **Description**: Geração de documentos prescritivos.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -121,7 +121,7 @@ O PEP substitui prontuários em papel, garantindo registro permanente e auditáv
 - PDF com cabeçalho da clínica
 - Controle de numeração de receituário
 
-### FR-005: Anexos e Documentos
+### PEP-FR-005: Anexos e Documentos
 **Description**: Armazenamento de arquivos clínicos.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -130,7 +130,7 @@ O PEP substitui prontuários em papel, garantindo registro permanente e auditáv
 - Visualização inline (lightbox)
 - Download individual ou zip
 
-### FR-006: Assinatura Digital ICP
+### PEP-FR-006: Assinatura Digital ICP
 **Description**: Assinatura de documentos com certificado digital.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -163,17 +163,17 @@ O PEP substitui prontuários em papel, garantindo registro permanente e auditáv
 
 ## 5. Success Criteria
 
-### SC-001: Cobertura do Odontograma
+### PEP-SC-001: Cobertura do Odontograma
 **Description**: 100% dos pacientes ativos têm odontograma preenchido
 **Target**: 100%
 **Measurement**: Query de pacientes sem odontograma
 
-### SC-002: Tempo de Registro
+### PEP-SC-002: Tempo de Registro
 **Description**: Dentista completa evolução em menos de 5 minutos
 **Target**: 90% das evoluções < 5min
 **Measurement**: Analytics de tempo de preenchimento
 
-### SC-003: Disponibilidade do PEP
+### PEP-SC-003: Disponibilidade do PEP
 **Description**: Sistema disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

@@ -81,7 +81,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: Campanhas
+### CRM-FR-001: Campanhas
 **Description**: Criação e execução de campanhas de marketing.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -91,7 +91,7 @@
 - Agendamento de envio
 - Acompanhamento: enviado, entregue, aberto, convertido
 
-### FR-002: Automações
+### CRM-FR-002: Automações
 **Description**: Fluxos automáticos baseados em eventos.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -99,7 +99,7 @@
 - Ação: envio de mensagem, criação de tarefa, desconto automático
 - Delay configurável
 
-### FR-003: Funil de Conversão
+### CRM-FR-003: Funil de Conversão
 **Description**: Visualização do journey do paciente.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -108,7 +108,7 @@
 - Gargalos identificados
 - Comparativo mês a mês
 
-### FR-004: Pesquisa de Satisfação (NPS)
+### CRM-FR-004: Pesquisa de Satisfação (NPS)
 **Description**: Coleta de feedback.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -117,7 +117,7 @@
 - Comentários abertos
 - Relatório de satisfação por dentista e clínica
 
-### FR-005: Indicações
+### CRM-FR-005: Indicações
 **Description**: Programa de indicação.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -149,17 +149,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### CRM-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### CRM-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### CRM-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

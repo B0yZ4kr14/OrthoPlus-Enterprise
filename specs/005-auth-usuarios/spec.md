@@ -83,7 +83,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 
 ## 3. Functional Requirements
 
-### FR-001: Autenticação JWT
+### AUT-FR-001: Autenticação JWT
 **Description**: Sistema de login baseado em tokens JWT.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -92,7 +92,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 - Refresh token opcional (para sessões longas)
 - Logout invalida token no cliente
 
-### FR-002: Registro de Usuários
+### AUT-FR-002: Registro de Usuários
 **Description**: Criação de novos usuários staff.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -101,7 +101,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 - Validação de email único
 - Envio de email de boas-vindas com senha temporária
 
-### FR-003: Multi-Tenancy (clinicGuard)
+### AUT-FR-003: Multi-Tenancy (clinicGuard)
 **Description**: Isolamento de dados por clínica.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -110,7 +110,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 - Usuário só acessa dados da própria clínica
 - ADMIN com múltiplas clínicas pode alternar
 
-### FR-004: Controle de Permissões
+### AUT-FR-004: Controle de Permissões
 **Description**: Sistema de roles e permissions.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -119,7 +119,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 - Módulos ativos por clínica (configuráveis)
 - Verificação em frontend (ProtectedRoute) e backend (clinicGuard)
 
-### FR-005: Rate Limiting
+### AUT-FR-005: Rate Limiting
 **Description**: Proteção contra brute force e abuse.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -128,7 +128,7 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 - API geral: 500 req / 15 min
 - Resposta 429 com Retry-After header
 
-### FR-006: Portal do Paciente
+### AUT-FR-006: Portal do Paciente
 **Description**: Autenticação separada para pacientes.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -161,17 +161,17 @@ Uma clínica odontológica lida com dados sensíveis (LGPD): dados pessoais, his
 
 ## 5. Success Criteria
 
-### SC-001: Segurança de Senhas
+### AUT-SC-001: Segurança de Senhas
 **Description**: 100% das senhas atendem política mínima
 **Target**: 100%
 **Measurement**: Query de senhas não conformes (zero)
 
-### SC-002: Isolamento Multi-Tenant
+### AUT-SC-002: Isolamento Multi-Tenant
 **Description**: Zero acessos cruzados entre clínicas
 **Target**: 100% isolamento
 **Measurement**: Audit logs + testes de penetração
 
-### SC-003: Tempo de Login
+### AUT-SC-003: Tempo de Login
 **Description**: Usuário faz login em menos de 2 segundos
 **Target**: p99 < 2s
 **Measurement**: Logs de API

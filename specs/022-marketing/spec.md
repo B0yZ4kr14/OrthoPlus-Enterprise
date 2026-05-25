@@ -70,19 +70,19 @@ A clínica recompensa pacientes fiéis com pontos, badges e benefícios. Indica�
 
 ### Functional Requirements
 
-- **FR-001**: CRUD operations for marketing campaigns (name, type, channel, dates, audience, status)
-- **FR-002**: Send tracking (envios) with status lifecycle (pending → sent → delivered → failed)
-- **FR-003**: Recall automation with scheduled notifications and batch processing
-- **FR-004**: Trigger-based marketing (process triggers automatically)
-- **FR-005**: Loyalty program with points, badges, rewards, and referrals
-- **FR-006**: Campaign metrics dashboard (sends, opens, conversions)
-- **FR-007**: Clinic-scoped data access — all queries filter by `clinic_id`
+- **MKT-FR-001**: CRUD operations for marketing campaigns (name, type, channel, dates, audience, status)
+- **MKT-FR-002**: Send tracking (envios) with status lifecycle (pending → sent → delivered → failed)
+- **MKT-FR-003**: Recall automation with scheduled notifications and batch processing
+- **MKT-FR-004**: Trigger-based marketing (process triggers automatically)
+- **MKT-FR-005**: Loyalty program with points, badges, rewards, and referrals
+- **MKT-FR-006**: Campaign metrics dashboard (sends, opens, conversions)
+- **MKT-FR-007**: Clinic-scoped data access — all queries filter by `clinic_id`
 
 ### Non-Functional Requirements
 
-- **NFR-001**: Batch recall processing supports 1000+ recalls per run
-- **NFR-002**: Campaign creation < 300ms response time
-- **NFR-003**: Send tracking is asynchronous (non-blocking)
+- **MKT-NFR-001**: Batch recall processing supports 1000+ recalls per run
+- **MKT-NFR-002**: Campaign creation < 300ms response time
+- **MKT-NFR-003**: Send tracking is asynchronous (non-blocking)
 
 ---
 
@@ -126,10 +126,10 @@ A clínica recompensa pacientes fiéis com pontos, badges e benefícios. Indica�
 
 ### Measurable Outcomes
 
-- **SC-001**: All 11 API endpoints respond with < 300ms p95
-- **SC-002**: All routes protected by `clinicGuard`
-- **SC-003**: Batch recall processing handles 1000 records without timeout
-- **SC-004**: Campaign send tracking is asynchronous (non-blocking API)
+- **MKT-SC-001**: All 11 API endpoints respond with < 300ms p95
+- **MKT-SC-002**: All routes protected by `clinicGuard`
+- **MKT-SC-003**: Batch recall processing handles 1000 records without timeout
+- **MKT-SC-004**: Campaign send tracking is asynchronous (non-blocking API)
 
 ### Post-Launch KPIs
 

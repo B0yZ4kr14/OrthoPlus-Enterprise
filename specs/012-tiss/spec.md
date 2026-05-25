@@ -80,7 +80,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: Cadastro de Convênios
+### TIS-FR-001: Cadastro de Convênios
 **Description**: Gestão de operadoras de saúde.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -88,7 +88,7 @@
 - Regras: carência, autorização obrigatória, limite de procedimentos
 - Configuração por clínica
 
-### FR-002: Guia TISS
+### TIS-FR-002: Guia TISS
 **Description**: Geração e envio de guias de autorização.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -98,7 +98,7 @@
 - Envio via webservice SOAP
 - Acompanhamento de protocolo
 
-### FR-003: Status de Autorização
+### TIS-FR-003: Status de Autorização
 **Description**: Consulta e acompanhamento.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -107,7 +107,7 @@
 - Motivo de negação
 - Histórico de guias por paciente
 
-### FR-004: Retorno e Glosas
+### TIS-FR-004: Retorno e Glosas
 **Description**: Processamento de pagamento e recursos.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -117,7 +117,7 @@
 - Geração de recurso de glosa
 - Relatório de inadimplência do convênio
 
-### FR-005: Relatórios TISS
+### TIS-FR-005: Relatórios TISS
 **Description**: Análise de convênios.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -150,17 +150,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### TIS-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### TIS-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### TIS-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

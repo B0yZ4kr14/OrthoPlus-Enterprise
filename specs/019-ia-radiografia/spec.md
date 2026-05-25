@@ -90,18 +90,18 @@ Dentists can view aggregated insights across all analyses in their clinic — pr
 
 ### Functional Requirements
 
-- **FR-001**: Dentists MUST be able to upload radiograph images (PNG, JPEG, DICOM) via a web interface, with automatic validation of file type and size.
-- **FR-002**: The system MUST verify active LGPD patient consent before initiating any AI analysis.
-- **FR-003**: Uploaded images MUST have DICOM/EXIF metadata stripped to remove patient-identifying information before AI processing.
-- **FR-004**: The system MUST call an AI vision model to analyze radiographs and return structured results including detected problems, affected teeth (FDI notation), severity levels, confidence scores, and treatment recommendations.
-- **FR-005**: AI analysis results MUST be encrypted at rest before storage in the database.
-- **FR-006**: Dentists MUST be able to review AI findings, add observations, override conclusions, and digitally sign their review.
-- **FR-007**: The system MUST maintain an immutable audit trail logging every action: upload, analysis, review, export, consent registration, and consent revocation.
-- **FR-008**: Clinics MUST be able to register, check, and revoke patient consent for AI radiography processing.
-- **FR-009**: Dentists MUST be able to view aggregated insights (KPIs, charts, problem distributions) across all clinic analyses.
-- **FR-010**: Dentists MUST be able to compare multiple radiograph analyses side-by-side and view patient radiography timelines.
-- **FR-011**: The system MUST support exporting comparative analyses to PDF format.
-- **FR-012**: The entire feature MUST be gated by an environment-level feature flag that can disable AI radiography globally.
+- **IAR-FR-001**: Dentists MUST be able to upload radiograph images (PNG, JPEG, DICOM) via a web interface, with automatic validation of file type and size.
+- **IAR-FR-002**: The system MUST verify active LGPD patient consent before initiating any AI analysis.
+- **IAR-FR-003**: Uploaded images MUST have DICOM/EXIF metadata stripped to remove patient-identifying information before AI processing.
+- **IAR-FR-004**: The system MUST call an AI vision model to analyze radiographs and return structured results including detected problems, affected teeth (FDI notation), severity levels, confidence scores, and treatment recommendations.
+- **IAR-FR-005**: AI analysis results MUST be encrypted at rest before storage in the database.
+- **IAR-FR-006**: Dentists MUST be able to review AI findings, add observations, override conclusions, and digitally sign their review.
+- **IAR-FR-007**: The system MUST maintain an immutable audit trail logging every action: upload, analysis, review, export, consent registration, and consent revocation.
+- **IAR-FR-008**: Clinics MUST be able to register, check, and revoke patient consent for AI radiography processing.
+- **IAR-FR-009**: Dentists MUST be able to view aggregated insights (KPIs, charts, problem distributions) across all clinic analyses.
+- **IAR-FR-010**: Dentists MUST be able to compare multiple radiograph analyses side-by-side and view patient radiography timelines.
+- **IAR-FR-011**: The system MUST support exporting comparative analyses to PDF format.
+- **IAR-FR-012**: The entire feature MUST be gated by an environment-level feature flag that can disable AI radiography globally.
 
 ### Key Entities
 
@@ -135,13 +135,13 @@ Dentists can view aggregated insights across all analyses in their clinic — pr
 
 ### Measurable Outcomes (Buildable — verifiable during implementation)
 
-- **SC-001**: AI analysis completes end-to-end (upload → processing → result display) in under 30 seconds for 95 percent of images under 5MB.
-- **SC-002**: 100 percent of AI analyses require explicit patient consent verification before processing — zero analyses process without consent.
-- **SC-003**: 100 percent of actions (upload, analyze, review, export, consent changes) produce an immutable audit log entry within 100ms of action completion.
-- **SC-004**: AI results are encrypted at rest — verified by attempting to read raw database values and confirming they are not plaintext.
-- **SC-005**: Rate limiting prevents more than 10 uploads per hour per dentist and 100 per day per clinic — verified by automated load testing.
-- **SC-006**: Zero unauthorized cross-clinic data access — verified by penetration testing attempting to access analysis IDs from other clinics.
-- **SC-007**: Metadata stripping removes all DICOM/EXIF patient-identifying fields — verified by inspecting uploaded image buffers before and after processing.
+- **IAR-SC-001**: AI analysis completes end-to-end (upload → processing → result display) in under 30 seconds for 95 percent of images under 5MB.
+- **IAR-SC-002**: 100 percent of AI analyses require explicit patient consent verification before processing — zero analyses process without consent.
+- **IAR-SC-003**: 100 percent of actions (upload, analyze, review, export, consent changes) produce an immutable audit log entry within 100ms of action completion.
+- **IAR-SC-004**: AI results are encrypted at rest — verified by attempting to read raw database values and confirming they are not plaintext.
+- **IAR-SC-005**: Rate limiting prevents more than 10 uploads per hour per dentist and 100 per day per clinic — verified by automated load testing.
+- **IAR-SC-006**: Zero unauthorized cross-clinic data access — verified by penetration testing attempting to access analysis IDs from other clinics.
+- **IAR-SC-007**: Metadata stripping removes all DICOM/EXIF patient-identifying fields — verified by inspecting uploaded image buffers before and after processing.
 
 ### Post-Launch KPIs (Business — tracked after deployment)
 

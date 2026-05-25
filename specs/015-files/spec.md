@@ -80,7 +80,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: Upload
+### FIL-FR-001: Upload
 **Description**: Armazenamento de arquivos com metadados.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -90,7 +90,7 @@
 - Categorização: radiografia, foto, receita, contrato, outro
 - Vinculação a paciente, atendimento, orçamento
 
-### FR-002: Storage
+### FIL-FR-002: Storage
 **Description**: Armazenamento seguro e escalável.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -99,7 +99,7 @@
 - Criptografia em repouso (AES-256)
 - Backup automático
 
-### FR-003: Visualização
+### FIL-FR-003: Visualização
 **Description**: Preview e download.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -108,7 +108,7 @@
 - Download em lote (ZIP)
 - Link temporário (expira em 24h)
 
-### FR-004: Permissões
+### FIL-FR-004: Permissões
 **Description**: Controle de acesso por arquivo.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -116,7 +116,7 @@
 - Herança de permissão do paciente
 - Audit log de acesso
 
-### FR-005: OCR e Busca
+### FIL-FR-005: OCR e Busca
 **Description**: Indexação de conteúdo.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -149,17 +149,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### FIL-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### FIL-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### FIL-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

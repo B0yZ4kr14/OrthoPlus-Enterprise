@@ -88,7 +88,7 @@ Dentistas e administradores precisam:
 
 ## 3. Functional Requirements
 
-### FR-001: Lançamentos Financeiros
+### FIN-FR-001: Lançamentos Financeiros
 **Description**: CRUD de receitas e despesas com categorização.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -97,7 +97,7 @@ Dentistas e administradores precisam:
 - Anexos (comprovante, nota fiscal)
 - Recorrência (mensal, anual)
 
-### FR-002: Caixa Registradora
+### FIN-FR-002: Caixa Registradora
 **Description**: Controle de entradas e saídas do dia. **Owner: Financeiro** — PDV opera o caixa no dia-a-dia, mas o registro histórico e fechamento oficial são do Financeiro.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -108,7 +108,7 @@ Dentistas e administradores precisam:
 - Fechamento com conferência (irreversível, apenas admin reabre)
 - Múltiplos caixas por clínica
 
-### FR-003: Contas a Receber
+### FIN-FR-003: Contas a Receber
 **Description**: Gestão de recebíveis (parcelas de tratamento).
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -118,7 +118,7 @@ Dentistas e administradores precisam:
 - Juros/multa por atraso configurável
 - Renegociação de dívida
 
-### FR-004: Contas a Pagar
+### FIN-FR-004: Contas a Pagar
 **Description**: Gestão de despesas programadas.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -127,7 +127,7 @@ Dentistas e administradores precisam:
 - Alertas de vencimento próximo
 - Pagamento com baixa automática
 
-### FR-005: Conciliação Bancária
+### FIN-FR-005: Conciliação Bancária
 **Description**: Matching entre extrato bancário e lançamentos.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -136,7 +136,7 @@ Dentistas e administradores precisam:
 - Interface de reconciliação manual para não-match
 - Histórico de conciliações
 
-### FR-006: Relatórios
+### FIN-FR-006: Relatórios
 **Description**: Relatórios gerenciais e contábeis.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -165,17 +165,17 @@ Dentistas e administradores precisam:
 
 ## 5. Success Criteria
 
-### SC-001: Precisão do Caixa
+### FIN-SC-001: Precisão do Caixa
 **Description**: Divergência entre sistema e físico menor que 0.1%
 **Target**: 99.9% de precisão
 **Measurement**: Comparativo fechamento de caixa
 
-### SC-002: Cobertura de Conciliação
+### FIN-SC-002: Cobertura de Conciliação
 **Description**: >90% das movimentações bancárias conciliadas automaticamente
 **Target**: 90% auto-match
 **Measurement**: Taxa de matching pós-importação
 
-### SC-003: Visibilidade de Inadimplência
+### FIN-SC-003: Visibilidade de Inadimplência
 **Description**: Administrador identifica contas vencidas em menos de 10 segundos
 **Target**: < 10s
 **Measurement**: Tempo de acesso ao relatório de inadimplência

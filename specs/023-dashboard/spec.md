@@ -38,14 +38,14 @@ O dentista ou administrador acessa o dashboard e visualiza metricas consolidadas
 
 ### Functional Requirements
 
-- **FR-001**: Consolidated overview endpoint aggregating patients, appointments, and financial data
-- **FR-002**: Redis caching (60s TTL) per clinic to reduce database load
-- **FR-003**: Clinic-scoped data access — all queries filter by `clinic_id`
+- **DSH-FR-001**: Consolidated overview endpoint aggregating patients, appointments, and financial data
+- **DSH-FR-002**: Redis caching (60s TTL) per clinic to reduce database load
+- **DSH-FR-003**: Clinic-scoped data access — all queries filter by `clinic_id`
 
 ### Non-Functional Requirements
 
-- **NFR-001**: Response time < 500ms for cached data, < 2s for cache miss
-- **NFR-002**: Dashboard supports clinics with 10k+ patients
+- **DSH-NFR-001**: Response time < 500ms for cached data, < 2s for cache miss
+- **DSH-NFR-002**: Dashboard supports clinics with 10k+ patients
 
 ---
 
@@ -69,9 +69,9 @@ O dentista ou administrador acessa o dashboard e visualiza metricas consolidadas
 
 ### Measurable Outcomes
 
-- **SC-001**: Overview endpoint responds < 500ms when cached
-- **SC-002**: Cache miss responds < 2s
-- **SC-003**: All routes protected by `clinicGuard`
+- **DSH-SC-001**: Overview endpoint responds < 500ms when cached
+- **DSH-SC-002**: Cache miss responds < 2s
+- **DSH-SC-003**: All routes protected by `clinicGuard`
 
 ---
 

@@ -85,7 +85,7 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 
 ## 3. Functional Requirements
 
-### FR-001: Cadastro de Paciente
+### PAC-FR-001: Cadastro de Paciente
 **Description**: Sistema deve permitir criar, ler, atualizar e excluir registros de pacientes com validações de dados brasileiros.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -96,7 +96,7 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 - CEP com integração ViaCEP ou similar
 - Campo clinicId obrigatório (multi-tenancy)
 
-### FR-002: Deduplicação por CPF
+### PAC-FR-002: Deduplicação por CPF
 **Description**: Impedir cadastro duplicado de mesmo CPF na mesma clínica.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -104,7 +104,7 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 - Alerta visual em tempo real no frontend
 - Sugestão de abrir ficha existente
 
-### FR-003: Gestão de Status
+### PAC-FR-003: Gestão de Status
 **Description**: Pacientes devem ter status controlado com transições válidas.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -112,7 +112,7 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 - Transições controladas (ex: ARQUIVADO não pode agendar)
 - Histórico de mudanças de status
 
-### FR-004: Upload de Foto ✅ IMPLEMENTADO
+### PAC-FR-004: Upload de Foto ✅ IMPLEMENTADO
 **Description**: Permitir associar foto ao perfil do paciente.
 **Priority**: Should Have
 **Status**: ✅ Implementado (2026-05-17)
@@ -122,7 +122,7 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 - Thumbnail automático (200x200) — pendente
 - ✅ Armazenamento via `/files/upload` (filesystem local)
 
-### FR-005: Timeline do Paciente ✅ IMPLEMENTADO
+### PAC-FR-005: Timeline do Paciente ✅ IMPLEMENTADO
 **Description**: Agregar eventos da jornada do paciente em visualização cronológica.
 **Priority**: Should Have
 **Status**: ✅ Implementado (2026-05-17)
@@ -156,17 +156,17 @@ Sem um cadastro de pacientes robusto, nenhum outro módulo do sistema pode opera
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Cadastro
+### PAC-SC-001: Tempo de Cadastro
 **Description**: Recepcionista cadastra novo paciente em menos de 2 minutos
 **Target**: 95% dos cadastros < 2min
 **Measurement**: Analytics de tempo de preenchimento de formulário
 
-### SC-002: Taxa de Deduplicação
+### PAC-SC-002: Taxa de Deduplicação
 **Description**: Zero cadastros duplicados de CPF na mesma clínica
 **Target**: 100% de prevenção
 **Measurement**: Query de duplicatas no banco
 
-### SC-003: Disponibilidade da Busca
+### PAC-SC-003: Disponibilidade da Busca
 **Description**: Busca de paciente retorna resultados em menos de 200ms
 **Target**: p99 < 200ms
 **Measurement**: Logs de API + Prometheus metrics

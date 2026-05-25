@@ -11,11 +11,11 @@ Módulo de analytics do OrthoPlus Enterprise que fornece métricas agregadas de 
 
 ## Functional Requirements
 
-### FR-1: Dashboard Overview
+### ANL-FR-1: Dashboard Overview
 - Endpoint que retorna estatísticas consolidadas da clínica
 - Dados: totalPatients, todayAppointments, monthlyRevenue, occupancyRate, pendingTreatments, completedTreatments
 
-### FR-2: Clinic Context Isolation
+### ANL-FR-2: Clinic Context Isolation
 - Todas as queries devem filtrar por `clinic_id`
 - Retornar 401 se clinicId não estiver presente no request
 
@@ -23,8 +23,8 @@ Módulo de analytics do OrthoPlus Enterprise que fornece métricas agregadas de 
 
 | ID | Criterion | Measurement |
 |----|-----------|-------------|
-| SC-1 | Endpoint retorna estatísticas corretas | Testes unitários passam |
-| SC-2 | Dados isolados por clínica | Queries filtram por clinic_id |
+| ANL-SC-1 | Endpoint retorna estatísticas corretas | Testes unitários passam |
+| ANL-SC-2 | Dados isolados por clínica | Queries filtram por clinic_id |
 
 ## Out of Scope
 - Drill-down de analytics

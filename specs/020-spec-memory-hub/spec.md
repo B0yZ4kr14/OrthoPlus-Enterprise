@@ -91,30 +91,30 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST index all markdown documents in `specs/`, `docs/`, `.specify/memory/`, and `.omk/memory/` directories.
-- **FR-002**: The system MUST provide a semantic search interface that returns ranked results with source file paths, relevance scores, and content excerpts.
-- **FR-003**: The system MUST automatically detect file changes (create, update, delete) in indexed directories and update the search index within 60 seconds.
-- **FR-004**: The system MUST generate structured context briefs for AI agents given a feature identifier or query topic.
-- **FR-005**: The system MUST detect and report memory drift: specs without implementations, broken cross-references, outdated architecture decisions.
-- **FR-006**: The system MUST provide a health dashboard showing memory coverage, drift metrics, and index status.
-- **FR-007**: The system MUST support filtering search results by source type (spec, plan, architecture, API contract, implementation note).
-- **FR-008**: The system MUST respect document confidentiality markers and exclude sensitive content from AI agent context.
-- **FR-009**: The system MUST maintain version history for indexed documents, allowing retrieval of previous versions.
-- **FR-010**: The system MUST expose both a CLI interface (for developers) and an API interface (for AI agents and integrations).
-- **FR-011**: The system MUST validate API key permissions (read/test call) on startup and fail fast with descriptive error if invalid.
-- **FR-012**: The system MUST support hot-swapping of API keys without restart (via file watcher on `.env` or SIGHUP).
+- **MEM-FR-001**: The system MUST index all markdown documents in `specs/`, `docs/`, `.specify/memory/`, and `.omk/memory/` directories.
+- **MEM-FR-002**: The system MUST provide a semantic search interface that returns ranked results with source file paths, relevance scores, and content excerpts.
+- **MEM-FR-003**: The system MUST automatically detect file changes (create, update, delete) in indexed directories and update the search index within 60 seconds.
+- **MEM-FR-004**: The system MUST generate structured context briefs for AI agents given a feature identifier or query topic.
+- **MEM-FR-005**: The system MUST detect and report memory drift: specs without implementations, broken cross-references, outdated architecture decisions.
+- **MEM-FR-006**: The system MUST provide a health dashboard showing memory coverage, drift metrics, and index status.
+- **MEM-FR-007**: The system MUST support filtering search results by source type (spec, plan, architecture, API contract, implementation note).
+- **MEM-FR-008**: The system MUST respect document confidentiality markers and exclude sensitive content from AI agent context.
+- **MEM-FR-009**: The system MUST maintain version history for indexed documents, allowing retrieval of previous versions.
+- **MEM-FR-010**: The system MUST expose both a CLI interface (for developers) and an API interface (for AI agents and integrations).
+- **MEM-FR-011**: The system MUST validate API key permissions (read/test call) on startup and fail fast with descriptive error if invalid.
+- **MEM-FR-012**: The system MUST support hot-swapping of API keys without restart (via file watcher on `.env` or SIGHUP).
 
 ### Non-Functional Requirements
 
-- **NFR-001**: Search queries MUST return results within 2 seconds for datasets up to 1000 documents.
-- **NFR-002**: The index update latency MUST be under 60 seconds for file changes. Inotify/fswatch provides near-real-time updates; polling fallback checks every 30 seconds.
-- **NFR-003**: Context briefs for AI agents MUST fit within a 128k token budget, with intelligent summarization for overflow.
-- **NFR-004**: The system SHOULD be operable without external cloud dependencies (local-first architecture). Ollama fallback ensures local operation; API-key providers are optional enhancements for production environments.
-- **NFR-006**: API keys MUST be stored encrypted at rest (AES-256-GCM) and never logged or exposed in error messages.
-- **NFR-007**: The system MUST support provider failover: if the primary API fails (timeout, rate limit, invalid key), fallback to secondary provider or queue for retry.
-- **NFR-008**: API usage costs MUST be trackable per clinic/workspace with monthly budget alerts configurable via environment.
-- **NFR-009**: Embedding requests MUST include request ID for provider-side tracing and cost attribution.
-- **NFR-005**: Health scan MUST complete within 5 minutes for the current project size (~300 documents).
+- **MEM-NFR-001**: Search queries MUST return results within 2 seconds for datasets up to 1000 documents.
+- **MEM-NFR-002**: The index update latency MUST be under 60 seconds for file changes. Inotify/fswatch provides near-real-time updates; polling fallback checks every 30 seconds.
+- **MEM-NFR-003**: Context briefs for AI agents MUST fit within a 128k token budget, with intelligent summarization for overflow.
+- **MEM-NFR-004**: The system SHOULD be operable without external cloud dependencies (local-first architecture). Ollama fallback ensures local operation; API-key providers are optional enhancements for production environments.
+- **MEM-NFR-006**: API keys MUST be stored encrypted at rest (AES-256-GCM) and never logged or exposed in error messages.
+- **MEM-NFR-007**: The system MUST support provider failover: if the primary API fails (timeout, rate limit, invalid key), fallback to secondary provider or queue for retry.
+- **MEM-NFR-008**: API usage costs MUST be trackable per clinic/workspace with monthly budget alerts configurable via environment.
+- **MEM-NFR-009**: Embedding requests MUST include request ID for provider-side tracing and cost attribution.
+- **MEM-NFR-005**: Health scan MUST complete within 5 minutes for the current project size (~300 documents).
 
 ---
 
@@ -122,7 +122,7 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 
 ### Buildable Success Criteria (Validatable During Implementation)
 
-1. **A developer can find relevant project context in under 2 seconds** via semantic search, compared to 2+ minutes of manual browsing. (Aligned with NFR-001: search < 2s for 1000 documents)
+1. **A developer can find relevant project context in under 2 seconds** via semantic search, compared to 2+ minutes of manual browsing. (Aligned with MEM-NFR-001: search < 2s for 1000 documents)
 3. **Memory drift is detected within 24 hours** of a spec-implementation divergence occurring.
 4. **95% of project documents are indexed and searchable** within 60 seconds of being created or modified.
 

@@ -87,7 +87,7 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 
 ## 3. Functional Requirements
 
-### FR-001: Estado de Colapso por Categoria
+### SID-FR-001: Estado de Colapso por Categoria
 **Description**: Cada categoria (MenuGroup) na sidebar deve ter seu próprio estado de colapso/expansão independente.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -95,7 +95,7 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 - Inicialização padrão: todas as categorias recolhidas
 - Exceção: categoria contendo a rota ativa é expandida automaticamente
 
-### FR-002: Toggle de Categoria
+### SID-FR-002: Toggle de Categoria
 **Description**: O usuário deve poder expandir/recolher categorias clicando no cabeçalho.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -105,7 +105,7 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 - Cursor pointer no cabeçalho
 - Suporte a teclado (Enter/Espaço)
 
-### FR-003: Animações de Transição
+### SID-FR-003: Animações de Transição
 **Description**: Transições entre estados devem ser animadas com Framer Motion.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -114,7 +114,7 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 - Duração 300ms, staggerChildren 40ms
 - Easing: `[0, 0, 0.2, 1]`
 
-### FR-004: Persistência localStorage
+### SID-FR-004: Persistência localStorage
 **Description**: O estado das categorias deve persistir no localStorage do navegador.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -123,7 +123,7 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 - Atualizado em tempo real a cada toggle
 - Carregado na inicialização do context
 
-### FR-005: Categoria Ativa Auto-Expand
+### SID-FR-005: Categoria Ativa Auto-Expand
 **Description**: A categoria que contém a rota atual deve sempre estar expandida.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -156,17 +156,17 @@ A sidebar atual do OrthoPlus Enterprise exibe todas as categorias de módulos se
 
 ## 5. Success Criteria
 
-### SC-001: Redução de Scroll
+### SID-SC-001: Redução de Scroll
 **Description**: Usuários precisam scrollar 50% menos na sidebar para acessar qualquer categoria
 **Target**: 50% reduction in average scroll distance
 **Measurement**: Analytics de scroll depth na sidebar
 
-### SC-002: Tempo de Navegação
+### SID-SC-002: Tempo de Navegação
 **Description**: Tempo médio para navegar entre módulos distantes deve reduzir
 **Target**: < 3 segundos para encontrar e clicar em qualquer módulo
 **Measurement**: Session recordings + heatmaps
 
-### SC-003: Adoção do Toggle
+### SID-SC-003: Adoção do Toggle
 **Description**: Usuários ativamente expandem/recolhem categorias
 **Target**: 70% dos usuários usam o toggle pelo menos uma vez por sessão
 **Measurement**: Event tracking no toggle de categoria

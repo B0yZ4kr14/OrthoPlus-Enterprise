@@ -19,18 +19,18 @@ No entanto, **0 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-50
 
 ## Functional Requirements
 
-### FR-1: Auditoria e Inventário de Cores Legadas
+### THM-FR-1: Auditoria e Inventário de Cores Legadas
 - Identificar todas as ocorrências de `amber-500`, `cyan-500` e variações em componentes `.tsx`
 - Classificar cada ocorrência por tipo semântico: `warning`, `info`, `accent`, `destructive`, `success`
 - Documentar o componente afetado e a correção sugerida
 
-### FR-2: Utility de Cores Semânticas
+### THM-FR-2: Utility de Cores Semânticas
 - Criar/exportar funções/utilitários em `@/theme/tokens-v3` para mapeamento semântico
 - Mapeamento: `warning` → `warning` CSS var, `info` → `info` CSS var, `accent` → `accent` CSS var
 - Garantir que `warning` no `premium-light` use `amber-500` (corretamente) mas via CSS var
 - Garantir que `info` no `premium-light` use `sky-500` via CSS var
 
-### FR-3: Refatoração de Componentes
+### THM-FR-3: Refatoração de Componentes
 - Substituir todas as 0 ocorrências restantes de cores hardcoded em componentes `.tsx` por classes/utilitários semânticos
 - Priorizar componentes de alto impacto visual:
   - `PasswordStrengthIndicator` (auth)
@@ -39,22 +39,22 @@ No entanto, **0 ocorrências** de cores hardcoded legadas (`amber-500`, `cyan-50
   - `ThemePreview` (settings)
   - Cards e alertas em CRM, Configurações
 
-### FR-4: Validação Visual
+### THM-FR-4: Validação Visual
 - Verificar que ambos os temas premium (`premium-light`, `premium-dental-dark`) renderizam cores consistentes
 
 ## Success Criteria
 
 | ID | Criterion | Measurement |
 |----|-----------|-------------|
-| SC-1 | Zero ocorrências de `amber-500`/`cyan-500` hardcoded em componentes | `grep` retorna vazio |
-| SC-2 | Todos os componentes de alerta usam cores semânticas via CSS vars | `grep` confirma zero hardcoded + build passa em ambos os temas premium (`premium-light`, `premium-dental-dark`) |
-| SC-3 | Build do frontend passa sem erros | `pnpm build` em `apps/web` completa com 0 erros |
-| SC-4 | Não há regressões entre `premium-light` e `premium-dental-dark` | Comparação visual antes/depois |
+| THM-SC-1 | Zero ocorrências de `amber-500`/`cyan-500` hardcoded em componentes | `grep` retorna vazio |
+| THM-SC-2 | Todos os componentes de alerta usam cores semânticas via CSS vars | `grep` confirma zero hardcoded + build passa em ambos os temas premium (`premium-light`, `premium-dental-dark`) |
+| THM-SC-3 | Build do frontend passa sem erros | `pnpm build` em `apps/web` completa com 0 erros |
+| THM-SC-4 | Não há regressões entre `premium-light` e `premium-dental-dark` | Comparação visual antes/depois |
 
 ## User Stories
 
-- **US-1**: Como usuário do tema premium-light, quero que os alertas de aviso usem a cor âmbar consistente do meu tema, não uma cor hardcoded que não combina.
-- **US-2**: Como desenvolvedor, quero usar utilitários semânticos (`warning`, `info`, `accent`) em vez de hardcodar cores Tailwind, para que meus componentes sejam automaticamente compatíveis com todos os temas.
+- **THM-US-1**: Como usuário do tema premium-light, quero que os alertas de aviso usem a cor âmbar consistente do meu tema, não uma cor hardcoded que não combina.
+- **THM-US-2**: Como desenvolvedor, quero usar utilitários semânticos (`warning`, `info`, `accent`) em vez de hardcodar cores Tailwind, para que meus componentes sejam automaticamente compatíveis com todos os temas.
 
 ## Edge Cases
 

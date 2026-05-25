@@ -79,7 +79,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: CRUD de Vendas
+### PDV-FR-001: CRUD de Vendas
 **Description**: Registro completo de transações de venda.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -91,7 +91,7 @@
 - Forma de pagamento
 - Cliente (opcional)
 
-### FR-002: Múltiplas Formas de Pagamento
+### PDV-FR-002: Múltiplas Formas de Pagamento
 **Description**: Pagamento misto e parcelado.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -100,7 +100,7 @@
 - Parcelamento em até 12x (cartão)
 - Geração de QR Code PIX
 
-### FR-003: Controle de Caixa
+### PDV-FR-003: Controle de Caixa
 **Description**: Operação diária de caixa. **Owner: Financeiro (entidade); PDV (operação)** — PDV abre, movimenta e solicita fechamento; Financeiro consolida e torna o fechamento irreversível.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -110,7 +110,7 @@
 - Relatório em PDF gerado pelo Financeiro
 - Bloqueio pós-fechamento (apenas admin reabre via Financeiro)
 
-### FR-004: Integração Financeira
+### PDV-FR-004: Integração Financeira
 **Description**: Vendas refletem no financeiro.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -118,7 +118,7 @@
 - Contas a receber para parcelado
 - Conciliação automática (PIX)
 
-### FR-005: Baixa de Estoque
+### PDV-FR-005: Baixa de Estoque
 **Description**: Produtos vendidos baixam do inventário.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -150,17 +150,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### PDV-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### PDV-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### PDV-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

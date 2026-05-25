@@ -78,7 +78,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: CRUD de Procedimentos
+### PRO-FR-001: CRUD de Procedimentos
 **Description**: Gestão completa do catálogo de procedimentos odontológicos.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -87,7 +87,7 @@
 - Status: ATIVO, INATIVO
 - clinicId obrigatório
 
-### FR-002: Tabela de Preços Multipla
+### PRO-FR-002: Tabela de Preços Multipla
 **Description**: Preços por convênio e particular.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -96,7 +96,7 @@
 - Campos: valor, tempo de retorno
 - Reajuste em lote por tabela
 
-### FR-003: Associação Dentista-Procedimento
+### PRO-FR-003: Associação Dentista-Procedimento
 **Description**: Define quem pode executar o quê.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -104,7 +104,7 @@
 - Duração customizada (sobrescreve padrão)
 - Comissão percentual por procedimento-dentista
 
-### FR-004: Materiais e Insumos
+### PRO-FR-004: Materiais e Insumos
 **Description**: Vinculação ao inventário.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -112,7 +112,7 @@
 - Quantidade estimada
 - Alerta de estoque baixo ao agendar
 
-### FR-005: Histórico de Preços
+### PRO-FR-005: Histórico de Preços
 **Description**: Auditoria de reajustes.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -144,17 +144,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### PRO-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### PRO-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### PRO-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

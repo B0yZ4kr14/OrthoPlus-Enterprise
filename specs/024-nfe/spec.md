@@ -38,15 +38,15 @@ A administradora da clinica emite uma nota fiscal eletronica para um procediment
 
 ### Functional Requirements
 
-- **FR-001**: CRUD operations for NF-e records
-- **FR-002**: NF-e cancellation with reason and audit trail
-- **FR-003**: Status tracking (RASCUNHO, EMITIDA, CANCELADA, REJEITADA)
-- **FR-004**: Clinic-scoped data access
+- **NFE-FR-001**: CRUD operations for NF-e records
+- **NFE-FR-002**: NF-e cancellation with reason and audit trail
+- **NFE-FR-003**: Status tracking (RASCUNHO, EMITIDA, CANCELADA, REJEITADA)
+- **NFE-FR-004**: Clinic-scoped data access
 
 ### Non-Functional Requirements
 
-- **NFR-001**: NF-e data must be immutable after issuance (cancellations create new records)
-- **NFR-002**: Response time < 300ms for CRUD operations
+- **NFE-NFR-001**: NF-e data must be immutable after issuance (cancellations create new records)
+- **NFE-NFR-002**: Response time < 300ms for CRUD operations
 
 ---
 
@@ -79,9 +79,9 @@ A administradora da clinica emite uma nota fiscal eletronica para um procediment
 
 ### Measurable Outcomes
 
-- **SC-001**: All 6 API endpoints respond with < 300ms p95
-- **SC-002**: All routes protected by `clinicGuard`
-- **SC-003**: Cancellation creates immutable audit record
+- **NFE-SC-001**: All 6 API endpoints respond with < 300ms p95
+- **NFE-SC-002**: All routes protected by `clinicGuard`
+- **NFE-SC-003**: Cancellation creates immutable audit record
 
 ---
 

@@ -81,7 +81,7 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 
 ## 3. Functional Requirements
 
-### FR-001: CRUD de Agendamentos
+### AGD-FR-001: CRUD de Agendamentos
 **Description**: Operações completas de agendamento com validações de negócio.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -91,7 +91,7 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - Cancelar com motivo obrigatório
 - Reagendar preservando histórico
 
-### FR-002: Visualização Multi-Modo
+### AGD-FR-002: Visualização Multi-Modo
 **Description**: Calendário com visualizações diária, semanal e mensal.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -101,7 +101,7 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - Navegação por setas e date picker
 - "Hoje" para voltar ao dia atual
 
-### FR-003: Gestão de Bloqueios
+### AGD-FR-003: Gestão de Bloqueios
 **Description**: Dentistas e admins podem bloquear horários.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -110,7 +110,7 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - Visível no calendário com cor diferente
 - Impede agendamento sobreposto
 
-### FR-004: Confirmações
+### AGD-FR-004: Confirmações
 **Description**: Sistema de confirmação de consultas. **Owner: Agenda (estado)** — módulo Notificações é consumidor do evento de envio.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -120,7 +120,7 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 - Resposta do paciente atualiza status na Agenda via callback/evento
 - Reenvio manual pela recepção reemite o evento
 
-### FR-005: Recall de Pacientes
+### AGD-FR-005: Recall de Pacientes
 **Description**: Sugestão automática de retorno baseada no tratamento.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -146,17 +146,17 @@ Uma clínica sem agenda funcional não opera. Recepcionistas precisam visualizar
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Marcação
+### AGD-SC-001: Tempo de Marcação
 **Description**: Marcar uma consulta leva menos de 30 segundos
 **Target**: 90% das marcações < 30s
 **Measurement**: Analytics de cliques e tempo
 
-### SC-002: Taxa de No-Show
+### AGD-SC-002: Taxa de No-Show
 **Description**: Reduzir faltas com confirmações automáticas
 **Target**: Redução de 30% no no-show
 **Measurement**: Comparativo antes/depois da feature
 
-### SC-003: Conflitos Zero
+### AGD-SC-003: Conflitos Zero
 **Description**: Zero agendamentos duplos no mesmo horário
 **Target**: 100% de prevenção
 **Measurement**: Query de sobreposição no banco

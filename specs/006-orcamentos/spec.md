@@ -80,7 +80,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: CRUD de Orçamentos ✅ PARCIAL
+### ORC-FR-001: CRUD de Orçamentos ✅ PARCIAL
 **Description**: Sistema deve permitir criar, ler, atualizar e excluir orçamentos de tratamento.
 **Priority**: Must Have
 **Status**: ✅ Scaffolding completo (2026-05-17)
@@ -91,7 +91,7 @@
 - ✅ Aplicação de desconto percentual ou fixo
 - ✅ Validade configurável (padrão 30 dias)
 
-### FR-002: Aprovação Digital ✅ PARCIAL
+### ORC-FR-002: Aprovação Digital ✅ PARCIAL
 **Description**: Paciente aprova ou rejeita orçamento via portal.
 **Priority**: Must Have
 **Status**: ✅ Backend workflow implementado (2026-05-17)
@@ -102,7 +102,7 @@
 - ✅ Rejeição com campo de motivo
 - Notificação automática à clínica — pendente
 
-### FR-003: Geração de Contas a Receber
+### ORC-FR-003: Geração de Contas a Receber
 **Description**: Ao aprovar, gera parcelas no financeiro.
 **Priority**: Must Have
 **Status**: ⏳ Pendente
@@ -112,7 +112,7 @@
 - Geração automática no módulo financeiro
 - Vinculação ao orçamento original
 
-### FR-004: Dashboard de Conversão
+### ORC-FR-004: Dashboard de Conversão
 **Description**: Métricas de performance de orçamentos.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -122,7 +122,7 @@
 - Tempo médio de aprovação
 - Motivos de rejeição (top 5)
 
-### FR-005: Versões de Orçamento
+### ORC-FR-005: Versões de Orçamento
 **Description**: Rastreabilidade de alterações.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -154,17 +154,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### ORC-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### ORC-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### ORC-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

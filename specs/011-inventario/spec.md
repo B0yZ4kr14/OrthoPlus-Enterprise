@@ -81,7 +81,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: CRUD de Produtos
+### INV-FR-001: CRUD de Produtos
 **Description**: Catálogo de materiais e produtos.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -91,7 +91,7 @@
 - Foto
 - Status: ATIVO, INATIVO
 
-### FR-002: Movimentações
+### INV-FR-002: Movimentações
 **Description**: Entradas e saídas com rastreabilidade.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -101,7 +101,7 @@
 - Custo médio atualizado
 - Vinculação a venda ou procedimento
 
-### FR-003: Alertas
+### INV-FR-003: Alertas
 **Description**: Notificações de estoque crítico.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -110,7 +110,7 @@
 - Sugestão de quantidade a comprar
 - Notificação por email/dashboard
 
-### FR-004: Relatórios
+### INV-FR-004: Relatórios
 **Description**: Análise de consumo e perdas.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -119,7 +119,7 @@
 - Giro de estoque
 - Custo médio histórico
 
-### FR-005: Integração com PDV
+### INV-FR-005: Integração com PDV
 **Description**: Baixa automática em vendas.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -150,17 +150,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### INV-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### INV-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### INV-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus

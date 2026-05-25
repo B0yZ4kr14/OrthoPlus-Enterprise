@@ -81,7 +81,7 @@
 
 ## 3. Functional Requirements
 
-### FR-001: CRUD de Funcionários
+### FUN-FR-001: CRUD de Funcionários
 **Description**: Gestão completa de colaboradores.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -90,7 +90,7 @@
 - Status: ATIVO, FERIAS, INATIVO
 - clinicId obrigatório
 
-### FR-002: Controle de Ponto
+### FUN-FR-002: Controle de Ponto
 **Description**: Registro de jornada.
 **Priority**: Must Have
 **Acceptance Criteria**:
@@ -100,7 +100,7 @@
 - Banco de horas
 - Relatório mensal por funcionário
 
-### FR-003: Escala de Trabalho
+### FUN-FR-003: Escala de Trabalho
 **Description**: Planejamento de folgas e turnos.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -109,7 +109,7 @@
 - Notificação de mudanças
 - Limite de folgas por mês
 
-### FR-004: Comissões e Metas
+### FUN-FR-004: Comissões e Metas
 **Description**: Remuneração variável.
 **Priority**: Should Have
 **Acceptance Criteria**:
@@ -118,7 +118,7 @@
 - Relatório de produção
 - Lançamento automático no financeiro
 
-### FR-005: Documentos
+### FUN-FR-005: Documentos
 **Description**: Gestão de contratos e certificados.
 **Priority**: Could Have
 **Acceptance Criteria**:
@@ -150,17 +150,17 @@
 
 ## 5. Success Criteria
 
-### SC-001: Tempo de Operação
+### FUN-SC-001: Tempo de Operação
 **Description**: Operação principal do módulo completa em menos de 2 minutos
 **Target**: 90% das operações < 2min
 **Measurement**: Analytics de tempo de interação
 
-### SC-002: Precisão de Dados
+### FUN-SC-002: Precisão de Dados
 **Description**: Zero erros de duplicação ou inconsistência
 **Target**: 100% de integridade
 **Measurement**: Queries de validação no banco
 
-### SC-003: Disponibilidade
+### FUN-SC-003: Disponibilidade
 **Description**: Módulo disponível 99.9% durante horário comercial
 **Target**: 99.9% uptime
 **Measurement**: Health checks + Prometheus
