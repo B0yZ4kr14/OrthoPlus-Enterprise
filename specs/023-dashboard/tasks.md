@@ -1,5 +1,11 @@
 # Tasks: Dashboard
 
+
+**Functional Requirements Coverage:**
+- DSH-FR-001: Consolidated overview endpoint aggregating patient...
+- DSH-FR-002: Redis caching (60s TTL) per clinic to reduce datab...
+- DSH-FR-003: Clinic-scoped data access — all queries filter by ...
+
 **Note**: This is a **migrated** task list — all tasks were already completed.
 
 ---
@@ -12,7 +18,7 @@
 
 ## Phase 2: Tests (Missing)
 
-- [x] T004 Backend unit test: overview aggregates data correctly
+- [x] T004 Backend unit test: overview aggregates data correctly  [→ DSH-FR-003]
 - [x] T005 Backend unit test: cache key includes clinicId
 - [x] T006 Backend unit test: returns 503 when DB unavailable
 

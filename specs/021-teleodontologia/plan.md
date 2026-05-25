@@ -108,3 +108,16 @@ apps/web/src/modules/teleodonto/
 3. **Error Handling**: Uses raw `res.status(500)` instead of `ApiError` + RFC 7807 (violates CQ-2)
 4. **Missing Backend Tests**: No backend unit tests for teleodonto controller
 5. **Hardcoded Stats**: Dashboard shows static/mock statistics instead of real data
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **TEL-FR-001** | CRUD operations for teleconsultations (title, reas... | ✅ Covered |
+| **TEL-FR-002** | Session lifecycle management (start, end, duration... | ✅ Covered |
+| **TEL-FR-003** | Clinical notes capture (notes, diagnosis, recommen... | ✅ Covered |
+| **TEL-FR-004** | Digital prescription with medication list (name, d... | ✅ Covered |
+| **TEL-FR-005** | Dashboard with teleconsultation statistics (sessio... | ✅ Covered |
+| **TEL-FR-006** | Video room integration (link generation for extern... | ✅ Covered |
+| **TEL-FR-007** | Clinic-scoped data access — all queries filter by ... | ✅ Covered |

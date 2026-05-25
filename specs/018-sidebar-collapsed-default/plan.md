@@ -107,3 +107,14 @@ apps/web/src/
 - [x] P024 `pnpm build` succeeds
 - [x] P025 Component tests verified (type-check + build pass)
 - [x] P026 No new `as any` or `@ts-ignore`
+---
+
+## Requirements Traceability
+
+| Requirement | Description | Coverage |
+|-------------|-------------|----------|
+| **SID-FR-001** | Estado de Colapso por Categoria | ✅ Covered |
+| **SID-FR-002** | Toggle de Categoria | ✅ Covered |
+| **SID-FR-003** | Animações de Transição | ✅ Covered |
+| **SID-FR-004** | Persistência localStorage | ✅ Covered |
+| **SID-FR-005** | Categoria Ativa Auto-Expand | ✅ Covered |

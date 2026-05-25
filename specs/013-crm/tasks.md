@@ -1,5 +1,13 @@
 # Tasks: CRM e Gestão de Leads
 
+
+**Functional Requirements Coverage:**
+- CRM-FR-001: Campanhas
+- CRM-FR-002: Automações
+- CRM-FR-003: Funil de Conversão
+- CRM-FR-004: Pesquisa de Satisfação (NPS)
+- CRM-FR-005: Indicações
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

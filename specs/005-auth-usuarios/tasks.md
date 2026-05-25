@@ -1,5 +1,14 @@
 # Tasks: Autenticação e Controle de Acesso
 
+
+**Functional Requirements Coverage:**
+- AUT-FR-001: Autenticação JWT
+- AUT-FR-002: Registro de Usuários
+- AUT-FR-003: Multi-Tenancy (clinicGuard)
+- AUT-FR-004: Controle de Permissões
+- AUT-FR-005: Rate Limiting
+- AUT-FR-006: Portal do Paciente
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit marking completed work
 
 ---

@@ -1,5 +1,15 @@
 # Tasks: Teleodontologia
 
+
+**Functional Requirements Coverage:**
+- TEL-FR-001: CRUD operations for teleconsultations (title, reas...
+- TEL-FR-002: Session lifecycle management (start, end, duration...
+- TEL-FR-003: Clinical notes capture (notes, diagnosis, recommen...
+- TEL-FR-004: Digital prescription with medication list (name, d...
+- TEL-FR-005: Dashboard with teleconsultation statistics (sessio...
+- TEL-FR-006: Video room integration (link generation for extern...
+- TEL-FR-007: Clinic-scoped data access — all queries filter by ...
+
 **Input**: Design documents from `/specs/021-teleodontologia/`
 
 **Prerequisites**: plan.md (required), spec.md (required for user stories)
@@ -53,7 +63,7 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 1
 
-- [x] T004 [P] [US1] Backend unit test: create teleconsulta with valid data
+- [x] T004 [P] [US1] Backend unit test: create teleconsulta with valid data  [→ TEL-FR-007]
 - [x] T005 [P] [US1] Backend unit test: list teleconsultas filters by clinicId
 - [x] T006 [P] [US1] Frontend unit test: `useTeleconsultas` hook
 

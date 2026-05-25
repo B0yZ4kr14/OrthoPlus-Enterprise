@@ -1,5 +1,13 @@
 # Tasks: Fidelidade
 
+
+**Functional Requirements Coverage:**
+- FID-FR-001: Points management (add, view balance, history)
+- FID-FR-002: Badge system (create, unlock, list)
+- FID-FR-003: Reward catalog and redemption
+- FID-FR-004: Referral tracking with bonus points
+- FID-FR-005: Clinic-scoped data access
+
 **Note**: This is a **migrated** task list — all tasks were already completed.
 
 ---

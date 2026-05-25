@@ -73,3 +73,12 @@ Widget: { id, dashboard_id, type, config, position, clinic_id, created_at, updat
 
 ## Status
 ✅ **Complete** — All tasks implemented and validated.
+---
+
+## Requirements Traceability
+
+| Requirement | Description | Coverage |
+|-------------|-------------|----------|
+| **BID-FR-1** | CRUD de Dashboards | ✅ Covered |
+| **BID-FR-2** | CRUD de Widgets | ✅ Covered |
+| **BID-FR-3** | Clinic Context Isolation | ✅ Covered |

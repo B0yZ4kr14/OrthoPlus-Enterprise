@@ -1,5 +1,10 @@
 # Tasks: Analytics
 
+
+**Functional Requirements Coverage:**
+- ANL-FR-1: Dashboard Overview
+- ANL-FR-2: Clinic Context Isolation
+
 ## Phase 1: Core Implementation
 
 - [x] T001 Implement `AnalyticsController` with `getDashboardOverview` endpoint

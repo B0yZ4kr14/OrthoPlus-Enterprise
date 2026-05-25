@@ -1,5 +1,13 @@
 # Tasks: Agenda e Agendamentos
 
+
+**Functional Requirements Coverage:**
+- AGD-FR-001: CRUD de Agendamentos
+- AGD-FR-002: Visualização Multi-Modo
+- AGD-FR-003: Gestão de Bloqueios
+- AGD-FR-004: Confirmações
+- AGD-FR-005: Recall de Pacientes
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

@@ -57,3 +57,14 @@ apps/web/src/modules/marketing-auto/components/programa-fidelidade/
 1. **⚠️ No backend tests** — Controller has 0 test coverage
 2. **⚠️ Frontend scattered** — UI lives under `marketing-auto/` instead of dedicated `fidelidade/` module
 3. **⚠️ Point atomicity** — Need to verify transaction safety for point operations
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **FID-FR-001** | Points management (add, view balance, history) | ✅ Covered |
+| **FID-FR-002** | Badge system (create, unlock, list) | ✅ Covered |
+| **FID-FR-003** | Reward catalog and redemption | ✅ Covered |
+| **FID-FR-004** | Referral tracking with bonus points | ✅ Covered |
+| **FID-FR-005** | Clinic-scoped data access | ✅ Covered |

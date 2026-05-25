@@ -1,5 +1,14 @@
 # Tasks: Prontuário Eletrônico (PEP)
 
+
+**Functional Requirements Coverage:**
+- PEP-FR-001: Odontograma Interativo
+- PEP-FR-002: Ficha Clínica Estruturada
+- PEP-FR-003: Evoluções Clínicas
+- PEP-FR-004: Prescrições e Receituário
+- PEP-FR-005: Anexos e Documentos
+- PEP-FR-006: Assinatura Digital ICP
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

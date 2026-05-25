@@ -50,3 +50,13 @@ backend/src/modules/nfe/
 1. **⚠️ No backend tests** — Controller has 0 test coverage
 2. **⚠️ No frontend** — Backend-only module; no frontend UI detected
 3. **⚠️ Architecture drift** — Controller may use Prisma directly
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **NFE-FR-001** | CRUD operations for NF-e records | ✅ Covered |
+| **NFE-FR-002** | NF-e cancellation with reason and audit trail | ✅ Covered |
+| **NFE-FR-003** | Status tracking (RASCUNHO, EMITIDA, CANCELADA, REJ... | ✅ Covered |
+| **NFE-FR-004** | Clinic-scoped data access | ✅ Covered |

@@ -1,5 +1,11 @@
 # Tasks: BI Dashboards
 
+
+**Functional Requirements Coverage:**
+- BID-FR-1: CRUD de Dashboards
+- BID-FR-2: CRUD de Widgets
+- BID-FR-3: Clinic Context Isolation
+
 ## Phase 1: Core Implementation
 
 - [x] T001 Implement `BIController` with dashboard CRUD endpoints

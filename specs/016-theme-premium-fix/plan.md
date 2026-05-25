@@ -47,3 +47,13 @@ Nenhuma alteração no data model. Apenas design tokens e CSS.
   - **Mitigation**: Testar cada componente refatorado no tema light antes de commitar
 - **Risk**: Cores em constantes/objetos não podem usar classes Tailwind
   - **Mitigation**: Para objetos de configuração, usar mapa de tokens em vez de strings hardcoded
+---
+
+## Requirements Traceability
+
+| Requirement | Description | Coverage |
+|-------------|-------------|----------|
+| **THM-FR-1** | Auditoria e Inventário de Cores Legadas | ✅ Covered |
+| **THM-FR-2** | Utility de Cores Semânticas | ✅ Covered |
+| **THM-FR-3** | Refatoração de Componentes | ✅ Covered |
+| **THM-FR-4** | Validação Visual | ✅ Covered |

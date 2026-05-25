@@ -1,5 +1,13 @@
 # Tasks: Sidebar com Categorias Recolhidas por Padrão
 
+
+**Functional Requirements Coverage:**
+- SID-FR-001: Estado de Colapso por Categoria
+- SID-FR-002: Toggle de Categoria
+- SID-FR-003: Animações de Transição
+- SID-FR-004: Persistência localStorage
+- SID-FR-005: Categoria Ativa Auto-Expand
+
 **Status**: IMPLEMENTED — Code exists, tasks being marked retroactively
 
 ---

@@ -52,3 +52,12 @@ apps/web/src/modules/dashboard/
 
 1. **⚠️ No backend tests** — DashboardController has 0 test coverage
 2. **⚠️ Graceful degradation** — Router returns 503 when DB is unavailable; no retry logic
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **DSH-FR-001** | Consolidated overview endpoint aggregating patient... | ✅ Covered |
+| **DSH-FR-002** | Redis caching (60s TTL) per clinic to reduce datab... | ✅ Covered |
+| **DSH-FR-003** | Clinic-scoped data access — all queries filter by ... | ✅ Covered |

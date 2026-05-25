@@ -1,5 +1,13 @@
 # Tasks: TISS e Guias Médicas
 
+
+**Functional Requirements Coverage:**
+- TIS-FR-001: Cadastro de Convênios
+- TIS-FR-002: Guia TISS
+- TIS-FR-003: Status de Autorização
+- TIS-FR-004: Retorno e Glosas
+- TIS-FR-005: Relatórios TISS
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

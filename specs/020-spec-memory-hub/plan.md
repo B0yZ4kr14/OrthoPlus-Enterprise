@@ -146,3 +146,21 @@ categories/@orthoplus/core/packages/
 |-----------|------------|-------------------------------------|
 | [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
 | [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **MEM-FR-001** | The system MUST index all markdown documents in `s... | ✅ Covered |
+| **MEM-FR-002** | The system MUST provide a semantic search interfac... | ✅ Covered |
+| **MEM-FR-003** | The system MUST automatically detect file changes ... | ✅ Covered |
+| **MEM-FR-004** | The system MUST generate structured context briefs... | ✅ Covered |
+| **MEM-FR-005** | The system MUST detect and report memory drift: sp... | ✅ Covered |
+| **MEM-FR-006** | The system MUST provide a health dashboard showing... | ✅ Covered |
+| **MEM-FR-007** | The system MUST support filtering search results b... | ✅ Covered |
+| **MEM-FR-008** | The system MUST respect document confidentiality m... | ✅ Covered |
+| **MEM-FR-009** | The system MUST maintain version history for index... | ✅ Covered |
+| **MEM-FR-010** | The system MUST expose both a CLI interface (for d... | ✅ Covered |
+| **MEM-FR-011** | The system MUST validate API key permissions (read... | ✅ Covered |
+| **MEM-FR-012** | The system MUST support hot-swapping of API keys w... | ✅ Covered |

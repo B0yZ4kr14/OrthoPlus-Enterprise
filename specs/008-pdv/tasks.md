@@ -1,5 +1,13 @@
 # Tasks: PDV (Ponto de Venda)
 
+
+**Functional Requirements Coverage:**
+- PDV-FR-001: CRUD de Vendas
+- PDV-FR-002: Múltiplas Formas de Pagamento
+- PDV-FR-003: Controle de Caixa
+- PDV-FR-004: Integração Financeira
+- PDV-FR-005: Baixa de Estoque
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

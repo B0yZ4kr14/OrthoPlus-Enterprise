@@ -1,5 +1,13 @@
 # Tasks: 011 Inventario
 
+
+**Functional Requirements Coverage:**
+- INV-FR-001: CRUD de Produtos
+- INV-FR-002: Movimentações
+- INV-FR-003: Alertas
+- INV-FR-004: Relatórios
+- INV-FR-005: Integração com PDV
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

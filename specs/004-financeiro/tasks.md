@@ -1,5 +1,14 @@
 # Tasks: Financeiro
 
+
+**Functional Requirements Coverage:**
+- FIN-FR-001: Lançamentos Financeiros
+- FIN-FR-002: Caixa Registradora
+- FIN-FR-003: Contas a Receber
+- FIN-FR-004: Contas a Pagar
+- FIN-FR-005: Conciliação Bancária
+- FIN-FR-006: Relatórios
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

@@ -1,5 +1,13 @@
 # Tasks: Orçamentos
 
+
+**Functional Requirements Coverage:**
+- ORC-FR-001: CRUD de Orçamentos ✅ PARCIAL
+- ORC-FR-002: Aprovação Digital ✅ PARCIAL
+- ORC-FR-003: Geração de Contas a Receber
+- ORC-FR-004: Dashboard de Conversão
+- ORC-FR-005: Versões de Orçamento
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

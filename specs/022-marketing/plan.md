@@ -102,3 +102,16 @@ apps/web/src/modules/marketing-auto/
 2. **Type Safety**: Controller uses `as any` casts for Prisma queries
 3. **Missing Backend Tests**: No backend unit tests for marketing controller
 4. **Frontend/Backend Mismatch**: Frontend uses `marketing-auto` module name, backend uses `marketing` — naming inconsistency
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **MKT-FR-001** | CRUD operations for marketing campaigns (name, typ... | ✅ Covered |
+| **MKT-FR-002** | Send tracking (envios) with status lifecycle (pend... | ✅ Covered |
+| **MKT-FR-003** | Recall automation with scheduled notifications and... | ✅ Covered |
+| **MKT-FR-004** | Trigger-based marketing (process triggers automati... | ✅ Covered |
+| **MKT-FR-005** | Loyalty program with points, badges, rewards, and ... | ✅ Covered |
+| **MKT-FR-006** | Campaign metrics dashboard (sends, opens, conversi... | ✅ Covered |
+| **MKT-FR-007** | Clinic-scoped data access — all queries filter by ... | ✅ Covered |

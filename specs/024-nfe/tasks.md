@@ -1,5 +1,12 @@
 # Tasks: NF-e
 
+
+**Functional Requirements Coverage:**
+- NFE-FR-001: CRUD operations for NF-e records
+- NFE-FR-002: NF-e cancellation with reason and audit trail
+- NFE-FR-003: Status tracking (RASCUNHO, EMITIDA, CANCELADA, REJ...
+- NFE-FR-004: Clinic-scoped data access
+
 **Note**: This is a **migrated** task list — all tasks were already completed.
 
 ---
@@ -12,7 +19,7 @@
 
 ## Phase 2: Tests (Missing)
 
-- [x] T004 Backend unit test: create NF-e with valid data
+- [x] T004 Backend unit test: create NF-e with valid data  [→ NFE-FR-004]
 - [x] T005 Backend unit test: cancellation creates audit record
 - [x] T006 Backend unit test: clinic isolation enforced
 

@@ -1,5 +1,13 @@
 # Tasks: Gestão de Arquivos e Documentos
 
+
+**Functional Requirements Coverage:**
+- FIL-FR-001: Upload
+- FIL-FR-002: Storage
+- FIL-FR-003: Visualização
+- FIL-FR-004: Permissões
+- FIL-FR-005: OCR e Busca
+
 **Input**: Design documents from `/specs/015-files//`
 
 **Prerequisites**: plan.md (required), spec.md (required)

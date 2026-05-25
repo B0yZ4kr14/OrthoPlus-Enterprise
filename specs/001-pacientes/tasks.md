@@ -1,5 +1,13 @@
 # Tasks: Gestão de Pacientes
 
+
+**Functional Requirements Coverage:**
+- PAC-FR-001: Cadastro de Paciente
+- PAC-FR-002: Deduplicação por CPF
+- PAC-FR-003: Gestão de Status
+- PAC-FR-004: Upload de Foto ✅ IMPLEMENTADO
+- PAC-FR-005: Timeline do Paciente ✅ IMPLEMENTADO
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit marking completed work
 
 ---

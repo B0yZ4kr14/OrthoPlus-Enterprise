@@ -1,5 +1,13 @@
 # Tasks: 010 Funcionarios
 
+
+**Functional Requirements Coverage:**
+- FUN-FR-001: CRUD de Funcionários
+- FUN-FR-002: Controle de Ponto
+- FUN-FR-003: Escala de Trabalho
+- FUN-FR-004: Comissões e Metas
+- FUN-FR-005: Documentos
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

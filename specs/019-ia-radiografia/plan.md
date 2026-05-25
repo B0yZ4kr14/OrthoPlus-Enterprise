@@ -371,3 +371,21 @@ Content-Type: multipart/form-data
 | Synchronous AI processing | Current implementation | Background queue requires Redis + worker infrastructure (GAP-002) |
 | JSON-only problem storage | No dedicated table exists | Creating a normalized table requires migration + frontend updates (GAP-005) |
 | Hardcoded encryption fallback | Dev convenience | Removing it breaks local dev without env setup (GAP-008) |
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **IAR-FR-001** | Dentists MUST be able to upload radiograph images ... | ✅ Covered |
+| **IAR-FR-002** | The system MUST verify active LGPD patient consent... | ✅ Covered |
+| **IAR-FR-003** | Uploaded images MUST have DICOM/EXIF metadata stri... | ✅ Covered |
+| **IAR-FR-004** | The system MUST call an AI vision model to analyze... | ✅ Covered |
+| **IAR-FR-005** | AI analysis results MUST be encrypted at rest befo... | ✅ Covered |
+| **IAR-FR-006** | Dentists MUST be able to review AI findings, add o... | ✅ Covered |
+| **IAR-FR-007** | The system MUST maintain an immutable audit trail ... | ✅ Covered |
+| **IAR-FR-008** | Clinics MUST be able to register, check, and revok... | ✅ Covered |
+| **IAR-FR-009** | Dentists MUST be able to view aggregated insights ... | ✅ Covered |
+| **IAR-FR-010** | Dentists MUST be able to compare multiple radiogra... | ✅ Covered |
+| **IAR-FR-011** | The system MUST support exporting comparative anal... | ✅ Covered |
+| **IAR-FR-012** | The entire feature MUST be gated by an environment... | ✅ Covered |

@@ -59,3 +59,11 @@ GET /api/analytics/overview
 
 ## Status
 ✅ **Complete** — All tasks implemented and validated.
+---
+
+## Requirements Traceability
+
+| Requirement | Description | Coverage |
+|-------------|-------------|----------|
+| **ANL-FR-1** | Dashboard Overview | ✅ Covered |
+| **ANL-FR-2** | Clinic Context Isolation | ✅ Covered |

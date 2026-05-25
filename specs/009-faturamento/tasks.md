@@ -1,5 +1,13 @@
 # Tasks: Faturamento e Notas Fiscais
 
+
+**Functional Requirements Coverage:**
+- FAT-FR-001: Emissão de NF-e
+- FAT-FR-002: Configuração Fiscal
+- FAT-FR-003: Consulta e Cancelamento
+- FAT-FR-004: Relatórios Fiscais
+- FAT-FR-005: Integração Orçamento → NF-e
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 **Note**: Faturamento frontend is consolidated within the financeiro module.

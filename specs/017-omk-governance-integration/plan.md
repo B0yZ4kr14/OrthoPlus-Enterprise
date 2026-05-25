@@ -102,3 +102,18 @@ categories/@orthoplus/        # Internal packages
 ## Complexity Tracking
 
 > No constitution violations to justify.
+---
+
+## Requirements Traceability
+
+| Requirement | Plan Section | Coverage |
+|-------------|--------------|----------|
+| **OMG-FR-001** | System MUST index the entire OrthoPlus Enterprise ... | ✅ Covered |
+| **OMG-FR-002** | System MUST provide queryable code intelligence vi... | ✅ Covered |
+| **OMG-FR-003** | System MUST support the full SpecKit SDD workflow:... | ✅ Covered |
+| **OMG-FR-004** | System MUST integrate SpecKit with the existing pr... | ✅ Covered |
+| **OMG-FR-005** | System MUST orchestrate SpecKit workflows via OMK ... | ✅ Covered |
+| **OMG-FR-006** | System MUST document the production VPS environmen... | ✅ Covered |
+| **OMG-FR-007** | System MUST validate that production endpoints are... | ✅ Covered |
+| **OMG-FR-008** | System MUST ensure all domain references in code, ... | ✅ Covered |
+| **OMG-FR-009** | System MUST maintain a canonical source of truth f... | ✅ Covered |

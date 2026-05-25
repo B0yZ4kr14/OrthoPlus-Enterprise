@@ -1,5 +1,12 @@
 # Tasks: 001-theme-premium-fix
 
+
+**Functional Requirements Coverage:**
+- THM-FR-1: Auditoria e Inventário de Cores Legadas
+- THM-FR-2: Utility de Cores Semânticas
+- THM-FR-3: Refatoração de Componentes
+- THM-FR-4: Validação Visual
+
 ## Phase 1: Auditoria e Foundation
 
 ### T1.1 [X] Gerar inventário completo de cores legadas

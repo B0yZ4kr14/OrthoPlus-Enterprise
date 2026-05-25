@@ -1,5 +1,15 @@
 # Tasks: Marketing Automático
 
+
+**Functional Requirements Coverage:**
+- MKT-FR-001: CRUD operations for marketing campaigns (name, typ...
+- MKT-FR-002: Send tracking (envios) with status lifecycle (pend...
+- MKT-FR-003: Recall automation with scheduled notifications and...
+- MKT-FR-004: Trigger-based marketing (process triggers automati...
+- MKT-FR-005: Loyalty program with points, badges, rewards, and ...
+- MKT-FR-006: Campaign metrics dashboard (sends, opens, conversi...
+- MKT-FR-007: Clinic-scoped data access — all queries filter by ...
+
 **Input**: Design documents from `/specs/022-marketing/`
 
 **Prerequisites**: plan.md (required), spec.md (required for user stories)
@@ -37,7 +47,7 @@ OrthoPlus is a **pnpm monorepo**. Default paths:
 
 ### Tests for User Story 1
 
-- [x] T004 [P] [US1] Backend unit test: create campaign with valid data
+- [x] T004 [P] [US1] Backend unit test: create campaign with valid data  [→ MKT-FR-007]
 - [x] T005 [P] [US1] Backend unit test: list campaigns filters by clinicId
 - [x] T006 [P] [US1] Frontend unit test: `ListCampaignsUseCase`
 

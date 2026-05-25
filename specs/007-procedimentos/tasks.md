@@ -1,5 +1,13 @@
 # Tasks: 007 Procedimentos
 
+
+**Functional Requirements Coverage:**
+- PRO-FR-001: CRUD de Procedimentos
+- PRO-FR-002: Tabela de Preços Multipla
+- PRO-FR-003: Associação Dentista-Procedimento
+- PRO-FR-004: Materiais e Insumos
+- PRO-FR-005: Histórico de Preços
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 ---

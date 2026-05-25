@@ -1,5 +1,13 @@
 # Tasks: Notificações
 
+
+**Functional Requirements Coverage:**
+- NOT-FR-001: Envio Multi-Canal
+- NOT-FR-002: Confirmação de Agendamento
+- NOT-FR-003: Alertas de Recall
+- NOT-FR-004: Notificações In-App
+- NOT-FR-005: Template Builder
+
 **Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
 
 **Architecture Note**: Notificações is implemented as a cross-cutting concern
