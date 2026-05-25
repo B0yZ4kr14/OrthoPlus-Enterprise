@@ -8,6 +8,11 @@ on:
       - 'backend/**'
       - 'shared-types/**'
       - 'categories/**'
+      - 'specs/**'
+      - '.squad/**'
+      - 'AGENTS.md'
+      - 'backend/AGENTS.md'
+      - 'apps/web/AGENTS.md'
 
 jobs:
   check-spec:
@@ -20,18 +25,14 @@ jobs:
 
       - name: Check for associated spec
         run: |
-          # Get the PR branch name
           PR_BRANCH="${{ github.head_ref }}"
           
-          # Check if branch follows feature naming convention
           if [[ "$PR_BRANCH" =~ ^[0-9]+- ]]; then
             FEATURE_NUM=$(echo "$PR_BRANCH" | grep -oP '^\d+')
             echo "Detected feature number: $FEATURE_NUM"
             
-            # Check if spec directory exists
-            if [ -d "specs/$(printf '%03d' $FEATURE_NUM)-*" ] || [ -d "specs/$FEATURE_NUM-"* ]; then
+            if [ -d "specs/$(printf '%03d' $FEATURE_NUM)-"* ] || [ -d "specs/$FEATURE_NUM-"* ]; then
               echo "✅ Spec directory found for feature $FEATURE_NUM"
-              exit 0
             else
               echo "❌ No spec directory found for feature $FEATURE_NUM"
               echo "Expected: specs/$(printf '%03d' $FEATURE_NUM)-<feature-name>/"
@@ -42,20 +43,88 @@ jobs:
             echo "⚠️ Branch '$PR_BRANCH' does not follow feature naming convention"
             echo "Feature branches should be named like: 001-feature-name"
             echo "Skipping spec check (may be a hotfix or docs PR)"
-            exit 0
           fi
         shell: bash
 
-      - name: Validate spec structure
+      - name: Validate spec structure and content
         run: |
           SPECS_FOUND=0
+          SPECS_COMPLETE=0
+          SPECS_WITH_TRACEABILITY=0
+          
           for spec_dir in specs/*/; do
-            if [ -f "$spec_dir/spec.md" ] && [ -f "$spec_dir/plan.md" ] && [ -f "$spec_dir/tasks.md" ]; then
+            spec_file="$spec_dir/spec.md"
+            plan_file="$spec_dir/plan.md"
+            tasks_file="$spec_dir/tasks.md"
+            
+            if [ -f "$spec_file" ] && [ -f "$plan_file" ] && [ -f "$tasks_file" ]; then
               SPECS_FOUND=$((SPECS_FOUND + 1))
+              
+              # Check if spec has content (not just frontmatter)
+              SPEC_LINES=$(wc -l < "$spec_file")
+              if [ "$SPEC_LINES" -gt 20 ]; then
+                SPECS_COMPLETE=$((SPECS_COMPLETE + 1))
+              else
+                echo "⚠️  $(basename "$spec_dir")/spec.md is near-empty ($SPEC_LINES lines)"
+              fi
+              
+              # Check for traceability section in plan.md
+              if grep -q "Requirements Traceability" "$plan_file"; then
+                SPECS_WITH_TRACEABILITY=$((SPECS_WITH_TRACEABILITY + 1))
+              else
+                echo "⚠️  $(basename "$spec_dir")/plan.md missing traceability section"
+              fi
             fi
           done
-          echo "Total valid specs found: $SPECS_FOUND"
+          
+          echo ""
+          echo "=== Spec Validation Summary ==="
+          echo "Total valid specs: $SPECS_FOUND"
+          echo "Specs with content: $SPECS_COMPLETE"
+          echo "Specs with traceability: $SPECS_WITH_TRACEABILITY"
+          
           if [ "$SPECS_FOUND" -lt 1 ]; then
             echo "❌ No valid specs found in repository"
             exit 1
           fi
+          
+          if [ "$SPECS_WITH_TRACEABILITY" -lt "$SPECS_FOUND" ]; then
+            echo "⚠️ Some specs missing traceability (non-blocking)"
+          fi
+        shell: bash
+
+      - name: Check AGENTS.md freshness
+        run: |
+          bash scripts/ci/check-agents-stale.sh 14
+        shell: bash
+        continue-on-error: true
+
+      - name: Check constitution drift
+        run: |
+          bash scripts/ci/check-constitution-drift.sh
+        shell: bash
+        continue-on-error: true
+
+      - name: Check Copilot prompts sync
+        run: |
+          # Count prompts
+          PROMPT_COUNT=$(ls .github/prompts/*.md 2>/dev/null | wc -l)
+          echo "Copilot prompts: $PROMPT_COUNT"
+          
+          if [ "$PROMPT_COUNT" -lt 1 ]; then
+            echo "❌ No Copilot prompts found"
+            echo "Run: bash scripts/ci/sync-copilot-prompts.sh"
+            exit 1
+          fi
+          
+          # Check for empty prompts
+          EMPTY_COUNT=$(find .github/prompts -name "*.md" -exec sh -c 'lines=$(wc -l < "$1"); [ "$lines" -le 3 ] && echo empty' _ {} \; | wc -l)
+          
+          if [ "$EMPTY_COUNT" -gt 0 ]; then
+            echo "❌ $EMPTY_COUNT empty prompts detected"
+            echo "Run: bash scripts/ci/sync-copilot-prompts.sh"
+            exit 1
+          fi
+          
+          echo "✅ All $PROMPT_COUNT Copilot prompts have content"
+        shell: bash

@@ -1,7 +1,7 @@
 # AGENTS.md — apps/web/
 
 > Contexto específico do frontend React. Não repete o root AGENTS.md.
-> **Atualizado:** 2026-05-13
+> **Atualizado:** 2026-05-24
 
 ---
 

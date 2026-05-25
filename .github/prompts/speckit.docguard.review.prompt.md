@@ -1,3 +1,57 @@
 ---
 agent: speckit.docguard.review
 ---
+
+# speckit.docguard.review
+
+## Description
+
+
+## Instructions
+
+---
+name: speckit-docguard-review
+description: Diagnose documentation issues and generate AI-ready fix prompts
+compatibility: Requires spec-kit project structure with .specify/ directory
+metadata:
+  author: github-spec-kit
+  source: docguard:commands/diagnose.md
+---
+
+# DocGuard Diagnose
+
+Runs guard validation, analyzes failures, and generates AI-ready prompts to fix documentation issues.
+
+## User Input
+
+$ARGUMENTS
+
+## Steps
+
+1. Run DocGuard diagnose on the current project:
+
+```bash
+npx --yes docguard-cli@latest diagnose $ARGUMENTS
+```
+
+2. Review the output:
+   - **Issues found** — categorized as errors or warnings
+   - **Remediation plan** — ordered list of fix commands
+   - **AI-ready prompt** — copy/paste to your AI agent for automated fixes
+
+3. For multi-perspective analysis, add `--debate` to get three-agent prompts (Advocate/Challenger/Synthesizer).
+
+## Flags
+
+- `--format json` — Output as JSON
+- `--debate` — Generate multi-perspective AI prompts
+- `--dir <path>` — Run on a different directory
+
+## Research
+
+Inspired by AITPG (IEEE TSE 2026) multi-agent prompting and TRACE (IEEE TMLCN 2026) calibrated quality evaluation.
+
+## Context
+- Project: OrthoPlus Enterprise
+- Auto-generated from: .kimi/skills/speckit-docguard-review/SKILL.md
+- Synced: 2026-05-24T21:37:04-03:00

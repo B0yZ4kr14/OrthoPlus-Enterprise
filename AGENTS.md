@@ -2,7 +2,7 @@
   AGENTS.md — OrthoPlus Enterprise (Root)
   Arquivo de referencia canonico para agentes de IA.
   Idioma principal do projeto: Portugues (codigo e documentacao).
-  **Atualizado:** 2026-05-19
+  **Atualizado:** 2026-05-24
 -->
 
 # AGENTS.md — OrthoPlus Enterprise
