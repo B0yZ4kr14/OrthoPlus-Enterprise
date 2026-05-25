@@ -318,6 +318,7 @@ app.use("/api/agents", createAgentsRouter());
 app.use("/api/ai", aiRouter);
 // Memory Hub Module — initialized with DI factory
 const memoryHubModule = createMemoryHubModule()
+memoryHubModule.startFileWatcher()
 app.use("/api/memory-hub", createMemoryHubRouter(memoryHubModule.controller))
 
 // Active modules endpoint: returns module keys for a clinic from the database.

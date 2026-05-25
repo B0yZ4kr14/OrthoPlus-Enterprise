@@ -20,6 +20,8 @@ export interface MemoryHubModule {
   controller: MemoryHubController
   fileWatcher: FileWatcher | null
   indexingService: IndexingService
+  startFileWatcher(): void
+  stopFileWatcher(): void
 }
 
 export function createMemoryHubModule(
@@ -83,7 +85,7 @@ export function createMemoryHubModule(
 
   let fileWatcher: FileWatcher | null = null
 
-  // Auto-start file watcher if enabled
+  // Create file watcher if enabled (start explicitly via startFileWatcher)
   if (enabled) {
     fileWatcher = new FileWatcher(async (events) => {
       for (const evt of events) {
@@ -98,13 +100,23 @@ export function createMemoryHubModule(
         }
       }
     })
-
-    fileWatcher.start(watchDirs, pollingInterval)
   }
 
   return {
     controller,
     fileWatcher,
     indexingService,
+    startFileWatcher() {
+      if (fileWatcher) {
+        fileWatcher.start(watchDirs, pollingInterval)
+        logger.info("[MemoryHub] FileWatcher started")
+      }
+    },
+    stopFileWatcher() {
+      if (fileWatcher) {
+        fileWatcher.stop()
+        logger.info("[MemoryHub] FileWatcher stopped")
+      }
+    },
   }
 }
