@@ -152,6 +152,13 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 - Local: `http://localhost:3005/api`
 - Produção: `https://tsiapp.io/api` (via nginx proxy)
 
+### URLs Canônicas
+- **Frontend**: `https://tsiapp.io/OrthoPlus-Enterprise/`
+- **Backend API**: `https://tsiapp.io/api/`
+- **Agent Service**: `https://tsiapp.io/api/agent/`
+
+> **Nota**: Outros projetos hospedados na mesma VPS (TSiSIP, LandPages, TSiMUSIC, TSiView) mantêm seus próprios subpaths e não são afetados pela configuração do OrthoPlus Enterprise.
+
 ### Auth (público)
 - `POST /api/auth/token` — Login
 - `POST /api/auth/register` — Registro staff
@@ -212,14 +219,23 @@ Todos registrados em `backend/src/index.ts` com `clinicGuard`.
 
 ---
 
-## 10. Estado Atual do Deploy VPS (2026-05-17)
+## 10. Estado Atual do Deploy VPS (2026-05-25)
 
 ### Sincronia de Código
 | Ambiente | Commit | Status |
 |----------|--------|--------|
-| LOCAL | `3e7f0f9` | ✅ Atual |
-| GITHUB | `3e7f0f9` | ✅ Atual |
-| VPS (`/home/tsi/apps/orthoplus-enterprise`) | `3e7f0f9` | ✅ Atual (build concluído) |
+| LOCAL | `094bb25` | ✅ Atual |
+| GITHUB | `094bb25` | ✅ Atual |
+| VPS (`/home/tsi/OrthoPlus-Enterprise`) | `094bb25` | ✅ Atual (build concluído) |
+
+### URLs de Acesso
+- **OrthoPlus Enterprise**: `https://tsiapp.io/OrthoPlus-Enterprise/` ✅
+- **API Backend**: `https://tsiapp.io/api/` ✅
+- **Outros projetos na VPS** (não afetados):
+  - `https://tsiapp.io/TSiSIP` 🔒
+  - `https://tsiapp.io/LandPages` 🔒
+  - `https://tsiapp.io/TSiMUSIC` 🔒
+  - `https://tsiapp.io/TSiView` 🔒
 
 **Nota:** Build Docker concluído. Port mapping corrigido `8083:8080`. Frontend e backend respondendo 200.
 
