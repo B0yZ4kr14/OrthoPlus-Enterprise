@@ -1,5 +1,5 @@
 import { logger } from '@/infrastructure/logger';
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { ClinicDataRepository } from "@/modules/configuracoes/infrastructure/ClinicDataRepository";
 import { Request, Response } from "express";
 
 interface CatalogModule {
@@ -254,6 +254,7 @@ function buildModuleView(catalog: CatalogModule[]) {
 }
 
 export class ModulosController {
+  private clinicDataRepo = new ClinicDataRepository()
   public getMyModules = (_req: Request, res: Response) => {
     res.json({ modules: buildModuleView(MODULE_CATALOG) });
   };
@@ -392,11 +393,7 @@ export class ModulosController {
       const user = req.user;
       if (!user) return res.status(401).json({ error: "Unauthorized" });
 
-      const patients = await prisma.patients
-        .findMany({
-          where: { clinic_id: user.clinicId },
-        })
-        .catch(() => []);
+      const patients = await this.clinicDataRepo.findPatientsByClinic(user.clinicId);
 
       return res.status(200).json({ export: patients, format: "json" });
     } catch (error) {
