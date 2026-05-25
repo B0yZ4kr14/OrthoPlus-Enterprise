@@ -41,31 +41,9 @@ export class AuthController {
       ]);
     }
 
-    try {
-      const result = await this.authService.authenticateStaff(email, password);
-      if (result) {
-        res.cookie("access_token", result.accessToken, COOKIE_OPTIONS);
-        res.json(this.authService.buildStaffLoginResponse(result));
-        return;
-      }
-    } catch (err) {
-      if (err instanceof ApiError) throw err;
-      if (!allowMock()) {
-        logger.error("Login DB error", { error: err });
-        throw Errors.database("Database error during authentication");
-      }
-      logger.warn("Login DB error, falling back to mock mode", { error: err });
-    }
-
-    if (!allowMock()) throw Errors.invalidCredentials();
-
-    const mockEmail = process.env.MOCK_ADMIN_EMAIL || "admin@clinic.com";
-    const mockPassword = process.env.MOCK_ADMIN_PASSWORD || "correct";
-    if (email !== mockEmail || password !== mockPassword) throw Errors.invalidCredentials();
-
-    const { accessToken, refreshToken } = this.authService.generateMockStaffToken(email, "authenticated", "mock-clinic-id");
-    res.cookie("access_token", accessToken, COOKIE_OPTIONS);
-    res.json(this.authService.buildMockStaffLoginResponse(email, accessToken, refreshToken));
+    const result = await this.authService.loginStaff(email, password);
+    res.cookie("access_token", result.accessToken, COOKIE_OPTIONS);
+    res.json(result);
   });
 
   // GET /auth/user
@@ -124,40 +102,9 @@ export class AuthController {
     }
 
     const normalizedCpf = cpf.replace(/\D/g, "");
-
-    try {
-      const result = await this.authService.authenticatePatient(normalizedCpf, birthDate);
-      if (result) {
-        res.cookie("access_token", result.accessToken, COOKIE_OPTIONS);
-        res.json({
-          access_token: result.accessToken,
-          token_type: "bearer",
-          expires_in: 3600,
-          refresh_token: result.refreshToken,
-          user: { id: result.patientId, aud: "authenticated", role: "patient", email: `patient-${normalizedCpf}@portal` },
-        });
-        return;
-      }
-    } catch (err) {
-      if (err instanceof ApiError) throw err;
-      if (!allowMock()) {
-        logger.error("Patient auth DB error", { error: err });
-        throw Errors.database("Database error during patient authentication");
-      }
-      logger.warn("Patient auth DB error, falling back to mock mode", { error: err });
-    }
-
-    if (!allowMock()) throw Errors.invalidCredentials();
-
-    const { accessToken, refreshToken } = this.authService.generateMockPatientToken(normalizedCpf, "mock-clinic-id");
-    res.cookie("access_token", accessToken, COOKIE_OPTIONS);
-    res.json({
-      access_token: accessToken,
-      token_type: "bearer",
-      expires_in: 3600,
-      refresh_token: refreshToken,
-      user: { id: "patient-0000-0000-0000-000000000000", aud: "authenticated", role: "patient", email: `patient-${normalizedCpf}@example.com` },
-    });
+    const result = await this.authService.loginPatient(normalizedCpf, birthDate);
+    res.cookie("access_token", result.access_token, COOKIE_OPTIONS);
+    res.json(result);
   });
 
   // GET /auth/user/:id/metadata

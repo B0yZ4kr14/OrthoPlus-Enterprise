@@ -3,6 +3,11 @@ import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler"
 import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
 import jwt from "jsonwebtoken"
 import type { LoginResponse, User } from "@orthoplus/shared-types"
+import type { AuthenticateUserResult } from "./AuthenticateUserUseCase"
+
+function allowMock(): boolean {
+  return process.env.AUTH_ALLOW_MOCK === "true"
+}
 
 function requireJwtSecret(): string {
   const secret = process.env.JWT_SECRET
@@ -54,6 +59,35 @@ export class AuthService {
     const { AuthenticateUserUseCase } = await import("./AuthenticateUserUseCase")
     const useCase = new AuthenticateUserUseCase()
     return useCase.execute(email, password)
+  }
+
+  async loginStaff(email: string, password: string): Promise<LoginResponse> {
+    let result: AuthenticateUserResult | null = null
+    try {
+      result = await this.authenticateStaff(email, password)
+    } catch (err) {
+      if (err instanceof ApiError) throw err
+      if (!allowMock()) {
+        logger.error("Login DB error", { error: err })
+        throw Errors.database("Database error during authentication")
+      }
+      logger.warn("Login DB error, falling back to mock mode", { error: err })
+    }
+
+    if (result) {
+      return this.buildStaffLoginResponse(result)
+    }
+
+    if (!allowMock()) throw Errors.invalidCredentials()
+
+    const mockEmail = process.env.MOCK_ADMIN_EMAIL || "admin@clinic.com"
+    const mockPassword = process.env.MOCK_ADMIN_PASSWORD || "correct"
+    if (email !== mockEmail || password !== mockPassword) {
+      throw Errors.invalidCredentials()
+    }
+
+    const { accessToken, refreshToken } = this.generateMockStaffToken(email, "authenticated", "mock-clinic-id")
+    return this.buildMockStaffLoginResponse(email, accessToken, refreshToken)
   }
 
   // ─── Token Refresh ───
@@ -118,6 +152,40 @@ export class AuthService {
     )
 
     return { patientId: patient.id, clinicId, accessToken, refreshToken }
+  }
+
+  async loginPatient(cpf: string, birthDate: string): Promise<{ access_token: string; token_type: string; expires_in: number; refresh_token: string; user: { id: string; aud: string; role: string; email: string } }> {
+    try {
+      const result = await this.authenticatePatient(cpf, birthDate)
+      if (result) {
+        const patientEmail = `patient-${cpf}@portal`
+        return {
+          access_token: result.accessToken,
+          token_type: "bearer",
+          expires_in: 3600,
+          refresh_token: result.refreshToken,
+          user: { id: result.patientId, aud: "authenticated", role: "patient", email: patientEmail },
+        }
+      }
+    } catch (err) {
+      if (err instanceof ApiError) throw err
+      if (!allowMock()) {
+        logger.error("Patient auth DB error", { error: err })
+        throw Errors.database("Database error during patient authentication")
+      }
+      logger.warn("Patient auth DB error, falling back to mock mode", { error: err })
+    }
+
+    if (!allowMock()) throw Errors.invalidCredentials()
+
+    const { accessToken, refreshToken, patientEmail } = this.generateMockPatientToken(cpf, "mock-clinic-id")
+    return {
+      access_token: accessToken,
+      token_type: "bearer",
+      expires_in: 3600,
+      refresh_token: refreshToken,
+      user: { id: "patient-0000-0000-0000-000000000000", aud: "authenticated", role: "patient", email: patientEmail },
+    }
   }
 
   // ─── User Metadata ───
