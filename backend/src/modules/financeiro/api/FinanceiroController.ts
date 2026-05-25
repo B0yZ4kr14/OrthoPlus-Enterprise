@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+
 import { logger } from "@/infrastructure/logger";
 import { FinanceiroRepository } from "../infrastructure/FinanceiroRepository";
 
@@ -650,9 +650,9 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await prisma.caixa_incidentes.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
+      const existing = await this.repo.getIncidente(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
-      await prisma.caixa_incidentes.delete({ where: { id: req.params.id } });
+      await this.repo.deleteIncidente(req.params.id);
       res.status(204).send();
     } catch (error) {
       logger.error("Error deleting incidente", { error });
@@ -667,10 +667,7 @@ export class FinanceiroController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
 
-      const data = await prisma.contas_receber.findMany({
-        where: { clinic_id: clinicId },
-        orderBy: { data_vencimento: "asc" },
-      });
+      const data = await this.repo.listContasReceber(clinicId);
       res.json(data);
     } catch (error) {
       logger.error("Error listing contas a receber", { error });
@@ -690,9 +687,11 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).contas_receber.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId, created_by: userId },
-      });
+      const data = await this.repo.createContaReceber({
+        ...parsed.data,
+        clinic_id: clinicId,
+        created_by: userId,
+      } as any);
       res.status(201).json(data);
     } catch (error) {
       logger.error("Error creating conta a receber", { error });
@@ -704,7 +703,7 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await prisma.contas_receber.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
+      const existing = await this.repo.getContaReceber(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
 
       const parsed = updateContaReceberSchema.safeParse(req.body);
@@ -713,9 +712,7 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).contas_receber.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: req.params.id }, data: parsed.data,
-      });
+      const data = await this.repo.updateContaReceber(req.params.id, parsed.data as any);
       res.json(data);
     } catch (error) {
       logger.error("Error updating conta a receber", { error });
@@ -727,9 +724,9 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await prisma.contas_receber.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
+      const existing = await this.repo.getContaReceber(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
-      await prisma.contas_receber.delete({ where: { id: req.params.id } });
+      await this.repo.deleteContaReceber(req.params.id);
       res.status(204).send();
     } catch (error) {
       logger.error("Error deleting conta a receber", { error });
@@ -744,10 +741,7 @@ export class FinanceiroController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
 
-      const data = await prisma.contas_pagar.findMany({
-        where: { clinic_id: clinicId },
-        orderBy: { data_vencimento: "asc" },
-      });
+      const data = await this.repo.listContasPagar(clinicId);
       res.json(data);
     } catch (error) {
       logger.error("Error listing contas a pagar", { error });
@@ -767,9 +761,11 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).contas_pagar.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId, created_by: userId },
-      });
+      const data = await this.repo.createContaPagar({
+        ...parsed.data,
+        clinic_id: clinicId,
+        created_by: userId,
+      } as any);
       res.status(201).json(data);
     } catch (error) {
       logger.error("Error creating conta a pagar", { error });
@@ -781,7 +777,7 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await prisma.contas_pagar.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
+      const existing = await this.repo.getContaPagar(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
 
       const parsed = updateContaPagarSchema.safeParse(req.body);
@@ -790,9 +786,7 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).contas_pagar.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: req.params.id }, data: parsed.data,
-      });
+      const data = await this.repo.updateContaPagar(req.params.id, parsed.data as any);
       res.json(data);
     } catch (error) {
       logger.error("Error updating conta a pagar", { error });
@@ -804,9 +798,9 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await prisma.contas_pagar.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
+      const existing = await this.repo.getContaPagar(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
-      await prisma.contas_pagar.delete({ where: { id: req.params.id } });
+      await this.repo.deleteContaPagar(req.params.id);
       res.status(204).send();
     } catch (error) {
       logger.error("Error deleting conta a pagar", { error });
@@ -821,10 +815,7 @@ export class FinanceiroController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
 
-      const data = await prisma.notas_fiscais.findMany({
-        where: { clinic_id: clinicId },
-        orderBy: { data_emissao: "desc" },
-      });
+      const data = await this.repo.listNotasFiscais(clinicId);
       res.json(data);
     } catch (error) {
       logger.error("Error listing notas fiscais", { error });
@@ -844,9 +835,11 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).notas_fiscais.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId, created_by: userId },
-      });
+      const data = await this.repo.createNotaFiscal({
+        ...parsed.data,
+        clinic_id: clinicId,
+        created_by: userId,
+      } as any);
       res.status(201).json(data);
     } catch (error) {
       logger.error("Error creating nota fiscal", { error });
@@ -858,7 +851,7 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await prisma.notas_fiscais.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
+      const existing = await this.repo.getNotaFiscal(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
 
       const parsed = updateNotaFiscalSchema.safeParse(req.body);
@@ -867,9 +860,7 @@ export class FinanceiroController {
         return;
       }
 
-      const data = await (prisma as any).notas_fiscais.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: req.params.id }, data: parsed.data,
-      });
+      const data = await this.repo.updateNotaFiscal(req.params.id, parsed.data as any);
       res.json(data);
     } catch (error) {
       logger.error("Error updating nota fiscal", { error });
@@ -881,9 +872,9 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await prisma.notas_fiscais.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
+      const existing = await this.repo.getNotaFiscal(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
-      await prisma.notas_fiscais.delete({ where: { id: req.params.id } });
+      await this.repo.deleteNotaFiscal(req.params.id);
       res.status(204).send();
     } catch (error) {
       logger.error("Error deleting nota fiscal", { error });
@@ -899,19 +890,17 @@ export class FinanceiroController {
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
 
       const { start_date } = req.query;
-      const where: any = { clinic_id: clinicId }; // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (start_date) where.created_at = { gte: new Date(start_date as string) };
 
-      const vendas = await (prisma as any).pdv_vendas.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where,
-        orderBy: { created_at: "desc" },
+      const vendas = await this.repo.listVendasPDV({
+        clinicId,
+        startDate: start_date as string | undefined,
       });
       
       // Extrair itens e pagamentos do metadata (pdv_venda_itens e pdv_pagamentos não existem no schema)
-      const data = vendas.map((v: { id: string; metadata?: { itens?: unknown[]; pagamentos?: unknown[] }; [key: string]: unknown }) => ({
+      const data = vendas.map((v) => ({
         ...v,
-        pdv_venda_itens: (v.metadata?.itens) || [],
-        pdv_pagamentos: (v.metadata?.pagamentos) || [],
+        pdv_venda_itens: ((v.metadata as any)?.itens) || [],
+        pdv_pagamentos: ((v.metadata as any)?.pagamentos) || [],
       }));
       
       res.json(data);
@@ -929,11 +918,10 @@ export class FinanceiroController {
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
 
       const { conciliado } = req.query;
-      const where: any = { clinic_id: clinicId }; // eslint-disable-line @typescript-eslint/no-explicit-any
-      if (conciliado !== undefined) where.conciliado = conciliado === "true";
 
-      const data = await (prisma as any).banco_extratos.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where, orderBy: { data_movimento: "desc" },
+      const data = await this.repo.listExtratos({
+        clinicId,
+        conciliado: conciliado !== undefined ? conciliado === "true" : undefined,
       });
       res.json(data);
     } catch (error) {
@@ -946,7 +934,7 @@ export class FinanceiroController {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return; }
-      const existing = await (prisma as any).banco_extratos.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await this.repo.getExtrato(req.params.id, clinicId);
       if (!existing) { res.status(404).json({ error: "Not found" }); return; }
 
       const parsed = updateExtratoSchema.safeParse(req.body);
@@ -955,14 +943,11 @@ export class FinanceiroController {
         return;
       }
       const { conciliado, transaction_id, observacoes } = parsed.data;
-      const data = await (prisma as any).banco_extratos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: req.params.id },
-        data: {
-          ...(conciliado !== undefined && { conciliado }),
-          ...(transaction_id !== undefined && { transaction_id }),
-          ...(observacoes !== undefined && { observacoes }),
-        },
-      });
+      const data = await this.repo.updateExtrato(req.params.id, {
+        ...(conciliado !== undefined && { conciliado }),
+        ...(transaction_id !== undefined && { transaction_id }),
+        ...(observacoes !== undefined && { observacoes }),
+      } as any);
       res.json(data);
     } catch (error) {
       logger.error("Error updating extrato", { error });
@@ -985,32 +970,16 @@ export class FinanceiroController {
         contasReceberPendentes,
         contasPagarPendentes,
       ] = await Promise.all([
-        (prisma as any).financial_transactions.aggregate({
-          where: { clinic_id: clinicId, type: "RECEITA", status: "PAGO" },
-          _sum: { amount: true },
-        }),
-        (prisma as any).financial_transactions.aggregate({
-          where: { clinic_id: clinicId, type: "DESPESA", status: "PAGO" },
-          _sum: { amount: true },
-        }),
-        (prisma as any).contas_receber.aggregate({
-          where: { clinic_id: clinicId, status: { not: "PAGO" } },
-          _sum: { valor: true },
-          _count: { id: true },
-        }),
-        (prisma as any).contas_pagar.aggregate({
-          where: { clinic_id: clinicId, status: { not: "PAGO" } },
-          _sum: { valor: true },
-          _count: { id: true },
-        }),
+        this.repo.aggregateTransactions(clinicId, "RECEITA", "PAGO"),
+        this.repo.aggregateTransactions(clinicId, "DESPESA", "PAGO"),
+        this.repo.aggregateContasReceber(clinicId),
+        this.repo.aggregateContasPagar(clinicId),
       ]);
 
       // Fallback para 0 se a tabela cash_registers não existir (P2021)
       let caixasAbertos = 0;
       try {
-        caixasAbertos = await (prisma as any).cash_registers.count({
-          where: { clinic_id: clinicId, status: "ABERTO" },
-        });
+        caixasAbertos = await this.repo.countOpenCashRegisters(clinicId);
       } catch (cashError: any) {
         if (cashError.code === "P2021") {
           logger.warn("Tabela cash_registers não encontrada, retornando caixasAbertos=0", {
@@ -1055,14 +1024,8 @@ export class FinanceiroController {
       if (endDate) dateFilter.lte = new Date(endDate as string);
 
       const [receitas, despesas] = await Promise.all([
-        prisma.financial_transactions.aggregate({
-          where: { clinic_id: clinicId, type: "RECEITA", status: "PAGO", ...(startDate || endDate ? { paid_date: dateFilter } : {}) },
-          _sum: { amount: true },
-        }),
-        prisma.financial_transactions.aggregate({
-          where: { clinic_id: clinicId, type: "DESPESA", status: "PAGO", ...(startDate || endDate ? { paid_date: dateFilter } : {}) },
-          _sum: { amount: true },
-        }),
+        this.repo.aggregateTransactions(clinicId, "RECEITA", "PAGO", startDate as string | undefined, endDate as string | undefined),
+        this.repo.aggregateTransactions(clinicId, "DESPESA", "PAGO", startDate as string | undefined, endDate as string | undefined),
       ]);
 
       res.json({
@@ -1134,9 +1097,7 @@ export class FinanceiroController {
           .json({ error: "contaReceberId and method are required" });
       }
 
-      const cobranca = await (prisma as any).contas_receber.findUnique({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: contaReceberId },
-      });
+      const cobranca = await this.repo.findContaReceberById(contaReceberId);
 
       if (!cobranca) {
         return res
@@ -1145,19 +1106,15 @@ export class FinanceiroController {
       }
 
       // Buscar paciente separadamente (sem relation no schema)
-      const patient = cobranca.patient_id ? await (prisma as any).patients.findUnique({
-        where: { id: cobranca.patient_id },
-      }) : null;
+      const patient = cobranca.patient_id ? await this.repo.getPatient(cobranca.patient_id) : null;
 
-      await (prisma as any).comunicacao_logs.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: {
-          paciente_id: cobranca.patient_id,
-          clinic_id: cobranca.clinic_id,
-          tipo: method.toUpperCase(),
-          mensagem: message || `Cobrança de R$ ${cobranca.valor} enviada.` + (patient ? ` para ${patient.full_name}` : ""),
-          status: "ENVIADO",
-        },
-      });
+      await this.repo.createComunicacaoLog({
+        paciente_id: cobranca.patient_id,
+        clinic_id: cobranca.clinic_id,
+        tipo: method.toUpperCase(),
+        mensagem: message || `Cobrança de R$ ${cobranca.valor} enviada.` + (patient ? ` para ${patient.full_name}` : ""),
+        status: "ENVIADO",
+      } as any);
 
       return res.status(200).json({
         success: true,
@@ -1179,33 +1136,21 @@ export class FinanceiroController {
 
       const transactionId = `txn_${Date.now()}`;
 
-      await prisma.$transaction(async (tx: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-        await tx.contas_receber.update({
-          where: { id: contaReceberId },
-          data: {
-            status: "PAGO",
-            data_pagamento: new Date(),
-            metodo_pagamento: paymentMethod,
-          },
-        });
-
-        const bill = await tx.contas_receber.findUnique({
-          where: { id: contaReceberId },
-        });
-        if (bill) {
-          await tx.transacoes_pagamento.create({
-            data: {
-              clinic_id: bill.clinic_id,
-              patient_id: bill.patient_id,
-              valor: amount,
-              metodo_pagamento: paymentMethod,
-              status: "APROVADO",
-              gateway_transaction_id: transactionId,
-              observacoes: `Processado via API backend`,
-            },
-          });
-        }
-      });
+      await this.repo.processarPagamento(
+        contaReceberId,
+        {
+          status: "PAGO",
+          data_pagamento: new Date().toISOString(),
+          forma_pagamento: paymentMethod,
+        },
+        {
+          valor: amount,
+          metodo_pagamento: paymentMethod,
+          status: "APROVADO",
+          gateway_transaction_id: transactionId,
+          observacoes: `Processado via API backend`,
+        },
+      );
 
       return res.status(200).json({
         success: true,
