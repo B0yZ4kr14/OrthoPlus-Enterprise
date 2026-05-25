@@ -1,6 +1,9 @@
 
 import { logger } from "@/infrastructure/logger";
 import { FinanceiroRepository } from "../infrastructure/FinanceiroRepository";
+import { ProcessarPagamentoUseCase } from "../application/ProcessarPagamentoUseCase";
+import { GetResumoFinanceiroUseCase } from "../application/GetResumoFinanceiroUseCase";
+import { GetCashFlowUseCase } from "../application/GetCashFlowUseCase";
 
 import { Request, Response } from "express";
 import { z } from "zod";
@@ -174,7 +177,10 @@ const updateNotaFiscalSchema = z.object({
 });
 
 export class FinanceiroController {
-  private repo = new FinanceiroRepository();
+  private repo = new FinanceiroRepository()
+  private processarPagamentoUseCase = new ProcessarPagamentoUseCase()
+  private getResumoUseCase = new GetResumoFinanceiroUseCase()
+  private getCashFlowUseCase = new GetCashFlowUseCase();
 
   // ═══════════════════ TRANSACTIONS ═══════════════════
 
@@ -964,47 +970,8 @@ export class FinanceiroController {
 
       // const hoje = new Date(); // Unused - reserved for future date filtering
 
-      const [
-        totalReceitas,
-        totalDespesas,
-        contasReceberPendentes,
-        contasPagarPendentes,
-      ] = await Promise.all([
-        this.repo.aggregateTransactions(clinicId, "RECEITA", "PAGO"),
-        this.repo.aggregateTransactions(clinicId, "DESPESA", "PAGO"),
-        this.repo.aggregateContasReceber(clinicId),
-        this.repo.aggregateContasPagar(clinicId),
-      ]);
-
-      // Fallback para 0 se a tabela cash_registers não existir (P2021)
-      let caixasAbertos = 0;
-      try {
-        caixasAbertos = await this.repo.countOpenCashRegisters(clinicId);
-      } catch (cashError: any) {
-        if (cashError.code === "P2021") {
-          logger.warn("Tabela cash_registers não encontrada, retornando caixasAbertos=0", {
-            clinicId,
-            table: cashError.meta?.table,
-          });
-        } else {
-          throw cashError;
-        }
-      }
-
-      res.json({
-        saldoGeral: (totalReceitas._sum.amount || 0) - (totalDespesas._sum.amount || 0),
-        totalReceitas: totalReceitas._sum.amount || 0,
-        totalDespesas: totalDespesas._sum.amount || 0,
-        contasReceber: {
-          total: contasReceberPendentes._sum.valor || 0,
-          quantidade: contasReceberPendentes._count?.id || 0,
-        },
-        contasPagar: {
-          total: contasPagarPendentes._sum.valor || 0,
-          quantidade: contasPagarPendentes._count?.id || 0,
-        },
-        caixasAbertos: caixasAbertos || 0,
-      });
+      const resumo = await this.getResumoUseCase.execute(clinicId)
+      res.json(resumo);
     } catch (error) {
       logger.error("Error getting resumo financeiro", { error });
       res.status(500).json({ error: "Internal server error" });
@@ -1023,16 +990,12 @@ export class FinanceiroController {
       if (startDate) dateFilter.gte = new Date(startDate as string);
       if (endDate) dateFilter.lte = new Date(endDate as string);
 
-      const [receitas, despesas] = await Promise.all([
-        this.repo.aggregateTransactions(clinicId, "RECEITA", "PAGO", startDate as string | undefined, endDate as string | undefined),
-        this.repo.aggregateTransactions(clinicId, "DESPESA", "PAGO", startDate as string | undefined, endDate as string | undefined),
-      ]);
-
-      res.json({
-        totalReceitas: receitas._sum.amount || 0,
-        totalDespesas: despesas._sum.amount || 0,
-        saldo: (receitas._sum.amount || 0) - (despesas._sum.amount || 0),
-      });
+      const cashFlow = await this.getCashFlowUseCase.execute(
+        clinicId,
+        startDate as string | undefined,
+        endDate as string | undefined,
+      )
+      res.json(cashFlow);
     } catch (error) {
       logger.error("Error getting cash flow", { error });
       res.status(500).json({ error: "Internal server error" });
@@ -1134,28 +1097,16 @@ export class FinanceiroController {
         return res.status(400).json({ error: "Required fields missing" });
       }
 
-      const transactionId = `txn_${Date.now()}`;
-
-      await this.repo.processarPagamento(
+      const result = await this.processarPagamentoUseCase.execute({
         contaReceberId,
-        {
-          status: "PAGO",
-          data_pagamento: new Date().toISOString(),
-          forma_pagamento: paymentMethod,
-        },
-        {
-          valor: amount,
-          metodo_pagamento: paymentMethod,
-          status: "APROVADO",
-          gateway_transaction_id: transactionId,
-          observacoes: `Processado via API backend`,
-        },
-      );
+        amount,
+        paymentMethod,
+      })
 
       return res.status(200).json({
         success: true,
-        transaction_id: transactionId,
-        status: "APPROVED",
+        transaction_id: result.transactionId,
+        status: result.status,
       });
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       logger.error("Error in processar-pagamento", { error });
