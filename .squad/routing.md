@@ -1,7 +1,7 @@
 # Squad Routing Rules — OrthoPlus Enterprise
 
 **Project**: OrthoPlus Enterprise
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Generated**: 2026-05-24
 
 ---
@@ -12,7 +12,10 @@
 |-------|------|------------|---------------|
 | planner | Arquiteto de Especificacao | premium | specify → plan → tasks |
 | implementer | Desenvolvedor Full-Stack | premium | implement |
-| reviewer | Revisor de Codigo | standard | review |
+| ai-engineer | Engenheiro de AI/ML | premium | implement (AI features) |
+| devops-engineer | Engenheiro de DevOps | standard | deploy / infrastructure |
+| data-engineer | Engenheiro de Dados/BI | standard | implement (analytics) |
+| reviewer | Revisor de Codigo | premium | review |
 | verifier | QA Engineer | standard | verify |
 
 ---
@@ -45,6 +48,51 @@ Example tasks:
 > "Implement PatientController with CRUD endpoints"
 > "Create MemoryHubSearch React component"
 > "Add clinicGuard to new router"
+
+---
+
+### AI Engineer
+
+Triggers:
+- Keywords: `ai`, `llm`, `model`, `embedding`, `vision`, `radiografia`, `genai`, `prompt`
+- File types: `.py` (Agno), `.ts` (embedding clients)
+- Patterns: `embedding`, `ollama`, `openai`, `anthropic`, `vector`, `rag`, `semantic search`
+- Domains: `ia-radiografia`, `memory_hub`, `agent-service`
+
+Example tasks:
+> "Add Ollama embedding client with nomic-embed-text"
+> "Implement AI radiografia analysis with vision model"
+> "Create RAG pipeline for context briefs"
+
+---
+
+### DevOps Engineer
+
+Triggers:
+- Keywords: `deploy`, `release`, `ship`, `docker`, `nginx`, `pm2`, `ci/cd`, `backup`
+- File types: `.sh`, `.yml`, `.conf`, `Dockerfile`
+- Patterns: `deploy`, `docker-compose`, `nginx`, `workflow`, `pipeline`, `health check`
+- Domains: `infrastructure`, `ops`, `monitoring`
+
+Example tasks:
+> "Deploy to VPS with zero downtime"
+> "Update nginx.conf for new API routes"
+> "Add GitHub Actions workflow for E2E tests"
+
+---
+
+### Data Engineer
+
+Triggers:
+- Keywords: `dashboard`, `analytics`, `bi`, `report`, `sql`, `query`, `etl`, `metric`, `kpi`
+- File types: `.ts` (Recharts), `.sql`, `.prisma`
+- Patterns: `aggregation`, `group by`, `chart`, `timeline`, `dre`, `conciliation`
+- Domains: `dashboard`, `analytics`, `bi`, `financeiro`
+
+Example tasks:
+> "Create patient retention dashboard with Recharts"
+> "Build financial DRE report with Prisma aggregations"
+> "Implement OFX conciliation pipeline"
 
 ---
 
