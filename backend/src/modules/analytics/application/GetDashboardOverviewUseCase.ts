@@ -1,4 +1,5 @@
 import { AnalyticsRepository } from "@/modules/analytics/infrastructure/AnalyticsRepository"
+import { MetricsEmitter } from "@/infrastructure/metrics"
 
 export interface DashboardStats {
   totalPatients: number
@@ -23,6 +24,8 @@ export class GetDashboardOverviewUseCase {
   private repo = new AnalyticsRepository()
 
   async execute(clinicId: string): Promise<DashboardOverviewResult> {
+    MetricsEmitter.incrementCounter("analytics_dashboard_queried", "Dashboard overview queried", { clinicId })
+
     const [
       totalPatients,
       todayAppointments,

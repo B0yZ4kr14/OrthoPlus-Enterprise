@@ -22,8 +22,8 @@
 - [x] T2.1 Create CreateTransactionUseCase from FinanceiroService
   - Acceptance: UseCase emits `financeiro_transaction_created` counter metric with labels {clinicId, paymentMethod} ✅
   - Acceptance: Every transaction creation produces immutable audit log entry via AuditLogRepository ✅
-- [ ] T2.2 GetDashboardOverviewUseCase from AnalyticsController
-  - Acceptance: UseCase emits `analytics.dashboard.queried` counter with label {clinicId}
+- [x] T2.2 GetDashboardOverviewUseCase from AnalyticsController
+  - Acceptance: UseCase emits `analytics_dashboard_queried` counter with label {clinicId} ✅
 - [x] T2.3 AuthenticateUserUseCase from AuthService
   - Acceptance: UseCase emits `auth_login_success` / `auth_login_failure` counters with label {role} ✅
   - Acceptance: Failed auth attempts log to `audit_logs` with userId, clinicId, action=AUTH_FAILURE ✅
