@@ -181,11 +181,17 @@ const apiLimiter = rateLimit({
 
 // Auth mutations (login, register, reset): strict brute-force protection.
 // GET /api/auth/me is exempt — called on every page load and must not hit 429.
+// Skip auth rate limiter in test environment to avoid 429s during E2E tests.
+const isTestEnv = process.env.NODE_ENV === 'test';
 app.use("/api/auth", (req, _res, next) => {
   if (req.method === "GET") return next();
+  if (isTestEnv) return next();
   return authLimiter(req, _res, next);
 });
-app.use("/auth/v1", authLimiter);
+app.use("/auth/v1", (req, _res, next) => {
+  if (isTestEnv) return next();
+  return authLimiter(req, _res, next);
+});
 app.use("/api/files", uploadLimiter);
 app.use("/api", apiLimiter);
 

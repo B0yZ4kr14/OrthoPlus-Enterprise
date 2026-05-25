@@ -7,8 +7,11 @@ import { CadastrarProdutoUseCase } from "../application/use-cases/CadastrarProdu
 import { IProdutoRepository } from "../domain/repositories/IProdutoRepository";
 import { logger } from "@/infrastructure/logger";
 import { prisma } from "@/infrastructure/database/prismaClient";
+import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository";
 
 export class InventarioController {
+  private repo = new InventarioRepository();
+
   constructor(private produtoRepository?: IProdutoRepository) {}
 
   cadastrarProduto = async (
@@ -174,24 +177,22 @@ export class InventarioController {
 
           for (const [supplierId, products] of supplierGroups) {
             const totalValue = products.reduce(
-              (sum, p) => sum + p.valor_unitario * p.quantidade_reposicao,
+              (sum: number, p: typeof lowStockProducts[0]) => sum + p.valor_unitario * p.quantidade_reposicao,
               0,
             );
             const numeroPedido = `AUTO-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
 
             // Create purchase order
-            const order = await prisma.estoque_pedidos.create({
-              data: {
-                clinic_id: clinicId,
-                numero_pedido: numeroPedido,
-                fornecedor_id: supplierId,
-                data_pedido: new Date().toISOString(),
-                status: 'RASCUNHO',
-                tipo: 'COMPRA',
-                valor_total: totalValue,
-                gerado_automaticamente: true,
-                created_by: 'SYSTEM',
-              },
+            const order = await this.repo.createEstoquePedido({
+              clinic_id: clinicId,
+              numero_pedido: numeroPedido,
+              fornecedor_id: supplierId,
+              data_pedido: new Date().toISOString(),
+              status: 'RASCUNHO',
+              tipo: 'COMPRA',
+              valor_total: totalValue,
+              gerado_automaticamente: true,
+              created_by: 'SYSTEM',
             });
 
             const orderId = order.id;
@@ -199,14 +200,12 @@ export class InventarioController {
             // Create line items for each product
             for (const product of products) {
               const itemTotal = product.valor_unitario * product.quantidade_reposicao;
-              await prisma.estoque_pedidos_itens.create({
-                data: {
-                  pedido_id: orderId,
-                  produto_id: product.produto_id,
-                  quantidade: product.quantidade_reposicao,
-                  preco_unitario: product.valor_unitario,
-                  valor_total: itemTotal,
-                },
+              await this.repo.createEstoquePedidoItem({
+                pedido_id: orderId,
+                produto_id: product.produto_id,
+                quantidade: product.quantidade_reposicao,
+                preco_unitario: product.valor_unitario,
+                valor_total: itemTotal,
               });
             }
 
@@ -227,15 +226,13 @@ export class InventarioController {
 
           // Create notification about auto-orders
           if (ordersCreated.length > 0) {
-            await prisma.notifications.create({
-              data: {
-                clinic_id: clinicId,
-                tipo: 'ALERTA',
-                titulo: 'Pedidos Automáticos Gerados',
-                mensagem: `${ordersCreated.length} pedido(s) de compra gerado(s) automaticamente para ${lowStockProducts.length} produto(s) com estoque baixo.`,
-                link_acao: '/estoque',
-                lida: false,
-              },
+            await this.repo.createNotification({
+              clinic_id: clinicId,
+              tipo: 'ALERTA',
+              titulo: 'Pedidos Automáticos Gerados',
+              mensagem: `${ordersCreated.length} pedido(s) de compra gerado(s) automaticamente para ${lowStockProducts.length} produto(s) com estoque baixo.`,
+              link_acao: '/estoque',
+              lida: false,
             });
           }
 
@@ -281,14 +278,12 @@ export class InventarioController {
               ? `CRÍTICO: ${product.nome} sem estoque!`
               : `Estoque mínimo: ${product.nome} (${product.quantidade_atual}/${product.quantidade_minima} un)`;
 
-            await (prisma as any).notifications.create({
-              data: {
-                clinic_id: clinicId,
-                tipo: "ALERTA",
-                titulo: tipoAlerta === "ESTOQUE_CRITICO" ? "🚨 Estoque Crítico" : "⚠️ Estoque Baixo",
-                mensagem,
-                link_acao: "/estoque",
-              },
+            await this.repo.createNotification({
+              clinic_id: clinicId,
+              tipo: "ALERTA",
+              titulo: tipoAlerta === "ESTOQUE_CRITICO" ? "🚨 Estoque Crítico" : "⚠️ Estoque Baixo",
+              mensagem,
+              link_acao: "/estoque",
             });
             alertsSent++;
           }
@@ -348,10 +343,7 @@ export class InventarioController {
         return res.status(401).json({ error: "Missing clinic context" });
       }
       const { id } = req.params;
-      const data = await prisma.produtos.updateMany({
-        where: { id, clinic_id: clinicId },
-        data: req.body,
-      });
+      const data = await this.repo.updateProduto(id, clinicId, req.body);
       return res.json({ success: true, data });
     } catch (error: unknown) {
       logger.error("Error updating produto", { error });
@@ -366,9 +358,7 @@ export class InventarioController {
         return res.status(401).json({ error: "Missing clinic context" });
       }
       const { id } = req.params;
-      await prisma.produtos.deleteMany({
-        where: { id, clinic_id: clinicId },
-      });
+      await this.repo.deleteProduto(id, clinicId);
       return res.status(204).send();
     } catch (error: unknown) {
       logger.error("Error deleting produto", { error });

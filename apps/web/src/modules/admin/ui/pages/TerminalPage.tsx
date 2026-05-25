@@ -13,21 +13,12 @@ import { Input } from "@orthoplus/core-ui/input";
 import { Button } from "@orthoplus/core-ui/button";
 import { ScrollArea } from "@orthoplus/core-ui/scroll-area";
 import { useAuth } from "@/contexts/AuthContext";
-import { apiClient } from "@/lib/api/apiClient";
-import { toast } from "sonner";
-
-interface CommandHistory {
-  command: string;
-  output: string;
-  exitCode: number;
-  timestamp: Date;
-}
+import { useTerminalPage } from "@/hooks/api/useTerminalPage";
 
 export default function TerminalPage() {
   const { clinicId } = useAuth();
   const [command, setCommand] = useState("");
-  const [history, setHistory] = useState<CommandHistory[]>([]);
-  const [isExecuting, setIsExecuting] = useState(false);
+  const { history, isExecuting, executeCommand, clearHistory } = useTerminalPage();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,64 +27,15 @@ export default function TerminalPage() {
     }
   }, [history]);
 
-  const executeCommand = async () => {
+  const handleExecute = () => {
     if (!command.trim() || !clinicId) return;
-
-    setIsExecuting(true);
-    const currentCommand = command;
+    executeCommand(command);
     setCommand("");
-
-    try {
-      const data = await apiClient.post<{
-        output: { stdout: string; stderr: string; exitCode: number };
-      }>("/terminal/execute", {
-        sessionId: crypto.randomUUID(),
-        command: currentCommand,
-      });
-
-      setHistory((prev) => [
-        ...prev,
-        {
-          command: currentCommand,
-          output:
-            data.output.stdout +
-            (data.output.stderr ? "\n" + data.output.stderr : ""),
-          exitCode: data.output.exitCode,
-          timestamp: new Date(),
-        },
-      ]);
-
-      if (data.output.exitCode !== 0) {
-        toast.error("Comando falhou");
-      } else {
-        toast.success("Comando executado");
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Erro desconhecido";
-      setHistory((prev) => [
-        ...prev,
-        {
-          command: currentCommand,
-          output: `Error: ${errorMessage}`,
-          exitCode: 1,
-          timestamp: new Date(),
-        },
-      ]);
-      toast.error("Erro ao executar comando");
-    } finally {
-      setIsExecuting(false);
-    }
-  };
-
-  const clearHistory = () => {
-    setHistory([]);
-    toast.success("Histórico limpo");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !isExecuting) {
-      executeCommand();
+      handleExecute();
     }
   };
 
@@ -196,7 +138,7 @@ export default function TerminalPage() {
               />
             </div>
             <Button
-              onClick={executeCommand}
+              onClick={handleExecute}
               disabled={!command.trim() || isExecuting}
             >
               <Send className="h-4 w-4 mr-2" />

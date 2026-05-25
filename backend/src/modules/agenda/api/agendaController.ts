@@ -1,5 +1,5 @@
 import { logger } from "@/infrastructure/logger";
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { AgendaRepository } from "@/modules/agenda/infrastructure/AgendaRepository";
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import { CreateAppointmentCommandHandler } from "../application/commands/CreateAppointmentCommand";
@@ -97,6 +97,8 @@ const dentistScheduleUpdateSchema = z.object({
 // Appointments
 // ---------------------------------------------------------------------------
 
+const agendaRepo = new AgendaRepository();
+
 export const getAppointments = async (req: Request, res: Response, next: NextFunction) => {
   const clinicId = requireClinicContext(req, res);
   if (!clinicId) return;
@@ -128,15 +130,11 @@ export const getAppointments = async (req: Request, res: Response, next: NextFun
           }
         : undefined;
 
-    const appointments = await prisma.appointments.findMany({
-      where: {
-        clinic_id: clinicId,
-        ...(dentist_id ? { dentist_id: dentist_id as string } : {}),
-        ...(patient_id ? { patient_id: patient_id as string } : {}),
-        ...(statusFilter !== undefined ? { status: statusFilter } : {}),
-        ...(startTimeFilter ? { start_time: startTimeFilter } : {}),
-      },
-      orderBy: { start_time: "asc" },
+    const appointments = await agendaRepo.findAppointments(clinicId, {
+      dentistId: dentist_id as string | undefined,
+      patientId: patient_id as string | undefined,
+      status: statusFilter,
+      startTime: startTimeFilter,
     });
 
     const duration = Date.now() - start;
@@ -157,9 +155,7 @@ export const getAppointmentById = async (req: Request, res: Response, next: Next
 
   try {
     const { id } = req.params;
-    const appointment = await prisma.appointments.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const appointment = await agendaRepo.findAppointmentById(id, clinicId);
 
     if (!appointment) {
       res.status(404).json({ error: "Appointment not found" });
@@ -213,9 +209,7 @@ export const updateAppointment = async (req: Request, res: Response, next: NextF
   try {
     const { id } = req.params;
 
-    const existing = await prisma.appointments.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await agendaRepo.findAppointmentById(id, clinicId);
     if (!existing) {
       res.status(404).json({ error: "Appointment not found" });
       return;
@@ -227,9 +221,9 @@ export const updateAppointment = async (req: Request, res: Response, next: NextF
       return;
     }
 
-    const appointment = await prisma.appointments.update({
-      where: { id },
-      data: { ...parsed.data, updated_at: new Date() },
+    const appointment = await agendaRepo.updateAppointment(id, {
+      ...parsed.data,
+      updated_at: new Date(),
     });
     res.json(appointment);
   } catch (error) {
@@ -246,15 +240,13 @@ export const deleteAppointment = async (req: Request, res: Response, next: NextF
   try {
     const { id } = req.params;
 
-    const existing = await prisma.appointments.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await agendaRepo.findAppointmentById(id, clinicId);
     if (!existing) {
       res.status(404).json({ error: "Appointment not found" });
       return;
     }
 
-    await prisma.appointments.delete({ where: { id } });
+    await agendaRepo.deleteAppointment(id);
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting appointment:", { error });
@@ -281,19 +273,13 @@ export const checkConflict = async (req: Request, res: Response, next: NextFunct
     const startIso = new Date(start_time as string).toISOString();
     const endIso = new Date(end_time as string).toISOString();
 
-    const conflicts = await prisma.appointments.findMany({
-      where: {
-        clinic_id: clinicId,
-        dentist_id: dentist_id as string,
-        status: { notIn: ["cancelado", "faltou"] },
-        ...(exclude_id ? { id: { not: exclude_id as string } } : {}),
-        OR: [
-          { start_time: { lte: startIso }, end_time: { gte: startIso } },
-          { start_time: { lte: endIso }, end_time: { gte: endIso } },
-        ],
-      },
-      select: { id: true },
-    });
+    const conflicts = await agendaRepo.findAppointmentConflicts(
+      clinicId,
+      dentist_id as string,
+      startIso,
+      endIso,
+      exclude_id as string | undefined
+    );
 
     res.json({ hasConflict: conflicts.length > 0, count: conflicts.length });
   } catch (error) {
@@ -317,25 +303,15 @@ export const getConfirmations = async (req: Request, res: Response, next: NextFu
     const { appointment_id, status } = req.query;
 
     // Collect appointment IDs that belong to this clinic
-    const clinicAppointments = await prisma.appointments.findMany({
-      where: {
-        clinic_id: clinicId,
-        ...(appointment_id ? { id: appointment_id as string } : {}),
-      },
-      select: { id: true },
+    const clinicAppointments = await agendaRepo.findAppointments(clinicId, {
+      ...(appointment_id ? { id: appointment_id as string } : {}),
     });
     const appointmentIds = clinicAppointments.map((a) => a.id);
 
-    const where: {
-      appointment_id: { in: string[] };
-      status?: string;
-    } = { appointment_id: { in: appointmentIds } };
-    if (status) where.status = status as string;
-
-    const confirmations = await prisma.appointment_confirmations.findMany({
-      where,
-      orderBy: { created_at: "asc" },
-    });
+    const confirmations = await agendaRepo.findConfirmationsByAppointmentIds(
+      appointmentIds,
+      status as string | undefined
+    );
     res.json(confirmations);
   } catch (error) {
     logger.error("Error fetching confirmations:", { error });
@@ -350,18 +326,17 @@ export const getConfirmationById = async (req: Request, res: Response, next: Nex
 
   try {
     const { id } = req.params;
-    const confirmation = await prisma.appointment_confirmations.findUnique({
-      where: { id },
-    });
+    const confirmation = await agendaRepo.findConfirmationById(id);
     if (!confirmation) {
       res.status(404).json({ error: "Confirmation not found" });
       return;
     }
 
     // Verify the linked appointment belongs to this clinic
-    const appointment = await prisma.appointments.findFirst({
-      where: { id: confirmation.appointment_id, clinic_id: clinicId },
-    });
+    const appointment = await agendaRepo.findAppointmentById(
+      confirmation.appointment_id,
+      clinicId
+    );
     if (!appointment) {
       res.status(404).json({ error: "Confirmation not found" });
       return;
@@ -387,17 +362,16 @@ export const createConfirmation = async (req: Request, res: Response, next: Next
     }
 
     // Verify the appointment belongs to this clinic
-    const appointment = await prisma.appointments.findFirst({
-      where: { id: parsed.data.appointment_id, clinic_id: clinicId },
-    });
+    const appointment = await agendaRepo.findAppointmentById(
+      parsed.data.appointment_id,
+      clinicId
+    );
     if (!appointment) {
       res.status(404).json({ error: "Appointment not found" });
       return;
     }
 
-    const confirmation = await prisma.appointment_confirmations.create({
-      data: parsed.data,
-    });
+    const confirmation = await agendaRepo.createConfirmation(parsed.data);
     res.status(201).json(confirmation);
   } catch (error) {
     logger.error("Error creating confirmation:", { error });
@@ -413,18 +387,17 @@ export const updateConfirmation = async (req: Request, res: Response, next: Next
   try {
     const { id } = req.params;
 
-    const existing = await prisma.appointment_confirmations.findUnique({
-      where: { id },
-    });
+    const existing = await agendaRepo.findConfirmationById(id);
     if (!existing) {
       res.status(404).json({ error: "Confirmation not found" });
       return;
     }
 
     // Verify the linked appointment belongs to this clinic
-    const appointment = await prisma.appointments.findFirst({
-      where: { id: existing.appointment_id, clinic_id: clinicId },
-    });
+    const appointment = await agendaRepo.findAppointmentById(
+      existing.appointment_id,
+      clinicId
+    );
     if (!appointment) {
       res.status(404).json({ error: "Confirmation not found" });
       return;
@@ -436,10 +409,7 @@ export const updateConfirmation = async (req: Request, res: Response, next: Next
       return;
     }
 
-    const confirmation = await prisma.appointment_confirmations.update({
-      where: { id },
-      data: parsed.data,
-    });
+    const confirmation = await agendaRepo.updateConfirmation(id, parsed.data);
     res.json(confirmation);
   } catch (error) {
     logger.error("Error updating confirmation:", { error });
@@ -455,24 +425,23 @@ export const deleteConfirmation = async (req: Request, res: Response, next: Next
   try {
     const { id } = req.params;
 
-    const existing = await prisma.appointment_confirmations.findUnique({
-      where: { id },
-    });
+    const existing = await agendaRepo.findConfirmationById(id);
     if (!existing) {
       res.status(404).json({ error: "Confirmation not found" });
       return;
     }
 
     // Verify the linked appointment belongs to this clinic
-    const appointment = await prisma.appointments.findFirst({
-      where: { id: existing.appointment_id, clinic_id: clinicId },
-    });
+    const appointment = await agendaRepo.findAppointmentById(
+      existing.appointment_id,
+      clinicId
+    );
     if (!appointment) {
       res.status(404).json({ error: "Confirmation not found" });
       return;
     }
 
-    await prisma.appointment_confirmations.delete({ where: { id } });
+    await agendaRepo.deleteConfirmation(id);
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting confirmation:", { error });
@@ -499,22 +468,15 @@ export const getBlockedTimes = async (req: Request, res: Response, next: NextFun
     if (start_date)
       endDatetimeFilter.gt = new Date(start_date as string).toISOString();
 
-    const items = await prisma.blocked_times.findMany({
-      where: {
-        clinic_id: clinicId,
-        ...(dentist_id ? { dentist_id: dentist_id as string } : {}),
-        ...(Object.keys(endDatetimeFilter).length > 0
-          ? { end_datetime: endDatetimeFilter }
-          : {}),
-        ...(end_date
-          ? {
-              start_datetime: {
-                lt: new Date(end_date as string).toISOString(),
-              },
-            }
-          : {}),
-      },
-      orderBy: { start_datetime: "asc" },
+    const items = await agendaRepo.findBlockedTimes(clinicId, {
+      dentistId: dentist_id as string | undefined,
+      endDatetime:
+        Object.keys(endDatetimeFilter).length > 0
+          ? (endDatetimeFilter as any)
+          : undefined,
+      startDatetime: end_date
+        ? { lt: new Date(end_date as string).toISOString() }
+        : undefined,
     });
     res.json(items);
   } catch (error) {
@@ -530,9 +492,7 @@ export const getBlockedTimeById = async (req: Request, res: Response, next: Next
 
   try {
     const { id } = req.params;
-    const item = await prisma.blocked_times.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const item = await agendaRepo.findBlockedTimeById(id, clinicId);
     if (!item) {
       res.status(404).json({ error: "Blocked time not found" });
       return;
@@ -556,8 +516,9 @@ export const createBlockedTime = async (req: Request, res: Response, next: NextF
       return;
     }
 
-    const item = await prisma.blocked_times.create({
-      data: { ...parsed.data, clinic_id: clinicId },
+    const item = await agendaRepo.createBlockedTime({
+      ...parsed.data,
+      clinic_id: clinicId,
     });
     res.status(201).json(item);
   } catch (error) {
@@ -574,15 +535,13 @@ export const deleteBlockedTime = async (req: Request, res: Response, next: NextF
   try {
     const { id } = req.params;
 
-    const existing = await prisma.blocked_times.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await agendaRepo.findBlockedTimeById(id, clinicId);
     if (!existing) {
       res.status(404).json({ error: "Blocked time not found" });
       return;
     }
 
-    await prisma.blocked_times.delete({ where: { id } });
+    await agendaRepo.deleteBlockedTime(id);
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting blocked time:", { error });
@@ -613,9 +572,10 @@ export const getDentistSchedules = async (req: Request, res: Response, next: Nex
     if (day_of_week !== undefined) where.day_of_week = Number(day_of_week);
     if (is_active !== undefined) where.is_active = is_active === "true";
 
-    const items = await prisma.dentist_schedules.findMany({
-      where,
-      orderBy: [{ dentist_id: "asc" }, { day_of_week: "asc" }],
+    const items = await agendaRepo.findDentistSchedules(clinicId, {
+      dentistId: where.dentist_id,
+      dayOfWeek: where.day_of_week,
+      isActive: where.is_active,
     });
     res.json(items);
   } catch (error) {
@@ -631,9 +591,7 @@ export const getDentistScheduleById = async (req: Request, res: Response, next: 
 
   try {
     const { id } = req.params;
-    const item = await prisma.dentist_schedules.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const item = await agendaRepo.findDentistScheduleById(id, clinicId);
     if (!item) {
       res.status(404).json({ error: "Schedule not found" });
       return;
@@ -657,8 +615,9 @@ export const createDentistSchedule = async (req: Request, res: Response, next: N
       return;
     }
 
-    const item = await prisma.dentist_schedules.create({
-      data: { ...parsed.data, clinic_id: clinicId },
+    const item = await agendaRepo.createDentistSchedule({
+      ...parsed.data,
+      clinic_id: clinicId,
     });
     res.status(201).json(item);
   } catch (error) {
@@ -675,9 +634,7 @@ export const updateDentistSchedule = async (req: Request, res: Response, next: N
   try {
     const { id } = req.params;
 
-    const existing = await prisma.dentist_schedules.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await agendaRepo.findDentistScheduleById(id, clinicId);
     if (!existing) {
       res.status(404).json({ error: "Schedule not found" });
       return;
@@ -689,10 +646,7 @@ export const updateDentistSchedule = async (req: Request, res: Response, next: N
       return;
     }
 
-    const item = await prisma.dentist_schedules.update({
-      where: { id },
-      data: parsed.data,
-    });
+    const item = await agendaRepo.updateDentistSchedule(id, parsed.data);
     res.json(item);
   } catch (error) {
     logger.error("Error updating dentist schedule:", { error });
@@ -708,15 +662,13 @@ export const deleteDentistSchedule = async (req: Request, res: Response, next: N
   try {
     const { id } = req.params;
 
-    const existing = await prisma.dentist_schedules.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await agendaRepo.findDentistScheduleById(id, clinicId);
     if (!existing) {
       res.status(404).json({ error: "Schedule not found" });
       return;
     }
 
-    await prisma.dentist_schedules.delete({ where: { id } });
+    await agendaRepo.deleteDentistSchedule(id);
     res.status(204).send();
   } catch (error) {
     logger.error("Error deleting dentist schedule:", { error });

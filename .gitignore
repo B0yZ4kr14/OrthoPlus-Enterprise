@@ -122,3 +122,4 @@ graphify-out/.graphify_*
 .env.vps.credentials
 .worktrees/
 .worktrees/
+.env2

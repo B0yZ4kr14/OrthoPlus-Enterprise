@@ -1,4 +1,3 @@
-import { useState, useEffect, useCallback } from "react";
 import {
   Github,
   GitBranch,
@@ -19,52 +18,13 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import { apiClient } from "@/lib/api/apiClient";
-import { toast } from "sonner";
+import { useGitHubManagerPage } from "@/hooks/api/useGitHubManagerPage";
 import { RepositoryManager } from "@/components/admin/RepositoryManager";
 import { WebhookManager } from "@/components/admin/WebhookManager";
 import { GitHubIntegrationConfig } from "@/components/settings/GitHubIntegrationConfig";
-import { GitHubData } from "../../types/github.types";
 
 export default function GitHubManagerPage() {
-  const [data, setData] = useState<GitHubData | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const fetchGitHubData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const reposRes = await apiClient.get<{ repositories: { id: string }[] }>("/github/repositories");
-      const repo = reposRes.repositories?.[0];
-      if (!repo) {
-        throw new Error("Nenhum repositório conectado");
-      }
-
-      const [branchesRes, prsRes, workflowsRes] = await Promise.all([
-        apiClient.get<{ branches: GitHubData["branches"] }>(`/github/repositories/${repo.id}/branches`),
-        apiClient.get<{ pullRequests: GitHubData["pull_requests"] }>(`/github/repositories/${repo.id}/pull-requests`),
-        apiClient.get<{ workflows: GitHubData["workflows"] }>(`/github/repositories/${repo.id}/workflows`),
-      ]);
-
-      setData({
-        commits: [], // Endpoint de commits retirado nesta versão
-        branches: branchesRes.branches || [],
-        pull_requests: prsRes.pullRequests || [],
-        workflows: workflowsRes.workflows || [],
-      });
-
-      toast.success("Dados atualizados");
-    } catch (error: unknown) {
-      const _e = error as { message?: string };
-      toast.error(_e.message || "Erro ao carregar dados do GitHub");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchGitHubData();
-  }, [fetchGitHubData]);
+  const { data, isLoading: loading, refresh: fetchGitHubData } = useGitHubManagerPage();
 
   return (
     <div className="space-y-6">
@@ -74,7 +34,7 @@ export default function GitHubManagerPage() {
           description="Gerenciamento de repositório, commits, branches e CI/CD"
           icon={Github}
         />
-        <Button onClick={fetchGitHubData} disabled={loading}>
+        <Button onClick={() => fetchGitHubData()} disabled={loading}>
           <RefreshCw
             className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
             aria-hidden="true"
@@ -114,7 +74,7 @@ export default function GitHubManagerPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data?.commits.map((commit) => (
+                  {data?.commits?.map((commit) => (
                     <div
                       key={commit.sha}
                       className="flex items-start gap-3 p-3 border rounded-lg"
@@ -151,7 +111,7 @@ export default function GitHubManagerPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data?.pull_requests.map((pr) => (
+                  {data?.pull_requests?.map((pr) => (
                     <div
                       key={pr.number}
                       className="flex items-start gap-3 p-3 border rounded-lg"
@@ -197,7 +157,7 @@ export default function GitHubManagerPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {data?.branches.map((branch) => (
+                  {data?.branches?.map((branch) => (
                     <div
                       key={branch.name}
                       className="flex items-center justify-between p-3 border rounded-lg"
@@ -235,7 +195,7 @@ export default function GitHubManagerPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data?.workflows.map((workflow) => (
+                  {data?.workflows?.map((workflow) => (
                     <div
                       key={workflow.name}
                       className="flex items-center justify-between p-3 border rounded-lg"

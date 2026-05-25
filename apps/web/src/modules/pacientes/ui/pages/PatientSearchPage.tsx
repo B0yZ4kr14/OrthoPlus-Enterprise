@@ -156,7 +156,7 @@ export default function PatientSearchPage() {
             </CardContent>
           </Card>
         ) : (
-          data?.patients.map((patient) => (
+          data?.patients?.map((patient) => (
             <Card
               key={patient.id}
               className="cursor-pointer hover:bg-accent/50 transition-colors"

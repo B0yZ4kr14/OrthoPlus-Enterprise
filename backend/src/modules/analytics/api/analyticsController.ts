@@ -1,5 +1,5 @@
 import { logger } from '@/infrastructure/logger';
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { AnalyticsRepository } from "@/modules/analytics/infrastructure/AnalyticsRepository";
 import { NextFunction, Request, Response } from "express";
 import { GetDashboardOverviewUseCase } from "@/modules/analytics/application/GetDashboardOverviewUseCase";
 import { GetUnifiedMetricsUseCase } from "@/modules/analytics/application/GetUnifiedMetricsUseCase";
@@ -8,6 +8,7 @@ import { GetUnifiedMetricsUseCase } from "@/modules/analytics/application/GetUni
 export class AnalyticsController {
   private getDashboardOverviewUseCase = new GetDashboardOverviewUseCase()
   private getUnifiedMetricsUseCase = new GetUnifiedMetricsUseCase()
+  private repo = new AnalyticsRepository()
   // ==========================================
   // dashboard-overview
   // ==========================================
@@ -71,31 +72,9 @@ export class AnalyticsController {
       const clinicId = req.clinicId;
       if (!clinicId) return res.status(401).json({ error: "Unauthorized" });
 
-      const patients = await ( prisma as any).patients.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinic_id: clinicId, marketingCampaign: { not: null },
-        },
-        select: {
-          id: true,
-          marketingCampaign: true,
-          marketingSource: true,
-          createdAt: true,
-          status: true,
-        },
-        take: 1000,
-      });
+      const patients = await this.repo.findPatientsWithMarketing(clinicId);
 
-      const campaigns = await ( prisma as any).marketing_campaigns.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinic_id: clinicId },
-        select: {
-          id: true,
-          name: true,
-          budget: true,
-          targetAudience: true,
-          status: true,
-          createdAt: true,
-        },
-        take: 100,
-      });
+      const campaigns = await this.repo.findMarketingCampaigns(clinicId);
 
       const totalPatients = patients.length;
       const convertedPatients = patients.filter(
@@ -251,28 +230,22 @@ export class AnalyticsController {
 
     // Let's assume Prisma has the tables, else we will have to use $queryRawUnsafe
     try {
-      let loyalty = await prisma.fidelidade_pacientes.findFirst({
-        where: { clinic_id: clinicId, patient_id: patientId },
-      });
+      let loyalty = await this.repo.findLoyaltyByPatient(clinicId, patientId);
 
       if (!loyalty) {
-        loyalty = await prisma.fidelidade_pacientes.create({
-          data: {
-            clinic_id: clinicId,
-            patient_id: patientId,
-            pontos_acumulados: points,
-            nivel: "BRONZE",
-          },
+        loyalty = await this.repo.createLoyalty({
+          clinic_id: clinicId,
+          patient_id: patientId,
+          pontos_acumulados: points,
+          nivel: "BRONZE",
         });
 
-        await prisma.fidelidade_transacoes.create({
-          data: {
-            clinic_id: clinicId,
-            patient_id: patientId,
-            tipo: "CREDITO",
-            pontos: points,
-            descricao: "Pontos por consulta realizada",
-          },
+        await this.repo.createLoyaltyTransaction({
+          clinic_id: clinicId,
+          patient_id: patientId,
+          tipo: "CREDITO",
+          pontos: points,
+          descricao: "Pontos por consulta realizada",
         });
 
         return {
@@ -291,22 +264,17 @@ export class AnalyticsController {
       else if (newTotal >= 500) newLevel = "GOLD";
       else if (newTotal >= 100) newLevel = "SILVER";
 
-      await prisma.fidelidade_pacientes.update({
-        where: { id: loyalty.id },
-        data: {
-          pontos_acumulados: newTotal,
-          nivel: newLevel,
-        },
+      await this.repo.updateLoyalty(loyalty.id, {
+        pontos_acumulados: newTotal,
+        nivel: newLevel,
       });
 
-      await prisma.fidelidade_transacoes.create({
-        data: {
-          clinic_id: clinicId,
-          patient_id: patientId,
-          tipo: "CREDITO",
-          pontos: points,
-          descricao: "Pontos por consulta realizada",
-        },
+      await this.repo.createLoyaltyTransaction({
+        clinic_id: clinicId,
+        patient_id: patientId,
+        tipo: "CREDITO",
+        pontos: points,
+        descricao: "Pontos por consulta realizada",
       });
 
       return {
@@ -333,15 +301,7 @@ export class AnalyticsController {
     goalType?: string,
   ) {
     try {
-      const goals = await prisma.gamification_goals.findMany({
-        where: {
-          clinic_id: clinicId,
-          user_id: userId,
-          status: "ACTIVE",
-          deadline: { gte: new Date() },
-        },
-        take: 1000,
-      });
+      const goals = await this.repo.findActiveGamificationGoals(clinicId, userId);
 
       const goalsProcessed = [];
 
@@ -358,13 +318,10 @@ export class AnalyticsController {
               new Date().getMonth(),
               1,
             );
-            const count = await ( prisma as any).appointments.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-              where: {
-                dentistId: userId,
-                status: "CONCLUIDA",
-                startTime: { gte: startMonth },
-              }, // check dentistId field name
-            });
+            const count = await this.repo.countAppointmentsByDentist(
+              userId,
+              startMonth
+            );
             progress = (count / goal.target_value) * 100;
             isCompleted = count >= goal.target_value;
             break;
@@ -375,13 +332,10 @@ export class AnalyticsController {
             break;
         }
 
-        await prisma.gamification_goals.update({
-          where: { id: goal.id },
-          data: {
-            current_value: Math.round(progress),
-            status: isCompleted ? "COMPLETED" : "ACTIVE",
-            completed_at: isCompleted ? new Date() : null,
-          },
+        await this.repo.updateGamificationGoal(goal.id, {
+          current_value: Math.round(progress),
+          status: isCompleted ? "COMPLETED" : "ACTIVE",
+          completed_at: isCompleted ? new Date() : null,
         });
 
         goalsProcessed.push({ goalId: goal.id, progress, isCompleted });
@@ -398,14 +352,12 @@ export class AnalyticsController {
 
   private async scheduleBIExport(clinicId: string) {
     try {
-      const res = await prisma.bi_export_jobs.create({
-        data: {
-          clinic_id: clinicId,
-          export_type: "MONTHLY_REPORT",
-          scheduled_for: new Date(Date.now() + 60 * 60 * 1000),
-          status: "SCHEDULED",
-          format: "PDF",
-        },
+      const res = await this.repo.createBIExportJob({
+        clinic_id: clinicId,
+        export_type: "MONTHLY_REPORT",
+        scheduled_for: new Date(Date.now() + 60 * 60 * 1000),
+        status: "SCHEDULED",
+        format: "PDF",
       });
       return {
         clinicId,
@@ -421,15 +373,13 @@ export class AnalyticsController {
     try {
       const { userId, clinicId, step, action, duration, metadata } =
         analyticsData;
-      await prisma.onboarding_analytics.create({
-        data: {
-          user_id: userId as string,
-          clinic_id: clinicId as string,
-          step_name: step as string,
-          event_type: action as string,
-          time_spent_seconds: duration as number,
-          metadata: (metadata || {}) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        },
+      await this.repo.createOnboardingAnalytics({
+        user_id: userId as string,
+        clinic_id: clinicId as string,
+        step_name: step as string,
+        event_type: action as string,
+        time_spent_seconds: duration as number,
+        metadata: (metadata || {}) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       });
       return { userId, step, action, saved_at: new Date() };
     } catch (e) {
@@ -449,25 +399,9 @@ export class AnalyticsController {
       const tomorrowStr = new Date(today.getTime() + 86400000).toISOString().split("T")[0];
 
       const [appointments, overdue, recalls] = await Promise.all([
-        prisma.appointments.count({
-          where: {
-            clinic_id: clinicId,
-            start_time: { gte: todayStr, lt: tomorrowStr },
-          },
-        }).catch(() => 0),
-        prisma.contas_receber.count({
-          where: {
-            clinic_id: clinicId,
-            data_vencimento: { lt: todayStr },
-            status: "PENDENTE",
-          },
-        }).catch(() => 0),
-        prisma.recalls.count({
-          where: {
-            clinic_id: clinicId,
-            data_prevista: { gte: todayStr, lt: tomorrowStr },
-          },
-        }).catch(() => 0),
+        this.repo.countAppointmentsToday(clinicId, todayStr, tomorrowStr).catch(() => 0),
+        this.repo.countOverdueContasReceber(clinicId, todayStr).catch(() => 0),
+        this.repo.countRecallsToday(clinicId, todayStr, tomorrowStr).catch(() => 0),
       ]);
 
       return res.json({

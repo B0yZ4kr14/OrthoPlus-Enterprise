@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   FileCode,
   Plus,
@@ -35,88 +34,22 @@ import {
   SelectValue,
 } from "@orthoplus/core-ui/select";
 import { useAuth } from "@/contexts/AuthContext";
-import { apiClient } from "@/lib/api/apiClient";
-import { toast } from "sonner";
-
-interface ADR {
-  id: string;
-  adr_number: number;
-  title: string;
-  status: "proposed" | "accepted" | "deprecated" | "superseded";
-  context: string;
-  decision: string;
-  consequences: string;
-  created_at: string;
-  decided_at: string | null;
-}
+import { useADRs } from "@/hooks/api/useADRs";
 
 export default function ADRsPage() {
   const { clinicId, user } = useAuth();
-  const [adrs, setAdrs] = useState<ADR[]>([]);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    context: "",
-    decision: "",
-    consequences: "",
-    alternatives_considered: "",
-    status: "proposed" as "proposed" | "accepted" | "deprecated" | "superseded",
-  });
+  const {
+    adrs,
+    isLoading,
+    dialogOpen,
+    setDialogOpen,
+    formData,
+    setFormData,
+    handleCreate,
+    isCreating,
+  } = useADRs(clinicId ?? undefined, user?.id ?? undefined);
 
-  const fetchADRs = async () => {
-    if (!clinicId) return;
-
-    try {
-      const data = await apiClient.get<ADR[]>("/admin/adrs");
-      setAdrs(data || []);
-    } catch (error) {
-      toast.error("Erro ao carregar ADRs");
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchADRs();
-  }, [clinicId]);
-
-  const handleCreate = async () => {
-    if (!clinicId || !formData.title.trim()) {
-      toast.error("Preencha todos os campos obrigatórios");
-      return;
-    }
-
-    try {
-      const nextNumber =
-        adrs.length > 0 ? Math.max(...adrs.map((a) => a.adr_number)) + 1 : 1;
-
-      await apiClient.post("/admin/adrs", {
-        clinic_id: clinicId,
-        adr_number: nextNumber,
-        ...formData,
-        created_by: user?.id,
-        decided_by: formData.status === "accepted" ? user?.id : undefined,
-        decided_at:
-          formData.status === "accepted" ? new Date().toISOString() : undefined,
-      });
-
-      toast.success("ADR criado com sucesso");
-      setDialogOpen(false);
-      setFormData({
-        title: "",
-        context: "",
-        decision: "",
-        consequences: "",
-        alternatives_considered: "",
-        status: "proposed",
-      });
-      fetchADRs();
-    } catch (error) {
-      toast.error("Erro ao criar ADR");
-      console.error(error);
-    }
-  };
-
-  const getStatusBadge = (status: ADR["status"]) => {
+  const getStatusBadge = (status: typeof formData.status) => {
     const variants = {
       proposed: {
         variant: "secondary" as const,
@@ -189,9 +122,8 @@ export default function ADRsPage() {
                 <label className="text-sm font-medium">Status</label>
                 <Select
                   value={formData.status}
-                  onValueChange={(value: unknown) =>
-                    // @ts-expect-error — TS2322
-                    setFormData({ ...formData, status: value })
+                  onValueChange={(value: string) =>
+                    setFormData({ ...formData, status: value as typeof formData.status })
                   }
                 >
                   <SelectTrigger>
@@ -263,7 +195,9 @@ export default function ADRsPage() {
                 <Button variant="outline" onClick={() => setDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button onClick={handleCreate}>Criar ADR</Button>
+                <Button onClick={handleCreate} disabled={isCreating}>
+                  Criar ADR
+                </Button>
               </div>
             </div>
           </DialogContent>
@@ -271,61 +205,71 @@ export default function ADRsPage() {
       </div>
 
       <div className="grid gap-4">
-        {adrs.map((adr) => (
-          <Card key={adr.id}>
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline">
-                      ADR-{adr.adr_number.toString().padStart(3, "0")}
-                    </Badge>
-                    {getStatusBadge(adr.status)}
-                  </div>
-                  <CardTitle className="text-xl">{adr.title}</CardTitle>
-                  <CardDescription>
-                    Criado em {new Date(adr.created_at).toLocaleDateString()}
-                    {adr.decided_at &&
-                      ` • Decidido em ${new Date(adr.decided_at).toLocaleDateString()}`}
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold mb-2">Contexto</h4>
-                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                  {adr.context}
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Decisão</h4>
-                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                  {adr.decision}
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-2">Consequências</h4>
-                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                  {adr.consequences}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-
-        {adrs.length === 0 && (
+        {isLoading ? (
           <Card>
             <CardContent className="text-center py-12">
-              <FileCode className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-              <p className="text-lg font-medium">Nenhum ADR criado</p>
-              <p className="text-sm text-muted-foreground">
-                Comece documentando suas decisões arquiteturais
-              </p>
+              <p className="text-muted-foreground">Carregando ADRs...</p>
             </CardContent>
           </Card>
+        ) : (
+          <>
+            {adrs.map((adr) => (
+              <Card key={adr.id}>
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline">
+                          ADR-{adr.adr_number.toString().padStart(3, "0")}
+                        </Badge>
+                        {getStatusBadge(adr.status)}
+                      </div>
+                      <CardTitle className="text-xl">{adr.title}</CardTitle>
+                      <CardDescription>
+                        Criado em {new Date(adr.created_at).toLocaleDateString()}
+                        {adr.decided_at &&
+                          ` • Decidido em ${new Date(adr.decided_at).toLocaleDateString()}`}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Contexto</h4>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                      {adr.context}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold mb-2">Decisão</h4>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                      {adr.decision}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold mb-2">Consequências</h4>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                      {adr.consequences}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
+            {adrs.length === 0 && (
+              <Card>
+                <CardContent className="text-center py-12">
+                  <FileCode className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                  <p className="text-lg font-medium">Nenhum ADR criado</p>
+                  <p className="text-sm text-muted-foreground">
+                    Comece documentando suas decisões arquiteturais
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
       </div>
     </div>

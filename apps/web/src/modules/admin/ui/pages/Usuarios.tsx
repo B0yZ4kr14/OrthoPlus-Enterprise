@@ -1,9 +1,4 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api/apiClient";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@orthoplus/core-ui/button";
-import { Input } from "@orthoplus/core-ui/input";
 import {
   Card,
   CardContent,
@@ -24,7 +19,6 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { TableFilter } from "@/components/shared/TableFilter";
 import {
   Dialog,
   DialogContent,
@@ -42,113 +36,28 @@ import {
   DropdownMenuTrigger,
 } from "@orthoplus/core-ui/dropdown-menu";
 import { UserForm } from "@/components/usuarios/UserForm";
-import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@orthoplus/core-ui/avatar";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatsCard } from "@/components/shared/StatsCard";
 import { KeyRound } from "lucide-react";
-
-interface User {
-  id: string;
-  email: string;
-  full_name: string;
-  app_role: "ADMIN" | "MEMBER";
-  clinic_id: string;
-  avatar_url?: string;
-  is_active: boolean;
-  last_sign_in_at?: string;
-  created_at: string;
-}
+import { useAuth } from "@/contexts/AuthContext";
+import { useUsuariosPage } from "@/hooks/api/useUsuariosPage";
 
 export default function Usuarios() {
   const { clinicId, isAdmin } = useAuth();
-  const queryClient = useQueryClient();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  // Fetch users
-  const { data: users, isLoading } = useQuery<User[]>({
-    queryKey: ["users", clinicId],
-    queryFn: async () => {
-      const response = await apiClient.get<User[]>("/usuarios");
-      // @ts-expect-error — TS2339
-      return response.data;
-    },
-    enabled: !!clinicId,
-  });
-
-  const filteredUsers =
-    users?.filter((user) => {
-      const matchesSearch =
-        !searchTerm ||
-        user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email?.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesRole = roleFilter === "all" || user.app_role === roleFilter;
-
-      return matchesSearch && matchesRole;
-    }) || [];
-
-  // Delete user mutation
-  const deleteUserMutation = useMutation({
-    mutationFn: async (userId: string) => {
-      await apiClient.delete(`/usuarios/${userId}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users", clinicId] });
-      toast.success("Usuário excluído com sucesso!");
-    },
-    onError: (error: unknown) => {
-      const msg = error instanceof Error ? error.message : "Erro desconhecido";
-      toast.error("Erro ao excluir usuário", {
-        description: msg,
-      });
-    },
-  });
-
-  // Toggle active status mutation
-  const toggleActiveMutation = useMutation({
-    mutationFn: async ({
-      userId,
-      isActive,
-    }: {
-      userId: string;
-      isActive: boolean;
-    }) => {
-      await apiClient.post(`/usuarios/${userId}/toggle-active`, {
-        is_active: !isActive,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users", clinicId] });
-    },
-  });
-
-  const handleEdit = (user: User) => {
-    setSelectedUser(user);
-    setIsDialogOpen(true);
-  };
-
-  const handleDelete = (userId: string) => {
-    if (
-      confirm(
-        "Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.",
-      )
-    ) {
-      deleteUserMutation.mutate(userId);
-    }
-  };
-
-  const handleToggleActive = (userId: string, isActive: boolean) => {
-    toggleActiveMutation.mutate({ userId, isActive });
-  };
-
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-    setSelectedUser(null);
-  };
+  const {
+    filteredUsers,
+    isLoading,
+    selectedUser,
+    isDialogOpen,
+    setIsDialogOpen,
+    handleEdit,
+    handleDelete,
+    handleToggleActive,
+    handleDialogClose,
+    isDeleting,
+    isToggling,
+  } = useUsuariosPage(clinicId ?? undefined);
 
   const getRoleBadge = (role: "ADMIN" | "MEMBER") => {
     if (role === "ADMIN") {
@@ -207,7 +116,6 @@ export default function Usuarios() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <PageHeader 
         icon={KeyRound} 
         title="Usuários" 
@@ -215,7 +123,7 @@ export default function Usuarios() {
         actions={
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => setSelectedUser(null)} className="gap-2">
+              <Button onClick={() => handleDialogClose()} className="gap-2">
                 <Plus className="h-4 w-4" />
                 Novo Usuário
               </Button>
@@ -241,29 +149,27 @@ export default function Usuarios() {
         } 
       />
 
-      {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
         <StatsCard
           title="Total de Usuários"
-          value={users?.length || 0}
+          value={filteredUsers.length}
           icon={Users}
           variant="primary"
         />
         <StatsCard
           title="Administradores"
-          value={users?.filter((u) => u.app_role === "ADMIN").length || 0}
+          value={filteredUsers.filter((u) => u.app_role === "ADMIN").length}
           icon={Shield}
           variant="warning"
         />
         <StatsCard
           title="Usuários Ativos"
-          value={users?.filter((u) => u.is_active).length || 0}
+          value={filteredUsers.filter((u) => u.is_active).length}
           icon={CheckCircle2}
           variant="success"
         />
       </div>
 
-      {/* Users List */}
       <Card variant="elevated" className="glass-card">
         <CardHeader>
           <CardTitle>Lista de Usuários</CardTitle>
@@ -342,6 +248,7 @@ export default function Usuarios() {
                         onClick={() =>
                           handleToggleActive(user.id, user.is_active)
                         }
+                        disabled={isToggling}
                       >
                         {user.is_active ? (
                           <>
@@ -359,6 +266,7 @@ export default function Usuarios() {
                       <DropdownMenuItem
                         onClick={() => handleDelete(user.id)}
                         className="text-destructive"
+                        disabled={isDeleting}
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Excluir

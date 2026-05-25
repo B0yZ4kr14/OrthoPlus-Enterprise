@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { PdvRepository } from "@/modules/pdv/infrastructure/PdvRepository";
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
 import { z } from "zod";
@@ -32,6 +32,7 @@ const createVendaSchema = z.object({
 });
 
 export class PdvController {
+  private repo = new PdvRepository()
   createVenda = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     createVendaSchema.parse(req.body);
     const clinicId = req.user?.clinicId;
@@ -43,18 +44,16 @@ export class PdvController {
     const valorTotal = req.body.itens.reduce((acc: number, item: any) => 
       acc + (item.quantidade * item.valorUnitario) - item.valorDesconto, 0);
 
-    const venda = await prisma.pdv_vendas.create({
-      data: {
-        clinic_id: clinicId,
-        numero_venda: `VND-${Date.now()}`,
-        valor_total: valorTotal,
-        forma_pagamento: req.body.pagamentos[0]?.formaPagamento || 'DINHEIRO',
-        status: 'CONCLUIDA',
-        metadata: {
-          vendedorId: req.body.vendedorId,
-          itens: req.body.itens
-        }
-      }
+    const venda = await this.repo.createVenda({
+      clinic_id: clinicId,
+      numero_venda: `VND-${Date.now()}`,
+      valor_total: valorTotal,
+      forma_pagamento: req.body.pagamentos[0]?.formaPagamento || 'DINHEIRO',
+      status: 'CONCLUIDA',
+      metadata: {
+        vendedorId: req.body.vendedorId,
+        itens: req.body.itens
+      } as any,
     });
 
     logger.info("Venda created", { clinicId, vendaId: venda.id });
@@ -68,11 +67,7 @@ export class PdvController {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
 
-    const vendas = await prisma.pdv_vendas.findMany({
-      where: { clinic_id: clinicId },
-      orderBy: { created_at: 'desc' },
-      take: 50
-    });
+    const vendas = await this.repo.findVendasByClinic(clinicId);
 
     logger.info("Listing vendas", { clinicId, count: vendas.length });
     res.status(200).json({ vendas });
@@ -84,9 +79,7 @@ export class PdvController {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
     const { id } = req.params;
-    const venda = await prisma.pdv_vendas.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const venda = await this.repo.findVendaById(id, clinicId);
     if (!venda) {
       throw Errors.notFound("Venda");
     }
@@ -99,19 +92,14 @@ export class PdvController {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
     const { id } = req.params;
-    const venda = await prisma.pdv_vendas.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const venda = await this.repo.findVendaById(id, clinicId);
     if (!venda) {
       throw Errors.notFound("Venda");
     }
     if (venda.status === "CANCELADA") {
       throw Errors.validation("Venda already cancelled");
     }
-    const updated = await prisma.pdv_vendas.update({
-      where: { id },
-      data: { status: "CANCELADA" },
-    });
+    const updated = await this.repo.updateVenda(id, { status: "CANCELADA" });
     logger.info("Venda cancelled", { clinicId, vendaId: id });
     res.json(updated);
   });

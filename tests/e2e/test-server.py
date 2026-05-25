@@ -21,7 +21,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=DIST_DIR, **kwargs)
 
     def do_GET(self):
-        self._handle_request()
+        if self.path.startswith("/api/"):
+            self._proxy_to_backend("GET")
+        else:
+            self._handle_request()
 
     def do_POST(self):
         self._proxy_to_backend("POST")
@@ -40,7 +43,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def _send_cors(self):
         self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        origin = self.headers.get("Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", origin)
+        self.send_header("Access-Control-Allow-Credentials", "true")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.end_headers()
@@ -59,11 +64,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             resp = conn.getresponse()
             self.send_response(resp.status)
             for k, v in resp.getheaders():
-                if k.lower() not in ("transfer-encoding", "content-encoding"):
+                if k.lower() not in ("transfer-encoding", "content-encoding", "connection"):
                     self.send_header(k, v)
-            self.send_header("Access-Control-Allow-Origin", "*")
+            origin = self.headers.get("Origin", "*")
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Access-Control-Allow-Credentials", "true")
             self.end_headers()
-            self.wfile.write(resp.read())
+            data = resp.read()
+            self.wfile.write(data)
+            self.wfile.flush()
         except Exception as e:
             self.send_response(502)
             self.end_headers()

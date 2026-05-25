@@ -1,5 +1,5 @@
 import { logger } from '@/infrastructure/logger';
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { ReportRepository } from "@/modules/relatorios/infrastructure/ReportRepository";
 import { NextFunction, Request, Response } from "express";
 
 
@@ -14,6 +14,7 @@ interface ExportOptions {
 }
 
 export class ReportController {
+  private repo = new ReportRepository()
   // GET or POST depending on frontend implementation, typically POST for options
   async exportClinicData(
     req: Request,
@@ -31,9 +32,7 @@ export class ReportController {
       }
 
       // Check admin status (already done by middleware normally, but verifying)
-      const userProfile = await (prisma as any).profiles.findUnique({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: userId },
-      });
+      const userProfile = await this.repo.findProfileById(userId as string);
       if (userProfile?.role !== "ADMIN" && userProfile?.role !== "MANAGER") {
         // Enforce basic RBAC if middleware didn't catch
         // We'll proceed assuming auth middleware handled it, but good to be safe
@@ -49,17 +48,11 @@ export class ReportController {
       };
 
       if (options.includeModules) {
-        const clinicModules = await (prisma as any).clinic_modules.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinic_id: clinicId },
-        });
+        const clinicModules = await this.repo.findClinicModules(clinicId as string);
         
         // Buscar module_catalog separadamente (sem relation no schema)
         const moduleCatalogIds = clinicModules.map((m: { module_catalog_id: number }) => m.module_catalog_id);
-        const moduleCatalogs = moduleCatalogIds.length > 0 
-          ? await (prisma as any).module_catalog.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-              where: { id: { in: moduleCatalogIds } },
-            })
-          : [];
+        const moduleCatalogs = await this.repo.findModuleCatalogs(moduleCatalogIds);
         
         // Mapear para incluir dados do catalog
         exportData.data.modules = clinicModules.map((cm: { module_catalog_id: number; [key: string]: unknown }) => ({
@@ -69,67 +62,42 @@ export class ReportController {
       }
 
       if (options.includePatients) {
-        const patients = await (prisma as any).patients.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinic_id: clinicId },
-          select: {
-            id: true,
-            cpf: true,
-            nome: true,
-            email: true,
-            telefone: true,
-            created_at: true,
-            updated_at: true,
-          },
-        });
+        const patients = await this.repo.findPatientsByClinic(clinicId as string);
         exportData.data.patients = patients;
         exportData.data.patientCount = patients.length || 0;
       }
 
       if (options.includeHistory) {
-        exportData.data.history = await (prisma as any).wiki_page_versions.findMany({
-          take: 100 // Example limit to prevent payload bloat
-        });
+        exportData.data.history = await this.repo.findWikiPageVersions(100);
       }
 
       if (options.includeProntuarios) {
-        exportData.data.prontuarios = await prisma.prontuarios.findMany({
-          where: { clinic_id: clinicId }
-        });
+        exportData.data.prontuarios = await this.repo.findProntuariosByClinic(clinicId as string);
       }
 
       if (options.includeAppointments) {
-        exportData.data.appointments = await (
-          prisma as any // eslint-disable-line @typescript-eslint/no-explicit-any
-        ).appointments_ortho.findMany({
-          where: { clinic_id: clinicId },
-        });
+        exportData.data.appointments = await this.repo.findAppointmentsOrthoByClinic(clinicId as string);
       }
 
       if (options.includeFinanceiro) {
         exportData.data.financeiro = {
-          contasReceber: await prisma.contas_receber.findMany({
-            where: { clinic_id: clinicId },
-          }),
-          contasPagar: await prisma.contas_pagar.findMany({
-            where: { clinic_id: clinicId },
-          }),
+          contasReceber: await this.repo.findContasReceberByClinic(clinicId as string),
+          contasPagar: await this.repo.findContasPagarByClinic(clinicId as string),
         };
       }
 
       // We would log to audit_logs, assuming audit_logs table exists
       try {
-        await (prisma as any).audit_logs.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          data: {
-            clinic_id: clinicId,
-            user_id: userId,
-            action: "DATA_EXPORT",
-            details: {
-              options,
-              recordsExported: {
-                modules: exportData.data.modules?.length || 0,
-                patients: exportData.data.patientCount || 0,
-                appointments: exportData.data.appointments?.length || 0,
-              },
+        await this.repo.createAuditLog({
+          clinic_id: clinicId,
+          user_id: userId,
+          action: "DATA_EXPORT",
+          details: {
+            options,
+            recordsExported: {
+              modules: exportData.data.modules?.length || 0,
+              patients: exportData.data.patientCount || 0,
+              appointments: exportData.data.appointments?.length || 0,
             },
           },
         });
@@ -159,9 +127,7 @@ export class ReportController {
           .json({ error: "Unauthorized: Missing clinicId or userId" });
       }
 
-      const userProfile = await (prisma as any).profiles.findUnique({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: userId },
-      });
+      const userProfile = await this.repo.findProfileById(userId as string);
       if (userProfile?.role !== "ADMIN" && userProfile?.role !== "MANAGER") {
         return res
           .status(403)
@@ -197,29 +163,16 @@ export class ReportController {
       if (importData.data.modules && Array.isArray(importData.data.modules)) {
         for (const moduleData of importData.data.modules) {
           try {
-            const catalogModule = await (
-              prisma as any // eslint-disable-line @typescript-eslint/no-explicit-any
-            ).module_catalog.findFirst({
-              where: { module_key: moduleData.module_catalog?.module_key },
-            });
+            const catalogModule = await this.repo.findModuleCatalogByKey(
+              moduleData.module_catalog?.module_key
+            );
 
             if (catalogModule) {
-              await (prisma as any).clinic_modules.upsert({ // eslint-disable-line @typescript-eslint/no-explicit-any
-                where: {
-                  clinic_id_module_catalog_id: {
-                    clinic_id: clinicId,
-                    module_catalog_id: catalogModule.id,
-                  },
-                },
-                update: {
-                  is_active: moduleData.is_active,
-                },
-                create: {
-                  clinic_id: clinicId,
-                  module_catalog_id: catalogModule.id,
-                  is_active: moduleData.is_active,
-                },
-              });
+              await this.repo.upsertClinicModule(
+                clinicId as string,
+                catalogModule.id,
+                moduleData.is_active
+              );
               results.imported.modules++;
             }
           } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -235,14 +188,12 @@ export class ReportController {
       ) {
         for (const prontuario of importData.data.prontuarios) {
           try {
-            const inserted = await prisma.prontuarios.create({
-              data: {
-                ...prontuario,
-                clinic_id: clinicId,
-                id: undefined,
-                created_at: undefined,
-                updated_at: undefined,
-              },
+            const inserted = await this.repo.createProntuario({
+              ...prontuario,
+              clinic_id: clinicId,
+              id: undefined,
+              created_at: undefined,
+              updated_at: undefined,
             });
 
             results.imported.prontuarios++;
@@ -256,12 +207,10 @@ export class ReportController {
               );
 
               for (const odonto of odontogramasOriginal) {
-                await prisma.pep_odontograma.create({
-                  data: {
-                    ...odonto,
-                    prontuario_id: inserted.id,
-                    id: undefined,
-                  },
+                await this.repo.createPepOdontograma({
+                  ...odonto,
+                  prontuario_id: inserted.id,
+                  id: undefined,
                 });
               }
             }
@@ -278,19 +227,17 @@ export class ReportController {
       }
 
       try {
-        await (prisma as any).audit_logs.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          data: {
-            clinic_id: clinicId,
-            user_id: userId,
-            action: "DATA_IMPORT",
-            details: {
-              sourceClinicId: importData.clinicId,
-              options,
-              results: {
-                imported: results.imported,
-                errorsCount: results.errors.length,
-                skippedCount: results.skipped.length,
-              },
+        await this.repo.createAuditLog({
+          clinic_id: clinicId,
+          user_id: userId,
+          action: "DATA_IMPORT",
+          details: {
+            sourceClinicId: importData.clinicId,
+            options,
+            results: {
+              imported: results.imported,
+              errorsCount: results.errors.length,
+              skippedCount: results.skipped.length,
             },
           },
         });

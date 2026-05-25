@@ -91,11 +91,11 @@ export const useFinanceiro = () => {
 
   // Transações pendentes
   const pendingTransactions =
-    data?.transactions.filter((t) => t.status === "PENDENTE") || [];
+    data?.transactions?.filter((t) => t.status === "PENDENTE") || [];
 
   // Transações vencidas
   const overdueTransactions =
-    data?.transactions.filter((t) => t.status === "VENCIDO") || [];
+    data?.transactions?.filter((t) => t.status === "VENCIDO") || [];
 
   return {
     transactions: data?.transactions || [],

@@ -152,9 +152,10 @@ export const useSidebarStore = create<SidebarState>()((set, get) => ({
 function useSidebarPersistence(
   userId: string | undefined,
   clinicId: string | null,
-  store: SidebarState,
 ): void {
   const storageKeyRef = useRef<string>("")
+  const setExpandedGroups = useSidebarStore((s) => s.setExpandedGroups)
+  const expandedGroups = useSidebarStore((s) => s.expandedGroups)
 
   // Load persisted state on user/clinic change
   useEffect(() => {
@@ -167,7 +168,7 @@ function useSidebarPersistence(
       groups = migrateLegacyState(key)
     }
 
-    store.setExpandedGroups(groups ?? [])
+    setExpandedGroups(groups ?? [])
 
     console.info("[sidebar:metric] init", {
       durationMs: Math.round(performance.now() - initStart),
@@ -175,14 +176,14 @@ function useSidebarPersistence(
       userId,
       clinicId,
     })
-  }, [userId, clinicId, store])
+  }, [userId, clinicId, setExpandedGroups])
 
   // Persist state on every change
   useEffect(() => {
     const key = storageKeyRef.current
     if (!key) return
-    savePersistedState(key, store.expandedGroups)
-  }, [store.expandedGroups])
+    savePersistedState(key, expandedGroups)
+  }, [expandedGroups])
 }
 
 /**
@@ -190,15 +191,16 @@ function useSidebarPersistence(
  */
 function useSidebarAutoExpand(
   pathname: string,
-  store: SidebarState,
   manuallyCollapsedRef: React.RefObject<Set<string>>,
 ): void {
+  const expandGroup = useSidebarStore((s) => s.expandGroup)
+
   useEffect(() => {
     const active = getActiveBoundedContext(pathname)
     if (active && !manuallyCollapsedRef.current?.has(active)) {
-      store.expandGroup(active)
+      expandGroup(active)
     }
-  }, [pathname, store, manuallyCollapsedRef])
+  }, [pathname, expandGroup, manuallyCollapsedRef])
 }
 
 /**
@@ -215,8 +217,8 @@ export function useSidebarCategory(): Pick<
   const store = useSidebarStore()
   const manuallyCollapsedRef = useRef<Set<string>>(new Set())
 
-  useSidebarPersistence(user?.id, clinicId, store)
-  useSidebarAutoExpand(pathname, store, manuallyCollapsedRef)
+  useSidebarPersistence(user?.id, clinicId)
+  useSidebarAutoExpand(pathname, manuallyCollapsedRef)
 
   const toggleGroup = useCallback(
     (boundedContext: string) => {

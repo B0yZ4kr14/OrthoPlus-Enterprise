@@ -1,5 +1,5 @@
 import { logger } from "@/infrastructure/logger";
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { CryptoRepository } from "@/modules/crypto/infrastructure/CryptoRepository";
 import { Request, Response } from "express";
 import { fetchExchangeRateBRL } from "./exchangeRate";
 
@@ -16,6 +16,7 @@ const handleError = (
 };
 
 export class CryptoController {
+  private repo = new CryptoRepository()
   /**
    * Endpoint to convert crypto to BRL.
    */
@@ -27,9 +28,7 @@ export class CryptoController {
         return res.status(400).json({ error: "transactionId is required" });
       }
 
-      const transaction = await prisma.crypto_transactions.findUnique({
-        where: { id: transactionId },
-      });
+      const transaction = await this.repo.findTransactionById(transactionId);
 
       if (!transaction) {
         return res.status(404).json({ error: "Transaction not found" });
@@ -49,29 +48,27 @@ export class CryptoController {
       const amountBrl = Math.round(transaction.amount * exchangeRate);
       const convertedAt = new Date().toISOString();
 
-      const updatedTransaction = await prisma.crypto_transactions.update({
-        where: { id: transactionId },
-        data: {
+      const updatedTransaction = await this.repo.updateTransaction(
+        transactionId,
+        {
           status: "CONVERTIDO",
           price_brl: amountBrl,
-        },
-      });
+        }
+      );
 
-      await prisma.audit_logs.create({
-        data: {
-          clinic_id: transaction.clinic_id,
-          action: "CRYPTO_CONVERTED_TO_BRL",
-          ip_address: { ip: req.ip || "unknown" },
-          details: {
-            transaction_id: transactionId,
-            coin: transaction.coin,
-            amount: transaction.amount,
-            amount_brl: amountBrl,
-            exchange_rate: exchangeRate,
-            converted_at: convertedAt,
-            status_before: transaction.status,
-            status_after: updatedTransaction.status,
-          },
+      await this.repo.createAuditLog({
+        clinic_id: transaction.clinic_id,
+        action: "CRYPTO_CONVERTED_TO_BRL",
+        ip_address: { ip: req.ip || "unknown" },
+        details: {
+          transaction_id: transactionId,
+          coin: transaction.coin,
+          amount: transaction.amount,
+          amount_brl: amountBrl,
+          exchange_rate: exchangeRate,
+          converted_at: convertedAt,
+          status_before: transaction.status,
+          status_after: updatedTransaction.status,
         },
       });
 
@@ -112,34 +109,30 @@ export class CryptoController {
       const exchangeRate = await fetchExchangeRateBRL(coin);
       const amountBrl = Math.round(parsedAmount * exchangeRate);
 
-      const invoice = await prisma.crypto_transactions.create({
-        data: {
-          amount: Math.round(parsedAmount),
-          coin,
-          clinic_id: clinicId,
-          wallet_id: walletId ?? null,
-          status: "PENDENTE",
-          type: "INVOICE",
-          price_brl: amountBrl,
-          fee: parsedFee !== undefined && Number.isFinite(parsedFee) ? Math.round(parsedFee) : null,
-          tx_hash: reference ?? null,
-        },
+      const invoice = await this.repo.createTransaction({
+        amount: Math.round(parsedAmount),
+        coin,
+        clinic_id: clinicId,
+        wallet_id: walletId ?? null,
+        status: "PENDENTE",
+        type: "INVOICE",
+        price_brl: amountBrl,
+        fee: parsedFee !== undefined && Number.isFinite(parsedFee) ? Math.round(parsedFee) : null,
+        tx_hash: reference ?? null,
       });
 
-      await prisma.audit_logs.create({
-        data: {
-          clinic_id: clinicId,
-          action: "CRYPTO_INVOICE_CREATED",
-          ip_address: { ip: req.ip || "unknown" },
-          details: {
-            invoice_id: invoice.id,
-            coin,
-            amount: invoice.amount,
-            price_brl: invoice.price_brl,
-            wallet_id: invoice.wallet_id,
-            reference: reference ?? null,
-            exchange_rate: exchangeRate,
-          },
+      await this.repo.createAuditLog({
+        clinic_id: clinicId,
+        action: "CRYPTO_INVOICE_CREATED",
+        ip_address: { ip: req.ip || "unknown" },
+        details: {
+          invoice_id: invoice.id,
+          coin,
+          amount: invoice.amount,
+          price_brl: invoice.price_brl,
+          wallet_id: invoice.wallet_id,
+          reference: reference ?? null,
+          exchange_rate: exchangeRate,
         },
       });
 

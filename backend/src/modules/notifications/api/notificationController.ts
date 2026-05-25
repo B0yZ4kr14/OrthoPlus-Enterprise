@@ -1,4 +1,5 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
+import { NotificationRepository } from "@/modules/notifications/infrastructure/NotificationRepository";
 import { NextFunction, Request, Response } from "express";
 import nodemailer from "nodemailer";
 import { logger } from "@/infrastructure/logger";
@@ -27,6 +28,7 @@ function createMailTransport() {
 const mailer = createMailTransport();
 
 export class NotificationController {
+  private repo = new NotificationRepository()
   /**
    * Auto Notifications (Cron-like endpoint)
    * Handles: upcoming appointments, overdue payments, low stock, birthdays
@@ -42,27 +44,19 @@ export class NotificationController {
       const tomorrowStart = new Date(tomorrow.setHours(0, 0, 0, 0));
       const tomorrowEnd = new Date(tomorrow.setHours(23, 59, 59, 999));
 
-      const upcomingAppointments = await prisma.appointments.findMany({
-        where: {
-          start_time: { gte: tomorrowStart.toISOString(), lte: tomorrowEnd.toISOString() },
-          status: 'agendado',
-        },
-        include: {
-          patient: { select: { full_name: true } },
-        },
-        take: 1000,
-      });
+      const upcomingAppointments = await this.repo.findUpcomingAppointments(
+        tomorrowStart.toISOString(),
+        tomorrowEnd.toISOString()
+      );
 
       for (const app of upcomingAppointments) {
-        await prisma.notifications.create({
-          data: {
-            clinic_id: app.clinic_id,
-            tipo: 'CONSULTA',
-            titulo: 'Consulta Amanhã',
-            mensagem: `Consulta agendada com ${app.patient?.full_name || 'paciente'}`,
-            link_acao: '/agenda',
-            lida: false,
-          },
+        await this.repo.createNotification({
+          clinic_id: app.clinic_id,
+          tipo: 'CONSULTA',
+          titulo: 'Consulta Amanhã',
+          mensagem: `Consulta agendada com ${app.patient?.full_name || 'paciente'}`,
+          link_acao: '/agenda',
+          lida: false,
         });
         notificationsCreated++;
       }
@@ -82,15 +76,13 @@ export class NotificationController {
       `;
 
       for (const payment of overduePayments) {
-        await prisma.notifications.create({
-          data: {
-            clinic_id: payment.clinic_id,
-            tipo: 'PAGAMENTO',
-            titulo: 'Pagamento Vencido',
-            mensagem: `Pagamento vencido - Paciente: ${payment.patient_name || 'N/A'}`,
-            link_acao: '/financeiro/contas-receber',
-            lida: false,
-          },
+        await this.repo.createNotification({
+          clinic_id: payment.clinic_id,
+          tipo: 'PAGAMENTO',
+          titulo: 'Pagamento Vencido',
+          mensagem: `Pagamento vencido - Paciente: ${payment.patient_name || 'N/A'}`,
+          link_acao: '/financeiro/contas-receber',
+          lida: false,
         });
         notificationsCreated++;
       }
@@ -102,15 +94,13 @@ export class NotificationController {
       `;
 
       for (const product of lowStockProducts) {
-        await prisma.notifications.create({
-          data: {
-            clinic_id: product.clinic_id,
-            tipo: 'ALERTA',
-            titulo: 'Estoque Baixo',
-            mensagem: `Produto "${product.nome}" com estoque baixo (${product.quantidade_atual} un)`,
-            link_acao: '/estoque',
-            lida: false,
-          },
+        await this.repo.createNotification({
+          clinic_id: product.clinic_id,
+          tipo: 'ALERTA',
+          titulo: 'Estoque Baixo',
+          mensagem: `Produto "${product.nome}" com estoque baixo (${product.quantidade_atual} un)`,
+          link_acao: '/estoque',
+          lida: false,
         });
         notificationsCreated++;
       }
@@ -130,15 +120,13 @@ export class NotificationController {
       `;
 
       for (const patient of birthdayPatients) {
-        await prisma.notifications.create({
-          data: {
-            clinic_id: patient.clinic_id,
-            tipo: 'LEMBRETE',
-            titulo: '🎂 Aniversariante do Dia',
-            mensagem: `Hoje é aniversário de ${patient.patient_name || 'um paciente'}!`,
-            link_acao: '/pacientes',
-            lida: false,
-          },
+        await this.repo.createNotification({
+          clinic_id: patient.clinic_id,
+          tipo: 'LEMBRETE',
+          titulo: '🎂 Aniversariante do Dia',
+          mensagem: `Hoje é aniversário de ${patient.patient_name || 'um paciente'}!`,
+          link_acao: '/pacientes',
+          lida: false,
         });
         notificationsCreated++;
       }
@@ -166,24 +154,20 @@ export class NotificationController {
         return;
       }
 
-      const notif = await (prisma as any).notifications.create({
-        data: {
-          clinic_id,
-          user_id: user_id || null,
-          tipo,
-          titulo,
-          mensagem,
-          link_acao: link_acao || null,
-        },
+      const notif = await this.repo.createNotification({
+        clinic_id,
+        user_id: user_id || null,
+        tipo,
+        titulo,
+        mensagem,
+        link_acao: link_acao || null,
       });
 
-      await (prisma as any).audit_logs.create({
-        data: {
-          clinic_id,
-          user_id: user_id || null,
-          action: "NOTIFICATION_CREATED",
-          details: { tipo, titulo, notification_id: notif.id },
-        },
+      await this.repo.createAuditLog({
+        clinic_id,
+        user_id: user_id || null,
+        action: "NOTIFICATION_CREATED",
+        details: { tipo, titulo, notification_id: notif.id },
       });
 
       res.json({ success: true, notification: notif });
@@ -201,13 +185,7 @@ export class NotificationController {
     next: NextFunction,
   ) {
     try {
-      const alerts = await (prisma as any).crypto_price_alerts.findMany({
-        where: {
-          alert_type: "VOLATILITY",
-          is_active: true,
-        },
-        take: 100,
-      });
+      const alerts = await this.repo.findActiveVolatilityAlerts();
 
       if (!alerts || alerts.length === 0) {
         res.json({ message: "No active alerts" });
@@ -266,19 +244,16 @@ export class NotificationController {
             shouldTrigger = true;
 
           if (shouldTrigger) {
-            await (prisma as any).crypto_price_alerts.update({
-              where: { id: alert.id },
-              data: { last_triggered_at: new Date().toISOString() },
+            await this.repo.updateCryptoAlert(alert.id, {
+              last_triggered_at: new Date().toISOString(),
             });
 
-            await (prisma as any).notifications.create({
-              data: {
-                clinic_id: alert.clinic_id,
-                tipo: "CRIPTO_VOLATILIDADE",
-                titulo: `Alerta de Volatilidade: ${alert.coin_type}`,
-                mensagem: `${alert.coin_type} variou ${changePercentage.toFixed(2)}%`,
-                link_acao: "/financeiro/crypto-pagamentos",
-              },
+            await this.repo.createNotification({
+              clinic_id: alert.clinic_id,
+              tipo: "CRIPTO_VOLATILIDADE",
+              titulo: `Alerta de Volatilidade: ${alert.coin_type}`,
+              mensagem: `${alert.coin_type} variou ${changePercentage.toFixed(2)}%`,
+              link_acao: "/financeiro/crypto-pagamentos",
             });
 
             triggeredAlerts.push({
@@ -330,22 +305,14 @@ export class NotificationController {
 
       for (const alert of alerts) {
         if (alert.cascade_enabled && alert.cascade_order > 1) {
-          const previousAlerts = await prisma.crypto_price_alerts.findMany({
-            where: {
-              cascade_group_id: alert.cascade_group_id,
-              cascade_order: { lt: alert.cascade_order },
-              last_triggered_at: null,
-            },
-            select: { id: true },
-          });
+          const previousAlerts = await this.repo.findCryptoAlertsByCascadeGroup(
+            alert.cascade_group_id,
+            alert.cascade_order
+          );
           if (previousAlerts.length > 0) continue;
         }
 
-        const latestRate = await prisma.crypto_exchange_rates.findFirst({
-          where: { coin_type: alert.coin_type },
-          orderBy: { timestamp: 'desc' },
-          select: { rate_brl: true },
-        });
+        const latestRate = await this.repo.findLatestCryptoRate(alert.coin_type);
 
         if (!latestRate) continue;
         const currentRate = latestRate.rate_brl;
@@ -391,20 +358,17 @@ export class NotificationController {
           }
         }
 
-        await (prisma as any).crypto_price_alerts.update({
-          where: { id: alert.id },
-          data: { last_triggered_at: new Date().toISOString() },
+        await this.repo.updateCryptoAlert(alert.id, {
+          last_triggered_at: new Date().toISOString(),
         });
 
-        await (prisma as any).notifications.create({
-          data: {
-            clinic_id: alert.clinic_id,
-            user_id: alert.created_by,
-            tipo: "CRYPTO_ALERT",
-            titulo: `Taxa ${alert.coin_type} Atingida`,
-            mensagem: `A taxa atingiu ${currentRate}`,
-            link_acao: "/financeiro/crypto-pagamentos",
-          },
+        await this.repo.createNotification({
+          clinic_id: alert.clinic_id,
+          user_id: alert.created_by,
+          tipo: "CRYPTO_ALERT",
+          titulo: `Taxa ${alert.coin_type} Atingida`,
+          mensagem: `A taxa atingiu ${currentRate}`,
+          link_acao: "/financeiro/crypto-pagamentos",
         });
       }
 
@@ -433,13 +397,7 @@ export class NotificationController {
       const clinic_id = req.user?.clinicId;
       const user_id = req.user?.id || null;
 
-      const admins = await prisma.users.findMany({
-        where: {
-          clinic_id: clinic_id || undefined,
-          role: 'ADMIN',
-        },
-        select: { email: true },
-      });
+      const admins = await this.repo.findAdminsByClinic(clinic_id);
 
       const adminEmails = admins.map((a) => a.email).filter(Boolean);
 
@@ -462,13 +420,11 @@ export class NotificationController {
           logger.error("Email failed", e);
         }
 
-        await (prisma as any).audit_logs.create({
-          data: {
-            clinic_id,
-            user_id,
-            action: "ALERTAS_REPOSICAO_ENVIADOS",
-            details: { total_produtos: previsoes.length },
-          },
+        await this.repo.createAuditLog({
+          clinic_id,
+          user_id,
+          action: "ALERTAS_REPOSICAO_ENVIADOS",
+          details: { total_produtos: previsoes.length },
         });
       }
 
@@ -510,24 +466,20 @@ export class NotificationController {
             ? `CRÍTICO: ${p.nome} sem estoque!`
             : `Estoque mínimo: ${p.nome}`;
 
-        await (prisma as any).estoque_alertas.create({
-          data: {
-            produto_id: p.id,
-            tipo: tipoAlerta,
-            mensagem: msg,
-            quantidade_atual: p.quantidade_atual,
-            quantidade_sugerida: p.quantidade_minima * 2,
-            lido: false,
-            clinic_id: p.clinic_id,
-          },
+        await this.repo.createStockAlert({
+          produto_id: p.id,
+          tipo: tipoAlerta,
+          mensagem: msg,
+          quantidade_atual: p.quantidade_atual,
+          quantidade_sugerida: p.quantidade_minima * 2,
+          lido: false,
+          clinic_id: p.clinic_id,
         });
 
-        await (prisma as any).audit_logs.create({
-          data: {
-            clinic_id: p.clinic_id,
-            action: "STOCK_ALERT_SENT",
-            details: { produto: p.nome, tipo_alerta: tipoAlerta },
-          },
+        await this.repo.createAuditLog({
+          clinic_id: p.clinic_id,
+          action: "STOCK_ALERT_SENT",
+          details: { produto: p.nome, tipo_alerta: tipoAlerta },
         });
 
         alertasEnviados.push({

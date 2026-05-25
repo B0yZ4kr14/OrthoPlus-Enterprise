@@ -5,6 +5,9 @@
  * implementations across backend modules.
  */
 
+import dotenv from "dotenv";
+dotenv.config();
+
 import { PostgresDatabaseConnection } from './PostgresDatabaseConnection';
 
 if (!process.env.DB_PASSWORD) {

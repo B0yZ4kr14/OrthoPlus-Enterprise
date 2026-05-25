@@ -6,7 +6,7 @@ import { defineConfig, devices } from "@playwright/test";
  */
 export default defineConfig({
   testDir: "./tests/e2e",
-  globalSetup: "./tests/e2e/global-setup.ts",
+  // globalSetup removed — using project dependency + storageState instead
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -31,25 +31,46 @@ export default defineConfig({
   },
 
   projects: [
+    { name: "setup", testMatch: /auth\.setup\.ts/ },
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
     },
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      use: {
+        ...devices["Desktop Firefox"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
     },
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      use: {
+        ...devices["Desktop Safari"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
     },
     {
       name: "Mobile Chrome",
-      use: { ...devices["Pixel 5"] },
+      use: {
+        ...devices["Pixel 5"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
     },
     {
       name: "Mobile Safari",
-      use: { ...devices["iPhone 12"] },
+      use: {
+        ...devices["iPhone 12"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
     },
   ],
 
@@ -62,7 +83,7 @@ export default defineConfig({
       timeout: 60000,
     },
     {
-      command: "python3 tests/e2e/test-server.py 8080",
+      command: "cd apps/web && pnpm preview --port 8080 --host",
       url: "http://localhost:8080/OrthoPlus-Enterprise/",
       reuseExistingServer: !process.env.CI,
       timeout: 60000,

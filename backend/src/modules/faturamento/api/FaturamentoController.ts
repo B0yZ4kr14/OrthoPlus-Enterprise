@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { FaturamentoRepository } from "@/modules/faturamento/infrastructure/FaturamentoRepository";
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { logger } from '@/infrastructure/logger';
@@ -15,6 +15,7 @@ const createNFeSchema = z.object({
 });
 
 export class FaturamentoController {
+  private repo = new FaturamentoRepository()
   createNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const validatedData = createNFeSchema.parse(req.body);
     const clinicId = req.user?.clinicId;
@@ -23,14 +24,12 @@ export class FaturamentoController {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
 
-    await prisma.nfe_records.create({
-      data: {
-        clinic_id: clinicId,
-        chave_acesso: validatedData.chaveAcesso,
-        valor_total: validatedData.valorTotal,
-        tipo_nota: validatedData.tipoNota,
-        status: "PROCESSANDO",
-      },
+    await this.repo.createNFe({
+      clinic_id: clinicId,
+      chave_acesso: validatedData.chaveAcesso,
+      valor_total: validatedData.valorTotal,
+      tipo_nota: validatedData.tipoNota,
+      status: "PROCESSANDO",
     }).catch(err => logger.debug('NFE create error', err));
 
     logger.info('NFe created', { clinicId, chaveAcesso: validatedData.chaveAcesso });
@@ -46,7 +45,7 @@ export class FaturamentoController {
 
     let nfes: any[] = [];
     try {
-      nfes = await prisma.nfe_records.findMany({ where: { clinic_id: clinicId } });
+      nfes = await this.repo.findNFesByClinic(clinicId);
     } catch (err) {
       logger.debug('NFE findMany error', err);
     }
@@ -63,9 +62,10 @@ export class FaturamentoController {
       throw Errors.validation("Protocolo and XML are required");
     }
 
-    await prisma.nfe_records.updateMany({
-      where: { id },
-      data: { status: "AUTORIZADA", protocolo, xml_autorizacao: xml },
+    await this.repo.updateNFeStatus(id, {
+      status: "AUTORIZADA",
+      protocolo,
+      xml_autorizacao: xml,
     }).catch(err => logger.debug('NFE autorizar error', err));
 
     logger.info('NFe authorized', { id, protocolo });
@@ -80,9 +80,10 @@ export class FaturamentoController {
       throw Errors.validation("Motivo is required");
     }
 
-    await prisma.nfe_records.updateMany({
-      where: { id },
-      data: { status: "CANCELADA", motivo_cancelamento: motivo, data_cancelamento: new Date() },
+    await this.repo.updateNFeStatus(id, {
+      status: "CANCELADA",
+      motivo_cancelamento: motivo,
+      data_cancelamento: new Date(),
     }).catch(err => logger.debug('NFE cancelar error', err));
 
     logger.info('NFe canceled', { id, motivo });

@@ -10,14 +10,18 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 1
+    },
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/tests/e2e",
@@ -31,7 +35,9 @@
         "outputDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "firefox",
         "name": "firefox",
         "testDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/tests/e2e",
@@ -45,7 +51,9 @@
         "outputDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "webkit",
         "name": "webkit",
         "testDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/tests/e2e",
@@ -59,7 +67,9 @@
         "outputDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/tests/e2e",
@@ -73,7 +83,9 @@
         "outputDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "/home/b0yz4kr14/Projects/OrthoPlus-Enterprise/tests/e2e",
@@ -112,20 +124,65 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.60.0",
-    "workers": 11,
+    "workers": 1,
     "webServer": null
   },
-  "suites": [],
-  "errors": [
+  "suites": [
     {
-      "message": "Error: Timed out waiting 60000ms from config.webServer.",
-      "stack": "Error: Timed out waiting 60000ms from config.webServer."
+      "title": "debug-smoke.spec.ts",
+      "file": "debug-smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "debug api call from page",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3319,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "API result: {\n  status: \u001b[33m200\u001b[39m,\n  body: \u001b[32m'<!doctype html>\\n'\u001b[39m +\n    \u001b[32m'<html lang=\"pt-BR\">\\n'\u001b[39m +\n    \u001b[32m'  <head>\\n'\u001b[39m +\n    \u001b[32m'    <meta charset=\"UTF-8\" />\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/OrthoPlus-Enterprise/orthoplus-logo-enterprise.svg\" />\\n'\u001b[39m +\n    \u001b[32m'    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\\n'\u001b[39m +\n    \u001b[32m'    <meta name=\"description\" content=\"OrthoPlus Enterprise — Sistema completo de gestão clínica, financeira e comercial para clínicas odontológicas. Multi-clínica. Multi-tenant. Seguro.\" />\\n'\u001b[39m +\n    \u001b[32m'    <title>OrthoPlus Enterprise</title>\\n'\u001b[39m +\n    \u001b[32m'    <script type=\"module\" crossorigin src=\"/OrthoPlus-Enterprise/assets/index-Ba4H8AOu.js\"></script>\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/rolldown-runtime-Djccxexk.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/pdf-DBY3txNg.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/forms-BmdFKWbI.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/radix-ui-BK4m21TF.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/charts-DnMbJ-nC.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/react-dom-BUMm45T4.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/card-CskGnzk4.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/badge-O-Mr32va.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/button-CZng1Pv3.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/dialog-A7_Nt5qe.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/lucide-DChGCqXp.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/select-C_sWPMwt.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/textarea-C93DAvC-.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/scroll-area-CRGWERMZ.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/switch-MEzWtLsX.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/table-Cr49WIWU.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/tabs-CCx0A4zQ.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/date-utils-auZBd7hb.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/src-BFr8LahX.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/PageHeader-DhIswTo3.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"modulepreload\" crossorigin href=\"/OrthoPlus-Enterprise/assets/validation-DTs6YXv-.js\">\\n'\u001b[39m +\n    \u001b[32m'    <link rel=\"stylesheet\" crossorigin href=\"/OrthoPlus-Enterprise/assets/index-CO89mBn8.css\">\\n'\u001b[39m +\n    \u001b[32m'  </head>\\n'\u001b[39m +\n    \u001b[32m'  <body>\\n'\u001b[39m +\n    \u001b[32m'    <div id=\"root\"></div>\\n'\u001b[39m +\n    \u001b[32m'  </body>\\n'\u001b[39m +\n    \u001b[32m'</html>\\n'\u001b[39m\n}\n"
+                    },
+                    {
+                      "text": "URL: http://localhost:8080/OrthoPlus-Enterprise/auth\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-05-25T18:11:53.852Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5cde9e7fd55b23e46c1f-26e537273fbf55883c1e",
+          "file": "debug-smoke.spec.ts",
+          "line": 3,
+          "column": 1
+        }
+      ]
     }
   ],
+  "errors": [],
   "stats": {
-    "startTime": "2026-05-24T19:03:51.163Z",
-    "duration": 60329.756,
-    "expected": 0,
+    "startTime": "2026-05-25T18:11:52.697Z",
+    "duration": 4575.555,
+    "expected": 1,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import { apiClient } from "@/lib/api/apiClient";
 import {
   Card,
   CardContent,
@@ -25,7 +23,6 @@ import {
   PopoverTrigger,
 } from "@orthoplus/core-ui/popover";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { TableFilter } from "@/components/shared/TableFilter";
 import {
   Shield,
   Calendar as CalendarIcon,
@@ -40,123 +37,29 @@ import {
 import { StatsCard } from "@/components/shared/StatsCard";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
-
-interface AuditLog {
-  id: number;
-  created_at: string;
-  user_id: string;
-  clinic_id: string;
-  action: string;
-  details: Record<string, any>;
-  target_module_id: number | null;
-  profiles?: { full_name: string | null } | null;
-}
-
-interface User {
-  id: string;
-  full_name: string | null;
-}
+import { useAuditLogs } from "@/hooks/api/useAuditLogs";
 
 export default function AuditLogs() {
   const { hasRole, clinicId } = useAuth();
-  const [logs, setLogs] = useState<AuditLog[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Filtros
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUser, setSelectedUser] = useState<string>("all");
-  const [selectedAction, setSelectedAction] = useState<string>("all");
-  const [dateFrom, setDateFrom] = useState<Date | undefined>();
-  const [dateTo, setDateTo] = useState<Date | undefined>();
-
-  /* eslint-disable react-hooks/exhaustive-deps -- data-fetching functions capture deps from closure */
-  useEffect(() => {
-    if (hasRole("ADMIN")) {
-      loadUsers();
-      loadLogs();
-    }
-  }, [hasRole, clinicId]);
-  /* eslint-enable react-hooks/exhaustive-deps */
-
-  const loadUsers = async () => {
-    try {
-      const data = await apiClient.get<User[]>("/usuarios");
-      setUsers(data || []);
-    } catch (error: unknown) {
-      console.error("Erro ao carregar usuários:", error);
-    }
-  };
-
-  const loadLogs = async () => {
-    try {
-      setLoading(true);
-
-      const params = new URLSearchParams();
-      if (selectedUser !== "all") params.append("user_id", selectedUser);
-      if (selectedAction !== "all") params.append("action", selectedAction);
-      if (dateFrom) params.append("from", dateFrom.toISOString());
-      if (dateTo) params.append("to", dateTo.toISOString());
-
-      const data = await apiClient.get<AuditLog[]>(
-        `/db/audit_logs?${params.toString()}`,
-      );
-      setLogs(data || []);
-    } catch (error: unknown) {
-      console.error("Erro ao carregar logs:", error);
-      toast.error("Erro ao carregar logs de auditoria");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSearch = () => {
-    loadLogs();
-  };
-
-  const handleClearFilters = () => {
-    setSearchTerm("");
-    setSelectedUser("all");
-    setSelectedAction("all");
-    setDateFrom(undefined);
-    setDateTo(undefined);
-    loadLogs();
-  };
-
-  const exportLogs = () => {
-    const csvContent = [
-      ["Data/Hora", "Usuário", "Ação", "Detalhes"].join(","),
-      ...logs.map((log) =>
-        [
-          format(new Date(log.created_at), "dd/MM/yyyy HH:mm:ss", {
-            locale: ptBR,
-          }),
-          log.profiles?.full_name ||
-            users.find((u) => u.id === log.user_id)?.full_name ||
-            log.user_id,
-          log.action,
-          JSON.stringify(log.details),
-        ].join(","),
-      ),
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-
-    link.setAttribute("href", url);
-    link.setAttribute("download", `audit_logs_${Date.now()}.csv`);
-    link.style.visibility = "hidden";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    toast.success("Logs exportados com sucesso!");
-  };
+  const {
+    logs,
+    users,
+    isLoading,
+    searchTerm,
+    setSearchTerm,
+    selectedUser,
+    setSelectedUser,
+    selectedAction,
+    setSelectedAction,
+    dateFrom,
+    setDateFrom,
+    dateTo,
+    setDateTo,
+    handleClearFilters,
+    exportLogs,
+  } = useAuditLogs(clinicId ?? undefined, hasRole("ADMIN"));
 
   const getActionColor = (action: string) => {
     if (action.includes("DELETE") || action.includes("DEACTIVATE"))
@@ -340,7 +243,10 @@ export default function AuditLogs() {
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={handleSearch} className="flex-1">
+            <Button
+              onClick={() => setSelectedUser(selectedUser)}
+              className="flex-1"
+            >
               <Search className="mr-2 h-4 w-4" />
               Aplicar Filtros
             </Button>
@@ -364,7 +270,7 @@ export default function AuditLogs() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {loading ? (
+          {isLoading ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">Carregando logs...</p>
             </div>

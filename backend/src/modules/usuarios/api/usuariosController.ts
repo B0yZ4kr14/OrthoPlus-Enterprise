@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { UsuariosRepository } from "@/modules/usuarios/infrastructure/UsuariosRepository";
 import { logger } from "@/infrastructure/logger";
 import bcrypt from "bcrypt";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -7,21 +7,15 @@ import { Request, Response } from "express";
 
 
 export class UsuariosController {
+  private repo = new UsuariosRepository()
   async list(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;
 
-      const profiles = await prisma.profiles.findMany({
-        where: { clinic_id: user?.clinicId },
-      });
+      const profiles = await this.repo.findProfilesByClinic(user?.clinicId as string);
 
       const profileIds = profiles.map((p: { id: string }) => p.id);
-      const users = profileIds.length > 0
-        ? await prisma.users.findMany({
-            where: { id: { in: profileIds } },
-            select: { id: true, email: true, last_sign_in_at: true },
-          })
-        : [];
+      const users = await this.repo.findUsersByIds(profileIds);
 
       const usersWithEmail = profiles.map((p: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
         const u = users.find((u) => u.id === p.id);
@@ -55,24 +49,20 @@ export class UsuariosController {
       const effectivePassword = password || randomBytes(24).toString("base64url");
       const hashedPassword = await bcrypt.hash(effectivePassword, 12);
 
-      const newUser = await prisma.users.create({
-        data: {
-          email,
-          password_hash: hashedPassword,
-          role: app_role || "MEMBER",
-          clinic_id: user.clinicId,
-          is_active: is_active ?? true,
-        },
+      const newUser = await this.repo.createUser({
+        email,
+        password_hash: hashedPassword,
+        role: app_role || "MEMBER",
+        clinic_id: user.clinicId,
+        is_active: is_active ?? true,
       });
 
-      await prisma.profiles.create({
-        data: {
-          id: newUser.id,
-          clinic_id: user.clinicId,
-          full_name,
-          app_role: app_role || "MEMBER",
-          is_active: is_active ?? true,
-        },
+      await this.repo.createProfile({
+        id: newUser.id,
+        clinic_id: user.clinicId,
+        full_name,
+        app_role: app_role || "MEMBER",
+        is_active: is_active ?? true,
       });
 
       res.status(201).json({ id: newUser.id });
@@ -90,24 +80,18 @@ export class UsuariosController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Auth required" }); return; }
 
-      const profile = await prisma.profiles.findFirst({ where: { id, clinic_id: clinicId } });
+      const profile = await this.repo.findProfileByIdAndClinic(id, clinicId);
       if (!profile) { res.status(404).json({ error: "User not found" }); return; }
 
-      await prisma.profiles.updateMany({
-        where: { id, clinic_id: clinicId },
-        data: {
-          ...(full_name !== undefined && { full_name }),
-          ...(app_role !== undefined && { app_role }),
-          ...(is_active !== undefined && { is_active }),
-        },
+      await this.repo.updateProfile(id, clinicId, {
+        ...(full_name !== undefined && { full_name }),
+        ...(app_role !== undefined && { app_role }),
+        ...(is_active !== undefined && { is_active }),
       });
 
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 12);
-        await prisma.users.update({
-          where: { id },
-          data: { password_hash: hashedPassword },
-        });
+        await this.repo.updateUser(id, { password_hash: hashedPassword });
       }
 
       res.json({ success: true });
@@ -125,18 +109,11 @@ export class UsuariosController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Auth required" }); return; }
 
-      const profile = await prisma.profiles.findFirst({ where: { id, clinic_id: clinicId } });
+      const profile = await this.repo.findProfileByIdAndClinic(id, clinicId);
       if (!profile) { res.status(404).json({ error: "User not found" }); return; }
 
-      await prisma.profiles.updateMany({
-        where: { id, clinic_id: clinicId },
-        data: { is_active },
-      });
-
-      await prisma.users.update({
-        where: { id },
-        data: { is_active },
-      });
+      await this.repo.updateProfile(id, clinicId, { is_active });
+      await this.repo.updateUser(id, { is_active });
 
       res.json({ success: true });
     } catch (error) {
@@ -152,11 +129,11 @@ export class UsuariosController {
       const clinicId = req.user?.clinicId;
       if (!clinicId) { res.status(401).json({ error: "Auth required" }); return; }
 
-      const profile = await prisma.profiles.findFirst({ where: { id, clinic_id: clinicId } });
+      const profile = await this.repo.findProfileByIdAndClinic(id, clinicId);
       if (!profile) { res.status(404).json({ error: "User not found" }); return; }
 
-      await prisma.profiles.deleteMany({ where: { id, clinic_id: clinicId } });
-      await prisma.users.delete({ where: { id } });
+      await this.repo.deleteProfilesByIdAndClinic(id, clinicId);
+      await this.repo.deleteUser(id);
 
       res.json({ success: true });
     } catch (error) {
@@ -171,12 +148,9 @@ export class UsuariosController {
       const user = req.user;
       const { full_name, avatar_url } = req.body;
 
-      await prisma.profiles.update({
-        where: { id: user?.id },
-        data: {
-          ...(full_name !== undefined && { full_name }),
-          ...(avatar_url !== undefined && { avatar_url }),
-        },
+      await this.repo.updateOwnProfile(user?.id as string, {
+        ...(full_name !== undefined && { full_name }),
+        ...(avatar_url !== undefined && { avatar_url }),
       });
 
       res.json({ success: true });

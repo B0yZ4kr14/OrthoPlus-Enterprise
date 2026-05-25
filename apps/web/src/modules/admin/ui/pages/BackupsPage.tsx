@@ -18,9 +18,7 @@ import {
   HardDrive,
 } from "lucide-react";
 import { StatsCard } from "@/components/shared/StatsCard";
-import { useState, useEffect } from "react";
-import { apiClient } from "@/lib/api/apiClient";
-import { toast } from "sonner";
+import { useBackupsPage } from "@/hooks/api/useBackupsPage";
 import { PageHeader } from "@/components/shared/PageHeader";
 
 interface Backup {
@@ -33,40 +31,7 @@ interface Backup {
 }
 
 export default function BackupsPage() {
-  const [backups, setBackups] = useState<Backup[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
-
-  const fetchBackups = async () => {
-    try {
-      setLoading(true);
-      const response = await apiClient.get<Backup[]>("/backups");
-      setBackups(response);
-    } catch (error) {
-      console.error("Error fetching backups:", error);
-      toast.error("Erro ao carregar backups");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const createBackup = async () => {
-    try {
-      setCreating(true);
-      await apiClient.post("/backups/create", { backup_type: "full" });
-      toast.success("Backup iniciado com sucesso");
-      fetchBackups();
-    } catch (error) {
-      console.error("Error creating backup:", error);
-      toast.error("Erro ao criar backup");
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBackups();
-  }, []);
+  const { backups, isLoading: loading, createBackup, isCreating: creating } = useBackupsPage();
 
   const formatFileSize = (bytes: number) => {
     const mb = bytes / (1024 * 1024);
@@ -112,7 +77,7 @@ export default function BackupsPage() {
         title="Backups" 
         description="Central de backups e restauração de dados" 
         actions={
-          <Button onClick={createBackup} disabled={creating}>
+          <Button onClick={() => createBackup()} disabled={creating}>
             {creating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

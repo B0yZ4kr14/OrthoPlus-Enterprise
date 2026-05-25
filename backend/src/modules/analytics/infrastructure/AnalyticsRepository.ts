@@ -5,6 +5,8 @@ import { prisma } from "@/infrastructure/database/prismaClient"
  */
 
 export class AnalyticsRepository {
+  // ── Dashboard Overview ────────────────────────────────────────────────
+
   async countPatients(clinicId: string): Promise<number> {
     try {
       return await (prisma as any).patients.count({
@@ -93,6 +95,8 @@ export class AnalyticsRepository {
       return 0
     }
   }
+
+  // ── Unified Metrics ───────────────────────────────────────────────────
 
   async aggregateRevenue(
     clinicId: string,
@@ -208,5 +212,126 @@ export class AnalyticsRepository {
     } catch {
       return 0
     }
+  }
+
+  // ── Marketing ROI ─────────────────────────────────────────────────────
+
+  async findPatientsWithMarketing(clinicId: string) {
+    return (prisma as any).patients.findMany({
+      where: { clinic_id: clinicId, marketingCampaign: { not: null } },
+      select: {
+        id: true,
+        marketingCampaign: true,
+        marketingSource: true,
+        createdAt: true,
+        status: true,
+      },
+      take: 1000,
+    });
+  }
+
+  async findMarketingCampaigns(clinicId: string) {
+    return (prisma as any).marketing_campaigns.findMany({
+      where: { clinic_id: clinicId },
+      select: {
+        id: true,
+        name: true,
+        budget: true,
+        targetAudience: true,
+        status: true,
+        createdAt: true,
+      },
+      take: 100,
+    });
+  }
+
+  // ── Loyalty Points ────────────────────────────────────────────────────
+
+  async findLoyaltyByPatient(clinicId: string, patientId: string) {
+    return prisma.fidelidade_pacientes.findFirst({
+      where: { clinic_id: clinicId, patient_id: patientId },
+    });
+  }
+
+  async createLoyalty(data: any) {
+    return prisma.fidelidade_pacientes.create({ data });
+  }
+
+  async updateLoyalty(id: string, data: any) {
+    return prisma.fidelidade_pacientes.update({ where: { id }, data });
+  }
+
+  async createLoyaltyTransaction(data: any) {
+    return prisma.fidelidade_transacoes.create({ data });
+  }
+
+  // ── Gamification ──────────────────────────────────────────────────────
+
+  async findActiveGamificationGoals(clinicId: string, userId: string) {
+    return prisma.gamification_goals.findMany({
+      where: {
+        clinic_id: clinicId,
+        user_id: userId,
+        status: "ACTIVE",
+        deadline: { gte: new Date() },
+      },
+      take: 1000,
+    });
+  }
+
+  async countAppointmentsByDentist(dentistId: string, startMonth: Date) {
+    return (prisma as any).appointments.count({
+      where: {
+        dentistId: dentistId,
+        status: "CONCLUIDA",
+        startTime: { gte: startMonth },
+      },
+    });
+  }
+
+  async updateGamificationGoal(id: string, data: any) {
+    return prisma.gamification_goals.update({ where: { id }, data });
+  }
+
+  // ── BI Export ─────────────────────────────────────────────────────────
+
+  async createBIExportJob(data: any) {
+    return prisma.bi_export_jobs.create({ data });
+  }
+
+  // ── Onboarding ────────────────────────────────────────────────────────
+
+  async createOnboardingAnalytics(data: any) {
+    return prisma.onboarding_analytics.create({ data });
+  }
+
+  // ── Sidebar Badges ────────────────────────────────────────────────────
+
+  async countAppointmentsToday(clinicId: string, todayStr: string, tomorrowStr: string) {
+    return prisma.appointments.count({
+      where: {
+        clinic_id: clinicId,
+        start_time: { gte: todayStr, lt: tomorrowStr },
+      },
+    });
+  }
+
+  async countOverdueContasReceber(clinicId: string, todayStr: string) {
+    return prisma.contas_receber.count({
+      where: {
+        clinic_id: clinicId,
+        data_vencimento: { lt: todayStr },
+        status: "PENDENTE",
+      },
+    });
+  }
+
+  async countRecallsToday(clinicId: string, todayStr: string, tomorrowStr: string) {
+    return prisma.recalls.count({
+      where: {
+        clinic_id: clinicId,
+        data_prevista: { gte: todayStr, lt: tomorrowStr },
+      },
+    });
   }
 }

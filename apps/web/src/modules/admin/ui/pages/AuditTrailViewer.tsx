@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api/apiClient";
 import {
   Card,
   CardContent,
@@ -28,67 +25,33 @@ import {
 import { Shield, Calendar, User, FileText, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-interface AuditLog {
-  id: number;
-  timestamp: string;
-  user_id: string | null;
-  action: string;
-  entity_type: string;
-  entity_id: string | null;
-  old_values: unknown;
-  new_values: unknown;
-  sensitivity_level: string;
-}
+import { useAuditTrail } from "@/hooks/api/useAuditTrail";
 
 export default function AuditTrailViewer() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [actionFilter, setActionFilter] = useState<string>("all");
-  const [sensitivityFilter, setSensitivityFilter] = useState<string>("all");
-
-  const { data: logs = [], isLoading } = useQuery({
-    queryKey: ["audit-trail", actionFilter, sensitivityFilter],
-    queryFn: async () => {
-      const queryParams: Record<string, string> = {
-        limit: "1000",
-      };
-
-      if (actionFilter !== "all") {
-        queryParams.action = actionFilter;
-      }
-
-      if (sensitivityFilter !== "all") {
-        queryParams.sensitivity_level = sensitivityFilter;
-      }
-
-      const data = await apiClient.get<AuditLog[]>("/admin/audit-trail", {
-        params: queryParams,
-      });
-      return data || [];
-    },
-  });
-
-  const filteredLogs = logs.filter(
-    (log) =>
-      log.entity_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.action.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const {
+    filteredLogs,
+    isLoading,
+    searchTerm,
+    setSearchTerm,
+    actionFilter,
+    setActionFilter,
+    sensitivityFilter,
+    setSensitivityFilter,
+  } = useAuditTrail();
 
   const getSensitivityBadge = (level: string) => {
-    const variants: Record<string, unknown> = {
-      CRITICAL: { variant: "destructive", icon: AlertCircle },
-      HIGH: { variant: "default", icon: Shield },
-      MEDIUM: { variant: "secondary", icon: FileText },
-      LOW: { variant: "outline", icon: FileText },
+    const variants: Record<string, { variant: string; Icon: React.ElementType }> = {
+      CRITICAL: { variant: "destructive", Icon: AlertCircle },
+      HIGH: { variant: "default", Icon: Shield },
+      MEDIUM: { variant: "secondary", Icon: FileText },
+      LOW: { variant: "outline", Icon: FileText },
     };
 
     const config = variants[level] || variants.LOW;
-    // @ts-expect-error — TS18046
-    const Icon = config.icon;
+    const Icon = config.Icon;
 
     return (
-      // @ts-expect-error — TS18046
-      <Badge variant={config.variant} className="gap-1">
+      <Badge variant={config.variant as any} className="gap-1">
         <Icon className="h-3 w-3" />
         {level}
       </Badge>

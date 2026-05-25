@@ -74,16 +74,16 @@ export const useModulos = () => {
   // Helper para verificar se módulo está ativo
   const isModuleActive = (moduleKey: string): boolean => {
     return (
-      data?.modules.find((m) => m.module_key === moduleKey)?.is_active || false
+      data?.modules?.find((m) => m.module_key === moduleKey)?.is_active || false
     );
   };
 
   // Obter módulos ativos
-  const activeModules = data?.modules.filter((m) => m.is_active) || [];
+  const activeModules = data?.modules?.filter((m) => m.is_active) || [];
 
   // Obter módulos por categoria
   const getModulesByCategory = (category: string) => {
-    return data?.modules.filter((m) => m.category === category) || [];
+    return data?.modules?.filter((m) => m.category === category) || [];
   };
 
   return {

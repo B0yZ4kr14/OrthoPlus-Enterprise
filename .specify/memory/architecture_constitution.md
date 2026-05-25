@@ -1,7 +1,7 @@
 # Architecture Constitution — OrthoPlus Enterprise
 
 **Version**: 1.0.0
-**Derived from**: constitution.md v1.1.0
+**Derived from**: constitution.md v1.3.1
 **Scope**: Enforceable architecture standards and system boundaries
 
 ---

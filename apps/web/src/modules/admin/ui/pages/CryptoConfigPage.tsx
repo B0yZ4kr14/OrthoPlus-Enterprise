@@ -13,9 +13,8 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { Bitcoin, Wallet, TrendingUp, Bell, Key, Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatsCard } from "@/components/shared/StatsCard";
-import { useState, useEffect } from "react";
-import { apiClient } from "@/lib/api/apiClient";
-import { toast } from "sonner";
+import { useState } from "react";
+import { useCryptoConfigPage } from "@/hooks/api/useCryptoConfigPage";
 import { formatCurrency } from "@/lib/utils/formatting.utils";
 
 interface Exchange {
@@ -36,47 +35,30 @@ interface Portfolio {
 }
 
 export default function CryptoConfigPage() {
-  const [exchanges, setExchanges] = useState<Exchange[]>([]);
-  const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    exchanges,
+    portfolio,
+    isLoading: loading,
+    addExchange,
+    isAdding,
+  } = useCryptoConfigPage();
+
   const [newExchange, setNewExchange] = useState({
     name: "",
     api_key: "",
     api_secret: "",
   });
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [exchangesData, portfolioData] = await Promise.all([
-        apiClient.get<Exchange[]>("/crypto-config/exchanges"),
-        apiClient.get<Portfolio>("/crypto-config/portfolio"),
-      ]);
-      setExchanges(exchangesData);
-      setPortfolio(portfolioData);
-    } catch (error) {
-      console.error("Error fetching crypto config:", error);
-      toast.error("Erro ao carregar configurações");
-    } finally {
-      setLoading(false);
-    }
+  const handleAddExchange = () => {
+    addExchange({
+      name: newExchange.name,
+      config: newExchange.api_key,
+      passphrase: newExchange.api_secret,
+    });
+    setNewExchange({ name: "", api_key: "", api_secret: "" });
   };
 
-  const addExchange = async () => {
-    try {
-      await apiClient.post("/crypto-config/exchanges", newExchange);
-      toast.success("Exchange adicionada com sucesso");
-      setNewExchange({ name: "", api_key: "", api_secret: "" });
-      fetchData();
-    } catch (error) {
-      console.error("Error adding exchange:", error);
-      toast.error("Erro ao adicionar exchange");
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const wrappedAddExchange = () => handleAddExchange();
 
   return (
     <div className="space-y-6">
@@ -178,7 +160,7 @@ export default function CryptoConfigPage() {
                       />
                     </div>
                   </div>
-                  <Button onClick={addExchange}>
+                  <Button onClick={wrappedAddExchange}>
                     <Key className="mr-2 h-4 w-4" />
                     Adicionar Exchange
                   </Button>
@@ -209,7 +191,7 @@ export default function CryptoConfigPage() {
                             <div>
                               <div className="font-medium">{exchange.name}</div>
                               <div className="text-sm text-muted-foreground">
-                                API Key: {exchange.api_key.substring(0, 10)}...
+                                API Key: {exchange.config.substring(0, 10)}...
                               </div>
                             </div>
                           </div>

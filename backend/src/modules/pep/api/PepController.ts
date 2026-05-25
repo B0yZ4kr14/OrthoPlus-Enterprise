@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { PepRepository } from "@/modules/pep/infrastructure/PepRepository";
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { logger } from '@/infrastructure/logger';
@@ -17,6 +17,7 @@ const createProntuarioSchema = z.object({
 });
 
 export class PepController {
+  private repo = new PepRepository()
   async createProntuario(req: Request, res: Response): Promise<void> {
     try {
       const validatedData = createProntuarioSchema.parse(req.body);
@@ -27,13 +28,11 @@ export class PepController {
         return;
       }
 
-      const prontuario = await prisma.prontuarios.create({
-        data: {
-          clinic_id: clinicId,
-          patient_id: validatedData.patientId,
-          patient_name: `Paciente ${validatedData.patientId}`, // Mocked name mapping
-          created_by: req.user?.id || 'system',
-        }
+      const prontuario = await this.repo.createProntuario({
+        clinic_id: clinicId,
+        patient_id: validatedData.patientId,
+        patient_name: `Paciente ${validatedData.patientId}`,
+        created_by: req.user?.id || 'system',
       });
       
       logger.info('Prontuario created', { clinicId, patientId: validatedData.patientId, prontuarioId: prontuario.id });
@@ -58,15 +57,7 @@ export class PepController {
         return;
       }
 
-      const prontuarios = await prisma.prontuarios.findMany({
-        where: {
-          clinic_id: clinicId,
-          patient_id: patientId
-        },
-        orderBy: {
-          created_at: 'desc'
-        }
-      });
+      const prontuarios = await this.repo.findProntuariosByPatientAndClinic(patientId, clinicId);
 
       logger.info('Listing prontuarios', { clinicId, patientId });
       res.status(200).json({ prontuarios });
@@ -86,16 +77,14 @@ export class PepController {
         return;
       }
 
-      const assinatura = await prisma.pep_assinaturas.create({
-        data: {
-          prontuario_id: id,
-          assinatura_base64: hash,
-          signed_at: new Date().toISOString(),
-          signed_by: req.user?.id || 'system',
-          tipo_documento: 'PRONTUARIO_EVOLUCAO',
-          ip_address: req.ip || '',
-          user_agent: req.headers['user-agent'] || ''
-        }
+      const assinatura = await this.repo.createAssinatura({
+        prontuario_id: id,
+        assinatura_base64: hash,
+        signed_at: new Date().toISOString(),
+        signed_by: req.user?.id || 'system',
+        tipo_documento: 'PRONTUARIO_EVOLUCAO',
+        ip_address: req.ip || '',
+        user_agent: req.headers['user-agent'] || '',
       });
 
       logger.info('Prontuario digitally signed', { id, assinaturaId: assinatura.id });

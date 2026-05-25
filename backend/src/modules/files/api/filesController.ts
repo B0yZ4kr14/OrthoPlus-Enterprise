@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { FilesRepository } from "@/modules/files/infrastructure/FilesRepository";
 import { logger } from "@/infrastructure/logger";
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler";
 import { NextFunction, Request, Response } from "express";
@@ -50,6 +50,7 @@ function sanitizeUploadVisibility(visibilidade: string | undefined, userRole: st
 
 export class FilesController {
   private filesService = new FilesService();
+  private repo = new FilesRepository();
 
   async uploadFile(
     req: Request,
@@ -118,16 +119,14 @@ export class FilesController {
       metricsCollector.files.recordUpload(clinicId, fileRecord.categoria, Date.now() - startTime);
 
       // Audit log for file upload (SEC-007) — fire-and-forget
-      prisma.audit_logs.create({
-        data: {
-          action: "FILE_UPLOAD",
-          action_type: "create",
-          clinic_id: clinicId,
-          user_id: userId,
-          details: { fileId: fileRecord.id, fileName: fileRecord.nomeOriginal, categoria: fileRecord.categoria },
-          ip_address: req.ip ? { ip: req.ip } : {},
-          user_agent: req.headers["user-agent"] ?? null,
-        },
+      this.repo.createAuditLog({
+        action: "FILE_UPLOAD",
+        action_type: "create",
+        clinic_id: clinicId,
+        user_id: userId,
+        details: { fileId: fileRecord.id, fileName: fileRecord.nomeOriginal, categoria: fileRecord.categoria },
+        ip_address: req.ip ? { ip: req.ip } : {},
+        user_agent: req.headers["user-agent"] ?? null,
       }).catch((err) => {
         logger.warn("[FilesController] Audit log failed (non-blocking):", err);
       });
@@ -208,16 +207,14 @@ export class FilesController {
       const exists = fs.existsSync(filePath);
 
       // Audit log for file view (SEC-007) — fire-and-forget
-      prisma.audit_logs.create({
-        data: {
-          action: "FILE_VIEW",
-          action_type: "read",
-          clinic_id: clinicId,
-          user_id: req.user?.id as string | undefined,
-          details: { fileId: id, fileName: file.nomeOriginal },
-          ip_address: req.ip ? { ip: req.ip } : {},
-          user_agent: req.headers["user-agent"] ?? null,
-        },
+      this.repo.createAuditLog({
+        action: "FILE_VIEW",
+        action_type: "read",
+        clinic_id: clinicId,
+        user_id: req.user?.id as string | undefined,
+        details: { fileId: id, fileName: file.nomeOriginal },
+        ip_address: req.ip ? { ip: req.ip } : {},
+        user_agent: req.headers["user-agent"] ?? null,
       }).catch((err) => {
         logger.warn("[FilesController] Audit log failed (non-blocking):", err);
       });
@@ -272,16 +269,14 @@ export class FilesController {
 
       // Audit log for file download (SEC-007) — fire-and-forget so DB failures
       // never block the primary file download operation.
-      prisma.audit_logs.create({
-        data: {
-          action: "FILE_DOWNLOAD",
-          action_type: "read",
-          clinic_id: clinicId,
-          user_id: req.user?.id as string | undefined,
-          details: { fileId: id, fileName: file.nomeOriginal },
-          ip_address: req.ip ? { ip: req.ip } : {},
-          user_agent: req.headers["user-agent"] ?? null,
-        },
+      this.repo.createAuditLog({
+        action: "FILE_DOWNLOAD",
+        action_type: "read",
+        clinic_id: clinicId,
+        user_id: req.user?.id as string | undefined,
+        details: { fileId: id, fileName: file.nomeOriginal },
+        ip_address: req.ip ? { ip: req.ip } : {},
+        user_agent: req.headers["user-agent"] ?? null,
       }).catch((err) => {
         logger.warn("[FilesController] Audit log failed (non-blocking):", err);
       });
@@ -344,16 +339,14 @@ export class FilesController {
       metricsCollector.files.recordDelete(clinicId);
 
       // Audit log for file delete (SEC-007) — fire-and-forget
-      prisma.audit_logs.create({
-        data: {
-          action: "FILE_DELETE",
-          action_type: "delete",
-          clinic_id: clinicId,
-          user_id: req.user?.id as string | undefined,
-          details: { fileId: id, fileName: file.nomeOriginal },
-          ip_address: req.ip ? { ip: req.ip } : {},
-          user_agent: req.headers["user-agent"] ?? null,
-        },
+      this.repo.createAuditLog({
+        action: "FILE_DELETE",
+        action_type: "delete",
+        clinic_id: clinicId,
+        user_id: req.user?.id as string | undefined,
+        details: { fileId: id, fileName: file.nomeOriginal },
+        ip_address: req.ip ? { ip: req.ip } : {},
+        user_agent: req.headers["user-agent"] ?? null,
       }).catch((err) => {
         logger.warn("[FilesController] Audit log failed (non-blocking):", err);
       });
@@ -387,9 +380,7 @@ export class FilesController {
         throw Errors.validation("Missing required fields: backupId, provider, config");
       }
 
-      const backup = await prisma.backup_history.findUnique({
-        where: { id: backupId },
-      });
+      const backup = await this.repo.findBackupById(backupId);
 
       if (!backup) {
         throw Errors.notFound("Backup", backupId);
@@ -414,17 +405,14 @@ export class FilesController {
           throw new ApiError(400, ErrorCodes.VALIDATION_ERROR, "Unsupported provider", "Provider must be one of: s3, google_drive, dropbox");
       }
 
-      await prisma.backup_history.update({
-        where: { id: backupId },
-        data: {
-          file_path: uploadUrl,
-          metadata: {
-            ...(typeof backup.metadata === "object" && backup.metadata !== null
-              ? backup.metadata
-              : {}),
-            cloudProvider: provider,
-            uploadedAt: new Date().toISOString(),
-          },
+      await this.repo.updateBackup(backupId, {
+        file_path: uploadUrl,
+        metadata: {
+          ...(typeof backup.metadata === "object" && backup.metadata !== null
+            ? backup.metadata
+            : {}),
+          cloudProvider: provider,
+          uploadedAt: new Date().toISOString(),
         },
       });
 
