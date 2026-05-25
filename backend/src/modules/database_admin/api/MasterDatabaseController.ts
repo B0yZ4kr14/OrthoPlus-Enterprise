@@ -1,213 +1,81 @@
-/**
- * MasterDatabaseController
- * API para gerenciamento federado de categorias de banco de dados
- */
-
 import { Request, Response } from "express";
-import { z } from "zod";
-import { logger } from "@/infrastructure/logger";
-import { MasterDatabaseManager } from "../infrastructure/MasterDatabaseManager";
-import { circuitBreakerRegistry } from "@/infrastructure/database/CategoryCircuitBreaker";
-import { BackupSchedulerService } from "../infrastructure/BackupSchedulerService";
-import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics";
-import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector";
-
-const masterManager = new MasterDatabaseManager();
-const backupService = new BackupSchedulerService();
-const metricsCollector = getMetricsCollector(prometheusMetrics.getRegistry());
+import { Errors, asyncHandler } from "@/middleware/errorHandler";
+import { MasterDatabaseControllerService } from "@/modules/database_admin/application/MasterDatabaseControllerService";
 
 export class MasterDatabaseController {
-  // ─── Categories ───
+  private service = new MasterDatabaseControllerService();
 
-  async getCategories(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-      const categories = masterManager.getCategories();
-      res.json({ categories });
-    } catch (error) {
-      logger.error("Error getting categories", { error });
-      res.status(500).json({ error: "Internal server error" });
+  getCategories = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const result = await this.service.getCategories();
+    res.json({ categories: result });
+  });
 
-  // ─── Health & Stats ───
-
-  async getMasterHealth(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-      const health = await masterManager.getHealth();
-
-      // Emitir métricas
-      for (const cat of health.categories) {
-        metricsCollector.database.recordHealthCheck(
-          cat.category,
-          cat.latencyMs,
-          cat.status
-        );
-      }
-
-      res.json(health);
-    } catch (error) {
-      logger.error("Error getting master health", { error });
-      res.status(500).json({ error: "Internal server error" });
+  getMasterHealth = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const result = await this.service.getMasterHealth();
+    res.json(result);
+  });
 
-  async getMasterStats(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-      const stats = await masterManager.getStats();
-
-      // Emitir métricas
-      for (const cat of stats.categories) {
-        metricsCollector.database.recordStats(
-          cat.category,
-          cat.tableCount,
-          cat.sizeBytes
-        );
-      }
-
-      res.json(stats);
-    } catch (error) {
-      logger.error("Error getting master stats", { error });
-      res.status(500).json({ error: "Internal server error" });
+  getMasterStats = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const result = await this.service.getMasterStats();
+    res.json(result);
+  });
 
-  // ─── Cross Query ───
-
-  async crossQuery(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-
-      const schema = z.object({
-        query: z.string().min(1),
-        schemas: z.array(z.string()).min(1),
-      });
-
-      const parsed = schema.safeParse(req.body);
-      if (!parsed.success) {
-        res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-        return;
-      }
-
-      const result = await masterManager.crossQuery(
-        parsed.data.query,
-        parsed.data.schemas
-      );
-      res.json(result);
-    } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : "Internal server error";
-      logger.error("Error running cross-query", { error });
-      res.status(400).json({ error: msg });
+  crossQuery = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const result = await this.service.crossQuery(req.body);
+    res.json(result);
+  });
 
-  // ─── Circuit Breaker ───
-
-  async getCircuitMetrics(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-      const metrics = circuitBreakerRegistry.getAllMetrics();
-
-      // Emitir métricas Prometheus
-      metricsCollector.circuitBreaker.collect();
-
-      res.json({ metrics });
-    } catch (error) {
-      logger.error("Error getting circuit metrics", { error });
-      res.status(500).json({ error: "Internal server error" });
+  getCircuitMetrics = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const result = this.service.getCircuitMetrics();
+    res.json(result);
+  });
 
-  async resetCircuit(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-
-      const { category } = req.params;
-      if (category) {
-        circuitBreakerRegistry.resetCategory(category);
-        res.json({ message: `Circuit breaker reset for ${category}` });
-      } else {
-        circuitBreakerRegistry.resetAll();
-        res.json({ message: "All circuit breakers reset" });
-      }
-    } catch (error) {
-      logger.error("Error resetting circuit breaker", { error });
-      res.status(500).json({ error: "Internal server error" });
+  resetCircuit = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const { category } = req.params;
+    const result = this.service.resetCircuit(category);
+    res.json(result);
+  });
 
-  // ─── Backup Scheduler ───
-
-  async getBackupStatus(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-      const status = await backupService.getAllBackupStatus();
-      res.json({ categories: status });
-    } catch (error) {
-      logger.error("Error getting backup status", { error });
-      res.status(500).json({ error: "Internal server error" });
+  getBackupStatus = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const result = await this.service.getBackupStatus();
+    res.json(result);
+  });
 
-  async executeBackup(req: Request, res: Response): Promise<void> {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        res.status(401).json({ error: "Não autenticado" });
-        return;
-      }
-
-      const { category } = req.params;
-      const { compress } = req.body;
-
-      const result = await backupService.executeBackup(category, { compress });
-
-      // Emitir métricas Prometheus
-      if (result.success) {
-        metricsCollector.backup.recordSuccess(
-          category,
-          result.durationMs,
-          result.sizeBytes
-        );
-      } else {
-        metricsCollector.backup.recordFailure(category);
-      }
-
-      res.json(result);
-    } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : "Internal server error";
-      logger.error("Error executing backup", { error });
-      res.status(400).json({ error: msg });
+  executeBackup = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Nao autenticado");
     }
-  }
+    const { category } = req.params;
+    const result = await this.service.executeBackup(category, req.body);
+    res.json(result);
+  });
 }
