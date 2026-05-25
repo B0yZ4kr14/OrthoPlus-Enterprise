@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { CryptoConfigRepository } from "@/modules/crypto_config/infrastructure/CryptoConfigRepository";
 import { logger } from "@/infrastructure/logger";
 /**
  * CryptoConfigController
@@ -12,6 +12,7 @@ import { ExchangeConfig } from "../domain/entities/ExchangeConfig";
 
 
 export class CryptoConfigController {
+  private cryptoRepo = new CryptoConfigRepository()
   async listExchanges(req: Request, res: Response): Promise<void> {
     try {
       const clinicId = req.user?.clinicId;
@@ -177,14 +178,12 @@ export class CryptoConfigController {
         return;
       }
 
-      const newWallet = await prisma.crypto_offline_wallets.create({
-        data: {
-          address,
-          clinic_id: clinicId,
-          currency: currency.toUpperCase(),
-          network: network.toUpperCase(),
-          label: label ?? null,
-        },
+      const newWallet = await this.cryptoRepo.createOfflineWallet({
+        address,
+        clinic_id: clinicId,
+        currency: currency.toUpperCase(),
+        network: network.toUpperCase(),
+        label: label ?? null,
       });
 
       res.json({ success: true, wallet: newWallet });
@@ -283,12 +282,7 @@ export class CryptoConfigController {
         return;
       }
 
-      const wallet = await prisma.crypto_wallets.findFirst({
-        where: {
-          address: walletAddress,
-          coin,
-        },
-      });
+      const wallet = await this.cryptoRepo.findWalletByAddressAndCoin(walletAddress, coin);
 
       if (!wallet) {
         res.status(404).json({ error: "Wallet not found" });
@@ -301,62 +295,52 @@ export class CryptoConfigController {
       const amountBrl = Math.round(amountRaw * exchangeRate);
       const fee = feeRaw !== undefined && Number.isFinite(feeRaw) ? Math.round(feeRaw) : null;
 
-      const existingTx = await prisma.crypto_transactions.findFirst({
-        where: { tx_hash: txHash },
-      });
+      const existingTx = await this.cryptoRepo.findTransactionByTxHash(txHash);
 
       const transaction = existingTx
-        ? await prisma.crypto_transactions.update({
-            where: { id: existingTx.id },
-            data: {
-              amount,
-              coin,
-              price_brl: amountBrl,
-              status,
-              fee,
-              wallet_id: wallet.id,
-              clinic_id: wallet.clinic_id,
-              exchange_id: payload.exchange_id ?? null,
-            },
+        ? await this.cryptoRepo.updateTransaction(existingTx.id, {
+            amount,
+            coin,
+            price_brl: amountBrl,
+            status,
+            fee,
+            wallet_id: wallet.id,
+            clinic_id: wallet.clinic_id,
+            exchange_id: payload.exchange_id ?? null,
           })
-        : await prisma.crypto_transactions.create({
-            data: {
-              amount,
-              coin,
-              clinic_id: wallet.clinic_id ?? clinicId,
-              exchange_id: payload.exchange_id ?? null,
-              fee,
-              price_brl: amountBrl,
-              status,
-              tx_hash: txHash,
-              type: "RECEBIMENTO",
-              wallet_id: wallet.id,
-            },
+        : await this.cryptoRepo.createTransaction({
+            amount,
+            coin,
+            clinic_id: wallet.clinic_id ?? clinicId,
+            exchange_id: payload.exchange_id ?? null,
+            fee,
+            price_brl: amountBrl,
+            status,
+            tx_hash: txHash,
+            type: "RECEBIMENTO",
+            wallet_id: wallet.id,
           });
 
       if (status === "CONFIRMADO") {
         const currentBalance = wallet.balance ?? 0;
-        await prisma.crypto_wallets.update({
-          where: { id: wallet.id },
-          data: { balance: currentBalance + amount },
+        await this.cryptoRepo.updateWallet(wallet.id, {
+          balance: currentBalance + amount,
         });
       }
 
-      await prisma.audit_logs.create({
-        data: {
-          clinic_id: wallet.clinic_id ?? clinicId,
-          action: "CRYPTO_TRANSACTION_WEBHOOK",
-          ip_address: { ip: req.ip || "unknown" },
-          details: {
-            transaction_hash: txHash,
-            coin,
-            amount,
-            amount_brl: amountBrl,
-            confirmations,
-            exchange_rate: exchangeRate,
-            status,
-            wallet_id: wallet.id,
-          },
+      await this.cryptoRepo.createAuditLog({
+        clinic_id: wallet.clinic_id ?? clinicId,
+        action: "CRYPTO_TRANSACTION_WEBHOOK",
+        ip_address: { ip: req.ip || "unknown" },
+        details: {
+          transaction_hash: txHash,
+          coin,
+          amount,
+          amount_brl: amountBrl,
+          confirmations,
+          exchange_rate: exchangeRate,
+          status,
+          wallet_id: wallet.id,
         },
       });
 
