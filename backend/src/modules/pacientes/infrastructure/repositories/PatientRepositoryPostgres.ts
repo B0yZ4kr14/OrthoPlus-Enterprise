@@ -215,4 +215,72 @@ export class PatientRepositoryPostgres implements IPatientRepository {
       updatedBy: row.updated_by as string | undefined,
     });
   }
+
+  // ─── Related entities (used by PacientesController) ───
+
+  async findAppointmentsByPatient(patientId: string) {
+    return prisma.appointments.findMany({
+      where: { patient_id: patientId },
+      orderBy: { start_time: "desc" },
+    })
+  }
+
+  async findTratamentosByPatient(patientId: string) {
+    // pep_tratamentos não tem patient_id direto — usa prontuario_id
+    // Esta query pode precisar de ajuste conforme schema real
+    return prisma.pep_tratamentos.findMany({
+      where: { prontuario_id: patientId },
+      orderBy: { created_at: "desc" },
+    })
+  }
+
+  async findBudgetsByPatient(patientId: string) {
+    return prisma.budgets.findMany({
+      where: { patient_id: patientId },
+      orderBy: { created_at: "desc" },
+    })
+  }
+
+  async findStatusHistoryByPatient(patientId: string) {
+    return prisma.patient_status_history.findMany({
+      where: { patient_id: patientId },
+      orderBy: { created_at: "desc" },
+    })
+  }
+
+  async findPatientAccount(patientId: string) {
+    return prisma.patient_accounts.findFirst({
+      where: { patient_id: patientId },
+    })
+  }
+
+  async findPatientAccountByEmail(email: string) {
+    return prisma.patient_accounts.findFirst({
+      where: { email },
+    })
+  }
+
+  async deletePatientSessionsBySessionId(sessionId: string) {
+    return prisma.patient_sessions.deleteMany({
+      where: { id: sessionId },
+    })
+  }
+
+  async createPatientSession(data: any) {
+    return prisma.patient_sessions.create({ data })
+  }
+
+  async deletePatientSessionsByPatient(patientId: string) {
+    return prisma.patient_sessions.deleteMany({
+      where: { patient_id: patientId },
+    })
+  }
+
+  async findPatientById(id: string) {
+    return prisma.patients.findFirst({ where: { id } })
+  }
+
+  async deletePatientHard(id: string) {
+    return prisma.patients.deleteMany({ where: { id } })
+  }
 }

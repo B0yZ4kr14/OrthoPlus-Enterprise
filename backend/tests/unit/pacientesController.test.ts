@@ -80,7 +80,7 @@ jest.mock('bcrypt', () => ({
 import { PacientesController } from '../../src/modules/pacientes/api/PacientesController'
 import { PatientCommandController } from '../../src/modules/pacientes/api/commands/PatientCommandController'
 import { PatientQueryController } from '../../src/modules/pacientes/api/queries/PatientQueryController'
-import { prisma } from '../../src/infrastructure/database/prismaClient'
+// Prisma mock no longer needed — controller uses repository
 import bcrypt from 'bcrypt'
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -119,6 +119,17 @@ const mockPatientRepository = {
   delete: jest.fn().mockResolvedValue(undefined),
   findAll: jest.fn().mockResolvedValue({ items: [], total: 0 }),
   getStats: jest.fn().mockResolvedValue({ total: 0, ativos: 0, inativos: 0, arquivados: 0, novosEsteMes: 0 }),
+  findAppointmentsByPatient: jest.fn().mockResolvedValue([]),
+  findTratamentosByPatient: jest.fn().mockResolvedValue([]),
+  findBudgetsByPatient: jest.fn().mockResolvedValue([]),
+  findStatusHistoryByPatient: jest.fn().mockResolvedValue([]),
+  findPatientAccount: jest.fn().mockResolvedValue(null),
+  findPatientAccountByEmail: jest.fn().mockResolvedValue(null),
+  createPatientSession: jest.fn().mockResolvedValue(undefined),
+  deletePatientSessionsByPatient: jest.fn().mockResolvedValue(undefined),
+  deletePatientSessionsBySessionId: jest.fn().mockResolvedValue(undefined),
+  findPatientById: jest.fn().mockResolvedValue(null),
+  deletePatientHard: jest.fn().mockResolvedValue(undefined),
 }
 
 const mockCadastrarUseCase = { execute: jest.fn().mockResolvedValue({ patientId: 'pid-1' }) }
@@ -261,10 +272,10 @@ describe('PacientesController', () => {
   // ── GET /api/pacientes/:id/timeline ─────────────────────────────────────
   describe('getPatientTimeline', () => {
     it('returns timeline array', async () => {
-      ;(prisma.appointments.findMany as jest.Mock).mockResolvedValue([])
-      ;(prisma.pep_tratamentos.findMany as jest.Mock).mockResolvedValue([])
-      ;(prisma.budgets.findMany as jest.Mock).mockResolvedValue([])
-      ;(prisma.patient_status_history.findMany as jest.Mock).mockResolvedValue([])
+      mockPatientRepository.findAppointmentsByPatient.mockResolvedValue([])
+      mockPatientRepository.findTratamentosByPatient.mockResolvedValue([])
+      mockPatientRepository.findBudgetsByPatient.mockResolvedValue([])
+      mockPatientRepository.findStatusHistoryByPatient.mockResolvedValue([])
       const req = mockReq({}, {}, { id: 'pid-1' })
       const res = mockRes()
       await controller.getPatientTimeline(req as Request, res)
@@ -282,13 +293,13 @@ describe('PacientesController', () => {
   // ── POST /api/pacientes/auth (login) ────────────────────────────────────
   describe('patientAuth', () => {
     it('returns 200 and sets cookie on valid login', async () => {
-      ;(prisma.patient_accounts.findFirst as jest.Mock).mockResolvedValueOnce({
+      mockPatientRepository.findPatientAccountByEmail.mockResolvedValueOnce({
         patient_id: 'pid-1',
         email: 'joao@email.com',
         senha_hash: '$2b$10$hash',
       })
       ;(bcrypt.compare as jest.Mock).mockResolvedValueOnce(true)
-      ;(prisma.patient_sessions.create as jest.Mock).mockResolvedValueOnce({})
+      mockPatientRepository.createPatientSession.mockResolvedValueOnce({})
       const req = mockReq({ action: 'login', email: 'joao@email.com', password: '123456' })
       const res = mockRes()
       await controller.patientAuth(req as Request, res)
@@ -304,7 +315,7 @@ describe('PacientesController', () => {
     })
 
     it('returns 401 when account not found', async () => {
-      ;(prisma.patient_accounts.findFirst as jest.Mock).mockResolvedValueOnce(null)
+      mockPatientRepository.findPatientAccountByEmail.mockResolvedValueOnce(null)
       const req = mockReq({ action: 'login', email: 'x@x.com', password: '123' })
       const res = mockRes()
       await controller.patientAuth(req as Request, res)
@@ -312,7 +323,7 @@ describe('PacientesController', () => {
     })
 
     it('returns 200 on logout', async () => {
-      ;(prisma.patient_sessions.deleteMany as jest.Mock).mockResolvedValueOnce({ count: 1 })
+      mockPatientRepository.deletePatientSessionsBySessionId.mockResolvedValueOnce({ count: 1 })
       const req = mockReq({ action: 'logout' }, { 'x-session-id': 'sess-1' })
       const res = mockRes()
       await controller.patientAuth(req as Request, res)
@@ -330,7 +341,7 @@ describe('PacientesController', () => {
   // ── DELETE /api/pacientes/:id ───────────────────────────────────────────
   describe('delete', () => {
     it('returns 200 on soft delete', async () => {
-      ;(prisma.patients.deleteMany as jest.Mock).mockResolvedValueOnce({ count: 1 })
+      mockPatientRepository.delete.mockResolvedValueOnce(undefined)
       const req = mockReq({}, {}, { id: 'pid-1' })
       const res = mockRes()
       await controller.delete(req as Request, res)

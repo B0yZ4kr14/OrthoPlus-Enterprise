@@ -6,7 +6,6 @@
 
 import { logger } from "@/infrastructure/logger";
 import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics";
-import { prisma } from "@/infrastructure/database/prismaClient";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 
@@ -342,58 +341,10 @@ export class PacientesController {
 
       const [appointments, treatments, budgets, statusChanges] =
         await Promise.all([
-          prisma.appointments.findMany({
-            where: { patient_id: patientId, clinic_id: clinicId },
-            select: {
-              id: true,
-              title: true,
-              start_time: true,
-              status: true,
-              created_at: true,
-            },
-            orderBy: { start_time: "desc" },
-            take: 20,
-          }),
-          prisma.pep_tratamentos.findMany({
-            where: {
-              prontuario: {
-                patient_id: patientId,
-                clinic_id: clinicId,
-              },
-            },
-            select: {
-              id: true,
-              titulo: true,
-              status: true,
-              data_inicio: true,
-              created_at: true,
-            },
-            orderBy: { created_at: "desc" },
-            take: 20,
-          }),
-          prisma.budgets.findMany({
-            where: { patient_id: patientId, clinic_id: clinicId },
-            select: {
-              id: true,
-              titulo: true,
-              valor_total: true,
-              status: true,
-              created_at: true,
-            },
-            orderBy: { created_at: "desc" },
-            take: 20,
-          }),
-          prisma.patient_status_history.findMany({
-            where: { patient_id: patientId },
-            select: {
-              id: true,
-              from_status: true,
-              to_status: true,
-              changed_at: true,
-            },
-            orderBy: { changed_at: "desc" },
-            take: 20,
-          }),
+          this.patientRepository.findAppointmentsByPatient(patientId),
+          this.patientRepository.findTratamentosByPatient(patientId),
+          this.patientRepository.findBudgetsByPatient(patientId),
+          this.patientRepository.findStatusHistoryByPatient(patientId),
         ]);
 
       const timeline = [
@@ -450,9 +401,7 @@ export class PacientesController {
       const { action, email, password } = req.body;
 
       if (action === "login") {
-        const account = await prisma.patient_accounts.findFirst({
-          where: { email },
-        });
+        const account = await this.patientRepository.findPatientAccountByEmail(email);
 
         if (!account) {
           res.status(401).json({ error: "Email ou senha inválidos" });
@@ -474,13 +423,11 @@ export class PacientesController {
 
         const sessionId = crypto.randomUUID();
 
-        await prisma.patient_sessions.create({
-          data: {
-            id: sessionId,
-            patient_id: account.patient_id,
-            token: sessionId,
-            expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-          },
+        await this.patientRepository.createPatientSession({
+          id: sessionId,
+          patient_id: account.patient_id,
+          token: sessionId,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
         });
 
         res.cookie("patient_session", sessionId, PATIENT_COOKIE_OPTIONS);
@@ -505,9 +452,7 @@ export class PacientesController {
       if (action === "logout") {
         const sessionId = req.cookies?.patient_session as string | undefined;
         if (sessionId) {
-          await prisma.patient_sessions.deleteMany({
-            where: { id: sessionId },
-          });
+          await this.patientRepository.deletePatientSessionsBySessionId(sessionId);
         }
         res.clearCookie("patient_session", { path: "/" });
         res.status(200).json({ success: true });
@@ -534,13 +479,8 @@ export class PacientesController {
         return;
       }
       // Fetch patient status before deletion for metrics (TD004)
-      const patient = await prisma.patients.findFirst({
-        where: { id, clinic_id: clinicId },
-        select: { status: true },
-      });
-      await prisma.patients.deleteMany({
-        where: { id, clinic_id: clinicId },
-      });
+      const patient = await this.patientRepository.findPatientById(id);
+      await this.patientRepository.delete(id, clinicId);
       if (patient && patient.status) {
         pacientesMetrics.decPatientsTotal(patient.status, clinicId);
       }
