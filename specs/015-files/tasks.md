@@ -27,7 +27,8 @@
 - [x] T102 [P] Backend: Storage — Armazenamento seguro e escalável.
 - [x] T103 [P] Backend: Visualização — Preview e download.
 - [x] T104 [P] Prisma schema update + migration generation
-- [x] T105 [P] Extend `filesService.ts` with new operations
+- [x] T105 [P] Extend `FilesService.ts` with new operations
+  - **Note**: File is `backend/src/modules/files/application/services/FilesService.ts` (PascalCase).
 - [x] T106 [P] Extend `filesController.ts` with new endpoints
 - [x] T107 [P] Add clinicGuard to all new routes
 - [x] T107a [P] Add rate limiting to upload endpoint (CQ-3: 50/hour)

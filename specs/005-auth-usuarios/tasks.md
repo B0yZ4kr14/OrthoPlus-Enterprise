@@ -27,7 +27,8 @@
   - **Status**: IMPLEMENTED — clinicGuard.ts middleware applied
 - [x] T104 [P] Prisma schema update + migration generation
   - **Status**: IMPLEMENTED — User model in schema.prisma
-- [x] T105 [P] Extend `authService.ts` with new operations
+- [x] T105 [P] Extend `AuthController.ts` with new operations
+  - **Note**: Original plan referenced `authService.ts` — auth module uses controller + router pattern without standalone service layer. Operations consolidated in `AuthController.ts`.
   - **Status**: IMPLEMENTED
 - [x] T106 [P] Extend `authController.ts` with new endpoints
   - **Status**: IMPLEMENTED

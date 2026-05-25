@@ -27,7 +27,8 @@
   - **Status**: IMPLEMENTED — PatientStatus with PROSPECT, TRATAMENTO, etc.
 - [x] T104 [P] Prisma schema update + migration generation
   - **Status**: IMPLEMENTED — Paciente model in schema.prisma
-- [x] T105 [P] Extend `pacientesService.ts` with new operations
+- [x] T105 [P] Extend `PacienteSearchService.ts` with search operations
+  - **Note**: Original plan referenced `pacientesService.ts` — evolved to CQRS command pattern + dedicated `PacienteSearchService.ts` for search operations
   - **Status**: IMPLEMENTED
 - [x] T106 [P] Extend `pacientesController.ts` with new endpoints
   - **Status**: IMPLEMENTED

@@ -366,5 +366,5 @@ npx playwright test tests/e2e/memory-hub.spec.ts --project=chromium
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
 - **Test naming**: New tests MUST use English (`should...`). Portuguese tests (`deve...`) are legacy debt.
-- **Schema changes**: SQLite schema is managed via `SqliteDatabase.ts` — no Prisma migration needed for this feature
+- **Schema changes**: SQLite schema is managed via `SqliteHealthChecker.ts` + `initSchema.sql` — no Prisma migration needed for this feature
 - **Embedding model**: Ensure Ollama is running with `nomic-embed-text` before testing search functionality

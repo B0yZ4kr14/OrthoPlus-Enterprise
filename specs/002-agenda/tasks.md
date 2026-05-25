@@ -27,7 +27,8 @@
   - **Status**: IMPLEMENTED — Create/Delete/List BlockedTime use cases
 - [x] T104 [P] Prisma schema update + migration
   - **Status**: IMPLEMENTED — inventario_agendamentos model
-- [x] T105 [P] Extend `agendaService.ts`
+- [x] T105 [P] Extend agenda commands with new operations
+  - **Note**: Original plan referenced `agendaService.ts` — evolved to CQRS command pattern (`CreateAppointmentCommand.ts`). No standalone service layer needed.
   - **Status**: IMPLEMENTED
 - [x] T106 [P] Extend `agendaController.ts`
   - **Status**: IMPLEMENTED
