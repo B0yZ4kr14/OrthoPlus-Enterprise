@@ -2,6 +2,7 @@ import { logger } from "@/infrastructure/logger"
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler"
 import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
 import jwt from "jsonwebtoken"
+import type { LoginResponse, User } from "@orthoplus/shared-types"
 
 function requireJwtSecret(): string {
   const secret = process.env.JWT_SECRET
@@ -27,6 +28,21 @@ export interface UserMetadataResult {
   }
   clinicData: { id: string; name: string }
   permissionsData: string[]
+}
+
+export interface StaffAuthResult {
+  user: User
+  accessToken: string
+  refreshToken: string
+  expiresIn: number
+}
+
+const DEFAULT_CLINIC_SETTINGS = {
+  timezone: "America/Sao_Paulo",
+  currency: "BRL",
+  language: "pt-BR",
+  dateFormat: "DD/MM/YYYY",
+  timeFormat: "24h" as const,
 }
 
 export class AuthService {
@@ -162,5 +178,110 @@ export class AuthService {
     const { RegisterUserUseCase } = await import("./RegisterUserUseCase")
     const useCase = new RegisterUserUseCase()
     return useCase.execute(email, password, role, clinicId)
+  }
+
+  // ─── Mock Token Generation ───
+
+  generateMockStaffToken(email: string, role: string, clinicId: string): { accessToken: string; refreshToken: string } {
+    const dummyId = "00000000-0000-0000-0000-000000000000"
+    const accessToken = jwt.sign(
+      { sub: dummyId, email, role, clinicId },
+      requireJwtSecret(),
+      { expiresIn: "1h" },
+    )
+    const refreshToken = jwt.sign(
+      { sub: dummyId, type: "refresh" },
+      requireJwtSecret(),
+      { expiresIn: "7d" },
+    )
+    return { accessToken, refreshToken }
+  }
+
+  generateMockPatientToken(cpf: string, clinicId: string): { accessToken: string; refreshToken: string; patientEmail: string } {
+    const dummyId = "patient-0000-0000-0000-000000000000"
+    const patientEmail = `patient-${cpf}@example.com`
+    const accessToken = jwt.sign(
+      { sub: dummyId, email: patientEmail, role: "patient", clinicId },
+      requireJwtSecret(),
+      { expiresIn: "1h" },
+    )
+    const refreshToken = jwt.sign(
+      { sub: dummyId, type: "refresh" },
+      requireJwtSecret(),
+      { expiresIn: "7d" },
+    )
+    return { accessToken, refreshToken, patientEmail }
+  }
+
+  // ─── Token Verification ───
+
+  verifyToken(token: string): { sub: string; email: string; role: string; clinicId: string; iat: number } {
+    return jwt.verify(token, requireJwtSecret()) as { sub: string; email: string; role: string; clinicId: string; iat: number }
+  }
+
+  verifyRefreshToken(refreshToken: string): { sub: string; type: string } {
+    return jwt.verify(refreshToken, requireJwtSecret()) as { sub: string; type: string }
+  }
+
+  // ─── Response Builders ───
+
+  buildStaffLoginResponse(result: { user: any; accessToken: string; refreshToken: string }): LoginResponse {
+    return {
+      user: {
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.email.split("@")[0],
+        role: result.user.role,
+        clinicId: result.user.clinicId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      clinic: {
+        id: result.user.clinicId,
+        name: "Clinic Name",
+        settings: DEFAULT_CLINIC_SETTINGS,
+        activeModules: [],
+      },
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+      expiresIn: 3600,
+    }
+  }
+
+  buildMockStaffLoginResponse(email: string, accessToken: string, refreshToken: string): LoginResponse {
+    const clinicId = "mock-clinic-id"
+    return {
+      user: {
+        id: "00000000-0000-0000-0000-000000000000",
+        email,
+        name: "Mock Admin",
+        role: "admin",
+        clinicId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      clinic: {
+        id: clinicId,
+        name: "Clinica Mock",
+        settings: DEFAULT_CLINIC_SETTINGS,
+        activeModules: [],
+      },
+      accessToken,
+      refreshToken,
+      expiresIn: 3600,
+    }
+  }
+
+  buildMockUserMetadata(): UserMetadataResult {
+    return {
+      roleData: { role: "ADMIN" },
+      profileData: {
+        clinic_id: "mock-clinic-id",
+        avatar_url: "",
+        full_name: "Mock Admin",
+      },
+      clinicData: { id: "mock-clinic-id", name: "Clinica Mock E2E" },
+      permissionsData: ["ALL"],
+    }
   }
 }
