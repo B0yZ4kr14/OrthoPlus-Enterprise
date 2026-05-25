@@ -1,12 +1,13 @@
 import { prisma } from "@/infrastructure/database/prismaClient"
 import { Prisma } from "@prisma/client"
+import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository"
 
 /**
  * UserRepository — encapsulates all database access for the auth module.
  * Replaces direct Prisma calls in AuthController.
  */
 
-export class UserRepository {
+export class UserRepository implements IUserRepository {
   // ─── users ───
 
   async findUserByEmail(email: string) {
@@ -51,7 +52,6 @@ export class UserRepository {
     if (moduleIds.length === 0) return []
     return prisma.module_catalog.findMany({
       where: { id: { in: moduleIds } },
-      select: { module_key: true },
     })
   }
 }

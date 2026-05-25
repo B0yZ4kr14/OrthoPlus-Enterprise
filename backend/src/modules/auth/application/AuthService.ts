@@ -1,6 +1,6 @@
 import { logger } from "@/infrastructure/logger"
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler"
-import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository"
 import jwt from "jsonwebtoken"
 import type { LoginResponse, User } from "@orthoplus/shared-types"
 import type { AuthenticateUserResult } from "./AuthenticateUserUseCase"
@@ -51,7 +51,11 @@ const DEFAULT_CLINIC_SETTINGS = {
 }
 
 export class AuthService {
-  private repo = new UserRepository()
+  private repo: IUserRepository
+
+  constructor(repo?: IUserRepository) {
+    this.repo = repo ?? new (require("@/modules/auth/infrastructure/UserRepository").UserRepository)()
+  }
 
   // ─── Staff Login ───
 

@@ -1,5 +1,5 @@
 import { Errors } from "@/middleware/errorHandler"
-import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository"
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import bcrypt from "bcrypt"
@@ -28,8 +28,12 @@ export interface AuthenticateUserResult {
  * AuthenticateUserUseCase — authenticates a staff user via email/password.
  */
 export class AuthenticateUserUseCase {
-  private repo = new UserRepository()
+  private repo: IUserRepository
   private audit = new AuditLogRepository()
+
+  constructor(repo?: IUserRepository) {
+    this.repo = repo ?? new (require("@/modules/auth/infrastructure/UserRepository").UserRepository)()
+  }
 
   async execute(email: string, password: string): Promise<AuthenticateUserResult | null> {
     const user = await this.repo.findUserByEmail(email)

@@ -1,5 +1,5 @@
 import { Errors } from "@/middleware/errorHandler"
-import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository"
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import bcrypt from "bcrypt"
@@ -15,8 +15,12 @@ export interface RegisterUserResult {
  * RegisterUserUseCase — registers a new staff user.
  */
 export class RegisterUserUseCase {
-  private repo = new UserRepository()
+  private repo: IUserRepository
   private audit = new AuditLogRepository()
+
+  constructor(repo?: IUserRepository) {
+    this.repo = repo ?? new (require("@/modules/auth/infrastructure/UserRepository").UserRepository)()
+  }
 
   async execute(
     email: string,

@@ -61,18 +61,26 @@ Os cookies HttpAlready são enviados automaticamente via `withCredentials: true`
 A `architecture_constitution.md` §EP-2 exige repository abstraction.
 Módulos com maior churn e complexidade:
 
-| Rank | Módulo | Arquivos | Motivação |
-|------|--------|----------|-----------|
-| 1 | `auth` | 7 | Autenticação — core de segurança |
-| 2 | `financeiro` | 17 | Financeiro — dados sensíveis, audit obrigatório |
-| 3 | `pdv` | 16 | PDV — transações críticas |
-| 4 | `agenda` | 10 | Agenda — alto volume de acessos |
-| 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal |
-| 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais |
-| 7 | `inventario` | 21 | Inventário — controle de estoque |
-| 8 | `contratos` | 10 | Contratos — dados financeiros |
+| Rank | Módulo | Arquivos | Motivação | Status |
+|------|--------|----------|-----------|--------|
+| 1 | `auth` | 7 | Autenticação — core de segurança | ✅ **CONCLUÍDO** |
+| 2 | `financeiro` | 17 | Financeiro — dados sensíveis, audit obrigatório | ⏳ Pendente |
+| 3 | `pdv` | 16 | PDV — transações críticas | ⏳ Pendente |
+| 4 | `agenda` | 10 | Agenda — alto volume de acessos | ⏳ Pendente |
+| 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal | ⏳ Pendente |
+| 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais | ⏳ Pendente |
+| 7 | `inventario` | 21 | Inventário — controle de estoque | ⏳ Pendente |
+| 8 | `contratos` | 10 | Contratos — dados financeiros | ⏳ Pendente |
 
-### T2.1 a T2.8 — Por módulo
+### T2.1 — auth (CONCLUÍDO ✅)
+- [x] Criar `domain/repositories/IUserRepository.ts` (interface com tipos Prisma)
+- [x] Atualizar `infrastructure/UserRepository.ts` para implementar `IUserRepository`
+- [x] Injetar `IUserRepository` em `AuthService`, `AuthenticateUserUseCase`, `RegisterUserUseCase`
+- [x] Build passa (0 erros TypeScript)
+- [x] 636/636 unit tests passam
+- [x] Commit: `165189d92`
+
+### T2.2 a T2.8 — Por módulo
 Para cada módulo:
 1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
 2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)
