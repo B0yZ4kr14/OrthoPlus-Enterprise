@@ -8,8 +8,8 @@ export class FinanceiroController {
   private wrap(fn: (req: Request, res: Response) => Promise<void>, context: string) {
     return async (req: Request, res: Response): Promise<void> => {
       try { await fn(req, res) } catch (error: any) {
-        if (error.statusCode) { res.status(error.statusCode).json({ error: error.message, details: error.details }); return }
-        logger.error(context, { error }); res.status(500).json({ error: "Internal server error" }) } }
+        if (error.statusCode) { res.status(error.statusCode).json({ type: `https://httpstatuses.com/${error.statusCode}`, title: error.message, status: error.statusCode, detail: error.message, errors: error.details }); return }
+        logger.error(context, { error }); res.status(500).json({ type: "https://httpstatuses.com/500", title: "Internal server error", status: 500, detail: "Internal server error" }) } }
   }
 
   private withClinic(
@@ -19,8 +19,8 @@ export class FinanceiroController {
   ) {
     return this.wrap(async (req, res) => {
       const clinicId = req.user?.clinicId
-      if (!clinicId) { res.status(401).json({ error: "Clinic ID not found" }); return }
-      if (options?.needsUserId && !req.user?.id) { res.status(401).json({ error: "Auth required" }); return }
+      if (!clinicId) { res.status(401).json({ type: "https://httpstatuses.com/401", title: "Unauthorized", status: 401, detail: "Clinic ID not found" }); return }
+      if (options?.needsUserId && !req.user?.id) { res.status(401).json({ type: "https://httpstatuses.com/401", title: "Unauthorized", status: 401, detail: "Auth required" }); return }
       await fn(clinicId, req, res) }, context)
   }
 
