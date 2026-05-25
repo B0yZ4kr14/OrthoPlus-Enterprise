@@ -15,26 +15,16 @@ router.use(clinicGuard);
   const controller = new CryptoConfigController();
   const volatilityWorker = new VolatilityWorkerController();
 
-  router.get("/exchanges", (req, res) => controller.listExchanges(req, res));
-  router.post("/exchanges", (req, res) => controller.createExchange(req, res));
-  router.get("/portfolio", (req, res) => controller.getPortfolio(req, res));
-  router.get("/dca-strategies", (req, res) =>
-    controller.getDCAStrategies(req, res),
-  );
+  router.get("/exchanges", controller.listExchanges);
+  router.post("/exchanges", controller.createExchange);
+  router.get("/portfolio", controller.getPortfolio);
+  router.get("/dca-strategies", controller.getDCAStrategies);
 
   // Phase 1: Ported from Edge Functions
-  router.post("/offline-wallet/manage", (req, res) =>
-    controller.manageOfflineWallet(req, res),
-  );
-  router.post("/offline-wallet/sync", (req, res) =>
-    controller.syncCryptoWallet(req, res),
-  );
-  router.post("/offline-wallet/validate-xpub", (req, res) =>
-    controller.validateXpub(req, res),
-  );
-  router.get("/realtime-notifications", (req, res) =>
-    controller.realtimeNotify(req, res),
-  );
+  router.post("/offline-wallet/manage", controller.manageOfflineWallet);
+  router.post("/offline-wallet/sync", controller.syncCryptoWallet);
+  router.post("/offline-wallet/validate-xpub", controller.validateXpub);
+  router.get("/realtime-notifications", controller.realtimeNotify);
 
   // Phase 2: Workers
   router.post("/workers/volatility", (req, res) =>
@@ -42,12 +32,10 @@ router.use(clinicGuard);
   );
 
   // Phase 5: Webhooks
-  router.post("/webhooks/transaction", (req, res) =>
-    controller.webhookCryptoTransaction(req, res),
-  );
+  router.post("/webhooks/transaction", controller.webhookCryptoTransaction);
 
   // Payment address generation (Wave-2 fix)
-  router.post("/payment-address", (req, res) => controller.generatePaymentAddress(req, res));
+  router.post("/payment-address", controller.generatePaymentAddress);
 
   return router;
 }
