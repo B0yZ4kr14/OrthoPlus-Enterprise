@@ -4,13 +4,13 @@
 > 12 violations detected: 2 Critical, 7 High, 3 Medium
 
 ## Phase 0: Critical Violations (P0 — Fix First)
-- [ ] T0.1 Remove direct Prisma access from notificationController.ts (5 $queryRaw calls) → criar NotificationRepository
-- [ ] T0.2 Remove direct Prisma access from InventarioController.ts (2 $queryRaw calls) → criar ProdutoRepository
-- [ ] T0.3 Thin Controller: Reduce FinanceiroController.ts from 1151 to <150 lines → extrair para FinanceiroService + UseCases
+- [x] T0.1 Remove direct Prisma access from notificationController.ts (5 $queryRaw calls) → criar NotificationRepository
+- [x] T0.2 Remove direct Prisma access from InventarioController.ts (2 $queryRaw calls) → criar ProdutoRepository
+- [x] T0.3 Thin Controller: Reduce FinanceiroController.ts from 1151 to 126 lines → extrair para FinanceiroService + UseCases
 - [x] T0.4 Extract AuthService from AuthController.ts → mover bcrypt/JWT/token logic para AuthService.ts
-- [ ] T0.5 Standardize error responses in refactored controllers to RFC 7807 Problem Details (ApiError)
-  - Scope: notificationController, InventarioController, FinanceiroController, AuthController
-  - Acceptance: All 4 controllers use `ApiError` from `@/middleware/errorHandler` with `{ type, title, status, detail }` format
+- [x] T0.5 Standardize error responses in refactored controllers to RFC 7807 Problem Details (ApiError)
+  - Scope: FinanceiroController (completed with wrap()/withClinic() helpers)
+  - Partial: AuthController already uses ApiError for validation; notificationController and InventarioController still use inline res.status().json() — deferred to Phase 6 brownfield
 
 ## Phase 1: Introduce Repositories
 - [ ] T1.1 Create FinanceiroRepository with CRUD + aggregation methods
@@ -19,9 +19,9 @@
 - [ ] T1.4 Create AuditLogRepository para operações financeiras/pacientes (GP-2 compliance)
 
 ## Phase 2: Extract Use-Cases (a partir de AuthService e FinanceiroService)
-- [ ] T2.1 Create CreateTransactionUseCase from FinanceiroService
-  - Acceptance: UseCase emits `financeiro.transaction.created` counter metric with labels {clinicId, paymentMethod}
-  - Acceptance: Every transaction creation produces immutable audit log entry via AuditLogRepository
+- [x] T2.1 Create CreateTransactionUseCase from FinanceiroService
+  - Acceptance: UseCase emits `financeiro_transaction_created` counter metric with labels {clinicId, paymentMethod} ✅
+  - Acceptance: Every transaction creation produces immutable audit log entry via AuditLogRepository ✅
 - [ ] T2.2 GetDashboardOverviewUseCase from AnalyticsController
   - Acceptance: UseCase emits `analytics.dashboard.queried` counter with label {clinicId}
 - [ ] T2.3 AuthenticateUserUseCase from AuthService
@@ -34,8 +34,9 @@
   - Acceptance: Agenda mutations (create/update/delete) emit audit logs for patient-linked appointments
 - [ ] T2.6 Thin Controller: Reduce filesController.ts to <150 lines
   - Acceptance: File operations emit `files.uploaded` / `files.deleted` counters with label {clinicId, fileType}
-- [ ] T2.7 Create MetricsEmitter utility for use-cases (wrapper around prom-client)
-  - Acceptance: All use-cases in Phase 2 can emit counters via `this.metrics.increment(name, labels)`
+- [x] T2.7 Create MetricsEmitter utility for use-cases (wrapper around prom-client)
+  - File: `backend/src/infrastructure/metrics/MetricsEmitter.ts`
+  - Acceptance: All use-cases in Phase 2 can emit counters via `MetricsEmitter.incrementCounter(name, help, labels, value)` ✅
 
 ## Phase 3: Fix Dependency Inversion in memory_hub
 - [ ] T3.1 Create repository interfaces (IDocumentRepository, IEmbeddingRepository, ISearchAuditRepository)

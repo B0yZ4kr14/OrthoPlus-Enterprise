@@ -3,8 +3,8 @@ import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/Financ
 import { ProcessarPagamentoUseCase } from "@/modules/financeiro/application/ProcessarPagamentoUseCase"
 import { GetResumoFinanceiroUseCase } from "@/modules/financeiro/application/GetResumoFinanceiroUseCase"
 import { GetCashFlowUseCase } from "@/modules/financeiro/application/GetCashFlowUseCase"
+import { CreateTransactionUseCase } from "@/modules/financeiro/application/CreateTransactionUseCase"
 import {
-  createTransactionSchema,
   updateTransactionSchema,
   createCategorySchema,
   updateCategorySchema,
@@ -41,6 +41,7 @@ export class FinanceiroService {
   private processarPagamentoUseCase = new ProcessarPagamentoUseCase()
   private getResumoUseCase = new GetResumoFinanceiroUseCase()
   private getCashFlowUseCase = new GetCashFlowUseCase()
+  private createTransactionUseCase = new CreateTransactionUseCase()
 
   private validate(schema: z.ZodSchema<any>, data: unknown): any {
     const parsed = schema.safeParse(data)
@@ -69,8 +70,7 @@ export class FinanceiroService {
   }
 
   async createTransaction(clinicId: string, userId: string, body: unknown) {
-    const data = this.validate(createTransactionSchema, body)
-    return this.repo.createTransaction({ ...data, clinic_id: clinicId, created_by: userId } as any)
+    return this.createTransactionUseCase.execute(clinicId, userId, body)
   }
 
   async updateTransaction(id: string, clinicId: string, body: unknown) {
