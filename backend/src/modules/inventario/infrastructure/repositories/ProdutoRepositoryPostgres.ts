@@ -121,6 +121,72 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
     return result.rows.map((r) => this.mapToDomain(r));
   }
 
+  async findProductsForAutoOrders(clinicId: string): Promise<Array<{
+    produto_id: string;
+    produto_nome: string;
+    quantidade_atual: number;
+    quantidade_minima: number;
+    quantidade_reposicao: number;
+    ponto_pedido: number;
+    dias_entrega_estimados: number | null;
+    fornecedor_id: string | null;
+    valor_unitario: number;
+  }>> {
+    const result = await this.db.query<Record<string, unknown>>(
+      `SELECT
+        p.id AS produto_id,
+        p.nome AS produto_nome,
+        p.quantidade_atual,
+        p.quantidade_minima,
+        COALESCE(pc.quantidade_reposicao, p.quantidade_minima * 2) AS quantidade_reposicao,
+        COALESCE(pc.ponto_pedido, p.quantidade_minima) AS ponto_pedido,
+        pc.dias_entrega_estimados,
+        p.fornecedor AS fornecedor_id,
+        p.valor_unitario
+      FROM inventario.produtos p
+      LEFT JOIN estoque_pedidos_config pc ON pc.produto_id = p.id AND pc.clinic_id = p.clinic_id
+      WHERE p.clinic_id = $1
+        AND p.quantidade_atual <= COALESCE(pc.ponto_pedido, p.quantidade_minima)
+        AND (p.ativo = true OR p.status = 'ATIVO')
+      LIMIT 200`,
+      [clinicId]
+    );
+    return result.rows.map((r) => ({
+      produto_id: r.produto_id as string,
+      produto_nome: r.produto_nome as string,
+      quantidade_atual: Number(r.quantidade_atual),
+      quantidade_minima: Number(r.quantidade_minima),
+      quantidade_reposicao: Number(r.quantidade_reposicao),
+      ponto_pedido: Number(r.ponto_pedido),
+      dias_entrega_estimados: (r.dias_entrega_estimados as number | null) ?? null,
+      fornecedor_id: (r.fornecedor_id as string | null) ?? null,
+      valor_unitario: Number(r.valor_unitario),
+    }));
+  }
+
+  async findProductsForAlerts(clinicId: string): Promise<Array<{
+    id: string;
+    nome: string;
+    quantidade_atual: number;
+    quantidade_minima: number;
+  }>> {
+    const result = await this.db.query<Record<string, unknown>>(
+      `SELECT id, nome, quantidade_atual, quantidade_minima
+      FROM inventario.produtos
+      WHERE clinic_id = $1
+        AND quantidade_atual <= quantidade_minima
+        AND (ativo = true OR status = 'ATIVO')
+      LIMIT 200`,
+      [clinicId]
+    );
+    return result.rows.map((r) => ({
+      id: r.id as string,
+      nome: r.nome as string,
+      quantidade_atual: Number(r.quantidade_atual),
+      quantidade_minima: Number(r.quantidade_minima),
+    }));
+  }
+
   async count(clinicId: string, filters?: { categoriaId?: string; fornecedorId?: string; ativo?: boolean; estoqueBaixo?: boolean; search?: string }): Promise<number> {
     const { where, params } = this.buildClinicFilters(clinicId, filters);
     const result = await this.db.query<{ count: string }>(

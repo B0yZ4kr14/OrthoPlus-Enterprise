@@ -1,4 +1,3 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { NotificationRepository } from "@/modules/notifications/infrastructure/NotificationRepository";
 import { NextFunction, Request, Response } from "express";
 import nodemailer from "nodemailer";
@@ -65,16 +64,7 @@ export class NotificationController {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // contas_receber has no Prisma relation to patients; kept as raw JOIN.
-      const overduePayments = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT cr.*, p.full_name as patient_name
-        FROM contas_receber cr
-        LEFT JOIN patients p ON cr.patient_id = p.id
-        WHERE cr.data_vencimento < ${today}
-        AND cr.status IN ('PENDENTE', 'ATRASADO')
-        LIMIT 1000
-      `;
-
+      const overduePayments = await this.repo.findOverduePayments(today);
       for (const payment of overduePayments) {
         await this.repo.createNotification({
           clinic_id: payment.clinic_id,
@@ -88,11 +78,7 @@ export class NotificationController {
       }
 
       // 3. Low stock
-      // Prisma Client does not support cross-column comparisons in WHERE.
-      const lowStockProducts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT * FROM produtos WHERE quantidade_atual <= quantidade_minima LIMIT 1000
-      `;
-
+      const lowStockProducts = await this.repo.findLowStockProducts();
       for (const product of lowStockProducts) {
         await this.repo.createNotification({
           clinic_id: product.clinic_id,
@@ -109,16 +95,7 @@ export class NotificationController {
       const todayMonth = today.getMonth() + 1;
       const todayDay = today.getDate();
 
-      // Prisma Client does not support EXTRACT(MONTH/DAY FROM date) natively.
-      const birthdayPatients = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT p.*, pat.full_name as patient_name
-        FROM prontuarios p
-        JOIN patients pat ON p.patient_id = pat.id
-        WHERE EXTRACT(MONTH FROM p.data_nascimento) = ${todayMonth}
-        AND EXTRACT(DAY FROM p.data_nascimento) = ${todayDay}
-        LIMIT 1000
-      `;
-
+      const birthdayPatients = await this.repo.findBirthdayPatients(todayMonth, todayDay);
       for (const patient of birthdayPatients) {
         await this.repo.createNotification({
           clinic_id: patient.clinic_id,
@@ -286,14 +263,7 @@ export class NotificationController {
     next: NextFunction,
   ) {
     try {
-      // crypto_price_alerts has no Prisma relation to profiles; kept as raw JOIN.
-      const alerts = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT cpa.*, p.email
-        FROM crypto_price_alerts cpa
-        LEFT JOIN profiles p ON cpa.created_by = p.id
-        WHERE cpa.is_active = true
-        LIMIT 100
-      `;
+      const alerts = await this.repo.findActiveCryptoPriceAlertsWithEmail();
 
       if (!alerts || alerts.length === 0) {
         res.json({ message: "No active alerts to process" });
@@ -315,17 +285,18 @@ export class NotificationController {
         const latestRate = await this.repo.findLatestCryptoRate(alert.coin_type);
 
         if (!latestRate) continue;
-        const currentRate = latestRate.rate_brl;
+        const currentRate = Number(latestRate.rate_brl);
+        const targetRate = Number(alert.target_rate_brl);
 
         let shouldTrigger = false;
         if (
           alert.alert_type === "ABOVE" &&
-          currentRate >= alert.target_rate_brl
+          currentRate >= targetRate
         )
           shouldTrigger = true;
         else if (
           alert.alert_type === "BELOW" &&
-          currentRate <= alert.target_rate_brl
+          currentRate <= targetRate
         )
           shouldTrigger = true;
 
@@ -443,13 +414,7 @@ export class NotificationController {
    */
   async sendStockAlerts(_req: Request, res: Response, next: NextFunction) {
     try {
-      // Prisma Client does not support cross-column comparisons in WHERE.
-      const produtos = await prisma.$queryRaw<any[]>` // eslint-disable-line @typescript-eslint/no-explicit-any
-        SELECT id, nome, quantidade_atual, quantidade_minima, clinic_id
-        FROM inventario.produtos
-        WHERE quantidade_atual <= quantidade_minima
-        LIMIT 1000
-      `;
+      const produtos = await this.repo.findLowStockInventoryProducts();
 
       if (!produtos || produtos.length === 0) {
         res.json({ message: "Nenhum alerta de estoque encontrado" });

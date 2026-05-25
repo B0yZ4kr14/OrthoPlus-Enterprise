@@ -6,7 +6,6 @@ import { NextFunction, Request, Response } from "express";
 import { CadastrarProdutoUseCase } from "../application/use-cases/CadastrarProdutoUseCase";
 import { IProdutoRepository } from "../domain/repositories/IProdutoRepository";
 import { logger } from "@/infrastructure/logger";
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository";
 
 export class InventarioController {
@@ -125,36 +124,10 @@ export class InventarioController {
       switch (action) {
         case "auto-orders":
         case "gerar-pedidos-automaticos": {
-          // Prisma Client does not support cross-column comparisons in WHERE.
-          // This query compares quantidade_atual against COALESCE(ponto_pedido, quantidade_minima).
-          const lowStockProducts = await prisma.$queryRaw<Array<{
-            produto_id: string;
-            produto_nome: string;
-            quantidade_atual: number;
-            quantidade_minima: number;
-            quantidade_reposicao: number;
-            ponto_pedido: number;
-            dias_entrega_estimados: number | null;
-            fornecedor_id: string | null;
-            valor_unitario: number;
-          }>>`
-            SELECT
-              p.id AS produto_id,
-              p.nome AS produto_nome,
-              p.quantidade_atual,
-              p.quantidade_minima,
-              COALESCE(pc.quantidade_reposicao, p.quantidade_minima * 2) AS quantidade_reposicao,
-              COALESCE(pc.ponto_pedido, p.quantidade_minima) AS ponto_pedido,
-              pc.dias_entrega_estimados,
-              p.fornecedor AS fornecedor_id,
-              p.valor_unitario
-            FROM inventario.produtos p
-            LEFT JOIN estoque_pedidos_config pc ON pc.produto_id = p.id AND pc.clinic_id = p.clinic_id
-            WHERE p.clinic_id = ${clinicId}
-              AND p.quantidade_atual <= COALESCE(pc.ponto_pedido, p.quantidade_minima)
-              AND (p.ativo = true OR p.status = 'ATIVO')
-            LIMIT 200
-          `;
+          if (!this.produtoRepository) {
+            return res.status(500).json({ error: "Repository not initialized" });
+          }
+          const lowStockProducts = await this.produtoRepository.findProductsForAutoOrders(clinicId);
 
           if (lowStockProducts.length === 0) {
             return res.status(200).json({
@@ -255,21 +228,10 @@ export class InventarioController {
         case "send-alerts":
         case "send-stock-alerts":
         case "send-replenishment-alerts": {
-          // Prisma Client does not support cross-column comparisons in WHERE.
-          // This query compares quantidade_atual <= quantidade_minima.
-          const alertProducts = await prisma.$queryRaw<Array<{
-            id: string;
-            nome: string;
-            quantidade_atual: number;
-            quantidade_minima: number;
-          }>>`
-            SELECT id, nome, quantidade_atual, quantidade_minima
-            FROM inventario.produtos
-            WHERE clinic_id = ${clinicId}
-              AND quantidade_atual <= quantidade_minima
-              AND (ativo = true OR status = 'ATIVO')
-            LIMIT 200
-          `;
+          if (!this.produtoRepository) {
+            return res.status(500).json({ error: "Repository not initialized" });
+          }
+          const alertProducts = await this.produtoRepository.findProductsForAlerts(clinicId);
 
           let alertsSent = 0;
           for (const product of alertProducts) {
