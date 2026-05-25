@@ -28,34 +28,34 @@ router.use(clinicGuard);
   router.post("/automation", controller.manageAutomation);
 
   // Individual legacy fallback points for specific manual requests if unmigrated
-  router.post("/gerar-pedidos-automaticos", (req, res) => {
+  router.post("/gerar-pedidos-automaticos", (req, res, next) => {
     req.body.action = "gerar-pedidos-automaticos";
-    controller.manageAutomation(req, res);
+    controller.manageAutomation(req, res, next);
   });
 
-  router.post("/prever-reposicao", (req, res) => {
+  router.post("/prever-reposicao", (req, res, next) => {
     req.body.action = "prever-reposicao";
-    controller.manageAutomation(req, res);
+    controller.manageAutomation(req, res, next);
   });
 
-  router.post("/send-stock-alerts", (req, res) => {
+  router.post("/send-stock-alerts", (req, res, next) => {
     req.body.action = "send-stock-alerts";
-    controller.manageAutomation(req, res);
+    controller.manageAutomation(req, res, next);
   });
 
-  router.post("/processar-retry-pedidos", (req, res) => {
+  router.post("/processar-retry-pedidos", (req, res, next) => {
     req.body.action = "processar-retry-pedidos";
-    controller.manageAutomation(req, res);
+    controller.manageAutomation(req, res, next);
   });
 
-  router.post("/enviar-pedido-automatico-api", (req, res) => {
+  router.post("/enviar-pedido-automatico-api", (req, res, next) => {
     req.body.action = "enviar-pedido-automatico-api";
-    controller.manageAutomation(req, res);
+    controller.manageAutomation(req, res, next);
   });
 
-  router.post("/webhook-confirmacao-pedido", (req, res) => {
+  router.post("/webhook-confirmacao-pedido", (req, res, next) => {
     req.body.action = "webhook-confirmacao-pedido";
-    controller.manageAutomation(req, res);
+    controller.manageAutomation(req, res, next);
   });
 
   router.use('/db', dbRouter);

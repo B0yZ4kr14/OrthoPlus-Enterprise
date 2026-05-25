@@ -2,139 +2,119 @@
  * MÓDULO INVENTÁRIO - Controller REST API
  */
 
-import { NextFunction, Request, Response } from "express";
-import { CadastrarProdutoUseCase } from "../application/use-cases/CadastrarProdutoUseCase";
-import { IProdutoRepository } from "../domain/repositories/IProdutoRepository";
-import { logger } from "@/infrastructure/logger";
-import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository";
+import { Request, Response } from "express"
+import { Errors, asyncHandler } from "@/middleware/errorHandler"
+import { logger } from "@/infrastructure/logger"
+import { CadastrarProdutoUseCase } from "../application/use-cases/CadastrarProdutoUseCase"
+import { IProdutoRepository } from "../domain/repositories/IProdutoRepository"
+import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository"
 
 export class InventarioController {
   private repo = new InventarioRepository();
 
   constructor(private produtoRepository?: IProdutoRepository) {}
 
-  cadastrarProduto = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  cadastrarProduto = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     if (!this.produtoRepository) {
-      return res.status(500).json({ error: "Repository not initialized" });
+      throw Errors.internal("Repository not initialized")
     }
-    try {
-      const useCase = new CadastrarProdutoUseCase(this.produtoRepository);
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const produto = await useCase.execute({
-        clinicId,
-        codigo: req.body.codigo,
-        nome: req.body.nome,
-        descricao: req.body.descricao,
-        categoriaId: req.body.categoriaId,
-        fornecedorId: req.body.fornecedorId,
-        unidadeMedida: req.body.unidadeMedida,
-        quantidadeEstoque: req.body.quantidadeEstoque,
-        quantidadeMinima: req.body.quantidadeMinima,
-        precoCusto: req.body.precoCusto,
-        precoVenda: req.body.precoVenda,
-        temNfe: req.body.temNfe,
-      });
-
-      return res.status(201).json({
-        success: true,
-        data: produto.toObject(),
-      });
-    } catch (error: unknown) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      return next(error);
+    const useCase = new CadastrarProdutoUseCase(this.produtoRepository)
+    const clinicId = req.user?.clinicId
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context")
     }
-  };
+    const produto = await useCase.execute({
+      clinicId,
+      codigo: req.body.codigo,
+      nome: req.body.nome,
+      descricao: req.body.descricao,
+      categoriaId: req.body.categoriaId,
+      fornecedorId: req.body.fornecedorId,
+      unidadeMedida: req.body.unidadeMedida,
+      quantidadeEstoque: req.body.quantidadeEstoque,
+      quantidadeMinima: req.body.quantidadeMinima,
+      precoCusto: req.body.precoCusto,
+      precoVenda: req.body.precoVenda,
+      temNfe: req.body.temNfe,
+    })
 
-  listarProdutos = async (req: Request, res: Response, next: NextFunction) => {
+    res.status(201).json({
+      success: true,
+      data: produto.toObject(),
+    })
+    return
+  })
+
+  listarProdutos = asyncHandler(async (req: Request, res: Response) => {
     if (!this.produtoRepository) {
-      return res.status(500).json({ error: "Repository not initialized" });
+      throw Errors.internal("Repository not initialized")
     }
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const filters = {
-        categoriaId: req.query.categoriaId as string,
-        fornecedorId: req.query.fornecedorId as string,
-        ativo: req.query.ativo !== undefined ? req.query.ativo === "true" : undefined,
-        estoqueBaixo: req.query.estoqueBaixo === "true",
-        search: req.query.search as string,
-      };
-
-      const produtos = await this.produtoRepository.findByClinic(
-        clinicId,
-        filters,
-      );
-      const total = await this.produtoRepository.count(clinicId, filters);
-
-      return res.json({
-        success: true,
-        data: produtos.map((p) => p.toObject()),
-        meta: { total },
-      });
-    } catch (error: unknown) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      return next(error);
+    const clinicId = req.user?.clinicId
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context")
     }
-  };
+    const filters = {
+      categoriaId: req.query.categoriaId as string,
+      fornecedorId: req.query.fornecedorId as string,
+      ativo: req.query.ativo !== undefined ? req.query.ativo === "true" : undefined,
+      estoqueBaixo: req.query.estoqueBaixo === "true",
+      search: req.query.search as string,
+    }
 
-  obterProduto = async (req: Request, res: Response, next: NextFunction) => {
+    const produtos = await this.produtoRepository.findByClinic(clinicId, filters)
+    const total = await this.produtoRepository.count(clinicId, filters)
+
+    res.json({
+      success: true,
+      data: produtos.map((p) => p.toObject()),
+      meta: { total },
+    })
+  })
+
+  obterProduto = asyncHandler(async (req: Request, res: Response) => {
     if (!this.produtoRepository) {
-      return res.status(500).json({ error: "Repository not initialized" });
+      throw Errors.internal("Repository not initialized")
     }
-    try {
-      const { id } = req.params;
-      const produto = await this.produtoRepository.findById(id);
+    const { id } = req.params
+    const produto = await this.produtoRepository.findById(id)
 
-      if (!produto) {
-        return res.status(404).json({
-          success: false,
-          error: "Produto não encontrado",
-        });
-      }
-
-      return res.json({
-        success: true,
-        data: produto.toObject(),
-      });
-    } catch (error: unknown) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      return next(error);
+    if (!produto) {
+      throw Errors.notFound("Produto não encontrado")
     }
-  };
 
-  public manageAutomation = async (req: Request, res: Response) => {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
+    res.json({
+      success: true,
+      data: produto.toObject(),
+    })
+  })
 
-      const { action, orderId, supplierData } = req.body;
+  manageAutomation = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context")
+    }
 
-      if (!action) {
-        return res.status(400).json({ error: "Action is required" });
-      }
+    const { action, orderId, supplierData } = req.body
 
-      switch (action) {
-        case "auto-orders":
-        case "gerar-pedidos-automaticos": {
-          if (!this.produtoRepository) {
-            return res.status(500).json({ error: "Repository not initialized" });
-          }
+    if (!action) {
+      throw Errors.validation("Action is required")
+    }
+
+    switch (action) {
+      case "auto-orders":
+      case "gerar-pedidos-automaticos": {
+        if (!this.produtoRepository) {
+          throw Errors.internal("Repository not initialized")
+        }
           const lowStockProducts = await this.produtoRepository.findProductsForAutoOrders(clinicId);
 
           if (lowStockProducts.length === 0) {
-            return res.status(200).json({
+            res.status(200).json({
               message: "No products below reorder point",
               clinicId,
               ordersCreated: 0,
-            });
+            })
+            return
           }
 
           // Group products by supplier to create consolidated purchase orders
@@ -209,28 +189,30 @@ export class InventarioController {
             });
           }
 
-          return res.status(200).json({
+          res.status(200).json({
             message: "Auto-orders created successfully",
             clinicId,
             ordersCreated: ordersCreated.length,
             details: ordersCreated,
-          });
+          })
+          return
         }
 
         case "predict-restock":
         case "prever-reposicao":
-          return res.status(200).json({
+          res.status(200).json({
             message: "Restock prediction analysis completed",
             clinicId,
             predictions: [],
-          });
+          })
+          return
 
-        case "send-alerts":
-        case "send-stock-alerts":
-        case "send-replenishment-alerts": {
-          if (!this.produtoRepository) {
-            return res.status(500).json({ error: "Repository not initialized" });
-          }
+      case "send-alerts":
+      case "send-stock-alerts":
+      case "send-replenishment-alerts": {
+        if (!this.produtoRepository) {
+          throw Errors.internal("Repository not initialized")
+        }
           const alertProducts = await this.produtoRepository.findProductsForAlerts(clinicId);
 
           let alertsSent = 0;
@@ -250,81 +232,70 @@ export class InventarioController {
             alertsSent++;
           }
 
-          return res.status(200).json({
+          res.status(200).json({
             message: "Stock alerts dispatched",
             clinicId,
             alertsSent,
-          });
+          })
+          return
         }
 
         case "retry-orders":
         case "processar-retry-pedidos":
-          return res.status(200).json({
+          res.status(200).json({
             message: "Failed orders retry process queued",
             clinicId,
             processed: 0,
-          });
+          })
+          return
 
         case "send-to-supplier":
         case "enviar-pedido-automatico-api":
-          return res.status(200).json({
+          res.status(200).json({
             message: "Order dispatched to supplier",
             orderId,
             supplier: (supplierData as { name?: string })?.name || "unknown",
-          });
+          })
+          return
 
         case "process-confirmation":
         case "webhook-confirmacao-pedido":
-          return res.status(200).json({
+          res.status(200).json({
             message: "Supplier webhook processed",
             orderId,
             status: "CONFIRMED",
-          });
+          })
+          return
 
         case "processar-inventarios-agendados":
-          return res.status(200).json({
+          res.status(200).json({
             message: "Scheduled inventories process initiated",
             clinicId,
-          });
+          })
+          return
 
-        default:
-          return res.status(400).json({ error: `Unknown action: ${action}` });
-      }
-    } catch (error: unknown) {
-      logger.error("Error in manageAutomation:", { error });
-      return res
-        .status(500)
-        .json({ error: "Internal server error" });
+      default:
+        throw Errors.validation(`Unknown action: ${action}`)
     }
-  };
+  })
 
-  atualizarProduto = async (req: Request, res: Response) => {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const { id } = req.params;
-      const data = await this.repo.updateProduto(id, clinicId, req.body);
-      return res.json({ success: true, data });
-    } catch (error: unknown) {
-      logger.error("Error updating produto", { error });
-      return res.status(500).json({ error: "Erro ao atualizar produto" });
+  atualizarProduto = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context")
     }
-  };
+    const { id } = req.params
+    const data = await this.repo.updateProduto(id, clinicId, req.body)
+    res.json({ success: true, data })
+  })
 
-  removerProduto = async (req: Request, res: Response) => {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const { id } = req.params;
-      await this.repo.deleteProduto(id, clinicId);
-      return res.status(204).send();
-    } catch (error: unknown) {
-      logger.error("Error deleting produto", { error });
-      return res.status(500).json({ error: "Erro ao remover produto" });
+  removerProduto = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context")
     }
-  };
+    const { id } = req.params
+    await this.repo.deleteProduto(id, clinicId)
+    res.status(204).send()
+  })
 }
