@@ -4,26 +4,24 @@
 > 12 violations detected: 2 Critical, 7 High, 3 Medium
 
 ## Phase 0: Critical Violations (P0 — Fix First)
-- [ ] T0.1 Remove direct Prisma access from notificationController.ts (5 $queryRaw calls)
-- [ ] T0.2 Remove direct Prisma access from InventarioController.ts (2 $queryRaw calls)
-- [ ] T0.3 Thin Controller: Reduce FinanceiroController.ts from 1151 to <200 lines
-- [ ] T0.4 Extract AuthService from AuthController.ts (move bcrypt/JWT logic)
+- [ ] T0.1 Remove direct Prisma access from notificationController.ts (5 $queryRaw calls) → criar NotificationRepository
+- [ ] T0.2 Remove direct Prisma access from InventarioController.ts (2 $queryRaw calls) → criar ProdutoRepository
+- [ ] T0.3 Thin Controller: Reduce FinanceiroController.ts from 1151 to <150 lines → extrair para FinanceiroService + UseCases
+- [ ] T0.4 Extract AuthService from AuthController.ts → mover bcrypt/JWT/token logic para AuthService.ts
 
 ## Phase 1: Introduce Repositories
 - [ ] T1.1 Create FinanceiroRepository with CRUD + aggregation methods
-- [ ] T1.2 Refactor FinanceiroController to use FinanceiroRepository
-- [ ] T1.3 Extract AuthService from AuthController (login, register, refresh)
-- [ ] T1.4 Create UserRepository for prisma.users access
-- [ ] T1.5 Create NotificationRepository for $queryRaw calls
-- [ ] T1.6 Create ProdutoRepository for InventarioController $queryRaw calls
+- [ ] T1.2 Refactor FinanceiroController to use FinanceiroRepository (aceitação: <150 linhas)
+- [ ] T1.3 Create UserRepository for prisma.users access
+- [ ] T1.4 Create AuditLogRepository para operações financeiras/pacientes (GP-2 compliance)
 
-## Phase 2: Extract Use-Cases
-- [ ] T2.1 Create CreateTransactionUseCase
-- [ ] T2.2 Create GetDashboardOverviewUseCase
-- [ ] T2.3 Create AuthenticateUserUseCase
-- [ ] T2.4 Create RegisterUserUseCase
-- [ ] T2.5 Thin Controller: Reduce agendaController.ts from 678 to <200 lines
-- [ ] T2.6 Thin Controller: Reduce filesController.ts from 736 to <200 lines
+## Phase 2: Extract Use-Cases (a partir de AuthService e FinanceiroService)
+- [ ] T2.1 Create CreateTransactionUseCase from FinanceiroService
+- [ ] T2.2 GetDashboardOverviewUseCase from AnalyticsController
+- [ ] T2.3 AuthenticateUserUseCase from AuthService
+- [ ] T2.4 RegisterUserUseCase from AuthService
+- [ ] T2.5 Thin Controller: Reduce agendaController.ts to <150 lines
+- [ ] T2.6 Thin Controller: Reduce filesController.ts to <150 lines
 
 ## Phase 3: Fix Dependency Inversion in memory_hub
 - [ ] T3.1 Create repository interfaces (IDocumentRepository, IEmbeddingRepository, ISearchAuditRepository)
@@ -31,21 +29,30 @@
 - [ ] T3.3 Refactor IndexingService with factory pattern
 - [ ] T3.4 Adjust MemoryHubModule.ts for DI
 
-## Phase 4: Frontend Hooks & Security
+## Phase 4: Frontend Hooks
 - [ ] T4.1 Create useADRs, useAuditLogs, useBackups hooks
 - [ ] T4.2 Create useCryptoConfig, useAIModelConfig, useAuthenticationConfig hooks
 - [ ] T4.3 Refactor admin pages to use hooks
 - [ ] T4.4 Create useAdminResource generic hook
-- [ ] T4.5 Remove localStorage token usage from useProcedimentos.ts (XSS risk)
-- [ ] T4.6 Migrate AuthContext to HttpOnly cookies only
+- [ ] T4.5 Emitir métricas customizadas de cada novo hook (EP-4 compliance)
 
 ## Phase 5: DTOs and API Contracts
-- [ ] T5.1 Define DTOs in shared-types
+- [ ] T5.1 Define TransactionDTO, DashboardOverviewDTO, UserDTO in shared-types
 - [ ] T5.2 Create entity-to-DTO mappers
-- [ ] T5.3 Update frontend to use DTOs
+- [ ] T5.3 Update frontend to consume DTOs
 - [ ] T5.4 Document API contracts with Zod schemas
 - [ ] T5.5 Standardize API response envelope { success, data, error }
 
-## Phase 6: Repository Coverage
-- [ ] T6.1 Add repository layer to 23 modules without repositories
-- [ ] T6.2 Prioritize: analytics, auth, files, notifications, pacientes
+## Phase 6: Repository Coverage & Brownfield
+- [ ] T6.1 Add repository layer a módulos com >=5 entidades E alterações recentes (<3 meses)
+- [ ] T6.2 Prioridade P0: analytics, auth, files, notifications, pacientes
+- [ ] T6.3 Excluir módulos legados estáveis (EP-2 brownfield tolerance)
+
+## Phase 7: Validation & Quality Gates (CRITICAL)
+- [ ] T7.1 Run full test suite — 636 unit tests + 26 E2E smoke tests (SC-1)
+- [ ] T7.2 Verify backend build: 0 TypeScript errors (SC-2)
+- [ ] T7.3 Verify all tests passing (SC-3)
+- [ ] T7.4 Run dual-mode smoke test (old + new endpoints) (SC-4)
+- [ ] T7.5 Verify clinicGuard on all new routers (GP-1)
+- [ ] T7.6 Verify audit logs for financial/patient ops (GP-2)
+- [ ] T7.7 Verify metrics emission from new services (EP-4)
