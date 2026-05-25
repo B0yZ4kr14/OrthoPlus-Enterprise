@@ -1,10 +1,9 @@
 import { logger } from '@/infrastructure/logger';
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { prisma } from "@/infrastructure/database/prismaClient";
-import { ApiError, Errors, ErrorCodes, asyncHandler } from "@/middleware/errorHandler";
+import { ApiError, Errors, asyncHandler } from "@/middleware/errorHandler";
 import type { LoginRequest, LoginResponse, User, JWTPayload } from "@orthoplus/shared-types";
+import { AuthService } from "@/modules/auth/application/AuthService";
 
 /**
  * Authentication controller for staff.
@@ -38,22 +37,8 @@ const COOKIE_OPTIONS = {
   path: "/",
 };
 
-/** Shape of a row returned from the `profiles` table. */
-interface ProfileRow {
-  id: string;
-  app_role: string | null;
-  clinic_id: string | null;
-  avatar_url: string | null;
-  full_name: string | null;
-}
-
-/** Shape of a row returned from the `clinics` table. */
-interface ClinicRow {
-  id: string;
-  name: string;
-}
-
 export class AuthController {
+  private authService = new AuthService()
   /**
    * POST /auth/login
    * Authenticates a staff user and returns JWT tokens.
@@ -75,52 +60,23 @@ export class AuthController {
 
     // STEP 1: Always try real database lookup first.
     try {
-      const user = await prisma.users.findUnique({
-        where: { email },
-      });
+      const result = await this.authService.authenticateStaff(email, password)
 
-      if (user && !user.is_active) {
-        throw Errors.invalidCredentials();
-      }
+      if (result) {
+        res.cookie("access_token", result.accessToken, COOKIE_OPTIONS)
 
-      if (user) {
-        const passwordMatch = await bcrypt.compare(password, user.password_hash);
-        if (!passwordMatch) {
-          throw Errors.invalidCredentials();
-        }
-
-        const clinicId = user.clinic_id;
-        if (!clinicId) {
-          throw Errors.noClinicAssigned();
-        }
-
-        const token = jwt.sign(
-          { sub: user.id, email: user.email, role: user.role, clinicId },
-          requireJwtSecret(),
-          { expiresIn: "1h" },
-        );
-
-        // Generate refresh token (TODO: store in database)
-        const refreshToken = jwt.sign(
-          { sub: user.id, type: "refresh" },
-          requireJwtSecret(),
-          { expiresIn: "7d" },
-        );
-
-        res.cookie("access_token", token, COOKIE_OPTIONS);
-        
         const response: LoginResponse = {
           user: {
-            id: user.id,
-            email: user.email,
-            name: user.email.split("@")[0], // TODO: fetch from profiles
-            role: user.role as any,
-            clinicId,
+            id: result.user.id,
+            email: result.user.email,
+            name: result.user.email.split("@")[0], // TODO: fetch from profiles
+            role: result.user.role as any,
+            clinicId: result.user.clinicId,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
           clinic: {
-            id: clinicId,
+            id: result.user.clinicId,
             name: "Clinic Name", // TODO: fetch from database
             settings: {
               timezone: "America/Sao_Paulo",
@@ -131,27 +87,27 @@ export class AuthController {
             },
             activeModules: [],
           },
-          accessToken: token,
-          refreshToken,
+          accessToken: result.accessToken,
+          refreshToken: result.refreshToken,
           expiresIn: 3600,
-        };
+        }
 
-        res.json(response);
-        return;
+        res.json(response)
+        return
       }
     } catch (err) {
       // If it's an ApiError, re-throw it
       if (err instanceof ApiError) {
-        throw err;
+        throw err
       }
-      
+
       // If DB is unavailable and mock is not allowed, surface the error.
       if (!allowMock) {
-        logger.error("Login DB error", { error: err });
-        throw Errors.database("Database error during authentication");
+        logger.error("Login DB error", { error: err })
+        throw Errors.database("Database error during authentication")
       }
       // DB error but mock is allowed — fall through to mock path below.
-      logger.warn("Login DB error, falling back to mock mode", { error: err });
+      logger.warn("Login DB error, falling back to mock mode", { error: err })
     }
 
     // STEP 2: No real user found. Fall back to mock if AUTH_ALLOW_MOCK=true.
@@ -287,27 +243,12 @@ export class AuthController {
       }
 
       // TODO: Verify refresh token in database and rotate it
-      
-      const user = await prisma.users.findUnique({ where: { id: decoded.sub } });
-      if (!user) {
-        throw Errors.notFound("User", decoded.sub);
-      }
 
-      const newAccessToken = jwt.sign(
-        { sub: user.id, email: user.email, role: user.role, clinicId: user.clinic_id },
-        requireJwtSecret(),
-        { expiresIn: "1h" },
-      );
-
-      const newRefreshToken = jwt.sign(
-        { sub: user.id, type: "refresh" },
-        requireJwtSecret(),
-        { expiresIn: "7d" },
-      );
+      const tokens = await this.authService.refreshAccessToken(refreshToken)
 
       res.json({
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
         expiresIn: 3600,
       });
     } catch (err) {
@@ -337,60 +278,35 @@ export class AuthController {
 
     // STEP 1: Always try real database lookup first.
     try {
-      const patient = await prisma.patients.findFirst({
-        where: { cpf: normalizedCpf },
-      });
-      if (patient) {
-        // Verify birth date matches
-        const patientBirth = new Date(patient.birth_date).toISOString().split("T")[0];
-        if (patientBirth !== birthDate) {
-          throw Errors.invalidCredentials();
-        }
+      const result = await this.authService.authenticatePatient(normalizedCpf, birthDate)
 
-        const clinicId = patient.clinic_id;
-        if (!clinicId) {
-          throw new ApiError(403, ErrorCodes.AUTH_NO_CLINIC, "No Clinic Assigned", "Patient has no clinic associated");
-        }
-
-        const patientEmail = `patient-${normalizedCpf}@portal`;
-        const token = jwt.sign(
-          { sub: patient.id, email: patientEmail, role: "patient", clinicId },
-          requireJwtSecret(),
-          { expiresIn: "1h" },
-        );
-
-        const refreshToken = jwt.sign(
-          { sub: patient.id, type: "refresh" },
-          requireJwtSecret(),
-          { expiresIn: "7d" },
-        );
-
-        res.cookie("access_token", token, COOKIE_OPTIONS);
+      if (result) {
+        res.cookie("access_token", result.accessToken, COOKIE_OPTIONS)
         res.json({
-          access_token: token,
+          access_token: result.accessToken,
           token_type: "bearer",
           expires_in: 3600,
-          refresh_token: refreshToken,
+          refresh_token: result.refreshToken,
           user: {
-            id: patient.id,
+            id: result.patientId,
             aud: "authenticated",
             role: "patient",
-            email: patientEmail,
+            email: `patient-${normalizedCpf}@portal`,
           },
-        });
-        return;
+        })
+        return
       }
     } catch (err) {
       if (err instanceof ApiError) {
-        throw err;
+        throw err
       }
-      
+
       if (!allowMock) {
-        logger.error("Patient auth DB error", { error: err });
-        throw Errors.database("Database error during patient authentication");
+        logger.error("Patient auth DB error", { error: err })
+        throw Errors.database("Database error during patient authentication")
       }
-      
-      logger.warn("Patient auth DB error, falling back to mock mode", { error: err });
+
+      logger.warn("Patient auth DB error, falling back to mock mode", { error: err })
     }
 
     // STEP 2: No real patient found. Fall back to mock only if AUTH_ALLOW_MOCK=true.
@@ -439,56 +355,15 @@ export class AuthController {
     }
 
     try {
-      const profile = await prisma.profiles.findUnique({ where: { id: userId } }) as ProfileRow | null;
+      const metadata = await this.authService.getUserMetadata(userId)
 
-      if (profile) {
-        let clinicData: ClinicRow | null = null;
-        if (profile.clinic_id) {
-          clinicData = await prisma.clinics.findUnique({ where: { id: profile.clinic_id } }) as ClinicRow | null;
-          if (!clinicData) {
-            logger.warn(`[getUserMetadata] Clinic ${profile.clinic_id} not found for user ${userId}`);
-          }
-        }
-
-        const role = profile.app_role || "MEMBER";
-        let permissionsData: string[];
-        if (role === "ADMIN" || role === "ROOT") {
-          permissionsData = ["ALL"];
-        } else {
-          const permissions = await prisma.user_module_permissions.findMany({
-            where: { user_id: userId },
-          });
-          if (permissions.length > 0) {
-            const moduleIds = permissions
-              .filter((p: any) => p.can_view)
-              .map((p: any) => p.module_catalog_id);
-            const modules = await prisma.module_catalog.findMany({
-              where: { id: { in: moduleIds } },
-              select: { module_key: true },
-            });
-            permissionsData = modules.map((m: any) => m.module_key);
-          } else {
-            permissionsData = [];
-          }
-        }
-
-        res.json({
-          roleData: { role },
-          profileData: {
-            clinic_id: profile.clinic_id || "",
-            avatar_url: profile.avatar_url || "",
-            full_name: profile.full_name || "",
-          },
-          clinicData: clinicData
-            ? { id: clinicData.id, name: clinicData.name }
-            : { id: profile.clinic_id || "", name: "Unknown Clinic" },
-          permissionsData,
-        });
-        return;
+      if (metadata) {
+        res.json(metadata)
+        return
       }
     } catch (err) {
-      logger.error("getUserMetadata error", { error: err });
-      throw Errors.internal("Error loading user metadata");
+      logger.error("getUserMetadata error", { error: err })
+      throw Errors.internal("Error loading user metadata")
     }
 
     // No real profile found — fall back to mock only if AUTH_ALLOW_MOCK=true.
@@ -555,34 +430,17 @@ export class AuthController {
     }
 
     try {
-      const existing = await prisma.users.findUnique({
-        where: { email },
-      });
-      if (existing) {
-        throw Errors.conflict("Email already in use");
-      }
-
-      const passwordHash = await bcrypt.hash(password!, 12);
-
-      const newUser = await prisma.users.create({
-        data: {
-          email: email!,
-          password_hash: passwordHash,
-          role: role!,
-          clinic_id: clinicId,
-          is_active: true,
-        },
-      });
+      const newUser = await this.authService.registerStaff(email!, password!, role!, clinicId!)
 
       res.status(201).json({
-        user: { id: newUser.id, email: newUser.email, role: newUser.role, clinicId: newUser.clinic_id },
-      });
+        user: { id: newUser.id, email: newUser.email, role: newUser.role, clinicId: newUser.clinicId },
+      })
     } catch (err) {
       if (err instanceof ApiError) {
-        throw err;
+        throw err
       }
-      logger.error("registerStaff error", { error: err });
-      throw Errors.internal("Error registering user");
+      logger.error("registerStaff error", { error: err })
+      throw Errors.internal("Error registering user")
     }
   });
 
