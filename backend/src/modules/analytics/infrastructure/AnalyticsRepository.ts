@@ -93,4 +93,120 @@ export class AnalyticsRepository {
       return 0
     }
   }
+
+  async aggregateRevenue(
+    clinicId: string,
+    type: string,
+    startDate: Date,
+    endDate?: Date,
+  ): Promise<number> {
+    try {
+      const where: any = {
+        clinic_id: clinicId,
+        type,
+        status: "PAGO",
+        createdAt: { gte: startDate },
+      }
+      if (endDate) {
+        where.createdAt.lt = endDate
+      }
+      const result = await (prisma as any).financial_transactions.aggregate({
+        _sum: { amount: true },
+        where,
+      })
+      return Number(result._sum.amount) || 0
+    } catch {
+      return 0
+    }
+  }
+
+  async getAppointmentsForPeriod(
+    clinicId: string,
+    startDate: Date,
+  ): Promise<Array<{ startTime: Date; endTime: Date | null; status: string }>> {
+    try {
+      return await (prisma as any).appointments.findMany({
+        where: { clinic_id: clinicId, startTime: { gte: startDate } },
+        select: { startTime: true, endTime: true, status: true },
+        take: 1000,
+      })
+    } catch {
+      return []
+    }
+  }
+
+  async getUniquePayingPatients(clinicId: string, startDate: Date): Promise<number> {
+    try {
+      const result = await (prisma as any).financial_transactions.groupBy({
+        by: ["patientId"],
+        where: {
+          clinic_id: clinicId,
+          type: "RECEITA",
+          status: "PAGO",
+          createdAt: { gte: startDate },
+          patientId: { not: null },
+        },
+      })
+      return result.length
+    } catch {
+      return 0
+    }
+  }
+
+  async getPendingReceivables(clinicId: string): Promise<Array<{ dataVencimento: string | null }>> {
+    try {
+      return await (prisma as any).financial_transactions.findMany({
+        where: {
+          clinic_id: clinicId,
+          type: "RECEITA",
+          status: "PENDENTE",
+        },
+        select: { dataVencimento: true },
+        take: 1000,
+      })
+    } catch {
+      return []
+    }
+  }
+
+  async countLeads(clinicId: string, startDate: Date): Promise<number> {
+    try {
+      return await (prisma as any).crm_leads.count({
+        where: { clinic_id: clinicId, createdAt: { gte: startDate } },
+      })
+    } catch {
+      return 0
+    }
+  }
+
+  async countConvertedLeads(clinicId: string, startDate: Date): Promise<number> {
+    try {
+      return await (prisma as any).crm_leads.count({
+        where: {
+          clinic_id: clinicId,
+          statusFunil: "CONVERTIDO",
+          createdAt: { gte: startDate },
+        },
+      })
+    } catch {
+      return 0
+    }
+  }
+
+  async getMarketingExpenses(clinicId: string, startDate: Date): Promise<number> {
+    try {
+      const result = await (prisma as any).financial_transactions.aggregate({
+        _sum: { amount: true },
+        where: {
+          clinic_id: clinicId,
+          type: "DESPESA",
+          categoria: "MARKETING",
+          createdAt: { gte: startDate },
+        },
+      })
+      return Number(result._sum.amount) || 0
+    } catch {
+      return 0
+    }
+  }
 }

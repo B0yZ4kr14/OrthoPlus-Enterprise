@@ -2,10 +2,12 @@ import { logger } from '@/infrastructure/logger';
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { NextFunction, Request, Response } from "express";
 import { GetDashboardOverviewUseCase } from "@/modules/analytics/application/GetDashboardOverviewUseCase";
+import { GetUnifiedMetricsUseCase } from "@/modules/analytics/application/GetUnifiedMetricsUseCase";
 
 
 export class AnalyticsController {
   private getDashboardOverviewUseCase = new GetDashboardOverviewUseCase()
+  private getUnifiedMetricsUseCase = new GetUnifiedMetricsUseCase()
   // ==========================================
   // dashboard-overview
   // ==========================================
@@ -49,179 +51,7 @@ export class AnalyticsController {
         return res.status(401).json({ error: "Unauthorized" });
       }
 
-      const startOfMonth = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        1,
-      );
-      const startOfLastMonth = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth() - 1,
-        1,
-      );
-
-      // Executive Metrics
-      const currentMonthRevenueAgg = await (
-        prisma as any // eslint-disable-line @typescript-eslint/no-explicit-any
-      ).transaction.aggregate({
-        _sum: { amount: true },
-        where: { clinic_id: clinicId, type: "RECEITA",
-          status: "PAGO",
-          createdAt: { gte: startOfMonth },
-        },
-      });
-      const receita_total = Number(currentMonthRevenueAgg._sum.amount) || 0;
-
-      const lastMonthRevenueAgg = await ( prisma as any).financial_transactions.aggregate({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        _sum: { amount: true },
-        where: { clinic_id: clinicId, type: "RECEITA",
-          status: "PAGO",
-          createdAt: { gte: startOfLastMonth, lt: startOfMonth },
-        },
-      });
-      const receita_mes_anterior = Number(lastMonthRevenueAgg._sum.amount) || 0;
-
-      const crescimento_mes =
-        receita_mes_anterior > 0
-          ? ((receita_total - receita_mes_anterior) / receita_mes_anterior) *
-            100
-          : 0;
-
-      const currentMonthExpensesAgg = await (
-        prisma as any // eslint-disable-line @typescript-eslint/no-explicit-any
-      ).transaction.aggregate({
-        _sum: { amount: true },
-        where: { clinic_id: clinicId, type: "DESPESA",
-          status: "PAGO",
-          createdAt: { gte: startOfMonth },
-        },
-      });
-
-      const despesas_total = Number(currentMonthExpensesAgg._sum.amount) || 0;
-      const lucro_liquido = receita_total - despesas_total;
-      const margem_lucro =
-        receita_total > 0 ? (lucro_liquido / receita_total) * 100 : 0;
-
-      // Clinical Metrics
-      const appointments = await ( prisma as any).appointments.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinic_id: clinicId, startTime: { gte: startOfMonth } },
-        select: { startTime: true, endTime: true, status: true },
-        take: 1000,
-      });
-
-      const total_appointments = appointments.length;
-      const completed_appointments = appointments.filter(
-        (a: { status: string }) => a.status === "CONCLUIDA",
-      ).length; // Correct status string might be 'CONCLUIDA' vs 'CONCLUIDO'
-      const taxa_ocupacao =
-        total_appointments > 0
-          ? (completed_appointments / total_appointments) * 100
-          : 0;
-
-      const durations = appointments
-        .filter((a: { status: string; endTime?: Date; startTime: Date }) => a.status === "CONCLUIDA" && a.endTime)
-        .map((a: { status: string; endTime: Date; startTime: Date }) => new Date(a.endTime).getTime() - new Date(a.startTime).getTime(),
-        );
-
-      const tempo_medio_consulta = durations.length
-        ? durations.reduce((sum: number, d: number) => sum + d, 0) /
-          durations.length /
-          60000
-        : 0;
-
-      // Financial Metrics
-      const uniquePatientsAgg = await ( prisma as any).financial_transactions.groupBy({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        by: ["patientId"],
-        where: { clinic_id: clinicId, type: "RECEITA",
-          status: "PAGO",
-          createdAt: { gte: startOfMonth },
-          patientId: { not: null },
-        },
-      });
-      const unique_patients = uniquePatientsAgg.length;
-      const ticket_medio =
-        unique_patients > 0 ? receita_total / unique_patients : 0;
-
-      const receivables = await ( prisma as any).financial_transactions.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinic_id: clinicId, type: "RECEITA",
-          status: "PENDENTE",
-        },
-        select: { dataVencimento: true }, // verify schema properties!
-        take: 1000,
-      });
-
-      const overdue = receivables.filter(
-        (r: { dataVencimento?: string }) => r.dataVencimento && new Date(r.dataVencimento) < new Date(),
-      ).length;
-      const total_receivables = receivables.length;
-      const inadimplencia =
-        total_receivables > 0 ? (overdue / total_receivables) * 100 : 0;
-      const fluxo_caixa = lucro_liquido;
-
-      // Commercial Metrics
-      const total_leads = await ( prisma as any).crm_leads.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinic_id: clinicId, createdAt: { gte: startOfMonth } },
-      });
-
-      const converted_leads = await ( prisma as any).crm_leads.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { clinic_id: clinicId, statusFunil: "CONVERTIDO",
-          createdAt: { gte: startOfMonth },
-        },
-      });
-
-      const conversao_leads =
-        total_leads && converted_leads
-          ? (converted_leads / total_leads) * 100
-          : 0;
-
-      const marketingExpensesAgg = await ( prisma as any).financial_transactions.aggregate({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        _sum: { amount: true },
-        where: { clinic_id: clinicId, type: "DESPESA",
-          categoria: "MARKETING", // Will this exist in schema? Maybe string!
-          createdAt: { gte: startOfMonth },
-        },
-      });
-
-      const custo_marketing = Number(marketingExpensesAgg._sum.amount) || 0;
-      const custo_aquisicao = converted_leads
-        ? custo_marketing / converted_leads
-        : 0;
-
-      const lifetime_value = ticket_medio * 12;
-      const roi_marketing =
-        custo_marketing > 0
-          ? ((lifetime_value * converted_leads - custo_marketing) /
-              custo_marketing) *
-            100
-          : 0;
-
-      const metrics = {
-        executive: {
-          receita_total,
-          crescimento_mes,
-          lucro_liquido,
-          margem_lucro,
-        },
-        clinical: {
-          taxa_ocupacao,
-          tempo_medio_consulta,
-          satisfacao_pacientes: 85,
-          procedimentos_realizados: completed_appointments,
-        },
-        financial: {
-          ticket_medio,
-          recorrencia: 75,
-          inadimplencia,
-          fluxo_caixa,
-        },
-        commercial: {
-          conversao_leads,
-          custo_aquisicao,
-          lifetime_value,
-          roi_marketing,
-        },
-      };
-
+      const metrics = await this.getUnifiedMetricsUseCase.execute(clinicId)
       return res.json(metrics);
     } catch (error) {
       logger.error("Error generating unified metrics", { error });
