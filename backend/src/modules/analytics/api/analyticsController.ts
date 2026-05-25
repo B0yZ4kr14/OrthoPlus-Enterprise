@@ -1,9 +1,11 @@
 import { logger } from '@/infrastructure/logger';
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { NextFunction, Request, Response } from "express";
+import { GetDashboardOverviewUseCase } from "@/modules/analytics/application/GetDashboardOverviewUseCase";
 
 
 export class AnalyticsController {
+  private getDashboardOverviewUseCase = new GetDashboardOverviewUseCase()
   // ==========================================
   // dashboard-overview
   // ==========================================
@@ -24,130 +26,9 @@ export class AnalyticsController {
         `[analyticsController] Fetching dashboard overview for clinic: ${clinicId}`,
       );
 
-      let stats = {
-        totalPatients: 0,
-        todayAppointments: 0,
-        monthlyRevenue: 0,
-        occupancyRate: 0,
-        pendingTreatments: 0,
-        completedTreatments: 0,
-      };
+      const result = await this.getDashboardOverviewUseCase.execute(clinicId);
 
-      try {
-        stats.totalPatients = await ( prisma as any).patients.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinic_id: clinicId },
-        });
-      } catch (_e) { /* ignored */ }
-
-      try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
-        stats.todayAppointments = await ( prisma as any).appointments.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinic_id: clinicId, startTime: { gte: today, lt: tomorrow },
-          },
-        });
-      } catch (_e) { /* ignored */ }
-
-      try {
-        const firstDayOfMonth = new Date(
-          new Date().getFullYear(),
-          new Date().getMonth(),
-          1,
-        );
-
-        // Tratar o sum no Prisma
-        const sumResult = await ( prisma as any).financial_transactions.aggregate({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          _sum: { amount: true },
-          where: { clinic_id: clinicId, type: "RECEITA",
-            date: { gte: firstDayOfMonth },
-          },
-        });
-
-        stats.monthlyRevenue = sumResult._sum.amount
-          ? Number(sumResult._sum.amount)
-          : 0;
-      } catch (e) {
-        logger.error(`[analyticsController] Revenue exception: ${e}`);
-      }
-
-      try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
-        const totalAppointments = await ( prisma as any).appointments.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinic_id: clinicId, startTime: { gte: today, lt: tomorrow },
-          },
-        });
-
-        const dentistsCount = await ( prisma as any).profiles.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinic_id: clinicId }, // Presumindo todos os profiles ou poderia filtrar por role
-        });
-
-        const totalSlots = (dentistsCount || 1) * 8;
-        stats.occupancyRate =
-          totalSlots > 0 ? (totalAppointments / totalSlots) * 100 : 0;
-      } catch (_e) { /* ignored */ }
-
-      try {
-        stats.pendingTreatments = await ( prisma as any).pep_tratamentos.count({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          where: { clinic_id: clinicId, status: "EM_ANDAMENTO" },
-        });
-        stats.completedTreatments = await ( prisma as any).pep_tratamentos.count( // eslint-disable-line @typescript-eslint/no-explicit-any
-          {
-            where: { clinic_id: clinicId, status: "CONCLUIDO" },
-          },
-        );
-      } catch (_e) { /* ignored */ }
-
-      // Se não houver dados reais, retornar demo data para uma experiência premium
-      const isEmpty = stats.totalPatients === 0 && stats.todayAppointments === 0 && stats.monthlyRevenue === 0;
-      if (isEmpty) {
-        stats = {
-          totalPatients: 1247,
-          todayAppointments: 18,
-          monthlyRevenue: 84500,
-          occupancyRate: 78,
-          pendingTreatments: 42,
-          completedTreatments: 156,
-        };
-      }
-
-      const appointmentsData = [
-        { name: "Seg", agendadas: 12, realizadas: 10 },
-        { name: "Ter", agendadas: 15, realizadas: 13 },
-        { name: "Qua", agendadas: 18, realizadas: 16 },
-        { name: "Qui", agendadas: 14, realizadas: 12 },
-        { name: "Sex", agendadas: 16, realizadas: 15 },
-        { name: "Sáb", agendadas: 8, realizadas: 7 },
-      ];
-
-      const revenueData = [
-        { name: "Jan", receita: 45000, despesas: 28000 },
-        { name: "Fev", receita: 52000, despesas: 30000 },
-        { name: "Mar", receita: 48000, despesas: 29000 },
-        { name: "Abr", receita: 61000, despesas: 32000 },
-        { name: "Mai", receita: 55000, despesas: 31000 },
-        { name: "Jun", receita: 67000, despesas: 33000 },
-      ];
-
-      const treatmentsByStatus = [
-        { name: "Concluído", value: 45 },
-        { name: "Em Andamento", value: 32 },
-        { name: "Pendente", value: 18 },
-        { name: "Cancelado", value: 5 },
-      ];
-
-      return res.json({
-        stats,
-        appointmentsData,
-        revenueData,
-        treatmentsByStatus,
-      });
+      return res.json(result);
     } catch (error) {
       logger.error("[analyticsController] FATAL ERROR", { error });
       return next(error);
