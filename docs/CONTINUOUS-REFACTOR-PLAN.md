@@ -1,0 +1,150 @@
+# Plano Contínuo de Refatoração — OrthoPlus Enterprise
+
+> Gerado em: 2026-05-25
+> Status: Orquestrado — execução sem pausas
+
+---
+
+## Contexto
+
+A primeira onda de refatoração eliminou todos os 13 fat controllers (>300 linhas).
+Restam 3 frentes críticas da Architecture Constitution:
+
+1. **Security Constitution §2.1**: Tokens em `localStorage` (violação crítica)
+2. **Architecture Constitution §EP-2**: 23 módulos sem repository layer
+3. **Frontend**: Inline API calls em componentes de página
+
+---
+
+## Fase 1: Segurança Crítica — Eliminar localStorage Tokens
+
+**Prioridade: P0 — BLOQUEANTE para produção**
+
+A `security_constitution.md` §2.1 é explicita:
+- MUST NOT: Store auth tokens in `localStorage` / `sessionStorage`
+- MUST: Use HttpOnly, Secure, SameSite=Strict cookies
+- MUST: Use `useAuth()` — never access storage APIs directly
+
+O backend já emite cookies (`AuthController` → `res.cookie("access_token", ...)`).
+O `apiClient` já envia cookies (`withCredentials: true`).
+O problema é que o request interceptor ainda injeta `localStorage.getItem("accessToken")`
+no header `Authorization`, e o `AuthContext` usa localStorage como source-of-truth.
+
+### T1.1 — Remover token injection do apiClient
+**Arquivo**: `apps/web/src/lib/api/apiClient.ts`  
+**Ação**: Eliminar o request interceptor que lê `localStorage.getItem("accessToken")`.
+Os cookies HttpAlready são enviados automaticamente via `withCredentials: true`.
+
+### T1.2 — Migrar AuthContext de localStorage para cookie-only
+**Arquivo**: `apps/web/src/contexts/AuthContext.tsx`  
+**Ação**:
+- Remover `localStorage.getItem/setItem/removeItem("accessToken")`
+- Remover `localStorage.getItem/setItem/removeItem("refreshToken")`
+- `checkSession()` deve chamar `/auth/me` sem verificar localStorage primeiro
+- `logout()` deve chamar `/auth/logout` (backend limpa o cookie)
+- Manter compatibilidade com mock mode (`AUTH_ALLOW_MOCK`)
+
+### T1.3 — Remover localStorage token de useProcedimentos
+**Arquivo**: `apps/web/src/components/fidelidade/recompensa-form/useProcedimentos.ts`
+**Ação**: Substituir `localStorage.getItem("accessToken")` por `useAuth()`.
+
+### T1.4 — Validar auth flow E2E
+**Testes**: Playwright E2E (`tests/e2e/`)  
+**Verificar**: login → cookie set → page reload → session still valid → logout → cookie cleared
+
+---
+
+## Fase 2: Repository Layer — Módulos Críticos (top 8)
+
+**Prioridade: P1**
+
+A `architecture_constitution.md` §EP-2 exige repository abstraction.
+Módulos com maior churn e complexidade:
+
+| Rank | Módulo | Arquivos | Motivação |
+|------|--------|----------|-----------|
+| 1 | `auth` | 7 | Autenticação — core de segurança |
+| 2 | `financeiro` | 17 | Financeiro — dados sensíveis, audit obrigatório |
+| 3 | `pdv` | 16 | PDV — transações críticas |
+| 4 | `agenda` | 10 | Agenda — alto volume de acessos |
+| 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal |
+| 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais |
+| 7 | `inventario` | 21 | Inventário — controle de estoque |
+| 8 | `contratos` | 10 | Contratos — dados financeiros |
+
+### T2.1 a T2.8 — Por módulo
+Para cada módulo:
+1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
+2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)
+3. Refatorar controller para depender da interface (inversão de dependência)
+4. Mover queries inline do controller para o repository
+5. Garantir que use-cases existentes também usem o repository
+
+---
+
+## Fase 3: Frontend — Eliminar Inline API Calls
+
+**Prioridade: P2**
+
+### T3.1 — Inventariar e consolidar
+**Arquivos com inline fetch/axios** (encontrados):
+- `src/modules/admin/ui/pages/ApiDocsPage.tsx` (exemplos de fetch)
+- `src/components/settings/BackendSelector.tsx` (fetch health)
+- `src/modules/Auth.tsx` (fetch para /api/orthoplus/auth/token)
+
+**Ação**:
+- `BackendSelector.tsx` → usar `apiClient` ou hook dedicado
+- `Auth.tsx` → usar `useAuth()` hook existente
+- `ApiDocsPage.tsx` → código de exemplo, não é runtime (pode ignorar)
+
+### T3.2 — Criar hooks de módulo
+Para cada página que faz chamada direta, criar hook em `src/hooks/` ou `src/modules/{modulo}/hooks/`.
+
+---
+
+## Fase 4: Completeness — Módulos Restantes
+
+**Prioridade: P3**
+
+Módulos sem `domain/repositories/` (16 restantes após Fase 2):
+`ai`, `analytics`, `backups`, `bi`, `comm`, `crm`, `crypto`, `dashboard`, `fidelidade`, `files`, `funcionarios`, `inadimplencia`, `lgpd`, `marketing`, `notifications`, `orcamentos`, `procedimentos`, `relatorios`, `split_pagamento`, `teleodonto`, `tiss`, `usuarios`
+
+**Regra**: Módulos com <5 entidades OU sem mudanças nos últimos 3 meses
+são excluídos da migração obrigatória (Brownfield exclusion).
+
+---
+
+## Sequência de Execução Contínua
+
+```
+T1.1 → T1.2 → T1.3 → T1.4   (Fase 1: Segurança — ~2-3h)
+   │
+   ▼
+T2.1 → T2.2 → T2.3 → T2.4   (Fase 2: Top 4 módulos — ~4-6h)
+   │
+   ▼
+T2.5 → T2.6 → T2.7 → T2.8   (Fase 2: Top 4 restantes — ~4-6h)
+   │
+   ▼
+T3.1 → T3.2                  (Fase 3: Frontend — ~2h)
+   │
+   ▼
+T4.1 (filtrado por brownfield)  (Fase 4: ~variável)
+```
+
+## Critérios de Aceitação por Tarefa
+
+- [ ] `pnpm build` passa (0 erros TypeScript)
+- [ ] `pnpm test` passa (636/636 unit tests)
+- [ ] Sem novos `@ts-ignore` ou `as any`
+- [ ] Sem regressão nos testes E2E (se aplicável)
+- [ ] Commits atômicos com mensagem convencional
+
+## Riscos e Mitigações
+
+| Risco | Mitigação |
+|-------|-----------|
+| AuthContext break → login não funciona | Testar mock mode E DB mode; manter fallback cookie |
+| Repository migration → testes quebram | Atualizar testes de integração; mock repository interface |
+| Frontend hooks → cache inválido | Invalidar React Query cache após mudanças de auth |
+

@@ -109,8 +109,7 @@ export default function Auth() {
       });
       const data = await response.json();
       if (data.accessToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+        // Cookie is set by backend automatically; no localStorage needed
         navigate("/dashboard");
         return;
       }

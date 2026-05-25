@@ -9,8 +9,6 @@ export function useProcedimentos() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) return;
     const fetchProcedimentos = async () => {
       try {
         setLoading(true);

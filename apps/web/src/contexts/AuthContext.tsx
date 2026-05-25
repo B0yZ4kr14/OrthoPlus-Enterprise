@@ -210,13 +210,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const checkSession = async () => {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        setSession(null);
-        setUser(null);
-        setLoading(false);
-        return;
-      }
       try {
         const data = await apiClient.get<{ user?: User; session?: string }>(
           "/auth/me",
@@ -224,7 +217,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (data && data.user) {
           setSession(data.session ? { access_token: data.session } : { access_token: "cookie" });
           setUser(data.user);
-          
+
           // Set role immediately from /auth/me response (fallback if fetchUserMetadata fails)
           const meRole = data.user.role;
           if (meRole) {
@@ -232,7 +225,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUserRole(normalizedRole as "ADMIN" | "MEMBER");
             setUserProfile(normalizedRole as UserProfile);
           }
-          
+
           fetchUserMetadata(data.user.id);
         } else {
           setSession(null);
@@ -240,34 +233,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUserRole(null);
           setClinicId(null);
         }
-      } catch (error) {
-        // Fallback: if accessToken exists in localStorage, try to fetch user profile directly
-        const token = localStorage.getItem("accessToken");
-        if (token) {
-          try {
-            const userData = await apiClient.get<{ user?: User }>("/auth/profile");
-            if (userData.user) {
-              setSession({ access_token: token });
-              setUser(userData.user);
-              fetchUserMetadata(userData.user.id);
-            } else {
-              setSession(null);
-              setUser(null);
-              setUserRole(null);
-              setClinicId(null);
-            }
-          } catch {
-            setSession(null);
-            setUser(null);
-            setUserRole(null);
-            setClinicId(null);
-          }
-        } else {
-          setSession(null);
-          setUser(null);
-          setUserRole(null);
-          setClinicId(null);
-        }
+      } catch {
+        // 401 expected when not logged in — cookies are HttpOnly, handled by backend
+        setSession(null);
+        setUser(null);
+        setUserRole(null);
+        setClinicId(null);
       } finally {
         setLoading(false);
       }
@@ -314,13 +285,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }>("/auth/token", { email, password });
 
       const token = response.access_token || response.accessToken;
-      if (token) {
-        localStorage.setItem("accessToken", token);
-      }
-      if ((response as any).refreshToken) {
-        localStorage.setItem("refreshToken", (response as any).refreshToken);
-      }
-
       setSession(token ? { access_token: token } : { access_token: "cookie" });
       setUser(response.user ?? null);
       

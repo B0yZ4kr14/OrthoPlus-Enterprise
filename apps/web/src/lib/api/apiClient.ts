@@ -27,32 +27,17 @@ class ApiClient {
   }
 
   private setupInterceptors() {
-    // Request interceptor — inject accessToken from localStorage when available
-    this.client.interceptors.request.use(
-      (config) => {
-        const token = localStorage.getItem("accessToken");
-        if (token && config.headers) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error),
-    );
-
     // Response interceptor — log errors but do NOT show toast here.
     // Callers (AuthContext, hooks) handle their own user-facing toasts.
     // Showing toast here causes double-toast on every error.
-    // 401s without a token are expected (user not logged in) — silenced.
+    // 401s are expected when user is not logged in — silenced in dev.
     this.client.interceptors.response.use(
-      (response) => {
-        return response;
-      },
+      (response) => response,
       (error: AxiosError) => {
         if (import.meta.env.DEV) {
           const status = error.response?.status;
-          const hasToken = !!localStorage.getItem("accessToken");
-          // Silently ignore 401s when no token is present (expected on initial load)
-          if (status === 401 && !hasToken) {
+          // Silently ignore 401s (expected when not logged in)
+          if (status === 401) {
             return Promise.reject(error);
           }
           console.error(
