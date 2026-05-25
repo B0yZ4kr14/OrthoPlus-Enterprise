@@ -442,3 +442,14 @@ async function gracefulShutdown(signal: string) {
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// FR-012: Hot-swap API keys via SIGHUP
+process.on('SIGHUP', () => {
+  logger.info('[SIGHUP] Reloading environment variables from .env');
+  const result = dotenv.config({ override: true });
+  if (result.error) {
+    logger.error('[SIGHUP] Failed to reload .env', { error: result.error });
+  } else {
+    logger.info('[SIGHUP] Environment reloaded successfully');
+  }
+});
