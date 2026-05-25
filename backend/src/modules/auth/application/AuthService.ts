@@ -1,7 +1,6 @@
 import { logger } from "@/infrastructure/logger"
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler"
 import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
-import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
 function requireJwtSecret(): string {
@@ -10,17 +9,6 @@ function requireJwtSecret(): string {
     throw new Error("JWT_SECRET is not configured")
   }
   return secret
-}
-
-export interface LoginResult {
-  user: {
-    id: string
-    email: string
-    role: string
-    clinicId: string
-  }
-  accessToken: string
-  refreshToken: string
 }
 
 export interface PatientAuthResult {
@@ -46,44 +34,10 @@ export class AuthService {
 
   // ─── Staff Login ───
 
-  async authenticateStaff(email: string, password: string): Promise<LoginResult | null> {
-    const user = await this.repo.findUserByEmail(email)
-
-    if (!user) {
-      return null
-    }
-
-    if (!user.is_active) {
-      throw Errors.invalidCredentials()
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password_hash)
-    if (!passwordMatch) {
-      throw Errors.invalidCredentials()
-    }
-
-    const clinicId = user.clinic_id
-    if (!clinicId) {
-      throw Errors.noClinicAssigned()
-    }
-
-    const accessToken = jwt.sign(
-      { sub: user.id, email: user.email, role: user.role, clinicId },
-      requireJwtSecret(),
-      { expiresIn: "1h" },
-    )
-
-    const refreshToken = jwt.sign(
-      { sub: user.id, type: "refresh" },
-      requireJwtSecret(),
-      { expiresIn: "7d" },
-    )
-
-    return {
-      user: { id: user.id, email: user.email, role: user.role, clinicId },
-      accessToken,
-      refreshToken,
-    }
+  async authenticateStaff(email: string, password: string) {
+    const { AuthenticateUserUseCase } = await import("./AuthenticateUserUseCase")
+    const useCase = new AuthenticateUserUseCase()
+    return useCase.execute(email, password)
   }
 
   // ─── Token Refresh ───
@@ -92,7 +46,7 @@ export class AuthService {
     const decoded = jwt.verify(refreshToken, requireJwtSecret()) as { sub: string; type: string }
 
     if (decoded.type !== "refresh") {
-      throw new ApiError(401, "AUTH_TOKEN_INVALID", "Invalid Token Type", "Token is not a refresh token")
+      throw new ApiError(401, ErrorCodes.AUTH_TOKEN_INVALID, "Invalid Token Type", "Token is not a refresh token")
     }
 
     const user = await this.repo.findUserById(decoded.sub)
@@ -205,21 +159,8 @@ export class AuthService {
     role: string,
     clinicId: string,
   ): Promise<{ id: string; email: string; role: string; clinicId: string | null }> {
-    const existing = await this.repo.findUserByEmail(email)
-    if (existing) {
-      throw Errors.conflict("Email already in use")
-    }
-
-    const passwordHash = await bcrypt.hash(password, 12)
-
-    const newUser = await this.repo.createUser({
-      email,
-      password_hash: passwordHash,
-      role,
-      clinic_id: clinicId,
-      is_active: true,
-    })
-
-    return { id: newUser.id, email: newUser.email, role: newUser.role, clinicId: newUser.clinic_id }
+    const { RegisterUserUseCase } = await import("./RegisterUserUseCase")
+    const useCase = new RegisterUserUseCase()
+    return useCase.execute(email, password, role, clinicId)
   }
 }
