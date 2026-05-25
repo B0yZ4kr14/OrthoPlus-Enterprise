@@ -1,18 +1,21 @@
 /**
- * MÓDULO INVENTÁRIO - Controller REST API
+ * MODULO INVENTARIO - Controller REST API
  */
 
 import { Request, Response } from "express"
 import { Errors, asyncHandler } from "@/middleware/errorHandler"
-import { logger } from "@/infrastructure/logger"
 import { CadastrarProdutoUseCase } from "../application/use-cases/CadastrarProdutoUseCase"
 import { IProdutoRepository } from "../domain/repositories/IProdutoRepository"
 import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository"
+import { InventarioControllerService } from "@/modules/inventario/application/InventarioControllerService"
 
 export class InventarioController {
   private repo = new InventarioRepository();
+  private service = new InventarioControllerService(this.repo);
 
-  constructor(private produtoRepository?: IProdutoRepository) {}
+  constructor(private produtoRepository?: IProdutoRepository) {
+    this.service = new InventarioControllerService(this.repo, this.produtoRepository);
+  }
 
   cadastrarProduto = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     if (!this.produtoRepository) {
@@ -42,7 +45,6 @@ export class InventarioController {
       success: true,
       data: produto.toObject(),
     })
-    return
   })
 
   listarProdutos = asyncHandler(async (req: Request, res: Response) => {
@@ -79,7 +81,7 @@ export class InventarioController {
     const produto = await this.produtoRepository.findById(id)
 
     if (!produto) {
-      throw Errors.notFound("Produto não encontrado")
+      throw Errors.notFound("Produto nao encontrado")
     }
 
     res.json({
@@ -103,176 +105,78 @@ export class InventarioController {
     switch (action) {
       case "auto-orders":
       case "gerar-pedidos-automaticos": {
-        if (!this.produtoRepository) {
-          throw Errors.internal("Repository not initialized")
-        }
-          const lowStockProducts = await this.produtoRepository.findProductsForAutoOrders(clinicId);
-
-          if (lowStockProducts.length === 0) {
-            res.status(200).json({
-              message: "No products below reorder point",
-              clinicId,
-              ordersCreated: 0,
-            })
-            return
-          }
-
-          // Group products by supplier to create consolidated purchase orders
-          const supplierGroups = new Map<string, typeof lowStockProducts>();
-          for (const product of lowStockProducts) {
-            const supplierId = product.fornecedor_id || "UNASSIGNED";
-            const group = supplierGroups.get(supplierId) || [];
-            group.push(product);
-            supplierGroups.set(supplierId, group);
-          }
-
-          const ordersCreated: Array<{ orderId: string; supplier: string; itemCount: number; totalValue: number }> = [];
-
-          for (const [supplierId, products] of supplierGroups) {
-            const totalValue = products.reduce(
-              (sum: number, p: typeof lowStockProducts[0]) => sum + p.valor_unitario * p.quantidade_reposicao,
-              0,
-            );
-            const numeroPedido = `AUTO-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
-
-            // Create purchase order
-            const order = await this.repo.createEstoquePedido({
-              clinic_id: clinicId,
-              numero_pedido: numeroPedido,
-              fornecedor_id: supplierId,
-              data_pedido: new Date().toISOString(),
-              status: 'RASCUNHO',
-              tipo: 'COMPRA',
-              valor_total: totalValue,
-              gerado_automaticamente: true,
-              created_by: 'SYSTEM',
-            });
-
-            const orderId = order.id;
-
-            // Create line items for each product
-            for (const product of products) {
-              const itemTotal = product.valor_unitario * product.quantidade_reposicao;
-              await this.repo.createEstoquePedidoItem({
-                pedido_id: orderId,
-                produto_id: product.produto_id,
-                quantidade: product.quantidade_reposicao,
-                preco_unitario: product.valor_unitario,
-                valor_total: itemTotal,
-              });
-            }
-
-            ordersCreated.push({
-              orderId,
-              supplier: supplierId,
-              itemCount: products.length,
-              totalValue,
-            });
-
-            logger.info("Auto-order created", {
-              clinicId,
-              orderId,
-              supplier: supplierId,
-              items: products.length,
-            });
-          }
-
-          // Create notification about auto-orders
-          if (ordersCreated.length > 0) {
-            await this.repo.createNotification({
-              clinic_id: clinicId,
-              tipo: 'ALERTA',
-              titulo: 'Pedidos Automáticos Gerados',
-              mensagem: `${ordersCreated.length} pedido(s) de compra gerado(s) automaticamente para ${lowStockProducts.length} produto(s) com estoque baixo.`,
-              link_acao: '/estoque',
-              lida: false,
-            });
-          }
-
+        const result = await this.service.createAutoOrders(clinicId)
+        if (result.ordersCreated === 0) {
           res.status(200).json({
-            message: "Auto-orders created successfully",
+            message: "No products below reorder point",
             clinicId,
-            ordersCreated: ordersCreated.length,
-            details: ordersCreated,
+            ordersCreated: 0,
           })
           return
         }
+        res.status(200).json({
+          message: "Auto-orders created successfully",
+          clinicId,
+          ordersCreated: result.ordersCreated,
+          details: result.details,
+        })
+        return
+      }
 
-        case "predict-restock":
-        case "prever-reposicao":
-          res.status(200).json({
-            message: "Restock prediction analysis completed",
-            clinicId,
-            predictions: [],
-          })
-          return
+      case "predict-restock":
+      case "prever-reposicao":
+        res.status(200).json({
+          message: "Restock prediction analysis completed",
+          clinicId,
+          predictions: [],
+        })
+        return
 
       case "send-alerts":
       case "send-stock-alerts":
       case "send-replenishment-alerts": {
-        if (!this.produtoRepository) {
-          throw Errors.internal("Repository not initialized")
-        }
-          const alertProducts = await this.produtoRepository.findProductsForAlerts(clinicId);
+        const result = await this.service.sendStockAlerts(clinicId)
+        res.status(200).json({
+          message: "Stock alerts dispatched",
+          clinicId,
+          alertsSent: result.alertsSent,
+        })
+        return
+      }
 
-          let alertsSent = 0;
-          for (const product of alertProducts) {
-            const tipoAlerta = product.quantidade_atual === 0 ? "ESTOQUE_CRITICO" : "ESTOQUE_MINIMO";
-            const mensagem = product.quantidade_atual === 0
-              ? `CRÍTICO: ${product.nome} sem estoque!`
-              : `Estoque mínimo: ${product.nome} (${product.quantidade_atual}/${product.quantidade_minima} un)`;
+      case "retry-orders":
+      case "processar-retry-pedidos":
+        res.status(200).json({
+          message: "Failed orders retry process queued",
+          clinicId,
+          processed: 0,
+        })
+        return
 
-            await this.repo.createNotification({
-              clinic_id: clinicId,
-              tipo: "ALERTA",
-              titulo: tipoAlerta === "ESTOQUE_CRITICO" ? "🚨 Estoque Crítico" : "⚠️ Estoque Baixo",
-              mensagem,
-              link_acao: "/estoque",
-            });
-            alertsSent++;
-          }
+      case "send-to-supplier":
+      case "enviar-pedido-automatico-api":
+        res.status(200).json({
+          message: "Order dispatched to supplier",
+          orderId,
+          supplier: (supplierData as { name?: string })?.name || "unknown",
+        })
+        return
 
-          res.status(200).json({
-            message: "Stock alerts dispatched",
-            clinicId,
-            alertsSent,
-          })
-          return
-        }
+      case "process-confirmation":
+      case "webhook-confirmacao-pedido":
+        res.status(200).json({
+          message: "Supplier webhook processed",
+          orderId,
+          status: "CONFIRMED",
+        })
+        return
 
-        case "retry-orders":
-        case "processar-retry-pedidos":
-          res.status(200).json({
-            message: "Failed orders retry process queued",
-            clinicId,
-            processed: 0,
-          })
-          return
-
-        case "send-to-supplier":
-        case "enviar-pedido-automatico-api":
-          res.status(200).json({
-            message: "Order dispatched to supplier",
-            orderId,
-            supplier: (supplierData as { name?: string })?.name || "unknown",
-          })
-          return
-
-        case "process-confirmation":
-        case "webhook-confirmacao-pedido":
-          res.status(200).json({
-            message: "Supplier webhook processed",
-            orderId,
-            status: "CONFIRMED",
-          })
-          return
-
-        case "processar-inventarios-agendados":
-          res.status(200).json({
-            message: "Scheduled inventories process initiated",
-            clinicId,
-          })
-          return
+      case "processar-inventarios-agendados":
+        res.status(200).json({
+          message: "Scheduled inventories process initiated",
+          clinicId,
+        })
+        return
 
       default:
         throw Errors.validation(`Unknown action: ${action}`)
