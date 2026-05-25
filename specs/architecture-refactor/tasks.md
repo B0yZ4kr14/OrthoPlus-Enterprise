@@ -30,8 +30,10 @@
 - [x] T2.4 RegisterUserUseCase from AuthService
   - Acceptance: UseCase emits `auth_user_registered` counter with label {role, clinicId} ✅
   - Acceptance: User registration produces audit log entry with before/after snapshot ✅
-- [ ] T2.5 Thin Controller: Reduce agendaController.ts to <150 lines
-  - Acceptance: Agenda mutations (create/update/delete) emit audit logs for patient-linked appointments
+- [x] T2.5 Thin Controller: Reduce agendaController.ts from 678 to ~181 lines
+  - Acceptance: Agenda mutations (create/update/delete) emit audit logs for patient-linked appointments ✅
+  - Extracted AgendaService with all business logic, metrics, and audit logs
+  - Extracted Zod schemas to api/schemas.ts
 - [ ] T2.6 Thin Controller: Reduce filesController.ts to <150 lines
   - Acceptance: File operations emit `files.uploaded` / `files.deleted` counters with label {clinicId, fileType}
 - [x] T2.7 Create MetricsEmitter utility for use-cases (wrapper around prom-client)
