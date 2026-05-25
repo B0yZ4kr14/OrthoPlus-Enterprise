@@ -96,7 +96,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<"ADMIN" | "MEMBER" | null>(null);
   const userRoleRef = useRef<"ADMIN" | "MEMBER" | null>(null);
-  userRoleRef.current = userRole;
+  useEffect(() => {
+    userRoleRef.current = userRole;
+  }, [userRole]);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [clinicId, setClinicId] = useState<string | null>(null);
   const [availableClinics, setAvailableClinics] = useState<Clinic[]>([]);
