@@ -17,6 +17,8 @@ Migrate OrthoPlus Enterprise from controller-centric architecture to Clean Archi
   - Acceptance: All API responses use DTOs from shared-types; no raw Prisma entities exposed
 - **FR-4: Create reusable data-fetching hooks on frontend**
   - Acceptance: Admin pages use custom hooks; zero inline `apiClient.` calls in page components
+- **FR-5: All financial and patient data mutations produce immutable audit logs**
+  - Acceptance: Every CreateTransaction, RegisterUser, and patient data change creates an entry in `audit_logs` table with userId, clinicId, action, entityType, entityId, timestamp, before/after snapshot
 
 ### Non-Functional
 - **SC-1: Zero regression on existing functionality**
@@ -29,6 +31,8 @@ Migrate OrthoPlus Enterprise from controller-centric architecture to Clean Archi
 - **SC-4: Coexistence strategy: old and new patterns run in parallel**
   - Mechanism: Adapter pattern + feature flags; old controllers keep working until new layer is validated
   - Validation: Dual-mode smoke test runs old and new endpoints side-by-side
+- **SC-5: Every new service/use-case emits at least one custom metric**
+  - Validation: Prometheus scrape endpoint (`/metrics`) shows new counters for each Phase 2+ service after implementation
 
 ## User Stories
 - **US-1**: Como desenvolvedor, quero que FinanceiroController use FinanceiroRepository para que eu possa testar a lógica de persistência isoladamente

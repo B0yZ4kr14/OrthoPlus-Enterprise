@@ -7,27 +7,45 @@
 - [ ] T0.1 Remove direct Prisma access from notificationController.ts (5 $queryRaw calls) → criar NotificationRepository
 - [ ] T0.2 Remove direct Prisma access from InventarioController.ts (2 $queryRaw calls) → criar ProdutoRepository
 - [ ] T0.3 Thin Controller: Reduce FinanceiroController.ts from 1151 to <150 lines → extrair para FinanceiroService + UseCases
-- [ ] T0.4 Extract AuthService from AuthController.ts → mover bcrypt/JWT/token logic para AuthService.ts
+- [x] T0.4 Extract AuthService from AuthController.ts → mover bcrypt/JWT/token logic para AuthService.ts
+- [ ] T0.5 Standardize error responses in refactored controllers to RFC 7807 Problem Details (ApiError)
+  - Scope: notificationController, InventarioController, FinanceiroController, AuthController
+  - Acceptance: All 4 controllers use `ApiError` from `@/middleware/errorHandler` with `{ type, title, status, detail }` format
 
 ## Phase 1: Introduce Repositories
 - [ ] T1.1 Create FinanceiroRepository with CRUD + aggregation methods
-- [ ] T1.2 Refactor FinanceiroController to use FinanceiroRepository (aceitação: <150 linhas)
+- [x] ~~T1.2 Refactor FinanceiroController to use FinanceiroRepository~~ (OBSOLETO — merged into T0.3)
 - [ ] T1.3 Create UserRepository for prisma.users access
 - [ ] T1.4 Create AuditLogRepository para operações financeiras/pacientes (GP-2 compliance)
 
 ## Phase 2: Extract Use-Cases (a partir de AuthService e FinanceiroService)
 - [ ] T2.1 Create CreateTransactionUseCase from FinanceiroService
+  - Acceptance: UseCase emits `financeiro.transaction.created` counter metric with labels {clinicId, paymentMethod}
+  - Acceptance: Every transaction creation produces immutable audit log entry via AuditLogRepository
 - [ ] T2.2 GetDashboardOverviewUseCase from AnalyticsController
+  - Acceptance: UseCase emits `analytics.dashboard.queried` counter with label {clinicId}
 - [ ] T2.3 AuthenticateUserUseCase from AuthService
+  - Acceptance: UseCase emits `auth.login.success` / `auth.login.failure` counters with label {role}
+  - Acceptance: Failed auth attempts log to `audit_logs` with userId, clinicId, action=AUTH_FAILURE
 - [ ] T2.4 RegisterUserUseCase from AuthService
+  - Acceptance: UseCase emits `auth.user.registered` counter with label {role, clinicId}
+  - Acceptance: User registration produces audit log entry with before/after snapshot
 - [ ] T2.5 Thin Controller: Reduce agendaController.ts to <150 lines
+  - Acceptance: Agenda mutations (create/update/delete) emit audit logs for patient-linked appointments
 - [ ] T2.6 Thin Controller: Reduce filesController.ts to <150 lines
+  - Acceptance: File operations emit `files.uploaded` / `files.deleted` counters with label {clinicId, fileType}
+- [ ] T2.7 Create MetricsEmitter utility for use-cases (wrapper around prom-client)
+  - Acceptance: All use-cases in Phase 2 can emit counters via `this.metrics.increment(name, labels)`
 
 ## Phase 3: Fix Dependency Inversion in memory_hub
 - [ ] T3.1 Create repository interfaces (IDocumentRepository, IEmbeddingRepository, ISearchAuditRepository)
+  - Acceptance: Each interface defines CRUD operations; no Prisma types leak into domain layer
 - [ ] T3.2 Refactor domain services to use interfaces
+  - Acceptance: HealthService, GraphService, SearchService depend on interfaces only
 - [ ] T3.3 Refactor IndexingService with factory pattern
+  - Acceptance: IndexingService receives repository via constructor injection
 - [ ] T3.4 Adjust MemoryHubModule.ts for DI
+  - Acceptance: Module wiring uses factory/provider pattern; unit tests can mock repositories
 
 ## Phase 4: Frontend Hooks
 - [ ] T4.1 Create useADRs, useAuditLogs, useBackups hooks
@@ -35,6 +53,7 @@
 - [ ] T4.3 Refactor admin pages to use hooks
 - [ ] T4.4 Create useAdminResource generic hook
 - [ ] T4.5 Emitir métricas customizadas de cada novo hook (EP-4 compliance)
+  - Acceptance: Each hook emits `frontend.hook.rendered` counter with label {hookName, page}
 
 ## Phase 5: DTOs and API Contracts
 - [ ] T5.1 Define TransactionDTO, DashboardOverviewDTO, UserDTO in shared-types
@@ -42,6 +61,8 @@
 - [ ] T5.3 Update frontend to consume DTOs
 - [ ] T5.4 Document API contracts with Zod schemas
 - [ ] T5.5 Standardize API response envelope { success, data, error }
+  - Acceptance: All new endpoints return `{ success: boolean, data?: T, error?: ProblemDetail }`
+  - Migration strategy: Gradual — new endpoints use envelope; legacy endpoints get adapter middleware
 
 ## Phase 6: Repository Coverage & Brownfield
 - [ ] T6.1 Add repository layer a módulos com >=5 entidades E alterações recentes (<3 meses)
@@ -52,7 +73,7 @@
 - [ ] T7.1 Run full test suite — 636 unit tests + 26 E2E smoke tests (SC-1)
 - [ ] T7.2 Verify backend build: 0 TypeScript errors (SC-2)
 - [ ] T7.3 Verify all tests passing (SC-3)
-- [ ] T7.4 Run dual-mode smoke test (old + new endpoints) (SC-4)
+- [ ] T7.4 Run dual-mode smoke test (old + new endpoints side-by-side) (SC-4)
 - [ ] T7.5 Verify clinicGuard on all new routers (GP-1)
-- [ ] T7.6 Verify audit logs for financial/patient ops (GP-2)
-- [ ] T7.7 Verify metrics emission from new services (EP-4)
+- [ ] T7.6 Verify audit logs for financial/patient ops (GP-2 / FR-5)
+- [ ] T7.7 Verify metrics emission from new services (EP-4 / SC-5)
