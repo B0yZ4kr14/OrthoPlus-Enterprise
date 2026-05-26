@@ -101,22 +101,7 @@ export default function Auth() {
   const handleLogin = async (values: LoginFormValues) => {
     const identifier = values.email.includes("@") ? values.email : values.email + "@tsiapp.io";
     setIsLoading(true);
-    try {
-      const response = await fetch("/api/orthoplus/auth/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: identifier, password: values.password }),
-      });
-      const data = await response.json();
-      if (data.accessToken) {
-        // Cookie is set by backend automatically; no localStorage needed
-        navigate("/dashboard");
-        return;
-      }
-    } catch (e) {
-      console.error("Direct login failed, falling back to signIn", e);
-    }
-    const { error } = await signIn(values.email, values.password);
+    const { error } = await signIn(identifier, values.password);
     setIsLoading(false);
     if (!error) {
       navigate("/dashboard");

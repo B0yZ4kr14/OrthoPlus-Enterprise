@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { apiClient } from "@/lib/api/apiClient";
 import type { BackendConfig } from "./types";
 
 export function useBackendStatus() {
@@ -15,20 +16,12 @@ export function useBackendStatus() {
       const startTime = Date.now();
 
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-        const response = await fetch(`${backend.url}/health`, {
-          method: "GET",
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
+        await apiClient.get("/health", { timeout: 5000 });
         const latency = Date.now() - startTime;
 
         return {
           ...backend,
-          status: response.ok ? "online" : "offline",
+          status: "online",
           latency,
         };
       } catch {
