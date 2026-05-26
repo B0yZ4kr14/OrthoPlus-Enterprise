@@ -40,5 +40,14 @@ export function createMemoryHubRouter(controller: MemoryHubController): Router {
   router.get("/graph", searchLimit, controller.graph)
   router.get("/drift", searchLimit, controller.drift)
 
+  const adminLimit = rateLimit({
+    windowMs: 60 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many admin requests. Please wait before retrying." },
+  })
+  router.post("/rotate-key", adminLimit, controller.rotateKey)
+
   return router
 }

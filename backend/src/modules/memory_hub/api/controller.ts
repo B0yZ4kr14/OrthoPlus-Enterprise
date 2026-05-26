@@ -202,6 +202,29 @@ export class MemoryHubController {
     res.json(graphData)
   })
 
+  rotateKey = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context")
+    }
+
+    const { provider, apiKey, model, baseUrl } = req.body
+    const updates: Record<string, string> = {}
+    if (provider !== undefined) updates.provider = provider
+    if (apiKey !== undefined) updates.apiKey = apiKey
+    if (model !== undefined) updates.model = model
+    if (baseUrl !== undefined) updates.baseUrl = baseUrl
+
+    const { EmbeddingClientFactory } = await import("../infrastructure/EmbeddingClientFactory")
+    const config = EmbeddingClientFactory.updateConfig(updates)
+
+    res.json({
+      message: "Embedding configuration updated",
+      provider: config.provider,
+      model: config.model || "default",
+    })
+  })
+
   drift = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId
     if (!clinicId) {
