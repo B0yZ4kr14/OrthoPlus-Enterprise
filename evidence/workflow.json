@@ -1,0 +1,46 @@
+{
+  "created_at": "2026-05-26T07:40:00.000Z",
+  "phases": {
+    "init": {
+      "status": "completed",
+      "started_at": "2026-05-26T07:35:00.000Z",
+      "completed_at": "2026-05-26T07:40:00.000Z"
+    },
+    "scan": {
+      "status": "pending"
+    },
+    "discover": {
+      "status": "pending"
+    },
+    "assess": {
+      "status": "pending"
+    },
+    "enrich": {
+      "status": "pending"
+    },
+    "generate": {
+      "status": "pending"
+    },
+    "validate": {
+      "status": "pending"
+    },
+    "finish": {
+      "status": "pending"
+    },
+    "gate": {
+      "status": "pending"
+    }
+  },
+  "adaptations": {
+    "db_schema_analysis": "auto",
+    "frontend_analysis": "auto",
+    "coverage_source": "proxy"
+  },
+  "notes": [
+    "coverage_report: not-collected (no coverage report artifact found in common locations)",
+    "flaky_test_history: not-collected (no flaky test export provided)",
+    "defect_export: not-collected (no defect tracker export provided)",
+    "ndepend_export: not-collected (not applicable to TypeScript/Python stack)",
+    "ide_entry_points: not-collected (no IDE entry-point list provided)"
+  ]
+}

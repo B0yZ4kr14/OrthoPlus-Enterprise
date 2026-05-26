@@ -1,0 +1,69 @@
+{
+  "created_at": "2026-05-26T07:40:00.000Z",
+  "project": {
+    "codebase_path": "./",
+    "detected": {
+      "languages": ["TypeScript", "Python"],
+      "language_proportions": { "TypeScript": 0.88, "Python": 0.12 },
+      "ts_files": 3709,
+      "py_files": 504,
+      "manifests": [
+        { "type": "pnpm-workspace", "path": "pnpm-workspace.yaml" },
+        { "type": "package.json-root", "path": "package.json" },
+        { "type": "package.json-frontend", "path": "apps/web/package.json" },
+        { "type": "package.json-backend", "path": "backend/package.json" },
+        { "type": "requirements.txt", "path": "agent-service/requirements.txt" },
+        { "type": "prisma-schema", "path": "backend/prisma/schema.prisma" }
+      ],
+      "frameworks": ["React", "Vite", "TailwindCSS", "Express", "Prisma", "FastAPI", "Agno"],
+      "has_frontend": true,
+      "has_database": true,
+      "db_orm": "Prisma",
+      "db_engine": "PostgreSQL",
+      "architecture_hint": "monorepo",
+      "ci_platform": "GitHub Actions",
+      "test_frameworks": ["Jest", "Vitest", "Playwright"]
+    }
+  },
+  "security_scope": {
+    "compliance_targets": ["LGPD", "OWASP-ASVS"],
+    "threat_standard": "STRIDE",
+    "risk_tolerance": "medium"
+  },
+  "qa_scope": {
+    "coverage_targets": {
+      "unit": 0.7,
+      "integration": 0.3,
+      "e2e": 0.1
+    },
+    "environments": ["dev", "staging", "prod"],
+    "test_pyramid": "classic"
+  },
+  "weights": {
+    "unified": {
+      "security": 0.5,
+      "qa": 0.5
+    },
+    "security_composite": {
+      "threat_modeling": 0.25,
+      "vulnerability_analysis": 0.25,
+      "control_coverage": 0.25,
+      "dependency_risk": 0.25
+    },
+    "qa_composite": {
+      "test_coverage": 0.3,
+      "testability": 0.25,
+      "environment_fidelity": 0.2,
+      "flakiness": 0.25
+    }
+  },
+  "inputs": {
+    "db_schema_export": "backend/prisma/schema.prisma",
+    "coverage_report": null,
+    "coverage_format": null,
+    "flaky_test_history": null,
+    "defect_export": null,
+    "ndepend_export": null,
+    "ide_entry_points": null
+  }
+}
