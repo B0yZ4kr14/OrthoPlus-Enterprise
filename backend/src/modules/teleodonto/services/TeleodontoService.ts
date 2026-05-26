@@ -2,6 +2,8 @@ import { logger } from "@/infrastructure/logger"
 import { Errors } from "@/middleware/errorHandler"
 import { ITeleodontoRepository } from "@/modules/teleodonto/domain/repositories/ITeleodontoRepository"
 
+import { TeleodontoRepository } from "@/modules/teleodonto/infrastructure/TeleodontoRepository"
+
 export interface CreateTeleconsultaInput {
   titulo: string
   motivo: string
@@ -62,7 +64,7 @@ export class TeleodontoService {
   private repo: ITeleodontoRepository
 
   constructor(repo?: ITeleodontoRepository) {
-    this.repo = repo ?? new (require("@/modules/teleodonto/infrastructure/TeleodontoRepository").TeleodontoRepository)()
+    this.repo = repo ?? new TeleodontoRepository()
   }
 
   async listTeleconsultas(clinicId: string, filters?: { status?: string; dentist_id?: string }) {

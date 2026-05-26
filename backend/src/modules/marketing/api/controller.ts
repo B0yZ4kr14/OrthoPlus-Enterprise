@@ -5,11 +5,13 @@ import { asyncHandler, Errors } from "@/middleware/errorHandler";
 import { marketingMetrics } from "@/infrastructure/metrics/MarketingMetrics";
 import { IMarketingRepository } from "@/modules/marketing/domain/repositories/IMarketingRepository";
 
+import { MarketingRepository } from "@/modules/marketing/infrastructure/MarketingRepository"
+
 export class MarketingController {
   private repo: IMarketingRepository
 
   constructor(repo?: IMarketingRepository) {
-    this.repo = repo ?? new (require("@/modules/marketing/infrastructure/MarketingRepository").MarketingRepository)()
+    this.repo = repo ?? new MarketingRepository()
   }
   // --- Campanhas ---
   listCampanhas = asyncHandler(async (req: Request, res: Response) => {

@@ -1,6 +1,8 @@
 import { logger } from "@/infrastructure/logger"
 import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 
+import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+
 export interface ResumoFinanceiroResult {
   saldoGeral: number
   totalReceitas: number
@@ -23,7 +25,7 @@ export class GetResumoFinanceiroUseCase {
   private repo: IFinanceiroRepository
 
   constructor(repo?: IFinanceiroRepository) {
-    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+    this.repo = repo ?? new FinanceiroRepository()
   }
 
   async execute(clinicId: string): Promise<ResumoFinanceiroResult> {

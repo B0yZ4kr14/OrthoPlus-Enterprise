@@ -4,6 +4,8 @@ import { AuditLogRepository } from "@/modules/database_admin/infrastructure/Audi
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import bcrypt from "bcrypt"
 
+import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+
 export interface RegisterUserResult {
   id: string
   email: string
@@ -19,7 +21,7 @@ export class RegisterUserUseCase {
   private audit = new AuditLogRepository()
 
   constructor(repo?: IUserRepository) {
-    this.repo = repo ?? new (require("@/modules/auth/infrastructure/UserRepository").UserRepository)()
+    this.repo = repo ?? new UserRepository()
   }
 
   async execute(

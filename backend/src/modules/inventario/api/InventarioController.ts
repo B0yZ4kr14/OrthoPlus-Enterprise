@@ -9,6 +9,8 @@ import { IProdutoRepository } from "../domain/repositories/IProdutoRepository"
 import { IInventarioRepository } from "@/modules/inventario/domain/repositories/IInventarioRepository"
 import { InventarioControllerService } from "@/modules/inventario/application/InventarioControllerService"
 
+import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository"
+
 export class InventarioController {
   private repo: IInventarioRepository
   private service: InventarioControllerService
@@ -17,7 +19,7 @@ export class InventarioController {
     repo?: IInventarioRepository,
     private produtoRepository?: IProdutoRepository,
   ) {
-    this.repo = repo ?? new (require("@/modules/inventario/infrastructure/InventarioRepository").InventarioRepository)()
+    this.repo = repo ?? new InventarioRepository()
     this.service = new InventarioControllerService(this.repo, this.produtoRepository)
   }
 

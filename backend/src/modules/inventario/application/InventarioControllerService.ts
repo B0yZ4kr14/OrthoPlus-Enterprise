@@ -2,6 +2,8 @@ import { logger } from "@/infrastructure/logger";
 import { IInventarioRepository } from "@/modules/inventario/domain/repositories/IInventarioRepository";
 import { IProdutoRepository } from "@/modules/inventario/domain/repositories/IProdutoRepository";
 
+import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository"
+
 export interface AutoOrderDetail {
   orderId: string;
   supplier: string;
@@ -17,7 +19,7 @@ export class InventarioControllerService {
     repo?: IInventarioRepository,
     produtoRepository?: IProdutoRepository,
   ) {
-    this.repo = repo ?? new (require("@/modules/inventario/infrastructure/InventarioRepository").InventarioRepository)()
+    this.repo = repo ?? new InventarioRepository()
     this.produtoRepository = produtoRepository
   }
 

@@ -5,6 +5,8 @@ import { MetricsEmitter } from "@/infrastructure/metrics"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
+import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+
 function requireJwtSecret(): string {
   const secret = process.env.JWT_SECRET
   if (!secret) {
@@ -32,7 +34,7 @@ export class AuthenticateUserUseCase {
   private audit = new AuditLogRepository()
 
   constructor(repo?: IUserRepository) {
-    this.repo = repo ?? new (require("@/modules/auth/infrastructure/UserRepository").UserRepository)()
+    this.repo = repo ?? new UserRepository()
   }
 
   async execute(email: string, password: string): Promise<AuthenticateUserResult | null> {

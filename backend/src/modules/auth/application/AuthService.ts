@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken"
 import type { LoginResponse, User } from "@orthoplus/shared-types"
 import type { AuthenticateUserResult } from "./AuthenticateUserUseCase"
 
+import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+
 function allowMock(): boolean {
   return process.env.AUTH_ALLOW_MOCK === "true"
 }
@@ -54,7 +56,7 @@ export class AuthService {
   private repo: IUserRepository
 
   constructor(repo?: IUserRepository) {
-    this.repo = repo ?? new (require("@/modules/auth/infrastructure/UserRepository").UserRepository)()
+    this.repo = repo ?? new UserRepository()
   }
 
   // ─── Staff Login ───

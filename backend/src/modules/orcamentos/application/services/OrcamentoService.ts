@@ -1,5 +1,7 @@
 import { IOrcamentoRepository } from "@/modules/orcamentos/domain/repositories/IOrcamentoRepository"
 
+import { OrcamentoRepository } from "@/modules/orcamentos/infrastructure/OrcamentoRepository"
+
 export interface CreateOrcamentoInput {
   numero_orcamento: string;
   titulo: string;
@@ -48,7 +50,7 @@ export class OrcamentoService {
   private repo: IOrcamentoRepository
 
   constructor(repo?: IOrcamentoRepository) {
-    this.repo = repo ?? new (require("@/modules/orcamentos/infrastructure/OrcamentoRepository").OrcamentoRepository)()
+    this.repo = repo ?? new OrcamentoRepository()
   }
 
   async list(clinicId: string, filters?: { patient_id?: string; status?: string }) {

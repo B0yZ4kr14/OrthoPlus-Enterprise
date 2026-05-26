@@ -1,5 +1,7 @@
 import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 
+import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+
 export interface ProcessarPagamentoInput {
   contaReceberId: string
   amount: number
@@ -19,7 +21,7 @@ export class ProcessarPagamentoUseCase {
   private repo: IFinanceiroRepository
 
   constructor(repo?: IFinanceiroRepository) {
-    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+    this.repo = repo ?? new FinanceiroRepository()
   }
 
   async execute(input: ProcessarPagamentoInput): Promise<ProcessarPagamentoResult> {

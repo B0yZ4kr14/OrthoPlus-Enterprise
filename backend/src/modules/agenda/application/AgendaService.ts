@@ -5,6 +5,7 @@ import { eventBus } from "@/shared/events/EventBus"
 import { agendaMetrics } from "@/infrastructure/metrics/AgendaMetrics"
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
+import { AgendaRepository } from "@/modules/agenda/infrastructure/AgendaRepository"
 import {
   appointmentCreateSchema,
   appointmentUpdateSchema,
@@ -22,7 +23,7 @@ export class AgendaService {
   private audit = new AuditLogRepository()
 
   constructor(repo?: IAgendaRepository) {
-    this.repo = repo ?? new (require("@/modules/agenda/infrastructure/AgendaRepository").AgendaRepository)()
+    this.repo = repo ?? new AgendaRepository()
   }
 
   // ─── Appointments ───

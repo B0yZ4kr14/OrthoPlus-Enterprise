@@ -1,15 +1,16 @@
 import { IUsuariosRepository } from "@/modules/usuarios/domain/repositories/IUsuariosRepository";
 import { logger } from "@/infrastructure/logger";
 import bcrypt from "bcrypt";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { randomBytes } = require('crypto') as { randomBytes: (n: number) => Buffer };
+import { randomBytes } from "crypto"
 import { Request, Response } from "express";
+
+import { UsuariosRepository } from "@/modules/usuarios/infrastructure/UsuariosRepository"
 
 export class UsuariosController {
   private repo: IUsuariosRepository
 
   constructor(repo?: IUsuariosRepository) {
-    this.repo = repo ?? new (require("@/modules/usuarios/infrastructure/UsuariosRepository").UsuariosRepository)()
+    this.repo = repo ?? new UsuariosRepository()
   }
   async list(req: Request, res: Response): Promise<void> {
     try {

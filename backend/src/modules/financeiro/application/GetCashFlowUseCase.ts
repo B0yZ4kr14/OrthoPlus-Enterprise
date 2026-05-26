@@ -1,5 +1,7 @@
 import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 
+import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+
 export interface CashFlowResult {
   totalReceitas: number
   totalDespesas: number
@@ -13,7 +15,7 @@ export class GetCashFlowUseCase {
   private repo: IFinanceiroRepository
 
   constructor(repo?: IFinanceiroRepository) {
-    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+    this.repo = repo ?? new FinanceiroRepository()
   }
 
   async execute(

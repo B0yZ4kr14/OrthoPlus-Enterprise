@@ -3,12 +3,14 @@ import { AuditLogRepository } from "@/modules/database_admin/infrastructure/Audi
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import { createTransactionSchema } from "@/modules/financeiro/api/schemas"
 
+import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+
 export class CreateTransactionUseCase {
   private repo: IFinanceiroRepository
   private audit = new AuditLogRepository()
 
   constructor(repo?: IFinanceiroRepository) {
-    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+    this.repo = repo ?? new FinanceiroRepository()
   }
 
   async execute(clinicId: string, userId: string, body: unknown) {

@@ -4,6 +4,7 @@ import { ProcessarPagamentoUseCase } from "@/modules/financeiro/application/Proc
 import { GetResumoFinanceiroUseCase } from "@/modules/financeiro/application/GetResumoFinanceiroUseCase"
 import { GetCashFlowUseCase } from "@/modules/financeiro/application/GetCashFlowUseCase"
 import { CreateTransactionUseCase } from "@/modules/financeiro/application/CreateTransactionUseCase"
+import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
 import {
   updateTransactionSchema,
   createCategorySchema,
@@ -44,7 +45,7 @@ export class FinanceiroService {
   private createTransactionUseCase: CreateTransactionUseCase
 
   constructor(repo?: IFinanceiroRepository) {
-    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+    this.repo = repo ?? new FinanceiroRepository()
     this.processarPagamentoUseCase = new ProcessarPagamentoUseCase(this.repo)
     this.getResumoUseCase = new GetResumoFinanceiroUseCase(this.repo)
     this.getCashFlowUseCase = new GetCashFlowUseCase(this.repo)

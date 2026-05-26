@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import { z } from "zod";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 
+import { PdvRepository } from "@/modules/pdv/infrastructure/PdvRepository"
+
 const createVendaSchema = z.object({
   patientId: z.string().uuid().optional(),
   vendedorId: z.string().uuid(),
@@ -35,7 +37,7 @@ export class PdvController {
   private repo: IPdvRepository
 
   constructor(repo?: IPdvRepository) {
-    this.repo = repo ?? new (require("@/modules/pdv/infrastructure/PdvRepository").PdvRepository)()
+    this.repo = repo ?? new PdvRepository()
   }
   createVenda = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     createVendaSchema.parse(req.body);

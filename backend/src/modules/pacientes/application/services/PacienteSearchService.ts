@@ -10,6 +10,8 @@ import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics"
 import { withTiming } from "@/infrastructure/metrics/withTiming"
 import { IPacientesSearchRepository } from "@/modules/pacientes/domain/repositories/IPacientesSearchRepository"
 
+import { PacientesSearchRepository } from "@/modules/pacientes/infrastructure/PacientesSearchRepository"
+
 export interface SearchPacientesFilters {
   query?: string
   status?: string
@@ -40,7 +42,7 @@ export class PacienteSearchService {
   private repo: IPacientesSearchRepository
 
   constructor(repo?: IPacientesSearchRepository) {
-    this.repo = repo ?? new (require("@/modules/pacientes/infrastructure/PacientesSearchRepository").PacientesSearchRepository)()
+    this.repo = repo ?? new PacientesSearchRepository()
   }
 
   async search(

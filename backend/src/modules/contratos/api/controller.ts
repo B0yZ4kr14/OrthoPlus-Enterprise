@@ -3,11 +3,13 @@ import { asyncHandler, Errors } from "@/middleware/errorHandler"
 import { IContratosRepository } from "@/modules/contratos/domain/repositories/IContratosRepository"
 import { createContratoSchema, updateContratoSchema } from "./schemas"
 
+import { ContratosRepository } from "@/modules/contratos/infrastructure/ContratosRepository"
+
 export class ContratosController {
   private repo: IContratosRepository
 
   constructor(repo?: IContratosRepository) {
-    this.repo = repo ?? new (require("@/modules/contratos/infrastructure/ContratosRepository").ContratosRepository)()
+    this.repo = repo ?? new ContratosRepository()
   }
 
   list = asyncHandler(async (req: Request, res: Response) => {
