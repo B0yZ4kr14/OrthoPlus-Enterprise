@@ -2,113 +2,135 @@
   {
     "workflow": "build.yml",
     "path": ".github/workflows/build.yml",
-    "triggers": [],
+    "triggers": ["push", "pull_request"],
+    "branches": ["main", "develop"],
+    "stages": ["type-check", "build", "bundle-size-gate", "backend-build", "backend-test"],
     "has_tests": true,
     "has_deploy": false,
-    "has_security": false
+    "has_security": false,
+    "merge_blocking": false
   },
   {
     "workflow": "cd.yml",
     "path": ".github/workflows/cd.yml",
-    "triggers": [],
+    "triggers": ["push"],
+    "branches": ["main"],
+    "stages": ["build", "test", "deploy"],
     "has_tests": true,
     "has_deploy": true,
-    "has_security": false
+    "has_security": false,
+    "merge_blocking": false
   },
   {
     "workflow": "ci.yml",
     "path": ".github/workflows/ci.yml",
-    "triggers": [],
+    "triggers": ["push", "pull_request"],
+    "branches": ["main"],
+    "stages": ["build-shared-types", "build-frontend", "build-backend"],
     "has_tests": true,
     "has_deploy": false,
-    "has_security": false
-  },
-  {
-    "workflow": "deploy-theme-v2.yml",
-    "path": ".github/workflows/deploy-theme-v2.yml",
-    "triggers": [],
-    "has_tests": true,
-    "has_deploy": true,
-    "has_security": false
+    "has_security": false,
+    "merge_blocking": false
   },
   {
     "workflow": "deploy-vps-orthoplus.yml",
     "path": ".github/workflows/deploy-vps-orthoplus.yml",
-    "triggers": [],
+    "triggers": ["push", "workflow_dispatch"],
+    "branches": ["main"],
+    "stages": ["build", "deploy-scp", "pm2-reload", "health-check"],
     "has_tests": true,
     "has_deploy": true,
-    "has_security": false
-  },
-  {
-    "workflow": "deploy.yml",
-    "path": ".github/workflows/deploy.yml",
-    "triggers": [],
-    "has_tests": true,
-    "has_deploy": true,
-    "has_security": false
+    "has_security": false,
+    "merge_blocking": false
   },
   {
     "workflow": "e2e-tests.yml",
     "path": ".github/workflows/e2e-tests.yml",
-    "triggers": [],
+    "triggers": ["push", "pull_request"],
+    "branches": ["main", "develop"],
+    "stages": ["setup-postgres", "install-deps", "run-playwright"],
+    "projects": ["chromium", "firefox", "webkit"],
     "has_tests": true,
     "has_deploy": false,
-    "has_security": false
-  },
-  {
-    "workflow": "gitnexus-index.yml",
-    "path": ".github/workflows/gitnexus-index.yml",
-    "triggers": [],
-    "has_tests": true,
-    "has_deploy": false,
-    "has_security": false
-  },
-  {
-    "workflow": "playwright.yml",
-    "path": ".github/workflows/playwright.yml",
-    "triggers": [],
-    "has_tests": true,
-    "has_deploy": false,
-    "has_security": false
+    "has_security": false,
+    "merge_blocking": false
   },
   {
     "workflow": "production-validation.yml",
     "path": ".github/workflows/production-validation.yml",
-    "triggers": [],
+    "triggers": ["push", "pull_request"],
+    "branches": ["main"],
+    "stages": ["dry-run-production", "security-audit", "env-validation"],
     "has_tests": true,
     "has_deploy": false,
-    "has_security": true
+    "has_security": true,
+    "merge_blocking": true
   },
   {
     "workflow": "quality-check.yml",
     "path": ".github/workflows/quality-check.yml",
-    "triggers": [],
+    "triggers": ["push", "pull_request"],
+    "branches": ["main", "develop"],
+    "stages": ["type-check", "lint", "format-check", "build", "test", "validate-quality", "bundle-size-gate"],
+    "coverage_threshold": 20,
     "has_tests": true,
     "has_deploy": false,
-    "has_security": false
+    "has_security": false,
+    "merge_blocking": true
   },
   {
     "workflow": "security.yml",
     "path": ".github/workflows/security.yml",
-    "triggers": [],
+    "triggers": ["push", "pull_request", "schedule"],
+    "branches": ["main"],
+    "cron": "0 9 * * 1",
+    "stages": ["dependency-audit", "eslint-security-scan"],
     "has_tests": true,
     "has_deploy": false,
-    "has_security": true
-  },
-  {
-    "workflow": "speckit-compliance.yml",
-    "path": ".github/workflows/speckit-compliance.yml",
-    "triggers": [],
-    "has_tests": true,
-    "has_deploy": false,
-    "has_security": false
+    "has_security": true,
+    "merge_blocking": false
   },
   {
     "workflow": "test.yml",
     "path": ".github/workflows/test.yml",
-    "triggers": [],
+    "triggers": ["push", "pull_request"],
+    "branches": ["main", "develop"],
+    "stages": ["vitest-unit", "upload-coverage-codecov"],
     "has_tests": true,
     "has_deploy": false,
-    "has_security": false
+    "has_security": false,
+    "merge_blocking": false
+  },
+  {
+    "workflow": "speckit-compliance.yml",
+    "path": ".github/workflows/speckit-compliance.yml",
+    "triggers": ["push", "pull_request"],
+    "branches": ["main"],
+    "stages": ["spec-validation"],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false,
+    "merge_blocking": false
+  },
+  {
+    "workflow": "gitnexus-index.yml",
+    "path": ".github/workflows/gitnexus-index.yml",
+    "triggers": ["push"],
+    "branches": ["main"],
+    "stages": ["reindex-codebase"],
+    "has_tests": false,
+    "has_deploy": false,
+    "has_security": false,
+    "merge_blocking": false
+  },
+  {
+    "workflow": "playwright.yml",
+    "path": ".github/workflows/playwright.yml",
+    "triggers": ["workflow_dispatch"],
+    "stages": ["e2e-against-staging"],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false,
+    "merge_blocking": false
   }
 ]

@@ -1,6 +1,6 @@
 import { test, expect } from "./fixtures";
 
-test.describe("IA Radiografia - Upload e Análise", () => {
+test.describe("AI X-Ray - Upload and Analysis", () => {
   test.beforeEach(async ({ page }) => {
     page.on("console", (msg) =>
       console.log(`[Browser Console] ${msg.type()}: ${msg.text()}`),
@@ -10,65 +10,65 @@ test.describe("IA Radiografia - Upload e Análise", () => {
     );
   });
 
-  test("deve exibir a página de IA Radiografia", async ({ page }) => {
+  test("should display the AI X-Ray page", async ({ page }) => {
     await page.goto("./ia-radiografia");
     await page.waitForLoadState("domcontentloaded");
 
-    // Verificar título da página
+    // Check page title
     await expect(page.locator("h1")).toContainText("IA Radiografia");
   });
 
-  test("deve exibir botão de upload e filtros", async ({ page }) => {
+  test("should display upload button and filters", async ({ page }) => {
     await page.goto("./ia-radiografia");
     await page.waitForLoadState("domcontentloaded");
 
-    // Verificar botão de upload
+    // Check upload button
     await expect(
       page.getByRole("button", { name: /nova análise/i }),
     ).toBeVisible();
 
-    // Verificar filtros
+    // Check filters
     await expect(page.getByText(/filtros/i)).toBeVisible();
     await expect(page.getByText(/status/i)).toBeVisible();
     await expect(page.getByText(/tipo/i)).toBeVisible();
   });
 
-  test("deve abrir o diálogo de upload ao clicar em Nova Análise", async ({
+  test("should open upload dialog when clicking New Analysis", async ({
     page,
   }) => {
     await page.goto("./ia-radiografia");
     await page.waitForLoadState("domcontentloaded");
 
-    // Clicar no botão de nova análise
+    // Click new analysis button
     await page.getByRole("button", { name: /nova análise/i }).click();
 
-    // Verificar se o diálogo abriu
+    // Check if dialog opened
     await expect(
       page.getByRole("dialog").getByText(/nova análise/i),
     ).toBeVisible();
 
-    // Verificar campos do formulário
+    // Check form fields
     await expect(page.getByLabel(/paciente/i)).toBeVisible();
     await expect(page.getByLabel(/tipo de radiografia/i)).toBeVisible();
     await expect(page.getByLabel(/arquivo/i)).toBeVisible();
   });
 
-  test("deve exibir lista de análises ou estado vazio", async ({ page }) => {
+  test("should display analysis list or empty state", async ({ page }) => {
     await page.goto("./ia-radiografia");
     await page.waitForLoadState("domcontentloaded");
 
-    // Verificar se a lista ou estado vazio está presente
+    // Check if list or empty state is present
     const listaOuVazio = page.locator(
       '[data-testid="analise-list"], [data-testid="empty-state"], tbody tr, text=/nenhuma análise/i',
     );
     await expect(listaOuVazio.first()).toBeVisible();
   });
 
-  test("deve navegar para a aba de insights", async ({ page }) => {
+  test("should navigate to insights tab", async ({ page }) => {
     await page.goto("./ia-radiografia");
     await page.waitForLoadState("domcontentloaded");
 
-    // Clicar na aba de insights se existir
+    // Click insights tab if it exists
     const insightsTab = page.getByRole("tab", { name: /insights/i });
     if (await insightsTab.isVisible().catch(() => false)) {
       await insightsTab.click();
@@ -78,11 +78,11 @@ test.describe("IA Radiografia - Upload e Análise", () => {
     }
   });
 
-  test("deve navegar para a aba de comparação", async ({ page }) => {
+  test("should navigate to comparison tab", async ({ page }) => {
     await page.goto("./ia-radiografia");
     await page.waitForLoadState("domcontentloaded");
 
-    // Clicar na aba de comparação se existir
+    // Click comparison tab if it exists
     const comparacaoTab = page.getByRole("tab", { name: /comparação/i });
     if (await comparacaoTab.isVisible().catch(() => false)) {
       await comparacaoTab.click();
@@ -94,33 +94,33 @@ test.describe("IA Radiografia - Upload e Análise", () => {
     }
   });
 
-  test("deve fazer upload de radiografia (fluxo E2E completo)", async ({ page }) => {
+  test("should upload x-ray (full E2E flow)", async ({ page }) => {
     await page.goto("./ia-radiografia");
     await page.waitForLoadState("domcontentloaded");
 
-    // Clicar no botão de nova análise
+    // Click new analysis button
     await page.getByRole("button", { name: /nova análise/i }).click();
 
-    // Verificar se o diálogo abriu
+    // Check if dialog opened
     await expect(
       page.getByRole("dialog").getByText(/upload de radiografia/i),
     ).toBeVisible();
 
-    // Preencher paciente ID
+    // Fill patient ID
     const patientInput = page.getByPlaceholder(/id do paciente/i);
     await patientInput.fill("test-patient-001");
 
-    // Aguardar verificação de consentimento (pode demorar)
+    // Wait for consent verification (may take time)
     await page.waitForTimeout(1500);
 
-    // Selecionar tipo de radiografia
+    // Select x-ray type
     const tipoSelect = page.getByRole("combobox").first();
     await tipoSelect.click();
     await page.getByRole("option", { name: /panorâmica/i }).first().click();
 
-    // Fazer upload de arquivo (criar arquivo temporário)
+    // Upload file (create temporary file)
     const fileInput = page.locator('input[type="file"]');
-    // Criar um blob PNG mínimo (1x1 pixel)
+    // Create a minimal PNG blob (1x1 pixel)
     const buffer = Buffer.from(
       "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
       "base64",
@@ -131,18 +131,18 @@ test.describe("IA Radiografia - Upload e Análise", () => {
       buffer,
     });
 
-    // Verificar que o botão de upload está habilitado (se consentimento OK)
+    // Check that upload button is enabled (if consent OK)
     const uploadButton = page.getByRole("button", { name: /enviar e analisar/i });
 
-    // Se o consentimento estiver confirmado, o botão deve estar habilitado
+    // If consent is confirmed, button should be enabled
     const isEnabled = await uploadButton.isEnabled().catch(() => false);
     if (isEnabled) {
       await uploadButton.click();
 
-      // Aguardar resposta do backend (sucesso ou erro de IA)
+      // Wait for backend response (success or AI error)
       await page.waitForTimeout(3000);
 
-      // Verificar se houve feedback (sucesso ou erro)
+      // Check if there was feedback (success or error)
       const hasFeedback = await Promise.race([
         page.getByText(/análise concluída/i).first().isVisible().catch(() => false),
         page.getByText(/erro ao processar/i).first().isVisible().catch(() => false),
@@ -151,7 +151,7 @@ test.describe("IA Radiografia - Upload e Análise", () => {
 
       expect(hasFeedback).toBeTruthy();
     } else {
-      // Se o botão está desabilitado, verificar que é por causa do consentimento
+      // If button is disabled, check that it is because of consent
       const consentWarning = await page
         .getByText(/consentimento lgpd/i)
         .first()

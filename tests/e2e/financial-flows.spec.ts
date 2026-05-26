@@ -19,17 +19,17 @@ test.describe('Financial Workflows', () => {
     await page.click('button:has-text("Nova Conta a Receber")');
     await page.waitForSelector('.max-w-xl'); // Dialog class
     
-    // Passo 1
+    // Step 1
     await page.fill('input[id="patient_name"]', 'Maria das Dores');
     await page.fill('input[id="descricao"]', 'Pagamento Tratamento Ortodôntico');
     await page.getByRole('button', { name: /próximo/i }).click();
 
-    // Passo 2
+    // Step 2
     await page.fill('input[id="valor"]', '2500.00');
     await page.fill('input[id="data_vencimento"]', '2024-12-31');
     await page.getByRole('button', { name: /próximo/i }).click();
 
-    // Passo 3
+    // Step 3
     await page.getByRole('button', { name: /salvar/i }).click();
 
     await expect(page.locator('.toast')).toContainText('sucesso', { ignoreCase: true });

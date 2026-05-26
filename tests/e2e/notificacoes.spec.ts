@@ -1,38 +1,38 @@
 import { test, expect } from "./fixtures";
 
-test.describe("Notificações", () => {
+test.describe("Notifications", () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
-    // Notificações não possuem página dedicada; o dropdown está no header global
+    // Notifications do not have a dedicated page; the dropdown is in the global header
     await page.goto("./dashboard");
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test("deve exibir dropdown de notificações", async ({ page }) => {
-    // Verificar que o ícone do sino está visível no header
+  test("should display notifications dropdown", async ({ page }) => {
+    // Check that the bell icon is visible in the header
     const bellButton = page.getByRole("button", { name: /notificações/i });
     await expect(bellButton.first()).toBeVisible();
 
-    // Clicar no sino para abrir o dropdown
+    // Click the bell to open dropdown
     await bellButton.first().click();
 
-    // Verificar que o painel de notificações abriu
+    // Check that the notifications panel opened
     await expect(page.getByText(/nenhuma notificação|notificações/i).first()).toBeVisible();
   });
 
-  test("deve navegar para dashboard e acessar notificações", async ({ page }) => {
-    // Navegar para o dashboard onde o dropdown de notificações está disponível
+  test("should navigate to dashboard and access notifications", async ({ page }) => {
+    // Navigate to the dashboard where the notifications dropdown is available
     await page.goto("./dashboard");
     await page.waitForLoadState("domcontentloaded");
 
-    // Verificar URL
+    // Check URL
     await expect(page).toHaveURL(/.*\/dashboard/);
 
-    // Verificar que o botão de notificações está presente no layout
+    // Check that the notifications button is present in the layout
     const bellButton = page.getByRole("button", { name: /notificações/i });
     await expect(bellButton.first()).toBeVisible();
 
-    // Abrir dropdown e verificar opção de marcar todas como lidas (se houver notificações)
+    // Open dropdown and check option to mark all as read (if there are notifications)
     await bellButton.first().click();
     await expect(page.getByText(/notificações/i).first()).toBeVisible();
   });

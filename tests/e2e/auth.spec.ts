@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Autenticação", () => {
+test.describe("Authentication", () => {
   test.beforeEach(async ({ page }) => {
     page.on("console", (msg) =>
       console.log(`[Browser Console] ${msg.type()}: ${msg.text()}`),
@@ -10,7 +10,7 @@ test.describe("Autenticação", () => {
     );
   });
 
-  test("deve exibir página de login para usuários não autenticados", async ({
+  test("should display login page for unauthenticated users", async ({
     page,
   }) => {
     await page.goto("./auth", { waitUntil: "networkidle" });
@@ -18,7 +18,7 @@ test.describe("Autenticação", () => {
     await expect(page.getByRole("heading", { name: /ortho/i })).toBeVisible();
   });
 
-  test("deve fazer login com credenciais válidas", async ({ page }) => {
+  test("should login with valid credentials", async ({ page }) => {
     await page.goto("./auth", { waitUntil: "networkidle" });
 
     await page
@@ -34,11 +34,11 @@ test.describe("Autenticação", () => {
 
     await expect(page).toHaveURL(/.*\/dashboard/);
     await page.waitForLoadState("networkidle");
-    // Verificar que saiu da tela de login (breadcrumb mostra Dashboard)
+    // Check that user left the login screen (breadcrumb shows Dashboard)
     await expect(page.locator('nav[aria-label="breadcrumb"]')).toContainText("Dashboard");
   });
 
-  test("deve exibir erro com credenciais inválidas", async ({ page }) => {
+  test("should display error with invalid credentials", async ({ page }) => {
     await page.goto("./auth", { waitUntil: "networkidle" });
 
     await page
@@ -55,7 +55,7 @@ test.describe("Autenticação", () => {
     await expect(page).toHaveURL(/.*\/auth/);
   });
 
-  test("deve fazer logout com sucesso", async ({ page }) => {
+  test("should logout successfully", async ({ page }) => {
     await page.goto("./auth", { waitUntil: "networkidle" });
     await page
       .locator('input[name="email"]:visible')
@@ -70,7 +70,7 @@ test.describe("Autenticação", () => {
     await expect(page).toHaveURL(/.*\/dashboard/);
     await page.waitForLoadState("networkidle");
 
-    // Abrir menu do usuário e fazer logout via API (mais robusto que UI dropdown)
+    // Open user menu and logout via API (more robust than UI dropdown)
     await page.evaluate(() => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
@@ -78,17 +78,17 @@ test.describe("Autenticação", () => {
     });
     await page.reload();
 
-    // Aguardar redirecionamento para login após logout
+    // Wait for redirect to login after logout
     await page.waitForURL(/.*\/auth/, { timeout: 15000 });
     await expect(page).toHaveURL(/.*\/auth/);
   });
 
-  test("deve proteger rotas privadas", async ({ page }) => {
+  test("should protect private routes", async ({ page }) => {
     await page.goto("./dashboard", { waitUntil: "networkidle" });
     await expect(page).toHaveURL(/.*\/auth/);
   });
 
-  test("deve validar campos vazios", async ({ page }) => {
+  test("should validate empty fields", async ({ page }) => {
     await page.goto("./auth", { waitUntil: "networkidle" });
 
     await page

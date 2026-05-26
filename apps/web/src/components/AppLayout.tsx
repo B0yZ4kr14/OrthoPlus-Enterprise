@@ -3,7 +3,6 @@ import { SidebarProvider } from "@orthoplus/core-ui/sidebar"
 import { AppSidebar } from "@/core/layout/Sidebar"
 import { SidebarHoverTrigger } from "@/core/layout/Sidebar/SidebarHoverTrigger"
 import { DashboardHeader } from "@/components/DashboardHeader"
-import { GlobalSearch } from "@/components/layout/GlobalSearch"
 import { Sheet, SheetContent } from "@orthoplus/core-ui/sheet"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { useFocusMode } from "@/hooks/useFocusMode"
@@ -113,7 +112,6 @@ const AppLayoutInner = memo(function AppLayoutInner({
           </main>
         </div>
       </div>
-      <GlobalSearch />
     </>
   )
 })

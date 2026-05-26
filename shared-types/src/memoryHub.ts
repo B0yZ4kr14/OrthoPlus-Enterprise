@@ -32,6 +32,24 @@ export interface ContextBrief {
   confidentialExcluded: number
 }
 
+export interface GraphNode {
+  id: string
+  label: string
+  docType: string
+  sourcePath: string
+}
+
+export interface GraphEdge {
+  source: string
+  target: string
+  type: "links-to" | "referenced-by"
+}
+
+export interface GraphData {
+  nodes: GraphNode[]
+  edges: GraphEdge[]
+}
+
 export interface DriftIssue {
   type: "missing_impl" | "broken_ref" | "outdated_decision" | "orphan_doc"
   severity: "low" | "medium" | "high" | "critical"

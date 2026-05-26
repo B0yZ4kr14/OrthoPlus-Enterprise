@@ -1,6 +1,12 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
+import { eventBus } from '@/shared/events/EventBus';
+import { ProntuarioUpdatedEvent } from '@/modules/pep/domain/events/ProntuarioUpdatedEvent';
+import { ProntuarioDeletedEvent } from '@/modules/pep/domain/events/ProntuarioDeletedEvent';
+import { TratamentoCreatedEvent } from '@/modules/pep/domain/events/TratamentoCreatedEvent';
+import { TratamentoUpdatedEvent } from '@/modules/pep/domain/events/TratamentoUpdatedEvent';
+import { TratamentoDeletedEvent } from '@/modules/pep/domain/events/TratamentoDeletedEvent';
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { PepController } from './PepController';
@@ -226,6 +232,10 @@ router.use(clinicGuard);
         where: { id: req.params.id },
         data: req.body,
       });
+
+      // Reindexacao em tempo real (non-blocking)
+      eventBus.publish(new ProntuarioUpdatedEvent(req.params.id, clinicId)).catch(() => {});
+
       return res.json(data);
     } catch (error) {
       logger.error('Error updating prontuario', { error });
@@ -240,6 +250,10 @@ router.use(clinicGuard);
       const existing = await (prisma as any).prontuarios.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!existing) return res.status(404).json({ error: 'Prontuario not found' });
       await (prisma as any).prontuarios.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+      // Reindexacao em tempo real (non-blocking)
+      eventBus.publish(new ProntuarioDeletedEvent(req.params.id, clinicId)).catch(() => {});
+
       return res.status(204).send();
     } catch (error) {
       logger.error('Error deleting prontuario', { error });
@@ -379,6 +393,10 @@ router.use(clinicGuard);
       const data = await (prisma as any).pep_tratamentos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
         data: { ...req.body, created_by: req.user?.id || 'system' },
       });
+
+      // Reindexacao em tempo real (non-blocking)
+      eventBus.publish(new TratamentoCreatedEvent(data.id, data.prontuario_id, clinicId)).catch(() => {});
+
       return res.status(201).json(data);
     } catch (error) {
       logger.error('Error creating tratamento', { error });
@@ -390,10 +408,16 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const existing = await (prisma as any).pep_tratamentos.findUnique({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (!existing) return res.status(404).json({ error: 'Tratamento not found' });
       const data = await (prisma as any).pep_tratamentos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
         data: req.body,
       });
+
+      // Reindexacao em tempo real (non-blocking)
+      eventBus.publish(new TratamentoUpdatedEvent(req.params.id, existing.prontuario_id, clinicId)).catch(() => {});
+
       return res.json(data);
     } catch (error) {
       logger.error('Error updating tratamento', { error });
@@ -405,7 +429,13 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
+      const existing = await (prisma as any).pep_tratamentos.findUnique({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (!existing) return res.status(404).json({ error: 'Tratamento not found' });
       await (prisma as any).pep_tratamentos.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+      // Reindexacao em tempo real (non-blocking)
+      eventBus.publish(new TratamentoDeletedEvent(req.params.id, existing.prontuario_id, clinicId)).catch(() => {});
+
       return res.status(204).send();
     } catch (error) {
       logger.error('Error deleting tratamento', { error });

@@ -4,19 +4,12 @@ import { db } from "@/infrastructure/database/connection";
 import { logger } from "@/infrastructure/logger";
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository";
 import { DatabaseHealth } from "@/modules/database_admin/domain/entities/DatabaseHealth";
+import type { SlowQuery } from "@orthoplus/shared-types"
 
 export interface HealthResult {
   health: ReturnType<DatabaseHealth["toJSON"]>
   isHealthy: boolean
   needsMaintenance: boolean
-}
-
-export interface SlowQuery {
-  query: string
-  calls: number
-  averageTime: number
-  totalTime: number
-  lastExecuted: Date
 }
 
 export interface PoolStats {

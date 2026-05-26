@@ -1,19 +1,19 @@
 import { test, expect } from './fixtures';
 
-test.describe('Fluxo Integrado: Paciente → PEP → Tratamento → Agendamento → Financeiro', () => {
-  test('deve completar fluxo completo de atendimento', async ({ page }) => {
-    // ========== ETAPA 1: LOGIN ==========
+test.describe('Integrated Flow: Patient → EHR → Treatment → Scheduling → Financial', () => {
+  test('should complete full service flow', async ({ page }) => {
+    // ========== STEP 1: LOGIN ==========
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     
-    // ========== ETAPA 2: CRIAR PACIENTE ==========
+    // ========== STEP 2: CREATE PATIENT ==========
     await page.goto('/pacientes');
     await page.waitForLoadState('domcontentloaded');
     
     await page.getByRole('button', { name: /novo|adicionar/i }).click();
     
-    // Preencher dados do paciente
+    // Fill patient data
     const patientName = `Paciente Fluxo E2E ${Date.now()}`;
     await page.getByLabel(/nome/i).fill(patientName);
     await page.getByLabel(/cpf/i).fill('111.222.333-44');
@@ -22,7 +22,7 @@ test.describe('Fluxo Integrado: Paciente → PEP → Tratamento → Agendamento 
     await page.getByLabel(/celular/i).fill('(11) 91234-5678');
     await page.getByLabel(/email/i).fill('fluxo@e2e.test');
     
-    // Endereço
+    // Address
     await page.getByLabel(/cep/i).fill('01310-100');
     await page.getByLabel(/logradouro/i).fill('Avenida Paulista');
     await page.getByLabel(/número/i).fill('1000');
@@ -36,11 +36,11 @@ test.describe('Fluxo Integrado: Paciente → PEP → Tratamento → Agendamento 
     const toastAfterCreatePatient = page.locator('[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *');
     await expect(toastAfterCreatePatient.first()).toBeVisible({ timeout: 10000 });
     
-    // ========== ETAPA 3: ABRIR PRONTUÁRIO (PEP) ==========
+    // ========== STEP 3: OPEN EHR (PEP) ==========
     await page.goto('/pep');
     await page.waitForLoadState('domcontentloaded');
     
-    // Preencher histórico clínico (if tab exists)
+    // Fill clinical history (if tab exists)
     const histTab = page.getByRole('tab', { name: /histórico clínico/i });
     if (await histTab.isVisible({ timeout: 3000 }).catch(() => false)) {
       await histTab.click();
@@ -53,23 +53,23 @@ test.describe('Fluxo Integrado: Paciente → PEP → Tratamento → Agendamento 
       await expect(toastAfterHistory.first()).toBeVisible({ timeout: 10000 });
     }
     
-    // ========== ETAPA 4: MARCAR ODONTOGRAMA ==========
+    // ========== STEP 4: MARK ODONTOGRAM ==========
     const odontoTab = page.getByRole('tab', { name: /^odontograma$/i });
     if (await odontoTab.isVisible({ timeout: 3000 }).catch(() => false)) {
       await odontoTab.click();
       
-      // Selecionar status cariado
+      // Select caries status
       const cariadoBtn = page.getByRole('button', { name: /cariado/i });
       if (await cariadoBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
         await cariadoBtn.click();
         
-        // Marcar dentes 11 e 21
+        // Mark teeth 11 and 21
         await page.locator('[data-tooth="11"]').click();
         await page.locator('[data-tooth="21"]').click();
       }
     }
     
-    // ========== ETAPA 5: CRIAR TRATAMENTOS ==========
+    // ========== STEP 5: CREATE TREATMENTS ==========
     const tratTab = page.getByRole('tab', { name: /tratamentos/i });
     if (await tratTab.isVisible({ timeout: 3000 }).catch(() => false)) {
       await tratTab.click();
@@ -88,14 +88,14 @@ test.describe('Fluxo Integrado: Paciente → PEP → Tratamento → Agendamento 
       }
     }
     
-    // ========== ETAPA 6: VERIFICAR FINANCEIRO ==========
+    // ========== STEP 6: VERIFY FINANCIAL ==========
     await page.goto('/financeiro');
     await page.waitForLoadState('domcontentloaded');
     
     // Verify page loaded
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
     
-    // ========== ETAPA 7: VERIFICAR DASHBOARD ==========
+    // ========== STEP 7: VERIFY DASHBOARD ==========
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     
@@ -103,7 +103,7 @@ test.describe('Fluxo Integrado: Paciente → PEP → Tratamento → Agendamento 
     await expect(page.locator('[data-testid], h1, h2, .card, .stat').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('deve manter consistência de dados entre módulos', async ({ page }) => {
+  test('should maintain data consistency between modules', async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
@@ -111,34 +111,34 @@ test.describe('Fluxo Integrado: Paciente → PEP → Tratamento → Agendamento 
     // Verify dashboard loads
     await expect(page.locator('h1, h2, [data-testid], .card').first()).toBeVisible({ timeout: 5000 });
     
-    // Navigate to pacientes
+    // Navigate to patients
     await page.goto('/pacientes');
     await page.waitForLoadState('domcontentloaded');
     
-    // Verify pacientes page loaded
+    // Verify patients page loaded
     await expect(page.getByRole('heading', { name: /pacientes/i }).first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('deve preservar dados ao navegar entre módulos', async ({ page }) => {
+  test('should preserve data when navigating between modules', async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto('/financeiro');
     await page.waitForLoadState('domcontentloaded');
     
-    // Verify financeiro loaded
+    // Verify financial loaded
     await expect(page.locator('h1, h2, [data-testid], .card').first()).toBeVisible({ timeout: 5000 });
     
-    // Navigate to pacientes
+    // Navigate to patients
     await page.goto('/pacientes');
     await page.waitForLoadState('domcontentloaded');
     
-    // Verify pacientes loaded
+    // Verify patients loaded
     await expect(page.locator('h1, h2, [data-testid], .card').first()).toBeVisible({ timeout: 5000 });
     
-    // Return to financeiro
+    // Return to financial
     await page.goto('/financeiro');
     await page.waitForLoadState('domcontentloaded');
     
-    // Verify financeiro still works
+    // Verify financial still works
     await expect(page.locator('h1, h2, [data-testid], .card').first()).toBeVisible({ timeout: 5000 });
   });
 });

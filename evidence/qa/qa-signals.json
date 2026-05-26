@@ -1,40 +1,48 @@
 {
+  "generated_at": "2026-05-24T20:03:56Z",
+  "sources": ["QS1", "QS2", "QS3", "QS4"],
+  "summary": {
+    "QS1_test_inventory_total": 192,
+    "QS1_backend_unit_tests": 36,
+    "QS1_frontend_unit_tests": 110,
+    "QS1_e2e_specs": 46,
+    "QS2_coverage_source": "proxy",
+    "QS2_backend_proxy_coverage": 0.32,
+    "QS2_frontend_proxy_coverage": 0.18,
+    "QS2_overall_proxy_coverage": 0.23,
+    "QS3_testability_findings": 120,
+    "QS4_ci_workflows": 12,
+    "QS4_environments": 3
+  },
   "QS1": {
-    "test_files": 192,
-    "frameworks": [
-      "vitest",
-      "playwright",
-      "jest"
-    ],
-    "levels": {
-      "unit": 146,
-      "e2e": 46
-    }
+    "file": "evidence/qa/test-inventory.json",
+    "backend_unit": { "framework": "jest", "files": 36, "test_count_estimate": 580 },
+    "frontend_unit": { "framework": "vitest", "files": 110, "test_count_estimate": 1450 },
+    "e2e": { "framework": "playwright", "files": 46, "projects": ["chromium", "firefox", "webkit"] }
   },
   "QS2": {
+    "file": "evidence/qa/coverage/coverage-map.json",
     "source": "proxy",
-    "packages_mapped": 82,
-    "avg_proxy_coverage": 0.41,
-    "confidence": "LOW"
+    "confidence": "LOW",
+    "headline_percent": 23
   },
   "QS3": {
-    "findings": 319,
-    "by_severity": {
-      "blocks": 0,
-      "impedes": 0,
-      "smell": 319
-    }
+    "file": "evidence/qa/testability/testability-findings.json",
+    "finding_count": 120,
+    "severity_breakdown": { "blocks": 0, "impedes": 0, "smell": 120 }
   },
   "QS4": {
-    "workflows": 14,
-    "environments": [
-      "dev",
-      "staging",
-      "prod"
-    ],
+    "ci_map": "evidence/qa/environments/ci-map.json",
+    "environment_map": "evidence/qa/environments/environment-map.json",
     "flaky_tests": {
+      "file": "evidence/qa/environments/flaky-tests.json",
       "source": "not-collected",
-      "reason": "no flaky test history export provided"
+      "reason": "no flaky test export provided"
     }
-  }
+  },
+  "not_collected": [
+    { "item": "coverage_report", "reason": "no coverage report artifact found in common locations" },
+    { "item": "flaky_test_history", "reason": "no flaky test export provided" },
+    { "item": "defect_export", "reason": "no defect tracker export provided" }
+  ]
 }

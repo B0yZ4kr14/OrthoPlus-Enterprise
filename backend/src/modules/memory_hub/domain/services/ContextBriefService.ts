@@ -2,6 +2,7 @@ import { SearchService } from "./SearchService"
 import { IDocumentRepository } from "../ports/IDocumentRepository"
 import { TokenCounter } from "../../infrastructure/TokenCounter"
 import { logger } from "@/infrastructure/logger"
+import type { ContextBrief } from "@orthoplus/shared-types"
 
 /**
  * Sanitize document excerpts to prevent prompt injection attacks.
@@ -61,19 +62,6 @@ function sanitizeTopic(topic: string): string {
     })
   }
   return safe.trim()
-}
-
-export interface ContextBrief {
-  topic: string
-  tokenCount: number
-  documents: Array<{
-    sourcePath: string
-    docType: string
-    relevance: number
-    summary: string
-  }>
-  markdown: string
-  confidentialExcluded: number
 }
 
 export class ContextBriefService {

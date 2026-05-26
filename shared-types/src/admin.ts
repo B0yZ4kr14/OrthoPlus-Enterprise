@@ -161,3 +161,39 @@ export interface AuditUser {
   id: string;
   fullName?: string;
 }
+
+// ============================================================================
+// Backup Status & Execution
+// ============================================================================
+
+export interface CategoryBackupStatus {
+  category: string;
+  lastBackup: string | null;
+  lastBackupSize: number | null;
+  lastBackupSizeHuman: string;
+  backupCount: number;
+  schemas: string[];
+}
+
+export interface BackupExecutionResult {
+  category: string;
+  success: boolean;
+  filePath: string;
+  sizeBytes: number;
+  sizeHuman: string;
+  durationMs: number;
+  schemas: string[];
+  error?: string;
+}
+
+// ============================================================================
+// Slow Queries
+// ============================================================================
+
+export interface SlowQuery {
+  query: string;
+  calls: number;
+  averageTime: number;
+  totalTime: number;
+  lastExecuted: string | Date;
+}

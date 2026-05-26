@@ -1,14 +1,6 @@
 import { AnalyticsRepository } from "@/modules/analytics/infrastructure/AnalyticsRepository"
 import { MetricsEmitter } from "@/infrastructure/metrics"
-
-export interface DashboardStats {
-  totalPatients: number
-  todayAppointments: number
-  monthlyRevenue: number
-  occupancyRate: number
-  pendingTreatments: number
-  completedTreatments: number
-}
+import type { DashboardStats } from "@orthoplus/shared-types"
 
 export interface DashboardOverviewResult {
   stats: DashboardStats

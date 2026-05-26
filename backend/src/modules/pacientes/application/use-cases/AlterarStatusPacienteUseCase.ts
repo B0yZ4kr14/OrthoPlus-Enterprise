@@ -8,6 +8,7 @@
 import { IPatientRepository } from '../../domain/repositories/IPatientRepository';
 import { PatientStatus } from '../../domain/value-objects/PatientStatus';
 import { eventBus } from '@/shared/events/EventBus';
+import { PatientUpdatedEvent } from '../../domain/events/PatientUpdatedEvent';
 import { logger } from '@/infrastructure/logger';
 import { pacientesMetrics } from '@/infrastructure/metrics/PacientesMetrics';
 
@@ -69,7 +70,10 @@ export class AlterarStatusPacienteUseCase {
 
     // Publicar eventos de domínio em paralelo
     const events = patient.getDomainEvents();
-    await Promise.all(events.map((event) => eventBus.publish(event)));
+    await Promise.all([
+      eventBus.publish(new PatientUpdatedEvent(patient.id, dto.clinicId)),
+      ...events.map((event) => eventBus.publish(event)),
+    ]);
     patient.clearDomainEvents();
 
     logger.info('AlterarStatusPacienteUseCase: Success', {

@@ -1,4 +1,6 @@
 import { PepRepository } from "@/modules/pep/infrastructure/PepRepository";
+import { eventBus } from '@/shared/events/EventBus';
+import { ProntuarioCreatedEvent } from '@/modules/pep/domain/events/ProntuarioCreatedEvent';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { logger } from '@/infrastructure/logger';
@@ -34,7 +36,14 @@ export class PepController {
         patient_name: `Paciente ${validatedData.patientId}`,
         created_by: req.user?.id || 'system',
       });
-      
+
+      // Reindexacao em tempo real (non-blocking)
+      eventBus.publish(new ProntuarioCreatedEvent(
+        prontuario.id,
+        clinicId,
+        validatedData.patientId
+      )).catch(() => { /* indexing failure is non-blocking */ })
+
       logger.info('Prontuario created', { clinicId, patientId: validatedData.patientId, prontuarioId: prontuario.id });
       res.status(201).json({ message: 'Prontuario created successfully', prontuario });
     } catch (error) {

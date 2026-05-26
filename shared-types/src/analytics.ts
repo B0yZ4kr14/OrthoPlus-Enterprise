@@ -11,11 +11,9 @@ export interface DashboardStats {
   totalPatients: number;
   todayAppointments: number;
   monthlyRevenue: number;
-  pendingPayments: number;
-  newPatientsThisMonth: number;
-  completedAppointmentsThisMonth: number;
-  canceledAppointmentsThisMonth: number;
-  averageTicket: number;
+  occupancyRate: number;
+  pendingTreatments: number;
+  completedTreatments: number;
 }
 
 export interface DashboardChartData {

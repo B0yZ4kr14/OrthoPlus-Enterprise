@@ -2,7 +2,7 @@ import { test, expect } from './fixtures';
 
 test.describe('Dashboard Navigation and Layout', () => {
   test.beforeEach(async ({ page }) => {
-    // Login como ADMIN
+    // Login as ADMIN
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
@@ -11,25 +11,25 @@ test.describe('Dashboard Navigation and Layout', () => {
   test('should display dashboard without header overlap', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar se header está visível
+    // Check if header is visible
     await expect(page.locator('header')).toBeVisible();
     
-    // Verificar se breadcrumbs estão visíveis
+    // Check if breadcrumbs are visible
     await expect(page.getByText('Dashboard')).toBeVisible();
     
-    // Verificar se conteúdo principal não está sobreposto
+    // Check if main content is not overlapped
     const main = page.locator('main');
     const mainBox = await main.boundingBox();
     const headerBox = await page.locator('header').boundingBox();
     
-    // Main deve começar após o header
+    // Main must start after header
     expect(mainBox!.y).toBeGreaterThan(headerBox!.y + headerBox!.height);
   });
 
   test('should display all action cards', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar cards de ação rápida
+    // Check quick action cards
     await expect(page.getByText('Novo Paciente')).toBeVisible();
     await expect(page.getByText('Agendar Consulta')).toBeVisible();
     await expect(page.getByText('Novo Procedimento')).toBeVisible();
@@ -39,20 +39,20 @@ test.describe('Dashboard Navigation and Layout', () => {
   test('should navigate from action cards', async ({ page }) => {
     await page.goto('/');
     
-    // Clicar em "Novo Paciente"
+    // Click "New Patient"
     await page.click('button:has-text("Novo Paciente")');
     
-    // Verificar navegação
+    // Check navigation
     await expect(page).toHaveURL(/\/pacientes/);
   });
 
   test('should display stats cards with loading state', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar se skeleton loader aparece primeiro (pode ser rápido)
+    // Check if skeleton loader appears first (can be fast)
     const skeleton = page.locator('[data-testid="dashboard-skeleton"]');
     
-    // Aguardar stats cards aparecerem
+    // Wait for stats cards to appear
     await expect(page.getByText(/total de pacientes/i)).toBeVisible({ timeout: 5000 });
     await expect(page.getByText(/consultas hoje/i)).toBeVisible();
     await expect(page.getByText(/receita do mês/i)).toBeVisible();
@@ -61,35 +61,35 @@ test.describe('Dashboard Navigation and Layout', () => {
   test('should display charts', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar se gráficos estão renderizados
+    // Check if charts are rendered
     await expect(page.getByText('Consultas por Semana')).toBeVisible();
     await expect(page.getByText('Receita Mensal')).toBeVisible();
     
-    // Verificar se recharts renderizou (procurar SVG)
+    // Check if recharts rendered (look for SVG)
     const charts = page.locator('svg.recharts-surface');
     expect(await charts.count()).toBeGreaterThan(0);
   });
 
   test('should use 4-column grid on large screens', async ({ page, viewport }) => {
-    // Setar viewport grande
+    // Set large viewport
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/');
     
-    // Verificar grid de action cards
+    // Check action cards grid
     const actionCardsGrid = page.locator('.grid').first();
     const gridClass = await actionCardsGrid.getAttribute('class');
     
-    // Deve ter lg:grid-cols-4
+    // Must have lg:grid-cols-4
     expect(gridClass).toContain('lg:grid-cols-4');
   });
 
   test('should be responsive on mobile', async ({ page }) => {
-    // Setar viewport mobile
+    // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/');
     
-    // Verificar se sidebar está colapsada ou acessível via menu
-    // Verificar se cards estão empilhados
+    // Check if sidebar is collapsed or accessible via menu
+    // Check if cards are stacked
     const actionCards = page.locator('button:has-text("Novo Paciente")');
     await expect(actionCards).toBeVisible();
   });
@@ -97,17 +97,17 @@ test.describe('Dashboard Navigation and Layout', () => {
   test('should have working breadcrumbs', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar breadcrumb home
+    // Check home breadcrumb
     await expect(page.getByText('Dashboard')).toBeVisible();
     
-    // Navegar para outra página
+    // Navigate to another page
     await page.click('[href="/pacientes"]');
     await page.waitForURL('/pacientes');
     
-    // Verificar novo breadcrumb
+    // Check new breadcrumb
     await expect(page.getByText('Pacientes')).toBeVisible();
     
-    // Clicar em home no breadcrumb
+    // Click home in breadcrumb
     await page.click('a[href="/"]');
     await page.waitForURL('/');
   });
@@ -115,57 +115,57 @@ test.describe('Dashboard Navigation and Layout', () => {
   test('should open global search with Cmd+K', async ({ page }) => {
     await page.goto('/');
     
-    // Pressionar Cmd+K (Ctrl+K no Windows/Linux)
+    // Press Cmd+K (Ctrl+K on Windows/Linux)
     await page.keyboard.press('Meta+K');
     
-    // Verificar se dialog de busca abriu
+    // Check if search dialog opened
     await expect(page.getByPlaceholder(/buscar/i)).toBeVisible();
   });
 
   test('should show notifications dropdown', async ({ page }) => {
     await page.goto('/');
     
-    // Clicar no ícone de notificações
+    // Click notifications icon
     await page.click('button:has([data-icon="bell"])');
     
-    // Verificar dropdown de notificações
+    // Check notifications dropdown
     await expect(page.getByText(/notificações/i)).toBeVisible();
   });
 
   test('should display theme toggle', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar botão de preview de tema
+    // Check theme preview button
     const themeButton = page.locator('button:has([data-icon="palette"])');
     await expect(themeButton).toBeVisible();
     
-    // Clicar para abrir dialog
+    // Click to open dialog
     await themeButton.click();
     
-    // Verificar se dialog de temas abriu
+    // Check if themes dialog opened
     await expect(page.getByText('Escolher Tema')).toBeVisible();
   });
 
   test('should handle user menu', async ({ page }) => {
     await page.goto('/');
     
-    // Clicar no avatar do usuário
+    // Click user avatar
     await page.click('button:has([role="img"])');
     
-    // Verificar opções do menu
+    // Check menu options
     await expect(page.getByText('Sair')).toBeVisible();
   });
 
   test('should show ripple effect on action cards', async ({ page }) => {
     await page.goto('/');
     
-    // Clicar em action card
+    // Click action card
     const card = page.locator('button:has-text("Novo Paciente")');
     await card.click();
     
-    // Verificar se animação de ripple existe (span com animate-ripple)
+    // Check if ripple animation exists (span with animate-ripple)
     const ripple = page.locator('span.animate-ripple');
-    // Pode já ter desaparecido pela velocidade da animação
+    // May have already disappeared due to animation speed
   });
 
   test('should load dashboard within 3 seconds', async ({ page }) => {
@@ -173,12 +173,12 @@ test.describe('Dashboard Navigation and Layout', () => {
     
     await page.goto('/');
     
-    // Aguardar elementos principais
+    // Wait for main elements
     await page.waitForSelector('[data-tour="dashboard"]', { timeout: 5000 });
     
     const loadTime = Date.now() - startTime;
     
-    // Performance: deve carregar em menos de 3 segundos
+    // Performance: should load in less than 3 seconds
     expect(loadTime).toBeLessThan(3000);
   });
 });

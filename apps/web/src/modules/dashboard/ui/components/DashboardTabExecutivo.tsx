@@ -25,7 +25,8 @@ import {
 import { Users, Calendar, DollarSign, Activity } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { AnimatedSection, StaggerGrid, statsStagger, chartsStagger } from "./DashboardAnimations";
-import type { DashboardStats, DashboardChartData } from "@/hooks/useDashboard";
+import type { DashboardStats } from "@orthoplus/shared-types";
+import type { DashboardChartData } from "@/hooks/useDashboard";
 
 const COLORS = [
   "hsl(168, 45%, 52%)",

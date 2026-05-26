@@ -5,82 +5,82 @@ import { test, expect } from './fixtures';
  * Testa ativação/desativação de módulos e validação de dependências
  */
 
-test.describe('Gestão de Módulos', () => {
+test.describe('Module Management', () => {
   test.beforeEach(async ({ page }) => {
-    // Login como admin
+    // Login as admin
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     
-    // Navegar para gestão de módulos
+    // Navigate to module management
     await page.goto('/settings/modules');
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('deve exibir lista de módulos', async ({ page }) => {
-    // Verificar título
+  test('should display module list', async ({ page }) => {
+    // Check title
     await expect(page.getByRole('heading', { name: /gestão de módulos/i })).toBeVisible();
     
-    // Verificar que existem módulos listados
+    // Check that there are modules listed
     const modules = page.locator('[data-testid="module-card"]');
     const count = await modules.count();
     expect(count).toBeGreaterThan(0);
   });
 
-  test('deve exibir categorias de módulos', async ({ page }) => {
-    // Verificar categorias
+  test('should display module categories', async ({ page }) => {
+    // Check categories
     await expect(page.getByText(/gestão e operação/i)).toBeVisible();
     await expect(page.getByText(/financeiro/i)).toBeVisible();
     await expect(page.getByText(/compliance/i)).toBeVisible();
   });
 
-  test('deve mostrar status ativo/inativo de módulos', async ({ page }) => {
-    // Verificar badges de status
+  test('should show active/inactive module status', async ({ page }) => {
+    // Check status badges
     const activeModules = page.locator('[data-testid="module-card"]', { hasText: /ativo/i });
     const count = await activeModules.count();
     expect(count).toBeGreaterThan(0);
   });
 
-  test('deve desativar módulo sem dependentes', async ({ page }) => {
-    // Encontrar módulo ESTOQUE (sem dependentes críticos)
+  test('should deactivate module without dependents', async ({ page }) => {
+    // Find ESTOQUE module (without critical dependents)
     const estoqueModule = page.locator('[data-testid="module-card"]', { hasText: /estoque/i });
     
-    // Clicar no toggle
+    // Click toggle
     const toggle = estoqueModule.locator('button[role="switch"]');
     await toggle.click();
     
-    // Aguardar confirmação
+    // Wait for confirmation
     await page.waitForLoadState("domcontentloaded");
     
-    // Verificar que o toggle mudou de estado
+    // Check that toggle changed state
     const isChecked = await toggle.getAttribute('data-state');
     expect(['checked', 'unchecked']).toContain(isChecked);
   });
 
-  test('deve bloquear desativação de módulo com dependentes', async ({ page }) => {
-    // Encontrar módulo PEP (tem dependentes: ASSINATURA_ICP, TISS, etc.)
+  test('should block deactivation of module with dependents', async ({ page }) => {
+    // Find PEP module (has dependents: ASSINATURA_ICP, TISS, etc.)
     const pepModule = page.locator('[data-testid="module-card"]', { hasText: /prontuário eletrônico/i });
     
-    // Verificar se o toggle está desabilitado
+    // Check if toggle is disabled
     const toggle = pepModule.locator('button[role="switch"]');
     const isDisabled = await toggle.isDisabled();
     
     if (isDisabled) {
-      // Hover para ver tooltip
+      // Hover to see tooltip
       await toggle.hover();
       
-      // Verificar mensagem de bloqueio
+      // Check blocking message
       await expect(page.getByText(/requerido por/i)).toBeVisible({ timeout: 2000 });
     }
   });
 
-  test('deve exibir dependências não atendidas', async ({ page }) => {
-    // Procurar módulos inativos com dependências
+  test('should display unmet dependencies', async ({ page }) => {
+    // Search for inactive modules with dependencies
     const inactiveModules = page.locator('[data-testid="module-card"]').filter({ hasNotText: /ativo/i });
     const count = await inactiveModules.count();
     
     if (count > 0) {
-      // Verificar se há indicador de dependências
+      // Check if there is a dependency indicator
       const firstInactive = inactiveModules.first();
       const hasDependencyWarning = await firstInactive.locator('[data-icon="alert-circle"]').count();
       
@@ -88,8 +88,8 @@ test.describe('Gestão de Módulos', () => {
     }
   });
 
-  test('deve ativar módulo com dependências atendidas', async ({ page }) => {
-    // Encontrar módulo inativo com dependências atendidas
+  test('should activate module with met dependencies', async ({ page }) => {
+    // Find inactive module with met dependencies
     const modules = page.locator('[data-testid="module-card"]');
     const count = await modules.count();
     
@@ -98,16 +98,16 @@ test.describe('Gestão de Módulos', () => {
       const hasActiveText = await module.getByText(/ativo/i).count();
       
       if (hasActiveText === 0) {
-        // Módulo inativo encontrado
+        // Inactive module found
         const toggle = module.locator('button[role="switch"]');
         const isDisabled = await toggle.isDisabled();
         
         if (!isDisabled) {
-          // Pode ser ativado
+          // Can be activated
           await toggle.click();
           await page.waitForLoadState("domcontentloaded");
           
-          // Verificar mudança
+          // Check change
           const newState = await toggle.getAttribute('data-state');
           expect(['checked', 'unchecked']).toContain(newState);
           break;
@@ -116,19 +116,19 @@ test.describe('Gestão de Módulos', () => {
     }
   });
 
-  test('deve filtrar módulos por categoria', async ({ page }) => {
-    // Clicar na categoria "Financeiro"
+  test('should filter modules by category', async ({ page }) => {
+    // Click "Financial" category
     await page.getByText(/financeiro/i).first().click();
     
-    // Verificar que apenas módulos financeiros estão visíveis
+    // Check that only financial modules are visible
     const visibleModules = page.locator('[data-testid="module-card"]:visible');
     const count = await visibleModules.count();
     
     expect(count).toBeGreaterThan(0);
   });
 
-  test('deve exibir contador de módulos ativos por categoria', async ({ page }) => {
-    // Verificar contadores (ex: "3/5 ativos")
+  test('should display active module counter by category', async ({ page }) => {
+    // Check counters (e.g., "3/5 active")
     const counters = page.locator('text=/\\d+\\/\\d+ ativos/i');
     const count = await counters.count();
     

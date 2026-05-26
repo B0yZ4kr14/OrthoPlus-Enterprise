@@ -2,26 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-
-export interface CategoryBackupStatus {
-  category: string;
-  lastBackup: string | null;
-  lastBackupSize: number | null;
-  lastBackupSizeHuman: string;
-  backupCount: number;
-  schemas: string[];
-}
-
-export interface BackupExecutionResult {
-  category: string;
-  success: boolean;
-  filePath: string;
-  sizeBytes: number;
-  sizeHuman: string;
-  durationMs: number;
-  schemas: string[];
-  error?: string;
-}
+import type { CategoryBackupStatus, BackupExecutionResult } from "@orthoplus/shared-types";
 
 export function useBackupStatus() {
   const { clinicId } = useAuth();

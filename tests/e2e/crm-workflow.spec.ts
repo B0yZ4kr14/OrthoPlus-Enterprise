@@ -17,7 +17,7 @@ test.describe("CRM Workflow", () => {
   test("should display lead kanban board", async ({ page }) => {
     await page.goto("./crm-kanban");
 
-    // Verificar colunas do kanban
+    // Check kanban columns
     await expect(page.getByText("Novos")).toBeVisible();
     await expect(page.getByText("Contato")).toBeVisible();
     await expect(page.getByText("Proposta")).toBeVisible();
@@ -28,7 +28,7 @@ test.describe("CRM Workflow", () => {
     await page.goto("./crm-kanban");
     await page.click('button:has-text("Novo Lead")');
 
-    // Verificar se o dialog abriu
+    // Check if dialog opened
     await expect(page.getByText("Criar Novo Lead")).toBeVisible();
   });
 
@@ -36,13 +36,13 @@ test.describe("CRM Workflow", () => {
     await page.goto("./crm-kanban");
     await page.click('button:has-text("Novo Lead")');
 
-    // Preencher formulário
+    // Fill form
     await page.fill('input[name="name"]', "João Test");
     await page.fill('input[name="email"]', "joao@test.com");
     await page.fill('input[name="phone"]', "11999999999");
     await page.fill('input[name="estimated_value"]', "1500");
 
-    // Submeter
+    // Submit
     await page.click('button[type="submit"]');
 
     // Accept any toast response — backend may not be running during E2E

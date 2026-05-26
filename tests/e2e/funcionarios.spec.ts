@@ -1,38 +1,38 @@
 import { test, expect } from "./fixtures";
 
-test.describe("Gestão de Funcionários", () => {
+test.describe("Employee Management", () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto("./funcionarios");
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test("deve exibir página de funcionários", async ({ page }) => {
-    // Verificar que o título da página está visível
+  test("should display employees page", async ({ page }) => {
+    // Check that the page title is visible
     await expect(
       page.getByRole("heading", { name: "Funcionários", exact: true }),
     ).toBeVisible();
 
-    // Verificar descrição da página
+    // Check page description
     await expect(
       page.getByText(/gestão da equipe e colaboradores/i),
     ).toBeVisible();
 
-    // Verificar botão de novo funcionário
+    // Check new employee button
     await expect(
       page.getByRole("button", { name: /novo funcionário/i }),
     ).toBeVisible();
   });
 
-  test("deve navegar para funcionários", async ({ page }) => {
-    // Navegar diretamente para a rota
+  test("should navigate to employees", async ({ page }) => {
+    // Navigate directly to the route
     await page.goto("./funcionarios");
     await page.waitForLoadState("domcontentloaded");
 
-    // Verificar URL
+    // Check URL
     await expect(page).toHaveURL(/.*\/funcionarios/);
 
-    // Verificar que a lista de funcionários ou estado vazio carregou
+    // Check that the employee list or empty state loaded
     await expect(
       page.getByRole("heading", { name: "Funcionários", exact: true }),
     ).toBeVisible();

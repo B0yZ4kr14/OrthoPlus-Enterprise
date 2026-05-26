@@ -1,18 +1,18 @@
 import { test, expect } from './fixtures';
 
-test.describe('Módulo de Estoque', () => {
+test.describe('Inventory Module', () => {
   test.beforeEach(async ({ page }) => {
-    // Login como ADMIN
+    // Login as ADMIN
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test.describe('Dashboard de Estoque', () => {
+  test.describe('Inventory Dashboard', () => {
     test('should display dashboard metrics', async ({ page }) => {
       await page.goto('/estoque');
       
-      // Verificar métricas principais
+      // Check main metrics
       await expect(page.getByText('Dashboard do Estoque')).toBeVisible();
       await expect(page.getByText('Total de Produtos')).toBeVisible();
       await expect(page.getByText('Estoque Baixo')).toBeVisible();
@@ -23,12 +23,12 @@ test.describe('Módulo de Estoque', () => {
     test('should display charts', async ({ page }) => {
       await page.goto('/estoque');
       
-      // Verificar gráficos
+      // Check charts
       await expect(page.getByText('Produtos com Estoque Baixo')).toBeVisible();
       await expect(page.getByText('Requisições por Status')).toBeVisible();
       await expect(page.getByText('Movimentações dos Últimos 7 Dias')).toBeVisible();
       
-      // Verificar se recharts renderizou
+      // Check if recharts rendered
       const charts = page.locator('svg.recharts-surface');
       expect(await charts.count()).toBeGreaterThan(0);
     });
@@ -36,21 +36,21 @@ test.describe('Módulo de Estoque', () => {
     test('should display active alerts', async ({ page }) => {
       await page.goto('/estoque');
       
-      // Verificar seção de alertas (se houver)
+      // Check alerts section (if any)
       const alertSection = page.getByText(/alertas ativos/i);
-      // Pode ou não estar visível dependendo se há alertas
+      // May or may not be visible depending on whether there are alerts
     });
 
     test('should use elevated card variants', async ({ page }) => {
       await page.goto('/estoque');
       
-      // Verificar se cards têm classes corretas
+      // Check if cards have correct classes
       const cards = page.locator('[class*="elevated"]');
       expect(await cards.count()).toBeGreaterThan(0);
     });
   });
 
-  test.describe('Cadastros de Produtos', () => {
+  test.describe('Product Registrations', () => {
     test('should navigate to cadastros page', async ({ page }) => {
       await page.goto('/estoque/cadastros');
       
@@ -63,13 +63,13 @@ test.describe('Módulo de Estoque', () => {
     test('should display product creation form', async ({ page }) => {
       await page.goto('/estoque/cadastros');
       
-      // Clicar em tab de produtos
+      // Click products tab
       await page.click('button:has-text("Produtos")');
       
-      // Clicar em novo produto
+      // Click new product
       await page.click('button:has-text("Novo Produto")');
       
-      // Verificar campos do formulário
+      // Check form fields
       await expect(page.getByLabel(/nome/i)).toBeVisible();
       await expect(page.getByLabel(/código/i)).toBeVisible();
       await expect(page.getByLabel(/categoria/i)).toBeVisible();
@@ -81,7 +81,7 @@ test.describe('Módulo de Estoque', () => {
       await page.click('button:has-text("Produtos")');
       await page.click('button:has-text("Novo Produto")');
       
-      // Preencher formulário
+      // Fill form
       const timestamp = Date.now();
       await page.fill('input[name="nome"]', `Produto Teste ${timestamp}`);
       await page.fill('input[name="codigo"]', `PROD${timestamp}`);
@@ -90,10 +90,10 @@ test.describe('Módulo de Estoque', () => {
       await page.fill('input[name="precoCompra"]', '50.00');
       await page.fill('input[name="precoVenda"]', '100.00');
       
-      // Submeter
+      // Submit
       await page.click('button[type="submit"]:has-text("Salvar")');
       
-      // Verificar toast de sucesso
+      // Check success toast
       await expect(page.getByText(/produto cadastrado/i)).toBeVisible({ timeout: 5000 });
     });
 
@@ -102,19 +102,19 @@ test.describe('Módulo de Estoque', () => {
       
       await page.click('button:has-text("Produtos")');
       
-      // Clicar em editar primeiro produto (se existir)
+      // Click edit first product (if exists)
       const editButton = page.locator('button:has-text("Editar")').first();
       if (await editButton.isVisible()) {
         await editButton.click();
         
-        // Modificar nome
+        // Modify name
         const nomeInput = page.locator('input[name="nome"]');
         await nomeInput.fill(`Produto Editado ${Date.now()}`);
         
-        // Salvar
+        // Save
         await page.click('button[type="submit"]:has-text("Salvar")');
         
-        // Verificar toast
+        // Check toast
         await expect(page.getByText(/produto atualizado/i)).toBeVisible({ timeout: 5000 });
       }
     });
@@ -124,12 +124,12 @@ test.describe('Módulo de Estoque', () => {
       
       await page.click('button:has-text("Produtos")');
       
-      // Buscar produto
+      // Search product
       const searchInput = page.getByPlaceholder(/buscar produtos/i);
       await searchInput.fill('teste');
       
-      // Verificar se filtrou resultados
-      // (pode não ter resultados se não houver produtos com "teste")
+      // Check if results were filtered
+      // (may have no results if there are no products with "test")
     });
 
     test('should delete product with confirmation', async ({ page }) => {
@@ -141,16 +141,16 @@ test.describe('Módulo de Estoque', () => {
       if (await deleteButton.isVisible()) {
         await deleteButton.click();
         
-        // Verificar dialog de confirmação
+        // Check confirmation dialog
         await expect(page.getByText(/confirmar exclusão/i)).toBeVisible();
         
-        // Cancelar para não excluir de verdade
+        // Cancel to avoid actually deleting
         await page.click('button:has-text("Cancelar")');
       }
     });
   });
 
-  test.describe('Cadastros de Fornecedores', () => {
+  test.describe('Supplier Registrations', () => {
     test('should display fornecedor form', async ({ page }) => {
       await page.goto('/estoque/cadastros');
       
@@ -187,7 +187,7 @@ test.describe('Módulo de Estoque', () => {
     });
   });
 
-  test.describe('Cadastros de Categorias', () => {
+  test.describe('Category Registrations', () => {
     test('should display categoria form', async ({ page }) => {
       await page.goto('/estoque/cadastros');
       
@@ -214,7 +214,7 @@ test.describe('Módulo de Estoque', () => {
     });
   });
 
-  test.describe('Movimentações de Estoque', () => {
+  test.describe('Stock Movements', () => {
     test('should navigate to movimentacoes page', async ({ page }) => {
       await page.goto('/estoque/movimentacoes');
       
@@ -228,7 +228,7 @@ test.describe('Módulo de Estoque', () => {
     test('should display metrics cards with elevated variant', async ({ page }) => {
       await page.goto('/estoque/movimentacoes');
       
-      // Verificar cards com variant elevated
+      // Check cards with elevated variant
       const elevatedCards = page.locator('[class*="elevated"]');
       expect(await elevatedCards.count()).toBeGreaterThan(0);
     });
@@ -244,11 +244,11 @@ test.describe('Módulo de Estoque', () => {
     test('should filter by tipo', async ({ page }) => {
       await page.goto('/estoque/movimentacoes');
       
-      // Aplicar filtro
+      // Apply filter
       await page.click('[role="combobox"]');
       await page.click('text=Entradas');
       
-      // Tab de entradas deve mostrar apenas entradas
+      // Entries tab should show only entries
       await page.click('button:has-text("Entradas")');
     });
 
@@ -262,7 +262,7 @@ test.describe('Módulo de Estoque', () => {
     test('should switch between tabs', async ({ page }) => {
       await page.goto('/estoque/movimentacoes');
       
-      // Testar navegação entre tabs
+      // Test navigation between tabs
       await page.click('button:has-text("Entradas")');
       
       await page.click('button:has-text("Saídas")');
@@ -279,14 +279,14 @@ test.describe('Módulo de Estoque', () => {
       
       await page.click('button:has-text("Scanner de Código de Barras")');
       
-      // Dialog deve abrir (pode não funcionar completamente sem câmera real)
+      // Dialog should open (may not work fully without real camera)
       await expect(page.locator('[role="dialog"]')).toBeVisible();
     });
   });
 
   test.describe('Loading States', () => {
     test('should show loading state on dashboard', async ({ page }) => {
-      // Interceptar request para simular loading
+      // Intercept request to simulate loading
       await page.route('**/rest/v1/estoque_produtos*', async route => {
         await page.waitForLoadState("domcontentloaded"); // Wait for page
         route.continue();
@@ -294,7 +294,7 @@ test.describe('Módulo de Estoque', () => {
       
       await page.goto('/estoque');
       
-      // Verificar se loading state aparece
+      // Check if loading state appears
       await expect(page.getByText(/carregando/i)).toBeVisible({ timeout: 1000 });
     });
   });
@@ -304,7 +304,7 @@ test.describe('Módulo de Estoque', () => {
       await page.setViewportSize({ width: 375, height: 667 });
       await page.goto('/estoque');
       
-      // Verificar se métricas estão empilhadas
+      // Check if metrics are stacked
       await expect(page.getByText('Total de Produtos')).toBeVisible();
     });
 
@@ -312,7 +312,7 @@ test.describe('Módulo de Estoque', () => {
       await page.setViewportSize({ width: 1920, height: 1080 });
       await page.goto('/estoque');
       
-      // Verificar grid de 4 colunas
+      // Check 4-column grid
       const metricsGrid = page.locator('.grid').first();
       const gridClass = await metricsGrid.getAttribute('class');
       expect(gridClass).toContain('lg:grid-cols-4');
@@ -336,7 +336,7 @@ test.describe('Módulo de Estoque', () => {
       
       await page.click('button[type="submit"]:has-text("Salvar")');
       
-      // Verificar toast
+      // Check toast
       await expect(page.getByRole('status')).toBeVisible({ timeout: 5000 });
     });
   });
@@ -345,7 +345,7 @@ test.describe('Módulo de Estoque', () => {
     test('should link to financial module from dashboard', async ({ page }) => {
       await page.goto('/estoque');
       
-      // Verificar se valor total está visível (integração com financeiro)
+      // Check if total value is visible (integration with financial)
       await expect(page.getByText(/valor total/i)).toBeVisible();
       await expect(page.getByText(/R\$/)).toBeVisible();
     });

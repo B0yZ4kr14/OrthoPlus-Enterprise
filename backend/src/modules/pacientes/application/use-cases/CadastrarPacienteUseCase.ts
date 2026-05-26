@@ -10,6 +10,7 @@ import { PatientStatus } from '../../domain/value-objects/PatientStatus';
 import { DadosComerciaisVO } from '../../domain/value-objects/DadosComerciaisVO';
 import { IPatientRepository } from '../../domain/repositories/IPatientRepository';
 import { eventBus } from '@/shared/events/EventBus';
+import { PatientCreatedEvent } from '../../domain/events/PatientCreatedEvent';
 import { logger } from '@/infrastructure/logger';
 import { pacientesMetrics } from '@/infrastructure/metrics/PacientesMetrics';
 import { withTiming } from '@/infrastructure/metrics/withTiming';
@@ -165,6 +166,7 @@ export class CadastrarPacienteUseCase {
               timestamp: new Date().toISOString(),
             },
           }),
+          eventBus.publish(new PatientCreatedEvent(patient.id, dto.clinicId)),
           ...events.map((event) => eventBus.publish(event)),
         ]);
 

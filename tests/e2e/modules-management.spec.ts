@@ -1,51 +1,51 @@
 import { test, expect } from './fixtures';
 
-test.describe('Gestão de Módulos (ADMIN)', () => {
+test.describe('Module Management (ADMIN)', () => {
   test.beforeEach(async ({ page }) => {
-    // Login como ADMIN
+    // Login as ADMIN
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     
-    // Navegar para configurações -> módulos
+    // Navigate to settings -> modules
     await page.getByRole('link', { name: /configurações/i }).click();
     await page.waitForURL('/configuracoes');
     await page.getByRole('tab', { name: /módulos/i }).click();
   });
 
-  test('deve exibir catálogo de módulos', async ({ page }) => {
-    // Verificar que há módulos listados
+  test('should display module catalog', async ({ page }) => {
+    // Check that there are modules listed
     await expect(page.getByText(/módulo de prontuário eletrônico/i)).toBeVisible();
     await expect(page.getByText(/módulo de agenda/i)).toBeVisible();
     await expect(page.getByText(/módulo financeiro/i)).toBeVisible();
   });
 
-  test('deve exibir módulos agrupados por categoria', async ({ page }) => {
+  test('should display modules grouped by category', async ({ page }) => {
     await expect(page.getByRole('heading', { name: /gestão e operação/i })).toBeVisible();
     await expect(page.getByRole('heading', { name: /financeiro/i })).toBeVisible();
     await expect(page.getByRole('heading', { name: /compliance/i })).toBeVisible();
   });
 
-  test('deve ativar módulo sem dependências', async ({ page }) => {
-    // Encontrar módulo PEP (não tem dependências)
+  test('should activate module without dependencies', async ({ page }) => {
+    // Find PEP module (has no dependencies)
     const pepModule = page.locator('[data-module="PEP"]');
     const toggle = pepModule.locator('button[role="switch"]');
     
-    // Verificar estado atual
+    // Check current state
     const isActive = await toggle.getAttribute('data-state');
     
     if (isActive === 'unchecked') {
-      // Ativar módulo
+      // Activate module
       await toggle.click();
       
-      // Verificar ativação
+      // Check activation
       await expect(page.getByText(/módulo ativado/i)).toBeVisible();
       await expect(toggle).toHaveAttribute('data-state', 'checked');
     }
   });
 
-  test('deve desativar módulo sem dependentes', async ({ page }) => {
-    // Encontrar módulo que não é dependência de outros
+  test('should deactivate module without dependents', async ({ page }) => {
+    // Find module that is not a dependency of others
     const moduleToggle = page.locator('[data-module="TELEODONTO"]').locator('button[role="switch"]');
     
     const isActive = await moduleToggle.getAttribute('data-state');
@@ -58,9 +58,9 @@ test.describe('Gestão de Módulos (ADMIN)', () => {
     }
   });
 
-  test('deve bloquear ativação de módulo com dependências não atendidas', async ({ page }) => {
-    // SPLIT_PAGAMENTO depende de FINANCEIRO
-    // Primeiro desativar FINANCEIRO se estiver ativo
+  test('should block activation of module with unmet dependencies', async ({ page }) => {
+    // SPLIT_PAYMENT depends on FINANCIAL
+    // First deactivate FINANCIAL if active
     const financeiroToggle = page.locator('[data-module="FINANCEIRO"]').locator('button[role="switch"]');
     const financeiroState = await financeiroToggle.getAttribute('data-state');
     
@@ -68,87 +68,87 @@ test.describe('Gestão de Módulos (ADMIN)', () => {
       await financeiroToggle.click();
     }
     
-    // Tentar ativar SPLIT_PAGAMENTO
+    // Try to activate SPLIT_PAYMENT
     const splitToggle = page.locator('[data-module="SPLIT_PAGAMENTO"]').locator('button[role="switch"]');
     
-    // Verificar que está desabilitado ou exibe tooltip
+    // Check that it is disabled or shows tooltip
     const isDisabled = await splitToggle.isDisabled();
     expect(isDisabled).toBe(true);
     
-    // Verificar tooltip de dependência
+    // Check dependency tooltip
     await splitToggle.hover();
     await expect(page.getByText(/requer.*financeiro/i)).toBeVisible();
   });
 
-  test('deve bloquear desativação de módulo com dependentes ativos', async ({ page }) => {
-    // Ativar FINANCEIRO
+  test('should block deactivation of module with active dependents', async ({ page }) => {
+    // Activate FINANCIAL
     const financeiroToggle = page.locator('[data-module="FINANCEIRO"]').locator('button[role="switch"]');
     if (await financeiroToggle.getAttribute('data-state') === 'unchecked') {
       await financeiroToggle.click();
     }
     
-    // Ativar SPLIT_PAGAMENTO (depende de FINANCEIRO)
+    // Activate SPLIT_PAYMENT (depends on FINANCIAL)
     const splitToggle = page.locator('[data-module="SPLIT_PAGAMENTO"]').locator('button[role="switch"]');
     if (await splitToggle.getAttribute('data-state') === 'unchecked' && !await splitToggle.isDisabled()) {
       await splitToggle.click();
     }
     
-    // Tentar desativar FINANCEIRO (deve falhar)
+    // Try to deactivate FINANCIAL (should fail)
     await financeiroToggle.click();
     
-    // Verificar erro
+    // Check error
     await expect(page.getByText(/não pode ser desativado.*split.*ativo/i)).toBeVisible();
   });
 
-  test('deve visualizar grafo de dependências', async ({ page }) => {
-    // Clicar no botão de visualizar grafo
+  test('should view dependency graph', async ({ page }) => {
+    // Click view graph button
     await page.getByRole('button', { name: /visualizar grafo|dependências/i }).click();
     
-    // Verificar que o grafo foi aberto
+    // Check that the graph opened
     await expect(page.locator('[class*="react-flow"]')).toBeVisible();
     
-    // Verificar que há nós no grafo
+    // Check that there are nodes in the graph
     const nodes = page.locator('[class*="react-flow__node"]');
     expect(await nodes.count()).toBeGreaterThan(0);
     
-    // Fechar grafo
+    // Close graph
     await page.getByRole('button', { name: /fechar/i }).click();
   });
 
-  test('deve simular ativação no grafo (What-If)', async ({ page }) => {
+  test('should simulate activation in graph (What-If)', async ({ page }) => {
     await page.getByRole('button', { name: /visualizar grafo/i }).click();
     
-    // Ativar modo simulação
+    // Activate simulation mode
     await page.getByRole('button', { name: /simular|what-if/i }).click();
     
-    // Clicar em um módulo no grafo
+    // Click a module in the graph
     const moduleNode = page.locator('[data-id="FINANCEIRO"]').first();
     await moduleNode.click();
     
-    // Verificar que alerta de simulação aparece
+    // Check that simulation alert appears
     await expect(page.getByText(/simula.*ativar.*financeiro/i)).toBeVisible();
     
-    // Verificar módulos afetados destacados
+    // Check highlighted affected modules
     await expect(page.locator('[data-simulated="true"]')).toHaveCount(await page.locator('[data-simulated="true"]').count());
   });
 
-  test('deve solicitar contratação de novo módulo', async ({ page }) => {
-    // Encontrar módulo não contratado
+  test('should request subscription to new module', async ({ page }) => {
+    // Find unsubscribed module
     const nonSubscribedModule = page.locator('[data-subscribed="false"]').first();
     
     if (await nonSubscribedModule.isVisible()) {
-      // Clicar em solicitar
+      // Click request
       await nonSubscribedModule.getByRole('button', { name: /solicitar/i }).click();
       
-      // Verificar mensagem de sucesso
+      // Check success message
       await expect(page.getByText(/solicitação enviada/i)).toBeVisible();
     }
   });
 
-  test('deve exibir estatísticas de módulos', async ({ page }) => {
+  test('should display module statistics', async ({ page }) => {
     await page.getByRole('button', { name: /visualizar grafo/i }).click();
     
-    // Verificar que estatísticas são exibidas
+    // Check that statistics are displayed
     await expect(page.getByText(/módulos ativos/i)).toBeVisible();
     await expect(page.getByText(/módulos disponíveis/i)).toBeVisible();
   });

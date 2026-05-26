@@ -1,23 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { apiClient } from "@/lib/api/apiClient"
-
-export interface GraphNode {
-  id: string
-  label: string
-  docType: string
-  sourcePath: string
-}
-
-export interface GraphEdge {
-  source: string
-  target: string
-  type: "links-to" | "referenced-by"
-}
-
-export interface GraphData {
-  nodes: GraphNode[]
-  edges: GraphEdge[]
-}
+import type { GraphData } from "@orthoplus/shared-types"
 
 export function useMemoryHubGraph() {
   const query = useQuery<GraphData, Error>({

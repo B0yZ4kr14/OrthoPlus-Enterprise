@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures';
 
-test.describe('Gestão de Pacientes', () => {
+test.describe('Patient Management', () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto('/');
@@ -9,12 +9,12 @@ test.describe('Gestão de Pacientes', () => {
     await page.goto('/pacientes');
   });
 
-  test('deve exibir lista de pacientes', async ({ page }) => {
+  test('should display patient list', async ({ page }) => {
     await expect(page.getByText(/pacientes/i)).toBeVisible();
     await expect(page.getByRole('table')).toBeVisible();
   });
 
-  test('deve abrir modal de cadastro de paciente', async ({ page }) => {
+  test('should open patient registration modal', async ({ page }) => {
     await page.getByRole('button', { name: /novo paciente|adicionar/i }).click();
     
     await expect(page.getByText(/cadastrar paciente/i)).toBeVisible();
@@ -22,14 +22,14 @@ test.describe('Gestão de Pacientes', () => {
     await expect(page.getByLabel(/cpf/i)).toBeVisible();
   });
 
-  test('deve validar campos obrigatórios ao cadastrar', async ({ page }) => {
+  test('should validate required fields when registering', async ({ page }) => {
     await page.getByRole('button', { name: /novo paciente|adicionar/i }).click();
     await page.getByRole('button', { name: /salvar|cadastrar/i }).click();
     
     await expect(page.getByText(/campo.*obrigatório/i).first()).toBeVisible();
   });
 
-  test('deve filtrar pacientes por nome', async ({ page }) => {
+  test('should filter patients by name', async ({ page }) => {
     const searchInput = page.getByPlaceholder(/buscar|pesquisar/i);
     await searchInput.fill('João');
     
@@ -39,7 +39,7 @@ test.describe('Gestão de Pacientes', () => {
     await expect(rows).not.toHaveCount(0);
   });
 
-  test('deve exibir detalhes do paciente', async ({ page }) => {
+  test('should display patient details', async ({ page }) => {
     const firstPatient = page.getByRole('row').nth(1);
     await firstPatient.click();
     

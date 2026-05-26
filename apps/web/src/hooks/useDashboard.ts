@@ -6,15 +6,7 @@
 import { apiClient } from "@/lib/api/apiClient";
 import { logger } from "@/lib/logger";
 import { useEffect, useState } from "react";
-
-export interface DashboardStats {
-  totalPatients: number;
-  todayAppointments: number;
-  monthlyRevenue: number;
-  occupancyRate: number;
-  pendingTreatments: number;
-  completedTreatments: number;
-}
+import type { DashboardStats } from "@orthoplus/shared-types";
 
 export interface DashboardChartData {
   name: string;

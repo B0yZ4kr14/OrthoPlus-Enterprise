@@ -1,30 +1,30 @@
 import { test, expect } from './fixtures';
 
-test.describe('Gestão de Inventário', () => {
+test.describe('Inventory Management', () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto('/estoque/inventario');
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('deve exibir lista de inventários', async ({ page }) => {
-    // Verificar que a página de inventário está visível
+  test('should display inventory list', async ({ page }) => {
+    // Check that the inventory page is visible
     await expect(page.getByRole('heading', { name: /inventário de estoque/i })).toBeVisible();
     
-    // Verificar KPIs
+    // Check KPIs
     await expect(page.getByText(/total de inventários/i)).toBeVisible();
     await expect(page.getByText(/em andamento/i)).toBeVisible();
     await expect(page.getByText(/divergências totais/i)).toBeVisible();
   });
 
-  test('deve criar novo inventário', async ({ page }) => {
-    // Clicar no botão de adicionar
+  test('should create new inventory', async ({ page }) => {
+    // Click the add button
     await page.getByRole('button', { name: /novo inventário/i }).click();
     
-    // Aguardar abertura do modal
+    // Wait for modal to open
     await expect(page.getByRole('heading', { name: /novo inventário/i })).toBeVisible();
     
-    // Preencher formulário
+    // Fill form
     const numeroInv = `INV-2024-E2E-${Date.now()}`;
     await page.getByLabel(/número/i).fill(numeroInv);
     
@@ -37,7 +37,7 @@ test.describe('Gestão de Inventário', () => {
     
     await page.getByLabel(/observações/i).fill('Inventário criado por teste E2E');
     
-    // Salvar
+    // Save
     await page.getByRole('button', { name: /criar inventário/i }).click();
     
     // Accept any toast response — backend may not be running during E2E
@@ -45,114 +45,114 @@ test.describe('Gestão de Inventário', () => {
     await expect(toastLocator.first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('deve validar campos obrigatórios', async ({ page }) => {
-    // Clicar no botão de adicionar
+  test('should validate required fields', async ({ page }) => {
+    // Click the add button
     await page.getByRole('button', { name: /novo inventário/i }).click();
     
-    // Limpar campo número
+    // Clear number field
     await page.getByLabel(/número/i).clear();
     
-    // Tentar salvar sem preencher
+    // Try to save without filling
     await page.getByRole('button', { name: /criar inventário/i }).click();
     
-    // Verificar mensagens de erro
+    // Check error messages
     await expect(page.getByText(/número.*obrigatório/i)).toBeVisible();
     await expect(page.getByText(/responsável.*obrigatório/i)).toBeVisible();
   });
 
-  test('deve filtrar inventários por status', async ({ page }) => {
-    // Aplicar filtro de status
+  test('should filter inventories by status', async ({ page }) => {
+    // Apply status filter
     await page.getByLabel(/^status/i).click();
     await page.getByRole('option', { name: /em andamento/i }).click();
     
-    // Aguardar filtro aplicado
+    // Wait for filter to be applied
     
-    // Verificar que apenas inventários "Em Andamento" são exibidos
+    // Check that only "In Progress" inventories are displayed
     const rows = page.locator('tbody tr').filter({ hasText: /em andamento/i });
     expect(await rows.count()).toBeGreaterThanOrEqual(0);
   });
 
-  test('deve filtrar inventários por tipo', async ({ page }) => {
-    // Aplicar filtro de tipo
+  test('should filter inventories by type', async ({ page }) => {
+    // Apply type filter
     await page.getByLabel(/^tipo/i).click();
     await page.getByRole('option', { name: /cíclico/i }).click();
     
-    // Aguardar filtro aplicado
+    // Wait for filter to be applied
     
-    // Verificar que resultados contêm "Cíclico"
+    // Check that results contain "Cyclic"
     const ciclicos = page.locator('tbody tr').filter({ hasText: /cíclico/i });
     expect(await ciclicos.count()).toBeGreaterThanOrEqual(0);
   });
 
-  test('deve buscar inventário por número', async ({ page }) => {
+  test('should search inventory by number', async ({ page }) => {
     const searchTerm = 'INV-2024';
     
-    // Digitar no campo de busca
+    // Type in the search field
     await page.getByPlaceholder(/número.*responsável/i).fill(searchTerm);
     
-    // Aguardar resultados
+    // Wait for results
     
-    // Verificar que os resultados contêm o termo buscado
+    // Check that results contain the search term
     const results = page.locator('tbody tr');
     const count = await results.count();
     
     expect(count).toBeGreaterThanOrEqual(0);
   });
 
-  test('deve abrir dialog de contagem para inventário em andamento', async ({ page }) => {
-    // Buscar inventário em andamento
+  test('should open counting dialog for in-progress inventory', async ({ page }) => {
+    // Search for in-progress inventory
     const rowEmAndamento = page.locator('tbody tr').filter({ hasText: /em andamento/i }).first();
     
     if (await rowEmAndamento.isVisible()) {
-      // Clicar no botão de contagem
+      // Click counting button
       await rowEmAndamento.getByRole('button', { name: /contagem/i }).click();
       
-      // Verificar que dialog de contagem abriu
+      // Check that counting dialog opened
       await expect(page.getByRole('heading', { name: /contagem de inventário/i })).toBeVisible();
       
-      // Verificar que há tabela de itens
+      // Check that items table exists
       await expect(page.getByRole('columnheader', { name: /qtd\. física/i })).toBeVisible();
     }
   });
 
-  test('deve visualizar divergências de inventário concluído', async ({ page }) => {
-    // Buscar inventário concluído
+  test('should view discrepancies of completed inventory', async ({ page }) => {
+    // Search for completed inventory
     const rowConcluido = page.locator('tbody tr').filter({ hasText: /concluído/i }).first();
     
     if (await rowConcluido.isVisible()) {
-      // Clicar no botão de divergências (ícone de alerta)
+      // Click discrepancies button (alert icon)
       const divergenciasBtn = rowConcluido.getByRole('button', { name: /divergências/i });
       
       if (await divergenciasBtn.isVisible()) {
         await divergenciasBtn.click();
         
-        // Verificar que dialog de divergências abriu
+        // Check that discrepancies dialog opened
         await expect(page.getByRole('heading', { name: /divergências do inventário/i })).toBeVisible();
         
-        // Verificar KPIs de divergências
+        // Check discrepancy KPIs
         await expect(page.getByText(/divergências/i)).toBeVisible();
         await expect(page.getByText(/valor total/i)).toBeVisible();
       }
     }
   });
 
-  test('deve permitir editar inventário não concluído', async ({ page }) => {
-    // Buscar inventário em andamento ou planejado
+  test('should allow editing non-completed inventory', async ({ page }) => {
+    // Search for in-progress inventory ou planejado
     const rowEditavel = page.locator('tbody tr').filter({ hasText: /(planejado|em andamento)/i }).first();
     
     if (await rowEditavel.isVisible()) {
-      // Clicar no botão de editar
+      // Click edit button
       await rowEditavel.getByRole('button', { name: /editar/i }).click();
       
-      // Verificar que modal de edição abriu
+      // Check that edit modal opened
       await expect(page.getByRole('heading', { name: /editar inventário/i })).toBeVisible();
       
-      // Alterar responsável
+      // Change responsible person
       const responsavelInput = page.getByLabel(/responsável/i);
       await responsavelInput.clear();
       await responsavelInput.fill('Responsável Editado E2E');
       
-      // Salvar
+      // Save
       await page.getByRole('button', { name: /atualizar inventário/i }).click();
       
       // Accept any toast response — backend may not be running during E2E
@@ -161,48 +161,48 @@ test.describe('Gestão de Inventário', () => {
     }
   });
 
-  test('deve visualizar detalhes de inventário', async ({ page }) => {
-    // Clicar no primeiro inventário
+  test('should view inventory details', async ({ page }) => {
+    // Click first inventory
     const firstRow = page.locator('tbody tr').first();
     await firstRow.getByRole('button', { name: /visualizar/i }).click();
     
-    // Verificar que modal de visualização abriu
+    // Check that view modal opened
     await expect(page.getByRole('dialog')).toBeVisible();
   });
 
-  test('deve mostrar progresso de contagem', async ({ page }) => {
-    // Verificar que barras de progresso estão visíveis
+  test('should show counting progress', async ({ page }) => {
+    // Check that progress bars are visible
     const progressBars = page.locator('[role="progressbar"], .bg-primary').filter({ has: page.locator('.bg-secondary') });
     
-    // Verificar contadores de itens contados
+    // Check counted items counters
     const counters = page.locator('text=/\\d+\\/\\d+/');
     expect(await counters.count()).toBeGreaterThanOrEqual(0);
   });
 
-  test('deve exibir alertas para divergências críticas', async ({ page }) => {
-    // Verificar se há ícones de alerta (divergências)
+  test('should display alerts for critical discrepancies', async ({ page }) => {
+    // Check if alert icons exist (discrepancies)
     const alertIcons = page.locator('[title*="divergências"], .text-orange-500, .text-red-500');
     
-    // Inventários com divergências devem ter indicadores visuais
+    // Inventories with discrepancies should have visual indicators
     const divergenciasCount = await page.locator('tbody tr').filter({ has: alertIcons }).count();
     expect(divergenciasCount).toBeGreaterThanOrEqual(0);
   });
 
-  test('deve permitir exportar relatório de divergências', async ({ page }) => {
-    // Buscar inventário com divergências
+  test('should allow exporting discrepancy report', async ({ page }) => {
+    // Search for inventory with discrepancies
     const rowComDivergencias = page.locator('tbody tr').filter({ hasText: /[1-9]\d*/ }).first();
     
     if (await rowComDivergencias.isVisible()) {
-      // Abrir dialog de divergências
+      // Open discrepancies dialog
       const divergenciasBtn = rowComDivergencias.getByRole('button', { name: /divergências/i });
       
       if (await divergenciasBtn.isVisible()) {
         await divergenciasBtn.click();
         
-        // Clicar em exportar relatório
+        // Click export report
         await page.getByRole('button', { name: /exportar relatório/i }).click();
         
-        // Verificar que exportação foi iniciada (ou toast de sucesso)
+        // Check that export was started (or success toast)
         // await expect(page.getByText(/exportando|exportado/i)).toBeVisible({ timeout: 5000 });
       }
     }

@@ -39,6 +39,7 @@ import { authMiddleware, tenantGuard } from "./middleware/authMiddleware";
 import adminToolsRouter from "./modules/admin_tools/api/router"
 import { createMemoryHubModule } from "./modules/memory_hub/MemoryHubModule"
 import { createMemoryHubRouter } from "./modules/memory_hub/api/router"
+import searchIndexRouter from "./modules/search_index/api/router"
 import contratosRouter from "./modules/contratos/api/router";
 import crmRouter from "./modules/crm/api/router";
 import { dbRouter as crmDbRouter } from "./modules/crm/api/dbRouter";
@@ -322,6 +323,7 @@ app.use("/api/modules", modulesRouter);
 // Agents Module — Integration with Agno Agent Service (Python/FastAPI on port 8000)
 app.use("/api/agents", createAgentsRouter());
 app.use("/api/ai", aiRouter);
+app.use("/api/search-index", searchIndexRouter);
 // Memory Hub Module — initialized with DI factory
 const memoryHubModule = createMemoryHubModule()
 memoryHubModule.startFileWatcher()

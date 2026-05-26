@@ -10,7 +10,7 @@ test.describe("Memory Hub - Search and Health", () => {
     );
   });
 
-  test("deve exibir a pagina do Memory Hub", async ({ page }) => {
+  test("should display the Memory Hub page", async ({ page }) => {
     await page.goto("./memory-hub");
     await page.waitForLoadState("domcontentloaded");
 
@@ -18,7 +18,7 @@ test.describe("Memory Hub - Search and Health", () => {
     await expect(page.getByText(/Search and monitor project knowledge/i)).toBeVisible();
   });
 
-  test("deve exibir metricas de saude", async ({ page }) => {
+  test("should display health metrics", async ({ page }) => {
     await page.goto("./memory-hub");
     await page.waitForLoadState("domcontentloaded");
 
@@ -27,7 +27,7 @@ test.describe("Memory Hub - Search and Health", () => {
     await expect(page.getByTestId("metric-drift")).toBeVisible();
   });
 
-  test("deve realizar busca semantica", async ({ page }) => {
+  test("should perform semantic search", async ({ page }) => {
     await page.goto("./memory-hub");
     await page.waitForLoadState("domcontentloaded");
 
@@ -40,7 +40,7 @@ test.describe("Memory Hub - Search and Health", () => {
     await searchInput.fill("clinicGuard");
     await searchButton.click();
 
-    // Aguardar resultados ou mensagem de vazio
+    // Wait for results or empty message
     await page.waitForTimeout(2000);
 
     const results = page.getByTestId("search-result");
@@ -52,7 +52,7 @@ test.describe("Memory Hub - Search and Health", () => {
     }
   });
 
-  test("deve navegar para Memory Hub via sidebar", async ({ page }) => {
+  test("should navigate to Memory Hub via sidebar", async ({ page }) => {
     await page.goto("./");
     await page.waitForLoadState("domcontentloaded");
 
@@ -67,10 +67,10 @@ test.describe("Memory Hub - Search and Health", () => {
     }
   });
 
-  test("deve exibir estado de carregamento das metricas", async ({ page }) => {
+  test("should display loading state for metrics", async ({ page }) => {
     await page.goto("./memory-hub");
 
-    // Verificar se o estado de loading eh exibido inicialmente ou os metric cards aparecem
+    // Check if loading state is shown initially or metric cards appear
     const loadingIndicator = page.getByTestId("health-loading");
     const metricCards = page.getByTestId("metric-documents");
 

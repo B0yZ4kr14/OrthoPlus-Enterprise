@@ -15,7 +15,7 @@ test.describe('Performance Optimization - React.memo & useCallback', () => {
       
       // Verify table structure
       const tableHeaders = page.locator('th');
-      await expect(tableHeaders).toHaveCount(6); // Nome, CPF, Telefone, Status, Convênio, Ações
+      await expect(tableHeaders).toHaveCount(6); // Name, CPF, Phone, Status, Insurance, Actions
       
       // Verify patients are rendered
       const tableRows = page.locator('tbody tr');
@@ -54,7 +54,7 @@ test.describe('Performance Optimization - React.memo & useCallback', () => {
       await statusFilter.selectOption('Ativo');
       
       
-      // Verify all visible patients have "Ativo" status
+      // Verify all visible patients have "Active" status
       const statusBadges = page.locator('tbody td').locator('text=/Ativo/i');
       const badgeCount = await statusBadges.count();
       expect(badgeCount).toBeGreaterThan(0);
@@ -100,7 +100,7 @@ test.describe('Performance Optimization - React.memo & useCallback', () => {
       await page.goto('/financeiro/transacoes');
       await page.waitForLoadState("domcontentloaded");
       
-      // Look for currency values (R$ format)
+    // Look for currency values (R$ format)
       const currencyValues = page.locator('text=/R\\$\\s*[\\d.,]+/');
       const count = await currencyValues.count();
       
@@ -114,14 +114,14 @@ test.describe('Performance Optimization - React.memo & useCallback', () => {
       await page.goto('/financeiro/transacoes');
       await page.waitForLoadState("domcontentloaded");
       
-      // Look for view/eye icon button
+    // Look for view/eye icon button
       const viewButtons = page.locator('button').filter({ has: page.locator('svg') });
       const buttonCount = await viewButtons.count();
       
       if (buttonCount > 0) {
         await viewButtons.first().click();
         
-        // Verify details dialog/modal opens
+      // Verify details dialog/modal opens
         const modalVisible = await page.locator('[role="dialog"]').count() > 0;
         expect(modalVisible).toBeTruthy();
       }
@@ -169,13 +169,13 @@ test.describe('Performance Optimization - React.memo & useCallback', () => {
       await page.goto('/procedimentos');
       await page.waitForLoadState("domcontentloaded");
       
-      // Look for filter dropdowns
+    // Look for filter dropdowns
       const categoryFilter = page.locator('select').first();
       
       if (await categoryFilter.count() > 0) {
         await categoryFilter.selectOption({ index: 1 }); // Select first category
         
-        // Verify filtering works
+      // Verify filtering works
         expect(true).toBeTruthy(); // Basic smoke test
       }
     });
@@ -184,7 +184,7 @@ test.describe('Performance Optimization - React.memo & useCallback', () => {
       await page.goto('/procedimentos');
       await page.waitForLoadState("domcontentloaded");
       
-      // Look for currency formatting
+    // Look for currency formatting
       const prices = page.locator('text=/R\\$\\s*[\\d.,]+/');
       const count = await prices.count();
       
@@ -209,10 +209,10 @@ test.describe('Performance Optimization - React.memo & useCallback', () => {
     test('should have minimal layout shifts on dashboard', async ({ page }) => {
       await page.goto('/');
       
-      // Wait for all content to load
+    // Wait for all content to load
       await page.waitForLoadState("domcontentloaded");
       
-      // Check that key elements are visible and stable
+    // Check that key elements are visible and stable
       await expect(page.locator('header')).toBeVisible();
       await expect(page.locator('main')).toBeVisible();
     });

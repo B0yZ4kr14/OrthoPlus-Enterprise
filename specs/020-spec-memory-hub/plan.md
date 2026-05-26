@@ -164,3 +164,196 @@ categories/@orthoplus/core/packages/
 | **MEM-FR-010** | The system MUST expose both a CLI interface (for d... | ✅ Covered |
 | **MEM-FR-011** | The system MUST validate API key permissions (read... | ✅ Covered |
 | **MEM-FR-012** | The system MUST support hot-swapping of API keys w... | ✅ Covered |
+
+---
+
+## Migration Path to pgvector/HNSW
+
+> **Trigger**: Apply when the semantic index exceeds ~10,000 chunks or when sub-2-second search latency can no longer be met with the current SQLite + in-memory cosine similarity approach. This section documents the migration from PostgreSQL full-text search (FTS) to `pgvector` with HNSW approximate nearest neighbor (ANN) indexing.
+
+### Current State
+
+The project currently relies on PostgreSQL full-text search using `tsvector` with a GIN index:
+
+```sql
+-- Existing FTS setup (core.search_index)
+ALTER TABLE "core"."search_index"
+ADD COLUMN IF NOT EXISTS "content_tsv" tsvector
+GENERATED ALWAYS AS (to_tsvector('portuguese', "content")) STORED;
+
+CREATE INDEX "search_index_content_tsv_gin" ON "core"."search_index" USING GIN ("content_tsv");
+```
+
+The Memory Hub currently stores embeddings in SQLite (`better-sqlite3`) and computes cosine similarity in-memory at query time. This is acceptable for <10k chunks but becomes a bottleneck as the document corpus grows.
+
+### Limitations of Current Approach
+
+| Limitation | Impact |
+|------------|--------|
+| **Exact term matching only** (`tsvector`) | Cannot find semantically related documents that do not share exact keywords (e.g., "LGPD" vs. "lei de protecao de dados") |
+| **No semantic similarity** | Results are ranked by term frequency, not conceptual relevance |
+| **No multi-language support** | `to_tsvector('portuguese', ...)` fails for English or mixed-language documents; requires one tsvector column per language |
+| **Ranking limitations** | `ts_rank` does not capture semantic nuance; false positives on common terms, false negatives on paraphrases |
+| **O(n) query complexity** (Memory Hub) | SQLite in-memory scan scales linearly with chunk count; latency degrades predictably beyond ~10k chunks |
+| **No ANN indexing** | Every query must compare against all vectors; no approximate shortcuts for large datasets |
+
+### Target State
+
+Migrate the semantic search backend to PostgreSQL `pgvector` with an HNSW (Hierarchical Navigable Small World) index for approximate nearest neighbor search:
+
+- **Storage**: Native `vector(1536)` columns in PostgreSQL (aligned with OpenAI `text-embedding-3-small` / Ollama `nomic-embed-text` dimensions)
+- **Indexing**: HNSW index using `vector_cosine_ops` for sub-millisecond ANN retrieval
+- **Query complexity**: O(log n) vs. current O(n) for large datasets
+- **Fallback**: Retain `tsvector` + GIN for exact-match and hybrid search scenarios
+
+### Prerequisites
+
+| Requirement | Version / Detail |
+|-------------|------------------|
+| PostgreSQL | 14+ (project currently uses 16) |
+| pgvector extension | 0.5.0+ (available via `apt install postgresql-16-pgvector` or Docker `pgvector/pgvector:pg16`) |
+| Embedding provider | OpenAI API, Ollama local model, or compatible embedding service |
+| Connection string | `DATABASE_URL` must have `CREATE EXTENSION` privileges |
+| Disk space | ~6 KB additional storage per vector (1536 dimensions × 4 bytes + index overhead) |
+
+### Schema Changes
+
+#### 1. Enable pgvector extension
+
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+```
+
+#### 2. Add embedding column to `core.search_index`
+
+```sql
+ALTER TABLE "core"."search_index"
+ADD COLUMN IF NOT EXISTS "embedding" vector(1536) NULL DEFAULT NULL;
+```
+
+> **Rationale**: `NULL` default allows zero-downtime migration; existing records remain searchable via `tsvector` while embeddings are backfilled.
+
+#### 3. Create HNSW index
+
+```sql
+CREATE INDEX IF NOT EXISTS "search_index_embedding_hnsw"
+ON "core"."search_index"
+USING hnsw (embedding vector_cosine_ops)
+WITH (m = 16, ef_construction = 64);
+```
+
+> **Parameters**: `m = 16` (number of bi-directional links per layer), `ef_construction = 64` (build-time recall/speed trade-off). Tune `ef_construction` upward (e.g., 128) for higher recall at the cost of slower index builds.
+
+#### 4. Add helper index for hybrid queries
+
+```sql
+-- Support filtering by clinic_id before vector search
+CREATE INDEX "search_index_clinic_id_embedding_idx"
+ON "core"."search_index" (clinic_id, embedding)
+WHERE embedding IS NOT NULL;
+```
+
+### Migration Steps
+
+| Step | Action | Owner | Est. Effort |
+|------|--------|-------|-------------|
+| 1 | **Install pgvector** on PostgreSQL host or update Docker image to `pgvector/pgvector:pg16` | DevOps | 30 min |
+| 2 | **Add embedding column** (nullable) to `core.search_index` via Prisma migration or raw SQL | Backend | 1h |
+| 3 | **Backfill embeddings** for existing records via batch job | Backend | 4–8h |
+| 4 | **Update indexers** to generate embeddings on `INSERT` / `UPDATE` | Backend | 4h |
+| 5 | **Update search endpoint** to support vector search (`<=>` cosine distance operator) | Backend | 4h |
+| 6 | **A/B test** — compare FTS vs. vector search result quality (precision@k, user relevance ratings) | QA / Product | 4h |
+| 7 | **Deprecate tsvector** (optional) — remove `content_tsv` column and GIN index once vector search is validated; or keep as fallback for exact-match queries | Backend | 2h |
+
+#### Step 3 — Backfill Job (Detailed)
+
+```typescript
+// Pseudocode for backfill batch job
+const BATCH_SIZE = 100
+let cursor = 0
+
+while (true) {
+  const rows = await prisma.$queryRaw`
+    SELECT id, content FROM core.search_index
+    WHERE embedding IS NULL
+    ORDER BY id
+    LIMIT ${BATCH_SIZE} OFFSET ${cursor}
+  `
+
+  if (rows.length === 0) break
+
+  const embeddings = await embeddingClient.embedBatch(rows.map(r => r.content))
+
+  for (let i = 0; i < rows.length; i++) {
+    await prisma.$executeRaw`
+      UPDATE core.search_index
+      SET embedding = ${embeddings[i]}::vector
+      WHERE id = ${rows[i].id}
+    `
+  }
+
+  cursor += BATCH_SIZE
+  await sleep(100) // Rate-limit embedding API calls
+}
+```
+
+> **Note**: Run backfill during low-traffic hours. For ~10k records, expect 2–4 hours depending on embedding provider latency. Use `pgvector`'s bulk load (`COPY`) if provider allows pre-generation of embeddings offline.
+
+#### Step 5 — Updated Search Query
+
+```sql
+-- Vector search with cosine similarity (pgvector <=> operator)
+SELECT
+  id,
+  title,
+  content,
+  1 - (embedding <=> $1::vector) AS cosine_similarity
+FROM core.search_index
+WHERE clinic_id = $2
+  AND embedding IS NOT NULL
+ORDER BY embedding <=> $1::vector
+LIMIT $3;
+```
+
+> **Hybrid search** (optional): Combine `ts_rank` and cosine similarity with weighted ranking for best-of-both-worlds retrieval.
+
+### Rollback Plan
+
+1. **Keep `tsvector` column and GIN index** (`search_index_content_tsv_gin`) untouched during migration.
+2. **Keep SQLite memory hub** operational in parallel until pgvector search is validated.
+3. **Reversion procedure**:
+   ```sql
+   -- Disable vector search; revert to FTS
+   DROP INDEX IF EXISTS "search_index_embedding_hnsw";
+   ALTER TABLE "core"."search_index" DROP COLUMN IF EXISTS "embedding";
+   ```
+4. **Application-level fallback**: Search service should detect missing `pgvector` extension or empty embedding column and automatically fall back to `tsvector` + SQLite cosine similarity.
+
+### Performance Expectations
+
+| Metric | Current (SQLite + In-Memory) | Target (pgvector + HNSW) |
+|--------|------------------------------|--------------------------|
+| Query complexity | O(n) — scans all chunks | O(log n) — ANN graph traversal |
+| Latency @ 1k chunks | ~50 ms | ~5 ms |
+| Latency @ 10k chunks | ~500 ms | ~10 ms |
+| Latency @ 100k chunks | ~5,000 ms (unacceptable) | ~20 ms |
+| Index build time | N/A (no ANN index) | ~2 min per 10k vectors (ef_construction=64) |
+| Recall@10 | 100% (exact) | ~95–99% (HNSW approximate) |
+
+### Cost Considerations
+
+| Cost Category | Estimate | Notes |
+|---------------|----------|-------|
+| **Embedding API** | ~$0.10 per 1M tokens (OpenAI `text-embedding-3-small`) | One-time backfill + incremental updates |
+| **Storage increase** | ~6 KB per vector | 10k vectors ≈ 60 MB; 100k vectors ≈ 600 MB |
+| **Index overhead** | ~2× vector size | HNSW graph links add ~50–100% overhead |
+| **Compute** | Negligible | ANN queries are CPU-light; index build is one-time or batched |
+| **Operational** | Low | `pgvector` is a standard PostgreSQL extension; backup via `pg_dump` includes vectors |
+
+### References
+
+- [pgvector GitHub](https://github.com/pgvector/pgvector)
+- [pgvector HNSW indexing](https://github.com/pgvector/pgvector?tab=readme-ov-file#hnsw)
+- [OpenAI Embeddings API pricing](https://openai.com/pricing)
+- [PostgreSQL 16 Full-Text Search documentation](https://www.postgresql.org/docs/16/textsearch.html)
+

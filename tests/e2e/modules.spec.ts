@@ -1,27 +1,27 @@
 import { test, expect } from './fixtures';
 
-test.describe('Gestão de Módulos (ADMIN)', () => {
+test.describe('Module Management (ADMIN)', () => {
   test.beforeEach(async ({ page }) => {
-    // Login como ADMIN
+    // Login as ADMIN
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     
-    // Navegar para gestão de módulos
+    // Navigate to module management
     await page.goto('/settings/modules');
   });
 
-  test('deve exibir lista completa de módulos', async ({ page }) => {
+  test('should display complete module list', async ({ page }) => {
     await expect(page.getByText(/gestão de módulos/i)).toBeVisible();
     
-    // Verificar categorias principais
+    // Check main categories
     await expect(page.getByText(/gestão e operação/i)).toBeVisible();
     await expect(page.getByText(/financeiro/i)).toBeVisible();
     await expect(page.getByText(/crescimento e marketing/i)).toBeVisible();
   });
 
-  test('deve ativar módulo sem dependências', async ({ page }) => {
-    // Localizar um módulo inativo sem dependências
+  test('should activate module without dependencies', async ({ page }) => {
+    // Find an inactive module without dependencies
     const moduleCard = page.locator('[data-module="AGENDA"]').first();
     const toggleSwitch = moduleCard.locator('button[role="switch"]');
     
@@ -35,66 +35,66 @@ test.describe('Gestão de Módulos (ADMIN)', () => {
     }
   });
 
-  test('deve bloquear ativação de módulo com dependências não atendidas', async ({ page }) => {
-    // SPLIT_PAGAMENTO depende de FINANCEIRO
+  test('should block activation of module with unmet dependencies', async ({ page }) => {
+    // SPLIT_PAYMENT depends on FINANCIAL
     const splitModule = page.locator('[data-module="SPLIT_PAGAMENTO"]').first();
     const toggleSwitch = splitModule.locator('button[role="switch"]');
     
-    // Tentar ativar sem dependência
+    // Try to activate without dependency
     await toggleSwitch.click();
     
-    // Deve mostrar erro de dependência
+    // Should show dependency error
     await expect(page.getByText(/requer o módulo/i)).toBeVisible();
   });
 
-  test('deve bloquear desativação de módulo com dependentes ativos', async ({ page }) => {
-    // Primeiro ativar FINANCEIRO
+  test('should block deactivation of module with active dependents', async ({ page }) => {
+    // First activate FINANCIAL
     const financeiroModule = page.locator('[data-module="FINANCEIRO"]').first();
     await financeiroModule.locator('button[role="switch"]').click();
     
-    // Ativar SPLIT_PAGAMENTO (dependente)
+    // Activate SPLIT_PAYMENT (dependent)
     const splitModule = page.locator('[data-module="SPLIT_PAGAMENTO"]').first();
     await splitModule.locator('button[role="switch"]').click();
     
-    // Tentar desativar FINANCEIRO (deve falhar)
+    // Try to deactivate FINANCIAL (should fail)
     await financeiroModule.locator('button[role="switch"]').click();
     await expect(page.getByText(/este módulo é requerido/i)).toBeVisible();
   });
 
-  test('deve exibir informações de dependências no tooltip', async ({ page }) => {
+  test('should display dependency info in tooltip', async ({ page }) => {
     const moduleCard = page.locator('[data-module="SPLIT_PAGAMENTO"]').first();
     
-    // Hover para mostrar tooltip
+    // Hover to show tooltip
     await moduleCard.hover();
     
-    // Verificar que tooltip mostra dependências
+    // Check that tooltip shows dependencies
     await expect(page.getByText(/requer/i)).toBeVisible();
   });
 });
 
-test.describe('Visualização de Módulos (MEMBER)', () => {
+test.describe('Module View (MEMBER)', () => {
   test.beforeEach(async ({ page }) => {
-    // Login como MEMBER
+    // Login as MEMBER
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('MEMBER não deve ter acesso à gestão de módulos', async ({ page }) => {
+  test('MEMBER should not have access to module management', async ({ page }) => {
     await page.goto('/settings/modules');
     
-    // Deve ser redirecionado ou mostrar acesso negado
+    // Should be redirected or show access denied
     await expect(page).not.toHaveURL('/settings/modules');
   });
 
-  test('MEMBER deve ver apenas módulos ativos e autorizados na sidebar', async ({ page }) => {
-    // Verificar que sidebar mostra apenas módulos permitidos
+  test('MEMBER should see only active and authorized modules in sidebar', async ({ page }) => {
+    // Check that sidebar shows only allowed modules
     const sidebar = page.locator('[data-sidebar]');
     
-    // Módulos básicos devem estar visíveis
+    // Basic modules should be visible
     await expect(sidebar.getByText(/pacientes/i)).toBeVisible();
     
-    // Módulos administrativos NÃO devem estar visíveis
+    // Admin modules should NOT be visible
     await expect(sidebar.getByText(/gestão de módulos/i)).not.toBeVisible();
   });
 });

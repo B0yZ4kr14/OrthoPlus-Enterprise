@@ -5,53 +5,53 @@ import { test, expect } from './fixtures';
  * Testa operações CRUD de contas a receber e pagamentos
  */
 
-test.describe('Financeiro - CRUD Completo', () => {
+test.describe('Financial - Complete CRUD', () => {
   test.beforeEach(async ({ page }) => {
-    // Login como admin
+    // Login as admin
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     
-    // Navegar para Financeiro
+    // Navigate to Financial
     await page.goto('/financeiro');
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('deve exibir dashboard financeiro com KPIs', async ({ page }) => {
+  test('should display financial dashboard with KPIs', async ({ page }) => {
     await expect(page.getByText(/receitas/i).first()).toBeVisible();
     await expect(page.getByText(/despesas/i).first()).toBeVisible();
     await expect(page.getByText(/lucro/i).first()).toBeVisible();
   });
 
-  test('deve criar nova conta a receber', async ({ page }) => {
-    // Abrir modal de nova conta (Wizard)
+  test('should create new receivable account', async ({ page }) => {
+    // Open new account modal (Wizard)
     await page.getByRole('button', { name: /nova conta/i }).click();
     
-    // Passo 1: Informações base
+    // Step 1: Base information
     await page.getByLabel(/cliente\/paciente/i).fill('João Silva');
     await page.getByLabel(/descrição/i).fill('Consulta de Revisão');
     await page.getByRole('button', { name: /próximo/i }).click();
 
-    // Passo 2: Valores
+    // Step 2: Values
     await page.getByLabel(/valor total/i).fill('250');
     await page.getByLabel(/data de vencimento/i).fill('2025-12-31');
     await page.getByRole('button', { name: /próximo/i }).click();
     
-    // Passo 3: Confirmação e Salvar
+    // Step 3: Confirmation and Save
     await page.getByRole('button', { name: /salvar/i }).click();
     
-    // Verificar toast de sucesso
+    // Check success toast
     await expect(page.getByText(/conta criada/i)).toBeVisible({ timeout: 5000 });
   });
 
-  test('deve filtrar contas por status', async ({ page }) => {
-    // Aplicar filtro "Pendente"
+  test('should filter accounts by status', async ({ page }) => {
+    // Apply "Pending" filter
     await page.getByRole('combobox', { name: /status/i }).click();
     await page.getByRole('option', { name: /pendente/i }).click();
     
     await page.waitForLoadState("domcontentloaded");
     
-    // Verificar que apenas contas pendentes são exibidas
+    // Check that only pending accounts are displayed
     const rows = page.locator('[data-testid="conta-row"]');
     const count = await rows.count();
     
@@ -62,65 +62,65 @@ test.describe('Financeiro - CRUD Completo', () => {
     }
   });
 
-  test('deve registrar pagamento de conta', async ({ page }) => {
-    // Encontrar primeira conta pendente
+  test('should register account payment', async ({ page }) => {
+    // Find first pending account
     const firstPendingRow = page.locator('[data-testid="conta-row"]').first();
     
-    // Abrir ações
+    // Open actions
     await firstPendingRow.getByRole('button', { name: /ações/i }).click();
     
-    // Registrar pagamento
+    // Register payment
     await page.getByRole('menuitem', { name: /registrar pagamento/i }).click();
     
-    // Confirmar
+    // Confirm
     await page.getByRole('button', { name: /confirmar/i }).click();
     
-    // Verificar toast
+    // Check toast
     await expect(page.getByText(/pagamento registrado/i)).toBeVisible({ timeout: 5000 });
   });
 
-  test('deve buscar contas por descrição', async ({ page }) => {
-    // Digitar busca
+  test('should search accounts by description', async ({ page }) => {
+    // Type search
     await page.getByPlaceholder(/buscar/i).fill('Consulta');
     
-    // Verificar resultados
+    // Check results
     const results = page.locator('[data-testid="conta-row"]');
     const count = await results.count();
     
     expect(count).toBeGreaterThanOrEqual(0);
   });
 
-  test('deve validar campos obrigatórios no passo 1', async ({ page }) => {
-    // Abrir modal
+  test('should validate required fields in step 1', async ({ page }) => {
+    // Open modal
     await page.getByRole('button', { name: /nova conta/i }).click();
     
-    // Tentar avançar o passo 1 sem preencher
+    // Try to advance step 1 without filling
     await page.getByRole('button', { name: /próximo/i }).click();
     
-    // Verificar campos nativos inválidos ou foco mantido no formulário por causa de required=""
+    // Check invalid native fields or focus kept in form due to required=""
     const patientName = page.locator('#patient_name');
     await expect(patientName).toBeFocused();
   });
 
-  test('deve navegar entre meses no calendário', async ({ page }) => {
-    // Clicar em próximo mês
+  test('should navigate between months in calendar', async ({ page }) => {
+    // Click next month
     await page.getByRole('button', { name: /próximo/i }).click();
     
-    // Clicar em mês anterior
+    // Click previous month
     await page.getByRole('button', { name: /anterior/i }).click();
     
-    // Verificar que o calendário está visível
+    // Check that the calendar is visible
     await expect(page.locator('[data-calendar]')).toBeVisible();
   });
 
-  test('deve exportar relatório financeiro', async ({ page }) => {
-    // Abrir menu de exportação
+  test('should export financial report', async ({ page }) => {
+    // Open export menu
     await page.getByRole('button', { name: /exportar/i }).click();
     
-    // Selecionar formato
+    // Select format
     await page.getByRole('menuitem', { name: /excel/i }).click();
     
-    // Aguardar download (não vamos validar o arquivo)
+    // Wait for download (we won't validate the file)
     await page.waitForLoadState("domcontentloaded");
   });
 });

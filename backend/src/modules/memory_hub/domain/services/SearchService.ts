@@ -2,16 +2,7 @@ import { logger } from "@/infrastructure/logger"
 import { IEmbeddingClient } from "../ports/IEmbeddingClient"
 import { IEmbeddingRepository } from "../ports/IEmbeddingRepository"
 import { IDocumentRepository } from "../ports/IDocumentRepository"
-
-export interface SearchResult {
-  id: string
-  sourcePath: string
-  docType: string
-  title: string
-  excerpt: string
-  relevanceScore: number
-  headingPath: string[]
-}
+import type { SearchResult } from "@orthoplus/shared-types"
 
 export interface SearchFilters {
   docTypes?: string[]

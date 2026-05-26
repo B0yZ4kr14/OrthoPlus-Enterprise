@@ -1,14 +1,14 @@
 import { test, expect } from "./fixtures";
 
-test.describe("Gestão de Agenda", () => {
+test.describe("Appointment Management", () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto("./agenda");
     await page.waitForLoadState("domcontentloaded");
   });
 
-  test("deve exibir calendário de agendamentos", async ({ page }) => {
-    // Verificar que o calendário está visível
+  test("should display appointment calendar", async ({ page }) => {
+    // Check that the calendar is visible
     await expect(
       page.getByRole("heading", { name: "Agenda", exact: true }),
     ).toBeVisible();
@@ -17,16 +17,16 @@ test.describe("Gestão de Agenda", () => {
     ).toBeVisible();
   });
 
-  test("deve criar novo agendamento", async ({ page }) => {
-    // Clicar no botão de adicionar
+  test("should create new appointment", async ({ page }) => {
+    // Click the add button
     await page.getByRole("button", { name: /novo agendamento/i }).click();
 
-    // Aguardar abertura do modal
+    // Wait for modal to open
     await expect(
       page.getByRole("heading", { name: /novo agendamento/i }),
     ).toBeVisible();
 
-    // Preencher formulário
+    // Fill the form
     await page.getByRole("combobox", { name: "Paciente" }).click();
     await page.getByRole("option").first().click();
 
@@ -52,96 +52,96 @@ test.describe("Gestão de Agenda", () => {
     await expect(toastLocator.first()).toBeVisible({ timeout: 10000 });
   });
 
-  test("deve validar campos obrigatórios", async ({ page }) => {
-    // Clicar no botão de adicionar
+  test("should validate required fields", async ({ page }) => {
+    // Click the add button
     await page.getByRole("button", { name: /novo agendamento/i }).click();
 
-    // Tentar salvar sem preencher
+    // Try to save without filling
     await page.getByRole("button", { name: /agendar consulta/i }).click();
 
-    // Verificar mensagens de erro (or at least check that the required fields highlight)
+    // Check error messages (or at least check that the required fields highlight)
     // Here we can just ensure form is still visible since the UI might use HTML5 validation or sonner
     await expect(
       page.getByRole("heading", { name: /novo agendamento/i }),
     ).toBeVisible();
   });
 
-  test("deve editar agendamento existente", async ({ page }) => {
-    // Clicar no primeiro agendamento do calendário
+  test("should edit existing appointment", async ({ page }) => {
+    // Click the first appointment in the calendar
     await page.locator('[data-testid="appointment-item"]').first().click();
 
-    // Aguardar modal de detalhes
+    // Wait for details modal
     await expect(
       page.getByRole("heading", { name: /detalhes/i }),
     ).toBeVisible();
 
-    // Clicar em editar
+    // Click edit
     await page.getByRole("button", { name: /editar/i }).click();
 
-    // Alterar observacoes
+    // Change observations
     const obsInput = page.getByRole("textbox", { name: "Observações" });
     await obsInput.clear();
     await obsInput.fill("Procedimento Editado E2E");
 
-    // Salvar
+    // Save
     await page.getByRole("button", { name: /salvar|atualizar/i }).click();
 
-    // Verificar atualização
+    // Check update
     await expect(page.getByText(/sucesso/i).first()).toBeVisible({
       timeout: 10000,
     });
   });
 
-  test("deve alterar status do agendamento", async ({ page }) => {
-    // Clicar no primeiro agendamento
+  test("should change appointment status", async ({ page }) => {
+    // Click the first appointment
     await page.locator('[data-testid="appointment-item"]').first().click();
 
-    // Clicar em editar
+    // Click edit
     await page.getByRole("button", { name: /editar/i }).click();
 
-    // Alterar status
+    // Change status
     await page.getByRole("combobox", { name: /status/i }).click();
     await page.getByRole("option", { name: /confirmada/i }).click();
 
-    // Salvar
+    // Save
     await page.getByRole("button", { name: /salvar|atualizar/i }).click();
 
-    // Verificar atualização
+    // Check update
     await expect(page.getByText(/sucesso/i).first()).toBeVisible({
       timeout: 10000,
     });
   });
 
-  test("deve enviar lembrete para paciente", async ({ page }) => {
-    // Clicar no primeiro agendamento
+  test("should send reminder to patient", async ({ page }) => {
+    // Click the first appointment
     await page.locator('[data-testid="appointment-item"]').first().click();
 
-    // Clicar em enviar lembrete
+    // Click send reminder
     await page.getByRole("button", { name: /lembrete/i }).click();
 
-    // Verificar envio
+    // Check sending
     await expect(page.getByText(/lembrete enviado/i)).toBeVisible({
       timeout: 10000,
     });
   });
 
-  test("deve navegar entre meses no calendário", async ({ page }) => {
-    // Verificar botões de navegação
+  test("should navigate between months in calendar", async ({ page }) => {
+    // Check navigation buttons
     const prevButton = page.getByRole("button", { name: /anterior|previous/i });
     const nextButton = page.getByRole("button", { name: /próximo|next/i });
 
     await expect(prevButton).toBeVisible();
     await expect(nextButton).toBeVisible();
 
-    // Navegar para próximo mês
+    // Navigate to next month
     await nextButton.click();
 
-    // Navegar para mês anterior
+    // Navigate to previous month
     await prevButton.click();
   });
 
-  test("deve filtrar agendamentos por dentista", async ({ page }) => {
-    // Verificar se há filtro de dentista
+  test("should filter appointments by dentist", async ({ page }) => {
+    // Check if dentist filter exists
     const dentistaFilter = page.getByRole("combobox", {
       name: /filtrar.*dentista/i,
     });
@@ -150,16 +150,16 @@ test.describe("Gestão de Agenda", () => {
       await dentistaFilter.click();
       await page.getByRole("option").first().click();
 
-      // Aguardar filtro aplicado
+      // Wait for filter to be applied
 
-      // Verificar que apenas agendamentos do dentista selecionado são exibidos
+      // Check that only appointments for the selected dentist are displayed
       const appointments = page.locator('[data-testid="appointment-item"]');
       expect(await appointments.count()).toBeGreaterThanOrEqual(0);
     }
   });
 
-  test("deve preencher formulário de exclusão", async ({ page }) => {
-    // Verify the "Novo Agendamento" form can be opened and filled for deletion flow
+  test("should fill deletion form", async ({ page }) => {
+    // Verify the "New Appointment" form can be opened and filled for deletion flow
     await page.getByRole("button", { name: /novo agendamento/i }).click();
 
     await expect(
@@ -198,7 +198,7 @@ test.describe("Gestão de Agenda", () => {
     await expect(toastLocator.first()).toBeVisible({ timeout: 10000 });
   });
 
-  test("deve submeter formulário de agendamento com horário", async ({ page }) => {
+  test("should submit appointment form with time", async ({ page }) => {
     // Verify form submission triggers a response
     await page.getByRole("button", { name: /novo agendamento/i }).click();
 

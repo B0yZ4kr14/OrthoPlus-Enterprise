@@ -1,17 +1,17 @@
 import { test, expect } from './fixtures';
 
 /**
- * TESTES E2E V5.0 - Navegação Modular
- * Valida a nova estrutura de 6 Bounded Contexts
+ * E2E TESTS V5.0 - Modular Navigation
+ * Validates the new 6 Bounded Contexts structure
  */
 
-test.describe('Navegação Modular V5.0', () => {
+test.describe('Modular Navigation V5.0', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test('deve exibir 6 bounded contexts na sidebar', async ({ page }) => {
-    // Verificar categorias principais
+  test('should display 6 bounded contexts in sidebar', async ({ page }) => {
+    // Check main categories
     await expect(page.locator('text=VISÃO GERAL')).toBeVisible();
     await expect(page.locator('text=ATENDIMENTO CLÍNICO')).toBeVisible();
     await expect(page.locator('text=FINANCEIRO & FISCAL')).toBeVisible();
@@ -21,115 +21,115 @@ test.describe('Navegação Modular V5.0', () => {
     await expect(page.locator('text=CONFIGURAÇÕES')).toBeVisible();
   });
 
-  test('deve navegar para Dashboard Unificado', async ({ page }) => {
+  test('should navigate to Unified Dashboard', async ({ page }) => {
     await page.click('text=Dashboard');
     await expect(page.locator('h1:has-text("Dashboard Unificado")')).toBeVisible();
     
-    // Verificar abas do dashboard
+    // Check dashboard tabs
     await expect(page.locator('button:has-text("Executivo")')).toBeVisible();
     await expect(page.locator('button:has-text("Clínico")')).toBeVisible();
     await expect(page.locator('button:has-text("Financeiro")')).toBeVisible();
     await expect(page.locator('button:has-text("Comercial")')).toBeVisible();
   });
 
-  test('deve exibir badges dinâmicos na sidebar', async ({ page }) => {
-    // Verificar se badges estão renderizando (aguardar carregamento)
+  test('should display dynamic badges in sidebar', async ({ page }) => {
+    // Check if badges are rendering (wait for loading)
     await page.waitForLoadState("domcontentloaded");
     
-    // Verificar se há pelo menos um badge visível
+    // Check if there is at least one visible badge
     const badges = page.locator('[data-badge]');
     const count = await badges.count();
     expect(count).toBeGreaterThanOrEqual(1);
   });
 
-  test('deve navegar para módulo FISCAL', async ({ page }) => {
-    // Expandir submenu Fiscal
+  test('should navigate to FISCAL module', async ({ page }) => {
+    // Expand Fiscal submenu
     await page.click('text=Fiscal');
     
-    // Clicar em Notas Fiscais
+    // Click Invoices
     await page.click('text=Notas Fiscais');
     await expect(page.locator('h1:has-text("Notas Fiscais")')).toBeVisible();
   });
 
-  test('deve navegar para PDV (agora em OPERAÇÕES)', async ({ page }) => {
+  test('should navigate to PDV (now in OPERATIONS)', async ({ page }) => {
     await page.click('text=PDV');
     await expect(page).toHaveURL(/\/pdv/);
   });
 
-  test('deve navegar para Dentistas e Funcionários (agora em CONFIGURAÇÕES)', async ({ page }) => {
-    // Dentistas
+  test('should navigate to Dentists and Employees (now in SETTINGS)', async ({ page }) => {
+    // Dentists
     await page.click('text=Dentistas');
     await expect(page).toHaveURL(/\/dentistas/);
     
-    // Voltar e navegar para Funcionários
+    // Go back and navigate to Employees
     await page.click('text=Configurações');
     await page.click('text=Funcionários');
     await expect(page).toHaveURL(/\/funcionarios/);
   });
 
-  test('deve alternar entre abas do Dashboard Unificado', async ({ page }) => {
+  test('should switch between Unified Dashboard tabs', async ({ page }) => {
     await page.click('text=Dashboard');
     
-    // Aba Clínico
+    // Clinical tab
     await page.click('button:has-text("Clínico")');
     await expect(page.locator('text=Consultas de Hoje')).toBeVisible();
     
-    // Aba Financeiro
+    // Financial tab
     await page.click('button:has-text("Financeiro")');
     await expect(page.locator('text=Contas a Receber')).toBeVisible();
     
-    // Aba Comercial
+    // Commercial tab
     await page.click('button:has-text("Comercial")');
     await expect(page.locator('text=Leads Ativos')).toBeVisible();
   });
 
-  test('deve colapsar e expandir sidebar mantendo badges', async ({ page }) => {
-    // Colapsar sidebar
+  test('should collapse and expand sidebar keeping badges', async ({ page }) => {
+    // Collapse sidebar
     await page.click('[data-testid="sidebar-toggle"]');
     
-    // Badges ainda devem existir (mesmo que não visíveis)
+    // Badges should still exist (even if not visible)
     const badges = page.locator('[data-badge]');
     const count = await badges.count();
     expect(count).toBeGreaterThanOrEqual(0);
     
-    // Expandir sidebar
+    // Expand sidebar
     await page.click('[data-testid="sidebar-toggle"]');
   });
 
-  test('deve navegar para módulo de pagamentos em criptomoedas', async ({ page }) => {
-    // Verificar link de Pagamentos em Criptomoedas
+  test('should navigate to crypto payments module', async ({ page }) => {
+    // Check Crypto Payments link
     await expect(page.locator('text=Pagamentos em Criptomoedas')).toBeVisible();
     
-    // Navegar para a página
+    // Navigate to the page
     await page.click('text=Pagamentos em Criptomoedas');
     await expect(page).toHaveURL(/\/financeiro\/crypto/);
   });
 
-  test('deve navegar para módulos administrativos', async ({ page }) => {
-    // Scroll até o final da sidebar
+  test('should navigate to admin modules', async ({ page }) => {
+    // Scroll to the end of the sidebar
     await page.evaluate(() => {
       const sidebar = document.querySelector('[data-sidebar]');
       if (sidebar) sidebar.scrollTop = sidebar.scrollHeight;
     });
     
-    // Expandir submenu Administração & DevOps
+    // Expand Administration & DevOps submenu
     await page.click('text=Administração & DevOps');
     
-    // Verificar subitems
+    // Check subitems
     await expect(page.locator('text=Database Admin')).toBeVisible();
     await expect(page.locator('text=Backups')).toBeVisible();
     await expect(page.locator('text=Terminal')).toBeVisible();
   });
 
-  test('deve exibir indicador de rota ativa', async ({ page }) => {
+  test('should display active route indicator', async ({ page }) => {
     await page.click('text=Pacientes');
     
-    // Verificar se o item está com estilo ativo
+    // Check if the item has active style
     const activeItem = page.locator('a[href="/pacientes"]');
     await expect(activeItem).toHaveClass(/bg-sidebar-accent/);
   });
 
-  test('deve carregar menos de 2 segundos (performance)', async ({ page }) => {
+  test('should load in less than 2 seconds (performance)', async ({ page }) => {
     const startTime = Date.now();
     await page.goto('/');
     await page.waitForSelector('[data-sidebar]');

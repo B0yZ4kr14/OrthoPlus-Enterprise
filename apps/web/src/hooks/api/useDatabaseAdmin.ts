@@ -6,6 +6,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
+import type { SlowQuery } from "@orthoplus/shared-types";
 
 interface DatabaseHealth {
   connectionPoolSize: number;
@@ -17,14 +18,6 @@ interface DatabaseHealth {
   lastVacuum: string | null;
   lastAnalyze: string | null;
   timestamp: string;
-}
-
-interface SlowQuery {
-  query: string;
-  calls: number;
-  averageTime: number;
-  totalTime: number;
-  lastExecuted: string;
 }
 
 export const useDatabaseAdmin = () => {

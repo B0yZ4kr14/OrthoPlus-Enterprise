@@ -3,60 +3,15 @@
     "id": "S3-admin_tools",
     "name": "admin_tools",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:18"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:19"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/admin_tools",
-        "file": "src/modules/admin_tools/api/router.ts:26"
-      }
+      { "type": "http", "method": "GET", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:12" },
+      { "type": "http", "method": "POST", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:13" },
+      { "type": "http", "method": "GET", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:16" },
+      { "type": "http", "method": "POST", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:17" },
+      { "type": "http", "method": "PATCH", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:18" },
+      { "type": "http", "method": "DELETE", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:19" },
+      { "type": "http", "method": "POST", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:22" },
+      { "type": "http", "method": "GET", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:23" },
+      { "type": "http", "method": "GET", "path": "/api/admin_tools", "file": "src/modules/admin_tools/api/router.ts:26" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -64,66 +19,17 @@
     "id": "S3-agenda",
     "name": "agenda",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:41"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:44"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:45"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:46"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:47"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:48"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:49"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:52"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:53"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/agenda",
-        "file": "src/modules/agenda/api/router.ts:54"
-      }
+      { "type": "http", "method": "GET", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:41" },
+      { "type": "http", "method": "GET", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:44" },
+      { "type": "http", "method": "GET", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:45" },
+      { "type": "http", "method": "GET", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:46" },
+      { "type": "http", "method": "POST", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:47" },
+      { "type": "http", "method": "PATCH", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:48" },
+      { "type": "http", "method": "DELETE", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:49" },
+      { "type": "http", "method": "GET", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:52" },
+      { "type": "http", "method": "GET", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:53" },
+      { "type": "http", "method": "POST", "path": "/api/agenda", "file": "src/modules/agenda/api/router.ts:54" },
+      { "type": "job", "name": "schedule-appointments", "schedule": "0 */15 * * *", "file": "src/workers/jobs/scheduleAppointments.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -131,42 +37,12 @@
     "id": "S3-agents",
     "name": "agents",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/agents",
-        "file": "src/modules/agents/api/router.ts:28"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/agents",
-        "file": "src/modules/agents/api/router.ts:29"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/agents",
-        "file": "src/modules/agents/api/router.ts:30"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/agents",
-        "file": "src/modules/agents/api/router.ts:31"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/agents",
-        "file": "src/modules/agents/api/router.ts:32"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/agents",
-        "file": "src/modules/agents/api/router.ts:33"
-      }
+      { "type": "http", "method": "GET", "path": "/api/agents", "file": "src/modules/agents/api/router.ts:28" },
+      { "type": "http", "method": "POST", "path": "/api/agents", "file": "src/modules/agents/api/router.ts:29" },
+      { "type": "http", "method": "POST", "path": "/api/agents", "file": "src/modules/agents/api/router.ts:30" },
+      { "type": "http", "method": "POST", "path": "/api/agents", "file": "src/modules/agents/api/router.ts:31" },
+      { "type": "http", "method": "POST", "path": "/api/agents", "file": "src/modules/agents/api/router.ts:32" },
+      { "type": "http", "method": "POST", "path": "/api/agents", "file": "src/modules/agents/api/router.ts:33" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -174,18 +50,9 @@
     "id": "S3-ai",
     "name": "ai",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/ai",
-        "file": "src/modules/ai/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/ai",
-        "file": "src/modules/ai/api/router.ts:24"
-      }
+      { "type": "http", "method": "GET", "path": "/api/ai", "file": "src/modules/ai/api/router.ts:13" },
+      { "type": "http", "method": "POST", "path": "/api/ai", "file": "src/modules/ai/api/router.ts:24" },
+      { "type": "job", "name": "ia-radiografia-worker", "schedule": "0 3 * * *", "file": "src/workers/iaRadiografiaWorker.ts" }
     ],
     "confidence_contribution": "MEDIUM"
   },
@@ -193,36 +60,11 @@
     "id": "S3-analytics",
     "name": "analytics",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/analytics",
-        "file": "src/modules/analytics/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/analytics",
-        "file": "src/modules/analytics/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/analytics",
-        "file": "src/modules/analytics/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/analytics",
-        "file": "src/modules/analytics/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/analytics",
-        "file": "src/modules/analytics/api/router.ts:23"
-      }
+      { "type": "http", "method": "GET", "path": "/api/analytics", "file": "src/modules/analytics/api/router.ts:11" },
+      { "type": "http", "method": "GET", "path": "/api/analytics", "file": "src/modules/analytics/api/router.ts:16" },
+      { "type": "http", "method": "GET", "path": "/api/analytics", "file": "src/modules/analytics/api/router.ts:17" },
+      { "type": "http", "method": "POST", "path": "/api/analytics", "file": "src/modules/analytics/api/router.ts:20" },
+      { "type": "http", "method": "GET", "path": "/api/analytics", "file": "src/modules/analytics/api/router.ts:23" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -230,60 +72,15 @@
     "id": "S3-auth",
     "name": "auth",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:8"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:9"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:15"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/auth",
-        "file": "src/modules/auth/api/router.ts:16"
-      }
+      { "type": "http", "method": "POST", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:8" },
+      { "type": "http", "method": "POST", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:9" },
+      { "type": "http", "method": "GET", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:10" },
+      { "type": "http", "method": "GET", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:11" },
+      { "type": "http", "method": "GET", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:12" },
+      { "type": "http", "method": "POST", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:13" },
+      { "type": "http", "method": "POST", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:14" },
+      { "type": "http", "method": "POST", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:15" },
+      { "type": "http", "method": "POST", "path": "/api/auth", "file": "src/modules/auth/api/router.ts:16" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -291,79 +88,33 @@
     "id": "S3-backups",
     "name": "backups",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/backups",
-        "file": "src/modules/backups/api/router.ts:11"
-      }
+      { "type": "http", "method": "POST", "path": "/api/backups", "file": "src/modules/backups/api/router.ts:11" },
+      { "type": "job", "name": "weekly-full-backup", "schedule": "0 1 * * 0", "file": "src/workers/jobs/backupJobs.ts:6" },
+      { "type": "job", "name": "daily-incremental-backup", "schedule": "0 2 * * *", "file": "src/workers/jobs/backupJobs.ts:17" },
+      { "type": "job", "name": "backup-verification", "schedule": "*/30 * * * *", "file": "src/workers/jobs/backupJobs.ts:28" },
+      { "type": "job", "name": "backup-replication", "schedule": "0 3 * * *", "file": "src/workers/jobs/backupJobs.ts:39" },
+      { "type": "job", "name": "backup-cleanup", "schedule": "0 4 * * *", "file": "src/workers/jobs/backupJobs.ts:55" },
+      { "type": "job", "name": "backup-retention-check", "schedule": "0 */12 * * *", "file": "src/workers/jobs/backupJobs.ts:66" },
+      { "type": "job", "name": "backup-health-check", "schedule": "0 */4 * * *", "file": "src/workers/jobs/backupJobs.ts:77" },
+      { "type": "job", "name": "weekly-backup-report", "schedule": "0 5 * * 6", "file": "src/workers/jobs/backupJobs.ts:88" }
     ],
-    "confidence_contribution": "MEDIUM"
+    "confidence_contribution": "HIGH"
   },
   {
     "id": "S3-bi",
     "name": "bi",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:24"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:29"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:32"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:33"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:34"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/bi",
-        "file": "src/modules/bi/api/router.ts:35"
-      }
+      { "type": "http", "method": "GET", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:12" },
+      { "type": "http", "method": "GET", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:23" },
+      { "type": "http", "method": "GET", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:24" },
+      { "type": "http", "method": "POST", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:25" },
+      { "type": "http", "method": "PATCH", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:26" },
+      { "type": "http", "method": "GET", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:29" },
+      { "type": "http", "method": "GET", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:32" },
+      { "type": "http", "method": "POST", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:33" },
+      { "type": "http", "method": "PATCH", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:34" },
+      { "type": "http", "method": "DELETE", "path": "/api/bi", "file": "src/modules/bi/api/router.ts:35" },
+      { "type": "job", "name": "bi-export-scheduler", "schedule": "0 6 * * *", "file": "src/workers/jobs/scheduleBiExport.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -371,18 +122,8 @@
     "id": "S3-comm",
     "name": "comm",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/comm",
-        "file": "src/modules/comm/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/comm",
-        "file": "src/modules/comm/api/router.ts:23"
-      }
+      { "type": "http", "method": "POST", "path": "/api/comm", "file": "src/modules/comm/api/router.ts:20" },
+      { "type": "http", "method": "POST", "path": "/api/comm", "file": "src/modules/comm/api/router.ts:23" }
     ],
     "confidence_contribution": "MEDIUM"
   },
@@ -390,66 +131,16 @@
     "id": "S3-configuracoes",
     "name": "configuracoes",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:15"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:18"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:19"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:24"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:29"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/configuracoes",
-        "file": "src/modules/configuracoes/api/router.ts:32"
-      }
+      { "type": "http", "method": "GET", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:15" },
+      { "type": "http", "method": "GET", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:16" },
+      { "type": "http", "method": "POST", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:18" },
+      { "type": "http", "method": "POST", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:19" },
+      { "type": "http", "method": "POST", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:22" },
+      { "type": "http", "method": "POST", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:23" },
+      { "type": "http", "method": "POST", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:24" },
+      { "type": "http", "method": "POST", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:25" },
+      { "type": "http", "method": "GET", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:29" },
+      { "type": "http", "method": "GET", "path": "/api/configuracoes", "file": "src/modules/configuracoes/api/router.ts:32" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -457,48 +148,13 @@
     "id": "S3-contratos",
     "name": "contratos",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/contratos",
-        "file": "src/modules/contratos/api/router.ts:9"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/contratos",
-        "file": "src/modules/contratos/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/contratos",
-        "file": "src/modules/contratos/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/contratos",
-        "file": "src/modules/contratos/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/contratos",
-        "file": "src/modules/contratos/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "PUT",
-        "path": "/api/contratos",
-        "file": "src/modules/contratos/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/contratos",
-        "file": "src/modules/contratos/api/router.ts:15"
-      }
+      { "type": "http", "method": "GET", "path": "/api/contratos", "file": "src/modules/contratos/api/router.ts:9" },
+      { "type": "http", "method": "GET", "path": "/api/contratos", "file": "src/modules/contratos/api/router.ts:10" },
+      { "type": "http", "method": "GET", "path": "/api/contratos", "file": "src/modules/contratos/api/router.ts:11" },
+      { "type": "http", "method": "POST", "path": "/api/contratos", "file": "src/modules/contratos/api/router.ts:12" },
+      { "type": "http", "method": "PATCH", "path": "/api/contratos", "file": "src/modules/contratos/api/router.ts:13" },
+      { "type": "http", "method": "PUT", "path": "/api/contratos", "file": "src/modules/contratos/api/router.ts:14" },
+      { "type": "http", "method": "DELETE", "path": "/api/contratos", "file": "src/modules/contratos/api/router.ts:15" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -506,42 +162,12 @@
     "id": "S3-crm",
     "name": "crm",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/crm",
-        "file": "src/modules/crm/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/crm",
-        "file": "src/modules/crm/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/crm",
-        "file": "src/modules/crm/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/crm",
-        "file": "src/modules/crm/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/crm",
-        "file": "src/modules/crm/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/crm",
-        "file": "src/modules/crm/api/router.ts:15"
-      }
+      { "type": "http", "method": "GET", "path": "/api/crm", "file": "src/modules/crm/api/router.ts:10" },
+      { "type": "http", "method": "GET", "path": "/api/crm", "file": "src/modules/crm/api/router.ts:11" },
+      { "type": "http", "method": "GET", "path": "/api/crm", "file": "src/modules/crm/api/router.ts:12" },
+      { "type": "http", "method": "POST", "path": "/api/crm", "file": "src/modules/crm/api/router.ts:13" },
+      { "type": "http", "method": "PATCH", "path": "/api/crm", "file": "src/modules/crm/api/router.ts:14" },
+      { "type": "http", "method": "DELETE", "path": "/api/crm", "file": "src/modules/crm/api/router.ts:15" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -549,66 +175,19 @@
     "id": "S3-crypto_config",
     "name": "crypto_config",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:18"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:19"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:24"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:27"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:30"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/crypto_config",
-        "file": "src/modules/crypto_config/api/router.ts:35"
-      }
+      { "type": "http", "method": "GET", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:18" },
+      { "type": "http", "method": "POST", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:19" },
+      { "type": "http", "method": "GET", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:20" },
+      { "type": "http", "method": "GET", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:21" },
+      { "type": "http", "method": "POST", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:24" },
+      { "type": "http", "method": "POST", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:25" },
+      { "type": "http", "method": "POST", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:26" },
+      { "type": "http", "method": "GET", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:27" },
+      { "type": "http", "method": "POST", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:30" },
+      { "type": "http", "method": "POST", "path": "/api/crypto_config", "file": "src/modules/crypto_config/api/router.ts:35" },
+      { "type": "job", "name": "crypto-price-sync", "schedule": "*/10 * * * *", "file": "src/workers/jobs/cryptoJobs.ts:23" },
+      { "type": "job", "name": "crypto-candlestick-update", "schedule": "15 * * * *", "file": "src/workers/jobs/cryptoJobs.ts:28" },
+      { "type": "job", "name": "crypto-alert-check", "schedule": "*/5 * * * *", "file": "src/workers/jobs/cryptoJobs.ts:33" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -616,24 +195,9 @@
     "id": "S3-dashboard",
     "name": "dashboard",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/dashboard",
-        "file": "src/modules/dashboard/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/dashboard",
-        "file": "src/modules/dashboard/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/dashboard",
-        "file": "src/modules/dashboard/api/router.ts:36"
-      }
+      { "type": "http", "method": "GET", "path": "/api/dashboard", "file": "src/modules/dashboard/api/router.ts:13" },
+      { "type": "http", "method": "GET", "path": "/api/dashboard", "file": "src/modules/dashboard/api/router.ts:25" },
+      { "type": "http", "method": "GET", "path": "/api/dashboard", "file": "src/modules/dashboard/api/router.ts:36" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -641,66 +205,19 @@
     "id": "S3-database_admin",
     "name": "database_admin",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:28"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:31"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:34"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:38"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/database_admin",
-        "file": "src/modules/database_admin/api/router.ts:41"
-      }
+      { "type": "http", "method": "POST", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:14" },
+      { "type": "http", "method": "GET", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:17" },
+      { "type": "http", "method": "GET", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:20" },
+      { "type": "http", "method": "POST", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:21" },
+      { "type": "http", "method": "GET", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:25" },
+      { "type": "http", "method": "GET", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:28" },
+      { "type": "http", "method": "GET", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:31" },
+      { "type": "http", "method": "POST", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:34" },
+      { "type": "http", "method": "GET", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:38" },
+      { "type": "http", "method": "POST", "path": "/api/database_admin", "file": "src/modules/database_admin/api/router.ts:41" },
+      { "type": "job", "name": "db-maintenance", "schedule": "0 2 * * 0", "file": "src/workers/jobs/adminJobs.ts:8" },
+      { "type": "job", "name": "scheduled-cleanup", "schedule": "0 1 * * *", "file": "src/workers/jobs/adminJobs.ts:22" },
+      { "type": "job", "name": "category-backup-scheduler", "schedule": "0 2 * * *", "file": "src/workers/categoryBackupScheduler.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -708,66 +225,16 @@
     "id": "S3-faturamento",
     "name": "faturamento",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:18"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:24"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/faturamento",
-        "file": "src/modules/faturamento/api/router.ts:25"
-      }
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:11" },
+      { "type": "http", "method": "GET", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:12" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:13" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:14" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:18" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:21" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:22" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:23" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:24" },
+      { "type": "http", "method": "POST", "path": "/api/faturamento", "file": "src/modules/faturamento/api/router.ts:25" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -775,60 +242,16 @@
     "id": "S3-fidelidade",
     "name": "fidelidade",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:27"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:30"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:31"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:34"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/fidelidade",
-        "file": "src/modules/fidelidade/api/router.ts:35"
-      }
+      { "type": "http", "method": "GET", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:11" },
+      { "type": "http", "method": "GET", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:22" },
+      { "type": "http", "method": "POST", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:23" },
+      { "type": "http", "method": "GET", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:26" },
+      { "type": "http", "method": "POST", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:27" },
+      { "type": "http", "method": "GET", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:30" },
+      { "type": "http", "method": "POST", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:31" },
+      { "type": "http", "method": "GET", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:34" },
+      { "type": "http", "method": "POST", "path": "/api/fidelidade", "file": "src/modules/fidelidade/api/router.ts:35" },
+      { "type": "job", "name": "gamification-jobs", "schedule": "0 9 * * *", "file": "src/workers/jobs/gamificationJobs.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -836,66 +259,16 @@
     "id": "S3-files",
     "name": "files",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:67"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:68"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:69"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:74"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:75"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:76"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:81"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:82"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:87"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/files",
-        "file": "src/modules/files/api/router.ts:92"
-      }
+      { "type": "http", "method": "GET", "path": "/api/files", "file": "src/modules/files/api/router.ts:67" },
+      { "type": "http", "method": "GET", "path": "/api/files", "file": "src/modules/files/api/router.ts:68" },
+      { "type": "http", "method": "POST", "path": "/api/files", "file": "src/modules/files/api/router.ts:69" },
+      { "type": "http", "method": "GET", "path": "/api/files", "file": "src/modules/files/api/router.ts:74" },
+      { "type": "http", "method": "GET", "path": "/api/files", "file": "src/modules/files/api/router.ts:75" },
+      { "type": "http", "method": "DELETE", "path": "/api/files", "file": "src/modules/files/api/router.ts:76" },
+      { "type": "http", "method": "POST", "path": "/api/files", "file": "src/modules/files/api/router.ts:81" },
+      { "type": "http", "method": "GET", "path": "/api/files", "file": "src/modules/files/api/router.ts:82" },
+      { "type": "http", "method": "POST", "path": "/api/files", "file": "src/modules/files/api/router.ts:87" },
+      { "type": "http", "method": "GET", "path": "/api/files", "file": "src/modules/files/api/router.ts:92" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -903,66 +276,17 @@
     "id": "S3-financeiro",
     "name": "financeiro",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:15"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/financeiro",
-        "file": "src/modules/financeiro/api/router.ts:23"
-      }
+      { "type": "http", "method": "GET", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:12" },
+      { "type": "http", "method": "GET", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:13" },
+      { "type": "http", "method": "POST", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:14" },
+      { "type": "http", "method": "PATCH", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:15" },
+      { "type": "http", "method": "DELETE", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:16" },
+      { "type": "http", "method": "PATCH", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:17" },
+      { "type": "http", "method": "GET", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:20" },
+      { "type": "http", "method": "GET", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:21" },
+      { "type": "http", "method": "POST", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:22" },
+      { "type": "http", "method": "PATCH", "path": "/api/financeiro", "file": "src/modules/financeiro/api/router.ts:23" },
+      { "type": "job", "name": "financeiro-jobs", "schedule": "0 6 * * *", "file": "src/workers/jobs/financeiroJobs.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -970,134 +294,11 @@
     "id": "S3-funcionarios",
     "name": "funcionarios",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/funcionarios",
-        "file": "src/modules/funcionarios/api/router.ts:9"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/funcionarios",
-        "file": "src/modules/funcionarios/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/funcionarios",
-        "file": "src/modules/funcionarios/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/funcionarios",
-        "file": "src/modules/funcionarios/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/funcionarios",
-        "file": "src/modules/funcionarios/api/router.ts:13"
-      }
-    ],
-    "confidence_contribution": "HIGH"
-  },
-  {
-    "id": "S3-github_tools",
-    "name": "github_tools",
-    "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/github_tools",
-        "file": "src/modules/github_tools/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/github_tools",
-        "file": "src/modules/github_tools/api/router.ts:15"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/github_tools",
-        "file": "src/modules/github_tools/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/github_tools",
-        "file": "src/modules/github_tools/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/github_tools",
-        "file": "src/modules/github_tools/api/router.ts:18"
-      }
-    ],
-    "confidence_contribution": "HIGH"
-  },
-  {
-    "id": "S3-ia_radiografia",
-    "name": "ia_radiografia",
-    "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:31"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:32"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:33"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:34"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/ia_radiografia",
-        "file": "src/modules/ia_radiografia/api/router.ts:35"
-      }
+      { "type": "http", "method": "GET", "path": "/api/funcionarios", "file": "src/modules/funcionarios/api/router.ts:9" },
+      { "type": "http", "method": "GET", "path": "/api/funcionarios", "file": "src/modules/funcionarios/api/router.ts:10" },
+      { "type": "http", "method": "POST", "path": "/api/funcionarios", "file": "src/modules/funcionarios/api/router.ts:11" },
+      { "type": "http", "method": "PATCH", "path": "/api/funcionarios", "file": "src/modules/funcionarios/api/router.ts:12" },
+      { "type": "http", "method": "DELETE", "path": "/api/funcionarios", "file": "src/modules/funcionarios/api/router.ts:13" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1105,48 +306,8 @@
     "id": "S3-inadimplencia",
     "name": "inadimplencia",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/inadimplencia",
-        "file": "src/modules/inadimplencia/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/inadimplencia",
-        "file": "src/modules/inadimplencia/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/inadimplencia",
-        "file": "src/modules/inadimplencia/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/inadimplencia",
-        "file": "src/modules/inadimplencia/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/inadimplencia",
-        "file": "src/modules/inadimplencia/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/inadimplencia",
-        "file": "src/modules/inadimplencia/api/router.ts:27"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/inadimplencia",
-        "file": "src/modules/inadimplencia/api/router.ts:28"
-      }
+      { "type": "http", "method": "GET", "path": "/api/inadimplencia", "file": "src/modules/inadimplencia/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/inadimplencia", "file": "src/modules/inadimplencia/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1154,66 +315,12 @@
     "id": "S3-inventario",
     "name": "inventario",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:24"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:28"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:31"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:36"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/inventario",
-        "file": "src/modules/inventario/api/router.ts:41"
-      }
+      { "type": "http", "method": "GET", "path": "/api/inventario", "file": "src/modules/inventario/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/inventario", "file": "src/modules/inventario/api/router.ts" },
+      { "type": "http", "method": "PATCH", "path": "/api/inventario", "file": "src/modules/inventario/api/router.ts" },
+      { "type": "job", "name": "estoque-reconciliation", "schedule": "0 2 * * *", "file": "src/workers/jobs/estoqueJobs.ts:23" },
+      { "type": "job", "name": "estoque-alerts", "schedule": "30 2 * * *", "file": "src/workers/jobs/estoqueJobs.ts:28" },
+      { "type": "job", "name": "estoque-report", "schedule": "0 3 * * *", "file": "src/workers/jobs/estoqueJobs.ts:33" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1221,42 +328,8 @@
     "id": "S3-lgpd",
     "name": "lgpd",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/lgpd",
-        "file": "src/modules/lgpd/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/lgpd",
-        "file": "src/modules/lgpd/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/lgpd",
-        "file": "src/modules/lgpd/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/lgpd",
-        "file": "src/modules/lgpd/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/lgpd",
-        "file": "src/modules/lgpd/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/lgpd",
-        "file": "src/modules/lgpd/api/router.ts:27"
-      }
+      { "type": "http", "method": "GET", "path": "/api/lgpd", "file": "src/modules/lgpd/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/lgpd", "file": "src/modules/lgpd/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1264,115 +337,10 @@
     "id": "S3-marketing",
     "name": "marketing",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:15"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:24"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/marketing",
-        "file": "src/modules/marketing/api/router.ts:25"
-      }
-    ],
-    "confidence_contribution": "HIGH"
-  },
-  {
-    "id": "S3-memory_hub",
-    "name": "memory_hub",
-    "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/memory_hub",
-        "file": "src/modules/memory_hub/api/router.ts:35"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/memory_hub",
-        "file": "src/modules/memory_hub/api/router.ts:36"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/memory_hub",
-        "file": "src/modules/memory_hub/api/router.ts:37"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/memory_hub",
-        "file": "src/modules/memory_hub/api/router.ts:38"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/memory_hub",
-        "file": "src/modules/memory_hub/api/router.ts:39"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/memory_hub",
-        "file": "src/modules/memory_hub/api/router.ts:40"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/memory_hub",
-        "file": "src/modules/memory_hub/api/router.ts:41"
-      }
+      { "type": "http", "method": "GET", "path": "/api/marketing", "file": "src/modules/marketing/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/marketing", "file": "src/modules/marketing/api/router.ts" },
+      { "type": "job", "name": "marketing-campaign-dispatch", "schedule": "*/15 * * * *", "file": "src/workers/jobs/marketingJobs.ts" },
+      { "type": "job", "name": "memory-hub-drift-detection", "schedule": "0 */6 * * *", "file": "src/workers/jobs/memoryHubDrift.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1380,42 +348,8 @@
     "id": "S3-nfe",
     "name": "nfe",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/nfe",
-        "file": "src/modules/nfe/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/nfe",
-        "file": "src/modules/nfe/api/router.ts:18"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/nfe",
-        "file": "src/modules/nfe/api/router.ts:19"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/nfe",
-        "file": "src/modules/nfe/api/router.ts:20"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/nfe",
-        "file": "src/modules/nfe/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/nfe",
-        "file": "src/modules/nfe/api/router.ts:22"
-      }
+      { "type": "http", "method": "GET", "path": "/api/nfe", "file": "src/modules/nfe/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/nfe", "file": "src/modules/nfe/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1423,60 +357,8 @@
     "id": "S3-notifications",
     "name": "notifications",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:19"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:27"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:31"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/notifications",
-        "file": "src/modules/notifications/api/router.ts:35"
-      }
+      { "type": "http", "method": "GET", "path": "/api/notifications", "file": "src/modules/notifications/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/notifications", "file": "src/modules/notifications/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1484,66 +366,9 @@
     "id": "S3-orcamentos",
     "name": "orcamentos",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:9"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "PUT",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:18"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:19"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/orcamentos",
-        "file": "src/modules/orcamentos/api/router.ts:22"
-      }
+      { "type": "http", "method": "GET", "path": "/api/orcamentos", "file": "src/modules/orcamentos/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/orcamentos", "file": "src/modules/orcamentos/api/router.ts" },
+      { "type": "http", "method": "PATCH", "path": "/api/orcamentos", "file": "src/modules/orcamentos/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1551,66 +376,10 @@
     "id": "S3-pacientes",
     "name": "pacientes",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:35"
-      },
-      {
-        "type": "http",
-        "method": "PUT",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:38"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:41"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:44"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:47"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:50"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:53"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:56"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:59"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pacientes",
-        "file": "src/modules/pacientes/api/router.ts:62"
-      }
+      { "type": "http", "method": "GET", "path": "/api/pacientes", "file": "src/modules/pacientes/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/pacientes", "file": "src/modules/pacientes/api/router.ts" },
+      { "type": "http", "method": "PATCH", "path": "/api/pacientes", "file": "src/modules/pacientes/api/router.ts" },
+      { "type": "http", "method": "DELETE", "path": "/api/pacientes", "file": "src/modules/pacientes/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1618,42 +387,9 @@
     "id": "S3-pdv",
     "name": "pdv",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pdv",
-        "file": "src/modules/pdv/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pdv",
-        "file": "src/modules/pdv/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pdv",
-        "file": "src/modules/pdv/api/router.ts:15"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pdv",
-        "file": "src/modules/pdv/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pdv",
-        "file": "src/modules/pdv/api/router.ts:19"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pdv",
-        "file": "src/modules/pdv/api/router.ts:20"
-      }
+      { "type": "http", "method": "GET", "path": "/api/pdv", "file": "src/modules/pdv/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/pdv", "file": "src/modules/pdv/api/router.ts" },
+      { "type": "http", "method": "PATCH", "path": "/api/pdv", "file": "src/modules/pdv/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1661,66 +397,9 @@
     "id": "S3-pep",
     "name": "pep",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:35"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:52"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:53"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:54"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:57"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:74"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:96"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:113"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:127"
-      },
-      {
-        "type": "http",
-        "method": "PUT",
-        "path": "/api/pep",
-        "file": "src/modules/pep/api/router.ts:198"
-      }
+      { "type": "http", "method": "GET", "path": "/api/pep", "file": "src/modules/pep/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/pep", "file": "src/modules/pep/api/router.ts" },
+      { "type": "http", "method": "PATCH", "path": "/api/pep", "file": "src/modules/pep/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1728,42 +407,8 @@
     "id": "S3-procedimentos",
     "name": "procedimentos",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/procedimentos",
-        "file": "src/modules/procedimentos/api/router.ts:9"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/procedimentos",
-        "file": "src/modules/procedimentos/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/procedimentos",
-        "file": "src/modules/procedimentos/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/procedimentos",
-        "file": "src/modules/procedimentos/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/procedimentos",
-        "file": "src/modules/procedimentos/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/procedimentos",
-        "file": "src/modules/procedimentos/api/router.ts:14"
-      }
+      { "type": "http", "method": "GET", "path": "/api/procedimentos", "file": "src/modules/procedimentos/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/procedimentos", "file": "src/modules/procedimentos/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1771,54 +416,9 @@
     "id": "S3-split_pagamento",
     "name": "split_pagamento",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "PUT",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:27"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:30"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/split_pagamento",
-        "file": "src/modules/split_pagamento/api/router.ts:33"
-      }
+      { "type": "http", "method": "GET", "path": "/api/split-pagamento", "file": "src/modules/split_pagamento/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/split-pagamento", "file": "src/modules/split_pagamento/api/router.ts" },
+      { "type": "http", "method": "GET", "path": "/api/split", "file": "src/modules/split_pagamento/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1826,103 +426,9 @@
     "id": "S3-teleodonto",
     "name": "teleodonto",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:15"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:16"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:17"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:18"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/teleodonto",
-        "file": "src/modules/teleodonto/api/router.ts:26"
-      }
-    ],
-    "confidence_contribution": "HIGH"
-  },
-  {
-    "id": "S3-terminal",
-    "name": "terminal",
-    "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/terminal",
-        "file": "src/modules/terminal/api/router.ts:14"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/terminal",
-        "file": "src/modules/terminal/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/terminal",
-        "file": "src/modules/terminal/api/router.ts:26"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/terminal",
-        "file": "src/modules/terminal/api/router.ts:27"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/terminal",
-        "file": "src/modules/terminal/api/router.ts:28"
-      }
+      { "type": "http", "method": "GET", "path": "/api/teleodonto", "file": "src/modules/teleodonto/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/teleodonto", "file": "src/modules/teleodonto/api/router.ts" },
+      { "type": "http", "method": "PATCH", "path": "/api/teleodonto", "file": "src/modules/teleodonto/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1930,66 +436,8 @@
     "id": "S3-tiss",
     "name": "tiss",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:21"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:22"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:23"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:24"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:25"
-      },
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:28"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:29"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:30"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/tiss",
-        "file": "src/modules/tiss/api/router.ts:33"
-      }
+      { "type": "http", "method": "GET", "path": "/api/tiss", "file": "src/modules/tiss/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/tiss", "file": "src/modules/tiss/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
   },
@@ -1997,43 +445,54 @@
     "id": "S3-usuarios",
     "name": "usuarios",
     "entry_points": [
-      {
-        "type": "http",
-        "method": "GET",
-        "path": "/api/usuarios",
-        "file": "src/modules/usuarios/api/router.ts:9"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/usuarios",
-        "file": "src/modules/usuarios/api/router.ts:10"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/usuarios",
-        "file": "src/modules/usuarios/api/router.ts:11"
-      },
-      {
-        "type": "http",
-        "method": "DELETE",
-        "path": "/api/usuarios",
-        "file": "src/modules/usuarios/api/router.ts:12"
-      },
-      {
-        "type": "http",
-        "method": "POST",
-        "path": "/api/usuarios",
-        "file": "src/modules/usuarios/api/router.ts:13"
-      },
-      {
-        "type": "http",
-        "method": "PATCH",
-        "path": "/api/usuarios",
-        "file": "src/modules/usuarios/api/router.ts:18"
-      }
+      { "type": "http", "method": "GET", "path": "/api/usuarios", "file": "src/modules/usuarios/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/usuarios", "file": "src/modules/usuarios/api/router.ts" },
+      { "type": "http", "method": "PATCH", "path": "/api/usuarios", "file": "src/modules/usuarios/api/router.ts" }
     ],
     "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S3-ia_radiografia",
+    "name": "ia_radiografia",
+    "entry_points": [
+      { "type": "http", "method": "POST", "path": "/api/ia_radiografia", "file": "src/modules/ia_radiografia/api/router.ts" },
+      { "type": "http", "method": "GET", "path": "/api/ia_radiografia", "file": "src/modules/ia_radiografia/api/router.ts" }
+    ],
+    "confidence_contribution": "MEDIUM"
+  },
+  {
+    "id": "S3-memory_hub",
+    "name": "memory_hub",
+    "entry_points": [
+      { "type": "http", "method": "GET", "path": "/api/memory_hub", "file": "src/modules/memory_hub/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/memory_hub", "file": "src/modules/memory_hub/api/router.ts" }
+    ],
+    "confidence_contribution": "MEDIUM"
+  },
+  {
+    "id": "S3-relatorios",
+    "name": "relatorios",
+    "entry_points": [
+      { "type": "http", "method": "GET", "path": "/api/relatorios", "file": "src/modules/relatorios/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/relatorios", "file": "src/modules/relatorios/api/router.ts" }
+    ],
+    "confidence_contribution": "MEDIUM"
+  },
+  {
+    "id": "S3-terminal",
+    "name": "terminal",
+    "entry_points": [
+      { "type": "http", "method": "POST", "path": "/api/terminal", "file": "src/modules/terminal/api/router.ts" }
+    ],
+    "confidence_contribution": "MEDIUM"
+  },
+  {
+    "id": "S3-github_tools",
+    "name": "github_tools",
+    "entry_points": [
+      { "type": "http", "method": "GET", "path": "/api/github_tools", "file": "src/modules/github_tools/api/router.ts" },
+      { "type": "http", "method": "POST", "path": "/api/github_tools", "file": "src/modules/github_tools/api/router.ts" }
+    ],
+    "confidence_contribution": "MEDIUM"
   }
 ]

@@ -2,6 +2,8 @@ import { IAgendaRepository } from "@/modules/agenda/domain/repositories/IAgendaR
 import { AppointmentRepositoryPostgres } from "@/modules/agenda/infrastructure/repositories/AppointmentRepositoryPostgres"
 import { CreateAppointmentCommandHandler } from "@/modules/agenda/application/commands/CreateAppointmentCommand"
 import { eventBus } from "@/shared/events/EventBus"
+import { AppointmentUpdatedEvent } from "@/modules/agenda/domain/events/AppointmentUpdatedEvent"
+import { AppointmentDeletedEvent } from "@/modules/agenda/domain/events/AppointmentDeletedEvent"
 import { agendaMetrics } from "@/infrastructure/metrics/AgendaMetrics"
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
@@ -116,6 +118,14 @@ export class AgendaService {
     })
 
     MetricsEmitter.incrementCounter("agenda_appointment_updated", "Appointments updated", { clinicId })
+
+    // Reindexacao em tempo real (non-blocking)
+    eventBus.publish(new AppointmentUpdatedEvent(
+      id,
+      clinicId,
+      existing.patient_id
+    )).catch(() => { /* indexing failure is non-blocking */ })
+
     try {
       await this.audit.createLog({
         table_name: "appointments",
@@ -143,6 +153,13 @@ export class AgendaService {
     await this.repo.deleteAppointment(id)
 
     MetricsEmitter.incrementCounter("agenda_appointment_deleted", "Appointments deleted", { clinicId })
+
+    // Reindexacao em tempo real (non-blocking)
+    eventBus.publish(new AppointmentDeletedEvent(
+      id,
+      clinicId
+    )).catch(() => { /* indexing failure is non-blocking */ })
+
     try {
       await this.audit.createLog({
         table_name: "appointments",

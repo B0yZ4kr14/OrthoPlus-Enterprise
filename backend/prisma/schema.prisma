@@ -3301,3 +3301,21 @@ model ia_radiografia_audit_log {
   @@index([clinic_id, timestamp])
   @@schema("pep")
 }
+
+model search_index {
+  id          String   @id @default(uuid())
+  entity_type String
+  entity_id   String
+  clinic_id   String
+  title       String
+  content     String
+  tokens      String?
+  module      String
+  updated_at  DateTime @updatedAt
+  created_at  DateTime @default(now())
+
+  @@index([entity_type])
+  @@index([clinic_id])
+  @@index([updated_at])
+  @@schema("core")
+}

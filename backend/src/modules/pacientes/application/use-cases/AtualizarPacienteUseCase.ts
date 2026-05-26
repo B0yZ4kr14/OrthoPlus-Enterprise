@@ -7,6 +7,7 @@
 
 import { logger } from "@/infrastructure/logger";
 import { eventBus } from "@/shared/events/EventBus";
+import { PatientUpdatedEvent } from "../../domain/events/PatientUpdatedEvent";
 import { IPatientRepository } from "../../domain/repositories/IPatientRepository";
 
 export interface AtualizarPacienteDTO {
@@ -128,7 +129,10 @@ export class AtualizarPacienteUseCase {
     // Publicar eventos de domínio em paralelo
     const events = patient.getDomainEvents();
 
-    await Promise.all(events.map((event) => eventBus.publish(event)));
+    await Promise.all([
+      eventBus.publish(new PatientUpdatedEvent(patient.id, dto.clinicId)),
+      ...events.map((event) => eventBus.publish(event)),
+    ]);
 
     patient.clearDomainEvents();
 

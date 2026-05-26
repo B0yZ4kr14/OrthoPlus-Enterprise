@@ -9,6 +9,7 @@ import { startMarketingJobsCron } from './jobs/marketingJobs';
 import { startMemoryHubDriftCron } from "./jobs/memoryHubDrift";
 import { startScheduleAppointmentsCron } from "./jobs/scheduleAppointments";
 import { startScheduleBiExportCron } from "./jobs/scheduleBiExport";
+import { startSearchIndexScheduler } from "./searchIndexScheduler";
 
 export const startAllWorkers = () => {
   logger.info("Starting all background workers (cron jobs)...");
@@ -23,6 +24,7 @@ export const startAllWorkers = () => {
   startAdminJobs();
   startMarketingJobsCron();
   startMemoryHubDriftCron();
+  startSearchIndexScheduler();
 
   logger.info("Background workers started.");
 };

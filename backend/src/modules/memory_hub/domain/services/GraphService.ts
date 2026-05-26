@@ -1,23 +1,6 @@
 import { logger } from "@/infrastructure/logger"
 import { IDocumentRepository } from "../ports/IDocumentRepository"
-
-export interface GraphNode {
-  id: string
-  label: string
-  docType: string
-  sourcePath: string
-}
-
-export interface GraphEdge {
-  source: string
-  target: string
-  type: "links-to" | "referenced-by"
-}
-
-export interface GraphData {
-  nodes: GraphNode[]
-  edges: GraphEdge[]
-}
+import type { GraphNode, GraphEdge, GraphData } from "@orthoplus/shared-types"
 
 /**
  * Build a cross-reference graph from document links and references.

@@ -12,20 +12,20 @@ test.describe("Crypto Payments Module", () => {
     await page.goto("./financeiro/crypto-pagamentos");
     await page.waitForLoadState("domcontentloaded");
 
-    // Verificar elementos principais da página
+    // Check main page elements
     await expect(page.getByText("Pagamentos em Criptomoedas")).toBeVisible();
   });
 
   test("should configure exchange", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Clicar na tab de Exchanges
+    // Click Exchanges tab
     await page.click('button:has-text("Exchanges")');
 
-    // Abrir dialog de configuração
+    // Open configuration dialog
     await page.click('button:has-text("Configurar Exchange")');
 
-    // Preencher formulário
+    // Fill form
     await page.selectOption('select[name="exchange_name"]', "BINANCE");
     await page.fill('input[name="api_key_encrypted"]', "test_api_key_12345");
     await page.fill(
@@ -34,10 +34,10 @@ test.describe("Crypto Payments Module", () => {
     );
     await page.fill('input[name="processing_fee_percentage"]', "2.5");
 
-    // Submeter formulário
+    // Submit form
     await page.click('button:has-text("Salvar Configuração")');
 
-    // Aguardar toast de sucesso
+    // Wait for success toast
     await expect(page.getByText(/configuração salva/i)).toBeVisible({
       timeout: 5000,
     });
@@ -46,13 +46,13 @@ test.describe("Crypto Payments Module", () => {
   test("should create wallet", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Clicar na tab de Carteiras
+    // Click Wallets tab
     await page.click('button:has-text("Carteiras")');
 
-    // Abrir dialog de nova carteira
+    // Open new wallet dialog
     await page.click('button:has-text("Nova Carteira")');
 
-    // Preencher formulário
+    // Fill form
     await page.fill('input[name="wallet_name"]', "Carteira Bitcoin Principal");
     await page.selectOption('select[name="coin_type"]', "BTC");
     await page.fill(
@@ -60,10 +60,10 @@ test.describe("Crypto Payments Module", () => {
       "3J98t1WpEZ73CNmYviecrnyiWrnqRhWNLy",
     );
 
-    // Submeter formulário
+    // Submit form
     await page.click('button:has-text("Criar Carteira")');
 
-    // Aguardar toast de sucesso
+    // Wait for success toast
     await expect(page.getByText(/carteira criada/i)).toBeVisible({
       timeout: 5000,
     });
@@ -72,20 +72,20 @@ test.describe("Crypto Payments Module", () => {
   test("should generate payment QR code", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Assumindo que há uma carteira já criada
-    // Clicar em botão para gerar pagamento
+    // Assuming a wallet already exists
+    // Click button to generate payment
     await page.locator('button:has-text("Gerar Pagamento")').first().click();
 
-    // Preencher valor
+    // Fill value
     await page.fill('input[name="amount_crypto"]', "0.001");
 
-    // Selecionar paciente (opcional)
+    // Select patient (optional)
     // await page.selectOption('select[name="patient_id"]', 'patient-uuid');
 
-    // Gerar QR Code
+    // Generate QR Code
     await page.click('button:has-text("Gerar QR Code")');
 
-    // Verificar se QR code foi renderizado
+    // Check if QR code was rendered
     await expect(page.locator("canvas")).toBeVisible({ timeout: 5000 });
     await expect(page.getByText(/endereço da carteira/i)).toBeVisible();
   });
@@ -93,10 +93,10 @@ test.describe("Crypto Payments Module", () => {
   test("should display transaction list", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Verificar se a tabela de transações existe
+    // Check if transactions table exists
     await expect(page.locator("table")).toBeVisible();
 
-    // Verificar colunas principais
+    // Check main columns
     await expect(page.getByText("Data")).toBeVisible();
     await expect(page.getByText("Moeda")).toBeVisible();
     await expect(page.getByText("Valor")).toBeVisible();
@@ -106,14 +106,14 @@ test.describe("Crypto Payments Module", () => {
   test("should filter transactions by status", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Aplicar filtro de status
+    // Apply status filter
     await page.selectOption('select[name="status_filter"]', "CONFIRMADO");
 
-    // Verificar se filtro foi aplicado (número de linhas na tabela mudou)
+    // Check if filter was applied (number of rows in table changed)
     const rows = page.locator("table tbody tr");
     const count = await rows.count();
 
-    // Se houver resultados, verificar se todos têm status CONFIRMADO
+    // If there are results, check that all have CONFIRMED status
     if (count > 0) {
       const statuses = await page
         .locator('table tbody tr td:has-text("Confirmado")')
@@ -125,8 +125,8 @@ test.describe("Crypto Payments Module", () => {
   test("should convert crypto to BRL", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Assumindo que há uma transação confirmada
-    // Clicar em botão de conversão
+    // Assuming there is a confirmed transaction
+    // Click conversion button
     const convertButton = page
       .locator('button:has-text("Converter para BRL")')
       .first();
@@ -134,10 +134,10 @@ test.describe("Crypto Payments Module", () => {
     if (await convertButton.isVisible()) {
       await convertButton.click();
 
-      // Confirmar conversão
+      // Confirm conversion
       await page.click('button:has-text("Confirmar Conversão")');
 
-      // Aguardar toast de sucesso
+      // Wait for success toast
       await expect(page.getByText(/conversão realizada/i)).toBeVisible({
         timeout: 5000,
       });
@@ -147,16 +147,16 @@ test.describe("Crypto Payments Module", () => {
   test("should sync wallet balance", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Clicar na tab de Carteiras
+    // Click Wallets tab
     await page.click('button:has-text("Carteiras")');
 
-    // Clicar em botão de sincronização
+    // Click sync button
     const syncButton = page.locator('button:has-text("Sincronizar")').first();
 
     if (await syncButton.isVisible()) {
       await syncButton.click();
 
-      // Aguardar toast de sucesso
+      // Wait for success toast
       await expect(page.getByText(/saldo sincronizado/i)).toBeVisible({
         timeout: 5000,
       });
@@ -166,7 +166,7 @@ test.describe("Crypto Payments Module", () => {
   test("should display dashboard metrics", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Verificar KPIs principais
+    // Check main KPIs
     await expect(page.getByText(/total em btc/i)).toBeVisible();
     await expect(page.getByText(/total em brl/i)).toBeVisible();
     await expect(page.getByText(/pendentes/i)).toBeVisible();
@@ -176,7 +176,7 @@ test.describe("Crypto Payments Module", () => {
   test("should handle empty states gracefully", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Se não houver transações, verificar mensagem de estado vazio
+    // If there are no transactions, check empty state message
     const emptyState = page.getByText(/nenhuma transação/i);
     const hasTransactions = (await page.locator("table tbody tr").count()) > 0;
 
@@ -190,16 +190,16 @@ test.describe("Crypto Payments Module", () => {
   }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Clicar na tab de Exchanges
+    // Click Exchanges tab
     await page.click('button:has-text("Exchanges")');
 
-    // Abrir dialog de configuração
+    // Open configuration dialog
     await page.click('button:has-text("Configurar Exchange")');
 
-    // Tentar submeter sem preencher campos obrigatórios
+    // Try to submit without filling required fields
     await page.click('button:has-text("Salvar Configuração")');
 
-    // Verificar mensagens de validação
+    // Check validation messages
     const validationErrors = page.locator("text=/obrigatório|required/i");
     expect(await validationErrors.count()).toBeGreaterThan(0);
   });
@@ -207,21 +207,21 @@ test.describe("Crypto Payments Module", () => {
   test("should validate Bitcoin address format", async ({ page }) => {
     await page.goto("./financeiro/crypto-pagamentos");
 
-    // Clicar na tab de Carteiras
+    // Click Wallets tab
     await page.click('button:has-text("Carteiras")');
 
-    // Abrir dialog de nova carteira
+    // Open new wallet dialog
     await page.click('button:has-text("Nova Carteira")');
 
-    // Preencher com endereço inválido
+    // Fill with invalid address
     await page.fill('input[name="wallet_name"]', "Test Wallet");
     await page.selectOption('select[name="coin_type"]', "BTC");
     await page.fill('input[name="wallet_address"]', "invalid-address-123");
 
-    // Tentar submeter
+    // Try to submit
     await page.click('button:has-text("Criar Carteira")');
 
-    // Verificar erro de validação
+    // Check validation error
     await expect(page.getByText(/endereço inválido/i)).toBeVisible({
       timeout: 3000,
     });

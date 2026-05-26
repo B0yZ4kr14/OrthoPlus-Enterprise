@@ -176,6 +176,7 @@ pnpm type-check       # Turbo type-check
 pnpm test             # Turbo test
 pnpm format           # Prettier em **/*.{ts,tsx,json,md}
 pnpm clean            # Turbo clean + rm -rf node_modules
+pnpm guard            # Style guard: detecta cores Tailwind nativas/hardcoded em UI
 ```
 
 > **Nota:** O script `format:check` e usado no CI (`quality-check.yml`) para verificar formatacao. Nao esta definido no root `package.json` — e injetado via CI ou pode ser executado com `npx prettier --check "**/*.{ts,tsx,json,md}"`.
@@ -247,6 +248,18 @@ Se qualquer comando falhar, o commit e abortado.
 
 ### Concorrencia
 - Todos os workflows usam `concurrency: group: <workflow>-${{ github.ref }}` com `cancel-in-progress: true`, exceto deploys que usam `cancel-in-progress: false`.
+
+### Convencao de Commits
+O projeto segue uma convencao inspirada em Conventional Commits, observada na pratica do historico de commits:
+- `feat(<scope>):` — Nova funcionalidade
+- `fix(<scope>):` — Correcao de bug
+- `docs(<scope>):` — Documentacao
+- `chore(<scope>):` — Tarefas de manutencao
+- `polish(<scope>):` — Ajustes finos de UI/UX (tipo customizado do projeto)
+- `refactor(<scope>):` — Refatoracao de codigo
+- `test(<scope>):` — Adicao ou correcao de testes
+- Escopos comuns: `ui`, `backend`, `brownkit`, `infra`, etc.
+- Mensagens de commit podem ser em portugues.
 
 ---
 
@@ -355,10 +368,6 @@ packages:
 ---
 
 ## 9. Convencoes de Codigo
-
-### TypeScript / Geral
-- **ES Modules:** `import/export` obrigatorio. Nunca `require`.
-- **Sem ponto e virgula:** O projeto nao usa `;` no final das linhas (padrao do Prettier).
 
 ### Bash (Scripts)
 - Shebang: `#!/bin/bash`

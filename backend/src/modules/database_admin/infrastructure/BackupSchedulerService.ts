@@ -14,26 +14,7 @@
 
 import { CategoryBackupService } from "@/infrastructure/database/CategoryBackupService";
 import { DB_CATEGORIES } from "./MasterDatabaseManager";
-
-export interface CategoryBackupStatus {
-  category: string;
-  lastBackup: string | null;
-  lastBackupSize: number | null;
-  lastBackupSizeHuman: string;
-  backupCount: number;
-  schemas: string[];
-}
-
-export interface BackupExecutionResult {
-  category: string;
-  success: boolean;
-  filePath: string;
-  sizeBytes: number;
-  sizeHuman: string;
-  durationMs: number;
-  schemas: string[];
-  error?: string;
-}
+import type { CategoryBackupStatus, BackupExecutionResult } from "@orthoplus/shared-types";
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 B";

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { StaggerGrid, statsStagger } from "./DashboardAnimations";
-import type { DashboardStats } from "@/hooks/useDashboard";
+import type { DashboardStats } from "@orthoplus/shared-types";
 
 interface DashboardTabFinanceiroProps {
   stats: DashboardStats;

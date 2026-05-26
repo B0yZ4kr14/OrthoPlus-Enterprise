@@ -1,13 +1,13 @@
 import { test, expect } from './fixtures';
 
-test.describe('PEP (Prontuário Eletrônico) Workflows', () => {
+test.describe('PEP (Electronic Health Record) Workflows', () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('should create new prontuário for patient', async ({ page }) => {
+  test('should create new EHR for patient', async ({ page }) => {
     await page.goto('/prontuario');
     await page.click('button:has-text("Novo Prontuário")');
     
@@ -43,11 +43,11 @@ test.describe('PEP (Prontuário Eletrônico) Workflows', () => {
     await page.click('[data-testid="odontograma-tab"]');
     await page.waitForSelector('[data-testid="odontograma-canvas"]');
     
-    // Clicar no dente 36
+    // Click tooth 36
     await page.click('[data-testid="tooth-36"]');
     await page.click('button:has-text("Cariado")');
     
-    // Clicar no dente 46
+    // Click tooth 46
     await page.click('[data-testid="tooth-46"]');
     await page.click('button:has-text("Restaurado")');
     
@@ -84,7 +84,7 @@ test.describe('PEP (Prontuário Eletrônico) Workflows', () => {
     await expect(page.locator('.toast')).toContainText('Evolução registrada com sucesso');
   });
 
-  test('should upload attachment to prontuário', async ({ page }) => {
+  test('should upload attachment to EHR', async ({ page }) => {
     await page.goto('/prontuario');
     await page.click('[data-testid="prontuario-row"]:first-child');
     
@@ -98,14 +98,14 @@ test.describe('PEP (Prontuário Eletrônico) Workflows', () => {
     await expect(page.locator('text=Radiografia periapical dente 36')).toBeVisible();
   });
 
-  test('should sign prontuário digitally', async ({ page }) => {
+  test('should sign EHR digitally', async ({ page }) => {
     await page.goto('/prontuario');
     await page.click('[data-testid="prontuario-row"]:first-child');
     
     await page.click('[data-testid="assinatura-tab"]');
     await page.waitForSelector('[data-testid="signature-canvas"]');
     
-    // Simular assinatura (desenho no canvas)
+    // Simulate signature (drawing on canvas)
     const canvas = page.locator('[data-testid="signature-canvas"]');
     const box = await canvas.boundingBox();
     if (box) {
@@ -119,7 +119,7 @@ test.describe('PEP (Prontuário Eletrônico) Workflows', () => {
     await expect(page.locator('.toast')).toContainText('Prontuário assinado digitalmente');
   });
 
-  test('should view prontuário history', async ({ page }) => {
+  test('should view EHR history', async ({ page }) => {
     await page.goto('/prontuario');
     await page.click('[data-testid="prontuario-row"]:first-child');
     
@@ -131,7 +131,7 @@ test.describe('PEP (Prontuário Eletrônico) Workflows', () => {
     expect(count).toBeGreaterThan(0);
   });
 
-  test('should export prontuário to PDF', async ({ page }) => {
+  test('should export EHR to PDF', async ({ page }) => {
     await page.goto('/prontuario');
     await page.click('[data-testid="prontuario-row"]:first-child');
     
@@ -143,7 +143,7 @@ test.describe('PEP (Prontuário Eletrônico) Workflows', () => {
     expect(download.suggestedFilename()).toMatch(/prontuario-.*\.pdf/);
   });
 
-  test('should search prontuários by patient name', async ({ page }) => {
+  test('should search EHRs by patient name', async ({ page }) => {
     await page.goto('/prontuario');
     await page.fill('[data-testid="prontuario-search"]', 'João');
     

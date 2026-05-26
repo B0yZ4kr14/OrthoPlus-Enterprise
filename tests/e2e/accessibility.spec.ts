@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures';
 import AxeBuilder from '@axe-core/playwright';
 
-test.describe('Testes de Acessibilidade', () => {
+test.describe('Accessibility Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Login
     // Auth token injected via fixtures.ts
@@ -9,13 +9,13 @@ test.describe('Testes de Acessibilidade', () => {
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('dashboard não deve ter violações de acessibilidade', async ({ page }) => {
+  test('dashboard should not have accessibility violations', async ({ page }) => {
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
-  test('página de pacientes não deve ter violações', async ({ page }) => {
+  test('patients page should not have violations', async ({ page }) => {
     await page.goto('/pacientes');
     
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
@@ -23,7 +23,7 @@ test.describe('Testes de Acessibilidade', () => {
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
-  test('módulo PEP não deve ter violações', async ({ page }) => {
+  test('PEP module should not have violations', async ({ page }) => {
     await page.goto('/pep');
     
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
@@ -31,7 +31,7 @@ test.describe('Testes de Acessibilidade', () => {
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
-  test('módulo financeiro não deve ter violações', async ({ page }) => {
+  test('financial module should not have violations', async ({ page }) => {
     await page.goto('/financeiro');
     
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
@@ -39,24 +39,24 @@ test.describe('Testes de Acessibilidade', () => {
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
-  test('deve ser navegável apenas pelo teclado', async ({ page }) => {
+  test('should be navigable by keyboard only', async ({ page }) => {
     await page.goto('/dashboard');
     
-    // Testar navegação por Tab
+    // Test Tab navigation
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
     
-    // Verificar que o foco está visível
+    // Check that focus is visible
     const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
     expect(focusedElement).toBeTruthy();
   });
 
-  test('formulários devem ter labels associadas', async ({ page }) => {
+  test('forms should have associated labels', async ({ page }) => {
     await page.goto('/pacientes');
     await page.getByRole('button', { name: /novo/i }).click();
     
-    // Verificar que todos os inputs têm labels
+    // Check that all inputs have labels
     const inputs = await page.locator('input[type="text"], input[type="email"]').all();
     
     for (const input of inputs) {
@@ -68,7 +68,7 @@ test.describe('Testes de Acessibilidade', () => {
     }
   });
 
-  test('imagens devem ter alt text', async ({ page }) => {
+  test('images should have alt text', async ({ page }) => {
     await page.goto('/dashboard');
     
     const images = await page.locator('img').all();
@@ -79,7 +79,7 @@ test.describe('Testes de Acessibilidade', () => {
     }
   });
 
-  test('deve ter contraste adequado', async ({ page }) => {
+  test('should have adequate contrast', async ({ page }) => {
     await page.goto('/dashboard');
     
     const accessibilityScanResults = await new AxeBuilder({ page })

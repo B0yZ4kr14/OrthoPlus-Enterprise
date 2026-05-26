@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures';
 
-test.describe('Módulo Financeiro', () => {
+test.describe('Financial Module', () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
     await page.goto('/');
@@ -9,7 +9,7 @@ test.describe('Módulo Financeiro', () => {
     await page.goto('/financeiro');
   });
 
-  test('deve exibir dashboard financeiro', async ({ page }) => {
+  test('should display financial dashboard', async ({ page }) => {
     await expect(page.getByText(/gestão financeira/i)).toBeVisible();
     await expect(page.getByText(/receitas/i)).toBeVisible();
     await expect(page.getByText(/despesas/i)).toBeVisible();

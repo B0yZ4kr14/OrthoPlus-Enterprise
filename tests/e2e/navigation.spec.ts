@@ -6,40 +6,40 @@ test.describe('Navigation E2E', () => {
   });
 
   test('should navigate through 5 bounded contexts', async ({ page }) => {
-    // CLÍNICA
+    // CLINIC
     await page.click('[data-testid="menu-clinica"]');
     await expect(page.locator('text=Pacientes')).toBeVisible();
     await expect(page.locator('text=Agenda')).toBeVisible();
     
-    // FINANCEIRO
+    // FINANCIAL
     await page.click('[data-testid="menu-financeiro"]');
     await expect(page.locator('text=Contas a Receber')).toBeVisible();
     await expect(page.locator('text=PDV')).toBeVisible();
     await expect(page.locator('text=Notas Fiscais')).toBeVisible();
     
-    // OPERAÇÕES
+    // OPERATIONS
     await page.click('[data-testid="menu-operacoes"]');
     await expect(page.locator('text=Estoque')).toBeVisible();
     
-    // CRESCIMENTO
+    // GROWTH
     await page.click('[data-testid="menu-crescimento"]');
     await expect(page.locator('text=CRM')).toBeVisible();
     await expect(page.locator('text=Marketing')).toBeVisible();
     
-    // CONFIGURAÇÕES
+    // SETTINGS
     await page.click('[data-testid="menu-configuracoes"]');
     await expect(page.locator('text=Gestão de Módulos')).toBeVisible();
   });
 
   test('should collapse and expand sidebar', async ({ page }) => {
-    // Verificar sidebar expandido
+    // Check expanded sidebar
     await expect(page.locator('[data-testid="sidebar"]')).toHaveAttribute('data-collapsed', 'false');
     
-    // Colapsar
+    // Collapse
     await page.click('[data-testid="sidebar-toggle"]');
     await expect(page.locator('[data-testid="sidebar"]')).toHaveAttribute('data-collapsed', 'true');
     
-    // Expandir
+    // Expand
     await page.click('[data-testid="sidebar-toggle"]');
     await expect(page.locator('[data-testid="sidebar"]')).toHaveAttribute('data-collapsed', 'false');
   });
@@ -49,7 +49,7 @@ test.describe('Navigation E2E', () => {
     await page.goto('/financeiro/fiscal/notas');
     await expect(page.locator('text=Notas Fiscais')).toBeVisible();
     
-    // Conciliação Bancária
+    // Bank Reconciliation
     await page.goto('/financeiro/conciliacao');
     await expect(page.locator('text=Conciliação Bancária')).toBeVisible();
     
@@ -61,7 +61,7 @@ test.describe('Navigation E2E', () => {
     await page.goto('/estoque/scanner');
     await expect(page.locator('text=Scanner Mobile')).toBeVisible();
     
-    // Comunicação
+    // Communication
     await page.goto('/comunicacao');
     await expect(page.locator('text=Comunicação')).toBeVisible();
   });

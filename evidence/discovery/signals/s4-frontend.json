@@ -1,170 +1,226 @@
 [
   {
-    "id": "S4-@/modules/pacientes",
-    "name": "@/modules/pacientes",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/pacientes",
+    "id": "S4-pacientes",
+    "name": "pacientes",
+    "routes": ["/pacientes", "/pacientes/novo", "/pacientes/:id", "/pacientes/busca"],
+    "feature_folder": "apps/web/src/modules/pacientes",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-agenda",
+    "name": "agenda",
+    "routes": ["/agenda"],
+    "feature_folder": "apps/web/src/modules/agenda",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-financeiro",
+    "name": "financeiro",
+    "routes": ["/financeiro", "/financeiro/receber", "/financeiro/fiscal/notas", "/financeiro/conciliacao"],
+    "feature_folder": "apps/web/src/modules/financeiro",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-pep",
+    "name": "pep",
+    "routes": ["/pep", "/pep/:patientId", "/assinatura-icp", "/fluxo-digital"],
+    "feature_folder": "apps/web/src/modules/pep",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-estoque",
+    "name": "estoque",
+    "routes": ["/estoque", "/estoque/inventario-historico", "/estoque/scanner"],
+    "feature_folder": "apps/web/src/modules/estoque",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-inventario",
+    "name": "inventario",
+    "routes": ["/inventario/dashboard"],
+    "feature_folder": "apps/web/src/modules/inventario",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-pdv",
+    "name": "pdv",
+    "routes": ["/pdv", "/pdv/dashboard", "/pdv/metas"],
+    "feature_folder": "apps/web/src/modules/pdv",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-crm",
+    "name": "crm",
+    "routes": ["/crm"],
+    "feature_folder": "apps/web/src/modules/crm",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-dentistas",
+    "name": "dentistas",
+    "routes": ["/dentistas"],
+    "feature_folder": "apps/web/src/modules/dentistas",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/agenda",
-    "name": "@/modules/agenda",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/agenda",
+    "id": "S4-funcionarios",
+    "name": "funcionarios",
+    "routes": ["/funcionarios"],
+    "feature_folder": "apps/web/src/modules/funcionarios",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/financeiro",
-    "name": "@/modules/financeiro",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/financeiro",
+    "id": "S4-procedimentos",
+    "name": "procedimentos",
+    "routes": ["/procedimentos"],
+    "feature_folder": "apps/web/src/modules/procedimentos",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/pep",
-    "name": "@/modules/pep",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/pep",
+    "id": "S4-cobranca",
+    "name": "cobranca",
+    "routes": ["/inadimplencia"],
+    "feature_folder": "apps/web/src/modules/cobranca",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/estoque",
-    "name": "@/modules/estoque",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/estoque",
+    "id": "S4-crypto",
+    "name": "crypto",
+    "routes": ["/crypto-payment"],
+    "feature_folder": "apps/web/src/modules/crypto",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/pdv",
-    "name": "@/modules/pdv",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/pdv",
+    "id": "S4-split-pagamento",
+    "name": "split-pagamento",
+    "routes": ["/split-pagamento"],
+    "feature_folder": "apps/web/src/modules/split-pagamento",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/crm",
-    "name": "@/modules/crm",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/crm",
+    "id": "S4-marketing-auto",
+    "name": "marketing-auto",
+    "routes": ["/marketing-auto", "/fidelidade", "/recall"],
+    "feature_folder": "apps/web/src/modules/marketing-auto",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-portal-paciente",
+    "name": "portal-paciente",
+    "routes": ["/portal-paciente"],
+    "feature_folder": "apps/web/src/modules/portal-paciente",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/dentistas",
-    "name": "@/modules/dentistas",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/dentistas",
+    "id": "S4-bi",
+    "name": "bi",
+    "routes": ["/bi", "/dashboards/comercial"],
+    "feature_folder": "apps/web/src/modules/bi",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/funcionarios",
-    "name": "@/modules/funcionarios",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/funcionarios",
+    "id": "S4-contratos",
+    "name": "contratos",
+    "routes": ["/contratos"],
+    "feature_folder": "apps/web/src/modules/contratos",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-orcamentos",
+    "name": "orcamentos",
+    "routes": ["/orcamentos", "/orcamentos/novo", "/orcamentos/editar/:id"],
+    "feature_folder": "apps/web/src/modules/orcamentos",
+    "confidence_contribution": "HIGH"
+  },
+  {
+    "id": "S4-odontograma",
+    "name": "odontograma",
+    "routes": ["/odontograma"],
+    "feature_folder": "apps/web/src/modules/odontograma",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/procedimentos",
-    "name": "@/modules/procedimentos",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/procedimentos",
+    "id": "S4-tratamentos",
+    "name": "tratamentos",
+    "routes": ["/tratamentos"],
+    "feature_folder": "apps/web/src/modules/tratamentos",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-ui",
-    "name": "ui",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/ui",
+    "id": "S4-lgpd",
+    "name": "lgpd",
+    "routes": ["/lgpd"],
+    "feature_folder": "apps/web/src/modules/lgpd",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/cobranca",
-    "name": "@/modules/cobranca",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/cobranca",
+    "id": "S4-tiss",
+    "name": "tiss",
+    "routes": ["/faturamento-tiss"],
+    "feature_folder": "apps/web/src/modules/tiss",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/crypto",
-    "name": "@/modules/crypto",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/crypto",
+    "id": "S4-teleodonto",
+    "name": "teleodonto",
+    "routes": ["/teleodonto"],
+    "feature_folder": "apps/web/src/modules/teleodonto",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/split-pagamento",
-    "name": "@/modules/split-pagamento",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/split-pagamento",
+    "id": "S4-ia-radiografia",
+    "name": "ia-radiografia",
+    "routes": ["/ia-radiografia"],
+    "feature_folder": "apps/web/src/modules/ia-radiografia",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/inventario",
-    "name": "@/modules/inventario",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/inventario",
+    "id": "S4-memory-hub",
+    "name": "memory-hub",
+    "routes": ["/memory-hub"],
+    "feature_folder": "apps/web/src/modules/memory-hub",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/marketing-auto",
-    "name": "@/modules/marketing-auto",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/marketing-auto",
+    "id": "S4-admin",
+    "name": "admin",
+    "routes": ["/admin/database", "/admin/backups", "/admin/crypto-config", "/admin/github", "/admin/terminal", "/admin/wiki", "/admin/adrs", "/admin/monitoring", "/admin/logs", "/admin/api-docs", "/admin/audit", "/admin/audit-trail"],
+    "feature_folder": "apps/web/src/modules/admin",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/portal-paciente",
-    "name": "@/modules/portal-paciente",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/portal-paciente",
+    "id": "S4-settings",
+    "name": "settings",
+    "routes": ["/configuracoes", "/configuracoes/modulos", "/configuracoes/database", "/usuarios"],
+    "feature_folder": "apps/web/src/modules/settings",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/bi",
-    "name": "@/modules/bi",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/bi",
+    "id": "S4-landpage",
+    "name": "landpage",
+    "routes": ["/", "/demo"],
+    "feature_folder": "apps/web/src/modules/landpage",
+    "confidence_contribution": "LOW"
+  },
+  {
+    "id": "S4-auth",
+    "name": "auth",
+    "routes": ["/auth"],
+    "feature_folder": "apps/web/src/modules/auth",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/dashboards",
-    "name": "@/modules/dashboards",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/dashboards",
+    "id": "S4-files",
+    "name": "files",
+    "routes": ["/files", "/files/upload"],
+    "feature_folder": "apps/web/src/modules/files",
     "confidence_contribution": "MEDIUM"
   },
   {
-    "id": "S4-@/modules/lgpd",
-    "name": "@/modules/lgpd",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/lgpd",
-    "confidence_contribution": "MEDIUM"
-  },
-  {
-    "id": "S4-@/modules/tiss",
-    "name": "@/modules/tiss",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/tiss",
-    "confidence_contribution": "MEDIUM"
-  },
-  {
-    "id": "S4-@/modules/teleodonto",
-    "name": "@/modules/teleodonto",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/teleodonto",
-    "confidence_contribution": "MEDIUM"
-  },
-  {
-    "id": "S4-@/modules/ia-radiografia",
-    "name": "@/modules/ia-radiografia",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/ia-radiografia",
-    "confidence_contribution": "MEDIUM"
-  },
-  {
-    "id": "S4-@/modules/memory-hub",
-    "name": "@/modules/memory-hub",
-    "routes": [],
-    "feature_folder": "apps/web/src/modules/@/modules/memory-hub",
+    "id": "S4-dashboard",
+    "name": "dashboard",
+    "routes": ["/dashboard"],
+    "feature_folder": "apps/web/src/modules/dashboard",
     "confidence_contribution": "MEDIUM"
   }
 ]

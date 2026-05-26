@@ -1,18 +1,18 @@
 import { test, expect } from './fixtures';
 
-test.describe('Módulo PEP - Prontuário Eletrônico', () => {
+test.describe('PEP Module - Electronic Health Record', () => {
   test.beforeEach(async ({ page }) => {
     // Login
     // Auth token injected via fixtures.ts
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
     
-    // Navegar para PEP
+    // Navigate to PEP
     await page.getByRole('link', { name: /prontuário|pep/i }).click();
     await page.waitForURL('/pep');
   });
 
-  test('deve exibir abas do prontuário', async ({ page }) => {
+  test('should display record tabs', async ({ page }) => {
     await expect(page.getByRole('tab', { name: /histórico clínico/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /tratamentos/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /odontograma/i })).toBeVisible();
@@ -20,91 +20,91 @@ test.describe('Módulo PEP - Prontuário Eletrônico', () => {
     await expect(page.getByRole('tab', { name: /assinatura/i })).toBeVisible();
   });
 
-  test('deve preencher histórico clínico', async ({ page }) => {
-    // Clicar na aba histórico clínico
+  test('should fill clinical history', async ({ page }) => {
+    // Click clinical history tab
     await page.getByRole('tab', { name: /histórico clínico/i }).click();
     
-    // Preencher anamnese
+    // Fill anamnesis
     await page.getByLabel(/queixa principal/i).fill('Dor no dente 11');
     await page.getByLabel(/história da doença/i).fill('Dor há 3 dias');
     
-    // Preencher diagnóstico
+    // Fill diagnosis
     await page.getByLabel(/diagnóstico/i).fill('Cárie dentária');
     
-    // Salvar
+    // Save
     await page.getByRole('button', { name: /salvar histórico/i }).click();
     
-    // Verificar sucesso
+    // Check success
     await expect(page.getByText(/histórico salvo/i)).toBeVisible();
   });
 
-  test('deve criar novo tratamento', async ({ page }) => {
-    // Navegar para aba tratamentos
+  test('should create new treatment', async ({ page }) => {
+    // Navigate to treatments tab
     await page.getByRole('tab', { name: /tratamentos/i }).click();
     
-    // Clicar em novo tratamento
+    // Click new treatment
     await page.getByRole('button', { name: /novo tratamento/i }).click();
     
-    // Preencher formulário
+    // Fill form
     await page.getByLabel(/título/i).fill('Restauração Dente 11');
     await page.getByLabel(/descrição/i).fill('Restauração em resina composta');
     await page.getByLabel(/dente/i).fill('11');
     await page.getByLabel(/valor estimado/i).fill('500');
     
-    // Salvar
+    // Save
     await page.getByRole('button', { name: /salvar/i }).click();
     
-    // Verificar criação
+    // Check creation
     await expect(page.getByText(/tratamento criado/i)).toBeVisible();
     await expect(page.getByText('Restauração Dente 11')).toBeVisible();
   });
 
-  test('deve interagir com odontograma 2D', async ({ page }) => {
-    // Navegar para aba odontograma
+  test('should interact with 2D odontogram', async ({ page }) => {
+    // Navigate to odontogram tab
     await page.getByRole('tab', { name: /odontograma/i }).click();
     
-    // Selecionar status "cariado"
+    // Select "caries" status
     await page.getByRole('button', { name: /cariado/i }).click();
     
-    // Clicar em um dente (dente 11)
+    // Click a tooth (tooth 11)
     await page.locator('[data-tooth="11"]').click();
     
-    // Verificar que o dente mudou de cor
+    // Check that the tooth changed color
     await expect(page.locator('[data-tooth="11"]')).toHaveAttribute('data-status', 'cariado');
     
-    // Verificar estatísticas atualizadas
+    // Check updated statistics
     await expect(page.getByText(/cariados: 1/i)).toBeVisible();
   });
 
-  test('deve fazer upload de anexo', async ({ page }) => {
-    // Navegar para aba anexos
+  test('should upload attachment', async ({ page }) => {
+    // Navigate to attachments tab
     await page.getByRole('tab', { name: /anexos/i }).click();
     
-    // Criar arquivo de teste
+    // Create test file
     const fileContent = 'Conteúdo do arquivo de teste';
     const buffer = Buffer.from(fileContent, 'utf-8');
     
-    // Upload do arquivo
+    // Upload file
     await page.setInputFiles('input[type="file"]', {
       name: 'teste.txt',
       mimeType: 'text/plain',
       buffer: buffer,
     });
     
-    // Verificar upload
+    // Check upload
     await expect(page.getByText(/arquivo enviado/i)).toBeVisible();
     await expect(page.getByText('teste.txt')).toBeVisible();
   });
 
-  test('deve capturar assinatura digital', async ({ page }) => {
-    // Navegar para aba assinatura
+  test('should capture digital signature', async ({ page }) => {
+    // Navigate to signature tab
     await page.getByRole('tab', { name: /assinatura/i }).click();
     
-    // Localizar canvas de assinatura
+    // Locate signature canvas
     const canvas = page.locator('canvas');
     await expect(canvas).toBeVisible();
     
-    // Simular desenho de assinatura (arrastar mouse)
+    // Simulate signature drawing (drag mouse)
     const box = await canvas.boundingBox();
     if (box) {
       await page.mouse.move(box.x + 50, box.y + 50);
@@ -113,28 +113,28 @@ test.describe('Módulo PEP - Prontuário Eletrônico', () => {
       await page.mouse.up();
     }
     
-    // Salvar assinatura
+    // Save assinatura
     await page.getByRole('button', { name: /salvar assinatura/i }).click();
     
-    // Verificar sucesso
+    // Check success
     await expect(page.getByText(/assinatura salva/i)).toBeVisible();
   });
 
-  test('deve visualizar histórico de alterações do odontograma', async ({ page }) => {
-    // Navegar para odontograma
+  test('should view odontogram change history', async ({ page }) => {
+    // Navigate to odontogram
     await page.getByRole('tab', { name: /odontograma/i }).click();
     
-    // Fazer algumas alterações
+    // Make some changes
     await page.getByRole('button', { name: /cariado/i }).click();
     await page.locator('[data-tooth="11"]').click();
     
     await page.getByRole('button', { name: /obturado/i }).click();
     await page.locator('[data-tooth="12"]').click();
     
-    // Abrir histórico
+    // Open history
     await page.getByRole('tab', { name: /histórico odonto/i }).click();
     
-    // Verificar que há entradas no histórico
+    // Check that there are entries in history
     await expect(page.getByText(/dente 11/i)).toBeVisible();
     await expect(page.getByText(/dente 12/i)).toBeVisible();
   });

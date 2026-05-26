@@ -29,7 +29,7 @@ test.describe('Teleodontologia Workflow', () => {
     // Dashboard tab (default)
     await expect(page.getByRole('tabpanel')).toContainText('Sessões Hoje');
     
-    // Sessões tab
+    // Sessions tab
     await page.click('button:has-text("Sessões")');
     await expect(page.getByText('Sessões Recentes')).toBeVisible();
     
@@ -42,7 +42,7 @@ test.describe('Teleodontologia Workflow', () => {
     await page.goto('/teleodonto');
     await page.click('button:has-text("Sessões")');
     
-    // Verificar se lista de sessões está visível
+    // Check if session list is visible
     await expect(page.getByText('Sessões Recentes')).toBeVisible();
   });
 });

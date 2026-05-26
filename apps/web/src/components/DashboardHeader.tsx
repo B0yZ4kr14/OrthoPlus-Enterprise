@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@orthoplus/core-ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@orthoplus/core-ui/button";
-import GlobalSearch from "@/components/GlobalSearch";
+import { GlobalSearch } from "@/components/GlobalSearch";
 import { HotkeysHelp } from "@/components/HotkeysHelp";
 import { NotificationDropdown } from "@/components/NotificationDropdown";
 import { QuickActions } from "@/components/layout/QuickActions";

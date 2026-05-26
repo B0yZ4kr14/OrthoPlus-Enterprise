@@ -8,8 +8,8 @@
     },
     "scan": {
       "status": "completed",
-      "started_at": "2026-05-26T07:45:00.000Z",
-      "completed_at": "2026-05-26T04:48:34.000Z",
+      "started_at": "2026-05-24T19:50:00.000Z",
+      "completed_at": "2026-05-24T20:03:56.000Z",
       "artifacts": [
         "evidence/discovery/candidates.md",
         "evidence/discovery/signals/s1-packages.json",
@@ -108,7 +108,13 @@
     "defect_export: not-collected (no defect tracker export provided)",
     "ndepend_export: not-collected (not applicable to TypeScript/Python stack)",
     "ide_entry_points: not-collected (no IDE entry-point list provided)",
-    "report: security report skipped \u2014 assess not done"
+    "report: security report skipped — assess not done",
+    "re-scan-2026-05-24: S4 frontend routes populated from AppRoutes.tsx (32 route groups)",
+    "re-scan-2026-05-24: S3 cron jobs added from backend/src/workers/jobs/ (14 job definitions)",
+    "re-scan-2026-05-24: QS1 test counts updated — backend 36 files, frontend 110 files, e2e 46 specs",
+    "re-scan-2026-05-24: QS2 proxy coverage refreshed — overall 23% (backend 32%, frontend 18%)",
+    "re-scan-2026-05-24: CI map updated with triggers, stages, and merge-blocking flags",
+    "re-scan-2026-05-24: candidates.md updated to 25 candidates with full S1-S4 cross-referencing"
   ],
   "assess_done": true
 }

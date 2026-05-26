@@ -25,5 +25,8 @@ export * from "./modules";
 export * from "./pdv";
 export * from "./analytics";
 
+// Search Types
+export * from "./search";
+
 // Version
 export const SHARED_TYPES_VERSION = "1.0.0";

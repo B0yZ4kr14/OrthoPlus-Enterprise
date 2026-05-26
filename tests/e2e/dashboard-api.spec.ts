@@ -13,17 +13,17 @@ test.describe('Dashboard API Integration', () => {
   });
 
   test('should load dashboard overview from REST API', async ({ page }) => {
-    // Navegar para o dashboard
+    // Navigate to dashboard
     await page.goto('/');
 
-    // Aguardar carregamento dos dados
+    // Wait for data loading
     await page.waitForSelector('[data-testid="stats-card"]', { timeout: 10000 });
 
-    // Verificar se os cards de estatísticas estão visíveis
+    // Check if stats cards are visible
     const statsCards = await page.$$('[data-testid="stats-card"]');
     expect(statsCards.length).toBeGreaterThan(0);
 
-    // Verificar se os gráficos estão renderizados
+    // Check if charts are rendered
     await expect(page.locator('.recharts-wrapper').first()).toBeVisible();
   });
 
@@ -31,7 +31,7 @@ test.describe('Dashboard API Integration', () => {
     await page.goto('/');
     await page.waitForSelector('[data-testid="stats-card"]');
 
-    // Verificar estrutura dos dados de estatísticas
+    // Check stats data structure
     const totalPatients = await page.locator('text=/Total de Pacientes/i').isVisible();
     expect(totalPatients).toBeTruthy();
 
@@ -46,11 +46,11 @@ test.describe('Dashboard API Integration', () => {
     await page.goto('/');
     await page.waitForSelector('.recharts-wrapper');
 
-    // Verificar se o gráfico de consultas está presente
+    // Check if appointments chart is present
     const appointmentsChart = await page.locator('text=/Visão Geral de Consultas/i').isVisible();
     expect(appointmentsChart).toBeTruthy();
 
-    // Verificar se há dados no gráfico
+    // Check if there is data in the chart
     const bars = await page.$$('.recharts-bar-rectangle');
     expect(bars.length).toBeGreaterThan(0);
   });
@@ -59,11 +59,11 @@ test.describe('Dashboard API Integration', () => {
     await page.goto('/');
     await page.waitForSelector('.recharts-wrapper');
 
-    // Verificar se o gráfico de receitas está presente
+    // Check if revenue chart is present
     const revenueChart = await page.locator('text=/Desempenho Financeiro/i').isVisible();
     expect(revenueChart).toBeTruthy();
 
-    // Verificar se há linhas no gráfico
+    // Check if there are lines in the chart
     const lines = await page.$$('.recharts-line');
     expect(lines.length).toBeGreaterThan(0);
   });
@@ -71,19 +71,19 @@ test.describe('Dashboard API Integration', () => {
   test('should handle loading state', async ({ page }) => {
     await page.goto('/');
 
-    // Verificar se o estado de carregamento aparece inicialmente
+    // Check if loading state appears initially
     const loadingIndicator = await page.locator('[data-testid="loading"]').isVisible();
     
-    // Aguardar que os dados carreguem
+    // Wait for data to load
     await page.waitForSelector('[data-testid="stats-card"]', { timeout: 10000 });
     
-    // Verificar se o loading desaparece
+    // Check if loading disappears
     const loadingGone = await page.locator('[data-testid="loading"]').isHidden();
     expect(loadingGone).toBeTruthy();
   });
 
   test('should handle API errors gracefully', async ({ page, context }) => {
-    // Simular erro de rede
+    // Simulate network error
     await context.route('**/api/dashboard/overview', route => {
       route.fulfill({
         status: 500,
@@ -93,10 +93,10 @@ test.describe('Dashboard API Integration', () => {
 
     await page.goto('/');
 
-    // Verificar se há mensagem de erro ou fallback
+    // Check if there is error message or fallback
     await page.waitForLoadState("domcontentloaded");
     
-    // Dashboard deve mostrar dados mockados em caso de erro
+    // Dashboard should show mock data in case of error
     const statsCards = await page.$$('[data-testid="stats-card"]');
     expect(statsCards.length).toBeGreaterThan(0);
   });
@@ -105,14 +105,14 @@ test.describe('Dashboard API Integration', () => {
     await page.goto('/');
     await page.waitForSelector('[data-testid="stats-card"]');
 
-    // Obter valor inicial
+    // Get initial value
     const initialValue = await page.locator('[data-testid="stats-card"]').first().textContent();
 
-    // Aguardar refresh automático (30 segundos) ou forçar refresh
+    // Wait for automatic refresh (30 seconds) or force refresh
     await page.reload();
     await page.waitForSelector('[data-testid="stats-card"]');
 
-    // Verificar se os dados foram recarregados
+    // Check if data was reloaded
     const newValue = await page.locator('[data-testid="stats-card"]').first().textContent();
     expect(newValue).toBeDefined();
   });
@@ -121,7 +121,7 @@ test.describe('Dashboard API Integration', () => {
     await page.goto('/');
     await page.waitForSelector('.recharts-wrapper');
 
-    // Verificar se há gráfico de pizza (tratamentos por status)
+    // Check if there is pie chart (treatments by status)
     const pieChart = await page.$$('.recharts-pie');
     expect(pieChart.length).toBeGreaterThan(0);
   });
@@ -131,11 +131,11 @@ test.describe('Dashboard API Integration', () => {
     await page.goto('/');
     await page.waitForSelector('[data-testid="stats-card"]');
 
-    // Verificar se os cards estão empilhados verticalmente
+    // Check if cards are stacked vertically
     const statsCards = await page.$$('[data-testid="stats-card"]');
     expect(statsCards.length).toBeGreaterThan(0);
 
-    // Verificar se os gráficos são responsivos
+    // Check if charts are responsive
     const charts = await page.$$('.recharts-responsive-container');
     expect(charts.length).toBeGreaterThan(0);
   });

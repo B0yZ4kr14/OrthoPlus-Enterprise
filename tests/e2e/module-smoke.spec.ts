@@ -14,7 +14,7 @@ test.describe('Module Smoke Tests', () => {
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('Funcionários — page loads', async ({ page }) => {
+  test('Employees — page loads', async ({ page }) => {
     await page.goto('./funcionarios');
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
@@ -41,7 +41,7 @@ test.describe('Module Smoke Tests', () => {
 
   // ─── Financial Modules ─────────────────────────────────────────────
 
-  test('Cobrança — page loads', async ({ page }) => {
+  test('Billing — page loads', async ({ page }) => {
     await page.goto('./inadimplencia');
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
@@ -51,7 +51,7 @@ test.describe('Module Smoke Tests', () => {
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('Orçamentos — page loads', async ({ page }) => {
+  test('Budgets — page loads', async ({ page }) => {
     await page.goto('./orcamentos');
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
@@ -61,7 +61,7 @@ test.describe('Module Smoke Tests', () => {
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('Inadimplência — page loads', async ({ page }) => {
+  test('Default — page loads', async ({ page }) => {
     await page.goto('./inadimplencia');
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
@@ -73,17 +73,17 @@ test.describe('Module Smoke Tests', () => {
 
   // ─── Marketing & Business ──────────────────────────────────────────
 
-  test('Marketing Automação — page loads', async ({ page }) => {
+  test('Marketing Automation — page loads', async ({ page }) => {
     await page.goto('./marketing-auto');
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('Fidelidade — page loads', async ({ page }) => {
+  test('Loyalty — page loads', async ({ page }) => {
     await page.goto('./fidelidade');
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('Programa Fidelidade — page loads', async ({ page }) => {
+  test('Loyalty Program — page loads', async ({ page }) => {
     await page.goto('./fidelidade');
     await expect(page.locator('h1, h2, [data-testid]').first()).toBeVisible({ timeout: 5000 });
   });

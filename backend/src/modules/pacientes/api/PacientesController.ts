@@ -1,10 +1,12 @@
 import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics"
 import { Request, Response } from "express"
 import { Errors, asyncHandler } from "@/middleware/errorHandler"
+import { eventBus } from "@/shared/events/EventBus"
 import { AlterarStatusPacienteUseCase } from "../application/use-cases/AlterarStatusPacienteUseCase"
 import { CadastrarPacienteUseCase, CadastrarPacienteDTO } from "../application/use-cases/CadastrarPacienteUseCase"
 import { AtualizarPacienteUseCase, AtualizarPacienteDTO } from "../application/use-cases/AtualizarPacienteUseCase"
 import { IPatientRepository } from "../domain/repositories/IPatientRepository"
+import { PatientDeletedEvent } from "../domain/events/PatientDeletedEvent"
 import { GetPatientQuery, GetPatientDTO } from "../application/queries/GetPatientQuery"
 import { PacientesControllerService } from "../application/PacientesControllerService"
 
@@ -197,6 +199,10 @@ export class PacientesController {
     if (patient && patient.status) {
       pacientesMetrics.decPatientsTotal(patient.status, clinicId)
     }
+    // Publicar evento de remoção de forma não-bloqueante
+    eventBus.publish(new PatientDeletedEvent(id, clinicId)).catch(() => {
+      // Silenciar erro para não interromper a resposta HTTP
+    });
     res.status(200).json({ success: true, message: "Paciente removido" })
   })
 }

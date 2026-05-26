@@ -3,47 +3,47 @@ import { test, expect } from './fixtures';
 test.describe('Patient Workflow E2E', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    // Assume login já está configurado
+    // Assume login is already configured
   });
 
   test('should create patient with marketing data and canonical status', async ({ page }) => {
-    // Navegar para cadastro de paciente
+    // Navigate to patient registration
     await page.click('[data-testid="quick-action-new-patient"]');
     
-    // Preencher dados básicos
+    // Fill basic data
     await page.fill('[name="full_name"]', 'João Silva Teste');
     await page.fill('[name="cpf"]', '123.456.789-00');
     await page.fill('[name="phone"]', '(11) 98765-4321');
     await page.fill('[name="email"]', 'joao.teste@example.com');
     
-    // Selecionar status canônico
+    // Select canonical status
     await page.click('[data-testid="patient-status-select"]');
     await page.click('[data-value="PROSPECT"]');
     
-    // Navegar para aba de Marketing
+    // Navigate to Marketing tab
     await page.click('[data-testid="tab-marketing"]');
     
-    // Preencher dados de marketing
+    // Fill marketing data
     await page.fill('[name="marketing_campaign"]', 'Campanha Verão 2024');
     await page.fill('[name="marketing_source"]', 'Google Ads');
     await page.fill('[name="marketing_event"]', 'Feira de Saúde');
     await page.fill('[name="marketing_promoter"]', 'João Promotor');
     
-    // Salvar paciente
+    // Save patient
     await page.click('[type="submit"]');
     
-    // Verificar sucesso
+    // Check success
     await expect(page.locator('text=Paciente cadastrado com sucesso')).toBeVisible();
   });
 
   test('should view unified patient page with 7 tabs', async ({ page }) => {
-    // Navegar para lista de pacientes
+    // Navigate to patient list
     await page.goto('/pacientes');
     
-    // Clicar no primeiro paciente
+    // Click first patient
     await page.click('[data-testid="patient-row"]:first-child');
     
-    // Verificar todas as 7 abas
+    // Check all 7 tabs
     await expect(page.locator('[data-testid="tab-cadastro"]')).toBeVisible();
     await expect(page.locator('[data-testid="tab-prontuario"]')).toBeVisible();
     await expect(page.locator('[data-testid="tab-odontograma"]')).toBeVisible();
@@ -52,7 +52,7 @@ test.describe('Patient Workflow E2E', () => {
     await expect(page.locator('[data-testid="tab-financeiro"]')).toBeVisible();
     await expect(page.locator('[data-testid="tab-timeline"]')).toBeVisible();
     
-    // Navegar entre abas
+    // Navigate between tabs
     await page.click('[data-testid="tab-prontuario"]');
     await expect(page.locator('text=Histórico Clínico')).toBeVisible();
     
@@ -61,39 +61,39 @@ test.describe('Patient Workflow E2E', () => {
   });
 
   test('should use global search with Cmd+K', async ({ page }) => {
-    // Ativar busca global
+    // Activate global search
     await page.keyboard.press('Meta+K');
     
-    // Verificar modal de busca aberto
+    // Check search modal opened
     await expect(page.locator('[data-testid="global-search-modal"]')).toBeVisible();
     
-    // Digitar termo de busca
+    // Type search term
     await page.fill('[data-testid="global-search-input"]', 'João');
     
-    // Aguardar resultados
+    // Wait for results
     await page.waitForSelector('[data-testid="search-result"]');
     
-    // Verificar categorias de resultados
+    // Check result categories
     await expect(page.locator('text=Pacientes')).toBeVisible();
     await expect(page.locator('text=Orçamentos')).toBeVisible();
     
-    // Clicar em resultado
+    // Click result
     await page.click('[data-testid="search-result"]:first-child');
     
-    // Verificar navegação
+    // Check navigation
     await expect(page).toHaveURL(/\/pacientes\/.+/);
   });
 
   test('should display dynamic sidebar badges', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar badges no sidebar
+    // Check badges in sidebar
     await expect(page.locator('[data-testid="badge-appointments"]')).toBeVisible();
     await expect(page.locator('[data-testid="badge-overdue"]')).toBeVisible();
     await expect(page.locator('[data-testid="badge-defaulters"]')).toBeVisible();
     await expect(page.locator('[data-testid="badge-recalls"]')).toBeVisible();
     
-    // Verificar valores numéricos
+    // Check numeric values
     const appointmentsBadge = await page.textContent('[data-testid="badge-appointments"]');
     expect(parseInt(appointmentsBadge || '0')).toBeGreaterThanOrEqual(0);
   });
@@ -101,13 +101,13 @@ test.describe('Patient Workflow E2E', () => {
   test('should use quick actions', async ({ page }) => {
     await page.goto('/');
     
-    // Verificar botões de quick action
+    // Check quick action buttons
     await expect(page.locator('[data-testid="quick-action-new-patient"]')).toBeVisible();
     await expect(page.locator('[data-testid="quick-action-schedule"]')).toBeVisible();
     await expect(page.locator('[data-testid="quick-action-new-sale"]')).toBeVisible();
     await expect(page.locator('[data-testid="quick-action-new-budget"]')).toBeVisible();
     
-    // Testar ação rápida de agendamento
+    // Test quick schedule action
     await page.click('[data-testid="quick-action-schedule"]');
     await expect(page).toHaveURL(/\/agenda/);
   });
@@ -115,16 +115,16 @@ test.describe('Patient Workflow E2E', () => {
   test('should view marketing ROI dashboard', async ({ page }) => {
     await page.goto('/dashboards/comercial');
     
-    // Verificar KPIs principais
+    // Check main KPIs
     await expect(page.locator('[data-testid="kpi-cac"]')).toBeVisible();
     await expect(page.locator('[data-testid="kpi-roi"]')).toBeVisible();
     await expect(page.locator('[data-testid="kpi-converted"]')).toBeVisible();
     await expect(page.locator('[data-testid="kpi-conversion-rate"]')).toBeVisible();
     
-    // Verificar gráfico de ROI por campanha
+    // Check campaign ROI chart
     await expect(page.locator('[data-testid="chart-campaign-roi"]')).toBeVisible();
     
-    // Verificar tabela de performance por origem
+    // Check source performance table
     await expect(page.locator('[data-testid="table-source-performance"]')).toBeVisible();
   });
 
@@ -132,21 +132,21 @@ test.describe('Patient Workflow E2E', () => {
     await page.goto('/pacientes');
     await page.click('[data-testid="patient-row"]:first-child');
     
-    // Ir para aba de cadastro
+    // Go to registration tab
     await page.click('[data-testid="tab-cadastro"]');
     
-    // Alterar status
+    // Change status
     await page.click('[data-testid="patient-status-select"]');
     await page.click('[data-value="TRATAMENTO"]');
     
-    // Salvar
+    // Save
     await page.click('[type="submit"]');
     await expect(page.locator('text=Status atualizado')).toBeVisible();
     
-    // Ir para timeline
+    // Go to timeline
     await page.click('[data-testid="tab-timeline"]');
     
-    // Verificar evento de mudança de status
+    // Check status change event
     await expect(page.locator('text=Mudança de Status')).toBeVisible();
     await expect(page.locator('text=PROSPECT → TRATAMENTO')).toBeVisible();
   });

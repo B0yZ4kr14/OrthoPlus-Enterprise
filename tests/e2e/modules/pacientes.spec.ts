@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
-test.describe('Módulo PACIENTES - E2E Tests', () => {
+test.describe('PATIENTS Module - E2E Tests', () => {
   let authToken: string;
 
   test.beforeAll(async ({ request }) => {
