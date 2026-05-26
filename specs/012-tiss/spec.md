@@ -3,7 +3,7 @@
 **Short Name**: `tiss-integration`
 **Feature Branch**: `[012-tiss]`
 **Created**: 2026-05-17
-**Status**: Draft
+**Status**: Backfilled — ~65% Implemented (retroactive audit 2026-05-24)
 **Project**: OrthoPlus Enterprise
 **Priority**: P3 — Healthcare Compliance
 

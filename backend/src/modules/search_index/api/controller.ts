@@ -362,7 +362,7 @@ export class SearchIndexController {
     // Build window around first match with context
     const contextBefore = 40
     let start = Math.max(0, firstMatchIndex - contextBefore)
-    let end = Math.min(escaped.length, start + maxLen)
+    const end = Math.min(escaped.length, start + maxLen)
 
     // If window hits the end, shift start back to fill maxLen
     if (end === escaped.length && end - start < maxLen) {

@@ -4,7 +4,7 @@
 
 **Input**: Feature specification from `specs/012-tiss/spec.md`
 
-**Status**: Draft Plan — awaiting `/speckit-tasks` breakdown
+**Status**: Backfilled — ~65% Implemented (retroactive audit 2026-05-24)
 
 ---
 
@@ -109,23 +109,24 @@ apps/web/
 
 ### Phase 0: Research & Design (if needed)
 
-- [ ] Review existing `tiss_integration` Prisma models and API
-- [ ] Audit current frontend `tissintegration` components
-- [ ] Identify gaps between spec and current implementation
-- [ ] Document API contract changes
+- [x] Review existing `tiss` Prisma models and API
+- [x] Audit current frontend `tiss` components
+- [x] Identify gaps between spec and current implementation
+- [x] Document API contract changes
+  - Gap: frontend components use hardcoded mock data; not wired to backend APIs
 
 ### Phase 1: Database & Backend Foundation
 
 **Purpose**: Data layer and API endpoints — BLOCKS all UI work
 
-- [ ] P001 Prisma schema updates (new fields/models)
-- [ ] P002 Generate and verify migration
-- [ ] P003 [P] Extend Service layer with new operations
-- [ ] P004 [P] Extend Controller with new endpoints
-- [ ] P005 [P] Add DTOs/validation (Zod or class-validator)
-- [ ] P006 [P] Add clinicGuard to new routes
-- [ ] P007 [P] Write backend unit tests
-- [ ] P008 Run `pnpm type-check` and `pnpm test` (backend)
+- [x] P001 Prisma schema updates — `tiss_guides` and `tiss_batches` models exist
+- [x] P002 Generate and verify migration — models in schema.prisma
+- [x] P003 [P] Extend Service layer with new operations — controller implements CRUD + batch + stats
+- [x] P004 [P] Extend Controller with new endpoints — `TISSController` with 8 methods
+- [x] P005 [P] Add DTOs/validation — Zod schemas (`createGuiaSchema`, `updateGuiaSchema`, `createLoteSchema`, `submitBatchSchema`)
+- [x] P006 [P] Add clinicGuard to new routes — `router.use(clinicGuard)` applied
+- [x] P007 [P] Write backend unit tests — `tissController.test.ts` (413 lines, 30+ test cases)
+- [x] P008 Run `pnpm type-check` and `pnpm test` (backend) — tests passing
 
 **Checkpoint**: Backend API ready — all new endpoints return 200 with test data
 
@@ -133,11 +134,11 @@ apps/web/
 
 **Purpose**: Data access and shared components
 
-- [ ] P009 [P] Add/update React Query hooks for new endpoints
-- [ ] P010 [P] Add/update Zustand store (if needed)
-- [ ] P011 [P] Create/update reusable components in `tissintegration/ui/components/`
-- [ ] P012 [P] Add routes to AppRoutes.tsx (if new pages)
-- [ ] P013 [P] Run `pnpm type-check` (frontend)
+- [x] P009 [P] Add/update React Query hooks for new endpoints — `useTISS.ts` and `useTISSGuides.ts`
+- [x] P010 [P] Add/update Zustand store (if needed) — not needed
+- [~] P011 [P] Create/update reusable components in `tiss/presentation/components/` — components exist BUT use hardcoded mock data
+- [x] P012 [P] Add routes to AppRoutes.tsx — `/faturamento-tiss` route registered with `moduleKey: "TISS"`
+- [x] P013 [P] Run `pnpm type-check` (frontend) — passes
 
 **Checkpoint**: Frontend can fetch and display data from new backend endpoints
 
@@ -149,12 +150,12 @@ apps/web/
 
 **Independent Test**: o sistema processa corretamente e retorna feedback apropriado
 
-- [ ] US1-001 [P] UI: Cadastrar Convênio — main view/component
-- [ ] US1-002 [P] UI: Form/interaction handlers
-- [ ] US1-003 UI: Validation and error states
-- [ ] US1-004 UI: Success feedback (toast/redirect)
-- [ ] US1-005 [P] API integration: Connect to backend
-- [ ] US1-006 [P] Tests: Component + integration tests
+- [ ] US1-001 [P] UI: Cadastrar Convênio — main view/component — **MISSING** (no dedicated convênio management page)
+- [ ] US1-002 [P] UI: Form/interaction handlers — **MISSING**
+- [ ] US1-003 UI: Validation and error states — **MISSING**
+- [ ] US1-004 UI: Success feedback (toast/redirect) — **MISSING**
+- [ ] US1-005 [P] API integration: Connect to backend — **MISSING** (no convênio backend endpoints)
+- [ ] US1-006 [P] Tests: Component + integration tests — **MISSING**
 
 #### US2: Solicitar Autorização (GUIA TISS) (Priority: P1)
 
@@ -162,12 +163,12 @@ apps/web/
 
 **Independent Test**: mensagens de erro claras aparecem e o formulário não é submetido
 
-- [ ] US2-001 [P] UI: Solicitar Autorização (GUIA TISS) — main view/component
-- [ ] US2-002 [P] UI: Form/interaction handlers
-- [ ] US2-003 UI: Validation and error states
-- [ ] US2-004 UI: Success feedback (toast/redirect)
-- [ ] US2-005 [P] API integration: Connect to backend
-- [ ] US2-006 [P] Tests: Component + integration tests
+- [~] US2-001 [P] UI: Solicitar Autorização (GUIA TISS) — `TISSGuideForm` exists but uses hardcoded mock options
+- [ ] US2-002 [P] UI: Form/interaction handlers — **MISSING** (form is static, not wired to state/submission)
+- [ ] US2-003 UI: Validation and error states — **MISSING**
+- [ ] US2-004 UI: Success feedback (toast/redirect) — **MISSING**
+- [~] US2-005 [P] API integration: Connect to backend — `useTISSGuides` hook calls POST /tiss/guias but form doesn't use it
+- [x] US2-006 [P] Tests: Component + integration tests — `TISSGuideForm.test.tsx` exists
 
 #### US3: Consultar Status de Autorização (Priority: P2)
 
@@ -177,12 +178,12 @@ apps/web/
 
 ---
 
-- [ ] US3-001 [P] UI: Consultar Status de Autorização — main view/component
-- [ ] US3-002 [P] UI: Form/interaction handlers
-- [ ] US3-003 UI: Validation and error states
-- [ ] US3-004 UI: Success feedback (toast/redirect)
-- [ ] US3-005 [P] API integration: Connect to backend
-- [ ] US3-006 [P] Tests: Component + integration tests
+- [~] US3-001 [P] UI: Consultar Status de Autorização — `TISSBatchList` exists but displays hardcoded mock data
+- [ ] US3-002 [P] UI: Form/interaction handlers — **MISSING**
+- [ ] US3-003 UI: Validation and error states — **MISSING**
+- [ ] US3-004 UI: Success feedback (toast/redirect) — **MISSING**
+- [~] US3-005 [P] API integration: Connect to backend — `useTISSGuides` fetches batches but `TISSBatchList` doesn't consume it
+- [x] US3-006 [P] Tests: Component + integration tests — `TISSBatchList.test.tsx` exists
 
 #### US4: Faturamento de Glosas (Priority: P3)
 
@@ -190,31 +191,31 @@ apps/web/
 
 **Independent Test**: Verify via UI + API test
 
-- [ ] US4-001 [P] UI: Faturamento de Glosas — main view/component
-- [ ] US4-002 [P] UI: Form/interaction handlers
-- [ ] US4-003 UI: Validation and error states
-- [ ] US4-004 UI: Success feedback (toast/redirect)
-- [ ] US4-005 [P] API integration: Connect to backend
-- [ ] US4-006 [P] Tests: Component + integration tests
+- [ ] US4-001 [P] UI: Faturamento de Glosas — **MISSING**
+- [ ] US4-002 [P] UI: Form/interaction handlers — **MISSING**
+- [ ] US4-003 UI: Validation and error states — **MISSING**
+- [ ] US4-004 UI: Success feedback (toast/redirect) — **MISSING**
+- [ ] US4-005 [P] API integration: Connect to backend — **MISSING** (no glosa backend endpoints)
+- [ ] US4-006 [P] Tests: Component + integration tests — **MISSING**
 
 ### Phase 4: Edge Cases & Polish
 
-- [ ] EC1 Handle: Dados Inválidos — Validação retorna erro 400 com mensagem específica. Nenhum dado é persistido.
-- [ ] EC2 Handle: Acesso Não Autorizado — Resposta 403 com mensagem "Acesso negado"
-- [ ] EC3 Handle: clinicId Inválido — clinicGuard rejeita com 403
+- [x] EC1 Handle: Dados Inválidos — Backend Zod validation returns 400 with details; frontend form validation **MISSING**
+- [x] EC2 Handle: Acesso Não Autorizado — clinicGuard returns 403; controller checks clinicId
+- [x] EC3 Handle: clinicId Inválido — clinicGuard rejects with 403
 
 ---
 
 ### Phase 5: Quality Gates
 
-- [ ] QG-01 `pnpm type-check` passes (0 errors)
-- [ ] QG-02 `pnpm lint` passes (0 errors)
-- [ ] QG-03 `pnpm build` succeeds
-- [ ] QG-04 Backend tests pass
-- [ ] QG-05 e2e tests pass (Playwright)
-- [ ] QG-06 clinicGuard applied to all new routes
-- [ ] QG-07 No new `as any` or `@ts-ignore`
-- [ ] QG-08 `@orthoplus/core-ui` used for all generic UI
+- [x] QG-01 `pnpm type-check` passes (0 errors)
+- [x] QG-02 `pnpm lint` passes (0 errors)
+- [x] QG-03 `pnpm build` succeeds
+- [x] QG-04 Backend tests pass — `tissController.test.ts` passing
+- [ ] QG-05 e2e tests pass (Playwright) — **MISSING**
+- [x] QG-06 clinicGuard applied to all new routes
+- [ ] QG-07 No new `as any` or `@ts-ignore` — **VIOLATION**: controller uses `(prisma as any)` extensively
+- [x] QG-08 `@orthoplus/core-ui` used for all generic UI
 
 ---
 
