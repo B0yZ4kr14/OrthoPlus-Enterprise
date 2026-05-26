@@ -7,11 +7,10 @@ import type { Tables } from "@/types/database";
 export class DbContaReceberRepository implements IContaReceberRepository {
   async findById(id: string): Promise<ContaReceber | null> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">>(
+      const data = await apiClient.get<Tables<"contas_receber">>(
         `/financeiro/contas-receber/${id}`,
       );
       if (!data) return null;
-      // @ts-expect-error — TS2345
       return ContaReceberMapper.toDomain(data);
     } catch {
       return null;
@@ -20,10 +19,9 @@ export class DbContaReceberRepository implements IContaReceberRepository {
 
   async findByClinicId(clinicId: string): Promise<ContaReceber[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Tables<"contas_receber">[]>(
         "/financeiro/contas-receber",
       );
-      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -35,11 +33,10 @@ export class DbContaReceberRepository implements IContaReceberRepository {
     patientId: string,
   ): Promise<ContaReceber[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Tables<"contas_receber">[]>(
         "/financeiro/contas-receber",
         { params: { patient_id: patientId } },
       );
-      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -48,11 +45,10 @@ export class DbContaReceberRepository implements IContaReceberRepository {
 
   async findPendentes(clinicId: string): Promise<ContaReceber[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Tables<"contas_receber">[]>(
         "/financeiro/contas-receber",
         { params: { status: "PENDENTE" } },
       );
-      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -62,11 +58,10 @@ export class DbContaReceberRepository implements IContaReceberRepository {
   async findVencidas(clinicId: string): Promise<ContaReceber[]> {
     const hoje = new Date().toISOString().split("T")[0];
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Tables<"contas_receber">[]>(
         "/financeiro/contas-receber",
         { params: { status: "PENDENTE", vencidas_antes: hoje } },
       );
-      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];
@@ -79,7 +74,7 @@ export class DbContaReceberRepository implements IContaReceberRepository {
     endDate: Date,
   ): Promise<ContaReceber[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Tables<"contas_receber">[]>(
         "/financeiro/contas-receber",
         {
           params: {
@@ -88,7 +83,6 @@ export class DbContaReceberRepository implements IContaReceberRepository {
           },
         },
       );
-      // @ts-expect-error — TS2345
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
     } catch {
       return [];

@@ -56,8 +56,7 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
         end_date: endDate.toISOString(),
       },
     });
-    // @ts-expect-error — TS2345
-    return data.map(AppointmentMapper.toDomain);
+    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
   }
 
   async findByDentistAndDateRange(
@@ -72,8 +71,7 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
         end_date: endDate.toISOString(),
       },
     });
-    // @ts-expect-error — TS2345
-    return data.map(AppointmentMapper.toDomain);
+    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
   }
 
   async findConflicts(
@@ -107,8 +105,7 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
       });
       return data
         .filter((a) => a.id !== excludeId)
-        // @ts-expect-error — TS2345
-        .map(AppointmentMapper.toDomain);
+        .map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
     }
     return [];
   }
@@ -119,8 +116,7 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
       `/agenda/appointments/${appointment.id}`,
       data,
     );
-    // @ts-expect-error — TS2345
-    return AppointmentMapper.toDomain(result);
+    return AppointmentMapper.toDomain(result as Parameters<typeof AppointmentMapper.toDomain>[0]);
   }
 
   async delete(id: string): Promise<void> {

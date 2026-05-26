@@ -1,4 +1,5 @@
 import { Odontograma, OdontogramaProps } from "@/domain/entities/Odontograma";
+import { ToothData, OdontogramaHistoryEntry } from "@/modules/pep/types/odontograma.types";
 import { Database } from "@/types/database";
 
 type OdontogramaRow = Database["public"]["Tables"]["odontogramas"]["Row"];
@@ -15,11 +16,9 @@ export class OdontogramaMapper {
     const props: OdontogramaProps = {
       id: row.id,
       prontuarioId: row.prontuario_id,
-      // @ts-expect-error — TS2322
-      teeth: row.teeth as unknown, // JSONB será parseado automaticamente
+      teeth: row.teeth as unknown as Record<number, ToothData>, // JSONB será parseado automaticamente
       lastUpdated: new Date(row.last_updated),
-      // @ts-expect-error — TS2740
-      history: (row.history as unknown) || [],
+      history: (row.history as unknown as OdontogramaHistoryEntry[]) || [],
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
     };
@@ -35,11 +34,9 @@ export class OdontogramaMapper {
       id: entity.id,
       prontuario_id: entity.prontuarioId,
       clinic_id: clinicId,
-      // @ts-expect-error — TS2322
-      teeth: entity.teeth as unknown,
+      teeth: entity.teeth as unknown as OdontogramaInsert["teeth"],
       last_updated: entity.lastUpdated.toISOString(),
-      // @ts-expect-error — TS2322
-      history: entity.history as unknown,
+      history: entity.history as unknown as OdontogramaInsert["history"],
       created_at: entity.createdAt.toISOString(),
       updated_at: entity.updatedAt.toISOString(),
     };

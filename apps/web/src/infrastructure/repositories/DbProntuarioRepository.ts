@@ -7,15 +7,16 @@ import { ProntuarioMapper } from "../mappers/ProntuarioMapper";
 export class DbProntuarioRepository implements IProntuarioRepository {
   async findById(id: string): Promise<Prontuario | null> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"patient_records">>(
+      const data = await apiClient.get<Record<string, any>>(
         `/pep/prontuarios/${id}`,
       );
       if (!data) return null;
-      return ProntuarioMapper.toDomain(data);
+      return ProntuarioMapper.toDomain(data as Parameters<typeof ProntuarioMapper.toDomain>[0]);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar prontuário", error);
+      throw new InfrastructureError(
+        "Erro ao buscar prontuário",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 
@@ -24,12 +25,11 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     clinicId: string,
   ): Promise<Prontuario | null> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"patient_records">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         `/pep/prontuarios/patient/${patientId}`,
       );
       if (!data || data.length === 0) return null;
-      return ProntuarioMapper.toDomain(data[0]);
+      return ProntuarioMapper.toDomain(data[0] as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0]);
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário do paciente",
@@ -41,9 +41,8 @@ export class DbProntuarioRepository implements IProntuarioRepository {
   async findByClinicId(clinicId: string): Promise<Prontuario[]> {
     try {
       const data =
-        // @ts-expect-error — TS2304
-        await apiClient.get<Tables<"patient_records">[]>("/pep/prontuarios");
-      return (data || []).map(ProntuarioMapper.toDomain);
+        await apiClient.get<Record<string, any>[]>("/pep/prontuarios");
+      return (data || []).map((d) => ProntuarioMapper.toDomain(d as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0]));
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuários da clínica",
@@ -61,13 +60,12 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     clinicId: string,
   ): Promise<Prontuario | null> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"patient_records">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/pep/prontuarios",
         { params: { search: numero } },
       );
       if (!data || data.length === 0) return null;
-      return ProntuarioMapper.toDomain(data[0]);
+      return ProntuarioMapper.toDomain(data[0] as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0]);
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário por número",
@@ -81,8 +79,10 @@ export class DbProntuarioRepository implements IProntuarioRepository {
       const data = ProntuarioMapper.toInsert(prontuario);
       await apiClient.post("/pep/prontuarios", data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao salvar prontuário", error);
+      throw new InfrastructureError(
+        "Erro ao salvar prontuário",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 
@@ -91,8 +91,10 @@ export class DbProntuarioRepository implements IProntuarioRepository {
       const data = ProntuarioMapper.toPersistence(prontuario);
       await apiClient.patch(`/pep/prontuarios/${prontuario.id}`, data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao atualizar prontuário", error);
+      throw new InfrastructureError(
+        "Erro ao atualizar prontuário",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 
@@ -100,8 +102,10 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     try {
       await apiClient.delete(`/pep/prontuarios/${id}`);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao deletar prontuário", error);
+      throw new InfrastructureError(
+        "Erro ao deletar prontuário",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 }

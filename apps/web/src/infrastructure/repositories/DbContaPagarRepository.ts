@@ -7,12 +7,11 @@ import type { Tables } from "@/types/database";
 export class DbContaPagarRepository implements IContaPagarRepository {
   async findById(id: string): Promise<ContaPagar | null> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">>(
+      const data = await apiClient.get<Record<string, any>>(
         `/financeiro/contas-pagar/${id}`,
       );
       if (!data) return null;
-      // @ts-expect-error — TS2345
-      return ContaPagarMapper.toDomain(data);
+      return ContaPagarMapper.toDomain(data as Parameters<typeof ContaPagarMapper.toDomain>[0]);
     } catch {
       return null;
     }
@@ -20,11 +19,10 @@ export class DbContaPagarRepository implements IContaPagarRepository {
 
   async findByClinicId(clinicId: string): Promise<ContaPagar[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/financeiro/contas-pagar",
       );
-      // @ts-expect-error — TS2345
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row));
+      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
     } catch {
       return [];
     }
@@ -32,12 +30,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
 
   async findPendentes(clinicId: string): Promise<ContaPagar[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/financeiro/contas-pagar",
         { params: { status: "PENDENTE" } },
       );
-      // @ts-expect-error — TS2345
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row));
+      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
     } catch {
       return [];
     }
@@ -46,12 +43,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
   async findVencidas(clinicId: string): Promise<ContaPagar[]> {
     const hoje = new Date().toISOString().split("T")[0];
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/financeiro/contas-pagar",
         { params: { status: "PENDENTE", vencidas_antes: hoje } },
       );
-      // @ts-expect-error — TS2345
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row));
+      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
     } catch {
       return [];
     }
@@ -62,12 +58,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
     fornecedor: string,
   ): Promise<ContaPagar[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/financeiro/contas-pagar",
         { params: { fornecedor } },
       );
-      // @ts-expect-error — TS2345
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row));
+      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
     } catch {
       return [];
     }
@@ -78,12 +73,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
     categoria: CategoriaContaPagar,
   ): Promise<ContaPagar[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/financeiro/contas-pagar",
         { params: { categoria } },
       );
-      // @ts-expect-error — TS2345
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row));
+      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
     } catch {
       return [];
     }
@@ -95,7 +89,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
     endDate: Date,
   ): Promise<ContaPagar[]> {
     try {
-      const data = await apiClient.get<Tables<"financial_transactions">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/financeiro/contas-pagar",
         {
           params: {
@@ -104,8 +98,7 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           },
         },
       );
-      // @ts-expect-error — TS2345
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row));
+      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
     } catch {
       return [];
     }
