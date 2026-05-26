@@ -70,7 +70,7 @@ Módulos com maior churn e complexidade:
 | 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal | ✅ **CONCLUÍDO** |
 | 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais | ✅ **CONCLUÍDO** |
 | 7 | `inventario` | 21 | Inventário — controle de estoque | ✅ **CONCLUÍDO** |
-| 8 | `contratos` | 10 | Contratos — dados financeiros | ⏳ Pendente |
+| 8 | `contratos` | 10 | Contratos — dados financeiros | ✅ **CONCLUÍDO** |
 
 ### T2.1 — auth (CONCLUÍDO ✅)
 - [x] Criar `domain/repositories/IUserRepository.ts` (interface com tipos Prisma)
@@ -132,7 +132,15 @@ Módulos com maior churn e complexidade:
 - [x] 636/636 unit tests passam
 - [x] Commit: `f724aed7a`
 
-### T2.8 — contratos (PENDENTE)
+### T2.8 — contratos (CONCLUÍDO ✅)
+- [x] Criar `domain/repositories/IContratosRepository.ts` (interface com tipos Prisma)
+- [x] Criar `infrastructure/ContratosRepository.ts` (implementação Prisma)
+- [x] Refatorar `ContratosController` para depender de `IContratosRepository`
+  em vez de 7 chamadas diretas `(prisma as any).contratos`
+- [x] Eliminar 7 comentários `eslint-disable-line @typescript-eslint/no-explicit-any`
+- [x] Build passa (0 erros TypeScript)
+- [x] 636/636 unit tests passam
+- [x] Commit: `35322c839`
 Para cada módulo:
 1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
 2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)
