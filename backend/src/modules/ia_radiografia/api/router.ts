@@ -1,4 +1,5 @@
 import { Router } from "express"
+import { asyncHandler } from "@/middleware/errorHandler"
 import { IARadiografiaController } from "./controller"
 import { clinicGuard } from "@/middleware/clinicGuard"
 import { authMiddleware } from "@/middleware/authMiddleware"
@@ -17,20 +18,20 @@ router.use(aiFeatureFlagGuard)
 router.use(iaRateLimiter)
 
 // Consentimento LGPD
-router.post("/consentimento", controller.registrarConsentimento)
-router.get("/consentimento/:pacienteId", controller.obterConsentimento)
-router.delete("/consentimento/:pacienteId", controller.revogarConsentimento)
+router.post("/consentimento", asyncHandler(controller.registrarConsentimento.bind(controller)))
+router.get("/consentimento/:pacienteId", asyncHandler(controller.obterConsentimento.bind(controller)))
+router.delete("/consentimento/:pacienteId", asyncHandler(controller.revogarConsentimento.bind(controller)))
 
 // Analises
 router.post(
   "/upload-e-analisar",
   upload.single("file"),
-  controller.uploadEAnalisar,
+  asyncHandler(controller.uploadEAnalisar.bind(controller)),
 )
-router.get("/analises", controller.listarAnalises)
-router.get("/analises/:id", controller.obterAnalise)
-router.get("/analises/:id/audit", controller.obterAuditoriaAnalise)
-router.patch("/analises/:id/revisar", controller.revisarAnalise)
-router.get("/insights", controller.obterInsights)
+router.get("/analises", asyncHandler(controller.listarAnalises.bind(controller)))
+router.get("/analises/:id", asyncHandler(controller.obterAnalise.bind(controller)))
+router.get("/analises/:id/audit", asyncHandler(controller.obterAuditoriaAnalise.bind(controller)))
+router.patch("/analises/:id/revisar", asyncHandler(controller.revisarAnalise.bind(controller)))
+router.get("/insights", asyncHandler(controller.obterInsights.bind(controller)))
 
 export default router

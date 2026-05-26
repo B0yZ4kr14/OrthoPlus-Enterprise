@@ -148,12 +148,8 @@ describe('IARadiografiaController', () => {
       req.body = { patient_id: 'patient-1', tipo_radiografia: 'PANORAMICA' }
       req.file = { buffer: Buffer.from('fake-image') } as any
 
-      await controller.uploadEAnalisar(req as Request, res as Response)
-
-      expect(statusMock).toHaveBeenCalledWith(403)
-      expect(jsonMock).toHaveBeenCalledWith(
-        expect.objectContaining({ code: 'CONSENTIMENTO_AUSENTE' })
-      )
+      await expect(controller.uploadEAnalisar(req as Request, res as Response))
+        .rejects.toThrow('Consentimento LGPD necessario')
     })
 
     it('should allow upload when patient has LGPD consent', async () => {
@@ -196,12 +192,8 @@ describe('IARadiografiaController', () => {
       req.body = { patient_id: 'patient-1', tipo_radiografia: 'PANORAMICA' }
       req.file = { buffer: Buffer.from('fake-image') } as any
 
-      await controller.uploadEAnalisar(req as Request, res as Response)
-
-      expect(statusMock).toHaveBeenCalledWith(400)
-      expect(jsonMock).toHaveBeenCalledWith(
-        expect.objectContaining({ error: expect.stringContaining('PII') })
-      )
+      await expect(controller.uploadEAnalisar(req as Request, res as Response))
+        .rejects.toThrow('Imagem contem possiveis metadados PII')
     })
   })
 
@@ -251,14 +243,8 @@ describe('IARadiografiaController', () => {
       req.body = { assinatura_digital: 'signed' }
       mockPrismaFindFirst.mockResolvedValue({ id: 'analise-1', clinic_id: 'clinic-123' })
 
-      await controller.revisarAnalise(req as Request, res as Response)
-
-      expect(statusMock).toHaveBeenCalledWith(400)
-      expect(jsonMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          error: expect.stringContaining('Observacoes'),
-        })
-      )
+      await expect(controller.revisarAnalise(req as Request, res as Response))
+        .rejects.toThrow('Observacoes e assinatura digital sao obrigatorias')
     })
 
     it('should return 400 when assinatura_digital is missing', async () => {
@@ -266,14 +252,8 @@ describe('IARadiografiaController', () => {
       req.body = { observacoes_dentista: 'Looks good' }
       mockPrismaFindFirst.mockResolvedValue({ id: 'analise-1', clinic_id: 'clinic-123' })
 
-      await controller.revisarAnalise(req as Request, res as Response)
-
-      expect(statusMock).toHaveBeenCalledWith(400)
-      expect(jsonMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          error: expect.stringContaining('assinatura'),
-        })
-      )
+      await expect(controller.revisarAnalise(req as Request, res as Response))
+        .rejects.toThrow('Observacoes e assinatura digital sao obrigatorias')
     })
 
     it('should return 404 when analysis does not exist', async () => {
@@ -281,9 +261,8 @@ describe('IARadiografiaController', () => {
       req.body = { observacoes_dentista: 'Looks good', assinatura_digital: 'signed' }
       mockPrismaFindFirst.mockResolvedValue(null)
 
-      await controller.revisarAnalise(req as Request, res as Response)
-
-      expect(statusMock).toHaveBeenCalledWith(404)
+      await expect(controller.revisarAnalise(req as Request, res as Response))
+        .rejects.toThrow("Analise with id 'nonexistent' not found")
     })
   })
 
@@ -329,12 +308,8 @@ describe('IARadiografiaController', () => {
       req.body = { patient_id: 'patient-1', tipo_radiografia: 'PANORAMICA' }
       req.file = { buffer: Buffer.from('fake-image') } as any
 
-      await controller.uploadEAnalisar(req as Request, res as Response)
-
-      expect(statusMock).toHaveBeenCalledWith(403)
-      expect(jsonMock).toHaveBeenCalledWith(
-        expect.objectContaining({ code: 'CONSENTIMENTO_AUSENTE' })
-      )
+      await expect(controller.uploadEAnalisar(req as Request, res as Response))
+        .rejects.toThrow('Consentimento LGPD necessario')
     })
   })
 
@@ -344,9 +319,8 @@ describe('IARadiografiaController', () => {
       mockPrismaFindFirst.mockResolvedValue(null)
       req.params = { id: 'analise-other-clinic' }
 
-      await controller.obterAuditoriaAnalise(req as Request, res as Response)
-
-      expect(statusMock).toHaveBeenCalledWith(404)
+      await expect(controller.obterAuditoriaAnalise(req as Request, res as Response))
+        .rejects.toThrow("Analise with id 'analise-other-clinic' not found")
     })
 
     it('should return audit records for analysis in same clinic', async () => {

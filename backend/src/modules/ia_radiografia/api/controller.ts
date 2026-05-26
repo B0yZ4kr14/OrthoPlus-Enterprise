@@ -1,9 +1,11 @@
 import { Request, Response } from "express"
-import { prisma } from "@/infrastructure/database/prismaClient"
+import { Errors, ApiError, ErrorCodes } from "@/middleware/errorHandler"
 import { IAConsentimentoService } from "../domain/services/IAConsentimentoService"
 import { IAAuditService } from "../domain/services/IAAuditService"
 import { IAEncryptionService } from "../domain/services/IAEncryptionService"
 import { DicomMetadataStripper } from "../domain/services/DicomMetadataStripper"
+import { IIARadiografiaRepository } from "../domain/repositories/IIARadiografiaRepository"
+import { IARadiografiaRepository } from "../infrastructure/IARadiografiaRepository"
 
 import { AcaoAuditIA, TipoRadiografia } from "@prisma/client"
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
@@ -20,388 +22,310 @@ const auditService = new IAAuditService()
 const encryptionService = new IAEncryptionService()
 const stripper = new DicomMetadataStripper()
 
-
 export class IARadiografiaController {
+  constructor(private repo: IIARadiografiaRepository = new IARadiografiaRepository()) {}
+
   /**
    * POST /ia-radiografia/upload-e-analisar
    */
   async uploadEAnalisar(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const dentistaId = req.user?.id as string
-      const { patient_id, prontuario_id, tipo_radiografia } = req.body
+    const clinicId = req.clinicId as string
+    const dentistaId = req.user?.id as string
+    const { patient_id, prontuario_id, tipo_radiografia } = req.body
 
-      if (!req.file) {
-        return res.status(400).json({ error: "Nenhuma imagem enviada" })
-      }
-
-      // 1. Verificar consentimento LGPD
-      const temConsentimento = await consentimentoService.verificarConsentimento(
-        patient_id,
-        clinicId,
-      )
-      if (!temConsentimento) {
-        return res.status(403).json({
-          error: "Consentimento LGPD necessario",
-          code: "CONSENTIMENTO_AUSENTE",
-        })
-      }
-
-      // 2. Strip metadados DICOM/EXIF
-      const { cleanBuffer, originalHash, cleanHash } = await stripper.strip(req.file.buffer)
-      const piiCheck = await stripper.validateNoPII(cleanBuffer)
-      if (!piiCheck) {
-        return res.status(400).json({ error: "Imagem contem possiveis metadados PII" })
-      }
-
-      // 3. Salvar arquivo em storage local
-      const storageDir = path.join(process.cwd(), "uploads", "ia-radiografia", clinicId, patient_id)
-      fs.mkdirSync(storageDir, { recursive: true })
-      const storageFileName = `${Date.now()}.png`
-      const storagePath = path.join(storageDir, storageFileName)
-      fs.writeFileSync(storagePath, cleanBuffer)
-
-      // 4. Criar registro de analise
-      const analise = await prisma.ia_radiografia_analise.create({
-        data: {
-          clinic_id: clinicId,
-          paciente_id: patient_id,
-          prontuario_id: prontuario_id || null,
-          dentista_id: dentistaId,
-          imagem_hash: originalHash,
-          imagem_storage_path: `uploads/ia-radiografia/${clinicId}/${patient_id}/${storageFileName}`,
-          tipo_radiografia: tipo_radiografia as TipoRadiografia,
-          status: "PENDENTE",
-          modelo_usado: process.env.AI_LOCAL_MODEL || "local/llama-3.3",
-        },
-      })
-
-      // 5. Audit log
-      await auditService.registrarAcao({
-        analiseId: analise.id,
-        clinicId,
-        pacienteId: patient_id,
-        dentistaId,
-        acao: AcaoAuditIA.UPLOAD,
-        ipAddress: req.ip,
-        userAgent: req.headers["user-agent"],
-        detalhes: { originalHash, cleanHash, tipoRadiografia: tipo_radiografia },
-      })
-
-      // 5.1 Metrics
-      metrics.iaRadiografia.uploadsTotal.inc({
-        category: "pep",
-        tipo_radiografia: tipo_radiografia as string,
-        status: "success",
-      })
-
-      // 6. Enfileirar analise IA para worker async
-      await iaRadiografiaQueue.add(
-        "analyze",
-        {
-          analiseId: analise.id,
-          storagePath,
-          tipoRadiografia: tipo_radiografia as string,
-        },
-        {
-          delay: 0,
-          attempts: 2,
-          backoff: { type: "exponential", delay: 5000 },
-        },
-      )
-
-      return res.status(202).json({
-        id: analise.id,
-        status: "PENDENTE",
-        message: "Analise enfileirada para processamento",
-      })
-    } catch (error) {
-      console.error("[IA-Radiografia] Upload error:", error)
-      return res.status(500).json({ error: "Erro ao processar upload" })
+    if (!req.file) {
+      throw Errors.validation("Nenhuma imagem enviada")
     }
+
+    // 1. Verificar consentimento LGPD
+    const temConsentimento = await consentimentoService.verificarConsentimento(
+      patient_id,
+      clinicId,
+    )
+    if (!temConsentimento) {
+      throw new ApiError(403, ErrorCodes.FORBIDDEN, "Forbidden", "Consentimento LGPD necessario")
+    }
+
+    // 2. Strip metadados DICOM/EXIF
+    const { cleanBuffer, originalHash, cleanHash } = await stripper.strip(req.file.buffer)
+    const piiCheck = await stripper.validateNoPII(cleanBuffer)
+    if (!piiCheck) {
+      throw Errors.validation("Imagem contem possiveis metadados PII")
+    }
+
+    // 3. Salvar arquivo em storage local
+    const storageDir = path.join(process.cwd(), "uploads", "ia-radiografia", clinicId, patient_id)
+    fs.mkdirSync(storageDir, { recursive: true })
+    const storageFileName = `${Date.now()}.png`
+    const storagePath = path.join(storageDir, storageFileName)
+    fs.writeFileSync(storagePath, cleanBuffer)
+
+    // 4. Criar registro de analise
+    const analise = await this.repo.createAnalise({
+      clinic_id: clinicId,
+      paciente_id: patient_id,
+      prontuario_id: prontuario_id || null,
+      dentista_id: dentistaId,
+      imagem_hash: originalHash,
+      imagem_storage_path: `uploads/ia-radiografia/${clinicId}/${patient_id}/${storageFileName}`,
+      tipo_radiografia: tipo_radiografia as TipoRadiografia,
+      status: "PENDENTE",
+      modelo_usado: process.env.AI_LOCAL_MODEL || "local/llama-3.3",
+    })
+
+    // 5. Audit log
+    await auditService.registrarAcao({
+      analiseId: analise.id,
+      clinicId,
+      pacienteId: patient_id,
+      dentistaId,
+      acao: AcaoAuditIA.UPLOAD,
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+      detalhes: { originalHash, cleanHash, tipoRadiografia: tipo_radiografia },
+    })
+
+    // 5.1 Metrics
+    metrics.iaRadiografia.uploadsTotal.inc({
+      category: "pep",
+      tipo_radiografia: tipo_radiografia as string,
+      status: "success",
+    })
+
+    // 6. Enfileirar analise IA para worker async
+    await iaRadiografiaQueue.add(
+      "analyze",
+      {
+        analiseId: analise.id,
+        storagePath,
+        tipoRadiografia: tipo_radiografia as string,
+      },
+      {
+        delay: 0,
+        attempts: 2,
+        backoff: { type: "exponential", delay: 5000 },
+      },
+    )
+
+    res.status(202).json({
+      id: analise.id,
+      status: "PENDENTE",
+      message: "Analise enfileirada para processamento",
+    })
   }
 
   /**
    * GET /ia-radiografia/analises
    */
   async listarAnalises(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const analises = await prisma.ia_radiografia_analise.findMany({
-        where: { clinic_id: clinicId },
-        orderBy: { created_at: "desc" },
-        select: {
-          id: true,
-          paciente_id: true,
-          tipo_radiografia: true,
-          status: true,
-          confidence_score: true,
-          revisada: true,
-          created_at: true,
-        },
-      })
-      return res.json(analises)
-    } catch (error) {
-      console.error("[IA-Radiografia] List error:", error)
-      return res.status(500).json({ error: "Erro ao listar analises" })
-    }
+    const clinicId = req.clinicId as string
+    const analises = await this.repo.findAnalisesByClinic(clinicId)
+    res.json(analises)
   }
 
   /**
    * GET /ia-radiografia/analises/:id
    */
   async obterAnalise(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const dentistaId = req.user?.id as string
-      const { id } = req.params
+    const clinicId = req.clinicId as string
+    const dentistaId = req.user?.id as string
+    const { id } = req.params
 
-      const analise = await prisma.ia_radiografia_analise.findFirst({
-        where: { id, clinic_id: clinicId },
-      })
+    const analise = await this.repo.findAnaliseById(id, clinicId)
 
-      if (!analise) {
-        return res.status(404).json({ error: "Analise nao encontrada" })
-      }
-
-      // Descriptografar resultado se existir
-      let resultadoDecriptado = null
-      if (analise.resultado_ia) {
-        const encrypted = analise.resultado_ia as { iv: string; ciphertext: string; tag: string }
-        resultadoDecriptado = encryptionService.decrypt(encrypted, analise.id)
-      }
-
-      // Audit log
-      await auditService.registrarAcao({
-        analiseId: analise.id,
-        clinicId,
-        pacienteId: analise.paciente_id,
-        dentistaId,
-        acao: AcaoAuditIA.VISUALIZAR,
-        ipAddress: req.ip,
-        userAgent: req.headers["user-agent"],
-      })
-
-      return res.json({
-        ...analise,
-        resultado_ia: resultadoDecriptado,
-      })
-    } catch (error) {
-      console.error("[IA-Radiografia] Get error:", error)
-      return res.status(500).json({ error: "Erro ao obter analise" })
+    if (!analise) {
+      throw Errors.notFound("Analise", id)
     }
+
+    // Descriptografar resultado se existir
+    let resultadoDecriptado = null
+    if (analise.resultado_ia) {
+      const encrypted = analise.resultado_ia as { iv: string; ciphertext: string; tag: string }
+      resultadoDecriptado = encryptionService.decrypt(encrypted, analise.id)
+    }
+
+    // Audit log
+    await auditService.registrarAcao({
+      analiseId: analise.id,
+      clinicId,
+      pacienteId: analise.paciente_id,
+      dentistaId,
+      acao: AcaoAuditIA.VISUALIZAR,
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    })
+
+    res.json({
+      ...analise,
+      resultado_ia: resultadoDecriptado,
+    })
   }
 
   /**
    * GET /ia-radiografia/analises/:id/audit
    */
   async obterAuditoriaAnalise(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const { id } = req.params
+    const clinicId = req.clinicId as string
+    const { id } = req.params
 
-      const analise = await prisma.ia_radiografia_analise.findFirst({
-        where: { id, clinic_id: clinicId },
-      })
+    const analise = await this.repo.findAnaliseById(id, clinicId)
 
-      if (!analise) {
-        return res.status(404).json({ error: "Analise nao encontrada" })
-      }
-
-      const auditoria = await auditService.obterAuditoriaPorAnalise(id)
-
-      return res.json(auditoria)
-    } catch (error) {
-      console.error("[IA-Radiografia] Audit get error:", error)
-      return res.status(500).json({ error: "Erro ao obter auditoria" })
+    if (!analise) {
+      throw Errors.notFound("Analise", id)
     }
+
+    const auditoria = await auditService.obterAuditoriaPorAnalise(id)
+
+    res.json(auditoria)
   }
 
   /**
    * PATCH /ia-radiografia/analises/:id/revisar
    */
   async revisarAnalise(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const dentistaRevisorId = req.user?.id as string
-      const { id } = req.params
-      const { observacoes_dentista, assinatura_digital } = req.body
+    const clinicId = req.clinicId as string
+    const dentistaRevisorId = req.user?.id as string
+    const { id } = req.params
+    const { observacoes_dentista, assinatura_digital } = req.body
 
-      if (!observacoes_dentista || !assinatura_digital) {
-        return res.status(400).json({
-          error: "Observacoes e assinatura digital sao obrigatorias",
-        })
-      }
-
-      const analise = await prisma.ia_radiografia_analise.findFirst({
-        where: { id, clinic_id: clinicId },
-      })
-
-      if (!analise) {
-        return res.status(404).json({ error: "Analise nao encontrada" })
-      }
-
-      // Hash da assinatura para auditoria
-      const assinaturaHash = crypto.createHash("sha256").update(assinatura_digital).digest("hex")
-
-      await prisma.ia_radiografia_analise.update({
-        where: { id },
-        data: {
-          revisada: true,
-          dentista_revisor_id: dentistaRevisorId,
-          observacoes_dentista,
-          assinatura_digital: assinaturaHash,
-        },
-      })
-
-      await auditService.registrarAcao({
-        analiseId: analise.id,
-        clinicId,
-        pacienteId: analise.paciente_id,
-        dentistaId: dentistaRevisorId,
-        acao: AcaoAuditIA.REVISAR,
-        detalhes: { assinaturaHash },
-      })
-
-      metrics.iaRadiografia.reviewsTotal.inc({ category: "pep" })
-
-      return res.json({ message: "Analise revisada com sucesso" })
-    } catch (error) {
-      console.error("[IA-Radiografia] Review error:", error)
-      return res.status(500).json({ error: "Erro ao revisar analise" })
+    if (!observacoes_dentista || !assinatura_digital) {
+      throw Errors.validation("Observacoes e assinatura digital sao obrigatorias")
     }
+
+    const analise = await this.repo.findAnaliseById(id, clinicId)
+
+    if (!analise) {
+      throw Errors.notFound("Analise", id)
+    }
+
+    // Hash da assinatura para auditoria
+    const assinaturaHash = crypto.createHash("sha256").update(assinatura_digital).digest("hex")
+
+    await this.repo.updateAnalise(id, {
+      revisada: true,
+      dentista_revisor_id: dentistaRevisorId,
+      observacoes_dentista,
+      assinatura_digital: assinaturaHash,
+    })
+
+    await auditService.registrarAcao({
+      analiseId: analise.id,
+      clinicId,
+      pacienteId: analise.paciente_id,
+      dentistaId: dentistaRevisorId,
+      acao: AcaoAuditIA.REVISAR,
+      detalhes: { assinaturaHash },
+    })
+
+    metrics.iaRadiografia.reviewsTotal.inc({ category: "pep" })
+
+    res.json({ message: "Analise revisada com sucesso" })
   }
 
   /**
    * POST /ia-radiografia/consentimento
    */
   async registrarConsentimento(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const { paciente_id, consentido, hash_termo } = req.body
+    const clinicId = req.clinicId as string
+    const { paciente_id, consentido, hash_termo } = req.body
 
-      const result = await consentimentoService.registrarConsentimento({
-        pacienteId: paciente_id,
-        clinicId,
-        consentido,
-        ipAddress: req.ip || "unknown",
-        hashTermo: hash_termo,
-      })
+    const result = await consentimentoService.registrarConsentimento({
+      pacienteId: paciente_id,
+      clinicId,
+      consentido,
+      ipAddress: req.ip || "unknown",
+      hashTermo: hash_termo,
+    })
 
-      return res.status(201).json(result)
-    } catch (error) {
-      console.error("[IA-Radiografia] Consent error:", error)
-      return res.status(500).json({ error: "Erro ao registrar consentimento" })
-    }
+    res.status(201).json(result)
   }
 
   /**
    * GET /ia-radiografia/consentimento/:pacienteId
    */
   async obterConsentimento(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const { pacienteId } = req.params
+    const clinicId = req.clinicId as string
+    const { pacienteId } = req.params
 
-      const historico = await consentimentoService.obterHistoricoConsentimento(
-        pacienteId,
-        clinicId,
-      )
+    const historico = await consentimentoService.obterHistoricoConsentimento(
+      pacienteId,
+      clinicId,
+    )
 
-      const ativo = await consentimentoService.verificarConsentimento(pacienteId, clinicId)
+    const ativo = await consentimentoService.verificarConsentimento(pacienteId, clinicId)
 
-      return res.json({ ativo, historico })
-    } catch (error) {
-      console.error("[IA-Radiografia] Consent get error:", error)
-      return res.status(500).json({ error: "Erro ao obter consentimento" })
-    }
+    res.json({ ativo, historico })
   }
 
   /**
    * GET /ia-radiografia/insights
    */
   async obterInsights(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const { from, to } = req.query as { from?: string; to?: string }
+    const clinicId = req.clinicId as string
+    const { from, to } = req.query as { from?: string; to?: string }
 
-      const dateFilter: { gte?: Date; lte?: Date } = {}
-      if (from) dateFilter.gte = new Date(from)
-      if (to) dateFilter.lte = new Date(to)
+    const dateFilter: { gte?: Date; lte?: Date } = {}
+    if (from) dateFilter.gte = new Date(from)
+    if (to) dateFilter.lte = new Date(to)
 
-      const where = {
-        clinic_id: clinicId,
-        ...(Object.keys(dateFilter).length > 0 ? { created_at: dateFilter } : {}),
-      }
-
-      const [
-        totalAnalises,
-        analisesConcluidas,
-        analisesRevisadas,
-        avgConfidence,
-        avgProcessingTime,
-      ] = await Promise.all([
-        prisma.ia_radiografia_analise.count({ where }),
-        prisma.ia_radiografia_analise.count({ where: { ...where, status: "CONCLUIDA" } }),
-        prisma.ia_radiografia_analise.count({ where: { ...where, revisada: true } }),
-        prisma.ia_radiografia_analise.aggregate({
-          where: { ...where, confidence_score: { not: null } },
-          _avg: { confidence_score: true },
-        }),
-        prisma.ia_radiografia_analise.aggregate({
-          where: { ...where, processamento_ms: { not: null } },
-          _avg: { processamento_ms: true },
-        }),
-      ])
-
-      const taxaRevisao = totalAnalises > 0 ? (analisesRevisadas / totalAnalises) * 100 : 0
-
-      return res.json({
-        total_analises: totalAnalises,
-        analises_concluidas: analisesConcluidas,
-        taxa_sucesso: totalAnalises > 0 ? (analisesConcluidas / totalAnalises) * 100 : 0,
-        taxa_revisao: taxaRevisao,
-        precisao_media: Math.round(avgConfidence._avg.confidence_score || 0),
-        tempo_medio_processamento_ms: Math.round(avgProcessingTime._avg.processamento_ms || 0),
-        // Nota: distribuicao_problemas requer descriptografia individual (GAP-005)
-        // sera implementado quando problema_radiografico table for criada
-        distribuicao_problemas: [],
-      })
-    } catch (error) {
-      console.error("[IA-Radiografia] Insights error:", error)
-      return res.status(500).json({ error: "Erro ao obter insights" })
+    const where = {
+      clinic_id: clinicId,
+      ...(Object.keys(dateFilter).length > 0 ? { created_at: dateFilter } : {}),
     }
+
+    const [
+      totalAnalises,
+      analisesConcluidas,
+      analisesRevisadas,
+      avgConfidence,
+      avgProcessingTime,
+    ] = await Promise.all([
+      this.repo.countAnalises(where),
+      this.repo.countAnalises({ ...where, status: "CONCLUIDA" }),
+      this.repo.countAnalises({ ...where, revisada: true }),
+      this.repo.aggregateConfidence(where),
+      this.repo.aggregateProcessingTime(where),
+    ])
+
+    const taxaRevisao = totalAnalises > 0 ? (analisesRevisadas / totalAnalises) * 100 : 0
+
+    res.json({
+      total_analises: totalAnalises,
+      analises_concluidas: analisesConcluidas,
+      taxa_sucesso: totalAnalises > 0 ? (analisesConcluidas / totalAnalises) * 100 : 0,
+      taxa_revisao: taxaRevisao,
+      precisao_media: Math.round(avgConfidence._avg.confidence_score || 0),
+      tempo_medio_processamento_ms: Math.round(avgProcessingTime._avg.processamento_ms || 0),
+      // Nota: distribuicao_problemas requer descriptografia individual (GAP-005)
+      // sera implementado quando problema_radiografico table for criada
+      distribuicao_problemas: [],
+    })
   }
 
   /**
    * DELETE /ia-radiografia/consentimento/:pacienteId
    */
   async revogarConsentimento(req: Request, res: Response) {
-    try {
-      const clinicId = req.clinicId as string
-      const { pacienteId } = req.params
-      const { motivo } = req.body
+    const clinicId = req.clinicId as string
+    const { pacienteId } = req.params
+    const { motivo } = req.body
 
-      const result = await consentimentoService.revogarConsentimento({
-        pacienteId,
-        clinicId,
-        motivo: motivo || "Revogacao pelo paciente",
-      })
+    const result = await consentimentoService.revogarConsentimento({
+      pacienteId,
+      clinicId,
+      motivo: motivo || "Revogacao pelo paciente",
+    })
 
-      await auditService.registrarAcao({
-        clinicId,
-        pacienteId,
-        dentistaId: req.user?.id as string,
-        acao: AcaoAuditIA.REVOGAR_CONSENTIMENTO,
-        detalhes: { motivo },
-      })
+    await auditService.registrarAcao({
+      clinicId,
+      pacienteId,
+      dentistaId: req.user?.id as string,
+      acao: AcaoAuditIA.REVOGAR_CONSENTIMENTO,
+      detalhes: { motivo },
+    })
 
-      metrics.iaRadiografia.consentRevocationsTotal.inc({ category: "pep" })
+    metrics.iaRadiografia.consentRevocationsTotal.inc({ category: "pep" })
 
-      return res.json(result)
-    } catch (error) {
-      console.error("[IA-Radiografia] Revoke error:", error)
-      return res.status(500).json({ error: "Erro ao revogar consentimento" })
-    }
+    res.json(result)
   }
 }
