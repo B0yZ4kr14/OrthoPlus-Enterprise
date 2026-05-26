@@ -2,6 +2,26 @@
 
 
 
+## [UI Premium Redesign — Fase 2 Base Components] - 2026-05-25
+
+### Added
+- **Input**: `state` prop (`default` | `error` | `success` | `warning`) with colored borders, focus rings, and subtle background tints
+- **Badge**: `dot` prop for status indicator dot; softer background colors for status variants (success/warning/error/info)
+- **Tabs**: `variant` prop (`default` | `underline`) with animated underline active indicator
+- **Skeleton**: `variant` prop (`default` | `shimmer`) with shimmer animation via gradient sweep
+- **Sonner**: per-type accent borders (left border) and tinted backgrounds for success/error/warning/info toasts
+
+### Changed
+- **Dialog**: softer overlay (`bg-black/40` + `backdrop-blur-sm`); content uses `backdrop-blur-xl`, `rounded-2xl`, refined shadow
+- **Sheet**: softer overlay (`bg-black/40` + `backdrop-blur-sm`); content uses `backdrop-blur-xl`, `rounded-l-2xl`, refined shadow
+- **Badge**: status variants now use translucent backgrounds (`bg-*/15`) instead of solid fills
+- **Sonner**: toast border-radius increased to `rounded-xl`, title/description font hierarchy refined
+
+### Quality Gates
+- Type-check: 0 errors
+- Build: frontend + backend passing
+- Lint: 0 errors
+
 ## [UI Premium Redesign — Fase 1 Chrome/Layout] - 2026-05-25
 
 ### Added
