@@ -65,6 +65,31 @@ function getRouteForItem(item: SearchResultItem): string {
   return config.getRoute(item);
 }
 
+function HighlightedSnippet({ snippet }: { snippet: string }) {
+  if (!snippet) return null;
+
+  const parts = snippet.split(/(<mark>.*?<\/mark>)/g);
+
+  return (
+    <span className="text-xs text-muted-foreground truncate">
+      {parts.map((part, i) => {
+        if (part.startsWith("<mark>") && part.endsWith("</mark>")) {
+          const text = part.slice(6, -7);
+          return (
+            <mark
+              key={i}
+              className="bg-yellow-200 dark:bg-yellow-600/60 rounded-sm px-0.5 text-foreground"
+            >
+              {text}
+            </mark>
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </span>
+  );
+}
+
 const GlobalSearch = memo(function GlobalSearch() {
   const navigate = useNavigate();
   const {
@@ -206,9 +231,7 @@ const GlobalSearch = memo(function GlobalSearch() {
                                 {item.title}
                               </span>
                               {item.snippet && (
-                                <span className="text-xs text-muted-foreground truncate">
-                                  {item.snippet}
-                                </span>
+                                <HighlightedSnippet snippet={item.snippet} />
                               )}
                             </div>
                             {item.score > 0 && (
