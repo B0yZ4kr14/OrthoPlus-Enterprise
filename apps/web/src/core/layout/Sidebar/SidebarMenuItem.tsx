@@ -51,16 +51,16 @@ export function SidebarMenuItem({
   };
 
   // Base styles — usa CSS vars para compatibilidade com todos os temas
-  const baseClasses = `min-h-[44px] py-2.5 px-3 flex items-center gap-3 transition-all duration-300 ease-out w-full group focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none rounded-xl ${
+  const baseClasses = `min-h-[44px] py-2.5 px-3 flex items-center gap-3 transition-all duration-200 ease-out w-full group focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none rounded-xl ${
     isItemActive
-      ? "bg-gradient-to-r from-[hsl(var(--accent))]/90 to-[hsl(var(--accent))]/60 border-r-[3px] border-[hsl(var(--interactive))] font-semibold text-[hsl(var(--interactive))] shadow-[0_0_12px_hsl(var(--interactive)/0.15)]"
-      : "text-[hsl(var(--sidebar-foreground))] font-medium hover:bg-[hsl(var(--sidebar-accent))]/80 hover:translate-x-0.5"
+      ? "bg-accent font-semibold text-interactive border-r-[3px] border-interactive"
+      : "text-sidebar-foreground font-medium hover:bg-sidebar-accent/80 hover:translate-x-0.5"
   }`;
 
-  const subItemClasses = `min-h-[40px] py-2 px-3 pl-8 flex items-center gap-3 transition-all duration-300 ease-out w-full group focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none rounded-xl ${
+  const subItemClasses = `min-h-[40px] py-2 px-3 pl-8 flex items-center gap-3 transition-all duration-200 ease-out w-full group focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none rounded-xl ${
     isItemActive
-      ? "bg-gradient-to-r from-[hsl(var(--accent))]/90 to-[hsl(var(--accent))]/60 border-r-[3px] border-[hsl(var(--interactive))] font-semibold text-[hsl(var(--interactive))] shadow-[0_0_12px_hsl(var(--interactive)/0.15)]"
-      : "text-[hsl(var(--muted-foreground))] font-medium hover:bg-[hsl(var(--sidebar-accent))]/80 hover:translate-x-0.5"
+      ? "bg-accent font-semibold text-interactive border-r-[3px] border-interactive"
+      : "text-muted-foreground font-medium hover:bg-sidebar-accent/80 hover:translate-x-0.5"
   }`;
 
   const iconClasses = `shrink-0 transition-all duration-300 ${
@@ -75,7 +75,7 @@ export function SidebarMenuItem({
 
     const triggerContent = (
       <CollapsibleTrigger className={baseClasses}>
-        <IconComponent className={`${iconClasses} h-4 w-4`} aria-hidden="true" />
+        <IconComponent className={`${iconClasses} h-5 w-5`} aria-hidden="true" />
         {!collapsed && (
           <>
             <span className="text-sm flex-1 text-left">{item.title}</span>
@@ -117,7 +117,7 @@ export function SidebarMenuItem({
       className={isSubItem ? subItemClasses : baseClasses}
       aria-current={isItemActive ? "page" : undefined}
     >
-      <IconComponent className={`${iconClasses} ${isSubItem ? "h-3.5 w-3.5" : "h-4 w-4"}`} aria-hidden="true" />
+      <IconComponent className={`${iconClasses} ${isSubItem ? "h-4 w-4" : "h-5 w-5"}`} aria-hidden="true" />
       {!collapsed && (
         <>
           <span className={`${isSubItem ? "text-xs" : "text-sm"} flex-1 truncate`} title={item.title}>
