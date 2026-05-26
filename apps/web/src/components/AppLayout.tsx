@@ -56,14 +56,22 @@ const AppLayoutInner = memo(function AppLayoutInner({
           />
         )}
 
-        {/* Sidebar desktop */}
+        {/* Sidebar desktop — animação premium com easing expo */}
         {!isMobile && !isFocusMode && (
           <nav
             data-tour="sidebar"
             className={cn(
-              "fixed inset-y-0 left-0 z-20 transition-transform duration-300 ease-out",
-              sidebarOpen ? "translate-x-0" : "-translate-x-full"
+              "fixed inset-y-0 left-0 z-20 will-change-transform",
+              sidebarOpen
+                ? "translate-x-0 transition-[transform,box-shadow] duration-500"
+                : "-translate-x-full transition-[transform,box-shadow] duration-300",
+              "shadow-[4px_0_24px_rgba(0,0,0,0.06)]"
             )}
+            style={{
+              transitionTimingFunction: sidebarOpen
+                ? "cubic-bezier(0.16, 1, 0.3, 1)" // ease-out-expo — entrada suave e decisiva
+                : "cubic-bezier(0.7, 0, 0.84, 0)", // ease-in-expo — saída rápida
+            }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             aria-hidden={!sidebarOpen}

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const ENTER_DELAY_MS = 120
-const LEAVE_DEBOUNCE_MS = 350
+/** Delay para abertura — rápido o suficiente para sentir responsivo */
+const ENTER_DELAY_MS = 80
+/** Debounce para fechamento — tolerante para clicks e scroll dentro da sidebar */
+const LEAVE_DEBOUNCE_MS = 450
 
 interface UseSidebarHoverReturn {
-  /** Sidebar visível por hover */
+  /** Sidebar visível por hover ou fixa */
   isOpen: boolean
   /** Sidebar está em modo auto-hide (oculta por padrão) */
   isAutoHide: boolean

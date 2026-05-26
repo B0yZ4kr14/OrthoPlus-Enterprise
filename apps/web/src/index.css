@@ -733,6 +733,22 @@
   100% { background-position: 200% 0; }
 }
 
+/* Neon pulse para indicador de sidebar recolhida */
+@keyframes neon-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    box-shadow: 0 0 4px hsl(var(--interactive) / 0.3), 0 0 8px hsl(var(--interactive) / 0.15);
+  }
+  50% {
+    opacity: 0.85;
+    box-shadow: 0 0 8px hsl(var(--interactive) / 0.6), 0 0 16px hsl(var(--interactive) / 0.3);
+  }
+}
+
+.animate-neon-pulse {
+  animation: neon-pulse 2.5s ease-in-out infinite;
+}
+
 .animate-fade-in-up    { animation: fade-in-up 0.25s ease-out forwards; }
 .animate-slide-in-left { animation: slide-in-left 0.3s ease-out forwards; }
 
