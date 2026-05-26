@@ -117,8 +117,7 @@ describe('OrcamentosController.list', () => {
     orcamentos.findMany.mockRejectedValueOnce(new Error('DB'))
     const req = mockReq()
     const res = mockRes()
-    await controller.list(req as Request, res)
-    expect(res.status).toHaveBeenCalledWith(500)
+    await expect(controller.list(req as Request, res)).rejects.toThrow('DB')
   })
 })
 
@@ -185,8 +184,7 @@ describe('OrcamentosController.create', () => {
     orcamentos.create.mockRejectedValueOnce(new Error('DB'))
     const req = mockReq({ body: validBody })
     const res = mockRes()
-    await controller.create(req as Request, res)
-    expect(res.status).toHaveBeenCalledWith(500)
+    await expect(controller.create(req as Request, res)).rejects.toThrow('DB')
   })
 })
 
@@ -450,7 +448,6 @@ describe('OrcamentosController.addItem', () => {
     orcamentoItens.create.mockRejectedValueOnce(new Error('DB'))
     const req = mockReq({ params: { orcamento_id: 'orc-1' }, body: validItemBody })
     const res = mockRes()
-    await controller.addItem(req as Request, res)
-    expect(res.status).toHaveBeenCalledWith(500)
+    await expect(controller.addItem(req as Request, res)).rejects.toThrow('DB')
   })
 })

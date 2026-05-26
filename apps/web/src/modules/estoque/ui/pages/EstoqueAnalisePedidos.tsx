@@ -50,10 +50,34 @@ export default function EstoqueAnalisePedidos() {
     economiaAutomacao: 0,
   });
 
-  const [historicoFornecedor, setHistoricoFornecedor] = useState<unknown[]>([]);
-  const [produtosMaisPedidos, setProdutosMaisPedidos] = useState<unknown[]>([]);
-  const [evolucaoPedidos, setEvolucaoPedidos] = useState<unknown[]>([]);
-  const [statusDistribution, setStatusDistribution] = useState<unknown[]>([]);
+  interface HistoricoFornecedor {
+    nome: string
+    total: number
+    quantidade: number
+  }
+
+  interface ProdutoMaisPedido {
+    nome: string
+    quantidade: number
+    valor: number
+  }
+
+  interface EvolucaoPedido {
+    mes: string
+    manual: number
+    automatico: number
+    total: number
+  }
+
+  interface StatusDistribuicao {
+    name: string
+    value: number
+  }
+
+  const [historicoFornecedor, setHistoricoFornecedor] = useState<HistoricoFornecedor[]>([]);
+  const [produtosMaisPedidos, setProdutosMaisPedidos] = useState<ProdutoMaisPedido[]>([]);
+  const [evolucaoPedidos, setEvolucaoPedidos] = useState<EvolucaoPedido[]>([]);
+  const [statusDistribution, setStatusDistribution] = useState<StatusDistribuicao[]>([]);
 
   useEffect(() => {
     if (!loading && pedidos.length > 0) {
@@ -70,8 +94,7 @@ export default function EstoqueAnalisePedidos() {
     const pedidosAutomaticos = pedidos.filter(
       (p) => p.geradoAutomaticamente,
     ).length;
-    // @ts-expect-error — TS18048
-    const valorTotal = pedidos.reduce((sum, p) => sum + p.valorTotal, 0);
+    const valorTotal = pedidos.reduce((sum, p) => sum + (p.valorTotal ?? 0), 0);
 
     // Calcular tempo médio de entrega (pedidos recebidos)
     const pedidosRecebidos = pedidos.filter(
@@ -114,16 +137,14 @@ export default function EstoqueAnalisePedidos() {
     pedidos.forEach((pedido) => {
       const fornecedor = fornecedores.find((f) => f.id === pedido.fornecedorId);
       if (fornecedor) {
-        // @ts-expect-error — TS2345
-        const current = fornecedorMap.get(pedido.fornecedorId) || {
+        const fornId = pedido.fornecedorId ?? ""
+        const current = fornecedorMap.get(fornId) || {
           total: 0,
           quantidade: 0,
           nome: fornecedor.nome,
-        };
-        // @ts-expect-error — TS2345
-        fornecedorMap.set(pedido.fornecedorId, {
-          // @ts-expect-error — TS18048
-          total: current.total + pedido.valorTotal,
+        }
+        fornecedorMap.set(fornId, {
+          total: current.total + (pedido.valorTotal ?? 0),
           quantidade: current.quantidade + 1,
           nome: fornecedor.nome,
         });
@@ -159,8 +180,7 @@ export default function EstoqueAnalisePedidos() {
         produtoMap.set(item.produtoId, {
           quantidade: current.quantidade + item.quantidade,
           nome: produto.nome,
-          // @ts-expect-error — TS18048
-          valor: current.valor + item.valorTotal,
+          valor: current.valor + (item.valorTotal ?? 0),
         });
       }
     });
@@ -368,8 +388,7 @@ export default function EstoqueAnalisePedidos() {
               />
               <YAxis />
               <Tooltip
-                // @ts-expect-error — TS2345
-                formatter={(value: unknown) => formatCurrency(value)}
+                formatter={(value: number) => formatCurrency(value)}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
               />
               <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
@@ -477,16 +496,12 @@ export default function EstoqueAnalisePedidos() {
             <tbody>
               {historicoFornecedor.map((fornecedor, index) => (
                 <tr key={index} className="border-b hover:bg-muted/50">
-                  {/* @ts-expect-error — TS18046 */}
                   <td className="p-3 font-medium">{fornecedor.nome}</td>
-                  {/* @ts-expect-error — TS18046 */}
                   <td className="text-right p-3">{fornecedor.quantidade}</td>
                   <td className="text-right p-3">
-                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(fornecedor.total)}
                   </td>
                   <td className="text-right p-3">
-                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(fornecedor.total / fornecedor.quantidade)}
                   </td>
                 </tr>
@@ -514,16 +529,12 @@ export default function EstoqueAnalisePedidos() {
             <tbody>
               {produtosMaisPedidos.map((produto, index) => (
                 <tr key={index} className="border-b hover:bg-muted/50">
-                  {/* @ts-expect-error — TS18046 */}
                   <td className="p-3 font-medium">{produto.nome}</td>
-                  {/* @ts-expect-error — TS18046 */}
                   <td className="text-right p-3">{produto.quantidade}</td>
                   <td className="text-right p-3">
-                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(produto.valor)}
                   </td>
                   <td className="text-right p-3">
-                    {/* @ts-expect-error — TS18046 */}
                     {formatCurrency(produto.valor / produto.quantidade)}
                   </td>
                 </tr>

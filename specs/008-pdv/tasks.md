@@ -8,7 +8,7 @@
 - PDV-FR-004: Integração Financeira
 - PDV-FR-005: Baixa de Estoque
 
-**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
+**Status**: BACKFILLED — Retroactive audit 2026-05-24
 
 ---
 
@@ -41,9 +41,13 @@
 ## Phase 4: User Stories
 
 #### US1: Realizar Venda
-- [x] T300-T305 — All implemented
+- [x] T300-T305 — All implemented (PDVPage.tsx, usePDV.ts hook, backend CRUD)
 #### US2: Fechamento de Caixa
-- [x] T310-T315 — All implemented
+- [x] T310-T315 — All implemented (AberturaCaixaDialog, FechamentoCaixaDialog, usePDV.ts)
+#### US3: Controle de Estoque em Venda
+- [ ] T320-T325 — **MISSING** — no automatic inventory deduction on sale; no stock alert UI
+#### US4: Relatório de Vendas
+- [x] T330-T335 — All implemented (DashboardExecutivoPDV.tsx with KPIs, charts, period filters)
 
 ---
 
@@ -57,4 +61,4 @@
 
 | Phase | Tasks | Done | Status |
 |-------|-------|------|--------|
-| Total | **38** | **37** | **97% COMPLETE** |
+| Total | **38** | **34** | **90% COMPLETE** |

@@ -109,8 +109,7 @@ describe('TISSController.listGuias', () => {
     guides.findMany.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq();
     const res = mockRes();
-    await controller.listGuias(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.listGuias(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -143,8 +142,7 @@ describe('TISSController.getGuiaById', () => {
     guides.findFirst.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ params: { id: 'guide-1' } });
     const res = mockRes();
-    await controller.getGuiaById(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.getGuiaById(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -189,8 +187,7 @@ describe('TISSController.createGuia', () => {
     guides.create.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await controller.createGuia(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.createGuia(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -380,8 +377,7 @@ describe('TISSController.submitBatch', () => {
     guides.findMany.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await controller.submitBatch(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.submitBatch(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -412,7 +408,6 @@ describe('TISSController.getStatistics', () => {
     guides.groupBy.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq();
     const res = mockRes();
-    await controller.getStatistics(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.getStatistics(req as Request, res)).rejects.toThrow('DB');
   });
 });

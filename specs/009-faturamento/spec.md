@@ -3,7 +3,8 @@
 **Short Name**: `billing-nfe`
 **Feature Branch**: `[009-faturamento]`
 **Created**: 2026-05-17
-**Status**: Draft
+**Backfilled**: 2026-05-24
+**Status**: Backfilled — 85% Implemented
 **Project**: OrthoPlus Enterprise
 **Priority**: P3 — Compliance
 

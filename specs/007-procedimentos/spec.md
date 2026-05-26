@@ -3,7 +3,8 @@
 **Short Name**: `procedure-catalog`
 **Feature Branch**: `[007-procedimentos]`
 **Created**: 2026-05-17
-**Status**: Draft
+**Backfilled**: 2026-05-24
+**Status**: Backfilled — 87% Implemented
 **Project**: OrthoPlus Enterprise
 **Priority**: P2 — Clinical Operations
 

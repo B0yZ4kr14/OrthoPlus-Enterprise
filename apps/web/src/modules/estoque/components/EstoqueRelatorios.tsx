@@ -82,17 +82,14 @@ export function EstoqueRelatorios() {
         yPos += 10;
       }
 
-      const filteredProds = fornecedorId
-        // @ts-expect-error — TS2551
-        ? produtos.filter((p) => p.fornecedorId === fornecedorId)
-        : produtos;
+      const fornecedorSelecionado = fornecedores.find((f) => f.id === fornecedorId)
+      const filteredProds = fornecedorId && fornecedorSelecionado
+        ? produtos.filter((p) => p.fornecedor === fornecedorSelecionado.nome)
+        : produtos
 
-      doc.setFontSize(10);
+      doc.setFontSize(10)
       filteredProds.forEach((prod) => {
-        // @ts-expect-error — TS2551
-        const categoria = categorias.find((c) => c.id === prod.categoriaId);
-        // @ts-expect-error — TS2339
-        const text = `${prod.nome} - Cat: ${categoria?.nome || "N/A"} - Qtd: ${prod.quantidadeAtual} - R$ ${prod.precoCompra.toFixed(2)}`;
+        const text = `${prod.nome} - Cat: ${prod.categoria || "N/A"} - Qtd: ${prod.quantidadeAtual} - R$ ${prod.valorUnitario.toFixed(2)}`
         doc.text(text, 20, yPos);
         yPos += 7;
         if (yPos > 280) {
@@ -106,10 +103,9 @@ export function EstoqueRelatorios() {
       yPos += 10;
 
       const valorTotal = produtos.reduce(
-        // @ts-expect-error — TS2339
-        (sum, p) => sum + p.quantidadeAtual * p.precoCompra,
+        (sum, p) => sum + p.quantidadeAtual * p.valorUnitario,
         0,
-      );
+      )
 
       doc.setFontSize(12);
       doc.text(
@@ -119,12 +115,10 @@ export function EstoqueRelatorios() {
       );
       yPos += 15;
 
-      doc.setFontSize(10);
+      doc.setFontSize(10)
       produtos.forEach((prod) => {
-        // @ts-expect-error — TS2339
-        const valorProd = prod.quantidadeAtual * prod.precoCompra;
-        // @ts-expect-error — TS2339
-        const text = `${prod.nome} - Qtd: ${prod.quantidadeAtual} x R$ ${prod.precoCompra.toFixed(2)} = R$ ${valorProd.toFixed(2)}`;
+        const valorProd = prod.quantidadeAtual * prod.valorUnitario
+        const text = `${prod.nome} - Qtd: ${prod.quantidadeAtual} x R$ ${prod.valorUnitario.toFixed(2)} = R$ ${valorProd.toFixed(2)}`
         doc.text(text, 20, yPos);
         yPos += 7;
         if (yPos > 280) {
@@ -192,50 +186,38 @@ export function EstoqueRelatorios() {
       });
       sheetName = "Movimentações";
     } else if (reportType === "produtos-fornecedor") {
-      const filteredProds = fornecedorId
-        // @ts-expect-error — TS2551
-        ? produtos.filter((p) => p.fornecedorId === fornecedorId)
-        : produtos;
+      const fornecedorSelecionado = fornecedores.find((f) => f.id === fornecedorId)
+      const filteredProds = fornecedorId && fornecedorSelecionado
+        ? produtos.filter((p) => p.fornecedor === fornecedorSelecionado.nome)
+        : produtos
 
       data = filteredProds.map((prod) => {
-        // @ts-expect-error — TS2551
-        const categoria = categorias.find((c) => c.id === prod.categoriaId);
-        // @ts-expect-error — TS2551
-        const fornecedor = fornecedores.find((f) => f.id === prod.fornecedorId);
+        const fornecedor = fornecedores.find((f) => f.nome === prod.fornecedor)
         return {
-          // @ts-expect-error — TS2339
-          Código: prod.codigo,
+          Código: prod.codigo_barra,
           Produto: prod.nome,
-          Categoria: categoria?.nome || "N/A",
-          Fornecedor: fornecedor?.nome || "N/A",
+          Categoria: prod.categoria || "N/A",
+          Fornecedor: fornecedor?.nome || prod.fornecedor || "N/A",
           "Quantidade Atual": prod.quantidadeAtual,
           "Quantidade Mínima": prod.quantidadeMinima,
-          // @ts-expect-error — TS2339
-          "Preço Compra": prod.precoCompra,
-          // @ts-expect-error — TS2339
-          "Preço Venda": prod.precoVenda || 0,
-          // @ts-expect-error — TS2339
-          "Valor Total": prod.quantidadeAtual * prod.precoCompra,
+          "Preço Compra": prod.valorUnitario,
+          "Preço Venda": 0,
+          "Valor Total": prod.quantidadeAtual * prod.valorUnitario,
           Status: prod.ativo ? "Ativo" : "Inativo",
-        };
-      });
+        }
+      })
       sheetName = "Produtos";
     } else if (reportType === "valor-inventario") {
       data = produtos.map((prod) => {
-        // @ts-expect-error — TS2551
-        const categoria = categorias.find((c) => c.id === prod.categoriaId);
         return {
-          // @ts-expect-error — TS2339
-          Código: prod.codigo,
+          Código: prod.codigo_barra,
           Produto: prod.nome,
-          Categoria: categoria?.nome || "N/A",
+          Categoria: prod.categoria || "N/A",
           Quantidade: prod.quantidadeAtual,
-          // @ts-expect-error — TS2339
-          "Preço Unitário": prod.precoCompra,
-          // @ts-expect-error — TS2339
-          "Valor Total": prod.quantidadeAtual * prod.precoCompra,
-        };
-      });
+          "Preço Unitário": prod.valorUnitario,
+          "Valor Total": prod.quantidadeAtual * prod.valorUnitario,
+        }
+      })
       sheetName = "Inventário";
     } else if (reportType === "historico-requisicoes") {
       const filteredReqs = requisicoes.filter((r) => {

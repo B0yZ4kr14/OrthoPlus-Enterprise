@@ -3,7 +3,8 @@
 **Short Name**: `point-of-sale`
 **Feature Branch**: `[008-pdv]`
 **Created**: 2026-05-17
-**Status**: Draft
+**Backfilled**: 2026-05-24
+**Status**: Backfilled — 90% Implemented
 **Project**: OrthoPlus Enterprise
 **Priority**: P2 — Revenue Operations
 

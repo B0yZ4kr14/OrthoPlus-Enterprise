@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 import { Router } from "express";
 import { InadimplenciaController } from "./controller";
 
@@ -18,13 +19,13 @@ router.get("/", (_req, res) => {
 });
 
 // Inadimplentes
-router.get("/inadimplentes", (_req, res) => controller.listInadimplentes(_req, res));
-router.get("/inadimplentes/:id", (_req, res) => controller.getInadimplente(_req, res));
-router.patch("/inadimplentes/:id", (_req, res) => controller.updateInadimplente(_req, res));
+router.get("/inadimplentes", asyncHandler(controller.listInadimplentes.bind(controller)));
+router.get("/inadimplentes/:id", asyncHandler(controller.getInadimplente.bind(controller)));
+router.patch("/inadimplentes/:id", asyncHandler(controller.updateInadimplente.bind(controller)));
 
 // Campanhas de cobrança
-router.get("/campanhas", (_req, res) => controller.listCampanhasCobranca(_req, res));
-router.post("/campanhas", (_req, res) => controller.createCampanhaCobranca(_req, res));
-router.patch("/campanhas/:id", (_req, res) => controller.updateCampanhaCobranca(_req, res));
+router.get("/campanhas", asyncHandler(controller.listCampanhasCobranca.bind(controller)));
+router.post("/campanhas", asyncHandler(controller.createCampanhaCobranca.bind(controller)));
+router.patch("/campanhas/:id", asyncHandler(controller.updateCampanhaCobranca.bind(controller)));
 
 export default router;

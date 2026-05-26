@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 /**
  * MÓDULO NF-e - Router
  *
@@ -11,15 +12,15 @@ import { NFeController } from './controller';
 
 export function createNfeRouter(): Router {
   const router: Router = Router();
-router.use(clinicGuard);
+  router.use(clinicGuard);
   const controller = new NFeController();
 
-  router.get('/status', (req, res) => controller.status(req, res));
-  router.get('/', (req, res) => controller.list(req, res));
-  router.get('/:id', (req, res) => controller.getById(req, res));
-  router.post('/', (req, res) => controller.create(req, res));
-  router.patch('/:id', (req, res) => controller.update(req, res));
-  router.post('/:id/cancelar', (req, res) => controller.cancel(req, res));
+  router.get('/status', asyncHandler(controller.status.bind(controller)));
+  router.get('/', asyncHandler(controller.list.bind(controller)));
+  router.get('/:id', asyncHandler(controller.getById.bind(controller)));
+  router.post('/', asyncHandler(controller.create.bind(controller)));
+  router.patch('/:id', asyncHandler(controller.update.bind(controller)));
+  router.post('/:id/cancelar', asyncHandler(controller.cancel.bind(controller)));
 
   return router;
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, type User } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
 import {
@@ -42,8 +42,9 @@ export default function EstoqueMovimentacoes() {
   const [tipoFiltro, setTipoFiltro] = useState<string>("TODOS");
 
   const { user: authUser } = useAuth();
-  // @ts-expect-error — TS2339
-  const currentUser = (authUser?.user_metadata?.full_name as string) ?? "Usuário Atual";
+  const currentUser = String(
+    ((authUser as User | null)?.user_metadata?.full_name) ?? "Usuário Atual",
+  )
 
   const handleSubmit = async (data: Movimentacao) => {
     try {

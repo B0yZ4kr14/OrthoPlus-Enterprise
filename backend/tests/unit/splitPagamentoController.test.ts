@@ -89,8 +89,7 @@ describe('SplitPagamentoController.getConfig', () => {
     splitConfig.findMany.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq();
     const res = mockRes();
-    await controller.getConfig(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.getConfig(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -139,8 +138,7 @@ describe('SplitPagamentoController.upsertConfig', () => {
     splitConfig.findFirst.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await controller.upsertConfig(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.upsertConfig(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -323,7 +321,6 @@ describe('SplitPagamentoController.calculateSplit', () => {
     splitConfig.findFirst.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await controller.calculateSplit(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.calculateSplit(req as Request, res)).rejects.toThrow('DB');
   });
 });

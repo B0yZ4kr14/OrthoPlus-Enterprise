@@ -131,35 +131,24 @@ export class Lead extends AggregateRoot<LeadProps> {
     this.props.updatedAt = new Date();
   }
 
-  static fromPersistence(data: unknown): Lead {
+  static fromPersistence(data: Record<string, unknown>): Lead {
     return new Lead({
-      // @ts-expect-error — TS18046
-      id: data.id,
-      // @ts-expect-error — TS18046
-      clinicId: data.clinic_id,
-      // @ts-expect-error — TS18046
-      name: data.name,
-      // @ts-expect-error — TS18046
-      email: Email.create(data.email),
-      // @ts-expect-error — TS18046
-      phone: Phone.create(data.phone),
-      // @ts-expect-error — TS18046
-      source: data.source,
-      // @ts-expect-error — TS18046
-      status: data.status,
-      // @ts-expect-error — TS18046
-      score: data.score,
-      // @ts-expect-error — TS18046
-      notes: data.notes,
-      // @ts-expect-error — TS18046
-      assignedTo: data.assigned_to,
-      // @ts-expect-error — TS18046
-      convertedAt: data.converted_at ? new Date(data.converted_at) : undefined,
-      // @ts-expect-error — TS18046
-      createdAt: new Date(data.created_at),
-      // @ts-expect-error — TS18046
-      updatedAt: new Date(data.updated_at),
-    });
+      id: String(data.id),
+      clinicId: String(data.clinic_id),
+      name: String(data.name),
+      email: Email.create(String(data.email)),
+      phone: Phone.create(String(data.phone)),
+      source: data.source as LeadSource,
+      status: data.status as LeadStatus,
+      score: Number(data.score),
+      notes: data.notes ? String(data.notes) : undefined,
+      assignedTo: data.assigned_to ? String(data.assigned_to) : undefined,
+      convertedAt: data.converted_at
+        ? new Date(String(data.converted_at))
+        : undefined,
+      createdAt: new Date(String(data.created_at)),
+      updatedAt: new Date(String(data.updated_at)),
+    })
   }
 
   toPersistence(): unknown {

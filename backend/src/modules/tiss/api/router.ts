@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 import { Router } from "express";
 import { TISSController } from "./controller";
 
@@ -18,21 +19,21 @@ router.get("/", (_req, res) => {
 });
 
 // Guias TISS
-router.get("/guias", (_req, res) => controller.listGuias(_req, res));
-router.get("/guias/:id", (_req, res) => controller.getGuiaById(_req, res));
-router.post("/guias", (_req, res) => controller.createGuia(_req, res));
-router.patch("/guias/:id", (_req, res) => controller.updateGuia(_req, res));
-router.delete("/guias/:id", (_req, res) => controller.deleteGuia(_req, res));
+router.get("/guias", asyncHandler(controller.listGuias.bind(controller)));
+router.get("/guias/:id", asyncHandler(controller.getGuiaById.bind(controller)));
+router.post("/guias", asyncHandler(controller.createGuia.bind(controller)));
+router.patch("/guias/:id", asyncHandler(controller.updateGuia.bind(controller)));
+router.delete("/guias/:id", asyncHandler(controller.deleteGuia.bind(controller)));
 
 // Lotes TISS
-router.get("/lotes", (_req, res) => controller.listLotes(_req, res));
-router.post("/lotes", (_req, res) => controller.createLote(_req, res));
-router.patch("/lotes/:id", (_req, res) => controller.updateLote(_req, res));
+router.get("/lotes", asyncHandler(controller.listLotes.bind(controller)));
+router.post("/lotes", asyncHandler(controller.createLote.bind(controller)));
+router.patch("/lotes/:id", asyncHandler(controller.updateLote.bind(controller)));
 
 // Batch submission — group guides and submit to insurance
-router.post("/lotes/submit", (_req, res) => controller.submitBatch(_req, res));
+router.post("/lotes/submit", asyncHandler(controller.submitBatch.bind(controller)));
 
 // Statistics
-router.get("/statistics", (_req, res) => controller.getStatistics(_req, res));
+router.get("/statistics", asyncHandler(controller.getStatistics.bind(controller)));
 
 export default router;

@@ -8,7 +8,7 @@
 - PRO-FR-004: Materiais e Insumos
 - PRO-FR-005: Histórico de Preços
 
-**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
+**Status**: BACKFILLED — Retroactive audit 2026-05-24
 
 ---
 
@@ -42,7 +42,10 @@
 
 ## Phase 4: User Stories
 
-- [x] US1-US2 — All implemented
+- [x] US1 Cadastrar Procedimento — IMPLEMENTED (TemplatesProcedimentos.tsx, full CRUD via apiClient)
+- [ ] US2 Tabela de Preços — **MISSING** — no dedicated price table UI or backend service
+- [ ] US3 Associação a Dentistas — **MISSING** — no dentist-procedure association UI
+- [x] US4 Categorização e Filtros — IMPLEMENTED (ProcedimentosList.tsx with especialidade filter)
 
 ---
 
@@ -56,11 +59,14 @@
 
 | Phase | Tasks | Done | Status |
 |-------|-------|------|--------|
-| Total | **38** | **37** | **97% COMPLETE** |
+| Total | **38** | **33** | **87% COMPLETE** |
 
 ## Identified Gaps
 
 | Gap | Priority | Description |
 |-----|----------|-------------|
-| GAP-001 | MEDIUM | E2E tests for complete flow |
-| GAP-002 | LOW | Additional unit test coverage |
+| GAP-001 | HIGH | Tabela de Preços UI and backend service |
+| GAP-002 | HIGH | Associação Dentista-Procedimento UI |
+| GAP-003 | MEDIUM | E2E tests for complete flow |
+| GAP-004 | LOW | Zustand store for procedimentos (currently localStorage with mock data) |
+| GAP-005 | LOW | Additional unit test coverage |

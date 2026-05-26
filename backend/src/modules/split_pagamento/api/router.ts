@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 import { Router } from "express";
 import { SplitPagamentoController } from "./controller";
 
@@ -18,18 +19,18 @@ router.get("/", (_req, res) => {
 });
 
 // Config
-router.get("/config", (_req, res) => controller.getConfig(_req, res));
-router.put("/config", (_req, res) => controller.upsertConfig(_req, res));
-router.post("/config", (_req, res) => controller.upsertConfig(_req, res));  // alias for frontend compatibility
+router.get("/config", asyncHandler(controller.getConfig.bind(controller)));
+router.put("/config", asyncHandler(controller.upsertConfig.bind(controller)));
+router.post("/config", asyncHandler(controller.upsertConfig.bind(controller)));  // alias for frontend compatibility
 
 // Comissões
-router.get("/comissoes", (_req, res) => controller.listComissoes(_req, res));
-router.post("/comissoes", (_req, res) => controller.createComissao(_req, res));
+router.get("/comissoes", asyncHandler(controller.listComissoes.bind(controller)));
+router.post("/comissoes", asyncHandler(controller.createComissao.bind(controller)));
 
 // Transações
-router.get("/transacoes", (_req, res) => controller.listTransacoes(_req, res));
+router.get("/transacoes", asyncHandler(controller.listTransacoes.bind(controller)));
 
 // Calculate split distribution
-router.post("/calculate", (_req, res) => controller.calculateSplit(_req, res));
+router.post("/calculate", asyncHandler(controller.calculateSplit.bind(controller)));
 
 export default router;

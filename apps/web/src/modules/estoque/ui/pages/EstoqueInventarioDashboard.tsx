@@ -48,26 +48,22 @@ export default function EstoqueInventarioDashboard() {
     );
 
     const inventariosPeriodo = inventarios.filter(
-      // @ts-expect-error — TS2769
-      (inv) => new Date(inv.createdAt) >= periodStart,
-    );
+      (inv) => inv.createdAt && new Date(inv.createdAt) >= periodStart,
+    )
 
     const totalInventarios = inventariosPeriodo.length;
     const totalDivergencias = inventariosPeriodo.reduce(
-      // @ts-expect-error — TS18048
-      (sum, inv) => sum + inv.divergenciasEncontradas,
+      (sum, inv) => sum + (inv.divergenciasEncontradas ?? 0),
       0,
-    );
+    )
     const totalPerdas = inventariosPeriodo.reduce(
-      // @ts-expect-error — TS18048
-      (sum, inv) => sum + inv.valorDivergencias,
+      (sum, inv) => sum + (inv.valorDivergencias ?? 0),
       0,
-    );
+    )
     const totalItensAnalisados = inventariosPeriodo.reduce(
-      // @ts-expect-error — TS18048
-      (sum, inv) => sum + inv.totalItens,
+      (sum, inv) => sum + (inv.totalItens ?? 0),
       0,
-    );
+    )
     const acuracidadeMedia =
       totalItensAnalisados > 0
         ? ((totalItensAnalisados - totalDivergencias) / totalItensAnalisados) *
@@ -79,16 +75,15 @@ export default function EstoqueInventarioDashboard() {
       periodStart.getTime() - periodDays * 24 * 60 * 60 * 1000,
     );
     const inventariosPeriodoAnterior = inventarios.filter((inv) => {
-      // @ts-expect-error — TS2769
-      const data = new Date(inv.createdAt);
-      return data >= prevPeriodStart && data < periodStart;
-    });
+      if (!inv.createdAt) return false
+      const data = new Date(inv.createdAt)
+      return data >= prevPeriodStart && data < periodStart
+    })
 
     const perdasPeriodoAnterior = inventariosPeriodoAnterior.reduce(
-      // @ts-expect-error — TS18048
-      (sum, inv) => sum + inv.valorDivergencias,
+      (sum, inv) => sum + (inv.valorDivergencias ?? 0),
       0,
-    );
+    )
     const variacaoPerdas =
       perdasPeriodoAnterior > 0
         ? ((totalPerdas - perdasPeriodoAnterior) / perdasPeriodoAnterior) * 100
@@ -121,21 +116,19 @@ export default function EstoqueInventarioDashboard() {
 
     return ultimos6Meses.map(({ mes, mesNum, anoNum }) => {
       const inventariosMes = inventarios.filter((inv) => {
-        // @ts-expect-error — TS2769
-        const data = new Date(inv.createdAt);
-        return data.getMonth() === mesNum && data.getFullYear() === anoNum;
-      });
+        if (!inv.createdAt) return false
+        const data = new Date(inv.createdAt)
+        return data.getMonth() === mesNum && data.getFullYear() === anoNum
+      })
 
       const totalItens = inventariosMes.reduce(
-        // @ts-expect-error — TS18048
-        (sum, inv) => sum + inv.totalItens,
+        (sum, inv) => sum + (inv.totalItens ?? 0),
         0,
-      );
+      )
       const totalDiverg = inventariosMes.reduce(
-        // @ts-expect-error — TS18048
-        (sum, inv) => sum + inv.divergenciasEncontradas,
+        (sum, inv) => sum + (inv.divergenciasEncontradas ?? 0),
         0,
-      );
+      )
       const acuracidade =
         totalItens > 0 ? ((totalItens - totalDiverg) / totalItens) * 100 : 100;
 
@@ -164,16 +157,15 @@ export default function EstoqueInventarioDashboard() {
 
     return ultimos6Meses.map(({ mes, mesNum, anoNum }) => {
       const inventariosMes = inventarios.filter((inv) => {
-        // @ts-expect-error — TS2769
-        const data = new Date(inv.createdAt);
-        return data.getMonth() === mesNum && data.getFullYear() === anoNum;
-      });
+        if (!inv.createdAt) return false
+        const data = new Date(inv.createdAt)
+        return data.getMonth() === mesNum && data.getFullYear() === anoNum
+      })
 
       const perdas = inventariosMes.reduce(
-        // @ts-expect-error — TS18048
-        (sum, inv) => sum + inv.valorDivergencias,
+        (sum, inv) => sum + (inv.valorDivergencias ?? 0),
         0,
-      );
+      )
 
       return {
         mes,
@@ -197,11 +189,10 @@ export default function EstoqueInventarioDashboard() {
           existing.quantidade += Math.abs(item.divergencia || 0);
         } else {
           produtoPerdas.set(item.produtoId, {
-            // @ts-expect-error — TS2322
-            nome: item.produtoNome,
+            nome: item.produtoNome || "N/A",
             perda: item.valorDivergencia,
             quantidade: Math.abs(item.divergencia || 0),
-          });
+          })
         }
       }
     });

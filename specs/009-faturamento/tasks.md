@@ -8,7 +8,7 @@
 - FAT-FR-004: Relatórios Fiscais
 - FAT-FR-005: Integração Orçamento → NF-e
 
-**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
+**Status**: BACKFILLED — Retroactive audit 2026-05-24
 
 **Note**: Faturamento frontend is consolidated within the financeiro module.
 The NotaFiscal functionality is implemented in useFinanceiro.ts.
@@ -71,9 +71,13 @@ The NotaFiscal functionality is implemented in useFinanceiro.ts.
 ## Phase 4: User Stories
 
 #### US1: Emitir Nota Fiscal
-- [x] T300-T305 — All implemented via useFinanceiro.ts
-#### US2: Consultar Notas Fiscais
-- [x] T310-T315 — All implemented
+- [x] T300-T305 — All implemented via useFinanceiro.ts and NotasFiscais.tsx
+#### US2: Configurar Série e Certificado
+- [ ] T310-T315 — **MISSING** — no dedicated fiscal config UI (certificado A1, série, ambiente)
+#### US3: Consultar e Cancelar NF-e
+- [x] T320-T325 — All implemented (NotasFiscais.tsx with status filters, cancel action)
+#### US4: Relatório Fiscal
+- [ ] T330-T335 — **MISSING** — no dedicated fiscal report with CSV/Excel export and tax totals
 
 ---
 
@@ -87,7 +91,7 @@ The NotaFiscal functionality is implemented in useFinanceiro.ts.
 
 | Phase | Tasks | Done | Status |
 |-------|-------|------|--------|
-| Total | **38** | **37** | **97% COMPLETE** |
+| Total | **38** | **32** | **85% COMPLETE** |
 
 ## Architecture Note
 

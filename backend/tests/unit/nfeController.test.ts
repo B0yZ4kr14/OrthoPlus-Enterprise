@@ -117,8 +117,7 @@ describe('NFeController.list', () => {
     mockRepo.findAll.mockRejectedValueOnce(new Error('DB error'));
     const req = mockReq();
     const res = mockRes();
-    await controller.list(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.list(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -159,8 +158,7 @@ describe('NFeController.getById', () => {
     mockRepo.findById.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ params: { id: 'nfe-id-1' } });
     const res = mockRes();
-    await controller.getById(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.getById(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -210,12 +208,11 @@ describe('NFeController.create', () => {
     expect(saved.clinicId).toBe('clinic-1');
   });
 
-  it('returns 500 when repository throws', async () => {
+  it('propagates repository error', async () => {
     mockRepo.save.mockRejectedValueOnce(new Error('DB error'));
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await controller.create(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.create(req as Request, res)).rejects.toThrow('DB error');
   });
 });
 
@@ -268,8 +265,7 @@ describe('NFeController.update', () => {
     mockRepo.findById.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ params: { id: 'nfe-id-1' }, body: {} });
     const res = mockRes();
-    await controller.update(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.update(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
@@ -320,8 +316,7 @@ describe('NFeController.cancel', () => {
     mockRepo.findById.mockRejectedValueOnce(new Error('DB'));
     const req = mockReq({ params: { id: 'nfe-id-1' } });
     const res = mockRes();
-    await controller.cancel(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(controller.cancel(req as Request, res)).rejects.toThrow('DB');
   });
 });
 
