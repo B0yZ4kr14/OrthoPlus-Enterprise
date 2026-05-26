@@ -61,6 +61,17 @@
     },
     "gate": {
       "status": "pending"
+    },
+    "report": {
+      "status": "completed",
+      "started_at": "2026-05-26T08:30:00.000Z",
+      "completed_at": "2026-05-26T05:00:58.000Z",
+      "artifacts": [
+        "evidence/reports/stakeholder-report.md",
+        "evidence/reports/architect-report.md",
+        "evidence/reports/dev-report.md",
+        "evidence/reports/sdet-report.md"
+      ]
     }
   },
   "adaptations": {
@@ -73,6 +84,7 @@
     "flaky_test_history: not-collected (no flaky test export provided)",
     "defect_export: not-collected (no defect tracker export provided)",
     "ndepend_export: not-collected (not applicable to TypeScript/Python stack)",
-    "ide_entry_points: not-collected (no IDE entry-point list provided)"
+    "ide_entry_points: not-collected (no IDE entry-point list provided)",
+    "report: security report skipped \u2014 assess not done"
   ]
 }
