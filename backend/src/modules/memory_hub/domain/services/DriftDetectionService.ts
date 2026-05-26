@@ -29,6 +29,7 @@ export class DriftDetectionService {
     const issues: DriftIssue[] = []
 
     issues.push(...this.detectBrokenApiRefs())
+    issues.push(...this.detectOutdatedDecisions())
     issues.push(...this.detectMissingImplementations())
     issues.push(...this.detectOrphanDocs())
 
@@ -266,6 +267,42 @@ export class DriftDetectionService {
     }
 
     return results
+  }
+
+  private detectOutdatedDecisions(): DriftIssue[] {
+    const issues: DriftIssue[] = []
+    const allDocs = this.documents.listAll()
+
+    for (const doc of allDocs) {
+      // Skip archived docs
+      if (doc.isArchived) continue
+
+      try {
+        // Check if file on disk is newer than last indexed
+        if (this.sandbox) {
+          this.sandbox.assertAllowed(doc.sourcePath)
+        }
+
+        if (fs.existsSync(doc.sourcePath)) {
+          const stats = fs.statSync(doc.sourcePath)
+          const mtimeMs = stats.mtimeMs
+
+          if (mtimeMs > doc.lastIndexed) {
+            const daysStale = Math.round((mtimeMs - doc.lastIndexed) / (24 * 60 * 60 * 1000))
+            issues.push({
+              type: "outdated_decision",
+              severity: daysStale > 30 ? "high" : "medium",
+              sourceDocument: doc.sourcePath,
+              description: `Document modified ${daysStale} days ago but index is stale (last indexed: ${new Date(doc.lastIndexed).toISOString()})`,
+            })
+          }
+        }
+      } catch {
+        // Skip unreadable docs
+      }
+    }
+
+    return issues
   }
 
   private detectMissingImplementations(): DriftIssue[] {

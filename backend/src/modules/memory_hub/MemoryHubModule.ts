@@ -15,6 +15,7 @@ import { DocumentRepository } from "./infrastructure/DocumentRepository"
 import { FileWatcher } from "./infrastructure/FileWatcher"
 import { SearchAuditRepository } from "./infrastructure/SearchAuditRepository"
 import { HealthService } from "./domain/services/HealthService"
+import { CostTrackingService } from "./domain/services/CostTrackingService"
 
 export interface MemoryHubModule {
   controller: MemoryHubController
@@ -66,6 +67,7 @@ export function createMemoryHubModule(
   const documents = new DocumentRepository(db)
   const auditRepository = new SearchAuditRepository(db)
   const healthService = new HealthService(db, documents, embeddings)
+  const costTrackingService = new CostTrackingService(db)
   const searchService = new SearchService(embedder, embeddings, documents)
   const contextBriefService = new ContextBriefService(searchService, documents)
   const indexingService = new IndexingService(db)
@@ -79,6 +81,7 @@ export function createMemoryHubModule(
     documents,
     auditRepository,
     healthService,
+    costTrackingService,
     metrics,
     db,
   })

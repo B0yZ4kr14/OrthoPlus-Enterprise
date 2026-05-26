@@ -1,6 +1,7 @@
 import Database from "better-sqlite3"
 import { Request, Response } from "express"
 import { asyncHandler, Errors } from "@/middleware/errorHandler"
+import { logger } from "@/infrastructure/logger"
 
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
 type MetricsCollector = ReturnType<typeof getMetricsCollector>
@@ -11,6 +12,7 @@ import { GraphService } from "../domain/services/GraphService"
 import { HealthService } from "../domain/services/HealthService"
 import { DocumentRepository } from "../infrastructure/DocumentRepository"
 import { SearchAuditRepository } from "../infrastructure/SearchAuditRepository"
+import { CostTrackingService } from "../domain/services/CostTrackingService"
 
 export interface MemoryHubControllerDeps {
   searchService: SearchService
@@ -20,6 +22,7 @@ export interface MemoryHubControllerDeps {
   documents: DocumentRepository
   auditRepository: SearchAuditRepository
   healthService: HealthService
+  costTrackingService?: CostTrackingService
   metrics: MetricsCollector
   db: Database.Database
 }
@@ -32,6 +35,7 @@ export class MemoryHubController {
   private documents: DocumentRepository
   private auditRepository: SearchAuditRepository
   private healthService: HealthService
+  private costTrackingService?: CostTrackingService
   private metrics: MetricsCollector
   private db: Database.Database
 
@@ -43,6 +47,7 @@ export class MemoryHubController {
     this.documents = deps.documents
     this.auditRepository = deps.auditRepository
     this.healthService = deps.healthService
+    this.costTrackingService = deps.costTrackingService
     this.metrics = deps.metrics
     this.db = deps.db
   }
@@ -99,6 +104,16 @@ export class MemoryHubController {
       filteredResults.length,
       Math.round(duration * 1000),
     )
+
+    // NFR-008: Cost tracking per clinic
+    if (this.costTrackingService) {
+      const provider = process.env.MEMORY_HUB_EMBEDDING_PROVIDER || "ollama"
+      const model = process.env.MEMORY_HUB_EMBEDDING_MODEL || (provider === "ollama" ? "nomic-embed-text" : "text-embedding-3-small")
+      const cost = this.costTrackingService.logCost(clinicId, query, provider, model)
+      if (cost.costUsd > 0) {
+        logger.info("[MemoryHubController] Search cost tracked", { clinicId, costUsd: cost.costUsd, tokens: cost.tokens })
+      }
+    }
 
     res.json({
       results: filteredResults,
@@ -223,6 +238,26 @@ export class MemoryHubController {
       provider: config.provider,
       model: config.model || "default",
     })
+  })
+
+  costs = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context")
+    }
+
+    if (!this.costTrackingService) {
+      res.status(503).json({ error: "Cost tracking not enabled" })
+      return
+    }
+
+    const { month } = req.query
+    const summary = this.costTrackingService.getMonthlySummary(
+      clinicId,
+      typeof month === "string" ? month : undefined,
+    )
+
+    res.json(summary)
   })
 
   drift = asyncHandler(async (req: Request, res: Response) => {

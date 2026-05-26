@@ -39,6 +39,7 @@ export function createMemoryHubRouter(controller: MemoryHubController): Router {
   router.get("/health", searchLimit, controller.health)
   router.get("/graph", searchLimit, controller.graph)
   router.get("/drift", searchLimit, controller.drift)
+  router.get("/costs", searchLimit, controller.costs)
 
   const adminLimit = rateLimit({
     windowMs: 60 * 1000,

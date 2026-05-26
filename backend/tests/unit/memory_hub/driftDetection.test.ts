@@ -248,4 +248,66 @@ describe("DriftDetectionService", () => {
       expect(missingIssues[0]?.severity).toBe("medium")
     })
   })
+
+  describe("T039: drift scan detects outdated decisions", () => {
+    it("detects documents modified since last index", async () => {
+      const tmpFile = path.join(tempDir, "outdated-spec.md")
+      fs.writeFileSync(tmpFile, "# Test Spec\nDecision: use PostgreSQL")
+      const mtime = Date.now()
+      const lastIndexed = mtime - 86400000 // 1 day ago
+
+      db.prepare(`
+        INSERT INTO documents (id, source_path, doc_type, title, content_hash, last_indexed, last_modified, version, word_count, is_archived, frontmatter)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        "doc-outdated",
+        tmpFile,
+        "spec",
+        "Test Spec",
+        "hash1",
+        lastIndexed,
+        lastIndexed,
+        1,
+        10,
+        0,
+        "{}",
+      )
+
+      const issues = await service.detect()
+      const outdated = issues.filter((i: { type: string }) => i.type === "outdated_decision")
+      expect(outdated.length).toBeGreaterThanOrEqual(1)
+      expect(outdated[0].severity).toBe("medium")
+      expect(outdated[0].sourceDocument).toBe(tmpFile)
+    })
+
+    it("does not flag recently indexed documents", async () => {
+      const tmpFile = path.join(tempDir, "fresh-spec.md")
+      fs.writeFileSync(tmpFile, "# Fresh Spec")
+      // Ensure lastIndexed is >= file mtime so it's not flagged
+      await new Promise((r) => setTimeout(r, 50))
+      const now = Date.now()
+
+      db.prepare(`
+        INSERT INTO documents (id, source_path, doc_type, title, content_hash, last_indexed, last_modified, version, word_count, is_archived, frontmatter)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        "doc-fresh",
+        tmpFile,
+        "spec",
+        "Fresh Spec",
+        "hash2",
+        now,
+        now,
+        1,
+        5,
+        0,
+        "{}",
+      )
+
+      const issues = await service.detect()
+      const outdated = issues.filter((i: { type: string }) => i.type === "outdated_decision")
+      const freshOutdated = outdated.filter((i: { sourceDocument: string }) => i.sourceDocument === tmpFile)
+      expect(freshOutdated.length).toBe(0)
+    })
+  })
 })
