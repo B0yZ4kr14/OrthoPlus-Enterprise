@@ -7,7 +7,28 @@
       "completed_at": "2026-05-26T07:40:00.000Z"
     },
     "scan": {
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-26T07:45:00.000Z",
+      "completed_at": "2026-05-26T04:48:34.000Z",
+      "artifacts": [
+        "evidence/discovery/candidates.md",
+        "evidence/discovery/signals/s1-packages.json",
+        "evidence/discovery/signals/s2-schema.json",
+        "evidence/discovery/signals/s3-entrypoints.json",
+        "evidence/discovery/signals/s4-frontend.json",
+        "evidence/security/security-signals.json",
+        "evidence/security/security-dependencies.json",
+        "evidence/security/signals/ss1-static.json",
+        "evidence/security/signals/ss3-config.json",
+        "evidence/security/signals/ss4-data-sensitivity.json",
+        "evidence/qa/qa-signals.json",
+        "evidence/qa/test-inventory.json",
+        "evidence/qa/coverage/coverage-map.json",
+        "evidence/qa/testability/testability-findings.json",
+        "evidence/qa/environments/ci-map.json",
+        "evidence/qa/environments/environment-map.json",
+        "evidence/qa/environments/flaky-tests.json"
+      ]
     },
     "discover": {
       "status": "pending"

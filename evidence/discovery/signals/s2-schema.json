@@ -1,0 +1,300 @@
+[
+  {
+    "id": "S2-other",
+    "tables": [
+      "abuse_reports",
+      "admin_configurations",
+      "analises_radiograficas",
+      "analises_radiograficas_history",
+      "appointment_confirmations",
+      "appointment_reminders",
+      "appointments",
+      "architecture_decision_records",
+      "audit_logs",
+      "audit_trail",
+      "backup_history",
+      "backup_replications",
+      "backup_retention_policies",
+      "backup_verification_log",
+      "bi_dashboards",
+      "bi_data_cache",
+      "bi_metrics",
+      "bi_reports",
+      "bi_widgets",
+      "blocked_times",
+      "budget_approvals",
+      "budget_items",
+      "budget_versions",
+      "budgets",
+      "caixa_incidentes",
+      "caixa_movimentos",
+      "campaign_metrics",
+      "campaign_sends",
+      "campaign_templates",
+      "campaign_triggers",
+      "cloud_storage_configs",
+      "collection_actions",
+      "collection_automation_config",
+      "fechamento_caixa",
+      "financial_categories",
+      "github_events",
+      "inadimplentes",
+      "lgpd_consents",
+      "lgpd_data_consents",
+      "lgpd_data_exports",
+      "lgpd_data_requests",
+      "login_attempts",
+      "module_catalog",
+      "module_configuration_templates",
+      "module_dependencies",
+      "nfce_carta_correcao",
+      "nfce_contingencia",
+      "nfce_emitidas",
+      "nfce_inutilizacao",
+      "notifications",
+      "onboarding_analytics",
+      "overdue_accounts",
+      "pdv_vendas",
+      "prescricoes_remotas",
+      "problemas_radiograficos",
+      "prontuarios",
+      "radiografia_ai_feedback",
+      "radiografia_laudo_templates",
+      "rate_limit_config",
+      "rate_limit_log",
+      "room_availability",
+      "root_actions_log",
+      "rum_metrics",
+      "sat_mfe_config",
+      "sat_mfe_impressoes",
+      "scheduled_backups",
+      "scheduled_exports",
+      "security_audit_log",
+      "system_health_metrics",
+      "terminal_command_history",
+      "wiki_page_versions",
+      "wiki_pages",
+      "banco_extratos",
+      "cash_registers",
+      "pdv_dashboard",
+      "pdv_metas_gamificacao",
+      "vendedor_metas",
+      "vendedor_ranking",
+      "event_store",
+      "domain_events",
+      "gamification_goals",
+      "bi_export_jobs",
+      "arquivo",
+      "arquivo_ocr",
+      "arquivo_versao",
+      "comunicacao_logs",
+      "analytics_events",
+      "ia_radiografia_analise",
+      "problema_radiografico",
+      "ia_modelo_config",
+      "ia_radiografia_audit_log"
+    ],
+    "fk_edges": 182,
+    "suggested_domain": "Other",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-marketing",
+    "tables": [
+      "campanha_envios",
+      "campanhas_inadimplencia",
+      "campanhas_marketing",
+      "crm_activities",
+      "crm_conversions",
+      "crm_interactions",
+      "crm_leads",
+      "crm_stages",
+      "lead_interacoes",
+      "lead_tags",
+      "leads",
+      "marketing_campaigns",
+      "recalls",
+      "fidelidade_badges",
+      "fidelidade_indicacoes",
+      "fidelidade_pontos",
+      "fidelidade_recompensas",
+      "fidelidade_transacoes"
+    ],
+    "fk_edges": 36,
+    "suggested_domain": "Marketing",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-administrative",
+    "tables": [
+      "clinic_modules",
+      "clinics",
+      "funcionarios",
+      "historico_clinico",
+      "permission_audit_logs",
+      "permission_templates",
+      "user_clinic_access",
+      "user_module_permissions",
+      "user_roles",
+      "users"
+    ],
+    "fk_edges": 20,
+    "suggested_domain": "Administrative",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-financial",
+    "tables": [
+      "contas_pagar",
+      "contas_receber",
+      "contrato_anexos",
+      "contrato_templates",
+      "contratos",
+      "crypto_payments",
+      "financial_transactions",
+      "integracao_contabil_config",
+      "integracao_contabil_envios",
+      "orcamento_itens",
+      "orcamento_pagamento",
+      "orcamento_visualizacoes",
+      "orcamentos",
+      "payment_methods",
+      "payment_negotiations",
+      "split_payment_config",
+      "split_payment_details",
+      "split_payment_recipients",
+      "split_payment_rules",
+      "split_payment_transactions",
+      "split_transactions",
+      "crypto_transactions",
+      "split_comissoes"
+    ],
+    "fk_edges": 46,
+    "suggested_domain": "Financial",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-cryptopayments",
+    "tables": [
+      "crypto_candlestick_data",
+      "crypto_price_alerts",
+      "crypto_offline_wallets",
+      "crypto_wallets",
+      "crypto_exchange_rates"
+    ],
+    "fk_edges": 10,
+    "suggested_domain": "CryptoPayments",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-clinical",
+    "tables": [
+      "dentist_schedules",
+      "inventario_agendamentos",
+      "odontogramas",
+      "patient_accounts",
+      "patient_messages",
+      "patient_notifications",
+      "patient_preferences",
+      "patient_sessions",
+      "patient_status_history",
+      "patients",
+      "pep_anexos",
+      "pep_assinaturas",
+      "pep_evolucoes",
+      "pep_odontograma",
+      "pep_odontograma_data",
+      "pep_odontograma_history",
+      "pep_tooth_surfaces",
+      "pep_tratamentos",
+      "procedimento_templates",
+      "teleconsultas",
+      "triagem_teleconsulta",
+      "fidelidade_pacientes",
+      "paciente_consentimento_ia"
+    ],
+    "fk_edges": 46,
+    "suggested_domain": "Clinical",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-inventory",
+    "tables": [
+      "estoque_pedidos",
+      "estoque_pedidos_config",
+      "estoque_pedidos_itens",
+      "inventario_itens",
+      "inventarios",
+      "movimentacoes_estoque",
+      "pdv_produtos",
+      "produtos",
+      "estoque_alertas"
+    ],
+    "fk_edges": 18,
+    "suggested_domain": "Inventory",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-fiscal",
+    "tables": [
+      "fiscal_config",
+      "notas_fiscais",
+      "tiss_batches",
+      "tiss_guides",
+      "nfe_records"
+    ],
+    "fk_edges": 10,
+    "suggested_domain": "Fiscal",
+    "confidence_contribution": "HIGH",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-files",
+    "tables": [
+      "profiles",
+      "teleodonto_files"
+    ],
+    "fk_edges": 4,
+    "suggested_domain": "Files",
+    "confidence_contribution": "MEDIUM",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  },
+  {
+    "id": "S2-telemedicine",
+    "tables": [
+      "teleodonto_chat",
+      "teleodonto_sessions"
+    ],
+    "fk_edges": 4,
+    "suggested_domain": "Telemedicine",
+    "confidence_contribution": "MEDIUM",
+    "evidence": [
+      "backend/prisma/schema.prisma: model definitions"
+    ]
+  }
+]

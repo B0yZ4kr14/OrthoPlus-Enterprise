@@ -1,0 +1,100 @@
+[
+  {
+    "id": "SEC-SS3-docker-compose",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Docker Compose file: docker-compose.yml"
+  },
+  {
+    "id": "SEC-SS3-docker-compose.prod",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.prod.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Docker Compose file: docker-compose.prod.yml"
+  },
+  {
+    "id": "SEC-SS3-docker-compose.ubuntu",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.ubuntu.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Docker Compose file: docker-compose.ubuntu.yml"
+  },
+  {
+    "id": "SEC-SS3-docker-compose.onprem",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.onprem.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Docker Compose file: docker-compose.onprem.yml"
+  },
+  {
+    "id": "SEC-SS3-cors",
+    "source": "SS3",
+    "category": "cors",
+    "severity_hint": "medium",
+    "evidence": [
+      {
+        "file": "backend/src/index.ts",
+        "lines": "CORS configuration"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "CORS configured \u2014 verify origin restrictions in production"
+  },
+  {
+    "id": "SEC-SS3-nginx",
+    "source": "SS3",
+    "category": "reverse-proxy",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "nginx.conf",
+        "lines": "proxy and SSL config"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "nginx reverse proxy with SSL termination configured"
+  },
+  {
+    "id": "SEC-SS3-ci-security",
+    "source": "SS3",
+    "category": "ci-security",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": ".github/workflows/security.yml",
+        "lines": "security audit"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Dedicated security audit workflow (weekly cron)"
+  }
+]

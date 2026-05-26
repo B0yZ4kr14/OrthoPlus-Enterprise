@@ -1,0 +1,40 @@
+{
+  "QS1": {
+    "test_files": 192,
+    "frameworks": [
+      "vitest",
+      "playwright",
+      "jest"
+    ],
+    "levels": {
+      "unit": 146,
+      "e2e": 46
+    }
+  },
+  "QS2": {
+    "source": "proxy",
+    "packages_mapped": 82,
+    "avg_proxy_coverage": 0.41,
+    "confidence": "LOW"
+  },
+  "QS3": {
+    "findings": 319,
+    "by_severity": {
+      "blocks": 0,
+      "impedes": 0,
+      "smell": 319
+    }
+  },
+  "QS4": {
+    "workflows": 14,
+    "environments": [
+      "dev",
+      "staging",
+      "prod"
+    ],
+    "flaky_tests": {
+      "source": "not-collected",
+      "reason": "no flaky test history export provided"
+    }
+  }
+}

@@ -1,0 +1,114 @@
+[
+  {
+    "workflow": "build.yml",
+    "path": ".github/workflows/build.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  },
+  {
+    "workflow": "cd.yml",
+    "path": ".github/workflows/cd.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": true,
+    "has_security": false
+  },
+  {
+    "workflow": "ci.yml",
+    "path": ".github/workflows/ci.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  },
+  {
+    "workflow": "deploy-theme-v2.yml",
+    "path": ".github/workflows/deploy-theme-v2.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": true,
+    "has_security": false
+  },
+  {
+    "workflow": "deploy-vps-orthoplus.yml",
+    "path": ".github/workflows/deploy-vps-orthoplus.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": true,
+    "has_security": false
+  },
+  {
+    "workflow": "deploy.yml",
+    "path": ".github/workflows/deploy.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": true,
+    "has_security": false
+  },
+  {
+    "workflow": "e2e-tests.yml",
+    "path": ".github/workflows/e2e-tests.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  },
+  {
+    "workflow": "gitnexus-index.yml",
+    "path": ".github/workflows/gitnexus-index.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  },
+  {
+    "workflow": "playwright.yml",
+    "path": ".github/workflows/playwright.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  },
+  {
+    "workflow": "production-validation.yml",
+    "path": ".github/workflows/production-validation.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": true
+  },
+  {
+    "workflow": "quality-check.yml",
+    "path": ".github/workflows/quality-check.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  },
+  {
+    "workflow": "security.yml",
+    "path": ".github/workflows/security.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": true
+  },
+  {
+    "workflow": "speckit-compliance.yml",
+    "path": ".github/workflows/speckit-compliance.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  },
+  {
+    "workflow": "test.yml",
+    "path": ".github/workflows/test.yml",
+    "triggers": [],
+    "has_tests": true,
+    "has_deploy": false,
+    "has_security": false
+  }
+]

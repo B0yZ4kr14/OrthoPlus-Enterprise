@@ -1,0 +1,198 @@
+[
+  {
+    "id": "SEC-SS1-001",
+    "source": "SS1",
+    "category": "authn-authz",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/src/middleware/authMiddleware.ts",
+        "lines": "JWT validation"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "JWT-based auth with clinicGuard middleware present"
+  },
+  {
+    "id": "SEC-SS1-002",
+    "source": "SS1",
+    "category": "authn-authz",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/src/middleware/clinicGuard.ts",
+        "lines": "clinic isolation"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Multi-tenant clinic isolation enforced"
+  },
+  {
+    "id": "SEC-SS1-003",
+    "source": "SS1",
+    "category": "input-validation",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/package.json",
+        "lines": "zod dependency"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Zod schema validation used throughout backend"
+  },
+  {
+    "id": "SEC-SS1-004",
+    "source": "SS1",
+    "category": "tls",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "nginx.conf",
+        "lines": "SSL/TLS configuration"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "nginx configured for HTTPS/SSL"
+  },
+  {
+    "id": "SEC-SS1-005",
+    "source": "SS1",
+    "category": "rate-limiting",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/package.json",
+        "lines": "express-rate-limit"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Rate limiting middleware present"
+  },
+  {
+    "id": "SEC-SS1-006",
+    "source": "SS1",
+    "category": "security-headers",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/package.json",
+        "lines": "helmet"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Helmet security headers configured"
+  },
+  {
+    "id": "SEC-SS1-007",
+    "source": "SS1",
+    "category": "compliance",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/src/modules/lgpd",
+        "lines": "LGPD module"
+      }
+    ],
+    "confidence": "HIGH",
+    "note": "Dedicated LGPD compliance module with consent management"
+  },
+  {
+    "id": "SEC-SS1-env-.env.example",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.example",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "Environment file .env.example contains sensitive keys \u2014 verify not committed"
+  },
+  {
+    "id": "SEC-SS1-env-.env.backup.local",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.backup.local",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "Environment file .env.backup.local contains sensitive keys \u2014 verify not committed"
+  },
+  {
+    "id": "SEC-SS1-env-.env",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "Environment file .env contains sensitive keys \u2014 verify not committed"
+  },
+  {
+    "id": "SEC-SS1-env-.env.production.example",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.production.example",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "Environment file .env.production.example contains sensitive keys \u2014 verify not committed"
+  },
+  {
+    "id": "SEC-SS1-env-.env.ubuntu.example",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.ubuntu.example",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "Environment file .env.ubuntu.example contains sensitive keys \u2014 verify not committed"
+  },
+  {
+    "id": "SEC-SS1-env-.env.vps.credentials",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.vps.credentials",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "Environment file .env.vps.credentials contains sensitive keys \u2014 verify not committed"
+  },
+  {
+    "id": "SEC-SS1-env-.env2",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env2",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM",
+    "note": "Environment file .env2 contains sensitive keys \u2014 verify not committed"
+  }
+]

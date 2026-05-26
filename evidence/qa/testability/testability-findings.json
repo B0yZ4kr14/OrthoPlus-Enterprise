@@ -1,0 +1,2873 @@
+[
+  {
+    "id": "TB-001",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/index.ts",
+    "line": 236,
+    "snippet": "res.json({ status: \"ok\", time: new Date(), uptime: process.uptime() });",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-002",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/index.ts",
+    "line": 239,
+    "snippet": "res.json({ status: \"ok\", time: new Date(), uptime: process.uptime() });",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-003",
+    "severity": "smell",
+    "pattern": "thread-sleep-timer",
+    "file": "backend/src/index.ts",
+    "line": 416,
+    "snippet": "const forceTimeout = setTimeout(() => {",
+    "recommended_seam": "Use scheduler abstraction"
+  },
+  {
+    "id": "TB-004",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/controllers/moduleController.ts",
+    "line": 140,
+    "snippet": "requestId: `req-${Date.now()}`,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-005",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/api/ApiGateway.ts",
+    "line": 51,
+    "snippet": "const start = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-006",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/api/ApiGateway.ts",
+    "line": 53,
+    "snippet": "const duration = Date.now() - start;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-007",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/api/ApiGateway.ts",
+    "line": 69,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-008",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryBackupService.ts",
+    "line": 51,
+    "snippet": "const timestamp = new Date().toISOString().replace(/[:.]/g, \"-\");",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-009",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryBackupService.ts",
+    "line": 55,
+    "snippet": "const start = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-010",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryBackupService.ts",
+    "line": 109,
+    "snippet": "durationMs: Date.now() - start,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-011",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryDatabaseManager.ts",
+    "line": 44,
+    "snippet": "const start = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-012",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryDatabaseManager.ts",
+    "line": 52,
+    "snippet": "const latencyMs = Date.now() - start;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-013",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryDatabaseManager.ts",
+    "line": 63,
+    "snippet": "latencyMs: Date.now() - start,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-014",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/PostgresDatabaseConnection.ts",
+    "line": 55,
+    "snippet": "const start = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-015",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/PostgresDatabaseConnection.ts",
+    "line": 58,
+    "snippet": "const duration = Date.now() - start;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-016",
+    "severity": "smell",
+    "pattern": "thread-sleep-timer",
+    "file": "backend/src/infrastructure/database/PostgresDatabaseConnection.ts",
+    "line": 132,
+    "snippet": "setTimeout(resolve, Math.pow(2, attempt) * 100),",
+    "recommended_seam": "Use scheduler abstraction"
+  },
+  {
+    "id": "TB-017",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryCircuitBreaker.ts",
+    "line": 66,
+    "snippet": "const now = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-018",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryCircuitBreaker.ts",
+    "line": 138,
+    "snippet": "this.lastSuccessAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-019",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryCircuitBreaker.ts",
+    "line": 151,
+    "snippet": "this.lastFailureAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-020",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryCircuitBreaker.ts",
+    "line": 157,
+    "snippet": "this.openedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-021",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/database/CategoryCircuitBreaker.ts",
+    "line": 163,
+    "snippet": "this.openedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-022",
+    "severity": "smell",
+    "pattern": "thread-sleep-timer",
+    "file": "backend/src/infrastructure/database/CategoryCircuitBreaker.ts",
+    "line": 120,
+    "snippet": "const timer = setTimeout(() => {",
+    "recommended_seam": "Use scheduler abstraction"
+  },
+  {
+    "id": "TB-023",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/metrics/PrometheusMetrics.ts",
+    "line": 65,
+    "snippet": "const start = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-024",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/metrics/PrometheusMetrics.ts",
+    "line": 70,
+    "snippet": "const duration = (Date.now() - start) / 1000;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-025",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/metrics/withTiming.ts",
+    "line": 17,
+    "snippet": "const start = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-026",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/metrics/withTiming.ts",
+    "line": 20,
+    "snippet": "const durationMs = Date.now() - start",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-027",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/infrastructure/metrics/withTiming.ts",
+    "line": 24,
+    "snippet": "const durationMs = Date.now() - start",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-028",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/middleware/lgpdMiddleware.ts",
+    "line": 213,
+    "snippet": "const timestamp = new Date().toISOString();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-029",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/middleware/errorHandler.ts",
+    "line": 124,
+    "snippet": "this.timestamp = new Date().toISOString();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-030",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/middleware/errorHandler.ts",
+    "line": 150,
+    "snippet": "return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-031",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/middleware/errorHandler.ts",
+    "line": 213,
+    "snippet": "const requestId = (err as ApiError).requestId || `req_${Date.now()}_${Math.rando",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-032",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/middleware/errorHandler.ts",
+    "line": 247,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-033",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/middleware/errorHandler.ts",
+    "line": 150,
+    "snippet": "return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-034",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/middleware/errorHandler.ts",
+    "line": 213,
+    "snippet": "const requestId = (err as ApiError).requestId || `req_${Date.now()}_${Math.rando",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-035",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/api/agendaController.ts",
+    "line": 132,
+    "snippet": "if (active === \"true\") endDatetimeFilter.gte = new Date().toISOString();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-036",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/AgendaService.ts",
+    "line": 37,
+    "snippet": "const start = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-037",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/AgendaService.ts",
+    "line": 40,
+    "snippet": "const duration = Date.now() - start",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-038",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/AgendaService.ts",
+    "line": 44,
+    "snippet": "const duration = Date.now() - start",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-039",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/AgendaService.ts",
+    "line": 90,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-040",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/AgendaService.ts",
+    "line": 115,
+    "snippet": "updated_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-041",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/AgendaService.ts",
+    "line": 128,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-042",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/AgendaService.ts",
+    "line": 155,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-043",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/commands/CreateAppointmentCommand.ts",
+    "line": 46,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-044",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/application/commands/CreateAppointmentCommand.ts",
+    "line": 47,
+    "snippet": "updatedAt: new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-045",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agenda/infrastructure/repositories/AppointmentRepositoryPostgres.ts",
+    "line": 53,
+    "snippet": "updated_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-046",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/agents/application/AgentsControllerService.ts",
+    "line": 52,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-047",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/GetUnifiedMetricsUseCase.ts",
+    "line": 37,
+    "snippet": "const now = new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-048",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/GetUnifiedMetricsUseCase.ts",
+    "line": 77,
+    "snippet": "(r) => r.dataVencimento && new Date(r.dataVencimento) < new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-049",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/AnalyticsControllerService.ts",
+    "line": 252,
+    "snippet": "new Date().getFullYear(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-050",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/AnalyticsControllerService.ts",
+    "line": 253,
+    "snippet": "new Date().getMonth(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-051",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/AnalyticsControllerService.ts",
+    "line": 272,
+    "snippet": "completed_at: isCompleted ? new Date() : null,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-052",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/AnalyticsControllerService.ts",
+    "line": 292,
+    "snippet": "scheduled_for: new Date(Date.now() + 60 * 60 * 1000),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-053",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/AnalyticsControllerService.ts",
+    "line": 318,
+    "snippet": "return { userId, step, action, saved_at: new Date() };",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-054",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/application/AnalyticsControllerService.ts",
+    "line": 325,
+    "snippet": "const today = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-055",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/infrastructure/AnalyticsRepository.ts",
+    "line": 22,
+    "snippet": "const today = new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-056",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/infrastructure/AnalyticsRepository.ts",
+    "line": 41,
+    "snippet": "new Date().getFullYear(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-057",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/infrastructure/AnalyticsRepository.ts",
+    "line": 42,
+    "snippet": "new Date().getMonth(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-058",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/infrastructure/AnalyticsRepository.ts",
+    "line": 63,
+    "snippet": "const today = new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-059",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/analytics/infrastructure/AnalyticsRepository.ts",
+    "line": 276,
+    "snippet": "deadline: { gte: new Date() },",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-060",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/api/AuthController.ts",
+    "line": 64,
+    "snippet": "updatedAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-061",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthService.ts",
+    "line": 310,
+    "snippet": "createdAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-062",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthService.ts",
+    "line": 311,
+    "snippet": "updatedAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-063",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthService.ts",
+    "line": 334,
+    "snippet": "createdAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-064",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthService.ts",
+    "line": 335,
+    "snippet": "updatedAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-065",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthenticateUserUseCase.ts",
+    "line": 54,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-066",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthenticateUserUseCase.ts",
+    "line": 71,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-067",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthenticateUserUseCase.ts",
+    "line": 89,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-068",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/AuthenticateUserUseCase.ts",
+    "line": 107,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-069",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/auth/application/RegisterUserUseCase.ts",
+    "line": 59,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-070",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 87,
+    "snippet": "return { backupId, isImmutable: true, verified_at: new Date().toISOString() };",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-071",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 94,
+    "snippet": "started_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-072",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 103,
+    "snippet": "verified_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-073",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 132,
+    "snippet": "tested_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-074",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 141,
+    "snippet": "uploaded_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-075",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 150,
+    "snippet": "return { backupId, isValid, validated_at: new Date().toISOString() };",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-076",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 159,
+    "snippet": "checked_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-077",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 164,
+    "snippet": "const backupId = `manual-${Date.now()}`;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-078",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 169,
+    "snippet": "started_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-079",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 170,
+    "snippet": "completed_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-080",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 179,
+    "snippet": "restored_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-081",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 83,
+    "snippet": "return { deduplicated: Math.floor(Math.random() * 3), kept: 5 };",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-082",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 123,
+    "snippet": "replicationId: \"repl-\" + Math.floor(Math.random() * 1000),",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-083",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/backups/api/backupController.ts",
+    "line": 154,
+    "snippet": "const volatility = Math.random() * 0.5;",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-084",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 85,
+    "snippet": "const expirationTime = Math.floor(Date.now() / 1000) + 3600;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-085",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 93,
+    "snippet": "token = `agora-stub-token-${Date.now()}`;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-086",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 98,
+    "snippet": "token = `dev-token-${Date.now()}`;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-087",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 152,
+    "snippet": "const mockResourceId = `resource-${Date.now()}`;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-088",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 153,
+    "snippet": "const mockSid = `sid-${Date.now()}`;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-089",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 160,
+    "snippet": "recording_started_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-090",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 247,
+    "snippet": "recording_started_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-091",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 283,
+    "snippet": "recording_stopped_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-092",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/comm/application/CommControllerService.ts",
+    "line": 320,
+    "snippet": "recording_stopped_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-093",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/configuracoes/domain/entities/Modulo.ts",
+    "line": 39,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-094",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/configuracoes/domain/entities/Modulo.ts",
+    "line": 44,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-095",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/configuracoes/domain/entities/Modulo.ts",
+    "line": 49,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-096",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/contratos/domain/entities/Contrato.ts",
+    "line": 63,
+    "snippet": "this.dataAssinatura = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-097",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/contratos/domain/entities/Contrato.ts",
+    "line": 64,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-098",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/contratos/domain/entities/Contrato.ts",
+    "line": 72,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-099",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/api/volatilityWorker.ts",
+    "line": 42,
+    "snippet": "const toTimestamp = Math.floor(Date.now() / 1000);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-100",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/api/volatilityWorker.ts",
+    "line": 82,
+    "snippet": "data: { last_triggered_at: new Date() },",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-101",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/domain/entities/ExchangeConfig.ts",
+    "line": 41,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-102",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/domain/entities/ExchangeConfig.ts",
+    "line": 46,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-103",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/domain/entities/ExchangeConfig.ts",
+    "line": 50,
+    "snippet": "this.props.lastSyncAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-104",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/domain/entities/ExchangeConfig.ts",
+    "line": 55,
+    "snippet": "const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-105",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 18,
+    "snippet": "lastSyncAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-106",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 19,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-107",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 20,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-108",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 47,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-109",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 48,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-110",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 62,
+    "snippet": "lastUpdated: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-111",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 74,
+    "snippet": "nextExecutionAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-112",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 226,
+    "snippet": "const address = `${coin_type?.toLowerCase() || \"btc\"}_${wallet_id || clinicId}_$",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-113",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 231,
+    "snippet": "created_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-114",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/crypto_config/application/CryptoConfigControllerService.ts",
+    "line": 117,
+    "snippet": "const mockAddress = `bc1q${Math.random().toString(36).substring(2, 42)}`;",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-115",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoControllerService.ts",
+    "line": 24,
+    "snippet": "const convertedAt = new Date().toISOString();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-116",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/crypto_config/application/CryptoControllerService.ts",
+    "line": 136,
+    "snippet": "updated_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-117",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/dashboard/controllers/DashboardController.ts",
+    "line": 61,
+    "snippet": "const today = new Date().toISOString().split('T')[0];",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-118",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/domain/entities/DatabaseHealth.ts",
+    "line": 56,
+    "snippet": "const now = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-119",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 140,
+    "snippet": "const start = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-120",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 146,
+    "snippet": "const catStart = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-121",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 174,
+    "snippet": "latencyMs: Date.now() - catStart,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-122",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 184,
+    "snippet": "latencyMs: Date.now() - catStart,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-123",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 193,
+    "snippet": "totalLatencyMs: Date.now() - start,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-124",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 194,
+    "snippet": "checkedAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-125",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 259,
+    "snippet": "checkedAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-126",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 277,
+    "snippet": "const start = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-127",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/infrastructure/MasterDatabaseManager.ts",
+    "line": 309,
+    "snippet": "executionTimeMs: Date.now() - start,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-128",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/application/DatabaseAdminControllerService.ts",
+    "line": 78,
+    "snippet": "let lastVacuum: Date = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-129",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/application/DatabaseAdminControllerService.ts",
+    "line": 79,
+    "snippet": "let lastAnalyze: Date = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-130",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/application/DatabaseAdminControllerService.ts",
+    "line": 127,
+    "snippet": "timestamp: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-131",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/application/DatabaseAdminControllerService.ts",
+    "line": 240,
+    "snippet": "lastExecuted: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-132",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/database_admin/application/DatabaseAdminControllerService.ts",
+    "line": 269,
+    "snippet": "const startedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-133",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/api/FaturamentoController.ts",
+    "line": 93,
+    "snippet": "protocolo: `IN-${Date.now()}`,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-134",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/api/gamificationWorker.ts",
+    "line": 31,
+    "snippet": "if (new Date() > new Date(meta.periodo_fim)) {",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-135",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/api/gamificationWorker.ts",
+    "line": 73,
+    "snippet": "const hoje = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-136",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/application/FaturamentoControllerService.ts",
+    "line": 64,
+    "snippet": "data_cancelamento: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-137",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/application/commands/EmitirNFeCommand.ts",
+    "line": 44,
+    "snippet": "dataEmissao: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-138",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/application/commands/EmitirNFeCommand.ts",
+    "line": 48,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-139",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/application/commands/EmitirNFeCommand.ts",
+    "line": 49,
+    "snippet": "updatedAt: new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-140",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/application/commands/EmitirNFeCommand.ts",
+    "line": 65,
+    "snippet": "const timestamp = Date.now();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-141",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/domain/entities/NFe.ts",
+    "line": 66,
+    "snippet": "this.dataAutorizacao = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-142",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/domain/entities/NFe.ts",
+    "line": 67,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-143",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/domain/entities/NFe.ts",
+    "line": 75,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-144",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/infrastructure/GamificationRepository.ts",
+    "line": 14,
+    "snippet": "periodo_inicio: { lte: new Date() },",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-145",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/faturamento/infrastructure/GamificationRepository.ts",
+    "line": 15,
+    "snippet": "periodo_fim: { gte: new Date() },",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-146",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/fidelidade/infrastructure/FidelidadeRepository.ts",
+    "line": 22,
+    "snippet": "update: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-147",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/fidelidade/infrastructure/FidelidadeRepository.ts",
+    "line": 47,
+    "snippet": "update: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-148",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/api/router.ts",
+    "line": 34,
+    "snippet": "const uniqueSuffix = Date.now() + \"-\" + Math.round(Math.random() * 1e9);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-149",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/files/api/router.ts",
+    "line": 34,
+    "snippet": "const uniqueSuffix = Date.now() + \"-\" + Math.round(Math.random() * 1e9);",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-150",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/application/FilesControllerService.ts",
+    "line": 94,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-151",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/application/FilesControllerService.ts",
+    "line": 108,
+    "snippet": "metricsCollector.files.recordUpload(clinicId, fileRecord.categoria, Date.now() -",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-152",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/application/FilesControllerService.ts",
+    "line": 160,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-153",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/application/FilesControllerService.ts",
+    "line": 179,
+    "snippet": "metricsCollector.files.recordDownload(clinicId, Date.now() - startTime)",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-154",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/application/FilesControllerService.ts",
+    "line": 216,
+    "snippet": "const fileName = `orthoplus_backup_${backup.clinic_id}_${new Date().toISOString(",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-155",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/application/FilesControllerService.ts",
+    "line": 238,
+    "snippet": "uploadedAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-156",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/files/application/FilesControllerService.ts",
+    "line": 248,
+    "snippet": "const date = new Date().toISOString().split(\"T\")[0].replace(/-/g, \"\")",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-157",
+    "severity": "smell",
+    "pattern": "direct-file-io",
+    "file": "backend/src/modules/files/application/services/FilesService.ts",
+    "line": 569,
+    "snippet": "const hash = crypto.createHash(\"sha256\").update(fs.readFileSync(filePath)).diges",
+    "recommended_seam": "Inject IFileSystem"
+  },
+  {
+    "id": "TB-158",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/application/ProcessarPagamentoUseCase.ts",
+    "line": 28,
+    "snippet": "const transactionId = `txn_${Date.now()}`",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-159",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/application/ProcessarPagamentoUseCase.ts",
+    "line": 34,
+    "snippet": "data_pagamento: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-160",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/application/FinanceiroService.ts",
+    "line": 101,
+    "snippet": "return this.repo.updateTransaction(id, { status: \"PAGO\", paid_date: new Date().t",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-161",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/application/CreateTransactionUseCase.ts",
+    "line": 43,
+    "snippet": "created_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-162",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/application/commands/CreateTransactionCommand.ts",
+    "line": 37,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-163",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/application/commands/CreateTransactionCommand.ts",
+    "line": 38,
+    "snippet": "updatedAt: new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-164",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/domain/entities/Transaction.ts",
+    "line": 44,
+    "snippet": "this.paidAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-165",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/domain/entities/Transaction.ts",
+    "line": 45,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-166",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/financeiro/domain/entities/Transaction.ts",
+    "line": 53,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-167",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 31,
+    "snippet": "lastSyncAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-168",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 33,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-169",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 34,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-170",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 75,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-171",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 76,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-172",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 105,
+    "snippet": "{ name: 'main', lastCommit: 'feat: add patient module', lastUpdated: new Date() ",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-173",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 106,
+    "snippet": "{ name: 'develop', lastCommit: 'fix: resolve bug in billing', lastUpdated: new D",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-174",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 107,
+    "snippet": "{ name: 'feature/new-dashboard', lastCommit: 'wip: dashboard redesign', lastUpda",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-175",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 134,
+    "snippet": "createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-176",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 142,
+    "snippet": "createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-177",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 143,
+    "snippet": "mergedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-178",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 170,
+    "snippet": "lastRun: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-179",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/api/GitHubToolsController.ts",
+    "line": 177,
+    "snippet": "lastRun: new Date(Date.now() - 24 * 60 * 60 * 1000),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-180",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/domain/entities/GitHubRepository.ts",
+    "line": 50,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-181",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/domain/entities/GitHubRepository.ts",
+    "line": 55,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-182",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/domain/entities/GitHubRepository.ts",
+    "line": 59,
+    "snippet": "this.props.lastSyncAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-183",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/domain/entities/GitHubRepository.ts",
+    "line": 60,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-184",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/github_tools/domain/entities/GitHubRepository.ts",
+    "line": 65,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-185",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/application/InventarioControllerService.ts",
+    "line": 56,
+    "snippet": "const numeroPedido = `AUTO-${Date.now()}-${Math.random().toString(36).substring(",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-186",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/application/InventarioControllerService.ts",
+    "line": 62,
+    "snippet": "data_pedido: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-187",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/inventario/application/InventarioControllerService.ts",
+    "line": 56,
+    "snippet": "const numeroPedido = `AUTO-${Date.now()}-${Math.random().toString(36).substring(",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-188",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/application/commands/CreateProdutoCommand.ts",
+    "line": 40,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-189",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/application/commands/CreateProdutoCommand.ts",
+    "line": 41,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-190",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/application/use-cases/CadastrarProdutoUseCase.ts",
+    "line": 48,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-191",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/application/use-cases/CadastrarProdutoUseCase.ts",
+    "line": 49,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-192",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/domain/entities/Produto.ts",
+    "line": 43,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-193",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/domain/entities/Produto.ts",
+    "line": 54,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-194",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/domain/entities/Produto.ts",
+    "line": 62,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-195",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/inventario/domain/entities/Produto.ts",
+    "line": 72,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-196",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/marketing/api/controller.ts",
+    "line": 147,
+    "snippet": "const now = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-197",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/marketing/api/controller.ts",
+    "line": 282,
+    "snippet": "const today = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-198",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/nfe/api/controller.ts",
+    "line": 66,
+    "snippet": "const now = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-199",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/nfe/api/controller.ts",
+    "line": 117,
+    "snippet": "nfe.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-200",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/nfe/domain/entities/NFe.ts",
+    "line": 47,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-201",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/notifications/application/NotificationControllerService.ts",
+    "line": 73,
+    "snippet": "const tomorrow = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-202",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/notifications/application/NotificationControllerService.ts",
+    "line": 95,
+    "snippet": "const today = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-203",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/notifications/application/NotificationControllerService.ts",
+    "line": 196,
+    "snippet": "const toTimestamp = Math.floor(Date.now() / 1000);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-204",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/notifications/application/NotificationControllerService.ts",
+    "line": 224,
+    "snippet": "last_triggered_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-205",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/notifications/application/NotificationControllerService.ts",
+    "line": 287,
+    "snippet": "(Date.now() - new Date(alert.last_triggered_at).getTime()) / (1000 * 60 * 60);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-206",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/notifications/application/NotificationControllerService.ts",
+    "line": 312,
+    "snippet": "last_triggered_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-207",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/orcamentos/application/services/OrcamentoService.ts",
+    "line": 66,
+    "snippet": "const dataValidade = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-208",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/orcamentos/application/services/OrcamentoService.ts",
+    "line": 94,
+    "snippet": "updated_at: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-209",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/orcamentos/application/services/OrcamentoService.ts",
+    "line": 113,
+    "snippet": "return this.repo.updateOrcamento(id, { status: \"PENDENTE\", updated_at: new Date(",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-210",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/orcamentos/application/services/OrcamentoService.ts",
+    "line": 123,
+    "snippet": "const now = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-211",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/orcamentos/application/services/OrcamentoService.ts",
+    "line": 139,
+    "snippet": "const now = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-212",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/application/PacientesControllerService.ts",
+    "line": 107,
+    "snippet": "expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-213",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/application/use-cases/CadastrarPacienteUseCase.ts",
+    "line": 153,
+    "snippet": "occurredOn: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-214",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/application/use-cases/CadastrarPacienteUseCase.ts",
+    "line": 165,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-215",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 249,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-216",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 256,
+    "snippet": "occurredOn: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-217",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 270,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-218",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 283,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-219",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 289,
+    "snippet": "occurredOn: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-220",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 302,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-221",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 310,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-222",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 339,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-223",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 346,
+    "snippet": "occurredOn: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-224",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 357,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-225",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 369,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-226",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 375,
+    "snippet": "occurredOn: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-227",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 387,
+    "snippet": "timestamp: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-228",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 465,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-229",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/domain/entities/Patient.ts",
+    "line": 466,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-230",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/infrastructure/repositories/PatientRepositoryPostgres.ts",
+    "line": 113,
+    "snippet": "const now = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-231",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/infrastructure/repositories/PatientRepositoryPostgres.ts",
+    "line": 148,
+    "snippet": "changed_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-232",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pacientes/infrastructure/repositories/PatientRepositoryPostgres.ts",
+    "line": 183,
+    "snippet": "data: { status: 'INATIVO', updated_at: new Date() },",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-233",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/api/PdvController.ts",
+    "line": 55,
+    "snippet": "numero_venda: `VND-${Date.now()}`,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-234",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/application/commands/CreateVendaCommand.ts",
+    "line": 38,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-235",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/application/commands/CreateVendaCommand.ts",
+    "line": 39,
+    "snippet": "updatedAt: new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-236",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/domain/entities/Venda.ts",
+    "line": 47,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-237",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/domain/entities/Venda.ts",
+    "line": 54,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-238",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/domain/entities/Venda.ts",
+    "line": 64,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-239",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/domain/entities/Venda.ts",
+    "line": 73,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-240",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pdv/domain/entities/Venda.ts",
+    "line": 81,
+    "snippet": "this.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-241",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/api/PepController.ts",
+    "line": 83,
+    "snippet": "signed_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-242",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/domain/entities/Prontuario.ts",
+    "line": 38,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-243",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/domain/entities/Prontuario.ts",
+    "line": 39,
+    "snippet": "updatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-244",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/domain/entities/Prontuario.ts",
+    "line": 61,
+    "snippet": "this.props.assinadoEm = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-245",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/domain/entities/Prontuario.ts",
+    "line": 62,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-246",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/domain/entities/Prontuario.ts",
+    "line": 71,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-247",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/domain/entities/Prontuario.ts",
+    "line": 80,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-248",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/pep/domain/entities/Prontuario.ts",
+    "line": 89,
+    "snippet": "this.props.updatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-249",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/teleodonto/api/controller.ts",
+    "line": 58,
+    "snippet": "const start = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-250",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/teleodonto/api/controller.ts",
+    "line": 60,
+    "snippet": "teleodontoMetrics.observeCreateDuration(clinicId, Date.now() - start)",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-251",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/teleodonto/services/TeleodontoService.ts",
+    "line": 110,
+    "snippet": "data_iniciada: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-252",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/teleodonto/services/TeleodontoService.ts",
+    "line": 126,
+    "snippet": "data_finalizada: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-253",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/teleodonto/services/TeleodontoService.ts",
+    "line": 158,
+    "snippet": "prescribed_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-254",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/terminal/api/TerminalController.ts",
+    "line": 28,
+    "snippet": "startedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-255",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/terminal/api/TerminalController.ts",
+    "line": 29,
+    "snippet": "lastActivityAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-256",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/terminal/api/TerminalController.ts",
+    "line": 74,
+    "snippet": "terminatedAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-257",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/terminal/domain/entities/TerminalSession.ts",
+    "line": 43,
+    "snippet": "this.props.lastActivityAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-258",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/terminal/domain/entities/TerminalSession.ts",
+    "line": 56,
+    "snippet": "this.props.terminatedAt = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-259",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/terminal/domain/entities/TerminalSession.ts",
+    "line": 60,
+    "snippet": "const idleThreshold = new Date(Date.now() - TerminalSession.IDLE_TIMEOUT_MS);",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-260",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/terminal/domain/entities/TerminalSession.ts",
+    "line": 71,
+    "snippet": "const endTime = this.props.terminatedAt || new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-261",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/tiss/api/controller.ts",
+    "line": 245,
+    "snippet": "batch_number || `LOTE-${Date.now()}-${Math.random().toString(36).substring(2, 8)",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-262",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/tiss/api/controller.ts",
+    "line": 256,
+    "snippet": "sent_at: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-263",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/tiss/api/controller.ts",
+    "line": 269,
+    "snippet": "submission_date: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-264",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/tiss/api/controller.ts",
+    "line": 245,
+    "snippet": "batch_number || `LOTE-${Date.now()}-${Math.random().toString(36).substring(2, 8)",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-265",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/ia_radiografia/api/controller.ts",
+    "line": 59,
+    "snippet": "const storageFileName = `${Date.now()}.png`",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-266",
+    "severity": "smell",
+    "pattern": "direct-file-io",
+    "file": "backend/src/modules/ia_radiografia/api/controller.ts",
+    "line": 61,
+    "snippet": "fs.writeFileSync(storagePath, cleanBuffer)",
+    "recommended_seam": "Inject IFileSystem"
+  },
+  {
+    "id": "TB-267",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/ia_radiografia/api/iaRateLimiter.ts",
+    "line": 9,
+    "snippet": "const now = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-268",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/ia_radiografia/domain/services/IAConsentimentoService.ts",
+    "line": 20,
+    "snippet": "data_consentimento: dto.consentido ? new Date() : null,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-269",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/ia_radiografia/domain/services/IAConsentimentoService.ts",
+    "line": 35,
+    "snippet": "data_revogacao: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-270",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/ia_radiografia/domain/services/LocalAIService.ts",
+    "line": 44,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-271",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/ia_radiografia/domain/services/LocalAIService.ts",
+    "line": 70,
+    "snippet": "const processingTimeMs = Date.now() - startTime",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-272",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/api/controller.ts",
+    "line": 51,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-273",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/api/controller.ts",
+    "line": 92,
+    "snippet": "const duration = (Date.now() - startTime) / 1000",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-274",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/api/controller.ts",
+    "line": 107,
+    "snippet": "query_time_ms: Date.now(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-275",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/api/controller.ts",
+    "line": 112,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-276",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/api/controller.ts",
+    "line": 119,
+    "snippet": "const duration = (Date.now() - startTime) / 1000",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-277",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/api/controller.ts",
+    "line": 127,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-278",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/api/controller.ts",
+    "line": 152,
+    "snippet": "const duration = (Date.now() - startTime) / 1000",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-279",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/SearchService.ts",
+    "line": 43,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-280",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/SearchService.ts",
+    "line": 84,
+    "snippet": "const duration = Date.now() - startTime",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-281",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/ContextBriefService.ts",
+    "line": 166,
+    "snippet": "`generated_at: ${new Date().toISOString()}`,",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-282",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/DriftDetectionService.ts",
+    "line": 49,
+    "snippet": "Date.now(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-283",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/DriftDetectionService.ts",
+    "line": 111,
+    "snippet": "const threshold = Date.now() - orphanThresholdDays * 24 * 60 * 60 * 1000",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-284",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/IndexingService.ts",
+    "line": 115,
+    "snippet": "createdAt: Date.now(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-285",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/IndexingService.ts",
+    "line": 125,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-286",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/IndexingService.ts",
+    "line": 141,
+    "snippet": "const duration = (Date.now() - startTime) / 1000",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-287",
+    "severity": "smell",
+    "pattern": "direct-file-io",
+    "file": "backend/src/modules/memory_hub/domain/services/IndexingService.ts",
+    "line": 46,
+    "snippet": "const content = fs.readFileSync(filePath, \"utf-8\")",
+    "recommended_seam": "Inject IFileSystem"
+  },
+  {
+    "id": "TB-288",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/domain/services/HealthService.ts",
+    "line": 40,
+    "snippet": "const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-289",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/infrastructure/DocumentRepository.ts",
+    "line": 67,
+    "snippet": "const now = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-290",
+    "severity": "smell",
+    "pattern": "thread-sleep-timer",
+    "file": "backend/src/modules/memory_hub/infrastructure/FileWatcher.ts",
+    "line": 72,
+    "snippet": "this.debounceTimer = setTimeout(() => {",
+    "recommended_seam": "Use scheduler abstraction"
+  },
+  {
+    "id": "TB-291",
+    "severity": "smell",
+    "pattern": "direct-file-io",
+    "file": "backend/src/modules/memory_hub/infrastructure/GitignoreParser.ts",
+    "line": 13,
+    "snippet": "const content = fs.readFileSync(gitignorePath, \"utf-8\")",
+    "recommended_seam": "Inject IFileSystem"
+  },
+  {
+    "id": "TB-292",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/infrastructure/SearchAuditRepository.ts",
+    "line": 39,
+    "snippet": "Date.now(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-293",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/infrastructure/OpenAIEmbeddingClient.ts",
+    "line": 20,
+    "snippet": "this.requestId = `emb_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-294",
+    "severity": "smell",
+    "pattern": "unseeded-randomness",
+    "file": "backend/src/modules/memory_hub/infrastructure/OpenAIEmbeddingClient.ts",
+    "line": 20,
+    "snippet": "this.requestId = `emb_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`",
+    "recommended_seam": "Inject IRandom / pass seed"
+  },
+  {
+    "id": "TB-295",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/workers/driftScanWorker.ts",
+    "line": 15,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-296",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/workers/driftScanWorker.ts",
+    "line": 33,
+    "snippet": "const duration = Date.now() - startTime",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-297",
+    "severity": "smell",
+    "pattern": "thread-sleep-timer",
+    "file": "backend/src/modules/memory_hub/workers/driftScanWorker.ts",
+    "line": 18,
+    "snippet": "const timeoutId = setTimeout(() => {",
+    "recommended_seam": "Use scheduler abstraction"
+  },
+  {
+    "id": "TB-298",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/memory_hub/cli/health.ts",
+    "line": 14,
+    "snippet": "const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-299",
+    "severity": "smell",
+    "pattern": "direct-file-io",
+    "file": "backend/src/modules/memory_hub/scripts/initDb.ts",
+    "line": 15,
+    "snippet": "const schema = fs.readFileSync(schemaPath, \"utf-8\")",
+    "recommended_seam": "Inject IFileSystem"
+  },
+  {
+    "id": "TB-300",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/modules/relatorios/application/ReportControllerService.ts",
+    "line": 26,
+    "snippet": "exportedAt: new Date().toISOString(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-301",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/shared/events/DomainEvent.ts",
+    "line": 19,
+    "snippet": "this.occurredOn = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-302",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/shared/events/handlers/GerarFinanceiroHandler.ts",
+    "line": 19,
+    "snippet": "dueDate: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-303",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/shared/events/handlers/GerarFinanceiroHandler.ts",
+    "line": 25,
+    "snippet": "createdAt: new Date(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-304",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/shared/events/handlers/GerarFinanceiroHandler.ts",
+    "line": 26,
+    "snippet": "updatedAt: new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-305",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/iaRadiografiaWorker.ts",
+    "line": 44,
+    "snippet": "const startTime = Date.now()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-306",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/iaRadiografiaWorker.ts",
+    "line": 50,
+    "snippet": "const durationMs = Date.now() - startTime",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-307",
+    "severity": "smell",
+    "pattern": "direct-file-io",
+    "file": "backend/src/workers/iaRadiografiaWorker.ts",
+    "line": 37,
+    "snippet": "const imageBuffer = fs.readFileSync(storagePath)",
+    "recommended_seam": "Inject IFileSystem"
+  },
+  {
+    "id": "TB-308",
+    "severity": "smell",
+    "pattern": "hidden-http-dependency",
+    "file": "backend/src/workers/jobs/cryptoJobs.ts",
+    "line": 8,
+    "snippet": "await axios.post(\"http://localhost:3005/api/crypto/jobs/execute\", {",
+    "recommended_seam": "Inject HTTP client / use repository pattern"
+  },
+  {
+    "id": "TB-309",
+    "severity": "smell",
+    "pattern": "hidden-http-dependency",
+    "file": "backend/src/workers/jobs/estoqueJobs.ts",
+    "line": 8,
+    "snippet": "await axios.post(\"http://localhost:3005/api/estoque/automation\", {",
+    "recommended_seam": "Inject HTTP client / use repository pattern"
+  },
+  {
+    "id": "TB-310",
+    "severity": "smell",
+    "pattern": "hidden-http-dependency",
+    "file": "backend/src/workers/jobs/financeiroJobs.ts",
+    "line": 7,
+    "snippet": "await axios.post(\"http://localhost:3005/api/financeiro/jobs/execute\", {",
+    "recommended_seam": "Inject HTTP client / use repository pattern"
+  },
+  {
+    "id": "TB-311",
+    "severity": "smell",
+    "pattern": "hidden-http-dependency",
+    "file": "backend/src/workers/jobs/marketingJobs.ts",
+    "line": 9,
+    "snippet": "await axios.post(`${BASE_URL}/api/marketing/${endpoint}`, {}, { headers: { \"X-In",
+    "recommended_seam": "Inject HTTP client / use repository pattern"
+  },
+  {
+    "id": "TB-312",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/jobs/scheduleAppointments.ts",
+    "line": 10,
+    "snippet": "const now = new Date();",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-313",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/jobs/gamificationJobs.ts",
+    "line": 23,
+    "snippet": "new Date().getFullYear(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-314",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/jobs/gamificationJobs.ts",
+    "line": 24,
+    "snippet": "new Date().getMonth(),",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-315",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/jobs/gamificationJobs.ts",
+    "line": 33,
+    "snippet": "deadline: { gte: new Date() },",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-316",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/jobs/gamificationJobs.ts",
+    "line": 79,
+    "snippet": "const completedAt = isCompleted ? new Date() : null;",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-317",
+    "severity": "smell",
+    "pattern": "static-clock-access",
+    "file": "backend/src/workers/jobs/memoryHubDrift.ts",
+    "line": 19,
+    "snippet": "const now = new Date()",
+    "recommended_seam": "Inject IClock / pass date provider"
+  },
+  {
+    "id": "TB-318",
+    "severity": "smell",
+    "pattern": "thread-sleep-timer",
+    "file": "backend/src/workers/jobs/memoryHubDrift.ts",
+    "line": 57,
+    "snippet": "setTimeout(() => {",
+    "recommended_seam": "Use scheduler abstraction"
+  },
+  {
+    "id": "TB-319",
+    "severity": "smell",
+    "pattern": "thread-sleep-timer",
+    "file": "backend/src/workers/jobs/memoryHubDrift.ts",
+    "line": 59,
+    "snippet": "setInterval(runDriftScan, 24 * 60 * 60 * 1000)",
+    "recommended_seam": "Use scheduler abstraction"
+  }
+]

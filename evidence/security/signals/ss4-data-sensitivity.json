@@ -1,0 +1,1253 @@
+[
+  {
+    "id": "SEC-SS4-backup_retention_policies",
+    "entity": "backup_retention_policies",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "auto_delete_enabled",
+      "backup_type",
+      "clinic_id",
+      "created_at",
+      "id",
+      "keep_daily",
+      "keep_monthly",
+      "keep_weekly",
+      "keep_yearly",
+      "name",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_dashboards",
+    "entity": "bi_dashboards",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "description",
+      "id",
+      "is_default",
+      "is_public",
+      "layout",
+      "name",
+      "refresh_interval_minutes",
+      "shared_with",
+      "tags",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_metrics",
+    "entity": "bi_metrics",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "aggregation_period",
+      "calculation_type",
+      "clinic_id",
+      "created_at",
+      "data_sources",
+      "description",
+      "formula",
+      "id",
+      "last_calculated_at",
+      "metadata",
+      "metric_key",
+      "name",
+      "trend",
+      "updated_at",
+      "value"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_reports",
+    "entity": "bi_reports",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "description",
+      "format",
+      "id",
+      "is_active",
+      "last_generated_at",
+      "name",
+      "next_generation_at",
+      "parameters",
+      "recipients",
+      "report_type",
+      "schedule",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_widgets",
+    "entity": "bi_widgets",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "cache_duration_minutes",
+      "chart_type",
+      "clinic_id",
+      "created_at",
+      "dashboard_id",
+      "data_source",
+      "display_config",
+      "height",
+      "id",
+      "name",
+      "position_x",
+      "position_y",
+      "query_config",
+      "refresh_on_load",
+      "updated_at",
+      "widget_type",
+      "width"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-caixa_movimentos",
+    "entity": "caixa_movimentos",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "aberto_em",
+      "caixa_id",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "diferenca",
+      "fechado_em",
+      "horario_risco",
+      "id",
+      "motivo_sangria",
+      "observacoes",
+      "risco_calculado",
+      "status",
+      "sugerido_por_ia",
+      "tipo",
+      "valor",
+      "valor_esperado",
+      "valor_final",
+      "valor_inicial"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-campaign_templates",
+    "entity": "campaign_templates",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "category",
+      "clinic_id",
+      "content",
+      "created_at",
+      "created_by",
+      "description",
+      "id",
+      "is_default",
+      "name",
+      "subject",
+      "template_type",
+      "updated_at",
+      "variables"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-campanha_envios",
+    "entity": "campanha_envios",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "aberto_em",
+      "campanha_id",
+      "clicado_em",
+      "convertido_em",
+      "created_at",
+      "destinatario_id",
+      "destinatario_tipo",
+      "email",
+      "enviado_em",
+      "erro_mensagem",
+      "id",
+      "status_envio",
+      "telefone"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-campanhas_marketing",
+    "entity": "campanhas_marketing",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "clinic_id",
+      "conteudo_template",
+      "created_at",
+      "created_by",
+      "data_fim",
+      "data_inicio",
+      "id",
+      "nome",
+      "segmento_alvo",
+      "status",
+      "taxa_abertura",
+      "taxa_clique",
+      "taxa_conversao",
+      "tipo",
+      "total_aberturas",
+      "total_cliques",
+      "total_conversoes",
+      "total_destinatarios",
+      "total_enviados",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-clinics",
+    "entity": "clinics",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "auto_cleanup_enabled",
+      "backup_retention_days",
+      "created_at",
+      "id",
+      "name",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-contas_pagar",
+    "entity": "contas_pagar",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "anexo_url",
+      "categoria",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "data_emissao",
+      "data_pagamento",
+      "data_vencimento",
+      "descricao",
+      "forma_pagamento",
+      "fornecedor",
+      "id",
+      "observacoes",
+      "parcela_numero",
+      "parcela_total",
+      "periodicidade",
+      "recorrente",
+      "status",
+      "updated_at",
+      "valor",
+      "valor_pago"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-contas_receber",
+    "entity": "contas_receber",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "data_emissao",
+      "data_pagamento",
+      "data_vencimento",
+      "descricao",
+      "forma_pagamento",
+      "id",
+      "observacoes",
+      "parcela_numero",
+      "parcela_total",
+      "patient_id",
+      "patient",
+      "status",
+      "updated_at",
+      "valor",
+      "valor_pago"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-contrato_templates",
+    "entity": "contrato_templates",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "ativo",
+      "clinic_id",
+      "conteudo_html",
+      "created_at",
+      "created_by",
+      "id",
+      "nome",
+      "tipo_tratamento",
+      "updated_at",
+      "variaveis_disponiveis"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crm_leads",
+    "entity": "crm_leads",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "assigned_to",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "email",
+      "estimated_value",
+      "id",
+      "interest_description",
+      "name",
+      "next_contact_date",
+      "notes",
+      "phone",
+      "source",
+      "status",
+      "tags",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crm_stages",
+    "entity": "crm_stages",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "average_time_days",
+      "clinic_id",
+      "color",
+      "conversion_rate",
+      "created_at",
+      "description",
+      "id",
+      "is_active",
+      "name",
+      "order_index",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-financial_categories",
+    "entity": "financial_categories",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "active",
+      "clinic_id",
+      "color",
+      "created_at",
+      "icon",
+      "id",
+      "name",
+      "type",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-financial_transactions",
+    "entity": "financial_transactions",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "amount",
+      "category",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "description",
+      "id",
+      "notes",
+      "payment_method",
+      "status",
+      "tags",
+      "transaction_date",
+      "type",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fiscal_config",
+    "entity": "fiscal_config",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "ambiente",
+      "certificado_digital",
+      "clinic_id",
+      "cnpj",
+      "codigo_regime_tributario",
+      "contingencia_enabled",
+      "contingencia_motivo",
+      "created_at",
+      "csc_id",
+      "csc_token",
+      "email_contabilidade",
+      "endereco",
+      "id",
+      "inscricao_estadual",
+      "is_active",
+      "nome_fantasia",
+      "numero_ultimo_nfce",
+      "razao_social",
+      "regime_tributario",
+      "senha_certificado",
+      "serie_nfce",
+      "tipo_emissao",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-funcionarios",
+    "entity": "funcionarios",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "avatar_url",
+      "cargo",
+      "celular",
+      "clinic_id",
+      "cpf",
+      "created_at",
+      "data_admissao",
+      "data_nascimento",
+      "dias_trabalho",
+      "email",
+      "endereco",
+      "horario_trabalho",
+      "id",
+      "nome",
+      "observacoes",
+      "permissoes",
+      "rg",
+      "salario",
+      "sexo",
+      "status",
+      "telefone",
+      "updated_at",
+      "user_id"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-inadimplentes",
+    "entity": "inadimplentes",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "clinic_id",
+      "created_at",
+      "dias_atraso",
+      "email",
+      "id",
+      "nome_paciente",
+      "observacoes",
+      "patient_id",
+      "status",
+      "telefone",
+      "ultima_cobranca",
+      "updated_at",
+      "valor_total_devido"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-inventario_agendamentos",
+    "entity": "inventario_agendamentos",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "ativo",
+      "categorias_ids",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "dia_execucao",
+      "dia_semana",
+      "id",
+      "nome",
+      "notificar_dias_antes",
+      "notificar_responsavel",
+      "observacoes",
+      "periodicidade",
+      "proxima_execucao",
+      "responsavel",
+      "tipo_inventario",
+      "ultima_execucao",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-leads",
+    "entity": "leads",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "atribuido_a",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "email",
+      "id",
+      "interesse",
+      "motivo_perda",
+      "nome",
+      "observacoes",
+      "origem",
+      "proximo_followup",
+      "score_qualidade",
+      "status_funil",
+      "telefone",
+      "temperatura",
+      "ultimo_contato",
+      "updated_at",
+      "utm_campaign",
+      "utm_medium",
+      "utm_source",
+      "valor_estimado",
+      "whatsapp"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-login_attempts",
+    "entity": "login_attempts",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "attempted_at",
+      "created_at",
+      "device_fingerprint",
+      "email",
+      "id",
+      "ip_address",
+      "ip_geolocation",
+      "session_duration_seconds",
+      "success",
+      "user_agent"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-marketing_campaigns",
+    "entity": "marketing_campaigns",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "campaign_type",
+      "channel",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "description",
+      "end_date",
+      "id",
+      "last_sent_at",
+      "metadata",
+      "name",
+      "schedule_config",
+      "send_immediately",
+      "start_date",
+      "status",
+      "target_audience",
+      "template_id",
+      "trigger_config",
+      "triggers",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-module_catalog",
+    "entity": "module_catalog",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "category",
+      "created_at",
+      "description",
+      "icon",
+      "id",
+      "module_key",
+      "name",
+      "clinic_modules"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-module_configuration_templates",
+    "entity": "module_configuration_templates",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "created_at",
+      "description",
+      "icon",
+      "id",
+      "is_active",
+      "modules",
+      "name",
+      "specialty",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-patient_accounts",
+    "entity": "patient_accounts",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "ativo",
+      "created_at",
+      "email",
+      "email_verificado",
+      "id",
+      "patient_id",
+      "senha_hash",
+      "token_verificacao",
+      "ultimo_acesso",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-patient_sessions",
+    "entity": "patient_sessions",
+    "classifications": [
+      "authentication"
+    ],
+    "fields": [
+      "created_at",
+      "expires_at",
+      "id",
+      "patient_id",
+      "token"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-patients",
+    "entity": "patients",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "address_city",
+      "address_complement",
+      "address_country",
+      "address_neighborhood",
+      "address_number",
+      "address_state",
+      "address_street",
+      "address_zipcode",
+      "alcohol_frequency",
+      "allergies_list",
+      "birth_date",
+      "bleeding_disorder_details",
+      "blood_pressure_diastolic",
+      "blood_pressure_systolic",
+      "blood_type",
+      "bmi",
+      "campanha_origem_id",
+      "campanha_origem_nome",
+      "canal_captacao",
+      "cardiovascular_details",
+      "cargo",
+      "churn_risk_score",
+      "clinic_id",
+      "clinical_observations",
+      "cnpj_empresa",
+      "cpf",
+      "photo_url",
+      "created_at",
+      "created_by",
+      "current_medications",
+      "data_conversao",
+      "data_primeiro_contato",
+      "data_qualificacao",
+      "data_sharing_consent",
+      "diabetes_controlled",
+      "diabetes_type",
+      "education_level",
+      "email",
+      "emergency_contact_name",
+      "emergency_contact_relationship",
+      "empresa",
+      "evento_captacao",
+      "first_appointment_date",
+      "full_name",
+      "gender",
+      "gum_condition",
+      "has_alcohol_habit",
+      "has_allergies",
+      "has_bleeding_disorder",
+      "has_cardiovascular_disease",
+      "has_diabetes",
+      "has_hepatitis",
+      "has_hiv",
+      "has_hypertension",
+      "has_medication_allergy",
+      "has_smoking_habit",
+      "has_systemic_disease",
+      "heart_rate",
+      "height_cm",
+      "hepatitis_type",
+      "hypertension_controlled",
+      "id",
+      "image_usage_consent",
+      "indicado_por",
+      "indicado_por_dentista_id",
+      "indicado_por_paciente_id",
+      "is_breastfeeding",
+      "is_pregnant",
+      "last_appointment_date",
+      "lgpd_consent",
+      "lgpd_consent_date",
+      "main_complaint",
+      "marital_status",
+      "marketing_campaign",
+      "marketing_event",
+      "marketing_promoter",
+      "marketing_source",
+      "marketing_telemarketing_agent",
+      "medication_allergies",
+      "nationality",
+      "occupation",
+      "oral_hygiene_quality",
+      "origem_lead",
+      "pain_level",
+      "patient_code",
+      "payment_status",
+      "phone_emergency",
+      "phone_primary",
+      "phone_secondary",
+      "preferred_payment_method",
+      "pregnancy_trimester",
+      "promotor_id",
+      "promotor_nome",
+      "propensao_indicacao",
+      "referral_source",
+      "rg",
+      "risk_level",
+      "risk_score_anesthetic",
+      "risk_score_medical",
+      "risk_score_overall",
+      "risk_score_surgical",
+      "smoking_frequency",
+      "social_name",
+      "status",
+      "systemic_diseases",
+      "total_appointments",
+      "total_debt",
+      "total_paid",
+      "treatment_consent",
+      "updated_at",
+      "updated_by",
+      "valor_lifetime",
+      "valor_ticket_medio",
+      "weight_kg",
+      "appointments",
+      "recalls",
+      "contas_receber"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-payment_methods",
+    "entity": "payment_methods",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "active",
+      "clinic_id",
+      "config",
+      "created_at",
+      "id",
+      "name",
+      "taxa_fixa",
+      "taxa_percentual",
+      "type",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-permission_templates",
+    "entity": "permission_templates",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "created_at",
+      "description",
+      "icon",
+      "id",
+      "module_keys",
+      "name"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-procedimento_templates",
+    "entity": "procedimento_templates",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "categoria",
+      "clinic_id",
+      "created_at",
+      "created_by",
+      "descricao",
+      "id",
+      "is_public",
+      "nome",
+      "steps",
+      "tags",
+      "tempo_estimado_minutos",
+      "updated_at",
+      "valor_sugerido"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-produtos",
+    "entity": "produtos",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "ativo",
+      "categoria",
+      "clinic_id",
+      "codigo_barras",
+      "created_at",
+      "descricao",
+      "fornecedor",
+      "id",
+      "localizacao",
+      "nome",
+      "observacoes",
+      "quantidade_atual",
+      "quantidade_minima",
+      "unidade_medida",
+      "updated_at",
+      "valor_unitario"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-profiles",
+    "entity": "profiles",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "app_role",
+      "avatar_url",
+      "clinic_id",
+      "created_at",
+      "full_name",
+      "id",
+      "is_active",
+      "phone",
+      "updated_at",
+      "crypto_price_alerts"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-scheduled_backups",
+    "entity": "scheduled_backups",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "backup_type",
+      "clinic_id",
+      "compression_enabled",
+      "created_at",
+      "created_by",
+      "day_of_month",
+      "day_of_week",
+      "encryption_enabled",
+      "frequency",
+      "id",
+      "include_data",
+      "includes_postgres_dump",
+      "is_active",
+      "last_run_at",
+      "local_path",
+      "max_parallel_jobs",
+      "name",
+      "next_run_at",
+      "notification_emails",
+      "retention_policy_id",
+      "storage_config",
+      "storage_destination",
+      "time_of_day",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-scheduled_exports",
+    "entity": "scheduled_exports",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "clinic_id",
+      "created_at",
+      "dashboard_name",
+      "email",
+      "export_format",
+      "frequency",
+      "id",
+      "is_active",
+      "last_sent_at",
+      "next_send_at",
+      "updated_at",
+      "user_id"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-teleconsultas",
+    "entity": "teleconsultas",
+    "classifications": [
+      "health"
+    ],
+    "fields": [
+      "appointment_id",
+      "clinic_id",
+      "conduta",
+      "created_at",
+      "created_by",
+      "data_agendada",
+      "data_finalizada",
+      "data_iniciada",
+      "dentist_id",
+      "diagnostico",
+      "duracao_minutos",
+      "id",
+      "link_sala",
+      "motivo",
+      "observacoes",
+      "patient_id",
+      "prescricao",
+      "recording_url",
+      "status",
+      "tipo",
+      "titulo",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-tiss_guides",
+    "entity": "tiss_guides",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "amount",
+      "batch_id",
+      "clinic_id",
+      "created_at",
+      "guide_number",
+      "id",
+      "insurance_company",
+      "patient_id",
+      "procedure_code",
+      "procedure_name",
+      "response_date",
+      "service_date",
+      "status",
+      "submission_date",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-banco_extratos",
+    "entity": "banco_extratos",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "amount",
+      "balance_after",
+      "category",
+      "clinic_id",
+      "created_at",
+      "date",
+      "description",
+      "id",
+      "reference",
+      "source",
+      "type"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crypto_offline_wallets",
+    "entity": "crypto_offline_wallets",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "address",
+      "clinic_id",
+      "created_at",
+      "currency",
+      "id",
+      "label",
+      "network",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crypto_transactions",
+    "entity": "crypto_transactions",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "amount",
+      "clinic_id",
+      "coin",
+      "created_at",
+      "exchange_id",
+      "fee",
+      "id",
+      "price_brl",
+      "status",
+      "tx_hash",
+      "type",
+      "wallet_id"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crypto_wallets",
+    "entity": "crypto_wallets",
+    "classifications": [
+      "PII",
+      "financial"
+    ],
+    "fields": [
+      "address",
+      "balance",
+      "clinic_id",
+      "coin",
+      "created_at",
+      "exchange",
+      "id",
+      "label",
+      "type",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fidelidade_badges",
+    "entity": "fidelidade_badges",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "clinic_id",
+      "condition",
+      "created_at",
+      "description",
+      "icon",
+      "id",
+      "name",
+      "tier",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fidelidade_pontos",
+    "entity": "fidelidade_pontos",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "amount",
+      "clinic_id",
+      "created_at",
+      "description",
+      "id",
+      "patient_id",
+      "source",
+      "type"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fidelidade_recompensas",
+    "entity": "fidelidade_recompensas",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "clinic_id",
+      "created_at",
+      "description",
+      "id",
+      "is_active",
+      "name",
+      "points_cost",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-split_comissoes",
+    "entity": "split_comissoes",
+    "classifications": [
+      "financial"
+    ],
+    "fields": [
+      "amount",
+      "clinic_id",
+      "config_id",
+      "created_at",
+      "id",
+      "paid_at",
+      "percentage",
+      "professional_id",
+      "status",
+      "transaction_id"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-users",
+    "entity": "users",
+    "classifications": [
+      "PII"
+    ],
+    "fields": [
+      "id",
+      "email",
+      "password_hash",
+      "role",
+      "clinic_id",
+      "is_active",
+      "last_sign_in_at",
+      "created_at",
+      "updated_at"
+    ],
+    "source": "prisma/schema.prisma",
+    "confidence": "HIGH"
+  }
+]

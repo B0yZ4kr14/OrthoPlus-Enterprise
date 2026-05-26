@@ -1,0 +1,1146 @@
+[
+  {
+    "id": "SEC-SS1-001",
+    "source": "SS1",
+    "category": "authn-authz",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/src/middleware/authMiddleware.ts",
+        "lines": "JWT validation"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS1-002",
+    "source": "SS1",
+    "category": "authn-authz",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/src/middleware/clinicGuard.ts",
+        "lines": "clinic isolation"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS1-003",
+    "source": "SS1",
+    "category": "input-validation",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/package.json",
+        "lines": "zod dependency"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS1-004",
+    "source": "SS1",
+    "category": "tls",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "nginx.conf",
+        "lines": "SSL/TLS configuration"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS1-005",
+    "source": "SS1",
+    "category": "rate-limiting",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/package.json",
+        "lines": "express-rate-limit"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS1-006",
+    "source": "SS1",
+    "category": "security-headers",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/package.json",
+        "lines": "helmet"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS1-007",
+    "source": "SS1",
+    "category": "compliance",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "backend/src/modules/lgpd",
+        "lines": "LGPD module"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS1-env-.env.example",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.example",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS1-env-.env.backup.local",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.backup.local",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS1-env-.env",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS1-env-.env.production.example",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.production.example",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS1-env-.env.ubuntu.example",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.ubuntu.example",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS1-env-.env.vps.credentials",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env.vps.credentials",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS1-env-.env2",
+    "source": "SS1",
+    "category": "credential-storage",
+    "severity_hint": "low",
+    "evidence": [
+      {
+        "file": ".env2",
+        "lines": "environment variables"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-001",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "name@@orthoplus/monorepo"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-002",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "version@5.5.0"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-003",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "type@module"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-004",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "dev@turbo run dev --parallel"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-005",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "build@turbo run build"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-006",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "lint@turbo run lint"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-007",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "test@turbo run test"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-008",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "type-check@turbo run type-check"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-009",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "clean@turbo run clean && rm -rf node_modules"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-010",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "format@prettier --write \\"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-011",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "guard@node scripts/guard.cjs"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-012",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "@axe-core/playwright@^4.11.3"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-013",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "@eslint/js@^10.0.1"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-014",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "@playwright/test@^1.60.0"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-015",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "@types/node@^22.16.5"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-016",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "eslint@^10.1.0"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-017",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "eslint-plugin-react-hooks@^7.0.1"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-018",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "eslint-plugin-react-refresh@^0.5.2"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-019",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "globals@^17.4.0"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS2-020",
+    "source": "SS2",
+    "category": "dependency",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "package.json",
+        "lines": "playwright@^1.60.0"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS3-docker-compose",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS3-docker-compose.prod",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.prod.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS3-docker-compose.ubuntu",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.ubuntu.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS3-docker-compose.onprem",
+    "source": "SS3",
+    "category": "container-config",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "docker-compose.onprem.yml",
+        "lines": "service definitions"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS3-cors",
+    "source": "SS3",
+    "category": "cors",
+    "severity_hint": "medium",
+    "evidence": [
+      {
+        "file": "backend/src/index.ts",
+        "lines": "CORS configuration"
+      }
+    ],
+    "confidence": "MEDIUM"
+  },
+  {
+    "id": "SEC-SS3-nginx",
+    "source": "SS3",
+    "category": "reverse-proxy",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "nginx.conf",
+        "lines": "proxy and SSL config"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS3-ci-security",
+    "source": "SS3",
+    "category": "ci-security",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": ".github/workflows/security.yml",
+        "lines": "security audit"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-backup_retention_policies",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model backup_retention_policies"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_dashboards",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model bi_dashboards"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_metrics",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model bi_metrics"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_reports",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model bi_reports"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-bi_widgets",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model bi_widgets"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-caixa_movimentos",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model caixa_movimentos"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-campaign_templates",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model campaign_templates"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-campanha_envios",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model campanha_envios"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-campanhas_marketing",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model campanhas_marketing"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-clinics",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model clinics"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-contas_pagar",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model contas_pagar"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-contas_receber",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model contas_receber"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-contrato_templates",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model contrato_templates"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crm_leads",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model crm_leads"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crm_stages",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model crm_stages"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-financial_categories",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model financial_categories"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-financial_transactions",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model financial_transactions"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fiscal_config",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model fiscal_config"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-funcionarios",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model funcionarios"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-inadimplentes",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model inadimplentes"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-inventario_agendamentos",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model inventario_agendamentos"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-leads",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model leads"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-login_attempts",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model login_attempts"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-marketing_campaigns",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model marketing_campaigns"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-module_catalog",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model module_catalog"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-module_configuration_templates",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model module_configuration_templates"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-patient_accounts",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model patient_accounts"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-patient_sessions",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model patient_sessions"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-patients",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model patients"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-payment_methods",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model payment_methods"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-permission_templates",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model permission_templates"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-procedimento_templates",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model procedimento_templates"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-produtos",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model produtos"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-profiles",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model profiles"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-scheduled_backups",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model scheduled_backups"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-scheduled_exports",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model scheduled_exports"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-teleconsultas",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model teleconsultas"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-tiss_guides",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model tiss_guides"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-banco_extratos",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model banco_extratos"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crypto_offline_wallets",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model crypto_offline_wallets"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crypto_transactions",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model crypto_transactions"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-crypto_wallets",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model crypto_wallets"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fidelidade_badges",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model fidelidade_badges"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fidelidade_pontos",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model fidelidade_pontos"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-fidelidade_recompensas",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model fidelidade_recompensas"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-split_comissoes",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model split_comissoes"
+      }
+    ],
+    "confidence": "HIGH"
+  },
+  {
+    "id": "SEC-SS4-users",
+    "source": "SS4",
+    "category": "data-sensitivity",
+    "severity_hint": "info",
+    "evidence": [
+      {
+        "file": "prisma/schema.prisma",
+        "lines": "model users"
+      }
+    ],
+    "confidence": "HIGH"
+  }
+]

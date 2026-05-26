@@ -1,0 +1,822 @@
+[
+  {
+    "id": "S1-be-admin_tools",
+    "name": "admin_tools",
+    "path": "backend/src/modules/admin_tools",
+    "domain_suggestive": false,
+    "reason": "Backend module: admin_tools",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 12,
+    "loc_estimate": 960
+  },
+  {
+    "id": "S1-be-agenda",
+    "name": "agenda",
+    "path": "backend/src/modules/agenda",
+    "domain_suggestive": true,
+    "reason": "Backend module: agenda",
+    "confidence_contribution": "HIGH",
+    "file_count": 11,
+    "loc_estimate": 880
+  },
+  {
+    "id": "S1-be-agents",
+    "name": "agents",
+    "path": "backend/src/modules/agents",
+    "domain_suggestive": false,
+    "reason": "Backend module: agents",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 6,
+    "loc_estimate": 480
+  },
+  {
+    "id": "S1-be-ai",
+    "name": "ai",
+    "path": "backend/src/modules/ai",
+    "domain_suggestive": false,
+    "reason": "Backend module: ai",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 160
+  },
+  {
+    "id": "S1-be-analytics",
+    "name": "analytics",
+    "path": "backend/src/modules/analytics",
+    "domain_suggestive": false,
+    "reason": "Backend module: analytics",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 6,
+    "loc_estimate": 480
+  },
+  {
+    "id": "S1-be-auth",
+    "name": "auth",
+    "path": "backend/src/modules/auth",
+    "domain_suggestive": true,
+    "reason": "Backend module: auth",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 8,
+    "loc_estimate": 640
+  },
+  {
+    "id": "S1-be-backups",
+    "name": "backups",
+    "path": "backend/src/modules/backups",
+    "domain_suggestive": false,
+    "reason": "Backend module: backups",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 160
+  },
+  {
+    "id": "S1-be-bi",
+    "name": "bi",
+    "path": "backend/src/modules/bi",
+    "domain_suggestive": true,
+    "reason": "Backend module: bi",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-comm",
+    "name": "comm",
+    "path": "backend/src/modules/comm",
+    "domain_suggestive": false,
+    "reason": "Backend module: comm",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-configuracoes",
+    "name": "configuracoes",
+    "path": "backend/src/modules/configuracoes",
+    "domain_suggestive": false,
+    "reason": "Backend module: configuracoes",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 16,
+    "loc_estimate": 1280
+  },
+  {
+    "id": "S1-be-contratos",
+    "name": "contratos",
+    "path": "backend/src/modules/contratos",
+    "domain_suggestive": true,
+    "reason": "Backend module: contratos",
+    "confidence_contribution": "HIGH",
+    "file_count": 12,
+    "loc_estimate": 960
+  },
+  {
+    "id": "S1-be-crm",
+    "name": "crm",
+    "path": "backend/src/modules/crm",
+    "domain_suggestive": true,
+    "reason": "Backend module: crm",
+    "confidence_contribution": "HIGH",
+    "file_count": 6,
+    "loc_estimate": 480
+  },
+  {
+    "id": "S1-be-crypto",
+    "name": "crypto",
+    "path": "backend/src/modules/crypto",
+    "domain_suggestive": true,
+    "reason": "Backend module: crypto",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 1,
+    "loc_estimate": 80
+  },
+  {
+    "id": "S1-be-crypto_config",
+    "name": "crypto_config",
+    "path": "backend/src/modules/crypto_config",
+    "domain_suggestive": true,
+    "reason": "Backend module: crypto_config",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 9,
+    "loc_estimate": 720
+  },
+  {
+    "id": "S1-be-dashboard",
+    "name": "dashboard",
+    "path": "backend/src/modules/dashboard",
+    "domain_suggestive": true,
+    "reason": "Backend module: dashboard",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 160
+  },
+  {
+    "id": "S1-be-database_admin",
+    "name": "database_admin",
+    "path": "backend/src/modules/database_admin",
+    "domain_suggestive": false,
+    "reason": "Backend module: database_admin",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 9,
+    "loc_estimate": 720
+  },
+  {
+    "id": "S1-be-faturamento",
+    "name": "faturamento",
+    "path": "backend/src/modules/faturamento",
+    "domain_suggestive": true,
+    "reason": "Backend module: faturamento",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 21,
+    "loc_estimate": 1680
+  },
+  {
+    "id": "S1-be-fidelidade",
+    "name": "fidelidade",
+    "path": "backend/src/modules/fidelidade",
+    "domain_suggestive": true,
+    "reason": "Backend module: fidelidade",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 4,
+    "loc_estimate": 320
+  },
+  {
+    "id": "S1-be-files",
+    "name": "files",
+    "path": "backend/src/modules/files",
+    "domain_suggestive": false,
+    "reason": "Backend module: files",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 7,
+    "loc_estimate": 560
+  },
+  {
+    "id": "S1-be-financeiro",
+    "name": "financeiro",
+    "path": "backend/src/modules/financeiro",
+    "domain_suggestive": true,
+    "reason": "Backend module: financeiro",
+    "confidence_contribution": "HIGH",
+    "file_count": 18,
+    "loc_estimate": 1440
+  },
+  {
+    "id": "S1-be-funcionarios",
+    "name": "funcionarios",
+    "path": "backend/src/modules/funcionarios",
+    "domain_suggestive": true,
+    "reason": "Backend module: funcionarios",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-github_tools",
+    "name": "github_tools",
+    "path": "backend/src/modules/github_tools",
+    "domain_suggestive": false,
+    "reason": "Backend module: github_tools",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-ia_radiografia",
+    "name": "ia_radiografia",
+    "path": "backend/src/modules/ia_radiografia",
+    "domain_suggestive": true,
+    "reason": "Backend module: ia_radiografia",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 14,
+    "loc_estimate": 1120
+  },
+  {
+    "id": "S1-be-inadimplencia",
+    "name": "inadimplencia",
+    "path": "backend/src/modules/inadimplencia",
+    "domain_suggestive": true,
+    "reason": "Backend module: inadimplencia",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 160
+  },
+  {
+    "id": "S1-be-inventario",
+    "name": "inventario",
+    "path": "backend/src/modules/inventario",
+    "domain_suggestive": true,
+    "reason": "Backend module: inventario",
+    "confidence_contribution": "HIGH",
+    "file_count": 22,
+    "loc_estimate": 1760
+  },
+  {
+    "id": "S1-be-lgpd",
+    "name": "lgpd",
+    "path": "backend/src/modules/lgpd",
+    "domain_suggestive": true,
+    "reason": "Backend module: lgpd",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-marketing",
+    "name": "marketing",
+    "path": "backend/src/modules/marketing",
+    "domain_suggestive": true,
+    "reason": "Backend module: marketing",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 5,
+    "loc_estimate": 400
+  },
+  {
+    "id": "S1-be-memory_hub",
+    "name": "memory_hub",
+    "path": "backend/src/modules/memory_hub",
+    "domain_suggestive": false,
+    "reason": "Backend module: memory_hub",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 38,
+    "loc_estimate": 3040
+  },
+  {
+    "id": "S1-be-nfe",
+    "name": "nfe",
+    "path": "backend/src/modules/nfe",
+    "domain_suggestive": true,
+    "reason": "Backend module: nfe",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 6,
+    "loc_estimate": 480
+  },
+  {
+    "id": "S1-be-notifications",
+    "name": "notifications",
+    "path": "backend/src/modules/notifications",
+    "domain_suggestive": false,
+    "reason": "Backend module: notifications",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 5,
+    "loc_estimate": 400
+  },
+  {
+    "id": "S1-be-orcamentos",
+    "name": "orcamentos",
+    "path": "backend/src/modules/orcamentos",
+    "domain_suggestive": true,
+    "reason": "Backend module: orcamentos",
+    "confidence_contribution": "HIGH",
+    "file_count": 6,
+    "loc_estimate": 480
+  },
+  {
+    "id": "S1-be-pacientes",
+    "name": "pacientes",
+    "path": "backend/src/modules/pacientes",
+    "domain_suggestive": true,
+    "reason": "Backend module: pacientes",
+    "confidence_contribution": "HIGH",
+    "file_count": 29,
+    "loc_estimate": 2320
+  },
+  {
+    "id": "S1-be-pdv",
+    "name": "pdv",
+    "path": "backend/src/modules/pdv",
+    "domain_suggestive": true,
+    "reason": "Backend module: pdv",
+    "confidence_contribution": "HIGH",
+    "file_count": 17,
+    "loc_estimate": 1360
+  },
+  {
+    "id": "S1-be-pep",
+    "name": "pep",
+    "path": "backend/src/modules/pep",
+    "domain_suggestive": true,
+    "reason": "Backend module: pep",
+    "confidence_contribution": "HIGH",
+    "file_count": 4,
+    "loc_estimate": 320
+  },
+  {
+    "id": "S1-be-procedimentos",
+    "name": "procedimentos",
+    "path": "backend/src/modules/procedimentos",
+    "domain_suggestive": true,
+    "reason": "Backend module: procedimentos",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 160
+  },
+  {
+    "id": "S1-be-relatorios",
+    "name": "relatorios",
+    "path": "backend/src/modules/relatorios",
+    "domain_suggestive": false,
+    "reason": "Backend module: relatorios",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-split_pagamento",
+    "name": "split_pagamento",
+    "path": "backend/src/modules/split_pagamento",
+    "domain_suggestive": true,
+    "reason": "Backend module: split_pagamento",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-teleodonto",
+    "name": "teleodonto",
+    "path": "backend/src/modules/teleodonto",
+    "domain_suggestive": true,
+    "reason": "Backend module: teleodonto",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 9,
+    "loc_estimate": 720
+  },
+  {
+    "id": "S1-be-terminal",
+    "name": "terminal",
+    "path": "backend/src/modules/terminal",
+    "domain_suggestive": false,
+    "reason": "Backend module: terminal",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-tiss",
+    "name": "tiss",
+    "path": "backend/src/modules/tiss",
+    "domain_suggestive": true,
+    "reason": "Backend module: tiss",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-be-usuarios",
+    "name": "usuarios",
+    "path": "backend/src/modules/usuarios",
+    "domain_suggestive": true,
+    "reason": "Backend module: usuarios",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 4,
+    "loc_estimate": 320
+  },
+  {
+    "id": "S1-fe-admin",
+    "name": "admin",
+    "path": "apps/web/src/modules/admin",
+    "domain_suggestive": true,
+    "reason": "Frontend module: admin",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 16,
+    "loc_estimate": 960
+  },
+  {
+    "id": "S1-fe-agenda",
+    "name": "agenda",
+    "path": "apps/web/src/modules/agenda",
+    "domain_suggestive": true,
+    "reason": "Frontend module: agenda",
+    "confidence_contribution": "HIGH",
+    "file_count": 58,
+    "loc_estimate": 3480
+  },
+  {
+    "id": "S1-fe-application",
+    "name": "application",
+    "path": "apps/web/src/modules/application",
+    "domain_suggestive": false,
+    "reason": "Frontend module: application",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 1,
+    "loc_estimate": 60
+  },
+  {
+    "id": "S1-fe-auth",
+    "name": "auth",
+    "path": "apps/web/src/modules/auth",
+    "domain_suggestive": false,
+    "reason": "Frontend module: auth",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 120
+  },
+  {
+    "id": "S1-fe-bi",
+    "name": "bi",
+    "path": "apps/web/src/modules/bi",
+    "domain_suggestive": true,
+    "reason": "Frontend module: bi",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 26,
+    "loc_estimate": 1560
+  },
+  {
+    "id": "S1-fe-cobranca",
+    "name": "cobranca",
+    "path": "apps/web/src/modules/cobranca",
+    "domain_suggestive": true,
+    "reason": "Frontend module: cobranca",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 7,
+    "loc_estimate": 420
+  },
+  {
+    "id": "S1-fe-contratos",
+    "name": "contratos",
+    "path": "apps/web/src/modules/contratos",
+    "domain_suggestive": true,
+    "reason": "Frontend module: contratos",
+    "confidence_contribution": "HIGH",
+    "file_count": 9,
+    "loc_estimate": 540
+  },
+  {
+    "id": "S1-fe-core",
+    "name": "core",
+    "path": "apps/web/src/modules/core",
+    "domain_suggestive": false,
+    "reason": "Frontend module: core",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 5,
+    "loc_estimate": 300
+  },
+  {
+    "id": "S1-fe-crm",
+    "name": "crm",
+    "path": "apps/web/src/modules/crm",
+    "domain_suggestive": true,
+    "reason": "Frontend module: crm",
+    "confidence_contribution": "HIGH",
+    "file_count": 32,
+    "loc_estimate": 1920
+  },
+  {
+    "id": "S1-fe-crypto",
+    "name": "crypto",
+    "path": "apps/web/src/modules/crypto",
+    "domain_suggestive": true,
+    "reason": "Frontend module: crypto",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 34,
+    "loc_estimate": 2040
+  },
+  {
+    "id": "S1-fe-dashboard",
+    "name": "dashboard",
+    "path": "apps/web/src/modules/dashboard",
+    "domain_suggestive": true,
+    "reason": "Frontend module: dashboard",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 6,
+    "loc_estimate": 360
+  },
+  {
+    "id": "S1-fe-dashboards",
+    "name": "dashboards",
+    "path": "apps/web/src/modules/dashboards",
+    "domain_suggestive": true,
+    "reason": "Frontend module: dashboards",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 120
+  },
+  {
+    "id": "S1-fe-dentistas",
+    "name": "dentistas",
+    "path": "apps/web/src/modules/dentistas",
+    "domain_suggestive": true,
+    "reason": "Frontend module: dentistas",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 15,
+    "loc_estimate": 900
+  },
+  {
+    "id": "S1-fe-domain",
+    "name": "domain",
+    "path": "apps/web/src/modules/domain",
+    "domain_suggestive": false,
+    "reason": "Frontend module: domain",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 1,
+    "loc_estimate": 60
+  },
+  {
+    "id": "S1-fe-estoque",
+    "name": "estoque",
+    "path": "apps/web/src/modules/estoque",
+    "domain_suggestive": true,
+    "reason": "Frontend module: estoque",
+    "confidence_contribution": "HIGH",
+    "file_count": 120,
+    "loc_estimate": 7200
+  },
+  {
+    "id": "S1-fe-fidelidade",
+    "name": "fidelidade",
+    "path": "apps/web/src/modules/fidelidade",
+    "domain_suggestive": true,
+    "reason": "Frontend module: fidelidade",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 180
+  },
+  {
+    "id": "S1-fe-files",
+    "name": "files",
+    "path": "apps/web/src/modules/files",
+    "domain_suggestive": false,
+    "reason": "Frontend module: files",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 5,
+    "loc_estimate": 300
+  },
+  {
+    "id": "S1-fe-financeiro",
+    "name": "financeiro",
+    "path": "apps/web/src/modules/financeiro",
+    "domain_suggestive": true,
+    "reason": "Frontend module: financeiro",
+    "confidence_contribution": "HIGH",
+    "file_count": 111,
+    "loc_estimate": 6660
+  },
+  {
+    "id": "S1-fe-funcionarios",
+    "name": "funcionarios",
+    "path": "apps/web/src/modules/funcionarios",
+    "domain_suggestive": true,
+    "reason": "Frontend module: funcionarios",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 16,
+    "loc_estimate": 960
+  },
+  {
+    "id": "S1-fe-ia-radiografia",
+    "name": "ia-radiografia",
+    "path": "apps/web/src/modules/ia-radiografia",
+    "domain_suggestive": true,
+    "reason": "Frontend module: ia-radiografia",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 40,
+    "loc_estimate": 2400
+  },
+  {
+    "id": "S1-fe-inadimplencia",
+    "name": "inadimplencia",
+    "path": "apps/web/src/modules/inadimplencia",
+    "domain_suggestive": true,
+    "reason": "Frontend module: inadimplencia",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 8,
+    "loc_estimate": 480
+  },
+  {
+    "id": "S1-fe-inventario",
+    "name": "inventario",
+    "path": "apps/web/src/modules/inventario",
+    "domain_suggestive": true,
+    "reason": "Frontend module: inventario",
+    "confidence_contribution": "HIGH",
+    "file_count": 4,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-fe-landpage",
+    "name": "landpage",
+    "path": "apps/web/src/modules/landpage",
+    "domain_suggestive": false,
+    "reason": "Frontend module: landpage",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 3,
+    "loc_estimate": 180
+  },
+  {
+    "id": "S1-fe-lgpd",
+    "name": "lgpd",
+    "path": "apps/web/src/modules/lgpd",
+    "domain_suggestive": true,
+    "reason": "Frontend module: lgpd",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 11,
+    "loc_estimate": 660
+  },
+  {
+    "id": "S1-fe-marketing-auto",
+    "name": "marketing-auto",
+    "path": "apps/web/src/modules/marketing-auto",
+    "domain_suggestive": true,
+    "reason": "Frontend module: marketing-auto",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 41,
+    "loc_estimate": 2460
+  },
+  {
+    "id": "S1-fe-memory-hub",
+    "name": "memory-hub",
+    "path": "apps/web/src/modules/memory-hub",
+    "domain_suggestive": false,
+    "reason": "Frontend module: memory-hub",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 14,
+    "loc_estimate": 840
+  },
+  {
+    "id": "S1-fe-odontograma",
+    "name": "odontograma",
+    "path": "apps/web/src/modules/odontograma",
+    "domain_suggestive": true,
+    "reason": "Frontend module: odontograma",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 2,
+    "loc_estimate": 120
+  },
+  {
+    "id": "S1-fe-orcamentos",
+    "name": "orcamentos",
+    "path": "apps/web/src/modules/orcamentos",
+    "domain_suggestive": true,
+    "reason": "Frontend module: orcamentos",
+    "confidence_contribution": "HIGH",
+    "file_count": 25,
+    "loc_estimate": 1500
+  },
+  {
+    "id": "S1-fe-pacientes",
+    "name": "pacientes",
+    "path": "apps/web/src/modules/pacientes",
+    "domain_suggestive": true,
+    "reason": "Frontend module: pacientes",
+    "confidence_contribution": "HIGH",
+    "file_count": 94,
+    "loc_estimate": 5640
+  },
+  {
+    "id": "S1-fe-pdv",
+    "name": "pdv",
+    "path": "apps/web/src/modules/pdv",
+    "domain_suggestive": true,
+    "reason": "Frontend module: pdv",
+    "confidence_contribution": "HIGH",
+    "file_count": 13,
+    "loc_estimate": 780
+  },
+  {
+    "id": "S1-fe-pep",
+    "name": "pep",
+    "path": "apps/web/src/modules/pep",
+    "domain_suggestive": true,
+    "reason": "Frontend module: pep",
+    "confidence_contribution": "HIGH",
+    "file_count": 76,
+    "loc_estimate": 4560
+  },
+  {
+    "id": "S1-fe-portal-paciente",
+    "name": "portal-paciente",
+    "path": "apps/web/src/modules/portal-paciente",
+    "domain_suggestive": true,
+    "reason": "Frontend module: portal-paciente",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 6,
+    "loc_estimate": 360
+  },
+  {
+    "id": "S1-fe-procedimentos",
+    "name": "procedimentos",
+    "path": "apps/web/src/modules/procedimentos",
+    "domain_suggestive": true,
+    "reason": "Frontend module: procedimentos",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 11,
+    "loc_estimate": 660
+  },
+  {
+    "id": "S1-fe-settings",
+    "name": "settings",
+    "path": "apps/web/src/modules/settings",
+    "domain_suggestive": false,
+    "reason": "Frontend module: settings",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 37,
+    "loc_estimate": 2220
+  },
+  {
+    "id": "S1-fe-split-pagamento",
+    "name": "split-pagamento",
+    "path": "apps/web/src/modules/split-pagamento",
+    "domain_suggestive": true,
+    "reason": "Frontend module: split-pagamento",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 11,
+    "loc_estimate": 660
+  },
+  {
+    "id": "S1-fe-teleodonto",
+    "name": "teleodonto",
+    "path": "apps/web/src/modules/teleodonto",
+    "domain_suggestive": true,
+    "reason": "Frontend module: teleodonto",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 15,
+    "loc_estimate": 900
+  },
+  {
+    "id": "S1-fe-tiss",
+    "name": "tiss",
+    "path": "apps/web/src/modules/tiss",
+    "domain_suggestive": true,
+    "reason": "Frontend module: tiss",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 12,
+    "loc_estimate": 720
+  },
+  {
+    "id": "S1-fe-tratamentos",
+    "name": "tratamentos",
+    "path": "apps/web/src/modules/tratamentos",
+    "domain_suggestive": true,
+    "reason": "Frontend module: tratamentos",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 4,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-fe-ui",
+    "name": "ui",
+    "path": "apps/web/src/modules/ui",
+    "domain_suggestive": true,
+    "reason": "Frontend module: ui",
+    "confidence_contribution": "MEDIUM",
+    "file_count": 4,
+    "loc_estimate": 240
+  },
+  {
+    "id": "S1-shared-types",
+    "name": "shared-types",
+    "path": "shared-types",
+    "domain_suggestive": false,
+    "reason": "Cross-stack TypeScript types",
+    "confidence_contribution": "LOW",
+    "file_count": 20,
+    "loc_estimate": 500
+  },
+  {
+    "id": "S1-core-ui",
+    "name": "core-ui",
+    "path": "categories/@orthoplus/core/packages/ui",
+    "domain_suggestive": false,
+    "reason": "Internal design system (Radix + CVA + Tailwind)",
+    "confidence_contribution": "LOW",
+    "file_count": 54,
+    "loc_estimate": 2000
+  }
+]

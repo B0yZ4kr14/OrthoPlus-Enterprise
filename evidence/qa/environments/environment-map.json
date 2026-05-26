@@ -1,0 +1,21 @@
+{
+  "environments": [
+    "dev",
+    "staging",
+    "prod"
+  ],
+  "deploy_targets": {
+    "prod": "VPS (Tailscale 100.111.74.69 / public 179.190.15.116)",
+    "staging": "Not explicitly configured"
+  },
+  "infrastructure": [
+    "Docker",
+    "Docker Compose",
+    "PM2",
+    "nginx",
+    "PostgreSQL",
+    "Redis",
+    "Prometheus",
+    "Grafana"
+  ]
+}

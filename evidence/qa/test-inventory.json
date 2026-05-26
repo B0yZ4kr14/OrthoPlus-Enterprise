@@ -1,0 +1,1830 @@
+[
+  {
+    "id": "QS1-be-agendaCommands",
+    "file": "backend/tests/unit/agendaCommands.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 12,
+    "target_files": [
+      "agendaCommands.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-agendaDomain",
+    "file": "backend/tests/unit/agendaDomain.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 29,
+    "target_files": [
+      "agendaDomain.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-authController",
+    "file": "backend/tests/unit/authController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 21,
+    "target_files": [
+      "authController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-contratosDomain",
+    "file": "backend/tests/unit/contratosDomain.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 34,
+    "target_files": [
+      "contratosDomain.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-dashboardController",
+    "file": "backend/tests/unit/dashboardController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 4,
+    "target_files": [
+      "dashboardController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-financeiroController",
+    "file": "backend/tests/unit/financeiroController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 35,
+    "target_files": [
+      "financeiroController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-health",
+    "file": "backend/tests/unit/health.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 1,
+    "target_files": [
+      "health.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-nfeController",
+    "file": "backend/tests/unit/nfeController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 25,
+    "target_files": [
+      "nfeController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-nfeDomain",
+    "file": "backend/tests/unit/nfeDomain.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 9,
+    "target_files": [
+      "nfeDomain.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-pdvCommands",
+    "file": "backend/tests/unit/pdvCommands.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 15,
+    "target_files": [
+      "pdvCommands.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-pdvDomain",
+    "file": "backend/tests/unit/pdvDomain.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 37,
+    "target_files": [
+      "pdvDomain.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-pepDomain",
+    "file": "backend/tests/unit/pepDomain.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 29,
+    "target_files": [
+      "pepDomain.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-produtoDomain",
+    "file": "backend/tests/unit/produtoDomain.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 22,
+    "target_files": [
+      "produtoDomain.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-splitPagamentoController",
+    "file": "backend/tests/unit/splitPagamentoController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 31,
+    "target_files": [
+      "splitPagamentoController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-tissController",
+    "file": "backend/tests/unit/tissController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 33,
+    "target_files": [
+      "tissController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-transactionDomain",
+    "file": "backend/tests/unit/transactionDomain.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 10,
+    "target_files": [
+      "transactionDomain.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-crmController",
+    "file": "backend/tests/unit/crmController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 21,
+    "target_files": [
+      "crmController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-fidelidadeController",
+    "file": "backend/tests/unit/fidelidadeController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 25,
+    "target_files": [
+      "fidelidadeController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-orcamentosController",
+    "file": "backend/tests/unit/orcamentosController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 38,
+    "target_files": [
+      "orcamentosController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-procedimentosController",
+    "file": "backend/tests/unit/procedimentosController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 20,
+    "target_files": [
+      "procedimentosController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-pacienteSearchService",
+    "file": "backend/tests/unit/pacienteSearchService.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 6,
+    "target_files": [
+      "pacienteSearchService.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-iaRadiografiaController",
+    "file": "backend/tests/unit/iaRadiografiaController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 11,
+    "target_files": [
+      "iaRadiografiaController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-teleodontoController",
+    "file": "backend/tests/unit/teleodontoController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 13,
+    "target_files": [
+      "teleodontoController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-marketingController",
+    "file": "backend/tests/unit/marketingController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 13,
+    "target_files": [
+      "marketingController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-pacientesController",
+    "file": "backend/tests/unit/pacientesController.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 27,
+    "target_files": [
+      "pacientesController.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-FilesService",
+    "file": "backend/tests/unit/files/FilesService.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 19,
+    "target_files": [
+      "FilesService.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-fileWatcher",
+    "file": "backend/tests/unit/memory_hub/fileWatcher.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 10,
+    "target_files": [
+      "fileWatcher.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-driftDetection",
+    "file": "backend/tests/unit/memory_hub/driftDetection.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 8,
+    "target_files": [
+      "driftDetection.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-versioning",
+    "file": "backend/tests/unit/memory_hub/versioning.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 10,
+    "target_files": [
+      "versioning.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-quantization",
+    "file": "backend/tests/unit/memory_hub/quantization.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 8,
+    "target_files": [
+      "quantization.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-graphService",
+    "file": "backend/tests/unit/memory_hub/graphService.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 5,
+    "target_files": [
+      "graphService.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-piiDetector",
+    "file": "backend/tests/unit/memory_hub/piiDetector.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 16,
+    "target_files": [
+      "piiDetector.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-pathSandbox",
+    "file": "backend/tests/unit/memory_hub/pathSandbox.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 8,
+    "target_files": [
+      "pathSandbox.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-search",
+    "file": "backend/tests/unit/memory_hub/search.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 14,
+    "target_files": [
+      "search.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-contextBrief",
+    "file": "backend/tests/unit/memory_hub/contextBrief.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 5,
+    "target_files": [
+      "contextBrief.ts"
+    ]
+  },
+  {
+    "id": "QS1-be-controller",
+    "file": "backend/tests/unit/memory_hub/controller.test.ts",
+    "level": "unit",
+    "framework": "jest",
+    "test_count": 10,
+    "target_files": [
+      "controller.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-ModuleCard.test.tsx",
+    "file": "apps/web/src/components/ModuleCard.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 4,
+    "target_files": [
+      "ModuleCard.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-ProtectedRoute.test.tsx",
+    "file": "apps/web/src/components/__tests__/ProtectedRoute.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "ProtectedRoute.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-AuthContext.test.tsx",
+    "file": "apps/web/src/contexts/__tests__/AuthContext.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 34,
+    "target_files": [
+      "AuthContext.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-modules.config.test.ts",
+    "file": "apps/web/src/core/config/__tests__/modules.config.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 15,
+    "target_files": [
+      "modules.config.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-modules.dependencies.test.ts",
+    "file": "apps/web/src/core/config/__tests__/modules.dependencies.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 19,
+    "target_files": [
+      "modules.dependencies.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-EventBus.test.ts",
+    "file": "apps/web/src/core/domain/events/__tests__/EventBus.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "EventBus.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-CPF.test.ts",
+    "file": "apps/web/src/core/domain/valueObjects/__tests__/CPF.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 8,
+    "target_files": [
+      "CPF.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-Email.test.ts",
+    "file": "apps/web/src/core/domain/valueObjects/__tests__/Email.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 10,
+    "target_files": [
+      "Email.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-Phone.test.ts",
+    "file": "apps/web/src/core/domain/valueObjects/__tests__/Phone.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "Phone.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-SidebarGroup.test.tsx",
+    "file": "apps/web/src/core/layout/Sidebar/SidebarGroup.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 9,
+    "target_files": [
+      "SidebarGroup.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-outbox.test.ts",
+    "file": "apps/web/src/lib/sync/__tests__/outbox.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "outbox.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-sync-channel.test.ts",
+    "file": "apps/web/src/lib/sync/__tests__/sync-channel.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "sync-channel.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-sync-handler.test.ts",
+    "file": "apps/web/src/lib/sync/__tests__/sync-handler.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "sync-handler.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-sync-retry.test.ts",
+    "file": "apps/web/src/lib/sync/__tests__/sync-retry.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 12,
+    "target_files": [
+      "sync-retry.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-timeout.test.ts",
+    "file": "apps/web/src/lib/sync/__tests__/timeout.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "timeout.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-CreateAppointmentUseCase.test.ts",
+    "file": "apps/web/src/modules/agenda/application/useCases/__tests__/CreateAppointmentUseCase.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "CreateAppointmentUseCase.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-ListAppointmentsUseCase.test.ts",
+    "file": "apps/web/src/modules/agenda/application/useCases/__tests__/ListAppointmentsUseCase.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "ListAppointmentsUseCase.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-CancelAppointmentUseCase.test.ts",
+    "file": "apps/web/src/modules/agenda/application/useCases/__tests__/CancelAppointmentUseCase.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 4,
+    "target_files": [
+      "CancelAppointmentUseCase.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-Appointment.test.ts",
+    "file": "apps/web/src/modules/agenda/domain/entities/__tests__/Appointment.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 32,
+    "target_files": [
+      "Appointment.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-BlockedTime.test.ts",
+    "file": "apps/web/src/modules/agenda/domain/entities/__tests__/BlockedTime.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 23,
+    "target_files": [
+      "BlockedTime.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-AppointmentMapper.test.ts",
+    "file": "apps/web/src/modules/agenda/infrastructure/mappers/__tests__/AppointmentMapper.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "AppointmentMapper.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-AgendaContext.test.tsx",
+    "file": "apps/web/src/modules/agenda/presentation/contexts/__tests__/AgendaContext.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 8,
+    "target_files": [
+      "AgendaContext.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useAppointments.test.tsx",
+    "file": "apps/web/src/modules/agenda/presentation/hooks/__tests__/useAppointments.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 4,
+    "target_files": [
+      "useAppointments.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-AgendaPage.test.tsx",
+    "file": "apps/web/src/modules/agenda/ui/pages/__tests__/AgendaPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 1,
+    "target_files": [
+      "AgendaPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useBIDashboards.test.tsx",
+    "file": "apps/web/src/modules/bi/application/hooks/__tests__/useBIDashboards.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "useBIDashboards.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useBIMetrics.test.tsx",
+    "file": "apps/web/src/modules/bi/application/hooks/__tests__/useBIMetrics.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "useBIMetrics.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-BIMetrics.test.tsx",
+    "file": "apps/web/src/modules/bi/presentation/components/__tests__/BIMetrics.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "BIMetrics.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-BICharts.test.tsx",
+    "file": "apps/web/src/modules/bi/presentation/components/__tests__/BICharts.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 3,
+    "target_files": [
+      "BICharts.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-BIDashboardPage.test.tsx",
+    "file": "apps/web/src/modules/bi/ui/pages/__tests__/BIDashboardPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 8,
+    "target_files": [
+      "BIDashboardPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useInadimplencia.test.tsx",
+    "file": "apps/web/src/modules/cobranca/hooks/__tests__/useInadimplencia.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 10,
+    "target_files": [
+      "useInadimplencia.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-CobrancaPage.test.tsx",
+    "file": "apps/web/src/modules/cobranca/ui/pages/__tests__/CobrancaPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 16,
+    "target_files": [
+      "CobrancaPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useContratos.test.ts",
+    "file": "apps/web/src/modules/contratos/hooks/__tests__/useContratos.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 26,
+    "target_files": [
+      "useContratos.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-Lead.test.ts",
+    "file": "apps/web/src/modules/crm/domain/aggregates/__tests__/Lead.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "Lead.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-LeadCard.test.tsx",
+    "file": "apps/web/src/modules/crm/presentation/components/__tests__/LeadCard.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 15,
+    "target_files": [
+      "LeadCard.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useLeads.test.tsx",
+    "file": "apps/web/src/modules/crm/presentation/hooks/__tests__/useLeads.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 10,
+    "target_files": [
+      "useLeads.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useAtividades.test.tsx",
+    "file": "apps/web/src/modules/crm/presentation/hooks/__tests__/useAtividades.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 8,
+    "target_files": [
+      "useAtividades.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useCrypto.test.ts",
+    "file": "apps/web/src/modules/crypto/hooks/__tests__/useCrypto.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 17,
+    "target_files": [
+      "useCrypto.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useCryptoPriceAlerts.test.ts",
+    "file": "apps/web/src/modules/crypto/hooks/__tests__/useCryptoPriceAlerts.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "useCryptoPriceAlerts.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-CryptoPaymentHistory.test.tsx",
+    "file": "apps/web/src/modules/crypto/presentation/components/__tests__/CryptoPaymentHistory.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "CryptoPaymentHistory.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-DentistaForm.test.tsx",
+    "file": "apps/web/src/modules/dentistas/components/dentista-form/__tests__/DentistaForm.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "DentistaForm.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-DentistasList.test.tsx",
+    "file": "apps/web/src/modules/dentistas/components/__tests__/DentistasList.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "DentistasList.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useDentistasStore.test.ts",
+    "file": "apps/web/src/modules/dentistas/hooks/__tests__/useDentistasStore.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 15,
+    "target_files": [
+      "useDentistasStore.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useEstoqueStore.test.ts",
+    "file": "apps/web/src/modules/estoque/hooks/__tests__/useEstoqueStore.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 33,
+    "target_files": [
+      "useEstoqueStore.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useEstoque.test.ts",
+    "file": "apps/web/src/modules/estoque/hooks/__tests__/useEstoque.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 47,
+    "target_files": [
+      "useEstoque.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useFidelidade.test.ts",
+    "file": "apps/web/src/modules/fidelidade/hooks/__tests__/useFidelidade.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 21,
+    "target_files": [
+      "useFidelidade.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-Transaction.test.ts",
+    "file": "apps/web/src/modules/financeiro/domain/aggregates/__tests__/Transaction.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "Transaction.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useTransactions.test.ts",
+    "file": "apps/web/src/modules/financeiro/presentation/hooks/__tests__/useTransactions.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "useTransactions.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useCashFlow.test.ts",
+    "file": "apps/web/src/modules/financeiro/presentation/hooks/__tests__/useCashFlow.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 4,
+    "target_files": [
+      "useCashFlow.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useCategories.test.ts",
+    "file": "apps/web/src/modules/financeiro/presentation/hooks/__tests__/useCategories.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "useCategories.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-FuncionariosList.test.tsx",
+    "file": "apps/web/src/modules/funcionarios/components/__tests__/FuncionariosList.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 10,
+    "target_files": [
+      "FuncionariosList.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useFuncionarios.test.ts",
+    "file": "apps/web/src/modules/funcionarios/hooks/__tests__/useFuncionarios.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 16,
+    "target_files": [
+      "useFuncionarios.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useFuncionariosStore.test.ts",
+    "file": "apps/web/src/modules/funcionarios/hooks/__tests__/useFuncionariosStore.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 19,
+    "target_files": [
+      "useFuncionariosStore.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useIAInsights.test.ts",
+    "file": "apps/web/src/modules/ia-radiografia/components/ia-insights-dashboard/__tests__/useIAInsights.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "useIAInsights.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useRadiografiaComparison.test.ts",
+    "file": "apps/web/src/modules/ia-radiografia/components/radiografia-comparison/__tests__/useRadiografiaComparison.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 10,
+    "target_files": [
+      "useRadiografiaComparison.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useRadiografia.test.ts",
+    "file": "apps/web/src/modules/ia-radiografia/hooks/__tests__/useRadiografia.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 12,
+    "target_files": [
+      "useRadiografia.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-UploadDialog.test.tsx",
+    "file": "apps/web/src/modules/ia-radiografia/ui/components/__tests__/UploadDialog.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 8,
+    "target_files": [
+      "UploadDialog.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-AnaliseList.test.tsx",
+    "file": "apps/web/src/modules/ia-radiografia/ui/components/__tests__/AnaliseList.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 9,
+    "target_files": [
+      "AnaliseList.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useInadimplentes.test.tsx",
+    "file": "apps/web/src/modules/inadimplencia/application/hooks/__tests__/useInadimplentes.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "useInadimplentes.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-InadimplenciaDashboard.test.tsx",
+    "file": "apps/web/src/modules/inadimplencia/presentation/components/__tests__/InadimplenciaDashboard.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 3,
+    "target_files": [
+      "InadimplenciaDashboard.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-InadimplenciaList.test.tsx",
+    "file": "apps/web/src/modules/inadimplencia/presentation/components/__tests__/InadimplenciaList.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "InadimplenciaList.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-CobrancaAutomation.test.tsx",
+    "file": "apps/web/src/modules/inadimplencia/presentation/components/__tests__/CobrancaAutomation.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "CobrancaAutomation.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useLGPDRequests.test.tsx",
+    "file": "apps/web/src/modules/lgpd/application/hooks/__tests__/useLGPDRequests.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "useLGPDRequests.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-LGPDRequests.test.tsx",
+    "file": "apps/web/src/modules/lgpd/presentation/components/__tests__/LGPDRequests.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "LGPDRequests.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-LGPDConsents.test.tsx",
+    "file": "apps/web/src/modules/lgpd/presentation/components/__tests__/LGPDConsents.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "LGPDConsents.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-LGPDAuditTrail.test.tsx",
+    "file": "apps/web/src/modules/lgpd/presentation/components/__tests__/LGPDAuditTrail.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "LGPDAuditTrail.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-LGPDPage.test.tsx",
+    "file": "apps/web/src/modules/lgpd/ui/pages/__tests__/LGPDPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "LGPDPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-CampaignCard.test.tsx",
+    "file": "apps/web/src/modules/marketing-auto/components/__tests__/CampaignCard.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "CampaignCard.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useMarketingCampaigns.test.ts",
+    "file": "apps/web/src/modules/marketing-auto/hooks/__tests__/useMarketingCampaigns.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 14,
+    "target_files": [
+      "useMarketingCampaigns.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useOrcamentos.test.tsx",
+    "file": "apps/web/src/modules/orcamentos/hooks/__tests__/useOrcamentos.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 10,
+    "target_files": [
+      "useOrcamentos.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useOrcamentos.test.ts",
+    "file": "apps/web/src/modules/orcamentos/presentation/hooks/__tests__/useOrcamentos.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "useOrcamentos.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-OrcamentosPage.test.tsx",
+    "file": "apps/web/src/modules/orcamentos/ui/pages/__tests__/OrcamentosPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "OrcamentosPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-PatientDetails.test.tsx",
+    "file": "apps/web/src/modules/pacientes/components/__tests__/PatientDetails.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 15,
+    "target_files": [
+      "PatientDetails.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-usePatientsAPI.test.ts",
+    "file": "apps/web/src/modules/pacientes/hooks/__tests__/usePatientsAPI.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 12,
+    "target_files": [
+      "usePatientsAPI.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-usePatientsUnified.test.ts",
+    "file": "apps/web/src/modules/pacientes/hooks/__tests__/usePatientsUnified.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 3,
+    "target_files": [
+      "usePatientsUnified.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-usePatientTimeline.test.tsx",
+    "file": "apps/web/src/modules/pacientes/hooks/__tests__/usePatientTimeline.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "usePatientTimeline.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-PacientesListPage.test.tsx",
+    "file": "apps/web/src/modules/pacientes/ui/pages/__tests__/PacientesListPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 9,
+    "target_files": [
+      "PacientesListPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-PatientFormPage.test.tsx",
+    "file": "apps/web/src/modules/pacientes/ui/pages/__tests__/PatientFormPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 8,
+    "target_files": [
+      "PatientFormPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-PatientSearchPage.test.tsx",
+    "file": "apps/web/src/modules/pacientes/ui/pages/__tests__/PatientSearchPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 4,
+    "target_files": [
+      "PatientSearchPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-PDVPage.test.tsx",
+    "file": "apps/web/src/modules/pdv/ui/pages/__tests__/PDVPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "PDVPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-DashboardExecutivoPDV.test.tsx",
+    "file": "apps/web/src/modules/pdv/ui/pages/__tests__/DashboardExecutivoPDV.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 8,
+    "target_files": [
+      "DashboardExecutivoPDV.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-MetasGamificacao.test.tsx",
+    "file": "apps/web/src/modules/pdv/ui/pages/__tests__/MetasGamificacao.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "MetasGamificacao.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-usePDV.test.ts",
+    "file": "apps/web/src/modules/pdv/hooks/__tests__/usePDV.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 19,
+    "target_files": [
+      "usePDV.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-usePDVApi.test.tsx",
+    "file": "apps/web/src/modules/pdv/hooks/__tests__/usePDVApi.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 12,
+    "target_files": [
+      "usePDVApi.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useOdontogramaStore.test.ts",
+    "file": "apps/web/src/modules/pep/hooks/useOdontogramaStore.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "useOdontogramaStore.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-usePatientPortal.test.ts",
+    "file": "apps/web/src/modules/portal-paciente/hooks/__tests__/usePatientPortal.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 21,
+    "target_files": [
+      "usePatientPortal.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-PortalPaciente.test.tsx",
+    "file": "apps/web/src/modules/portal-paciente/ui/pages/__tests__/PortalPaciente.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "PortalPaciente.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-ProcedimentosList.test.tsx",
+    "file": "apps/web/src/modules/procedimentos/components/__tests__/ProcedimentosList.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "ProcedimentosList.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useProcedimentosStore.test.ts",
+    "file": "apps/web/src/modules/procedimentos/hooks/__tests__/useProcedimentosStore.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "useProcedimentosStore.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-TemplatesProcedimentos.test.tsx",
+    "file": "apps/web/src/modules/procedimentos/ui/pages/__tests__/TemplatesProcedimentos.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "TemplatesProcedimentos.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useModulesSimple.test.ts",
+    "file": "apps/web/src/modules/settings/components/modules-simple/__tests__/useModulesSimple.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 20,
+    "target_files": [
+      "useModulesSimple.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-ModuleCard.test.tsx",
+    "file": "apps/web/src/modules/settings/components/modules-simple/__tests__/ModuleCard.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 13,
+    "target_files": [
+      "ModuleCard.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useBackupStatus.test.tsx",
+    "file": "apps/web/src/modules/settings/hooks/__tests__/useBackupStatus.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "useBackupStatus.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useSplitConfig.test.tsx",
+    "file": "apps/web/src/modules/split-pagamento/application/hooks/useSplitConfig.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 2,
+    "target_files": [
+      "useSplitConfig.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useSplit.test.ts",
+    "file": "apps/web/src/modules/split-pagamento/hooks/useSplit.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 28,
+    "target_files": [
+      "useSplit.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-split-pagamento.test.tsx",
+    "file": "apps/web/src/modules/split-pagamento/ui/pages/split-pagamento.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "split-pagamento.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useTeleconsultas.test.tsx",
+    "file": "apps/web/src/modules/teleodonto/application/hooks/__tests__/useTeleconsultas.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "useTeleconsultas.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useTeleodontologia.test.ts",
+    "file": "apps/web/src/modules/teleodonto/application/hooks/__tests__/useTeleodontologia.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 14,
+    "target_files": [
+      "useTeleodontologia.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-TeleodontoSessionList.test.tsx",
+    "file": "apps/web/src/modules/teleodonto/presentation/components/__tests__/TeleodontoSessionList.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "TeleodontoSessionList.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useTISS.test.tsx",
+    "file": "apps/web/src/modules/tiss/application/hooks/__tests__/useTISS.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 9,
+    "target_files": [
+      "useTISS.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useTISSGuides.test.tsx",
+    "file": "apps/web/src/modules/tiss/application/hooks/__tests__/useTISSGuides.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 7,
+    "target_files": [
+      "useTISSGuides.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-TISSDashboard.test.tsx",
+    "file": "apps/web/src/modules/tiss/presentation/components/__tests__/TISSDashboard.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "TISSDashboard.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-TISSBatchList.test.tsx",
+    "file": "apps/web/src/modules/tiss/presentation/components/__tests__/TISSBatchList.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 6,
+    "target_files": [
+      "TISSBatchList.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-TISSGuideForm.test.tsx",
+    "file": "apps/web/src/modules/tiss/presentation/components/__tests__/TISSGuideForm.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 9,
+    "target_files": [
+      "TISSGuideForm.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-TratamentosPage.test.tsx",
+    "file": "apps/web/src/modules/tratamentos/ui/pages/__tests__/TratamentosPage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 15,
+    "target_files": [
+      "TratamentosPage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useTratamentos.test.ts",
+    "file": "apps/web/src/modules/tratamentos/hooks/__tests__/useTratamentos.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 11,
+    "target_files": [
+      "useTratamentos.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-Landpage.test.tsx",
+    "file": "apps/web/src/modules/landpage/ui/pages/__tests__/Landpage.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 18,
+    "target_files": [
+      "Landpage.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-MemoryHubSearch.test.tsx",
+    "file": "apps/web/src/modules/memory-hub/__tests__/MemoryHubSearch.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "MemoryHubSearch.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-MemoryHubHealth.test.tsx",
+    "file": "apps/web/src/modules/memory-hub/__tests__/MemoryHubHealth.test.tsx",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 3,
+    "target_files": [
+      "MemoryHubHealth.tsx"
+    ]
+  },
+  {
+    "id": "QS1-fe-useMemoryHubSearch.test.ts",
+    "file": "apps/web/src/modules/memory-hub/__tests__/useMemoryHubSearch.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 5,
+    "target_files": [
+      "useMemoryHubSearch.ts"
+    ]
+  },
+  {
+    "id": "QS1-fe-useMemoryHubHealth.test.ts",
+    "file": "apps/web/src/modules/memory-hub/__tests__/useMemoryHubHealth.test.ts",
+    "level": "unit",
+    "framework": "vitest",
+    "test_count": 3,
+    "target_files": [
+      "useMemoryHubHealth.ts"
+    ]
+  },
+  {
+    "id": "QS1-e2e-accessibility",
+    "file": "tests/e2e/accessibility.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 8,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-backend-switching",
+    "file": "tests/e2e/backend-switching.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 8,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-dashboard-api",
+    "file": "tests/e2e/dashboard-api.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 9,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-dashboard-navigation",
+    "file": "tests/e2e/dashboard-navigation.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 14,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-dashboard",
+    "file": "tests/e2e/dashboard.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 5,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-estoque",
+    "file": "tests/e2e/estoque.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 27,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-financeiro-crud",
+    "file": "tests/e2e/financeiro-crud.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 8,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-financeiro",
+    "file": "tests/e2e/financeiro.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 1,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-financial-flows",
+    "file": "tests/e2e/financial-flows.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 10,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-inventario",
+    "file": "tests/e2e/inventario.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 13,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-lead-conversion",
+    "file": "tests/e2e/lead-conversion.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 3,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-modular-navigation",
+    "file": "tests/e2e/modular-navigation.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 10,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-module-smoke",
+    "file": "tests/e2e/module-smoke.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 25,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-modules-activation",
+    "file": "tests/e2e/modules-activation.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 9,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-modules-management",
+    "file": "tests/e2e/modules-management.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 10,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-modules",
+    "file": "tests/e2e/modules.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 7,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-navigation-v5",
+    "file": "tests/e2e/navigation-v5.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 12,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-navigation",
+    "file": "tests/e2e/navigation.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 3,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-pacientes",
+    "file": "tests/e2e/pacientes.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 6,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-patient-workflow",
+    "file": "tests/e2e/patient-workflow.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 7,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-patients-crud",
+    "file": "tests/e2e/patients-crud.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 10,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-patients",
+    "file": "tests/e2e/patients.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 5,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-pep-workflows",
+    "file": "tests/e2e/pep-workflows.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 10,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-pep",
+    "file": "tests/e2e/pep.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 7,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-performance-optimization",
+    "file": "tests/e2e/performance-optimization.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 14,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-permissions",
+    "file": "tests/e2e/permissions.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 8,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-teleodonto-workflow",
+    "file": "tests/e2e/teleodonto-workflow.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 4,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-toast-enhanced",
+    "file": "tests/e2e/toast-enhanced.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 13,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-transaction-flow",
+    "file": "tests/e2e/transaction-flow.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 3,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-wcag-accessibility",
+    "file": "tests/e2e/wcag-accessibility.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 20,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-workflow-integration",
+    "file": "tests/e2e/workflow-integration.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 3,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-agenda",
+    "file": "tests/e2e/agenda.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 10,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-auth",
+    "file": "tests/e2e/auth.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 6,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-crm-workflow",
+    "file": "tests/e2e/crm-workflow.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 4,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-crypto-flows",
+    "file": "tests/e2e/crypto-flows.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 11,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-crypto-payments",
+    "file": "tests/e2e/crypto-payments.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 12,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-landing-branding",
+    "file": "tests/e2e/landing-branding.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 1,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-funcionarios",
+    "file": "tests/e2e/funcionarios.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 2,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-notificacoes",
+    "file": "tests/e2e/notificacoes.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 2,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-orcamentos",
+    "file": "tests/e2e/orcamentos.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 2,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-pdv",
+    "file": "tests/e2e/pdv.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 2,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-procedimentos",
+    "file": "tests/e2e/procedimentos.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 2,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-tiss",
+    "file": "tests/e2e/tiss.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 2,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-ia-radiografia-upload",
+    "file": "tests/e2e/ia-radiografia-upload.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 7,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-memory-hub",
+    "file": "tests/e2e/memory-hub.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 5,
+    "target_files": []
+  },
+  {
+    "id": "QS1-e2e-pacientes",
+    "file": "tests/e2e/modules/pacientes.spec.ts",
+    "level": "e2e",
+    "framework": "playwright",
+    "test_count": 5,
+    "target_files": []
+  }
+]

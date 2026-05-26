@@ -1,0 +1,4 @@
+{
+  "source": "not-collected",
+  "reason": "no flaky test history export provided"
+}
