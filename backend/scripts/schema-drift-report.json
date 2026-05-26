@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-05-26T15:40:32.285Z",
+  "databaseUrl": "postgresql://***:***@localhost:5432/orthoplus?schema=public",
+  "summary": {
+    "totalPrismaModels": 189,
+    "totalPrismaScalarFields": 2338,
+    "totalDbTables": 190,
+    "totalDbColumns": 2347,
+    "tablesMissingInDb": 0,
+    "tablesMissingInPrisma": 1,
+    "schemaMismatches": 0,
+    "columnsMissingInDb": 0,
+    "columnsMissingInPrisma": 1,
+    "typeMismatches": 0,
+    "nullabilityMismatches": 0
+  },
+  "drifts": [
+    {
+      "category": "columnMissingInPrisma",
+      "severity": "low",
+      "dbSchema": "core",
+      "dbTable": "search_index",
+      "dbColumn": "content_tsv",
+      "dbType": "tsvector (tsvector)",
+      "message": "Coluna \"search_index.content_tsv\" existe no DB mas nao esta modelada no Prisma.",
+      "recommendation": "Adicionar campo ao model Prisma \"search_index\" ou remover a coluna se for obsoleta."
+    },
+    {
+      "category": "tableMissingInPrisma",
+      "severity": "low",
+      "dbSchema": "public",
+      "dbTable": "_prisma_migrations",
+      "message": "Tabela \"_prisma_migrations\" no schema \"public\" existe no DB mas nao esta modelada no Prisma.",
+      "recommendation": "Adicionar model \"_prisma_migrations\" ao schema Prisma com @@schema(\"public\") ou avaliar se a tabela e obsoleta e pode ser removida."
+    }
+  ]
+}

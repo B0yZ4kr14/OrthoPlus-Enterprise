@@ -4,6 +4,12 @@ import { asyncHandler, Errors } from "@/middleware/errorHandler"
 import { PacienteIndexer } from "../services/PacienteIndexer"
 import { AgendaIndexer } from "../services/AgendaIndexer"
 import { PepIndexer } from "../services/PepIndexer"
+import {
+  getSearchCache,
+  setSearchCache,
+  invalidateSearchCache,
+} from "@/infrastructure/cache/searchCache"
+import { logger } from "@/infrastructure/logger"
 
 export interface SearchResultItem {
   id: string
@@ -32,6 +38,8 @@ interface SearchRow {
   score: number
 }
 
+const SEARCH_CACHE_TTL_MS = 60 * 1000 // 60 seconds
+
 export class SearchIndexController {
   private indexer = new PacienteIndexer(prisma)
   private agendaIndexer = new AgendaIndexer(prisma)
@@ -50,10 +58,21 @@ export class SearchIndexController {
 
     const moduleFilter = req.query.module as string | undefined
     const page = Math.max(1, parseInt((req.query.page as string) || "1", 10))
-    const limit = Math.min(100, Math.max(1, parseInt((req.query.limit as string) || "20", 10)))
+    const limit = Math.min(
+      100,
+      Math.max(1, parseInt((req.query.limit as string) || "20", 10))
+    )
     const offset = (page - 1) * limit
 
     const query = q.trim()
+
+    // Check cache first
+    const cached = await getSearchCache(clinicId, query, moduleFilter, page, limit)
+    if (cached) {
+      logger.info(`[SearchCache HIT] clinic=${clinicId} query="${query}"`)
+      res.json(cached)
+      return
+    }
 
     // Run search query and count in parallel
     const [results, countResult] = await Promise.all([
@@ -79,6 +98,20 @@ export class SearchIndexController {
       limit,
       results: items,
     }
+
+    // Store in cache
+    await setSearchCache(
+      clinicId,
+      query,
+      moduleFilter,
+      page,
+      limit,
+      response,
+      SEARCH_CACHE_TTL_MS
+    )
+    logger.info(
+      `[SearchCache MISS] clinic=${clinicId} query="${query}" — stored in cache`
+    )
 
     res.json(response)
   })
@@ -138,7 +171,10 @@ export class SearchIndexController {
   }
 
   private async runReindex(
-    indexer: { fullReindex(force?: boolean): Promise<{ indexed: number; durationMs: number }>; incremental(since: Date): Promise<{ indexed: number; durationMs: number }> },
+    indexer: {
+      fullReindex(force?: boolean): Promise<{ indexed: number; durationMs: number }>
+      incremental(since: Date): Promise<{ indexed: number; durationMs: number }>
+    },
     req: Request
   ): Promise<{ indexed: number; durationMs: number }> {
     const { force, since } = req.body as { force?: boolean; since?: string }
@@ -161,17 +197,29 @@ export class SearchIndexController {
   }
 
   reindexPacientes = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
     const result = await this.runReindex(this.indexer, req)
+    if (clinicId) {
+      await invalidateSearchCache(clinicId)
+    }
     res.json({ indexed: result.indexed, durationMs: result.durationMs })
   })
 
   reindexAgenda = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
     const result = await this.runReindex(this.agendaIndexer, req)
+    if (clinicId) {
+      await invalidateSearchCache(clinicId)
+    }
     res.json({ indexed: result.indexed, durationMs: result.durationMs })
   })
 
   reindexPep = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId
     const result = await this.runReindex(this.pepIndexer, req)
+    if (clinicId) {
+      await invalidateSearchCache(clinicId)
+    }
     res.json({ indexed: result.indexed, durationMs: result.durationMs })
   })
 
