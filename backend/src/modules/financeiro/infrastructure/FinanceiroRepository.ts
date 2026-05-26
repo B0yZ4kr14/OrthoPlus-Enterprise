@@ -1,5 +1,6 @@
 import { prisma } from "@/infrastructure/database/prismaClient"
 import { Prisma } from "@prisma/client"
+import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 
 /**
  * FinanceiroRepository — encapsulates all database access for the financeiro module.
@@ -60,7 +61,7 @@ export interface VendaFilters {
 
 // ─── Repository ───
 
-export class FinanceiroRepository {
+export class FinanceiroRepository implements IFinanceiroRepository {
   // ─── financial_transactions ───
 
   async listTransactions(filters: TransactionFilters) {

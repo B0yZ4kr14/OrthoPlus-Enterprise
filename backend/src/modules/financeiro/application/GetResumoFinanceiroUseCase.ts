@@ -1,5 +1,5 @@
 import { logger } from "@/infrastructure/logger"
-import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 
 export interface ResumoFinanceiroResult {
   saldoGeral: number
@@ -20,7 +20,11 @@ export interface ResumoFinanceiroResult {
  * GetResumoFinanceiroUseCase — computes the financial summary for a clinic.
  */
 export class GetResumoFinanceiroUseCase {
-  private repo = new FinanceiroRepository()
+  private repo: IFinanceiroRepository
+
+  constructor(repo?: IFinanceiroRepository) {
+    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+  }
 
   async execute(clinicId: string): Promise<ResumoFinanceiroResult> {
     const [
@@ -51,16 +55,16 @@ export class GetResumoFinanceiroUseCase {
     }
 
     return {
-      saldoGeral: (totalReceitas._sum.amount || 0) - (totalDespesas._sum.amount || 0),
-      totalReceitas: totalReceitas._sum.amount || 0,
-      totalDespesas: totalDespesas._sum.amount || 0,
+      saldoGeral: (totalReceitas._sum?.amount || 0) - (totalDespesas._sum?.amount || 0),
+      totalReceitas: totalReceitas._sum?.amount || 0,
+      totalDespesas: totalDespesas._sum?.amount || 0,
       contasReceber: {
-        total: contasReceberPendentes._sum.valor || 0,
-        quantidade: contasReceberPendentes._count?.id || 0,
+        total: contasReceberPendentes._sum?.valor || 0,
+        quantidade: (contasReceberPendentes._count as any)?.id || 0,
       },
       contasPagar: {
-        total: contasPagarPendentes._sum.valor || 0,
-        quantidade: contasPagarPendentes._count?.id || 0,
+        total: contasPagarPendentes._sum?.valor || 0,
+        quantidade: (contasPagarPendentes._count as any)?.id || 0,
       },
       caixasAbertos: caixasAbertos || 0,
     }

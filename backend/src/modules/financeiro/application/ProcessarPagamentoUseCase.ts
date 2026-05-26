@@ -1,4 +1,4 @@
-import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 
 export interface ProcessarPagamentoInput {
   contaReceberId: string
@@ -16,7 +16,11 @@ export interface ProcessarPagamentoResult {
  * Updates conta_receber status and creates a payment transaction.
  */
 export class ProcessarPagamentoUseCase {
-  private repo = new FinanceiroRepository()
+  private repo: IFinanceiroRepository
+
+  constructor(repo?: IFinanceiroRepository) {
+    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+  }
 
   async execute(input: ProcessarPagamentoInput): Promise<ProcessarPagamentoResult> {
     const transactionId = `txn_${Date.now()}`

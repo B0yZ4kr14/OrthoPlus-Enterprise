@@ -1,11 +1,15 @@
-import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import { createTransactionSchema } from "@/modules/financeiro/api/schemas"
 
 export class CreateTransactionUseCase {
-  private repo = new FinanceiroRepository()
+  private repo: IFinanceiroRepository
   private audit = new AuditLogRepository()
+
+  constructor(repo?: IFinanceiroRepository) {
+    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+  }
 
   async execute(clinicId: string, userId: string, body: unknown) {
     const parsed = createTransactionSchema.safeParse(body)

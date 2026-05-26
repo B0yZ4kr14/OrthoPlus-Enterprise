@@ -64,7 +64,7 @@ Módulos com maior churn e complexidade:
 | Rank | Módulo | Arquivos | Motivação | Status |
 |------|--------|----------|-----------|--------|
 | 1 | `auth` | 7 | Autenticação — core de segurança | ✅ **CONCLUÍDO** |
-| 2 | `financeiro` | 17 | Financeiro — dados sensíveis, audit obrigatório | ⏳ Pendente |
+| 2 | `financeiro` | 17 | Financeiro — dados sensíveis, audit obrigatório | ✅ **CONCLUÍDO** |
 | 3 | `pdv` | 16 | PDV — transações críticas | ⏳ Pendente |
 | 4 | `agenda` | 10 | Agenda — alto volume de acessos | ⏳ Pendente |
 | 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal | ⏳ Pendente |
@@ -80,7 +80,16 @@ Módulos com maior churn e complexidade:
 - [x] 636/636 unit tests passam
 - [x] Commit: `165189d92`
 
-### T2.2 a T2.8 — Por módulo
+### T2.2 — financeiro (CONCLUÍDO ✅)
+- [x] Criar `domain/repositories/IFinanceiroRepository.ts` (interface com tipos Prisma para 8 entidades)
+- [x] Atualizar `infrastructure/FinanceiroRepository.ts` para implementar `IFinanceiroRepository`
+- [x] Injetar `IFinanceiroRepository` em `FinanceiroService`, `CreateTransactionUseCase`, `GetCashFlowUseCase`, `GetResumoFinanceiroUseCase`, `ProcessarPagamentoUseCase`
+- [x] Corrigir acessos strict-null em aggregates (`_sum?._amount`, `_count as any`)
+- [x] Build passa (0 erros TypeScript)
+- [x] 636/636 unit tests passam
+- [x] Commit: `a34e1594c`
+
+### T2.3 a T2.8 — Por módulo
 Para cada módulo:
 1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
 2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)

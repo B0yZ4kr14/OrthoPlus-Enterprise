@@ -1,4 +1,4 @@
-import { FinanceiroRepository } from "@/modules/financeiro/infrastructure/FinanceiroRepository"
+import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository"
 
 export interface CashFlowResult {
   totalReceitas: number
@@ -10,7 +10,11 @@ export interface CashFlowResult {
  * GetCashFlowUseCase — computes cash flow analytics for a clinic.
  */
 export class GetCashFlowUseCase {
-  private repo = new FinanceiroRepository()
+  private repo: IFinanceiroRepository
+
+  constructor(repo?: IFinanceiroRepository) {
+    this.repo = repo ?? new (require("@/modules/financeiro/infrastructure/FinanceiroRepository").FinanceiroRepository)()
+  }
 
   async execute(
     clinicId: string,
@@ -23,9 +27,9 @@ export class GetCashFlowUseCase {
     ])
 
     return {
-      totalReceitas: receitas._sum.amount || 0,
-      totalDespesas: despesas._sum.amount || 0,
-      saldo: (receitas._sum.amount || 0) - (despesas._sum.amount || 0),
+      totalReceitas: receitas._sum?.amount || 0,
+      totalDespesas: despesas._sum?.amount || 0,
+      saldo: (receitas._sum?.amount || 0) - (despesas._sum?.amount || 0),
     }
   }
 }
