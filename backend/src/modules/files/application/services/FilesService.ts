@@ -1,8 +1,10 @@
-import { prisma, VisibilidadeArquivo } from "@/infrastructure/database/prismaClient";
+import { VisibilidadeArquivo } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { circuitBreakerRegistry } from "@/infrastructure/database/CategoryCircuitBreaker";
 import type { CircuitBreakerConfig } from "@/infrastructure/database/CategoryCircuitBreaker";
 import { Errors } from "@/middleware/errorHandler";
+import { IFilesRepository } from "@/modules/files/domain/repositories/IFilesRepository";
+import { FilesRepository } from "@/modules/files/infrastructure/FilesRepository";
 import crypto from "crypto";
 import fs from "fs";
 
@@ -61,6 +63,8 @@ export interface VersionData {
 }
 
 export class FilesService {
+  constructor(private repo: IFilesRepository = new FilesRepository()) {}
+
   async create(data: CreateFileInput): Promise<{
     id: string;
     nomeOriginal: string;
@@ -73,20 +77,18 @@ export class FilesService {
   }> {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     const record = await cb.execute(
-      async () => prisma.arquivo.create({
-        data: {
-          clinic_id: data.clinicId,
-          paciente_id: data.pacienteId ?? null,
-          consulta_id: data.consultaId ?? null,
-          orcamento_id: data.orcamentoId ?? null,
-          nome_original: data.nomeOriginal,
-          nome_storage: data.nomeStorage,
-          mime_type: data.mimeType,
-          tamanho_bytes: data.tamanhoBytes,
-          categoria: data.categoria ?? "OUTRO",
-          visibilidade: parseVisibilidade(data.visibilidade) ?? VisibilidadeArquivo.RESTRITO,
-          uploaded_by: data.uploadedBy,
-        },
+      async () => this.repo.createArquivo({
+        clinic_id: data.clinicId,
+        paciente_id: data.pacienteId ?? null,
+        consulta_id: data.consultaId ?? null,
+        orcamento_id: data.orcamentoId ?? null,
+        nome_original: data.nomeOriginal,
+        nome_storage: data.nomeStorage,
+        mime_type: data.mimeType,
+        tamanho_bytes: data.tamanhoBytes,
+        categoria: data.categoria ?? "OUTRO",
+        visibilidade: parseVisibilidade(data.visibilidade) ?? VisibilidadeArquivo.RESTRITO,
+        uploaded_by: data.uploadedBy,
       }),
       () => { throw Errors.externalService("Database"); }
     );
@@ -151,11 +153,7 @@ export class FilesService {
           // ADMIN sees all — no visibility filter needed
         }
 
-        return prisma.arquivo.findMany({
-          where,
-          orderBy: { created_at: "desc" },
-          take: 1000,
-        }) as Promise<ArquivoRecord[]>;
+        return this.repo.findArquivos(where, { created_at: "desc" }, 1000) as Promise<ArquivoRecord[]>;
       },
       () => []
     );
@@ -188,12 +186,7 @@ export class FilesService {
   } | null> {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     const record = await cb.execute(
-      async () => prisma.arquivo.findFirst({
-        where: {
-          id,
-          clinic_id: clinicId,
-        },
-      }),
+      async () => this.repo.findArquivoById(id, clinicId),
       () => null
     );
 
@@ -219,12 +212,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     try {
       const result = await cb.execute(
-        async () => prisma.arquivo.deleteMany({
-          where: {
-            id,
-            clinic_id: clinicId,
-          },
-        }),
+        async () => this.repo.deleteArquivo(id, clinicId),
         () => ({ count: 0 })
       );
 
@@ -244,16 +232,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     try {
       const result = await cb.execute(
-        async () => prisma.arquivo.updateMany({
-          where: {
-            id,
-            clinic_id: clinicId,
-          },
-          data: {
-            url_temp: urlTemp,
-            expira_em: expiraEm,
-          },
-        }),
+        async () => this.repo.updateArquivoUrlTemp(id, clinicId, urlTemp, expiraEm),
         () => ({ count: 0 })
       );
 
@@ -280,9 +259,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
 
     const file = await cb.execute(
-      async () => prisma.arquivo.findFirst({
-        where: { id: arquivoId, clinic_id: clinicId },
-      }),
+      async () => this.repo.findArquivoById(arquivoId, clinicId),
       () => null
     );
 
@@ -291,23 +268,18 @@ export class FilesService {
     }
 
     const record = await cb.execute(
-      async () => prisma.arquivo_ocr.create({
-        data: {
-          arquivo_id: arquivoId,
-          status: "PROCESSANDO",
-          texto_extraido: null,
-          idioma: "pt",
-          confidence: null,
-        },
+      async () => this.repo.createOCR({
+        arquivo_id: arquivoId,
+        status: "PROCESSANDO",
+        texto_extraido: null,
+        idioma: "pt",
+        confidence: null,
       }),
       () => { throw Errors.externalService("Database"); }
     );
 
     await cb.execute(
-      async () => prisma.arquivo.updateMany({
-        where: { id: arquivoId, clinic_id: clinicId },
-        data: { ocr_status: "PROCESSANDO" },
-      }),
+      async () => this.repo.updateArquivoOcrStatus(arquivoId, clinicId, "PROCESSANDO"),
       () => { throw Errors.externalService("Database"); }
     );
 
@@ -336,9 +308,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
 
     const file = await cb.execute(
-      async () => prisma.arquivo.findFirst({
-        where: { id: arquivoId, clinic_id: clinicId },
-      }),
+      async () => this.repo.findArquivoById(arquivoId, clinicId),
       () => null
     );
 
@@ -347,10 +317,7 @@ export class FilesService {
     }
 
     const record = await cb.execute(
-      async () => prisma.arquivo_ocr.findFirst({
-        where: { arquivo_id: arquivoId },
-        orderBy: { created_at: "desc" },
-      }),
+      async () => this.repo.findOCRByArquivoId(arquivoId),
       () => null
     );
 
@@ -383,31 +350,23 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
 
     const ocrRecords = await cb.execute(
-      async () => prisma.arquivo_ocr.findMany({
-        where: {
-          texto_extraido: { contains: searchTerm, mode: "insensitive" },
-        },
-        select: { arquivo_id: true },
-      }),
+      async () => this.repo.findOCRsByText(searchTerm),
       () => []
     );
 
-    const arquivoIds = ocrRecords.map((r) => r.arquivo_id);
+    const arquivoIds = ocrRecords.map((r: any) => r.arquivo_id);
     if (arquivoIds.length === 0) return [];
 
     const files = await cb.execute(
-      async () => prisma.arquivo.findMany({
-        where: {
-          id: { in: arquivoIds },
-          clinic_id: clinicId,
-        },
-        orderBy: { created_at: "desc" },
-        take: 1000,
-      }),
+      async () => this.repo.findArquivos(
+        { id: { in: arquivoIds }, clinic_id: clinicId },
+        { created_at: "desc" },
+        1000,
+      ),
       () => []
     );
 
-    return files.map((f) => ({
+    return files.map((f: any) => ({
       id: f.id,
       nomeOriginal: f.nome_original,
       mimeType: f.mime_type,
@@ -439,9 +398,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
 
     const file = await cb.execute(
-      async () => prisma.arquivo.findFirst({
-        where: { id: arquivoId, clinic_id: clinicId },
-      }),
+      async () => this.repo.findArquivoById(arquivoId, clinicId),
       () => null
     );
 
@@ -450,34 +407,26 @@ export class FilesService {
     }
 
     const lastVersion = await cb.execute(
-      async () => prisma.arquivo_versao.findFirst({
-        where: { arquivo_id: arquivoId },
-        orderBy: { numero_versao: "desc" },
-      }),
+      async () => this.repo.findLastVersion(arquivoId),
       () => null
     );
 
     const nextVersionNumber = (lastVersion?.numero_versao ?? 0) + 1;
 
     const record = await cb.execute(
-      async () => prisma.arquivo_versao.create({
-        data: {
-          arquivo_id: arquivoId,
-          numero_versao: nextVersionNumber,
-          nome_storage: data.nomeStorage,
-          tamanho_bytes: data.tamanhoBytes,
-          url_temp: data.urlTemp ?? null,
-          created_by: data.createdBy,
-        },
+      async () => this.repo.createVersion({
+        arquivo_id: arquivoId,
+        numero_versao: nextVersionNumber,
+        nome_storage: data.nomeStorage,
+        tamanho_bytes: data.tamanhoBytes,
+        url_temp: data.urlTemp ?? null,
+        created_by: data.createdBy,
       }),
       () => { throw Errors.externalService("Database"); }
     );
 
     await cb.execute(
-      async () => prisma.arquivo.updateMany({
-        where: { id: arquivoId, clinic_id: clinicId },
-        data: { versao_atual_id: record.id },
-      }),
+      async () => this.repo.updateArquivoVersaoAtual(arquivoId, clinicId, record.id),
       () => { throw Errors.externalService("Database"); }
     );
 
@@ -508,9 +457,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
 
     const file = await cb.execute(
-      async () => prisma.arquivo.findFirst({
-        where: { id: arquivoId, clinic_id: clinicId },
-      }),
+      async () => this.repo.findArquivoById(arquivoId, clinicId),
       () => null
     );
 
@@ -519,14 +466,11 @@ export class FilesService {
     }
 
     const records = await cb.execute(
-      async () => prisma.arquivo_versao.findMany({
-        where: { arquivo_id: arquivoId },
-        orderBy: { numero_versao: "desc" },
-      }),
+      async () => this.repo.findVersionsByArquivoId(arquivoId),
       () => []
     );
 
-    return records.map((r) => ({
+    return records.map((r: any) => ({
       id: r.id,
       arquivoId: r.arquivo_id,
       numeroVersao: r.numero_versao,
@@ -559,9 +503,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
 
     const file = await cb.execute(
-      async () => prisma.arquivo.findFirst({
-        where: { id: arquivoId, clinic_id: clinicId },
-      }),
+      async () => this.repo.findArquivoById(arquivoId, clinicId),
       () => null
     );
 
@@ -570,9 +512,7 @@ export class FilesService {
     }
 
     const version = await cb.execute(
-      async () => prisma.arquivo_versao.findFirst({
-        where: { id: versionId, arquivo_id: arquivoId },
-      }),
+      async () => this.repo.findVersionById(versionId, arquivoId),
       () => null
     );
 
@@ -581,13 +521,10 @@ export class FilesService {
     }
 
     const updated = await cb.execute(
-      async () => prisma.arquivo.updateMany({
-        where: { id: arquivoId, clinic_id: clinicId },
-        data: {
-          nome_storage: version.nome_storage,
-          tamanho_bytes: version.tamanho_bytes,
-          versao_atual_id: version.id,
-        },
+      async () => this.repo.updateArquivoFromVersion(arquivoId, clinicId, {
+        nome_storage: version.nome_storage,
+        tamanho_bytes: version.tamanho_bytes,
+        versao_atual_id: version.id,
       }),
       () => ({ count: 0 })
     );
@@ -597,9 +534,7 @@ export class FilesService {
     }
 
     const refreshed = await cb.execute(
-      async () => prisma.arquivo.findFirst({
-        where: { id: arquivoId, clinic_id: clinicId },
-      }),
+      async () => this.repo.findArquivoById(arquivoId, clinicId),
       () => null
     );
 
@@ -663,10 +598,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
 
     const patient = await cb.execute(
-      async () => prisma.patients.findFirst({
-        where: { id: patientId, clinic_id: clinicId },
-        select: { id: true },
-      }),
+      async () => this.repo.findPatientById(patientId, clinicId),
       () => null,
     );
 

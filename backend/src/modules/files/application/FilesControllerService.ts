@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import { IFilesRepository } from "@/modules/files/domain/repositories/IFilesRepository"
 import { FilesRepository } from "@/modules/files/infrastructure/FilesRepository"
 import { FilesService, parseVisibilidade } from "@/modules/files/application/services/FilesService"
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector"
@@ -50,7 +51,7 @@ function sanitizeUploadVisibility(visibilidade: string | undefined, userRole: st
 
 export class FilesControllerService {
   private filesService = new FilesService()
-  private repo = new FilesRepository()
+  private repo: IFilesRepository = new FilesRepository()
 
   async uploadFile(params: {
     file: Express.Multer.File
