@@ -1,10 +1,15 @@
-import { SidebarHeader as ShadcnSidebarHeader } from "@orthoplus/core-ui/sidebar";
-import { useSidebar } from "@orthoplus/core-ui/sidebar";
-import orthoLogo from "@/assets/orthoplus-logo-enterprise.svg";
+import { SidebarHeader as ShadcnSidebarHeader } from "@orthoplus/core-ui/sidebar"
+import { useSidebar } from "@orthoplus/core-ui/sidebar"
+import orthoLogo from "@/assets/orthoplus-logo-enterprise.svg"
 
-export function SidebarHeader() {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
+interface SidebarHeaderProps {
+  /** Quando true, a sidebar está em modo auto-hide (oculta por padrão) */
+  isAutoHide?: boolean
+}
+
+export function SidebarHeader({ isAutoHide = false }: SidebarHeaderProps) {
+  const { state } = useSidebar()
+  const collapsed = state === "collapsed" && !isAutoHide
 
   return (
     <ShadcnSidebarHeader className="border-b border-border/30 bg-sidebar-background/95 backdrop-blur-xl transition-all duration-300">
@@ -30,5 +35,5 @@ export function SidebarHeader() {
         </div>
       </div>
     </ShadcnSidebarHeader>
-  );
+  )
 }

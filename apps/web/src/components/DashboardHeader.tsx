@@ -1,4 +1,4 @@
-import { LogOut, Building2, User } from "lucide-react";
+import { LogOut, Building2, User, Pin, PinOff, PanelLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@orthoplus/core-ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,6 +25,28 @@ import {
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { cn } from "@/lib/utils";
+import { useSidebarHover } from "@/hooks/useSidebarHover";
+
+function SidebarPinToggle() {
+  const { isAutoHide, toggleAutoHide } = useSidebarHover()
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleAutoHide}
+      className="h-9 w-9 hidden md:flex"
+      title={isAutoHide ? "Fixar sidebar (Ctrl+B)" : "Modo hover"}
+      data-testid="sidebar-pin-toggle"
+    >
+      {isAutoHide ? (
+        <PanelLeft className="h-4 w-4 text-muted-foreground" />
+      ) : (
+        <Pin className="h-4 w-4 text-interactive" />
+      )}
+    </Button>
+  )
+}
 
 interface DashboardHeaderProps {
   className?: string;
@@ -104,6 +126,8 @@ export function DashboardHeader({
             <div data-tour="theme-toggle">
               <ThemeToggle />
             </div>
+
+            <SidebarPinToggle />
 
             {availableClinics && availableClinics.length > 1 && (
               <Select value={selectedClinic?.id} onValueChange={switchClinic}>
