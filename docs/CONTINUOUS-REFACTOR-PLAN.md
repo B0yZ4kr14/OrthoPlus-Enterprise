@@ -65,7 +65,7 @@ Módulos com maior churn e complexidade:
 |------|--------|----------|-----------|--------|
 | 1 | `auth` | 7 | Autenticação — core de segurança | ✅ **CONCLUÍDO** |
 | 2 | `financeiro` | 17 | Financeiro — dados sensíveis, audit obrigatório | ✅ **CONCLUÍDO** |
-| 3 | `pdv` | 16 | PDV — transações críticas | ⏳ Pendente |
+| 3 | `pdv` | 16 | PDV — transações críticas | ✅ **CONCLUÍDO** |
 | 4 | `agenda` | 10 | Agenda — alto volume de acessos | ⏳ Pendente |
 | 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal | ⏳ Pendente |
 | 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais | ⏳ Pendente |
@@ -89,7 +89,15 @@ Módulos com maior churn e complexidade:
 - [x] 636/636 unit tests passam
 - [x] Commit: `a34e1594c`
 
-### T2.3 a T2.8 — Por módulo
+### T2.3 — pdv (CONCLUÍDO ✅)
+- [x] Criar `domain/repositories/IPdvRepository.ts` (interface com tipos Prisma)
+- [x] Atualizar `infrastructure/PdvRepository.ts` para implementar `IPdvRepository`
+- [x] Injetar `IPdvRepository` em `PdvController`
+- [x] Build passa (0 erros TypeScript)
+- [x] 636/636 unit tests passam
+- [x] Commit: `65ffe8a52`
+
+### T2.4 a T2.8 — Por módulo
 Para cada módulo:
 1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
 2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)

@@ -1,7 +1,8 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Prisma } from "@prisma/client";
+import { IPdvRepository } from "@/modules/pdv/domain/repositories/IPdvRepository";
 
-export class PdvRepository {
+export class PdvRepository implements IPdvRepository {
   async createVenda(data: Prisma.pdv_vendasCreateInput) {
     return prisma.pdv_vendas.create({ data });
   }

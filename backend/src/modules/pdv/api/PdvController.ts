@@ -1,4 +1,4 @@
-import { PdvRepository } from "@/modules/pdv/infrastructure/PdvRepository";
+import { IPdvRepository } from "@/modules/pdv/domain/repositories/IPdvRepository";
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
 import { z } from "zod";
@@ -32,7 +32,11 @@ const createVendaSchema = z.object({
 });
 
 export class PdvController {
-  private repo = new PdvRepository()
+  private repo: IPdvRepository
+
+  constructor(repo?: IPdvRepository) {
+    this.repo = repo ?? new (require("@/modules/pdv/infrastructure/PdvRepository").PdvRepository)()
+  }
   createVenda = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     createVendaSchema.parse(req.body);
     const clinicId = req.user?.clinicId;
