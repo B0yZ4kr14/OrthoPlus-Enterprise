@@ -1,0 +1,112 @@
+{
+  "BC-001": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.45, "integration": 0.15, "e2e": 0.20, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "partial", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no contract tests for FHIR compatibility"]
+    }
+  },
+  "BC-002": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.40, "integration": 0.10, "e2e": 0.15, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "partial", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no contract tests for payment gateway integration"]
+    }
+  },
+  "BC-003": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.35, "integration": 0.08, "e2e": 0.10, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "none", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no integration tests for stock alerts"]
+    }
+  },
+  "BC-004": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.55, "integration": 0.20, "e2e": 0.25, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "partial", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no penetration tests for auth endpoints"]
+    }
+  },
+  "BC-005": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.30, "integration": 0.05, "e2e": 0.08, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "none", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no contract tests for email/SMS provider"]
+    }
+  },
+  "BC-006": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.25, "integration": 0.05, "e2e": 0.05, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "none", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no integration tests against testnet"]
+    }
+  },
+  "BC-007": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.30, "integration": 0.05, "e2e": 0.05, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "none", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no mock tests for SEFAZ/ANS APIs"]
+    }
+  },
+  "BC-008": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.35, "integration": 0.10, "e2e": 0.10, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "partial", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no performance tests for image upload", "no contract tests for AI model API"]
+    }
+  },
+  "BC-009": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.20, "integration": 0.05, "e2e": 0.05, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "none", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no E2E tests for video flow"]
+    }
+  },
+  "BC-010": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.25, "integration": 0.05, "e2e": 0.05, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "none", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no tests for AI agent workflows"]
+    }
+  },
+  "BC-011": {
+    "qa_context": {
+      "test_coverage": { "unit": 0.20, "integration": 0.05, "e2e": 0.05, "source": "proxy", "confidence": "LOW" },
+      "automation_status": { "regression": "partial", "smoke": "none", "contract": "absent" },
+      "testability": { "rating": "good", "findings_count": 0, "top_issues": [] },
+      "defect_profile": { "open_defects": null, "flaky_tests": null, "change_velocity": null, "source": "not-collected" },
+      "environments": { "coverage": ["dev", "prod"], "missing": ["staging"], "parity_issues": [] },
+      "test_strategy_gaps": ["no visual regression tests for PDF output"]
+    }
+  }
+}
