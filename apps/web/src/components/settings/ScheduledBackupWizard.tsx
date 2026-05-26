@@ -41,11 +41,39 @@ import { AdvancedOptionsStep } from "./backup-wizard/AdvancedOptionsStep";
 import { DestinationStep } from "./backup-wizard/DestinationStep";
 import { SummaryStep } from "./backup-wizard/SummaryStep";
 
+interface ApiScheduledBackupConfig {
+  id?: string;
+  time_of_day?: string;
+  day_of_week?: number;
+  day_of_month?: number;
+  backup_type?: "full" | "incremental" | "differential";
+  is_incremental?: boolean;
+  include_modules?: boolean;
+  include_patients?: boolean;
+  include_clinical_history?: boolean;
+  include_prontuarios?: boolean;
+  include_appointments?: boolean;
+  include_financial?: boolean;
+  include_postgres_db?: boolean;
+  compression_enabled?: boolean;
+  encryption_enabled?: boolean;
+  cloud_storage_provider?:
+    | "s3"
+    | "google_drive"
+    | "dropbox"
+    | "ftp"
+    | "storj"
+    | "local"
+    | "none";
+  local_path?: string;
+  notification_emails?: string[];
+  enabled?: boolean;
+}
 
 interface ScheduledBackupWizardProps {
   open: boolean;
   onClose: () => void;
-  initialData?: Partial<ScheduledBackupConfig>;
+  initialData?: Partial<ScheduledBackupConfig> & Partial<ApiScheduledBackupConfig>;
 }
 
 export function ScheduledBackupWizard({
@@ -82,79 +110,59 @@ export function ScheduledBackupWizard({
       setConfig({
         name: initialData.name || "",
         frequency: initialData.frequency || "daily",
-        // @ts-expect-error — TS2551
         timeOfDay: initialData.time_of_day || initialData.timeOfDay || "02:00",
         dayOfWeek:
-          // @ts-expect-error — TS2551
           initialData.day_of_week !== undefined
-            // @ts-expect-error — TS2551
             ? initialData.day_of_week
             : initialData.dayOfWeek,
         dayOfMonth:
-          // @ts-expect-error — TS2551
           initialData.day_of_month !== undefined
-            // @ts-expect-error — TS2551
             ? initialData.day_of_month
             : initialData.dayOfMonth,
-        // @ts-expect-error — TS2551
         backupType: initialData.backup_type || initialData.backupType || "full",
         isIncremental:
-          // @ts-expect-error — TS2551
           initialData.is_incremental ?? initialData.isIncremental ?? false,
         includeModules:
-          // @ts-expect-error — TS2551
           initialData.include_modules ?? initialData.includeModules ?? true,
         includePatients:
-          // @ts-expect-error — TS2551
           initialData.include_patients ?? initialData.includePatients ?? true,
         includeHistory:
-          // @ts-expect-error — TS2339
           initialData.include_clinical_history ??
           initialData.includeHistory ??
           true,
         includeProntuarios:
-          // @ts-expect-error — TS2551
           initialData.include_prontuarios ??
           initialData.includeProntuarios ??
           true,
         includeAppointments:
-          // @ts-expect-error — TS2551
           initialData.include_appointments ??
           initialData.includeAppointments ??
           true,
         includeFinanceiro:
-          // @ts-expect-error — TS2551
           initialData.include_financial ??
           initialData.includeFinanceiro ??
           true,
         includePostgresDB:
-          // @ts-expect-error — TS2551
           initialData.include_postgres_db ??
           initialData.includePostgresDB ??
           true,
         enableCompression:
-          // @ts-expect-error — TS2339
           initialData.compression_enabled ??
           initialData.enableCompression ??
           true,
         enableEncryption:
-          // @ts-expect-error — TS2339
           initialData.encryption_enabled ??
           initialData.enableEncryption ??
           false,
         cloudStorageProvider:
-          // @ts-expect-error — TS2551
           initialData.cloud_storage_provider ||
           initialData.cloudStorageProvider ||
           "local",
-        // @ts-expect-error — TS2551
         localPath: initialData.local_path || initialData.localPath || "",
         notificationEmails:
-          // @ts-expect-error — TS2551
           initialData.notification_emails ||
           initialData.notificationEmails ||
           [],
-        // @ts-expect-error — TS2339
         isActive: initialData.enabled ?? initialData.isActive ?? true,
       });
       setStep(1);
@@ -236,10 +244,8 @@ export function ScheduledBackupWizard({
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // @ts-expect-error — TS2339
       if (initialData?.id) {
         await apiClient.patch(
-          // @ts-expect-error — TS2339
           `/configuracoes/backups/agendados/${initialData.id}`,
           config,
         );

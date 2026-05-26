@@ -32,49 +32,33 @@ export function useAgendaApi() {
 
       // Transform database row to Appointment format
       const transformedAppointments: Appointment[] = (data || []).map(
-        (apt: unknown) => {
-          // @ts-expect-error — TS18046
+        (apt) => {
           const startDate = new Date(apt.start_time);
-          // @ts-expect-error — TS18046
           const endDate = new Date(apt.end_time);
 
           return {
-            // @ts-expect-error — TS18046
             id: apt.id,
-            // @ts-expect-error — TS18046
             pacienteId: apt.patient_id,
-            // @ts-expect-error — TS18046
             pacienteNome: apt.patient?.profiles?.full_name || "Paciente",
-            // @ts-expect-error — TS18046
             dentistaId: apt.dentist_id,
-            // @ts-expect-error — TS18046
             dentistaNome: apt.dentist?.full_name || "Dentista",
             data: startDate.toISOString().split("T")[0],
             horaInicio: startDate.toTimeString().slice(0, 5),
             horaFim: endDate.toTimeString().slice(0, 5),
-            // @ts-expect-error — TS18046
             procedimento: apt.title || "",
             status:
-              // @ts-expect-error — TS18046
               apt.status === "agendado"
                 ? "Agendada"
-                // @ts-expect-error — TS18046
                 : apt.status === "confirmado"
                   ? "Confirmada"
-                  // @ts-expect-error — TS18046
                   : apt.status === "cancelado"
                     ? "Cancelada"
-                    // @ts-expect-error — TS18046
                     : apt.status === "concluido"
                       ? "Realizada"
                       : "Agendada",
-            // @ts-expect-error — TS18046
             observacoes: apt.description || "",
-            // @ts-expect-error — TS18046
             lembreteEnviado: apt.reminder_sent || false,
-            // @ts-expect-error — TS18046
             createdAt: apt.created_at,
-            // @ts-expect-error — TS18046
             updatedAt: apt.updated_at,
           };
         },
@@ -103,10 +87,8 @@ export function useAgendaApi() {
       });
 
       const transformedDentistas: Dentista[] = (data || []).map(
-        (dentista: unknown, index: number) => ({
-          // @ts-expect-error — TS18046
+        (dentista, index) => ({
           id: dentista.id,
-          // @ts-expect-error — TS18046
           nome: dentista.full_name || "Dentista",
           especialidade: "Odontologia",
           cor: ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"][
@@ -311,8 +293,7 @@ export function useAgendaApi() {
   };
 
   const enviarLembrete = async (id: string) => {
-    // @ts-expect-error — TS2345
-    await updateAppointment(id, { lembreteEnviado: true } as unknown);
+    await updateAppointment(id, { lembreteEnviado: true });
     toast.success("Lembrete enviado com sucesso!");
   };
 
