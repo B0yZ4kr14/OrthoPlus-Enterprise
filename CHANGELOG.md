@@ -1,5 +1,44 @@
 # Changelog — OrthoPlus Enterprise
 
+
+
+## [VPS Deploy + Lint Fix] - 2026-05-25
+
+### Added
+- Nginx redirect: `/` → `/OrthoPlus-Enterprise/`
+- Nginx redirect: `/orthoplus-enterprise` (lowercase) → `/OrthoPlus-Enterprise/`
+- Security headers re-declared in SPA location (HSTS, X-Frame-Options, CSP, etc.)
+- Static assets caching for SPA (`public, immutable`, 1 year)
+
+### Changed
+- Nginx alias: `/OrthoPlus-Enterprise/` now points directly to `/home/tsi/OrthoPlus-Enterprise/apps/web/dist/`
+- Deploy script: `~/.ssh/config` → `$HOME/.ssh/config` for non-interactive shells
+
+### Fixed
+- Converted 20 `require()` statements to ES module `import` in backend
+- Fixed broken import blocks caused by automated insertion
+- Fixed `new (ClassName)()` syntax → `new ClassName()`
+
+### DevOps
+- Deployed frontend v2.9.9 + backend v2.5.4 to VPS
+- Prisma migrate deploy: no pending migrations
+- Redis container: already running (port 6379)
+- Backend PM2: `orthoplus-backend` online
+
+### Quality Gates
+- Lint: 0 errors, ~490 warnings (reduced from 20 errors)
+- Build: frontend + backend passing
+- Tests: 636/636 unit tests passing
+- Type-check: 0 errors
+
+### E2E Tests
+- Auth tests: 1 suite passed (1.1m) across 5 browsers
+  - Chromium: 6/6 tests passed
+  - Firefox: 6/6 tests passed
+  - WebKit: 6/6 tests passed
+  - Mobile Chrome: 6/6 tests passed
+  - Mobile Safari: 6/6 tests passed
+
 ## [IA Radiografia] - 2026-05-24
 
 ### Added
