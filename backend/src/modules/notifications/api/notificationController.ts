@@ -24,6 +24,34 @@ const mailer = createMailTransport();
 export class NotificationController {
   private service = new NotificationControllerService();
 
+  listNotifications = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
+    }
+    const notifications = await this.service.listNotifications(clinicId);
+    res.json({ notifications });
+  });
+
+  markAsRead = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
+    }
+    const { id } = req.params;
+    await this.service.markAsRead(id, clinicId);
+    res.json({ success: true, id });
+  });
+
+  markAllAsRead = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
+    }
+    await this.service.markAllAsRead(clinicId);
+    res.json({ success: true });
+  });
+
   runAutoNotifications = asyncHandler(async (_req: Request, res: Response) => {
     const result = await this.service.runAutoNotifications();
     res.json({ success: true, ...result });

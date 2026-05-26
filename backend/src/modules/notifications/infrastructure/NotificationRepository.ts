@@ -1,6 +1,7 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
+import { INotificationRepository } from "@/modules/notifications/domain/repositories/INotificationRepository";
 
-export class NotificationRepository {
+export class NotificationRepository implements INotificationRepository {
   // ── Appointments ──────────────────────────────────────────────────────
 
   async findUpcomingAppointments(tomorrowStart: string, tomorrowEnd: string) {
@@ -18,8 +19,40 @@ export class NotificationRepository {
 
   // ── Notifications ─────────────────────────────────────────────────────
 
+  async findNotificationsByClinic(clinicId: string) {
+    return prisma.notifications.findMany({
+      where: { clinic_id: clinicId },
+      orderBy: { created_at: "desc" },
+      take: 100,
+      select: {
+        id: true,
+        clinic_id: true,
+        tipo: true,
+        titulo: true,
+        mensagem: true,
+        link_acao: true,
+        lida: true,
+        created_at: true,
+      },
+    });
+  }
+
   async createNotification(data: any) {
     return (prisma as any).notifications.create({ data });
+  }
+
+  async markNotificationRead(id: string, clinicId: string) {
+    return (prisma as any).notifications.updateMany({
+      where: { id, clinic_id: clinicId },
+      data: { lida: true },
+    });
+  }
+
+  async markAllNotificationsRead(clinicId: string) {
+    return (prisma as any).notifications.updateMany({
+      where: { clinic_id: clinicId, lida: false },
+      data: { lida: true },
+    });
   }
 
   // ── Crypto Price Alerts ───────────────────────────────────────────────
@@ -37,7 +70,7 @@ export class NotificationRepository {
 
   async findCryptoAlertsByCascadeGroup(
     cascadeGroupId: string,
-    cascadeOrder: number
+    cascadeOrder: number,
   ) {
     return prisma.crypto_price_alerts.findMany({
       where: {

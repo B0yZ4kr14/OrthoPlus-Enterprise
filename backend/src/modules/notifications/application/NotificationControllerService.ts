@@ -1,3 +1,4 @@
+import { INotificationRepository } from "@/modules/notifications/domain/repositories/INotificationRepository";
 import { NotificationRepository } from "@/modules/notifications/infrastructure/NotificationRepository";
 import { Errors } from "@/middleware/errorHandler";
 import { logger } from "@/infrastructure/logger";
@@ -64,7 +65,7 @@ export interface StockAlertResult {
 }
 
 export class NotificationControllerService {
-  constructor(private repo: NotificationRepository = new NotificationRepository()) {}
+  constructor(private repo: INotificationRepository = new NotificationRepository()) {}
 
   async runAutoNotifications(): Promise<AutoNotificationsResult> {
     let notificationsCreated = 0;
@@ -382,5 +383,17 @@ export class NotificationControllerService {
       detalhes,
       message: `Sent ${detalhes.length} stock alerts`,
     };
+  }
+
+  async listNotifications(clinicId: string) {
+    return this.repo.findNotificationsByClinic(clinicId);
+  }
+
+  async markAsRead(id: string, clinicId: string) {
+    return this.repo.markNotificationRead(id, clinicId);
+  }
+
+  async markAllAsRead(clinicId: string) {
+    return this.repo.markAllNotificationsRead(clinicId);
   }
 }
