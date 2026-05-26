@@ -32,7 +32,7 @@ import { RequisicaoForm } from "@/modules/estoque/components/RequisicaoForm";
 import { RequisicoesList } from "@/modules/estoque/components/RequisicoesList";
 import { AlertasEstoque } from "@/modules/estoque/components/AlertasEstoque";
 import { useToast } from "@/hooks/use-toast";
-import type { Requisicao } from "@/modules/estoque/types/estoque.types";
+import type { Requisicao, Produto, Alerta } from "@/modules/estoque/types/estoque.types";
 
 export default function EstoqueRequisicoesPage() {
   const { toast } = useToast();
@@ -151,9 +151,7 @@ export default function EstoqueRequisicoesPage() {
           </CardHeader>
           <CardContent>
             <AlertasEstoque
-              // @ts-expect-error — TS2322
               alertas={alertasNaoLidos}
-              // @ts-expect-error — TS2322
               produtos={produtos}
               onMarcarLido={marcarAlertaComoLido}
               onLimparLidos={limparAlertasLidos}
@@ -232,9 +230,7 @@ export default function EstoqueRequisicoesPage() {
 
         <TabsContent value="pendentes">
           <RequisicoesList
-            // @ts-expect-error — TS2345
             requisicoes={filteredRequisicoes(requisicoesPendentes)}
-            // @ts-expect-error — TS2322
             produtos={produtos}
             onAprovar={isAdmin ? handleAprovar : undefined}
             onRejeitar={
@@ -245,18 +241,14 @@ export default function EstoqueRequisicoesPage() {
 
         <TabsContent value="aprovadas">
           <RequisicoesList
-            // @ts-expect-error — TS2345
             requisicoes={filteredRequisicoes(requisicoesAprovadas)}
-            // @ts-expect-error — TS2322
             produtos={produtos}
           />
         </TabsContent>
 
         <TabsContent value="rejeitadas">
           <RequisicoesList
-            // @ts-expect-error — TS2345
             requisicoes={filteredRequisicoes(requisicoesRejeitadas)}
-            // @ts-expect-error — TS2322
             produtos={produtos}
           />
         </TabsContent>
@@ -268,7 +260,6 @@ export default function EstoqueRequisicoesPage() {
             <DialogTitle>Nova Requisição</DialogTitle>
           </DialogHeader>
           <RequisicaoForm
-            // @ts-expect-error — TS2322
             produtos={produtos}
             onSubmit={handleSubmit}
             onCancel={() => setShowForm(false)}

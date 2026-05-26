@@ -43,7 +43,6 @@ export default function EstoqueDashboardPage() {
       (r) => r.status === "PENDENTE",
     ).length;
     const valorTotalInventario = produtos.reduce(
-      // @ts-expect-error — TS2339
       (sum, p) => sum + p.quantidadeAtual * p.precoCompra,
       0,
     );

@@ -67,12 +67,13 @@ export default function EstoqueMovimentacoesPage() {
   );
   const movimentacoesAjuste = movimentacoes.filter((m) => m.tipo === "AJUSTE");
 
-  const filteredMovimentacoes = (lista: Movimentacao[]) => {
+  const filteredMovimentacoes = (lista: typeof movimentacoes) => {
     return lista.filter((m) => {
       const produto = produtos.find((p) => p.id === m.produtoId);
       const matchSearch =
-        produto?.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        m.motivo.toLowerCase().includes(searchTerm.toLowerCase());
+        (produto?.nome.toLowerCase().includes(searchTerm.toLowerCase()) ??
+          false) ||
+        (m.motivo?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
 
       const matchTipo = tipoFiltro === "TODOS" || m.tipo === tipoFiltro;
 
@@ -228,33 +229,24 @@ export default function EstoqueMovimentacoesPage() {
 
         <TabsContent value="entradas">
           <MovimentacoesList
-            // @ts-expect-error — TS2345
             movimentacoes={filteredMovimentacoes(movimentacoesEntrada)}
-            // @ts-expect-error — TS2322
             produtos={produtos}
-            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
           />
         </TabsContent>
 
         <TabsContent value="saidas">
           <MovimentacoesList
-            // @ts-expect-error — TS2345
             movimentacoes={filteredMovimentacoes(movimentacoesSaida)}
-            // @ts-expect-error — TS2322
             produtos={produtos}
-            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
           />
         </TabsContent>
 
         <TabsContent value="ajustes">
           <MovimentacoesList
-            // @ts-expect-error — TS2345
             movimentacoes={filteredMovimentacoes(movimentacoesAjuste)}
-            // @ts-expect-error — TS2322
             produtos={produtos}
-            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
           />
         </TabsContent>
@@ -266,9 +258,7 @@ export default function EstoqueMovimentacoesPage() {
             <DialogTitle>Registrar Movimentação</DialogTitle>
           </DialogHeader>
           <MovimentacaoForm
-            // @ts-expect-error — TS2322
             produtos={produtos}
-            // @ts-expect-error — TS2322
             fornecedores={fornecedores}
             onSubmit={handleSubmit}
             onCancel={() => setShowForm(false)}

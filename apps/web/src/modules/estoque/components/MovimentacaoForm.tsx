@@ -23,14 +23,25 @@ import {
   type Movimentacao,
   tiposMovimentacao,
 } from "../types/estoque.types";
-import type { Produto, Fornecedor } from "../types/estoque.types";
+
+interface ProdutoAtivo {
+  id?: string
+  nome: string
+  ativo: boolean
+}
+
+interface FornecedorAtivo {
+  id?: string
+  nome: string
+  ativo?: boolean
+}
 
 interface MovimentacaoFormProps {
-  produtos: Produto[];
-  fornecedores: Fornecedor[];
-  onSubmit: (data: Movimentacao) => void;
-  onCancel: () => void;
-  currentUser: string;
+  produtos: ProdutoAtivo[]
+  fornecedores: FornecedorAtivo[]
+  onSubmit: (data: Movimentacao) => void
+  onCancel: () => void
+  currentUser: string
 }
 
 export function MovimentacaoForm({
@@ -200,7 +211,7 @@ export function MovimentacaoForm({
                       </FormControl>
                       <SelectContent>
                         {fornecedores
-                          .filter((f) => f.ativo)
+                          .filter((f) => f.ativo !== false)
                           .map((forn) => (
                             <SelectItem key={forn.id} value={forn.id!}>
                               {forn.nome}

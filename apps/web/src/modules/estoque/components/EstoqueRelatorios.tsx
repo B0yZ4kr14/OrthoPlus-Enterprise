@@ -84,12 +84,13 @@ export function EstoqueRelatorios() {
 
       const fornecedorSelecionado = fornecedores.find((f) => f.id === fornecedorId)
       const filteredProds = fornecedorId && fornecedorSelecionado
-        ? produtos.filter((p) => p.fornecedor === fornecedorSelecionado.nome)
+        ? produtos.filter((p) => p.fornecedorId === fornecedorId)
         : produtos
 
       doc.setFontSize(10)
       filteredProds.forEach((prod) => {
-        const text = `${prod.nome} - Cat: ${prod.categoria || "N/A"} - Qtd: ${prod.quantidadeAtual} - R$ ${prod.valorUnitario.toFixed(2)}`
+        const categoriaNome = categorias.find((c) => c.id === prod.categoriaId)?.nome
+        const text = `${prod.nome} - Cat: ${categoriaNome || "N/A"} - Qtd: ${prod.quantidadeAtual} - R$ ${prod.precoCompra.toFixed(2)}`
         doc.text(text, 20, yPos);
         yPos += 7;
         if (yPos > 280) {
@@ -103,7 +104,7 @@ export function EstoqueRelatorios() {
       yPos += 10;
 
       const valorTotal = produtos.reduce(
-        (sum, p) => sum + p.quantidadeAtual * p.valorUnitario,
+        (sum, p) => sum + p.quantidadeAtual * p.precoCompra,
         0,
       )
 
@@ -117,8 +118,8 @@ export function EstoqueRelatorios() {
 
       doc.setFontSize(10)
       produtos.forEach((prod) => {
-        const valorProd = prod.quantidadeAtual * prod.valorUnitario
-        const text = `${prod.nome} - Qtd: ${prod.quantidadeAtual} x R$ ${prod.valorUnitario.toFixed(2)} = R$ ${valorProd.toFixed(2)}`
+        const valorProd = prod.quantidadeAtual * prod.precoCompra
+        const text = `${prod.nome} - Qtd: ${prod.quantidadeAtual} x R$ ${prod.precoCompra.toFixed(2)} = R$ ${valorProd.toFixed(2)}`
         doc.text(text, 20, yPos);
         yPos += 7;
         if (yPos > 280) {
@@ -188,34 +189,36 @@ export function EstoqueRelatorios() {
     } else if (reportType === "produtos-fornecedor") {
       const fornecedorSelecionado = fornecedores.find((f) => f.id === fornecedorId)
       const filteredProds = fornecedorId && fornecedorSelecionado
-        ? produtos.filter((p) => p.fornecedor === fornecedorSelecionado.nome)
+        ? produtos.filter((p) => p.fornecedorId === fornecedorId)
         : produtos
 
       data = filteredProds.map((prod) => {
-        const fornecedor = fornecedores.find((f) => f.nome === prod.fornecedor)
+        const fornecedor = fornecedores.find((f) => f.id === prod.fornecedorId)
+        const categoriaNome = categorias.find((c) => c.id === prod.categoriaId)?.nome
         return {
-          Código: prod.codigo_barra,
+          Código: prod.codigoBarras || prod.codigo,
           Produto: prod.nome,
-          Categoria: prod.categoria || "N/A",
-          Fornecedor: fornecedor?.nome || prod.fornecedor || "N/A",
+          Categoria: categoriaNome || "N/A",
+          Fornecedor: fornecedor?.nome || "N/A",
           "Quantidade Atual": prod.quantidadeAtual,
           "Quantidade Mínima": prod.quantidadeMinima,
-          "Preço Compra": prod.valorUnitario,
-          "Preço Venda": 0,
-          "Valor Total": prod.quantidadeAtual * prod.valorUnitario,
+          "Preço Compra": prod.precoCompra,
+          "Preço Venda": prod.precoVenda || 0,
+          "Valor Total": prod.quantidadeAtual * prod.precoCompra,
           Status: prod.ativo ? "Ativo" : "Inativo",
         }
       })
       sheetName = "Produtos";
     } else if (reportType === "valor-inventario") {
       data = produtos.map((prod) => {
+        const categoriaNome = categorias.find((c) => c.id === prod.categoriaId)?.nome
         return {
-          Código: prod.codigo_barra,
+          Código: prod.codigoBarras || prod.codigo,
           Produto: prod.nome,
-          Categoria: prod.categoria || "N/A",
+          Categoria: categoriaNome || "N/A",
           Quantidade: prod.quantidadeAtual,
-          "Preço Unitário": prod.valorUnitario,
-          "Valor Total": prod.quantidadeAtual * prod.valorUnitario,
+          "Preço Unitário": prod.precoCompra,
+          "Valor Total": prod.quantidadeAtual * prod.precoCompra,
         }
       })
       sheetName = "Inventário";

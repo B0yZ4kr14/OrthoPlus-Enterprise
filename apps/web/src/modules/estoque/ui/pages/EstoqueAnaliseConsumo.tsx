@@ -180,11 +180,11 @@ export default function EstoqueAnaliseConsumo() {
         (acc, mov) => {
           const produto = produtos.find((p) => p.id === mov.produtoId);
           if (produto) {
-            const categoriaId = produto.categoria || "sem-categoria";
-            if (!acc[categoriaId]) {
-              acc[categoriaId] = { nome: produto.categoria ? "Categoria" : "Sem Categoria", valor: 0 };
+            const catId = produto.categoriaId || "sem-categoria";
+            if (!acc[catId]) {
+              acc[catId] = { nome: "Categoria", valor: 0 };
             }
-            acc[categoriaId].valor += mov.quantidade || 0;
+            acc[catId].valor += mov.quantidade || 0;
           }
           return acc;
         },

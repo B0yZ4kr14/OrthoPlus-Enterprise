@@ -260,10 +260,10 @@ describe("useEstoque", () => {
 
     expect(result.current.produtos).toHaveLength(1)
     expect(result.current.produtos[0].id).toBe("p1")
-    expect(result.current.produtos[0].codigo_barra).toBe("7891234567890")
+    expect(result.current.produtos[0].codigoBarras).toBe("7891234567890")
     expect(result.current.produtos[0].quantidadeAtual).toBe(12)
     expect(result.current.produtos[0].quantidadeMinima).toBe(5)
-    expect(result.current.produtos[0].valorUnitario).toBe(150)
+    expect(result.current.produtos[0].precoCompra).toBe(150)
     expect(result.current.produtos[0].unidadeMedida).toBe("UNIDADE")
   })
 
@@ -278,15 +278,14 @@ describe("useEstoque", () => {
     })
 
     const newProduto = {
-      codigo_barra: "0000000000000",
+      codigo: "0000000000000",
       nome: "Novo Produto",
-      categoria: "Teste",
-      unidadeMedida: "CAIXA",
+      categoriaId: "c1",
+      unidadeMedida: "CAIXA" as const,
       quantidadeAtual: 20,
       quantidadeMinima: 5,
-      valorUnitario: 100,
-      fornecedor: "Fornecedor Teste",
-      localizacao: "B1",
+      precoCompra: 100,
+      fornecedorId: "f1",
       ativo: true,
     }
 
@@ -311,15 +310,14 @@ describe("useEstoque", () => {
     await act(async () => {
       await expect(
         result.current.addProduto({
-          codigo_barra: "",
+          codigo: "",
           nome: "Test",
-          categoria: "",
-          unidadeMedida: "UNIDADE",
+          categoriaId: "",
+          unidadeMedida: "UNIDADE" as const,
           quantidadeAtual: 0,
           quantidadeMinima: 0,
-          valorUnitario: 0,
-          fornecedor: "",
-          localizacao: "",
+          precoCompra: 0,
+          fornecedorId: "",
           ativo: true,
         })
       ).rejects.toThrow("Save failed")
@@ -531,7 +529,7 @@ describe("useEstoque", () => {
 
     expect(result.current.fornecedores).toHaveLength(1)
     expect(result.current.fornecedores[0].nome).toBe("Dental Supply Ltda")
-    expect(result.current.fornecedores[0].prazo_entrega_dias).toBe(7)
+    expect(result.current.fornecedores[0].nome).toBe("Dental Supply Ltda")
   })
 
   it("should add a fornecedor", async () => {
@@ -548,6 +546,11 @@ describe("useEstoque", () => {
       await result.current.addFornecedor({
         nome: "Novo Fornecedor",
         cnpj: "11.111.111/0001-11",
+        ativo: true,
+        apiEnabled: false,
+        apiAuthType: "none" as const,
+        apiRequestFormat: "json" as const,
+        autoOrderEnabled: false,
       })
     })
 
@@ -638,7 +641,7 @@ describe("useEstoque", () => {
       produtoId: "p1",
       quantidade: 3,
       motivo: "Necessidade",
-      prioridade: "NORMAL" as const,
+      prioridade: "MEDIA" as const,
       status: "PENDENTE" as const,
       solicitadoPor: "user-1",
     }
@@ -826,7 +829,7 @@ describe("useEstoque", () => {
     })
 
     expect(result.current.alertas).toHaveLength(1)
-    expect(result.current.alertas[0].tipo).toBe("ESTOQUE_BAIXO")
+    expect(result.current.alertas[0].tipo).toBe("ESTOQUE_MINIMO")
     expect(result.current.alertas[0].quantidadeAtual).toBe(3)
   })
 

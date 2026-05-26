@@ -38,9 +38,9 @@ import type { Requisicao, Produto, Alerta } from "@/modules/estoque/types/estoqu
 export default function EstoqueRequisicoes() {
   const { toast } = useToast();
   const {
-    produtos: hookProdutos,
-    requisicoes: hookRequisicoes,
-    alertas: hookAlertas,
+    produtos,
+    requisicoes,
+    alertas,
     loading,
     addRequisicao,
     aprovarRequisicao,
@@ -48,48 +48,6 @@ export default function EstoqueRequisicoes() {
     marcarAlertaComoLido,
     limparAlertasLidos,
   } = useEstoque();
-
-  const produtos: Produto[] = hookProdutos.map((p) => ({
-    id: p.id,
-    nome: p.nome,
-    codigo: p.codigo_barra || p.id,
-    codigoBarras: p.codigo_barra,
-    categoriaId: p.categoria || "",
-    fornecedorId: p.fornecedor || "",
-    unidadeMedida: p.unidadeMedida as Produto["unidadeMedida"],
-    quantidadeMinima: p.quantidadeMinima,
-    quantidadeAtual: p.quantidadeAtual,
-    precoCompra: p.valorUnitario,
-    lote: p.lote,
-    dataValidade: p.dataValidade,
-    ativo: p.ativo,
-    createdAt: p.createdAt,
-  }))
-
-  const requisicoes: Requisicao[] = hookRequisicoes.map((r) => ({
-    id: r.id,
-    produtoId: r.produtoId,
-    quantidade: r.quantidade,
-    motivo: r.motivo,
-    prioridade: r.prioridade as Requisicao["prioridade"],
-    status: r.status,
-    solicitadoPor: r.solicitadoPor,
-    aprovadoPor: r.aprovadoPor,
-    dataAprovacao: r.dataAprovacao,
-    observacoes: r.observacoes,
-    createdAt: r.createdAt,
-  }))
-
-  const alertas: Alerta[] = hookAlertas.map((a) => ({
-    id: a.id,
-    produtoId: a.produtoId,
-    tipo: a.tipo as Alerta["tipo"],
-    mensagem: a.mensagem,
-    quantidadeAtual: a.quantidadeAtual,
-    quantidadeSugerida: a.quantidadeSugerida,
-    lido: a.lido,
-    createdAt: a.createdAt,
-  }))
 
   const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");

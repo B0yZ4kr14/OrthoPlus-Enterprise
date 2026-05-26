@@ -12,11 +12,8 @@ import {
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
-import {
-  useEstoque,
-  type Produto,
-  type Movimentacao,
-} from "@/modules/estoque/hooks/useEstoque";
+import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
+import type { Produto, Movimentacao } from "@/modules/estoque/types/estoque.types";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingState } from "@/components/shared/LoadingState";
 import {
@@ -58,7 +55,7 @@ export default function EstoqueScannerMobile() {
 
     // Buscar produto pelo código
     const produto = produtos.find(
-      (p) => p.codigo_barra === code,
+      (p) => p.codigoBarras === code,
     );
 
     const historyEntry: ScanHistory = {
@@ -95,7 +92,7 @@ export default function EstoqueScannerMobile() {
     } else if (scanMode === "entrada") {
       try {
         await addMovimentacao({
-          produtoId: produto.id,
+          produtoId: produto.id!,
           tipo: "ENTRADA",
           quantidade: 1,
           motivo: "Entrada via Scanner Mobile",
@@ -126,7 +123,7 @@ export default function EstoqueScannerMobile() {
 
       try {
         await addMovimentacao({
-          produtoId: produto.id,
+          produtoId: produto.id!,
           tipo: "SAIDA",
           quantidade: 1,
           motivo: "Saída via Scanner Mobile",
@@ -268,7 +265,7 @@ export default function EstoqueScannerMobile() {
             <div>
               <p className="font-semibold text-lg">{lastScannedProduct.nome}</p>
               <p className="text-sm text-muted-foreground">
-                Código: {lastScannedProduct.codigo_barra}
+                Código: {lastScannedProduct.codigoBarras}
               </p>
             </div>
             <div className="flex items-center justify-between pt-2 border-t">
