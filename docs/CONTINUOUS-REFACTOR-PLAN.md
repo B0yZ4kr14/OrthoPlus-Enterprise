@@ -71,6 +71,10 @@ Módulos com maior churn e complexidade:
 | 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais | ✅ **CONCLUÍDO** |
 | 7 | `inventario` | 21 | Inventário — controle de estoque | ✅ **CONCLUÍDO** |
 | 8 | `contratos` | 10 | Contratos — dados financeiros | ✅ **CONCLUÍDO** |
+| — | `usuarios` | 3 | Usuários — gestão de perfis | ✅ **CONCLUÍDO** |
+| — | `relatorios` | 2 | Relatórios — export/import | ✅ **CONCLUÍDO** |
+| — | `orcamentos` | 4 | Orçamentos — 13 chamadas inline | ✅ **CONCLUÍDO** |
+| — | `teleodonto` | 7 | Teleodontologia — 9 chamadas inline | ✅ **CONCLUÍDO** |
 
 ### T2.1 — auth (CONCLUÍDO ✅)
 - [x] Criar `domain/repositories/IUserRepository.ts` (interface com tipos Prisma)
@@ -141,6 +145,15 @@ Módulos com maior churn e complexidade:
 - [x] Build passa (0 erros TypeScript)
 - [x] 636/636 unit tests passam
 - [x] Commit: `35322c839`
+
+### Extensão eficiente — módulos com chamadas inline (CONCLUÍDO ✅)
+
+| Módulo | Chamadas Inline | Ação | Status |
+|--------|----------------|------|--------|
+| `usuarios` | 0 (centralizado) | Criar IUsuariosRepository, DI | ✅ |
+| `relatorios` | 0 (centralizado) | Criar IReportRepository, DI | ✅ |
+| `orcamentos` | 13 | Criar IOrcamentoRepository + OrcamentoRepository, refatorar service | ✅ |
+| `teleodonto` | 9 | Criar ITeleodontoRepository + TeleodontoRepository, refatorar service | ✅ |
 Para cada módulo:
 1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
 2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)

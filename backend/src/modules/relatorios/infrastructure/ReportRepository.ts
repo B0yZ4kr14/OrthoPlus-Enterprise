@@ -1,6 +1,7 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
+import { IReportRepository } from "@/modules/relatorios/domain/repositories/IReportRepository";
 
-export class ReportRepository {
+export class ReportRepository implements IReportRepository {
   async findProfileById(id: string) {
     return (prisma as any).profiles.findUnique({ where: { id } });
   }

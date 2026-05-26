@@ -1,7 +1,8 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Prisma } from "@prisma/client";
+import { IUsuariosRepository } from "@/modules/usuarios/domain/repositories/IUsuariosRepository";
 
-export class UsuariosRepository {
+export class UsuariosRepository implements IUsuariosRepository {
   // ── Profiles ──────────────────────────────────────────────────────────
 
   async findProfilesByClinic(clinicId: string) {

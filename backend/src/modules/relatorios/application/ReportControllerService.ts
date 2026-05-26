@@ -1,5 +1,5 @@
 import { logger } from "@/infrastructure/logger";
-import { ReportRepository } from "@/modules/relatorios/infrastructure/ReportRepository";
+import { IReportRepository } from "@/modules/relatorios/domain/repositories/IReportRepository";
 
 interface ExportOptions {
   includeModules: boolean;
@@ -12,7 +12,11 @@ interface ExportOptions {
 }
 
 export class ReportControllerService {
-  constructor(private repo: ReportRepository = new ReportRepository()) {}
+  private repo: IReportRepository
+
+  constructor(repo?: IReportRepository) {
+    this.repo = repo ?? new (require("@/modules/relatorios/infrastructure/ReportRepository").ReportRepository)()
+  }
 
   async exportClinicData(clinicId: string, userId: string, options: ExportOptions) {
     const exportData: any = {

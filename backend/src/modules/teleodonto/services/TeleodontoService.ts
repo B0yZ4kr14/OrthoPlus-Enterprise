@@ -1,6 +1,6 @@
-import { prisma } from "@/infrastructure/database/prismaClient"
 import { logger } from "@/infrastructure/logger"
 import { Errors } from "@/middleware/errorHandler"
+import { ITeleodontoRepository } from "@/modules/teleodonto/domain/repositories/ITeleodontoRepository"
 
 export interface CreateTeleconsultaInput {
   titulo: string
@@ -59,22 +59,22 @@ export interface AddPrescriptionInput {
 }
 
 export class TeleodontoService {
+  private repo: ITeleodontoRepository
+
+  constructor(repo?: ITeleodontoRepository) {
+    this.repo = repo ?? new (require("@/modules/teleodonto/infrastructure/TeleodontoRepository").TeleodontoRepository)()
+  }
+
   async listTeleconsultas(clinicId: string, filters?: { status?: string; dentist_id?: string }) {
     const where: Record<string, unknown> = { clinic_id: clinicId }
     if (filters?.status) where.status = filters.status
     if (filters?.dentist_id) where.dentist_id = filters.dentist_id
 
-    return prisma.teleconsultas.findMany({
-      where,
-      orderBy: { data_agendada: "desc" },
-      take: 1000,
-    })
+    return this.repo.listTeleconsultas(clinicId)
   }
 
   async getById(id: string, clinicId: string) {
-    const data = await prisma.teleconsultas.findFirst({
-      where: { id, clinic_id: clinicId },
-    })
+    const data = await this.repo.getTeleconsultaById(id, clinicId)
     if (!data) {
       throw Errors.notFound("Teleconsulta", id)
     }
@@ -82,40 +82,30 @@ export class TeleodontoService {
   }
 
   async create(input: CreateTeleconsultaInput, clinicId: string, userId?: string) {
-    return prisma.teleconsultas.create({
-      data: {
-        ...input,
-        clinic_id: clinicId,
-        status: input.status || "AGENDADO",
-        created_by: userId || "system",
-      },
+    return this.repo.createTeleconsulta({
+      ...input,
+      clinic_id: clinicId,
+      status: input.status || "AGENDADO",
+      created_by: userId || "system",
     })
   }
 
   async update(id: string, input: UpdateTeleconsultaInput, clinicId: string) {
     await this.getById(id, clinicId)
-    return prisma.teleconsultas.update({
-      where: { id },
-      data: input,
-    })
+    return this.repo.updateTeleconsulta(id, input)
   }
 
   async delete(id: string, clinicId: string) {
     await this.getById(id, clinicId)
-    return prisma.teleconsultas.deleteMany({
-      where: { id, clinic_id: clinicId },
-    })
+    return this.repo.deleteTeleconsultasByIdAndClinic(id, clinicId)
   }
 
   async startSession(input: StartSessionInput, clinicId: string) {
     await this.getById(input.teleconsulta_id, clinicId)
 
-    const data = await prisma.teleconsultas.update({
-      where: { id: input.teleconsulta_id },
-      data: {
-        status: "EM_ANDAMENTO",
-        data_iniciada: new Date().toISOString(),
-      },
+    const data = await this.repo.updateTeleconsulta(input.teleconsulta_id, {
+      status: "EM_ANDAMENTO",
+      data_iniciada: new Date().toISOString(),
     })
 
     logger.info("Teleconsulta session started", {
@@ -138,10 +128,7 @@ export class TeleodontoService {
       updateData.observacoes = input.notes
     }
 
-    const data = await prisma.teleconsultas.update({
-      where: { id: input.teleconsulta_id },
-      data: updateData,
-    })
+    const data = await this.repo.updateTeleconsulta(input.teleconsulta_id, updateData)
 
     logger.info("Teleconsulta session ended", {
       clinicId,
@@ -155,13 +142,10 @@ export class TeleodontoService {
   async addNotes(input: AddNotesInput, clinicId: string) {
     await this.getById(input.teleconsulta_id, clinicId)
 
-    return prisma.teleconsultas.update({
-      where: { id: input.teleconsulta_id },
-      data: {
-        observacoes: input.notes,
-        diagnostico: input.diagnosis,
-        conduta: input.recommendations,
-      },
+    return this.repo.updateTeleconsulta(input.teleconsulta_id, {
+      observacoes: input.notes,
+      diagnostico: input.diagnosis,
+      conduta: input.recommendations,
     })
   }
 
@@ -176,11 +160,8 @@ export class TeleodontoService {
       observations: input.observations,
     }
 
-    const data = await prisma.teleconsultas.update({
-      where: { id: input.teleconsulta_id },
-      data: {
-        prescricao: JSON.stringify(prescription),
-      },
+    const data = await this.repo.updateTeleconsulta(input.teleconsulta_id, {
+      prescricao: JSON.stringify(prescription),
     })
 
     logger.info("Prescription added to teleconsulta", {

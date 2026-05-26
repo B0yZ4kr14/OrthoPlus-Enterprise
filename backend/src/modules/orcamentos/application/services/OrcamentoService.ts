@@ -1,4 +1,4 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
+import { IOrcamentoRepository } from "@/modules/orcamentos/domain/repositories/IOrcamentoRepository"
 
 export interface CreateOrcamentoInput {
   numero_orcamento: string;
@@ -45,21 +45,18 @@ export interface AddItemInput {
 }
 
 export class OrcamentoService {
-  async list(clinicId: string, filters?: { patient_id?: string; status?: string }) {
-    const where: Record<string, unknown> = { clinic_id: clinicId };
-    if (filters?.patient_id) where.patient_id = filters.patient_id;
-    if (filters?.status) where.status = filters.status;
+  private repo: IOrcamentoRepository
 
-    return prisma.orcamentos.findMany({
-      where,
-      orderBy: { created_at: "desc" },
-    });
+  constructor(repo?: IOrcamentoRepository) {
+    this.repo = repo ?? new (require("@/modules/orcamentos/infrastructure/OrcamentoRepository").OrcamentoRepository)()
+  }
+
+  async list(clinicId: string, filters?: { patient_id?: string; status?: string }) {
+    return this.repo.listOrcamentos(clinicId, filters)
   }
 
   async getById(id: string, clinicId: string) {
-    return prisma.orcamentos.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    return this.repo.getOrcamentoById(id, clinicId)
   }
 
   async create(data: CreateOrcamentoInput, clinicId: string) {
@@ -67,45 +64,40 @@ export class OrcamentoService {
     const dataValidade = new Date();
     dataValidade.setDate(dataValidade.getDate() + validadeDias);
 
-    return prisma.orcamentos.create({
-      data: {
-        numero_orcamento: data.numero_orcamento,
-        titulo: data.titulo,
-        patient_id: data.patient_id,
-        tipo_plano: data.tipo_plano,
-        clinic_id: clinicId,
-        created_by: data.created_by,
-        validade_dias: validadeDias,
-        data_validade: dataValidade.toISOString(),
-        valor_final: data.valor_final ?? data.valor_total,
-        valor_total: data.valor_total,
-        status: data.status ?? "RASCUNHO",
-        desconto_percentual: data.desconto_percentual,
-        desconto_valor: data.desconto_valor,
-        observacoes: data.observacoes,
-        descricao: data.descricao,
-      },
-    });
+    return this.repo.createOrcamento({
+      numero_orcamento: data.numero_orcamento,
+      titulo: data.titulo,
+      patient_id: data.patient_id,
+      tipo_plano: data.tipo_plano,
+      clinic_id: clinicId,
+      created_by: data.created_by,
+      validade_dias: validadeDias,
+      data_validade: dataValidade.toISOString(),
+      valor_final: data.valor_final ?? data.valor_total,
+      valor_total: data.valor_total,
+      status: data.status ?? "RASCUNHO",
+      desconto_percentual: data.desconto_percentual,
+      desconto_valor: data.desconto_valor,
+      observacoes: data.observacoes,
+      descricao: data.descricao,
+    })
   }
 
   async update(id: string, data: UpdateOrcamentoInput, clinicId: string) {
     const existing = await this.getById(id, clinicId);
     if (!existing) return null;
 
-    return prisma.orcamentos.update({
-      where: { id },
-      data: {
-        ...data,
-        updated_at: new Date(),
-      },
-    });
+    return this.repo.updateOrcamento(id, {
+      ...data,
+      updated_at: new Date(),
+    })
   }
 
   async delete(id: string, clinicId: string) {
     const existing = await this.getById(id, clinicId);
     if (!existing) return false;
 
-    await prisma.orcamentos.delete({ where: { id } });
+    await this.repo.deleteOrcamento(id);
     return true;
   }
 
@@ -116,10 +108,7 @@ export class OrcamentoService {
       throw new Error("Apenas orçamentos em rascunho podem ser enviados");
     }
 
-    return prisma.orcamentos.update({
-      where: { id },
-      data: { status: "PENDENTE", updated_at: new Date() },
-    });
+    return this.repo.updateOrcamento(id, { status: "PENDENTE", updated_at: new Date() })
   }
 
   async aprovar(id: string, aprovadoPor: string, clinicId: string) {
@@ -130,15 +119,12 @@ export class OrcamentoService {
     }
 
     const now = new Date();
-    return prisma.orcamentos.update({
-      where: { id },
-      data: {
-        status: "APROVADO",
-        aprovado_por: aprovadoPor,
-        aprovado_em: now.toISOString(),
-        updated_at: now,
-      },
-    });
+    return this.repo.updateOrcamento(id, {
+      status: "APROVADO",
+      aprovado_por: aprovadoPor,
+      aprovado_em: now.toISOString(),
+      updated_at: now,
+    })
   }
 
   async rejeitar(id: string, _rejeitadoPor: string, motivo: string, clinicId: string) {
@@ -149,47 +135,35 @@ export class OrcamentoService {
     }
 
     const now = new Date();
-    return prisma.orcamentos.update({
-      where: { id },
-      data: {
-        status: "REJEITADO",
-        rejeitado_em: now.toISOString(),
-        motivo_rejeicao: motivo,
-        updated_at: now,
-      },
-    });
+    return this.repo.updateOrcamento(id, {
+      status: "REJEITADO",
+      rejeitado_em: now.toISOString(),
+      motivo_rejeicao: motivo,
+      updated_at: now,
+    })
   }
 
   async listItems(orcamentoId: string, clinicId: string) {
-    const orcamento = await prisma.orcamentos.findFirst({
-      where: { id: orcamentoId, clinic_id: clinicId },
-    });
+    const orcamento = await this.repo.getOrcamentoById(orcamentoId, clinicId);
     if (!orcamento) return [];
 
-    return prisma.orcamento_itens.findMany({
-      where: { orcamento_id: orcamentoId },
-      orderBy: { ordem: "asc" },
-    });
+    return this.repo.listItems(orcamentoId)
   }
 
   async addItem(orcamentoId: string, data: AddItemInput, clinicId: string) {
-    const orcamento = await prisma.orcamentos.findFirst({
-      where: { id: orcamentoId, clinic_id: clinicId },
-    });
+    const orcamento = await this.repo.getOrcamentoById(orcamentoId, clinicId);
     if (!orcamento) return null;
 
-    return prisma.orcamento_itens.create({
-      data: {
-        descricao: data.descricao,
-        ordem: data.ordem,
-        quantidade: data.quantidade,
-        valor_unitario: data.valor_unitario,
-        valor_total: data.valor_total,
-        orcamento_id: orcamentoId,
-        procedimento_id: data.procedimento_id,
-        observacoes: data.observacoes,
-        dente_codigo: data.dente_codigo,
-      },
-    });
+    return this.repo.addItem({
+      descricao: data.descricao,
+      ordem: data.ordem,
+      quantidade: data.quantidade,
+      valor_unitario: data.valor_unitario,
+      valor_total: data.valor_total,
+      orcamento_id: orcamentoId,
+      procedimento_id: data.procedimento_id,
+      observacoes: data.observacoes,
+      dente_codigo: data.dente_codigo,
+    })
   }
 }
