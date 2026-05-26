@@ -1,0 +1,3 @@
+backend/src/modules/relatorios/application/ReportControllerService.ts
+backend/src/modules/relatorios/domain/repositories/IReportRepository.ts
+backend/src/modules/relatorios/infrastructure/ReportRepository.ts

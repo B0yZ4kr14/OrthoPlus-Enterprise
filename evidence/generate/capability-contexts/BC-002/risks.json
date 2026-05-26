@@ -1,0 +1,22 @@
+{
+  "capability": "BC-002",
+  "unified": 0.36,
+  "security": {
+    "likelihood": 0.0,
+    "impact": 0.95,
+    "exposure": 0.4,
+    "composite": 0.5
+  },
+  "qa": {
+    "composite": 0.18
+  },
+  "drivers": [
+    "Low risk profile"
+  ],
+  "vulnerabilities": [],
+  "threats": [
+    "T-BC-002-002",
+    "T-BC-002-003",
+    "T-BC-002-004"
+  ]
+}

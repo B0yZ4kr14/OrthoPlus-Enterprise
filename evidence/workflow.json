@@ -61,7 +61,17 @@
       "status": "pending"
     },
     "generate": {
-      "status": "pending"
+      "status": "completed",
+      "artifacts": {
+        "capability_contexts": "evidence/generate/capability-contexts/BC-*/ (11 dirs)",
+        "security_prompts": "evidence/generate/security-prompts.md",
+        "spec_seeds": "evidence/generate/spec-seeds/BC-*-spec-seed.md (7 files)",
+        "instructions": "evidence/generate/instructions.md",
+        "skills": ".agents/skills/ (11 skills)",
+        "subagents": ".agents/subagents/ (3 subagents)",
+        "project_agent": ".agents/agent.md",
+        "pipeline_lock": "evidence/generate/pipeline.lock.json"
+      }
     },
     "validate": {
       "status": "pending"

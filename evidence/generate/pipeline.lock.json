@@ -1,0 +1,74 @@
+{
+  "version": "1",
+  "started_at": "2026-05-26T05:12:31Z",
+  "plan": {
+    "artifacts": [
+      "capability-contexts",
+      "security-prompts",
+      "spec-seeds",
+      "instructions",
+      "skills",
+      "subagents",
+      "project-agent"
+    ],
+    "clients": []
+  },
+  "steps": {
+    "resolve_client_integrations": {
+      "status": "skipped",
+      "output": null
+    },
+    "generate_instructions": {
+      "status": "completed",
+      "output": "evidence/generate/instructions.md"
+    },
+    "generate_dev_skills": {
+      "status": "completed",
+      "output": ".agents/skills/"
+    },
+    "generate_stack_skills": {
+      "status": "completed",
+      "output": ".agents/skills/"
+    },
+    "generate_business_rules_skill": {
+      "status": "completed",
+      "output": ".agents/skills/business-rules/"
+    },
+    "generate_security_guidelines_skill": {
+      "status": "completed",
+      "output": ".agents/skills/security-guidelines/"
+    },
+    "generate_dev_prompts": {
+      "status": "completed",
+      "output": "evidence/generate/prompts/"
+    },
+    "generate_hooks": {
+      "status": "skipped",
+      "output": null
+    },
+    "generate_dev_subagents": {
+      "status": "completed",
+      "output": ".agents/subagents/"
+    },
+    "generate_project_agent": {
+      "status": "completed",
+      "output": ".agents/agent.md"
+    },
+    "generate_claude_skills": {
+      "status": "skipped",
+      "output": null
+    },
+    "generate_copilot_skills": {
+      "status": "skipped",
+      "output": null
+    },
+    "generate_gemini_skills": {
+      "status": "skipped",
+      "output": null
+    },
+    "generate_opencode_skills": {
+      "status": "skipped",
+      "output": null
+    }
+  }
+}
