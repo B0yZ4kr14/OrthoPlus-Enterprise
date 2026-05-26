@@ -10,7 +10,10 @@ import {
   statusLabels,
   tipoPlanoLabels,
 } from "@/modules/orcamentos/types/orcamento.types";
-import type { OrcamentoComplete } from "@/modules/orcamentos/types/orcamento.types";
+import {
+  Orcamento,
+  StatusOrcamento,
+} from "@/modules/orcamentos/domain/entities/Orcamento";
 import { OrcamentoForm } from "@/components/financeiro/OrcamentoForm";
 import {
   Dialog,
@@ -20,30 +23,40 @@ import {
 } from "@orthoplus/core-ui/dialog";
 import { toast } from "sonner";
 
+type BadgeVariant =
+  | "default"
+  | "secondary"
+  | "destructive"
+  | "outline"
+  | "success"
+  | "warning"
+  | "error"
+  | "info";
+
 export default function Orcamentos() {
   const {
     orcamentos,
     loading,
-    // @ts-expect-error — TS2339
-    sendOrcamento,
-    // @ts-expect-error — TS2339
-    approveOrcamento,
-    // @ts-expect-error — TS2339
-    convertToTreatmentPlan,
+    enviarOrcamento,
+    aprovarOrcamento,
   } = useOrcamentos();
-  const [selectedOrcamento, setSelectedOrcamento] =
-    useState<OrcamentoComplete | null>(null);
+
+  const convertToTreatmentPlan = (_orcamentoId: string) => {
+    toast.info("Conversão para plano de tratamento ainda não implementada");
+  };
+
+  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
+    null,
+  );
   const [formOpen, setFormOpen] = useState(false);
 
-  const getStatusVariant = (status: string) => {
-    const variants: Record<string, unknown> = {
+  const getStatusVariant = (status: StatusOrcamento): BadgeVariant => {
+    const variants: Record<StatusOrcamento, BadgeVariant> = {
       RASCUNHO: "default",
-      ENVIADO: "default",
-      VISUALIZADO: "secondary",
+      PENDENTE: "secondary",
       APROVADO: "success",
       REJEITADO: "destructive",
       EXPIRADO: "destructive",
-      CONVERTIDO: "success",
     };
     return variants[status] || "default";
   };
@@ -83,12 +96,7 @@ export default function Orcamentos() {
             Aguardando Aprovação
           </div>
           <div className="text-3xl font-bold mt-2 text-warning">
-            {
-              orcamentos.filter(
-                // @ts-expect-error — TS2367
-                (o) => o.status === "ENVIADO" || o.status === "VISUALIZADO",
-              ).length
-            }
+            {orcamentos.filter((o) => o.status === "PENDENTE").length}
           </div>
         </Card>
         <Card className="p-6">
@@ -101,8 +109,7 @@ export default function Orcamentos() {
           <div className="text-sm text-muted-foreground">Valor Total</div>
           <div className="text-3xl font-bold mt-2">
             {formatCurrency(
-              // @ts-expect-error — TS2339
-              orcamentos.reduce((sum, o) => sum + o.valor_final, 0),
+              orcamentos.reduce((sum, o) => sum + o.valorTotal, 0),
             )}
           </div>
         </Card>
@@ -124,46 +131,35 @@ export default function Orcamentos() {
               <div
                 key={orcamento.id}
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
-                // @ts-expect-error — TS2345
                 onClick={() => setSelectedOrcamento(orcamento)}
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-semibold">{orcamento.titulo}</h3>
-                    {/* @ts-expect-error — TS2322 */}
                     <Badge variant={getStatusVariant(orcamento.status)}>
-                      {statusLabels[orcamento.status]}
+                      {statusLabels[orcamento.status] || orcamento.status}
                     </Badge>
                     <Badge variant="outline">
-                      {/* @ts-expect-error — TS2551 */}
-                      {tipoPlanoLabels[orcamento.tipo_plano]}
+                      {tipoPlanoLabels[orcamento.tipoPlano]}
                     </Badge>
                   </div>
                   <div className="text-sm text-muted-foreground space-y-1">
-                    {/* @ts-expect-error — TS2551 */}
-                    <p>Número: {orcamento.numero_orcamento}</p>
-                    {/* @ts-expect-error — TS2339 */}
-                    <p>Paciente: {orcamento.patient_name || "N/A"}</p>
+                    <p>Número: {orcamento.numeroOrcamento}</p>
+                    <p>Paciente: N/A</p>
                     <p>
                       Validade:{" "}
-                      {/* @ts-expect-error — TS2339 */}
-                      {new Date(orcamento.data_validade).toLocaleDateString(
-                        "pt-BR",
-                      )}
+                      {orcamento.dataExpiracao.toLocaleDateString("pt-BR")}
                     </p>
                   </div>
                 </div>
                 <div className="text-right space-y-2">
                   <div>
                     <div className="text-2xl font-bold">
-                      {/* @ts-expect-error — TS2339 */}
-                      {formatCurrency(orcamento.valor_final)}
+                      {formatCurrency(orcamento.valorTotal)}
                     </div>
-                    {/* @ts-expect-error — TS2551 */}
-                    {orcamento.desconto_valor > 0 && (
+                    {(orcamento.descontoValor ?? 0) > 0 && (
                       <div className="text-sm text-muted-foreground line-through">
-                        {/* @ts-expect-error — TS2551 */}
-                        {formatCurrency(orcamento.valor_total)}
+                        {formatCurrency(orcamento.valorSubtotal)}
                       </div>
                     )}
                   </div>
@@ -174,23 +170,20 @@ export default function Orcamentos() {
                         variant="outline"
                         onClick={(e) => {
                           e.stopPropagation();
-                          sendOrcamento(orcamento.id!, "");
+                          enviarOrcamento(orcamento.id);
                         }}
                       >
                         <Send className="h-3 w-3 mr-1" />
                         Enviar
                       </Button>
                     )}
-                    {/* @ts-expect-error — TS2367 */}
-                    {(orcamento.status === "ENVIADO" ||
-                      // @ts-expect-error — TS2367
-                      orcamento.status === "VISUALIZADO") && (
+                    {orcamento.status === "PENDENTE" && (
                       <Button
                         size="sm"
                         variant="elevated"
                         onClick={(e) => {
                           e.stopPropagation();
-                          approveOrcamento(orcamento.id!);
+                          aprovarOrcamento(orcamento.id);
                         }}
                       >
                         <CheckCircle className="h-3 w-3 mr-1" />
@@ -203,7 +196,7 @@ export default function Orcamentos() {
                         variant="elevated-secondary"
                         onClick={(e) => {
                           e.stopPropagation();
-                          convertToTreatmentPlan(orcamento.id!);
+                          convertToTreatmentPlan(orcamento.id);
                         }}
                       >
                         Converter em Tratamento
@@ -223,7 +216,7 @@ export default function Orcamentos() {
             <DialogTitle>Novo Orçamento</DialogTitle>
           </DialogHeader>
           <OrcamentoForm
-            onSubmit={(data) => {
+            onSubmit={() => {
               toast.success("Orçamento criado com sucesso!");
               setFormOpen(false);
             }}

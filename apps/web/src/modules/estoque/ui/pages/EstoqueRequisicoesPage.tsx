@@ -63,8 +63,7 @@ export default function EstoqueRequisicoesPage() {
 
   const handleSubmit = async (data: Requisicao) => {
     try {
-      // @ts-expect-error — TS2345
-      await addRequisicao(data);
+      await addRequisicao(data as Parameters<typeof addRequisicao>[0]);
       toast({
         title: "Sucesso",
         description: "Requisição enviada com sucesso!",

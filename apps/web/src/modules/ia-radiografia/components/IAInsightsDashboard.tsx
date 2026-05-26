@@ -45,9 +45,8 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
     analises.forEach((analise) => {
       const problemasDetectados =
         analise.resultado_ia?.problemas_detectados || [];
-      problemasDetectados.forEach((problema: unknown) => {
-        // @ts-expect-error — TS18046
-        const tipo = problema.tipo || "Problema Dentário";
+      problemasDetectados.forEach((problema: Record<string, unknown>) => {
+        const tipo = String(problema.tipo || "Problema Dentário");
         problemas.set(tipo, (problemas.get(tipo) || 0) + 1);
       });
     });
@@ -65,9 +64,8 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
     analises.forEach((analise) => {
       const problemasDetectados =
         analise.resultado_ia?.problemas_detectados || [];
-      problemasDetectados.forEach((problema: unknown) => {
-        // @ts-expect-error — TS18046
-        const localizacao = problema.localizacao || "Não especificada";
+      problemasDetectados.forEach((problema: Record<string, unknown>) => {
+        const localizacao = String(problema.localizacao || "Não especificada");
         areas.set(localizacao, (areas.get(localizacao) || 0) + 1);
       });
     });
@@ -85,9 +83,8 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
     analises.forEach((analise) => {
       const problemasDetectados =
         analise.resultado_ia?.problemas_detectados || [];
-      problemasDetectados.forEach((problema: unknown) => {
-        // @ts-expect-error — TS18046
-        const sev = problema.severidade || "MÉDIA";
+      problemasDetectados.forEach((problema: Record<string, unknown>) => {
+        const sev = String(problema.severidade || "MÉDIA");
         sevs.set(sev, (sevs.get(sev) || 0) + 1);
       });
     });
@@ -357,8 +354,7 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
                     className="text-center p-4 bg-accent/50 rounded-lg"
                   >
                     <Badge
-                      // @ts-expect-error — TS2322
-                      variant={getSeveridadeColor(sev.severidade) as unknown}
+                      variant={getSeveridadeColor(sev.severidade) as any}
                       className="mb-2"
                     >
                       {sev.severidade}
@@ -414,8 +410,7 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
                         </AlertDescription>
                       </div>
                       <Badge
-                        // @ts-expect-error — TS2322
-                        variant={getPrioridadeColor(rec.prioridade) as unknown}
+                        variant={getPrioridadeColor(rec.prioridade) as any}
                       >
                         {rec.prioridade.toUpperCase()}
                       </Badge>

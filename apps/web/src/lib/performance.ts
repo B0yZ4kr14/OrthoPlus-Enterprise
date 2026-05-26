@@ -13,20 +13,17 @@ declare global {
 import { logger } from "./logger";
 
 // Web Vitals Monitoring
-export function reportWebVitals(metric: unknown) {
+export function reportWebVitals(metric: Record<string, any>) {
   // Log metrics para analytics (only in dev)
   logger.info("Web Vitals", { metric });
 
   // Integração com analytics (Google Analytics, etc)
   if (window.gtag) {
-    // @ts-expect-error — TS18046
     window.gtag("event", metric.name, {
       value: Math.round(
-        // @ts-expect-error — TS18046
         metric.name === "CLS" ? metric.value * 1000 : metric.value,
       ),
       event_category: "Web Vitals",
-      // @ts-expect-error — TS18046
       event_label: metric.id,
       non_interaction: true,
     });
@@ -95,8 +92,7 @@ export function monitorResourceLoading() {
 // Memory Usage Monitor
 export function monitorMemoryUsage() {
   if ("memory" in performance) {
-    // @ts-expect-error — TS2571
-    const memory = (performance as unknown).memory;
+    const memory = (performance as any).memory;
 
     return {
       usedJSHeapSize: (memory.usedJSHeapSize / 1048576).toFixed(2) + " MB",
