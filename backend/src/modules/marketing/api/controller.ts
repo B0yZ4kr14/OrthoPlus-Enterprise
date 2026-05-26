@@ -1,11 +1,16 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
 import { createCampanhaSchema, updateCampanhaSchema, createEnvioSchema, createRecallSchema } from "./schemas";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 import { marketingMetrics } from "@/infrastructure/metrics/MarketingMetrics";
+import { IMarketingRepository } from "@/modules/marketing/domain/repositories/IMarketingRepository";
 
 export class MarketingController {
+  private repo: IMarketingRepository
+
+  constructor(repo?: IMarketingRepository) {
+    this.repo = repo ?? new (require("@/modules/marketing/infrastructure/MarketingRepository").MarketingRepository)()
+  }
   // --- Campanhas ---
   listCampanhas = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
@@ -15,10 +20,7 @@ export class MarketingController {
     const { status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (status) where.status = String(status);
-    const data = await (prisma as any).marketing_campaigns.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where,
-      orderBy: { created_at: "desc" },
-    });
+    const data = await this.repo.listCampaigns(clinicId, status ? String(status) : undefined);
     res.json(data);
   });
 
@@ -28,9 +30,7 @@ export class MarketingController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const data = await (prisma as any).marketing_campaigns.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { id, clinic_id: clinicId },
-    });
+    const data = await this.repo.getCampaignById(id, clinicId);
     if (!data) {
       throw Errors.notFound("Campanha");
     }
@@ -46,9 +46,7 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await (prisma as any).marketing_campaigns.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      data: { ...parsed.data, clinic_id: clinicId },
-    });
+    const data = await this.repo.createCampaign({ ...parsed.data, clinic_id: clinicId } as any);
     marketingMetrics.incCampaignsCreated(clinicId)
     res.status(201).json(data);
   });
@@ -59,9 +57,7 @@ export class MarketingController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await (prisma as any).marketing_campaigns.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await this.repo.getCampaignById(id, clinicId);
     if (!existing) {
       throw Errors.notFound("Campanha");
     }
@@ -69,10 +65,7 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await (prisma as any).marketing_campaigns.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { id },
-      data: parsed.data,
-    });
+    const data = await this.repo.updateCampaign(id, parsed.data as any);
     res.json(data);
   });
 
@@ -86,10 +79,7 @@ export class MarketingController {
     const where: Record<string, unknown> = { campanha: { clinic_id: clinicId } };
     if (campanha_id) where.campanha_id = String(campanha_id);
     if (status_envio) where.status_envio = String(status_envio);
-    const data = await (prisma as any).campanha_envios.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where,
-      orderBy: { enviado_em: "desc" },
-    });
+    const data = await this.repo.listEnvios(where as any);
     res.json(data);
   });
 
@@ -102,15 +92,11 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const campanha = await (prisma as any).marketing_campaigns.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { id: parsed.data.campanha_id, clinic_id: clinicId },
-    });
+    const campanha = await this.repo.getCampaignById(parsed.data.campanha_id, clinicId);
     if (!campanha) {
       throw Errors.notFound("Campanha");
     }
-    const data = await (prisma as any).campanha_envios.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      data: parsed.data,
-    });
+    const data = await this.repo.createEnvio(parsed.data as any);
     marketingMetrics.incEnviosCreated(clinicId)
     res.status(201).json(data);
   });
@@ -124,10 +110,7 @@ export class MarketingController {
     const { tipo_recall } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (tipo_recall) where.tipo_recall = String(tipo_recall);
-    const data = await (prisma as any).recalls.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where,
-      orderBy: { data_prevista: "desc" },
-    });
+    const data = await this.repo.listRecalls(clinicId, tipo_recall ? String(tipo_recall) : undefined);
     res.json(data);
   });
 
@@ -140,9 +123,7 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await (prisma as any).recalls.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      data: { ...parsed.data, clinic_id: clinicId },
-    });
+    const data = await this.repo.createRecall({ ...parsed.data, clinic_id: clinicId } as any);
     res.status(201).json(data);
   });
 
@@ -154,19 +135,7 @@ export class MarketingController {
     }
 
     // Find active campaigns with active triggers
-    const activeTriggers = await prisma.campaign_triggers.findMany({
-      where: {
-        is_active: true,
-        campaign: {
-          clinic_id: clinicId,
-          status: "ACTIVE",
-        },
-      },
-      include: {
-        campaign: true,
-      },
-      take: 100,
-    });
+    const activeTriggers = await this.repo.findActiveTriggers(clinicId);
 
     if (activeTriggers.length === 0) {
       res.json({ message: "No active triggers found", triggered: 0 });
@@ -201,14 +170,7 @@ export class MarketingController {
         // Prisma Client does not support EXTRACT(MONTH/DAY FROM date) natively.
         const todayMonth = now.getMonth() + 1;
         const todayDay = now.getDate();
-        recipients = await prisma.$queryRaw<typeof recipients>`
-          SELECT p.id AS patient_id, p.full_name AS patient_name, p.email
-          FROM patients p
-          WHERE p.clinic_id = ${clinicId}
-            AND EXTRACT(MONTH FROM p.birth_date) = ${todayMonth}
-            AND EXTRACT(DAY FROM p.birth_date) = ${todayDay}
-          LIMIT 500
-        `;
+        recipients = await this.repo.findPatientsByBirthday(clinicId, todayMonth, todayDay);
       } else if (condition.event === "appointment" && condition.status === "completed") {
         // Post-appointment trigger: patients who completed appointments recently
         const delayDays = trigger.delay_days || 1;
@@ -217,20 +179,7 @@ export class MarketingController {
         const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
         const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999));
 
-        const appointmentRecalls = await prisma.appointments.findMany({
-          where: {
-            clinic_id: clinicId,
-            status: "concluido",
-            end_time: { gte: startOfDay.toISOString(), lte: endOfDay.toISOString() },
-          },
-          include: {
-            patient: {
-              select: { id: true, full_name: true, email: true },
-            },
-          },
-          distinct: ["patient_id"],
-          take: 500,
-        });
+        const appointmentRecalls = await this.repo.findAppointmentsByDateRange(clinicId, startOfDay, endOfDay);
         recipients = appointmentRecalls
           .filter((a) => a.patient)
           .map((a) => ({
@@ -244,23 +193,9 @@ export class MarketingController {
         const cutoffDate = new Date(now);
         cutoffDate.setDate(cutoffDate.getDate() - daysThreshold);
 
-        const recentAppointmentPatientIds = await prisma.appointments.findMany({
-          where: {
-            clinic_id: clinicId,
-            start_time: { gte: cutoffDate.toISOString() },
-          },
-          select: { patient_id: true },
-          distinct: ["patient_id"],
-        });
+        const recentAppointmentPatientIds = await this.repo.findRecentAppointmentPatientIds(clinicId, cutoffDate);
         const recentPatientIds = new Set(recentAppointmentPatientIds.map((a) => a.patient_id));
-        recipients = await prisma.patients.findMany({
-          where: {
-            clinic_id: clinicId,
-            id: { notIn: Array.from(recentPatientIds) },
-          },
-          select: { id: true, full_name: true, email: true },
-          take: 500,
-        }).then((patients) =>
+        recipients = await this.repo.findPatientsNotInIds(clinicId, Array.from(recentPatientIds)).then((patients) =>
           patients.map((p) => ({
             patient_id: p.id,
             patient_name: p.full_name || "",
@@ -279,38 +214,32 @@ export class MarketingController {
       let sendCount = 0;
       for (const recipient of recipients) {
         // Check if already sent to this recipient for this campaign recently
-        const alreadySent = await prisma.campanha_envios.count({
-          where: {
-            campanha_id: trigger.campaign.id,
-            destinatario_id: recipient.patient_id,
-            created_at: { gte: oneDayAgo },
-          },
+        const alreadySent = await this.repo.countEnvios({
+          campanha_id: trigger.campaign.id,
+          destinatario_id: recipient.patient_id,
+          created_at: { gte: oneDayAgo },
         });
 
         if (alreadySent > 0) continue;
 
         // Create send record
-        await (prisma as any).campanha_envios.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          data: {
-            campanha_id: trigger.campaign.id,
-            destinatario_id: recipient.patient_id,
-            destinatario_tipo: "PATIENT",
-            email: recipient.email,
-            status_envio: "PENDING",
-          },
-        });
+        await this.repo.createEnvio({
+          campanha_id: trigger.campaign.id,
+          destinatario_id: recipient.patient_id,
+          destinatario_tipo: "PATIENT",
+          email: recipient.email,
+          status_envio: "PENDING",
+        } as any);
 
         // Create notification for the clinic
-        await prisma.notifications.create({
-          data: {
-            clinic_id: clinicId,
-            tipo: 'MARKETING',
-            titulo: 'Campanha: ' + trigger.campaign.name,
-            mensagem: 'Envio agendado para ' + (recipient.patient_name || 'paciente') + ' via ' + trigger.campaign.channel,
-            link_acao: '/marketing-auto',
-            lida: false,
-          },
-        });
+        await this.repo.createNotification({
+          clinic_id: clinicId,
+          tipo: "MARKETING",
+          titulo: "Campanha: " + trigger.campaign.name,
+          mensagem: "Envio agendado para " + (recipient.patient_name || "paciente") + " via " + trigger.campaign.channel,
+          link_acao: "/marketing-auto",
+          lida: false,
+        } as any);
 
         sendCount++;
       }
@@ -351,23 +280,7 @@ export class MarketingController {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
 
-    const pendingRecallsRaw = await prisma.recalls.findMany({
-      where: {
-        clinic_id: clinicId,
-        status: "PENDING",
-        notificacao_enviada: false,
-        data_prevista: { lte: today.toISOString() },
-      },
-      include: {
-        patient: {
-          select: {
-            full_name: true,
-            email: true,
-          },
-        },
-      },
-      take: 200,
-    });
+    const pendingRecallsRaw = await this.repo.listRecalls(clinicId) as any[];
     const pendingRecalls = pendingRecallsRaw.map((r) => ({
       id: r.id,
       patient_id: r.patient_id,
@@ -385,22 +298,17 @@ export class MarketingController {
         || `Olá ${recall.patient_name || ""}, está na hora do seu retorno (${recall.tipo_recall}).`;
 
       // Create notification
-      await prisma.notifications.create({
-        data: {
-          clinic_id: clinicId,
-          tipo: 'LEMBRETE',
-          titulo: 'Recall: ' + recall.tipo_recall,
-          mensagem,
-          link_acao: '/recall',
-          lida: false,
-        },
-      });
+      await this.repo.createNotification({
+        clinic_id: clinicId,
+        tipo: "LEMBRETE",
+        titulo: "Recall: " + recall.tipo_recall,
+        mensagem,
+        link_acao: "/recall",
+        lida: false,
+      } as any);
 
       // Mark recall as sent
-      await prisma.recalls.update({
-        where: { id: recall.id },
-        data: { notificacao_enviada: true, status: 'SENT' },
-      });
+      await this.repo.updateRecall(recall.id, { notificacao_enviada: true, status: "SENT" });
 
       processed++;
     }
@@ -419,9 +327,7 @@ export class MarketingController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    await (prisma as any).marketing_campaigns.deleteMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { id, clinic_id: clinicId },
-    });
+    await this.repo.deleteCampaign(id, clinicId);
     res.status(204).send();
   });
 }

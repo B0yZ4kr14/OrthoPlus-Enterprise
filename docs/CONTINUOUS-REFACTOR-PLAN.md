@@ -75,6 +75,7 @@ Módulos com maior churn e complexidade:
 | — | `relatorios` | 2 | Relatórios — export/import | ✅ **CONCLUÍDO** |
 | — | `orcamentos` | 4 | Orçamentos — 13 chamadas inline | ✅ **CONCLUÍDO** |
 | — | `teleodonto` | 7 | Teleodontologia — 9 chamadas inline | ✅ **CONCLUÍDO** |
+| — | `marketing` | 3 | Marketing — 22 chamadas inline | ✅ **CONCLUÍDO** |
 
 ### T2.1 — auth (CONCLUÍDO ✅)
 - [x] Criar `domain/repositories/IUserRepository.ts` (interface com tipos Prisma)
@@ -147,6 +148,14 @@ Módulos com maior churn e complexidade:
 - [x] Commit: `35322c839`
 
 ### Extensão eficiente — módulos com chamadas inline (CONCLUÍDO ✅)
+
+| Módulo | Chamadas Inline | Ação | Status |
+|--------|----------------|------|--------|
+| `usuarios` | 0 (centralizado) | Criar IUsuariosRepository, DI | ✅ |
+| `relatorios` | 0 (centralizado) | Criar IReportRepository, DI | ✅ |
+| `orcamentos` | 13 | Criar IOrcamentoRepository + OrcamentoRepository, refatorar service | ✅ |
+| `teleodonto` | 9 | Criar ITeleodontoRepository + TeleodontoRepository, refatorar service | ✅ |
+| `marketing` | 22 | Criar IMarketingRepository + MarketingRepository, refatorar controller | ✅ |
 
 | Módulo | Chamadas Inline | Ação | Status |
 |--------|----------------|------|--------|
