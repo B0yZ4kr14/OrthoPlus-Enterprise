@@ -3,6 +3,12 @@ import { useToast } from "@/hooks/use-toast";
 import { apiClient } from "@/lib/api/apiClient";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+interface ToggleModuleResponse {
+  error?: string;
+  success?: boolean;
+  message?: string;
+}
+
 // Cache simples para módulos (5 minutos)
 let modulesCache: { data: Module[]; timestamp: number } | null = null;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
@@ -69,23 +75,19 @@ export function useModules() {
   const toggleModule = useCallback(
     async (moduleKey: string) => {
       try {
-        const data = await apiClient.post<unknown>(
+        const data = await apiClient.post<ToggleModuleResponse>(
           "/configuracoes/modulos/toggle",
           { module_key: moduleKey },
         );
 
-        // @ts-expect-error — TS2339
         if (data?.error) {
-          // @ts-expect-error — TS2339
           throw new Error(data.error);
         }
 
-        // @ts-expect-error — TS2339
         if (data?.success) {
           toast({
             title: "Módulo atualizado",
             description:
-              // @ts-expect-error — TS2339
               data.message || "O status do módulo foi alterado com sucesso.",
           });
           // Invalidar cache e recarregar

@@ -2156,7 +2156,38 @@ model procedimento_templates {
   tempo_estimado_minutos Int
   updated_at             DateTime @updatedAt
   valor_sugerido         Int
+  precos                 procedimento_precos[]
   @@schema("clinico")
+}
+
+model tabela_precos {
+  id          String   @id @default(uuid())
+  nome        String
+  tipo        String
+  convenio_id String?
+  is_active   Boolean  @default(true)
+  is_default  Boolean  @default(false)
+  clinic_id   String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  precos      procedimento_precos[]
+  @@schema("clinico")
+  @@unique([clinic_id, is_default], name: "unique_default_per_clinic")
+}
+
+model procedimento_precos {
+  id                      String   @id @default(uuid())
+  procedimento_template_id String
+  tabela_preco_id         String
+  valor                   Int
+  tempo_retorno_dias      Int?
+  clinic_id               String
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
+  procedimento_template   procedimento_templates @relation(fields: [procedimento_template_id], references: [id], onDelete: Cascade)
+  tabela_preco            tabela_precos          @relation(fields: [tabela_preco_id], references: [id], onDelete: Cascade)
+  @@schema("clinico")
+  @@unique([procedimento_template_id, tabela_preco_id], name: "unique_proc_tabela")
 }
 
 model produtos {

@@ -23,8 +23,7 @@ export class DbModuleRepository implements IModuleRepository {
       return ModuleMapper.toDomain(data);
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro inesperado ao buscar módulo", error);
+      throw new InfrastructureError("Erro inesperado ao buscar módulo", error instanceof Error ? error : new Error(String(error)));
     }
   }
 
@@ -101,8 +100,7 @@ export class DbModuleRepository implements IModuleRepository {
       });
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro inesperado ao ativar módulo", error);
+      throw new InfrastructureError("Erro inesperado ao ativar módulo", error instanceof Error ? error : new Error(String(error)));
     }
   }
 
@@ -143,8 +141,7 @@ export class DbModuleRepository implements IModuleRepository {
       });
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar dependências", error);
+      throw new InfrastructureError("Erro ao buscar dependências", error instanceof Error ? error : new Error(String(error)));
     }
   }
 
@@ -167,8 +164,7 @@ export class DbModuleRepository implements IModuleRepository {
       });
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar dependentes ativos", error);
+      throw new InfrastructureError("Erro ao buscar dependentes ativos", error instanceof Error ? error : new Error(String(error)));
     }
   }
 }

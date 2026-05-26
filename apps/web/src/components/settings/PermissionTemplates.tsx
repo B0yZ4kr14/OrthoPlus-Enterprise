@@ -4,6 +4,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
+import type { LucideIcon } from "lucide-react";
 import {
   Stethoscope,
   UserPlus,
@@ -35,7 +36,7 @@ interface User {
   full_name: string;
 }
 
-const templateIcons: Record<string, unknown> = {
+const templateIcons: Record<string, LucideIcon> = {
   Stethoscope: Stethoscope,
   UserPlus: UserPlus,
   DollarSign: DollarSign,
@@ -60,29 +61,22 @@ export function PermissionTemplates() {
       setLoading(true);
 
       // Buscar templates
-      const templatesData = await apiClient.get<Record<string, any>[]>(
+      const templatesData = await apiClient.get<Template[]>(
         "/configuracoes/permissoes/templates",
       );
-      // @ts-expect-error — TS2345
       setTemplates(templatesData || []);
 
       // Buscar usuários MEMBER
-      const profilesData = await apiClient.get<Record<string, any>[]>(
+      const profilesData = await apiClient.get<Array<{ id: string; full_name: string; role?: string }>>(
         "/configuracoes/usuarios",
       );
 
-      // Buscar roles
-      // Backend retorna roles nos profiles
-      const rolesData = profilesData;
-
       // Filtrar apenas MEMBERs
       const memberUsers =
-        profilesData?.filter((profile: unknown) => {
-          // @ts-expect-error — TS18046
+        profilesData?.filter((profile) => {
           return (profile.role || "MEMBER") === "MEMBER";
         }) || [];
 
-      // @ts-expect-error — TS2345
       setUsers(memberUsers);
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
@@ -185,7 +179,7 @@ export function PermissionTemplates() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {templates.map((template) => {
-          const Icon = templateIcons[template.icon] || Briefcase;
+          const Icon = (templateIcons[template.icon] || Briefcase) as LucideIcon;
           const isApplying = applying === template.id;
 
           return (
@@ -195,7 +189,6 @@ export function PermissionTemplates() {
             >
               <div className="flex items-start gap-4 mb-4">
                 <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10">
-                  {/* @ts-expect-error — TS2604, TS2786 */}
                   <Icon className="h-6 w-6 text-primary" />
                 </div>
                 <div className="flex-1">

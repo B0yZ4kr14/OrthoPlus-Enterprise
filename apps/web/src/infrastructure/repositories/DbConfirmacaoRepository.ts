@@ -21,11 +21,10 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
     agendamentoId: string,
   ): Promise<Confirmacao | null> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
         params: { appointment_id: agendamentoId },
       });
       if (!data || data.length === 0) return null;
-      // @ts-expect-error — TS2345
       return ConfirmacaoMapper.toDomain(data[0]);
     } catch {
       return null;
@@ -45,11 +44,10 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
             : "ERROR";
 
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
         params: { status: dbStatus },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(ConfirmacaoMapper.toDomain);
+      return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
     } catch {
       return [];
     }
@@ -57,11 +55,10 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
 
   async findPendentes(): Promise<Confirmacao[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
         params: { status: "PENDING" },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(ConfirmacaoMapper.toDomain);
+      return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
     } catch {
       return [];
     }
@@ -69,11 +66,10 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
 
   async findEnviadasNaoConfirmadas(): Promise<Confirmacao[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/confirmations`, {
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
         params: { status: "SENT" },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(ConfirmacaoMapper.toDomain);
+      return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
     } catch {
       return [];
     }

@@ -40,6 +40,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { TableFilter } from "@/components/shared/TableFilter";
+import TabelaPrecosManager from "../../components/TabelaPrecosManager";
 
 interface ProcedimentoTemplate {
   id: string;
@@ -113,16 +114,19 @@ export default function TemplatesProcedimentosPage() {
     return <Badge className={colors[categoria] || ""}>{categoria}</Badge>;
   };
 
+  const [activeTab, setActiveTab] = useState<"templates" | "tabelas">("templates")
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Templates de Procedimentos</h1>
+          <h1 className="text-3xl font-bold">Catálogo de Procedimentos</h1>
           <p className="text-muted-foreground mt-2">
-            Crie e gerencie templates reutilizáveis para procedimentos comuns
+            Gerencie templates e tabelas de preços
           </p>
         </div>
 
+        {activeTab === "templates" && (
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
@@ -140,8 +144,37 @@ export default function TemplatesProcedimentosPage() {
             <TemplateForm onClose={() => setIsDialogOpen(false)} />
           </DialogContent>
         </Dialog>
+        )}
       </div>
 
+      {/* Tabs */}
+      <div className="flex gap-2 border-b">
+        <button
+          onClick={() => setActiveTab("templates")}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === "templates"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Templates
+        </button>
+        <button
+          onClick={() => setActiveTab("tabelas")}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === "tabelas"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Tabela de Preços
+        </button>
+      </div>
+
+      {activeTab === "tabelas" ? (
+        <TabelaPrecosManager />
+      ) : (
+        <>
       {/* Filters */}
       <TableFilter
         searchValue={searchTerm}
@@ -250,6 +283,8 @@ export default function TemplatesProcedimentosPage() {
             </Card>
           ))}
         </div>
+      )}
+        </>
       )}
     </div>
   );

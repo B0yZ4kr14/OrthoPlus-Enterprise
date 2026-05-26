@@ -58,8 +58,7 @@ export function PermissionAuditLogs() {
 
   const fetchUsers = async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/configuracoes/usuarios');
-      // @ts-expect-error — TS2345
+      const data = await apiClient.get<Array<{ id: string; full_name: string }>>('/configuracoes/usuarios');
       setUsers(data || []);
     } catch (error) {
       console.error("Erro ao carregar usuários:", error);
@@ -106,14 +105,12 @@ export function PermissionAuditLogs() {
           ...log,
           user: {
             full_name:
-              // @ts-expect-error — TS2339
-              (log.user as unknown)?.full_name?.[0]?.full_name ||
+              (log.user as Record<string, any>)?.full_name?.[0]?.full_name ||
               "Desconhecido",
           },
           target_user: {
             full_name:
-              // @ts-expect-error — TS2339
-              (log.target_user as unknown)?.full_name?.[0]?.full_name ||
+              (log.target_user as Record<string, any>)?.full_name?.[0]?.full_name ||
               "Desconhecido",
           },
           module: log.module_catalog_id
@@ -121,8 +118,7 @@ export function PermissionAuditLogs() {
             : undefined,
         })) || [];
 
-      // @ts-expect-error — TS2345
-      setLogs(processedLogs);
+      setLogs(processedLogs as AuditLog[]);
     } catch (error) {
       console.error("Erro ao carregar logs:", error);
     } finally {

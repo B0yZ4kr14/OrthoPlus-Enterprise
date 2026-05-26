@@ -44,11 +44,10 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     clinicId: string,
   ): Promise<Agendamento[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Tables<"appointments">[]>(`/agenda/appointments`, {
         params: { patient_id: patientId, clinic_id: clinicId },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(AgendamentoMapper.toDomain);
+      return (data || []).map((d) => AgendamentoMapper.toDomain(d));
     } catch {
       return [];
     }
@@ -60,15 +59,14 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
     endDate: Date,
   ): Promise<Agendamento[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Tables<"appointments">[]>(`/agenda/appointments`, {
         params: {
           clinic_id: clinicId,
           start_date: startDate.toISOString(),
           end_date: endDate.toISOString(),
         },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(AgendamentoMapper.toDomain);
+      return (data || []).map((d) => AgendamentoMapper.toDomain(d));
     } catch {
       return [];
     }
@@ -86,11 +84,10 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
   ): Promise<Agendamento[]> {
     const dbStatus = status.toLowerCase();
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Tables<"appointments">[]>(`/agenda/appointments`, {
         params: { clinic_id: clinicId, status: dbStatus },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(AgendamentoMapper.toDomain);
+      return (data || []).map((d) => AgendamentoMapper.toDomain(d));
     } catch {
       return [];
     }
@@ -98,14 +95,13 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
 
   async findAtivos(clinicId: string): Promise<Agendamento[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
+      const data = await apiClient.get<Tables<"appointments">[]>(`/agenda/appointments`, {
         params: {
           clinic_id: clinicId,
           status: "not.in.(cancelado,concluido,faltou)",
         },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(AgendamentoMapper.toDomain);
+      return (data || []).map((d) => AgendamentoMapper.toDomain(d));
     } catch {
       return [];
     }
