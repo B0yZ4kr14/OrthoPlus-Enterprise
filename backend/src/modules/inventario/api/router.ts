@@ -14,7 +14,7 @@ export function createInventarioRouter(db?: IDatabaseConnection): Router {
 router.use(clinicGuard);
 
   const produtoRepository = db ? new ProdutoRepositoryPostgres(db) : undefined;
-  const controller = new InventarioController(produtoRepository);
+  const controller = new InventarioController(undefined, produtoRepository);
 
   // Rotas
   router.get('/', controller.listarProdutos);

@@ -6,15 +6,19 @@ import { Request, Response } from "express"
 import { Errors, asyncHandler } from "@/middleware/errorHandler"
 import { CadastrarProdutoUseCase } from "../application/use-cases/CadastrarProdutoUseCase"
 import { IProdutoRepository } from "../domain/repositories/IProdutoRepository"
-import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository"
+import { IInventarioRepository } from "@/modules/inventario/domain/repositories/IInventarioRepository"
 import { InventarioControllerService } from "@/modules/inventario/application/InventarioControllerService"
 
 export class InventarioController {
-  private repo = new InventarioRepository();
-  private service = new InventarioControllerService(this.repo);
+  private repo: IInventarioRepository
+  private service: InventarioControllerService
 
-  constructor(private produtoRepository?: IProdutoRepository) {
-    this.service = new InventarioControllerService(this.repo, this.produtoRepository);
+  constructor(
+    repo?: IInventarioRepository,
+    private produtoRepository?: IProdutoRepository,
+  ) {
+    this.repo = repo ?? new (require("@/modules/inventario/infrastructure/InventarioRepository").InventarioRepository)()
+    this.service = new InventarioControllerService(this.repo, this.produtoRepository)
   }
 
   cadastrarProduto = asyncHandler(async (req: Request, res: Response): Promise<void> => {

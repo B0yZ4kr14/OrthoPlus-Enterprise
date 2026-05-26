@@ -1,5 +1,5 @@
 import { logger } from "@/infrastructure/logger";
-import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository";
+import { IInventarioRepository } from "@/modules/inventario/domain/repositories/IInventarioRepository";
 import { IProdutoRepository } from "@/modules/inventario/domain/repositories/IProdutoRepository";
 
 export interface AutoOrderDetail {
@@ -10,10 +10,16 @@ export interface AutoOrderDetail {
 }
 
 export class InventarioControllerService {
+  private repo: IInventarioRepository
+  private produtoRepository?: IProdutoRepository
+
   constructor(
-    private repo: InventarioRepository = new InventarioRepository(),
-    private produtoRepository?: IProdutoRepository
-  ) {}
+    repo?: IInventarioRepository,
+    produtoRepository?: IProdutoRepository,
+  ) {
+    this.repo = repo ?? new (require("@/modules/inventario/infrastructure/InventarioRepository").InventarioRepository)()
+    this.produtoRepository = produtoRepository
+  }
 
   async createAutoOrders(clinicId: string): Promise<{
     ordersCreated: number;

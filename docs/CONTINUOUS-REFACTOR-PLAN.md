@@ -69,7 +69,7 @@ Módulos com maior churn e complexidade:
 | 4 | `agenda` | 10 | Agenda — alto volume de acessos | ✅ **CONCLUÍDO** |
 | 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal | ✅ **CONCLUÍDO** |
 | 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais | ✅ **CONCLUÍDO** |
-| 7 | `inventario` | 21 | Inventário — controle de estoque | ⏳ Pendente |
+| 7 | `inventario` | 21 | Inventário — controle de estoque | ✅ **CONCLUÍDO** |
 | 8 | `contratos` | 10 | Contratos — dados financeiros | ⏳ Pendente |
 
 ### T2.1 — auth (CONCLUÍDO ✅)
@@ -123,7 +123,16 @@ Módulos com maior churn e complexidade:
 - [x] 636/636 unit tests passam
 - [x] Commit: `ccf98983e`
 
-### T2.7 a T2.8 — Por módulo
+### T2.7 — inventario (CONCLUÍDO ✅)
+- [x] Criar `domain/repositories/IInventarioRepository.ts` (interface com tipos Prisma)
+- [x] Atualizar `infrastructure/InventarioRepository.ts` para implementar `IInventarioRepository`
+- [x] Injetar `IInventarioRepository` em `InventarioController` e `InventarioControllerService`
+- [x] Corrigir `router.ts` para nova assinatura do construtor
+- [x] Build passa (0 erros TypeScript)
+- [x] 636/636 unit tests passam
+- [x] Commit: `f724aed7a`
+
+### T2.8 — contratos (PENDENTE)
 Para cada módulo:
 1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
 2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)

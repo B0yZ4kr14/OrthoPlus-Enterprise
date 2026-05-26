@@ -1,7 +1,8 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Prisma } from "@prisma/client";
+import { IInventarioRepository } from "@/modules/inventario/domain/repositories/IInventarioRepository";
 
-export class InventarioRepository {
+export class InventarioRepository implements IInventarioRepository {
   async updateProduto(
     id: string,
     clinicId: string,
