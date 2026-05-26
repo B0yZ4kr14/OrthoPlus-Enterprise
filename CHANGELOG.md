@@ -2,6 +2,31 @@
 
 
 
+## [UI Premium Redesign — Fase 1 Chrome/Layout] - 2026-05-25
+
+### Added
+- `generate-css-vars.ts` — automates CSS variable generation from `tokens-v3.ts`
+- `DropdownMenuLabel` and `DropdownMenuSeparator` in QuickActions dropdown
+- Icon containers with `bg-interactive/10` and colored icons in QuickActions items
+- Descriptions below each QuickActions item for better UX
+
+### Changed
+- **Sidebar**: fully migrated to CSS variables (`--interactive`, `--accent`, `--sidebar-foreground`)
+  - `SidebarMenuItem`: active/hover states use `hsl(var(--interactive))` and `hsl(var(--accent))`
+  - `SidebarHeader`: "Enterprise" badge uses gradient from `--interactive` to `--interactive-hover`
+- **Header**: `DashboardHeader` dropdowns use `glass-card border-border/50`
+- **GlobalSearch trigger**: redesigned as accessible `<button>` with kbd shortcut indicator
+- **QuickActions**: dropdown items now have 2-line layout (title + description) with icon circles
+- **AppLayout**: focus mode banner uses `glass-card`
+
+### Fixed
+- Removed hardcoded emerald/teal hex values from sidebar components
+- Consistent `glass-card` usage across header dropdowns and modals
+
+### Quality Gates
+- Type-check: 0 errors
+- Build: frontend + backend passing
+
 ## [VPS Deploy + Lint Fix] - 2026-05-25
 
 ### Added

@@ -119,12 +119,17 @@ const GlobalSearch = memo(function GlobalSearch() {
 
   return (
     <>
-      <div className="relative cursor-pointer" onClick={() => setOpen(true)}>
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <div className="w-full md:w-64 pl-10 pr-4 py-2 text-sm text-muted-foreground border border-border rounded-md bg-background hover:bg-accent/50 transition-colors">
-          Buscar... <kbd className="ml-auto text-xs">⌘K</kbd>
-        </div>
-      </div>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="relative w-full md:w-64 pl-9 pr-3 py-2 text-sm text-muted-foreground border border-border/60 rounded-lg bg-background/80 hover:bg-accent/50 hover:border-border transition-all duration-200 text-left group"
+      >
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/70 group-hover:text-muted-foreground transition-colors" />
+        <span className="truncate">Buscar paciente, agendamento...</span>
+        <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/60 bg-muted border border-border/50 rounded">
+          <span className="text-xs">⌘</span>K
+        </kbd>
+      </button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
           placeholder="Buscar..."
