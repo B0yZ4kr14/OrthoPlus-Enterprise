@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 import { OperacionalBackupService } from "../infrastructure/OperacionalBackupService";
 import { OperacionalDatabaseManager } from "../infrastructure/OperacionalDatabaseManager";
 
@@ -19,44 +20,24 @@ const dbRouter: Router = Router();
 
 dbRouter.use(clinicGuard);
 
-dbRouter.get("/health", async (_req, res) => {
-  try {
-    res.json(await manager.getHealth());
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
+dbRouter.get("/health", asyncHandler(async (_req, res) => {
+  res.json(await manager.getHealth());
+}));
 
-dbRouter.get("/stats", async (_req, res) => {
-  try {
-    res.json(await manager.getStats());
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
+dbRouter.get("/stats", asyncHandler(async (_req, res) => {
+  res.json(await manager.getStats());
+}));
 
-dbRouter.post("/backup", adminOnly, async (_req, res) => {
-  try {
-    res.json(await backup.runBackup());
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
+dbRouter.post("/backup", adminOnly, asyncHandler(async (_req, res) => {
+  res.json(await backup.runBackup());
+}));
 
-dbRouter.get("/backups", async (_req, res) => {
-  try {
-    res.json(await backup.listBackups());
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
+dbRouter.get("/backups", asyncHandler(async (_req, res) => {
+  res.json(await backup.listBackups());
+}));
 
-dbRouter.post("/maintenance", adminOnly, async (_req, res) => {
-  try {
-    res.json(await manager.runMaintenance());
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
+dbRouter.post("/maintenance", adminOnly, asyncHandler(async (_req, res) => {
+  res.json(await manager.runMaintenance());
+}));
 
 export { dbRouter };

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { clinicGuard } from "@/middleware/clinicGuard";
 import {
   applyModuleTemplate,
   getMyModules,
@@ -11,6 +12,9 @@ import {
 } from "../controllers/moduleController";
 
 const modulesRouter: Router = Router();
+
+// Protect all /api/modules/* routes with clinic context validation
+modulesRouter.use(clinicGuard);
 
 // Module Management Routes
 modulesRouter.post("/apply-template", applyModuleTemplate);

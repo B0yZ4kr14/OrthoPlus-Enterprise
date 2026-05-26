@@ -1,0 +1,60 @@
+{
+  "date": "2026-05-26",
+  "commit": "e3f69a5e3",
+  "gitnexus": {
+    "nodes": 41002,
+    "edges": 83326,
+    "clusters": 814,
+    "flows": 288
+  },
+  "frontend": {
+    "typescript_files": 2021,
+    "lines_of_code": 42494,
+    "components_files": 1064,
+    "modules_files": 903,
+    "design_system_files": 54,
+    "ts_expect_error": 686,
+    "as_any": 206,
+    "orphan_components": 30,
+    "unused_design_system_exports": 16,
+    "duplicate_hooks": 16,
+    "raw_html_buttons": 52,
+    "raw_html_selects": 14
+  },
+  "backend": {
+    "modules_total": 41,
+    "routers_total": 40,
+    "endpoints_mapped": 44,
+    "workers_total": 14,
+    "prisma_models_total": 173,
+    "prisma_models_used": 68,
+    "prisma_models_unused": 105,
+    "raw_500_handlers": 140,
+    "api_error_usage": 5,
+    "modules_without_service": 21,
+    "modules_without_repository": 13,
+    "orphan_events": 3,
+    "unregistered_workers": 1
+  },
+  "specs": {
+    "total_specs": 25,
+    "specs_with_artifacts": 25,
+    "specs_fully_implemented": 1,
+    "specs_partially_implemented": 1,
+    "specs_brownfield": 22,
+    "modules_without_spec": 21
+  },
+  "security": {
+    "clinicGuard_coverage": "39/40",
+    "unprotected_routes": ["/api/modules/*"],
+    "sql_injection_risk": "low",
+    "info_disclosure_risk": "medium"
+  },
+  "grades": {
+    "frontend": "B",
+    "backend": "B-",
+    "specs_docs": "C+",
+    "security": "B",
+    "architecture": "B"
+  }
+}
