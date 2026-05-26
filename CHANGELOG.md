@@ -2,6 +2,19 @@
 
 
 
+## [Deploy — Fases 1-3 Premium Redesign] - 2026-05-26
+
+### Deploy
+- VPS: frontend + backend synced and reloaded successfully
+- Backend: PM2 reload `orthoplus-backend` — health check OK (uptime 19s)
+- Frontend: `https://tsiapp.io/OrthoPlus-Enterprise/` — HTTP 200
+- Prisma Client regenerated on VPS
+
+### Quality Gates
+- Type-check: 0 errors
+- Build: frontend + backend passing
+- Lint: 0 errors
+
 ## [UI Premium Redesign — Fase 3 Pilot: Dashboard + Pacientes] - 2026-05-25
 
 ### Added
