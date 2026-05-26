@@ -312,10 +312,10 @@ apps/web/
 | Phase 0 (Research) | 4 | 4 | 0 | 0 | 100% |
 | Phase 1 (Backend) | 8 | 7 | 0 | 1 | 88% |
 | Phase 2 (Frontend Foundation) | 5 | 4 | 0 | 1 | 80% |
-| Phase 3 (User Stories) | 24 | 14 | 2 | 8 | 62% |
+| Phase 3 (User Stories) | 24 | 12 | 1 | 11 | 52% |
 | Phase 4 (Edge Cases) | 3 | 3 | 0 | 0 | 100% |
 | Phase 5 (Quality Gates) | 8 | 5 | 0 | 3 | 63% |
-| **Total** | **52** | **37** | **2** | **13** | **~73%** |
+| **Total** | **52** | **35** | **1** | **16** | **~69%** |
 
 **Key Gaps Identified:**
 - US3 (Acompanhamento/Dashboard de Conversão): Not implemented

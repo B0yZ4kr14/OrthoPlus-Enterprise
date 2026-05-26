@@ -313,10 +313,10 @@ apps/web/
 | Phase 0 (Research) | 4 | 4 | 0 | 0 | 100% |
 | Phase 1 (Backend) | 8 | 7 | 0 | 1 | 88% |
 | Phase 2 (Frontend Foundation) | 5 | 4 | 0 | 1 | 80% |
-| Phase 3 (User Stories) | 24 | 21 | 1 | 2 | 90% |
+| Phase 3 (User Stories) | 24 | 18 | 2 | 4 | 79% |
 | Phase 4 (Edge Cases) | 3 | 0 | 0 | 3 | 0% |
 | Phase 5 (Quality Gates) | 8 | 4 | 0 | 4 | 50% |
-| **Total** | **52** | **40** | **1** | **11** | **~80%** |
+| **Total** | **52** | **37** | **2** | **13** | **~75%** |
 
 **Key Gaps Identified:**
 - US4 (Relatório DRE): Data structure exists but no dedicated UI page

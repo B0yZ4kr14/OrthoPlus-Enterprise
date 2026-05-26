@@ -8,7 +8,7 @@
 - ORC-FR-004: Dashboard de Conversão
 - ORC-FR-005: Versões de Orçamento
 
-**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
+**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-24
 
 ---
 
@@ -94,6 +94,6 @@
 | Phase 1 | 4 | 4 | COMPLETE |
 | Phase 2 | 10 | 10 | COMPLETE |
 | Phase 3 | 5 | 5 | COMPLETE |
-| Phase 4 | 12 | 12 | COMPLETE |
+| Phase 4 | 12 | 10 | 2 PARTIAL (approval portal, parcel generation) |
 | Phase 5 | 7 | 6 | 1 PENDING |
-| **Total** | **38** | **37** | **97% COMPLETE** |
+| **Total** | **38** | **35** | **~92% COMPLETE** |

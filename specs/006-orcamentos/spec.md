@@ -4,7 +4,7 @@
 **Feature Branch**: `[006-orcamentos]`
 **Created**: 2026-05-17
 **Status**: Partially Implemented — Backfilled 2026-05-24
-**Implementation**: ~70% (backend CRUD + workflow + frontend pages; missing: patient portal approval, dashboard conversão, versões, geração contas a receber, E2E tests)
+**Implementation**: ~69% (backend CRUD + workflow + frontend pages; missing: patient portal approval, dashboard conversão, versões, geração contas a receber, E2E tests)
 **Project**: OrthoPlus Enterprise
 **Priority**: P2 — Revenue
 

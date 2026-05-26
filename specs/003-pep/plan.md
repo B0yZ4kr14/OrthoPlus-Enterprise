@@ -309,10 +309,10 @@ apps/web/
 | Phase 0 (Research) | 4 | 4 | 0 | 0 | 100% |
 | Phase 1 (Backend) | 8 | 7 | 0 | 1 | 88% |
 | Phase 2 (Frontend Foundation) | 5 | 4 | 0 | 1 | 80% |
-| Phase 3 (User Stories) | 24 | 20 | 1 | 3 | 85% |
+| Phase 3 (User Stories) | 24 | 17 | 1 | 6 | 73% |
 | Phase 4 (Edge Cases) | 3 | 0 | 0 | 3 | 0% |
 | Phase 5 (Quality Gates) | 8 | 4 | 0 | 4 | 50% |
-| **Total** | **52** | **39** | **1** | **12** | **~77%** |
+| **Total** | **52** | **36** | **1** | **15** | **~71%** |
 
 **Key Gaps Identified:**
 - US4 (Análise IA de Radiografia): Not implemented

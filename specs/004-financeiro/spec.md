@@ -4,7 +4,7 @@
 **Feature Branch**: `[004-financeiro]`
 **Created**: 2026-05-17
 **Status**: Partially Implemented — Backfilled 2026-05-24
-**Implementation**: ~80% (full backend + transactions + caixa + contas receber/pagar + conciliacao + notas fiscais; missing: DRE dedicated page, E2E tests, some edge cases)
+**Implementation**: ~75% (full backend + transactions + caixa + contas receber/pagar + conciliacao + notas fiscais; missing: DRE dedicated page, E2E tests, some edge cases)
 **Project**: OrthoPlus Enterprise
 **Priority**: P1 — Business Viability
 

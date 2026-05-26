@@ -5,115 +5,116 @@ import { InfrastructureError } from "../errors";
 import { UserMapper } from "../mappers/UserMapper";
 import type { Tables } from "@/types/database";
 
+type ProfileWithEmail = Tables<"profiles"> & { email?: string }
+
 export class DbUserRepository implements IUserRepository {
   async findById(id: string): Promise<User | null> {
     try {
-      const data = await apiClient.get<Tables<"profiles">>(`/usuarios/${id}`);
+      const data = await apiClient.get<ProfileWithEmail>(`/usuarios/${id}`);
       if (!data) return null;
-      // @ts-expect-error — TS2339
       return UserMapper.toDomain(data, data.email || "");
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro inesperado ao buscar usuário", error);
+      throw new InfrastructureError(
+        "Erro inesperado ao buscar usuário",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
   async findByEmail(email: string): Promise<User | null> {
     try {
-      const data = await apiClient.get<Tables<"profiles">>(`/auth/users`, {
+      const data = await apiClient.get<unknown>(`/auth/users`, {
         params: { email },
       });
+      const dataRecord = data as Record<string, unknown>
+      const users = (dataRecord.users as ProfileWithEmail[] | undefined) || []
       const authUser =
-        // @ts-expect-error — TS2339
-        data?.users?.find((u: Tables<"profiles">) => u.email === email) ||
-        // @ts-expect-error — TS2339
-        (data && data.email === email ? data : null);
+        users.find((u) => u.email === email) ||
+        (dataRecord && (dataRecord as ProfileWithEmail).email === email
+          ? (data as ProfileWithEmail)
+          : null)
 
-      if (!authUser) return null;
+      if (!authUser) return null
 
       const profile = await apiClient.get<Tables<"profiles">>(
         `/usuarios/${authUser.id}`,
-      );
-      if (!profile) return null;
+      )
+      if (!profile) return null
 
-      return UserMapper.toDomain(profile, email);
+      return UserMapper.toDomain(profile, email)
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar usuário por email",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
 
   async findByClinicId(clinicId: string): Promise<User[]> {
     try {
-      const data = await apiClient.get<Tables<"profiles">>("/usuarios", {
+      const data = await apiClient.get<unknown>("/usuarios", {
         params: { clinicId },
       });
-      // @ts-expect-error — TS2339
-      const profiles = data.users || data || [];
+      const profiles =
+        ((data as Record<string, unknown>).users as ProfileWithEmail[] | undefined) ||
+        (Array.isArray(data) ? (data as ProfileWithEmail[]) : []);
 
-      return profiles.map((profile: Tables<"profiles">) =>
-        // @ts-expect-error — TS2339
+      return profiles.map((profile) =>
         UserMapper.toDomain(profile, profile.email || ""),
       );
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar usuários",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
 
   async findActiveByClinicId(clinicId: string): Promise<User[]> {
     try {
-      const data = await apiClient.get<Tables<"profiles">>("/usuarios", {
+      const data = await apiClient.get<unknown>("/usuarios", {
         params: { clinicId },
       });
-      // @ts-expect-error — TS2339
-      const profiles = data.users || data || [];
+      const profiles =
+        ((data as Record<string, unknown>).users as ProfileWithEmail[] | undefined) ||
+        (Array.isArray(data) ? (data as ProfileWithEmail[]) : []);
 
       return profiles
-        .filter((profile: Tables<"profiles">) => profile.is_active !== false)
-        .map((profile: Tables<"profiles">) =>
-          // @ts-expect-error — TS2339
+        .filter((profile) => profile.is_active !== false)
+        .map((profile) =>
           UserMapper.toDomain(profile, profile.email || ""),
         );
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar usuários ativos",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
 
   async findAdminsByClinicId(clinicId: string): Promise<User[]> {
     try {
-      const data = await apiClient.get<Tables<"profiles">>("/usuarios", {
+      const data = await apiClient.get<unknown>("/usuarios", {
         params: { clinicId },
       });
-      // @ts-expect-error — TS2339
-      const profiles = data.users || data || [];
+      const profiles =
+        ((data as Record<string, unknown>).users as ProfileWithEmail[] | undefined) ||
+        (Array.isArray(data) ? (data as ProfileWithEmail[]) : []);
 
       return profiles
-        .filter((profile: Tables<"profiles">) => profile.app_role === "ADMIN")
-        .map((profile: Tables<"profiles">) =>
-          // @ts-expect-error — TS2339
+        .filter((profile) => profile.app_role === "ADMIN")
+        .map((profile) =>
           UserMapper.toDomain(profile, profile.email || ""),
         );
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar administradores",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
@@ -124,8 +125,10 @@ export class DbUserRepository implements IUserRepository {
       await apiClient.post("/usuarios", data);
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro inesperado ao salvar usuário", error);
+      throw new InfrastructureError(
+        "Erro inesperado ao salvar usuário",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
@@ -137,8 +140,7 @@ export class DbUserRepository implements IUserRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao atualizar usuário",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
@@ -152,8 +154,7 @@ export class DbUserRepository implements IUserRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao deletar usuário",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }

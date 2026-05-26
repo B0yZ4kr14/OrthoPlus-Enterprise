@@ -121,11 +121,13 @@
 | Phase 3 | 5 | 5 | COMPLETE |
 | Phase 4 | 12 | 12 | COMPLETE |
 | Phase 5 | 7 | 6 | 1 PENDING |
-| **Total** | **38** | **37** | **97% COMPLETE** |
+| **Total** | **38** | **37** | **~97% COMPLETE** |
 
 ## Identified Gaps
 
 | Gap | Priority | Description |
 |-----|----------|-------------|
 | GAP-001 | MEDIUM | E2E tests for financeiro flow |
-| GAP-002 | LOW | Advanced reconciliation (conciliacao bancaria) automation |
+| GAP-002 | MEDIUM | Relatório DRE dedicated page (data exists in hook, UI stubbed) |
+| GAP-003 | LOW | Edge cases: pagamento parcial, estorno, caixa negativo |
+| GAP-004 | LOW | Advanced reconciliation (conciliacao bancaria) automation rate not verified |

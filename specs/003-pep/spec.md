@@ -4,7 +4,7 @@
 **Feature Branch**: `[003-pep]`
 **Created**: 2026-05-17
 **Status**: Partially Implemented — Backfilled 2026-05-24
-**Implementation**: ~75% (core backend + odontograma + anamnese + prescricao form + assinatura ICP; missing: IA radiografia, E2E tests, edge cases)
+**Implementation**: ~71% (core backend + odontograma + anamnese + prescricao form + assinatura ICP; missing: IA radiografia, E2E tests, edge cases)
 **Project**: OrthoPlus Enterprise
 **Priority**: P1 — Clinical Core
 

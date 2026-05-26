@@ -51,25 +51,27 @@ export class DbAnexoRepository implements IAnexoRepository {
 
   async findByTipo(prontuarioId: string, tipo: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos", {
+      const data = await apiClient.get<Tables<"pep_anexos">[]>("/pep/anexos", {
         params: { prontuario_id: prontuarioId, tipo_arquivo: tipo },
       });
-      // @ts-expect-error — TS2345
       return (data || []).map(AnexoMapper.toDomain);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar anexos por tipo", error);
+      throw new InfrastructureError(
+        "Erro ao buscar anexos por tipo",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
   async findByClinicId(clinicId: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos");
-      // @ts-expect-error — TS2345
+      const data = await apiClient.get<Tables<"pep_anexos">[]>("/pep/anexos");
       return (data || []).map(AnexoMapper.toDomain);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar anexos da clínica", error);
+      throw new InfrastructureError(
+        "Erro ao buscar anexos da clínica",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
