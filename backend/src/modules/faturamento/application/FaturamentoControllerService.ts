@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FaturamentoRepository } from "@/modules/faturamento/infrastructure/FaturamentoRepository";
+import { IFaturamentoRepository } from "@/modules/faturamento/domain/repositories/IFaturamentoRepository";
 import { logger } from "@/infrastructure/logger";
 
 const createNFeSchema = z.object({
@@ -13,7 +13,11 @@ const createNFeSchema = z.object({
 });
 
 export class FaturamentoControllerService {
-  constructor(private repo: FaturamentoRepository = new FaturamentoRepository()) {}
+  private repo: IFaturamentoRepository
+
+  constructor(repo?: IFaturamentoRepository) {
+    this.repo = repo ?? new (require("@/modules/faturamento/infrastructure/FaturamentoRepository").FaturamentoRepository)()
+  }
 
   async createNFe(clinicId: string, body: unknown) {
     const validatedData = createNFeSchema.parse(body);

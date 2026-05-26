@@ -1,7 +1,8 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Prisma } from "@prisma/client";
+import { IFaturamentoRepository } from "@/modules/faturamento/domain/repositories/IFaturamentoRepository";
 
-export class FaturamentoRepository {
+export class FaturamentoRepository implements IFaturamentoRepository {
   async createNFe(data: Prisma.nfe_recordsCreateInput) {
     return prisma.nfe_records.create({ data });
   }
