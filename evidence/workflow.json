@@ -80,7 +80,10 @@
         "evidence/reports/stakeholder-report.md",
         "evidence/reports/architect-report.md",
         "evidence/reports/dev-report.md",
-        "evidence/reports/sdet-report.md"
+        "evidence/reports/sdet-report.md",
+        {
+          "security": "evidence/report/security.md"
+        }
       ]
     }
   },
