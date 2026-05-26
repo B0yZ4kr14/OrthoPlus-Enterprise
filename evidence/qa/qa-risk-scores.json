@@ -1,0 +1,112 @@
+[
+  {
+    "capability": "BC-001",
+    "coverage_gap": 0.29,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.15,
+    "posture": "release-ready"
+  },
+  {
+    "capability": "BC-002",
+    "coverage_gap": 0.37,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.18,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-003",
+    "coverage_gap": 0.41,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.19,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-004",
+    "coverage_gap": 0.18,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.11,
+    "posture": "release-ready"
+  },
+  {
+    "capability": "BC-005",
+    "coverage_gap": 0.53,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.24,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-006",
+    "coverage_gap": 0.66,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.28,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-007",
+    "coverage_gap": 0.63,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.27,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-008",
+    "coverage_gap": 0.39,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.19,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-009",
+    "coverage_gap": 0.68,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.29,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-010",
+    "coverage_gap": 0.66,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.28,
+    "posture": "needs-work"
+  },
+  {
+    "capability": "BC-011",
+    "coverage_gap": 0.68,
+    "testability": 0.0,
+    "defect_density": null,
+    "change_velocity": null,
+    "environment_gap": 0.33,
+    "composite": 0.29,
+    "posture": "needs-work"
+  }
+]

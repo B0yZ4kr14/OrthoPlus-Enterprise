@@ -1,0 +1,26 @@
+{
+  "Spoofing": {
+    "findings": [],
+    "rationale": "No auth surface; inventory is internal-only"
+  },
+  "Tampering": {
+    "findings": [],
+    "rationale": "Prisma ORM + Zod validation provide integrity; clinicGuard enforces tenant isolation"
+  },
+  "Repudiation": {
+    "findings": [],
+    "rationale": "Winston logging + audit trail in LGPD module provide non-repudiation"
+  },
+  "Information Disclosure": {
+    "findings": [],
+    "rationale": "No sensitive data in this capability"
+  },
+  "Denial of Service": {
+    "findings": [],
+    "rationale": "Express-rate-limit present; nginx rate limiting configured"
+  },
+  "Elevation of Privilege": {
+    "findings": [],
+    "rationale": "RBAC with role checks; admin_tools restricted to ADMIN role"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "systemic_risks": [
+    {
+      "id": "CCR-001",
+      "type": "shared_vulnerability",
+      "description": "Zod validation present but not consistently applied across all analytics endpoints",
+      "affected_capabilities": [
+        "BC-010",
+        "BC-011"
+      ],
+      "path": [
+        "BC-010",
+        "BC-011"
+      ],
+      "control_gap": "Validation family gap in BC-010-01"
+    },
+    {
+      "id": "CCR-002",
+      "type": "cascading_failure",
+      "description": "Compromise of BC-004 auth enables access to all capabilities",
+      "affected_capabilities": [
+        "BC-004",
+        "BC-001",
+        "BC-002",
+        "BC-008"
+      ],
+      "path": [
+        "BC-004"
+      ],
+      "control_gap": "Single auth gateway; no capability-level mutual auth"
+    },
+    {
+      "id": "CCR-003",
+      "type": "privilege_escalation",
+      "description": "Admin role + analytics role \u2192 full data extraction possible",
+      "affected_capabilities": [
+        "BC-004",
+        "BC-010"
+      ],
+      "path": [
+        "BC-004",
+        "BC-010"
+      ],
+      "control_gap": "No separation of duties between admin and analytics access"
+    },
+    {
+      "id": "CCR-004",
+      "type": "weak_trust_boundary",
+      "description": "File upload (BC-008) serves medical images to Clinical (BC-001) without re-auth",
+      "affected_capabilities": [
+        "BC-008",
+        "BC-001"
+      ],
+      "path": [
+        "BC-008",
+        "BC-001"
+      ],
+      "control_gap": "File access relies on URL token only; no capability-level re-validation"
+    }
+  ]
+}

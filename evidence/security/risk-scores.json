@@ -1,0 +1,178 @@
+[
+  {
+    "id": "BC-001",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.95,
+      "exposure": 0.4,
+      "composite": 0.5
+    },
+    "qa": {
+      "composite": 0.15
+    },
+    "unified": 0.34,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-002",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.95,
+      "exposure": 0.4,
+      "composite": 0.5
+    },
+    "qa": {
+      "composite": 0.18
+    },
+    "unified": 0.36,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-003",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.3,
+      "exposure": 0.4,
+      "composite": 0.24
+    },
+    "qa": {
+      "composite": 0.19
+    },
+    "unified": 0.22,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-004",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.85,
+      "exposure": 0.4,
+      "composite": 0.46
+    },
+    "qa": {
+      "composite": 0.11
+    },
+    "unified": 0.3,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-005",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.6,
+      "exposure": 0.4,
+      "composite": 0.36
+    },
+    "qa": {
+      "composite": 0.24
+    },
+    "unified": 0.31,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-006",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.95,
+      "exposure": 0.4,
+      "composite": 0.5
+    },
+    "qa": {
+      "composite": 0.28
+    },
+    "unified": 0.4,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-007",
+    "security": {
+      "likelihood": 0.15,
+      "impact": 0.95,
+      "exposure": 0.4,
+      "composite": 0.54
+    },
+    "qa": {
+      "composite": 0.27
+    },
+    "unified": 0.42,
+    "drivers": [
+      "Security composite 0.54: 1 vulnerabilities"
+    ]
+  },
+  {
+    "id": "BC-008",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.95,
+      "exposure": 0.4,
+      "composite": 0.5
+    },
+    "qa": {
+      "composite": 0.19
+    },
+    "unified": 0.36,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-009",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.95,
+      "exposure": 0.4,
+      "composite": 0.5
+    },
+    "qa": {
+      "composite": 0.29
+    },
+    "unified": 0.41,
+    "drivers": [
+      "Low risk profile"
+    ]
+  },
+  {
+    "id": "BC-010",
+    "security": {
+      "likelihood": 0.15,
+      "impact": 0.95,
+      "exposure": 0.4,
+      "composite": 0.54
+    },
+    "qa": {
+      "composite": 0.28
+    },
+    "unified": 0.42,
+    "drivers": [
+      "Security composite 0.54: 1 vulnerabilities"
+    ]
+  },
+  {
+    "id": "BC-011",
+    "security": {
+      "likelihood": 0.0,
+      "impact": 0.7,
+      "exposure": 0.4,
+      "composite": 0.4
+    },
+    "qa": {
+      "composite": 0.29
+    },
+    "unified": 0.35,
+    "drivers": [
+      "Low risk profile"
+    ]
+  }
+]

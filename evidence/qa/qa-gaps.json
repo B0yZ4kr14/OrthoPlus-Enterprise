@@ -1,0 +1,50 @@
+[
+  {
+    "capability": "BC-001",
+    "gap": "no contract tests for FHIR compatibility"
+  },
+  {
+    "capability": "BC-002",
+    "gap": "no contract tests for payment gateway integration"
+  },
+  {
+    "capability": "BC-003",
+    "gap": "no integration tests for stock alerts"
+  },
+  {
+    "capability": "BC-004",
+    "gap": "no penetration tests for auth endpoints"
+  },
+  {
+    "capability": "BC-005",
+    "gap": "no contract tests for email/SMS provider"
+  },
+  {
+    "capability": "BC-006",
+    "gap": "no integration tests against testnet"
+  },
+  {
+    "capability": "BC-007",
+    "gap": "no mock tests for SEFAZ/ANS APIs"
+  },
+  {
+    "capability": "BC-008",
+    "gap": "no performance tests for image upload"
+  },
+  {
+    "capability": "BC-008",
+    "gap": "no contract tests for AI model API"
+  },
+  {
+    "capability": "BC-009",
+    "gap": "no E2E tests for video flow"
+  },
+  {
+    "capability": "BC-010",
+    "gap": "no tests for AI agent workflows"
+  },
+  {
+    "capability": "BC-011",
+    "gap": "no visual regression tests for PDF output"
+  }
+]

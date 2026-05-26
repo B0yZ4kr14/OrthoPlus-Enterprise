@@ -1,0 +1,60 @@
+{
+  "missing_controls": [
+    {
+      "capability": "BC-006",
+      "control_family": "Encryption",
+      "gap": "No HSM for private key custody"
+    },
+    {
+      "capability": "BC-008",
+      "control_family": "Encryption",
+      "gap": "Encryption-at-rest not verified on MinIO"
+    },
+    {
+      "capability": "BC-010",
+      "control_family": "Validation",
+      "gap": "No field-level access control on analytics queries"
+    }
+  ],
+  "weak_implementations": [
+    {
+      "capability": "BC-007",
+      "control_family": "Monitoring",
+      "gap": "PII masking incomplete in external API error logs"
+    }
+  ],
+  "high_risk_areas": [
+    {
+      "capability": "BC-010",
+      "unified_score": 0.58,
+      "reason": "Reads all sensitive data; validation inconsistently applied"
+    },
+    {
+      "capability": "BC-004",
+      "unified_score": 0.55,
+      "reason": "Auth gateway compromise affects entire system"
+    }
+  ],
+  "compliance_gaps": {
+    "LGPD": [
+      {
+        "capability": "BC-008",
+        "gap": "Medical image retention policy not explicitly enforced"
+      },
+      {
+        "capability": "BC-010",
+        "gap": "Analytics data anonymization not verified"
+      }
+    ],
+    "OWASP-ASVS": [
+      {
+        "requirement": "V2.10",
+        "gap": "No credential rotation policy enforced"
+      },
+      {
+        "requirement": "V4.1",
+        "gap": "Access control not consistently applied on analytics endpoints"
+      }
+    ]
+  }
+}

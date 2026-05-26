@@ -1,0 +1,98 @@
+[
+  {
+    "control_family": "Authentication",
+    "capability": "BC-004",
+    "present": true,
+    "implementation": "JWT with bcrypt hashing, refresh tokens",
+    "consistently_applied": true,
+    "gaps": [],
+    "mitigates": [
+      "T-BC-004-001",
+      "V-001"
+    ]
+  },
+  {
+    "control_family": "Authorization",
+    "capability": "BC-004",
+    "present": true,
+    "implementation": "RBAC with clinicGuard multi-tenant isolation",
+    "consistently_applied": true,
+    "gaps": [],
+    "mitigates": [
+      "T-BC-004-005"
+    ]
+  },
+  {
+    "control_family": "Validation",
+    "capability": "BC-001",
+    "present": true,
+    "implementation": "Zod schema validation on all entry points",
+    "consistently_applied": true,
+    "gaps": [],
+    "mitigates": [
+      "T-BC-001-002"
+    ]
+  },
+  {
+    "control_family": "Validation",
+    "capability": "BC-010",
+    "present": true,
+    "implementation": "Zod schemas",
+    "consistently_applied": false,
+    "gaps": [
+      {
+        "l2": "BC-010-01",
+        "operation": "GET /api/analytics/dashboard-overview",
+        "issue": "No field-level access control on aggregated queries"
+      }
+    ],
+    "mitigates": [
+      "V-003"
+    ]
+  },
+  {
+    "control_family": "Monitoring",
+    "capability": "BC-001",
+    "present": true,
+    "implementation": "Winston structured logging",
+    "consistently_applied": true,
+    "gaps": [],
+    "mitigates": [
+      "T-BC-001-003"
+    ]
+  },
+  {
+    "control_family": "Encryption",
+    "capability": "BC-008",
+    "present": true,
+    "implementation": "TLS in transit; S3 SSE for storage",
+    "consistently_applied": false,
+    "gaps": [
+      {
+        "l2": "BC-008-01",
+        "operation": "file upload",
+        "issue": "Encryption-at-rest not explicitly verified on MinIO deployments"
+      }
+    ],
+    "mitigates": [
+      "V-004"
+    ]
+  },
+  {
+    "control_family": "Encryption",
+    "capability": "BC-006",
+    "present": true,
+    "implementation": "Private keys in environment variables",
+    "consistently_applied": false,
+    "gaps": [
+      {
+        "l2": "BC-006-01",
+        "operation": "wallet creation",
+        "issue": "No HSM or secret manager for key custody"
+      }
+    ],
+    "mitigates": [
+      "V-002"
+    ]
+  }
+]

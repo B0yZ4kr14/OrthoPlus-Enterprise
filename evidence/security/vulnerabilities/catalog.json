@@ -1,0 +1,104 @@
+[
+  {
+    "id": "V-001",
+    "classification": "Potential",
+    "cwe": "CWE-287",
+    "title": "JWT secret rotation not enforced",
+    "capability": "BC-004",
+    "location": {
+      "file": "backend/src/middleware/authMiddleware.ts",
+      "lines": "1-50"
+    },
+    "dependency": null,
+    "exploit_path": "If JWT secret is leaked, all tokens become permanently valid until secret changed",
+    "remediation": "Implement automatic JWT secret rotation with grace period",
+    "linked_threats": [
+      "T-BC-004-001"
+    ]
+  },
+  {
+    "id": "V-002",
+    "classification": "Potential",
+    "cwe": "CWE-522",
+    "title": "Private key storage in environment variables",
+    "capability": "BC-006",
+    "location": {
+      "file": ".env.production.example",
+      "lines": "crypto config"
+    },
+    "dependency": null,
+    "exploit_path": "Environment variables may be logged or exposed in process dumps",
+    "remediation": "Use hardware security module (HSM) or secret manager (HashiCorp Vault, AWS Secrets Manager)",
+    "linked_threats": [
+      "T-BC-006-001"
+    ]
+  },
+  {
+    "id": "V-003",
+    "classification": "Probable",
+    "cwe": "CWE-200",
+    "title": "Analytics reads all sensitive data without field-level masking",
+    "capability": "BC-010",
+    "location": {
+      "file": "backend/src/modules/analytics",
+      "lines": "dashboard queries"
+    },
+    "dependency": null,
+    "exploit_path": "Analytics dashboard may expose PII/health data to users with analytics role",
+    "remediation": "Implement field-level masking in analytics queries based on user role",
+    "linked_threats": [
+      "T-BC-010-003"
+    ]
+  },
+  {
+    "id": "V-004",
+    "classification": "Potential",
+    "cwe": "CWE-319",
+    "title": "Medical images stored without encryption-at-rest check",
+    "capability": "BC-008",
+    "location": {
+      "file": "backend/src/modules/files",
+      "lines": "upload handler"
+    },
+    "dependency": null,
+    "exploit_path": "If S3/MinIO bucket is misconfigured, medical images may be publicly accessible",
+    "remediation": "Enforce server-side encryption (SSE-S3 or SSE-KMS) and validate bucket policies",
+    "linked_threats": [
+      "T-BC-008-003"
+    ]
+  },
+  {
+    "id": "V-005",
+    "classification": "Probable",
+    "cwe": "CWE-703",
+    "title": "Government API errors may leak sensitive data in logs",
+    "capability": "BC-007",
+    "location": {
+      "file": "backend/src/modules/nfe",
+      "lines": "error handling"
+    },
+    "dependency": null,
+    "exploit_path": "SEFAZ error responses containing CNPJ/tax data may be logged without masking",
+    "remediation": "Mask CNPJ/CPF in logs; use structured logging with PII redaction",
+    "linked_threats": [
+      "T-BC-007-003"
+    ]
+  },
+  {
+    "id": "V-006",
+    "classification": "Potential",
+    "cwe": "CWE-400",
+    "title": "No file size limit on radiograph uploads",
+    "capability": "BC-008",
+    "location": {
+      "file": "backend/src/modules/files",
+      "lines": "upload handler"
+    },
+    "dependency": null,
+    "exploit_path": "Large file uploads could cause DoS or storage exhaustion",
+    "remediation": "Add file size limits and scan uploads for malware",
+    "linked_threats": [
+      "T-BC-008-004"
+    ]
+  }
+]

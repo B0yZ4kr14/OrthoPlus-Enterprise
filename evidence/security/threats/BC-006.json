@@ -1,0 +1,54 @@
+{
+  "Spoofing": {
+    "findings": [
+      {
+        "id": "T-BC-006-001",
+        "description": "JWT token replay if refresh token compromised",
+        "likelihood": "low",
+        "impact": "high"
+      }
+    ],
+    "rationale": "JWT-based auth; spoofing requires token compromise"
+  },
+  "Tampering": {
+    "findings": [
+      {
+        "id": "T-BC-006-002",
+        "description": "Financial transaction tampering",
+        "likelihood": "low",
+        "impact": "high"
+      }
+    ],
+    "rationale": "Prisma ORM + Zod validation provide integrity; clinicGuard enforces tenant isolation"
+  },
+  "Repudiation": {
+    "findings": [],
+    "rationale": "Winston logging + audit trail in LGPD module provide non-repudiation"
+  },
+  "Information Disclosure": {
+    "findings": [
+      {
+        "id": "T-BC-006-003",
+        "description": "Crypto Payments data leak via misconfigured access control",
+        "likelihood": "low",
+        "impact": "high"
+      }
+    ],
+    "rationale": "Data sensitivity: financial, authentication"
+  },
+  "Denial of Service": {
+    "findings": [
+      {
+        "id": "T-BC-006-004",
+        "description": "Rate-limit bypass on high-frequency endpoints",
+        "likelihood": "low",
+        "impact": "medium"
+      }
+    ],
+    "rationale": "Express-rate-limit present; nginx rate limiting configured"
+  },
+  "Elevation of Privilege": {
+    "findings": [],
+    "rationale": "RBAC with role checks; admin_tools restricted to ADMIN role"
+  }
+}

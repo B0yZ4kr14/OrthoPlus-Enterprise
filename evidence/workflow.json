@@ -45,7 +45,17 @@
       ]
     },
     "assess": {
-      "status": "pending"
+      "status": "completed",
+      "artifacts": {
+        "threat_models": "evidence/security/threats/BC-*.json (11 files)",
+        "vulnerability_catalog": "evidence/security/vulnerabilities/catalog.json",
+        "control_map": "evidence/security/controls/control-map.json",
+        "risk_scores": "evidence/security/risk-scores.json",
+        "cross_capability_risks": "evidence/security/cross-capability-risks.json",
+        "gaps": "evidence/security/gaps.json",
+        "qa_risk_scores": "evidence/qa/qa-risk-scores.json",
+        "qa_gaps": "evidence/qa/qa-gaps.json"
+      }
     },
     "enrich": {
       "status": "pending"
@@ -86,5 +96,6 @@
     "ndepend_export: not-collected (not applicable to TypeScript/Python stack)",
     "ide_entry_points: not-collected (no IDE entry-point list provided)",
     "report: security report skipped \u2014 assess not done"
-  ]
+  ],
+  "assess_done": true
 }

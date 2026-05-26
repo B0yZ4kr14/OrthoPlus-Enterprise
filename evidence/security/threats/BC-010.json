@@ -1,0 +1,47 @@
+{
+  "Spoofing": {
+    "findings": [],
+    "rationale": "JWT-based auth; spoofing requires token compromise"
+  },
+  "Tampering": {
+    "findings": [
+      {
+        "id": "T-BC-010-002",
+        "description": "Medical record tampering if clinicGuard bypassed",
+        "likelihood": "low",
+        "impact": "high"
+      }
+    ],
+    "rationale": "Prisma ORM + Zod validation provide integrity; clinicGuard enforces tenant isolation"
+  },
+  "Repudiation": {
+    "findings": [],
+    "rationale": "Winston logging + audit trail in LGPD module provide non-repudiation"
+  },
+  "Information Disclosure": {
+    "findings": [
+      {
+        "id": "T-BC-010-003",
+        "description": "Analytics & Intelligence data leak via misconfigured access control",
+        "likelihood": "medium",
+        "impact": "high"
+      }
+    ],
+    "rationale": "Data sensitivity: PII, health, financial"
+  },
+  "Denial of Service": {
+    "findings": [
+      {
+        "id": "T-BC-010-004",
+        "description": "Rate-limit bypass on high-frequency endpoints",
+        "likelihood": "low",
+        "impact": "medium"
+      }
+    ],
+    "rationale": "Express-rate-limit present; nginx rate limiting configured"
+  },
+  "Elevation of Privilege": {
+    "findings": [],
+    "rationale": "RBAC with role checks; admin_tools restricted to ADMIN role"
+  }
+}
