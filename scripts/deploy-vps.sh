@@ -15,7 +15,7 @@ echo "[DEPLOY] VPS Host: $VPS_HOST"
 echo "[DEPLOY] Syncing project files..."
 
 rsync -avz --delete \
-  -e "ssh -F ~/.ssh/config -o StrictHostKeyChecking=no" \
+  -e "ssh -F $HOME/.ssh/config -o StrictHostKeyChecking=no" \
   --exclude='.git' \
   --exclude='node_modules' \
   --exclude='.turbo' \
@@ -31,7 +31,7 @@ rsync -avz --delete \
 REDIS_PASSWORD="${REDIS_PASSWORD:-$(openssl rand -base64 32)}"
 
 echo "[DEPLOY] Installing pnpm and dependencies on VPS..."
-ssh -F ~/.ssh/config -o StrictHostKeyChecking=no "$VPS_TARGET" << REMOTE
+ssh -F $HOME/.ssh/config -o StrictHostKeyChecking=no "$VPS_TARGET" << REMOTE
   set -e
   cd "$REMOTE_DIR"
   
