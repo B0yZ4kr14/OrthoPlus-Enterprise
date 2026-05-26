@@ -2,6 +2,26 @@
 
 
 
+## [UI Premium Redesign — Fase 3 Pilot: Dashboard + Pacientes] - 2026-05-25
+
+### Added
+- **PatientAvatar**: new reusable avatar component with initials extraction (`getInitials`)
+- **PacientesListPage**: inline action buttons (View/Edit) visible on row hover
+- **PacientesListPage**: ChevronRight indicator on patient rows for affordance
+
+### Changed
+- **StatsCard**: larger value text (`text-3xl`), smaller label (`text-[11px]`), tighter spacing
+- **StatsCard**: subtle hover lift (`hover:-translate-y-0.5`) and shadow transition
+- **StatsCard**: trend badge uses emerald/red translucent backgrounds
+- **PacientesListPage**: replaced generic UserCircle icon with `PatientAvatar` (initials-based)
+- **PacientesListPage**: refined typography (smaller metadata text, muted CPF label)
+- **PacientesListPage**: softer hover background (`hover:bg-muted/20`)
+- **PacientesListPage**: status badge now uses `variant="outline"` for subtler appearance
+
+### Quality Gates
+- Type-check: 0 errors
+- Build: frontend + backend passing
+
 ## [UI Premium Redesign — Fase 2 Base Components] - 2026-05-25
 
 ### Added
