@@ -1,4 +1,4 @@
-import { AgendaRepository } from "@/modules/agenda/infrastructure/AgendaRepository"
+import { IAgendaRepository } from "@/modules/agenda/domain/repositories/IAgendaRepository"
 import { AppointmentRepositoryPostgres } from "@/modules/agenda/infrastructure/repositories/AppointmentRepositoryPostgres"
 import { CreateAppointmentCommandHandler } from "@/modules/agenda/application/commands/CreateAppointmentCommand"
 import { eventBus } from "@/shared/events/EventBus"
@@ -16,10 +16,14 @@ import {
 } from "@/modules/agenda/api/schemas"
 
 export class AgendaService {
-  private repo = new AgendaRepository()
+  private repo: IAgendaRepository
   private appointmentRepo = new AppointmentRepositoryPostgres()
   private createHandler = new CreateAppointmentCommandHandler(this.appointmentRepo, eventBus)
   private audit = new AuditLogRepository()
+
+  constructor(repo?: IAgendaRepository) {
+    this.repo = repo ?? new (require("@/modules/agenda/infrastructure/AgendaRepository").AgendaRepository)()
+  }
 
   // ─── Appointments ───
 

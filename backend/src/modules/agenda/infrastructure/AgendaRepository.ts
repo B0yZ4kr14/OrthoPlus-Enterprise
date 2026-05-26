@@ -1,11 +1,14 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Prisma } from "@prisma/client";
+import {
+  IAgendaRepository,
+  AppointmentStatusFilter,
+  AppointmentTimeFilter,
+} from "@/modules/agenda/domain/repositories/IAgendaRepository";
 
-export type AppointmentStatusFilter = string | { notIn: string[] };
+export type { AppointmentStatusFilter, AppointmentTimeFilter };
 
-export type AppointmentTimeFilter = { gte?: string; lte?: string };
-
-export class AgendaRepository {
+export class AgendaRepository implements IAgendaRepository {
   // ── Appointments ──────────────────────────────────────────────────────
 
   async findAppointments(
