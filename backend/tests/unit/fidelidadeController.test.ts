@@ -51,9 +51,7 @@ describe("FidelidadeController", () => {
     it("returns 401 when clinicId is missing", async () => {
       const req: Partial<Request> = { user: undefined, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.getPoints(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ error: "Missing clinic context" });
+      await expect(controller.getPoints(req as Request, res)).rejects.toThrow("Missing clinic context");
     });
 
     it("returns all points for the clinic", async () => {
@@ -85,9 +83,7 @@ describe("FidelidadeController", () => {
       (prisma as any).fidelidade_pontos.findMany.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.getPoints(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: "Internal server error" });
+      await expect(controller.getPoints(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 
@@ -96,15 +92,13 @@ describe("FidelidadeController", () => {
     it("returns 401 when clinicId is missing", async () => {
       const req: Partial<Request> = { user: undefined, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.addPoints(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.addPoints(req as Request, res)).rejects.toThrow("Missing clinic context");
     });
 
     it("returns 400 for invalid input", async () => {
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { patient_id: "not-uuid", pontos: -5 }, query: {}, params: {} };
       const res = mockRes();
-      await controller.addPoints(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.addPoints(req as Request, res)).rejects.toThrow("Invalid input");
     });
 
     it("creates points atomically and returns 201 with accumulated points", async () => {
@@ -150,8 +144,7 @@ describe("FidelidadeController", () => {
       (prisma as any).$transaction.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { patient_id: "550e8400-e29b-41d4-a716-446655440000", pontos: 10 }, query: {}, params: {} };
       const res = mockRes();
-      await controller.addPoints(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.addPoints(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 
@@ -160,8 +153,7 @@ describe("FidelidadeController", () => {
     it("returns 401 when clinicId is missing", async () => {
       const req: Partial<Request> = { user: undefined, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.listBadges(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.listBadges(req as Request, res)).rejects.toThrow("Missing clinic context");
     });
 
     it("returns badges for the clinic", async () => {
@@ -181,8 +173,7 @@ describe("FidelidadeController", () => {
       (prisma as any).fidelidade_badges.findMany.mockRejectedValueOnce(new Error("fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.listBadges(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.listBadges(req as Request, res)).rejects.toThrow("fail");
     });
   });
 
@@ -191,8 +182,7 @@ describe("FidelidadeController", () => {
     it("returns 400 for invalid input", async () => {
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { nome: "" }, query: {}, params: {} };
       const res = mockRes();
-      await controller.createBadge(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.createBadge(req as Request, res)).rejects.toThrow("Invalid input");
     });
 
     it("creates badge and returns 201", async () => {
@@ -212,8 +202,7 @@ describe("FidelidadeController", () => {
     it("returns 401 when clinicId is missing", async () => {
       const req: Partial<Request> = { user: undefined, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.listRecompensas(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.listRecompensas(req as Request, res)).rejects.toThrow("Missing clinic context");
     });
 
     it("filters by ativo query param", async () => {
@@ -232,8 +221,7 @@ describe("FidelidadeController", () => {
       (prisma as any).fidelidade_recompensas.findMany.mockRejectedValueOnce(new Error("fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.listRecompensas(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.listRecompensas(req as Request, res)).rejects.toThrow("fail");
     });
   });
 
@@ -242,8 +230,7 @@ describe("FidelidadeController", () => {
     it("returns 400 for invalid input", async () => {
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { nome: "" }, query: {}, params: {} };
       const res = mockRes();
-      await controller.createRecompensa(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.createRecompensa(req as Request, res)).rejects.toThrow("Invalid input");
     });
 
     it("creates recompensa and returns 201", async () => {
@@ -263,8 +250,7 @@ describe("FidelidadeController", () => {
     it("returns 401 when clinicId is missing", async () => {
       const req: Partial<Request> = { user: undefined, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.listIndicacoes(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.listIndicacoes(req as Request, res)).rejects.toThrow("Missing clinic context");
     });
 
     it("filters by referrer_id", async () => {
@@ -283,8 +269,7 @@ describe("FidelidadeController", () => {
       (prisma as any).fidelidade_indicacoes.findMany.mockRejectedValueOnce(new Error("fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.listIndicacoes(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.listIndicacoes(req as Request, res)).rejects.toThrow("fail");
     });
   });
 
@@ -293,8 +278,7 @@ describe("FidelidadeController", () => {
     it("returns 400 for invalid input", async () => {
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { referrer_id: "bad-id" }, query: {}, params: {} };
       const res = mockRes();
-      await controller.createIndicacao(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.createIndicacao(req as Request, res)).rejects.toThrow("Invalid input");
     });
 
     it("creates indicacao and returns 201", async () => {
@@ -315,8 +299,7 @@ describe("FidelidadeController", () => {
       (prisma as any).fidelidade_indicacoes.create.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { referrer_id: "550e8400-e29b-41d4-a716-446655440000", referred_patient_id: "550e8400-e29b-41d4-a716-446655440001" }, query: {}, params: {} };
       const res = mockRes();
-      await controller.createIndicacao(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.createIndicacao(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 });

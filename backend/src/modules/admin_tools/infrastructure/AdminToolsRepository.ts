@@ -1,27 +1,77 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
+import { IAdminToolsRepository } from "@/modules/admin_tools/domain/repositories/IAdminToolsRepository";
 
-export class AdminToolsRepository {
-  // --- ADRs ---
+export class AdminToolsRepository implements IAdminToolsRepository {
+  async createUser(data: any) {
+    return (prisma as any).users.create({ data });
+  }
+
+  async updateUserRole(email: string, role: string) {
+    return prisma.users.update({
+      where: { email },
+      data: { role },
+    });
+  }
+
+  async getActiveConnections() {
+    return prisma.$queryRaw`SELECT count(*) FROM pg_stat_activity`;
+  }
+
+  async getTableSizes() {
+    return prisma.$queryRaw`
+      SELECT relname as "table",
+             pg_size_pretty(pg_total_relation_size(relid)) As "size"
+      FROM pg_catalog.pg_statio_user_tables
+      ORDER BY pg_total_relation_size(relid) DESC`;
+  }
+
+  async searchPatients(clinicId: string, query: string) {
+    return (prisma as any).patients.findMany({
+      where: {
+        clinic_id: clinicId,
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { cpf: { contains: query } },
+        ],
+      },
+      take: 10,
+    });
+  }
+
+  async searchDentists(clinicId: string, query: string) {
+    return (prisma as any).profiles.findMany({
+      where: {
+        clinic_id: clinicId,
+        app_role: { contains: "DENTIST", mode: "insensitive" },
+        OR: [
+          { full_name: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      take: 10,
+    });
+  }
+
+  // ADR
   async findAdrsByClinic(clinicId: string) {
-    return (prisma as any).architecture_decision_records.findMany({
+    return (prisma as any).adrs.findMany({
       where: { clinic_id: clinicId },
       orderBy: { created_at: "desc" },
     });
   }
 
-  async createAdr(data: Record<string, unknown>) {
-    return (prisma as any).architecture_decision_records.create({ data });
+  async createAdr(data: any) {
+    return (prisma as any).adrs.create({ data });
   }
 
-  // --- Wiki ---
+  // Wiki
   async findWikiPagesByClinic(clinicId: string) {
     return (prisma as any).wiki_pages.findMany({
       where: { clinic_id: clinicId },
-      orderBy: { updated_at: "desc" },
+      orderBy: { created_at: "desc" },
     });
   }
 
-  async createWikiPage(data: Record<string, unknown>) {
+  async createWikiPage(data: any) {
     return (prisma as any).wiki_pages.create({ data });
   }
 
@@ -31,11 +81,8 @@ export class AdminToolsRepository {
     });
   }
 
-  async updateWikiPage(id: string, data: Record<string, unknown>) {
-    return (prisma as any).wiki_pages.update({
-      where: { id },
-      data,
-    });
+  async updateWikiPage(id: string, data: any) {
+    return (prisma as any).wiki_pages.update({ where: { id }, data });
   }
 
   async deleteWikiPage(id: string, clinicId: string) {

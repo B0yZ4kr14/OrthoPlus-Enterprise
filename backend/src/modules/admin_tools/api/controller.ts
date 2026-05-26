@@ -1,8 +1,9 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import axios from "axios";
 import { Request, Response } from "express";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
+import { IAdminToolsRepository } from "@/modules/admin_tools/domain/repositories/IAdminToolsRepository";
+import { AdminToolsRepository } from "@/modules/admin_tools/infrastructure/AdminToolsRepository";
 import { createADRSchema, createWikiPageSchema, updateWikiPageSchema } from "./schemas";
 import { ListAdrsUseCase } from "../application/ListAdrsUseCase";
 import { CreateAdrUseCase } from "../application/CreateAdrUseCase";
@@ -12,6 +13,8 @@ import { UpdateWikiEntryUseCase } from "../application/UpdateWikiEntryUseCase";
 import { DeleteWikiEntryUseCase } from "../application/DeleteWikiEntryUseCase";
 
 export class AdminToolsController {
+  constructor(private repo: IAdminToolsRepository = new AdminToolsRepository()) {}
+
   private listAdrsUC = new ListAdrsUseCase();
   private createAdrUC = new CreateAdrUseCase();
   private listWikiUC = new ListWikiEntriesUseCase();
@@ -104,18 +107,13 @@ export class AdminToolsController {
     }
     try {
       const { email, name } = req.body;
-      const user = await (prisma as any).users.create({
-        data: {
-          email,
-          name,
-          tenantId: "00000000-0000-0000-0000-000000000000",
-        } as any,
+      const user = await this.repo.createUser({
+        email,
+        name,
+        tenantId: "00000000-0000-0000-0000-000000000000",
       });
 
-      await prisma.users.update({
-        where: { email },
-        data: { role: "ROOT" },
-      }).catch(() => {});
+      await this.repo.updateUserRole(email, "ROOT").catch(() => {});
 
       res.status(200).json({ message: "Root user created successfully", user });
       return;
@@ -126,16 +124,12 @@ export class AdminToolsController {
   });
 
   analyzeDatabaseHealth = asyncHandler(async (_req: Request, res: Response) => {
-    const activeConnections = await prisma
-      .$queryRaw`SELECT count(*) FROM pg_stat_activity`
+    const activeConnections = await this.repo
+      .getActiveConnections()
       .catch(() => [{ count: 0 }]);
 
-    const tableSizes = await prisma
-      .$queryRaw`
-        SELECT relname as "table",
-               pg_size_pretty(pg_total_relation_size(relid)) As "size"
-        FROM pg_catalog.pg_statio_user_tables
-        ORDER BY pg_total_relation_size(relid) DESC`
+    const tableSizes = await this.repo
+      .getTableSizes()
       .catch(() => []);
 
     res.status(200).json({
@@ -199,32 +193,14 @@ export class AdminToolsController {
     const results: Record<string, unknown> = {};
 
     if (!entityType || entityType === "patients") {
-      results.patients = await (prisma as any).patients
-        .findMany({
-          where: {
-            clinic_id: clinicId,
-            OR: [
-              { name: { contains: String(query), mode: "insensitive" } },
-              { cpf: { contains: String(query) } },
-            ],
-          },
-          take: 10,
-        })
+      results.patients = await this.repo
+        .searchPatients(clinicId, String(query))
         .catch(() => []);
     }
 
     if (!entityType || entityType === "dentists") {
-      results.dentists = await (prisma as any).profiles
-        .findMany({
-          where: {
-            clinic_id: clinicId,
-            app_role: { contains: "DENTIST", mode: "insensitive" },
-            OR: [
-              { full_name: { contains: String(query), mode: "insensitive" } },
-            ],
-          },
-          take: 10,
-        })
+      results.dentists = await this.repo
+        .searchDentists(clinicId, String(query))
         .catch(() => []);
     }
 

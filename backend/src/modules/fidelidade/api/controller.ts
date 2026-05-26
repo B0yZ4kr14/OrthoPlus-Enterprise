@@ -1,11 +1,8 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
-import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
 import { z } from "zod";
-
-// ---------------------------------------------------------------------------
-// Validation schemas — only whitelisted fields are accepted
-// ---------------------------------------------------------------------------
+import { Errors } from "@/middleware/errorHandler";
+import { IFidelidadeRepository } from "@/modules/fidelidade/domain/repositories/IFidelidadeRepository";
+import { FidelidadeRepository } from "@/modules/fidelidade/infrastructure/FidelidadeRepository";
 
 const addPointsSchema = z.object({
   patient_id: z.string().uuid(),
@@ -40,194 +37,121 @@ const createIndicacaoSchema = z.object({
 });
 
 export class FidelidadeController {
-  // --- Pontos ---
+  constructor(private repo: IFidelidadeRepository = new FidelidadeRepository()) {}
+
   async getPoints(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const { patient_id } = req.query;
-      const where: Record<string, unknown> = { clinic_id: clinicId };
-      if (patient_id) where.patient_id = String(patient_id);
-      const data = await (prisma as any).fidelidade_pontos.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where,
-        orderBy: { created_at: "desc" },
-      });
-      return res.json(data);
-    } catch (error) {
-      logger.error("Error getting points", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const { patient_id } = req.query;
+    const data = await this.repo.findPontosByClinic(clinicId, patient_id ? String(patient_id) : undefined);
+    res.json(data);
   }
 
   async addPoints(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const parsed = addPointsSchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-      }
-
-      const { patient_id, pontos } = parsed.data;
-
-      // Atomic transaction: create point record + update patient balance + check badge unlocks
-      const [pointRecord, , unlockedBadges] = await prisma.$transaction([
-        (prisma as any).fidelidade_pontos.create({
-          data: { ...parsed.data, clinic_id: clinicId },
-        }),
-        (prisma as any).fidelidade_pacientes.upsert({
-          where: { clinic_id_patient_id: { clinic_id: clinicId, patient_id } },
-          update: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date() },
-          create: { clinic_id: clinicId, patient_id, pontos_acumulados: pontos, nivel: "BRONZE" },
-        }),
-        (prisma as any).fidelidade_badges.findMany({
-          where: { clinic_id: clinicId, is_active: true },
-          orderBy: { pontos_necessarios: "asc" },
-        }),
-      ]);
-
-      // Determine newly unlocked badges based on new total
-      const patientRecord = await (prisma as any).fidelidade_pacientes.findUnique({
-        where: { clinic_id_patient_id: { clinic_id: clinicId, patient_id } },
-      });
-      const totalPoints = patientRecord?.pontos_acumulados || pontos;
-      const newlyUnlocked = (unlockedBadges || []).filter(
-        (badge: { pontos_necessarios: number }) => totalPoints >= badge.pontos_necessarios
-      );
-
-      return res.status(201).json({
-        ...pointRecord,
-        pontos_acumulados: totalPoints,
-        badges_desbloqueados: newlyUnlocked.length > 0 ? newlyUnlocked : undefined,
-      });
-    } catch (error) {
-      logger.error("Error adding points", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const parsed = addPointsSchema.safeParse(req.body);
+    if (!parsed.success) {
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
+    }
+
+    const { patient_id, pontos } = parsed.data;
+
+    const [pointRecord, , unlockedBadges] = await this.repo.addPointsTransaction(
+      clinicId,
+      patient_id,
+      pontos,
+      parsed.data,
+    );
+
+    const patientRecord = await this.repo.findPacienteFidelidade(clinicId, patient_id);
+    const totalPoints = patientRecord?.pontos_acumulados || pontos;
+    const newlyUnlocked = (unlockedBadges || []).filter(
+      (badge: { pontos_necessarios: number }) => totalPoints >= badge.pontos_necessarios
+    );
+
+    res.status(201).json({
+      ...pointRecord,
+      pontos_acumulados: totalPoints,
+      badges_desbloqueados: newlyUnlocked.length > 0 ? newlyUnlocked : undefined,
+    });
   }
 
-  // --- Badges ---
   async listBadges(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const where = { clinic_id: clinicId };
-      const data = await (prisma as any).fidelidade_badges.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where,
-        orderBy: { nome: "asc" },
-      });
-      return res.json(data);
-    } catch (error) {
-      logger.error("Error listing badges", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const data = await this.repo.findAllBadgesByClinic(clinicId);
+    res.json(data);
   }
 
   async createBadge(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const parsed = createBadgeSchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-      }
-      const data = await (prisma as any).fidelidade_badges.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId },
-      });
-      return res.status(201).json(data);
-    } catch (error) {
-      logger.error("Error creating badge", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const parsed = createBadgeSchema.safeParse(req.body);
+    if (!parsed.success) {
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
+    }
+    const data = await this.repo.createBadge({ ...parsed.data, clinic_id: clinicId });
+    res.status(201).json(data);
   }
 
-  // --- Recompensas ---
   async listRecompensas(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const { ativo } = req.query;
-      const where: Record<string, unknown> = { clinic_id: clinicId };
-      if (ativo !== undefined) where.ativo = ativo === "true";
-      const data = await (prisma as any).fidelidade_recompensas.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where,
-        orderBy: { pontos_necessarios: "asc" },
-      });
-      return res.json(data);
-    } catch (error) {
-      logger.error("Error listing recompensas", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const { ativo } = req.query;
+    const data = await this.repo.findRecompensasByClinic(
+      clinicId,
+      ativo !== undefined ? ativo === "true" : undefined,
+    );
+    res.json(data);
   }
 
   async createRecompensa(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const parsed = createRecompensaSchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-      }
-      const data = await (prisma as any).fidelidade_recompensas.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId },
-      });
-      return res.status(201).json(data);
-    } catch (error) {
-      logger.error("Error creating recompensa", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const parsed = createRecompensaSchema.safeParse(req.body);
+    if (!parsed.success) {
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
+    }
+    const data = await this.repo.createRecompensa({ ...parsed.data, clinic_id: clinicId });
+    res.status(201).json(data);
   }
 
-  // --- Indicações ---
   async listIndicacoes(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const { referrer_id } = req.query;
-      const where: Record<string, unknown> = { clinic_id: clinicId };
-      if (referrer_id) where.referrer_id = String(referrer_id);
-      const data = await (prisma as any).fidelidade_indicacoes.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where,
-        orderBy: { created_at: "desc" },
-      });
-      return res.json(data);
-    } catch (error) {
-      logger.error("Error listing indicacoes", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const { referrer_id } = req.query;
+    const data = await this.repo.findIndicacoesByClinic(
+      clinicId,
+      referrer_id ? String(referrer_id) : undefined,
+    );
+    res.json(data);
   }
 
   async createIndicacao(req: Request, res: Response) {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) {
-        return res.status(401).json({ error: "Missing clinic context" });
-      }
-      const parsed = createIndicacaoSchema.safeParse(req.body);
-      if (!parsed.success) {
-        return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-      }
-      const data = await (prisma as any).fidelidade_indicacoes.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        data: { ...parsed.data, clinic_id: clinicId },
-      });
-      return res.status(201).json(data);
-    } catch (error) {
-      logger.error("Error creating indicacao", { error });
-      return res.status(500).json({ error: "Internal server error" });
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
     }
+    const parsed = createIndicacaoSchema.safeParse(req.body);
+    if (!parsed.success) {
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
+    }
+    const data = await this.repo.createIndicacao({ ...parsed.data, clinic_id: clinicId });
+    res.status(201).json(data);
   }
 }

@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 import { Router } from "express";
 import { FidelidadeController } from "./controller";
 
@@ -18,19 +19,19 @@ router.get("/", (_req, res) => {
 });
 
 // Pontos
-router.get("/pontos", (_req, res) => controller.getPoints(_req, res));
-router.post("/pontos", (_req, res) => controller.addPoints(_req, res));
+router.get("/pontos", asyncHandler(controller.getPoints.bind(controller)));
+router.post("/pontos", asyncHandler(controller.addPoints.bind(controller)));
 
 // Badges
-router.get("/badges", (_req, res) => controller.listBadges(_req, res));
-router.post("/badges", (_req, res) => controller.createBadge(_req, res));
+router.get("/badges", asyncHandler(controller.listBadges.bind(controller)));
+router.post("/badges", asyncHandler(controller.createBadge.bind(controller)));
 
 // Recompensas
-router.get("/recompensas", (_req, res) => controller.listRecompensas(_req, res));
-router.post("/recompensas", (_req, res) => controller.createRecompensa(_req, res));
+router.get("/recompensas", asyncHandler(controller.listRecompensas.bind(controller)));
+router.post("/recompensas", asyncHandler(controller.createRecompensa.bind(controller)));
 
 // Indicações
-router.get("/indicacoes", (_req, res) => controller.listIndicacoes(_req, res));
-router.post("/indicacoes", (_req, res) => controller.createIndicacao(_req, res));
+router.get("/indicacoes", asyncHandler(controller.listIndicacoes.bind(controller)));
+router.post("/indicacoes", asyncHandler(controller.createIndicacao.bind(controller)));
 
 export default router;
