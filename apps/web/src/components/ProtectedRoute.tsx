@@ -23,8 +23,14 @@ export function ProtectedRoute({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background">
+        <div className="relative">
+          <Loader2 className="h-10 w-10 animate-spin text-interactive" />
+          <div className="absolute inset-0 h-10 w-10 rounded-full bg-interactive/10 animate-pulse" />
+        </div>
+        <p className="text-sm text-muted-foreground animate-pulse">
+          Carregando...
+        </p>
       </div>
     );
   }

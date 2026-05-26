@@ -56,11 +56,11 @@ export function DashboardHeader({
       <HotkeysHelp />
       <header
         className={cn(
-          "sticky top-0 z-50 w-full bg-card/80 backdrop-blur-xl border-b border-border/50 shadow-sm",
+          "sticky top-0 z-50 w-full bg-card/80 backdrop-blur-xl border-b border-border/50",
           className,
         )}
       >
-        <div className="flex items-center justify-between h-16 px-6 gap-6">
+        <div className="flex items-center justify-between h-[60px] px-6 gap-6">
           {/* Mobile menu button - shown only on mobile */}
           {onMenuClick && (
             <Button
@@ -185,7 +185,7 @@ export function DashboardHeader({
           </div>
         </div>
 
-        <div className="px-6 py-2 border-t border-border/50">
+        <div className="px-6 py-1.5 border-t border-border/30 bg-muted/20">
           <Breadcrumbs />
         </div>
       </header>
