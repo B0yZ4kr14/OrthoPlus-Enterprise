@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Inventario,
@@ -35,9 +35,9 @@ export function InventarioForm({
     formState: { errors },
     setValue,
     watch,
-  } = useForm<Inventario>({
-    resolver: zodResolver(inventarioSchema) as any,
-    defaultValues: (inventario as any) || {
+  } = useForm<Inventario, any, Inventario>({
+    resolver: zodResolver(inventarioSchema) as Resolver<Inventario>,
+    defaultValues: inventario || {
       numero: `INV-${format(new Date(), "yyyy")}-${String(Math.floor(Math.random() * 1000)).padStart(3, "0")}`,
       data: format(new Date(), "yyyy-MM-dd"),
       status: "PLANEJADO",

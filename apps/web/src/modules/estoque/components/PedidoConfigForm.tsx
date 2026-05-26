@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
@@ -38,9 +38,8 @@ export function PedidoConfigForm({
     formState: { errors },
     watch,
     setValue,
-  } = useForm<PedidoConfig>({
-    // @ts-expect-error — TS2322
-    resolver: zodResolver(pedidoConfigSchema),
+  } = useForm<PedidoConfig, any, PedidoConfig>({
+    resolver: zodResolver(pedidoConfigSchema) as Resolver<PedidoConfig>,
     defaultValues: config || {
       gerarAutomaticamente: true,
       diasEntregaEstimados: 7,
@@ -52,7 +51,7 @@ export function PedidoConfigForm({
 
   return (
     <Card className="p-6">
-      {/* @ts-expect-error — TS2345 */}
+      
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
           <div>

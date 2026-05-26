@@ -68,24 +68,20 @@ export const OdontogramaAIAnalysis = ({
     setSelectedSuggestions(new Set());
 
     try {
-      const data = await apiClient.post<unknown>("/ia/analyze-odontogram", {
+      const data = await apiClient.post<Record<string, unknown>>("/ia/analyze-odontogram", {
         prontuarioId,
       });
 
-      // @ts-expect-error — TS18046
-      if (data.suggestions && data.suggestions.length > 0) {
-        // @ts-expect-error — TS18046
-        setSuggestions(data.suggestions);
-        // @ts-expect-error — TS18046
-        setPatientName(data.patient_name);
+      const suggestions = data.suggestions as unknown[];
+      if (suggestions && suggestions.length > 0) {
+        setSuggestions(suggestions as TreatmentSuggestion[]);
+        setPatientName(String(data.patient_name || ""));
         toast.success(
-          // @ts-expect-error — TS18046
-          `Análise concluída! ${data.suggestions.length} sugestões de tratamento geradas.`,
+          `Análise concluída! ${suggestions.length} sugestões de tratamento geradas.`,
         );
       } else {
         toast.info(
-          // @ts-expect-error — TS18046
-          data.message || "Nenhuma sugestão de tratamento necessária.",
+          String(data.message || "Nenhuma sugestão de tratamento necessária."),
         );
       }
     } catch (error) {
@@ -145,14 +141,13 @@ export const OdontogramaAIAnalysis = ({
       onTreatmentCreate?.(selectedItems);
 
       // Depois agendar as consultas automaticamente
-      const data = await apiClient.post<unknown>("/ia/schedule-appointments", {
+      const data = await apiClient.post<Record<string, unknown>>("/ia/schedule-appointments", {
         treatments: selectedItems,
         patientId: patientId,
         dentistId: "mock-dentist-id", // Em produção, seria selecionado pelo usuário
       });
 
-      // @ts-expect-error — TS18046
-      toast.success(data.message || "Consultas agendadas automaticamente!");
+      toast.success(String(data.message || "Consultas agendadas automaticamente!"));
       setSuggestions([]);
       setSelectedSuggestions(new Set());
     } catch (error) {
@@ -269,8 +264,7 @@ export const OdontogramaAIAnalysis = ({
                       </TableCell>
                       <TableCell>
                         <Badge
-                          // @ts-expect-error — TS2322
-                          variant={config.color as unknown}
+                          variant={config.color as any}
                           className="gap-1"
                         >
                           <Icon className="h-3 w-3" />

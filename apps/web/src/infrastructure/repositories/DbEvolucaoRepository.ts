@@ -29,8 +29,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções do tratamento",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -45,8 +44,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções do prontuário",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -59,8 +57,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções da clínica",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -85,8 +82,7 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar evoluções por período",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }

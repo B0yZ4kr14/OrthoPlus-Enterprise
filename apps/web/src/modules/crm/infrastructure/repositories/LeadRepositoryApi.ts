@@ -19,8 +19,7 @@ export class LeadRepositoryApi implements ILeadRepository {
     try {
       const data = await apiClient.get<Record<string, any>>(`/crm/leads/${id}`);
       if (!data) return null;
-      // @ts-expect-error — TS2345
-      return LeadMapper.toDomain(data);
+      return LeadMapper.toDomain(data as Parameters<typeof LeadMapper.toDomain>[0]);
     } catch (error: unknown) {
       const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
       if (_e.response?.status === 404 || _e.response?.status === 406)

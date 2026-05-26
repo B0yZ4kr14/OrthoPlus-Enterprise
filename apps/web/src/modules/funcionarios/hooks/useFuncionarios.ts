@@ -52,20 +52,15 @@ function mapRowToFuncionario(row: Record<string, any>): Funcionario {
     telefone: row.telefone,
     celular: row.celular,
     email: row.email,
-    // @ts-expect-error — TS2322
-    endereco: row.endereco as unknown,
-    // @ts-expect-error — TS2322
-    cargo: row.cargo as unknown,
+    endereco: row.endereco as any,
+    cargo: row.cargo as any,
     dataAdmissao: row.data_admissao,
     salario: Number(row.salario),
-    // @ts-expect-error — TS2322
-    permissoes: row.permissoes as unknown,
-    // @ts-expect-error — TS2322
-    horarioTrabalho: row.horario_trabalho as unknown,
+    permissoes: row.permissoes as any,
+    horarioTrabalho: row.horario_trabalho as any,
     diasTrabalho: row.dias_trabalho,
     observacoes: row.observacoes || undefined,
-    // @ts-expect-error — TS2322
-    status: row.status as unknown,
+    status: row.status as any,
     senhaAcesso: undefined,
     avatar_url: row.avatar_url || undefined,
     createdAt: row.created_at,

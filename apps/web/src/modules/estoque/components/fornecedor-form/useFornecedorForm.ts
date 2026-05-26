@@ -1,5 +1,5 @@
 // cspell:disable
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { fornecedorSchema, type Fornecedor } from "../../types/estoque.types";
 
@@ -33,14 +33,13 @@ const defaultValues: Partial<Fornecedor> = {
 };
 
 export function useFornecedorForm({ fornecedor, onSubmit }: UseFornecedorFormProps) {
-  const form = useForm<Fornecedor>({
-    // @ts-expect-error — TS2322 schema type mismatch
-    resolver: zodResolver(fornecedorSchema),
+  const form = useForm<Fornecedor, any, Fornecedor>({
+    resolver: zodResolver(fornecedorSchema) as Resolver<Fornecedor>,
     defaultValues: fornecedor || defaultValues,
   });
 
    
-  const handleSubmit = form.handleSubmit(onSubmit as any);
+  const handleSubmit = form.handleSubmit(onSubmit);
   const apiEnabled = form.watch("apiEnabled");
   const apiAuthType = form.watch("apiAuthType");
 

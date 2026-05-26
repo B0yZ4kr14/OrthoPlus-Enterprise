@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
@@ -62,9 +62,8 @@ export function OrcamentoForm({
     formState: { errors },
     setValue,
     watch,
-  } = useForm<OrcamentoFormData>({
-    // @ts-expect-error — TS2322
-    resolver: zodResolver(orcamentoSchema),
+  } = useForm<OrcamentoFormData, any, OrcamentoFormData>({
+    resolver: zodResolver(orcamentoSchema) as Resolver<OrcamentoFormData>,
     defaultValues: {
       ...initialData,
       tipo_plano: initialData?.tipo_plano || "BASICO",
@@ -113,7 +112,6 @@ export function OrcamentoForm({
   };
 
   return (
-    // @ts-expect-error — TS2345
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
@@ -133,8 +131,7 @@ export function OrcamentoForm({
         <div className="space-y-2">
           <Label htmlFor="tipo_plano">Tipo de Plano *</Label>
           <Select
-            // @ts-expect-error — TS2345
-            onValueChange={(value) => setValue("tipo_plano", value as unknown)}
+            onValueChange={(value) => setValue("tipo_plano", value as "BASICO" | "INTERMEDIARIO" | "PREMIUM")}
             defaultValue={watch("tipo_plano")}
           >
             <SelectTrigger>

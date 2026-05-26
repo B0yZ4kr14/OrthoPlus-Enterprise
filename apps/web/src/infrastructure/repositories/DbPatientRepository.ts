@@ -16,8 +16,7 @@ export class DbPatientRepository implements IPatientRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar paciente",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -33,8 +32,7 @@ export class DbPatientRepository implements IPatientRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar pacientes",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -46,8 +44,7 @@ export class DbPatientRepository implements IPatientRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar pacientes ativos",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -73,8 +70,7 @@ export class DbPatientRepository implements IPatientRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao salvar paciente",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -89,8 +85,7 @@ export class DbPatientRepository implements IPatientRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao atualizar paciente",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -102,8 +97,7 @@ export class DbPatientRepository implements IPatientRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao deletar paciente",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -118,8 +112,7 @@ export class DbPatientRepository implements IPatientRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar pacientes por risco",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }

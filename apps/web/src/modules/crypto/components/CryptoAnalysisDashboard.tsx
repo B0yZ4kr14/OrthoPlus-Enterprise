@@ -104,19 +104,13 @@ export function CryptoAnalysisDashboard({
 
       if (candleData && candleData.length > 0) {
         setCandlestickData(
-          candleData.map((c: unknown) => ({
-            // @ts-expect-error — TS18046
-            time: c.open_time,
-            // @ts-expect-error — TS18046
-            open: parseFloat(c.open_price),
-            // @ts-expect-error — TS18046
-            high: parseFloat(c.high_price),
-            // @ts-expect-error — TS18046
-            low: parseFloat(c.low_price),
-            // @ts-expect-error — TS18046
-            close: parseFloat(c.close_price),
-            // @ts-expect-error — TS18046
-            volume: parseFloat(c.volume),
+          candleData.map((c: Record<string, unknown>) => ({
+            time: String(c.open_time),
+            open: parseFloat(String(c.open_price)),
+            high: parseFloat(String(c.high_price)),
+            low: parseFloat(String(c.low_price)),
+            close: parseFloat(String(c.close_price)),
+            volume: parseFloat(String(c.volume)),
           })),
         );
       } else {

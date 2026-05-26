@@ -390,15 +390,13 @@ export function useFinanceiro() {
         ...c,
         type: "RECEITA" as const,
         status: c.status?.toUpperCase() as unknown,
-        // @ts-expect-error — TS2571
-        category: (c as unknown).categoria || "OUTROS",
+        category: (c as Record<string, unknown>).categoria || "OUTROS",
       })),
       ...contasPagar.map((c) => ({
         ...c,
         type: "DESPESA" as const,
         status: c.status?.toUpperCase() as unknown,
-        // @ts-expect-error — TS2571
-        category: (c as unknown).categoria || "OUTROS",
+        category: (c as Record<string, unknown>).categoria || "OUTROS",
       })),
     ].sort(
       (a, b) =>
@@ -407,13 +405,10 @@ export function useFinanceiro() {
     ),
 
     addTransaction: async (transaction: unknown) => {
-      // @ts-expect-error — TS18046
-      if (transaction.tipo === "RECEITA") {
-        // @ts-expect-error — TS2345
-        return addContaReceber(transaction);
+      if ((transaction as Record<string, unknown>).tipo === "RECEITA") {
+        return addContaReceber(transaction as Parameters<typeof addContaReceber>[0]);
       } else {
-        // @ts-expect-error — TS2345
-        return addContaPagar(transaction);
+        return addContaPagar(transaction as Parameters<typeof addContaPagar>[0]);
       }
     },
 
@@ -421,11 +416,9 @@ export function useFinanceiro() {
       // Tentar atualizar em contas a receber primeiro
       const isReceber = contasReceber.some((c) => c.id === id);
       if (isReceber) {
-        // @ts-expect-error — TS2345
-        return updateContaReceber(id, updates);
+        return updateContaReceber(id, updates as Parameters<typeof updateContaReceber>[1]);
       } else {
-        // @ts-expect-error — TS2345
-        return updateContaPagar(id, updates);
+        return updateContaPagar(id, updates as Parameters<typeof updateContaPagar>[1]);
       }
     },
 
@@ -520,8 +513,7 @@ export function useFinanceiro() {
       contasReceber
         .filter((c) => c.status === "pago")
         .forEach((c) => {
-          // @ts-expect-error — TS2571
-          const category = (c as unknown).categoria || "OUTROS";
+          const category = String((c as Record<string, unknown>).categoria || "OUTROS");
           categories[category] =
             (categories[category] || 0) + (c.valor_pago || 0);
         });

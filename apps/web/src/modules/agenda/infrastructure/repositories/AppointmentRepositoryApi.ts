@@ -7,19 +7,17 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
   async save(appointment: Appointment): Promise<Appointment> {
     const data = AppointmentMapper.toPersistence(appointment);
     const result = await apiClient.post<unknown>("/agenda/appointments", data);
-    // @ts-expect-error — TS2345
-    return AppointmentMapper.toDomain(result);
+    return AppointmentMapper.toDomain(result as Parameters<typeof AppointmentMapper.toDomain>[0]);
   }
 
   async findById(id: string): Promise<Appointment | null> {
     try {
       const data = await apiClient.get<Record<string, any>>(`/agenda/appointments/${id}`);
-      // @ts-expect-error — TS2345
-      return data ? AppointmentMapper.toDomain(data) : null;
+      return data ? AppointmentMapper.toDomain(data as Parameters<typeof AppointmentMapper.toDomain>[0]) : null;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      // @ts-expect-error — TS2339
-      if ((error as { response?: { status?: number } })?.response?.status === 404 || error?.response?.status === 400)
+      const err = error as { response?: { status?: number } };
+      if (err?.response?.status === 404 || err?.response?.status === 400)
         return null;
       throw new Error(`Erro ao buscar agendamento: ${_e.message}`);
     }
@@ -29,24 +27,21 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
     const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
       params: { clinic_id: clinicId },
     });
-    // @ts-expect-error — TS2345
-    return data.map(AppointmentMapper.toDomain);
+    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
   }
 
   async findByPatient(patientId: string): Promise<Appointment[]> {
     const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
       params: { patient_id: patientId },
     });
-    // @ts-expect-error — TS2345
-    return data.map(AppointmentMapper.toDomain);
+    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
   }
 
   async findByDentist(dentistId: string): Promise<Appointment[]> {
     const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
       params: { dentist_id: dentistId },
     });
-    // @ts-expect-error — TS2345
-    return data.map(AppointmentMapper.toDomain);
+    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
   }
 
   async findByDateRange(

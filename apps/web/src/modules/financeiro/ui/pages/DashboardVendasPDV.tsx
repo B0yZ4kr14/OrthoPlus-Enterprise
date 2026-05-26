@@ -100,8 +100,7 @@ export default function DashboardVendasPDV() {
     ) || {};
 
   const vendedoresData = Object.values(vendasPorVendedor)
-    // @ts-expect-error — TS18046
-    .sort((a: unknown, b: unknown) => b.total - a.total)
+    .sort((a, b) => b.total - a.total)
     .slice(0, 5);
 
   // Produtos mais vendidos
@@ -125,8 +124,7 @@ export default function DashboardVendasPDV() {
     ) || {};
 
   const produtosData = Object.values(produtosMaisVendidos)
-    // @ts-expect-error — TS18046
-    .sort((a: unknown, b: unknown) => b.quantidade - a.quantidade)
+    .sort((a, b) => b.quantidade - a.quantidade)
     .slice(0, 10);
 
   // Vendas por hora
@@ -145,10 +143,8 @@ export default function DashboardVendasPDV() {
     ) || {};
 
   const horariosData = Object.values(vendasPorHora).sort(
-    (a: unknown, b: unknown) => {
-      // @ts-expect-error — TS18046
+    (a, b) => {
       const horaA = parseInt(a.hora.split(":")[0]);
-      // @ts-expect-error — TS18046
       const horaB = parseInt(b.hora.split(":")[0]);
       return horaA - horaB;
     },
@@ -158,13 +154,11 @@ export default function DashboardVendasPDV() {
   const formasPagamento =
     vendas?.reduce(
       (acc, venda) => {
-        venda.pdv_pagamentos?.forEach((pag: unknown) => {
-          // @ts-expect-error — TS18046
-          const forma = pag.forma_pagamento;
+        venda.pdv_pagamentos?.forEach((pag: Record<string, unknown>) => {
+          const forma = String(pag.forma_pagamento);
           if (!acc[forma]) {
             acc[forma] = { name: forma, value: 0 };
           }
-          // @ts-expect-error — TS18046
           acc[forma].value += Number(pag.valor);
         });
         return acc;

@@ -9,8 +9,7 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
   async save(schedule: DentistSchedule): Promise<DentistSchedule> {
     const data = DentistScheduleMapper.toPersistence(schedule);
     const result = await apiClient.post<unknown>(this.basePath, data);
-    // @ts-expect-error — TS2345
-    return DentistScheduleMapper.toDomain(result);
+    return DentistScheduleMapper.toDomain(result as Parameters<typeof DentistScheduleMapper.toDomain>[0]);
   }
 
   async findById(id: string): Promise<DentistSchedule | null> {
@@ -20,8 +19,8 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
       return data ? DentistScheduleMapper.toDomain(data) : null;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      // @ts-expect-error — TS2339
-      if ((error as { response?: { status?: number } })?.response?.status === 404 || error?.response?.status === 400)
+      const err = error as { response?: { status?: number } };
+      if (err?.response?.status == 404 || err?.response?.status == 400)
         return null;
       throw new Error(`Erro ao buscar horário: ${_e.message}`);
     }
@@ -31,8 +30,7 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
     const data = await apiClient.get<Record<string, any>[]>(this.basePath, {
       params: { dentist_id: dentistId, is_active: true },
     });
-    // @ts-expect-error — TS2345
-    return data.map(DentistScheduleMapper.toDomain);
+    return data.map((d) => DentistScheduleMapper.toDomain(d as Parameters<typeof DentistScheduleMapper.toDomain>[0]));
   }
 
   async findByDentistAndDayOfWeek(
@@ -60,8 +58,7 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
     const data = await apiClient.get<Record<string, any>[]>(this.basePath, {
       params: { clinic_id: clinicId, is_active: true },
     });
-    // @ts-expect-error — TS2345
-    return data.map(DentistScheduleMapper.toDomain);
+    return data.map((d) => DentistScheduleMapper.toDomain(d as Parameters<typeof DentistScheduleMapper.toDomain>[0]));
   }
 
   async update(schedule: DentistSchedule): Promise<DentistSchedule> {
@@ -70,8 +67,7 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
       `${this.basePath}/${schedule.id}`,
       data,
     );
-    // @ts-expect-error — TS2345
-    return DentistScheduleMapper.toDomain(result);
+    return DentistScheduleMapper.toDomain(result as Parameters<typeof DentistScheduleMapper.toDomain>[0]);
   }
 
   async delete(id: string): Promise<void> {

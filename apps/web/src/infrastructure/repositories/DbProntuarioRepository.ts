@@ -33,8 +33,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário do paciente",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -48,8 +47,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuários da clínica",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -73,8 +71,7 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário por número",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }

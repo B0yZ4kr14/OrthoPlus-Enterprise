@@ -49,17 +49,12 @@ export const UserManagementTab = () => {
 
       // Buscar roles de cada usuário
       // Backend retorna profiles com roles já incluídos
-      const usersWithRoles = (profiles || []).map((profile: unknown) => ({
-        // @ts-expect-error — TS18046
-        id: profile.id,
-        // @ts-expect-error — TS18046
-        full_name: profile.full_name,
-        // @ts-expect-error — TS18046
-        role: profile.role || "MEMBER",
-        // @ts-expect-error — TS18046
-        clinic_id: profile.clinic_id,
-        // @ts-expect-error — TS18046
-        created_at: profile.created_at,
+      const usersWithRoles = (profiles || []).map((profile: Record<string, unknown>) => ({
+        id: String(profile.id),
+        full_name: String(profile.full_name),
+        role: String(profile.role || "MEMBER") as "ADMIN" | "MEMBER" | "ROOT",
+        clinic_id: String(profile.clinic_id),
+        created_at: String(profile.created_at),
       }))
 
       setUsers(usersWithRoles)
@@ -79,11 +74,9 @@ export const UserManagementTab = () => {
 
       // Inicializar permissões
       const initialPermissions: ModulePermission[] = (data || []).map(
-        (module: unknown) => ({
-          // @ts-expect-error — TS18046
-          module_key: module.module_key,
-          // @ts-expect-error — TS18046
-          module_name: module.name,
+        (module: Record<string, unknown>) => ({
+          module_key: String(module.module_key),
+          module_name: String(module.name),
           can_view: false,
           can_edit: false,
           can_delete: false,
@@ -130,10 +123,8 @@ export const UserManagementTab = () => {
           .filter((p) => p.can_view || p.can_edit || p.can_delete)
           .map((p) => ({
             user_id: newUser.id,
-            module_catalog_id: modules.find(
-              // @ts-expect-error — TS18046
-              (m) => m.module_key === p.module_key,
-            // @ts-expect-error — TS2339
+            module_catalog_id: (modules as Record<string, unknown>[]).find(
+              (m) => String(m.module_key) === p.module_key,
             )?.id,
             can_view: p.can_view,
             can_edit: p.can_edit,

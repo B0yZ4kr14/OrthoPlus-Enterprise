@@ -25,8 +25,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
     try {
       const data = await apiClient.get<Record<string, any>>(`/crm/atividades/${id}`);
       if (!data) return null;
-      // @ts-expect-error — TS2345
-      return AtividadeMapper.toDomain(data);
+      return AtividadeMapper.toDomain(data as Parameters<typeof AtividadeMapper.toDomain>[0]);
     } catch (error: unknown) {
       const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
       if (_e.response?.status === 404 || _e.response?.status === 406)

@@ -9,8 +9,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
   async save(blockedTime: BlockedTime): Promise<BlockedTime> {
     const data = BlockedTimeMapper.toPersistence(blockedTime);
     const result = await apiClient.post<unknown>(this.basePath, data);
-    // @ts-expect-error — TS2345
-    return BlockedTimeMapper.toDomain(result);
+    return BlockedTimeMapper.toDomain(result as Parameters<typeof BlockedTimeMapper.toDomain>[0]);
   }
 
   async findById(id: string): Promise<BlockedTime | null> {
@@ -33,8 +32,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         active: true,
       },
     });
-    // @ts-expect-error — TS2345
-    return data.map(BlockedTimeMapper.toDomain);
+    return data.map((d) => BlockedTimeMapper.toDomain(d as Parameters<typeof BlockedTimeMapper.toDomain>[0]));
   }
 
   async findByDentistAndDateRange(
@@ -49,8 +47,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         end_date: endDate.toISOString(),
       },
     });
-    // @ts-expect-error — TS2345
-    return data.map(BlockedTimeMapper.toDomain);
+    return data.map((d) => BlockedTimeMapper.toDomain(d as Parameters<typeof BlockedTimeMapper.toDomain>[0]));
   }
 
   async findByClinicId(clinicId: string): Promise<BlockedTime[]> {
@@ -60,8 +57,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         active: true,
       },
     });
-    // @ts-expect-error — TS2345
-    return data.map(BlockedTimeMapper.toDomain);
+    return data.map((d) => BlockedTimeMapper.toDomain(d as Parameters<typeof BlockedTimeMapper.toDomain>[0]));
   }
 
   async delete(id: string): Promise<void> {

@@ -39,8 +39,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulo por chave",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -55,8 +54,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulos da clínica",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -74,8 +72,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulos ativos",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -91,8 +88,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao buscar módulos por categoria",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -120,8 +116,7 @@ export class DbModuleRepository implements IModuleRepository {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
         "Erro inesperado ao desativar módulo",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
