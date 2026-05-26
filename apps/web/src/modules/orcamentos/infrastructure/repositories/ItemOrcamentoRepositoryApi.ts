@@ -44,34 +44,31 @@ export class ItemOrcamentoRepositoryApi implements IItemOrcamentoRepository {
     await apiClient.delete(`/orcamentos/${budgetId}/items`);
   }
 
-  private toDomain(data: unknown): ItemOrcamento {
+  private toDomain(data: Record<string, unknown>): ItemOrcamento {
     return ItemOrcamento.restore({
-      // @ts-expect-error — TS18046
-      id: data.id,
-      // @ts-expect-error — TS18046
-      budgetId: data.budget_id,
-      // @ts-expect-error — TS18046
-      ordem: data.ordem,
-      // @ts-expect-error — TS18046
-      descricao: data.descricao,
-      // @ts-expect-error — TS18046
-      procedimentoId: data.procedimento_id,
-      // @ts-expect-error — TS18046
-      denteRegiao: data.dente_regiao,
-      // @ts-expect-error — TS18046
-      quantidade: data.quantidade,
-      // @ts-expect-error — TS18046
-      valorUnitario: data.valor_unitario,
-      // @ts-expect-error — TS18046
-      descontoPercentual: data.desconto_percentual,
-      // @ts-expect-error — TS18046
-      descontoValor: data.desconto_valor,
-      // @ts-expect-error — TS18046
-      valorTotal: data.valor_total,
-      // @ts-expect-error — TS18046
-      observacoes: data.observacoes,
-      // @ts-expect-error — TS18046
-      createdAt: new Date(data.created_at),
+      id: String(data.id),
+      budgetId: String(data.budget_id),
+      ordem: Number(data.ordem),
+      descricao: String(data.descricao),
+      procedimentoId: data.procedimento_id
+        ? String(data.procedimento_id)
+        : undefined,
+      denteRegiao: data.dente_regiao
+        ? String(data.dente_regiao)
+        : undefined,
+      quantidade: Number(data.quantidade),
+      valorUnitario: Number(data.valor_unitario),
+      descontoPercentual: data.desconto_percentual
+        ? Number(data.desconto_percentual)
+        : undefined,
+      descontoValor: data.desconto_valor
+        ? Number(data.desconto_valor)
+        : undefined,
+      valorTotal: Number(data.valor_total),
+      observacoes: data.observacoes
+        ? String(data.observacoes)
+        : undefined,
+      createdAt: new Date(String(data.created_at)),
     });
   }
 

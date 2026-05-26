@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 import { Router } from "express";
 import { FuncionariosController } from "./controller";
 
@@ -6,10 +7,10 @@ const controller = new FuncionariosController();
 const router: Router = Router();
 router.use(clinicGuard);
 
-router.get("/", (req, res) => controller.list(req, res));
-router.get("/:id", (req, res) => controller.getById(req, res));
-router.post("/", (req, res) => controller.create(req, res));
-router.patch("/:id", (req, res) => controller.update(req, res));
-router.delete("/:id", (req, res) => controller.delete(req, res));
+router.get("/", asyncHandler(controller.list.bind(controller)));
+router.get("/:id", asyncHandler(controller.getById.bind(controller)));
+router.post("/", asyncHandler(controller.create.bind(controller)));
+router.patch("/:id", asyncHandler(controller.update.bind(controller)));
+router.delete("/:id", asyncHandler(controller.delete.bind(controller)));
 
 export default router;

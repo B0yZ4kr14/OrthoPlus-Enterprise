@@ -9,7 +9,7 @@
 - PEP-FR-005: Anexos e Documentos
 - PEP-FR-006: Assinatura Digital ICP
 
-**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
+**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-24
 
 ---
 
@@ -119,13 +119,15 @@
 | Phase 1 | 4 | 4 | COMPLETE |
 | Phase 2 | 10 | 10 | COMPLETE |
 | Phase 3 | 5 | 5 | COMPLETE |
-| Phase 4 | 12 | 12 | COMPLETE |
+| Phase 4 | 12 | 11 | 1 PARTIAL (PrescricaoForm tests) |
 | Phase 5 | 7 | 6 | 1 PENDING |
-| **Total** | **38** | **37** | **97% COMPLETE** |
+| **Total** | **38** | **36** | **~95% COMPLETE** |
 
 ## Identified Gaps
 
 | Gap | Priority | Description |
 |-----|----------|-------------|
 | GAP-001 | MEDIUM | E2E tests for complete PEP flow |
-| GAP-002 | LOW | ICP digital signature advanced validation |
+| GAP-002 | HIGH | Análise IA de Radiografia (US4) — not implemented |
+| GAP-003 | MEDIUM | Edge cases: odontograma de criança, extração, portabilidade |
+| GAP-004 | LOW | ICP digital signature advanced validation |

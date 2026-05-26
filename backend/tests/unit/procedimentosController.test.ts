@@ -68,12 +68,11 @@ describe("ProcedimentosController", () => {
       });
     });
 
-    it("returns 500 on database error", async () => {
+    it("rejects on database error", async () => {
       procedimentoTemplates.findMany.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: {}, query: {}, params: {} };
       const res = mockRes();
-      await controller.listTemplates(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.listTemplates(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 
@@ -103,12 +102,11 @@ describe("ProcedimentosController", () => {
       expect(res.json).toHaveBeenCalledWith(template);
     });
 
-    it("returns 500 on database error", async () => {
+    it("rejects on database error", async () => {
       procedimentoTemplates.findFirst.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: {}, query: {}, params: { id: "t1" } };
       const res = mockRes();
-      await controller.getTemplateById(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.getTemplateById(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 
@@ -139,12 +137,11 @@ describe("ProcedimentosController", () => {
       expect(res.json).toHaveBeenCalledWith(created);
     });
 
-    it("returns 500 on database error", async () => {
+    it("rejects on database error", async () => {
       procedimentoTemplates.create.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { nome: "Teste", valor_sugerido: 50 }, query: {}, params: {} };
       const res = mockRes();
-      await controller.createTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.createTemplate(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 
@@ -187,13 +184,12 @@ describe("ProcedimentosController", () => {
       expect(res.json).toHaveBeenCalledWith(updated);
     });
 
-    it("returns 500 on database error", async () => {
+    it("rejects on database error", async () => {
       procedimentoTemplates.findFirst.mockResolvedValueOnce({ id: "t1" });
       procedimentoTemplates.update.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: { nome: "New" }, query: {}, params: { id: "t1" } };
       const res = mockRes();
-      await controller.updateTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.updateTemplate(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 
@@ -216,12 +212,11 @@ describe("ProcedimentosController", () => {
       expect(res.send).toHaveBeenCalled();
     });
 
-    it("returns 500 on database error", async () => {
+    it("rejects on database error", async () => {
       procedimentoTemplates.deleteMany.mockRejectedValueOnce(new Error("DB fail"));
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: {}, query: {}, params: { id: "t1" } };
       const res = mockRes();
-      await controller.deleteTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(500);
+      await expect(controller.deleteTemplate(req as Request, res)).rejects.toThrow("DB fail");
     });
   });
 });

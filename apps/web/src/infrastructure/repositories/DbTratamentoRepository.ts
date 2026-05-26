@@ -3,26 +3,27 @@ import { ITratamentoRepository } from "@/domain/repositories/ITratamentoReposito
 import { apiClient } from "@/lib/api/apiClient";
 import { InfrastructureError } from "../errors/InfrastructureError";
 import { TratamentoMapper } from "../mappers/TratamentoMapper";
+import type { Tables } from "@/types/database";
 
 export class DbTratamentoRepository implements ITratamentoRepository {
   async findById(id: string): Promise<Tratamento | null> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"patient_treatments">>(
+      const data = await apiClient.get<Tables<"pep_tratamentos">>(
         `/pep/tratamentos/${id}`,
       );
       if (!data) return null;
       return TratamentoMapper.toDomain(data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar tratamento", error);
+      throw new InfrastructureError(
+        "Erro ao buscar tratamento",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
   async findByProntuarioId(prontuarioId: string): Promise<Tratamento[]> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"patient_treatments">[]>(
+      const data = await apiClient.get<Tables<"pep_tratamentos">[]>(
         `/pep/tratamentos`,
         { params: { prontuario_id: prontuarioId } },
       );
@@ -30,8 +31,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar tratamentos do prontuário",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
@@ -41,8 +41,7 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     status: "PLANEJADO" | "EM_ANDAMENTO" | "CONCLUIDO" | "CANCELADO",
   ): Promise<Tratamento[]> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"patient_treatments">[]>(
+      const data = await apiClient.get<Tables<"pep_tratamentos">[]>(
         `/pep/tratamentos`,
         { params: { prontuario_id: prontuarioId, status } },
       );
@@ -50,37 +49,36 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar tratamentos por status",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
 
   async findAtivos(prontuarioId: string): Promise<Tratamento[]> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"patient_treatments">[]>(
+      const data = await apiClient.get<Tables<"pep_tratamentos">[]>(
         `/pep/tratamentos`,
         { params: { prontuario_id: prontuarioId, ativos: true } },
       );
       return (data || []).map(TratamentoMapper.toDomain);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar tratamentos ativos", error);
+      throw new InfrastructureError(
+        "Erro ao buscar tratamentos ativos",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
   async findByClinicId(clinicId: string): Promise<Tratamento[]> {
     try {
-      const data =
-        // @ts-expect-error — TS2304
-        await apiClient.get<Tables<"patient_treatments">[]>("/pep/tratamentos");
+      const data = await apiClient.get<Tables<"pep_tratamentos">[]>(
+        "/pep/tratamentos",
+      );
       return (data || []).map(TratamentoMapper.toDomain);
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar tratamentos da clínica",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
@@ -90,8 +88,10 @@ export class DbTratamentoRepository implements ITratamentoRepository {
       const data = TratamentoMapper.toInsert(tratamento);
       await apiClient.post("/pep/tratamentos", data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao salvar tratamento", error);
+      throw new InfrastructureError(
+        "Erro ao salvar tratamento",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
@@ -100,8 +100,10 @@ export class DbTratamentoRepository implements ITratamentoRepository {
       const data = TratamentoMapper.toPersistence(tratamento);
       await apiClient.patch(`/pep/tratamentos/${tratamento.id}`, data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao atualizar tratamento", error);
+      throw new InfrastructureError(
+        "Erro ao atualizar tratamento",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
@@ -109,8 +111,10 @@ export class DbTratamentoRepository implements ITratamentoRepository {
     try {
       await apiClient.delete(`/pep/tratamentos/${id}`);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao deletar tratamento", error);
+      throw new InfrastructureError(
+        "Erro ao deletar tratamento",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 }

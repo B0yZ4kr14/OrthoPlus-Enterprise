@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import { asyncHandler } from "@/middleware/errorHandler";
 import { Router } from "express";
 import { LGPDController } from "./controller";
 
@@ -18,12 +19,12 @@ router.get("/", (_req, res) => {
 });
 
 // Consentimentos
-router.get("/consentimentos", (_req, res) => controller.listConsentimentos(_req, res));
-router.post("/consentimentos", (_req, res) => controller.createConsentimento(_req, res));
+router.get("/consentimentos", asyncHandler(controller.listConsentimentos.bind(controller)));
+router.post("/consentimentos", asyncHandler(controller.createConsentimento.bind(controller)));
 
 // Solicitações
-router.get("/solicitacoes", (_req, res) => controller.listSolicitacoes(_req, res));
-router.post("/solicitacoes", (_req, res) => controller.createSolicitacao(_req, res));
-router.patch("/solicitacoes/:id", (_req, res) => controller.updateSolicitacao(_req, res));
+router.get("/solicitacoes", asyncHandler(controller.listSolicitacoes.bind(controller)));
+router.post("/solicitacoes", asyncHandler(controller.createSolicitacao.bind(controller)));
+router.patch("/solicitacoes/:id", asyncHandler(controller.updateSolicitacao.bind(controller)));
 
 export default router;

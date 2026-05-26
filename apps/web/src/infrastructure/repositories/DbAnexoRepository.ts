@@ -3,50 +3,48 @@ import { IAnexoRepository } from "@/domain/repositories/IAnexoRepository";
 import { apiClient } from "@/lib/api/apiClient";
 import { InfrastructureError } from "../errors/InfrastructureError";
 import { AnexoMapper } from "../mappers/AnexoMapper";
+import type { Tables } from "@/types/database";
 
 export class DbAnexoRepository implements IAnexoRepository {
   async findById(id: string): Promise<Anexo | null> {
     try {
-      // @ts-expect-error — TS2304
-      const data = await apiClient.get<Tables<"pep_evolucoes">>(
+      const data = await apiClient.get<Tables<"pep_anexos">>(
         `/pep/anexos/${id}`,
       );
       if (!data) return null;
       return AnexoMapper.toDomain(data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao buscar anexo", error);
+      throw new InfrastructureError(
+        "Erro ao buscar anexo",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
   async findByProntuarioId(prontuarioId: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos", {
+      const data = await apiClient.get<Tables<"pep_anexos">[]>("/pep/anexos", {
         params: { prontuario_id: prontuarioId },
       });
-      // @ts-expect-error — TS2345
       return (data || []).map(AnexoMapper.toDomain);
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar anexos do prontuário",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
 
   async findByHistoricoId(historicoId: string): Promise<Anexo[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/pep/anexos", {
+      const data = await apiClient.get<Tables<"pep_anexos">[]>("/pep/anexos", {
         params: { historico_id: historicoId },
       });
-      // @ts-expect-error — TS2345
       return (data || []).map(AnexoMapper.toDomain);
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar anexos do histórico",
-        // @ts-expect-error — TS2345
-        error,
+        error instanceof Error ? error : undefined,
       );
     }
   }
@@ -80,8 +78,10 @@ export class DbAnexoRepository implements IAnexoRepository {
       const data = AnexoMapper.toInsert(anexo);
       await apiClient.post("/pep/anexos", data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao salvar anexo", error);
+      throw new InfrastructureError(
+        "Erro ao salvar anexo",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
@@ -90,8 +90,10 @@ export class DbAnexoRepository implements IAnexoRepository {
       const data = AnexoMapper.toPersistence(anexo);
       await apiClient.patch(`/pep/anexos/${anexo.id}`, data);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao atualizar anexo", error);
+      throw new InfrastructureError(
+        "Erro ao atualizar anexo",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
@@ -99,8 +101,10 @@ export class DbAnexoRepository implements IAnexoRepository {
     try {
       await apiClient.delete(`/pep/anexos/${id}`);
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao deletar anexo", error);
+      throw new InfrastructureError(
+        "Erro ao deletar anexo",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
@@ -126,8 +130,10 @@ export class DbAnexoRepository implements IAnexoRepository {
 
       return response.url;
     } catch (error) {
-      // @ts-expect-error — TS2345
-      throw new InfrastructureError("Erro ao fazer upload do arquivo", error);
+      throw new InfrastructureError(
+        "Erro ao fazer upload do arquivo",
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 }

@@ -39,45 +39,34 @@ export function useInventoryAPI() {
 
     try {
       setLoading(true);
-      const response = await apiClient.get<{ data: unknown[] }>(
-        "/inventario/produtos",
-      );
+      const response = await apiClient.get<{
+        data: Array<Record<string, unknown>>
+      }>("/inventario/produtos");
 
       // Converter dados da API para formato frontend
-      const transformed: Product[] = response.data.map(
-        (apiProduct: unknown) => ({
-          // @ts-expect-error — TS18046
-          id: apiProduct.id,
-          // @ts-expect-error — TS18046
-          nome: apiProduct.nome,
-          // @ts-expect-error — TS18046
-          codigo: apiProduct.codigo,
-          // @ts-expect-error — TS18046
-          categoria: apiProduct.categoria,
-          // @ts-expect-error — TS18046
-          descricao: apiProduct.descricao,
-          // @ts-expect-error — TS18046
-          unidadeMedida: apiProduct.unidade_medida,
-          // @ts-expect-error — TS18046
-          estoqueAtual: apiProduct.estoque_atual,
-          // @ts-expect-error — TS18046
-          estoqueMinimo: apiProduct.estoque_minimo,
-          // @ts-expect-error — TS18046
-          estoqueMaximo: apiProduct.estoque_maximo,
-          // @ts-expect-error — TS18046
-          valorUnitario: apiProduct.valor_unitario,
-          // @ts-expect-error — TS18046
-          fornecedor: apiProduct.fornecedor,
-          // @ts-expect-error — TS18046
-          localizacao: apiProduct.localizacao,
-          // @ts-expect-error — TS18046
-          ativo: apiProduct.ativo,
-          // @ts-expect-error — TS18046
-          createdAt: apiProduct.created_at,
-          // @ts-expect-error — TS18046
-          updatedAt: apiProduct.updated_at,
-        }),
-      );
+      const transformed: Product[] = response.data.map((apiProduct) => ({
+        id: String(apiProduct.id),
+        nome: String(apiProduct.nome),
+        codigo: String(apiProduct.codigo),
+        categoria: String(apiProduct.categoria),
+        descricao: apiProduct.descricao
+          ? String(apiProduct.descricao)
+          : undefined,
+        unidadeMedida: String(apiProduct.unidade_medida),
+        estoqueAtual: Number(apiProduct.estoque_atual),
+        estoqueMinimo: Number(apiProduct.estoque_minimo),
+        estoqueMaximo: Number(apiProduct.estoque_maximo),
+        valorUnitario: Number(apiProduct.valor_unitario),
+        fornecedor: apiProduct.fornecedor
+          ? String(apiProduct.fornecedor)
+          : undefined,
+        localizacao: apiProduct.localizacao
+          ? String(apiProduct.localizacao)
+          : undefined,
+        ativo: Boolean(apiProduct.ativo),
+        createdAt: String(apiProduct.created_at),
+        updatedAt: String(apiProduct.updated_at),
+      }))
 
       setProducts(transformed);
     } catch (error: unknown) {

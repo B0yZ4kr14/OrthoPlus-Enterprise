@@ -9,7 +9,7 @@
 - FIN-FR-005: Conciliação Bancária
 - FIN-FR-006: Relatórios
 
-**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-20
+**Status**: PARTIALLY IMPLEMENTED — Retroactive audit 2026-05-24
 
 ---
 
