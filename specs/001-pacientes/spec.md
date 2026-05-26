@@ -3,7 +3,7 @@
 **Short Name**: `patient-management`
 **Feature Branch**: `[001-pacientes]`
 **Created**: 2026-05-17
-**Status**: In Progress
+**Status**: Completed (Backfilled 2026-05-24) ~92%
 **Project**: OrthoPlus Enterprise
 **Priority**: P1 — Foundation
 

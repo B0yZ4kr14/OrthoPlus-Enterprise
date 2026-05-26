@@ -2,6 +2,34 @@ import { apiClient } from "@/lib/api/apiClient";
 import { Orcamento, StatusOrcamento } from "../../domain/entities/Orcamento";
 import { IOrcamentoRepository } from "../../domain/repositories/IOrcamentoRepository";
 
+interface RawOrcamento {
+  id: string;
+  numero_orcamento: string;
+  clinic_id: string;
+  patient_id: string;
+  created_by: string;
+  titulo: string;
+  descricao?: string;
+  tipo_plano: string;
+  validade_dias: number;
+  data_expiracao: string;
+  status: string;
+  valor_subtotal: number;
+  desconto_percentual?: number;
+  desconto_valor?: number;
+  valor_total: number;
+  observacoes?: string;
+  aprovado_por?: string;
+  aprovado_em?: string;
+  rejeitado_por?: string;
+  rejeitado_em?: string;
+  motivo_rejeicao?: string;
+  convertido_contrato: boolean;
+  contrato_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export class OrcamentoRepositoryApi implements IOrcamentoRepository {
   async findById(id: string): Promise<Orcamento | null> {
     try {
@@ -105,57 +133,32 @@ export class OrcamentoRepositoryApi implements IOrcamentoRepository {
     await apiClient.delete(`/orcamentos/${id}`);
   }
 
-  private toDomain(data: unknown): Orcamento {
+  private toDomain(data: RawOrcamento): Orcamento {
     return Orcamento.restore({
-      // @ts-expect-error — TS18046
       id: data.id,
-      // @ts-expect-error — TS18046
       numeroOrcamento: data.numero_orcamento,
-      // @ts-expect-error — TS18046
       clinicId: data.clinic_id,
-      // @ts-expect-error — TS18046
       patientId: data.patient_id,
-      // @ts-expect-error — TS18046
       createdBy: data.created_by,
-      // @ts-expect-error — TS18046
       titulo: data.titulo,
-      // @ts-expect-error — TS18046
       descricao: data.descricao,
-      // @ts-expect-error — TS18046
       tipoPlano: data.tipo_plano,
-      // @ts-expect-error — TS18046
       validadeDias: data.validade_dias,
-      // @ts-expect-error — TS18046
       dataExpiracao: new Date(data.data_expiracao),
-      // @ts-expect-error — TS18046
       status: data.status as StatusOrcamento,
-      // @ts-expect-error — TS18046
       valorSubtotal: data.valor_subtotal,
-      // @ts-expect-error — TS18046
       descontoPercentual: data.desconto_percentual,
-      // @ts-expect-error — TS18046
       descontoValor: data.desconto_valor,
-      // @ts-expect-error — TS18046
       valorTotal: data.valor_total,
-      // @ts-expect-error — TS18046
       observacoes: data.observacoes,
-      // @ts-expect-error — TS18046
       aprovadoPor: data.aprovado_por,
-      // @ts-expect-error — TS18046
       aprovadoEm: data.aprovado_em ? new Date(data.aprovado_em) : undefined,
-      // @ts-expect-error — TS18046
       rejeitadoPor: data.rejeitado_por,
-      // @ts-expect-error — TS18046
       rejeitadoEm: data.rejeitado_em ? new Date(data.rejeitado_em) : undefined,
-      // @ts-expect-error — TS18046
       motivoRejeicao: data.motivo_rejeicao,
-      // @ts-expect-error — TS18046
       convertidoContrato: data.convertido_contrato,
-      // @ts-expect-error — TS18046
       contratoId: data.contrato_id,
-      // @ts-expect-error — TS18046
       createdAt: new Date(data.created_at),
-      // @ts-expect-error — TS18046
       updatedAt: new Date(data.updated_at),
     });
   }

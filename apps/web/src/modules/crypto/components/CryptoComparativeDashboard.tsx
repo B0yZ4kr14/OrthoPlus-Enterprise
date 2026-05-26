@@ -25,8 +25,15 @@ import {
 } from "lucide-react";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 
+interface CryptoTransaction {
+  status: string;
+  amount_brl?: number;
+  processing_fee_brl?: number;
+  net_amount_brl?: number;
+}
+
 interface CryptoComparativeDashboardProps {
-  transactions: unknown[];
+  transactions: CryptoTransaction[];
 }
 
 export function CryptoComparativeDashboard({
@@ -34,17 +41,12 @@ export function CryptoComparativeDashboard({
 }: CryptoComparativeDashboardProps) {
   // Calcular métricas de crypto
   const cryptoStats = transactions
-    // @ts-expect-error — TS18046
     .filter((t) => t.status === "CONFIRMADO" || t.status === "CONVERTIDO")
     .reduce(
       (acc, t) => {
-        // @ts-expect-error — TS18046
         acc.totalBRL += t.amount_brl || 0;
-        // @ts-expect-error — TS18046
         acc.totalFees += t.processing_fee_brl || 0;
-        // @ts-expect-error — TS18046
         acc.netAmount += t.net_amount_brl || 0;
-        // @ts-expect-error — TS18046
         acc.count += 1;
         return acc;
       },
@@ -60,9 +62,7 @@ export function CryptoComparativeDashboard({
   };
 
   const cryptoFeePercentage =
-    // @ts-expect-error — TS18046
     cryptoStats.totalBRL > 0
-      // @ts-expect-error — TS18046
       ? (cryptoStats.totalFees / cryptoStats.totalBRL) * 100
       : 0;
 
@@ -70,58 +70,44 @@ export function CryptoComparativeDashboard({
   const comparisonData = [
     {
       method: "Crypto",
-      // @ts-expect-error — TS18046
       fee: cryptoStats.totalFees,
       feePercentage: cryptoFeePercentage,
-      // @ts-expect-error — TS18046
       netAmount: cryptoStats.netAmount,
       color: "#f97316", // orange-500
     },
     {
       method: "PIX",
-      // @ts-expect-error — TS18046
       fee: (cryptoStats.totalBRL * TRADITIONAL_FEES.PIX) / 100,
       feePercentage: TRADITIONAL_FEES.PIX,
       netAmount:
-        // @ts-expect-error — TS18046
         cryptoStats.totalBRL -
-        // @ts-expect-error — TS18046
         (cryptoStats.totalBRL * TRADITIONAL_FEES.PIX) / 100,
       color: "#10b981", // green-500
     },
     {
       method: "Cartão Débito",
-      // @ts-expect-error — TS18046
       fee: (cryptoStats.totalBRL * TRADITIONAL_FEES.DEBIT_CARD) / 100,
       feePercentage: TRADITIONAL_FEES.DEBIT_CARD,
       netAmount:
-        // @ts-expect-error — TS18046
         cryptoStats.totalBRL -
-        // @ts-expect-error — TS18046
         (cryptoStats.totalBRL * TRADITIONAL_FEES.DEBIT_CARD) / 100,
       color: "#3b82f6", // blue-500
     },
     {
       method: "Cartão Crédito",
-      // @ts-expect-error — TS18046
       fee: (cryptoStats.totalBRL * TRADITIONAL_FEES.CREDIT_CARD) / 100,
       feePercentage: TRADITIONAL_FEES.CREDIT_CARD,
       netAmount:
-        // @ts-expect-error — TS18046
         cryptoStats.totalBRL -
-        // @ts-expect-error — TS18046
         (cryptoStats.totalBRL * TRADITIONAL_FEES.CREDIT_CARD) / 100,
       color: "#8b5cf6", // purple-500
     },
     {
       method: "Boleto",
-      // @ts-expect-error — TS18046
       fee: (cryptoStats.totalBRL * TRADITIONAL_FEES.BOLETO) / 100,
       feePercentage: TRADITIONAL_FEES.BOLETO,
       netAmount:
-        // @ts-expect-error — TS18046
         cryptoStats.totalBRL -
-        // @ts-expect-error — TS18046
         (cryptoStats.totalBRL * TRADITIONAL_FEES.BOLETO) / 100,
       color: "#ef4444", // red-500
     },
@@ -130,10 +116,8 @@ export function CryptoComparativeDashboard({
   // Calcular economia vs métodos tradicionais
   const savingsData = comparisonData.slice(1).map((method) => ({
     method: `vs ${method.method}`,
-    // @ts-expect-error — TS18046
     savings: method.fee - cryptoStats.totalFees,
     savingsPercentage:
-      // @ts-expect-error — TS18046
       ((method.fee - cryptoStats.totalFees) / method.fee) * 100,
   }));
 
@@ -148,8 +132,6 @@ export function CryptoComparativeDashboard({
     value: item.fee,
     color: item.color,
   }));
-
-  // @ts-expect-error — TS18046
   if (cryptoStats.count === 0) {
     return (
       <Card>
@@ -183,7 +165,6 @@ export function CryptoComparativeDashboard({
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 R${" "}
-                {/* @ts-expect-error — TS18046 */}
                 {cryptoStats.totalFees.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}
@@ -244,7 +225,6 @@ export function CryptoComparativeDashboard({
               </p>
               <p className="text-2xl font-bold text-purple-500">
                 R${" "}
-                {/* @ts-expect-error — TS18046 */}
                 {cryptoStats.netAmount.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}
@@ -299,10 +279,8 @@ export function CryptoComparativeDashboard({
                   tickFormatter={(value) => `R$ ${value.toFixed(0)}`}
                 />
                 <Tooltip
-                  // @ts-expect-error — TS2769
-                  formatter={(value: unknown, name) => {
+                  formatter={(value: number, name: string) => {
                     if (name === "fee") {
-                      // @ts-expect-error — TS18046
                       return `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
                     }
                     return value;
@@ -346,8 +324,7 @@ export function CryptoComparativeDashboard({
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(value: unknown) =>
-                    // @ts-expect-error — TS18046
+                  formatter={(value: number) =>
                     `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
                   }
                 />
@@ -379,8 +356,7 @@ export function CryptoComparativeDashboard({
                 tickFormatter={(value) => `R$ ${value.toFixed(0)}`}
               />
               <Tooltip
-                formatter={(value: unknown) =>
-                  // @ts-expect-error — TS18046
+                formatter={(value: number) =>
                   `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
                 }
               />
@@ -417,7 +393,6 @@ export function CryptoComparativeDashboard({
               </thead>
               <tbody>
                 {comparisonData.map((item) => {
-                  // @ts-expect-error — TS18046
                   const diff = item.fee - cryptoStats.totalFees;
                   const isCrypto = item.method === "Crypto";
 

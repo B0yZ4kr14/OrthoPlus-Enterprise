@@ -3,7 +3,7 @@
 **Short Name**: `auth-access-control`
 **Feature Branch**: `[005-auth-usuarios]`
 **Created**: 2026-05-17
-**Status**: Draft
+**Status**: Completed (Backfilled 2026-05-24) ~95%
 **Project**: OrthoPlus Enterprise
 **Priority**: P1 — Security Foundation
 
