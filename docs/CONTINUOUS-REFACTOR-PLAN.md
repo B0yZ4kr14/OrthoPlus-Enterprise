@@ -68,7 +68,7 @@ Módulos com maior churn e complexidade:
 | 3 | `pdv` | 16 | PDV — transações críticas | ✅ **CONCLUÍDO** |
 | 4 | `agenda` | 10 | Agenda — alto volume de acessos | ✅ **CONCLUÍDO** |
 | 5 | `faturamento` | 18 | Faturamento/NFe — compliance fiscal | ✅ **CONCLUÍDO** |
-| 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais | ⏳ Pendente |
+| 6 | `pacientes` | 27 | Pacientes — LGPD, dados pessoais | ✅ **CONCLUÍDO** |
 | 7 | `inventario` | 21 | Inventário — controle de estoque | ⏳ Pendente |
 | 8 | `contratos` | 10 | Contratos — dados financeiros | ⏳ Pendente |
 
@@ -114,7 +114,16 @@ Módulos com maior churn e complexidade:
 - [x] 636/636 unit tests passam
 - [x] Commit: `e3b63ddd5`
 
-### T2.6 a T2.8 — Por módulo
+### T2.6 — pacientes (CONCLUÍDO ✅)
+- [x] Criar `domain/repositories/IPacientesSearchRepository.ts` (interface para busca)
+- [x] Criar `infrastructure/PacientesSearchRepository.ts` (implementação Prisma)
+- [x] Refatorar `PacienteSearchService` para depender de `IPacientesSearchRepository`
+  em vez de chamadas diretas ao Prisma
+- [x] Build passa (0 erros TypeScript)
+- [x] 636/636 unit tests passam
+- [x] Commit: `ccf98983e`
+
+### T2.7 a T2.8 — Por módulo
 Para cada módulo:
 1. Criar `domain/repositories/I{Entidade}Repository.ts` (interface)
 2. Criar `infrastructure/{Entidade}Repository.ts` (implementação Prisma)

@@ -5,10 +5,10 @@
  * com filtros por status, dentista responsável e ordenação.
  */
 
-import { prisma } from "@/infrastructure/database/prismaClient"
 import { logger } from "@/infrastructure/logger"
 import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics"
 import { withTiming } from "@/infrastructure/metrics/withTiming"
+import { IPacientesSearchRepository } from "@/modules/pacientes/domain/repositories/IPacientesSearchRepository"
 
 export interface SearchPacientesFilters {
   query?: string
@@ -37,6 +37,12 @@ export interface SearchPacientesResult {
 }
 
 export class PacienteSearchService {
+  private repo: IPacientesSearchRepository
+
+  constructor(repo?: IPacientesSearchRepository) {
+    this.repo = repo ?? new (require("@/modules/pacientes/infrastructure/PacientesSearchRepository").PacientesSearchRepository)()
+  }
+
   async search(
     clinicId: string,
     filters: SearchPacientesFilters,
@@ -78,7 +84,7 @@ export class PacienteSearchService {
     return withTiming(
       async () => {
         const [patients, total] = await Promise.all([
-          prisma.patients.findMany({
+          this.repo.searchPatients({
             where,
             orderBy,
             skip,
@@ -95,7 +101,7 @@ export class PacienteSearchService {
               last_appointment_date: true,
             },
           }),
-          prisma.patients.count({ where }),
+          this.repo.countPatients(where),
         ])
 
         logger.info("PacienteSearchService: found", {
@@ -106,15 +112,15 @@ export class PacienteSearchService {
 
         return {
           patients: patients.map((p) => ({
-            id: p.id,
-            fullName: p.full_name,
-            cpf: p.cpf,
-            phone: p.phone_primary,
-            email: p.email,
-            status: p.status ?? "",
-            birthDate: p.birth_date,
-            photoUrl: p.photo_url,
-            lastVisit: p.last_appointment_date,
+            id: p.id as string,
+            fullName: p.full_name as string,
+            cpf: p.cpf as string | null,
+            phone: p.phone_primary as string | null,
+            email: p.email as string | null,
+            status: (p.status as string) ?? "",
+            birthDate: p.birth_date as string | null,
+            photoUrl: p.photo_url as string | null,
+            lastVisit: p.last_appointment_date as string | null,
           })),
           total,
           page,
