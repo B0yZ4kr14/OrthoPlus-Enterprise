@@ -8,6 +8,7 @@ import { Input } from "@orthoplus/core-ui/input"
 import { Label } from "@orthoplus/core-ui/label"
 import { LoadingState } from "@/components/shared/LoadingState"
 import { FileText, Download } from "lucide-react"
+import ExcelJS from "exceljs"
 
 interface RelatorioFilters {
   dataInicio?: string
@@ -55,8 +56,75 @@ export default function RelatorioFiscalPage() {
     enabled: !!clinicId,
   })
 
-  const handleExport = (format: "csv" | "excel") => {
-    console.log(`Export ${format} triggered`)
+  const handleExportCSV = () => {
+    if (!data) return
+    const headers = ["Numero", "Serie", "Chave Acesso", "Valor Total", "ICMS", "ISS", "Status", "Data Emissao"]
+    const rows = data.notas.map((n) => [
+      n.numero,
+      n.serie,
+      n.chave_acesso,
+      (n.valor_total / 100).toFixed(2),
+      (n.valor_icms / 100).toFixed(2),
+      (n.valor_iss / 100).toFixed(2),
+      n.status,
+      n.data_emissao,
+    ])
+    const csvContent = [headers.join(";"), ...rows.map((r) => r.join(";"))].join("\n")
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `relatorio-fiscal-${new Date().toISOString().slice(0, 10)}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleExportExcel = async () => {
+    if (!data) return
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet("Relatorio Fiscal")
+    worksheet.columns = [
+      { header: "Numero", key: "numero", width: 12 },
+      { header: "Serie", key: "serie", width: 8 },
+      { header: "Chave Acesso", key: "chave_acesso", width: 50 },
+      { header: "Valor Total", key: "valor_total", width: 15 },
+      { header: "ICMS", key: "valor_icms", width: 15 },
+      { header: "ISS", key: "valor_iss", width: 15 },
+      { header: "Status", key: "status", width: 15 },
+      { header: "Data Emissao", key: "data_emissao", width: 18 },
+    ]
+    data.notas.forEach((n) => {
+      worksheet.addRow({
+        numero: n.numero,
+        serie: n.serie,
+        chave_acesso: n.chave_acesso,
+        valor_total: (n.valor_total / 100).toFixed(2),
+        valor_icms: (n.valor_icms / 100).toFixed(2),
+        valor_iss: (n.valor_iss / 100).toFixed(2),
+        status: n.status,
+        data_emissao: n.data_emissao,
+      })
+    })
+    // Add totals row
+    worksheet.addRow({})
+    worksheet.addRow({
+      numero: "TOTAIS",
+      valor_total: (data.totais.valorTotal / 100).toFixed(2),
+      valor_icms: (data.totais.valorIcms / 100).toFixed(2),
+      valor_iss: (data.totais.valorIss / 100).toFixed(2),
+    })
+    const buffer = await workbook.xlsx.writeBuffer()
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `relatorio-fiscal-${new Date().toISOString().slice(0, 10)}.xlsx`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   if (isLoading) {
@@ -78,11 +146,11 @@ export default function RelatorioFiscalPage() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => handleExport("csv")}>
+          <Button variant="outline" onClick={handleExportCSV}>
             <Download className="h-4 w-4 mr-2" />
             CSV
           </Button>
-          <Button variant="outline" onClick={() => handleExport("excel")}>
+          <Button variant="outline" onClick={handleExportExcel}>
             <Download className="h-4 w-4 mr-2" />
             Excel
           </Button>
