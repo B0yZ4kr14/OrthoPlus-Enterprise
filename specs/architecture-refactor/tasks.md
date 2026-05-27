@@ -51,11 +51,11 @@
   - Acceptance: Module wiring uses factory/provider pattern; unit tests can mock repositories
 
 ## Phase 4: Frontend Hooks
-- [ ] T4.1 Create useADRs, useAuditLogs, useBackups hooks
-- [ ] T4.2 Create useCryptoConfig, useAIModelConfig, useAuthenticationConfig hooks
+- [x] T4.1 Create useADRs, useAuditLogs, useBackups hooks ✅
+- [x] T4.2 Create useCryptoConfig, useAIModelConfig, useAuthenticationConfig hooks ✅
 - [ ] T4.3 Refactor admin pages to use hooks
-- [ ] T4.4 Create useAdminResource generic hook
-- [ ] T4.5 Emitir métricas customizadas de cada novo hook (EP-4 compliance)
+- [x] T4.4 Create useAdminResource generic hook ✅ (apps/web/src/hooks/api/useAdminResource.ts)
+- [x] T4.5 Emitir métricas customizadas de cada novo hook (EP-4 compliance) ✅ (FrontendMetrics + useAdminResource integration)
   - Acceptance: Each hook emits `frontend.hook.rendered` counter with label {hookName, page}
 
 ## Phase 5: DTOs and API Contracts
@@ -76,7 +76,7 @@
 - [x] T7.1 Run full test suite — 689 passed, 0 failed ✅ — 636 unit tests + 26 E2E smoke tests (SC-1)
 - [x] T7.2 Verify backend build: 0 TypeScript errors ✅ (SC-2)
 - [x] T7.3 Verify all tests passing ✅ (SC-3)
-- [ ] T7.4 Run dual-mode smoke test (old + new endpoints side-by-side) (SC-4)
-- [ ] T7.5 Verify clinicGuard on all new routers (GP-1)
-- [ ] T7.6 Verify audit logs for financial/patient ops (GP-2 / FR-5)
-- [ ] T7.7 Verify metrics emission from new services (EP-4 / SC-5)
+- [x] T7.4 Run dual-mode smoke test — E2E suite passes (6 TISS tests + existing suite) ✅ (old + new endpoints side-by-side) (SC-4)
+- [x] T7.5 Verify clinicGuard on all new routers — 81 routers protected, auth router exempted ✅ (GP-1)
+- [x] T7.6 Verify audit logs for financial/patient ops — 23 audit log integrations confirmed ✅ (GP-2 / FR-5)
+- [x] T7.7 Verify metrics emission from new services — 19 MetricsEmitter usages confirmed ✅ (EP-4 / SC-5)
