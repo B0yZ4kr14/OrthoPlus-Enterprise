@@ -286,7 +286,10 @@
   - Add `X-Request-ID` header (UUID v4) to every HTTP request to Ollama/external provider
   - Include request ID in Winston logs for provider-side tracing and cost attribution
   - Store request ID in SQLite `search_queries` table for audit trail
-- [ ] T055 [Post-MVP] Detect contradictory specs in `backend/src/modules/memory_hub/domain/services/ContradictionDetector.ts`
+- [X] T055 [Post-MVP] Detect contradictory specs in `backend/src/modules/memory_hub/domain/services/ContradictionDetector.ts`
+  - Compare indexed specs for overlapping requirements with conflicting values
+  - Flag in health dashboard and search results; prioritize more recent document
+  - Detects: ID conflicts (critical), semantic contradictions (high), overlapping scope (medium)
   - Compare indexed specs for overlapping requirements with conflicting values
   - Flag in health dashboard and search results; prioritize more recent document
   - Depends on: mature index with >50 specs for meaningful detection

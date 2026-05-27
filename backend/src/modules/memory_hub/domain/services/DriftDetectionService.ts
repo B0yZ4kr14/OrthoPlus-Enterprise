@@ -5,9 +5,10 @@ import { logger } from "@/infrastructure/logger"
 import { IDocumentRepository } from "../ports/IDocumentRepository"
 import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 import { PathSandbox } from "../../infrastructure/PathSandbox"
+import { ContradictionDetector } from "./ContradictionDetector"
 
 export interface DriftIssue {
-  type: "missing_impl" | "broken_ref" | "outdated_decision" | "orphan_doc"
+  type: "missing_impl" | "broken_ref" | "outdated_decision" | "orphan_doc" | "contradictory_spec" | "overlapping_scope"
   severity: "low" | "medium" | "high" | "critical"
   sourceDocument: string
   targetDocument?: string
@@ -32,6 +33,7 @@ export class DriftDetectionService {
     issues.push(...this.detectOutdatedDecisions())
     issues.push(...this.detectMissingImplementations())
     issues.push(...this.detectOrphanDocs())
+    issues.push(...this.detectContradictions())
 
     // Store in drift_reports table
     const insert = this.db.prepare(
@@ -354,6 +356,29 @@ export class DriftDetectionService {
           description: `Document not reindexed in ${orphanThresholdDays} days`,
         })
       }
+    }
+
+    return issues
+  }
+
+  private detectContradictions(): DriftIssue[] {
+    const issues: DriftIssue[] = []
+
+    try {
+      const detector = new ContradictionDetector(this.documents)
+      const contradictions = detector.detect()
+
+      for (const c of contradictions) {
+        issues.push({
+          type: c.type === "overlapping_scope" ? "overlapping_scope" : "contradictory_spec",
+          severity: c.severity,
+          sourceDocument: c.sourceDocument,
+          targetDocument: c.targetDocument,
+          description: c.description,
+        })
+      }
+    } catch (err) {
+      logger.warn("[DriftDetectionService] detectContradictions failed", { error: err })
     }
 
     return issues
