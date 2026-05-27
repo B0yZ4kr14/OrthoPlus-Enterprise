@@ -1,6 +1,6 @@
 generator client {
   previewFeatures = ["multiSchema"]
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
 }
 
 datasource db {
@@ -23,6 +23,7 @@ model abuse_reports {
   resolved_by  String?
   severity     String
   user_id      String?
+
   @@schema("configuracoes")
 }
 
@@ -35,6 +36,7 @@ model admin_configurations {
   id          String    @id @default(uuid())
   is_active   Boolean?
   updated_at  DateTime? @updatedAt
+
   @@schema("configuracoes")
 }
 
@@ -62,6 +64,7 @@ model analises_radiograficas {
   status_analise        String
   tipo_radiografia      String
   updated_at            DateTime @updatedAt
+
   @@schema("clinico")
 }
 
@@ -75,6 +78,7 @@ model analises_radiograficas_history {
   problemas_detectados Int?
   resultado_ia         Json
   versao               Int
+
   @@schema("clinico")
 }
 
@@ -89,6 +93,7 @@ model appointment_confirmations {
   phone_number        String?
   sent_at             String?
   status              String
+
   @@schema("core")
 }
 
@@ -103,6 +108,7 @@ model appointment_reminders {
   scheduled_for    String
   sent_at          String?
   status           String
+
   @@schema("core")
 }
 
@@ -146,6 +152,7 @@ model architecture_decision_records {
   tags                    String[]
   title                   String
   updated_at              DateTime @updatedAt
+
   @@schema("configuracoes")
 }
 
@@ -180,6 +187,7 @@ model audit_trail {
   timestamp         String
   user_agent        String?
   user_id           String?
+
   @@schema("core")
 }
 
@@ -205,6 +213,7 @@ model backup_history {
   status                 String
   transfer_speed_mbps    Int?
   verified_at            String?
+
   @@schema("backups")
 }
 
@@ -225,6 +234,7 @@ model backup_replications {
   storage_provider   String
   target_clinic_id   String
   updated_at         DateTime? @updatedAt
+
   @@schema("backups")
 }
 
@@ -240,6 +250,7 @@ model backup_retention_policies {
   keep_yearly         Int
   name                String
   updated_at          DateTime? @updatedAt
+
   @@schema("backups")
 }
 
@@ -250,6 +261,7 @@ model backup_verification_log {
   status            String
   verification_type String
   verified_at       String?
+
   @@schema("backups")
 }
 
@@ -267,6 +279,7 @@ model bi_dashboards {
   shared_with              String[]
   tags                     String[]
   updated_at               DateTime @updatedAt
+
   @@schema("administrativo")
 }
 
@@ -278,6 +291,7 @@ model bi_data_cache {
   expires_at String
   id         String   @id @default(uuid())
   widget_id  String?
+
   @@schema("administrativo")
 }
 
@@ -297,6 +311,7 @@ model bi_metrics {
   trend              Int?
   updated_at         DateTime @updatedAt
   value              Int?
+
   @@schema("administrativo")
 }
 
@@ -316,6 +331,7 @@ model bi_reports {
   report_type        String
   schedule           Json?
   updated_at         DateTime @updatedAt
+
   @@schema("administrativo")
 }
 
@@ -337,6 +353,7 @@ model bi_widgets {
   updated_at             DateTime @updatedAt
   widget_type            String
   width                  Int
+
   @@schema("administrativo")
 }
 
@@ -363,6 +380,7 @@ model budget_approvals {
   usuario_id            String
   valor_orcamento       Int
   versao                Int
+
   @@schema("financeiro")
 }
 
@@ -380,6 +398,7 @@ model budget_items {
   quantidade          Int
   valor_total         Int
   valor_unitario      Int
+
   @@schema("financeiro")
 }
 
@@ -390,6 +409,7 @@ model budget_versions {
   id            String   @id @default(uuid())
   snapshot_data Json
   versao        Int
+
   @@schema("financeiro")
 }
 
@@ -482,6 +502,7 @@ model campaign_metrics {
   total_sent        Int?
   unsubscribe_count Int?
   updated_at        DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -529,10 +550,10 @@ model campaign_templates {
 model campaign_triggers {
   campaign_id       String
   campaign          marketing_campaigns @relation(fields: [campaign_id], references: [id])
-  created_at        DateTime @default(now())
+  created_at        DateTime            @default(now())
   delay_days        Int?
   delay_hours       Int?
-  id                String   @id @default(uuid())
+  id                String              @id @default(uuid())
   is_active         Boolean
   trigger_condition Json
   trigger_type      String
@@ -601,12 +622,12 @@ model campanhas_marketing {
 
 model clinic_modules {
   clinic_id         String
-  id                Int      @id @default(autoincrement())
+  id                Int            @id @default(autoincrement())
   is_active         Boolean
   module_catalog_id Int
   module_catalog    module_catalog @relation(fields: [module_catalog_id], references: [id])
   subscribed_at     String
-  updated_at        DateTime @updatedAt
+  updated_at        DateTime       @updatedAt
 
   @@schema("configuracoes")
 }
@@ -693,21 +714,21 @@ model contas_pagar {
 
 model contas_receber {
   clinic_id       String
-  created_at      DateTime @default(now())
+  created_at      DateTime  @default(now())
   created_by      String?
   data_emissao    String
   data_pagamento  String?
   data_vencimento String
   descricao       String
   forma_pagamento String?
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   observacoes     String?
   parcela_numero  Int?
   parcela_total   Int?
   patient_id      String?
   patient         patients? @relation(fields: [patient_id], references: [id])
   status          String
-  updated_at      DateTime @updatedAt
+  updated_at      DateTime  @updatedAt
   valor           Int
   valor_pago      Int?
 
@@ -786,6 +807,7 @@ model crm_activities {
   status         String
   title          String
   updated_at     DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -800,6 +822,7 @@ model crm_conversions {
   lead_id              String
   time_to_convert_days Int?
   total_interactions   Int?
+
   @@schema("comercial")
 }
 
@@ -817,6 +840,7 @@ model crm_interactions {
   next_action_date String?
   outcome          String?
   subject          String?
+
   @@schema("comercial")
 }
 
@@ -837,6 +861,7 @@ model crm_leads {
   status               String
   tags                 String[]
   updated_at           DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -852,6 +877,7 @@ model crm_stages {
   name              String
   order_index       Int
   updated_at        DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -1100,6 +1126,7 @@ model github_events {
   event_type   String
   id           String   @id @default(uuid())
   triggered_by String?
+
   @@schema("github_tools")
 }
 
@@ -1113,6 +1140,7 @@ model historico_clinico {
   tipo               String
   titulo             String
   updated_at         DateTime @updatedAt
+
   @@schema("pep")
 }
 
@@ -1130,6 +1158,7 @@ model inadimplentes {
   ultima_cobranca    String?
   updated_at         DateTime @updatedAt
   valor_total_devido Int
+
   @@schema("comercial")
 }
 
@@ -1150,6 +1179,7 @@ model integracao_contabil_config {
   periodicidade_envio String
   software            String
   updated_at          DateTime @updatedAt
+
   @@schema("financeiro")
 }
 
@@ -1169,6 +1199,7 @@ model integracao_contabil_envios {
   tentativas         Int
   tipo_documento     String
   updated_at         DateTime @updatedAt
+
   @@schema("financeiro")
 }
 
@@ -1191,6 +1222,7 @@ model inventario_agendamentos {
   tipo_inventario       String
   ultima_execucao       String?
   updated_at            DateTime @updatedAt
+
   @@schema("operacional")
 }
 
@@ -1244,6 +1276,7 @@ model lead_interacoes {
   proximo_passo     String?
   resultado         String?
   tipo              String
+
   @@schema("comercial")
 }
 
@@ -1252,6 +1285,7 @@ model lead_tags {
   id         String   @id @default(uuid())
   lead_id    String
   tag        String
+
   @@schema("comercial")
 }
 
@@ -1279,6 +1313,7 @@ model leads {
   utm_source       String?
   valor_estimado   Int?
   whatsapp         String?
+
   @@schema("comercial")
 }
 
@@ -1301,6 +1336,7 @@ model lgpd_consents {
   updated_at   DateTime @updatedAt
   user_agent   String?
   version      Int
+
   @@schema("administrativo")
 }
 
@@ -1314,6 +1350,7 @@ model lgpd_data_consents {
   id           String   @id @default(uuid())
   patient_id   String
   revoked_at   String?
+
   @@schema("administrativo")
 }
 
@@ -1337,6 +1374,7 @@ model lgpd_data_exports {
   status          String
   tables_included String[]
   updated_at      DateTime @updatedAt
+
   @@schema("administrativo")
 }
 
@@ -1358,6 +1396,7 @@ model lgpd_data_requests {
   response         String?
   status           String
   updated_at       DateTime @updatedAt
+
   @@schema("administrativo")
 }
 
@@ -1372,6 +1411,7 @@ model login_attempts {
   session_duration_seconds Int?
   success                  Boolean
   user_agent               String?
+
   @@schema("core")
 }
 
@@ -1379,11 +1419,11 @@ model marketing_campaigns {
   campaign_type    String
   channel          String
   clinic_id        String
-  created_at       DateTime @default(now())
+  created_at       DateTime            @default(now())
   created_by       String
   description      String?
   end_date         String?
-  id               String   @id @default(uuid())
+  id               String              @id @default(uuid())
   last_sent_at     String?
   metadata         Json?
   name             String
@@ -1395,19 +1435,21 @@ model marketing_campaigns {
   template_id      String?
   trigger_config   Json?
   triggers         campaign_triggers[]
-  updated_at       DateTime @updatedAt
+  updated_at       DateTime            @updatedAt
+
   @@schema("comercial")
 }
 
 model module_catalog {
   category       String
-  created_at     DateTime @default(now())
+  created_at     DateTime         @default(now())
   description    String?
   icon           String?
-  id             Int      @id @default(autoincrement())
+  id             Int              @id @default(autoincrement())
   module_key     String
   name           String
   clinic_modules clinic_modules[]
+
   @@schema("configuracoes")
 }
 
@@ -1421,6 +1463,7 @@ model module_configuration_templates {
   name        String
   specialty   String
   updated_at  DateTime @updatedAt
+
   @@schema("configuracoes")
 }
 
@@ -1447,6 +1490,7 @@ model movimentacoes_estoque {
   usuario_id          String
   valor_total         Int
   valor_unitario      Int
+
   @@schema("inventario")
 }
 
@@ -1569,21 +1613,21 @@ model notas_fiscais {
 }
 
 model faturamento_config {
-  id                    String   @id @default(uuid())
-  clinic_id             String   @unique
-  cnpj_emitente         String?
-  razao_social          String?
-  serie_nfe             String?
-  serie_nfce            String?
-  ambiente              String   @default("homologacao")
-  certificado_a1_path   String?
-  certificado_senha     String?
+  id                     String   @id @default(uuid())
+  clinic_id              String   @unique
+  cnpj_emitente          String?
+  razao_social           String?
+  serie_nfe              String?
+  serie_nfce             String?
+  ambiente               String   @default("homologacao")
+  certificado_a1_path    String?
+  certificado_senha      String?
   certificado_vencimento String?
-  regime_tributario     String?
-  inscricao_estadual    String?
-  inscricao_municipal   String?
-  created_at            DateTime @default(now())
-  updated_at            DateTime @updatedAt
+  regime_tributario      String?
+  inscricao_estadual     String?
+  inscricao_municipal    String?
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
 
   @@schema("faturamento")
 }
@@ -1599,6 +1643,7 @@ model notifications {
   tipo       String
   titulo     String
   user_id    String?
+
   @@schema("administrativo")
 }
 
@@ -1625,6 +1670,7 @@ model onboarding_analytics {
   step_number        Int?
   time_spent_seconds Int?
   user_id            String
+
   @@schema("core")
 }
 
@@ -1640,6 +1686,7 @@ model orcamento_itens {
   quantidade      Int
   valor_total     Int
   valor_unitario  Int
+
   @@schema("financeiro")
 }
 
@@ -1653,6 +1700,7 @@ model orcamento_pagamento {
   tipo_pagamento  String
   valor_entrada   Int?
   valor_parcela   Int?
+
   @@schema("financeiro")
 }
 
@@ -1663,6 +1711,7 @@ model orcamento_visualizacoes {
   orcamento_id     String
   user_agent       String?
   visualizado_em   String
+
   @@schema("financeiro")
 }
 
@@ -1710,6 +1759,7 @@ model overdue_accounts {
   status           String
   total_amount     Int
   updated_at       DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -1724,6 +1774,7 @@ model patient_accounts {
   token_verificacao String?
   ultimo_acesso     String?
   updated_at        DateTime @updatedAt
+
   @@schema("pacientes")
 }
 
@@ -1738,6 +1789,7 @@ model patient_messages {
   patient_id     String
   remetente_id   String
   remetente_tipo String
+
   @@schema("pacientes")
 }
 
@@ -1751,6 +1803,7 @@ model patient_notifications {
   patient_id String
   tipo       String
   titulo     String
+
   @@schema("administrativo")
 }
 
@@ -1765,6 +1818,7 @@ model patient_preferences {
   patient_id              String
   tema                    String?
   updated_at              DateTime @updatedAt
+
   @@schema("pacientes")
 }
 
@@ -1774,6 +1828,7 @@ model patient_sessions {
   id         String   @id @default(uuid())
   patient_id String
   token      String
+
   @@schema("pacientes")
 }
 
@@ -1819,7 +1874,7 @@ model patients {
   cnpj_empresa                   String?
   cpf                            String?
   photo_url                      String?
-  created_at                     DateTime @default(now())
+  created_at                     DateTime         @default(now())
   created_by                     String?
   current_medications            String[]
   data_conversao                 String?
@@ -1853,7 +1908,7 @@ model patients {
   height_cm                      Int?
   hepatitis_type                 String?
   hypertension_controlled        Boolean?
-  id                             String   @id @default(uuid())
+  id                             String           @id @default(uuid())
   image_usage_consent            Boolean?
   indicado_por                   String?
   indicado_por_dentista_id       String?
@@ -1901,7 +1956,7 @@ model patients {
   total_debt                     Int?
   total_paid                     Int?
   treatment_consent              Boolean?
-  updated_at                     DateTime @updatedAt
+  updated_at                     DateTime         @updatedAt
   updated_by                     String?
   valor_lifetime                 Int?
   valor_ticket_medio             Int?
@@ -1928,6 +1983,7 @@ model payment_methods {
   taxa_percentual Int?
   type            String
   updated_at      DateTime @updatedAt
+
   @@schema("financeiro")
 }
 
@@ -1948,6 +2004,7 @@ model payment_negotiations {
   patient_id          String
   status              String
   updated_at          DateTime @updatedAt
+
   @@schema("financeiro")
 }
 
@@ -2021,6 +2078,7 @@ model pep_assinaturas {
   signed_by         String
   tipo_documento    String
   user_agent        String?
+
   @@schema("pep")
 }
 
@@ -2083,24 +2141,25 @@ model pep_tooth_surfaces {
   status              String
   surface             String
   updated_at          DateTime @updatedAt
+
   @@schema("pep")
 }
 
 model pep_tratamentos {
-  created_at      DateTime @default(now())
+  created_at      DateTime    @default(now())
   created_by      String
   data_conclusao  String?
   data_inicio     String
   dente_codigo    String?
   descricao       String
-  id              String   @id @default(uuid())
+  id              String      @id @default(uuid())
   observacoes     String?
   procedimento_id String?
   prontuario_id   String
   prontuario      prontuarios @relation(fields: [prontuario_id], references: [id])
   status          String
   titulo          String
-  updated_at      DateTime @updatedAt
+  updated_at      DateTime    @updatedAt
   valor_estimado  Int?
 
   @@schema("pep")
@@ -2127,6 +2186,7 @@ model permission_templates {
   id          String   @id @default(uuid())
   module_keys String[]
   name        String
+
   @@schema("core")
 }
 
@@ -2144,6 +2204,7 @@ model prescricoes_remotas {
   medicamento_nome       String?
   teleconsulta_id        String
   tipo                   String
+
   @@schema("clinico")
 }
 
@@ -2159,87 +2220,92 @@ model problemas_radiograficos {
   sugestao_tratamento String?
   tipo_problema       String
   urgente             Boolean?
+
   @@schema("clinico")
 }
 
 model procedimento_templates {
   categoria              String
   clinic_id              String?
-  created_at             DateTime @default(now())
+  created_at             DateTime                 @default(now())
   created_by             String
   descricao              String?
-  id                     String   @id @default(uuid())
+  id                     String                   @id @default(uuid())
   is_public              Boolean?
   nome                   String
   steps                  Json
   tags                   String[]
   tempo_estimado_minutos Int
-  updated_at             DateTime @updatedAt
+  updated_at             DateTime                 @updatedAt
   valor_sugerido         Int
   precos                 procedimento_precos[]
   dentistas              dentista_procedimentos[]
+
   @@schema("clinico")
 }
 
 model tabela_precos {
-  id          String   @id @default(uuid())
+  id          String                @id @default(uuid())
   nome        String
   tipo        String
   convenio_id String?
-  is_active   Boolean  @default(true)
-  is_default  Boolean  @default(false)
+  is_active   Boolean               @default(true)
+  is_default  Boolean               @default(false)
   clinic_id   String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  created_at  DateTime              @default(now())
+  updated_at  DateTime              @updatedAt
   precos      procedimento_precos[]
-  @@schema("clinico")
+
   @@unique([clinic_id, is_default], name: "unique_default_per_clinic")
+  @@schema("clinico")
 }
 
 model tiss_convenios {
-  id                String   @id @default(uuid())
-  clinic_id         String
-  nome              String
-  codigo_operadora  String?
-  cnpj              String?
-  registro_ans      String?
-  tipo_plano        String?
-  is_active         Boolean  @default(true)
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  id               String   @id @default(uuid())
+  clinic_id        String
+  nome             String
+  codigo_operadora String?
+  cnpj             String?
+  registro_ans     String?
+  tipo_plano       String?
+  is_active        Boolean  @default(true)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
 
-  @@schema("clinico")
   @@index([clinic_id])
+  @@schema("clinico")
 }
 
 model procedimento_precos {
-  id                      String   @id @default(uuid())
+  id                       String                 @id @default(uuid())
   procedimento_template_id String
-  tabela_preco_id         String
-  valor                   Int
-  tempo_retorno_dias      Int?
-  clinic_id               String
-  created_at              DateTime @default(now())
-  updated_at              DateTime @updatedAt
-  procedimento_template   procedimento_templates @relation(fields: [procedimento_template_id], references: [id], onDelete: Cascade)
-  tabela_preco            tabela_precos          @relation(fields: [tabela_preco_id], references: [id], onDelete: Cascade)
-  @@schema("clinico")
+  tabela_preco_id          String
+  valor                    Int
+  tempo_retorno_dias       Int?
+  clinic_id                String
+  created_at               DateTime               @default(now())
+  updated_at               DateTime               @updatedAt
+  procedimento_template    procedimento_templates @relation(fields: [procedimento_template_id], references: [id], onDelete: Cascade)
+  tabela_preco             tabela_precos          @relation(fields: [tabela_preco_id], references: [id], onDelete: Cascade)
+
   @@unique([procedimento_template_id, tabela_preco_id], name: "unique_proc_tabela")
+  @@schema("clinico")
 }
 
 model dentista_procedimentos {
-  id                      String   @id @default(uuid())
-  dentista_id             String
+  id                       String                 @id @default(uuid())
+  dentista_id              String
   procedimento_template_id String
-  duracao_customizada_min Int?
-  comissao_percentual     Decimal  @default(0.00) @db.Decimal(5, 2)
-  is_active               Boolean  @default(true)
-  clinic_id               String
-  created_at              DateTime @default(now())
-  updated_at              DateTime @updatedAt
-  procedimento_template   procedimento_templates @relation(fields: [procedimento_template_id], references: [id], onDelete: Cascade)
-  @@schema("clinico")
+  duracao_customizada_min  Int?
+  comissao_percentual      Decimal                @default(0.00) @db.Decimal(5, 2)
+  is_active                Boolean                @default(true)
+  clinic_id                String
+  created_at               DateTime               @default(now())
+  updated_at               DateTime               @updatedAt
+  procedimento_template    procedimento_templates @relation(fields: [procedimento_template_id], references: [id], onDelete: Cascade)
+
   @@unique([dentista_id, procedimento_template_id], name: "unique_dentista_proc")
+  @@schema("clinico")
 }
 
 model produtos {
@@ -2264,27 +2330,28 @@ model produtos {
 }
 
 model profiles {
-  app_role   String
-  avatar_url String?
-  clinic_id  String?
-  created_at DateTime @default(now())
+  app_role            String
+  avatar_url          String?
+  clinic_id           String?
+  created_at          DateTime              @default(now())
   full_name           String?
-  id                  String   @id @default(uuid())
+  id                  String                @id @default(uuid())
   is_active           Boolean
   phone               String?
-  updated_at          DateTime @updatedAt
+  updated_at          DateTime              @updatedAt
   crypto_price_alerts crypto_price_alerts[] @relation(name: "crypto_alert_creator")
+
   @@schema("core")
 }
 
 model prontuarios {
   clinic_id    String
-  created_at   DateTime @default(now())
+  created_at   DateTime          @default(now())
   created_by   String
-  id           String   @id @default(uuid())
+  id           String            @id @default(uuid())
   patient_id   String
   patient_name String
-  updated_at   DateTime @updatedAt
+  updated_at   DateTime          @updatedAt
   tratamentos  pep_tratamentos[]
 
   @@schema("pep")
@@ -2303,6 +2370,7 @@ model radiografia_ai_feedback {
   id                  String   @id @default(uuid())
   imagem_marcada_url  String?
   usado_para_treino   Boolean?
+
   @@schema("clinico")
 }
 
@@ -2316,6 +2384,7 @@ model radiografia_laudo_templates {
   template_markdown     String
   tipo_radiografia      String
   variaveis_disponiveis Json?
+
   @@schema("clinico")
 }
 
@@ -2328,6 +2397,7 @@ model rate_limit_config {
   max_requests_per_user Int
   updated_at            DateTime @updatedAt
   window_minutes        Int
+
   @@schema("configuracoes")
 }
 
@@ -2340,6 +2410,7 @@ model rate_limit_log {
   updated_at    DateTime @updatedAt
   user_id       String?
   window_start  String
+
   @@schema("configuracoes")
 }
 
@@ -2357,6 +2428,7 @@ model recalls {
   status                 String
   tipo_recall            String
   updated_at             DateTime @updatedAt
+
   @@schema("core")
 }
 
@@ -2371,6 +2443,7 @@ model room_availability {
   room_name   String
   room_number String?
   updated_at  DateTime @updatedAt
+
   @@schema("core")
 }
 
@@ -2384,6 +2457,7 @@ model root_actions_log {
   target_record_id String?
   target_table     String?
   user_agent       String?
+
   @@schema("configuracoes")
 }
 
@@ -2397,6 +2471,7 @@ model rum_metrics {
   rating       String
   user_agent   String?
   user_id      String?
+
   @@schema("core")
 }
 
@@ -2415,6 +2490,7 @@ model sat_mfe_config {
   tipo_equipamento String
   updated_at       DateTime @updatedAt
   versao_software  String?
+
   @@schema("faturamento")
 }
 
@@ -2436,6 +2512,7 @@ model sat_mfe_impressoes {
   venda_id           String?
   xml_enviado        String?
   xml_retorno        String?
+
   @@schema("faturamento")
 }
 
@@ -2464,6 +2541,7 @@ model scheduled_backups {
   storage_destination    String?
   time_of_day            String
   updated_at             DateTime @updatedAt
+
   @@schema("backups")
 }
 
@@ -2480,6 +2558,7 @@ model scheduled_exports {
   next_send_at   String?
   updated_at     DateTime @updatedAt
   user_id        String
+
   @@schema("administrativo")
 }
 
@@ -2491,6 +2570,7 @@ model security_audit_log {
   resolution        String
   resolved_at       String
   severity          String?
+
   @@schema("configuracoes")
 }
 
@@ -2503,6 +2583,7 @@ model split_payment_config {
   procedure_type  String?
   professional_id String
   updated_at      DateTime @updatedAt
+
   @@schema("financeiro")
 }
 
@@ -2518,6 +2599,7 @@ model split_payment_details {
   split_transaction_id String
   status               String
   tax_withheld         Int?
+
   @@schema("financeiro")
 }
 
@@ -2533,6 +2615,7 @@ model split_payment_recipients {
   split_percentage   Int?
   tax_rate           Int?
   tax_regime         String?
+
   @@schema("financeiro")
 }
 
@@ -2547,6 +2630,7 @@ model split_payment_rules {
   rule_type  String
   status     String
   updated_at DateTime @updatedAt
+
   @@schema("financeiro")
 }
 
@@ -2562,6 +2646,7 @@ model split_payment_transactions {
   status              String
   total_amount        Int
   transaction_id      String?
+
   @@schema("financeiro")
 }
 
@@ -2577,6 +2662,7 @@ model split_transactions {
   status              String
   total_amount        Int
   transaction_id      String
+
   @@schema("financeiro")
 }
 
@@ -2588,6 +2674,7 @@ model system_health_metrics {
   recorded_at String
   unit        String?
   value       Int
+
   @@schema("administrativo")
 }
 
@@ -2614,6 +2701,7 @@ model teleconsultas {
   tipo            String
   titulo          String
   updated_at      DateTime @updatedAt
+
   @@schema("clinico")
 }
 
@@ -2628,6 +2716,7 @@ model teleodonto_chat {
   sender_role     String
   sent_at         String
   session_id      String
+
   @@schema("clinico")
 }
 
@@ -2644,6 +2733,7 @@ model teleodonto_files {
   tipo_arquivo               String
   uploaded_at                String
   uploaded_by                String
+
   @@schema("clinico")
 }
 
@@ -2677,6 +2767,7 @@ model teleodonto_sessions {
   started_at                String?
   status                    String
   updated_at                DateTime @updatedAt
+
   @@schema("clinico")
 }
 
@@ -2690,6 +2781,7 @@ model terminal_command_history {
   output         String?
   user_id        String
   was_successful Boolean?
+
   @@schema("terminal")
 }
 
@@ -2705,6 +2797,7 @@ model tiss_batches {
   status            String
   total_amount      Int
   total_guides      Int
+
   @@schema("clinico")
 }
 
@@ -2724,6 +2817,7 @@ model tiss_guides {
   status            String
   submission_date   String?
   updated_at        DateTime @updatedAt
+
   @@schema("clinico")
 }
 
@@ -2737,6 +2831,7 @@ model triagem_teleconsulta {
   sintomas         String[]
   teleconsulta_id  String
   tempo_sintoma    String?
+
   @@schema("clinico")
 }
 
@@ -2746,6 +2841,7 @@ model user_clinic_access {
   id         String   @id @default(uuid())
   is_default Boolean?
   user_id    String
+
   @@schema("core")
 }
 
@@ -2758,6 +2854,7 @@ model user_module_permissions {
   module_catalog_id Int
   updated_at        DateTime @updatedAt
   user_id           String
+
   @@schema("core")
 }
 
@@ -2766,6 +2863,7 @@ model user_roles {
   id         String   @id @default(uuid())
   role       String
   user_id    String
+
   @@schema("core")
 }
 
@@ -2778,6 +2876,7 @@ model wiki_page_versions {
   page_id        String
   title          String
   version        Int
+
   @@schema("administrativo")
 }
 
@@ -2796,6 +2895,7 @@ model wiki_pages {
   updated_at   DateTime @updatedAt
   updated_by   String?
   version      Int
+
   @@schema("administrativo")
 }
 
@@ -2813,6 +2913,7 @@ model banco_extratos {
   reference     String?
   source        String?
   type          String
+
   @@schema("financeiro")
 }
 
@@ -2828,6 +2929,7 @@ model cash_registers {
   status         String
   updated_at     DateTime @updatedAt
   valor_abertura Int
+
   @@schema("pdv")
 }
 
@@ -2840,6 +2942,7 @@ model crypto_offline_wallets {
   label      String?
   network    String
   updated_at DateTime @updatedAt
+
   @@schema("crypto_config")
 }
 
@@ -2856,6 +2959,7 @@ model crypto_transactions {
   tx_hash     String?
   type        String
   wallet_id   String?
+
   @@schema("financeiro")
 }
 
@@ -2870,6 +2974,7 @@ model crypto_wallets {
   label      String?
   type       String
   updated_at DateTime @updatedAt
+
   @@schema("crypto_config")
 }
 
@@ -2883,6 +2988,7 @@ model fidelidade_badges {
   name        String
   tier        String?
   updated_at  DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -2897,6 +3003,7 @@ model fidelidade_indicacoes {
   reward_points   Int?
   status          String
   updated_at      DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -2909,6 +3016,7 @@ model fidelidade_pontos {
   patient_id  String
   source      String
   type        String
+
   @@schema("comercial")
 }
 
@@ -2921,6 +3029,7 @@ model fidelidade_recompensas {
   name        String
   points_cost Int
   updated_at  DateTime @updatedAt
+
   @@schema("comercial")
 }
 
@@ -2933,6 +3042,7 @@ model pdv_dashboard {
   periodo         String?
   total_vendas    Int?
   updated_at      DateTime @updatedAt
+
   @@schema("pdv")
 }
 
@@ -2948,6 +3058,7 @@ model pdv_metas_gamificacao {
   recompensa  String?
   updated_at  DateTime @updatedAt
   vendedor_id String?
+
   @@schema("pdv")
 }
 
@@ -2962,6 +3073,7 @@ model split_comissoes {
   professional_id String
   status          String
   transaction_id  String?
+
   @@schema("financeiro")
 }
 
@@ -2989,6 +3101,7 @@ model vendedor_ranking {
   updated_at    DateTime @updatedAt
   vendedor_id   String
   vendedor_nome String?
+
   @@schema("pdv")
 }
 
@@ -3009,15 +3122,15 @@ model event_store {
 }
 
 model users {
-  id             String    @id @default(uuid())
-  email          String    @unique
-  password_hash  String
-  role           String    @default("MEMBER")
-  clinic_id      String?
-  is_active      Boolean   @default(true)
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password_hash   String
+  role            String    @default("MEMBER")
+  clinic_id       String?
+  is_active       Boolean   @default(true)
   last_sign_in_at DateTime?
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
 
   @@index([clinic_id])
   @@schema("configuracoes")
@@ -3038,18 +3151,18 @@ model domain_events {
 // Wave-2: Ghost table models (added to fix missing Prisma models)
 
 model nfe_records {
-  id                   String   @id @default(uuid())
-  clinic_id            String
-  chave_acesso         String
-  valor_total          Decimal  @db.Decimal(10, 2)
-  tipo_nota            String
-  status               String
-  protocolo            String?
-  xml_autorizacao      String?
-  motivo_cancelamento  String?
-  data_cancelamento    DateTime?
-  data_emissao         DateTime @default(now())
-  created_at           DateTime @default(now())
+  id                  String    @id @default(uuid())
+  clinic_id           String
+  chave_acesso        String
+  valor_total         Decimal   @db.Decimal(10, 2)
+  tipo_nota           String
+  status              String
+  protocolo           String?
+  xml_autorizacao     String?
+  motivo_cancelamento String?
+  data_cancelamento   DateTime?
+  data_emissao        DateTime  @default(now())
+  created_at          DateTime  @default(now())
 
   @@index([clinic_id])
   @@index([status])
@@ -3070,42 +3183,42 @@ model fidelidade_pacientes {
 }
 
 model fidelidade_transacoes {
-  id          String   @id @default(uuid())
-  clinic_id   String
-  patient_id  String
-  tipo        String
-  pontos      Int
-  descricao   String?
-  created_at  DateTime @default(now())
+  id         String   @id @default(uuid())
+  clinic_id  String
+  patient_id String
+  tipo       String
+  pontos     Int
+  descricao  String?
+  created_at DateTime @default(now())
 
   @@index([clinic_id, patient_id])
   @@schema("comercial")
 }
 
 model gamification_goals {
-  id             String   @id @default(uuid())
-  clinic_id      String
-  user_id        String
-  type           String
-  target_value   Int
-  current_value  Int      @default(0)
-  status         String   @default("ACTIVE")
-  deadline       DateTime
-  completed_at   DateTime?
-  created_at     DateTime @default(now())
+  id            String    @id @default(uuid())
+  clinic_id     String
+  user_id       String
+  type          String
+  target_value  Int
+  current_value Int       @default(0)
+  status        String    @default("ACTIVE")
+  deadline      DateTime
+  completed_at  DateTime?
+  created_at    DateTime  @default(now())
 
   @@index([clinic_id, user_id, status])
   @@schema("comercial")
 }
 
 model bi_export_jobs {
-  id             String   @id @default(uuid())
-  clinic_id      String
-  export_type    String
-  scheduled_for  DateTime
-  status         String   @default("PENDING")
-  format         String
-  created_at     DateTime @default(now())
+  id            String   @id @default(uuid())
+  clinic_id     String
+  export_type   String
+  scheduled_for DateTime
+  status        String   @default("PENDING")
+  format        String
+  created_at    DateTime @default(now())
 
   @@index([clinic_id, status])
   @@schema("administrativo")
@@ -3120,24 +3233,24 @@ enum VisibilidadeArquivo {
 }
 
 model arquivo {
-  id            String   @id @default(uuid())
-  clinic_id     String
-  paciente_id   String?
-  consulta_id   String?
-  orcamento_id  String?
-  nome_original String
-  nome_storage  String
-  mime_type     String
-  tamanho_bytes Int
-  categoria     String   @default("OUTRO")
-  visibilidade  VisibilidadeArquivo @default(RESTRITO)
-  url_temp      String?
-  expira_em     DateTime?
-  uploaded_by   String
+  id              String              @id @default(uuid())
+  clinic_id       String
+  paciente_id     String?
+  consulta_id     String?
+  orcamento_id    String?
+  nome_original   String
+  nome_storage    String
+  mime_type       String
+  tamanho_bytes   Int
+  categoria       String              @default("OUTRO")
+  visibilidade    VisibilidadeArquivo @default(RESTRITO)
+  url_temp        String?
+  expira_em       DateTime?
+  uploaded_by     String
   versao_atual_id String?
-  ocr_status    String?  @default("PENDENTE")
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  ocr_status      String?             @default("PENDENTE")
+  created_at      DateTime            @default(now())
+  updated_at      DateTime            @updatedAt
 
   @@index([clinic_id, paciente_id])
   @@index([clinic_id, categoria])
@@ -3160,40 +3273,40 @@ model arquivo_ocr {
 }
 
 model arquivo_versao {
-  id             String   @id @default(uuid())
-  arquivo_id     String
-  numero_versao  Int
-  nome_storage   String
-  tamanho_bytes  Int
-  url_temp       String?
-  created_by     String
-  created_at     DateTime @default(now())
+  id            String   @id @default(uuid())
+  arquivo_id    String
+  numero_versao Int
+  nome_storage  String
+  tamanho_bytes Int
+  url_temp      String?
+  created_by    String
+  created_at    DateTime @default(now())
 
   @@index([arquivo_id, numero_versao])
   @@schema("administrativo")
 }
 
 model estoque_alertas {
-  id                   String   @id @default(uuid())
-  produto_id           String
-  tipo                 String
-  mensagem             String
-  quantidade_atual     Int
-  quantidade_sugerida  Int?
-  lido                 Boolean  @default(false)
-  clinic_id            String
-  created_at           DateTime @default(now())
+  id                  String   @id @default(uuid())
+  produto_id          String
+  tipo                String
+  mensagem            String
+  quantidade_atual    Int
+  quantidade_sugerida Int?
+  lido                Boolean  @default(false)
+  clinic_id           String
+  created_at          DateTime @default(now())
 
   @@index([clinic_id, lido])
   @@schema("inventario")
 }
 
 model crypto_exchange_rates {
-  id         String   @id @default(uuid())
-  coin_type  String
-  rate_brl   Decimal  @db.Decimal(18, 8)
-  timestamp  DateTime @default(now())
-  source     String?
+  id        String   @id @default(uuid())
+  coin_type String
+  rate_brl  Decimal  @db.Decimal(18, 8)
+  timestamp DateTime @default(now())
+  source    String?
 
   @@index([coin_type, timestamp])
   @@schema("financeiro")
@@ -3213,11 +3326,11 @@ model comunicacao_logs {
 }
 
 model analytics_events {
-  id          String   @id @default(uuid())
-  event_type  String
-  clinic_id   String?
-  payload     Json?
-  created_at  DateTime @default(now())
+  id         String   @id @default(uuid())
+  event_type String
+  clinic_id  String?
+  payload    Json?
+  created_at DateTime @default(now())
 
   @@index([event_type, created_at])
   @@schema("operacional")
@@ -3284,7 +3397,7 @@ model paciente_consentimento_ia {
 }
 
 model ia_radiografia_analise {
-  id                   String           @id @default(uuid())
+  id                   String          @id @default(uuid())
   clinic_id            String
   paciente_id          String
   prontuario_id        String?
@@ -3292,20 +3405,20 @@ model ia_radiografia_analise {
   imagem_hash          String
   imagem_storage_path  String
   tipo_radiografia     TipoRadiografia
-  status               StatusAnaliseIA  @default(PENDENTE)
+  status               StatusAnaliseIA @default(PENDENTE)
   resultado_ia         Json?
   confidence_score     Float?
   processamento_ms     Int?
-  revisada             Boolean          @default(false)
+  revisada             Boolean         @default(false)
   dentista_revisor_id  String?
   observacoes_dentista String?
   assinatura_digital   String?
-  modelo_usado         String           @default("local/llama-3.3")
+  modelo_usado         String          @default("local/llama-3.3")
   modelo_version       String?
   experiment_id        String?
   erro_processamento   String?
-  created_at           DateTime         @default(now())
-  updated_at           DateTime         @updatedAt
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 
   problemas_detectados problema_radiografico[]
 
@@ -3316,7 +3429,7 @@ model ia_radiografia_analise {
 }
 
 model problema_radiografico {
-  id                  String   @id @default(uuid())
+  id                  String                   @id @default(uuid())
   analise_id          String
   tipo_problema       TipoProblemaRadiografico
   dente_codigo        String?
@@ -3325,8 +3438,8 @@ model problema_radiografico {
   confianca           Float
   descricao           String?
   sugestao_tratamento String?
-  urgente             Boolean  @default(false)
-  created_at          DateTime @default(now())
+  urgente             Boolean                  @default(false)
+  created_at          DateTime                 @default(now())
 
   analise ia_radiografia_analise @relation(fields: [analise_id], references: [id], onDelete: Cascade)
 
@@ -3357,11 +3470,11 @@ enum SeveridadeProblema {
 }
 
 model ia_modelo_config {
-  id              String   @id @default(uuid())
-  clinic_id       String
-  modelo_ativo    String   @default("local/llama-3.3")
-  aceita_beta     Boolean  @default(false)
-  updated_at      DateTime @updatedAt
+  id           String   @id @default(uuid())
+  clinic_id    String
+  modelo_ativo String   @default("local/llama-3.3")
+  aceita_beta  Boolean  @default(false)
+  updated_at   DateTime @updatedAt
 
   @@unique([clinic_id])
   @@schema("pep")
