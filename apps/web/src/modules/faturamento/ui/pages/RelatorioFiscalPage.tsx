@@ -7,8 +7,17 @@ import { Button } from "@orthoplus/core-ui/button"
 import { Input } from "@orthoplus/core-ui/input"
 import { Label } from "@orthoplus/core-ui/label"
 import { LoadingState } from "@/components/shared/LoadingState"
-import { FileText, Download } from "lucide-react"
+import { FileText, Download, TrendingUp } from "lucide-react"
 import ExcelJS from "exceljs"
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts"
 
 interface RelatorioFilters {
   dataInicio?: string
@@ -220,6 +229,35 @@ export default function RelatorioFiscalPage() {
               </CardContent>
             </Card>
           </div>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <CardTitle>Evolucao por Data</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={data.notas.map((n) => ({
+                      data: n.data_emissao,
+                      valor: n.valor_total / 100,
+                    }))}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="data" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip
+                      formatter={(value: number) =>
+                        `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                      }
+                    />
+                    <Bar dataKey="valor" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>
