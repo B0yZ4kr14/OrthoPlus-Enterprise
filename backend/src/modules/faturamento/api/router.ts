@@ -33,5 +33,8 @@ router.use(clinicGuard);
   router.get("/config", controller.getConfig);
   router.post("/config", controller.upsertConfig);
 
+  // Fiscal Report
+  router.get("/relatorio", controller.getRelatorio);
+
   return router;
 }

@@ -89,7 +89,7 @@ export default function RecallPage() {
   });
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, { variant: string; icon: React.ComponentType<{ className?: string }>; label: string }> = {
+    const config: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: React.ComponentType<{ className?: string }>; label: string }> = {
       PENDENTE: { variant: "secondary", icon: Clock, label: "Pendente" },
       AGENDADO: { variant: "default", icon: Calendar, label: "Agendado" },
       CONFIRMADO: {

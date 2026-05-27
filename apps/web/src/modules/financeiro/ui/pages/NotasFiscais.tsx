@@ -46,8 +46,10 @@ import {
   XCircle,
   Eye,
   Settings,
+  BarChart3,
 } from "lucide-react";
 import { FiscalConfigForm } from "../../components/FiscalConfigForm";
+import { FiscalRelatorio } from "../../components/FiscalRelatorio";
 import { useFaturamento } from "@/hooks/api/useFaturamento";
 import { formatDate } from "@/lib/utils/date.utils";
 
@@ -55,7 +57,7 @@ import { useFinanceiro } from "@/modules/financeiro/application/hooks/useFinance
 import type { NotaFiscal } from "@/modules/financeiro/types/financeiro-completo.types";
 
 export default function NotasFiscais() {
-  const { config, isLoadingConfig, saveConfig, isSavingConfig } = useFaturamento();
+  const { config, isLoadingConfig, saveConfig, isSavingConfig, relatorio, isLoadingRelatorio, refetchRelatorio } = useFaturamento();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("todas");
   const [filterTipo, setFilterTipo] = useState("todos");
@@ -369,6 +371,10 @@ export default function NotasFiscais() {
             <Settings className="h-4 w-4 mr-1" />
             Configuração
           </TabsTrigger>
+          <TabsTrigger value="relatorio">
+            <BarChart3 className="h-4 w-4 mr-1" />
+            Relatório
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="todas" className="space-y-4">
@@ -436,6 +442,13 @@ export default function NotasFiscais() {
             onSave={saveConfig}
             isLoading={isLoadingConfig}
             isSaving={isSavingConfig}
+          />
+        </TabsContent>
+        <TabsContent value="relatorio" className="space-y-4">
+          <FiscalRelatorio
+            data={relatorio}
+            isLoading={isLoadingRelatorio}
+            onGenerate={() => refetchRelatorio()}
           />
         </TabsContent>
       </Tabs>

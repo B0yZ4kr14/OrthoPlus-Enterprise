@@ -15,4 +15,5 @@ export interface IFaturamentoRepository {
 
   getConfig(clinicId: string): Promise<any | null>
   upsertConfig(clinicId: string, data: any): Promise<any>
+  getRelatorio(clinicId: string, filters: { dataInicio?: string; dataFim?: string; tipo?: string }): Promise<any[]>
 }

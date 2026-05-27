@@ -111,6 +111,14 @@ export const useFaturamento = () => {
     },
   });
 
+  const { data: relatorioData, isLoading: isLoadingRelatorio, refetch: refetchRelatorio } = useQuery({
+    queryKey: ["faturamento-relatorio"],
+    queryFn: async () => {
+      return await apiClient.get<{ notas: NFe[]; totais: any }>("/faturamento/relatorio");
+    },
+    enabled: false,
+  });
+
   const { data: config, isLoading: isLoadingConfig } = useQuery({
     queryKey: ["faturamento-config"],
     queryFn: async () => {
@@ -143,5 +151,8 @@ export const useFaturamento = () => {
     isLoadingConfig,
     saveConfig: saveConfig.mutate,
     isSavingConfig: saveConfig.isPending,
+    relatorio: relatorioData,
+    isLoadingRelatorio,
+    refetchRelatorio,
   };
 };

@@ -29,4 +29,18 @@ export class FaturamentoRepository implements IFaturamentoRepository {
       create: { clinic_id: clinicId, ...data },
     });
   }
+
+  async getRelatorio(clinicId: string, filters: { dataInicio?: string; dataFim?: string; tipo?: string }) {
+    const where: any = { clinic_id: clinicId };
+    if (filters.tipo) where.tipo = filters.tipo;
+    if (filters.dataInicio || filters.dataFim) {
+      where.data_emissao = {};
+      if (filters.dataInicio) where.data_emissao.gte = filters.dataInicio;
+      if (filters.dataFim) where.data_emissao.lte = filters.dataFim;
+    }
+    return (prisma as any).notas_fiscais.findMany({
+      where,
+      orderBy: { data_emissao: 'desc' },
+    });
+  }
 }

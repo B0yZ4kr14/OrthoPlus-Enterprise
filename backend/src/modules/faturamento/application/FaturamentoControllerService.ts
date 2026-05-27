@@ -74,4 +74,18 @@ export class FaturamentoControllerService {
   async upsertConfig(clinicId: string, data: unknown) {
     return this.repo.upsertConfig(clinicId, data);
   }
+
+  async getRelatorio(clinicId: string, filters: { dataInicio?: string; dataFim?: string; tipo?: string }) {
+    const notas = await this.repo.getRelatorio(clinicId, filters);
+    const totais = {
+      valorTotal: notas.reduce((acc: number, n: any) => acc + (n.valor_total || 0), 0),
+      valorIcms: notas.reduce((acc: number, n: any) => acc + (n.valor_icms || 0), 0),
+      valorIss: notas.reduce((acc: number, n: any) => acc + (n.valor_iss || 0), 0),
+      valorIpi: 0,
+      valorPis: 0,
+      valorCofins: 0,
+      quantidade: notas.length,
+    };
+    return { notas, totais };
+  }
 }

@@ -168,4 +168,14 @@ export class FaturamentoController {
     const config = await this.service.upsertConfig(clinicId, req.body);
     res.status(200).json({ message: "Config saved successfully", config });
   });
+
+  getRelatorio = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
+    }
+    const { dataInicio, dataFim, tipo } = req.query as any;
+    const result = await this.service.getRelatorio(clinicId, { dataInicio, dataFim, tipo });
+    res.status(200).json(result);
+  });
 }
