@@ -242,7 +242,7 @@ export function CryptoComparativeDashboard({
       {totalSavings > 100 && (
         <Alert className="bg-success/10 border-success/50">
           <TrendingUp className="h-4 w-4 text-success" />
-          <AlertDescription className="text-success dark:text-green-300">
+          <AlertDescription className="text-success dark:text-success/80">
             <strong>Excelente!</strong> Você está economizando{" "}
             <strong>
               R${" "}

@@ -131,7 +131,7 @@ export function CryptoTransactionsView({
             <Button
               onClick={() => setWalletDialogOpen(true)}
               size="lg"
-              className="bg-warning hover:bg-orange-600"
+              className="bg-warning hover:bg-warning"
             >
               <Plus className="h-5 w-5 mr-2" />
               Criar Carteira

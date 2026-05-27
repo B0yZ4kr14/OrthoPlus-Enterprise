@@ -157,7 +157,7 @@ export default function AssinaturaICP() {
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Badge variant="outline" className="bg-blue-50">
+                    <Badge variant="outline" className="bg-info/5">
                       e-CPF A1
                     </Badge>
                     <span className="text-sm">3 certificados</span>
@@ -365,7 +365,7 @@ export default function AssinaturaICP() {
                           ) : (
                             <Badge
                               variant="outline"
-                              className="flex items-center space-x-1 bg-yellow-50"
+                              className="flex items-center space-x-1 bg-warning/5"
                             >
                               <AlertTriangle className="h-3 w-3 text-warning" />
                               <span>Expira em breve</span>

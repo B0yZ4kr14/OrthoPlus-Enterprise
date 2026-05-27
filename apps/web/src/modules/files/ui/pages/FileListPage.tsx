@@ -37,8 +37,8 @@ const CATEGORIAS: Record<string, string> = {
 };
 
 const VISIBILIDADE_CONFIG: Record<string, { label: string; className: string }> = {
-  PUBLICO: { label: "Público", className: "bg-success/10 text-green-800" },
-  RESTRITO: { label: "Restrito", className: "bg-warning/10 text-yellow-800" },
+  PUBLICO: { label: "Público", className: "bg-success/10 text-success" },
+  RESTRITO: { label: "Restrito", className: "bg-warning/10 text-warning" },
   CONFIDENCIAL: { label: "Confidencial", className: "bg-destructive/10 text-destructive" },
 };
 
@@ -47,7 +47,7 @@ const OCR_STATUS_CONFIG: Record<
   { label: string; className: string }
 > = {
   PENDENTE: { label: "Pendente", className: "bg-gray-100 text-gray-600" },
-  PROCESSANDO: { label: "Processando", className: "bg-warning/10 text-yellow-700" },
+  PROCESSANDO: { label: "Processando", className: "bg-warning/10 text-warning" },
   CONCLUIDO: { label: "Concluído", className: "bg-success/10 text-success" },
   ERRO: { label: "Erro", className: "bg-destructive/10 text-destructive" },
 };
@@ -195,7 +195,7 @@ export default function FileListPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-info/10 text-info">
                       {CATEGORIAS[file.categoria] ?? file.categoria}
                     </span>
                   </td>
@@ -254,7 +254,7 @@ export default function FileListPage() {
                       </button>
                       <button
                         onClick={() => handleDelete(file.id)}
-                        className="p-2 hover:bg-red-50 rounded-md"
+                        className="p-2 hover:bg-destructive/5 rounded-md"
                         title="Excluir"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />

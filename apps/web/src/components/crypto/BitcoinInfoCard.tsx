@@ -143,7 +143,7 @@ export function BitcoinInfoCard() {
                 {[
                   {
                     name: "Binance",
-                    color: "bg-warning/10 border-yellow-500/20",
+                    color: "bg-warning/10 border-warning/20",
                   },
                   {
                     name: "Coinbase",

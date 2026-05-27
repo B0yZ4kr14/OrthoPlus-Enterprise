@@ -141,7 +141,7 @@ export function AlertasEstoque({
                 </div>
                 <Badge
                   variant="outline"
-                  className="text-success border-green-600"
+                  className="text-success border-success"
                 >
                   <Check className="h-3 w-3 mr-1" />
                   Resolvido

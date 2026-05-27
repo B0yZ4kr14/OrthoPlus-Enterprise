@@ -147,24 +147,24 @@ export const unidadesMedida = [
 ] as const;
 
 export const prioridadesRequisicao = [
-  { value: "BAIXA", label: "Baixa", color: "bg-blue-500" },
-  { value: "MEDIA", label: "Média", color: "bg-yellow-500" },
-  { value: "ALTA", label: "Alta", color: "bg-orange-500" },
-  { value: "URGENTE", label: "Urgente", color: "bg-red-500" },
+  { value: "BAIXA", label: "Baixa", color: "bg-info" },
+  { value: "MEDIA", label: "Média", color: "bg-warning" },
+  { value: "ALTA", label: "Alta", color: "bg-warning" },
+  { value: "URGENTE", label: "Urgente", color: "bg-destructive" },
 ] as const;
 
 export const statusRequisicao = [
   { value: "PENDENTE", label: "Pendente", color: "bg-gray-500" },
-  { value: "APROVADA", label: "Aprovada", color: "bg-green-500" },
-  { value: "REJEITADA", label: "Rejeitada", color: "bg-red-500" },
-  { value: "ENTREGUE", label: "Entregue", color: "bg-blue-500" },
+  { value: "APROVADA", label: "Aprovada", color: "bg-success" },
+  { value: "REJEITADA", label: "Rejeitada", color: "bg-destructive" },
+  { value: "ENTREGUE", label: "Entregue", color: "bg-info" },
 ] as const;
 
 export const tiposMovimentacao = [
-  { value: "ENTRADA", label: "Entrada", color: "bg-green-500" },
-  { value: "SAIDA", label: "Saída", color: "bg-red-500" },
-  { value: "AJUSTE", label: "Ajuste", color: "bg-blue-500" },
-  { value: "DEVOLUCAO", label: "Devolução", color: "bg-yellow-500" },
+  { value: "ENTRADA", label: "Entrada", color: "bg-success" },
+  { value: "SAIDA", label: "Saída", color: "bg-destructive" },
+  { value: "AJUSTE", label: "Ajuste", color: "bg-info" },
+  { value: "DEVOLUCAO", label: "Devolução", color: "bg-warning" },
   { value: "PERDA", label: "Perda", color: "bg-gray-500" },
 ] as const;
 
@@ -229,10 +229,10 @@ export const tiposInventario = [
 ] as const;
 
 export const statusInventario = [
-  { value: "PLANEJADO", label: "Planejado", color: "bg-blue-500" },
-  { value: "EM_ANDAMENTO", label: "Em Andamento", color: "bg-yellow-500" },
-  { value: "CONCLUIDO", label: "Concluído", color: "bg-green-500" },
-  { value: "CANCELADO", label: "Cancelado", color: "bg-red-500" },
+  { value: "PLANEJADO", label: "Planejado", color: "bg-info" },
+  { value: "EM_ANDAMENTO", label: "Em Andamento", color: "bg-warning" },
+  { value: "CONCLUIDO", label: "Concluído", color: "bg-success" },
+  { value: "CANCELADO", label: "Cancelado", color: "bg-destructive" },
 ] as const;
 
 // Schema para Pedido
@@ -289,8 +289,8 @@ export const pedidoConfigSchema = z.object({
 export type PedidoConfig = z.infer<typeof pedidoConfigSchema>;
 
 export const statusPedido = [
-  { value: "PENDENTE", label: "Pendente", color: "bg-yellow-500" },
-  { value: "ENVIADO", label: "Enviado", color: "bg-blue-500" },
-  { value: "RECEBIDO", label: "Recebido", color: "bg-green-500" },
-  { value: "CANCELADO", label: "Cancelado", color: "bg-red-500" },
+  { value: "PENDENTE", label: "Pendente", color: "bg-warning" },
+  { value: "ENVIADO", label: "Enviado", color: "bg-info" },
+  { value: "RECEBIDO", label: "Recebido", color: "bg-success" },
+  { value: "CANCELADO", label: "Cancelado", color: "bg-destructive" },
 ] as const;

@@ -108,7 +108,7 @@ export default function TemplatesProcedimentosPage() {
       ENDODONTIA: "bg-destructive/10 text-destructive dark:text-destructive",
       PROTESE: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
       ORTODONTIA: "bg-success/10 text-success dark:text-success",
-      CIRURGIA: "bg-warning/10 text-warning dark:text-orange-400",
+      CIRURGIA: "bg-warning/10 text-warning dark:text-warning/80",
       PERIODONTIA: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
       ESTETICA: "bg-interactive/10 text-interactive",
       PREVENTIVA: "bg-success/10 text-success dark:text-success",

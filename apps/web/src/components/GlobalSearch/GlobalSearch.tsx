@@ -78,7 +78,7 @@ function HighlightedSnippet({ snippet }: { snippet: string }) {
           return (
             <mark
               key={i}
-              className="bg-yellow-200 dark:bg-yellow-600/60 rounded-sm px-0.5 text-foreground"
+              className="bg-warning/30 dark:bg-warning/60 rounded-sm px-0.5 text-foreground"
             >
               {text}
             </mark>

@@ -183,11 +183,11 @@ function calculateStrength(password: string): PasswordStrength {
   }
 
   const strengthMap = {
-    0: { label: "Muito Fraca", color: "bg-destructive dark:bg-red-600" },
-    1: { label: "Fraca", color: "bg-warning dark:bg-orange-600" },
-    2: { label: "Média", color: "bg-warning dark:bg-yellow-600" },
-    3: { label: "Forte", color: "bg-lime-500 dark:bg-lime-600" },
-    4: { label: "Muito Forte", color: "bg-success dark:bg-green-600" },
+    0: { label: "Muito Fraca", color: "bg-destructive dark:bg-destructive/60" },
+    1: { label: "Fraca", color: "bg-warning dark:bg-warning/60" },
+    2: { label: "Média", color: "bg-warning dark:bg-warning/60" },
+    3: { label: "Forte", color: "bg-success dark:bg-success/60" },
+    4: { label: "Muito Forte", color: "bg-success dark:bg-success/60" },
   };
 
   const { label, color } = strengthMap[score as keyof typeof strengthMap];
@@ -197,9 +197,9 @@ function calculateStrength(password: string): PasswordStrength {
 
 function getTextColorClass(bgColor: string): string {
   if (bgColor.includes("red")) return "text-destructive dark:text-destructive";
-  if (bgColor.includes("orange")) return "text-warning dark:text-orange-400";
+  if (bgColor.includes("orange")) return "text-warning dark:text-warning/80";
   if (bgColor.includes("yellow")) return "text-warning dark:text-warning";
-  if (bgColor.includes("lime")) return "text-lime-600 dark:text-lime-400";
+  if (bgColor.includes("lime")) return "text-success dark:text-success/80";
   if (bgColor.includes("green")) return "text-success dark:text-success";
   return "text-muted-foreground";
 }

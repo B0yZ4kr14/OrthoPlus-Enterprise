@@ -245,32 +245,32 @@ export function CryptoPaymentCheckout({
 
         {/* Status Messages */}
         {status === "PROCESSING" && (
-          <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
-            <p className="text-sm text-blue-900 dark:text-blue-100">
+          <div className="p-4 bg-info/5 dark:bg-info/20 rounded-lg">
+            <p className="text-sm text-info dark:text-info">
               ⏳ Processando pagamento... Aguarde a confirmação na blockchain.
             </p>
           </div>
         )}
 
         {status === "CONFIRMED" && (
-          <div className="p-4 bg-success/5 dark:bg-green-950 rounded-lg">
-            <p className="text-sm text-green-900 dark:text-green-100">
+          <div className="p-4 bg-success/5 dark:bg-success/20 rounded-lg">
+            <p className="text-sm text-success dark:text-success">
               ✅ Pagamento confirmado com sucesso!
             </p>
           </div>
         )}
 
         {status === "EXPIRED" && (
-          <div className="p-4 bg-orange-50 dark:bg-orange-950 rounded-lg">
-            <p className="text-sm text-orange-900 dark:text-orange-100">
+          <div className="p-4 bg-warning/5 dark:bg-warning/20 rounded-lg">
+            <p className="text-sm text-warning dark:text-warning">
               ⏱️ Este pagamento expirou. Por favor, gere um novo.
             </p>
           </div>
         )}
 
         {status === "FAILED" && (
-          <div className="p-4 bg-red-50 dark:bg-red-950 rounded-lg">
-            <p className="text-sm text-red-900 dark:text-red-100">
+          <div className="p-4 bg-destructive/5 dark:bg-destructive/20 rounded-lg">
+            <p className="text-sm text-destructive dark:text-destructive">
               ❌ Pagamento falhou. Entre em contato com o suporte.
             </p>
           </div>

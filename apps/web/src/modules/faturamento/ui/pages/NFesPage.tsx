@@ -38,10 +38,10 @@ import { toast } from "sonner"
 
 function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { icon: React.ReactNode; className: string; label: string }> = {
-    PENDENTE: { icon: <Clock className="h-3 w-3" />, className: "bg-warning/10 text-yellow-800", label: "Pendente" },
-    AUTORIZADA: { icon: <CheckCircle2 className="h-3 w-3" />, className: "bg-success/10 text-green-800", label: "Autorizada" },
+    PENDENTE: { icon: <Clock className="h-3 w-3" />, className: "bg-warning/10 text-warning", label: "Pendente" },
+    AUTORIZADA: { icon: <CheckCircle2 className="h-3 w-3" />, className: "bg-success/10 text-success", label: "Autorizada" },
     CANCELADA: { icon: <XCircle className="h-3 w-3" />, className: "bg-destructive/10 text-destructive", label: "Cancelada" },
-    REJEITADA: { icon: <AlertCircle className="h-3 w-3" />, className: "bg-orange-100 text-orange-800", label: "Rejeitada" },
+    REJEITADA: { icon: <AlertCircle className="h-3 w-3" />, className: "bg-warning/10 text-warning", label: "Rejeitada" },
   }
 
   const cfg = config[status] || config.PENDENTE

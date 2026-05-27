@@ -261,7 +261,7 @@ export default function RecallPage() {
 
       {/* Recalls Atrasados */}
       {overdueRecalls.length > 0 && (
-        <Card className="border-red-200 dark:border-red-900">
+        <Card className="border-destructive/20 dark:border-destructive/20">
           <CardHeader>
             <CardTitle className="text-destructive flex items-center gap-2">
               <XCircle className="h-5 w-5" />
@@ -276,7 +276,7 @@ export default function RecallPage() {
               {overdueRecalls.slice(0, 5).map((recall) => (
                 <div
                   key={recall.id}
-                  className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950/20 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-destructive/5 dark:bg-destructive/20/20 rounded-lg"
                 >
                   <div>
                     <p className="font-medium">

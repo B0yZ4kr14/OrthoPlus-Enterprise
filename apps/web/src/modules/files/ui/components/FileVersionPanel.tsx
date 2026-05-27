@@ -37,7 +37,7 @@ function VersionItem({
   return (
     <div
       className={`flex items-center justify-between p-3 rounded-md border ${
-        isCurrent ? "bg-blue-50 border-blue-200" : "bg-white border-gray-100"
+        isCurrent ? "bg-info/5 border-info/20" : "bg-white border-gray-100"
       }`}
     >
       <div className="flex items-start gap-3 min-w-0">

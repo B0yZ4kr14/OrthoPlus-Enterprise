@@ -2,11 +2,11 @@ import { useMemo } from "react";
 import type { PasswordStrength } from "./types";
 
 const STRENGTH_MAP = {
-  0: { label: "Muito Fraca", color: "bg-destructive dark:bg-red-600" },
-  1: { label: "Fraca", color: "bg-warning dark:bg-orange-600" },
-  2: { label: "Média", color: "bg-warning dark:bg-yellow-600" },
-  3: { label: "Forte", color: "bg-lime-500 dark:bg-lime-600" },
-  4: { label: "Muito Forte", color: "bg-success dark:bg-green-600" },
+  0: { label: "Muito Fraca", color: "bg-destructive dark:bg-destructive/60" },
+  1: { label: "Fraca", color: "bg-warning dark:bg-warning/60" },
+  2: { label: "Média", color: "bg-warning dark:bg-warning/60" },
+  3: { label: "Forte", color: "bg-success dark:bg-success/60" },
+  4: { label: "Muito Forte", color: "bg-success dark:bg-success/60" },
 };
 
 function calculateRequirements(password: string) {

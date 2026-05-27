@@ -112,7 +112,7 @@ export function TISSGuideForm() {
       </CardHeader>
       <CardContent>
         {showSuccess && (
-          <div className="mb-4 p-3 bg-success/5 border border-green-200 rounded-md text-green-800 text-sm">
+          <div className="mb-4 p-3 bg-success/5 border border-success/20 rounded-md text-success text-sm">
             Guia TISS criada com sucesso!
           </div>
         )}

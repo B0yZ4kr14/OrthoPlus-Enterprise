@@ -12,7 +12,7 @@ interface OverviewTabProps {
 }
 
 const variantClasses: Record<CertificadoTipo["variant"], string> = {
-  blue: "bg-blue-50",
+  blue: "bg-info/5",
   green: "bg-success/5",
   purple: "bg-purple-50",
 };

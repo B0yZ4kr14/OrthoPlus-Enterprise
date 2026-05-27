@@ -190,8 +190,8 @@ export function CryptoPaymentStatus({
 
         {/* Confirmed At */}
         {paymentStatus.confirmedAt && (
-          <div className="p-4 bg-success/5 dark:bg-green-950 rounded-lg">
-            <p className="text-sm text-green-900 dark:text-green-100">
+          <div className="p-4 bg-success/5 dark:bg-success/20 rounded-lg">
+            <p className="text-sm text-success dark:text-success">
               ✅ Confirmado em{" "}
               {new Date(paymentStatus.confirmedAt).toLocaleString("pt-BR", {
                 dateStyle: "short",

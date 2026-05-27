@@ -345,7 +345,7 @@ export default function EstoqueDashboard() {
               return (
                 <div
                   key={alerta.id}
-                  className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-warning/20 dark:border-orange-900"
+                  className="flex items-center justify-between p-3 bg-warning/5 dark:bg-warning/20/20 rounded-lg border border-warning/20 dark:border-warning/20"
                 >
                   <div className="flex items-center gap-3">
                     <AlertTriangle className="h-5 w-5 text-warning flex-shrink-0" />

@@ -15,10 +15,10 @@ interface AppointmentCardProps {
 }
 
 const statusColors = {
-  AGENDADO: "bg-info/10 text-info border-blue-200",
-  CONFIRMADO: "bg-success/10 text-success border-green-200",
+  AGENDADO: "bg-info/10 text-info border-info/20",
+  CONFIRMADO: "bg-success/10 text-success border-success/20",
   REALIZADO: "bg-gray-500/10 text-gray-700 border-gray-200",
-  CANCELADO: "bg-destructive/10 text-destructive border-red-200",
+  CANCELADO: "bg-destructive/10 text-destructive border-destructive/20",
   FALTOU: "bg-warning/10 text-warning border-warning/20",
 };
 

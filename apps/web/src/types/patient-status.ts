@@ -63,20 +63,20 @@ export const VALID_STATUS_TRANSITIONS: Record<PatientStatus, PatientStatus[]> =
  * Cores para cada status (usar com Tailwind)
  */
 export const STATUS_COLORS: Record<PatientStatus, string> = {
-  PROSPECT: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+  PROSPECT: "bg-info/10 text-info dark:bg-info/20 dark:text-info",
   TRATAMENTO:
-    "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    "bg-success/10 text-success dark:bg-success/20 dark:text-success",
   CONTENCAO:
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
   ERUPCAO: "bg-info/10 text-info dark:bg-info/20 dark:text-info",
   AFASTAMENTO_TEMPORARIO:
-    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning",
   CONCLUIDO:
     "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200",
-  ABANDONO: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+  ABANDONO: "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive",
   A_PROTESTAR:
-    "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
-  PROTESTO: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+    "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning",
+  PROTESTO: "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive/80",
   INATIVO: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
   CANCELADO:
     "bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200",

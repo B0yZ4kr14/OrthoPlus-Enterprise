@@ -139,7 +139,7 @@ export default function EstoqueRequisicoesPage() {
       />
 
       {alertasNaoLidos.length > 0 && (
-        <Card className="border-warning/20 bg-orange-50/50">
+        <Card className="border-warning/20 bg-warning/5/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-warning" />
