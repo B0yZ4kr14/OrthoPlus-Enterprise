@@ -83,7 +83,7 @@
 
 - [x] T501-T505 — Build/type-check/lint passing
 - [x] T506 Backend tests — PASS (`tissController.test.ts`)
-- [ ] T507 E2E tests — **MISSING**
+- [x] T507 E2E tests — PASS (tiss.spec.ts with dashboard, glosas, convenios tabs)
 - [x] T508 Security audit — **PASS** — All `(prisma as any)` casts removed from controller
 
 ## Summary
@@ -94,7 +94,7 @@
 | Phase 2 (Backend) | 10 | 10 | ✅ 100% |
 | Phase 3 (Frontend Foundation) | 6 | 5 | ⚠️ 83% |
 | Phase 4 (User Stories) | 20 | 14 | ⚠️ 70% |
-| Phase 5 (Quality Gates) | 5 | 4 | ✅ 80% |
+| Phase 5 (Quality Gates) | 5 | 5 | ✅ 100% |
 | **Total** | **45** | **37** | **~82% COMPLETE** |
 
 ## Identified Gaps
