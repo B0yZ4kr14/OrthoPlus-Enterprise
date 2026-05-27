@@ -204,20 +204,8 @@ describe("AuthContext", () => {
       expect(screen.getByTestId("modules").textContent).toBe('["agenda","pacientes"]')
     })
 
-    it("should fallback to /auth/profile when /auth/me fails", async () => {
-      localStorage.setItem("accessToken", "tok-123")
-
+    it("should clear state when /auth/me fails (no fallback)", async () => {
       mockGet.mockRejectedValueOnce(new Error("me failed"))
-      mockGet.mockResolvedValueOnce({
-        user: { id: "user-fb", role: "MEMBER" },
-      })
-      mockGet.mockResolvedValueOnce({
-        roleData: { role: "MEMBER" },
-        profileData: { clinic_id: "clinic-fb", avatar_url: "", full_name: "Fallback" },
-        clinicData: { id: "clinic-fb", name: "Fallback Clinic" },
-        permissionsData: ["agenda"],
-      })
-      mockGet.mockResolvedValueOnce(["agenda"])
 
       render(<TestConsumer />, { wrapper: Wrapper })
 
@@ -225,9 +213,9 @@ describe("AuthContext", () => {
         expect(screen.getByTestId("loading").textContent).toBe("ready"),
       )
 
-      expect(screen.getByTestId("user").textContent).toBe("user-fb")
-      expect(screen.getByTestId("session").textContent).toBe("has-session")
-      expect(screen.getByTestId("role").textContent).toBe("MEMBER")
+      expect(screen.getByTestId("user").textContent).toBe("no-user")
+      expect(screen.getByTestId("session").textContent).toBe("no-session")
+      expect(screen.getByTestId("role").textContent).toBe("no-role")
     })
 
     it("should clear state when both /auth/me and /auth/profile fail", async () => {
@@ -319,6 +307,7 @@ describe("AuthContext", () => {
 
   describe("signIn", () => {
     it("should store token, set session/user/role, and call fetchUserMetadata on success", async () => {
+      mockGet.mockResolvedValueOnce({ user: null, session: null })
       mockPost.mockResolvedValueOnce({
         access_token: "token-123",
         user: { id: "user-1", email: "a@b.com", role: "ADMIN" },
@@ -613,6 +602,7 @@ describe("AuthContext", () => {
 
   describe("fetchUserMetadata", () => {
     it("should set permissions [ALL] and fetch active modules for ADMIN", async () => {
+      mockGet.mockResolvedValueOnce({ user: null, session: null })
       mockGet.mockResolvedValueOnce({
         roleData: { role: "ADMIN" },
         profileData: { clinic_id: "clinic-1", avatar_url: "", full_name: "Admin" },
@@ -639,6 +629,7 @@ describe("AuthContext", () => {
     })
 
     it("should set permissions from API and fetch active modules for MEMBER", async () => {
+      mockGet.mockResolvedValueOnce({ user: null, session: null })
       mockGet.mockResolvedValueOnce({
         roleData: { role: "MEMBER" },
         profileData: { clinic_id: "clinic-1", avatar_url: "", full_name: "Member" },
@@ -665,6 +656,7 @@ describe("AuthContext", () => {
     })
 
     it("should map ROOT role to ADMIN in fetchUserMetadata", async () => {
+      mockGet.mockResolvedValueOnce({ user: null, session: null })
       mockGet.mockResolvedValueOnce({
         roleData: { role: "ROOT" },
         profileData: { clinic_id: "clinic-1" },
@@ -688,6 +680,7 @@ describe("AuthContext", () => {
     })
 
     it("should update user avatar and full_name in state", async () => {
+      mockGet.mockResolvedValueOnce({ user: null, session: null })
       mockPost.mockResolvedValueOnce({
         access_token: "tok",
         user: { id: "user-1", email: "a@b.com" },
