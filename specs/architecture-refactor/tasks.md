@@ -34,7 +34,7 @@
   - Acceptance: Agenda mutations (create/update/delete) emit audit logs for patient-linked appointments ✅
   - Extracted AgendaService with all business logic, metrics, and audit logs
   - Extracted Zod schemas to api/schemas.ts
-- [ ] T2.6 Thin Controller: Reduce filesController.ts to <150 lines
+- [x] T2.6 Thin Controller: Reduce filesController.ts to 125 lines ✅
   - Acceptance: File operations emit `files.uploaded` / `files.deleted` counters with label {clinicId, fileType}
 - [x] T2.7 Create MetricsEmitter utility for use-cases (wrapper around prom-client)
   - File: `backend/src/infrastructure/metrics/MetricsEmitter.ts`
@@ -73,9 +73,9 @@
 - [ ] T6.3 Excluir módulos legados estáveis (EP-2 brownfield tolerance)
 
 ## Phase 7: Validation & Quality Gates (CRITICAL)
-- [ ] T7.1 Run full test suite — 636 unit tests + 26 E2E smoke tests (SC-1)
-- [ ] T7.2 Verify backend build: 0 TypeScript errors (SC-2)
-- [ ] T7.3 Verify all tests passing (SC-3)
+- [x] T7.1 Run full test suite — 689 passed, 0 failed ✅ — 636 unit tests + 26 E2E smoke tests (SC-1)
+- [x] T7.2 Verify backend build: 0 TypeScript errors ✅ (SC-2)
+- [x] T7.3 Verify all tests passing ✅ (SC-3)
 - [ ] T7.4 Run dual-mode smoke test (old + new endpoints side-by-side) (SC-4)
 - [ ] T7.5 Verify clinicGuard on all new routers (GP-1)
 - [ ] T7.6 Verify audit logs for financial/patient ops (GP-2 / FR-5)
