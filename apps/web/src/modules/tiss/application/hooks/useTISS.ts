@@ -9,7 +9,7 @@ export interface TISSGuide {
   batch_id?: string;
   guide_number: string;
   patient_id: string;
-  insurance_compunknown: string;
+  insurance_company: string;
   procedure_code: string;
   procedure_name: string;
   amount: number;
@@ -25,7 +25,7 @@ export interface TISSBatch {
   id: string;
   clinic_id: string;
   batch_number: string;
-  insurance_compunknown: string;
+  insurance_company: string;
   total_guides: number;
   total_amount: number;
   status: "pendente" | "enviado" | "processando" | "concluido";
@@ -60,7 +60,7 @@ export function useTISS() {
     mutationFn: async (
       guideData: Partial<TISSGuide> & {
         patient_id: string;
-        insurance_compunknown: string;
+        insurance_company: string;
         procedure_code: string;
         procedure_name: string;
         amount: number;
@@ -72,7 +72,7 @@ export function useTISS() {
       const response = await apiClient.post<unknown>("/tiss/guias", {
         guide_number: guideNumber,
         patient_id: guideData.patient_id,
-        insurance_compunknown: guideData.insurance_compunknown,
+        insurance_company: guideData.insurance_company,
         procedure_code: guideData.procedure_code,
         procedure_name: guideData.procedure_name,
         amount: guideData.amount,
@@ -93,14 +93,14 @@ export function useTISS() {
 
   const createBatch = useMutation({
     mutationFn: async ({
-      insurance_compunknown,
+      insurance_company,
       guide_ids,
     }: {
-      insurance_compunknown: string;
+      insurance_company: string;
       guide_ids: string[];
     }) => {
       const response = await apiClient.post<unknown>("/tiss/lotes", {
-        insurance_compunknown,
+        insurance_company,
         guide_ids,
       });
 

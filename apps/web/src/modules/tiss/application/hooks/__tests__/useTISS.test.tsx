@@ -41,7 +41,7 @@ const mockGuide = {
   clinic_id: "clinic-1",
   guide_number: "2025110001",
   patient_id: "p1",
-  insurance_compunknown: "Unimed",
+  insurance_company: "Unimed",
   procedure_code: "81000030",
   procedure_name: "Consulta",
   amount: 150,
@@ -55,7 +55,7 @@ const mockBatch = {
   id: "b1",
   clinic_id: "clinic-1",
   batch_number: "202511001",
-  insurance_compunknown: "Unimed",
+  insurance_company: "Unimed",
   total_guides: 5,
   total_amount: 750,
   status: "enviado" as const,
@@ -153,7 +153,7 @@ describe("useTISS", () => {
     await act(async () => {
       await result.current.createGuide({
         patient_id: "p1",
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         procedure_code: "81000030",
         procedure_name: "Consulta",
         amount: 150,
@@ -165,7 +165,7 @@ describe("useTISS", () => {
       "/tiss/guias",
       expect.objectContaining({
         patient_id: "p1",
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         procedure_code: "81000030",
         procedure_name: "Consulta",
         amount: 150,
@@ -190,7 +190,7 @@ describe("useTISS", () => {
     await act(async () => {
       await result.current.createGuide({
         patient_id: "p1",
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         procedure_code: "81000030",
         procedure_name: "Consulta",
         amount: 150,
@@ -221,7 +221,7 @@ describe("useTISS", () => {
     act(() => {
       result.current.createGuide({
         patient_id: "p1",
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         procedure_code: "81000030",
         procedure_name: "Consulta",
         amount: 150,
@@ -255,7 +255,7 @@ describe("useTISS", () => {
 
     await act(async () => {
       await result.current.createBatch({
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         guide_ids: ["g1", "g2"],
       })
     })
@@ -263,7 +263,7 @@ describe("useTISS", () => {
     expect(mockPost).toHaveBeenCalledWith(
       "/tiss/lotes",
       expect.objectContaining({
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         guide_ids: ["g1", "g2"],
       }),
     )
@@ -283,7 +283,7 @@ describe("useTISS", () => {
 
     await act(async () => {
       await result.current.createBatch({
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         guide_ids: ["g1"],
       })
     })
@@ -310,7 +310,7 @@ describe("useTISS", () => {
 
     act(() => {
       result.current.createBatch({
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         guide_ids: ["g1"],
       })
     })

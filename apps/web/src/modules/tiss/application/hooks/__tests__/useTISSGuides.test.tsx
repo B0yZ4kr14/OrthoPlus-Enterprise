@@ -41,7 +41,7 @@ const mockGuide = {
   clinic_id: "clinic-1",
   guide_number: "2025110001",
   patient_id: "p1",
-  insurance_compunknown: "Unimed",
+  insurance_company: "Unimed",
   procedure_code: "81000030",
   procedure_name: "Consulta",
   amount: 150,
@@ -55,7 +55,7 @@ const mockBatch = {
   id: "b1",
   clinic_id: "clinic-1",
   batch_number: "202511001",
-  insurance_compunknown: "Unimed",
+  insurance_company: "Unimed",
   total_guides: 5,
   total_amount: 750,
   status: "enviado",
@@ -153,7 +153,7 @@ describe("useTISSGuides", () => {
     await act(async () => {
       await result.current.createGuide({
         patient_id: "p1",
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         procedure_code: "81000030",
         procedure_name: "Consulta",
         amount: 150,
@@ -165,7 +165,7 @@ describe("useTISSGuides", () => {
       "/tiss/guias",
       expect.objectContaining({
         patient_id: "p1",
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
         created_by: "user-1",
       }),
     )
@@ -186,7 +186,7 @@ describe("useTISSGuides", () => {
     await act(async () => {
       await result.current.createGuide({
         patient_id: "p1",
-        insurance_compunknown: "Unimed",
+        insurance_company: "Unimed",
       })
     })
 
@@ -217,7 +217,7 @@ describe("useTISSGuides", () => {
       expect.objectContaining({
         guide_ids: ["g1", "g2"],
         batch_number: expect.stringMatching(/^LOTE-\d+$/),
-        insurance_compunknown: "A_DEFINIR",
+        insurance_company: "A_DEFINIR",
       }),
     )
     expect(toast.success).toHaveBeenCalledWith("Lote criado!")

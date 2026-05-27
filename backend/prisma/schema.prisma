@@ -2806,6 +2806,9 @@ model tiss_guides {
   batch_id          String?
   clinic_id         String
   created_at        DateTime @default(now())
+  glosa_amount      Int?
+  glosa_date        DateTime?
+  glosa_reason      String?
   guide_number      String
   id                String   @id @default(uuid())
   insurance_company String

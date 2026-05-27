@@ -3,25 +3,31 @@ import { apiClient } from "@/lib/api/apiClient";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useTISSGuides = () => {
-  const { clinicId, user } = useAuth();
+interface UseTISSGuidesOptions {
+  batchStatus?: string;
+}
+
+export const useTISSGuides = (options: UseTISSGuidesOptions = {}) => {
+  const { clinicId } = useAuth();
   const queryClient = useQueryClient();
+  const { batchStatus } = options;
 
   const { data: guides = [], isLoading } = useQuery({
     queryKey: ["tiss-guides", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<Record<string, any>[]>("/tiss/guias");
+      const data = await apiClient.get<Record<string, any>[]>('/tiss/guias');
       return data;
     },
     enabled: !!clinicId,
   });
 
   const { data: batches = [], isLoading: isLoadingBatches } = useQuery({
-    queryKey: ["tiss-batches", clinicId],
+    queryKey: ["tiss-batches", clinicId, batchStatus],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<Record<string, any>[]>("/tiss/lotes");
+      const config = batchStatus ? { params: { status: batchStatus } } : undefined;
+      const data = await apiClient.get<Record<string, any>[]>('/tiss/lotes', config);
       return data;
     },
     enabled: !!clinicId,
