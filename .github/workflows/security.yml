@@ -34,13 +34,11 @@ jobs:
       
       - name: Run pnpm audit
         run: pnpm audit --audit-level=moderate
-        continue-on-error: true
       
       - name: Check for vulnerable dependencies
         run: |
           pnpm audit --json > audit-results.json
           cat audit-results.json
-        continue-on-error: true
       
       - name: Upload audit results
         uses: actions/upload-artifact@v4
@@ -71,4 +69,3 @@ jobs:
       
       - name: Run ESLint security rules
         run: pnpm exec eslint src/
-        continue-on-error: true

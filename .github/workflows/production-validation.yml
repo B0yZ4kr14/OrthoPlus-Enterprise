@@ -53,9 +53,8 @@ jobs:
         run: pnpm install
 
       - name: Audit dependencies
-        # Only critical vulnerabilities block the pipeline; high-severity ones should be triaged regularly
+        # Critical vulnerabilities block the pipeline; high-severity ones should be triaged regularly
         run: pnpm audit --audit-level=critical
-        continue-on-error: true
 
   build-production:
     name: Production Build
