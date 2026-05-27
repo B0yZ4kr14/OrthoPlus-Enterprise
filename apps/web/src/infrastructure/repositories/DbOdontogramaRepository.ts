@@ -10,12 +10,11 @@ import type { Tables } from "@/types/database";
 export class DbOdontogramaRepository implements IOdontogramaRepository {
   async findById(id: string): Promise<Odontograma | null> {
     try {
-      // @ts-expect-error — TS2344
-      const data = await apiClient.get<Tables<"patient_odontograms">>(
+      const data = await apiClient.get<Record<string, any>>(
         `/pep/odontogramas/${id}`,
       );
       if (!data) return null;
-      return OdontogramaMapper.toDomain(data);
+      return OdontogramaMapper.toDomain(data as Parameters<typeof OdontogramaMapper.toDomain>[0]);
     } catch {
       return null;
     }
@@ -23,13 +22,12 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
 
   async findByProntuarioId(prontuarioId: string): Promise<Odontograma | null> {
     try {
-      // @ts-expect-error — TS2344
-      const data = await apiClient.get<Tables<"patient_odontograms">[]>(
+      const data = await apiClient.get<Record<string, any>[]>(
         "/pep/odontogramas",
         { params: { prontuario_id: prontuarioId } },
       );
       if (!data || data.length === 0) return null;
-      return OdontogramaMapper.toDomain(data[0]);
+      return OdontogramaMapper.toDomain(data[0] as Parameters<typeof OdontogramaMapper.toDomain>[0]);
     } catch {
       return null;
     }
@@ -38,11 +36,10 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
   async findByClinicId(clinicId: string): Promise<Odontograma[]> {
     try {
       const data =
-        // @ts-expect-error — TS2344
-        await apiClient.get<Tables<"patient_odontograms">[]>(
+        await apiClient.get<Record<string, any>[]>(
           "/pep/odontogramas",
         );
-      return (data || []).map((row) => OdontogramaMapper.toDomain(row));
+      return (data || []).map((row) => OdontogramaMapper.toDomain(row as Parameters<typeof OdontogramaMapper.toDomain>[0]));
     } catch {
       return [];
     }

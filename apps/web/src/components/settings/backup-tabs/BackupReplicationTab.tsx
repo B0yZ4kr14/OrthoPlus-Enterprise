@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { LoadingState } from "@/components/shared/LoadingState";
+import type { LucideIcon } from "lucide-react";
 import { Globe, CheckCircle, XCircle, Clock, Database } from "lucide-react";
 
 export function BackupReplicationTab() {
@@ -35,7 +36,7 @@ export function BackupReplicationTab() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, unknown> = {
+    const variants: Record<string, { variant: string; icon: LucideIcon; label: string }> = {
       COMPLETED: { variant: "success", icon: CheckCircle, label: "Completo" },
       FAILED: { variant: "destructive", icon: XCircle, label: "Falhou" },
       PENDING: { variant: "warning", icon: Clock, label: "Pendente" },
@@ -43,17 +44,14 @@ export function BackupReplicationTab() {
     };
 
     const config = variants[status] || variants.PENDING;
-    // @ts-expect-error — TS18046
     const Icon = config.icon;
 
     return (
       <Badge
-        // @ts-expect-error — TS18046, TS2322
-        variant={config.variant as unknown}
+        variant={config.variant as any}
         className="flex items-center gap-1"
       >
         <Icon className="h-3 w-3" />
-        {/* @ts-expect-error — TS18046 */}
         {config.label}
       </Badge>
     );

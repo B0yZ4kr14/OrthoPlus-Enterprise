@@ -12,3 +12,4 @@
 
 // Exportar mappers quando criados
 // export * from './mappers';
+export {}

@@ -9,18 +9,15 @@ type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
  */
 export class UserMapper {
   static toDomain(row: ProfileRow, email: string): User {
-    const rowAny = row as unknown;
+    const rowAny = row as Record<string, any>;
     return User.restore({
       id: row.id,
       clinicId: row.clinic_id ?? "",
       email: Email.create(email),
       fullName: row.full_name ?? "Usuário",
-      // @ts-expect-error — TS18046
       appRole: (rowAny.app_role as AppRole) ?? "MEMBER",
-      // @ts-expect-error — TS18046
       isActive: rowAny.is_active ?? true,
       avatarUrl: row.avatar_url ?? undefined,
-      // @ts-expect-error — TS18046
       phone: rowAny.phone ?? undefined,
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),

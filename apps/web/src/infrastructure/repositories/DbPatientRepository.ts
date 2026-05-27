@@ -8,10 +8,9 @@ import type { Tables } from "@/types/database";
 export class DbPatientRepository implements IPatientRepository {
   async findById(id: string): Promise<Patient | null> {
     try {
-      const data = await apiClient.get<Tables<"patients">>(`/pacientes/${id}`);
+      const data = await apiClient.get<Record<string, any>>(`/pacientes/${id}`);
       if (!data) return null;
-      // @ts-expect-error — TS2345
-      return PatientMapper.toDomain(data);
+      return PatientMapper.toDomain(data as Parameters<typeof PatientMapper.toDomain>[0]);
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
@@ -23,11 +22,10 @@ export class DbPatientRepository implements IPatientRepository {
 
   async findByClinicId(clinicId: string): Promise<Patient[]> {
     try {
-      const data = await apiClient.get<Tables<"patients">[]>(`/pacientes`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/pacientes`, {
         params: { clinic_id: clinicId },
       });
-      // @ts-expect-error — TS2345
-      return (data || []).map(PatientMapper.toDomain);
+      return (data || []).map((d) => PatientMapper.toDomain(d as Parameters<typeof PatientMapper.toDomain>[0]));
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
@@ -51,12 +49,11 @@ export class DbPatientRepository implements IPatientRepository {
 
   async findByCPF(cpf: string, clinicId: string): Promise<Patient | null> {
     try {
-      const data = await apiClient.get<Tables<"patients">[]>(`/pacientes`, {
+      const data = await apiClient.get<Record<string, any>[]>(`/pacientes`, {
         params: { clinic_id: clinicId, cpf },
       });
       if (!data || data.length === 0) return null;
-      // @ts-expect-error — TS2345
-      return PatientMapper.toDomain(data[0]);
+      return PatientMapper.toDomain(data[0] as Parameters<typeof PatientMapper.toDomain>[0]);
     } catch {
       return null;
     }

@@ -15,3 +15,4 @@
 
 // Exportar repository interfaces quando criadas
 // export * from './repositories';
+export {}

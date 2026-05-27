@@ -52,10 +52,8 @@ function ToothMesh({
     TOOTH_STATUS_COLORS[toothData.status] || TOOTH_STATUS_COLORS["higido"];
   const isExtraido = toothData.status === "extraido";
 
-  const handleClick = (e: unknown) => {
-    // @ts-expect-error — TS18046
+  const handleClick = (e: { stopPropagation: () => void; button: number }) => {
     e.stopPropagation();
-    // @ts-expect-error — TS18046
     if (e.button === 2) {
       // Right click
       onToothRightClick(toothData.number);

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// @ts-expect-error — TS2307
 import { Html5QrcodeScanner } from "html5-qrcode";
 import {
   Dialog,
@@ -37,13 +36,11 @@ export function BarcodeScannerDialog({
       );
 
       html5QrcodeScanner.render(
-        // @ts-expect-error — TS7006
-        (decodedText) => {
+        (decodedText: string) => {
           onScanSuccess(decodedText);
           onOpenChange(false);
         },
-        // @ts-expect-error — TS7006
-        (error) => {
+        (_error: string) => {
           // Silenciar erros de scan contínuo
         },
       );

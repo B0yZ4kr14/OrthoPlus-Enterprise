@@ -61,7 +61,7 @@ export const useOdontograma = (prontuarioId: string) => {
 
       if (Array.isArray(teeth) && teeth.length > 0) {
         teeth.forEach((tooth: unknown) => {
-          const surfaces: Record<string, any> = {
+          const surfaces: Record<string, string> = {
             mesial: "higido",
             distal: "higido",
             oclusal: "higido",
@@ -69,21 +69,21 @@ export const useOdontograma = (prontuarioId: string) => {
             lingual: "higido",
           };
 
-          if ((tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).surfaces || (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).pep_tooth_surfaces) {
-            const surfaceList = (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).surfaces || (tooth as { surfaces?: unknown[]; pep_tooth_surfaces?: unknown[] }).pep_tooth_surfaces;
-            // @ts-expect-error — TS18048
-            surfaceList.forEach((surface: unknown) => {
-              surfaces[(surface as { surface: string }).surface] = (surface as { status: string }).status;
+          const toothRecord = tooth as Record<string, any>;
+          if (toothRecord.surfaces || toothRecord.pep_tooth_surfaces) {
+            const surfaceList = toothRecord.surfaces || toothRecord.pep_tooth_surfaces;
+            surfaceList?.forEach((surface: Record<string, any>) => {
+              surfaces[surface.surface] = surface.status;
             });
           }
 
-          // @ts-expect-error — TS7015
-          processedTeeth[(tooth as { tooth_number: string }).tooth_number] = {
-            number: (tooth as { tooth_number: string }).tooth_number,
-            status: (tooth as { status: string }).status,
-            notes: (tooth as { notes?: string }).notes,
-            surfaces,
-            updatedAt: (tooth as { updated_at?: string }).updated_at,
+          const toothNum = Number((tooth as Record<string, any>).tooth_number);
+          processedTeeth[toothNum] = {
+            number: toothNum,
+            status: (tooth as Record<string, any>).status,
+            notes: (tooth as Record<string, any>).notes,
+            surfaces: surfaces as unknown as ToothData["surfaces"],
+            updatedAt: (tooth as Record<string, any>).updated_at,
           };
         });
       } else {
@@ -96,16 +96,15 @@ export const useOdontograma = (prontuarioId: string) => {
 
       // Processar histórico
       if (historyData) {
-        // @ts-expect-error — TS2322
-        const processedHistory: OdontogramaHistoryEntry[] = historyData.map(
+        const processedHistory = (historyData || []).map(
           (entry: Record<string, any>) => ({
-            id: (entry as { id: string }).id,
-            timestamp: (entry as { created_at: string }).created_at,
-            teeth: (entry as { snapshot_data: unknown }).snapshot_data,
-            changedTeeth: (entry as { changed_teeth?: unknown[] }).changed_teeth || [],
-            description: (entry as { description?: string }).description,
+            id: entry.id,
+            timestamp: entry.created_at,
+            teeth: entry.snapshot_data,
+            changedTeeth: entry.changed_teeth || [],
+            description: entry.description,
           }),
-        );
+        ) as OdontogramaHistoryEntry[];
         setHistory(processedHistory);
       }
     } catch (error: unknown) {

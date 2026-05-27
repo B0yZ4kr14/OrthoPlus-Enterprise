@@ -6,7 +6,6 @@ export async function exportInventarioPDF(
   items: InventarioItem[],
 ) {
   const { default: jsPDF } = await import("jspdf");
-  // @ts-expect-error — TS2307
   const { default: autoTable } = await import("jspdf-autotable");
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -73,7 +72,7 @@ export async function exportInventarioPDF(
     doc.text("Detalhamento de Divergências", 14, 20);
 
     const divergenciasData = divergencias.map((item) => [
-      item.produtoNome,
+      item.produtoNome || "-",
       item.lote || "-",
       item.quantidadeSistema.toString(),
       item.quantidadeFisica?.toString() || "-",
@@ -157,13 +156,11 @@ export async function exportInventarioPDF(
   // Recomendações
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  // @ts-expect-error — TS2571
-  doc.text("Recomendações", 14, (doc as unknown).lastAutoTable.finalY + 20);
+  doc.text("Recomendações", 14, (doc as any).lastAutoTable.finalY + 20);
 
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  // @ts-expect-error — TS2571
-  let yPos = (doc as unknown).lastAutoTable.finalY + 30;
+  let yPos = (doc as any).lastAutoTable.finalY + 30;
 
   const recomendacoes = [
     "• Revisar processos de entrada e saída de produtos com divergências altas",

@@ -86,8 +86,7 @@ export function ExportDashboardDialog({
       // Exibir os primeiros 10 itens dos dados
       const displayData = data.slice(0, 10);
       displayData.forEach((item, index) => {
-        // @ts-expect-error — TS2769
-        const text = Object.entries(item)
+        const text = Object.entries(item as Record<string, unknown>)
           .map(([key, value]) => `${key}: ${value}`)
           .join(" | ");
 
@@ -276,8 +275,7 @@ export function ExportDashboardDialog({
             <Label>Formato de Exportação</Label>
             <Select
               value={format}
-              // @ts-expect-error — TS2345
-              onValueChange={(value: unknown) => setFormat(value)}
+              onValueChange={(value: string) => setFormat(value as "pdf" | "excel" | "csv")}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -310,8 +308,7 @@ export function ExportDashboardDialog({
                   <Label>Frequência</Label>
                   <Select
                     value={frequency}
-                    // @ts-expect-error — TS2345
-                    onValueChange={(value: unknown) => setFrequency(value)}
+                    onValueChange={(value: string) => setFrequency(value as "daily" | "weekly" | "monthly")}
                   >
                     <SelectTrigger>
                       <SelectValue />

@@ -47,8 +47,9 @@ export function sanitizeLogData(data: unknown): unknown {
 
   // Objetos
   const sanitized: Record<string, any> = {};
+  const dataRecord = data as Record<string, unknown>;
 
-  for (const key of Object.keys(data)) {
+  for (const key of Object.keys(dataRecord)) {
     const lowerKey = key.toLowerCase();
 
     // Verificar se a chave contém palavra sensível
@@ -58,14 +59,11 @@ export function sanitizeLogData(data: unknown): unknown {
 
     if (isSensitive) {
       sanitized[key] = "***REDACTED***";
-    // @ts-expect-error — TS7053
-    } else if (typeof data[key] === "object") {
+    } else if (typeof dataRecord[key] === "object") {
       // Recursivamente sanitizar objetos aninhados
-      // @ts-expect-error — TS7053
-      sanitized[key] = sanitizeLogData(data[key]);
+      sanitized[key] = sanitizeLogData(dataRecord[key]);
     } else {
-      // @ts-expect-error — TS7053
-      sanitized[key] = data[key];
+      sanitized[key] = dataRecord[key];
     }
   }
 
