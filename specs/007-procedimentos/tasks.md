@@ -44,7 +44,7 @@
 
 - [x] US1 Cadastrar Procedimento — IMPLEMENTED (TemplatesProcedimentos.tsx, full CRUD via apiClient)
 - [x] US2 Tabela de Preços — CRUD tabelas (particular/convênio), preços por procedimento, reajuste em lote
-- [ ] US3 Associação a Dentistas — **MISSING** — no dentist-procedure association UI
+- [x] US3 Associação a Dentistas — CRUD associação dentista-procedimento, duração customizada, comissão
 - [x] US4 Categorização e Filtros — IMPLEMENTED (ProcedimentosList.tsx with especialidade filter)
 
 ---
