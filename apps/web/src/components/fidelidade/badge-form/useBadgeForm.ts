@@ -50,7 +50,7 @@ export function useBadgeForm(onOpenChange: (open: boolean) => void) {
       resetForm();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast.error((error.issues as any)[0].message);
+        toast.error(error.issues[0].message);
       } else {
         toast.error("Erro ao criar badge");
       }

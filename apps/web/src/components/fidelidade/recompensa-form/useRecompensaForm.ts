@@ -43,7 +43,7 @@ export function useRecompensaForm({ editingRecompensa, onSuccess }: RecompensaFo
   const validate = (): boolean => {
     const result = recompensaSchema.safeParse(formData);
     if (!result.success) {
-      const firstError = result.error.issues as any[0];
+      const firstError = (result.error.issues as Array<{ message: string }>)[0];
       toast.error(firstError.message);
       return false;
     }

@@ -49,7 +49,7 @@ export function IndicacoesTab({ indicacoes }: IndicacoesTabProps) {
                     </div>
                   )}
                 </div>
-                <Badge variant={getStatusIndicacaoVariant(indicacao.status) as any}>
+                <Badge variant={getStatusIndicacaoVariant(indicacao.status)}>
                   {indicacao.status}
                 </Badge>
               </div>

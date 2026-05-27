@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePDV, PDVVendaItem, PDVPagamento } from "@/hooks/usePDV";
+import { usePdvEstoqueAlerta } from "../../hooks/usePDVApi";
+import { AlertTriangle } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
@@ -43,6 +45,28 @@ const formasPagamento: FormasPagamentoOption[] = [
   { value: "TRANSFERENCIA", label: "Transferência", icon: Wallet },
   { value: "CRYPTO", label: "Criptomoeda", icon: Wallet },
 ];
+
+function EstoqueAlertaPDV() {
+  const { data: produtos = [] } = usePdvEstoqueAlerta()
+  if (produtos.length === 0) return null
+  return (
+    <Card className="border-l-warning/40">
+      <CardContent className="pt-4">
+        <div className="flex items-center gap-2 text-warning mb-2">
+          <AlertTriangle className="h-5 w-5" />
+          <span className="font-semibold">Alerta de Estoque Baixo</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {produtos.map((p: any) => (
+            <Badge key={p.id} variant="outline" className="text-xs">
+              {p.descricao}: {p.estoque_atual} (mín: {p.estoque_minimo})
+            </Badge>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
 
 export default function PDVPage() {
   const { clinicId } = useAuth();
@@ -128,6 +152,8 @@ export default function PDVPage() {
         title="Ponto de Venda (PDV)"
         description="Gerencie as vendas do seu Ponto de Venda"
       />
+
+      <EstoqueAlertaPDV />
 
       {!caixaAberto ? (
         <Card className="glass-card overflow-hidden border-l-destructive/40">

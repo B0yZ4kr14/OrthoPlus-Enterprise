@@ -1,6 +1,6 @@
 // cspell:disable
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { apiClient } from "@/lib/api/apiClient";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,7 +13,7 @@ export function useUserForm({ user, onSuccess }: UserFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<UserFormValues>({
-    resolver: zodResolver(userFormSchema) as any,
+    resolver: zodResolver(userFormSchema) as Resolver<UserFormValues>,
     defaultValues: {
       full_name: user?.full_name || "",
       email: user?.email || "",

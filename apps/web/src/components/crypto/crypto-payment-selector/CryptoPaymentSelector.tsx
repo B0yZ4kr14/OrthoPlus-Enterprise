@@ -78,7 +78,7 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
             {
               id: "payment-request",
               wallet_address: paymentData.address,
-              coin_type: paymentData.coin as any,
+              coin_type: paymentData.coin as CoinType,
               wallet_name: `Pagamento ${paymentData.coin}`,
               balance: 0,
               balance_brl: 0,

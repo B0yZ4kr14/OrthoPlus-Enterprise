@@ -51,7 +51,7 @@ export class IncidenteCaixaMapper {
       valor_caixa_momento: incidente.valorCaixaMomento,
       descricao: incidente.descricao,
       boletim_ocorrencia: incidente.boletimOcorrencia,
-      metadata: incidente.metadata as any,
+      metadata: incidente.metadata as Record<string, unknown>,
       created_at: incidente.createdAt.toISOString(),
     };
   }

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Appointment,
@@ -54,7 +54,7 @@ export function AppointmentForm({
     setValue,
     watch,
   } = useForm<Appointment>({
-    resolver: zodResolver(appointmentSchema as any),
+    resolver: zodResolver(appointmentSchema) as Resolver<Appointment>,
     defaultValues: appointment || {
       data: initialDate || "",
       horaInicio: initialTime || "",
@@ -95,7 +95,7 @@ export function AppointmentForm({
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Paciente */}
         <div className="space-y-2">

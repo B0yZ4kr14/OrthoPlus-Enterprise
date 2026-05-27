@@ -53,7 +53,7 @@ const getTipoLabel = (tipo: AtividadeTipo): string => {
 };
 
 const getStatusBadge = (status: AtividadeStatus) => {
-  const variants: Record<AtividadeStatus, { variant: string; icon: LucideIcon }> =
+  const variants: Record<AtividadeStatus, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: LucideIcon }> =
     {
       AGENDADA: { variant: "default", icon: Clock },
       CONCLUIDA: { variant: "default", icon: CheckCircle2 },
@@ -110,7 +110,7 @@ export const AtividadesList = ({
                           {getTipoLabel(atividade.tipo)}
                         </h4>
                         <Badge
-                          variant={variant as any}
+                          variant={variant}
                           className="flex items-center gap-1"
                         >
                           <StatusIcon className="h-3 w-3" />

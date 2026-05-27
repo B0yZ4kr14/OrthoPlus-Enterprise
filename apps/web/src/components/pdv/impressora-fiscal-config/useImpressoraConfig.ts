@@ -51,7 +51,7 @@ export function useImpressoraConfig() {
           });
         }
       } catch (error: unknown) {
-        if ((error as any)?.status !== 404) throw error;
+        if ((error as { status?: number })?.status !== 404) throw error;
       }
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Erro desconhecido";

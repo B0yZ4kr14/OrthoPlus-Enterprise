@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@orthoplus/core-ui/button";
@@ -58,7 +58,7 @@ export function InventarioAgendamentoForm({
     setValue,
     formState: { errors },
   } = useForm<AgendamentoFormData>({
-    resolver: zodResolver(agendamentoSchema),
+    resolver: zodResolver(agendamentoSchema) as Resolver<AgendamentoFormData>,
     defaultValues: {
       notificarResponsavel: true,
       notificarDiasAntes: 1,

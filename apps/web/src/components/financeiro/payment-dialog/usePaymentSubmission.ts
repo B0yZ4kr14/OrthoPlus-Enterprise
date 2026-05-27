@@ -41,7 +41,7 @@ export function usePaymentSubmission(
         triggerSuccessConfetti();
 
         toast.success("Pagamento processado com sucesso!", {
-          description: `Transação: ${(data as any).transacao_id}`,
+          description: `Transação: ${(data as { transacao_id?: string }).transacao_id || "N/A"}`,
         });
 
         resetForm();

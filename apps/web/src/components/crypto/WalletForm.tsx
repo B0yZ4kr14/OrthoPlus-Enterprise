@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   cryptoWalletSchema,
@@ -41,7 +41,7 @@ export function WalletForm({
   exchanges = [],
 }: WalletFormProps) {
   const form = useForm<z.infer<typeof cryptoWalletSchema>>({
-    resolver: zodResolver(cryptoWalletSchema) as any,
+    resolver: zodResolver(cryptoWalletSchema) as Resolver<z.infer<typeof cryptoWalletSchema>>,
     defaultValues: {
       wallet_name: initialData?.wallet_name || "",
       coin_type: initialData?.coin_type || "BTC",

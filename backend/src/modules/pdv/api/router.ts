@@ -15,6 +15,9 @@ router.use(clinicGuard);
   router.get('/vendas/:id', controller.getVendaById);
   router.post('/vendas/:id/cancelar', controller.cancelVenda);
 
+  // Stock alerts
+  router.get('/estoque-alerta', controller.getEstoqueAlerta);
+
   // Dashboard & Gamification
   router.get('/dashboard-executivo', dashboardCtrl.getDashboardExecutivo);
   router.get('/metas-gamificacao', dashboardCtrl.getMetasGamificacao);

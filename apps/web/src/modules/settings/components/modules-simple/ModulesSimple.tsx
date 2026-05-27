@@ -111,10 +111,10 @@ const ModulesSimple = memo(function ModulesSimple() {
             </DialogDescription>
           </DialogHeader>
 
-          {roadmapData && (
+          {roadmapData?.recommendation && (
             <ModuleAdoptionRoadmap
-              recommendation={roadmapData.recommendation as any}
-              clinicProfile={roadmapData.clinic_profile as any}
+              recommendation={roadmapData.recommendation}
+              clinicProfile={roadmapData.clinic_profile}
               onActivatePhase={handleActivatePhase}
             />
           )}

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 
 import { PdvRepository } from "@/modules/pdv/infrastructure/PdvRepository"
+import { prisma } from "@/infrastructure/database/prismaClient"
 
 const createVendaSchema = z.object({
   patientId: z.string().uuid().optional(),
@@ -50,6 +51,23 @@ export class PdvController {
     const valorTotal = req.body.itens.reduce((acc: number, item: any) => 
       acc + (item.quantidade * item.valorUnitario) - item.valorDesconto, 0);
 
+    // Check stock before sale
+    const estoqueAlertas: Array<{ produtoId: string; nome: string; estoqueAtual: number; quantidade: number }> = [];
+    for (const item of req.body.itens) {
+      const produto = await (prisma as any).pdv_produtos.findFirst({
+        where: { id: item.produtoId, clinic_id: clinicId },
+      });
+      if (produto && produto.controla_estoque && produto.estoque_atual < item.quantidade) {
+        res.status(400).json({
+          error: "Estoque insuficiente",
+          produto: produto.descricao,
+          estoqueAtual: produto.estoque_atual,
+          quantidadeSolicitada: item.quantidade,
+        });
+        return;
+      }
+    }
+
     const venda = await this.repo.createVenda({
       clinic_id: clinicId,
       numero_venda: `VND-${Date.now()}`,
@@ -62,8 +80,30 @@ export class PdvController {
       } as any,
     });
 
-    logger.info("Venda created", { clinicId, vendaId: venda.id });
-    res.status(201).json({ message: "Venda created successfully", venda });
+    // Deduct stock
+    for (const item of req.body.itens) {
+      const produto = await (prisma as any).pdv_produtos.findFirst({
+        where: { id: item.produtoId, clinic_id: clinicId },
+      });
+      if (produto && produto.controla_estoque) {
+        const novoEstoque = produto.estoque_atual - item.quantidade;
+        await (prisma as any).pdv_produtos.update({
+          where: { id: item.produtoId },
+          data: { estoque_atual: novoEstoque },
+        });
+        if (novoEstoque <= (produto.estoque_minimo || 0)) {
+          estoqueAlertas.push({
+            produtoId: item.produtoId,
+            nome: produto.descricao,
+            estoqueAtual: novoEstoque,
+            quantidade: item.quantidade,
+          });
+        }
+      }
+    }
+
+    logger.info("Venda created", { clinicId, vendaId: venda.id, estoqueAlertas: estoqueAlertas.length });
+    res.status(201).json({ message: "Venda created successfully", venda, estoqueAlertas });
   });
 
   listVendas = asyncHandler(async (req: Request, res: Response): Promise<void> => {
@@ -108,5 +148,21 @@ export class PdvController {
     const updated = await this.repo.updateVenda(id, { status: "CANCELADA" });
     logger.info("Venda cancelled", { clinicId, vendaId: id });
     res.json(updated);
+  });
+
+  getEstoqueAlerta = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
+    }
+    const produtos = await (prisma as any).pdv_produtos.findMany({
+      where: {
+        clinic_id: clinicId,
+        controla_estoque: true,
+        estoque_atual: { lte: (prisma as any).pdv_produtos.fields.estoque_minimo },
+      },
+      orderBy: { estoque_atual: "asc" },
+    });
+    res.status(200).json({ produtos });
   });
 }

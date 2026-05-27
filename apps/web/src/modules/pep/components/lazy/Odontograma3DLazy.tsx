@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { LoadingState } from "@/components/shared/LoadingState";
 
 // Lazy load do componente 3D pesado
-const Odontograma3D = lazy(() => import("../Odontograma3D") as any);
+const Odontograma3D = lazy(() => import("../Odontograma3D") as Promise<{ default: React.ComponentType<{ patientId: string; onToothClick?: (toothNumber: number) => void }> }>);
 
 interface Odontograma3DLazyProps {
   patientId: string;

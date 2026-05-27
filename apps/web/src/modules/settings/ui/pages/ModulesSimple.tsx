@@ -101,7 +101,7 @@ const ModulesSimple = memo(function ModulesSimple() {
   const [showWizard, setShowWizard] = useState(false);
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
   const [showRoadmap, setShowRoadmap] = useState(false);
-  const [roadmapData, setRoadmapData] = useState<{ recommendation?: string[]; clinic_profile?: Record<string, unknown> } | null>(null);
+  const [roadmapData, setRoadmapData] = useState<{ recommendation?: import("@/components/modules/module-adoption-roadmap/types").Recommendation; clinic_profile?: import("@/components/modules/module-adoption-roadmap/types").ClinicProfile } | null>(null);
   const [loadingRoadmap, setLoadingRoadmap] = useState(false);
 
   // ✅ FASE 2: Memoizar categorias agrupadas
@@ -167,7 +167,7 @@ const ModulesSimple = memo(function ModulesSimple() {
         "/modules/recommend-sequence",
       );
 
-      setRoadmapData(data);
+      setRoadmapData(data as unknown as { recommendation?: import("@/components/modules/module-adoption-roadmap/types").Recommendation; clinic_profile?: import("@/components/modules/module-adoption-roadmap/types").ClinicProfile });
       setShowRoadmap(true);
       toast.success("Roadmap de adoção gerado com sucesso!");
     } catch (error: unknown) {
@@ -479,10 +479,10 @@ const ModulesSimple = memo(function ModulesSimple() {
             </DialogDescription>
           </DialogHeader>
 
-          {roadmapData && (
+          {roadmapData?.recommendation && (
             <ModuleAdoptionRoadmap
-              recommendation={roadmapData.recommendation as any}
-              clinicProfile={roadmapData.clinic_profile as any}
+              recommendation={roadmapData.recommendation}
+              clinicProfile={roadmapData.clinic_profile}
               onActivatePhase={handleActivatePhase}
             />
           )}

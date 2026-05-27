@@ -12,9 +12,11 @@ export interface Module {
   blocking_dependents?: string[];
 }
 
+import type { Recommendation, ClinicProfile } from "@/components/modules/module-adoption-roadmap/types";
+
 export interface RoadmapData {
-  recommendation?: string[];
-  clinic_profile?: Record<string, unknown>;
+  recommendation?: Recommendation;
+  clinic_profile?: ClinicProfile;
 }
 
 export interface ModulesSimpleState {

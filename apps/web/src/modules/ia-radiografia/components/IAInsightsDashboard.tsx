@@ -17,8 +17,10 @@ interface IAInsightsDashboardProps {
   analises: AnaliseComplete[];
 }
 
-const getPrioridadeColor = (prioridade: string) => {
-  const colors: Record<string, string> = {
+type BadgeVariant = "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info";
+
+const getPrioridadeColor = (prioridade: string): BadgeVariant => {
+  const colors: Record<string, BadgeVariant> = {
     alta: "destructive",
     media: "warning",
     baixa: "success",
@@ -26,8 +28,8 @@ const getPrioridadeColor = (prioridade: string) => {
   return colors[prioridade] || "default";
 };
 
-const getSeveridadeColor = (severidade: string) => {
-  const colors: Record<string, string> = {
+const getSeveridadeColor = (severidade: string): BadgeVariant => {
+  const colors: Record<string, BadgeVariant> = {
     ALTA: "destructive",
     MEDIA: "warning",
     BAIXA: "success",

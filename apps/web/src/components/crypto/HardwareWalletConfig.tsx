@@ -118,7 +118,7 @@ export function HardwareWalletConfig() {
               <Select
                 value={newWallet.type}
                 onValueChange={(value) =>
-                  setNewWallet({ ...newWallet, type: value as any })
+                  setNewWallet({ ...newWallet, type: value as "krux" | "jade" })
                 }
               >
                 <SelectTrigger id="wallet-type">
