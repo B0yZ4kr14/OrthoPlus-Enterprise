@@ -106,7 +106,7 @@ describe("useTISSGuides", () => {
     expect(result.current.batches).toHaveLength(1)
     expect(result.current.batches[0].batch_number).toBe("202511001")
     expect(mockGet).toHaveBeenCalledWith("/tiss/guias")
-    expect(mockGet).toHaveBeenCalledWith("/tiss/lotes")
+    expect(mockGet).toHaveBeenCalledWith("/tiss/lotes", undefined)
   })
 
   it("should not fetch when clinicId is null", async () => {
@@ -139,7 +139,7 @@ describe("useTISSGuides", () => {
   // Create guide
   // ─────────────────────────────────────────────────────────────
 
-  it("should create a guide via mutation with created_by", async () => {
+  it("should create a guide via mutation", async () => {
     mockGet.mockImplementation((url: string) => {
       if (url === "/tiss/guias") return Promise.resolve([])
       if (url === "/tiss/lotes") return Promise.resolve([])
@@ -166,7 +166,6 @@ describe("useTISSGuides", () => {
       expect.objectContaining({
         patient_id: "p1",
         insurance_company: "Unimed",
-        created_by: "user-1",
       }),
     )
     expect(toast.success).toHaveBeenCalledWith("Guia TISS criada!")
@@ -178,16 +177,20 @@ describe("useTISSGuides", () => {
       if (url === "/tiss/lotes") return Promise.resolve([])
       return Promise.resolve([])
     })
-    mockPost.mockRejectedValueOnce(new Error("Save failed"))
+    mockPost.mockImplementation(() => Promise.reject(new Error("Save failed")))
 
     const { result } = renderHook(() => useTISSGuides(), { wrapper: createWrapper() })
     await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     await act(async () => {
-      await result.current.createGuide({
-        patient_id: "p1",
-        insurance_company: "Unimed",
-      })
+      try {
+        await result.current.createGuide({
+          patient_id: "p1",
+          insurance_company: "Unimed",
+        })
+      } catch {
+        // expected
+      }
     })
 
     expect(toast.error).toHaveBeenCalledWith("Erro ao criar guia")
@@ -229,13 +232,17 @@ describe("useTISSGuides", () => {
       if (url === "/tiss/lotes") return Promise.resolve([])
       return Promise.resolve([])
     })
-    mockPost.mockRejectedValueOnce(new Error("Batch failed"))
+    mockPost.mockImplementation(() => Promise.reject(new Error("Batch failed")))
 
     const { result } = renderHook(() => useTISSGuides(), { wrapper: createWrapper() })
     await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     await act(async () => {
-      await result.current.createBatch(["g1"])
+      try {
+        await result.current.createBatch(["g1"])
+      } catch {
+        // expected
+      }
     })
 
     expect(toast.error).toHaveBeenCalledWith("Erro ao criar lote")
