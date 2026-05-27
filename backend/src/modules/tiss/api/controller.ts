@@ -387,4 +387,67 @@ export class TISSController {
     await prisma.tiss_convenios.delete({ where: { id } });
     return res.status(204).send();
   }
+
+  // --- Vinculação Paciente-Convênio ---
+  async listPacienteConvenios(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { patient_id } = req.query;
+    const where: Record<string, unknown> = { clinic_id: clinicId };
+    if (patient_id) where.patient_id = String(patient_id);
+    const data = await prisma.paciente_convenios.findMany({
+      where,
+      orderBy: { created_at: "desc" },
+    });
+    return res.json(data);
+  }
+
+  async createPacienteConvenio(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { patient_id, convenio_id, numero_carteira, validade_carteira } = req.body;
+    if (!patient_id || !convenio_id) {
+      return res.status(400).json({ error: "patient_id and convenio_id are required" });
+    }
+    const data = await prisma.paciente_convenios.create({
+      data: { clinic_id: clinicId, patient_id, convenio_id, numero_carteira, validade_carteira },
+    });
+    logger.info("Paciente convenio created", { clinicId, patientId: patient_id, convenioId: convenio_id });
+    return res.status(201).json(data);
+  }
+
+  async updatePacienteConvenio(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const existing = await prisma.paciente_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    if (!existing) {
+      return res.status(404).json({ error: "Vinculacao not found" });
+    }
+    const data = await prisma.paciente_convenios.update({
+      where: { id },
+      data: req.body,
+    });
+    return res.json(data);
+  }
+
+  async deletePacienteConvenio(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const existing = await prisma.paciente_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    if (!existing) {
+      return res.status(404).json({ error: "Vinculacao not found" });
+    }
+    await prisma.paciente_convenios.delete({ where: { id } });
+    return res.status(204).send();
+  }
 }

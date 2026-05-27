@@ -47,4 +47,10 @@ router.post("/convenios", asyncHandler(controller.createConvenio.bind(controller
 router.patch("/convenios/:id", asyncHandler(controller.updateConvenio.bind(controller)));
 router.delete("/convenios/:id", asyncHandler(controller.deleteConvenio.bind(controller)));
 
+// Vinculação Paciente-Convênio
+router.get("/paciente-convenios", asyncHandler(controller.listPacienteConvenios.bind(controller)));
+router.post("/paciente-convenios", asyncHandler(controller.createPacienteConvenio.bind(controller)));
+router.patch("/paciente-convenios/:id", asyncHandler(controller.updatePacienteConvenio.bind(controller)));
+router.delete("/paciente-convenios/:id", asyncHandler(controller.deletePacienteConvenio.bind(controller)));
+
 export default router;

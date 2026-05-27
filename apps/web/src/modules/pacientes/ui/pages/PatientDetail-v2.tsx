@@ -13,6 +13,7 @@ import {
   Activity,
   User,
   ArrowLeft,
+  Shield,
 } from "lucide-react";
 import { PatientTimeline } from "../../components/PatientTimeline";
 import { usePatientTimeline } from "../../hooks/usePatientTimeline";
@@ -27,6 +28,7 @@ import {
   PatientStatus,
 } from "@/types/patient-status";
 import type { Patient } from "@/types/patient";
+import { PacienteConveniosTab } from "@/modules/tiss/presentation/components/PacienteConveniosTab";
 
 // Definindo localmente caso não esteja exportado no adapter (verificado: não está exportado)
 interface PatientAPIData {
@@ -157,7 +159,7 @@ export default function PatientDetail() {
 
       {/* Unified Tabs */}
       <Tabs defaultValue="cadastro" className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="cadastro" className="gap-2">
             <User className="h-4 w-4" />
             Dados Cadastrais
@@ -185,6 +187,10 @@ export default function PatientDetail() {
           <TabsTrigger value="timeline" className="gap-2">
             <Activity className="h-4 w-4" />
             Timeline
+          </TabsTrigger>
+          <TabsTrigger value="convenios" className="gap-2">
+            <Shield className="h-4 w-4" />
+            Convênios
           </TabsTrigger>
         </TabsList>
 
@@ -347,6 +353,10 @@ export default function PatientDetail() {
 
         <TabsContent value="timeline">
           <TimelineTab patientId={patientId} />
+        </TabsContent>
+
+        <TabsContent value="convenios">
+          <PacienteConveniosTab patientId={patientId || ""} />
         </TabsContent>
       </Tabs>
     </div>

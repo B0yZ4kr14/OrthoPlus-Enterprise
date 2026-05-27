@@ -1846,6 +1846,23 @@ model patient_status_history {
   @@schema("pacientes")
 }
 
+model paciente_convenios {
+  id                String   @id @default(uuid())
+  clinic_id         String
+  patient_id        String
+  convenio_id       String
+  numero_carteira   String?
+  validade_carteira String?
+  is_active         Boolean  @default(true)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@index([patient_id])
+  @@index([convenio_id])
+  @@index([clinic_id])
+  @@schema("pacientes")
+}
+
 model patients {
   address_city                   String?
   address_complement             String?
