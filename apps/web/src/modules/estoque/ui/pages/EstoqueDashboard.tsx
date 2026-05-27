@@ -187,11 +187,11 @@ export default function EstoqueDashboard() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Estoque Baixo
               </p>
-              <p className="text-2xl font-bold text-orange-500 truncate">
+              <p className="text-2xl font-bold text-warning truncate">
                 {metrics.produtosEstoqueBaixo}
               </p>
             </div>
-            <AlertTriangle className="h-10 w-10 text-orange-500 opacity-50 shrink-0" />
+            <AlertTriangle className="h-10 w-10 text-warning opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -205,11 +205,11 @@ export default function EstoqueDashboard() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Requisições Pendentes
               </p>
-              <p className="text-2xl font-bold text-yellow-500 truncate">
+              <p className="text-2xl font-bold text-warning truncate">
                 {metrics.requisiçõesPendentes}
               </p>
             </div>
-            <Clock className="h-10 w-10 text-yellow-500 opacity-50 shrink-0" />
+            <Clock className="h-10 w-10 text-warning opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -223,14 +223,14 @@ export default function EstoqueDashboard() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Valor Total
               </p>
-              <p className="text-2xl font-bold text-green-500 truncate">
+              <p className="text-2xl font-bold text-success truncate">
                 R${" "}
                 {metrics.valorTotalInventario.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}
               </p>
             </div>
-            <DollarSign className="h-10 w-10 text-green-500 opacity-50 shrink-0" />
+            <DollarSign className="h-10 w-10 text-success opacity-50 shrink-0" />
           </div>
         </Card>
       </div>
@@ -239,7 +239,7 @@ export default function EstoqueDashboard() {
         {/* Gráfico de Produtos com Estoque Baixo */}
         <Card variant="elevated" className="p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-orange-500" />
+            <AlertTriangle className="h-5 w-5 text-warning" />
             Produtos com Estoque Baixo
           </h3>
           {produtosEstoqueBaixo.length > 0 ? (
@@ -261,7 +261,7 @@ export default function EstoqueDashboard() {
             </ResponsiveContainer>
           ) : (
             <div className="text-center py-12 text-muted-foreground">
-              <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
+              <CheckCircle className="h-12 w-12 mx-auto mb-2 text-success" />
               <p>Nenhum produto com estoque baixo</p>
             </div>
           )}
@@ -270,7 +270,7 @@ export default function EstoqueDashboard() {
         {/* Gráfico de Distribuição de Requisições */}
         <Card variant="elevated" className="p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-blue-500" />
+            <TrendingUp className="h-5 w-5 text-info" />
             Requisições por Status
           </h3>
           {distribuicaoRequisicoes.length > 0 ? (
@@ -336,7 +336,7 @@ export default function EstoqueDashboard() {
       {alertasAtivos.length > 0 && (
         <Card variant="elevated" className="p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-orange-500" />
+            <AlertTriangle className="h-5 w-5 text-warning" />
             Alertas Ativos ({alertasAtivos.length})
           </h3>
           <div className="space-y-2">
@@ -345,10 +345,10 @@ export default function EstoqueDashboard() {
               return (
                 <div
                   key={alerta.id}
-                  className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-200 dark:border-orange-900"
+                  className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-warning/20 dark:border-orange-900"
                 >
                   <div className="flex items-center gap-3">
-                    <AlertTriangle className="h-5 w-5 text-orange-500 flex-shrink-0" />
+                    <AlertTriangle className="h-5 w-5 text-warning flex-shrink-0" />
                     <div>
                       <p className="font-medium">{produto?.nome}</p>
                       <p className="text-sm text-muted-foreground">

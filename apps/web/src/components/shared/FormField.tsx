@@ -93,14 +93,14 @@ export function FormField(props: FormFieldProps) {
             className={cn(
               "pr-10",
               hasError && "border-destructive focus-visible:ring-destructive",
-              hasSuccess && "border-green-500 focus-visible:ring-green-500",
+              hasSuccess && "border-success focus-visible:ring-success",
             )}
           />
           {(hasError || hasSuccess) && (
             <div className="absolute right-3 top-3">
               {hasError && <AlertCircle className="h-5 w-5 text-destructive" />}
               {hasSuccess && (
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-success" />
               )}
             </div>
           )}
@@ -120,7 +120,7 @@ export function FormField(props: FormFieldProps) {
               id={name}
               className={cn(
                 hasError && "border-destructive focus:ring-destructive",
-                hasSuccess && "border-green-500 focus:ring-green-500",
+                hasSuccess && "border-success focus:ring-success",
               )}
             >
               <SelectValue placeholder={props.placeholder} />
@@ -137,7 +137,7 @@ export function FormField(props: FormFieldProps) {
             <div className="absolute right-10 top-1/2 -translate-y-1/2">
               {hasError && <AlertCircle className="h-5 w-5 text-destructive" />}
               {hasSuccess && (
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <CheckCircle2 className="h-5 w-5 text-success" />
               )}
             </div>
           )}
@@ -164,13 +164,13 @@ export function FormField(props: FormFieldProps) {
           className={cn(
             "pr-10",
             hasError && "border-destructive focus-visible:ring-destructive",
-            hasSuccess && "border-green-500 focus-visible:ring-green-500",
+            hasSuccess && "border-success focus-visible:ring-success",
           )}
         />
         {(hasError || hasSuccess) && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
             {hasError && <AlertCircle className="h-5 w-5 text-destructive" />}
-            {hasSuccess && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+            {hasSuccess && <CheckCircle2 className="h-5 w-5 text-success" />}
           </div>
         )}
       </div>
@@ -191,7 +191,7 @@ export function FormField(props: FormFieldProps) {
         </div>
       )}
       {hasSuccess && (
-        <div className="flex items-start gap-2 text-sm text-green-600 dark:text-green-500">
+        <div className="flex items-start gap-2 text-sm text-success dark:text-success">
           <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
           <span>Campo válido</span>
         </div>

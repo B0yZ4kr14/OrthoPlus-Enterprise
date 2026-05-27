@@ -91,21 +91,21 @@ export function InventarioDivergenciasDialog({
         <div className="space-y-4">
           {/* Resumo */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+            <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
               <div className="text-sm text-muted-foreground">Divergências</div>
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-2xl font-bold text-destructive">
                 {divergencias.length}
               </div>
             </div>
-            <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+            <div className="p-4 bg-warning/10 border border-warning/20 rounded-lg">
               <div className="text-sm text-muted-foreground">Valor Total</div>
-              <div className="text-2xl font-bold text-orange-600">
+              <div className="text-2xl font-bold text-warning">
                 R$ {Math.abs(totalValorDivergencias).toFixed(2)}
               </div>
             </div>
-            <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <div className="p-4 bg-success/10 border border-success/20 rounded-lg">
               <div className="text-sm text-muted-foreground">Itens OK</div>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-success">
                 {items.length - divergencias.length}
               </div>
             </div>
@@ -130,7 +130,7 @@ export function InventarioDivergenciasDialog({
                 {divergencias.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={8} className="text-center py-8">
-                      <div className="flex flex-col items-center gap-2 text-green-600">
+                      <div className="flex flex-col items-center gap-2 text-success">
                         <CheckCircle className="h-12 w-12" />
                         <p className="font-medium">
                           Nenhuma divergência encontrada!
@@ -147,14 +147,14 @@ export function InventarioDivergenciasDialog({
                       item.percentualDivergencia || 0,
                     );
                     let criticidadeLabel = "Baixa";
-                    let criticidadeColor = "bg-yellow-500";
+                    let criticidadeColor = "bg-warning";
 
                     if (criticidade >= 20) {
                       criticidadeLabel = "Alta";
-                      criticidadeColor = "bg-red-500";
+                      criticidadeColor = "bg-destructive";
                     } else if (criticidade >= 10) {
                       criticidadeLabel = "Média";
-                      criticidadeColor = "bg-orange-500";
+                      criticidadeColor = "bg-warning";
                     }
 
                     return (
@@ -177,8 +177,8 @@ export function InventarioDivergenciasDialog({
                           <div
                             className={`text-center font-medium ${
                               (item.divergencia || 0) > 0
-                                ? "text-green-600"
-                                : "text-red-600"
+                                ? "text-success"
+                                : "text-destructive"
                             }`}
                           >
                             {(item.divergencia || 0) > 0 && "+"}
@@ -189,8 +189,8 @@ export function InventarioDivergenciasDialog({
                           <span
                             className={
                               (item.percentualDivergencia || 0) > 0
-                                ? "text-green-600"
-                                : "text-red-600"
+                                ? "text-success"
+                                : "text-destructive"
                             }
                           >
                             {(item.percentualDivergencia || 0) > 0 && "+"}
@@ -201,8 +201,8 @@ export function InventarioDivergenciasDialog({
                           <span
                             className={
                               (item.valorDivergencia || 0) > 0
-                                ? "text-green-600"
-                                : "text-red-600"
+                                ? "text-success"
+                                : "text-destructive"
                             }
                           >
                             R$ {Math.abs(item.valorDivergencia || 0).toFixed(2)}

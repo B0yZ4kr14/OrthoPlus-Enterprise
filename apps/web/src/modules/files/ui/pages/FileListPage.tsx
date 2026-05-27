@@ -37,9 +37,9 @@ const CATEGORIAS: Record<string, string> = {
 };
 
 const VISIBILIDADE_CONFIG: Record<string, { label: string; className: string }> = {
-  PUBLICO: { label: "Público", className: "bg-green-100 text-green-800" },
-  RESTRITO: { label: "Restrito", className: "bg-yellow-100 text-yellow-800" },
-  CONFIDENCIAL: { label: "Confidencial", className: "bg-red-100 text-red-800" },
+  PUBLICO: { label: "Público", className: "bg-success/10 text-green-800" },
+  RESTRITO: { label: "Restrito", className: "bg-warning/10 text-yellow-800" },
+  CONFIDENCIAL: { label: "Confidencial", className: "bg-destructive/10 text-destructive" },
 };
 
 const OCR_STATUS_CONFIG: Record<
@@ -47,9 +47,9 @@ const OCR_STATUS_CONFIG: Record<
   { label: string; className: string }
 > = {
   PENDENTE: { label: "Pendente", className: "bg-gray-100 text-gray-600" },
-  PROCESSANDO: { label: "Processando", className: "bg-yellow-100 text-yellow-700" },
-  CONCLUIDO: { label: "Concluído", className: "bg-green-100 text-green-700" },
-  ERRO: { label: "Erro", className: "bg-red-100 text-red-700" },
+  PROCESSANDO: { label: "Processando", className: "bg-warning/10 text-yellow-700" },
+  CONCLUIDO: { label: "Concluído", className: "bg-success/10 text-success" },
+  ERRO: { label: "Erro", className: "bg-destructive/10 text-destructive" },
 };
 
 export default function FileListPage() {
@@ -106,7 +106,7 @@ export default function FileListPage() {
   if (filesQuery.error) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-12 text-red-600">
+        <div className="text-center py-12 text-destructive">
           Erro ao carregar arquivos
         </div>
       </div>
@@ -257,7 +257,7 @@ export default function FileListPage() {
                         className="p-2 hover:bg-red-50 rounded-md"
                         title="Excluir"
                       >
-                        <Trash2 className="h-4 w-4 text-red-500" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                       </button>
                     </div>
                   </td>

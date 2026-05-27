@@ -37,7 +37,7 @@ export default function AssinaturaICP() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
-              <Shield className="h-12 w-12 mx-auto mb-4 text-yellow-500" />
+              <Shield className="h-12 w-12 mx-auto mb-4 text-warning" />
               <p>Você não tem acesso a este módulo.</p>
               <p className="text-sm mt-2">
                 Entre em contato com o administrador para solicitar acesso.
@@ -96,7 +96,7 @@ export default function AssinaturaICP() {
           <CardContent>
             <div className="text-2xl font-bold">127</div>
             <p className="text-xs text-muted-foreground">
-              <span className="text-green-500">+15%</span> vs. mês anterior
+              <span className="text-success">+15%</span> vs. mês anterior
             </p>
           </CardContent>
         </Card>
@@ -166,7 +166,7 @@ export default function AssinaturaICP() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Badge variant="outline" className="bg-green-50">
+                    <Badge variant="outline" className="bg-success/5">
                       e-CPF A3
                     </Badge>
                     <span className="text-sm">2 certificados</span>
@@ -180,7 +180,7 @@ export default function AssinaturaICP() {
                     </Badge>
                     <span className="text-sm">1 certificado</span>
                   </div>
-                  <span className="text-sm text-yellow-600">
+                  <span className="text-sm text-warning">
                     Expira em breve
                   </span>
                 </div>
@@ -278,8 +278,8 @@ export default function AssinaturaICP() {
                     className="flex items-center justify-between p-4 border rounded-lg"
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100">
-                        <FileSignature className="h-6 w-6 text-yellow-600" />
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-warning/10">
+                        <FileSignature className="h-6 w-6 text-warning" />
                       </div>
                       <div>
                         <p className="font-medium">{request.name}</p>
@@ -367,7 +367,7 @@ export default function AssinaturaICP() {
                               variant="outline"
                               className="flex items-center space-x-1 bg-yellow-50"
                             >
-                              <AlertTriangle className="h-3 w-3 text-yellow-600" />
+                              <AlertTriangle className="h-3 w-3 text-warning" />
                               <span>Expira em breve</span>
                             </Badge>
                           )}
@@ -493,8 +493,8 @@ export default function AssinaturaICP() {
                       className="flex items-center justify-between p-3 border rounded-lg"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100">
-                          <CheckCircle className="h-5 w-5 text-green-600" />
+                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-success/10">
+                          <CheckCircle className="h-5 w-5 text-success" />
                         </div>
                         <div>
                           <p className="font-medium text-sm">
@@ -507,7 +507,7 @@ export default function AssinaturaICP() {
                       </div>
                       <Badge
                         variant="default"
-                        className="bg-green-100 text-green-700"
+                        className="bg-success/10 text-success"
                       >
                         {validation.result}
                       </Badge>

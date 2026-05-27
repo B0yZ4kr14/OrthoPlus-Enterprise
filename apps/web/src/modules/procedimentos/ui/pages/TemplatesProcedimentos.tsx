@@ -104,11 +104,11 @@ export default function TemplatesProcedimentosPage() {
 
   const getCategoryBadge = (categoria: string) => {
     const colors: Record<string, string> = {
-      RESTAURACAO: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
-      ENDODONTIA: "bg-red-500/10 text-red-700 dark:text-red-400",
+      RESTAURACAO: "bg-info/10 text-info dark:text-info",
+      ENDODONTIA: "bg-destructive/10 text-destructive dark:text-destructive",
       PROTESE: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
-      ORTODONTIA: "bg-green-500/10 text-green-700 dark:text-green-400",
-      CIRURGIA: "bg-orange-500/10 text-orange-700 dark:text-orange-400",
+      ORTODONTIA: "bg-success/10 text-success dark:text-success",
+      CIRURGIA: "bg-warning/10 text-warning dark:text-orange-400",
       PERIODONTIA: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
       ESTETICA: "bg-interactive/10 text-interactive",
       PREVENTIVA: "bg-success/10 text-success dark:text-success",
@@ -244,7 +244,7 @@ export default function TemplatesProcedimentosPage() {
                     </CardDescription>
                   </div>
                   {template.is_public ? (
-                    <Globe className="h-5 w-5 text-blue-500" />
+                    <Globe className="h-5 w-5 text-info" />
                   ) : (
                     <Lock className="h-5 w-5 text-muted-foreground" />
                   )}

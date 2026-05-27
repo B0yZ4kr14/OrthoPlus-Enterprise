@@ -272,9 +272,9 @@ export default function EstoqueIntegracoes() {
               Taxa de Sucesso
             </CardTitle>
             {metrics.taxaSucesso >= 80 ? (
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-success" />
             ) : (
-              <TrendingDown className="h-4 w-4 text-red-500" />
+              <TrendingDown className="h-4 w-4 text-destructive" />
             )}
           </CardHeader>
           <CardContent>
@@ -307,10 +307,10 @@ export default function EstoqueIntegracoes() {
             <CardTitle className="text-sm font-medium">
               Pedidos Falhos
             </CardTitle>
-            <XCircle className="h-4 w-4 text-red-500" />
+            <XCircle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-500">
+            <div className="text-2xl font-bold text-destructive">
               {metrics.pedidosFalhos}
             </div>
             <p className="text-xs text-muted-foreground mt-1">Requer atenção</p>
@@ -412,7 +412,7 @@ export default function EstoqueIntegracoes() {
                         {fornecedor.api_enabled && (
                           <Badge
                             variant="outline"
-                            className="bg-green-500/10 text-green-600"
+                            className="bg-success/10 text-success"
                           >
                             <CheckCircle className="h-3 w-3 mr-1" />
                             API Ativa
@@ -421,7 +421,7 @@ export default function EstoqueIntegracoes() {
                         {fornecedor.auto_order_enabled && (
                           <Badge
                             variant="outline"
-                            className="bg-blue-500/10 text-blue-600"
+                            className="bg-info/10 text-info"
                           >
                             Pedidos Automáticos
                           </Badge>
@@ -443,8 +443,8 @@ export default function EstoqueIntegracoes() {
                           <span
                             className={
                               taxaSucessoFornecedor >= 80
-                                ? "text-green-600"
-                                : "text-red-600"
+                                ? "text-success"
+                                : "text-destructive"
                             }
                           >
                             {taxaSucessoFornecedor.toFixed(1)}%
@@ -502,11 +502,11 @@ export default function EstoqueIntegracoes() {
                 >
                   <div className="flex items-center gap-4">
                     {pedido.status === "confirmado" ? (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-5 w-5 text-success" />
                     ) : pedido.status === "enviado" ? (
-                      <Clock className="h-5 w-5 text-blue-500" />
+                      <Clock className="h-5 w-5 text-info" />
                     ) : (
-                      <XCircle className="h-5 w-5 text-red-500" />
+                      <XCircle className="h-5 w-5 text-destructive" />
                     )}
                     <div>
                       <p className="font-medium">{pedido.numero_pedido}</p>
