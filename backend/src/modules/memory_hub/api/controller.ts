@@ -10,8 +10,8 @@ import { ContextBriefService } from "../domain/services/ContextBriefService"
 import { IndexingService } from "../domain/services/IndexingService"
 import { GraphService } from "../domain/services/GraphService"
 import { HealthService } from "../domain/services/HealthService"
-import { DocumentRepository } from "../infrastructure/DocumentRepository"
-import { SearchAuditRepository } from "../infrastructure/SearchAuditRepository"
+import { IDocumentRepository } from "../domain/ports/IDocumentRepository"
+import { ISearchAuditRepository } from "../domain/ports/ISearchAuditRepository"
 import { CostTrackingService } from "../domain/services/CostTrackingService"
 
 export interface MemoryHubControllerDeps {
@@ -19,8 +19,8 @@ export interface MemoryHubControllerDeps {
   contextBriefService: ContextBriefService
   indexingService: IndexingService
   graphService: GraphService
-  documents: DocumentRepository
-  auditRepository: SearchAuditRepository
+  documents: IDocumentRepository
+  auditRepository: ISearchAuditRepository
   healthService: HealthService
   costTrackingService?: CostTrackingService
   metrics: MetricsCollector
@@ -32,8 +32,8 @@ export class MemoryHubController {
   private contextBriefService: ContextBriefService
   private indexingService: IndexingService
   private graphService: GraphService
-  private documents: DocumentRepository
-  private auditRepository: SearchAuditRepository
+  private documents: IDocumentRepository
+  private auditRepository: ISearchAuditRepository
   private healthService: HealthService
   private costTrackingService?: CostTrackingService
   private metrics: MetricsCollector

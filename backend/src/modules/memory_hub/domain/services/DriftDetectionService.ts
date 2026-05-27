@@ -3,7 +3,6 @@ import fs from "fs"
 import path from "path"
 import { logger } from "@/infrastructure/logger"
 import { IDocumentRepository } from "../ports/IDocumentRepository"
-import { DocumentRepository } from "../../infrastructure/DocumentRepository"
 import { PathSandbox } from "../../infrastructure/PathSandbox"
 import { ContradictionDetector } from "./ContradictionDetector"
 
@@ -20,9 +19,9 @@ export class DriftDetectionService {
   private db: Database.Database
   private sandbox?: PathSandbox
 
-  constructor(db: Database.Database, documents?: IDocumentRepository, sandbox?: PathSandbox) {
+  constructor(db: Database.Database, documents: IDocumentRepository, sandbox?: PathSandbox) {
     this.db = db
-    this.documents = documents || new DocumentRepository(db)
+    this.documents = documents
     this.sandbox = sandbox
   }
 

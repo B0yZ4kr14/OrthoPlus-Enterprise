@@ -9,4 +9,11 @@ export interface IDocumentRepository {
   isConfidential(doc: any): boolean
   archive(id: string): void
   upsert(doc: any): any
+  findVersions(sourcePath: string, clinicId?: string): Array<{
+    version: number
+    contentHash: string
+    title: string
+    wordCount: number
+    createdAt: number
+  }>
 }

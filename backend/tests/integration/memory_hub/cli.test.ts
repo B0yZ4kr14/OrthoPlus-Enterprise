@@ -85,7 +85,9 @@ describe("MemoryHub CLI", () => {
     it("should return exit code 0 and print issues table", async () => {
       // Acceptance criteria: drift command detects and prints issues
       const { DriftDetectionService } = await import("../../../src/modules/memory_hub/domain/services/DriftDetectionService")
-      const service = new DriftDetectionService(db)
+      const { DocumentRepository } = await import("../../../src/modules/memory_hub/infrastructure/DocumentRepository")
+      const documents = new DocumentRepository(db)
+      const service = new DriftDetectionService(db, documents)
       const issues = await service.detect()
       expect(Array.isArray(issues)).toBe(true)
     })

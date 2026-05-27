@@ -49,7 +49,7 @@ describe("DriftDetectionService", () => {
     `)
 
     repo = new DocumentRepository(db)
-    service = new DriftDetectionService(db)
+    service = new DriftDetectionService(db, repo)
   })
 
   afterEach(() => {

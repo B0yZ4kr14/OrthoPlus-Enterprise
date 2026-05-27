@@ -9,11 +9,12 @@ import { SearchService } from "./domain/services/SearchService"
 import { ContextBriefService } from "./domain/services/ContextBriefService"
 import { IndexingService } from "./domain/services/IndexingService"
 import { GraphService } from "./domain/services/GraphService"
-import { EmbeddingClientFactory } from "./infrastructure/EmbeddingClientFactory"
-import { EmbeddingRepository } from "./infrastructure/EmbeddingRepository"
-import { DocumentRepository } from "./infrastructure/DocumentRepository"
 import { FileWatcher } from "./infrastructure/FileWatcher"
 import { SearchAuditRepository } from "./infrastructure/SearchAuditRepository"
+import { DocumentRepository } from "./infrastructure/DocumentRepository"
+import { EmbeddingRepository } from "./infrastructure/EmbeddingRepository"
+import { EmbeddingClientFactory } from "./infrastructure/EmbeddingClientFactory"
+import { IndexingServiceFactory } from "./infrastructure/IndexingServiceFactory"
 import { HealthService } from "./domain/services/HealthService"
 import { CostTrackingService } from "./domain/services/CostTrackingService"
 import { ApiKeyValidator } from "./infrastructure/ApiKeyValidator"
@@ -70,16 +71,21 @@ export function createMemoryHubModule(
   const secureConfigStore = new SecureConfigStore(db)
   const apiKeyHotSwap = new ApiKeyHotSwap()
 
-  EmbeddingClientFactory.validateConfig()
-  const embedder = EmbeddingClientFactory.create()
-  const embeddings = new EmbeddingRepository(db)
   const documents = new DocumentRepository(db)
+  const embeddings = new EmbeddingRepository(db)
   const auditRepository = new SearchAuditRepository(db)
+  const embedder = EmbeddingClientFactory.create()
+
   const healthService = new HealthService(db, documents, embeddings)
   const costTrackingService = new CostTrackingService(db)
   const searchService = new SearchService(embedder, embeddings, documents)
   const contextBriefService = new ContextBriefService(searchService, documents)
-  const indexingService = new IndexingService(db)
+  const indexingService = IndexingServiceFactory.create(db, {
+    documents,
+    chunks: undefined, // factory will create ChunkRepository
+    embeddings,
+    embedder,
+  })
   const graphService = new GraphService(documents)
 
   const controller = new MemoryHubController({

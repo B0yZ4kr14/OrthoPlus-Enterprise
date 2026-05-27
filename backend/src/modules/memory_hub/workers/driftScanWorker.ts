@@ -2,6 +2,7 @@ import Database from "better-sqlite3"
 import { logger } from "@/infrastructure/logger"
 import { DriftDetectionService } from "../domain/services/DriftDetectionService"
 import { PathSandbox } from "../infrastructure/PathSandbox"
+import { DocumentRepository } from "../infrastructure/DocumentRepository"
 
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
 const projectRoot = process.env.MEMORY_HUB_PROJECT_ROOT || process.cwd()
@@ -10,7 +11,8 @@ const timeoutMs = parseInt(process.env.MEMORY_HUB_DRIFT_TIMEOUT || "300000", 10)
 // F-RT-020-019: Sandbox drift worker to project root only
 const sandbox = new PathSandbox(projectRoot)
 const db = new Database(dbPath)
-const detector = new DriftDetectionService(db, undefined, sandbox)
+const documents = new DocumentRepository(db)
+const detector = new DriftDetectionService(db, documents, sandbox)
 
 const startTime = Date.now()
 

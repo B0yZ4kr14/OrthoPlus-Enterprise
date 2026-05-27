@@ -1,17 +1,8 @@
 import Database from "better-sqlite3"
 import crypto from "crypto"
+import { ISearchAuditRepository, SearchAuditEntry } from "../domain/ports/ISearchAuditRepository"
 
-export interface SearchAuditEntry {
-  id: string
-  clinicId: string
-  userId: string | null
-  queryText: string
-  resultsCount: number
-  durationMs: number
-  timestamp: number
-}
-
-export class SearchAuditRepository {
+export class SearchAuditRepository implements ISearchAuditRepository {
   private db: Database.Database
 
   constructor(db: Database.Database) {

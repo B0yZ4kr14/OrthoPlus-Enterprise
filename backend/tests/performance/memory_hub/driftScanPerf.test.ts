@@ -77,7 +77,9 @@ describe("DriftScan Performance", () => {
   })
 
   it("should complete drift scan within 5 minutes (300000ms)", async () => {
-    const service = new DriftDetectionService(db)
+    const { DocumentRepository } = await import("../../../src/modules/memory_hub/infrastructure/DocumentRepository")
+    const documents = new DocumentRepository(db)
+    const service = new DriftDetectionService(db, documents)
 
     const start = Date.now()
     const issues = await service.detect()
