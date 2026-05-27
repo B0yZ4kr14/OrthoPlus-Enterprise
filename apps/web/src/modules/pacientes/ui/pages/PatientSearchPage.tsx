@@ -24,6 +24,7 @@ import {
   Filter,
   X,
 } from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 const STATUS_OPTIONS = [
   { value: "", label: "Todos" },
@@ -72,13 +73,17 @@ export default function PatientSearchPage() {
 
   return (
     <div className="container mx-auto py-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Busca Rápida de Pacientes</h1>
-        <Button onClick={() => navigate("/pacientes/novo")}>
-          <User className="h-4 w-4 mr-2" />
-          Novo Paciente
-        </Button>
-      </div>
+      <PageHeader
+        title="Busca Rapida de Pacientes"
+        description="Pesquise pacientes por nome, CPF, telefone ou email"
+        icon={Search}
+        actions={
+          <Button onClick={() => navigate("/pacientes/novo")}>
+            <User className="h-4 w-4 mr-2" />
+            Novo Paciente
+          </Button>
+        }
+      />
 
       <div className="flex gap-3">
         <div className="relative flex-1">

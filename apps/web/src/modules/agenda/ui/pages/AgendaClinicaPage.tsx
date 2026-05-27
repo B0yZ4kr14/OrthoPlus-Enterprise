@@ -11,7 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
-import { Calendar } from "lucide-react";
+import { Calendar } from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 type ViewMode = "calendar" | "form" | "details";
 
@@ -96,18 +97,11 @@ export default function AgendaClinicaPage() {
 
   return (
     <div className="p-8 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-3 rounded-lg bg-primary/10">
-          <Calendar className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Agenda Clínica</h1>
-          <p className="text-muted-foreground mt-1">
-            Gerenciamento de consultas e agendamentos
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Agenda Clinica"
+        description="Gerenciamento de consultas e agendamentos"
+        icon={Calendar}
+      />
 
       {/* Calendar View */}
       <AgendaCalendar

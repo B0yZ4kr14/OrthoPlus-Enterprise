@@ -7,6 +7,7 @@ import { Button } from "@orthoplus/core-ui/button"
 import { Input } from "@orthoplus/core-ui/input"
 import { Label } from "@orthoplus/core-ui/label"
 import { LoadingState } from "@/components/shared/LoadingState"
+import { PageHeader } from "@/components/shared/PageHeader"
 import { FileText, Download, TrendingUp } from "lucide-react"
 import ExcelJS from "exceljs"
 import {
@@ -142,29 +143,23 @@ export default function RelatorioFiscalPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-primary/10">
-            <FileText className="h-6 w-6 text-primary" />
+      <PageHeader
+        title="Relatorio Fiscal"
+        description="Visualize e exporte dados fiscais da clinica"
+        icon={FileText}
+        actions={
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleExportCSV}>
+              <Download className="h-4 w-4 mr-2" />
+              CSV
+            </Button>
+            <Button variant="outline" onClick={handleExportExcel}>
+              <Download className="h-4 w-4 mr-2" />
+              Excel
+            </Button>
           </div>
-          <div>
-            <h1 className="text-2xl font-semibold">Relatorio Fiscal</h1>
-            <p className="text-sm text-muted-foreground">
-              Visualize e exporte dados fiscais da clinica
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={handleExportCSV}>
-            <Download className="h-4 w-4 mr-2" />
-            CSV
-          </Button>
-          <Button variant="outline" onClick={handleExportExcel}>
-            <Download className="h-4 w-4 mr-2" />
-            Excel
-          </Button>
-        </div>
-      </div>
+        }
+      />
 
       <Card>
         <CardHeader>
