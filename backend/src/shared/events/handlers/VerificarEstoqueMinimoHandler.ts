@@ -22,13 +22,14 @@ export class VerificarEstoqueMinimoHandler implements EventHandler<EstoqueAltera
           ? `CRÍTICO: ${event.produto.nome} sem estoque!`
           : `Estoque mínimo: ${event.produto.nome} (${event.produto.quantidadeAtual}/${event.produto.quantidadeMinima} un)`;
 
-        await (prisma as any).notifications.create({
+        await prisma.notifications.create({
           data: {
             clinic_id: clinicId,
             tipo: "ALERTA",
             titulo,
             mensagem,
             link_acao: "/estoque",
+            lida: false,
           },
         });
       }

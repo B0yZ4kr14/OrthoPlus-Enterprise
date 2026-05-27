@@ -3,7 +3,7 @@ import { IAdminToolsRepository } from "@/modules/admin_tools/domain/repositories
 
 export class AdminToolsRepository implements IAdminToolsRepository {
   async createUser(data: any) {
-    return (prisma as any).users.create({ data });
+    return prisma.users.create({ data });
   }
 
   async updateUserRole(email: string, role: string) {
@@ -26,11 +26,11 @@ export class AdminToolsRepository implements IAdminToolsRepository {
   }
 
   async searchPatients(clinicId: string, query: string) {
-    return (prisma as any).patients.findMany({
+    return prisma.patients.findMany({
       where: {
         clinic_id: clinicId,
         OR: [
-          { name: { contains: query, mode: "insensitive" } },
+          { full_name: { contains: query, mode: "insensitive" } },
           { cpf: { contains: query } },
         ],
       },
@@ -39,7 +39,7 @@ export class AdminToolsRepository implements IAdminToolsRepository {
   }
 
   async searchDentists(clinicId: string, query: string) {
-    return (prisma as any).profiles.findMany({
+    return prisma.profiles.findMany({
       where: {
         clinic_id: clinicId,
         app_role: { contains: "DENTIST", mode: "insensitive" },
@@ -65,28 +65,28 @@ export class AdminToolsRepository implements IAdminToolsRepository {
 
   // Wiki
   async findWikiPagesByClinic(clinicId: string) {
-    return (prisma as any).wiki_pages.findMany({
+    return prisma.wiki_pages.findMany({
       where: { clinic_id: clinicId },
       orderBy: { created_at: "desc" },
     });
   }
 
   async createWikiPage(data: any) {
-    return (prisma as any).wiki_pages.create({ data });
+    return prisma.wiki_pages.create({ data });
   }
 
   async findWikiPageByIdAndClinic(id: string, clinicId: string) {
-    return (prisma as any).wiki_pages.findFirst({
+    return prisma.wiki_pages.findFirst({
       where: { id, clinic_id: clinicId },
     });
   }
 
   async updateWikiPage(id: string, data: any) {
-    return (prisma as any).wiki_pages.update({ where: { id }, data });
+    return prisma.wiki_pages.update({ where: { id }, data });
   }
 
   async deleteWikiPage(id: string, clinicId: string) {
-    return (prisma as any).wiki_pages.deleteMany({
+    return prisma.wiki_pages.deleteMany({
       where: { id, clinic_id: clinicId },
     });
   }

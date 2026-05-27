@@ -3,31 +3,30 @@ import { IReportRepository } from "@/modules/relatorios/domain/repositories/IRep
 
 export class ReportRepository implements IReportRepository {
   async findProfileById(id: string) {
-    return (prisma as any).profiles.findUnique({ where: { id } });
+    return prisma.profiles.findUnique({ where: { id } });
   }
 
   async findClinicModules(clinicId: string) {
-    return (prisma as any).clinic_modules.findMany({
+    return prisma.clinic_modules.findMany({
       where: { clinic_id: clinicId },
     });
   }
 
   async findModuleCatalogs(ids: number[]) {
     if (ids.length === 0) return [];
-    return (prisma as any).module_catalog.findMany({
+    return prisma.module_catalog.findMany({
       where: { id: { in: ids } },
     });
   }
 
   async findPatientsByClinic(clinicId: string) {
-    return (prisma as any).patients.findMany({
+    return prisma.patients.findMany({
       where: { clinic_id: clinicId },
       select: {
         id: true,
         cpf: true,
-        nome: true,
+        full_name: true,
         email: true,
-        telefone: true,
         created_at: true,
         updated_at: true,
       },
@@ -35,7 +34,7 @@ export class ReportRepository implements IReportRepository {
   }
 
   async findWikiPageVersions(take = 100) {
-    return (prisma as any).wiki_page_versions.findMany({ take });
+    return prisma.wiki_page_versions.findMany({ take });
   }
 
   async findProntuariosByClinic(clinicId: string) {
@@ -57,11 +56,11 @@ export class ReportRepository implements IReportRepository {
   }
 
   async createAuditLog(data: any) {
-    return (prisma as any).audit_logs.create({ data });
+    return prisma.audit_logs.create({ data });
   }
 
   async findModuleCatalogByKey(moduleKey: string) {
-    return (prisma as any).module_catalog.findFirst({
+    return prisma.module_catalog.findFirst({
       where: { module_key: moduleKey },
     });
   }
@@ -71,18 +70,21 @@ export class ReportRepository implements IReportRepository {
     moduleCatalogId: number,
     isActive: boolean
   ) {
-    return (prisma as any).clinic_modules.upsert({
-      where: {
-        clinic_id_module_catalog_id: {
-          clinic_id: clinicId,
-          module_catalog_id: moduleCatalogId,
-        },
-      },
-      update: { is_active: isActive },
-      create: {
+    const existing = await prisma.clinic_modules.findFirst({
+      where: { clinic_id: clinicId, module_catalog_id: moduleCatalogId },
+    });
+    if (existing) {
+      return prisma.clinic_modules.update({
+        where: { id: existing.id },
+        data: { is_active: isActive },
+      });
+    }
+    return prisma.clinic_modules.create({
+      data: {
         clinic_id: clinicId,
         module_catalog_id: moduleCatalogId,
         is_active: isActive,
+        subscribed_at: new Date().toISOString(),
       },
     });
   }

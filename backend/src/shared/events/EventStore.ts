@@ -7,11 +7,11 @@ import { DomainEvent } from "./DomainEvent";
 export class EventStore {
   async append(event: DomainEvent): Promise<void> {
     try {
-      await (prisma as any).domain_events.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.domain_events.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
         data: {
           aggregate_id: event.aggregateId,
           event_type: event.eventType,
-          payload: event as unknown as Record<string, unknown>,
+          payload: event as any,
           occurred_at: event.occurredOn,
         },
       });
@@ -22,7 +22,7 @@ export class EventStore {
 
   async getEvents(aggregateId: string): Promise<DomainEvent[]> {
     try {
-      const rows = await (prisma as any).domain_events.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const rows = await prisma.domain_events.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { aggregate_id: aggregateId },
         orderBy: { occurred_at: "asc" },
       });

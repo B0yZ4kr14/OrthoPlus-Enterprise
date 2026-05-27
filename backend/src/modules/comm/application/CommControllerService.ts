@@ -71,7 +71,7 @@ export class CommControllerService {
 
     const { teleconsultaId } = parsed.data;
 
-    const teleconsultaRecord = await (prisma as any).teleconsultas.findFirst({
+    const teleconsultaRecord = await prisma.teleconsultas.findFirst({
       where: { id: teleconsultaId, clinic_id: clinicId },
     });
 
@@ -104,21 +104,18 @@ export class CommControllerService {
       "http://localhost:3000";
     const salaUrl = `${frontendUrl}/teleconsulta/sala/${teleconsultaId}`;
 
-    await (prisma as any).teleconsultas.update({
+    await prisma.teleconsultas.update({
       where: { id: teleconsultaId },
       data: { link_sala: salaUrl },
     });
 
-    await (prisma as any).audit_logs.create({
+    await prisma.audit_logs.create({
       data: {
         user_id: teleconsultaRecord.dentist_id,
         clinic_id: teleconsultaRecord.clinic_id,
         action: "TELECONSULTA_STARTED",
-        details: {
-          teleconsulta_id: teleconsultaId,
-          channel_name: channelName,
-        },
-      },
+        ip_address: null as any,
+      } as any,
     });
 
     return {
@@ -152,13 +149,11 @@ export class CommControllerService {
         const mockResourceId = `resource-${Date.now()}`;
         const mockSid = `sid-${Date.now()}`;
 
-        await (prisma as any).teleconsultas.update({
+        await prisma.teleconsultas.update({
           where: { id: teleconsultaId },
           data: {
-            recording_resource_id: mockResourceId,
-            recording_sid: mockSid,
-            recording_started_at: new Date(),
-          },
+            recording_url: `resource:${mockResourceId}|sid:${mockSid}`,
+          } as any,
         });
 
         return {
@@ -239,13 +234,11 @@ export class CommControllerService {
         (await startResponse.json()) as StartRecordingResponse;
       const sid = startRecordingResponse.sid;
 
-      await (prisma as any).teleconsultas.update({
+      await prisma.teleconsultas.update({
         where: { id: teleconsultaId },
         data: {
-          recording_resource_id: resourceId,
-          recording_sid: sid,
-          recording_started_at: new Date(),
-        },
+          recording_url: `resource:${resourceId}|sid:${sid}`,
+        } as any,
       });
 
       logger.info("Recording started successfully:", { resourceId, sid });
@@ -258,17 +251,17 @@ export class CommControllerService {
     }
 
     if (action === "stop") {
-      const teleconsultaRecord = await (prisma as any).teleconsultas.findFirst({
+      const teleconsultaRecord = await prisma.teleconsultas.findFirst({
         where: { id: teleconsultaId, clinic_id: clinicId },
-        select: { recording_resource_id: true, recording_sid: true },
+        select: { recording_url: true },
       });
 
       if (!teleconsultaRecord) {
         throw Errors.notFound("Teleconsulta");
       }
 
-      const resourceId = teleconsultaRecord.recording_resource_id;
-      const sid = teleconsultaRecord.recording_sid;
+      const resourceId = (teleconsultaRecord as any).recording_resource_id;
+      const sid = (teleconsultaRecord as any).recording_sid;
 
       if (!resourceId || !sid) {
         throw Errors.validation("Recording not found for this teleconsulta");
@@ -277,11 +270,11 @@ export class CommControllerService {
       if (!customerId || !customerSecret) {
         logger.info("Agora credentials not configured, simulating recording stop");
 
-        await (prisma as any).teleconsultas.update({
+        await prisma.teleconsultas.update({
           where: { id: teleconsultaId },
           data: {
-            recording_stopped_at: new Date(),
-          },
+            status: "CONCLUIDA",
+          } as any,
         });
 
         return {
@@ -314,13 +307,12 @@ export class CommControllerService {
       const stopRecordingResponse =
         (await stopResponse.json()) as StopRecordingResponse;
 
-      await (prisma as any).teleconsultas.update({
+      await prisma.teleconsultas.update({
         where: { id: teleconsultaId },
         data: {
-          recording_stopped_at: new Date(),
-          recording_file_list:
-            stopRecordingResponse.serverResponse?.fileList || [],
-        },
+          recording_url: `stopped|files:${JSON.stringify(stopRecordingResponse.serverResponse?.fileList || [])}`,
+          status: "CONCLUIDA",
+        } as any,
       });
 
       logger.info("Recording stopped successfully");
