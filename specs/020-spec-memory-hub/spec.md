@@ -4,7 +4,7 @@
 
 **Created**: 2026-05-18
 
-**Status**: In Progress
+**Status**: In Progress — Post-`/speckit-analyze` remediation applied (2026-05-27)
 
 **Input**: User description: "spec-kit-memory-hub"
 
@@ -98,9 +98,9 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 - **MEM-FR-005**: The system MUST detect and report memory drift: specs without implementations, broken cross-references, outdated architecture decisions.
 - **MEM-FR-006**: The system MUST provide a health dashboard showing memory coverage, drift metrics, and index status.
 - **MEM-FR-007**: The system MUST support filtering search results by source type (spec, plan, architecture, API contract, implementation note).
-- **MEM-FR-008**: The system MUST respect document confidentiality markers and exclude sensitive content from AI agent context.
+- **MEM-FR-008**: The system MUST respect document confidentiality markers and exclude sensitive content from AI agent context. Confidentiality is declared via `confidential: true` in YAML frontmatter or an HTML comment `<!-- CONFIDENTIAL -->` at the start of the document. Documents marked confidential are indexed for search but excluded from AI agent context briefs.
 - **MEM-FR-009**: The system MUST maintain version history for indexed documents, allowing retrieval of previous versions.
-- **MEM-FR-010**: The system MUST expose both a CLI interface (for developers) and an API interface (for AI agents and integrations).
+- **MEM-FR-010**: The system MUST expose both a CLI interface (for developers) and an API interface (for AI agents and integrations). CLI output defaults to Markdown tables for readability; `--json` flag is supported for programmatic consumption. API responses follow RFC 7807 Problem Details for errors.
 - **MEM-FR-011**: The system MUST validate API key permissions (read/test call) on startup and fail fast with descriptive error if invalid.
 - **MEM-FR-012**: The system MUST support hot-swapping of API keys without restart (via file watcher on `.env` or SIGHUP).
 
@@ -108,7 +108,7 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 
 - **MEM-NFR-001**: Search queries MUST return results within 2 seconds for datasets up to 1000 documents.
 - **MEM-NFR-002**: The index update latency MUST be under 60 seconds for file changes. Inotify/fswatch provides near-real-time updates; polling fallback checks every 30 seconds.
-- **MEM-NFR-003**: Context briefs for AI agents MUST fit within a 128k token budget, with intelligent summarization for overflow.
+- **MEM-NFR-003**: Context briefs for AI agents MUST fit within a 128k token budget, with intelligent summarization for overflow. When the budget is exceeded, secondary documents are truncated with a `[truncated]` suffix; critical documents (spec + plan) are never truncated. If truncation is insufficient, the brief returns a 413 Payload Too Large with a summary of what was included.
 - **MEM-NFR-004**: The system SHOULD be operable without external cloud dependencies (local-first architecture). Ollama fallback ensures local operation; API-key providers are optional enhancements for production environments.
 - **MEM-NFR-006**: API keys MUST be stored encrypted at rest (AES-256-GCM) and never logged or exposed in error messages.
 - **MEM-NFR-007**: The system MUST support provider failover: if the primary API fails (timeout, rate limit, invalid key), fallback to secondary provider or queue for retry.

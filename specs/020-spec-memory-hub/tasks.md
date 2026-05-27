@@ -265,6 +265,31 @@
   - Corrupted index → `SqliteHealthChecker.backup()` + integrity check available
   - Token budget exceeded → hard cap + truncation in `ContextBriefService`
   - Contradictory specs → detection not yet implemented (deferred to Post-MVP)
+- [ ] T050 [P] Implement API key validation on startup in `backend/src/modules/memory_hub/infrastructure/ApiKeyValidator.ts`
+  - `validate(provider, apiKey)`: perform a lightweight test call (e.g., `POST /api/embed` with empty string or `GET /api/tags` for Ollama)
+  - Fail fast on startup with descriptive `ApiError` if key is invalid or provider unreachable
+  - Called by `MemoryHubModule.initialize()` before indexing begins
+- [ ] T051 [P] Implement API key hot-swap in `backend/src/modules/memory_hub/infrastructure/ApiKeyHotSwap.ts`
+  - `process.on('SIGHUP', ...)` reloads API key from env
+  - Optional `chokidar` watcher on `.env` file as fallback for environments without signal support
+  - Thread-safe: update a shared config object atomically; in-flight requests complete with old key
+- [ ] T052 [P] Implement encrypted key storage in `backend/src/modules/memory_hub/infrastructure/SecureConfigStore.ts`
+  - AES-256-GCM encryption of `MEMORY_HUB_API_KEY` at rest using a master key derived from `MEMORY_HUB_MASTER_KEY` (32-byte hex)
+  - Store encrypted key in SQLite `config` table; decrypt on read, never log plaintext
+  - Fallback: if `MEMORY_HUB_MASTER_KEY` is unset, warn and store unencrypted (development only)
+- [X] T053 [P] Cost tracking per clinic in `backend/src/modules/memory_hub/domain/services/CostTrackingService.ts`
+  - Track embedding API usage per `clinicId`: requests, tokens, estimated cost
+  - Monthly budget alert via env `MEMORY_HUB_MONTHLY_BUDGET_ALERT_CENTS` (default 50000 = $500)
+  - Emit Prometheus metric `orthoplus_memory_hub_api_cost_total` with `clinic_id` label
+  - **Note**: Service exists but was unmapped in original task list; added for traceability
+- [ ] T054 [P] Inject request ID into embedding calls in `backend/src/modules/memory_hub/infrastructure/OllamaEmbeddingClient.ts`
+  - Add `X-Request-ID` header (UUID v4) to every HTTP request to Ollama/external provider
+  - Include request ID in Winston logs for provider-side tracing and cost attribution
+  - Store request ID in SQLite `search_queries` table for audit trail
+- [ ] T055 [Post-MVP] Detect contradictory specs in `backend/src/modules/memory_hub/domain/services/ContradictionDetector.ts`
+  - Compare indexed specs for overlapping requirements with conflicting values
+  - Flag in health dashboard and search results; prioritize more recent document
+  - Depends on: mature index with >50 specs for meaningful detection
 
 ---
 

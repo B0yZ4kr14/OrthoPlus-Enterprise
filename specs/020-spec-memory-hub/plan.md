@@ -59,6 +59,7 @@ Build a centralized project memory hub that indexes all markdown documentation (
 | **INF-1** Infrastructure Resilience | CategoryCircuitBreaker protection for DB operations | ✅ Existing |
 | **INF-2** Observability Metrics | Emit `orthoplus_*` metrics with category label for new modules | 🔍 Enforce |
 | **INF-3** Backup & DR | Per-category pg_dump via BackupSchedulerService; 10-backup retention | ✅ Existing |
+| **WP-1** BullMQ for jobs | Drift scan uses node-cron (lightweight, idempotent, no queue semantics) | ⚠️ Exception — justified: scan is read-only, self-contained, and runs on single scheduler instance |
 
 ## Project Structure
 
@@ -162,8 +163,17 @@ categories/@orthoplus/core/packages/
 | **MEM-FR-008** | The system MUST respect document confidentiality m... | ✅ Covered |
 | **MEM-FR-009** | The system MUST maintain version history for index... | ✅ Covered |
 | **MEM-FR-010** | The system MUST expose both a CLI interface (for d... | ✅ Covered |
-| **MEM-FR-011** | The system MUST validate API key permissions (read... | ✅ Covered |
-| **MEM-FR-012** | The system MUST support hot-swapping of API keys w... | ✅ Covered |
+| **MEM-FR-011** | The system MUST validate API key permissions (read... | ⚠️ Partial — T050 adds validation; T039 gates build |
+| **MEM-FR-012** | The system MUST support hot-swapping of API keys w... | ⚠️ Partial — T051 adds SIGHUP + watcher |
+| **MEM-NFR-001** | Search queries MUST return results within 2 second... | ✅ Covered — T012 (SearchService) |
+| **MEM-NFR-002** | The index update latency MUST be under 60 seconds... | ✅ Covered — T020 (FileWatcher) |
+| **MEM-NFR-003** | Context briefs for AI agents MUST fit within a 128... | ⚠️ Partial — T026 (ContextBriefService); overflow behavior clarified in spec |
+| **MEM-NFR-004** | The system SHOULD be operable without external clo... | ✅ Covered — T007 (Ollama fallback) |
+| **MEM-NFR-005** | Health scan MUST complete within 5 minutes... | ✅ Covered — T032 (cron with timeout) |
+| **MEM-NFR-006** | API keys MUST be stored encrypted at rest (AES-256... | ⚠️ Partial — T052 adds SecureConfigStore |
+| **MEM-NFR-007** | The system MUST support provider failover... | ⚠️ Partial — T007 (Ollama client) + T038 (metrics) |
+| **MEM-NFR-008** | API usage costs MUST be trackable per clinic/work... | ✅ Covered — T053 (CostTrackingService) |
+| **MEM-NFR-009** | Embedding requests MUST include request ID... | ⚠️ Partial — T054 adds request ID injection |
 
 ---
 
