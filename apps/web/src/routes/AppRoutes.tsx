@@ -97,6 +97,9 @@ const TeleodontoPage = lazy(() => import("@/modules/teleodonto").then((m) => ({ 
 const RelatorioFiscalPage = lazy(
   () => import("@/modules/faturamento/ui/pages/RelatorioFiscalPage"),
 );
+const NFesPage = lazy(
+  () => import("@/modules/faturamento/ui/pages/NFesPage"),
+);
 
 // Odontograma (standalone page — reuses PEP components)
 const OdontogramaPage = lazy(
@@ -286,6 +289,7 @@ const AppRoutes = () => (
     <Route path="/files" element={protectedRoute(<FileListPage />, { moduleKey: "FILES" })} />
     <Route path="/files/upload" element={protectedRoute(<FileUploadPage />, { moduleKey: "FILES" })} />
     <Route path="/faturamento-tiss" element={protectedRoute(<TISSPage />, { moduleKey: "TISS" })} />
+    <Route path="/faturamento/nfes" element={protectedRoute(<NFesPage />, { moduleKey: "FATURAMENTO" })} />
     <Route path="/faturamento/relatorio" element={protectedRoute(<RelatorioFiscalPage />, { moduleKey: "FATURAMENTO" })} />
     <Route path="/teleodonto" element={protectedRoute(<TeleodontoPage />, { moduleKey: "TELEODONTO" })} />
 
