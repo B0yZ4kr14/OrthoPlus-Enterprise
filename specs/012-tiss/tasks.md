@@ -16,7 +16,7 @@
 
 - [x] T001-T004 — Backend infrastructure exists
   - `backend/src/modules/tiss/api/` — controller.ts, router.ts, schemas.ts
-  - Prisma models: `tiss_guides`, `tiss_batches`
+  - Prisma models: `tiss_guides`, `tiss_batches`, `tiss_convenios`
   - Registered in `backend/src/index.ts` at `/api/tiss`
 
 ---
@@ -38,45 +38,44 @@
 
 - [x] T201-T205 — Frontend structure exists
   - Route: `/faturamento-tiss` with `moduleKey: "TISS"`
-  - Page: `TISSPage` with tabs (Dashboard, Guias, Lotes)
-  - Hooks: `useTISS.ts`, `useTISSGuides.ts`
-  - Components: `TISSDashboard`, `TISSGuideForm`, `TISSBatchList`
-- [ ] T206 — **MISSING** — Components not wired to real data (all use hardcoded mock data)
+  - Page: `TISSPage` with tabs (Dashboard, Guias, Lotes, Glosas, Convênios)
+  - Hooks: `useTISS.ts`, `useTISSGuides.ts`, `useTISSStatistics.ts`, `useTISSGlosas.ts`, `useTISSConvenios.ts`
+  - Components: `TISSDashboard`, `TISSGuideForm`, `TISSBatchList`, `TISSGlosasManager`, `TISSConveniosManager`
+- [~] T206 — **PARTIAL** — Dashboard wired to real data via `/statistics`; GuideForm and BatchList still need full real-data integration
 
 ---
 
 ## Phase 4: User Stories
 
 #### US1: Cadastrar Convênio (Priority: P1)
-- [x] T300-T305 — **IMPLEMENTED** — No convênio management endpoints or UI
-  - No `Convenio` model, controller, or page
-  - Spec requirement not implemented
+- [x] T300-T305 — **IMPLEMENTED** — Convênio management backend, hook, and UI
+  - Model: `tiss_convenios` with full CRUD
+  - Component: `TISSConveniosManager.tsx`
+  - Hook: `useTISSConvenios.ts`
 
 #### US2: Solicitar Autorização (GUIA TISS) (Priority: P1)
-- [~] T310-T315 — **PARTIAL** — Form exists but not functional
-  - `TISSGuideForm.tsx` has static JSX with hardcoded patient/procedure options
-  - No form state management or submit handling
-  - `useTISSGuides` hook has `createGuide` mutation but page doesn't wire it to the form
+- [~] T310-T315 — **PARTIAL** — Form exists with basic submit handling
+  - `TISSGuideForm.tsx` has form state and submit
+  - `useTISS` hook has `createGuide` mutation wired
   - No XML TISS generation per spec (TIS-FR-002)
   - No SOAP webservice integration
 
 #### US3: Consultar Status de Autorização (Priority: P2)
-- [~] T320-T325 — **PARTIAL** — Batch list UI exists but uses mock data
-  - `TISSBatchList.tsx` displays 3 hardcoded batches
-  - `useTISSGuides` fetches real batch data but component ignores it
-  - No status filtering or search
+- [~] T320-T325 — **PARTIAL** — Batch list UI fetches real data but may need enhanced filtering
+  - `TISSBatchList.tsx` connected to API
+  - `useTISS` fetches real batch data
 
 #### US4: Faturamento de Glosas (Priority: P3)
-- [ ] T330-T335 — **MISSING** — No glosa processing implemented
-  - No glosa backend endpoints
-  - No glosa UI components
-  - No retorno/reenvio flow
+- [x] T330-T335 — **IMPLEMENTED** — Glosa processing backend and UI
+  - Schema: `glosa_amount`, `glosa_date`, `glosa_reason` added to `tiss_guides`
+  - Endpoints: `GET /tiss/glosas`, `PATCH /tiss/glosas/:id`, `POST /tiss/glosas/:id/reprocessar`
+  - Component: `TISSGlosasManager.tsx` with table, dialog, reprocess action
+  - Hook: `useTISSGlosas.ts`
 
 #### US5: Relatórios TISS (Priority: Could Have)
-- [~] T340-T345 — **PARTIAL** — `TISSDashboard` shows static KPI cards
-  - Stats are hardcoded (23 pendentes, 142 enviadas, 94% aprovação, 8 glosas)
-  - Backend `/statistics` endpoint exists and is tested
-  - Dashboard not connected to real data
+- [x] T340-T345 — **IMPLEMENTED** — `TISSDashboard` connected to `/statistics` endpoint
+  - Real-time KPIs: pendentes, enviadas, aprovação, glosas
+  - Hook: `useTISSStatistics.ts`
 
 ---
 
@@ -85,7 +84,7 @@
 - [x] T501-T505 — Build/type-check/lint passing
 - [x] T506 Backend tests — PASS (`tissController.test.ts`)
 - [ ] T507 E2E tests — **MISSING**
-- [ ] T508 Security audit — **VIOLATION**: Controller uses `(prisma as any)` extensively (9 occurrences)
+- [x] T508 Security audit — **PASS** — All `(prisma as any)` casts removed from controller
 
 ## Summary
 
@@ -94,18 +93,15 @@
 | Phase 1 (Setup) | 4 | 4 | ✅ 100% |
 | Phase 2 (Backend) | 10 | 10 | ✅ 100% |
 | Phase 3 (Frontend Foundation) | 6 | 5 | ⚠️ 83% |
-| Phase 4 (User Stories) | 20 | 4 | ❌ 20% |
-| Phase 5 (Quality Gates) | 5 | 3 | ⚠️ 60% |
-| **Total** | **45** | **26** | **~58% COMPLETE** |
+| Phase 4 (User Stories) | 20 | 14 | ⚠️ 70% |
+| Phase 5 (Quality Gates) | 5 | 4 | ✅ 80% |
+| **Total** | **45** | **37** | **~82% COMPLETE** |
 
 ## Identified Gaps
 
 | Gap | Priority | Description |
 |-----|----------|-------------|
-| GAP-001 | **HIGH** | Frontend components use hardcoded mock data — need wiring to hooks/API |
-| GAP-002 | **HIGH** | No convênio management (TIS-FR-001) — missing model, API, and UI |
-| GAP-003 | **HIGH** | No XML TISS generation or SOAP webservice integration (TIS-FR-002) |
-| GAP-004 | **MEDIUM** | No glosa processing (TIS-FR-004) — missing backend and UI |
-| GAP-005 | **MEDIUM** | No E2E tests for TISS flows |
-| GAP-006 | **LOW** | `TISSDashboard` not connected to `/statistics` endpoint |
-| GAP-007 | **LOW** | Controller uses `(prisma as any)` instead of typed Prisma client |
+| GAP-001 | **MEDIUM** | GuideForm and BatchList need full real-data polish |
+| GAP-002 | **MEDIUM** | No XML TISS generation or SOAP webservice integration (TIS-FR-002) |
+| GAP-003 | **MEDIUM** | No E2E tests for TISS flows |
+| GAP-004 | **LOW** | `useTISS` hook still has some mock/hardcoded patterns |
