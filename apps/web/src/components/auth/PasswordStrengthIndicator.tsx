@@ -79,7 +79,7 @@ export function PasswordStrengthIndicator({
           </p>
 
           {password.length > 0 && strength.score === 4 && (
-            <CheckCircle className="h-4 w-4 text-green-500" />
+            <CheckCircle className="h-4 w-4 text-success" />
           )}
         </div>
       </div>
@@ -138,7 +138,7 @@ function Requirement({
   return (
     <li className="flex items-center gap-2 text-xs">
       {met ? (
-        <CheckCircle className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+        <CheckCircle className="h-3.5 w-3.5 text-success flex-shrink-0" />
       ) : (
         <XCircle className="h-3.5 w-3.5 text-muted-foreground/50 flex-shrink-0" />
       )}
@@ -183,11 +183,11 @@ function calculateStrength(password: string): PasswordStrength {
   }
 
   const strengthMap = {
-    0: { label: "Muito Fraca", color: "bg-red-500 dark:bg-red-600" },
-    1: { label: "Fraca", color: "bg-orange-500 dark:bg-orange-600" },
-    2: { label: "Média", color: "bg-yellow-500 dark:bg-yellow-600" },
+    0: { label: "Muito Fraca", color: "bg-destructive dark:bg-red-600" },
+    1: { label: "Fraca", color: "bg-warning dark:bg-orange-600" },
+    2: { label: "Média", color: "bg-warning dark:bg-yellow-600" },
     3: { label: "Forte", color: "bg-lime-500 dark:bg-lime-600" },
-    4: { label: "Muito Forte", color: "bg-green-500 dark:bg-green-600" },
+    4: { label: "Muito Forte", color: "bg-success dark:bg-green-600" },
   };
 
   const { label, color } = strengthMap[score as keyof typeof strengthMap];
@@ -196,10 +196,10 @@ function calculateStrength(password: string): PasswordStrength {
 }
 
 function getTextColorClass(bgColor: string): string {
-  if (bgColor.includes("red")) return "text-red-600 dark:text-red-400";
-  if (bgColor.includes("orange")) return "text-orange-600 dark:text-orange-400";
-  if (bgColor.includes("yellow")) return "text-yellow-600 dark:text-yellow-400";
+  if (bgColor.includes("red")) return "text-destructive dark:text-destructive";
+  if (bgColor.includes("orange")) return "text-warning dark:text-orange-400";
+  if (bgColor.includes("yellow")) return "text-warning dark:text-warning";
   if (bgColor.includes("lime")) return "text-lime-600 dark:text-lime-400";
-  if (bgColor.includes("green")) return "text-green-600 dark:text-green-400";
+  if (bgColor.includes("green")) return "text-success dark:text-success";
   return "text-muted-foreground";
 }

@@ -48,17 +48,17 @@ export function AgendaCalendar({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Confirmada":
-        return "bg-green-500/20 border-green-500 text-green-700";
+        return "bg-success/20 border-success text-success";
       case "Agendada":
-        return "bg-blue-500/20 border-blue-500 text-blue-700";
+        return "bg-info/20 border-info text-info";
       case "Realizada":
         return "bg-gray-500/20 border-gray-500 text-gray-700";
       case "Cancelada":
-        return "bg-red-500/20 border-red-500 text-red-700";
+        return "bg-destructive/20 border-destructive text-destructive";
       case "Faltou":
-        return "bg-orange-500/20 border-orange-500 text-orange-700";
+        return "bg-warning/20 border-warning text-warning";
       default:
-        return "bg-blue-500/20 border-blue-500 text-blue-700";
+        return "bg-info/20 border-info text-info";
     }
   };
 
@@ -202,11 +202,11 @@ export function AgendaCalendar({
       {/* Legend */}
       <div className="flex flex-wrap gap-4 text-sm">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-blue-500/20 border border-blue-500"></div>
+          <div className="w-4 h-4 rounded bg-info/20 border border-info"></div>
           <span>Agendada</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-green-500/20 border border-green-500"></div>
+          <div className="w-4 h-4 rounded bg-success/20 border border-success"></div>
           <span>Confirmada</span>
         </div>
         <div className="flex items-center gap-2">
@@ -214,11 +214,11 @@ export function AgendaCalendar({
           <span>Realizada</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-red-500/20 border border-red-500"></div>
+          <div className="w-4 h-4 rounded bg-destructive/20 border border-destructive"></div>
           <span>Cancelada</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-orange-500/20 border border-orange-500"></div>
+          <div className="w-4 h-4 rounded bg-warning/20 border border-warning"></div>
           <span>Faltou</span>
         </div>
       </div>

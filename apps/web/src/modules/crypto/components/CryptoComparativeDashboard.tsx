@@ -160,7 +160,7 @@ export function CryptoComparativeDashboard({
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Taxa Crypto Média
               </p>
-              <p className="text-2xl font-bold text-orange-500">
+              <p className="text-2xl font-bold text-warning">
                 {cryptoFeePercentage.toFixed(2)}%
               </p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -170,7 +170,7 @@ export function CryptoComparativeDashboard({
                 })}
               </p>
             </div>
-            <Percent className="h-10 w-10 text-orange-500 opacity-50 shrink-0" />
+            <Percent className="h-10 w-10 text-warning opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -184,7 +184,7 @@ export function CryptoComparativeDashboard({
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Economia Total
               </p>
-              <p className="text-2xl font-bold text-green-500">
+              <p className="text-2xl font-bold text-success">
                 R${" "}
                 {totalSavings.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
@@ -194,7 +194,7 @@ export function CryptoComparativeDashboard({
                 vs métodos tradicionais
               </p>
             </div>
-            <TrendingUp className="h-10 w-10 text-green-500 opacity-50 shrink-0" />
+            <TrendingUp className="h-10 w-10 text-success opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -204,12 +204,12 @@ export function CryptoComparativeDashboard({
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Economia Média
               </p>
-              <p className="text-2xl font-bold text-blue-500">
+              <p className="text-2xl font-bold text-info">
                 {avgSavingsPercentage.toFixed(1)}%
               </p>
               <p className="text-xs text-muted-foreground mt-1">menos taxas</p>
             </div>
-            <TrendingDown className="h-10 w-10 text-blue-500 opacity-50 shrink-0" />
+            <TrendingDown className="h-10 w-10 text-info opacity-50 shrink-0" />
           </div>
         </Card>
 
@@ -240,9 +240,9 @@ export function CryptoComparativeDashboard({
 
       {/* Alert de Economia */}
       {totalSavings > 100 && (
-        <Alert className="bg-green-500/10 border-green-500/50">
-          <TrendingUp className="h-4 w-4 text-green-500" />
-          <AlertDescription className="text-green-700 dark:text-green-300">
+        <Alert className="bg-success/10 border-success/50">
+          <TrendingUp className="h-4 w-4 text-success" />
+          <AlertDescription className="text-success dark:text-green-300">
             <strong>Excelente!</strong> Você está economizando{" "}
             <strong>
               R${" "}
@@ -338,7 +338,7 @@ export function CryptoComparativeDashboard({
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-green-500" />
+            <TrendingUp className="h-4 w-4 text-success" />
             Economia usando Crypto vs Métodos Tradicionais
           </CardTitle>
         </CardHeader>
@@ -428,14 +428,14 @@ export function CryptoComparativeDashboard({
                         {isCrypto ? (
                           <span className="text-muted-foreground">-</span>
                         ) : diff > 0 ? (
-                          <span className="text-green-600 dark:text-green-400 font-medium">
+                          <span className="text-success dark:text-success font-medium">
                             -R${" "}
                             {diff.toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,
                             })}
                           </span>
                         ) : (
-                          <span className="text-red-600 dark:text-red-400 font-medium">
+                          <span className="text-destructive dark:text-destructive font-medium">
                             +R${" "}
                             {Math.abs(diff).toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,

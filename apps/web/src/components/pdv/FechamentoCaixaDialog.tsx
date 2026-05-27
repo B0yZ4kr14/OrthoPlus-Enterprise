@@ -53,7 +53,7 @@ export function FechamentoCaixaDialog({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Lock className="h-5 w-5 text-red-500" />
+            <Lock className="h-5 w-5 text-destructive" />
             Fechamento de Caixa
           </DialogTitle>
         </DialogHeader>
@@ -61,7 +61,7 @@ export function FechamentoCaixaDialog({
         <div className="space-y-6">
           {/* Resumo */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+            <div className="p-4 bg-info/10 rounded-lg border border-info/20">
               <p className="text-sm text-muted-foreground mb-1">
                 Valor Inicial
               </p>
@@ -72,11 +72,11 @@ export function FechamentoCaixaDialog({
                 })}
               </p>
             </div>
-            <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+            <div className="p-4 bg-success/10 rounded-lg border border-success/20">
               <p className="text-sm text-muted-foreground mb-1">
                 Valor Esperado
               </p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-2xl font-bold text-success">
                 R${" "}
                 {valorEsperado.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
@@ -87,13 +87,13 @@ export function FechamentoCaixaDialog({
               <div
                 className={`p-4 rounded-lg border ${
                   diferenca > 0
-                    ? "bg-green-500/10 border-green-500/20"
-                    : "bg-red-500/10 border-red-500/20"
+                    ? "bg-success/10 border-success/20"
+                    : "bg-destructive/10 border-destructive/20"
                 }`}
               >
                 <p className="text-sm text-muted-foreground mb-1">Diferença</p>
                 <p
-                  className={`text-2xl font-bold ${diferenca > 0 ? "text-green-600" : "text-red-600"}`}
+                  className={`text-2xl font-bold ${diferenca > 0 ? "text-success" : "text-destructive"}`}
                 >
                   {diferenca > 0 ? "+" : ""}R${" "}
                   {Math.abs(diferenca).toLocaleString("pt-BR", {

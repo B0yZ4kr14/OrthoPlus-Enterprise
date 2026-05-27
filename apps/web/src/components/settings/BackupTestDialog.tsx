@@ -97,16 +97,16 @@ export function BackupTestDialog({
 
   const getStatusIcon = () => {
     if (testing)
-      return <Loader2 className="h-5 w-5 animate-spin text-blue-500" />;
+      return <Loader2 className="h-5 w-5 animate-spin text-info" />;
     if (!testResult) return <Info className="h-5 w-5 text-muted-foreground" />;
     if (testResult.success)
-      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-    return <XCircle className="h-5 w-5 text-red-500" />;
+      return <CheckCircle2 className="h-5 w-5 text-success" />;
+    return <XCircle className="h-5 w-5 text-destructive" />;
   };
 
   const getStatusColor = () => {
     if (!testResult) return "border-border";
-    return testResult.success ? "border-green-500/50" : "border-red-500/50";
+    return testResult.success ? "border-success/50" : "border-destructive/50";
   };
 
   return (
@@ -169,14 +169,14 @@ export function BackupTestDialog({
                       Testes Executados
                     </p>
                   </div>
-                  <div className="text-center p-3 bg-green-500/10 rounded">
-                    <p className="text-2xl font-bold text-green-600">
+                  <div className="text-center p-3 bg-success/10 rounded">
+                    <p className="text-2xl font-bold text-success">
                       {testResult.testsPassed}
                     </p>
                     <p className="text-xs text-muted-foreground">Aprovados</p>
                   </div>
-                  <div className="text-center p-3 bg-red-500/10 rounded">
-                    <p className="text-2xl font-bold text-red-600">
+                  <div className="text-center p-3 bg-destructive/10 rounded">
+                    <p className="text-2xl font-bold text-destructive">
                       {testResult.testsFailed}
                     </p>
                     <p className="text-xs text-muted-foreground">Reprovados</p>
@@ -205,9 +205,9 @@ export function BackupTestDialog({
 
                 {/* Success message */}
                 {testResult.success && (
-                  <Alert className="bg-green-500/10 border-green-500/20">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-600 dark:text-green-400">
+                  <Alert className="bg-success/10 border-success/20">
+                    <CheckCircle2 className="h-4 w-4 text-success" />
+                    <AlertDescription className="text-success dark:text-success">
                       ✓ Backup validado com sucesso! Todos os testes passaram e
                       o backup está pronto para ser restaurado caso necessário.
                     </AlertDescription>
