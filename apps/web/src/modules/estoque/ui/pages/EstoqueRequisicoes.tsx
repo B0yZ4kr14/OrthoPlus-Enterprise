@@ -146,10 +146,10 @@ export default function EstoqueRequisicoes() {
       />
 
       {alertasNaoLidos.length > 0 && (
-        <Card className="border-orange-200 bg-orange-50/50">
+        <Card className="border-warning/20 bg-orange-50/50">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-orange-500" />
+              <AlertCircle className="h-5 w-5 text-warning" />
               <CardTitle className="text-orange-900">
                 {alertasNaoLidos.length} Alerta
                 {alertasNaoLidos.length !== 1 ? "s" : ""} de Estoque

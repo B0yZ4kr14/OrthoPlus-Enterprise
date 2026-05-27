@@ -67,7 +67,7 @@ export function FornecedoresList({
                       {fornecedor.api_enabled && (
                         <Badge
                           variant="outline"
-                          className="bg-green-500/10 text-green-600"
+                          className="bg-success/10 text-success"
                         >
                           <CheckCircle className="h-3 w-3 mr-1" />
                           API Ativa
@@ -76,7 +76,7 @@ export function FornecedoresList({
                       {fornecedor.auto_order_enabled && (
                         <Badge
                           variant="outline"
-                          className="bg-blue-500/10 text-blue-600"
+                          className="bg-info/10 text-info"
                         >
                           Pedidos Automáticos
                         </Badge>
@@ -98,8 +98,8 @@ export function FornecedoresList({
                         <span
                           className={
                             taxaSucessoFornecedor >= 80
-                              ? "text-green-600"
-                              : "text-red-600"
+                              ? "text-success"
+                              : "text-destructive"
                           }
                         >
                           {taxaSucessoFornecedor.toFixed(1)}%

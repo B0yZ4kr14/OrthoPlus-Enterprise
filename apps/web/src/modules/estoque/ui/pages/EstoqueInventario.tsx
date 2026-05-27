@@ -159,7 +159,7 @@ export default function EstoqueInventario() {
                 {inventarios.filter((i) => i.status === "EM_ANDAMENTO").length}
               </p>
             </div>
-            <FileText className="h-8 w-8 text-yellow-500" />
+            <FileText className="h-8 w-8 text-warning" />
           </div>
         </Card>
 
@@ -176,7 +176,7 @@ export default function EstoqueInventario() {
                 )}
               </p>
             </div>
-            <AlertTriangle className="h-8 w-8 text-orange-500" />
+            <AlertTriangle className="h-8 w-8 text-warning" />
           </div>
         </Card>
 
@@ -193,7 +193,7 @@ export default function EstoqueInventario() {
                   .toFixed(2)}
               </p>
             </div>
-            <AlertTriangle className="h-8 w-8 text-red-500" />
+            <AlertTriangle className="h-8 w-8 text-destructive" />
           </div>
         </Card>
       </div>
@@ -350,7 +350,7 @@ export default function EstoqueInventario() {
                             onClick={() => handleDivergencias(inventario)}
                             title="Ver Divergências"
                           >
-                            <AlertTriangle className="h-4 w-4 text-orange-500" />
+                            <AlertTriangle className="h-4 w-4 text-warning" />
                           </Button>
                         )}
                       {inventario.status !== "CONCLUIDO" && (

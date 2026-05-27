@@ -108,14 +108,14 @@ export function CryptoPaymentStatus({
   const getStatusIcon = () => {
     switch (paymentStatus.status) {
       case "PENDING":
-        return <Clock className="h-8 w-8 text-yellow-500" />;
+        return <Clock className="h-8 w-8 text-warning" />;
       case "PROCESSING":
-        return <Loader2 className="h-8 w-8 animate-spin text-blue-500" />;
+        return <Loader2 className="h-8 w-8 animate-spin text-info" />;
       case "CONFIRMED":
-        return <CheckCircle2 className="h-8 w-8 text-green-500" />;
+        return <CheckCircle2 className="h-8 w-8 text-success" />;
       case "EXPIRED":
       case "FAILED":
-        return <AlertCircle className="h-8 w-8 text-red-500" />;
+        return <AlertCircle className="h-8 w-8 text-destructive" />;
       default:
         return <Clock className="h-8 w-8 text-gray-500" />;
     }
@@ -190,7 +190,7 @@ export function CryptoPaymentStatus({
 
         {/* Confirmed At */}
         {paymentStatus.confirmedAt && (
-          <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+          <div className="p-4 bg-success/5 dark:bg-green-950 rounded-lg">
             <p className="text-sm text-green-900 dark:text-green-100">
               ✅ Confirmado em{" "}
               {new Date(paymentStatus.confirmedAt).toLocaleString("pt-BR", {
@@ -255,7 +255,7 @@ function TimelineItem({ completed, label, time }: TimelineItemProps) {
     <div className="flex items-center gap-3">
       <div
         className={`w-2 h-2 rounded-full ${
-          completed ? "bg-green-500" : "bg-muted"
+          completed ? "bg-success" : "bg-muted"
         }`}
       />
       <div className="flex-1 flex justify-between">

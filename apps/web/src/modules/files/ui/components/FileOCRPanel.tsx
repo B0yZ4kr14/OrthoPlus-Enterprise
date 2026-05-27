@@ -54,8 +54,8 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
       {status === "CONCLUIDO" && ocr?.textoExtraido ? (
         <div className="rounded-md border bg-gray-50 p-3">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <span className="text-xs text-green-600 font-medium">Texto extraído com sucesso</span>
+            <CheckCircle className="h-4 w-4 text-success" />
+            <span className="text-xs text-success font-medium">Texto extraído com sucesso</span>
             {ocr.confidence && (
               <span className="text-xs text-muted-foreground">
                 (confiança: {(ocr.confidence * 100).toFixed(1)}%)
@@ -73,7 +73,7 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
         </div>
       ) : status === "ERRO" ? (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm text-red-600">
+          <div className="flex items-center gap-2 text-sm text-destructive">
             <AlertCircle className="h-4 w-4" />
             Falha ao extrair texto do documento.
           </div>

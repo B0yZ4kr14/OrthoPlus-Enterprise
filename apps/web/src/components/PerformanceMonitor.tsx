@@ -52,9 +52,9 @@ export function PerformanceMonitor() {
   if (!import.meta.env.DEV) return null;
 
   const getFPSColor = (fps: number) => {
-    if (fps >= 55) return "text-green-500";
-    if (fps >= 30) return "text-yellow-500";
-    return "text-red-500";
+    if (fps >= 55) return "text-success";
+    if (fps >= 30) return "text-warning";
+    return "text-destructive";
   };
 
   const getMemoryColor = (usage: string) => {

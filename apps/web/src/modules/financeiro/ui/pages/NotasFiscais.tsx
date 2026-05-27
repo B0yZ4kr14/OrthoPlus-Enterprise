@@ -81,7 +81,7 @@ export default function NotasFiscais() {
 
   const getTipoBadge = (tipo: string) => {
     const colors: Record<string, string> = {
-      NFe: "bg-blue-500/10 text-blue-700 border-blue-500/20",
+      NFe: "bg-info/10 text-info border-info/20",
       NFSe: "bg-purple-500/10 text-purple-700 border-purple-500/20",
     };
     return (

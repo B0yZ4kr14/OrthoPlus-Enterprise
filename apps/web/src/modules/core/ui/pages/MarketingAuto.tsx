@@ -73,7 +73,7 @@ export default function MarketingAuto() {
             <CardTitle className="text-sm font-medium">
               Taxa de Conversão
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600" />
+            <TrendingUp className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0%</div>

@@ -79,9 +79,9 @@ export function StepActivation() {
 
   return (
     <div className="space-y-6">
-      <Card className="p-4 bg-blue-500/10 border-blue-500/20">
+      <Card className="p-4 bg-info/10 border-info/20">
         <div className="flex gap-3">
-          <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+          <Info className="h-5 w-5 text-info mt-0.5 flex-shrink-0" />
           <div>
             <h3 className="font-semibold mb-1">
               Como funciona a ativação de módulos?
@@ -106,11 +106,11 @@ export function StepActivation() {
         </div>
         <div className="flex gap-4 text-sm">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <CheckCircle2 className="h-4 w-4 text-success" />
             <span>{activeModules.length} Ativos</span>
           </div>
           <div className="flex items-center gap-2">
-            <XCircle className="h-4 w-4 text-red-500" />
+            <XCircle className="h-4 w-4 text-destructive" />
             <span>{SAMPLE_MODULES.length - activeModules.length} Inativos</span>
           </div>
         </div>
@@ -138,7 +138,7 @@ export function StepActivation() {
                       <div className="flex items-center gap-3">
                         <div
                           className={`w-2 h-2 rounded-full ${
-                            isActive ? "bg-green-500" : "bg-gray-400"
+                            isActive ? "bg-success" : "bg-gray-400"
                           }`}
                         />
                         <div>

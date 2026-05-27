@@ -114,8 +114,8 @@ export function CryptoTransactionsView({
       <Card depth="normal" className="p-8">
         <div className="text-center space-y-6">
           <div className="flex justify-center">
-            <div className="rounded-full bg-orange-500/10 p-6">
-              <Wallet className="h-12 w-12 text-orange-500" />
+            <div className="rounded-full bg-warning/10 p-6">
+              <Wallet className="h-12 w-12 text-warning" />
             </div>
           </div>
           <div className="space-y-2">
@@ -131,7 +131,7 @@ export function CryptoTransactionsView({
             <Button
               onClick={() => setWalletDialogOpen(true)}
               size="lg"
-              className="bg-orange-500 hover:bg-orange-600"
+              className="bg-warning hover:bg-orange-600"
             >
               <Plus className="h-5 w-5 mr-2" />
               Criar Carteira
@@ -250,7 +250,7 @@ export function CryptoTransactionsView({
                           <span className="text-muted-foreground">
                             Valor Líquido:
                           </span>
-                          <p className="font-semibold text-green-600 dark:text-green-400">
+                          <p className="font-semibold text-success dark:text-success">
                             R${" "}
                             {tx.net_amount_brl?.toLocaleString("pt-BR", {
                               minimumFractionDigits: 2,

@@ -38,9 +38,9 @@ import { toast } from "sonner"
 
 function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { icon: React.ReactNode; className: string; label: string }> = {
-    PENDENTE: { icon: <Clock className="h-3 w-3" />, className: "bg-yellow-100 text-yellow-800", label: "Pendente" },
-    AUTORIZADA: { icon: <CheckCircle2 className="h-3 w-3" />, className: "bg-green-100 text-green-800", label: "Autorizada" },
-    CANCELADA: { icon: <XCircle className="h-3 w-3" />, className: "bg-red-100 text-red-800", label: "Cancelada" },
+    PENDENTE: { icon: <Clock className="h-3 w-3" />, className: "bg-warning/10 text-yellow-800", label: "Pendente" },
+    AUTORIZADA: { icon: <CheckCircle2 className="h-3 w-3" />, className: "bg-success/10 text-green-800", label: "Autorizada" },
+    CANCELADA: { icon: <XCircle className="h-3 w-3" />, className: "bg-destructive/10 text-destructive", label: "Cancelada" },
     REJEITADA: { icon: <AlertCircle className="h-3 w-3" />, className: "bg-orange-100 text-orange-800", label: "Rejeitada" },
   }
 
@@ -207,7 +207,7 @@ export default function NFesPage() {
                           onClick={() => openCancelDialog(nfe.id)}
                           disabled={isCanceling}
                         >
-                          <XCircle className="h-4 w-4 text-red-500" />
+                          <XCircle className="h-4 w-4 text-destructive" />
                         </Button>
                       )}
                     </TableCell>

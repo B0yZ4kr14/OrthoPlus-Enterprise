@@ -27,7 +27,7 @@ const mockLeads: Lead[] = [
 ];
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  novo: { label: "Novo", color: "bg-blue-500/10 text-blue-500" },
+  novo: { label: "Novo", color: "bg-info/10 text-info" },
   contatado: { label: "Contatado", color: "bg-warning/10 text-warning" },
   agendado: { label: "Agendado", color: "bg-interactive/10 text-interactive" },
   convertido: { label: "Convertido", color: "bg-success/10 text-success" },

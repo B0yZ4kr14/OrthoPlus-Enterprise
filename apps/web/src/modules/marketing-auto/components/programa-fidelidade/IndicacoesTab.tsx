@@ -44,7 +44,7 @@ export function IndicacoesTab({ indicacoes }: IndicacoesTabProps) {
                       : "—"}
                   </div>
                   {indicacao.pontos_concedidos && (
-                    <div className="font-medium text-green-600">
+                    <div className="font-medium text-success">
                       +{indicacao.pontos_concedidos} pontos
                     </div>
                   )}

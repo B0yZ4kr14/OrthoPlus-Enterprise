@@ -11,8 +11,8 @@ export function RestoreProgress({ progress, results }: RestoreProgressProps) {
   if (results) {
     return (
       <div className="space-y-4 text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-          <Check className="h-8 w-8 text-green-600" />
+        <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto">
+          <Check className="h-8 w-8 text-success" />
         </div>
         <div>
           <h3 className="text-lg font-semibold">Restauração Concluída!</h3>

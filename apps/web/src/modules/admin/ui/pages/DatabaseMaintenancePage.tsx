@@ -91,7 +91,7 @@ export default function DatabaseMaintenancePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">
+            <div className="text-2xl font-bold text-warning">
               {stats?.slowQueriesCount || 0}
             </div>
           </CardContent>

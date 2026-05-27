@@ -117,8 +117,8 @@ export const TransactionsList = memo(function TransactionsList({
                     <span
                       className={
                         transaction.type === "RECEITA"
-                          ? "text-green-600"
-                          : "text-red-600"
+                          ? "text-success"
+                          : "text-destructive"
                       }
                     >
                       {transaction.description}
@@ -126,7 +126,7 @@ export const TransactionsList = memo(function TransactionsList({
                   </TableCell>
                   <TableCell>
                     <span
-                      className={`font-semibold ${transaction.type === "RECEITA" ? "text-green-600" : "text-red-600"}`}
+                      className={`font-semibold ${transaction.type === "RECEITA" ? "text-success" : "text-destructive"}`}
                     >
                       {formatCurrency(transaction.amount)}
                     </span>

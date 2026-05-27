@@ -187,7 +187,7 @@ export default function CryptoConfigPage() {
                           className="flex items-center justify-between p-3 border rounded-lg"
                         >
                           <div className="flex items-center gap-3">
-                            <Bitcoin className="h-5 w-5 text-orange-500" />
+                            <Bitcoin className="h-5 w-5 text-warning" />
                             <div>
                               <div className="font-medium">{exchange.name}</div>
                               <div className="text-sm text-muted-foreground">
@@ -233,7 +233,7 @@ export default function CryptoConfigPage() {
                           className="flex items-center justify-between p-3 border rounded-lg"
                         >
                           <div className="flex items-center gap-3">
-                            <Bitcoin className="h-5 w-5 text-orange-500" />
+                            <Bitcoin className="h-5 w-5 text-warning" />
                             <div>
                               <div className="font-medium">{asset.symbol}</div>
                               <div className="text-sm text-muted-foreground">

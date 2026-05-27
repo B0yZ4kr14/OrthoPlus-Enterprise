@@ -46,12 +46,12 @@ describe("ModuleCard", () => {
         title="Módulo Teste"
         subtitle="Descrição"
         icon={FileText}
-        color="bg-blue-500"
+        color="bg-info"
         onClick={mockOnClick}
       />,
     );
 
-    const colorDiv = container.querySelector(".bg-blue-500");
+    const colorDiv = container.querySelector(".bg-info");
     expect(colorDiv).toBeTruthy();
   });
 

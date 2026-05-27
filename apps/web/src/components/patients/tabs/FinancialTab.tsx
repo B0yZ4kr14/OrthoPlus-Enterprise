@@ -104,7 +104,7 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               R${" "}
               {(patient?.total_paid || 0).toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,

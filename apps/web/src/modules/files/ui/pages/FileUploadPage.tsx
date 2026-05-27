@@ -127,7 +127,7 @@ export default function FileUploadPage() {
           <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <p className="text-gray-600 mb-2">
             Arraste arquivos aqui ou{" "}
-            <label className="text-blue-600 cursor-pointer hover:underline">
+            <label className="text-info cursor-pointer hover:underline">
               clique para selecionar
               <input
                 type="file"

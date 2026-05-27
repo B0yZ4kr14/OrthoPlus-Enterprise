@@ -24,7 +24,7 @@ export function KPICards({
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
               Taxa Crypto Média
             </p>
-            <p className="text-2xl font-bold text-orange-500">
+            <p className="text-2xl font-bold text-warning">
               {cryptoFeePercentage.toFixed(2)}%
             </p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -34,7 +34,7 @@ export function KPICards({
               })}
             </p>
           </div>
-          <Percent className="h-10 w-10 text-orange-500 opacity-50 shrink-0" />
+          <Percent className="h-10 w-10 text-warning opacity-50 shrink-0" />
         </div>
       </Card>
 
@@ -44,7 +44,7 @@ export function KPICards({
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
               Economia Total
             </p>
-            <p className="text-2xl font-bold text-green-500">
+            <p className="text-2xl font-bold text-success">
               R${" "}
               {totalSavings.toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
@@ -54,7 +54,7 @@ export function KPICards({
               vs métodos tradicionais
             </p>
           </div>
-          <TrendingUp className="h-10 w-10 text-green-500 opacity-50 shrink-0" />
+          <TrendingUp className="h-10 w-10 text-success opacity-50 shrink-0" />
         </div>
       </Card>
 
@@ -64,12 +64,12 @@ export function KPICards({
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
               Economia Média
             </p>
-            <p className="text-2xl font-bold text-blue-500">
+            <p className="text-2xl font-bold text-info">
               {avgSavingsPercentage.toFixed(1)}%
             </p>
             <p className="text-xs text-muted-foreground mt-1">menos taxas</p>
           </div>
-          <TrendingDown className="h-10 w-10 text-blue-500 opacity-50 shrink-0" />
+          <TrendingDown className="h-10 w-10 text-info opacity-50 shrink-0" />
         </div>
       </Card>
 

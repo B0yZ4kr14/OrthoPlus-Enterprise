@@ -57,7 +57,7 @@ export function AlertasEstoque({
   if (alertas.length === 0) {
     return (
       <div className="text-center py-12">
-        <Check className="h-12 w-12 mx-auto text-green-500 mb-4" />
+        <Check className="h-12 w-12 mx-auto text-success mb-4" />
         <p className="text-muted-foreground">Nenhum alerta no momento</p>
         <p className="text-sm text-muted-foreground">
           Todos os produtos estão com estoque adequado
@@ -141,7 +141,7 @@ export function AlertasEstoque({
                 </div>
                 <Badge
                   variant="outline"
-                  className="text-green-600 border-green-600"
+                  className="text-success border-green-600"
                 >
                   <Check className="h-3 w-3 mr-1" />
                   Resolvido

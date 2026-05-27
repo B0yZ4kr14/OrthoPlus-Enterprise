@@ -181,7 +181,7 @@ export default function TabelaPrecosManager() {
               <TableCell>{t.is_active ? "Ativa" : "Inativa"}</TableCell>
               <TableCell className="flex gap-2">
                 <Button size="icon" variant="ghost" onClick={() => startEdit(t)}><Pencil className="h-4 w-4" /></Button>
-                <Button size="icon" variant="ghost" className="text-red-500" onClick={() => handleDeleteTabela(t.id)}><Trash2 className="h-4 w-4" /></Button>
+                <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDeleteTabela(t.id)}><Trash2 className="h-4 w-4" /></Button>
               </TableCell>
             </TableRow>
           ))}
@@ -244,7 +244,7 @@ export default function TabelaPrecosManager() {
                   <TableCell>R$ {(p.valor / 100).toFixed(2)}</TableCell>
                   <TableCell>{p.tempo_retorno_dias ?? "—"}</TableCell>
                   <TableCell>
-                    <Button size="icon" variant="ghost" className="text-red-500" onClick={() => handleDeletePreco(p.id)}><Trash2 className="h-4 w-4" /></Button>
+                    <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDeletePreco(p.id)}><Trash2 className="h-4 w-4" /></Button>
                   </TableCell>
                 </TableRow>
               ))}

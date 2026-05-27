@@ -13,9 +13,9 @@ export function RateRow({ rate }: RateRowProps) {
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
         {isCrypto ? (
-          <Bitcoin className="h-5 w-5 text-orange-500" />
+          <Bitcoin className="h-5 w-5 text-warning" />
         ) : (
-          <DollarSign className="h-5 w-5 text-green-500" />
+          <DollarSign className="h-5 w-5 text-success" />
         )}
         <div>
           <div className="font-semibold text-sm">{rate.name}</div>

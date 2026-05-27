@@ -79,7 +79,7 @@ export default function MetasGamificacao() {
   }, [clinicId, periodoRanking, loadData]);
 
   const getBadgeIcon = (badge: string) => {
-    if (badge === "OURO") return <Crown className="h-5 w-5 text-yellow-500" />;
+    if (badge === "OURO") return <Crown className="h-5 w-5 text-warning" />;
     if (badge === "PRATA") return <Medal className="h-5 w-5 text-gray-400" />;
     if (badge === "BRONZE") return <Medal className="h-5 w-5 text-warning" />;
     return null;

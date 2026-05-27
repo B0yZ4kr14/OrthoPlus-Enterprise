@@ -252,7 +252,7 @@ export default function EstoqueAnaliseConsumo() {
                   {(tendenciasUso[tendenciasUso.length - 1]?.consumo ?? 0) > (tendenciasUso[0]?.consumo ?? 0) ? (
                     <><TrendingUp className="h-5 w-5 text-destructive" /><span className="text-destructive">Alta</span></>
                   ) : (
-                    <><TrendingDown className="h-5 w-5 text-green-600" /><span className="text-green-600">Baixa</span></>
+                    <><TrendingDown className="h-5 w-5 text-success" /><span className="text-success">Baixa</span></>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">comparado ao início do período</p>
@@ -319,9 +319,9 @@ export default function EstoqueAnaliseConsumo() {
                         </div>
                         <div className={`px-3 py-1 rounded-full text-xs font-medium ${
                           item.urgencia === "critica" ? "bg-destructive/10 text-destructive"
-                            : item.urgencia === "alta" ? "bg-orange-500/10 text-orange-600"
-                              : item.urgencia === "media" ? "bg-yellow-500/10 text-yellow-600"
-                                : "bg-blue-500/10 text-blue-600"
+                            : item.urgencia === "alta" ? "bg-warning/10 text-warning"
+                              : item.urgencia === "media" ? "bg-warning/10 text-warning"
+                                : "bg-info/10 text-info"
                         }`}>
                           {item.urgencia === "critica" ? "Crítico" : item.urgencia === "alta" ? "Alta" : item.urgencia === "media" ? "Média" : "Baixa"}
                         </div>

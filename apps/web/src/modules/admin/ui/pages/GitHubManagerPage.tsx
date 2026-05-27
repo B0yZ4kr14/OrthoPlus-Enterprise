@@ -116,7 +116,7 @@ export default function GitHubManagerPage() {
                       key={pr.number}
                       className="flex items-start gap-3 p-3 border rounded-lg"
                     >
-                      <GitPullRequest className="h-5 w-5 text-green-500 mt-0.5" />
+                      <GitPullRequest className="h-5 w-5 text-success mt-0.5" />
                       <div className="flex-1 space-y-1">
                         <p className="font-medium">
                           #{pr.number} - {pr.title}

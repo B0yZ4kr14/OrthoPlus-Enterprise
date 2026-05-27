@@ -36,9 +36,9 @@ export function MetricsCards({ metrics }: MetricsCardsProps) {
             Taxa de Sucesso
           </CardTitle>
           {metrics.taxaSucesso >= 80 ? (
-            <TrendingUp className="h-4 w-4 text-green-500" />
+            <TrendingUp className="h-4 w-4 text-success" />
           ) : (
-            <TrendingDown className="h-4 w-4 text-red-500" />
+            <TrendingDown className="h-4 w-4 text-destructive" />
           )}
         </CardHeader>
         <CardContent>
@@ -71,10 +71,10 @@ export function MetricsCards({ metrics }: MetricsCardsProps) {
           <CardTitle className="text-sm font-medium">
             Pedidos Falhos
           </CardTitle>
-          <XCircle className="h-4 w-4 text-red-500" />
+          <XCircle className="h-4 w-4 text-destructive" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-red-500">
+          <div className="text-2xl font-bold text-destructive">
             {metrics.pedidosFalhos}
           </div>
           <p className="text-xs text-muted-foreground mt-1">Requer atenção</p>

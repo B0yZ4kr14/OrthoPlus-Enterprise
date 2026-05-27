@@ -30,7 +30,7 @@ export function AssinaturaICP() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
-              <Shield className="h-12 w-12 mx-auto mb-4 text-yellow-500" />
+              <Shield className="h-12 w-12 mx-auto mb-4 text-warning" />
               <p>Você não tem acesso a este módulo.</p>
               <p className="text-sm mt-2">
                 Entre em contato com o administrador para solicitar acesso.

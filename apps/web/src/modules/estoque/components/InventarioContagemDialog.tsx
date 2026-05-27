@@ -172,16 +172,16 @@ export function InventarioContagemDialog({
                           <div
                             className={`flex items-center justify-center gap-1 ${
                               divergencia > 0
-                                ? "text-green-600"
+                                ? "text-success"
                                 : divergencia < 0
-                                  ? "text-red-600"
+                                  ? "text-destructive"
                                   : ""
                             }`}
                           >
                             {divergencia > 0 && "+"}
                             {divergencia}
                             {Math.abs(divergencia) > 5 && (
-                              <AlertTriangle className="h-4 w-4 text-orange-500" />
+                              <AlertTriangle className="h-4 w-4 text-warning" />
                             )}
                           </div>
                         )}
@@ -191,9 +191,9 @@ export function InventarioContagemDialog({
                           <span
                             className={
                               percentual > 0
-                                ? "text-green-600"
+                                ? "text-success"
                                 : percentual < 0
-                                  ? "text-red-600"
+                                  ? "text-destructive"
                                   : ""
                             }
                           >
@@ -207,8 +207,8 @@ export function InventarioContagemDialog({
                           <span
                             className={
                               item.valorDivergencia > 0
-                                ? "text-green-600"
-                                : "text-red-600"
+                                ? "text-success"
+                                : "text-destructive"
                             }
                           >
                             R$ {Math.abs(item.valorDivergencia).toFixed(2)}

@@ -95,7 +95,7 @@ export function InventarioAgendamentoForm({
               {...register("nome")}
             />
             {errors.nome && (
-              <p className="text-sm text-red-600">{errors.nome.message?.toString()}</p>
+              <p className="text-sm text-destructive">{errors.nome.message?.toString()}</p>
             )}
           </div>
 
@@ -107,7 +107,7 @@ export function InventarioAgendamentoForm({
               {...register("responsavel")}
             />
             {errors.responsavel?.message && (
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-destructive">
                 {errors.responsavel.message.toString()}
               </p>
             )}
@@ -181,7 +181,7 @@ export function InventarioAgendamentoForm({
                 {...register("diaExecucao", { valueAsNumber: true })}
               />
               {errors.diaExecucao?.message && (
-                <p className="text-sm text-red-600">
+                <p className="text-sm text-destructive">
                   {errors.diaExecucao.message.toString()}
                 </p>
               )}

@@ -113,10 +113,10 @@ export function MarketingAutoPage() {
             <CardTitle className="text-sm font-medium">
               Campanhas Ativas
             </CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-500" />
+            <TrendingUp className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">
+            <div className="text-2xl font-bold text-success">
               {activeCampaigns}
             </div>
           </CardContent>

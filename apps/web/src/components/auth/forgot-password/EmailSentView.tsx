@@ -12,8 +12,8 @@ export function EmailSentView({ email, onBack }: EmailSentViewProps) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center space-y-4">
-        <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-          <CheckCircle2 className="h-6 w-6 text-green-600" />
+        <div className="mx-auto w-12 h-12 bg-success/10 rounded-full flex items-center justify-center">
+          <CheckCircle2 className="h-6 w-6 text-success" />
         </div>
         <CardTitle>Email Enviado!</CardTitle>
         <CardDescription>

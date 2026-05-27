@@ -37,7 +37,7 @@ const ICON_MAP = {
 };
 
 const COLOR_MAP: Record<string, string> = {
-  appointment: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+  appointment: "bg-blue-100 text-info dark:bg-blue-900/30 dark:text-blue-300",
   treatment: "bg-success/10 text-success dark:bg-success/20 dark:text-success",
   budget: "bg-warning/10 text-warning dark:bg-warning/30 dark:text-warning",
   status_change: "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-300",

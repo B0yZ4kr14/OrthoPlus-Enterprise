@@ -86,10 +86,10 @@ export function EvolucoesTimeline({ prontuarioId }: EvolucoesTimelineProps) {
 
   const getTipoColor = (tipo: string) => {
     const colors: Record<string, string> = {
-      CONSULTA: "bg-blue-500",
-      PROCEDIMENTO: "bg-green-500",
-      RETORNO: "bg-yellow-500",
-      EMERGENCIA: "bg-red-500",
+      CONSULTA: "bg-info",
+      PROCEDIMENTO: "bg-success",
+      RETORNO: "bg-warning",
+      EMERGENCIA: "bg-destructive",
       OBSERVACAO: "bg-gray-500",
     };
     return colors[tipo] || "bg-gray-500";

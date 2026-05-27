@@ -63,14 +63,14 @@ export function ComparisonTable({ data, cryptoStats }: ComparisonTableProps) {
                       {isCrypto ? (
                         <span className="text-muted-foreground">-</span>
                       ) : diff > 0 ? (
-                        <span className="text-green-600 dark:text-green-400 font-medium">
+                        <span className="text-success dark:text-success font-medium">
                           -R${" "}
                           {diff.toLocaleString("pt-BR", {
                             minimumFractionDigits: 2,
                           })}
                         </span>
                       ) : (
-                        <span className="text-red-600 dark:text-red-400 font-medium">
+                        <span className="text-destructive dark:text-destructive font-medium">
                           +R${" "}
                           {Math.abs(diff).toLocaleString("pt-BR", {
                             minimumFractionDigits: 2,

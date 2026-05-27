@@ -197,7 +197,7 @@ export default function EstoqueScannerMobile() {
             <div className="mt-4 p-4 bg-muted rounded-lg">
               <TabsContent value="consulta" className="mt-0">
                 <div className="flex items-start gap-3">
-                  <Package className="h-5 w-5 text-blue-500 mt-0.5" />
+                  <Package className="h-5 w-5 text-info mt-0.5" />
                   <div>
                     <p className="font-medium text-sm">Modo Consulta</p>
                     <p className="text-xs text-muted-foreground">
@@ -209,7 +209,7 @@ export default function EstoqueScannerMobile() {
 
               <TabsContent value="entrada" className="mt-0">
                 <div className="flex items-start gap-3">
-                  <TrendingUp className="h-5 w-5 text-green-500 mt-0.5" />
+                  <TrendingUp className="h-5 w-5 text-success mt-0.5" />
                   <div>
                     <p className="font-medium text-sm">Modo Entrada</p>
                     <p className="text-xs text-muted-foreground">
@@ -221,7 +221,7 @@ export default function EstoqueScannerMobile() {
 
               <TabsContent value="saida" className="mt-0">
                 <div className="flex items-start gap-3">
-                  <TrendingDown className="h-5 w-5 text-orange-500 mt-0.5" />
+                  <TrendingDown className="h-5 w-5 text-warning mt-0.5" />
                   <div>
                     <p className="font-medium text-sm">Modo Saída</p>
                     <p className="text-xs text-muted-foreground">
@@ -257,7 +257,7 @@ export default function EstoqueScannerMobile() {
         <Card variant="elevated" className="border-primary">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-success" />
               Último Produto Escaneado
             </CardTitle>
           </CardHeader>
@@ -298,7 +298,7 @@ export default function EstoqueScannerMobile() {
                   className="flex items-start gap-3 p-3 rounded-lg border"
                 >
                   {entry.status === "success" ? (
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                    <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                   ) : (
                     <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
                   )}
@@ -352,7 +352,7 @@ export default function EstoqueScannerMobile() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <p className="text-2xl font-bold text-green-500">
+              <p className="text-2xl font-bold text-success">
                 {scanHistory.filter((h) => h.mode === "entrada").length}
               </p>
               <p className="text-xs text-muted-foreground">Entradas</p>
@@ -363,7 +363,7 @@ export default function EstoqueScannerMobile() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <p className="text-2xl font-bold text-orange-500">
+              <p className="text-2xl font-bold text-warning">
                 {scanHistory.filter((h) => h.mode === "saida").length}
               </p>
               <p className="text-xs text-muted-foreground">Saídas</p>

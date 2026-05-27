@@ -112,7 +112,7 @@ export function TISSGuideForm() {
       </CardHeader>
       <CardContent>
         {showSuccess && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md text-green-800 text-sm">
+          <div className="mb-4 p-3 bg-success/5 border border-green-200 rounded-md text-green-800 text-sm">
             Guia TISS criada com sucesso!
           </div>
         )}
@@ -138,7 +138,7 @@ export function TISSGuideForm() {
                 </SelectContent>
               </Select>
               {errors.patient_id && (
-                <p className="text-xs text-red-500">{errors.patient_id.message}</p>
+                <p className="text-xs text-destructive">{errors.patient_id.message}</p>
               )}
             </div>
 
@@ -163,7 +163,7 @@ export function TISSGuideForm() {
                 </SelectContent>
               </Select>
               {errors.insurance_company && (
-                <p className="text-xs text-red-500">
+                <p className="text-xs text-destructive">
                   {errors.insurance_company.message}
                 </p>
               )}
@@ -179,7 +179,7 @@ export function TISSGuideForm() {
                 {...register("guide_number")}
               />
               {errors.guide_number && (
-                <p className="text-xs text-red-500">
+                <p className="text-xs text-destructive">
                   {errors.guide_number.message}
                 </p>
               )}
@@ -193,7 +193,7 @@ export function TISSGuideForm() {
                 {...register("service_date")}
               />
               {errors.service_date && (
-                <p className="text-xs text-red-500">
+                <p className="text-xs text-destructive">
                   {errors.service_date.message}
                 </p>
               )}
@@ -216,7 +216,7 @@ export function TISSGuideForm() {
                 </SelectContent>
               </Select>
               {errors.procedure_code && (
-                <p className="text-xs text-red-500">
+                <p className="text-xs text-destructive">
                   {errors.procedure_code.message}
                 </p>
               )}
@@ -230,7 +230,7 @@ export function TISSGuideForm() {
                 {...register("amount")}
               />
               {errors.amount && (
-                <p className="text-xs text-red-500">{errors.amount.message}</p>
+                <p className="text-xs text-destructive">{errors.amount.message}</p>
               )}
             </div>
           </div>

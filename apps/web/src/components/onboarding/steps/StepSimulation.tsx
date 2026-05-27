@@ -146,7 +146,7 @@ export function StepSimulation() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {module.active ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                      <CheckCircle2 className="h-5 w-5 text-success" />
                     ) : (
                       <XCircle className="h-5 w-5 text-gray-400" />
                     )}
@@ -175,9 +175,9 @@ export function StepSimulation() {
                 </div>
 
                 {!canToggle && module.active && dependents.length > 0 && (
-                  <div className="flex items-start gap-2 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
-                    <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-red-600 dark:text-red-400">
+                  <div className="flex items-start gap-2 p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                    <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-destructive dark:text-destructive">
                       Não pode desativar:{" "}
                       <strong>
                         {dependents.map((d) => d.name).join(", ")}

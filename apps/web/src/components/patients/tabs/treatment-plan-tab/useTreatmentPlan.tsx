@@ -11,9 +11,9 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const STATUS_CONFIG: Record<string, StatusConfig> = {
-  concluido: { label: "Concluído", iconColor: "text-green-500" },
-  em_andamento: { label: "Em Andamento", iconColor: "text-yellow-500" },
-  cancelado: { label: "Cancelado", iconColor: "text-red-500" },
+  concluido: { label: "Concluído", iconColor: "text-success" },
+  em_andamento: { label: "Em Andamento", iconColor: "text-warning" },
+  cancelado: { label: "Cancelado", iconColor: "text-destructive" },
   default: { label: "Pendente", iconColor: "" },
 };
 

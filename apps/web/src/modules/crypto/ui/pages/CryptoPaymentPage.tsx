@@ -99,7 +99,7 @@ export default function CryptoPaymentPage() {
       <div className="grid md:grid-cols-3 gap-4">
         <Card variant="metric" depth="subtle">
           <CardHeader>
-            <Bitcoin className="h-8 w-8 mb-2 text-orange-500" />
+            <Bitcoin className="h-8 w-8 mb-2 text-warning" />
             <CardTitle>Múltiplas Moedas</CardTitle>
             <CardDescription>
               Aceite BTC, ETH, USDT, LTC, DAI e Lightning Network
@@ -109,7 +109,7 @@ export default function CryptoPaymentPage() {
 
         <Card variant="metric" depth="subtle">
           <CardHeader>
-            <Shield className="h-8 w-8 mb-2 text-green-500" />
+            <Shield className="h-8 w-8 mb-2 text-success" />
             <CardTitle>Seguro e Confiável</CardTitle>
             <CardDescription>
               Integração com BTCPay Server - Auto-custódia total
@@ -119,7 +119,7 @@ export default function CryptoPaymentPage() {
 
         <Card variant="metric" depth="subtle">
           <CardHeader>
-            <Zap className="h-8 w-8 mb-2 text-yellow-500" />
+            <Zap className="h-8 w-8 mb-2 text-warning" />
             <CardTitle>Processamento Rápido</CardTitle>
             <CardDescription>
               Confirmações em segundos via Lightning Network

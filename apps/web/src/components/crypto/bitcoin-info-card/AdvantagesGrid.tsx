@@ -9,9 +9,9 @@ const ICONS = {
 };
 
 const ICON_COLORS = {
-  shield: "text-blue-500",
-  zap: "text-yellow-500",
-  globe: "text-green-500",
+  shield: "text-info",
+  zap: "text-warning",
+  globe: "text-success",
   lock: "text-purple-500",
 };
 

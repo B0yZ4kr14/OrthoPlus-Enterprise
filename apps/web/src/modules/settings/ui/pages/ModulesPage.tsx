@@ -48,7 +48,7 @@ export default function ModulesPage() {
           <CardHeader className="pb-3">
             <CardDescription>Contratados</CardDescription>
             <CardTitle className="text-3xl flex items-center gap-2">
-              <CheckCircle2 className="h-6 w-6 text-blue-500" />
+              <CheckCircle2 className="h-6 w-6 text-info" />
               {stats.subscribed}
             </CardTitle>
           </CardHeader>
@@ -57,7 +57,7 @@ export default function ModulesPage() {
           <CardHeader className="pb-3">
             <CardDescription>Ativos</CardDescription>
             <CardTitle className="text-3xl flex items-center gap-2">
-              <Circle className="h-6 w-6 text-green-500 fill-green-500" />
+              <Circle className="h-6 w-6 text-success fill-green-500" />
               {stats.active}
             </CardTitle>
           </CardHeader>

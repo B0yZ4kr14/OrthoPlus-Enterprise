@@ -232,11 +232,11 @@ export function AuthenticationConfig() {
 
           {config.google_oauth_enabled && (
             <div className="ml-6 space-y-4 border-l-2 border-border pl-4">
-              <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                <p className="text-sm text-blue-600 dark:text-blue-400">
+              <div className="p-4 bg-info/10 border border-info/20 rounded-lg">
+                <p className="text-sm text-info dark:text-info">
                   <strong>⚠️ Configuração no Google Cloud Console:</strong>
                 </p>
-                <ol className="text-sm text-blue-600 dark:text-blue-400 mt-2 space-y-1 list-decimal list-inside">
+                <ol className="text-sm text-info dark:text-info mt-2 space-y-1 list-decimal list-inside">
                   <li>
                     Acesse{" "}
                     <a

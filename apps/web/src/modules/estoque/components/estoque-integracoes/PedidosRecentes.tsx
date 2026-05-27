@@ -39,11 +39,11 @@ export function PedidosRecentes({ pedidos }: PedidosRecentesProps) {
               >
                 <div className="flex items-center gap-4">
                   {pedido.status === "confirmado" ? (
-                    <CheckCircle className="h-5 w-5 text-green-500" />
+                    <CheckCircle className="h-5 w-5 text-success" />
                   ) : pedido.status === "enviado" ? (
-                    <Clock className="h-5 w-5 text-blue-500" />
+                    <Clock className="h-5 w-5 text-info" />
                   ) : (
-                    <XCircle className="h-5 w-5 text-red-500" />
+                    <XCircle className="h-5 w-5 text-destructive" />
                   )}
                   <div>
                     <p className="font-medium">{pedido.numero_pedido}</p>

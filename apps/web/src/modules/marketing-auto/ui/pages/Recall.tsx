@@ -139,7 +139,7 @@ export default function RecallPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-info">
               {upcomingRecalls.length}
             </div>
           </CardContent>
@@ -150,7 +150,7 @@ export default function RecallPage() {
             <CardTitle className="text-sm font-medium">Atrasados</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-2xl font-bold text-destructive">
               {overdueRecalls.length}
             </div>
           </CardContent>
@@ -163,7 +163,7 @@ export default function RecallPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {recalls.filter((r) => r.notificacao_enviada).length}
             </div>
           </CardContent>
@@ -263,7 +263,7 @@ export default function RecallPage() {
       {overdueRecalls.length > 0 && (
         <Card className="border-red-200 dark:border-red-900">
           <CardHeader>
-            <CardTitle className="text-red-600 flex items-center gap-2">
+            <CardTitle className="text-destructive flex items-center gap-2">
               <XCircle className="h-5 w-5" />
               Recalls Atrasados ({overdueRecalls.length})
             </CardTitle>

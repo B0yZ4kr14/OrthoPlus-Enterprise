@@ -22,7 +22,7 @@ export function FieldMessage({ error, success, helperText }: FieldMessageProps) 
 
   if (hasSuccess) {
     return (
-      <div className="flex items-start gap-2 text-sm text-green-600 dark:text-green-500">
+      <div className="flex items-start gap-2 text-sm text-success dark:text-success">
         <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0" />
         <span>Campo válido</span>
       </div>

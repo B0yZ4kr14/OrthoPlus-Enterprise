@@ -93,16 +93,16 @@ export default function SystemLogsPage() {
 
   const getLevelBadge = (level: LogEntry["level"]) => {
     const config = {
-      info: { variant: "default" as const, icon: Info, color: "text-blue-500" },
+      info: { variant: "default" as const, icon: Info, color: "text-info" },
       warning: {
         variant: "secondary" as const,
         icon: AlertCircle,
-        color: "text-yellow-500",
+        color: "text-warning",
       },
       error: {
         variant: "destructive" as const,
         icon: AlertCircle,
-        color: "text-red-500",
+        color: "text-destructive",
       },
     };
 

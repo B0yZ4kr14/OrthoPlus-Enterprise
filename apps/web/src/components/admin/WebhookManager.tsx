@@ -72,9 +72,9 @@ export function WebhookManager() {
 
   const getEventIcon = (eventType: string) => {
     if (eventType.includes("push"))
-      return <Activity className="h-4 w-4 text-blue-500" />;
+      return <Activity className="h-4 w-4 text-info" />;
     if (eventType.includes("pull_request"))
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     if (eventType.includes("error"))
       return <XCircle className="h-4 w-4 text-destructive" />;
     return <Clock className="h-4 w-4 text-muted-foreground" />;

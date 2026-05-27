@@ -61,9 +61,9 @@ export default function CRMFunil() {
 
   const getTemperaturaColor = (temp: string) => {
     const colors: Record<string, string> = {
-      FRIO: "bg-blue-500",
-      MORNO: "bg-yellow-500",
-      QUENTE: "bg-red-500",
+      FRIO: "bg-info",
+      MORNO: "bg-warning",
+      QUENTE: "bg-destructive",
     };
     return colors[temp] || "bg-gray-500";
   };

@@ -5,8 +5,8 @@ export function ErrorFallback({ moduleName, error, onRetry }: ErrorFallbackProps
   return (
     <div className="flex items-center justify-center min-h-[300px] p-8">
       <div className="max-w-md w-full bg-card border border-border rounded-xl p-6 text-center space-y-4 shadow-[var(--shadow-card)]">
-        <div className="mx-auto w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center">
-          <AlertTriangle className="h-6 w-6 text-red-400" />
+        <div className="mx-auto w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center">
+          <AlertTriangle className="h-6 w-6 text-destructive" />
         </div>
 
         <div className="space-y-2">

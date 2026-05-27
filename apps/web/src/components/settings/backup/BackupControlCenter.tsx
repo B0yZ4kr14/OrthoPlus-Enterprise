@@ -95,7 +95,7 @@ export function BackupControlCenter() {
             <CardTitle className="text-sm font-medium">
               Taxa de Sucesso
             </CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+            <CheckCircle className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.successRate}</div>
@@ -149,7 +149,7 @@ export function BackupControlCenter() {
               >
                 <div className="flex items-center gap-3">
                   {backup.status === "success" ? (
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-success" />
                   ) : (
                     <AlertCircle className="h-4 w-4 text-destructive" />
                   )}

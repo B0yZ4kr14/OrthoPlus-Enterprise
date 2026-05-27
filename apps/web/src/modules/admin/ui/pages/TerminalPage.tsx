@@ -81,7 +81,7 @@ export default function TerminalPage() {
           <div className="bg-slate-950 rounded-lg p-4 font-mono text-sm">
             <ScrollArea className="h-[400px]" ref={scrollRef}>
               <div className="space-y-3">
-                <div className="text-green-400">
+                <div className="text-success">
                   OrthoPlus Enterprise Terminal Shell v1.0 - DEMO MODE
                 </div>
                 <div className="text-muted-foreground">
@@ -92,7 +92,7 @@ export default function TerminalPage() {
                 {history.map((entry, idx) => (
                   <div key={idx} className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-blue-400">$</span>
+                      <span className="text-info">$</span>
                       <span className="text-foreground">{entry.command}</span>
                       <span className="text-xs text-muted-foreground ml-auto">
                         {entry.timestamp.toLocaleTimeString()}
@@ -100,7 +100,7 @@ export default function TerminalPage() {
                     </div>
                     <div
                       className={
-                        entry.exitCode === 0 ? "text-green-400" : "text-red-400"
+                        entry.exitCode === 0 ? "text-success" : "text-destructive"
                       }
                     >
                       <pre className="whitespace-pre-wrap break-words">
@@ -108,7 +108,7 @@ export default function TerminalPage() {
                       </pre>
                     </div>
                     {entry.exitCode !== 0 && (
-                      <div className="text-yellow-400 text-xs">
+                      <div className="text-warning text-xs">
                         Exit code: {entry.exitCode}
                       </div>
                     )}
@@ -116,7 +116,7 @@ export default function TerminalPage() {
                 ))}
 
                 {isExecuting && (
-                  <div className="flex items-center gap-2 text-yellow-400">
+                  <div className="flex items-center gap-2 text-warning">
                     <span className="animate-pulse">Executando...</span>
                   </div>
                 )}
@@ -127,7 +127,7 @@ export default function TerminalPage() {
           {/* Command Input */}
           <div className="flex gap-2">
             <div className="flex-1 flex items-center gap-2 bg-slate-950 rounded-lg px-3 py-2">
-              <span className="text-blue-400 font-mono">$</span>
+              <span className="text-info font-mono">$</span>
               <Input
                 value={command}
                 onChange={(e) => setCommand(e.target.value)}

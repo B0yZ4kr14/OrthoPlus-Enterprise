@@ -22,7 +22,7 @@ export function RateItem({ rate }: RateItemProps) {
         </div>
       </div>
       <div className="text-right">
-        <div className={`flex items-center gap-1 ${change.isPositive ? "text-green-500" : "text-red-500"}`}>
+        <div className={`flex items-center gap-1 ${change.isPositive ? "text-success" : "text-destructive"}`}>
           {change.isPositive ? (
             <TrendingUp className="h-3 w-3" />
           ) : (

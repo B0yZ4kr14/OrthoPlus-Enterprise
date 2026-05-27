@@ -355,27 +355,27 @@ export function CryptoCalculator() {
         <div className="mt-6 pt-4 border-t">
           <h4 className="text-sm font-semibold mb-3">Cotações em Tempo Real</h4>
           <div className="grid grid-cols-3 gap-3">
-            <div className="text-center p-3 rounded-lg bg-orange-500/10 border border-orange-500/20">
+            <div className="text-center p-3 rounded-lg bg-warning/10 border border-warning/20">
               <p className="text-xs text-muted-foreground mb-1">Bitcoin</p>
-              <p className="text-lg font-bold text-orange-500">
+              <p className="text-lg font-bold text-warning">
                 R${" "}
                 {rates.BTC.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}
               </p>
             </div>
-            <div className="text-center p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+            <div className="text-center p-3 rounded-lg bg-info/10 border border-info/20">
               <p className="text-xs text-muted-foreground mb-1">Ethereum</p>
-              <p className="text-lg font-bold text-blue-500">
+              <p className="text-lg font-bold text-info">
                 R${" "}
                 {rates.ETH.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}
               </p>
             </div>
-            <div className="text-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+            <div className="text-center p-3 rounded-lg bg-success/10 border border-success/20">
               <p className="text-xs text-muted-foreground mb-1">Tether</p>
-              <p className="text-lg font-bold text-green-500">
+              <p className="text-lg font-bold text-success">
                 R${" "}
                 {rates.USDT.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,

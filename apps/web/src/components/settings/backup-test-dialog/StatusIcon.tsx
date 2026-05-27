@@ -8,13 +8,13 @@ interface StatusIconProps {
 }
 
 export function StatusIcon({ testing, testResult }: StatusIconProps) {
-  if (testing) return <Loader2 className="h-5 w-5 animate-spin text-blue-500" />;
+  if (testing) return <Loader2 className="h-5 w-5 animate-spin text-info" />;
   if (!testResult) return <Info className="h-5 w-5 text-muted-foreground" />;
-  if (testResult.success) return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-  return <XCircle className="h-5 w-5 text-red-500" />;
+  if (testResult.success) return <CheckCircle2 className="h-5 w-5 text-success" />;
+  return <XCircle className="h-5 w-5 text-destructive" />;
 }
 
 export function getStatusColor(testResult: TestResult | null): string {
   if (!testResult) return "border-border";
-  return testResult.success ? "border-green-500/50" : "border-red-500/50";
+  return testResult.success ? "border-success/50" : "border-destructive/50";
 }

@@ -41,13 +41,13 @@ export function TextareaField({
         className={cn(
           "pr-10",
           hasError && "border-destructive focus-visible:ring-destructive",
-          hasSuccess && "border-green-500 focus-visible:ring-green-500",
+          hasSuccess && "border-success focus-visible:ring-success",
         )}
       />
       {(hasError || hasSuccess) && (
         <div className="absolute right-3 top-3">
           {hasError && <AlertCircle className="h-5 w-5 text-destructive" />}
-          {hasSuccess && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+          {hasSuccess && <CheckCircle2 className="h-5 w-5 text-success" />}
         </div>
       )}
     </div>

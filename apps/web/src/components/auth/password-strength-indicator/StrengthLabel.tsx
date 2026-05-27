@@ -18,7 +18,7 @@ export function StrengthLabel({ password, label, color, score }: StrengthLabelPr
       <p className={`text-sm font-medium transition-colors ${getTextColorClass(color)}`}>
         {label}
       </p>
-      {score === 4 && <CheckCircle className="h-4 w-4 text-green-500" />}
+      {score === 4 && <CheckCircle className="h-4 w-4 text-success" />}
     </div>
   );
 }

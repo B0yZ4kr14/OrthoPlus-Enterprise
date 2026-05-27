@@ -3,9 +3,9 @@ import { Info } from "lucide-react";
 
 export function InfoCard() {
   return (
-    <Card className="p-4 bg-blue-500/10 border-blue-500/20">
+    <Card className="p-4 bg-info/10 border-info/20">
       <div className="flex gap-3">
-        <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+        <Info className="h-5 w-5 text-info mt-0.5 flex-shrink-0" />
         <div>
           <h3 className="font-semibold mb-1">Como funciona a ativação de módulos?</h3>
           <p className="text-sm text-muted-foreground">

@@ -52,7 +52,7 @@ export function BackupHistoryTab() {
             >
               <div className="flex items-center gap-3">
                 {backup.status === "success" ? (
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                  <CheckCircle className="h-5 w-5 text-success flex-shrink-0" />
                 ) : (
                   <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0" />
                 )}

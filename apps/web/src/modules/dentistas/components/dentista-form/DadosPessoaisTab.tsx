@@ -37,19 +37,19 @@ export function DadosPessoaisTab({ register, errors, setValue, watch, avatarUrl,
         <div className="space-y-2">
           <Label>Nome *</Label>
           <Input {...register("nome")} placeholder="Nome completo" />
-          {errors?.nome && <p className="text-sm text-red-500">{String(errors.nome.message)}</p>}
+          {errors?.nome && <p className="text-sm text-destructive">{String(errors.nome.message)}</p>}
         </div>
 
         <div className="space-y-2">
           <Label>Email *</Label>
           <Input type="email" {...register("email")} placeholder="email@exemplo.com" />
-          {errors?.email && <p className="text-sm text-red-500">{String(errors.email.message)}</p>}
+          {errors?.email && <p className="text-sm text-destructive">{String(errors.email.message)}</p>}
         </div>
 
         <div className="space-y-2">
           <Label>CRO *</Label>
           <Input {...register("cro")} placeholder="00000" />
-          {errors?.cro && <p className="text-sm text-red-500">{String(errors.cro.message)}</p>}
+          {errors?.cro && <p className="text-sm text-destructive">{String(errors.cro.message)}</p>}
         </div>
 
         <div className="space-y-2">

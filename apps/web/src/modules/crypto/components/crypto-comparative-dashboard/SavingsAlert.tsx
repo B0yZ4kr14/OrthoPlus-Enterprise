@@ -10,9 +10,9 @@ export function SavingsAlert({ totalSavings }: SavingsAlertProps) {
   if (totalSavings <= 100) return null;
 
   return (
-    <Alert className="bg-green-500/10 border-green-500/50">
-      <TrendingUp className="h-4 w-4 text-green-500" />
-      <AlertDescription className="text-green-700 dark:text-green-300">
+    <Alert className="bg-success/10 border-success/50">
+      <TrendingUp className="h-4 w-4 text-success" />
+      <AlertDescription className="text-success dark:text-green-300">
         <strong>Excelente!</strong> Você está economizando{" "}
         <strong>
           R${" "}

@@ -92,8 +92,8 @@ export function BackupLocalCard() {
               </div>
 
               <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
-                <AlertTriangle className="w-6 h-6 text-red-500 flex-shrink-0" />
-                <p className="text-sm text-red-700 font-medium">Sem backup, se o computador quebrar, você perde TUDO! Não arrisque.</p>
+                <AlertTriangle className="w-6 h-6 text-destructive flex-shrink-0" />
+                <p className="text-sm text-destructive font-medium">Sem backup, se o computador quebrar, você perde TUDO! Não arrisque.</p>
               </div>
             </div>
 

@@ -8,7 +8,7 @@ export function getNivelColor(nivel: NivelFidelidade): string {
     case "PLATINA":
       return "text-slate-400";
     case "OURO":
-      return "text-yellow-500";
+      return "text-warning";
     case "PRATA":
       return "text-gray-400";
     case "BRONZE":

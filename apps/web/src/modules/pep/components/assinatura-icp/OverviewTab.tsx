@@ -13,7 +13,7 @@ interface OverviewTabProps {
 
 const variantClasses: Record<CertificadoTipo["variant"], string> = {
   blue: "bg-blue-50",
-  green: "bg-green-50",
+  green: "bg-success/5",
   purple: "bg-purple-50",
 };
 
@@ -37,7 +37,7 @@ export function OverviewTab({ documentos, solicitacoes, certificadosTipos }: Ove
                   </Badge>
                   <span className="text-sm">{cert.quantidade} certificado{cert.quantidade > 1 ? "s" : ""}</span>
                 </div>
-                <span className={`text-sm ${cert.status === "Válidos" ? "text-muted-foreground" : "text-yellow-600"}`}>
+                <span className={`text-sm ${cert.status === "Válidos" ? "text-muted-foreground" : "text-warning"}`}>
                   {cert.status}
                 </span>
               </div>
@@ -102,8 +102,8 @@ export function OverviewTab({ documentos, solicitacoes, certificadosTipos }: Ove
                 className="flex items-center justify-between p-4 border rounded-lg"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100">
-                    <FileSignature className="h-6 w-6 text-yellow-600" />
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-warning/10">
+                    <FileSignature className="h-6 w-6 text-warning" />
                   </div>
                   <div>
                     <p className="font-medium">{request.name}</p>

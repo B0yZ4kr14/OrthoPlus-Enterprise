@@ -320,7 +320,7 @@ export function ModuleTooltip({
               <ul className="text-xs space-y-1.5">
                 {data.benefits.map((benefit, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-green-500 mt-0.5 shrink-0">✓</span>
+                    <span className="text-success mt-0.5 shrink-0">✓</span>
                     <span className="text-muted-foreground">{benefit}</span>
                   </li>
                 ))}

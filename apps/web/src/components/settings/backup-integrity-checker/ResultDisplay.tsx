@@ -12,7 +12,7 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
     <Alert variant={result.isValid ? "default" : "destructive"} className="mt-4">
       <div className="flex items-start gap-3">
         {result.isValid ? (
-          <CheckCircle2 className="h-5 w-5 text-green-500" />
+          <CheckCircle2 className="h-5 w-5 text-success" />
         ) : (
           <AlertTriangle className="h-5 w-5 text-destructive" />
         )}

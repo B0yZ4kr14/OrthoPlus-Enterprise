@@ -48,8 +48,8 @@ export function ValidationTab({ validacoes }: ValidationTabProps) {
                 className="flex items-center justify-between p-3 border rounded-lg"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-success/10">
+                    <CheckCircle className="h-5 w-5 text-success" />
                   </div>
                   <div>
                     <p className="font-medium text-sm">
@@ -62,7 +62,7 @@ export function ValidationTab({ validacoes }: ValidationTabProps) {
                 </div>
                 <Badge
                   variant="default"
-                  className="bg-green-100 text-green-700"
+                  className="bg-success/10 text-success"
                 >
                   {validation.result}
                 </Badge>

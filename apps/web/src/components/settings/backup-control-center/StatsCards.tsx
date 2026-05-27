@@ -34,7 +34,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
       value: stats.successRate,
       subtitle: "Últimos 30 dias",
       icon: CheckCircle,
-      iconClass: "text-green-500",
+      iconClass: "text-success",
     },
   ];
 

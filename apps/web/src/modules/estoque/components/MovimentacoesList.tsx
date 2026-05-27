@@ -66,13 +66,13 @@ export function MovimentacoesList({
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {
       case "ENTRADA":
-        return <ArrowDownCircle className="h-5 w-5 text-green-500" />;
+        return <ArrowDownCircle className="h-5 w-5 text-success" />;
       case "SAIDA":
-        return <ArrowUpCircle className="h-5 w-5 text-red-500" />;
+        return <ArrowUpCircle className="h-5 w-5 text-destructive" />;
       case "AJUSTE":
-        return <RefreshCw className="h-5 w-5 text-blue-500" />;
+        return <RefreshCw className="h-5 w-5 text-info" />;
       case "DEVOLUCAO":
-        return <RotateCcw className="h-5 w-5 text-yellow-500" />;
+        return <RotateCcw className="h-5 w-5 text-warning" />;
       case "PERDA":
         return <XCircle className="h-5 w-5 text-gray-500" />;
       default:

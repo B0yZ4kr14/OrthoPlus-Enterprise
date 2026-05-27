@@ -22,7 +22,7 @@ export function SavingsChart({ data }: SavingsChartProps) {
     <Card>
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-green-500" />
+          <TrendingUp className="h-4 w-4 text-success" />
           Economia usando Crypto vs Métodos Tradicionais
         </CardTitle>
       </CardHeader>

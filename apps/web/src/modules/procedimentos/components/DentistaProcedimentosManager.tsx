@@ -123,7 +123,7 @@ export default function DentistaProcedimentosManager() {
                 </Badge>
               </TableCell>
               <TableCell>
-                <Button size="icon" variant="ghost" className="text-red-500" onClick={() => handleDelete(a.id)}><Trash2 className="h-4 w-4" /></Button>
+                <Button size="icon" variant="ghost" className="text-destructive" onClick={() => handleDelete(a.id)}><Trash2 className="h-4 w-4" /></Button>
               </TableCell>
             </TableRow>
           ))}

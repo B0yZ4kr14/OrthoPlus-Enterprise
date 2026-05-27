@@ -45,9 +45,9 @@ export const statusTextColorMap: Record<string, string> = {
   inativo: "bg-warning/10 text-warning",
   arquivado: "bg-muted text-muted-foreground",
   // System monitoring statuses
-  healthy: "text-green-500",
-  warning: "text-yellow-500",
-  critical: "text-red-500",
+  healthy: "text-success",
+  warning: "text-warning",
+  critical: "text-destructive",
 };
 
 export function getStatusTextColor(status: string): string {

@@ -47,9 +47,9 @@ export const PROCESS_STEPS: ProcessStep[] = [
 ];
 
 export const EXCHANGES: Exchange[] = [
-  { name: "Binance", color: "bg-yellow-500/10 border-yellow-500/20" },
-  { name: "Coinbase", color: "bg-blue-500/10 border-blue-500/20" },
+  { name: "Binance", color: "bg-warning/10 border-yellow-500/20" },
+  { name: "Coinbase", color: "bg-info/10 border-info/20" },
   { name: "Kraken", color: "bg-purple-500/10 border-purple-500/20" },
-  { name: "Bybit", color: "bg-orange-500/10 border-orange-500/20" },
+  { name: "Bybit", color: "bg-warning/10 border-warning/20" },
   { name: "Mercado Bitcoin", color: "bg-info/10 border-info/20" },
 ];

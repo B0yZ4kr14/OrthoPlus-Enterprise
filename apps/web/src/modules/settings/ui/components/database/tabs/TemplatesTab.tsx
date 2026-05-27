@@ -100,14 +100,14 @@ export function TemplatesTab({ category, categorySchemas }: TemplatesTabProps) {
                   onClick={() => handleCopy(`${category}-${idx}`, tpl.ddl)}
                 >
                   {copiedId === `${category}-${idx}` ? (
-                    <Check className="h-4 w-4 text-green-500" />
+                    <Check className="h-4 w-4 text-success" />
                   ) : (
                     <Copy className="h-4 w-4 text-muted-foreground" />
                   )}
                 </Button>
               </div>
               <div className="p-4 bg-muted/50 rounded-b-lg">
-                <pre className="text-xs text-green-400 font-mono whitespace-pre-wrap">
+                <pre className="text-xs text-success font-mono whitespace-pre-wrap">
                   {tpl.ddl}
                 </pre>
               </div>

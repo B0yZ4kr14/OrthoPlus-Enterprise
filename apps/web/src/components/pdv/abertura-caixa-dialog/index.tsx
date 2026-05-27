@@ -33,7 +33,7 @@ export function AberturaCaixaDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-green-500" />
+            <DollarSign className="h-5 w-5 text-success" />
             Abertura de Caixa
           </DialogTitle>
         </DialogHeader>

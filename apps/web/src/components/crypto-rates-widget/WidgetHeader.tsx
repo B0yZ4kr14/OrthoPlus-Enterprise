@@ -14,7 +14,7 @@ export function WidgetHeader({ lastUpdate, loading, onRefresh }: WidgetHeaderPro
       <div className="flex items-center justify-between">
         <div>
           <CardTitle className="flex items-center gap-2">
-            <Bitcoin className="h-5 w-5 text-orange-500" />
+            <Bitcoin className="h-5 w-5 text-warning" />
             Crypto Rates
           </CardTitle>
           <CardDescription>

@@ -60,7 +60,7 @@ export default function ProgramaFidelidade() {
       case "PLATINA":
         return "text-slate-400";
       case "OURO":
-        return "text-yellow-500";
+        return "text-warning";
       case "PRATA":
         return "text-gray-400";
       case "BRONZE":
@@ -286,7 +286,7 @@ export default function ProgramaFidelidade() {
                       </p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
-                          <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
+                          <Star className="h-5 w-5 text-warning fill-yellow-500" />
                           <span className="font-bold">
                             {recompensa.pontos_necessarios}
                           </span>
@@ -343,7 +343,7 @@ export default function ProgramaFidelidade() {
                           ) : "—"}
                         </div>
                         {indicacao.pontos_concedidos && (
-                          <div className="font-medium text-green-600">
+                          <div className="font-medium text-success">
                             +{indicacao.pontos_concedidos} pontos
                           </div>
                         )}

@@ -39,7 +39,7 @@ export function RecompensasTab({ recompensas, onAdd, onEdit }: RecompensasTabPro
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
-                    <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
+                    <Star className="h-5 w-5 text-warning fill-yellow-500" />
                     <span className="font-bold">
                       {recompensa.pontos_necessarios}
                     </span>

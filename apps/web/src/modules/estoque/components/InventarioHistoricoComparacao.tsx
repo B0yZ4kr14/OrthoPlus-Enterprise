@@ -236,7 +236,7 @@ export function InventarioHistoricoComparacao() {
               <p className="text-2xl font-bold">{totalDivergencias}</p>
               {tendencia !== 0 && (
                 <div
-                  className={`flex items-center gap-1 text-xs ${tendencia < 0 ? "text-green-600" : "text-red-600"}`}
+                  className={`flex items-center gap-1 text-xs ${tendencia < 0 ? "text-success" : "text-destructive"}`}
                 >
                   {tendencia < 0 ? (
                     <TrendingDown className="h-3 w-3" />
@@ -247,7 +247,7 @@ export function InventarioHistoricoComparacao() {
                 </div>
               )}
             </div>
-            <AlertTriangle className="h-8 w-8 text-orange-500" />
+            <AlertTriangle className="h-8 w-8 text-warning" />
           </div>
         </Card>
 
@@ -261,7 +261,7 @@ export function InventarioHistoricoComparacao() {
                 R$ {totalValorDivergencias.toFixed(2)}
               </p>
             </div>
-            <TrendingUp className="h-8 w-8 text-red-500" />
+            <TrendingUp className="h-8 w-8 text-destructive" />
           </div>
         </Card>
 
@@ -274,7 +274,7 @@ export function InventarioHistoricoComparacao() {
               </p>
             </div>
             <div
-              className={`text-2xl ${acuracidadeMedia >= 95 ? "text-green-600" : acuracidadeMedia >= 90 ? "text-yellow-600" : "text-red-600"}`}
+              className={`text-2xl ${acuracidadeMedia >= 95 ? "text-success" : acuracidadeMedia >= 90 ? "text-warning" : "text-destructive"}`}
             >
               {acuracidadeMedia >= 95
                 ? "✓"
@@ -395,7 +395,7 @@ export function InventarioHistoricoComparacao() {
                     <td className="text-right py-3">
                       {produto.totalDivergencia.toFixed(2)}
                     </td>
-                    <td className="text-right py-3 font-semibold text-red-600">
+                    <td className="text-right py-3 font-semibold text-destructive">
                       R$ {produto.valorTotal.toFixed(2)}
                     </td>
                   </tr>

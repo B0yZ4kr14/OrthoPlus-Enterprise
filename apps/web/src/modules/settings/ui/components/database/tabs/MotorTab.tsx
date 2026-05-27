@@ -87,26 +87,26 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
               <div>
-                <h5 className="text-sm font-medium text-green-400 mb-3 flex items-center gap-2">
+                <h5 className="text-sm font-medium text-success mb-3 flex items-center gap-2">
                   ✅ Quando usar
                 </h5>
                 <ul className="space-y-2">
                   {currentDetails.whenToUse.map((item, idx) => (
                     <li key={idx} className="text-sm text-foreground flex items-start gap-2">
-                      <span className="text-green-500 mt-0.5">•</span> {item}
+                      <span className="text-success mt-0.5">•</span> {item}
                     </li>
                   ))}
                 </ul>
               </div>
 
               <div>
-                <h5 className="text-sm font-medium text-yellow-500 mb-3 flex items-center gap-2">
+                <h5 className="text-sm font-medium text-warning mb-3 flex items-center gap-2">
                   ⚠️ Limitações
                 </h5>
                 <ul className="space-y-2">
                   {currentDetails.limitations.map((item, idx) => (
                     <li key={idx} className="text-sm text-foreground flex items-start gap-2">
-                      <span className="text-yellow-600 mt-0.5">•</span> {item}
+                      <span className="text-warning mt-0.5">•</span> {item}
                     </li>
                   ))}
                 </ul>
@@ -114,7 +114,7 @@ export function MotorTab({ selectedEngine, onSelectEngine }: MotorTabProps) {
             </div>
 
             <div>
-              <h5 className="text-sm font-medium text-blue-400 mb-3">🚀 Recursos:</h5>
+              <h5 className="text-sm font-medium text-info mb-3">🚀 Recursos:</h5>
               <div className="flex flex-wrap gap-2">
                 {currentDetails.resources.map((resource, idx) => (
                   <Badge key={idx} variant="outline" className="border-interactive/30 bg-interactive/10 text-interactive">

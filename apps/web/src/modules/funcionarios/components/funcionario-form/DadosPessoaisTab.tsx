@@ -52,7 +52,7 @@ export function DadosPessoaisTab({
             placeholder="Nome do funcionário"
           />
           {errors?.nome && (
-            <p className="text-sm text-red-500">{String(errors.nome.message)}</p>
+            <p className="text-sm text-destructive">{String(errors.nome.message)}</p>
           )}
         </div>
 
@@ -65,7 +65,7 @@ export function DadosPessoaisTab({
             placeholder="email@exemplo.com"
           />
           {errors?.email && (
-            <p className="text-sm text-red-500">{String(errors.email.message)}</p>
+            <p className="text-sm text-destructive">{String(errors.email.message)}</p>
           )}
         </div>
 
@@ -77,7 +77,7 @@ export function DadosPessoaisTab({
             placeholder="000.000.000-00"
           />
           {errors?.cpf && (
-            <p className="text-sm text-red-500">{String(errors.cpf.message)}</p>
+            <p className="text-sm text-destructive">{String(errors.cpf.message)}</p>
           )}
         </div>
 
@@ -89,7 +89,7 @@ export function DadosPessoaisTab({
             placeholder="(00) 00000-0000"
           />
           {errors?.telefone && (
-            <p className="text-sm text-red-500">{String(errors.telefone.message)}</p>
+            <p className="text-sm text-destructive">{String(errors.telefone.message)}</p>
           )}
         </div>
 

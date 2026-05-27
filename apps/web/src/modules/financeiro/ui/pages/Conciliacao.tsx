@@ -36,7 +36,7 @@ export default function Conciliacao() {
             <CardTitle>Transações Conciliadas</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-600">0</div>
+            <div className="text-3xl font-bold text-success">0</div>
             <p className="text-sm text-muted-foreground">Match automático</p>
           </CardContent>
         </Card>
@@ -45,7 +45,7 @@ export default function Conciliacao() {
             <CardTitle>Divergências</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-600">0</div>
+            <div className="text-3xl font-bold text-warning">0</div>
             <p className="text-sm text-muted-foreground">Requerem análise</p>
           </CardContent>
         </Card>
@@ -54,7 +54,7 @@ export default function Conciliacao() {
             <CardTitle>Não Conciliadas</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-red-600">0</div>
+            <div className="text-3xl font-bold text-destructive">0</div>
             <p className="text-sm text-muted-foreground">Sem correspondência</p>
           </CardContent>
         </Card>

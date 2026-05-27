@@ -479,7 +479,7 @@ export function BackupRestoreDialog({
         {/* Step 4: Results */}
         {step === 4 && restoreResults && (
           <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-4 text-green-600">
+            <div className="flex items-center gap-2 mb-4 text-success">
               <Check className="h-5 w-5" />
               <h3 className="font-semibold">Restauração Concluída</h3>
             </div>

@@ -25,12 +25,12 @@ export function TestResultView({ testResult }: TestResultViewProps) {
             <p className="text-2xl font-bold">{testResult.testsRun}</p>
             <p className="text-xs text-muted-foreground">Testes Executados</p>
           </div>
-          <div className="text-center p-3 bg-green-500/10 rounded">
-            <p className="text-2xl font-bold text-green-600">{testResult.testsPassed}</p>
+          <div className="text-center p-3 bg-success/10 rounded">
+            <p className="text-2xl font-bold text-success">{testResult.testsPassed}</p>
             <p className="text-xs text-muted-foreground">Aprovados</p>
           </div>
-          <div className="text-center p-3 bg-red-500/10 rounded">
-            <p className="text-2xl font-bold text-red-600">{testResult.testsFailed}</p>
+          <div className="text-center p-3 bg-destructive/10 rounded">
+            <p className="text-2xl font-bold text-destructive">{testResult.testsFailed}</p>
             <p className="text-xs text-muted-foreground">Reprovados</p>
           </div>
         </div>
@@ -54,9 +54,9 @@ export function TestResultView({ testResult }: TestResultViewProps) {
         )}
 
         {testResult.success && (
-          <Alert className="bg-green-500/10 border-green-500/20">
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-600 dark:text-green-400">
+          <Alert className="bg-success/10 border-success/20">
+            <CheckCircle2 className="h-4 w-4 text-success" />
+            <AlertDescription className="text-success dark:text-success">
               ✓ Backup validado com sucesso! Todos os testes passaram e o backup está pronto para ser restaurado caso necessário.
             </AlertDescription>
           </Alert>

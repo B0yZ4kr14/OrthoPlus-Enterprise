@@ -79,7 +79,7 @@ export function CryptoPagamentos() {
                 {dashboardData.totalBTC.toFixed(8)} BTC
               </p>
             </div>
-            <Bitcoin className="h-10 w-10 text-orange-500 opacity-20 shrink-0" />
+            <Bitcoin className="h-10 w-10 text-warning opacity-20 shrink-0" />
           </div>
         </Card>
 
@@ -89,14 +89,14 @@ export function CryptoPagamentos() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Total em BRL
               </p>
-              <p className="text-2xl font-bold text-green-500 truncate">
+              <p className="text-2xl font-bold text-success truncate">
                 R${" "}
                 {dashboardData.totalBRL.toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}
               </p>
             </div>
-            <TrendingUp className="h-10 w-10 text-green-500 opacity-20 shrink-0" />
+            <TrendingUp className="h-10 w-10 text-success opacity-20 shrink-0" />
           </div>
         </Card>
 
@@ -106,11 +106,11 @@ export function CryptoPagamentos() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Transações Pendentes
               </p>
-              <p className="text-2xl font-bold text-yellow-500 truncate">
+              <p className="text-2xl font-bold text-warning truncate">
                 {dashboardData.pendingTransactions}
               </p>
             </div>
-            <ArrowRightLeft className="h-10 w-10 text-yellow-500 opacity-20 shrink-0" />
+            <ArrowRightLeft className="h-10 w-10 text-warning opacity-20 shrink-0" />
           </div>
         </Card>
 
@@ -124,7 +124,7 @@ export function CryptoPagamentos() {
                 {dashboardData.confirmedToday}
               </p>
             </div>
-            <Wallet className="h-10 w-10 text-blue-500 opacity-20 shrink-0" />
+            <Wallet className="h-10 w-10 text-info opacity-20 shrink-0" />
           </div>
         </Card>
       </div>

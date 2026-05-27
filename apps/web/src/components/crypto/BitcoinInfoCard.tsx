@@ -30,8 +30,8 @@ export function BitcoinInfoCard() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-500/10">
-                <Bitcoin className="h-6 w-6 text-orange-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Bitcoin className="h-6 w-6 text-warning" />
               </div>
               <div>
                 <CardTitle className="text-lg">
@@ -66,7 +66,7 @@ export function BitcoinInfoCard() {
             {/* Vantagens principais */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-4 rounded-lg border bg-card/50">
-                <Shield className="h-8 w-8 text-blue-500 mb-3" />
+                <Shield className="h-8 w-8 text-info mb-3" />
                 <h4 className="font-semibold text-sm mb-2">Segurança Máxima</h4>
                 <p className="text-xs text-muted-foreground">
                   Transações protegidas por blockchain com criptografia de ponta
@@ -74,7 +74,7 @@ export function BitcoinInfoCard() {
               </div>
 
               <div className="p-4 rounded-lg border bg-card/50">
-                <Zap className="h-8 w-8 text-yellow-500 mb-3" />
+                <Zap className="h-8 w-8 text-warning mb-3" />
                 <h4 className="font-semibold text-sm mb-2">Taxas Reduzidas</h4>
                 <p className="text-xs text-muted-foreground">
                   Até 90% mais barato que cartões de crédito (2-5% vs 0.1-0.5%)
@@ -82,7 +82,7 @@ export function BitcoinInfoCard() {
               </div>
 
               <div className="p-4 rounded-lg border bg-card/50">
-                <Globe className="h-8 w-8 text-green-500 mb-3" />
+                <Globe className="h-8 w-8 text-success mb-3" />
                 <h4 className="font-semibold text-sm mb-2">Global 24/7</h4>
                 <p className="text-xs text-muted-foreground">
                   Receba de qualquer lugar do mundo, sem fronteiras ou horários
@@ -143,11 +143,11 @@ export function BitcoinInfoCard() {
                 {[
                   {
                     name: "Binance",
-                    color: "bg-yellow-500/10 border-yellow-500/20",
+                    color: "bg-warning/10 border-yellow-500/20",
                   },
                   {
                     name: "Coinbase",
-                    color: "bg-blue-500/10 border-blue-500/20",
+                    color: "bg-info/10 border-info/20",
                   },
                   {
                     name: "Kraken",
@@ -155,7 +155,7 @@ export function BitcoinInfoCard() {
                   },
                   {
                     name: "Bybit",
-                    color: "bg-orange-500/10 border-orange-500/20",
+                    color: "bg-warning/10 border-warning/20",
                   },
                   {
                     name: "Mercado Bitcoin",

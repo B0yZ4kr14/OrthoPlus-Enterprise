@@ -84,7 +84,7 @@ export function RepairTab({ selectedEngine, category }: RepairTabProps) {
                 </Button>
               </div>
               <div className="mt-4 p-2 bg-muted rounded border border-border">
-                <code className="text-xs text-green-400 font-mono">{tool.cmd}</code>
+                <code className="text-xs text-success font-mono">{tool.cmd}</code>
               </div>
             </CardContent>
           </Card>

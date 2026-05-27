@@ -69,7 +69,7 @@ export function DadosProfissionaisTab({
             </SelectContent>
           </Select>
           {errors?.cargo && (
-            <p className="text-sm text-red-500">{String(errors.cargo.message)}</p>
+            <p className="text-sm text-destructive">{String(errors.cargo.message)}</p>
           )}
         </div>
 

@@ -35,7 +35,7 @@ export function KpiCards({ data }: KpiCardsProps) {
         <CardContent>
           <div className="text-2xl font-bold">{data.docsAssinadosMes}</div>
           <p className="text-xs text-muted-foreground">
-            <span className="text-green-500">+{data.docsAssinadosVariacao}%</span> vs. mês anterior
+            <span className="text-success">+{data.docsAssinadosVariacao}%</span> vs. mês anterior
           </p>
         </CardContent>
       </Card>

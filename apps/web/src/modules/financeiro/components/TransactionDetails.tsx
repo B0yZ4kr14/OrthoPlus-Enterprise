@@ -66,7 +66,7 @@ export function TransactionDetails({
             Valor
           </label>
           <p
-            className={`text-lg font-semibold mt-1 ${transaction.type === "RECEITA" ? "text-green-600" : "text-red-600"}`}
+            className={`text-lg font-semibold mt-1 ${transaction.type === "RECEITA" ? "text-success" : "text-destructive"}`}
           >
             {formatCurrency(transaction.amount)}
           </p>

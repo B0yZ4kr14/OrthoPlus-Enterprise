@@ -128,15 +128,15 @@ export default function QuickChart() {
                 <h4 className="font-semibold text-sm">Legenda:</h4>
                 <div className="space-y-1 text-xs">
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-green-500" />
+                    <div className="w-4 h-4 rounded bg-success" />
                     <span>Hígido</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-red-500" />
+                    <div className="w-4 h-4 rounded bg-destructive" />
                     <span>Cárie</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-blue-500" />
+                    <div className="w-4 h-4 rounded bg-info" />
                     <span>Tratado</span>
                   </div>
                 </div>

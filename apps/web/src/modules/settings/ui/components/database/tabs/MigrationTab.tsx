@@ -42,7 +42,7 @@ export function MigrationTab({ selectedEngine }: MigrationTabProps) {
         <Card className="border border-border bg-card hover:bg-muted transition-colors">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2 text-foreground">
-              <Download className="w-4 h-4 text-green-400" />
+              <Download className="w-4 h-4 text-success" />
               ⬇ Exportar Dados
             </CardTitle>
           </CardHeader>
@@ -59,7 +59,7 @@ export function MigrationTab({ selectedEngine }: MigrationTabProps) {
         <Card className="border border-border bg-card hover:bg-muted transition-colors">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2 text-foreground">
-              <Upload className="w-4 h-4 text-blue-400" />
+              <Upload className="w-4 h-4 text-info" />
               ⬆ Importar Dados
             </CardTitle>
           </CardHeader>
@@ -76,7 +76,7 @@ export function MigrationTab({ selectedEngine }: MigrationTabProps) {
 
       <div className="p-4 rounded-xl border border-warning/30 bg-warning/5">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
           <div className="space-y-4 w-full">
             <div>
               <h4 className="text-sm font-medium text-warning">Migração Assistida</h4>

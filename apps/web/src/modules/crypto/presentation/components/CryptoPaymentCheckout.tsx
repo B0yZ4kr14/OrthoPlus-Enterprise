@@ -253,7 +253,7 @@ export function CryptoPaymentCheckout({
         )}
 
         {status === "CONFIRMED" && (
-          <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+          <div className="p-4 bg-success/5 dark:bg-green-950 rounded-lg">
             <p className="text-sm text-green-900 dark:text-green-100">
               ✅ Pagamento confirmado com sucesso!
             </p>

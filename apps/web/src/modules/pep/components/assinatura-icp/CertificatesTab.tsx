@@ -45,7 +45,7 @@ export function CertificatesTab({ certificados }: CertificatesTabProps) {
                         variant="outline"
                         className="flex items-center space-x-1 bg-yellow-50"
                       >
-                        <AlertTriangle className="h-3 w-3 text-yellow-600" />
+                        <AlertTriangle className="h-3 w-3 text-warning" />
                         <span>Expira em breve</span>
                       </Badge>
                     )}

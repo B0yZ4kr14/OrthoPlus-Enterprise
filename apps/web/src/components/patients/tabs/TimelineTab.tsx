@@ -58,15 +58,15 @@ export function TimelineTab({ patientId }: TimelineTabProps) {
   const getColorForType = (type: string) => {
     switch (type) {
       case "consulta":
-        return "text-blue-500 bg-blue-500/10";
+        return "text-info bg-info/10";
       case "pagamento":
-        return "text-green-500 bg-green-500/10";
+        return "text-success bg-success/10";
       case "prontuario":
         return "text-purple-500 bg-purple-500/10";
       case "status_change":
-        return "text-orange-500 bg-orange-500/10";
+        return "text-warning bg-warning/10";
       case "budget":
-        return "text-yellow-500 bg-yellow-500/10";
+        return "text-warning bg-warning/10";
       default:
         return "text-gray-500 bg-gray-500/10";
     }
