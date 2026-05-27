@@ -38,18 +38,18 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   async createNotification(data: any) {
-    return (prisma as any).notifications.create({ data });
+    return prisma.notifications.create({ data });
   }
 
   async markNotificationRead(id: string, clinicId: string) {
-    return (prisma as any).notifications.updateMany({
+    return prisma.notifications.updateMany({
       where: { id, clinic_id: clinicId },
       data: { lida: true },
     });
   }
 
   async markAllNotificationsRead(clinicId: string) {
-    return (prisma as any).notifications.updateMany({
+    return prisma.notifications.updateMany({
       where: { clinic_id: clinicId, lida: false },
       data: { lida: true },
     });
@@ -58,14 +58,14 @@ export class NotificationRepository implements INotificationRepository {
   // ── Crypto Price Alerts ───────────────────────────────────────────────
 
   async findActiveVolatilityAlerts() {
-    return (prisma as any).crypto_price_alerts.findMany({
+    return prisma.crypto_price_alerts.findMany({
       where: { alert_type: "VOLATILITY", is_active: true },
       take: 100,
     });
   }
 
   async updateCryptoAlert(id: string, data: any) {
-    return (prisma as any).crypto_price_alerts.update({ where: { id }, data });
+    return prisma.crypto_price_alerts.update({ where: { id }, data });
   }
 
   async findCryptoAlertsByCascadeGroup(
@@ -107,13 +107,13 @@ export class NotificationRepository implements INotificationRepository {
   // ── Audit Logs ────────────────────────────────────────────────────────
 
   async createAuditLog(data: any) {
-    return (prisma as any).audit_logs.create({ data });
+    return prisma.audit_logs.create({ data });
   }
 
   // ── Stock Alerts ──────────────────────────────────────────────────────
 
   async createStockAlert(data: any) {
-    return (prisma as any).estoque_alertas.create({ data });
+    return prisma.estoque_alertas.create({ data });
   }
 
   // ── Raw SQL Queries (Prisma limitations: cross-column comparisons, EXTRACT, JOINs) ──
