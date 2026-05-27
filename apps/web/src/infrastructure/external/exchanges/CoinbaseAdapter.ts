@@ -41,8 +41,7 @@ export class CoinbaseAdapter implements ICryptoExchange {
       if (!response.ok) throw new Error("Failed to fetch balance");
 
       const data = await response.json();
-      // @ts-expect-error — TS18046
-      const account = data.data.find((acc: unknown) => acc.currency === coin);
+      const account = data.data.find((acc: Record<string, any>) => acc.currency === coin);
 
       return parseFloat(account?.balance?.amount || "0");
     } catch (error) {
@@ -62,8 +61,7 @@ export class CoinbaseAdapter implements ICryptoExchange {
 
       const accountsData = await accountsResponse.json();
       const account = accountsData.data.find(
-        // @ts-expect-error — TS18046
-        (acc: unknown) => acc.currency === coin,
+        (acc: Record<string, any>) => acc.currency === coin,
       );
 
       if (!account) throw new Error(`Account for ${coin} not found`);

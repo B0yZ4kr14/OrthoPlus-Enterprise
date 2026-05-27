@@ -24,8 +24,7 @@ const historicoSchema = z.object({
     .string()
     .min(10, "Descrição deve ter no mínimo 10 caracteres")
     .max(5000, "Descrição muito longa"),
-  // @ts-expect-error — TS2554
-  dados_estruturados: z.record(z.unknown()).optional(),
+  dados_estruturados: z.record(z.string(), z.unknown()).optional(),
 });
 
 type HistoricoFormData = z.infer<typeof historicoSchema>;

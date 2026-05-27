@@ -57,9 +57,8 @@ export function OdontogramaPage() {
         </CardHeader>
         <CardContent>
           <PatientSelector
-            onSelect={(patient: Patient) => setSelectedPatient(patient)}
-            // @ts-expect-error — TS2322
-            selected={selectedPatient}
+            onSelect={(patient) => setSelectedPatient(patient)}
+            selectedPatient={selectedPatient}
           />
         </CardContent>
       </Card>

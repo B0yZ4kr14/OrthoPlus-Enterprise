@@ -15,8 +15,7 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
   async findById(id: string): Promise<DentistSchedule | null> {
     try {
       const data = await apiClient.get<Record<string, any>>(`${this.basePath}/${id}`);
-      // @ts-expect-error — TS2345
-      return data ? DentistScheduleMapper.toDomain(data) : null;
+      return data ? DentistScheduleMapper.toDomain(data as Parameters<typeof DentistScheduleMapper.toDomain>[0]) : null;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       const err = error as { response?: { status?: number } };
@@ -45,8 +44,7 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
           is_active: true,
         },
       });
-      // @ts-expect-error — TS2345
-      if (data.length > 0) return DentistScheduleMapper.toDomain(data[0]);
+      if (data.length > 0) return DentistScheduleMapper.toDomain(data[0] as Parameters<typeof DentistScheduleMapper.toDomain>[0]);
       return null;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };

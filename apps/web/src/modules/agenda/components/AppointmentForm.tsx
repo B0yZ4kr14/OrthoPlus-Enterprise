@@ -54,8 +54,7 @@ export function AppointmentForm({
     setValue,
     watch,
   } = useForm<Appointment>({
-    // @ts-expect-error — TS2322
-    resolver: zodResolver(appointmentSchema),
+    resolver: zodResolver(appointmentSchema as any),
     defaultValues: appointment || {
       data: initialDate || "",
       horaInicio: initialTime || "",
@@ -96,8 +95,7 @@ export function AppointmentForm({
   });
 
   return (
-    // @ts-expect-error — TS2345
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Paciente */}
         <div className="space-y-2">

@@ -2,8 +2,7 @@ import { Suspense, lazy } from "react";
 import { LoadingState } from "@/components/shared/LoadingState";
 
 // Lazy load do componente 3D pesado
-// @ts-expect-error — TS2322
-const Odontograma3D = lazy(() => import("../Odontograma3D"));
+const Odontograma3D = lazy(() => import("../Odontograma3D") as any);
 
 interface Odontograma3DLazyProps {
   patientId: string;

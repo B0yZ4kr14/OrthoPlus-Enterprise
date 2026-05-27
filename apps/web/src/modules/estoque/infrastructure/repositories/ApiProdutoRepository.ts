@@ -25,8 +25,8 @@ export class ApiProdutoRepository implements IProdutoRepository {
       // but typically apiClient unifies this. We assume the API returns the mapped Domain type.
       return data;
     } catch (error) {
-      // @ts-expect-error — TS2571
-      if ((error as unknown).status === 404) return null;
+      const err = error as { response?: { status?: number } };
+      if (err.response?.status === 404) return null;
       throw error;
     }
   }
@@ -44,8 +44,8 @@ export class ApiProdutoRepository implements IProdutoRepository {
       );
       return data;
     } catch (error) {
-      // @ts-expect-error — TS2571
-      if ((error as unknown).status === 404) return null;
+      const err = error as { response?: { status?: number } };
+      if (err.response?.status === 404) return null;
       throw error;
     }
   }

@@ -34,7 +34,6 @@ const MOCK_CATEGORIAS: Categoria[] = [
 ];
 
 const MOCK_FORNECEDORES: Fornecedor[] = [
-  // @ts-expect-error — TS2739
   {
     id: "1",
     nome: "Dental Supply Ltda",
@@ -48,8 +47,7 @@ const MOCK_FORNECEDORES: Fornecedor[] = [
     cep: "01234-567",
     ativo: true,
     createdAt: new Date().toISOString(),
-  },
-  // @ts-expect-error — TS2739
+  } as Fornecedor,
   {
     id: "2",
     nome: "Odonto Distribuidora",
@@ -63,7 +61,7 @@ const MOCK_FORNECEDORES: Fornecedor[] = [
     cep: "01310-100",
     ativo: true,
     createdAt: new Date().toISOString(),
-  },
+  } as Fornecedor,
 ];
 
 const MOCK_PRODUTOS: Produto[] = [

@@ -27,10 +27,9 @@ export function ExportButton({
       return;
     }
 
-    // @ts-expect-error — TS2769
-    const headers = Object.keys(data[0]).join(",");
-    const rows = data.map((item) =>
-      // @ts-expect-error — TS2769
+    const rowsData = data as Record<string, unknown>[];
+    const headers = Object.keys(rowsData[0]).join(",");
+    const rows = rowsData.map((item) =>
       Object.values(item)
         .map((val) =>
           typeof val === "string" && val.includes(",") ? `"${val}"` : val,

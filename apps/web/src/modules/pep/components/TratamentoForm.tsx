@@ -125,8 +125,7 @@ export function TratamentoForm({
           <Label htmlFor="status">Status *</Label>
           <Select
             defaultValue="EM_ANDAMENTO"
-            // @ts-expect-error — TS2345
-            onValueChange={(value) => setValue("status", value as unknown)}
+            onValueChange={(value) => setValue("status", value as "EM_ANDAMENTO" | "CONCLUIDO" | "PAUSADO" | "CANCELADO")}
           >
             <SelectTrigger id="status">
               <SelectValue />

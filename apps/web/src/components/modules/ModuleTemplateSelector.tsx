@@ -77,8 +77,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
           : [],
       }));
 
-      // @ts-expect-error — TS2345
-      setTemplates(processedTemplates);
+      setTemplates(processedTemplates as Template[]);
     } catch (error) {
       console.error("Error fetching templates:", error);
       toast({
@@ -106,8 +105,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
 
       toast({
         title: "Template aplicado!",
-        // @ts-expect-error — TS18046
-        description: `${data.activated} módulos ativados com sucesso.`,
+        description: `${(data as Record<string, any>).activated} módulos ativados com sucesso.`,
       });
 
       setDialogOpen(false);

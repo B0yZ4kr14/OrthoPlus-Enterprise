@@ -106,16 +106,14 @@ export default function PEPPage() {
       // Criar tratamentos usando o Use Case via hook customizado
       for (const suggestion of suggestions) {
         await createTratamento({
-          // @ts-expect-error — TS2322
-          titulo: (suggestion as { procedure?: string }).procedure,
+          titulo: (suggestion as { procedure?: string }).procedure || "Tratamento sugerido",
           descricao:
             (suggestion as { clinical_notes?: string }).clinical_notes ||
             `Tratamento para o dente ${(suggestion as { tooth_number?: number }).tooth_number}`,
-          // @ts-expect-error — TS2322
-          denteCodigo: (suggestion as { tooth_number?: number }).tooth_number,
+          denteCodigo: (suggestion as { tooth_number?: number }).tooth_number || 0,
           dataInicio: new Date(),
           createdBy: user.id,
-        });
+        } as any);
       }
 
       toast({

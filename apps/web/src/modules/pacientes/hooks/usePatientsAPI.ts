@@ -30,8 +30,7 @@ export function usePatientsAPI(): UsePatientsReturn {
 
       // Converter dados da API para formato global do sistema usando adapter
       const transformedPatients = PatientAdapter.toFrontendList(
-        // @ts-expect-error — TS2345
-        response.patients,
+        response.patients as Parameters<typeof PatientAdapter.toFrontendList>[0],
       );
       setPatients(transformedPatients);
     } catch (error: unknown) {

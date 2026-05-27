@@ -15,7 +15,7 @@ import { usePatients } from "@/modules/pacientes/hooks/usePatientsUnified";
 import type { Patient } from "@/types/patient";
 
 interface PatientSelectorProps {
-  onSelect: (patient: Patient) => void;
+  onSelect: (patient: Patient | null) => void;
   selectedPatient?: Patient | null;
   placeholder?: string;
   compact?: boolean;
@@ -78,8 +78,7 @@ export function PatientSelector({
         <Button
           variant="ghost"
           size="sm"
-          // @ts-expect-error — TS2345
-          onClick={() => onSelect(null as unknown)}
+          onClick={() => onSelect(null)}
         >
           Trocar
         </Button>

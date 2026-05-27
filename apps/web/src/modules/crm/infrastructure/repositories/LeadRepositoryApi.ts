@@ -31,8 +31,7 @@ export class LeadRepositoryApi implements ILeadRepository {
   async findByClinicId(clinicId: string): Promise<Lead[]> {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads");
-      // @ts-expect-error — TS2345
-      return data?.map(LeadMapper.toDomain) ?? [];
+      return data?.map((d) => LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0])) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar leads: ${_e.message}`);
@@ -44,8 +43,7 @@ export class LeadRepositoryApi implements ILeadRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads", {
         params: { assigned_to: responsavelId },
       });
-      // @ts-expect-error — TS2345
-      return data?.map(LeadMapper.toDomain) ?? [];
+      return data?.map((d) => LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0])) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar leads do responsável: ${_e.message}`);
@@ -57,8 +55,7 @@ export class LeadRepositoryApi implements ILeadRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads", {
         params: { status },
       });
-      // @ts-expect-error — TS2345
-      return data?.map(LeadMapper.toDomain) ?? [];
+      return data?.map((d) => LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0])) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar leads por status: ${_e.message}`);

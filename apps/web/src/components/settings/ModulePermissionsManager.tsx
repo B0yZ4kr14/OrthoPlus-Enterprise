@@ -73,20 +73,17 @@ export function ModulePermissionsManager() {
       setUsers(usersWithRoles);
 
       // Buscar módulos ativos
-      const modulesData = await apiClient.post<unknown>(
+      const modulesData = await apiClient.post<{ modules: Module[] }>(
         "/modules/my-modules",
       );
-      const activeModules =
-        // @ts-expect-error — TS2339
-        modulesData?.modules?.filter((m: Module) => m.is_active) || [];
+      const activeModules = modulesData?.modules?.filter((m) => m.is_active) || [];
       setModules(activeModules);
 
       // Buscar permissões existentes
-      const permissionsData = await apiClient.get<Record<string, any>[]>(
+      const permissionsData = await apiClient.get<UserPermission[]>(
         "/configuracoes/permissoes",
       );
 
-      // @ts-expect-error — TS2345
       setPermissions(permissionsData || []);
 
       if (usersWithRoles.length > 0 && !selectedUser) {

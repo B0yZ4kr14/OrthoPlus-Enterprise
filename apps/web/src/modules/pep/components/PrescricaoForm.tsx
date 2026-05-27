@@ -162,8 +162,7 @@ export function PrescricaoForm({
             <Select
               value={currentMed.via || "oral"}
               onValueChange={(value) =>
-                // @ts-expect-error — TS2322
-                setCurrentMed({ ...currentMed, via: value as unknown })
+                setCurrentMed({ ...currentMed, via: value as MedicamentoFormData["via"] })
               }
             >
               <SelectTrigger>

@@ -21,8 +21,7 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
     queryKey: ["patient-financial", patientId],
     queryFn: async () => {
       const data = await apiClient.get<Record<string, any>>(`/pacientes/${patientId}`);
-      // @ts-expect-error — TS2345
-      return PatientAdapter.toFrontend(data);
+      return PatientAdapter.toFrontend(data as Parameters<typeof PatientAdapter.toFrontend>[0]);
     },
   });
 
@@ -33,9 +32,8 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
       const data = await apiClient.get<Record<string, any>[]>(
         `/pacientes/${patientId}/timeline`,
       );
-      const events = data || [];
-      // @ts-expect-error — TS18046
-      return events.filter((e: unknown) => e.type === "budget");
+      const events = (data || []) as Record<string, any>[];
+      return events.filter((e) => e.type === "budget");
     },
   });
 

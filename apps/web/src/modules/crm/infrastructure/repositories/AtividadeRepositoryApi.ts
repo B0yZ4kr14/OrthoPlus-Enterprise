@@ -39,8 +39,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
         params: { lead_id: leadId },
       });
-      // @ts-expect-error — TS2345
-      return data?.map(AtividadeMapper.toDomain) ?? [];
+      return data?.map((d) => AtividadeMapper.toDomain(d as Parameters<typeof AtividadeMapper.toDomain>[0])) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar atividades do lead: ${_e.message}`);
@@ -52,8 +51,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
         params: { assigned_to: responsavelId },
       });
-      // @ts-expect-error — TS2345
-      return data?.map(AtividadeMapper.toDomain) ?? [];
+      return data?.map((d) => AtividadeMapper.toDomain(d as Parameters<typeof AtividadeMapper.toDomain>[0])) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(

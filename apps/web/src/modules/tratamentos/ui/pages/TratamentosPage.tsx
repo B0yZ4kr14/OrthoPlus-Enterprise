@@ -85,7 +85,7 @@ export function TratamentosPage() {
         </CardHeader>
         <CardContent>
           <PatientSelector
-            onSelect={(patient: Patient) => setSelectedPatient(patient)}
+            onSelect={(patient) => setSelectedPatient(patient)}
             selectedPatient={selectedPatient}
           />
         </CardContent>

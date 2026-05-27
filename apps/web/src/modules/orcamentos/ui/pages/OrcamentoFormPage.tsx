@@ -155,7 +155,9 @@ export default function OrcamentoFormPage() {
                 selectedPatient={selectedPatient}
                 onSelect={(patient) => {
                   setSelectedPatient(patient);
-                  form.setValue("patient_id", patient.id);
+                  if (patient) {
+                    form.setValue("patient_id", patient.id);
+                  }
                 }}
               />
               {form.formState.errors.patient_id && (

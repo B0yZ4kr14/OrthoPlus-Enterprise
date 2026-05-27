@@ -48,8 +48,7 @@ export default function QuickChart() {
       if (!(patient as { id?: string })?.id) return [];
 
       const data = await apiClient.get<Record<string, any>[]>(
-        // @ts-expect-error — TS18048
-        `/pep/tratamentos?prontuario_id=${patient.id}&status=EM_ANDAMENTO`,
+        `/pep/tratamentos?prontuario_id=${(patient as Record<string, any>).id}&status=EM_ANDAMENTO`,
       );
       return data || [];
     },
