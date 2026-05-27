@@ -16,7 +16,7 @@ export function TISSGlosasManager() {
   const [glosaAmount, setGlosaAmount] = useState("");
 
   const handleRegistrarGlosa = (id: string) => {
-    registerGlosa({ id, glosa_reason: glosaReason, glosa_amount: Number(glosaAmount) });
+    registerGlosa({ id, data: { glosa_amount: Number(glosaAmount), glosa_reason: glosaReason, glosa_date: new Date().toISOString() } });
     setSelectedGlosa(null);
     setGlosaReason("");
     setGlosaAmount("");
