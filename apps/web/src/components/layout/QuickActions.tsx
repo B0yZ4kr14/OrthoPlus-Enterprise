@@ -21,7 +21,7 @@ export function QuickActions() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild data-tour="action-cards">
         <Button variant="default" size="icon" data-testid="quick-actions-btn" className="shadow-[0_0_12px_hsl(var(--interactive)/0.25)] hover:shadow-[0_0_16px_hsl(var(--interactive)/0.35)] transition-shadow duration-300">
           <Plus className="h-5 w-5" />
         </Button>
