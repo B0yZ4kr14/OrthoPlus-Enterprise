@@ -18,7 +18,8 @@ import {
   SelectValue,
 } from "@orthoplus/core-ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, FileText } from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 import { PatientSelector } from "@/components/shared/PatientSelector";
 import type { Patient } from "@/types/patient";
 import { tipoPlanoLabels } from "../../types/orcamento.types";
@@ -133,14 +134,16 @@ export default function OrcamentoFormPage() {
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => navigate("/orcamentos")}>
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <h1 className="text-3xl font-bold">
-          {id ? "Editar Orçamento" : "Novo Orçamento"}
-        </h1>
-      </div>
+      <PageHeader
+        title={id ? "Editar Orcamento" : "Novo Orcamento"}
+        description="Preencha os dados do orcamento para o paciente"
+        icon={FileText}
+        actions={
+          <Button variant="ghost" size="icon" onClick={() => navigate("/orcamentos")}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+        }
+      />
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <Card>

@@ -36,7 +36,9 @@ import {
   Globe,
   Lock,
   Trash2,
-} from "lucide-react";
+  Stethoscope,
+} from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { TableFilter } from "@/components/shared/TableFilter";
@@ -119,34 +121,32 @@ export default function TemplatesProcedimentosPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Catálogo de Procedimentos</h1>
-          <p className="text-muted-foreground mt-2">
-            Gerencie templates e tabelas de preços
-          </p>
-        </div>
-
-        {activeTab === "templates" && (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Novo Template
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Criar Template de Procedimento</DialogTitle>
-              <DialogDescription>
-                Defina um template reutilizável com procedimentos, tempo e valor
-              </DialogDescription>
-            </DialogHeader>
-            <TemplateForm onClose={() => setIsDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
-        )}
-      </div>
+      <PageHeader
+        title="Catalogo de Procedimentos"
+        description="Gerencie templates e tabelas de precos"
+        icon={Stethoscope}
+        actions={
+          activeTab === "templates" ? (
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Novo Template
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Criar Template de Procedimento</DialogTitle>
+                  <DialogDescription>
+                    Defina um template reutilizavel com procedimentos, tempo e valor
+                  </DialogDescription>
+                </DialogHeader>
+                <TemplateForm onClose={() => setIsDialogOpen(false)} />
+              </DialogContent>
+            </Dialog>
+          ) : undefined
+        }
+      />
 
       {/* Tabs */}
       <div className="flex gap-2 border-b">
