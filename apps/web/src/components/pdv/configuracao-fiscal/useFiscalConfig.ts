@@ -30,11 +30,11 @@ export function useFiscalConfig() {
   const [formData, setFormData] = useState<FiscalFormData>(DEFAULT_FORM_DATA);
 
   const { data: fiscalConfig, isLoading } = useQuery({
-    queryKey: ["fiscal-config", clinicId],
+    queryKey: ["faturamento-config", clinicId],
     queryFn: async () => {
       try {
-        const data = await apiClient.get(`/fiscal-config?clinic_id=${clinicId}`);
-        return Array.isArray(data) ? (data[0] as FiscalConfig) : (data as FiscalConfig);
+        const response = await apiClient.get<{ config: FiscalConfig | null }>("/faturamento/config");
+        return response.config;
       } catch (error: unknown) {
         const err = error as Record<string, unknown>;
         if (err?.status !== 404) throw error;
@@ -46,15 +46,19 @@ export function useFiscalConfig() {
 
   const saveMutation = useMutation({
     mutationFn: async (data: FiscalFormData) => {
-      const payload = { ...data, clinic_id: clinicId };
-      if (fiscalConfig) {
-        await apiClient.patch(`/fiscal-config/${fiscalConfig.id}`, payload);
-      } else {
-        await apiClient.post("/fiscal-config", payload);
-      }
+      const payload = {
+        cnpj_emitente: data.cnpj,
+        razao_social: data.razao_social,
+        ambiente: data.ambiente.toLowerCase(),
+        regime_tributario: data.regime_tributario,
+        inscricao_estadual: data.inscricao_estadual,
+        serie_nfce: String(data.serie_nfce),
+        // Map other fields as needed
+      };
+      await apiClient.post("/faturamento/config", payload);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["fiscal-config"] });
+      queryClient.invalidateQueries({ queryKey: ["faturamento-config"] });
       toast({
         title: "Configuração salva",
         description: "Configuração fiscal atualizada com sucesso",

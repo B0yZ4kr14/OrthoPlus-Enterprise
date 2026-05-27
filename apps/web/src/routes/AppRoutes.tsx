@@ -93,6 +93,11 @@ const AssinaturaICP = lazy(
 const TISSPage = lazy(() => import("@/modules/tiss").then((m) => ({ default: m.TISSPage })));
 const TeleodontoPage = lazy(() => import("@/modules/teleodonto").then((m) => ({ default: m.TeleodontoPage })));
 
+// Faturamento
+const RelatorioFiscalPage = lazy(
+  () => import("@/modules/faturamento/ui/pages/RelatorioFiscalPage"),
+);
+
 // Odontograma (standalone page — reuses PEP components)
 const OdontogramaPage = lazy(
   () => import("@/modules/odontograma/ui/pages/OdontogramaPage"),
@@ -281,6 +286,7 @@ const AppRoutes = () => (
     <Route path="/files" element={protectedRoute(<FileListPage />, { moduleKey: "FILES" })} />
     <Route path="/files/upload" element={protectedRoute(<FileUploadPage />, { moduleKey: "FILES" })} />
     <Route path="/faturamento-tiss" element={protectedRoute(<TISSPage />, { moduleKey: "TISS" })} />
+    <Route path="/faturamento/relatorio" element={protectedRoute(<RelatorioFiscalPage />, { moduleKey: "FATURAMENTO" })} />
     <Route path="/teleodonto" element={protectedRoute(<TeleodontoPage />, { moduleKey: "TELEODONTO" })} />
 
     {/* Memory Hub */}
