@@ -9,7 +9,7 @@ export class VolatilityWorkerController {
       
 
       // Fetch active volatility alerts
-      const alerts = await (prisma as any).crypto_price_alerts.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const alerts = await prisma.crypto_price_alerts.findMany({
         where: {
           alert_type: "VOLATILITY",
           is_active: true,
@@ -35,9 +35,9 @@ export class VolatilityWorkerController {
         const coinId = coinIds[alert.coin_type];
         if (!coinId) continue;
 
-        const timeframeMinutes = alert.volatility_timeframe_minutes || 60;
-        const thresholdPercentage = alert.volatility_threshold_percentage || 5;
-        const direction = alert.volatility_direction || "both";
+        const timeframeMinutes = (alert as any).volatility_timeframe_minutes || 60;
+        const thresholdPercentage = (alert as any).volatility_threshold_percentage || 5;
+        const direction = (alert as any).volatility_direction || "both";
 
         const toTimestamp = Math.floor(Date.now() / 1000);
         const fromTimestamp = toTimestamp - timeframeMinutes * 60;
@@ -77,19 +77,20 @@ export class VolatilityWorkerController {
 
           if (shouldTrigger) {
             // Update last_triggered_at
-            await (prisma as any).crypto_price_alerts.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+            await prisma.crypto_price_alerts.update({
               where: { id: alert.id },
-              data: { last_triggered_at: new Date() },
+              data: { last_triggered_at: new Date().toISOString() },
             });
 
             // Create notification
-            await (prisma as any).notifications.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+            await prisma.notifications.create({
               data: {
                 clinic_id: alert.clinic_id,
                 tipo: "CRIPTO_VOLATILIDADE",
                 titulo: `Alerta de Volatilidade: ${alert.coin_type}`,
                 mensagem: `${alert.coin_type} variou ${changePercentage >= 0 ? "+" : ""}${changePercentage.toFixed(2)}% em ${timeframeMinutes} minutos. Preço atual: R$ ${lastPrice.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
                 link_acao: "/financeiro/crypto-pagamentos",
+                lida: false,
               },
             });
 

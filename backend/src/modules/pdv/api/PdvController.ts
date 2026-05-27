@@ -54,10 +54,10 @@ export class PdvController {
     // Check stock before sale
     const estoqueAlertas: Array<{ produtoId: string; nome: string; estoqueAtual: number; quantidade: number }> = [];
     for (const item of req.body.itens) {
-      const produto = await (prisma as any).pdv_produtos.findFirst({
+      const produto = await prisma.pdv_produtos.findFirst({
         where: { id: item.produtoId, clinic_id: clinicId },
       });
-      if (produto && produto.controla_estoque && produto.estoque_atual < item.quantidade) {
+      if (produto && produto.controla_estoque && produto.estoque_atual !== null && produto.estoque_atual < item.quantidade) {
         res.status(400).json({
           error: "Estoque insuficiente",
           produto: produto.descricao,
@@ -82,12 +82,12 @@ export class PdvController {
 
     // Deduct stock
     for (const item of req.body.itens) {
-      const produto = await (prisma as any).pdv_produtos.findFirst({
+      const produto = await prisma.pdv_produtos.findFirst({
         where: { id: item.produtoId, clinic_id: clinicId },
       });
-      if (produto && produto.controla_estoque) {
+      if (produto && produto.controla_estoque && produto.estoque_atual !== null) {
         const novoEstoque = produto.estoque_atual - item.quantidade;
-        await (prisma as any).pdv_produtos.update({
+        await prisma.pdv_produtos.update({
           where: { id: item.produtoId },
           data: { estoque_atual: novoEstoque },
         });
@@ -155,11 +155,11 @@ export class PdvController {
     if (!clinicId) {
       throw Errors.unauthorized("Clinic ID not found in token");
     }
-    const produtos = await (prisma as any).pdv_produtos.findMany({
+    const produtos = await prisma.pdv_produtos.findMany({
       where: {
         clinic_id: clinicId,
         controla_estoque: true,
-        estoque_atual: { lte: (prisma as any).pdv_produtos.fields.estoque_minimo },
+        estoque_atual: { lte: prisma.pdv_produtos.fields.estoque_minimo },
       },
       orderBy: { estoque_atual: "asc" },
     });

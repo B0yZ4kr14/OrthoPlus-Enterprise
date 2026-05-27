@@ -33,7 +33,7 @@ export function createConfiguracoesRouter(): Router {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
-      const data = await (prisma as any).scheduled_backups.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.scheduled_backups.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { clinic_id: clinicId },
         orderBy: { created_at: "desc" },
       });
@@ -48,7 +48,7 @@ export function createConfiguracoesRouter(): Router {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
-      const data = await (prisma as any).scheduled_backups.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.scheduled_backups.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
         data: req.body,
       });
@@ -63,7 +63,7 @@ export function createConfiguracoesRouter(): Router {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
-      await (prisma as any).scheduled_backups.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.scheduled_backups.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       return res.status(204).send();
     } catch (error) {
       logger.error("Error deleting scheduled backup", { error });

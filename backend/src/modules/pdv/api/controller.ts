@@ -7,9 +7,9 @@ export class PDVController {
     const clinicId = req.user?.clinicId;
     if (!clinicId) { throw Errors.unauthorized("Missing clinic context"); }
     const { periodo } = req.query;
-    const where: any = { clinic_id: clinicId }; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const where: { clinic_id: string; periodo?: string } = { clinic_id: clinicId };
     if (periodo) where.periodo = String(periodo);
-    const data = await (prisma as any).pdv_dashboard.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.pdv_dashboard.findMany({
       where,
       orderBy: { data_referencia: "desc" },
     });
@@ -19,7 +19,7 @@ export class PDVController {
   getMetasGamificacao = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
     if (!clinicId) { throw Errors.unauthorized("Missing clinic context"); }
-    const data = await (prisma as any).pdv_metas_gamificacao.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.pdv_metas_gamificacao.findMany({
       where: { clinic_id: clinicId },
       orderBy: { created_at: "desc" },
     });

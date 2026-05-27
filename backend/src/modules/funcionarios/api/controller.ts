@@ -9,7 +9,7 @@ export class FuncionariosController {
       res.status(401).json({ error: "Missing clinic context" });
       return;
     }
-    const data = await (prisma as any).funcionarios.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.funcionarios.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
       where: { clinic_id: clinicId },
       orderBy: { nome: "asc" },
     });
@@ -23,7 +23,7 @@ export class FuncionariosController {
       return;
     }
     const { id } = req.params;
-    const data = await (prisma as any).funcionarios.findFirst({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.funcionarios.findFirst({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
     if (!data) {
       res.status(404).json({ error: "Funcionário not found" });
       return;
@@ -42,8 +42,8 @@ export class FuncionariosController {
       res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
-    const data = await (prisma as any).funcionarios.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      data: { ...parsed.data, clinic_id: clinicId },
+    const data = await prisma.funcionarios.create({
+      data: { ...parsed.data, clinic_id: clinicId } as any,
     });
     res.status(201).json(data);
   }
@@ -60,9 +60,9 @@ export class FuncionariosController {
       res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
-    const data = await (prisma as any).funcionarios.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.funcionarios.update({
       where: { id },
-      data: parsed.data,
+      data: parsed.data as any,
     });
     res.json(data);
   }
@@ -74,7 +74,7 @@ export class FuncionariosController {
       return;
     }
     const { id } = req.params;
-    await (prisma as any).funcionarios.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await prisma.funcionarios.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
     res.status(204).send();
   }
 }

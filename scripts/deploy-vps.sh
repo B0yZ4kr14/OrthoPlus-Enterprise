@@ -53,9 +53,9 @@ ssh -F $HOME/.ssh/config -o StrictHostKeyChecking=no "$VPS_TARGET" << REMOTE
     exit 1
   fi
   
-  # Run Prisma Deploy
+  # Run Prisma Deploy and Generate
   echo "[DEPLOY] Running prisma migrate deploy..."
-  cd backend && pnpm exec prisma migrate deploy && cd ..
+  cd backend && pnpm exec prisma migrate deploy && pnpm exec prisma generate && cd ..
 
   
   # Start Redis if not running

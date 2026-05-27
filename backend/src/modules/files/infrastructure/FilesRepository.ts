@@ -116,7 +116,7 @@ export class FilesRepository implements IFilesRepository {
   // ── Audit Logs / Backup ───────────────────────────────────────────────
 
   async createAuditLog(data: any) {
-    return (prisma as any).audit_logs.create({ data });
+    return prisma.audit_logs.create({ data });
   }
 
   async findBackupById(id: string) {

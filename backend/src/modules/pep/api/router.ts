@@ -64,8 +64,8 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).odontogramas.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { patient_id: req.params.patientId, clinic_id: clinicId },
+      const data = await prisma.odontogramas.findFirst({
+        where: { patient_id: req.params.patientId, clinic_id: clinicId } as any,
         orderBy: { updated_at: 'desc' },
       });
       if (!data) return res.status(404).json({ error: 'Odontograma not found for this patient' });
@@ -86,7 +86,7 @@ router.use(clinicGuard);
       const prontuarioFilter = prontuario_id || patient_id; // accept both param names
       const where: Record<string, unknown> = {};
       if (prontuarioFilter) where.prontuario_id = String(prontuarioFilter);
-      const data = await (prisma as any).pep_odontograma_history.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_odontograma_history.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where,
         orderBy: { created_at: 'desc' },
         take: 100,
@@ -107,7 +107,7 @@ router.use(clinicGuard);
       if (!parsed.success) {
         return res.status(400).json({ error: 'Invalid input', details: parsed.error.flatten() });
       }
-      const data = await (prisma as any).pep_odontograma_history.create({ data: { ...parsed.data, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_odontograma_history.create({ data: { ...parsed.data, clinic_id: clinicId } as any });
       return res.status(201).json(data);
     } catch (error) {
       logger.error('Error creating odontograma history', { error });
@@ -120,7 +120,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).odontogramas.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.odontogramas.findFirst({ where: { id: req.params.id, clinic_id: clinicId } });
       if (!data) return res.status(404).json({ error: 'Odontograma not found' });
       return res.json(data);
     } catch (error) {
@@ -140,35 +140,35 @@ router.use(clinicGuard);
       }
 
       // Check if odontograma already exists for this patient in this clinic
-      const existing = await (prisma as any).odontogramas.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { patient_id: parsed.data.patient_id, clinic_id: clinicId },
+      const existing = await prisma.odontogramas.findFirst({
+        where: { patient_id: parsed.data.patient_id, clinic_id: clinicId } as any,
       });
 
       let data;
       if (existing) {
         // Update existing
-        data = await (prisma as any).odontogramas.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data = await prisma.odontogramas.update({
           where: { id: existing.id },
           data: {
             odontograma_data: parsed.data.odontograma_data,
             observacoes: parsed.data.observacoes,
-          },
+          } as any,
         });
       } else {
         // Create new
-        data = await (prisma as any).odontogramas.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-          data: { ...parsed.data, clinic_id: clinicId },
+        data = await prisma.odontogramas.create({
+          data: { ...parsed.data, clinic_id: clinicId } as any,
         });
       }
 
       // Also save a history snapshot
-      await (prisma as any).pep_odontograma_history.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.pep_odontograma_history.create({
         data: {
           patient_id: parsed.data.patient_id,
           clinic_id: clinicId,
           odontograma_data: parsed.data.odontograma_data,
           observacoes: parsed.data.observacoes,
-        },
+        } as any,
       });
 
       return res.status(existing ? 200 : 201).json(data);
@@ -185,13 +185,13 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const existing = await (prisma as any).odontogramas.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.odontogramas.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!existing) return res.status(404).json({ error: 'Odontograma not found' });
       const parsed = odontogramaUpdateSchema.safeParse(req.body);
       if (!parsed.success) {
         return res.status(400).json({ error: 'Invalid input', details: parsed.error.flatten() });
       }
-      const data = await (prisma as any).odontogramas.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.odontogramas.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
         data: parsed.data,
       });
@@ -209,9 +209,9 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const existing = await (prisma as any).odontogramas.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.odontogramas.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!existing) return res.status(404).json({ error: 'Odontograma not found' });
-      await (prisma as any).odontogramas.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.odontogramas.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       return res.status(204).send();
     } catch (error) {
       logger.error('Error deleting odontograma', { error });
@@ -226,9 +226,9 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const existing = await (prisma as any).prontuarios.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.prontuarios.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!existing) return res.status(404).json({ error: 'Prontuario not found' });
-      const data = await (prisma as any).prontuarios.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.prontuarios.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
         data: req.body,
       });
@@ -247,9 +247,9 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const existing = await (prisma as any).prontuarios.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.prontuarios.findFirst({ where: { id: req.params.id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!existing) return res.status(404).json({ error: 'Prontuario not found' });
-      await (prisma as any).prontuarios.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.prontuarios.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
 
       // Reindexacao em tempo real (non-blocking)
       eventBus.publish(new ProntuarioDeletedEvent(req.params.id, clinicId)).catch(() => {});
@@ -268,7 +268,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).pep_anexos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_anexos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
         data: { ...req.body, clinic_id: clinicId },
       });
       return res.status(201).json(data);
@@ -282,7 +282,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).pep_anexos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_anexos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
         data: req.body,
       });
@@ -297,7 +297,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      await (prisma as any).pep_anexos.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.pep_anexos.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       return res.status(204).send();
     } catch (error) {
       logger.error('Error deleting anexo', { error });
@@ -312,7 +312,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).pep_evolucoes.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_evolucoes.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
         data: { ...req.body, created_by: req.user?.id || 'system' },
       });
       return res.status(201).json(data);
@@ -326,7 +326,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).pep_evolucoes.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_evolucoes.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
         data: req.body,
       });
@@ -341,7 +341,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      await (prisma as any).pep_evolucoes.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.pep_evolucoes.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       return res.status(204).send();
     } catch (error) {
       logger.error('Error deleting evolucao', { error });
@@ -360,7 +360,7 @@ router.use(clinicGuard);
       const where: Record<string, unknown> = {};
       if (prontuario_id) where.prontuario_id = String(prontuario_id);
       if (status) where.status = String(status);
-      const data = await (prisma as any).pep_tratamentos.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_tratamentos.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where,
         orderBy: { created_at: 'desc' },
       });
@@ -375,7 +375,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).pep_tratamentos.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_tratamentos.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
       });
       if (!data) return res.status(404).json({ error: 'Tratamento not found' });
@@ -390,7 +390,7 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const data = await (prisma as any).pep_tratamentos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_tratamentos.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
         data: { ...req.body, created_by: req.user?.id || 'system' },
       });
 
@@ -408,9 +408,9 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const existing = await (prisma as any).pep_tratamentos.findUnique({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.pep_tratamentos.findUnique({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!existing) return res.status(404).json({ error: 'Tratamento not found' });
-      const data = await (prisma as any).pep_tratamentos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const data = await prisma.pep_tratamentos.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { id: req.params.id },
         data: req.body,
       });
@@ -429,9 +429,9 @@ router.use(clinicGuard);
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
-      const existing = await (prisma as any).pep_tratamentos.findUnique({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.pep_tratamentos.findUnique({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!existing) return res.status(404).json({ error: 'Tratamento not found' });
-      await (prisma as any).pep_tratamentos.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.pep_tratamentos.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
 
       // Reindexacao em tempo real (non-blocking)
       eventBus.publish(new TratamentoDeletedEvent(req.params.id, existing.prontuario_id, clinicId)).catch(() => {});
@@ -451,17 +451,17 @@ router.use(clinicGuard);
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
       const { prontuario_id, tooth_number, status: toothStatus, notes } = req.body;
-      const existing = await (prisma as any).pep_odontograma_data.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.pep_odontograma_data.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { prontuario_id, tooth_number },
       });
       let data;
       if (existing) {
-        data = await (prisma as any).pep_odontograma_data.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data = await prisma.pep_odontograma_data.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
           where: { id: existing.id },
           data: { status: toothStatus, notes, updated_by: req.user?.id || 'system' },
         });
       } else {
-        data = await (prisma as any).pep_odontograma_data.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data = await prisma.pep_odontograma_data.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
           data: { prontuario_id, tooth_number, status: toothStatus, notes, created_by: req.user?.id || 'system' },
         });
       }
@@ -477,17 +477,17 @@ router.use(clinicGuard);
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
       const { odontograma_data_id, surface, status: surfaceStatus } = req.body;
-      const existing = await (prisma as any).pep_tooth_surfaces.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      const existing = await prisma.pep_tooth_surfaces.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { odontograma_data_id, surface },
       });
       let data;
       if (existing) {
-        data = await (prisma as any).pep_tooth_surfaces.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data = await prisma.pep_tooth_surfaces.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
           where: { id: existing.id },
           data: { status: surfaceStatus },
         });
       } else {
-        data = await (prisma as any).pep_tooth_surfaces.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        data = await prisma.pep_tooth_surfaces.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
           data: { odontograma_data_id, surface, status: surfaceStatus },
         });
       }
@@ -503,7 +503,7 @@ router.use(clinicGuard);
       const clinicId = req.user?.clinicId;
       if (!clinicId) return res.status(401).json({ error: 'Missing clinic context' });
       const { id } = req.body;
-      await (prisma as any).pep_odontograma_data.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+      await prisma.pep_odontograma_data.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
       return res.status(204).send();
     } catch (error) {
       logger.error('Error deleting odontograma data', { error });

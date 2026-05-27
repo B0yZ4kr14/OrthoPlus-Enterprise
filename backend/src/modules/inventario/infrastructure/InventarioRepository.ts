@@ -24,6 +24,6 @@ export class InventarioRepository implements IInventarioRepository {
   }
 
   async createNotification(data: any) {
-    return (prisma as any).notifications.create({ data });
+    return prisma.notifications.create({ data });
   }
 }

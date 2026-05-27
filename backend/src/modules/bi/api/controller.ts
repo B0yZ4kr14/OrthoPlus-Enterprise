@@ -15,7 +15,7 @@ export class BIController {
     if (!clinicId) {
       throw Errors.unauthorized("Missing clinic context");
     }
-    const data = await (prisma as any).bi_dashboards.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.bi_dashboards.findMany({
       where: { clinic_id: clinicId },
       orderBy: { created_at: "desc" },
     });
@@ -29,7 +29,7 @@ export class BIController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const data = await (prisma as any).bi_dashboards.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.bi_dashboards.findFirst({
       where: { id, clinic_id: clinicId },
     });
     if (!data) {
@@ -48,8 +48,8 @@ export class BIController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await (prisma as any).bi_dashboards.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      data: { ...parsed.data, clinic_id: clinicId },
+    const data = await prisma.bi_dashboards.create({
+      data: { ...parsed.data, clinic_id: clinicId } as any,
     });
     res.status(201).json(data);
     return;
@@ -61,7 +61,7 @@ export class BIController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await (prisma as any).bi_dashboards.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const existing = await prisma.bi_dashboards.findFirst({
       where: { id, clinic_id: clinicId },
     });
     if (!existing) {
@@ -71,9 +71,9 @@ export class BIController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await (prisma as any).bi_dashboards.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.bi_dashboards.update({
       where: { id },
-      data: parsed.data,
+      data: parsed.data as any,
     });
     res.json(data);
     return;
@@ -89,9 +89,9 @@ export class BIController {
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (periodo) where.periodo = String(periodo);
     if (tipo) where.tipo = String(tipo);
-    const data = await (prisma as any).bi_metrics.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where,
-      orderBy: { data_referencia: "desc" },
+    const data = await prisma.bi_metrics.findMany({
+      where: where as any,
+      orderBy: { created_at: "desc" },
     });
     res.json(data);
     return;
@@ -104,9 +104,9 @@ export class BIController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { dashboard_id } = req.params;
-    const data = await (prisma as any).bi_widgets.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { dashboard_id, dashboard: { clinic_id: clinicId } },
-      orderBy: { posicao: "asc" },
+    const data = await prisma.bi_widgets.findMany({
+      where: { dashboard_id, clinic_id: clinicId },
+      orderBy: { position_y: "asc" },
     });
     res.json(data);
     return;
@@ -118,7 +118,7 @@ export class BIController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { dashboard_id } = req.params;
-    const dashboard = await (prisma as any).bi_dashboards.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const dashboard = await prisma.bi_dashboards.findFirst({
       where: { id: dashboard_id, clinic_id: clinicId },
     });
     if (!dashboard) {
@@ -128,8 +128,8 @@ export class BIController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await (prisma as any).bi_widgets.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      data: { ...parsed.data, dashboard_id, clinic_id: clinicId },
+    const data = await prisma.bi_widgets.create({
+      data: { ...parsed.data, dashboard_id, clinic_id: clinicId } as any,
     });
     res.status(201).json(data);
     return;
@@ -141,8 +141,8 @@ export class BIController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await (prisma as any).bi_widgets.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { id, dashboard: { clinic_id: clinicId } },
+    const existing = await prisma.bi_widgets.findFirst({
+      where: { id, clinic_id: clinicId },
     });
     if (!existing) {
       throw Errors.notFound("Widget", id);
@@ -151,9 +151,9 @@ export class BIController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await (prisma as any).bi_widgets.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.bi_widgets.update({
       where: { id },
-      data: parsed.data,
+      data: parsed.data as any,
     });
     res.json(data);
     return;
@@ -165,13 +165,13 @@ export class BIController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await (prisma as any).bi_widgets.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { id, dashboard: { clinic_id: clinicId } },
+    const existing = await prisma.bi_widgets.findFirst({
+      where: { id, clinic_id: clinicId },
     });
     if (!existing) {
       throw Errors.notFound("Widget", id);
     }
-    await (prisma as any).bi_widgets.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await prisma.bi_widgets.delete({ where: { id } });
     res.status(204).send();
     return;
   });

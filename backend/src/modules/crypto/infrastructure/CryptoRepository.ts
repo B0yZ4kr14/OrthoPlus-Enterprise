@@ -15,6 +15,6 @@ export class CryptoRepository {
   }
 
   async createAuditLog(data: any) {
-    return (prisma as any).audit_logs.create({ data });
+    return prisma.audit_logs.create({ data });
   }
 }
