@@ -1,16 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import { Scan, Send, Package } from "lucide-react";
+import { Scan, Send, Package } from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 export default function FluxoDigital() {
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-3xl font-bold">Fluxo Digital (CAD/CAM)</h1>
-        <p className="text-muted-foreground">
-          Integração com scanners intraorais e laboratórios
-        </p>
-      </div>
+      <PageHeader
+        title="Fluxo Digital (CAD/CAM)"
+        description="Integracao com scanners intraorais e laboratorios"
+        icon={Scan}
+      />
 
       <Tabs defaultValue="scanners">
         <TabsList>

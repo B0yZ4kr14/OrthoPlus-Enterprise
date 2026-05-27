@@ -24,7 +24,8 @@ import {
   User,
   Calendar,
   Lock,
-} from "lucide-react";
+} from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 export default function AssinaturaICP() {
   const { hasModuleAccess } = useAuth();
@@ -50,27 +51,23 @@ export default function AssinaturaICP() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Assinatura Digital ICP-Brasil
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Gestão de certificados digitais e assinaturas qualificadas
-          </p>
-        </div>
-        <div className="flex space-x-2">
-          <Button variant="outline">
-            <Upload className="h-4 w-4 mr-2" />
-            Importar Certificado
-          </Button>
-          <Button>
-            <FileSignature className="h-4 w-4 mr-2" />
-            Nova Assinatura
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Assinatura Digital ICP-Brasil"
+        description="Gestao de certificados digitais e assinaturas qualificadas"
+        icon={Shield}
+        actions={
+          <div className="flex space-x-2">
+            <Button variant="outline">
+              <Upload className="h-4 w-4 mr-2" />
+              Importar Certificado
+            </Button>
+            <Button>
+              <FileSignature className="h-4 w-4 mr-2" />
+              Nova Assinatura
+            </Button>
+          </div>
+        }
+      />
 
       {/* KPIs */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
