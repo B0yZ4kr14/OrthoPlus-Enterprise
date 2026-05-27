@@ -346,6 +346,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setUserRole(null);
       setClinicId(null);
+      // Clear legacy tokens from localStorage (migration to HttpOnly cookies)
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("token");
       // Clear sidebar state from localStorage to prevent cross-user leakage
       const keysToRemove: string[] = [];
       for (let i = 0; i < localStorage.length; i++) {

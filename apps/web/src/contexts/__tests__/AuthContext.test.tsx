@@ -344,7 +344,8 @@ describe("AuthContext", () => {
         expect(screen.getByTestId("session").textContent).toBe("has-session"),
       )
 
-      expect(localStorage.getItem("accessToken")).toBe("token-123")
+      // Token is now stored in HttpOnly cookie, not localStorage
+      expect(localStorage.getItem("accessToken")).toBeNull()
       expect(screen.getByTestId("user").textContent).toBe("user-1")
       expect(screen.getByTestId("role").textContent).toBe("ADMIN")
       expect(screen.getByTestId("admin").textContent).toBe("admin")

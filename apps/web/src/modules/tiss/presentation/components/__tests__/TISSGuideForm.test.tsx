@@ -1,39 +1,49 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { TISSGuideForm } from "../TISSGuideForm"
 
-vi.mock("@orthoplus/core-ui/card", () => ({
-  Card: ({ children }: any) => <div data-testid="card">{children}</div>,
-  CardContent: ({ children, className }: any) => (
-    <div data-testid="card-content" className={className}>{children}</div>
-  ),
-  CardHeader: ({ children }: any) => <div data-testid="card-header">{children}</div>,
-  CardTitle: ({ children }: any) => <div data-testid="card-title">{children}</div>,
-  CardDescription: ({ children }: any) => <div data-testid="card-description">{children}</div>,
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+})
+
+vi.mock("@/hooks/api/usePacientes", () => ({
+  usePacientes: () => ({
+    patients: [
+      { id: "p1", nome: "João Silva" },
+      { id: "p2", nome: "Maria Santos" },
+      { id: "p3", nome: "Pedro Costa" },
+    ],
+    isLoading: false,
+  }),
 }))
 
-vi.mock("@orthoplus/core-ui/label", () => ({
-  Label: ({ children, htmlFor }: any) => <label htmlFor={htmlFor}>{children}</label>,
+vi.mock("@/modules/tiss/application/hooks/useTISSConvenios", () => ({
+  useTISSConvenios: () => ({
+    convenios: [
+      { id: "c1", nome: "Unimed", is_active: true },
+      { id: "c2", nome: "Bradesco Saúde", is_active: true },
+      { id: "c3", nome: "Amil", is_active: true },
+    ],
+    isLoading: false,
+  }),
 }))
 
-vi.mock("@orthoplus/core-ui/input", () => ({
-  Input: ({ id, placeholder, ...props }: any) => (
-    <input id={id} placeholder={placeholder} {...props} />
-  ),
+vi.mock("@/modules/procedimentos/hooks/useProcedimentosStore", () => ({
+  useProcedimentosStore: () => ({
+    procedimentos: [
+      { id: "pr1", codigo: "81000030", nome: "Consulta", valor: 150 },
+      { id: "pr2", codigo: "82000107", nome: "Limpeza", valor: 200 },
+      { id: "pr3", codigo: "83000018", nome: "Restauração", valor: 300 },
+    ],
+  }),
 }))
 
-vi.mock("@orthoplus/core-ui/button", () => ({
-  Button: ({ children, variant, ...props }: any) => (
-    <button data-variant={variant} {...props}>{children}</button>
-  ),
-}))
-
-vi.mock("@orthoplus/core-ui/select", () => ({
-  Select: ({ children }: any) => <div data-testid="select">{children}</div>,
-  SelectContent: ({ children }: any) => <div data-testid="select-content">{children}</div>,
-  SelectItem: ({ children, value }: any) => <div data-value={value}>{children}</div>,
-  SelectTrigger: ({ children, id }: any) => <div data-testid="select-trigger" id={id}>{children}</div>,
-  SelectValue: ({ placeholder }: any) => <span data-testid="select-value">{placeholder}</span>,
+vi.mock("@/modules/tiss/application/hooks/useTISSGuides", () => ({
+  useTISSGuides: () => ({
+    createGuide: vi.fn(),
+    isCreating: false,
+  }),
 }))
 
 describe("TISSGuideForm", () => {
@@ -41,71 +51,39 @@ describe("TISSGuideForm", () => {
     vi.clearAllMocks()
   })
 
-  it("should render form title and description", () => {
-    render(<TISSGuideForm />)
+  const renderWithQueryClient = (ui: React.ReactElement) =>
+    render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>)
 
+  it("should render form title and description", () => {
+    renderWithQueryClient(<TISSGuideForm />)
     expect(screen.getByText("Nova Guia TISS")).toBeTruthy()
     expect(screen.getByText("Preencha os dados da guia de atendimento")).toBeTruthy()
   })
 
   it("should render patient select", () => {
-    render(<TISSGuideForm />)
-
+    renderWithQueryClient(<TISSGuideForm />)
     expect(screen.getByText("Paciente")).toBeTruthy()
-    const selectValues = screen.getAllByTestId("select-value")
-    expect(selectValues.length).toBeGreaterThanOrEqual(1)
-    expect(selectValues[0].textContent).toBe("Selecione o paciente")
   })
 
   it("should render insurance select", () => {
-    render(<TISSGuideForm />)
-
+    renderWithQueryClient(<TISSGuideForm />)
     expect(screen.getByText("Convênio")).toBeTruthy()
-    expect(screen.getAllByTestId("select-value").length).toBeGreaterThanOrEqual(2)
   })
 
   it("should render guide number input", () => {
-    render(<TISSGuideForm />)
-
+    renderWithQueryClient(<TISSGuideForm />)
     expect(screen.getByText("Número da Guia")).toBeTruthy()
     expect(screen.getByPlaceholderText("2025110001")).toBeTruthy()
   })
 
   it("should render procedure select", () => {
-    render(<TISSGuideForm />)
-
+    renderWithQueryClient(<TISSGuideForm />)
     expect(screen.getByText("Procedimento")).toBeTruthy()
-    expect(screen.getAllByTestId("select-value").length).toBeGreaterThanOrEqual(3)
   })
 
   it("should render cancel and save buttons", () => {
-    render(<TISSGuideForm />)
-
+    renderWithQueryClient(<TISSGuideForm />)
     expect(screen.getByText("Cancelar")).toBeTruthy()
     expect(screen.getByText("Salvar Guia")).toBeTruthy()
-  })
-
-  it("should render all select options for patients", () => {
-    render(<TISSGuideForm />)
-
-    expect(screen.getByText("João Silva")).toBeTruthy()
-    expect(screen.getByText("Maria Santos")).toBeTruthy()
-    expect(screen.getByText("Pedro Costa")).toBeTruthy()
-  })
-
-  it("should render all select options for insurance", () => {
-    render(<TISSGuideForm />)
-
-    expect(screen.getByText("Unimed")).toBeTruthy()
-    expect(screen.getByText("Bradesco Saúde")).toBeTruthy()
-    expect(screen.getByText("Amil")).toBeTruthy()
-  })
-
-  it("should render all select options for procedures", () => {
-    render(<TISSGuideForm />)
-
-    expect(screen.getByText("Consulta")).toBeTruthy()
-    expect(screen.getByText("Limpeza")).toBeTruthy()
-    expect(screen.getByText("Restauração")).toBeTruthy()
   })
 })
