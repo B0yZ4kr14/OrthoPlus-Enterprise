@@ -16,13 +16,19 @@ import { FileWatcher } from "./infrastructure/FileWatcher"
 import { SearchAuditRepository } from "./infrastructure/SearchAuditRepository"
 import { HealthService } from "./domain/services/HealthService"
 import { CostTrackingService } from "./domain/services/CostTrackingService"
+import { ApiKeyValidator } from "./infrastructure/ApiKeyValidator"
+import { ApiKeyHotSwap } from "./infrastructure/ApiKeyHotSwap"
+import { SecureConfigStore } from "./infrastructure/SecureConfigStore"
 
 export interface MemoryHubModule {
   controller: MemoryHubController
   fileWatcher: FileWatcher | null
   indexingService: IndexingService
+  secureConfigStore: SecureConfigStore
+  apiKeyHotSwap: ApiKeyHotSwap
   startFileWatcher(): void
   stopFileWatcher(): void
+  initialize(): Promise<void>
 }
 
 export function createMemoryHubModule(
@@ -60,6 +66,9 @@ export function createMemoryHubModule(
   }
 
   const metrics = getMetricsCollector(prometheusMetrics.getRegistry())
+
+  const secureConfigStore = new SecureConfigStore(db)
+  const apiKeyHotSwap = new ApiKeyHotSwap()
 
   EmbeddingClientFactory.validateConfig()
   const embedder = EmbeddingClientFactory.create()
@@ -109,6 +118,8 @@ export function createMemoryHubModule(
     controller,
     fileWatcher,
     indexingService,
+    secureConfigStore,
+    apiKeyHotSwap,
     startFileWatcher() {
       if (fileWatcher) {
         fileWatcher.start(watchDirs, pollingInterval)
@@ -119,6 +130,27 @@ export function createMemoryHubModule(
       if (fileWatcher) {
         fileWatcher.stop()
         logger.info("[MemoryHub] FileWatcher stopped")
+      }
+    },
+    async initialize() {
+      // Validate API key on startup (MEM-FR-011)
+      const validator = new ApiKeyValidator()
+      const provider = process.env.MEMORY_HUB_EMBEDDING_PROVIDER || "ollama"
+      const apiKey = process.env.MEMORY_HUB_API_KEY
+      const baseUrl = process.env.MEMORY_HUB_API_BASE_URL
+
+      const result = await validator.validate(provider, apiKey, baseUrl)
+      if (!result.valid) {
+        throw new Error(`[MemoryHub] API key validation failed: ${result.error}`)
+      }
+      logger.info("[MemoryHub] API key validated successfully", { provider: result.provider })
+
+      // Start hot-swap listeners (MEM-FR-012)
+      apiKeyHotSwap.start()
+
+      // Store API key encrypted if SecureConfigStore is enabled
+      if (apiKey && secureConfigStore) {
+        secureConfigStore.storeApiKey(provider, apiKey)
       }
     },
   }

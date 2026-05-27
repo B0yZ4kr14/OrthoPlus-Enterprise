@@ -84,3 +84,16 @@ CREATE TABLE IF NOT EXISTS document_versions (
 CREATE INDEX IF NOT EXISTS idx_versions_document ON document_versions(document_id, version);
 
 CREATE INDEX IF NOT EXISTS idx_drift_severity ON drift_reports(severity, resolved_at);
+
+-- Secure configuration storage (T052: AES-256-GCM encrypted keys)
+CREATE TABLE IF NOT EXISTS config (
+  key TEXT PRIMARY KEY,
+  encrypted_value BLOB NOT NULL,
+  iv BLOB NOT NULL,
+  auth_tag BLOB NOT NULL,
+  updated_at INTEGER
+);
+
+-- Embedding request audit trail (T054: request ID tracing)
+ALTER TABLE search_queries ADD COLUMN request_id TEXT;
+CREATE INDEX IF NOT EXISTS idx_search_queries_request_id ON search_queries(request_id);

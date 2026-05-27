@@ -1,3 +1,4 @@
+import crypto from "crypto"
 import { EmbeddingClient, EmbeddingResult } from "./EmbeddingClient"
 import { logger } from "@/infrastructure/logger"
 
@@ -19,10 +20,15 @@ export class OllamaEmbeddingClient extends EmbeddingClient {
       return results as EmbeddingResult[]
     }
 
+    const requestId = this.generateRequestId()
+
     try {
       const response = await fetch(`${this.endpoint}/api/embed`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-ID": requestId,
+        },
         body: JSON.stringify({
           model: this.model,
           input: uncached.map((u) => u.text),
@@ -35,11 +41,25 @@ export class OllamaEmbeddingClient extends EmbeddingClient {
 
       const data = await response.json() as { embeddings: number[][] }
 
+      logger.info("[OllamaEmbeddingClient] Embed success", {
+        requestId,
+        model: this.model,
+        chunks: uncached.length,
+      })
+
       const embeddings = data.embeddings
       return this.storeInCache(uncached, embeddings, results)
     } catch (error) {
-      logger.error("[OllamaEmbeddingClient] Embed error — failing fast to prevent index corruption", { error: (error as Error).message, model: this.model })
+      logger.error("[OllamaEmbeddingClient] Embed error — failing fast to prevent index corruption", {
+        error: (error as Error).message,
+        model: this.model,
+        requestId,
+      })
       throw error instanceof Error ? error : new Error("Ollama embedding failed")
     }
+  }
+
+  private generateRequestId(): string {
+    return crypto.randomUUID()
   }
 }

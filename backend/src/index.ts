@@ -326,7 +326,22 @@ app.use("/api/ai", aiRouter);
 app.use("/api/search-index", searchIndexRouter);
 // Memory Hub Module — initialized with DI factory
 const memoryHubModule = createMemoryHubModule()
-memoryHubModule.startFileWatcher()
+
+// Initialize memory hub asynchronously (API key validation + hot-swap setup)
+;(async () => {
+  try {
+    await memoryHubModule.initialize()
+    memoryHubModule.startFileWatcher()
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    logger.error('[MemoryHub] Initialization failed', { error: message })
+    // Fail fast in production; warn in development
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1)
+    }
+  }
+})()
+
 app.use("/api/memory-hub", createMemoryHubRouter(memoryHubModule.controller))
 
 // Active modules endpoint: returns module keys for a clinic from the database.
