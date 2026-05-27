@@ -17,39 +17,52 @@ export class FidelidadeRepository implements IFidelidadeRepository {
   }
 
   async upsertPacienteFidelidade(clinicId: string, patientId: string, pontos: number) {
-    return prisma.fidelidade_pacientes.upsert({
-      where: { clinic_id_patient_id: { clinic_id: clinicId, patient_id: patientId } },
-      update: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date() },
-      create: { clinic_id: clinicId, patient_id: patientId, pontos_acumulados: pontos, nivel: "BRONZE" },
+    const existing = await prisma.fidelidade_pacientes.findFirst({
+      where: { clinic_id: clinicId, patient_id: patientId },
+    });
+    if (existing) {
+      return prisma.fidelidade_pacientes.update({
+        where: { id: existing.id },
+        data: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date() },
+      });
+    }
+    return prisma.fidelidade_pacientes.create({
+      data: { clinic_id: clinicId, patient_id: patientId, pontos_acumulados: pontos, nivel: "BRONZE" },
     });
   }
 
   async findBadgesByClinic(clinicId: string) {
     return prisma.fidelidade_badges.findMany({
-      where: { clinic_id: clinicId, is_active: true },
-      orderBy: { pontos_necessarios: "asc" },
+      where: { clinic_id: clinicId },
+      orderBy: { name: "asc" },
     });
   }
 
   async findPacienteFidelidade(clinicId: string, patientId: string) {
-    return prisma.fidelidade_pacientes.findUnique({
-      where: { clinic_id_patient_id: { clinic_id: clinicId, patient_id: patientId } },
+    return prisma.fidelidade_pacientes.findFirst({
+      where: { clinic_id: clinicId, patient_id: patientId },
     });
   }
 
   async addPointsTransaction(clinicId: string, patientId: string, pontos: number, pontoData: any): Promise<[any, any, any[]]> {
+    const existing = await prisma.fidelidade_pacientes.findFirst({
+      where: { clinic_id: clinicId, patient_id: patientId },
+    });
     return prisma.$transaction([
       prisma.fidelidade_pontos.create({
         data: { ...pontoData, clinic_id: clinicId },
       }),
-      prisma.fidelidade_pacientes.upsert({
-        where: { clinic_id_patient_id: { clinic_id: clinicId, patient_id: patientId } },
-        update: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date() },
-        create: { clinic_id: clinicId, patient_id: patientId, pontos_acumulados: pontos, nivel: "BRONZE" },
-      }),
+      existing
+        ? prisma.fidelidade_pacientes.update({
+            where: { id: existing.id },
+            data: { pontos_acumulados: { increment: pontos }, ultima_atualizacao: new Date() },
+          })
+        : prisma.fidelidade_pacientes.create({
+            data: { clinic_id: clinicId, patient_id: patientId, pontos_acumulados: pontos, nivel: "BRONZE" },
+          }),
       prisma.fidelidade_badges.findMany({
-        where: { clinic_id: clinicId, is_active: true },
-        orderBy: { pontos_necessarios: "asc" },
+        where: { clinic_id: clinicId },
+        orderBy: { name: "asc" },
       }),
     ]);
   }
@@ -58,7 +71,7 @@ export class FidelidadeRepository implements IFidelidadeRepository {
   async findAllBadgesByClinic(clinicId: string) {
     return prisma.fidelidade_badges.findMany({
       where: { clinic_id: clinicId },
-      orderBy: { nome: "asc" },
+      orderBy: { name: "asc" },
     });
   }
 
@@ -69,10 +82,10 @@ export class FidelidadeRepository implements IFidelidadeRepository {
   // Recompensas
   async findRecompensasByClinic(clinicId: string, ativo?: boolean) {
     const where: Record<string, unknown> = { clinic_id: clinicId };
-    if (ativo !== undefined) where.ativo = ativo;
+    if (ativo !== undefined) where.is_active = ativo;
     return prisma.fidelidade_recompensas.findMany({
       where,
-      orderBy: { pontos_necessarios: "asc" },
+      orderBy: { points_cost: "asc" },
     });
   }
 

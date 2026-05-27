@@ -61,8 +61,8 @@ export class GetUnifiedMetricsUseCase {
       total_appointments > 0 ? (completed_appointments / total_appointments) * 100 : 0
 
     const durations = appointments
-      .filter((a) => a.status === "CONCLUIDA" && a.endTime)
-      .map((a) => new Date(a.endTime!).getTime() - new Date(a.startTime).getTime())
+      .filter((a) => a.status === "CONCLUIDA" && a.end_time)
+      .map((a) => new Date(a.end_time).getTime() - new Date(a.start_time).getTime())
 
     const tempo_medio_consulta = durations.length
       ? durations.reduce((sum, d) => sum + d, 0) / durations.length / 60000
@@ -74,7 +74,7 @@ export class GetUnifiedMetricsUseCase {
 
     const receivables = await this.repo.getPendingReceivables(clinicId)
     const overdue = receivables.filter(
-      (r) => r.dataVencimento && new Date(r.dataVencimento) < new Date(),
+      (r) => r.data_vencimento && new Date(r.data_vencimento) < new Date(),
     ).length
     const total_receivables = receivables.length
     const inadimplencia = total_receivables > 0 ? (overdue / total_receivables) * 100 : 0

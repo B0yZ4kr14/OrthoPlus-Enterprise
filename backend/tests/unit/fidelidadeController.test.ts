@@ -8,8 +8,11 @@ jest.mock("../../src/infrastructure/database/prismaClient", () => ({
       create: jest.fn(),
     },
     fidelidade_pacientes: {
+      findFirst: jest.fn(),
       findUnique: jest.fn(),
       upsert: jest.fn(),
+      update: jest.fn(),
+      create: jest.fn(),
     },
     fidelidade_badges: {
       findMany: jest.fn(),
@@ -106,9 +109,10 @@ describe("FidelidadeController", () => {
       const created = { id: "p3", ...payload, clinic_id: "clinic-1" };
       const badges = [{ id: "b1", name: "Bronze", pontos_necessarios: 5 }];
       (prisma as any).fidelidade_pontos.create.mockResolvedValue(created);
-      (prisma as any).fidelidade_pacientes.upsert.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 25 });
+      (prisma as any).fidelidade_pacientes.findFirst.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 25 });
+      (prisma as any).fidelidade_pacientes.update.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 25 });
       (prisma as any).fidelidade_badges.findMany.mockResolvedValue(badges);
-      (prisma as any).fidelidade_pacientes.findUnique.mockResolvedValue({ pontos_acumulados: 25 });
+      (prisma as any).fidelidade_pacientes.findFirst.mockResolvedValue({ pontos_acumulados: 25 });
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: payload, query: {}, params: {} };
       const res = mockRes();
       await controller.addPoints(req as Request, res);
@@ -128,9 +132,9 @@ describe("FidelidadeController", () => {
         { id: "b2", name: "Silver", pontos_necessarios: 50 },
       ];
       (prisma as any).fidelidade_pontos.create.mockResolvedValue(created);
-      (prisma as any).fidelidade_pacientes.upsert.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 50 });
+      (prisma as any).fidelidade_pacientes.findFirst.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 50 });
+      (prisma as any).fidelidade_pacientes.update.mockResolvedValue({ id: "fp1", patient_id: payload.patient_id, pontos_acumulados: 50 });
       (prisma as any).fidelidade_badges.findMany.mockResolvedValue(badges);
-      (prisma as any).fidelidade_pacientes.findUnique.mockResolvedValue({ pontos_acumulados: 50 });
       const req: Partial<Request> = { user: { clinicId: "clinic-1" } as any, body: payload, query: {}, params: {} };
       const res = mockRes();
       await controller.addPoints(req as Request, res);
@@ -164,7 +168,7 @@ describe("FidelidadeController", () => {
       await controller.listBadges(req as Request, res);
       expect((prisma as any).fidelidade_badges.findMany).toHaveBeenCalledWith({
         where: { clinic_id: "clinic-1" },
-        orderBy: { nome: "asc" },
+        orderBy: { name: "asc" },
       });
       expect(res.json).toHaveBeenCalledWith(fake);
     });
@@ -212,8 +216,8 @@ describe("FidelidadeController", () => {
       const res = mockRes();
       await controller.listRecompensas(req as Request, res);
       expect((prisma as any).fidelidade_recompensas.findMany).toHaveBeenCalledWith({
-        where: { clinic_id: "clinic-1", ativo: true },
-        orderBy: { pontos_necessarios: "asc" },
+        where: { clinic_id: "clinic-1", is_active: true },
+        orderBy: { points_cost: "asc" },
       });
     });
 

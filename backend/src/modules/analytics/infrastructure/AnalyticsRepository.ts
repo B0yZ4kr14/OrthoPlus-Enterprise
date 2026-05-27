@@ -9,7 +9,7 @@ export class AnalyticsRepository {
 
   async countPatients(clinicId: string): Promise<number> {
     try {
-      return await (prisma as any).patients.count({
+      return await prisma.patients.count({
         where: { clinic_id: clinicId },
       })
     } catch {
@@ -24,10 +24,10 @@ export class AnalyticsRepository {
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
 
-      return await (prisma as any).appointments.count({
+      return await prisma.appointments.count({
         where: {
           clinic_id: clinicId,
-          startTime: { gte: today, lt: tomorrow },
+          start_time: { gte: today.toISOString(), lt: tomorrow.toISOString() },
         },
       })
     } catch {
@@ -43,12 +43,12 @@ export class AnalyticsRepository {
         1,
       )
 
-      const sumResult = await (prisma as any).financial_transactions.aggregate({
+      const sumResult = await prisma.financial_transactions.aggregate({
         _sum: { amount: true },
         where: {
           clinic_id: clinicId,
           type: "RECEITA",
-          date: { gte: firstDayOfMonth },
+          transaction_date: { gte: firstDayOfMonth.toISOString().split("T")[0] },
         },
       })
 
@@ -65,14 +65,14 @@ export class AnalyticsRepository {
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
 
-      const totalAppointments = await (prisma as any).appointments.count({
+      const totalAppointments = await prisma.appointments.count({
         where: {
           clinic_id: clinicId,
-          startTime: { gte: today, lt: tomorrow },
+          start_time: { gte: today.toISOString(), lt: tomorrow.toISOString() },
         },
       })
 
-      const dentistsCount = await (prisma as any).profiles.count({
+      const dentistsCount = await prisma.profiles.count({
         where: { clinic_id: clinicId },
       })
 
@@ -88,8 +88,8 @@ export class AnalyticsRepository {
     status: string,
   ): Promise<number> {
     try {
-      return await (prisma as any).pep_tratamentos.count({
-        where: { clinic_id: clinicId, status },
+      return await prisma.pep_tratamentos.count({
+        where: { prontuario: { clinic_id: clinicId }, status },
       })
     } catch {
       return 0
@@ -105,18 +105,18 @@ export class AnalyticsRepository {
     endDate?: Date,
   ): Promise<number> {
     try {
-      const where: any = {
+      const where: Record<string, unknown> = {
         clinic_id: clinicId,
         type,
         status: "PAGO",
-        createdAt: { gte: startDate },
+        created_at: { gte: startDate },
       }
       if (endDate) {
-        where.createdAt.lt = endDate
+        ;(where.created_at as Record<string, Date>).lt = endDate
       }
-      const result = await (prisma as any).financial_transactions.aggregate({
+      const result = await prisma.financial_transactions.aggregate({
         _sum: { amount: true },
-        where,
+        where: where as any,
       })
       return Number(result._sum.amount) || 0
     } catch {
@@ -127,11 +127,11 @@ export class AnalyticsRepository {
   async getAppointmentsForPeriod(
     clinicId: string,
     startDate: Date,
-  ): Promise<Array<{ startTime: Date; endTime: Date | null; status: string }>> {
+  ): Promise<Array<{ start_time: string; end_time: string; status: string }>> {
     try {
-      return await (prisma as any).appointments.findMany({
-        where: { clinic_id: clinicId, startTime: { gte: startDate } },
-        select: { startTime: true, endTime: true, status: true },
+      return await prisma.appointments.findMany({
+        where: { clinic_id: clinicId, start_time: { gte: startDate.toISOString() } },
+        select: { start_time: true, end_time: true, status: true },
         take: 1000,
       })
     } catch {
@@ -141,14 +141,13 @@ export class AnalyticsRepository {
 
   async getUniquePayingPatients(clinicId: string, startDate: Date): Promise<number> {
     try {
-      const result = await (prisma as any).financial_transactions.groupBy({
-        by: ["patientId"],
+      const result = await prisma.contas_receber.groupBy({
+        by: ["patient_id"],
         where: {
           clinic_id: clinicId,
-          type: "RECEITA",
           status: "PAGO",
-          createdAt: { gte: startDate },
-          patientId: { not: null },
+          created_at: { gte: startDate },
+          patient_id: { not: null },
         },
       })
       return result.length
@@ -157,15 +156,14 @@ export class AnalyticsRepository {
     }
   }
 
-  async getPendingReceivables(clinicId: string): Promise<Array<{ dataVencimento: string | null }>> {
+  async getPendingReceivables(clinicId: string): Promise<Array<{ data_vencimento: string }>> {
     try {
-      return await (prisma as any).financial_transactions.findMany({
+      return await prisma.contas_receber.findMany({
         where: {
           clinic_id: clinicId,
-          type: "RECEITA",
           status: "PENDENTE",
         },
-        select: { dataVencimento: true },
+        select: { data_vencimento: true },
         take: 1000,
       })
     } catch {
@@ -175,8 +173,8 @@ export class AnalyticsRepository {
 
   async countLeads(clinicId: string, startDate: Date): Promise<number> {
     try {
-      return await (prisma as any).crm_leads.count({
-        where: { clinic_id: clinicId, createdAt: { gte: startDate } },
+      return await prisma.crm_leads.count({
+        where: { clinic_id: clinicId, created_at: { gte: startDate } },
       })
     } catch {
       return 0
@@ -185,11 +183,11 @@ export class AnalyticsRepository {
 
   async countConvertedLeads(clinicId: string, startDate: Date): Promise<number> {
     try {
-      return await (prisma as any).crm_leads.count({
+      return await prisma.crm_leads.count({
         where: {
           clinic_id: clinicId,
-          statusFunil: "CONVERTIDO",
-          createdAt: { gte: startDate },
+          status: "CONVERTIDO",
+          created_at: { gte: startDate },
         },
       })
     } catch {
@@ -199,13 +197,13 @@ export class AnalyticsRepository {
 
   async getMarketingExpenses(clinicId: string, startDate: Date): Promise<number> {
     try {
-      const result = await (prisma as any).financial_transactions.aggregate({
+      const result = await prisma.financial_transactions.aggregate({
         _sum: { amount: true },
         where: {
           clinic_id: clinicId,
           type: "DESPESA",
-          categoria: "MARKETING",
-          createdAt: { gte: startDate },
+          category: "MARKETING",
+          created_at: { gte: startDate },
         },
       })
       return Number(result._sum.amount) || 0
@@ -217,29 +215,28 @@ export class AnalyticsRepository {
   // ── Marketing ROI ─────────────────────────────────────────────────────
 
   async findPatientsWithMarketing(clinicId: string) {
-    return (prisma as any).patients.findMany({
-      where: { clinic_id: clinicId, marketingCampaign: { not: null } },
+    return prisma.patients.findMany({
+      where: { clinic_id: clinicId, marketing_campaign: { not: null } },
       select: {
         id: true,
-        marketingCampaign: true,
-        marketingSource: true,
-        createdAt: true,
-        status: true,
+        marketing_campaign: true,
+        marketing_source: true,
+        first_appointment_date: true,
+        created_at: true,
       },
       take: 1000,
     });
   }
 
   async findMarketingCampaigns(clinicId: string) {
-    return (prisma as any).marketing_campaigns.findMany({
+    return prisma.marketing_campaigns.findMany({
       where: { clinic_id: clinicId },
       select: {
         id: true,
         name: true,
-        budget: true,
-        targetAudience: true,
+        target_audience: true,
         status: true,
-        createdAt: true,
+        created_at: true,
       },
       take: 100,
     });
@@ -280,11 +277,11 @@ export class AnalyticsRepository {
   }
 
   async countAppointmentsByDentist(dentistId: string, startMonth: Date) {
-    return (prisma as any).appointments.count({
+    return prisma.appointments.count({
       where: {
-        dentistId: dentistId,
+        dentist_id: dentistId,
         status: "CONCLUIDA",
-        startTime: { gte: startMonth },
+        start_time: { gte: startMonth.toISOString() },
       },
     });
   }

@@ -57,51 +57,44 @@ export class AnalyticsControllerService {
 
     const totalPatients = patients.length;
     const convertedPatients = patients.filter(
-      (p: { status: string }) => p.status === "TRATAMENTO" || p.status === "CONCLUIDO",
+      (p) => (p as any).first_appointment_date,
     ).length;
 
-    const totalBudget = campaigns.reduce(
-      (sum: number, c: { budget?: unknown }) => sum + (c.budget ? Number(c.budget) : 0),
-      0,
-    );
-    const cac = totalPatients > 0 ? totalBudget / totalPatients : 0;
+    const totalBudget = 0;
+    const cac = 0;
     const conversionRate =
       totalPatients > 0 ? (convertedPatients / totalPatients) * 100 : 0;
 
-    const campaignROI = campaigns.map((campaign: { id: string; name: string; budget?: unknown; status: string; createdAt: Date }) => {
+    const campaignROI = campaigns.map((campaign) => {
       const campaignPatients = patients.filter(
-        (p: { marketingCampaign?: string; status: string }) => p.marketingCampaign === campaign.name,
+        (p) => (p as any).marketing_campaign === campaign.name,
       );
       const converted = campaignPatients.filter(
-        (p: { status: string }) => p.status === "TRATAMENTO" || p.status === "CONCLUIDO",
+        (p) => (p as any).first_appointment_date,
       ).length;
 
       return {
         campaign: campaign.name,
-        budget: campaign.budget ? Number(campaign.budget) : 0,
+        budget: 0,
         patients: campaignPatients.length,
         converted,
         conversionRate:
           campaignPatients.length > 0
             ? (converted / campaignPatients.length) * 100
             : 0,
-        cac:
-          campaignPatients.length > 0
-            ? (campaign.budget ? Number(campaign.budget) : 0) /
-              campaignPatients.length
-            : 0,
+        cac: 0,
       };
     });
 
     const sourcePerformanceAcc: Record<string, { total: number; converted: number }> = {};
 
-    patients.forEach((p: { marketingSource?: string; status: string }) => {
-      const source = p.marketingSource || "Nao especificado";
+    patients.forEach((p) => {
+      const source = (p as any).marketing_source || "Nao especificado";
       if (!sourcePerformanceAcc[source]) {
         sourcePerformanceAcc[source] = { total: 0, converted: 0 };
       }
       sourcePerformanceAcc[source].total++;
-      if (p.status === "TRATAMENTO" || p.status === "CONCLUIDO") {
+      if ((p as any).first_appointment_date) {
         sourcePerformanceAcc[source].converted++;
       }
     });
