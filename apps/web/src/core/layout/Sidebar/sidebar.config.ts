@@ -45,6 +45,9 @@ import {
   BookOpen,
   ClipboardCheck,
   Activity,
+  Bell,
+  FolderOpen,
+  BrainCircuit,
   type LucideIcon,
 } from "lucide-react";
 
@@ -184,6 +187,18 @@ export const menuGroups: MenuGroup[] = [
         moduleKey: "FISCAL",
       },
       {
+        title: "NF-e",
+        url: "/faturamento/nfes",
+        icon: FileText,
+        moduleKey: "FATURAMENTO",
+      },
+      {
+        title: "Relatório Fiscal",
+        url: "/faturamento/relatorio",
+        icon: FileSpreadsheet,
+        moduleKey: "FATURAMENTO",
+      },
+      {
         title: "Pagamentos Crypto",
         url: "/crypto-payment",
         icon: Bitcoin,
@@ -212,6 +227,12 @@ export const menuGroups: MenuGroup[] = [
         title: "Campanhas de Marketing",
         url: "/marketing-auto",
         icon: Megaphone,
+        moduleKey: "MARKETING_AUTO",
+      },
+      {
+        title: "Recall",
+        url: "/recall",
+        icon: Bell,
         moduleKey: "MARKETING_AUTO",
       },
       {
@@ -264,6 +285,12 @@ export const menuGroups: MenuGroup[] = [
         url: "/ia-radiografia",
         icon: Brain,
         moduleKey: "IA",
+      },
+      {
+        title: "Arquivos",
+        url: "/files",
+        icon: FolderOpen,
+        moduleKey: "FILES",
       },
       {
         title: "Teleodontologia",
