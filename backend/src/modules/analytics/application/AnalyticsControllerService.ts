@@ -39,9 +39,9 @@ export interface SidebarBadgesResult {
 }
 
 export class AnalyticsControllerService {
-  private getDashboardOverviewUseCase = new GetDashboardOverviewUseCase();
-  private getUnifiedMetricsUseCase = new GetUnifiedMetricsUseCase();
   private repo = new AnalyticsRepository();
+  private getDashboardOverviewUseCase = new GetDashboardOverviewUseCase(this.repo);
+  private getUnifiedMetricsUseCase = new GetUnifiedMetricsUseCase();
 
   async getDashboardOverview(clinicId: string) {
     return this.getDashboardOverviewUseCase.execute(clinicId);

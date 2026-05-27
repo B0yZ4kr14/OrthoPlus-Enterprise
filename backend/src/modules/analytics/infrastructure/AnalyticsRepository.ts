@@ -1,10 +1,11 @@
 import { prisma } from "@/infrastructure/database/prismaClient"
+import { IAnalyticsRepository } from "../domain/repositories/IAnalyticsRepository"
 
 /**
  * AnalyticsRepository — encapsulates all database access for analytics queries.
  */
 
-export class AnalyticsRepository {
+export class AnalyticsRepository implements IAnalyticsRepository {
   // ── Dashboard Overview ────────────────────────────────────────────────
 
   async countPatients(clinicId: string): Promise<number> {

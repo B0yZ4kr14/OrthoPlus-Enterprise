@@ -1,6 +1,6 @@
-import { AnalyticsRepository } from "@/modules/analytics/infrastructure/AnalyticsRepository"
 import { MetricsEmitter } from "@/infrastructure/metrics"
 import type { DashboardStats } from "@orthoplus/shared-types"
+import type { IAnalyticsRepository } from "../domain/repositories/IAnalyticsRepository"
 
 export interface DashboardOverviewResult {
   stats: DashboardStats
@@ -13,7 +13,11 @@ export interface DashboardOverviewResult {
  * GetDashboardOverviewUseCase — computes the dashboard overview for a clinic.
  */
 export class GetDashboardOverviewUseCase {
-  private repo = new AnalyticsRepository()
+  private repo: IAnalyticsRepository
+
+  constructor(repo: IAnalyticsRepository) {
+    this.repo = repo
+  }
 
   async execute(clinicId: string): Promise<DashboardOverviewResult> {
     MetricsEmitter.incrementCounter("analytics_dashboard_queried", "Dashboard overview queried", { clinicId })

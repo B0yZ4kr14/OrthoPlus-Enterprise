@@ -7,8 +7,17 @@
 // Generic API Response Types
 // ============================================================================
 
+// Legacy envelope — used by most endpoints (gradually migrating to StandardApiResponse)
 export interface ApiResponse<T> {
   data: T;
+  meta?: ResponseMeta;
+}
+
+// Standardized envelope — aligns with T5.5 (Architecture Refactor)
+export interface StandardApiResponse<T> {
+  success: boolean;
+  data: T | null;
+  error: ProblemDetail | null;
   meta?: ResponseMeta;
 }
 

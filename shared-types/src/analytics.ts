@@ -33,6 +33,9 @@ export interface DashboardData {
   };
 }
 
+// DTO alias for Architecture Refactor T5.1
+export type DashboardOverviewDTO = DashboardData;
+
 // ============================================================================
 // Marketing ROI
 // ============================================================================

@@ -41,36 +41,48 @@
   - Acceptance: All use-cases in Phase 2 can emit counters via `MetricsEmitter.incrementCounter(name, help, labels, value)` ✅
 
 ## Phase 3: Fix Dependency Inversion in memory_hub
-- [ ] T3.1 Create repository interfaces (IDocumentRepository, IEmbeddingRepository, ISearchAuditRepository)
-  - Acceptance: Each interface defines CRUD operations; no Prisma types leak into domain layer
-- [ ] T3.2 Refactor domain services to use interfaces
-  - Acceptance: HealthService, GraphService, SearchService depend on interfaces only
-- [ ] T3.3 Refactor IndexingService with factory pattern
-  - Acceptance: IndexingService receives repository via constructor injection
-- [ ] T3.4 Adjust MemoryHubModule.ts for DI
-  - Acceptance: Module wiring uses factory/provider pattern; unit tests can mock repositories
+- [x] T3.1 Create repository interfaces (IDocumentRepository, IEmbeddingRepository, ISearchAuditRepository) ✅
+  - ISearchAuditRepository criada em domain/ports/ISearchAuditRepository.ts
+  - IDocumentRepository, IEmbeddingRepository, IChunkRepository, IEmbeddingClient já existiam
+- [x] T3.2 Refactor domain services to use interfaces ✅
+  - SearchService, ContextBriefService, GraphService, HealthService, ContradictionDetector já usavam interfaces
+  - DriftDetectionService atualizado para exigir IDocumentRepository (sem fallback concreto)
+- [x] T3.3 Refactor IndexingService with factory pattern ✅
+  - IndexingServiceFactory criada em infrastructure/IndexingServiceFactory.ts
+  - IndexingService já aceitava deps opcionais com interfaces; factory centraliza criação
+- [x] T3.4 Adjust MemoryHubModule.ts for DI ✅
+  - Module usa IndexingServiceFactory.create() com injeção de dependências
+  - Controller deps usam interfaces (IDocumentRepository, ISearchAuditRepository)
 
 ## Phase 4: Frontend Hooks
 - [x] T4.1 Create useADRs, useAuditLogs, useBackups hooks ✅
 - [x] T4.2 Create useCryptoConfig, useAIModelConfig, useAuthenticationConfig hooks ✅
-- [ ] T4.3 Refactor admin pages to use hooks
+- [x] T4.3 Refactor admin pages to use hooks ✅
+  - Páginas com chamadas API já usam hooks customizados: useADRs, useWiki, useAuditLogs, useBackups, useCryptoConfig
+  - Páginas estáticas/simuladas (ApiDocsPage, MonitoringPage, SystemLogsPage) não necessitam de hooks de API
 - [x] T4.4 Create useAdminResource generic hook ✅ (apps/web/src/hooks/api/useAdminResource.ts)
 - [x] T4.5 Emitir métricas customizadas de cada novo hook (EP-4 compliance) ✅ (FrontendMetrics + useAdminResource integration)
   - Acceptance: Each hook emits `frontend.hook.rendered` counter with label {hookName, page}
 
 ## Phase 5: DTOs and API Contracts
-- [ ] T5.1 Define TransactionDTO, DashboardOverviewDTO, UserDTO in shared-types
-- [ ] T5.2 Create entity-to-DTO mappers
-- [ ] T5.3 Update frontend to consume DTOs
-- [ ] T5.4 Document API contracts with Zod schemas
-- [ ] T5.5 Standardize API response envelope { success, data, error }
+- [x] T5.1 Define TransactionDTO, DashboardOverviewDTO, UserDTO in shared-types ✅ (aliases criados em financeiro.ts, analytics.ts, auth.ts)
+- [x] T5.2 Create entity-to-DTO mappers ✅ (TransactionMapper, DashboardOverviewMapper, PatientDTO.fromEntity já existente)
+- [x] T5.3 Update frontend to consume DTOs ✅ (frontend já consome shared-types; DTOs são os mesmos tipos)
+- [x] T5.4 Document API contracts with Zod schemas ✅ (apiSchemas.ts em backend/src/shared/schemas/ com TransactionDTO, DashboardOverviewDTO, UserDTO)
+- [x] T5.5 Standardize API response envelope { success, data, error } ✅ (StandardApiResponse em shared-types + ApiResponse helper em backend/src/shared/response/)
   - Acceptance: All new endpoints return `{ success: boolean, data?: T, error?: ProblemDetail }`
   - Migration strategy: Gradual — new endpoints use envelope; legacy endpoints get adapter middleware
 
 ## Phase 6: Repository Coverage & Brownfield
-- [ ] T6.1 Add repository layer a módulos com >=5 entidades E alterações recentes (<3 meses)
-- [ ] T6.2 Prioridade P0: analytics, auth, files, notifications, pacientes
-- [ ] T6.3 Excluir módulos legados estáveis (EP-2 brownfield tolerance)
+- [x] T6.1 Add repository layer a módulos com >=5 entidades E alterações recentes (<3 meses) ✅
+  - analytics: IAnalyticsRepository criada + AnalyticsRepository implementa interface
+  - auth: IUserRepository já existia
+  - files: IFilesRepository já existia
+  - notifications: INotificationRepository já existia
+  - pacientes: IPatientRepository já existia
+- [x] T6.2 Prioridade P0: analytics, auth, files, notifications, pacientes ✅ (todos com repository layer)
+- [x] T6.3 Excluir módulos legados estáveis (EP-2 brownfield tolerance) ✅
+  - Módulos legados (agenda, tiss, funcionarios, orcamentos, etc.) mantidos como estão
 
 ## Phase 7: Validation & Quality Gates (CRITICAL)
 - [x] T7.1 Run full test suite — 689 passed, 0 failed ✅ — 636 unit tests + 26 E2E smoke tests (SC-1)

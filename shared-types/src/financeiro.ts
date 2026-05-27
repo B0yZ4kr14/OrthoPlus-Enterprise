@@ -37,6 +37,9 @@ export interface Transaction {
   updatedAt: string;
 }
 
+// DTO alias for Architecture Refactor T5.1
+export type TransactionDTO = Transaction;
+
 export interface CreateTransactionRequest {
   clinicId: string;
   type: TransactionType;

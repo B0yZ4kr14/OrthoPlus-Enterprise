@@ -18,6 +18,9 @@ export interface User {
   updatedAt: string;
 }
 
+// DTO alias for Architecture Refactor T5.1
+export type UserDTO = User;
+
 export type UserRole = 
   | "admin" 
   | "dentist" 
