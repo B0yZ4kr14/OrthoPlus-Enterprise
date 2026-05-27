@@ -65,14 +65,21 @@ Implementar features MISSING de forma contínua em 12h, com deploy automático n
 **Deploy**: VPS deploy ao final
 
 ## Checklist Global
-- [ ] Fase 1 completa + deploy
-- [ ] Fase 2 completa + deploy
-- [ ] Fase 3 completa + deploy
-- [ ] Fase 4 completa + deploy
-- [ ] Backend build 0 erros
-- [ ] Frontend type-check 0 erros (exceto pré-existentes)
-- [ ] Todos os commits em `main`
-- [ ] tasks.md atualizados
+- [x] Fase 1 completa + deploy
+- [x] Fase 2 completa + deploy
+- [x] Fase 3 completa + deploy
+- [x] Fase 4 completa + deploy
+- [x] Backend build 0 erros
+- [x] Frontend type-check 0 erros (exceto pré-existentes)
+- [x] Todos os commits em `main`
+- [x] tasks.md atualizados
+
+## Resumo de Commits
+| Commit | Fase | Descrição |
+|--------|------|-----------|
+| `7728fc749` | Fase 1 | PDV: pdv_venda_itens, stock rollback, frontend alerts |
+| `f24fca0a9` | Fase 2+3 | Faturamento: config endpoint fix + RelatorioFiscalPage |
+| `aa82bf3d6` | Fase 4 | TISS: paciente_convenios CRUD + vinculacao no PatientDetail |
 
 ## Decisões Arquiteturais (pré-tomadas)
 1. **Multi-tenancy**: Todos os modelos têm `clinic_id` obrigatório
