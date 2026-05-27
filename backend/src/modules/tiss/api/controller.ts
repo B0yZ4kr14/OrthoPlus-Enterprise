@@ -261,7 +261,7 @@ export class TISSController {
       guides: {
         total: totalAmount._count.id ?? 0,
         total_amount: totalAmount._sum.amount ?? 0,
-        total_glosa: totalGlosa._sum.glosa_amount ?? 0,
+        total_glosa: totalGlosa._sum?.glosa_amount ?? 0,
         by_status: guidesByStatus,
       },
       batches: {

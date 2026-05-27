@@ -394,12 +394,14 @@ describe('TISSController.getStatistics', () => {
     guides.groupBy.mockResolvedValueOnce([{ status: 'SUBMITTED', _count: { id: 2 }, _sum: { amount: 400 } }]);
     batches.groupBy.mockResolvedValueOnce([{ status: 'SUBMITTED', _count: { id: 1 }, _sum: { total_amount: 400 } }]);
     guides.aggregate.mockResolvedValueOnce({ _count: { id: 2 }, _sum: { amount: 400 } });
+    guides.aggregate.mockResolvedValueOnce({ _count: { id: 0 }, _sum: { glosa_amount: 0 } });
     const req = mockReq();
     const res = mockRes();
     await controller.getStatistics(req as Request, res);
     const payload = (res.json as jest.Mock).mock.calls[0][0];
     expect(payload.guides.total).toBe(2);
     expect(payload.guides.total_amount).toBe(400);
+    expect(payload.guides.total_glosa).toBe(0);
     expect(Array.isArray(payload.guides.by_status)).toBe(true);
     expect(Array.isArray(payload.batches.by_status)).toBe(true);
   });
