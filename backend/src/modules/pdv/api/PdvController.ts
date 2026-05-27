@@ -80,6 +80,20 @@ export class PdvController {
       } as any,
     });
 
+    // Create sale items in dedicated table
+    await prisma.pdv_venda_itens.createMany({
+      data: req.body.itens.map((item: any) => ({
+        venda_id: venda.id,
+        produto_id: item.produtoId,
+        descricao: item.descricao,
+        quantidade: item.quantidade,
+        valor_unitario: item.valorUnitario,
+        valor_desconto: item.valorDesconto || 0,
+        valor_total: (item.quantidade * item.valorUnitario) - (item.valorDesconto || 0),
+        clinic_id: clinicId,
+      })),
+    });
+
     // Deduct stock
     for (const item of req.body.itens) {
       const produto = await prisma.pdv_produtos.findFirst({
@@ -145,6 +159,42 @@ export class PdvController {
     if (venda.status === "CANCELADA") {
       throw Errors.validation("Venda already cancelled");
     }
+
+    // Rollback stock for items in dedicated table
+    const itens = await prisma.pdv_venda_itens.findMany({
+      where: { venda_id: id, clinic_id: clinicId },
+    });
+    for (const item of itens) {
+      const produto = await prisma.pdv_produtos.findFirst({
+        where: { id: item.produto_id, clinic_id: clinicId },
+      });
+      if (produto && produto.controla_estoque && produto.estoque_atual !== null) {
+        await prisma.pdv_produtos.update({
+          where: { id: item.produto_id },
+          data: { estoque_atual: produto.estoque_atual + item.quantidade },
+        });
+      }
+    }
+
+    // Fallback: rollback stock from metadata for legacy sales
+    if (itens.length === 0 && venda.metadata && typeof venda.metadata === 'object') {
+      const metadata = venda.metadata as Record<string, unknown>;
+      const metadataItens = metadata.itens as Array<{ produtoId: string; quantidade: number }> | undefined;
+      if (metadataItens) {
+        for (const item of metadataItens) {
+          const produto = await prisma.pdv_produtos.findFirst({
+            where: { id: item.produtoId, clinic_id: clinicId },
+          });
+          if (produto && produto.controla_estoque && produto.estoque_atual !== null) {
+            await prisma.pdv_produtos.update({
+              where: { id: item.produtoId },
+              data: { estoque_atual: produto.estoque_atual + item.quantidade },
+            });
+          }
+        }
+      }
+    }
+
     const updated = await this.repo.updateVenda(id, { status: "CANCELADA" });
     logger.info("Venda cancelled", { clinicId, vendaId: id });
     res.json(updated);

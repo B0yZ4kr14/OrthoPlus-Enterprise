@@ -2036,6 +2036,26 @@ model pdv_produtos {
   @@schema("inventario")
 }
 
+model pdv_venda_itens {
+  id               String   @id @default(uuid())
+  venda_id         String
+  produto_id       String
+  descricao        String
+  quantidade       Int
+  valor_unitario   Int
+  valor_desconto   Int      @default(0)
+  valor_total      Int
+  clinic_id        String
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  venda pdv_vendas @relation(fields: [venda_id], references: [id])
+
+  @@schema("pdv")
+  @@index([venda_id])
+  @@index([produto_id])
+}
+
 model pdv_vendas {
   caixa_movimento_id String?
   clinic_id          String
@@ -2048,6 +2068,7 @@ model pdv_vendas {
   status             String
   updated_at         DateTime @updatedAt
   valor_total        Int
+  itens              pdv_venda_itens[]
 
   @@schema("pdv")
 }

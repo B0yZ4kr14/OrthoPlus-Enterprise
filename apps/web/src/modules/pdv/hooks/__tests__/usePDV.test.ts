@@ -239,7 +239,7 @@ describe("usePDV", () => {
 
   it("should create venda and reload vendas", async () => {
     mockGet.mockResolvedValue(mockCaixaAberto)
-    mockPost.mockResolvedValue(mockVenda)
+    mockPost.mockResolvedValue({ venda: mockVenda })
 
     const { result } = renderHook(() => usePDV("clinic-1"))
     await waitFor(() => expect(result.current.caixaAberto).toEqual(mockCaixaAberto))
