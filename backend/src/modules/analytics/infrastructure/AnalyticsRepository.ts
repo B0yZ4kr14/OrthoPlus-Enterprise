@@ -112,7 +112,7 @@ export class AnalyticsRepository {
         created_at: { gte: startDate },
       }
       if (endDate) {
-        ;(where.created_at as Record<string, Date>).lt = endDate
+        (where.created_at as Record<string, Date>).lt = endDate
       }
       const result = await prisma.financial_transactions.aggregate({
         _sum: { amount: true },
