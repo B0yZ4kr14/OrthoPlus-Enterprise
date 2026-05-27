@@ -36,6 +36,11 @@ router.post("/lotes/submit", asyncHandler(controller.submitBatch.bind(controller
 // Statistics
 router.get("/statistics", asyncHandler(controller.getStatistics.bind(controller)));
 
+// Glosas
+router.get("/glosas", asyncHandler(controller.listGlosas.bind(controller)));
+router.patch("/glosas/:id", asyncHandler(controller.updateGlosa.bind(controller)));
+router.post("/glosas/:id/reprocessar", asyncHandler(controller.reprocessarGlosa.bind(controller)));
+
 // Convênios
 router.get("/convenios", asyncHandler(controller.listConvenios.bind(controller)));
 router.post("/convenios", asyncHandler(controller.createConvenio.bind(controller)));

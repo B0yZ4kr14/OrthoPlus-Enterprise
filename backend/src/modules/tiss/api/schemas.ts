@@ -12,7 +12,17 @@ export const createGuiaSchema = z.object({
   batch_id: z.string().uuid().optional(),
   submission_date: z.string().optional(),
 });
-export const updateGuiaSchema = createGuiaSchema.partial();
+export const updateGuiaSchema = createGuiaSchema.partial().extend({
+  glosa_amount: z.number().int().nonnegative().optional(),
+  glosa_date: z.string().optional(),
+  glosa_reason: z.string().max(500).optional(),
+});
+
+export const registerGlosaSchema = z.object({
+  glosa_amount: z.number().int().nonnegative(),
+  glosa_date: z.string(),
+  glosa_reason: z.string().min(1).max(500),
+});
 
 export const createLoteSchema = z.object({
   batch_number: z.string().max(50),

@@ -7,6 +7,7 @@ import {
   createLoteSchema,
   updateLoteSchema,
   submitBatchSchema,
+  registerGlosaSchema,
 } from "./schemas";
 
 export class TISSController {
@@ -231,12 +232,12 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
 
-    const [guidesByStatus, batchesByStatus, totalAmount] = await Promise.all([
+    const [guidesByStatus, batchesByStatus, totalAmount, totalGlosa] = await Promise.all([
       prisma.tiss_guides.groupBy({
         by: ["status"],
         where: { clinic_id: clinicId },
         _count: { id: true },
-        _sum: { amount: true },
+        _sum: { amount: true, glosa_amount: true },
       }),
       prisma.tiss_batches.groupBy({
         by: ["status"],
@@ -249,18 +250,77 @@ export class TISSController {
         _count: { id: true },
         _sum: { amount: true },
       }),
+      prisma.tiss_guides.aggregate({
+        where: { clinic_id: clinicId, glosa_amount: { not: null } },
+        _count: { id: true },
+        _sum: { glosa_amount: true },
+      }),
     ]);
 
     return res.json({
       guides: {
         total: totalAmount._count.id ?? 0,
         total_amount: totalAmount._sum.amount ?? 0,
+        total_glosa: totalGlosa._sum.glosa_amount ?? 0,
         by_status: guidesByStatus,
       },
       batches: {
         by_status: batchesByStatus,
       },
     });
+  }
+
+  // --- Glosas ---
+  async listGlosas(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const data = await prisma.tiss_guides.findMany({
+      where: { clinic_id: clinicId, status: "glosada" },
+      orderBy: { glosa_date: "desc" },
+    });
+    return res.json(data);
+  }
+
+  async updateGlosa(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const { glosa_reason, glosa_amount } = req.body;
+    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
+    if (!existing) {
+      return res.status(404).json({ error: "Guia not found" });
+    }
+    const data = await prisma.tiss_guides.update({
+      where: { id },
+      data: {
+        status: "glosada",
+        glosa_reason,
+        glosa_amount,
+        glosa_date: new Date(),
+      },
+    });
+    return res.json(data);
+  }
+
+  async reprocessarGlosa(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId, status: "glosada" } });
+    if (!existing) {
+      return res.status(404).json({ error: "Glosa not found or not in glosada status" });
+    }
+    const data = await prisma.tiss_guides.update({
+      where: { id },
+      data: { status: "pendente", glosa_reason: null, glosa_amount: null, glosa_date: null },
+    });
+    return res.json(data);
   }
 
   // --- Convênios ---
@@ -320,5 +380,76 @@ export class TISSController {
     }
     await prisma.tiss_convenios.delete({ where: { id } });
     return res.status(204).send();
+  }
+
+  // --- Glosas ---
+  async listGlosas(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const data = await prisma.tiss_guides.findMany({
+      where: {
+        clinic_id: clinicId,
+        glosa_amount: { not: null },
+      },
+      orderBy: { glosa_date: "desc" },
+      take: 1000,
+    });
+    return res.json(data);
+  }
+
+  async updateGlosa(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const existing = await prisma.tiss_guides.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
+    if (!existing) {
+      return res.status(404).json({ error: "Guia not found" });
+    }
+    const parsed = registerGlosaSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+    }
+    const data = await prisma.tiss_guides.update({
+      where: { id },
+      data: {
+        glosa_amount: parsed.data.glosa_amount,
+        glosa_date: parsed.data.glosa_date,
+        glosa_reason: parsed.data.glosa_reason,
+        status: "GLOSADA",
+      },
+    });
+    logger.info("TISS glosa registered", { clinicId, guideId: id, glosaAmount: parsed.data.glosa_amount });
+    return res.json(data);
+  }
+
+  async reprocessarGlosa(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const existing = await prisma.tiss_guides.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
+    if (!existing) {
+      return res.status(404).json({ error: "Guia not found" });
+    }
+    const data = await prisma.tiss_guides.update({
+      where: { id },
+      data: {
+        status: "RASCUNHO",
+        glosa_amount: null,
+        glosa_date: null,
+        glosa_reason: null,
+      },
+    });
+    logger.info("TISS glosa reprocessed", { clinicId, guideId: id });
+    return res.json({ message: "Guia reprocessada", guide: data });
   }
 }
