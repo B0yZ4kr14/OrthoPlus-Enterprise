@@ -125,6 +125,9 @@ describe("PatientSearchPage", () => {
 
     render(<PatientSearchPage />, { wrapper: createWrapper() })
 
+    const searchInput = screen.getByPlaceholderText(/Buscar por nome/i)
+    fireEvent.change(searchInput, { target: { value: "xyz" } })
+
     expect(
       screen.getByText(/Nenhum paciente encontrado/),
     ).toBeTruthy()

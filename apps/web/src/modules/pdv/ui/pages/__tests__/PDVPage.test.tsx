@@ -1,6 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 import { render, screen, act } from "@testing-library/react"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import React from "react"
 import PDVPage from "../PDVPage"
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  })
+  return ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  )
+}
 
 const mockUsePDV = vi.fn()
 
@@ -119,7 +130,7 @@ describe("PDVPage", () => {
   it("should render loading state", () => {
     mockUsePDV.mockReturnValue({ ...defaultUsePDVReturn, loading: true })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     expect(screen.getByText("Carregando...")).toBeTruthy()
     expect(screen.getByText("Ponto de Venda (PDV)")).toBeTruthy()
@@ -128,7 +139,7 @@ describe("PDVPage", () => {
   it("should render caixa fechado state", () => {
     mockUsePDV.mockReturnValue(defaultUsePDVReturn)
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     expect(screen.getByText("Caixa Fechado")).toBeTruthy()
     expect(screen.getByText("Abra o caixa para iniciar as vendas.")).toBeTruthy()
@@ -138,7 +149,7 @@ describe("PDVPage", () => {
   it("should open abertura dialog when clicking Abrir Caixa", () => {
     mockUsePDV.mockReturnValue(defaultUsePDVReturn)
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     const abrirButton = screen.getByText("Abrir Caixa")
     act(() => {
@@ -158,7 +169,7 @@ describe("PDVPage", () => {
       },
     })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     expect(screen.getByText("Caixa Aberto")).toBeTruthy()
     // The valor_inicial is formatted as R$ 500,00
@@ -176,7 +187,7 @@ describe("PDVPage", () => {
       },
     })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     expect(screen.getByText("Fechar Caixa")).toBeTruthy()
   })
@@ -191,7 +202,7 @@ describe("PDVPage", () => {
       },
     })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     const fecharButton = screen.getByText("Fechar Caixa")
     act(() => {
@@ -211,7 +222,7 @@ describe("PDVPage", () => {
       },
     })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     expect(screen.getByText("Adicionar Item")).toBeTruthy()
     expect(screen.getByLabelText("Descrição")).toBeTruthy()
@@ -222,7 +233,7 @@ describe("PDVPage", () => {
   it("should disable inputs when caixa is closed", () => {
     mockUsePDV.mockReturnValue(defaultUsePDVReturn)
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     const descInput = screen.getByLabelText("Descrição") as HTMLInputElement
     expect(descInput.disabled).toBe(true)
@@ -238,7 +249,7 @@ describe("PDVPage", () => {
       },
     })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     expect(screen.getByText("Dinheiro")).toBeTruthy()
     expect(screen.getByText("Cartão Crédito")).toBeTruthy()
@@ -258,7 +269,7 @@ describe("PDVPage", () => {
       },
     })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     expect(screen.getByText("Pagamento")).toBeTruthy()
     expect(screen.getByText("Finalizar Venda")).toBeTruthy()
@@ -274,7 +285,7 @@ describe("PDVPage", () => {
       },
     })
 
-    render(<PDVPage />)
+    render(<PDVPage />, { wrapper: createWrapper() })
 
     const finalizarButton = screen.getByText("Finalizar Venda") as HTMLButtonElement
     expect(finalizarButton.disabled).toBe(true)
