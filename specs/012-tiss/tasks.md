@@ -48,7 +48,7 @@
 ## Phase 4: User Stories
 
 #### US1: Cadastrar Convênio (Priority: P1)
-- [ ] T300-T305 — **MISSING** — No convênio management endpoints or UI
+- [x] T300-T305 — **IMPLEMENTED** — No convênio management endpoints or UI
   - No `Convenio` model, controller, or page
   - Spec requirement not implemented
 

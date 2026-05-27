@@ -2177,6 +2177,7 @@ model procedimento_templates {
   updated_at             DateTime @updatedAt
   valor_sugerido         Int
   precos                 procedimento_precos[]
+  dentistas              dentista_procedimentos[]
   @@schema("clinico")
 }
 
