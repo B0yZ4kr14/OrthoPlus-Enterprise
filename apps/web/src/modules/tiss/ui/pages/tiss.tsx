@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
-import { FileText, Send, History, CheckCircle } from "lucide-react";
+import { FileText, Send, History, CheckCircle, Building2 } from "lucide-react";
 import { TISSBatchList } from "@/modules/tiss/presentation/components/TISSBatchList";
 import { TISSGuideForm } from "@/modules/tiss/presentation/components/TISSGuideForm";
 import { TISSDashboard } from "@/modules/tiss/presentation/components/TISSDashboard";
 import { useTISSGuides } from "@/modules/tiss/application/hooks/useTISSGuides";
+import { TISSConveniosManager } from "@/modules/tiss/presentation/components/TISSConveniosManager";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { FileSpreadsheet } from "lucide-react";
 
@@ -28,7 +29,7 @@ export default function TISSPage() {
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="dashboard">
             <CheckCircle className="mr-2 h-4 w-4" />
             Dashboard
@@ -40,6 +41,10 @@ export default function TISSPage() {
           <TabsTrigger value="batches">
             <Send className="mr-2 h-4 w-4" />
             Lotes
+          </TabsTrigger>
+          <TabsTrigger value="convenios">
+            <Building2 className="mr-2 h-4 w-4" />
+            Convênios
           </TabsTrigger>
         </TabsList>
 
@@ -53,6 +58,9 @@ export default function TISSPage() {
 
         <TabsContent value="batches" className="space-y-4">
           <TISSBatchList />
+        </TabsContent>
+        <TabsContent value="convenios" className="space-y-4">
+          <TISSConveniosManager />
         </TabsContent>
       </Tabs>
     </div>

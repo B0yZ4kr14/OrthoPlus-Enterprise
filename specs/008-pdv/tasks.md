@@ -45,7 +45,7 @@
 #### US2: Fechamento de Caixa
 - [x] T310-T315 — All implemented (AberturaCaixaDialog, FechamentoCaixaDialog, usePDV.ts)
 #### US3: Controle de Estoque em Venda
-- [ ] T320-T325 — **MISSING** — no automatic inventory deduction on sale; no stock alert UI
+- [x] T320-T325 — IMPLEMENTED — automatic inventory deduction on sale + stock alert UI (EstoqueAlerta component in PDVPage.tsx)
 #### US4: Relatório de Vendas
 - [x] T330-T335 — All implemented (DashboardExecutivoPDV.tsx with KPIs, charts, period filters)
 

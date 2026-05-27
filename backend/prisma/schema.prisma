@@ -2195,6 +2195,22 @@ model tabela_precos {
   @@unique([clinic_id, is_default], name: "unique_default_per_clinic")
 }
 
+model tiss_convenios {
+  id                String   @id @default(uuid())
+  clinic_id         String
+  nome              String
+  codigo_operadora  String?
+  cnpj              String?
+  registro_ans      String?
+  tipo_plano        String?
+  is_active         Boolean  @default(true)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@schema("clinico")
+  @@index([clinic_id])
+}
+
 model procedimento_precos {
   id                      String   @id @default(uuid())
   procedimento_template_id String

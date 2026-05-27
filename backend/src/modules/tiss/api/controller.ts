@@ -262,4 +262,63 @@ export class TISSController {
       },
     });
   }
+
+  // --- Convênios ---
+  async listConvenios(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const data = await (prisma as any).tiss_convenios.findMany({
+      where: { clinic_id: clinicId },
+      orderBy: { nome: "asc" },
+    });
+    return res.json(data);
+  }
+
+  async createConvenio(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { nome, codigo_operadora, cnpj, registro_ans, tipo_plano, is_active } = req.body;
+    if (!nome) {
+      return res.status(400).json({ error: "Nome is required" });
+    }
+    const data = await (prisma as any).tiss_convenios.create({
+      data: { clinic_id: clinicId, nome, codigo_operadora, cnpj, registro_ans, tipo_plano, is_active },
+    });
+    return res.status(201).json(data);
+  }
+
+  async updateConvenio(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const existing = await (prisma as any).tiss_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    if (!existing) {
+      return res.status(404).json({ error: "Convenio not found" });
+    }
+    const data = await (prisma as any).tiss_convenios.update({
+      where: { id },
+      data: req.body,
+    });
+    return res.json(data);
+  }
+
+  async deleteConvenio(req: Request, res: Response) {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      return res.status(401).json({ error: "Missing clinic context" });
+    }
+    const { id } = req.params;
+    const existing = await (prisma as any).tiss_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    if (!existing) {
+      return res.status(404).json({ error: "Convenio not found" });
+    }
+    await (prisma as any).tiss_convenios.delete({ where: { id } });
+    return res.status(204).send();
+  }
 }
