@@ -18,6 +18,7 @@ export interface TISSStatistics {
   guides: {
     total: number;
     total_amount: number;
+    total_glosa: number;
     by_status: StatusCount[];
   };
   batches: {

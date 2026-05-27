@@ -20,7 +20,6 @@ export const updateGuiaSchema = createGuiaSchema.partial().extend({
 
 export const registerGlosaSchema = z.object({
   glosa_amount: z.number().int().nonnegative(),
-  glosa_date: z.string(),
   glosa_reason: z.string().min(1).max(500),
 });
 

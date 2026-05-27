@@ -3,21 +3,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export interface TISSGlosa {
-  id: string;
-  clinic_id: string;
-  guide_number: string;
-  patient_id: string;
-  insurance_company: string;
-  procedure_code: string;
-  procedure_name: string;
-  amount: number;
-  status: string;
-  glosa_amount?: number;
-  glosa_reason?: string;
-  glosa_date?: string;
-  service_date: string;
-  created_at: string;
+export interface GlosaData {
+  glosa_amount: number;
+  glosa_date: string;
+  glosa_reason: string;
 }
 
 export function useTISSGlosas() {
@@ -27,50 +16,51 @@ export function useTISSGlosas() {
   const { data: glosas = [], isLoading } = useQuery({
     queryKey: ["tiss-glosas", clinicId],
     queryFn: async () => {
-      const response = await apiClient.get<TISSGlosa[]>("/tiss/glosas");
-      return response;
+      if (!clinicId) return [];
+      const data = await apiClient.get<Record<string, any>[]>('/tiss/glosas');
+      return data;
     },
     enabled: !!clinicId,
   });
 
-  const updateGlosa = useMutation({
-    mutationFn: async ({ id, glosa_reason, glosa_amount }: { id: string; glosa_reason: string; glosa_amount: number }) => {
-      const response = await apiClient.patch<TISSGlosa>(`/tiss/glosas/${id}`, { glosa_reason, glosa_amount });
+  const registerGlosa = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: GlosaData }) => {
+      const response = await apiClient.patch<unknown>(`/tiss/glosas/${id}`, data);
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tiss-glosas"] });
-      queryClient.invalidateQueries({ queryKey: ["tiss-guides"] });
-      queryClient.invalidateQueries({ queryKey: ["tiss-statistics"] });
-      toast.success("Glosa registrada com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["tiss-glosas", clinicId] });
+      queryClient.invalidateQueries({ queryKey: ["tiss-guides", clinicId] });
+      queryClient.invalidateQueries({ queryKey: ["tiss-statistics", clinicId] });
+      toast.success("Glosa registrada!");
     },
-    onError: (error: Error) => {
-      toast.error(`Erro ao registrar glosa: ${error.message}`);
+    onError: () => {
+      toast.error("Erro ao registrar glosa");
     },
   });
 
   const reprocessarGlosa = useMutation({
     mutationFn: async (id: string) => {
-      const response = await apiClient.post<TISSGlosa>(`/tiss/glosas/${id}/reprocessar`);
+      const response = await apiClient.post<unknown>(`/tiss/glosas/${id}/reprocessar`, {});
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tiss-glosas"] });
-      queryClient.invalidateQueries({ queryKey: ["tiss-guides"] });
-      queryClient.invalidateQueries({ queryKey: ["tiss-statistics"] });
-      toast.success("Guia reprocessada com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["tiss-glosas", clinicId] });
+      queryClient.invalidateQueries({ queryKey: ["tiss-guides", clinicId] });
+      queryClient.invalidateQueries({ queryKey: ["tiss-statistics", clinicId] });
+      toast.success("Guia reprocessada!");
     },
-    onError: (error: Error) => {
-      toast.error(`Erro ao reprocessar guia: ${error.message}`);
+    onError: () => {
+      toast.error("Erro ao reprocessar glosa");
     },
   });
 
   return {
     glosas,
     isLoading,
-    updateGlosa: updateGlosa.mutate,
-    isUpdatingGlosa: updateGlosa.isPending,
-    reprocessarGlosa: reprocessarGlosa.mutate,
-    isReprocessando: reprocessarGlosa.isPending,
+    registerGlosa: registerGlosa.mutateAsync,
+    reprocessarGlosa: reprocessarGlosa.mutateAsync,
+    isRegistering: registerGlosa.isPending,
+    isReprocessing: reprocessarGlosa.isPending,
   };
 }

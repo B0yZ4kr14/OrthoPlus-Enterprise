@@ -10,13 +10,13 @@ import { useState } from "react";
 import { RefreshCw, AlertTriangle } from "lucide-react";
 
 export function TISSGlosasManager() {
-  const { glosas, isLoading, updateGlosa, reprocessarGlosa } = useTISSGlosas();
+  const { glosas, isLoading, registerGlosa, reprocessarGlosa } = useTISSGlosas();
   const [selectedGlosa, setSelectedGlosa] = useState<string | null>(null);
   const [glosaReason, setGlosaReason] = useState("");
   const [glosaAmount, setGlosaAmount] = useState("");
 
   const handleRegistrarGlosa = (id: string) => {
-    updateGlosa({ id, glosa_reason: glosaReason, glosa_amount: Number(glosaAmount) });
+    registerGlosa({ id, glosa_reason: glosaReason, glosa_amount: Number(glosaAmount) });
     setSelectedGlosa(null);
     setGlosaReason("");
     setGlosaAmount("");

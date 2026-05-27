@@ -277,8 +277,9 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const data = await prisma.tiss_guides.findMany({
-      where: { clinic_id: clinicId, status: "glosada" },
+      where: { clinic_id: clinicId, glosa_amount: { not: null } },
       orderBy: { glosa_date: "desc" },
+      take: 1000,
     });
     return res.json(data);
   }
@@ -289,20 +290,24 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const { glosa_reason, glosa_amount } = req.body;
     const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
     if (!existing) {
       return res.status(404).json({ error: "Guia not found" });
+    }
+    const parsed = registerGlosaSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await prisma.tiss_guides.update({
       where: { id },
       data: {
         status: "glosada",
-        glosa_reason,
-        glosa_amount,
+        glosa_amount: parsed.data.glosa_amount,
+        glosa_reason: parsed.data.glosa_reason,
         glosa_date: new Date(),
       },
     });
+    logger.info("TISS glosa registered", { clinicId, guideId: id, glosaAmount: parsed.data.glosa_amount });
     return res.json(data);
   }
 
@@ -312,15 +317,16 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId, status: "glosada" } });
+    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
     if (!existing) {
-      return res.status(404).json({ error: "Glosa not found or not in glosada status" });
+      return res.status(404).json({ error: "Guia not found" });
     }
     const data = await prisma.tiss_guides.update({
       where: { id },
-      data: { status: "pendente", glosa_reason: null, glosa_amount: null, glosa_date: null },
+      data: { status: "RASCUNHO", glosa_reason: null, glosa_amount: null, glosa_date: null },
     });
-    return res.json(data);
+    logger.info("TISS glosa reprocessed", { clinicId, guideId: id });
+    return res.json({ message: "Guia reprocessada", guide: data });
   }
 
   // --- Convênios ---
@@ -380,76 +386,5 @@ export class TISSController {
     }
     await prisma.tiss_convenios.delete({ where: { id } });
     return res.status(204).send();
-  }
-
-  // --- Glosas ---
-  async listGlosas(req: Request, res: Response) {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
-    }
-    const data = await prisma.tiss_guides.findMany({
-      where: {
-        clinic_id: clinicId,
-        glosa_amount: { not: null },
-      },
-      orderBy: { glosa_date: "desc" },
-      take: 1000,
-    });
-    return res.json(data);
-  }
-
-  async updateGlosa(req: Request, res: Response) {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
-    }
-    const { id } = req.params;
-    const existing = await prisma.tiss_guides.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
-    if (!existing) {
-      return res.status(404).json({ error: "Guia not found" });
-    }
-    const parsed = registerGlosaSchema.safeParse(req.body);
-    if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-    }
-    const data = await prisma.tiss_guides.update({
-      where: { id },
-      data: {
-        glosa_amount: parsed.data.glosa_amount,
-        glosa_date: parsed.data.glosa_date,
-        glosa_reason: parsed.data.glosa_reason,
-        status: "GLOSADA",
-      },
-    });
-    logger.info("TISS glosa registered", { clinicId, guideId: id, glosaAmount: parsed.data.glosa_amount });
-    return res.json(data);
-  }
-
-  async reprocessarGlosa(req: Request, res: Response) {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
-    }
-    const { id } = req.params;
-    const existing = await prisma.tiss_guides.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
-    if (!existing) {
-      return res.status(404).json({ error: "Guia not found" });
-    }
-    const data = await prisma.tiss_guides.update({
-      where: { id },
-      data: {
-        status: "RASCUNHO",
-        glosa_amount: null,
-        glosa_date: null,
-        glosa_reason: null,
-      },
-    });
-    logger.info("TISS glosa reprocessed", { clinicId, guideId: id });
-    return res.json({ message: "Guia reprocessada", guide: data });
   }
 }

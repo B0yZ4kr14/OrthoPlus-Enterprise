@@ -1,16 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { FileText, Send, CheckCircle, XCircle } from "lucide-react";
+import { FileText, Send, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { useTISSStatistics } from "../../application/hooks/useTISSStatistics";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 
 export function TISSDashboard() {
   const { data: stats, isLoading } = useTISSStatistics();
 
-  const pendingGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "pendente")?._count.id ?? 0;
-  const sentGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "enviada")?._count.id ?? 0;
-  const approvedGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "aprovada")?._count.id ?? 0;
-  const glosadasGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "glosada")?._count.id ?? 0;
+  const pendingGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "pendente" || s.status === "PENDENTE")?._count.id ?? 0;
+  const sentGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "enviada" || s.status === "SUBMITTED")?._count.id ?? 0;
+  const approvedGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "aprovada" || s.status === "APROVADA")?._count.id ?? 0;
+  const glosadasGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "glosada" || s.status === "GLOSADA")?._count.id ?? 0;
   const totalGuides = stats?.guides.total ?? 0;
+  const totalGlosa = stats?.guides.total_glosa ?? 0;
 
   const approvalRate = totalGuides > 0
     ? Math.round((approvedGuides / totalGuides) * 100)
@@ -41,12 +42,18 @@ export function TISSDashboard() {
       icon: XCircle,
       description: "guias glosadas",
     },
+    {
+      title: "Valor Glosado",
+      value: `R$ ${(totalGlosa / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+      icon: AlertTriangle,
+      description: "total em glosas",
+    },
   ];
 
   if (isLoading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {Array.from({ length: 5 }).map((_, i) => (
           <Card key={i}>
             <CardHeader className="pb-2">
               <Skeleton className="h-4 w-24" />
@@ -61,7 +68,7 @@ export function TISSDashboard() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
       {statCards.map((stat) => (
         <Card key={stat.title}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
