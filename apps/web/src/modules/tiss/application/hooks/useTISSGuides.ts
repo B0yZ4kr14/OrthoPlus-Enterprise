@@ -29,10 +29,7 @@ export const useTISSGuides = () => {
 
   const createGuide = useMutation({
     mutationFn: async (guideData: unknown) => {
-      const response = await apiClient.post<unknown>("/tiss/guias", {
-        ...(guideData as Record<string, unknown>),
-        created_by: user?.id,
-      });
+      const response = await apiClient.post<unknown>("/tiss/guias", guideData);
       return response;
     },
     onSuccess: () => {
@@ -49,7 +46,7 @@ export const useTISSGuides = () => {
       const response = await apiClient.post<unknown>("/tiss/lotes", {
         guide_ids: guideIds,
         batch_number: `LOTE-${Date.now()}`,
-        insurance_compunknown: "A_DEFINIR",
+        insurance_company: "A_DEFINIR",
       });
       return response;
     },
@@ -66,7 +63,9 @@ export const useTISSGuides = () => {
     guides,
     batches,
     isLoading: isLoading || isLoadingBatches,
-    createGuide: createGuide.mutate,
-    createBatch: createBatch.mutate,
+    createGuide: createGuide.mutateAsync,
+    createBatch: createBatch.mutateAsync,
+    isCreating: createGuide.isPending,
+    isCreatingBatch: createBatch.isPending,
   };
 };
