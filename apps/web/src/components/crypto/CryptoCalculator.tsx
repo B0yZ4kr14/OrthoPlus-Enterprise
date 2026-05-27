@@ -31,12 +31,10 @@ import { format, subHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export function CryptoCalculator() {
-  const [fromCurrency, setFromCurrency] = useState<
-    "BTC" | "ETH" | "USDT" | "BRL"
-  >("BTC");
-  const [toCurrency, setToCurrency] = useState<"BTC" | "ETH" | "USDT" | "BRL">(
-    "BRL",
-  );
+  type CryptoCurrency = "BTC" | "ETH" | "USDT" | "BRL";
+
+  const [fromCurrency, setFromCurrency] = useState<CryptoCurrency>("BTC");
+  const [toCurrency, setToCurrency] = useState<CryptoCurrency>("BRL");
   const [amount, setAmount] = useState<string>("1");
   const [result, setResult] = useState<string>("0");
   const [rates, setRates] = useState<Record<string, number>>({
@@ -51,7 +49,7 @@ export function CryptoCalculator() {
     BTC: number;
     ETH: number;
     USDT: number;
-    [key: string]: any;
+    BRL?: number;
   }
   const [history24h, setHistory24h] = useState<HistoryItem[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
@@ -191,7 +189,7 @@ export function CryptoCalculator() {
             <div className="grid grid-cols-2 gap-2">
               <Select
                 value={fromCurrency}
-                onValueChange={(value) => setFromCurrency(value as any)}
+                onValueChange={(value) => setFromCurrency(value as CryptoCurrency)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -244,7 +242,7 @@ export function CryptoCalculator() {
             <div className="grid grid-cols-2 gap-2">
               <Select
                 value={toCurrency}
-                onValueChange={(value) => setToCurrency(value as any)}
+                onValueChange={(value) => setToCurrency(value as CryptoCurrency)}
               >
                 <SelectTrigger>
                   <SelectValue />

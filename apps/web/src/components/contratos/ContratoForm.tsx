@@ -137,8 +137,7 @@ export function ContratoForm({
         <div className="space-y-2">
           <Label htmlFor="status">Status</Label>
           <Select
-            // @ts-expect-error — TS2345
-            onValueChange={(value) => setValue("status", value as unknown)}
+            onValueChange={(value: "AGUARDANDO_ASSINATURA" | "ASSINADO" | "CANCELADO" | "EXPIRADO" | "CONCLUIDO") => setValue("status", value)}
             defaultValue={watch("status")}
           >
             <SelectTrigger>

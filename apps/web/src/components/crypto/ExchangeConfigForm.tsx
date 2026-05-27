@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -80,8 +80,8 @@ export function ExchangeConfigForm({
   >("idle");
 
   const form = useForm<z.infer<typeof exchangeFormSchema>>({
-    resolver: zodResolver(exchangeFormSchema) as any,
-    defaultValues: (initialData as any) || {
+    resolver: zodResolver(exchangeFormSchema) as Resolver<z.infer<typeof exchangeFormSchema>>,
+    defaultValues: (initialData as Partial<z.infer<typeof exchangeFormSchema>>) || {
       exchange_name: "BINANCE",
       api_key: "",
       api_secret: "",

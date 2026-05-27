@@ -260,8 +260,7 @@ export function CaixaPanel({
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
-                  // @ts-expect-error — TS2769
-                  }).format(caixaAtual.valorInicial)}
+                  }).format(Number(caixaAtual.valorInicial))}
                 </span>
               </div>
               {caixaAtual.valorFinal !== undefined && (

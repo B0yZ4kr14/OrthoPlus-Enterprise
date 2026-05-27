@@ -1,4 +1,4 @@
-import { Atividade } from "../../domain/entities/Atividade";
+import { Atividade, AtividadeTipo } from "../../domain/entities/Atividade";
 import { IAtividadeRepository } from "../../domain/repositories/IAtividadeRepository";
 
 interface CreateAtividadeInput {
@@ -33,8 +33,7 @@ export class CreateAtividadeUseCase {
       id: crypto.randomUUID(),
       leadId: input.leadId,
       clinicId: input.clinicId,
-      // @ts-expect-error — TS2322
-      tipo: input.tipo as unknown,
+      tipo: input.tipo as AtividadeTipo,
       titulo: input.titulo.trim(),
       descricao: input.descricao?.trim(),
       dataAgendada: input.dataAgendada,

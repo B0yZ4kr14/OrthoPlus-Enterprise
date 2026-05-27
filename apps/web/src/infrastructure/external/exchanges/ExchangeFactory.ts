@@ -39,9 +39,8 @@ export class ExchangeFactory {
       case "BTCPAY": {
         const { BTCPayAdapter } = await import("./BTCPayAdapter");
         return new BTCPayAdapter(
-          // @ts-expect-error — TS2345
-          additionalConfig?.btcpayServerUrl,
-          additionalConfig?.storeId,
+          additionalConfig?.btcpayServerUrl as string,
+          additionalConfig?.storeId as string,
           apiKey,
         );
       }

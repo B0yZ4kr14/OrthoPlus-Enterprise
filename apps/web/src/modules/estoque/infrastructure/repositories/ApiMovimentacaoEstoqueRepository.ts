@@ -13,8 +13,7 @@ export class ApiMovimentacaoEstoqueRepository implements IMovimentacaoEstoqueRep
       );
       return data;
     } catch (error) {
-      // @ts-expect-error — TS2571
-      if ((error as unknown).status === 404) return null;
+      if ((error as { status?: number }).status === 404) return null;
       throw error;
     }
   }

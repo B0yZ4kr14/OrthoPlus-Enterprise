@@ -1,11 +1,11 @@
 // cspell:disable
-import type { ComponentType } from "react";
+import type { ComponentType, LazyExoticComponent } from "react";
 
 export interface Step {
   id: string;
   title: string;
   description: string;
-  component: ComponentType;
+  component: ComponentType | LazyExoticComponent<ComponentType>;
 }
 
 export interface OnboardingWizardProps {

@@ -40,9 +40,8 @@ export class MercadoBitcoinAdapter implements ICryptoExchange {
 
       if (!response.ok) throw new Error("Failed to fetch balance");
 
-      const data = await response.json();
-      // @ts-expect-error — TS18046
-      const balance = data.find((b: unknown) => b.currency_id === coin);
+      const data = await response.json() as Array<{ currency_id: string; available: string }>;
+      const balance = data.find((b) => b.currency_id === coin);
 
       return parseFloat(balance?.available || "0");
     } catch (error) {

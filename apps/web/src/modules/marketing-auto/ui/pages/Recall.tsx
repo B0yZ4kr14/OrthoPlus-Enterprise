@@ -89,7 +89,7 @@ export default function RecallPage() {
   });
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, unknown> = {
+    const config: Record<string, { variant: string; icon: React.ComponentType<{ className?: string }>; label: string }> = {
       PENDENTE: { variant: "secondary", icon: Clock, label: "Pendente" },
       AGENDADO: { variant: "default", icon: Calendar, label: "Agendado" },
       CONFIRMADO: {
@@ -101,11 +101,10 @@ export default function RecallPage() {
       CANCELADO: { variant: "destructive", icon: XCircle, label: "Cancelado" },
     };
 
-    // @ts-expect-error — TS2339
     const { variant, icon: Icon, label } = config[status] || config.PENDENTE;
 
     return (
-      <Badge variant={variant} className="gap-1">
+      <Badge variant={variant as any} className="gap-1">
         <Icon className="h-3 w-3" />
         {label}
       </Badge>

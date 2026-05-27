@@ -104,8 +104,7 @@ export default function EstoqueInventarioPage() {
   const handleSubmit = async (data: Inventario) => {
     try {
       if (selectedInventario) {
-        // @ts-expect-error — TS2345
-        await updateInventario(selectedInventario.id, data);
+        await updateInventario(selectedInventario.id!, data);
       } else {
         await addInventario(data);
       }

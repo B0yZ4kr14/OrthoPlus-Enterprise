@@ -1,6 +1,6 @@
 // cspell:disable
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { apiClient } from "@/lib/api/apiClient";
 import { logger } from "@/lib/logger";
@@ -13,7 +13,7 @@ export function useXPubConfig({ onSuccess }: XPubConfigFormProps) {
   const [isValid, setIsValid] = useState(false);
 
   const form = useForm<XPubConfigFormValues>({
-    resolver: zodResolver(xpubConfigSchema) as any,
+    resolver: zodResolver(xpubConfigSchema) as Resolver<XPubConfigFormValues>,
     defaultValues: {
       wallet_name: "",
       hardware_type: "trezor",

@@ -27,8 +27,12 @@ router.get("/precos", asyncHandler(controller.listPrecos.bind(controller)));
 router.post("/precos", asyncHandler(controller.createPreco.bind(controller)));
 router.patch("/precos/:id", asyncHandler(controller.updatePreco.bind(controller)));
 router.delete("/precos/:id", asyncHandler(controller.deletePreco.bind(controller)));
-
-// Reajuste em lote
 router.post("/precos/reajuste", asyncHandler(controller.reajustarPrecos.bind(controller)));
+
+// Associação dentista-procedimento
+router.get("/dentista-procedimentos", asyncHandler(controller.listDentistaProcs.bind(controller)));
+router.post("/dentista-procedimentos", asyncHandler(controller.createDentistaProc.bind(controller)));
+router.patch("/dentista-procedimentos/:id", asyncHandler(controller.updateDentistaProc.bind(controller)));
+router.delete("/dentista-procedimentos/:id", asyncHandler(controller.deleteDentistaProc.bind(controller)));
 
 export default router;

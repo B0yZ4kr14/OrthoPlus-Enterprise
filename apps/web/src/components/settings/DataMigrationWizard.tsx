@@ -120,9 +120,9 @@ export function DataMigrationWizard({
       setProgress(100);
       setImportResults(data);
 
+      const result = data as { imported: { modules: number; patients: number; prontuarios: number; appointments: number } };
       toast.success("Importação concluída!", {
-        // @ts-expect-error — TS18046
-        description: `${data.imported.modules + data.imported.patients + data.imported.prontuarios + data.imported.appointments} registros importados.`,
+        description: `${result.imported.modules + result.imported.patients + result.imported.prontuarios + result.imported.appointments} registros importados.`,
       });
       setStep(4);
     } catch (error: unknown) {

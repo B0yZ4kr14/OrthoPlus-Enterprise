@@ -1,6 +1,6 @@
 // cspell:disable
 import { useState, useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import type { ExchangeConfig } from "@/modules/crypto/types/crypto.types";
@@ -19,8 +19,8 @@ export function useExchangeConfigForm({ onSubmit, initialData }: UseExchangeConf
   );
 
   const form = useForm<ExchangeFormValues>({
-    resolver: zodResolver(exchangeFormSchema) as any,
-    defaultValues: (initialData as any) || {
+    resolver: zodResolver(exchangeFormSchema) as Resolver<ExchangeFormValues>,
+    defaultValues: (initialData as Partial<ExchangeFormValues>) || {
       exchange_name: "BINANCE",
       api_key: "",
       api_secret: "",

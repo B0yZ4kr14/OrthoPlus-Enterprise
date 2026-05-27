@@ -13,8 +13,7 @@ export interface IEventHandler<T extends DomainEvent> {
  */
 export class EventBus {
   private static instance: EventBus;
-  // @ts-expect-error — TS2344
-  private handlers: Map<string, IEventHandler<unknown>[]> = new Map();
+  private handlers: Map<string, IEventHandler<DomainEvent>[]> = new Map();
   private eventLog: DomainEvent[] = [];
   private readonly maxLogSize = 1000;
 

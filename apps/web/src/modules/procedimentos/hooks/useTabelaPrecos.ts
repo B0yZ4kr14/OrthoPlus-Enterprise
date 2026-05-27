@@ -7,6 +7,8 @@ import type {
   AtualizarTabelaPreco,
   CriarProcedimentoPreco,
   ReajusteLote,
+  DentistaProcedimento,
+  CriarDentistaProcedimento,
 } from "../types/procedimento-precos.types"
 
 const BASE = "/procedimentos"
@@ -100,5 +102,43 @@ export function useReajusteLote() {
       qc.invalidateQueries({ queryKey: ["procedimento-precos"] })
       qc.invalidateQueries({ queryKey: ["tabelas-precos"] })
     },
+  })
+}
+
+export function useDentistaProcedimentos(dentistaId?: string) {
+  const params = new URLSearchParams()
+  if (dentistaId) params.append("dentista_id", dentistaId)
+  return useQuery({
+    queryKey: ["dentista-procedimentos", dentistaId],
+    queryFn: async () => {
+      const data = await apiClient.get<DentistaProcedimento[]>(`/procedimentos/dentista-procedimentos?${params.toString()}`)
+      return data
+    },
+  })
+}
+
+export function useCreateDentistaProcedimento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: CriarDentistaProcedimento) =>
+      apiClient.post<DentistaProcedimento>("/procedimentos/dentista-procedimentos", payload),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["dentista-procedimentos"] }),
+  })
+}
+
+export function useUpdateDentistaProcedimento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: Partial<CriarDentistaProcedimento> }) =>
+      apiClient.patch<DentistaProcedimento>(`/procedimentos/dentista-procedimentos/${id}`, payload),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["dentista-procedimentos"] }),
+  })
+}
+
+export function useDeleteDentistaProcedimento() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => apiClient.delete(`/procedimentos/dentista-procedimentos/${id}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["dentista-procedimentos"] }),
   })
 }

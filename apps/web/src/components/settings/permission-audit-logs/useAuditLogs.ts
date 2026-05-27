@@ -47,12 +47,12 @@ export function useAuditLogs() {
           details: (log.details as Record<string, unknown>) || {},
           user: {
             full_name:
-              (log.user as any)?.full_name ||
+              (log.user as { full_name?: string } | undefined)?.full_name ||
               "Desconhecido",
           },
           target_user: {
             full_name:
-              (log.target_user as any)?.full_name || "Desconhecido",
+              (log.target_user as { full_name?: string } | undefined)?.full_name || "Desconhecido",
           },
           module: log.module_catalog_id
             ? modulesMap[log.module_catalog_id as number]

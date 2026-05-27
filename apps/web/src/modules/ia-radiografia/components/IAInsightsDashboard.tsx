@@ -18,7 +18,7 @@ interface IAInsightsDashboardProps {
 }
 
 const getPrioridadeColor = (prioridade: string) => {
-  const colors: Record<string, unknown> = {
+  const colors: Record<string, string> = {
     alta: "destructive",
     media: "warning",
     baixa: "success",
@@ -27,7 +27,7 @@ const getPrioridadeColor = (prioridade: string) => {
 };
 
 const getSeveridadeColor = (severidade: string) => {
-  const colors: Record<string, unknown> = {
+  const colors: Record<string, string> = {
     ALTA: "destructive",
     MEDIA: "warning",
     BAIXA: "success",
@@ -354,7 +354,7 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
                     className="text-center p-4 bg-accent/50 rounded-lg"
                   >
                     <Badge
-                      variant={getSeveridadeColor(sev.severidade) as any}
+                      variant={getSeveridadeColor(sev.severidade)}
                       className="mb-2"
                     >
                       {sev.severidade}
@@ -410,7 +410,7 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
                         </AlertDescription>
                       </div>
                       <Badge
-                        variant={getPrioridadeColor(rec.prioridade) as any}
+                        variant={getPrioridadeColor(rec.prioridade)}
                       >
                         {rec.prioridade.toUpperCase()}
                       </Badge>

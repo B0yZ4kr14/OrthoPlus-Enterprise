@@ -12,6 +12,7 @@ import { RecompensasTab } from "./RecompensasTab";
 import { IndicacoesTab } from "./IndicacoesTab";
 import { BadgesTab } from "./BadgesTab";
 import { ConfigTab } from "./ConfigTab";
+import type { PacientePontos, Recompensa, Indicacao } from "./types";
 
 export default function ProgramaFidelidade() {
   const {
@@ -55,7 +56,7 @@ export default function ProgramaFidelidade() {
 
         <TabsContent value="pacientes" className="space-y-4">
           <PacientesTab
-            pacientes={pontos as any}
+            pacientes={pontos as unknown as PacientePontos[]}
             onShareBadge={handleShareBadge}
             onTriggerConfetti={triggerConfetti}
           />
@@ -63,14 +64,14 @@ export default function ProgramaFidelidade() {
 
         <TabsContent value="recompensas" className="space-y-4">
           <RecompensasTab
-            recompensas={recompensas as any}
+            recompensas={recompensas as unknown as Recompensa[]}
             onAdd={() => setRecompensaFormOpen(true)}
-            onEdit={handleEditRecompensa as any}
+            onEdit={handleEditRecompensa as unknown as (r: Recompensa) => void}
           />
         </TabsContent>
 
         <TabsContent value="indicacoes" className="space-y-4">
-          <IndicacoesTab indicacoes={indicacoes as any} />
+          <IndicacoesTab indicacoes={indicacoes as unknown as Indicacao[]} />
         </TabsContent>
 
         <TabsContent value="badges" className="space-y-4">

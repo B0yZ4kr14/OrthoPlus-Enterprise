@@ -16,11 +16,7 @@ export function Odontograma3DLazy({
   return (
     <Suspense
       fallback={
-        <LoadingState
-          message="Carregando visualizador 3D..."
-          // @ts-expect-error — TS2322
-          subMessage="Isso pode levar alguns segundos na primeira vez"
-        />
+        <LoadingState message="Carregando visualizador 3D... Isso pode levar alguns segundos na primeira vez" />
       }
     >
       <Odontograma3D patientId={patientId} onToothClick={onToothClick} />

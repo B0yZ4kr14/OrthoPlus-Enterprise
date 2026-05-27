@@ -129,9 +129,9 @@ export function InventarioForm({
         <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
           <p className="text-sm text-muted-foreground">
             <strong>
-              {tiposInventario.find((t) => t.value === tipo as any)?.label}:
+              {tiposInventario.find((t) => t.value === tipo)?.label}:
             </strong>{" "}
-            {tiposInventario.find((t) => t.value === tipo as any)?.description}
+            {tiposInventario.find((t) => t.value === tipo)?.description}
           </p>
         </div>
       )}

@@ -62,9 +62,8 @@ export class BinanceAdapter implements ICryptoExchange {
 
       if (!response.ok) throw new Error("Failed to fetch balance");
 
-      const data = await response.json();
-      // @ts-expect-error — TS18046
-      const balance = data.balances.find((b: unknown) => b.asset === coin);
+      const data = await response.json() as { balances: Array<{ asset: string; free: string }> };
+      const balance = data.balances.find((b) => b.asset === coin);
 
       return parseFloat(balance?.free || "0");
     } catch (error) {

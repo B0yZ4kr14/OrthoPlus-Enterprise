@@ -9,6 +9,7 @@ vi.mock("sonner", () => ({
 }))
 
 import { useEstoqueStore } from "../useEstoqueStore"
+import type { Produto, Movimentacao, Alerta } from "../../types/estoque.types"
 
 describe("useEstoqueStore", () => {
   let storage: Record<string, string> = {}
@@ -108,7 +109,7 @@ describe("useEstoqueStore", () => {
     }
 
     act(() => {
-      result.current.addProduto(newProduto as any)
+      result.current.addProduto(newProduto)
     })
 
     expect(result.current.produtos).toHaveLength(3)
@@ -205,7 +206,7 @@ describe("useEstoqueStore", () => {
         quantidade: 8,
         motivo: "Compra de reposição",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.movimentacoes).toHaveLength(1)
@@ -225,7 +226,7 @@ describe("useEstoqueStore", () => {
         quantidade: 5,
         motivo: "Uso em procedimento",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     const produto = result.current.produtos.find((p) => p.id === "1")
@@ -242,7 +243,7 @@ describe("useEstoqueStore", () => {
         quantidade: 5,
         motivo: "Devolução de material",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     const produto = result.current.produtos.find((p) => p.id === "2")
@@ -259,7 +260,7 @@ describe("useEstoqueStore", () => {
         quantidade: 10,
         motivo: "Material vencido",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     const produto = result.current.produtos.find((p) => p.id === "2")
@@ -276,7 +277,7 @@ describe("useEstoqueStore", () => {
         quantidade: 100,
         motivo: "Inventário anual",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     const produto = result.current.produtos.find((p) => p.id === "1")
@@ -293,7 +294,7 @@ describe("useEstoqueStore", () => {
         quantidade: 999,
         motivo: "Teste de limite",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     const produto = result.current.produtos.find((p) => p.id === "1")
@@ -316,7 +317,7 @@ describe("useEstoqueStore", () => {
         quantidade: 7,
         motivo: "Uso em procedimento",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.alertas).toHaveLength(1)
@@ -338,7 +339,7 @@ describe("useEstoqueStore", () => {
         quantidade: 10,
         motivo: "Uso em procedimento",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.alertas).toHaveLength(1)
@@ -357,7 +358,7 @@ describe("useEstoqueStore", () => {
         quantidade: 6,
         motivo: "Uso em procedimento",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.alertas).toHaveLength(0)
@@ -374,7 +375,7 @@ describe("useEstoqueStore", () => {
         quantidade: 7,
         motivo: "Uso",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.alertas).toHaveLength(1)
@@ -388,7 +389,7 @@ describe("useEstoqueStore", () => {
         quantidade: 3,
         motivo: "Uso adicional",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     // Note: the production code has a stale-closure issue where addAlerta
@@ -409,7 +410,7 @@ describe("useEstoqueStore", () => {
         quantidade: 7,
         motivo: "Uso",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.alertas).toHaveLength(1)
@@ -422,7 +423,7 @@ describe("useEstoqueStore", () => {
         quantidade: 20,
         motivo: "Reposição",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     // Alert should be cleared because quantidadeAtual (18) > min (5)
@@ -439,10 +440,10 @@ describe("useEstoqueStore", () => {
         quantidade: 10,
         motivo: "Uso",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
-    const alertaId = result.current.alertas[0]!.id as string
+    const alertaId = result.current.alertas[0]!.id!
 
     act(() => {
       result.current.marcarAlertaComoLido(alertaId)
@@ -461,7 +462,7 @@ describe("useEstoqueStore", () => {
         quantidade: 10,
         motivo: "Uso",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     act(() => {
@@ -471,7 +472,7 @@ describe("useEstoqueStore", () => {
         quantidade: 20,
         motivo: "Uso",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.alertas).toHaveLength(2)
@@ -500,13 +501,13 @@ describe("useEstoqueStore", () => {
         nome: "Nova Categoria",
         descricao: "Descrição",
         cor: "#ff0000",
-      } as any)
+      })
     })
 
     expect(result.current.categorias).toHaveLength(4)
     expect(result.current.categorias[3].nome).toBe("Nova Categoria")
 
-    const categoriaId = result.current.categorias[3]!.id as string
+    const categoriaId = result.current.categorias[3]!.id!
 
     act(() => {
       result.current.updateCategoria(categoriaId, { nome: "Categoria Atualizada" })
@@ -548,13 +549,17 @@ describe("useEstoqueStore", () => {
         email: "test@fornecedor.com",
         telefone: "(11) 1111-1111",
         ativo: true,
-      } as any)
+        apiEnabled: false,
+        apiAuthType: "none",
+        apiRequestFormat: "json",
+        autoOrderEnabled: false,
+      })
     })
 
     expect(result.current.fornecedores).toHaveLength(3)
     expect(result.current.fornecedores[2].nome).toBe("Novo Fornecedor")
 
-    const fornecedorId = result.current.fornecedores[2]!.id as string
+    const fornecedorId = result.current.fornecedores[2]!.id!
 
     act(() => {
       result.current.updateFornecedor(fornecedorId, { nome: "Fornecedor Atualizado" })
@@ -596,13 +601,13 @@ describe("useEstoqueStore", () => {
         prioridade: "ALTA",
         status: "PENDENTE",
         solicitadoPor: "user-1",
-      } as any)
+      })
     })
 
     expect(result.current.requisicoes).toHaveLength(1)
     expect(result.current.requisicoes[0].status).toBe("PENDENTE")
 
-    const requisicaoId = result.current.requisicoes[0]!.id as string
+    const requisicaoId = result.current.requisicoes[0]!.id!
 
     act(() => {
       result.current.aprovarRequisicao(requisicaoId, "admin-1")
@@ -633,13 +638,13 @@ describe("useEstoqueStore", () => {
         produtoId: "1",
         quantidade: 2,
         motivo: "Teste",
-        prioridade: "NORMAL",
+        prioridade: "MEDIA",
         status: "PENDENTE",
         solicitadoPor: "user-1",
-      } as any)
+      })
     })
 
-    const id = result.current.requisicoes[0]!.id as string
+    const id = result.current.requisicoes[0]!.id!
     expect(result.current.getRequisicaoById(id)?.motivo).toBe("Teste")
     expect(result.current.getRequisicaoById("999")).toBeUndefined()
   })
@@ -654,10 +659,10 @@ describe("useEstoqueStore", () => {
         quantidade: 5,
         motivo: "Teste",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
-    const id = result.current.movimentacoes[0]!.id as string
+    const id = result.current.movimentacoes[0]!.id!
     expect(result.current.getMovimentacaoById(id)?.tipo).toBe("ENTRADA")
     expect(result.current.getMovimentacaoById("999")).toBeUndefined()
   })
@@ -684,7 +689,7 @@ describe("useEstoqueStore", () => {
         quantidade: 60,
         motivo: "Uso mensal",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     // After the above, quantidadeAtual = 12 - 60 = 0 (clamped)
@@ -696,7 +701,7 @@ describe("useEstoqueStore", () => {
         quantidade: 100,
         motivo: "Reposição",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     // Now quantidadeAtual = 100
@@ -708,7 +713,7 @@ describe("useEstoqueStore", () => {
         quantidade: 30,
         motivo: "Uso recente",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
     // quantidadeAtual = 70, consumoMedio = 30/30 = 1, diasEstoque = 70/1 = 70 > 15 → 0
@@ -736,7 +741,7 @@ describe("useEstoqueStore", () => {
         precoCompra: 5,
         precoVenda: 10,
         ativo: true,
-      } as any)
+      })
     })
 
     const stored = JSON.parse(storage["estoque-produtos"] || "[]")
@@ -754,10 +759,10 @@ describe("useEstoqueStore", () => {
         quantidade: 5,
         motivo: "Teste persistência",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
-    const stored = JSON.parse(storage["estoque-movimentacoes"] || "[]")
+    const stored: Movimentacao[] = JSON.parse(storage["estoque-movimentacoes"] || "[]")
     expect(stored).toHaveLength(1)
     expect(stored[0].motivo).toBe("Teste persistência")
   })
@@ -772,10 +777,10 @@ describe("useEstoqueStore", () => {
         quantidade: 10,
         motivo: "Uso",
         realizadoPor: "user-1",
-      } as any)
+      })
     })
 
-    const stored = JSON.parse(storage["estoque-alertas"] || "[]")
+    const stored: Alerta[] = JSON.parse(storage["estoque-alertas"] || "[]")
     expect(stored).toHaveLength(1)
     expect(stored[0].tipo).toBe("ESTOQUE_CRITICO")
   })

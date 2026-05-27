@@ -66,7 +66,7 @@ export const MovimentacaoForm = ({
       const baseInput = {
         produtoId,
         quantidade: data.quantidade,
-        motivo: data.motivo,
+        motivo: data.motivo || "",
         observacoes: data.observacoes,
         usuarioId: user.id,
       };
@@ -79,10 +79,12 @@ export const MovimentacaoForm = ({
           await registrarSaida(baseInput);
           break;
         case "AJUSTE":
-          // @ts-expect-error — TS2345
           await ajustarEstoque({
-            ...baseInput,
+            produtoId,
             novaQuantidade: data.quantidade,
+            motivo: data.motivo || "",
+            observacoes: data.observacoes,
+            usuarioId: user.id,
           });
           break;
       }

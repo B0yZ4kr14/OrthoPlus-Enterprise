@@ -28,9 +28,8 @@ export const useBIDashboards = () => {
   });
 
   const createDashboard = useMutation({
-    mutationFn: async (dashboardData: unknown) => {
+    mutationFn: async (dashboardData: Record<string, unknown>) => {
       const data = await apiClient.post<unknown>("/bi/dashboards", {
-        // @ts-expect-error — TS2698
         ...dashboardData,
         created_by: user?.id,
       });

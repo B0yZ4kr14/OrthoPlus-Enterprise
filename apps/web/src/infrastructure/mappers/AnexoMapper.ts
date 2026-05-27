@@ -16,8 +16,7 @@ export class AnexoMapper {
       prontuarioId: raw.prontuario_id,
       historicoId: raw.historico_id || undefined,
       clinicId: "", // Tabela não tem clinic_id, será preenchido via query
-      // @ts-expect-error — TS2322
-      tipo: (raw.tipo_arquivo as unknown) || "OUTRO",
+      tipo: (raw.tipo_arquivo as AnexoProps["tipo"]) || "OUTRO",
       nomeArquivo: raw.nome_arquivo,
       storagePath: raw.caminho_storage,
       url: url,

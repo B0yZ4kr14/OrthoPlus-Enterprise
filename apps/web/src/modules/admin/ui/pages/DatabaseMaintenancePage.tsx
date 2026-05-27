@@ -32,7 +32,7 @@ interface DBStats {
 }
 
 export default function DatabaseMaintenancePage() {
-  const { stats, isLoading: loading, executeMaintenance, isExecuting: executing } = useDatabaseMaintenancePage() as any;
+  const { stats, isLoading: loading, executeMaintenance, isExecuting: executing } = useDatabaseMaintenancePage();
 
   return (
     <div className="space-y-6">
@@ -117,7 +117,7 @@ export default function DatabaseMaintenancePage() {
               </CardHeader>
               <CardContent>
                 <Button
-                  onClick={() => (executeMaintenance as any)({ operation: "VACUUM" })}
+                  onClick={() => executeMaintenance({ operation: "VACUUM" })}
                   disabled={executing !== null}
                   className="w-full"
                 >
@@ -136,7 +136,7 @@ export default function DatabaseMaintenancePage() {
               </CardHeader>
               <CardContent>
                 <Button
-                  onClick={() => (executeMaintenance as any)({ operation: "ANALYZE" })}
+                  onClick={() => executeMaintenance({ operation: "ANALYZE" })}
                   disabled={executing !== null}
                   className="w-full"
                 >
@@ -157,7 +157,7 @@ export default function DatabaseMaintenancePage() {
               </CardHeader>
               <CardContent>
                 <Button
-                  onClick={() => (executeMaintenance as any)({ operation: "REINDEX" })}
+                  onClick={() => executeMaintenance({ operation: "REINDEX" })}
                   disabled={executing !== null}
                   className="w-full"
                 >
@@ -193,7 +193,7 @@ export default function DatabaseMaintenancePage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {stats?.tables?.map((table: { name: string; rows: number; size: string; last_vacuum: string }) => (
+            {stats?.tables?.map((table) => (
               <div
                 key={table.name}
                 className="flex items-center justify-between p-3 border rounded-lg"

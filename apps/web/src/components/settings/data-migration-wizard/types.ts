@@ -6,7 +6,7 @@ export interface ExportOptions {
   includeProntuarios: boolean;
   includeAppointments: boolean;
   includeFinanceiro: boolean;
-  format: string;
+  format: "json" | "csv" | "excel";
   enableCompression: boolean;
   enableEncryption: boolean;
   isIncremental: boolean;

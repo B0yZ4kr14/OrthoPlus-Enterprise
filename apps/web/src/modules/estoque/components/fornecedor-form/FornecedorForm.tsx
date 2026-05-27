@@ -27,7 +27,7 @@ export function FornecedorForm({
   return (
     <Form {...form}>
       { }
-      <form onSubmit={handleSubmit as any} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <Tabs defaultValue="dados" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="dados">Dados Cadastrais</TabsTrigger>
@@ -37,13 +37,13 @@ export function FornecedorForm({
 
           <TabsContent value="dados" className="space-y-6">
             { }
-            <DadosCadastraisTab form={form as any} />
+            <DadosCadastraisTab form={form} />
           </TabsContent>
 
           <TabsContent value="api" className="space-y-6">
             { }
             <ApiIntegracaoTab
-              form={form as any}
+              form={form}
               apiEnabled={apiEnabled}
               apiAuthType={apiAuthType}
             />
@@ -51,7 +51,7 @@ export function FornecedorForm({
 
           <TabsContent value="pedidos" className="space-y-6">
             { }
-            <PedidosAutomaticosTab form={form as any} apiEnabled={apiEnabled} />
+            <PedidosAutomaticosTab form={form} apiEnabled={apiEnabled} />
           </TabsContent>
         </Tabs>
 

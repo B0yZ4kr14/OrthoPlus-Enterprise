@@ -1,5 +1,4 @@
-// @ts-expect-error — TS2307
-import { MovimentacaoEstoque } from "../entities/MovimentacaoEstoque";
+import { MovimentacaoEstoque } from "@/domain/entities/MovimentacaoEstoque";
 
 /**
  * Interface do repositório de MovimentacaoEstoque

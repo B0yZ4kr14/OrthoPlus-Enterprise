@@ -22,23 +22,30 @@ interface DBStats {
   }>;
 }
 
+import { useState } from "react";
+
 export const useDatabaseMaintenancePage = () => {
   const queryClient = useQueryClient();
+  const [executingOperation, setExecutingOperation] = useState<string | null>(null);
 
   const {
     data: stats,
     isLoading,
-  } = useQuery({
+  } = useQuery<DBStats>({
     queryKey: ["database-maintenance-page"],
     queryFn: async () => {
       const data = await apiClient.get<{ health: DBStats }>("/db/health");
-      return { ...data.health, tables: [] };
+      return { ...data.health, tables: data.health.tables || [] };
     },
   });
 
   const maintenanceMutation = useMutation({
     mutationFn: async (payload: { operation: string; targetSchema?: string }) => {
+      setExecutingOperation(payload.operation);
       return await apiClient.post<{ message: string }>("/db/maintenance", payload);
+    },
+    onSettled: () => {
+      setExecutingOperation(null);
     },
     onSuccess: (data) => {
       toast.success(data.message);
@@ -53,6 +60,6 @@ export const useDatabaseMaintenancePage = () => {
     stats,
     isLoading,
     executeMaintenance: maintenanceMutation.mutate,
-    isExecuting: maintenanceMutation.isPending,
+    isExecuting: executingOperation,
   };
 };

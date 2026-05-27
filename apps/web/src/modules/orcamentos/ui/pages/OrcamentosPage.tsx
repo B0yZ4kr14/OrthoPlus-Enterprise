@@ -51,8 +51,8 @@ export default function OrcamentosPage() {
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: any }> = {
       RASCUNHO: { variant: "secondary", icon: FileText },
-      PENDENTE: { variant: "info" as any, icon: Clock },
-      APROVADO: { variant: "success" as any, icon: CheckCircle },
+      PENDENTE: { variant: "info", icon: Clock },
+      APROVADO: { variant: "success", icon: CheckCircle },
       REJEITADO: { variant: "destructive", icon: XCircle },
       EXPIRADO: { variant: "destructive", icon: XCircle },
     };

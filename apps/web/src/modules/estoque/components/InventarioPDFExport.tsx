@@ -156,11 +156,12 @@ export async function exportInventarioPDF(
   // Recomendações
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Recomendações", 14, (doc as any).lastAutoTable.finalY + 20);
+  const lastTableY = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 0;
+  doc.text("Recomendações", 14, lastTableY + 20);
 
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  let yPos = (doc as any).lastAutoTable.finalY + 30;
+  let yPos = lastTableY + 30;
 
   const recomendacoes = [
     "• Revisar processos de entrada e saída de produtos com divergências altas",

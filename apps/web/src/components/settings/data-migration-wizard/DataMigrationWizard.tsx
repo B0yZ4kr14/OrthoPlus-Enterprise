@@ -36,13 +36,13 @@ export function DataMigrationWizard({ open, onClose, mode }: DataMigrationWizard
 
   const renderStepContent = () => {
     if (mode === "export") {
-      if (step === 1) return <ExportDataSelectionStep exportOptions={exportOptions as any} setExportOptions={setExportOptions as any} />;
-      if (step === 2) return <ExportConfirmStep exportOptions={exportOptions as any} setExportOptions={setExportOptions as any} loading={loading} progress={progress} />;
+      if (step === 1) return <ExportDataSelectionStep exportOptions={exportOptions} setExportOptions={setExportOptions} />;
+      if (step === 2) return <ExportConfirmStep exportOptions={exportOptions} setExportOptions={setExportOptions} loading={loading} progress={progress} />;
       if (step === 3) return <MigrationResultsStep mode="export" importResults={null} />;
     } else {
       if (step === 1) return <ImportFileUploadStep importFile={importFile} onFileUpload={handleFileUpload} />;
       if (step === 2) return <ImportPreviewStep importData={importData} />;
-      if (step === 3) return <ImportOptionsStep importOptions={importOptions as any} setImportOptions={setImportOptions as any} loading={loading} progress={progress} />;
+      if (step === 3) return <ImportOptionsStep importOptions={importOptions} setImportOptions={setImportOptions} loading={loading} progress={progress} />;
       if (step === 4) return <MigrationResultsStep mode="import" importResults={importResults} />;
     }
     return null;

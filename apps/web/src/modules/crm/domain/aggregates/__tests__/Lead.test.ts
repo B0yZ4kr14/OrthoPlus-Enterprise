@@ -98,8 +98,7 @@ describe("Lead Aggregate", () => {
       lead.assignTo("user-1");
 
       const persistence = lead.toPersistence();
-      // @ts-expect-error — TS18046
-      expect(persistence.assigned_to).toBe("user-1");
+      expect((persistence as Record<string, unknown>).assigned_to).toBe("user-1");
     });
   });
 });

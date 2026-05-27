@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest"
 import { renderHook } from "@testing-library/react"
 
 import { useIAInsights } from "../useIAInsights"
-import type { AnaliseComplete } from "../../../types/radiografia.types"
+import type { AnaliseComplete, ProblemaRadiografico } from "../../../types/radiografia.types"
 
 function makeAnalise(overrides: Partial<AnaliseComplete> = {}): AnaliseComplete {
   return {
@@ -38,9 +38,9 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
-            { tipo_problema: "CARIE", localizacao: "Dente 16", severidade: "MODERADA" } as any,
-            { tipo_problema: "FRATURA", localizacao: "Dente 21", severidade: "GRAVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as unknown as ProblemaRadiografico,
+            { tipo_problema: "CARIE", localizacao: "Dente 16", severidade: "MODERADA" } as unknown as ProblemaRadiografico,
+            { tipo_problema: "FRATURA", localizacao: "Dente 21", severidade: "GRAVE" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -49,8 +49,8 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
-            { tipo_problema: "PERIODONTAL", localizacao: "Dente 36", severidade: "MODERADA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as unknown as ProblemaRadiografico,
+            { tipo_problema: "PERIODONTAL", localizacao: "Dente 36", severidade: "MODERADA" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -72,8 +72,8 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Arcada Superior", severidade: "LEVE" } as any,
-            { tipo_problema: "CARIE", localizacao: "Arcada Superior", severidade: "MODERADA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Arcada Superior", severidade: "LEVE" } as unknown as ProblemaRadiografico,
+            { tipo_problema: "CARIE", localizacao: "Arcada Superior", severidade: "MODERADA" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -82,7 +82,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Arcada Inferior", severidade: "LEVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Arcada Inferior", severidade: "LEVE" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -103,8 +103,8 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as any,
-            { tipo_problema: "CARIE", localizacao: "Dente 16", severidade: "MEDIA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as unknown as ProblemaRadiografico,
+            { tipo_problema: "CARIE", localizacao: "Dente 16", severidade: "MEDIA" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -113,7 +113,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "ALTA" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -185,7 +185,7 @@ describe("useIAInsights", () => {
         problemas_detectados: 1,
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14", severidade: "LEVE" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -244,7 +244,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE", localizacao: "Dente 14" } as any,
+            { tipo_problema: "CARIE", localizacao: "Dente 14" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",
@@ -264,7 +264,7 @@ describe("useIAInsights", () => {
       makeAnalise({
         resultado_ia: {
           problemas_detectados: [
-            { tipo_problema: "CARIE" } as any,
+            { tipo_problema: "CARIE" } as unknown as ProblemaRadiografico,
           ],
           sugestoes_tratamento: [],
           observacoes_ia: "",

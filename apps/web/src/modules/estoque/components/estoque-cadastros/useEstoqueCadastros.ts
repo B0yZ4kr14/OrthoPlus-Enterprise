@@ -5,10 +5,6 @@ import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
 import type { Produto, Fornecedor, Categoria } from "../../types/estoque.types";
 
- 
-type ProdutoExt = Produto & Record<string, any>;
- 
-type FornecedorExt = Fornecedor & Record<string, any>;
 import type { ViewMode, ItemToDelete, SummaryData } from "./types";
 
 export function useEstoqueCadastros() {
@@ -33,7 +29,7 @@ export function useEstoqueCadastros() {
   const [fornecedorViewMode, setFornecedorViewMode] = useState<ViewMode>("list");
   const [categoriaViewMode, setCategoriaViewMode] = useState<ViewMode>("list");
 
-  const [selectedProduto, setSelectedProduto] = useState<ProdutoExt | undefined>();
+  const [selectedProduto, setSelectedProduto] = useState<Produto | undefined>();
   const [selectedFornecedor, setSelectedFornecedor] = useState<Fornecedor | undefined>();
   const [selectedCategoria, setSelectedCategoria] = useState<Categoria | undefined>();
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -48,12 +44,12 @@ export function useEstoqueCadastros() {
     produtosCount: produtos.length,
     produtosAtivos: produtos.filter((p) => p.ativo).length,
     fornecedoresCount: fornecedores.length,
-    fornecedoresAtivos: ((fornecedores as unknown) as FornecedorExt[]).filter((f) => f.ativo).length,
+    fornecedoresAtivos: fornecedores.filter((f) => f.ativo).length,
     categoriasCount: categorias.length,
   }), [produtos, fornecedores, categorias]);
 
   const filteredProdutos = useMemo(() =>
-    ((produtos as unknown) as ProdutoExt[]).filter(
+    produtos.filter(
       (p) =>
         p.nome.toLowerCase().includes(searchProduto.toLowerCase()) ||
         p.codigo?.toLowerCase().includes(searchProduto.toLowerCase()),
@@ -61,7 +57,7 @@ export function useEstoqueCadastros() {
   [produtos, searchProduto]);
 
   const filteredFornecedores = useMemo(() =>
-    ((fornecedores as unknown) as FornecedorExt[]).filter(
+    fornecedores.filter(
       (f) =>
         f.nome.toLowerCase().includes(searchFornecedor.toLowerCase()) ||
         f.cnpj?.toLowerCase().includes(searchFornecedor.toLowerCase()),
@@ -74,19 +70,18 @@ export function useEstoqueCadastros() {
     setProdutoViewMode("form");
   }, []);
 
-  const handleEditProduto = useCallback((produto: ProdutoExt) => {
-    setSelectedProduto(produto as ProdutoExt);
+  const handleEditProduto = useCallback((produto: Produto) => {
+    setSelectedProduto(produto);
     setProdutoViewMode("form");
   }, []);
 
    
-  const handleSubmitProduto = useCallback((data: any) => {
+  const handleSubmitProduto = useCallback((data: Produto) => {
     if (selectedProduto) {
       updateProduto(selectedProduto.id!, data);
       toast({ title: "Sucesso", description: "Produto atualizado com sucesso!" });
     } else {
-       
-      addProduto(data as any);
+      addProduto(data);
       toast({ title: "Sucesso", description: "Produto cadastrado com sucesso!" });
     }
     setProdutoViewMode("list");
@@ -191,7 +186,7 @@ export function useEstoqueCadastros() {
   }, [itemToDelete, deleteProduto, deleteFornecedor, deleteCategoria, toast]);
 
   const handleScanSuccess = useCallback((barcode: string) => {
-    const produto = ((produtos as unknown) as ProdutoExt[]).find(
+    const produto = produtos.find(
       (p) => p.codigoBarras === barcode || p.codigo === barcode,
     );
     if (produto) {

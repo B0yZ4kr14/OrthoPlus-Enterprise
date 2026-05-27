@@ -86,8 +86,7 @@ export class OrcamentoAggregate {
     }
 
     // Executar ação no aggregate
-    // @ts-expect-error — TS2345
-    this.orcamento.rejeitar(rejeitadoPor, motivo);
+    this.orcamento.rejeitar(rejeitadoPor, motivo || "");
 
     // Registrar evento
     this.addEvent(

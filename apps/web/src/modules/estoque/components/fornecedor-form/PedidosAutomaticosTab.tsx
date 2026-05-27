@@ -16,9 +16,10 @@ import {
 } from "@orthoplus/core-ui/form";
 import type { Fornecedor } from "../../types/estoque.types";
 
+import type { UseFormReturn } from "react-hook-form";
+
 interface PedidosAutomaticosTabProps {
-   
-  form: any;
+  form: UseFormReturn<Fornecedor>;
   apiEnabled: boolean;
 }
 

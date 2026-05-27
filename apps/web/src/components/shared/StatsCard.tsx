@@ -75,7 +75,7 @@ export const StatsCard = memo(function StatsCard({
           <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-2">
             <span className={cn(
               "inline-flex items-center gap-0.5 font-semibold px-2 py-0.5 rounded-full text-[10px]",
-              trend.isPositive ? "bg-emerald-500/10 text-emerald-600" : "bg-red-500/10 text-red-600"
+              trend.isPositive ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
             )}>
               {trend.isPositive ? "↑" : "↓"} {Math.abs(trend.value)}%
             </span>

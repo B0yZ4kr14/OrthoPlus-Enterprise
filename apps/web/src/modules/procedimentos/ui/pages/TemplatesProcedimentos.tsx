@@ -41,6 +41,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { TableFilter } from "@/components/shared/TableFilter";
 import TabelaPrecosManager from "../../components/TabelaPrecosManager";
+import DentistaProcedimentosManager from "../../components/DentistaProcedimentosManager";
 
 interface ProcedimentoTemplate {
   id: string;
@@ -108,13 +109,13 @@ export default function TemplatesProcedimentosPage() {
       CIRURGIA: "bg-orange-500/10 text-orange-700 dark:text-orange-400",
       PERIODONTIA: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
       ESTETICA: "bg-interactive/10 text-interactive",
-      PREVENTIVA: "bg-teal-500/10 text-teal-700 dark:text-teal-400",
+      PREVENTIVA: "bg-success/10 text-success dark:text-success",
     };
 
     return <Badge className={colors[categoria] || ""}>{categoria}</Badge>;
   };
 
-  const [activeTab, setActiveTab] = useState<"templates" | "tabelas">("templates")
+  const [activeTab, setActiveTab] = useState<"templates" | "tabelas" | "dentistas">("templates")
 
   return (
     <div className="space-y-6">
@@ -169,10 +170,22 @@ export default function TemplatesProcedimentosPage() {
         >
           Tabela de Preços
         </button>
+        <button
+          onClick={() => setActiveTab("dentistas")}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === "dentistas"
+              ? "border-primary text-primary"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Dentistas
+        </button>
       </div>
 
       {activeTab === "tabelas" ? (
         <TabelaPrecosManager />
+      ) : activeTab === "dentistas" ? (
+        <DentistaProcedimentosManager />
       ) : (
         <>
       {/* Filters */}

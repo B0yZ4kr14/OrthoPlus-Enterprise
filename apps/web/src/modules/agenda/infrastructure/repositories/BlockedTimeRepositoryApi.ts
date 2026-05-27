@@ -15,8 +15,7 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
   async findById(id: string): Promise<BlockedTime | null> {
     try {
       const data = await apiClient.get<Record<string, any>>(`${this.basePath}/${id}`);
-      // @ts-expect-error — TS2345
-      return data ? BlockedTimeMapper.toDomain(data) : null;
+      return data ? BlockedTimeMapper.toDomain(data as Parameters<typeof BlockedTimeMapper.toDomain>[0]) : null;
     } catch (error: unknown) {
       const axiosErr = error as { response?: { status?: number } };
       if (axiosErr.response?.status === 404 || axiosErr.response?.status === 400)

@@ -132,8 +132,7 @@ export function PatientSelector({
               <Button
                 variant="outline"
                 size="sm"
-                // @ts-expect-error — TS2345
-                onClick={() => onSelect(null as unknown)}
+                onClick={() => onSelect(null)}
               >
                 Trocar
               </Button>

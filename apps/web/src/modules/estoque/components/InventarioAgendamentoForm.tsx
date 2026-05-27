@@ -58,12 +58,12 @@ export function InventarioAgendamentoForm({
     setValue,
     formState: { errors },
   } = useForm<AgendamentoFormData>({
-    resolver: zodResolver(agendamentoSchema) as any,
+    resolver: zodResolver(agendamentoSchema),
     defaultValues: {
       notificarResponsavel: true,
       notificarDiasAntes: 1,
       ...initialData,
-    } as any,
+    },
   });
 
   const periodicidade = watch("periodicidade");

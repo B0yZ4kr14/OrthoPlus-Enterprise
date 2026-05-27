@@ -124,8 +124,7 @@ class PerformanceTracker {
     }
 
     if (filter?.minDuration) {
-      // @ts-expect-error — TS18048
-      filtered = filtered.filter((m) => m.duration >= filter.minDuration);
+      filtered = filtered.filter((m) => m.duration >= (filter.minDuration ?? 0));
     }
 
     if (filter?.limit) {

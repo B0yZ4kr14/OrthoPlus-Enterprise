@@ -1,5 +1,53 @@
-// @ts-expect-error — TS2307
-import { Patient, Consulta, Prontuario } from "../types/patient.types";
+interface Patient {
+  nome: string;
+  status: string;
+  createdAt?: string;
+  cpf: string;
+  rg?: string;
+  dataNascimento: string;
+  sexo: string;
+  telefone: string;
+  celular: string;
+  email?: string;
+  endereco: {
+    logradouro: string;
+    numero: string;
+    complemento?: string;
+    bairro: string;
+    cidade: string;
+    estado: string;
+    cep: string;
+  };
+  convenio: {
+    temConvenio: boolean;
+    nomeConvenio?: string;
+    numeroCarteira?: string;
+    validade?: string;
+  };
+  observacoes?: string;
+}
+
+interface Consulta {
+  id: string;
+  data: string;
+  hora: string;
+  dentista: string;
+  procedimento: string;
+  status: string;
+  observacoes?: string;
+}
+
+interface Prontuario {
+  id: string;
+  pacienteId: string;
+  data: string;
+  dentista: string;
+  anamnese?: string;
+  diagnostico?: string;
+  tratamento?: string;
+  prescricao?: string;
+  observacoes?: string;
+}
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Separator } from "@orthoplus/core-ui/separator";

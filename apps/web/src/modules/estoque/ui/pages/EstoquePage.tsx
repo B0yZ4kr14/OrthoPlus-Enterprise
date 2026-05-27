@@ -9,8 +9,7 @@ import { MovimentacaoForm } from "../components/MovimentacaoForm";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatsCard } from "@/components/shared/StatsCard";
 import { Card } from "@orthoplus/core-ui/card";
-// @ts-expect-error — TS2307
-import type { Produto } from "../../domain/entities/Produto";
+import type { Produto } from "@/domain/entities/Produto";
 import { CardTopBorder } from "@/components/shared/CardTopBorder";
 
 export const EstoquePage = () => {
@@ -99,7 +98,7 @@ export const EstoquePage = () => {
             <CardTopBorder color="interactive" opacity={30} />
             <div className="p-1">
               <ProdutoList
-                produtos={produtos as unknown as Produto[]}
+                produtos={produtos as Produto[]}
                 isLoading={isLoading}
                 onMovimentacao={handleOpenMovimentacao}
               />
@@ -112,7 +111,7 @@ export const EstoquePage = () => {
             <CardTopBorder color="warning" opacity={40} />
             <div className="p-1">
               <ProdutoList
-                produtos={produtosEstoqueBaixo as unknown as Produto[]}
+                produtos={produtosEstoqueBaixo as Produto[]}
                 isLoading={isLoading}
                 onMovimentacao={handleOpenMovimentacao}
               />
@@ -125,7 +124,7 @@ export const EstoquePage = () => {
             <CardTopBorder color="destructive" opacity={40} />
             <div className="p-1">
               <ProdutoList
-                produtos={produtosZerados as unknown as Produto[]}
+                produtos={produtosZerados as Produto[]}
                 isLoading={isLoading}
                 onMovimentacao={handleOpenMovimentacao}
               />

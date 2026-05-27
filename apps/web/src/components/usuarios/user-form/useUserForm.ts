@@ -13,8 +13,7 @@ export function useUserForm({ user, onSuccess }: UserFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<UserFormValues>({
-    // @ts-expect-error — TS2322
-    resolver: zodResolver(userFormSchema),
+    resolver: zodResolver(userFormSchema) as any,
     defaultValues: {
       full_name: user?.full_name || "",
       email: user?.email || "",

@@ -34,8 +34,7 @@ export default function PatientDetailPage() {
     queryKey: ["patient", id],
     queryFn: async () => {
       const data = await apiClient.get<Record<string, any>>(`/pacientes/${id}`);
-      // @ts-expect-error — TS2345
-      return PatientAdapter.toFrontend(data);
+      return PatientAdapter.toFrontend(data as Parameters<typeof PatientAdapter.toFrontend>[0]);
     },
     enabled: !!id,
   });

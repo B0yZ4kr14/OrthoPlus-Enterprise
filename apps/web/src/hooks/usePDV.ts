@@ -62,6 +62,8 @@ export interface PDVPagamento {
   valor: number;
   parcelas?: number;
   transacao_id?: string;
+  taxa_operacao?: number;
+  valor_liquido?: number;
   created_at: string;
 }
 

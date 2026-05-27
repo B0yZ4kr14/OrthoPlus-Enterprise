@@ -22,6 +22,7 @@ import {
   Wallet,
   Unlock,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CardTopBorder } from "@/components/shared/CardTopBorder";
@@ -31,13 +32,13 @@ type FormaPagamentoType = PDVPagamento["forma_pagamento"];
 interface FormasPagamentoOption {
   value: FormaPagamentoType;
   label: string;
-  icon: any;
+  icon: LucideIcon;
 }
 
 const formasPagamento: FormasPagamentoOption[] = [
   { value: "DINHEIRO", label: "Dinheiro", icon: DollarSign },
-  { value: "CREDITO" as any, label: "Cartão Crédito", icon: CreditCard },
-  { value: "DEBITO" as any, label: "Cartão Débito", icon: CreditCard },
+  { value: "CREDITO", label: "Cartão Crédito", icon: CreditCard },
+  { value: "DEBITO", label: "Cartão Débito", icon: CreditCard },
   { value: "PIX", label: "PIX", icon: Wallet },
   { value: "TRANSFERENCIA", label: "Transferência", icon: Wallet },
   { value: "CRYPTO", label: "Criptomoeda", icon: Wallet },
@@ -93,7 +94,7 @@ export default function PDVPage() {
   const finalizarVenda = async () => {
     if (itens.length === 0 || !caixaAberto) return;
     const formaNormalizada: FormaPagamentoType = formaPagamento;
-    const taxaOperacao = formaNormalizada === ("CREDITO" as any) ? totalVenda * 0.035 : 0;
+    const taxaOperacao = formaNormalizada === "CREDITO" ? totalVenda * 0.035 : 0;
     const valorLiquido = totalVenda - taxaOperacao;
     await criarVenda(
       { valor_total: totalVenda, desconto: 0, status: "FINALIZADA" },
@@ -105,7 +106,7 @@ export default function PDVPage() {
           parcelas: parseInt(parcelas) || 1,
           taxa_operacao: taxaOperacao,
           valor_liquido: valorLiquido,
-        } as any,
+        },
       ],
     );
     setItens([]);
@@ -278,7 +279,7 @@ export default function PDVPage() {
                 </div>
               </div>
 
-              {formaPagamento === ("CREDITO" as any) && (
+              {formaPagamento === "CREDITO" && (
                 <div className="space-y-2">
                   <Label htmlFor="parcelas">Parcelas</Label>
                   <Input

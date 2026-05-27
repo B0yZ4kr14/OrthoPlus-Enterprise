@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Funcionario, FuncionarioFilters } from "../types/funcionario.types";
+import { Funcionario, FuncionarioFilters, Cargo, Permissoes } from "../types/funcionario.types";
 
 interface FuncionarioRow {
   id: string;
@@ -52,15 +52,15 @@ function mapRowToFuncionario(row: Record<string, any>): Funcionario {
     telefone: row.telefone,
     celular: row.celular,
     email: row.email,
-    endereco: row.endereco as any,
-    cargo: row.cargo as any,
+    endereco: row.endereco,
+    cargo: row.cargo as Cargo,
     dataAdmissao: row.data_admissao,
     salario: Number(row.salario),
-    permissoes: row.permissoes as any,
-    horarioTrabalho: row.horario_trabalho as any,
+    permissoes: row.permissoes as Permissoes,
+    horarioTrabalho: row.horario_trabalho,
     diasTrabalho: row.dias_trabalho,
     observacoes: row.observacoes || undefined,
-    status: row.status as any,
+    status: row.status as Funcionario["status"],
     senhaAcesso: undefined,
     avatar_url: row.avatar_url || undefined,
     createdAt: row.created_at,
@@ -144,8 +144,7 @@ export function useFuncionarios() {
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       console.error("Erro ao adicionar funcionário:", error);
-      // @ts-expect-error — TS2339
-      if (_e.code === "23505") {
+      if ((error as { code?: string }).code === "23505") {
         toast.error("CPF já cadastrado para esta clínica");
       } else {
         toast.error("Erro ao cadastrar funcionário");

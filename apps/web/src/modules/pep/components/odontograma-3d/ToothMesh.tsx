@@ -1,7 +1,6 @@
 // cspell:disable
 import { useRef, useState } from "react";
-// @ts-expect-error — TS7016
-import * as THREE from "three";
+
 import { Text } from "@react-three/drei";
 import type { ToothData, ToothStatus } from "../../types/odontograma.types";
 import { TOOTH_STATUS_COLORS } from "../../types/odontograma.types";
@@ -21,7 +20,7 @@ export function ToothMesh({
   onToothClick,
   onToothRightClick,
 }: ToothMeshProps) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<any>(null);
   const [hovered, setHovered] = useState(false);
 
   if (!toothData) return null;

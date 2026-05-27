@@ -62,8 +62,7 @@ export class UpdateAgendamentoUseCase {
 
       props.updatedAt = new Date();
 
-      // @ts-expect-error — TS2571
-      const updatedAgendamento = (agendamento as unknown).constructor.restore(
+      const updatedAgendamento = (agendamento as any).constructor.restore(
         props,
       );
       await this.agendamentoRepository.update(updatedAgendamento);

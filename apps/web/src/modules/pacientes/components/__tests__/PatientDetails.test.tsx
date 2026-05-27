@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, act } from "@testing-library/react"
+import type { ReactNode } from "react"
 import { PatientDetails } from "../PatientDetails"
 
 const mockOnEdit = vi.fn()
@@ -7,16 +8,16 @@ const mockOnClose = vi.fn()
 
 // Mock UI primitives that may use portal or complex rendering
 vi.mock("@orthoplus/core-ui/tabs", () => ({
-  Tabs: ({ children, defaultValue }: any) => (
+  Tabs: ({ children, defaultValue }: { children?: ReactNode; defaultValue?: string }) => (
     <div data-testid="tabs" data-default={defaultValue}>
       {children}
     </div>
   ),
-  TabsList: ({ children }: any) => <div data-testid="tabs-list">{children}</div>,
-  TabsTrigger: ({ children, value }: any) => (
+  TabsList: ({ children }: { children?: ReactNode }) => <div data-testid="tabs-list">{children}</div>,
+  TabsTrigger: ({ children, value }: { children?: ReactNode; value: string }) => (
     <button data-testid={`tab-trigger-${value}`}>{children}</button>
   ),
-  TabsContent: ({ children, value }: any) => (
+  TabsContent: ({ children, value }: { children?: ReactNode; value: string }) => (
     <div data-testid={`tab-content-${value}`}>{children}</div>
   ),
 }))
@@ -74,7 +75,7 @@ describe("PatientDetails", () => {
 
   it("should render patient name and status badge", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText("João Silva")).toBeTruthy()
     expect(screen.getByText("Ativo")).toBeTruthy()
@@ -82,14 +83,14 @@ describe("PatientDetails", () => {
 
   it("should render registration date", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText(/Cadastrado em/)).toBeTruthy()
   })
 
   it("should call onEdit when edit button is clicked", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     const editButton = screen.getByText("Editar")
     act(() => {
@@ -101,7 +102,7 @@ describe("PatientDetails", () => {
 
   it("should call onClose when close button is clicked", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     const closeButton = screen.getByText("Fechar")
     act(() => {
@@ -113,7 +114,7 @@ describe("PatientDetails", () => {
 
   it("should render dados cadastrais tab with personal info", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByTestId("tab-trigger-dados")).toBeTruthy()
     expect(screen.getByTestId("tab-content-dados")).toBeTruthy()
@@ -125,7 +126,7 @@ describe("PatientDetails", () => {
 
   it("should render contact tab with phone and email", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByTestId("tab-trigger-dados")).toBeTruthy()
     expect(screen.getByText("Contato")).toBeTruthy()
@@ -136,7 +137,7 @@ describe("PatientDetails", () => {
 
   it("should render address tab with full address", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText("Endereço")).toBeTruthy()
     expect(screen.getByText(/Rua das Flores, 123/)).toBeTruthy()
@@ -147,7 +148,7 @@ describe("PatientDetails", () => {
 
   it("should render convenio info when patient has convenio", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText("Convênio")).toBeTruthy()
     expect(screen.getByText("Unimed")).toBeTruthy()
@@ -156,28 +157,28 @@ describe("PatientDetails", () => {
 
   it("should render 'sem convenio' message when patient has no convenio", () => {
     const patient = createMockPatientNoConvenio()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText(/Paciente particular/)).toBeTruthy()
   })
 
   it("should render observacoes when present", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText("Paciente com histórico de alergia a penicilina.")).toBeTruthy()
   })
 
   it("should not render observacoes section when absent", () => {
     const patient = createMockPatientNoConvenio()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.queryByText("Paciente com histórico de alergia a penicilina.")).toBeNull()
   })
 
   it("should render consultas tab with mock data", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByTestId("tab-trigger-consultas")).toBeTruthy()
     expect(screen.getByTestId("tab-content-consultas")).toBeTruthy()
@@ -188,7 +189,7 @@ describe("PatientDetails", () => {
 
   it("should render prontuario tab with mock data", () => {
     const patient = createMockPatient()
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByTestId("tab-trigger-prontuario")).toBeTruthy()
     expect(screen.getByTestId("tab-content-prontuario")).toBeTruthy()
@@ -199,14 +200,14 @@ describe("PatientDetails", () => {
 
   it("should render female sexo correctly", () => {
     const patient = { ...createMockPatient(), sexo: "F" }
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText("Feminino")).toBeTruthy()
   })
 
   it("should render other sexo correctly", () => {
     const patient = { ...createMockPatient(), sexo: "O" }
-    render(<PatientDetails patient={patient as any} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
 
     expect(screen.getByText("Outro")).toBeTruthy()
   })

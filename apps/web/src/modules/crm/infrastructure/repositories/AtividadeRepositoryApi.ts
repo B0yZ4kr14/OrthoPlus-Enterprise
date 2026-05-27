@@ -78,8 +78,7 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
           end_date: endOfDay.toISOString(),
         },
       });
-      // @ts-expect-error — TS2345
-      return activities?.map(AtividadeMapper.toDomain) ?? [];
+      return activities?.map((d) => AtividadeMapper.toDomain(d as Parameters<typeof AtividadeMapper.toDomain>[0])) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar atividades agendadas: ${_e.message}`);

@@ -96,7 +96,7 @@ export default function EstoqueScannerMobile() {
           tipo: "ENTRADA",
           quantidade: 1,
           motivo: "Entrada via Scanner Mobile",
-          realizadoPor: (user as any)?.nome || "Scanner Mobile",
+          realizadoPor: (user as { nome?: string } | null)?.nome || "Scanner Mobile",
           createdAt: new Date().toISOString(),
         });
 
@@ -127,7 +127,7 @@ export default function EstoqueScannerMobile() {
           tipo: "SAIDA",
           quantidade: 1,
           motivo: "Saída via Scanner Mobile",
-          realizadoPor: (user as any)?.nome || "Scanner Mobile",
+          realizadoPor: (user as { nome?: string } | null)?.nome || "Scanner Mobile",
           createdAt: new Date().toISOString(),
         });
 

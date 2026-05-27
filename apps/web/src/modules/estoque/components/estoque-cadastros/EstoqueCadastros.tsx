@@ -101,11 +101,9 @@ export function EstoqueCadastros() {
         <TabsContent value="produtos" className="space-y-4">
           <ProdutosTab
             viewMode={produtoViewMode}
-             
-            produtos={filteredProdutos as any}
+            produtos={filteredProdutos}
             categorias={categorias}
-             
-            fornecedores={fornecedores as any}
+            fornecedores={fornecedores}
             selectedProduto={selectedProduto}
             searchValue={searchProduto}
             onSearchChange={setSearchProduto}
@@ -122,8 +120,7 @@ export function EstoqueCadastros() {
         <TabsContent value="fornecedores" className="space-y-4">
           <FornecedoresTab
             viewMode={fornecedorViewMode}
-             
-            fornecedores={filteredFornecedores as any}
+            fornecedores={filteredFornecedores}
             selectedFornecedor={selectedFornecedor}
             searchValue={searchFornecedor}
             onSearchChange={setSearchFornecedor}

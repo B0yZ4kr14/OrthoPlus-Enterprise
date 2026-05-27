@@ -9,11 +9,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@orthoplus/core-ui/form";
+import type { UseFormReturn } from "react-hook-form";
 import type { Fornecedor } from "../../types/estoque.types";
 
 interface DadosCadastraisTabProps {
-   
-  form: any;
+  form: UseFormReturn<Fornecedor>;
 }
 
 export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {

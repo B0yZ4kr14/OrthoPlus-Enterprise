@@ -1,5 +1,4 @@
-// @ts-expect-error — TS2307
-import { Produto } from "../entities/Produto";
+import { Produto } from "@/domain/entities/Produto";
 
 /**
  * Interface do repositório de Produtos

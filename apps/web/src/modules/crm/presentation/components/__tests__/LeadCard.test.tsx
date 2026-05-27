@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 import { render, screen, act } from "@testing-library/react"
+import type { ReactNode } from "react"
+import { Lead } from "@/modules/crm/domain/entities/Lead"
 import { LeadCard } from "../LeadCard"
 
 const mockOnEdit = vi.fn()
@@ -22,17 +24,17 @@ vi.mock("@/lib/utils/status.utils", () => ({
 }))
 
 vi.mock("@orthoplus/core-ui/card", () => ({
-  Card: ({ children, className }: any) => (
+  Card: ({ children, className }: { children?: ReactNode; className?: string }) => (
     <div data-testid="card" className={className}>
       {children}
     </div>
   ),
-  CardHeader: ({ children, className }: any) => (
+  CardHeader: ({ children, className }: { children?: ReactNode; className?: string }) => (
     <div data-testid="card-header" className={className}>
       {children}
     </div>
   ),
-  CardContent: ({ children, className }: any) => (
+  CardContent: ({ children, className }: { children?: ReactNode; className?: string }) => (
     <div data-testid="card-content" className={className}>
       {children}
     </div>
@@ -40,7 +42,7 @@ vi.mock("@orthoplus/core-ui/card", () => ({
 }))
 
 vi.mock("@orthoplus/core-ui/badge", () => ({
-  Badge: ({ children, variant, className }: any) => (
+  Badge: ({ children, variant, className }: { children?: ReactNode; variant?: string; className?: string }) => (
     <span data-testid="badge" data-variant={variant} className={className}>
       {children}
     </span>
@@ -48,7 +50,13 @@ vi.mock("@orthoplus/core-ui/badge", () => ({
 }))
 
 vi.mock("@orthoplus/core-ui/button", () => ({
-  Button: ({ children, onClick, variant, size, className, ...props }: any) => (
+  Button: ({ children, onClick, variant, size, className, ...props }: {
+    children?: ReactNode
+    onClick?: () => void
+    variant?: string
+    size?: string
+    className?: string
+  } & Record<string, unknown>) => (
     <button
       onClick={onClick}
       data-variant={variant}
@@ -112,7 +120,7 @@ describe("LeadCard", () => {
   it("should render lead name and status", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -126,7 +134,7 @@ describe("LeadCard", () => {
   it("should render contact info", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -140,7 +148,7 @@ describe("LeadCard", () => {
   it("should render interest and estimated value", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -156,7 +164,7 @@ describe("LeadCard", () => {
   it("should render origin badge", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -169,7 +177,7 @@ describe("LeadCard", () => {
   it("should render creation date", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -183,7 +191,7 @@ describe("LeadCard", () => {
   it("should not render contact section when email and telefone are absent", () => {
     render(
       <LeadCard
-        lead={mockLeadSemContato as any}
+        lead={mockLeadSemContato as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -197,7 +205,7 @@ describe("LeadCard", () => {
   it("should not render interest section when no interest or value", () => {
     render(
       <LeadCard
-        lead={mockLeadSemContato as any}
+        lead={mockLeadSemContato as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -211,7 +219,7 @@ describe("LeadCard", () => {
   it("should render correct status labels for different statuses", () => {
     const { rerender } = render(
       <LeadCard
-        lead={{ ...mockLead, status: "CONTATO_INICIAL" } as any}
+        lead={{ ...mockLead, status: "CONTATO_INICIAL" } as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -222,7 +230,7 @@ describe("LeadCard", () => {
 
     rerender(
       <LeadCard
-        lead={{ ...mockLead, status: "PROPOSTA" } as any}
+        lead={{ ...mockLead, status: "PROPOSTA" } as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -233,7 +241,7 @@ describe("LeadCard", () => {
 
     rerender(
       <LeadCard
-        lead={{ ...mockLead, status: "NEGOCIACAO" } as any}
+        lead={{ ...mockLead, status: "NEGOCIACAO" } as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -250,7 +258,7 @@ describe("LeadCard", () => {
   it("should call onEdit when clicking edit button", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -271,7 +279,7 @@ describe("LeadCard", () => {
   it("should call onDelete when clicking delete button", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -292,7 +300,7 @@ describe("LeadCard", () => {
   it("should call onStatusChange when clicking status update button", () => {
     render(
       <LeadCard
-        lead={mockLead as any}
+        lead={mockLead as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -314,7 +322,7 @@ describe("LeadCard", () => {
   it("should not render status update button for GANHO leads", () => {
     render(
       <LeadCard
-        lead={mockLeadGanho as any}
+        lead={mockLeadGanho as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -330,7 +338,7 @@ describe("LeadCard", () => {
   it("should not render status update button for PERDIDO leads", () => {
     render(
       <LeadCard
-        lead={mockLeadPerdido as any}
+        lead={mockLeadPerdido as unknown as Lead}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onStatusChange={mockOnStatusChange}
@@ -342,14 +350,14 @@ describe("LeadCard", () => {
   })
 
   it("should not render action buttons when handlers are not provided", () => {
-    render(<LeadCard lead={mockLead as any} />)
+    render(<LeadCard lead={mockLead as unknown as Lead} />)
 
     const buttons = screen.queryAllByRole("button")
     expect(buttons).toHaveLength(0)
   })
 
   it("should render only edit button when only onEdit is provided", () => {
-    render(<LeadCard lead={mockLead as any} onEdit={mockOnEdit} />)
+    render(<LeadCard lead={mockLead as unknown as Lead} onEdit={mockOnEdit} />)
 
     const buttons = screen.getAllByRole("button")
     // Edit + status update (since onStatusChange is not provided, only edit)

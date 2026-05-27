@@ -285,8 +285,7 @@ export default function ScheduledBackupsManagement() {
           setBackupToEdit(null);
           queryClient.invalidateQueries({ queryKey: ["scheduled-backups"] });
         }}
-        // @ts-expect-error — TS2322
-        initialData={backupToEdit}
+        initialData={backupToEdit as any}
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

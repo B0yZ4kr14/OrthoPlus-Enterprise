@@ -48,8 +48,7 @@ export function postSyncUpdate(type: SyncMessageType, data?: unknown): void {
 
   const message: SyncMessage = {
     type,
-    // @ts-expect-error — TS2322
-    data,
+    data: data as Record<string, any>,
     timestamp: Date.now(),
   };
 

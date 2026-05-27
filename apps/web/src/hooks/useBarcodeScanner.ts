@@ -1,5 +1,4 @@
 import { useState } from "react";
-// @ts-expect-error — TS2307
 import { BarcodeScanner } from "@capacitor-community/barcode-scanner";
 import { useToast } from "@/hooks/use-toast";
 
@@ -77,7 +76,7 @@ export function useBarcodeScanner() {
       if (result.hasContent) {
         return {
           hasContent: true,
-          content: result.content,
+          content: result.content || "",
           format: result.format,
         };
       }

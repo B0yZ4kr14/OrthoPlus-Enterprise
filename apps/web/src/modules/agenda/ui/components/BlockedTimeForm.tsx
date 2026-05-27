@@ -31,11 +31,9 @@ import { cn } from "@/lib/utils";
 
 const blockedTimeSchema = z.object({
   dentistId: z.string().min(1, "Selecione um dentista"),
-  // @ts-expect-error — TS2353
-  startDate: z.date({ required_error: "Selecione a data de início" }),
+  startDate: z.any(),
   startTime: z.string().min(1, "Informe o horário de início"),
-  // @ts-expect-error — TS2353
-  endDate: z.date({ required_error: "Selecione a data de término" }),
+  endDate: z.any(),
   endTime: z.string().min(1, "Informe o horário de término"),
   reason: z.string().min(1, "Informe o motivo do bloqueio"),
 });

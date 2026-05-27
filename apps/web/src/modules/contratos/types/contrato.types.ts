@@ -7,8 +7,7 @@ export const contratoTemplateSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
   tipo_tratamento: z.string().min(1, "Tipo de tratamento é obrigatório"),
   conteudo_html: z.string().min(1, "Conteúdo é obrigatório"),
-  // @ts-expect-error — TS2554
-  variaveis_disponiveis: z.record(z.string()).optional(),
+  variaveis_disponiveis: z.record(z.string(), z.string()).optional(),
   ativo: z.boolean().default(true),
 });
 

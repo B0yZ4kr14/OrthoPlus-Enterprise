@@ -28,9 +28,8 @@ export const useLGPDRequests = () => {
   });
 
   const createRequest = useMutation({
-    mutationFn: async (requestData: unknown) => {
+    mutationFn: async (requestData: Record<string, unknown>) => {
       const response = await apiClient.post<unknown>("/lgpd/solicitacoes", {
-        // @ts-expect-error — TS2698
         ...requestData,
         requested_by: user?.id,
       });

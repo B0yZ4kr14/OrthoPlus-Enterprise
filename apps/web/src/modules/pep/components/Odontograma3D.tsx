@@ -1,8 +1,7 @@
 import { Suspense, memo, useCallback, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, Text } from "@react-three/drei";
-// @ts-expect-error — TS7016
-import * as THREE from "three";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
@@ -40,7 +39,7 @@ function ToothMesh({
   onToothClick,
   onToothRightClick,
 }: ToothMeshProps) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<any>(null);
   const [hovered, setHovered] = useState(false);
 
   // Proteção contra dados undefined

@@ -17,8 +17,7 @@ export class TratamentoMapper {
       descricao: raw.descricao || "",
       denteCodigo: raw.dente_codigo || undefined,
       procedimentoId: raw.procedimento_id || undefined,
-      // @ts-expect-error — TS2322
-      status: (raw.status as unknown) || "PLANEJADO",
+      status: (raw.status as "PLANEJADO" | "EM_ANDAMENTO" | "CONCLUIDO" | "CANCELADO") || "PLANEJADO",
       dataInicio: new Date(raw.data_inicio),
       dataTermino: raw.data_conclusao
         ? new Date(raw.data_conclusao)

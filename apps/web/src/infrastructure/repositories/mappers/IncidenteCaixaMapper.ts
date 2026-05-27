@@ -51,8 +51,7 @@ export class IncidenteCaixaMapper {
       valor_caixa_momento: incidente.valorCaixaMomento,
       descricao: incidente.descricao,
       boletim_ocorrencia: incidente.boletimOcorrencia,
-      // @ts-expect-error — TS2322
-      metadata: incidente.metadata as unknown,
+      metadata: incidente.metadata as any,
       created_at: incidente.createdAt.toISOString(),
     };
   }

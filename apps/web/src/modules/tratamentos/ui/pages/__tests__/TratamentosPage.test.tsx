@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, act } from "@testing-library/react"
+import type { ReactNode } from "react"
 import { TratamentosPage } from "../TratamentosPage"
 
 const mockUpdateStatus = vi.fn()
@@ -22,7 +23,7 @@ vi.mock("sonner", () => ({
 }))
 
 vi.mock("@/components/shared/PatientSelector", () => ({
-  PatientSelector: ({ onSelect }: any) => (
+  PatientSelector: ({ onSelect }: { onSelect: (patient: { id: string; nome: string }) => void }) => (
     <button data-testid="select-patient" onClick={() => onSelect({ id: "p1", nome: "Joao Silva" })}>
       Selecionar Paciente
     </button>
@@ -30,11 +31,16 @@ vi.mock("@/components/shared/PatientSelector", () => ({
 }))
 
 vi.mock("@/components/shared/PageHeader", () => ({
-  PageHeader: ({ title }: any) => <h1>{title}</h1>,
+  PageHeader: ({ title }: { title: string }) => <h1>{title}</h1>,
 }))
 
 vi.mock("@orthoplus/core-ui/button", () => ({
-  Button: ({ children, onClick, size, variant, ...props }: any) => (
+  Button: ({ children, onClick, size, variant, ...props }: {
+    children?: ReactNode
+    onClick?: () => void
+    size?: string
+    variant?: string
+  } & Record<string, unknown>) => (
     <button onClick={onClick} data-size={size} data-variant={variant} {...props}>
       {children}
     </button>
@@ -42,31 +48,31 @@ vi.mock("@orthoplus/core-ui/button", () => ({
 }))
 
 vi.mock("@orthoplus/core-ui/card", () => ({
-  Card: ({ children }: any) => <div>{children}</div>,
-  CardContent: ({ children, className }: any) => <div className={className}>{children}</div>,
-  CardDescription: ({ children }: any) => <div>{children}</div>,
-  CardHeader: ({ children, className }: any) => <div className={className}>{children}</div>,
-  CardTitle: ({ children, className }: any) => <div className={className}>{children}</div>,
+  Card: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
+  CardContent: ({ children, className }: { children?: ReactNode; className?: string }) => <div className={className}>{children}</div>,
+  CardDescription: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
+  CardHeader: ({ children, className }: { children?: ReactNode; className?: string }) => <div className={className}>{children}</div>,
+  CardTitle: ({ children, className }: { children?: ReactNode; className?: string }) => <div className={className}>{children}</div>,
 }))
 
 vi.mock("@orthoplus/core-ui/tabs", () => ({
-  Tabs: ({ children, defaultValue }: any) => <div data-default-tab={defaultValue}>{children}</div>,
-  TabsList: ({ children }: any) => <div>{children}</div>,
-  TabsTrigger: ({ children, value }: any) => <button data-testid={`tab-${value}`}>{children}</button>,
-  TabsContent: ({ children, value, className }: any) => (
+  Tabs: ({ children, defaultValue }: { children?: ReactNode; defaultValue?: string }) => <div data-default-tab={defaultValue}>{children}</div>,
+  TabsList: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
+  TabsTrigger: ({ children, value }: { children?: ReactNode; value: string }) => <button data-testid={`tab-${value}`}>{children}</button>,
+  TabsContent: ({ children, value, className }: { children?: ReactNode; value: string; className?: string }) => (
     <div data-tab={value} className={className}>{children}</div>
   ),
 }))
 
 vi.mock("@orthoplus/core-ui/badge", () => ({
-  Badge: ({ children, variant, className }: any) => (
+  Badge: ({ children, variant, className }: { children?: ReactNode; variant?: string; className?: string }) => (
     <span data-variant={variant} className={className}>{children}</span>
   ),
 }))
 
 vi.mock("@orthoplus/core-ui/alert", () => ({
-  Alert: ({ children }: any) => <div role="alert">{children}</div>,
-  AlertDescription: ({ children }: any) => <p>{children}</p>,
+  Alert: ({ children }: { children?: ReactNode }) => <div role="alert">{children}</div>,
+  AlertDescription: ({ children }: { children?: ReactNode }) => <p>{children}</p>,
 }))
 
 vi.mock("lucide-react", async () => {
@@ -123,7 +129,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
   })
 
   it("should render page header", () => {
@@ -152,7 +158,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -170,7 +176,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -197,7 +203,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -221,7 +227,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -242,7 +248,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -266,7 +272,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -290,7 +296,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -309,7 +315,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -329,7 +335,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 
@@ -360,7 +366,7 @@ describe("TratamentosPage", () => {
       createTratamento: mockCreateTratamento,
       updateStatus: mockUpdateStatus,
       refresh: mockRefresh,
-    } as any)
+    } as unknown as ReturnType<typeof useTratamentos>)
 
     render(<TratamentosPage />)
 

@@ -57,8 +57,7 @@ export const ConfiguracaoFiscal = () => {
   });
 
   const saveMutation = useMutation({
-    mutationFn: async (data: unknown) => {
-      // @ts-expect-error — TS2698
+    mutationFn: async (data: Record<string, unknown>) => {
       const payload = { ...data, clinic_id: clinicId };
       if (fiscalConfig) {
         await apiClient.patch(`/fiscal-config/${fiscalConfig.id}`, payload);

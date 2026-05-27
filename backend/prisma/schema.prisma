@@ -2190,6 +2190,21 @@ model procedimento_precos {
   @@unique([procedimento_template_id, tabela_preco_id], name: "unique_proc_tabela")
 }
 
+model dentista_procedimentos {
+  id                      String   @id @default(uuid())
+  dentista_id             String
+  procedimento_template_id String
+  duracao_customizada_min Int?
+  comissao_percentual     Decimal  @default(0.00) @db.Decimal(5, 2)
+  is_active               Boolean  @default(true)
+  clinic_id               String
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
+  procedimento_template   procedimento_templates @relation(fields: [procedimento_template_id], references: [id], onDelete: Cascade)
+  @@schema("clinico")
+  @@unique([dentista_id, procedimento_template_id], name: "unique_dentista_proc")
+}
+
 model produtos {
   ativo             Boolean
   categoria         String
