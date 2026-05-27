@@ -16,7 +16,7 @@ function countProblemas(analises: AnaliseComplete[]): Map<string, number> {
   analises.forEach((analise) => {
     const problemasDetectados = analise.resultado_ia?.problemas_detectados || [];
     problemasDetectados.forEach((problema: Record<string, unknown>) => {
-      const tipo = (problema.tipo as string) || "Problema Dentário";
+      const tipo = (problema.tipo_problema as string) || "Problema Dentário";
       problemas.set(tipo, (problemas.get(tipo) || 0) + 1);
     });
   });

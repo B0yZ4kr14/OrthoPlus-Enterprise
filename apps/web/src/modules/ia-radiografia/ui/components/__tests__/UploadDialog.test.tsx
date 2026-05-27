@@ -115,7 +115,7 @@ describe("UploadDialog", () => {
     expect(uploadButton).toHaveProperty("disabled", true)
   })
 
-  it("should enable upload button when all fields are filled", () => {
+  it("should enable upload button when all fields are filled and consent given", () => {
     const file = new File(["dummy"], "xray.jpg", { type: "image/jpeg" })
 
     render(
@@ -129,6 +129,7 @@ describe("UploadDialog", () => {
         selectedFile={file}
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
+        consentStatus="consented"
       />,
     )
 
@@ -150,6 +151,7 @@ describe("UploadDialog", () => {
         selectedFile={file}
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
+        consentStatus="consented"
       />,
     )
 
@@ -203,8 +205,8 @@ describe("UploadDialog", () => {
     expect(screen.getByText("Panorâmica")).toBeTruthy()
     expect(screen.getByText("Periapical")).toBeTruthy()
     expect(screen.getByText("Bite-Wing")).toBeTruthy()
-    expect(screen.getByText("Cefalométrica")).toBeTruthy()
-    expect(screen.getByText("Tomografia")).toBeTruthy()
+    expect(screen.getByText("Oclusal")).toBeTruthy()
+    expect(screen.getByText("Lateral")).toBeTruthy()
   })
 
   it("should call onFileChange when selecting a file", () => {

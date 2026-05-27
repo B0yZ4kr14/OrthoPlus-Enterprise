@@ -61,9 +61,9 @@ describe("useIAInsights", () => {
     const { result } = renderHook(() => useIAInsights(analises))
 
     expect(result.current.padroesMaisComuns).toEqual([
-      { tipo_problema: "CARIE", ocorrencias: 3 },
-      { tipo_problema: "FRATURA", ocorrencias: 1 },
-      { tipo_problema: "PERIODONTAL", ocorrencias: 1 },
+      { tipo: "CARIE", ocorrencias: 3 },
+      { tipo: "FRATURA", ocorrencias: 1 },
+      { tipo: "PERIODONTAL", ocorrencias: 1 },
     ])
   })
 
@@ -139,8 +139,8 @@ describe("useIAInsights", () => {
     const { result } = renderHook(() => useIAInsights(analises))
 
     expect(result.current.tiposMaisAnalisados).toEqual([
-      { tipo_problema: "Panorâmica", quantidade: 2 },
-      { tipo_problema: "Periapical", quantidade: 1 },
+      { tipo: "Panorâmica", quantidade: 2 },
+      { tipo: "Periapical", quantidade: 1 },
     ])
   })
 
