@@ -29,5 +29,9 @@ router.use(clinicGuard);
   router.post("/sped", controller.gerarSpedFiscal);
   router.post("/contabilidade/enviar", controller.enviarDadosContabilidade);
 
+  // Fiscal Config
+  router.get("/config", controller.getConfig);
+  router.post("/config", controller.upsertConfig);
+
   return router;
 }

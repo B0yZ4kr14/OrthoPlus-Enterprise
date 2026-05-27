@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Loader2 } from "lucide-react";
-import type { CryptoPaymentSelectorProps } from "./types";
+import type { CryptoPaymentSelectorProps, CoinType } from "./types";
 import { useCryptoPayment } from "./useCryptoPayment";
 import { WalletSelect } from "./WalletSelect";
 import { CoinSelect } from "./CoinSelect";

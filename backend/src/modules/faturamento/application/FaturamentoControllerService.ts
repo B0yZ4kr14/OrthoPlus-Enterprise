@@ -66,4 +66,12 @@ export class FaturamentoControllerService {
 
     logger.info("NFe canceled", { id, motivo });
   }
+
+  async getConfig(clinicId: string) {
+    return this.repo.getConfig(clinicId);
+  }
+
+  async upsertConfig(clinicId: string, data: unknown) {
+    return this.repo.upsertConfig(clinicId, data);
+  }
 }

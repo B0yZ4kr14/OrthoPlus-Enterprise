@@ -264,7 +264,7 @@ export const OdontogramaAIAnalysis = ({
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant={config.color as any}
+                          variant={config.color as "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"}
                           className="gap-1"
                         >
                           <Icon className="h-3 w-3" />

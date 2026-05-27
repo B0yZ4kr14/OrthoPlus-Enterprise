@@ -92,7 +92,9 @@ export function monitorResourceLoading() {
 // Memory Usage Monitor
 export function monitorMemoryUsage() {
   if ("memory" in performance) {
-    const memory = (performance as unknown as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number } }).memory;
+    const memory = (performance as unknown as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+
+    if (!memory) return null;
 
     return {
       usedJSHeapSize: (memory.usedJSHeapSize / 1048576).toFixed(2) + " MB",

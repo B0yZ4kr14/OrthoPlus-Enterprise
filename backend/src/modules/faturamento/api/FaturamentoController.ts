@@ -150,4 +150,22 @@ export class FaturamentoController {
       tipoDocumento,
     });
   });
+
+  getConfig = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
+    }
+    const config = await this.service.getConfig(clinicId);
+    res.status(200).json({ config });
+  });
+
+  upsertConfig = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Clinic ID not found in token");
+    }
+    const config = await this.service.upsertConfig(clinicId, req.body);
+    res.status(200).json({ message: "Config saved successfully", config });
+  });
 }

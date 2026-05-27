@@ -30,7 +30,7 @@ export class IncidenteCaixaMapper {
         : undefined,
       descricao: row.descricao || undefined,
       boletimOcorrencia: row.boletim_ocorrencia || undefined,
-      metadata: (row.metadata as Record<string, unknown>) || undefined,
+      metadata: (row.metadata as Record<string, unknown> | null) || undefined,
       createdAt: new Date(row.created_at!),
       updatedAt: new Date(row.created_at!), // Usar created_at como fallback
     });
@@ -51,7 +51,7 @@ export class IncidenteCaixaMapper {
       valor_caixa_momento: incidente.valorCaixaMomento,
       descricao: incidente.descricao,
       boletim_ocorrencia: incidente.boletimOcorrencia,
-      metadata: incidente.metadata as Record<string, unknown>,
+      metadata: incidente.metadata as unknown as IncidenteCaixaInsert["metadata"],
       created_at: incidente.createdAt.toISOString(),
     };
   }

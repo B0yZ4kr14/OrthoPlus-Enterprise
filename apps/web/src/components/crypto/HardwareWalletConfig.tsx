@@ -40,9 +40,15 @@ interface HardwareWallet {
 
 export function HardwareWalletConfig() {
   const [wallets, setWallets] = useState<HardwareWallet[]>([]);
-  const [newWallet, setNewWallet] = useState({
+  const [newWallet, setNewWallet] = useState<{
+    name: string;
+    type: "krux" | "jade";
+    xpub: string;
+    fingerprint: string;
+    multisig: boolean;
+  }>({
     name: "",
-    type: "krux" as const,
+    type: "krux",
     xpub: "",
     fingerprint: "",
     multisig: false,

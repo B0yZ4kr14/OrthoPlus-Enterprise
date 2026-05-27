@@ -25,11 +25,13 @@ interface CryptoPaymentSelectorProps {
   onPaymentConfirmed: (txHash: string, cryptoCurrency: string) => void;
 }
 
+import type { CoinType } from "./crypto-payment-selector/types";
+
 interface PaymentData {
   address: string;
   qrData: string;
   amount: number;
-  coin: string;
+  coin: CoinType;
 }
 
 export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
@@ -38,7 +40,7 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
 }: CryptoPaymentSelectorProps) {
   const { wallets, offlineWallets, loading: loadingData } = useCrypto();
   const [selectedWallet, setSelectedWallet] = useState<string>("");
-  const [selectedCoin, setSelectedCoin] = useState<string>("BTC");
+  const [selectedCoin, setSelectedCoin] = useState<CoinType>("BTC");
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [generatingAddress, setGeneratingAddress] = useState(false);
@@ -144,7 +146,7 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
             <label className="text-sm font-medium mb-2 block">
               Criptomoeda
             </label>
-            <Select value={selectedCoin} onValueChange={setSelectedCoin}>
+            <Select value={selectedCoin} onValueChange={(value) => setSelectedCoin(value as CoinType)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

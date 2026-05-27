@@ -2,6 +2,24 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 
+interface FiscalConfig {
+  id: string;
+  clinic_id: string;
+  cnpj_emitente?: string;
+  razao_social?: string;
+  serie_nfe?: string;
+  serie_nfce?: string;
+  ambiente: string;
+  certificado_a1_path?: string;
+  certificado_senha?: string;
+  certificado_vencimento?: string;
+  regime_tributario?: string;
+  inscricao_estadual?: string;
+  inscricao_municipal?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface NFe {
   id: string;
   clinic_id: string;
@@ -93,6 +111,26 @@ export const useFaturamento = () => {
     },
   });
 
+  const { data: config, isLoading: isLoadingConfig } = useQuery({
+    queryKey: ["faturamento-config"],
+    queryFn: async () => {
+      return await apiClient.get<{ config: FiscalConfig | null }>("/faturamento/config");
+    },
+  });
+
+  const saveConfig = useMutation({
+    mutationFn: async (data: Partial<FiscalConfig>) => {
+      return await apiClient.post<FiscalConfig>("/faturamento/config", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["faturamento-config"] });
+      toast.success("Configuração fiscal salva com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configuração fiscal");
+    },
+  });
+
   return {
     notas,
     isLoadingNotas,
@@ -101,5 +139,9 @@ export const useFaturamento = () => {
     cancelarNFe: cancelarNFe.mutate,
     consultarStatusSEFAZ: consultarStatusSEFAZ.mutate,
     isEmitindoNFe: emitirNFe.isPending,
+    config: config?.config ?? null,
+    isLoadingConfig,
+    saveConfig: saveConfig.mutate,
+    isSavingConfig: saveConfig.isPending,
   };
 };

@@ -1568,6 +1568,26 @@ model notas_fiscais {
   @@schema("faturamento")
 }
 
+model faturamento_config {
+  id                    String   @id @default(uuid())
+  clinic_id             String   @unique
+  cnpj_emitente         String?
+  razao_social          String?
+  serie_nfe             String?
+  serie_nfce            String?
+  ambiente              String   @default("homologacao")
+  certificado_a1_path   String?
+  certificado_senha     String?
+  certificado_vencimento String?
+  regime_tributario     String?
+  inscricao_estadual    String?
+  inscricao_municipal   String?
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+
+  @@schema("faturamento")
+}
+
 model notifications {
   clinic_id  String
   created_at DateTime @default(now())

@@ -110,10 +110,10 @@ export default function PEPPage() {
           descricao:
             (suggestion as { clinical_notes?: string }).clinical_notes ||
             `Tratamento para o dente ${(suggestion as { tooth_number?: number }).tooth_number}`,
-          denteCodigo: (suggestion as { tooth_number?: number }).tooth_number || 0,
+          denteCodigo: String((suggestion as { tooth_number?: number }).tooth_number || 0),
           dataInicio: new Date(),
           createdBy: user.id,
-        } as any);
+        });
       }
 
       toast({

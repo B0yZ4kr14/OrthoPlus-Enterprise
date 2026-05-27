@@ -12,4 +12,7 @@ export interface IFaturamentoRepository {
     id: string,
     data: Prisma.nfe_recordsUpdateManyMutationInput,
   ): Promise<Prisma.BatchPayload>
+
+  getConfig(clinicId: string): Promise<any | null>
+  upsertConfig(clinicId: string, data: any): Promise<any>
 }

@@ -17,4 +17,16 @@ export class FaturamentoRepository implements IFaturamentoRepository {
   ) {
     return prisma.nfe_records.updateMany({ where: { id }, data });
   }
+
+  async getConfig(clinicId: string) {
+    return (prisma as any).faturamento_config.findUnique({ where: { clinic_id: clinicId } });
+  }
+
+  async upsertConfig(clinicId: string, data: any) {
+    return (prisma as any).faturamento_config.upsert({
+      where: { clinic_id: clinicId },
+      update: data,
+      create: { clinic_id: clinicId, ...data },
+    });
+  }
 }

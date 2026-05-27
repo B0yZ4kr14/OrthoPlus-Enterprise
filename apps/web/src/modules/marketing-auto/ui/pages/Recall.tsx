@@ -104,7 +104,7 @@ export default function RecallPage() {
     const { variant, icon: Icon, label } = config[status] || config.PENDENTE;
 
     return (
-      <Badge variant={variant as any} className="gap-1">
+      <Badge variant={variant} className="gap-1">
         <Icon className="h-3 w-3" />
         {label}
       </Badge>

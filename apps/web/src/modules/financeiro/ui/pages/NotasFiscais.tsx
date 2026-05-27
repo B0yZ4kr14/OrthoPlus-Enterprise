@@ -45,13 +45,17 @@ import {
   Clock,
   XCircle,
   Eye,
+  Settings,
 } from "lucide-react";
+import { FiscalConfigForm } from "../../components/FiscalConfigForm";
+import { useFaturamento } from "@/hooks/api/useFaturamento";
 import { formatDate } from "@/lib/utils/date.utils";
 
 import { useFinanceiro } from "@/modules/financeiro/application/hooks/useFinanceiro";
 import type { NotaFiscal } from "@/modules/financeiro/types/financeiro-completo.types";
 
 export default function NotasFiscais() {
+  const { config, isLoadingConfig, saveConfig, isSavingConfig } = useFaturamento();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("todas");
   const [filterTipo, setFilterTipo] = useState("todos");
@@ -361,6 +365,10 @@ export default function NotasFiscais() {
             Pendentes (
             {notasFiscais.filter((n) => n.status === "pendente").length})
           </TabsTrigger>
+          <TabsTrigger value="config">
+            <Settings className="h-4 w-4 mr-1" />
+            Configuração
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="todas" className="space-y-4">
@@ -421,6 +429,14 @@ export default function NotasFiscais() {
               </TableBody>
             </Table>
           </Card>
+        </TabsContent>
+        <TabsContent value="config" className="space-y-4">
+          <FiscalConfigForm
+            config={config}
+            onSave={saveConfig}
+            isLoading={isLoadingConfig}
+            isSaving={isSavingConfig}
+          />
         </TabsContent>
       </Tabs>
     </div>

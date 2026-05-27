@@ -285,7 +285,7 @@ export default function ScheduledBackupsManagement() {
           setBackupToEdit(null);
           queryClient.invalidateQueries({ queryKey: ["scheduled-backups"] });
         }}
-        initialData={backupToEdit as any}
+        initialData={backupToEdit || undefined}
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
