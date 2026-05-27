@@ -2,59 +2,66 @@ import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/car
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { getStatusColor } from "@/lib/utils/status.utils";
+import { useTISSGuides } from "@/modules/tiss/application/hooks/useTISSGuides";
+import { formatDate } from "@/lib/utils/date.utils";
 
 export function TISSBatchList() {
-  const batches = [
-    {
-      id: "1",
-      number: "202511001",
-      insurance: "Unimed",
-      guides: 45,
-      value: "R$ 18.750,00",
-      status: "enviado",
-      date: "2025-11-10",
-    },
-    {
-      id: "2",
-      number: "202511002",
-      insurance: "Bradesco Saúde",
-      guides: 32,
-      value: "R$ 14.200,00",
-      status: "processando",
-      date: "2025-11-12",
-    },
-    {
-      id: "3",
-      number: "202511003",
-      insurance: "Amil",
-      guides: 28,
-      value: "R$ 12.450,00",
-      status: "pendente",
-      date: "2025-11-15",
-    },
-  ];
+  const { batches, isLoading } = useTISSGuides();
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Lotes TISS</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">Carregando lotes...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (batches.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Lotes TISS</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">Nenhum lote encontrado.</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Lotes TISS</CardTitle>
+        <CardTitle>Lotes TISS ({batches.length})</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {batches.map((batch) => (
+          {batches.map((batch: any) => (
             <div
               key={batch.id}
               className="flex items-center justify-between p-4 border rounded-lg"
             >
               <div>
-                <p className="font-medium">Lote {batch.number}</p>
+                <p className="font-medium">Lote {batch.batch_number || batch.number || batch.id}</p>
                 <p className="text-sm text-muted-foreground">
-                  {batch.insurance} • {batch.guides} guias
+                  {batch.insurance_company || batch.insurance || "-"} • {batch.guide_count || batch.guides || 0} guias
                 </p>
+                {batch.created_at && (
+                  <p className="text-xs text-muted-foreground">
+                    {formatDate(batch.created_at)}
+                  </p>
+                )}
               </div>
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <p className="font-bold">{batch.value}</p>
+                  <p className="font-bold">
+                    R$ {((batch.total_amount || batch.value || 0) / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  </p>
                   <Badge variant={getStatusColor(batch.status)}>
                     {batch.status}
                   </Badge>
