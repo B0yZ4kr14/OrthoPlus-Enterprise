@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import dotenv from "dotenv"
 import { logger } from "@/infrastructure/logger"
 import { EmbeddingClientFactory, EmbeddingProviderConfig } from "./EmbeddingClientFactory"
 
@@ -117,7 +118,6 @@ export class ApiKeyHotSwap {
 
   private loadEnvFile(): void {
     try {
-      const dotenv = require("dotenv")
       if (fs.existsSync(this.envPath)) {
         const result = dotenv.config({ path: this.envPath, override: true })
         if (result.error) {

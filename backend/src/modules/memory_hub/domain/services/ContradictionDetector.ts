@@ -1,3 +1,4 @@
+import fs from "fs"
 import { logger } from "@/infrastructure/logger"
 import { IDocumentRepository } from "../ports/IDocumentRepository"
 
@@ -126,7 +127,6 @@ export class ContradictionDetector {
 
     // If no content from frontmatter, read file directly
     if (!content) {
-      const fs = require("fs")
       if (fs.existsSync(sourcePath)) {
         content = fs.readFileSync(sourcePath, "utf-8")
       }
