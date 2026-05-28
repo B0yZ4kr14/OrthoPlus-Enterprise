@@ -160,7 +160,7 @@ export function CryptoPaymentCheckout({
         {/* QR Code */}
         {qrCodeImage && status === "PENDING" && (
           <div className="flex flex-col items-center space-y-4">
-            <div className="bg-white p-4 rounded-lg">
+            <div className="bg-background p-4 rounded-lg">
               <img
                 src={qrCodeImage}
                 alt="QR Code de Pagamento"

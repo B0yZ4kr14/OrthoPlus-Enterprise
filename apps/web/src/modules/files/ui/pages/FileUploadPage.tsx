@@ -76,7 +76,7 @@ export default function FileUploadPage() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-2xl font-bold mb-6">Upload de Documentos</h1>
 
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
+      <div className="bg-background rounded-lg shadow p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium mb-1">Categoria</label>
@@ -125,7 +125,7 @@ export default function FileUploadPage() {
           className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors"
         >
           <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <p className="text-gray-600 mb-2">
+          <p className="text-muted-foreground mb-2">
             Arraste arquivos aqui ou{" "}
             <label className="text-info cursor-pointer hover:underline">
               clique para selecionar
@@ -144,7 +144,7 @@ export default function FileUploadPage() {
       </div>
 
       {files.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="bg-background rounded-lg shadow p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4">
             Arquivos selecionados ({files.length})
           </h2>
@@ -163,7 +163,7 @@ export default function FileUploadPage() {
                 </div>
                 <button
                   onClick={() => removeFile(index)}
-                  className="p-1 hover:bg-gray-200 rounded"
+                  className="p-1 hover:bg-muted/50 rounded"
                 >
                   <X className="h-4 w-4 text-gray-500" />
                 </button>

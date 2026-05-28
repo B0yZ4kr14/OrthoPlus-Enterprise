@@ -202,7 +202,7 @@ export default function Landpage() {
                 Enterprise
               </span>
               <br />
-              <span className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
+              <span className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl dark:text-white">
                 Gestão Premium para Clínicas Odontológicas
               </span>
             </motion.h1>

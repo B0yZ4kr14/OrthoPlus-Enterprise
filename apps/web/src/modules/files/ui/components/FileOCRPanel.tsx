@@ -62,7 +62,7 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
               </span>
             )}
           </div>
-          <pre className="text-xs text-gray-700 whitespace-pre-wrap max-h-64 overflow-y-auto font-mono leading-relaxed">
+          <pre className="text-xs text-foreground whitespace-pre-wrap max-h-64 overflow-y-auto font-mono leading-relaxed">
             {ocr.textoExtraido}
           </pre>
         </div>

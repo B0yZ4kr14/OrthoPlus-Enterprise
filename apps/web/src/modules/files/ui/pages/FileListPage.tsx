@@ -46,7 +46,7 @@ const OCR_STATUS_CONFIG: Record<
   string,
   { label: string; className: string }
 > = {
-  PENDENTE: { label: "Pendente", className: "bg-gray-100 text-gray-600" },
+  PENDENTE: { label: "Pendente", className: "bg-muted text-muted-foreground" },
   PROCESSANDO: { label: "Processando", className: "bg-warning/10 text-warning" },
   CONCLUIDO: { label: "Concluído", className: "bg-success/10 text-success" },
   ERRO: { label: "Erro", className: "bg-destructive/10 text-destructive" },
@@ -127,7 +127,7 @@ export default function FileListPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-4 mb-6 space-y-4">
+      <div className="bg-background rounded-lg shadow p-4 mb-6 space-y-4">
         <div className="flex items-center gap-4">
           <label className="text-sm font-medium">Filtrar por categoria:</label>
           <select
@@ -147,7 +147,7 @@ export default function FileListPage() {
       </div>
 
       {files.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-12 text-center">
+        <div className="bg-background rounded-lg shadow p-12 text-center">
           <File className="mx-auto h-12 w-12 text-gray-300 mb-4" />
           <p className="text-gray-500">Nenhum documento encontrado</p>
           <p className="text-sm text-gray-400 mt-1">
@@ -155,29 +155,29 @@ export default function FileListPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-background rounded-lg shadow overflow-hidden">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                   Nome
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                   Categoria
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                   Visibilidade
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                   OCR
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                   Tamanho
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                   Data
                 </th>
-                <th className="px-4 py-3 text-right text-sm font-medium text-gray-700">
+                <th className="px-4 py-3 text-right text-sm font-medium text-foreground">
                   Ações
                 </th>
               </tr>
@@ -207,7 +207,7 @@ export default function FileListPage() {
                           {vis.label}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground">
                           {file.visibilidade}
                         </span>
                       );
@@ -223,34 +223,34 @@ export default function FileListPage() {
                       );
                     })()}
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-600">
+                  <td className="px-4 py-3 text-sm text-muted-foreground">
                     {formatSize(file.tamanhoBytes)}
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-600">
+                  <td className="px-4 py-3 text-sm text-muted-foreground">
                     {formatDate(file.createdAt)}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => setSelectedFileForOCR(file)}
-                        className="p-2 hover:bg-gray-100 rounded-md"
+                        className="p-2 hover:bg-muted rounded-md"
                         title="OCR"
                       >
-                        <FileText className="h-4 w-4 text-gray-600" />
+                        <FileText className="h-4 w-4 text-muted-foreground" />
                       </button>
                       <button
                         onClick={() => setSelectedFileForVersions(file)}
-                        className="p-2 hover:bg-gray-100 rounded-md"
+                        className="p-2 hover:bg-muted rounded-md"
                         title="Versões"
                       >
-                        <GitBranch className="h-4 w-4 text-gray-600" />
+                        <GitBranch className="h-4 w-4 text-muted-foreground" />
                       </button>
                       <button
                         onClick={() => handleDownload(file.id, file.nomeOriginal)}
-                        className="p-2 hover:bg-gray-100 rounded-md"
+                        className="p-2 hover:bg-muted rounded-md"
                         title="Download"
                       >
-                        <Download className="h-4 w-4 text-gray-600" />
+                        <Download className="h-4 w-4 text-muted-foreground" />
                       </button>
                       <button
                         onClick={() => handleDelete(file.id)}

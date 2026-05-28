@@ -59,7 +59,7 @@ export function FileSearchOCR() {
       </div>
 
       {activeQuery && results && results.length > 0 && (
-        <div className="rounded-md border bg-white">
+        <div className="rounded-md border bg-background">
           <div className="px-3 py-2 border-b bg-gray-50 text-xs text-muted-foreground">
             {results.length} resultado(s) para "{activeQuery}"
           </div>
