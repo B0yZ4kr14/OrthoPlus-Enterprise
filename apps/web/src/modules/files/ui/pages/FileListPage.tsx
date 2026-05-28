@@ -148,16 +148,16 @@ export default function FileListPage() {
 
       {files.length === 0 ? (
         <div className="bg-background rounded-lg shadow p-12 text-center">
-          <File className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-          <p className="text-gray-500">Nenhum documento encontrado</p>
-          <p className="text-sm text-gray-400 mt-1">
+          <File className="mx-auto h-12 w-12 text-muted-foreground/30 mb-4" />
+          <p className="text-muted-foreground">Nenhum documento encontrado</p>
+          <p className="text-sm text-muted-foreground/70 mt-1">
             Faça o upload do primeiro documento
           </p>
         </div>
       ) : (
         <div className="bg-background rounded-lg shadow overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-muted">
               <tr>
                 <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                   Nome
@@ -182,15 +182,15 @@ export default function FileListPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {files.map((file: FileRecord) => (
-                <tr key={file.id} className="hover:bg-gray-50">
+                <tr key={file.id} className="hover:bg-muted">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <File className="h-5 w-5 text-gray-400" />
+                      <File className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <p className="text-sm font-medium">{file.nomeOriginal}</p>
-                        <p className="text-xs text-gray-500">{file.mimeType}</p>
+                        <p className="text-xs text-muted-foreground">{file.mimeType}</p>
                       </div>
                     </div>
                   </td>

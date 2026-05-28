@@ -122,9 +122,9 @@ export default function FileUploadPage() {
         <div
           onDrop={onDrop}
           onDragOver={(e) => e.preventDefault()}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors"
+          className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-muted-foreground/50 transition-colors"
         >
-          <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <p className="text-muted-foreground mb-2">
             Arraste arquivos aqui ou{" "}
             <label className="text-info cursor-pointer hover:underline">
@@ -137,7 +137,7 @@ export default function FileUploadPage() {
               />
             </label>
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-muted-foreground/70">
             PDF, JPG, PNG, DOCX, XLSX (max 50MB)
           </p>
         </div>
@@ -152,20 +152,20 @@ export default function FileUploadPage() {
             {files.map((file, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-md"
+                className="flex items-center justify-between p-3 bg-muted rounded-md"
               >
                 <div className="flex items-center gap-3">
-                  <File className="h-5 w-5 text-gray-500" />
+                  <File className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <p className="text-sm font-medium">{file.name}</p>
-                    <p className="text-xs text-gray-500">{formatSize(file.size)}</p>
+                    <p className="text-xs text-muted-foreground">{formatSize(file.size)}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => removeFile(index)}
                   className="p-1 hover:bg-muted/50 rounded"
                 >
-                  <X className="h-4 w-4 text-gray-500" />
+                  <X className="h-4 w-4 text-muted-foreground" />
                 </button>
               </div>
             ))}

@@ -63,7 +63,7 @@ export default function AuditTrailViewer() {
       INSERT: "bg-success/10 text-success dark:text-success",
       UPDATE: "bg-info/10 text-info dark:text-info",
       DELETE: "bg-destructive/10 text-destructive dark:text-destructive",
-      SELECT: "bg-gray-500/10 text-gray-700 dark:text-gray-400",
+      SELECT: "bg-muted text-muted-foreground dark:text-muted-foreground",
       EXPORT: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
     };
 

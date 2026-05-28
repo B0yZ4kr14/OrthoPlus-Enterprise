@@ -65,7 +65,7 @@ export default function CRMFunil() {
       MORNO: "bg-warning",
       QUENTE: "bg-destructive",
     };
-    return colors[temp] || "bg-gray-500";
+    return colors[temp] || "bg-muted-foreground";
   };
 
   return (

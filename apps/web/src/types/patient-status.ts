@@ -77,9 +77,9 @@ export const STATUS_COLORS: Record<PatientStatus, string> = {
   A_PROTESTAR:
     "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning",
   PROTESTO: "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive/80",
-  INATIVO: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
+  INATIVO: "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
   CANCELADO:
-    "bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200",
+    "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
   MIGRADO:
     "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
   TRANSFERENCIA:

@@ -267,7 +267,7 @@ export const Odontograma3D = memo(({ prontuarioId }: Odontograma3DProps) => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="w-full h-[600px] bg-slate-50 rounded-lg border border-border">
+            <div className="w-full h-[600px] bg-muted rounded-lg border border-border">
               <Canvas shadows>
                 <PerspectiveCamera makeDefault position={[0, 5, 12]} />
                 <OrbitControls

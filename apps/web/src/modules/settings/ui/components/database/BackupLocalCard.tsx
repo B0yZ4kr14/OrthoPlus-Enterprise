@@ -42,7 +42,7 @@ export function BackupLocalCard() {
                 </Tooltip>
               </TooltipProvider>
             </h2>
-            <p className="text-sm text-gray-400 mt-1">Criar e restaurar backups do banco de dados</p>
+            <p className="text-sm text-muted-foreground mt-1">Criar e restaurar backups do banco de dados</p>
           </div>
         </div>
         <div className="text-muted-foreground">

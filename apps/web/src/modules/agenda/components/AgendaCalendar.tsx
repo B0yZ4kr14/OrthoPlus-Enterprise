@@ -52,7 +52,7 @@ export function AgendaCalendar({
       case "Agendada":
         return "bg-info/20 border-info text-info";
       case "Realizada":
-        return "bg-gray-500/20 border-gray-500 text-gray-700";
+        return "bg-muted border-muted-foreground text-muted-foreground";
       case "Cancelada":
         return "bg-destructive/20 border-destructive text-destructive";
       case "Faltou":
@@ -210,7 +210,7 @@ export function AgendaCalendar({
           <span>Confirmada</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-gray-500/20 border border-gray-500"></div>
+          <div className="w-4 h-4 rounded bg-muted border border-muted-foreground"></div>
           <span>Realizada</span>
         </div>
         <div className="flex items-center gap-2">

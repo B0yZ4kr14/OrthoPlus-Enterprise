@@ -228,3 +228,95 @@ Total: 9 blocos em 5 workflows. O security.yml tem 3 blocos, o que pode mascarar
 ---
 
 Relatório gerado automaticamente via análise Speckit.
+
+---
+
+## Atualizações Pós-Análise (2026-05-28)
+
+### Correções Aplicadas na Sessão Contínua
+
+| # | Problema | Ação | Status |
+|---|----------|------|--------|
+| 10 | Legibilidade dark mode na landpage | Adicionado `dark:text-white` no subtítulo do hero | ✅ |
+| 11 | Layout página Acesso Negado | Redesign completo com Card, ícone em círculo, botões Voltar + Dashboard | ✅ |
+| 12 | Layout página Not Found | Redesign consistente com Card + ícone SearchX | ✅ |
+| 13 | Cores hardcoded em Files module | Eliminados `bg-white`, `text-gray-*`, `bg-gray-*` em FileListPage, FileUploadPage, FileSearchOCR, FileOCRPanel, FileVersionPanel | ✅ |
+| 14 | Cores hardcoded em components | Eliminados `bg-white` em QRCodeDialog, WalletQRPreview, CupomFiscal | ✅ |
+| 15 | Deploy VPS | Deploy completo realizado com sucesso, health check OK | ✅ |
+
+### Commits Adicionais
+
+```
+0a33e2e91 fix(frontend): elimina bg-white hardcoded em QRCodeDialog, WalletQRPreview, CupomFiscal
+fd210e0ac fix(frontend): corrige legibilidade dark mode e melhora páginas de erro
+```
+
+### Deploys Realizados
+
+| Deploy | Data/Hora | Status |
+|--------|-----------|--------|
+| Deploy #1 | 2026-05-28 ~21:50 | ✅ Health check OK |
+| Deploy #2 | 2026-05-28 ~21:55 | ✅ Health check OK |
+| Deploy #3 | 2026-05-28 ~21:59 | ✅ Health check OK |
+
+
+---
+
+## Atualizações Pós-Deploy (2026-05-28 ~22:47)
+
+### Correções de Cores Hardcoded Adicionais
+
+| # | Módulo | Arquivo | Problema | Correção |
+|---|--------|---------|----------|----------|
+| 16 | files | FileListPage.tsx | 8 ocorrências gray-* | Substituídas por tokens semânticos |
+| 17 | files | FileUploadPage.tsx | 7 ocorrências gray-* | Substituídas por tokens semânticos |
+| 18 | admin | AuditTrailViewer.tsx | 1 ocorrência gray-500 | bg-muted text-muted-foreground |
+| 19 | crm | CRMFunil.tsx | 1 ocorrência gray-500 | bg-muted-foreground |
+| 20 | estoque | EstoqueInventarioPage.tsx | 1 ocorrência gray-500 | bg-muted-foreground |
+| 21 | estoque | EstoqueInventario.tsx | 1 ocorrência gray-500 | bg-muted-foreground |
+| 22 | marketing | ProgramaFidelidade.tsx | 1 ocorrência gray-400 | text-muted-foreground |
+| 23 | pdv | MetasGamificacao.tsx | 1 ocorrência gray-400 | text-muted-foreground |
+| 24 | settings | DatabaseManagementPage.tsx | 1 ocorrência gray-500 | bg-muted-foreground |
+| 25 | agenda | AppointmentCard.tsx | 1 ocorrência gray-500 | bg-muted text-muted-foreground |
+| 26 | agenda | AppointmentDetailsDialog.tsx | 1 ocorrência gray-500 | bg-muted text-muted-foreground |
+| 27 | files | FileOCRPanel.tsx | 1 ocorrência gray-50 | bg-muted |
+| 28 | files | FileSearchOCR.tsx | 2 ocorrências gray-50 | bg-muted |
+| 29 | files | FileVersionPanel.tsx | 2 ocorrências gray-* | text-foreground text-muted-foreground |
+| 30 | onboarding | ModuleItem.tsx | 1 ocorrência gray-400 | bg-muted-foreground |
+| 31 | onboarding | ModuleCard.tsx | 1 ocorrência gray-400 | text-muted-foreground |
+| 32 | onboarding | StepActivation.tsx | 1 ocorrência gray-400 | bg-muted-foreground |
+| 33 | onboarding | StepSimulation.tsx | 1 ocorrência gray-400 | text-muted-foreground |
+| 34 | patients | TimelineTab.tsx | 1 ocorrência gray-500 | text-muted-foreground bg-muted |
+| 35 | agenda | AgendaCalendar.tsx | 2 ocorrências gray-500 | bg-muted border-muted-foreground |
+| 36 | crypto | CryptoPaymentStatus.tsx | 1 ocorrência gray-500 | text-muted-foreground |
+| 37 | estoque | RequisicoesList.tsx | 2 ocorrências gray-500 | bg-muted-foreground |
+| 38 | estoque | MovimentacoesList.tsx | 2 ocorrências gray-500 | bg-muted-foreground |
+| 39 | estoque | estoque.types.ts | 2 ocorrências gray-500 | bg-muted-foreground |
+| 40 | marketing | programa-fidelidade/utils.ts | 1 ocorrência slate-400 | text-muted-foreground |
+| 41 | marketing | ProgramaFidelidade.tsx | 1 ocorrência slate-400 | text-muted-foreground |
+| 42 | pacientes | PatientTimeline.tsx | 1 ocorrência slate-100/700 | bg-muted text-muted-foreground |
+| 43 | pep | OdontogramaCanvas.tsx | 1 ocorrência slate-50 | bg-muted |
+| 44 | pep | Odontograma3D.tsx | 1 ocorrência slate-50 | bg-muted |
+| 45 | types | patient-status.ts | 1 ocorrência slate-100/800 | bg-muted text-muted-foreground |
+| 46 | estoque | estoque.types.ts | Fix syntax error | Corrigido erro de sintaxe após substituição |
+
+### Resultado
+
+- **Total de ocorrências gray-*/slate-* eliminadas**: 46
+- **Arquivos modificados**: 25
+- **Build frontend**: ✅ 0 erros, 10.18s
+- **Deploy VPS**: ✅ Health check OK
+- **Status PM2**: online, ~56mb (inicializando)
+
+### Cores Intencionalmente Mantidas
+
+As seguintes cores hardcoded foram mantidas por serem intencionais:
+
+| Arquivo | Cor | Razão |
+|---------|-----|-------|
+| Landpage.tsx | text-slate-*/bg-white | Design de landpage com identidade visual própria |
+| TerminalPage.tsx | bg-slate-950 | Look de terminal escuro |
+| ImageViewer.tsx | bg-slate-900 | Contraste para viewer de imagem |
+| ThemeSelector.tsx | bg-slate-900 | Preview do tema escuro |
+| Auth.tsx | dark:bg-slate-800 | Modo escuro do auth |
+

@@ -61,7 +61,7 @@ export function MovimentacoesList({
     id ? fornecedores.find((f) => f.id === id)?.nome || "-" : "-";
 
   const getTipoColor = (tipo: string) =>
-    tiposMovimentacao.find((t) => t.value === tipo)?.color || "bg-gray-500";
+    tiposMovimentacao.find((t) => t.value === tipo)?.color || "bg-muted-foreground";
 
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {
@@ -74,7 +74,7 @@ export function MovimentacoesList({
       case "DEVOLUCAO":
         return <RotateCcw className="h-5 w-5 text-warning" />;
       case "PERDA":
-        return <XCircle className="h-5 w-5 text-gray-500" />;
+        return <XCircle className="h-5 w-5 text-muted-foreground" />;
       default:
         return null;
     }

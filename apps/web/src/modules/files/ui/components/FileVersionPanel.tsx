@@ -49,10 +49,10 @@ function VersionItem({
           )}
         </div>
         <div className="min-w-0">
-          <p className="text-sm font-medium text-gray-900">
+          <p className="text-sm font-medium text-foreground">
             Versão {version.numeroVersao}
           </p>
-          <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
+          <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {formatDateTime(version.createdAt)}

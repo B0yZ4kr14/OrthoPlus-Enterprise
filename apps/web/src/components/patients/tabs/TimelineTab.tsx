@@ -68,7 +68,7 @@ export function TimelineTab({ patientId }: TimelineTabProps) {
       case "budget":
         return "text-warning bg-warning/10";
       default:
-        return "text-gray-500 bg-gray-500/10";
+        return "text-muted-foreground bg-muted";
     }
   };
 

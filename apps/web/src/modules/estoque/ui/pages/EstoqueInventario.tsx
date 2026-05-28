@@ -116,7 +116,7 @@ export default function EstoqueInventario() {
 
   const getStatusColor = (status: string) => {
     const statusConfig = statusInventario.find((s) => s.value === status);
-    return statusConfig?.color || "bg-gray-500";
+    return statusConfig?.color || "bg-muted-foreground";
   };
 
   const getTipoLabel = (tipo: string) => {

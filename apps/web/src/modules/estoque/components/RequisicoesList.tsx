@@ -38,10 +38,10 @@ export function RequisicoesList({
 
   const getPrioridadeColor = (prioridade: string) =>
     prioridadesRequisicao.find((p) => p.value === prioridade)?.color ||
-    "bg-gray-500";
+    "bg-muted-foreground";
 
   const getStatusColor = (status: string) =>
-    statusRequisicao.find((s) => s.value === status)?.color || "bg-gray-500";
+    statusRequisicao.find((s) => s.value === status)?.color || "bg-muted-foreground";
 
   return (
     <div className="space-y-4">

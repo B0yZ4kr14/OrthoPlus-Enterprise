@@ -52,7 +52,7 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
       </div>
 
       {status === "CONCLUIDO" && ocr?.textoExtraido ? (
-        <div className="rounded-md border bg-gray-50 p-3">
+        <div className="rounded-md border bg-muted p-3">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle className="h-4 w-4 text-success" />
             <span className="text-xs text-success font-medium">Texto extraído com sucesso</span>

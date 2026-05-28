@@ -30,7 +30,7 @@ export function OdontogramaCanvas({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="w-full h-[600px] bg-slate-50 rounded-lg border border-border">
+        <div className="w-full h-[600px] bg-muted rounded-lg border border-border">
           <Canvas shadows>
             <ToothArcade
               teethData={teethData}

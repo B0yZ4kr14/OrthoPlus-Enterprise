@@ -138,7 +138,7 @@ export function StepActivation() {
                       <div className="flex items-center gap-3">
                         <div
                           className={`w-2 h-2 rounded-full ${
-                            isActive ? "bg-success" : "bg-gray-400"
+                            isActive ? "bg-success" : "bg-muted-foreground"
                           }`}
                         />
                         <div>

@@ -90,9 +90,9 @@ export function EvolucoesTimeline({ prontuarioId }: EvolucoesTimelineProps) {
       PROCEDIMENTO: "bg-success",
       RETORNO: "bg-warning",
       EMERGENCIA: "bg-destructive",
-      OBSERVACAO: "bg-gray-500",
+      OBSERVACAO: "bg-muted-foreground",
     };
-    return colors[tipo] || "bg-gray-500";
+    return colors[tipo] || "bg-muted-foreground";
   };
 
   if (isLoading) {

@@ -154,7 +154,7 @@ export const prioridadesRequisicao = [
 ] as const;
 
 export const statusRequisicao = [
-  { value: "PENDENTE", label: "Pendente", color: "bg-gray-500" },
+  { value: "PENDENTE", label: "Pendente", color: "bg-muted-foreground" },
   { value: "APROVADA", label: "Aprovada", color: "bg-success" },
   { value: "REJEITADA", label: "Rejeitada", color: "bg-destructive" },
   { value: "ENTREGUE", label: "Entregue", color: "bg-info" },
@@ -165,7 +165,7 @@ export const tiposMovimentacao = [
   { value: "SAIDA", label: "Saída", color: "bg-destructive" },
   { value: "AJUSTE", label: "Ajuste", color: "bg-info" },
   { value: "DEVOLUCAO", label: "Devolução", color: "bg-warning" },
-  { value: "PERDA", label: "Perda", color: "bg-gray-500" },
+  { value: "PERDA", label: "Perda", color: "bg-muted-foreground" },
 ] as const;
 
 // Schema para Inventário

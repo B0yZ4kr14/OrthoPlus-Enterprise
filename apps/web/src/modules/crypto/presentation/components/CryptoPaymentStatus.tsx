@@ -117,7 +117,7 @@ export function CryptoPaymentStatus({
       case "FAILED":
         return <AlertCircle className="h-8 w-8 text-destructive" />;
       default:
-        return <Clock className="h-8 w-8 text-gray-500" />;
+        return <Clock className="h-8 w-8 text-muted-foreground" />;
     }
   };
 

@@ -58,11 +58,11 @@ export default function ProgramaFidelidade() {
       case "DIAMANTE":
         return "text-interactive";
       case "PLATINA":
-        return "text-slate-400";
+        return "text-muted-foreground";
       case "OURO":
         return "text-warning";
       case "PRATA":
-        return "text-gray-400";
+        return "text-muted-foreground";
       case "BRONZE":
         return "text-warning";
       default:
