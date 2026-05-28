@@ -134,7 +134,7 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
 
         <div
           ref={cupomRef}
-          className="cupom border border-border rounded-lg p-6 bg-white text-black font-mono text-sm"
+          className="cupom border border-border rounded-lg p-6 bg-background text-foreground font-mono text-sm"
         >
           <div className="center bold">
             <p className="text-lg">CLÍNICA ODONTOLÓGICA</p>

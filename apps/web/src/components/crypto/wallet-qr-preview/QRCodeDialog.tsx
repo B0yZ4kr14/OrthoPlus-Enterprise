@@ -35,7 +35,7 @@ export function QRCodeDialog({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <div className="flex justify-center p-6 bg-white rounded-lg">
+          <div className="flex justify-center p-6 bg-background rounded-lg">
             {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" className="w-64 h-64" />}
           </div>
           <div className="space-y-2">
