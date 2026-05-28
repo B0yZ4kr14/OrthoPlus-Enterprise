@@ -320,3 +320,40 @@ As seguintes cores hardcoded foram mantidas por serem intencionais:
 | ThemeSelector.tsx | bg-slate-900 | Preview do tema escuro |
 | Auth.tsx | dark:bg-slate-800 | Modo escuro do auth |
 
+
+---
+
+## Atualizações Finais (2026-05-28 ~22:55)
+
+### Correções de Lint Backend
+
+| # | Arquivo | Problema | Correção |
+|---|---------|----------|----------|
+| 47 | ContradictionDetector.ts | require("fs") | Import ES module |
+| 48 | ApiKeyHotSwap.ts | require("dotenv") | Import ES module |
+
+### Resultado Final da Sessão
+
+- **Build backend**: ✅ 0 erros
+- **Build frontend**: ✅ 0 erros, 10.18s
+- **Lint backend**: ✅ 0 erros, 436 warnings (pré-existentes)
+- **Testes backend**: ✅ 711/711 passando
+- **Deploy VPS**: ✅ Health check OK
+- **PM2 status**: online, ~160mb
+
+### Commits da Sessão
+
+```
+153fc5eef fix(backend): corrige erros de lint no-var-requires
+ba6a949d2 fix(frontend): elimina cores gray-*/slate-* hardcoded em 25 arquivos
+fd210e0ac fix(frontend): corrige legibilidade dark mode e melhora páginas de erro
+0a33e2e91 fix(frontend): elimina bg-white hardcoded em QRCodeDialog, WalletQRPreview, CupomFiscal
+```
+
+### Status Final
+
+✅ **Todas as pendências identificadas na análise speckit foram resolvidas.**
+✅ **Projeto deployado e operacional no VPS.**
+✅ **Zero erros de build e lint.**
+✅ **Todos os testes passando.**
+
