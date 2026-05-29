@@ -144,6 +144,33 @@ jobs:
           }
           EOF
 
+      - name: Debug auth token
+        run: |
+          echo "Starting backend for debug..."
+          cd backend
+          pnpm exec tsx -r tsconfig-paths/register src/index.ts &
+          BACKEND_PID=$!
+          sleep 8
+          echo "=== Health Check ==="
+          curl -s http://localhost:3005/health | head -c 200 || echo "HEALTH FAILED"
+          echo ""
+          echo "=== /api/auth/me with token ==="
+          TOKEN=$(node -e "
+            const jwt = require('jsonwebtoken');
+            console.log(jwt.sign(
+              {sub:'user-001',email:'admin@orthoplus.com',role:'ADMIN',clinicId:'clinic-001'},
+              process.env.JWT_SECRET,
+              {expiresIn:'1h'}
+            ));
+          ")
+          curl -s http://localhost:3005/api/auth/me -H "Cookie: access_token=$TOKEN" | head -c 300 || echo "AUTH ME FAILED"
+          echo ""
+          echo "=== /api/analytics/dashboard-overview with token ==="
+          curl -s http://localhost:3005/api/analytics/dashboard-overview -H "Cookie: access_token=$TOKEN" | head -c 300 || echo "ANALYTICS FAILED"
+          echo ""
+          kill $BACKEND_PID || true
+          sleep 2
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
