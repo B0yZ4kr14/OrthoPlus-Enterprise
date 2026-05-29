@@ -24,7 +24,7 @@ jobs:
         env:
           NODE_ENV: production
           PORT: "3005"
-          JWT_SECRET: "test-jwt-secret-for-ci-validation-only-32chars"
+          JWT_SECRET: "KCbSOYkbFl9p27AIpuEyfsOfeSBurBy0pBySacKgi0o="
           AUTH_ALLOW_MOCK: "false"
           ENABLE_DANGEROUS_ADMIN_ENDPOINTS: "false"
           DB_SSL: "true"
