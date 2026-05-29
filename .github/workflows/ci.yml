@@ -37,11 +37,10 @@ jobs:
         with:
           node-version: '20'
       - uses: pnpm/action-setup@v4
-      - run: pnpm install --filter "@orthoplus/shared-types" --filter "./apps/web..."
+      - run: pnpm install
         working-directory: .
       - run: pnpm --filter @orthoplus/shared-types build
         working-directory: .
-      - run: pnpm install
       - run: npx tsc --noEmit
       - run: pnpm build
 
@@ -59,11 +58,10 @@ jobs:
         with:
           node-version: '20'
       - uses: pnpm/action-setup@v4
-      - run: pnpm install --filter @orthoplus/shared-types
+      - run: pnpm install
         working-directory: .
       - run: pnpm --filter @orthoplus/shared-types build
         working-directory: .
-      - run: pnpm install
       - run: pnpm --filter orthoplus-backend exec prisma generate
       - run: npx tsc --noEmit || true
       - run: pnpm build
