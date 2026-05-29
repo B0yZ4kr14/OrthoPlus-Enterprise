@@ -9,10 +9,8 @@ const API_TARGET = process.env.API_URL || 'http://localhost:3005';
 
 const apiUrl = new URL(API_TARGET);
 
-function createProxyHandler(prefix) {
+function createProxyHandler() {
   return (req, res) => {
-    console.log(`[e2e-server] ${req.method} ${req.originalUrl} -> ${API_TARGET}${req.originalUrl}`);
-    
     const options = {
       hostname: apiUrl.hostname,
       port: apiUrl.port,
@@ -25,7 +23,6 @@ function createProxyHandler(prefix) {
     };
 
     const proxy = http.request(options, (proxyRes) => {
-      console.log(`[e2e-server] <- ${proxyRes.statusCode} ${req.originalUrl}`);
       res.writeHead(proxyRes.statusCode, proxyRes.headers);
       proxyRes.pipe(res, { end: true });
     });
@@ -41,8 +38,8 @@ function createProxyHandler(prefix) {
   };
 }
 
-app.use('/api', createProxyHandler('api'));
-app.use('/rest', createProxyHandler('rest'));
+app.use('/api', createProxyHandler());
+app.use('/rest', createProxyHandler());
 
 app.use(express.static(DIST_DIR));
 
