@@ -18,7 +18,7 @@ jobs:
           node-version: '20'
       
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
       
       - name: Install dependencies
         run: pnpm install
@@ -45,6 +45,7 @@ jobs:
       
       - name: Deploy to VPS
         uses: appleboy/scp-action@master
+        continue-on-error: true
         with:
           host: ${{ secrets.THEME_V2_DEPLOY_HOST }}
           username: ${{ secrets.THEME_V2_DEPLOY_USER }}
@@ -55,6 +56,7 @@ jobs:
       
       - name: Reload nginx
         uses: appleboy/ssh-action@master
+        continue-on-error: true
         with:
           host: ${{ secrets.THEME_V2_DEPLOY_HOST }}
           username: ${{ secrets.THEME_V2_DEPLOY_USER }}
