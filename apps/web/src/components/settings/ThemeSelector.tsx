@@ -41,7 +41,9 @@ export function ThemeSelector() {
 
       <RadioGroup
         value={theme}
-        onValueChange={(value) => setTheme(value as "premium-light" | "premium-dental-dark")}
+        onValueChange={(value) =>
+          setTheme(value as "premium-light" | "premium-dental-dark")
+        }
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {themes.map(({ key, name, description, icon: Icon, preview }) => (
@@ -63,7 +65,9 @@ export function ThemeSelector() {
                   <Icon className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <span className="font-medium block">{name}</span>
-                    <span className="text-xs text-muted-foreground">{description}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {description}
+                    </span>
                   </div>
                 </div>
 

@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   Card,
   CardContent,
@@ -21,16 +26,16 @@ export default function TeleodontoPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={Video} 
-        title="Teleodonto" 
-        description="Consultas e atendimentos remotos" 
+      <PageHeader
+        icon={Video}
+        title="Teleodonto"
+        description="Consultas e atendimentos remotos"
         actions={
           <Button>
             <Video className="mr-2 h-4 w-4" />
             Nova Sessão
           </Button>
-        } 
+        }
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>

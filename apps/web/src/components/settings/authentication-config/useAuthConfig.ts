@@ -27,7 +27,7 @@ export function useAuthConfig() {
     setLoading(true);
     try {
       const dataArray = await apiClient.get<Record<string, any>[]>(
-        "/admin/configuracoes/auth"
+        "/admin/configuracoes/auth",
       );
       const data = dataArray?.[0];
 
@@ -57,7 +57,8 @@ export function useAuthConfig() {
     } catch (error) {
       toast({
         title: "Erro ao salvar",
-        description: error instanceof Error ? error.message : "Erro desconhecido",
+        description:
+          error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
       });
     } finally {

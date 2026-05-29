@@ -9,7 +9,12 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 
 export default function ApiDocsPage() {
   const edgeFunctions = [
@@ -138,7 +143,8 @@ export default function ApiDocsPage() {
               <div>
                 <h3 className="font-semibold mb-2">Base URL</h3>
                 <code className="bg-muted px-3 py-1 rounded">
-                  {import.meta.env.VITE_API_BASE_URL || "http://localhost:3005"}/api
+                  {import.meta.env.VITE_API_BASE_URL || "http://localhost:3005"}
+                  /api
                 </code>
               </div>
 
@@ -222,7 +228,10 @@ export default function ApiDocsPage() {
                             )}
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            {(param as Record<string, unknown>).description as string}
+                            {
+                              (param as Record<string, unknown>)
+                                .description as string
+                            }
                           </p>
                         </div>
                       ))}

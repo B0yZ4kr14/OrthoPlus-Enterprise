@@ -41,9 +41,17 @@ export function AppointmentsChart({ data }: AppointmentsChartProps) {
                 borderRadius: "6px",
               }}
             />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
-            <Bar dataKey="agendadas" fill="hsl(var(--primary))" name="Agendadas" />
-            <Bar dataKey="realizadas" fill="hsl(var(--success))" name="Realizadas" />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Bar
+              dataKey="agendadas"
+              fill="hsl(var(--primary))"
+              name="Agendadas"
+            />
+            <Bar
+              dataKey="realizadas"
+              fill="hsl(var(--success))"
+              name="Realizadas"
+            />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

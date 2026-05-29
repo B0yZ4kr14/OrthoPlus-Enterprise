@@ -7,12 +7,7 @@ import { ValorDisplay } from "./components/ValorDisplay";
 import { ProcessButton } from "./components/ProcessButton";
 
 export * from "./types";
-export {
-  OperationSelect,
-  ParcelasSelect,
-  ValorDisplay,
-  ProcessButton,
-};
+export { OperationSelect, ParcelasSelect, ValorDisplay, ProcessButton };
 export { useParcelas } from "./hooks/useParcelas";
 
 export function TEFPaymentForm({

@@ -14,18 +14,20 @@ import { FormActions } from "./FormActions";
 import type { XPubConfigFormProps } from "./schema";
 
 export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
-  const { form, testingXPub, testAddress, isValid, handleTestXPub, onSubmit } = useXPubConfig({
-    onSuccess,
-    onCancel,
-  });
+  const { form, testingXPub, testAddress, isValid, handleTestXPub, onSubmit } =
+    useXPubConfig({
+      onSuccess,
+      onCancel,
+    });
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Configuração de Hardware Wallet (Não-Custodial)</CardTitle>
         <CardDescription>
-          O OrthoPlus Enterprise <strong>NUNCA</strong> terá acesso às suas chaves privadas. Configure sua Hardware Wallet (Trezor,
-          Coldcard, KRUX) para gerar endereços de recebimento.
+          O OrthoPlus Enterprise <strong>NUNCA</strong> terá acesso às suas
+          chaves privadas. Configure sua Hardware Wallet (Trezor, Coldcard,
+          KRUX) para gerar endereços de recebimento.
         </CardDescription>
       </CardHeader>
 

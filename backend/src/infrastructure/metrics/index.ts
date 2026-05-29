@@ -1,1 +1,1 @@
-export { MetricsEmitter } from "./MetricsEmitter"
+export { MetricsEmitter } from "./MetricsEmitter";

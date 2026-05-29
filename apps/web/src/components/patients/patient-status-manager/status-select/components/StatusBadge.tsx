@@ -1,8 +1,5 @@
 import { cn } from "@/lib/utils";
-import {
-  STATUS_LABELS,
-  STATUS_COLORS,
-} from "@/types/patient-status";
+import { STATUS_LABELS, STATUS_COLORS } from "@/types/patient-status";
 import type { PatientStatus } from "../types";
 
 interface StatusBadgeProps {
@@ -16,7 +13,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
       className={cn(
         "px-2 py-1 rounded text-xs font-medium",
         STATUS_COLORS[status],
-        className
+        className,
       )}
     >
       {STATUS_LABELS[status]}

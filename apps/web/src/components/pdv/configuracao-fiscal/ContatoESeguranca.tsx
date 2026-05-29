@@ -7,10 +7,16 @@ import type { FiscalFormData } from "./types";
 
 interface ContatoESegurancaProps {
   formData: FiscalFormData;
-  onChange: <K extends keyof FiscalFormData>(field: K, value: FiscalFormData[K]) => void;
+  onChange: <K extends keyof FiscalFormData>(
+    field: K,
+    value: FiscalFormData[K],
+  ) => void;
 }
 
-export function ContatoESeguranca({ formData, onChange }: ContatoESegurancaProps) {
+export function ContatoESeguranca({
+  formData,
+  onChange,
+}: ContatoESegurancaProps) {
   return (
     <>
       <div className="space-y-2">
@@ -27,7 +33,9 @@ export function ContatoESeguranca({ formData, onChange }: ContatoESegurancaProps
         <Switch
           id="contingencia"
           checked={formData.contingencia_enabled}
-          onCheckedChange={(checked) => onChange("contingencia_enabled", checked)}
+          onCheckedChange={(checked) =>
+            onChange("contingencia_enabled", checked)
+          }
         />
         <Label htmlFor="contingencia">Modo Contingência</Label>
       </div>

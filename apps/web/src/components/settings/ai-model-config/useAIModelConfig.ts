@@ -26,7 +26,7 @@ export function useAIModelConfig({ selectedClinic }: UseAIModelConfigProps) {
     setLoading(true);
     try {
       const dataArray = await apiClient.get<Record<string, unknown>[]>(
-        "/admin/configuracoes/ai_models"
+        "/admin/configuracoes/ai_models",
       );
 
       const data = dataArray?.[0];

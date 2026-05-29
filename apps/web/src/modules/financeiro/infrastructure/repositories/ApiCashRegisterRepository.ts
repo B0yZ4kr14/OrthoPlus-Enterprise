@@ -14,7 +14,9 @@ export class ApiCashRegisterRepository implements ICashRegisterRepository {
 
   async findById(id: string): Promise<CashRegister | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`${this.baseUrl}/${id}`);
+      const data = await apiClient.get<Record<string, any>>(
+        `${this.baseUrl}/${id}`,
+      );
       if (!data) return null;
       return this.toDomain(data);
     } catch {
@@ -37,7 +39,9 @@ export class ApiCashRegisterRepository implements ICashRegisterRepository {
         params.end_date = filters.period.endDate.toISOString();
       }
 
-      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, { params });
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
+        params,
+      });
       return (data || []).map((row) => this.toDomain(row));
     } catch (e) {
       console.error(e);

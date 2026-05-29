@@ -18,7 +18,8 @@ import { useTerminalPage } from "@/hooks/api/useTerminalPage";
 export default function TerminalPage() {
   const { clinicId } = useAuth();
   const [command, setCommand] = useState("");
-  const { history, isExecuting, executeCommand, clearHistory } = useTerminalPage();
+  const { history, isExecuting, executeCommand, clearHistory } =
+    useTerminalPage();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -100,7 +101,9 @@ export default function TerminalPage() {
                     </div>
                     <div
                       className={
-                        entry.exitCode === 0 ? "text-success" : "text-destructive"
+                        entry.exitCode === 0
+                          ? "text-success"
+                          : "text-destructive"
                       }
                     >
                       <pre className="whitespace-pre-wrap break-words">

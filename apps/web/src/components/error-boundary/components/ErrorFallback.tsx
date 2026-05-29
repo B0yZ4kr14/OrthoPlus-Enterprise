@@ -1,7 +1,11 @@
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import type { ErrorFallbackProps } from "../types";
 
-export function ErrorFallback({ moduleName, error, onRetry }: ErrorFallbackProps) {
+export function ErrorFallback({
+  moduleName,
+  error,
+  onRetry,
+}: ErrorFallbackProps) {
   return (
     <div className="flex items-center justify-center min-h-[300px] p-8">
       <div className="max-w-md w-full bg-card border border-border rounded-xl p-6 text-center space-y-4 shadow-[var(--shadow-card)]">
@@ -10,7 +14,9 @@ export function ErrorFallback({ moduleName, error, onRetry }: ErrorFallbackProps
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-foreground">Algo deu errado</h3>
+          <h3 className="text-lg font-semibold text-foreground">
+            Algo deu errado
+          </h3>
           <p className="text-sm text-muted-foreground">
             {moduleName
               ? `O módulo "${moduleName}" encontrou um erro inesperado.`

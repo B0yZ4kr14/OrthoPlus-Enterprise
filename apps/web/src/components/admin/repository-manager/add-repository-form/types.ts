@@ -12,5 +12,8 @@ export interface AddRepositoryFormProps {
   isAutenticando: boolean;
   onSubmit: (e: React.FormEvent) => void;
   onTestConnection: () => void;
-  onChange: <K extends keyof RepositoryFormData>(field: K, value: RepositoryFormData[K]) => void;
+  onChange: <K extends keyof RepositoryFormData>(
+    field: K,
+    value: RepositoryFormData[K],
+  ) => void;
 }

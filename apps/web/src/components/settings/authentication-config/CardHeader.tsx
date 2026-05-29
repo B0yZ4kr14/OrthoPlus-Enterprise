@@ -13,7 +13,9 @@ export function AuthCardHeader() {
         <KeyRound className="h-5 w-5" />
         <CardTitle>Configurações de Autenticação</CardTitle>
       </div>
-      <CardDescription>Configure métodos de login e requisitos de senha</CardDescription>
+      <CardDescription>
+        Configure métodos de login e requisitos de senha
+      </CardDescription>
     </CardHeader>
   );
 }

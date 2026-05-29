@@ -11,16 +11,23 @@ import { AtivoSwitch } from "./AtivoSwitch";
 import { FormActions } from "./FormActions";
 import type { RecompensaFormProps } from "./types";
 
-export function RecompensaForm({ editingRecompensa, onSuccess }: RecompensaFormProps) {
-  const { formData, loading, handleInputChange, handleSubmit } = useRecompensaForm({
-    editingRecompensa,
-    onSuccess,
-  });
+export function RecompensaForm({
+  editingRecompensa,
+  onSuccess,
+}: RecompensaFormProps) {
+  const { formData, loading, handleInputChange, handleSubmit } =
+    useRecompensaForm({
+      editingRecompensa,
+      onSuccess,
+    });
   const { procedimentos, loading: loadingProcedimentos } = useProcedimentos();
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <NomeInput value={formData.nome} onChange={(v) => handleInputChange("nome", v)} />
+      <NomeInput
+        value={formData.nome}
+        onChange={(v) => handleInputChange("nome", v)}
+      />
       <DescricaoInput
         value={formData.descricao}
         onChange={(v) => handleInputChange("descricao", v)}
@@ -29,7 +36,10 @@ export function RecompensaForm({ editingRecompensa, onSuccess }: RecompensaFormP
         value={formData.pontos_necessarios}
         onChange={(v) => handleInputChange("pontos_necessarios", v)}
       />
-      <TipoSelect value={formData.tipo} onChange={(v) => handleInputChange("tipo", v)} />
+      <TipoSelect
+        value={formData.tipo}
+        onChange={(v) => handleInputChange("tipo", v)}
+      />
       <ValorDescontoInput
         tipo={formData.tipo}
         value={formData.valor_desconto || null}
@@ -43,7 +53,10 @@ export function RecompensaForm({ editingRecompensa, onSuccess }: RecompensaFormP
           loading={loadingProcedimentos}
         />
       )}
-      <AtivoSwitch value={formData.ativo} onChange={(v) => handleInputChange("ativo", v)} />
+      <AtivoSwitch
+        value={formData.ativo}
+        onChange={(v) => handleInputChange("ativo", v)}
+      />
       <FormActions loading={loading} isEditing={!!editingRecompensa} />
     </form>
   );

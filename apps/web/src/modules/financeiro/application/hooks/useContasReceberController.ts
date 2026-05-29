@@ -13,7 +13,10 @@ export function useContasReceberController() {
     const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
     const formatBRL = (v: number) =>
-      new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+      new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(v);
 
     doc.setFontSize(18);
     doc.text("Relatório de Contas a Receber", 14, 22);
@@ -27,7 +30,11 @@ export function useContasReceberController() {
         doc.addPage();
         y = 20;
       }
-      doc.text(`${index + 1}. ${conta.patient_name} - ${formatBRL(conta.valor)} - ${conta.status}`, 14, y);
+      doc.text(
+        `${index + 1}. ${conta.patient_name} - ${formatBRL(conta.valor)} - ${conta.status}`,
+        14,
+        y,
+      );
       y += 10;
     });
 
@@ -57,11 +64,16 @@ export function useContasReceberController() {
 
     try {
       const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", `contas-receber-${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+      link.setAttribute(
+        "download",
+        `contas-receber-${format(new Date(), "yyyy-MM-dd")}.xlsx`,
+      );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -77,13 +89,12 @@ export function useContasReceberController() {
   return {
     state: {
       ...state,
-      totalReceber
+      totalReceber,
     },
     actions: {
       ...actions,
       exportarPDF,
-      exportarExcel
-    }
+      exportarExcel,
+    },
   };
 }
-

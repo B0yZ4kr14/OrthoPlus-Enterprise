@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { FileImage, Shield, CheckCircle, XCircle } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
 

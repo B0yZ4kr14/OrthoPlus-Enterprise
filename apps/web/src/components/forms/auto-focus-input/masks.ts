@@ -19,22 +19,31 @@ export function applyMask(rawValue: string, mask?: MaskType): string {
 
     case "phone":
       if (numbers.length <= 10) {
-        return numbers.replace(/(\d{2})(\d)/, "($1) $2").replace(/(\d{4})(\d)/, "$1-$2");
+        return numbers
+          .replace(/(\d{2})(\d)/, "($1) $2")
+          .replace(/(\d{4})(\d)/, "$1-$2");
       }
-      return numbers.replace(/(\d{2})(\d)/, "($1) $2").replace(/(\d{5})(\d)/, "$1-$2");
+      return numbers
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2");
 
     case "cep":
       return numbers.replace(/(\d{5})(\d)/, "$1-$2");
 
     case "date":
-      return numbers.replace(/(\d{2})(\d)/, "$1/$2").replace(/(\d{2})(\d)/, "$1/$2");
+      return numbers
+        .replace(/(\d{2})(\d)/, "$1/$2")
+        .replace(/(\d{2})(\d)/, "$1/$2");
 
     default:
       return rawValue;
   }
 }
 
-export function getMaxDigits(maskType?: MaskType, fallbackMaxLength = 0): number {
+export function getMaxDigits(
+  maskType?: MaskType,
+  fallbackMaxLength = 0,
+): number {
   const MAX_DIGITS: Record<string, number> = {
     cpf: 11,
     cnpj: 14,
@@ -43,5 +52,7 @@ export function getMaxDigits(maskType?: MaskType, fallbackMaxLength = 0): number
     date: 8,
   };
 
-  return maskType ? MAX_DIGITS[maskType] || fallbackMaxLength : fallbackMaxLength;
+  return maskType
+    ? MAX_DIGITS[maskType] || fallbackMaxLength
+    : fallbackMaxLength;
 }

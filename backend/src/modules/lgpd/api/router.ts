@@ -14,17 +14,32 @@ router.get("/", (_req, res) => {
     version: "1.0.0",
     endpoints: ["/"],
     status: "active",
-    note: "Module routes available — see router.ts for full endpoint list"
+    note: "Module routes available — see router.ts for full endpoint list",
   });
 });
 
 // Consentimentos
-router.get("/consentimentos", asyncHandler(controller.listConsentimentos.bind(controller)));
-router.post("/consentimentos", asyncHandler(controller.createConsentimento.bind(controller)));
+router.get(
+  "/consentimentos",
+  asyncHandler(controller.listConsentimentos.bind(controller)),
+);
+router.post(
+  "/consentimentos",
+  asyncHandler(controller.createConsentimento.bind(controller)),
+);
 
 // Solicitações
-router.get("/solicitacoes", asyncHandler(controller.listSolicitacoes.bind(controller)));
-router.post("/solicitacoes", asyncHandler(controller.createSolicitacao.bind(controller)));
-router.patch("/solicitacoes/:id", asyncHandler(controller.updateSolicitacao.bind(controller)));
+router.get(
+  "/solicitacoes",
+  asyncHandler(controller.listSolicitacoes.bind(controller)),
+);
+router.post(
+  "/solicitacoes",
+  asyncHandler(controller.createSolicitacao.bind(controller)),
+);
+router.patch(
+  "/solicitacoes/:id",
+  asyncHandler(controller.updateSolicitacao.bind(controller)),
+);
 
 export default router;

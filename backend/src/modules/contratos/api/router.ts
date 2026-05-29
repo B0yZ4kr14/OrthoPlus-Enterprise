@@ -11,7 +11,7 @@ router.get("/templates", controller.listTemplates);
 router.get("/:id", controller.getById);
 router.post("/", controller.create);
 router.patch("/:id", controller.update);
-router.put("/:id", controller.update);  // alias for frontend compatibility
+router.put("/:id", controller.update); // alias for frontend compatibility
 router.delete("/:id", controller.delete);
 
 export default router;

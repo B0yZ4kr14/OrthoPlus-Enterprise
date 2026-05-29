@@ -9,7 +9,13 @@ interface KPICardProps {
   icon: React.ReactNode;
 }
 
-export function KPICard({ title, value, badgeText, badgeVariant, icon }: KPICardProps) {
+export function KPICard({
+  title,
+  value,
+  badgeText,
+  badgeVariant,
+  icon,
+}: KPICardProps) {
   return (
     <Card depth="normal">
       <CardContent className="p-4">

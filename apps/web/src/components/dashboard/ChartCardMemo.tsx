@@ -64,11 +64,15 @@ function CustomTooltip({
   });
 
   const prevData =
-    currentIndex > 0 ? (data[currentIndex - 1] as Record<string, number>) : null;
+    currentIndex > 0
+      ? (data[currentIndex - 1] as Record<string, number>)
+      : null;
 
   return (
     <div className="bg-card shadow-lg rounded-lg p-3 border border-border min-w-[140px]">
-      <p className="text-xs font-medium text-muted-foreground mb-2">{String(label)}</p>
+      <p className="text-xs font-medium text-muted-foreground mb-2">
+        {String(label)}
+      </p>
       <div className="space-y-1.5">
         {payload.map((item) => {
           const prevValue = prevData ? prevData[item.dataKey] : null;
@@ -107,7 +111,9 @@ function CustomTooltip({
                   <span
                     className={cn(
                       "text-[10px] font-medium",
-                      delta >= 0 ? "text-[hsl(var(--success))]" : "text-[hsl(var(--destructive))]"
+                      delta >= 0
+                        ? "text-[hsl(var(--success))]"
+                        : "text-[hsl(var(--destructive))]",
                     )}
                   >
                     {delta >= 0 ? "+" : ""}
@@ -153,7 +159,7 @@ function CustomLegend({
               "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all border min-h-[44px] focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-1 focus-visible:outline-none",
               isHidden
                 ? "bg-muted text-muted-foreground border-border opacity-60 line-through"
-                : "bg-card text-foreground border-border shadow-sm hover:shadow-md"
+                : "bg-card text-foreground border-border shadow-sm hover:shadow-md",
             )}
           >
             <span
@@ -182,7 +188,7 @@ export const ChartCardMemo = memo(function ChartCardMemo({
 
   const toggleKey = useCallback((key: string) => {
     setHiddenKeys((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
     );
   }, []);
 
@@ -231,13 +237,33 @@ export const ChartCardMemo = memo(function ChartCardMemo({
               {isBar ? (
                 <BarChart data={data}>
                   <defs>
-                    <linearGradient id="gradientPrimary" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="gradientPrimary"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#14B8A6" stopOpacity={0.2} />
+                      <stop
+                        offset="95%"
+                        stopColor="#14B8A6"
+                        stopOpacity={0.2}
+                      />
                     </linearGradient>
-                    <linearGradient id="gradientSecondary" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="gradientSecondary"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor="#64748B" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#94A3B8" stopOpacity={0.2} />
+                      <stop
+                        offset="95%"
+                        stopColor="#94A3B8"
+                        stopOpacity={0.2}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
@@ -284,13 +310,33 @@ export const ChartCardMemo = memo(function ChartCardMemo({
               ) : (
                 <AreaChart data={data}>
                   <defs>
-                    <linearGradient id="gradientPrimary" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="gradientPrimary"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#14B8A6" stopOpacity={0.2} />
+                      <stop
+                        offset="95%"
+                        stopColor="#14B8A6"
+                        stopOpacity={0.2}
+                      />
                     </linearGradient>
-                    <linearGradient id="gradientSecondary" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="gradientSecondary"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor="#64748B" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#94A3B8" stopOpacity={0.2} />
+                      <stop
+                        offset="95%"
+                        stopColor="#94A3B8"
+                        stopOpacity={0.2}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" opacity={0.3} />

@@ -7,7 +7,10 @@ export interface IQueryHandler<T extends IQuery, R = unknown> {
 export class QueryBus {
   private handlers = new Map<string, IQueryHandler<IQuery, unknown>>();
 
-  public register(queryName: string, handler: IQueryHandler<IQuery, unknown>): void {
+  public register(
+    queryName: string,
+    handler: IQueryHandler<IQuery, unknown>,
+  ): void {
     if (this.handlers.has(queryName)) {
       throw new Error(`QueryHandler for ${queryName} is already registered.`);
     }
@@ -29,7 +32,10 @@ export class QueryBus {
    * Execute a query by an explicit string key.
    * Preferred over `execute` to avoid reliance on class name inference.
    */
-  public async executeByKey<R = unknown>(queryName: string, payload: unknown): Promise<R> {
+  public async executeByKey<R = unknown>(
+    queryName: string,
+    payload: unknown,
+  ): Promise<R> {
     const handler = this.handlers.get(queryName);
 
     if (!handler) {

@@ -9,7 +9,8 @@ export function useProgramaFidelidade() {
   const { pontos, recompensas, badges, indicacoes, loading } = useFidelidade();
   const [recompensaFormOpen, setRecompensaFormOpen] = useState(false);
   const [badgeFormOpen, setBadgeFormOpen] = useState(false);
-  const [editingRecompensa, setEditingRecompensa] = useState<FidelidadeRecompensa | null>(null);
+  const [editingRecompensa, setEditingRecompensa] =
+    useState<FidelidadeRecompensa | null>(null);
 
   const triggerConfetti = useCallback(() => {
     confetti({
@@ -36,10 +37,13 @@ export function useProgramaFidelidade() {
     }
   }, []);
 
-  const handleEditRecompensa = useCallback((recompensa: FidelidadeRecompensa) => {
-    setEditingRecompensa(recompensa);
-    setRecompensaFormOpen(true);
-  }, []);
+  const handleEditRecompensa = useCallback(
+    (recompensa: FidelidadeRecompensa) => {
+      setEditingRecompensa(recompensa);
+      setRecompensaFormOpen(true);
+    },
+    [],
+  );
 
   const handleCloseRecompensaForm = useCallback(() => {
     setRecompensaFormOpen(false);

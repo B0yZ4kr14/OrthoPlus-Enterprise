@@ -71,9 +71,13 @@ export default function DashboardExecutivoPDV() {
     transacoesTEF: 0,
     vendedores: 0,
   });
-  const [vendasPorVendedor, setVendasPorVendedor] = useState<VendedorItem[]>([]);
+  const [vendasPorVendedor, setVendasPorVendedor] = useState<VendedorItem[]>(
+    [],
+  );
   const [metasPorPeriodo, setMetasPorPeriodo] = useState<MetaPeriodoItem[]>([]);
-  const [transacoesPorMetodo, setTransacoesPorMetodo] = useState<TransacaoMetodoItem[]>([]);
+  const [transacoesPorMetodo, setTransacoesPorMetodo] = useState<
+    TransacaoMetodoItem[]
+  >([]);
   const [rankingTop5, setRankingTop5] = useState<RankingTop5Item[]>([]);
 
   const loadDashboardData = useCallback(async () => {
@@ -82,9 +86,12 @@ export default function DashboardExecutivoPDV() {
 
       // Call the unified backend endpoint for the executive dashboard data
       // Carregar todas as informações do endpoint consolidado
-      const data = await apiClient.get<Record<string, any>>("/pdv/dashboard-executivo", {
-        params: { clinicId },
-      });
+      const data = await apiClient.get<Record<string, any>>(
+        "/pdv/dashboard-executivo",
+        {
+          params: { clinicId },
+        },
+      );
 
       setKpis(
         data.kpis || {
@@ -98,7 +105,9 @@ export default function DashboardExecutivoPDV() {
 
       setVendasPorVendedor((data.vendasPorVendedor as VendedorItem[]) || []);
       setMetasPorPeriodo((data.metasPorPeriodo as MetaPeriodoItem[]) || []);
-      setTransacoesPorMetodo((data.transacoesPorMetodo as TransacaoMetodoItem[]) || []);
+      setTransacoesPorMetodo(
+        (data.transacoesPorMetodo as TransacaoMetodoItem[]) || [],
+      );
       setRankingTop5((data.rankingTop5 as RankingTop5Item[]) || []);
     } catch (error) {
       console.error("Erro ao carregar dashboard executivo:", error);
@@ -243,7 +252,7 @@ export default function DashboardExecutivoPDV() {
                   borderRadius: "8px",
                 }}
               />
-              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Line
                 type="monotone"
                 dataKey="meta"

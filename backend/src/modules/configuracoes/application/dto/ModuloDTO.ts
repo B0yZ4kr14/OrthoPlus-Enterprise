@@ -1,4 +1,4 @@
-import { Modulo } from '../../domain/entities/Modulo';
+import { Modulo } from "../../domain/entities/Modulo";
 
 export class ModuloDTO {
   constructor(
@@ -9,7 +9,7 @@ export class ModuloDTO {
     public categoria: string,
     public isActive: boolean,
     public dependencies: Array<{ moduleKey: string; required: boolean }>,
-    public configuracoes: Record<string, any>
+    public configuracoes: Record<string, any>,
   ) {}
 
   static fromEntity(modulo: Modulo): ModuloDTO {
@@ -21,7 +21,7 @@ export class ModuloDTO {
       modulo.categoria,
       modulo.isActive,
       modulo.dependencies,
-      modulo.configuracoes
+      modulo.configuracoes,
     );
   }
 }

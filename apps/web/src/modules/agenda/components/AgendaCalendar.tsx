@@ -170,10 +170,16 @@ export function AgendaCalendar({
                                 getStatusColor(apt.status),
                               )}
                             >
-                              <div className="font-medium truncate" title={apt.pacienteNome}>
+                              <div
+                                className="font-medium truncate"
+                                title={apt.pacienteNome}
+                              >
                                 {apt.pacienteNome}
                               </div>
-                              <div className="text-xs opacity-80 truncate" title={apt.procedimento}>
+                              <div
+                                className="text-xs opacity-80 truncate"
+                                title={apt.procedimento}
+                              >
                                 {apt.procedimento}
                               </div>
                               <div className="text-xs opacity-60">

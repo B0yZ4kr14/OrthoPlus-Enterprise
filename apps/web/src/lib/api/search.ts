@@ -1,10 +1,10 @@
-import { apiClient } from "@/lib/api/apiClient"
-import type { SearchResponse } from "@orthoplus/shared-types"
+import { apiClient } from "@/lib/api/apiClient";
+import type { SearchResponse } from "@orthoplus/shared-types";
 
 export interface ReindexResponse {
-  message: string
-  indexed: number
-  durationMs: number
+  message: string;
+  indexed: number;
+  durationMs: number;
 }
 
 /**
@@ -21,12 +21,12 @@ export function search(
   page = 1,
   limit = 20,
 ): Promise<SearchResponse> {
-  const params = new URLSearchParams()
-  params.set("q", query)
-  if (module) params.set("module", module)
-  params.set("page", String(page))
-  params.set("limit", String(limit))
-  return apiClient.get<SearchResponse>(`/search-index?${params.toString()}`)
+  const params = new URLSearchParams();
+  params.set("q", query);
+  if (module) params.set("module", module);
+  params.set("page", String(page));
+  params.set("limit", String(limit));
+  return apiClient.get<SearchResponse>(`/search-index?${params.toString()}`);
 }
 
 /**
@@ -40,12 +40,12 @@ export function reindexPacientes(
   since?: string,
 ): Promise<ReindexResponse> {
   if (!force && !since) {
-    throw new Error("Especifique force=true ou since=<data_iso>")
+    throw new Error("Especifique force=true ou since=<data_iso>");
   }
   return apiClient.post<ReindexResponse>("/search-index/reindex/pacientes", {
     force,
     since,
-  })
+  });
 }
 
 /**
@@ -59,12 +59,12 @@ export function reindexAgenda(
   since?: string,
 ): Promise<ReindexResponse> {
   if (!force && !since) {
-    throw new Error("Especifique force=true ou since=<data_iso>")
+    throw new Error("Especifique force=true ou since=<data_iso>");
   }
   return apiClient.post<ReindexResponse>("/search-index/reindex/agenda", {
     force,
     since,
-  })
+  });
 }
 
 /**
@@ -78,10 +78,10 @@ export function reindexPep(
   since?: string,
 ): Promise<ReindexResponse> {
   if (!force && !since) {
-    throw new Error("Especifique force=true ou since=<data_iso>")
+    throw new Error("Especifique force=true ou since=<data_iso>");
   }
   return apiClient.post<ReindexResponse>("/search-index/reindex/pep", {
     force,
     since,
-  })
+  });
 }

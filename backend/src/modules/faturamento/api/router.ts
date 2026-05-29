@@ -5,7 +5,7 @@ import { GamificationWorkerController } from "./gamificationWorker";
 
 export function createFaturamentoRouter(): Router {
   const router: Router = Router();
-router.use(clinicGuard);
+  router.use(clinicGuard);
   const controller = new FaturamentoController();
 
   router.post("/nfes", controller.createNFe);
@@ -15,7 +15,10 @@ router.use(clinicGuard);
 
   // Gamification Worker
   const gamificationWorker = new GamificationWorkerController();
-  router.post("/gamification/process", gamificationWorker.processGoalsAndRankings);
+  router.post(
+    "/gamification/process",
+    gamificationWorker.processGoalsAndRankings,
+  );
 
   // Legacy Fiscal Routes
   router.post("/nfce/autorizar", controller.autorizarNfceSefaz);
@@ -23,7 +26,7 @@ router.use(clinicGuard);
   router.post("/nfce/emitir", controller.emitirNfce);
   router.post("/nfce/inutilizar", controller.inutilizarNumeracaoNfce);
   router.post("/nfce/contingencia", controller.sincronizarNfceContingencia);
-  
+
   router.post("/validate-xml", controller.validateFiscalXml);
   router.post("/sat/imprimir", controller.imprimirCupomSat);
   router.post("/sped", controller.gerarSpedFiscal);

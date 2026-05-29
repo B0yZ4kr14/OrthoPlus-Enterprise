@@ -25,23 +25,23 @@ import {
 } from "../types/estoque.types";
 
 interface ProdutoAtivo {
-  id?: string
-  nome: string
-  ativo: boolean
+  id?: string;
+  nome: string;
+  ativo: boolean;
 }
 
 interface FornecedorAtivo {
-  id?: string
-  nome: string
-  ativo?: boolean
+  id?: string;
+  nome: string;
+  ativo?: boolean;
 }
 
 interface MovimentacaoFormProps {
-  produtos: ProdutoAtivo[]
-  fornecedores: FornecedorAtivo[]
-  onSubmit: (data: Movimentacao) => void
-  onCancel: () => void
-  currentUser: string
+  produtos: ProdutoAtivo[];
+  fornecedores: FornecedorAtivo[];
+  onSubmit: (data: Movimentacao) => void;
+  onCancel: () => void;
+  currentUser: string;
 }
 
 export function MovimentacaoForm({

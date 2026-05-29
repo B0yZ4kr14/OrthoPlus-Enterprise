@@ -11,7 +11,11 @@ import { CompletionScreen } from "./CompletionScreen";
 import { STEPS } from "./constants";
 import type { OnboardingWizardProps } from "./types";
 
-export function OnboardingWizard({ open = true, onClose, onComplete }: OnboardingWizardProps) {
+export function OnboardingWizard({
+  open = true,
+  onClose,
+  onComplete,
+}: OnboardingWizardProps) {
   const {
     currentStep,
     completed,
@@ -35,7 +39,9 @@ export function OnboardingWizard({ open = true, onClose, onComplete }: Onboardin
   if (completed) {
     return (
       <AnimatePresence>
-        {open && <CompletionScreen onClose={handleClose} onFinish={handleFinish} />}
+        {open && (
+          <CompletionScreen onClose={handleClose} onFinish={handleFinish} />
+        )}
       </AnimatePresence>
     );
   }
@@ -60,7 +66,11 @@ export function OnboardingWizard({ open = true, onClose, onComplete }: Onboardin
               transition={{ duration: 0.3, ease: "easeOut" }}
             >
               <div className="relative p-6 space-y-6">
-                <WizardHeader steps={STEPS} currentStep={currentStep} progress={progress} />
+                <WizardHeader
+                  steps={STEPS}
+                  currentStep={currentStep}
+                  progress={progress}
+                />
 
                 {/* Step Content */}
                 <StepComponent />

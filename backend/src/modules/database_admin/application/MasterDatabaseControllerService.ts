@@ -20,7 +20,7 @@ export class MasterDatabaseControllerService {
       metricsCollector.database.recordHealthCheck(
         cat.category,
         cat.latencyMs,
-        cat.status
+        cat.status,
       );
     }
     return health;
@@ -32,7 +32,7 @@ export class MasterDatabaseControllerService {
       metricsCollector.database.recordStats(
         cat.category,
         cat.tableCount,
-        cat.sizeBytes
+        cat.sizeBytes,
       );
     }
     return stats;
@@ -46,7 +46,9 @@ export class MasterDatabaseControllerService {
 
     const parsed = schema.safeParse(body);
     if (!parsed.success) {
-      throw new Error(`Invalid input: ${JSON.stringify(parsed.error.flatten())}`);
+      throw new Error(
+        `Invalid input: ${JSON.stringify(parsed.error.flatten())}`,
+      );
     }
 
     return masterManager.crossQuery(parsed.data.query, parsed.data.schemas);
@@ -73,13 +75,15 @@ export class MasterDatabaseControllerService {
   }
 
   async executeBackup(category: string, body: { compress?: boolean }) {
-    const result = await backupService.executeBackup(category, { compress: body.compress });
+    const result = await backupService.executeBackup(category, {
+      compress: body.compress,
+    });
 
     if (result.success) {
       metricsCollector.backup.recordSuccess(
         category,
         result.durationMs,
-        result.sizeBytes
+        result.sizeBytes,
       );
     } else {
       metricsCollector.backup.recordFailure(category);

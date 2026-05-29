@@ -51,33 +51,39 @@ export default function EstoqueAnalisePedidos() {
   });
 
   interface HistoricoFornecedor {
-    nome: string
-    total: number
-    quantidade: number
+    nome: string;
+    total: number;
+    quantidade: number;
   }
 
   interface ProdutoMaisPedido {
-    nome: string
-    quantidade: number
-    valor: number
+    nome: string;
+    quantidade: number;
+    valor: number;
   }
 
   interface EvolucaoPedido {
-    mes: string
-    manual: number
-    automatico: number
-    total: number
+    mes: string;
+    manual: number;
+    automatico: number;
+    total: number;
   }
 
   interface StatusDistribuicao {
-    name: string
-    value: number
+    name: string;
+    value: number;
   }
 
-  const [historicoFornecedor, setHistoricoFornecedor] = useState<HistoricoFornecedor[]>([]);
-  const [produtosMaisPedidos, setProdutosMaisPedidos] = useState<ProdutoMaisPedido[]>([]);
+  const [historicoFornecedor, setHistoricoFornecedor] = useState<
+    HistoricoFornecedor[]
+  >([]);
+  const [produtosMaisPedidos, setProdutosMaisPedidos] = useState<
+    ProdutoMaisPedido[]
+  >([]);
   const [evolucaoPedidos, setEvolucaoPedidos] = useState<EvolucaoPedido[]>([]);
-  const [statusDistribution, setStatusDistribution] = useState<StatusDistribuicao[]>([]);
+  const [statusDistribution, setStatusDistribution] = useState<
+    StatusDistribuicao[]
+  >([]);
 
   useEffect(() => {
     if (!loading && pedidos.length > 0) {
@@ -137,12 +143,12 @@ export default function EstoqueAnalisePedidos() {
     pedidos.forEach((pedido) => {
       const fornecedor = fornecedores.find((f) => f.id === pedido.fornecedorId);
       if (fornecedor) {
-        const fornId = pedido.fornecedorId ?? ""
+        const fornId = pedido.fornecedorId ?? "";
         const current = fornecedorMap.get(fornId) || {
           total: 0,
           quantidade: 0,
           nome: fornecedor.nome,
-        }
+        };
         fornecedorMap.set(fornId, {
           total: current.total + (pedido.valorTotal ?? 0),
           quantidade: current.quantidade + 1,
@@ -391,8 +397,12 @@ export default function EstoqueAnalisePedidos() {
                 formatter={(value: number) => formatCurrency(value)}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
               />
-              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
-              <Bar dataKey="total" fill="hsl(160, 84%, 30%)" name="Valor Total" />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+              <Bar
+                dataKey="total"
+                fill="hsl(160, 84%, 30%)"
+                name="Valor Total"
+              />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -406,8 +416,12 @@ export default function EstoqueAnalisePedidos() {
               <XAxis type="number" />
               <YAxis dataKey="nome" type="category" width={120} fontSize={12} />
               <Tooltip />
-              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
-              <Bar dataKey="quantidade" fill="hsl(217, 91%, 60%)" name="Quantidade" />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+              <Bar
+                dataKey="quantidade"
+                fill="hsl(217, 91%, 60%)"
+                name="Quantidade"
+              />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -421,7 +435,7 @@ export default function EstoqueAnalisePedidos() {
               <XAxis dataKey="mes" />
               <YAxis />
               <Tooltip />
-              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Line
                 type="monotone"
                 dataKey="manual"

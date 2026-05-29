@@ -6,7 +6,17 @@ import { Input } from "@orthoplus/core-ui/input";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Plus, UserCircle, Phone, Calendar, AlertTriangle, Users, ChevronRight, Eye, Pencil } from "lucide-react";
+import {
+  Plus,
+  UserCircle,
+  Phone,
+  Calendar,
+  AlertTriangle,
+  Users,
+  ChevronRight,
+  Eye,
+  Pencil,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { RiskScoreBadge } from "@/components/patients/RiskScoreBadge";
 import { PatientAvatar } from "@/components/patients/PatientAvatar";
@@ -41,8 +51,12 @@ export default function PacientesListPage() {
     }) || [];
 
   const totalCount = filteredPatients?.length || 0;
-  const activeCount = filteredPatients?.filter((p) => p.status === "ativo")?.length || 0;
-  const highRiskCount = filteredPatients?.filter((p) => p.risk_level === "alto" || p.risk_level === "critico")?.length || 0;
+  const activeCount =
+    filteredPatients?.filter((p) => p.status === "ativo")?.length || 0;
+  const highRiskCount =
+    filteredPatients?.filter(
+      (p) => p.risk_level === "alto" || p.risk_level === "critico",
+    )?.length || 0;
 
   if (isLoading) {
     return (
@@ -65,7 +79,12 @@ export default function PacientesListPage() {
         title="Pacientes"
         description="Gestão completa de pacientes com ficha clínica profissional"
         actions={
-          <Button variant="default" onClick={() => navigate("/pacientes/novo")} className="gap-2 glow-interactive" data-testid="patients-new-button">
+          <Button
+            variant="default"
+            onClick={() => navigate("/pacientes/novo")}
+            className="gap-2 glow-interactive"
+            data-testid="patients-new-button"
+          >
             <Plus className="h-4 w-4" />
             Novo Paciente
           </Button>
@@ -129,7 +148,10 @@ export default function PacientesListPage() {
       </div>
 
       {/* Patient List Premium */}
-      <Card className="glass-card overflow-hidden" data-testid="patients-list-card">
+      <Card
+        className="glass-card overflow-hidden"
+        data-testid="patients-list-card"
+      >
         <CardTopBorder color="interactive" opacity={30} />
         <div className="divide-y divide-border/40">
           {filteredPatients.length === 0 ? (
@@ -137,8 +159,15 @@ export default function PacientesListPage() {
               <EmptyState
                 icon={Users}
                 message="Nenhum paciente encontrado"
-                description={searchTerm || statusFilter !== "all" ? "Tente ajustar os filtros de busca." : "Cadastre seu primeiro paciente para começar."}
-                action={{ label: "Novo Paciente", onClick: () => navigate("/pacientes/novo") }}
+                description={
+                  searchTerm || statusFilter !== "all"
+                    ? "Tente ajustar os filtros de busca."
+                    : "Cadastre seu primeiro paciente para começar."
+                }
+                action={{
+                  label: "Novo Paciente",
+                  onClick: () => navigate("/pacientes/novo"),
+                }}
               />
             </div>
           ) : (
@@ -163,7 +192,11 @@ export default function PacientesListPage() {
                             {patient.phone_primary}
                           </span>
                         )}
-                        {patient.cpf && <span className="text-muted-foreground/60">CPF: {patient.cpf}</span>}
+                        {patient.cpf && (
+                          <span className="text-muted-foreground/60">
+                            CPF: {patient.cpf}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -175,7 +208,10 @@ export default function PacientesListPage() {
                       />
                       <Badge
                         variant="outline"
-                        className={cn("text-[10px] capitalize", getStatusTextColor(patient.status || "ativo"))}
+                        className={cn(
+                          "text-[10px] capitalize",
+                          getStatusTextColor(patient.status || "ativo"),
+                        )}
                       >
                         {patient.status || "ativo"}
                       </Badge>

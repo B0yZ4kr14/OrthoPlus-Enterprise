@@ -1,12 +1,21 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { DollarSign } from "lucide-react";
 import type { FinanceiroTabProps } from "./types";
 import { useFinanceiroTab } from "./useFinanceiroTab";
 import { FinancialSummary } from "./FinancialSummary";
 
 export function FinanceiroTab({ patient }: FinanceiroTabProps) {
-  const { getPaymentStatusConfig } = useFinanceiroTab(patient.payment_status as string);
-  const statusConfig = getPaymentStatusConfig((patient.payment_status as string) || "");
+  const { getPaymentStatusConfig } = useFinanceiroTab(
+    patient.payment_status as string,
+  );
+  const statusConfig = getPaymentStatusConfig(
+    (patient.payment_status as string) || "",
+  );
   const StatusIcon = statusConfig.icon;
 
   const totalPaid = (patient.total_paid as number) || 0;
@@ -40,8 +49,12 @@ export function FinanceiroTab({ patient }: FinanceiroTabProps) {
             </p>
           </div>
           <div>
-            <label className="text-sm font-medium text-muted-foreground">Balanço Total</label>
-            <p className={`text-2xl font-bold mt-2 ${balance < 0 ? "text-destructive" : "text-success"}`}>
+            <label className="text-sm font-medium text-muted-foreground">
+              Balanço Total
+            </label>
+            <p
+              className={`text-2xl font-bold mt-2 ${balance < 0 ? "text-destructive" : "text-success"}`}
+            >
               R$ {balance.toFixed(2)}
             </p>
           </div>
@@ -57,7 +70,8 @@ export function FinanceiroTab({ patient }: FinanceiroTabProps) {
             <DollarSign className="h-16 w-16 mx-auto mb-4 opacity-50" />
             <p>Histórico de pagamentos em desenvolvimento</p>
             <p className="text-sm mt-2">
-              Aqui serão exibidos todos os pagamentos, orçamentos e transações do paciente
+              Aqui serão exibidos todos os pagamentos, orçamentos e transações
+              do paciente
             </p>
           </div>
         </CardContent>

@@ -31,7 +31,9 @@ export function useEstoque() {
   // Categorias
   const loadCategorias = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/categorias');
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/categorias",
+      );
       setCategorias(
         data.map((c) => ({
           id: c.id,
@@ -42,19 +44,19 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading categorias:', error);
+      console.error("Error loading categorias:", error);
     }
   }, []);
 
   const addCategoria = async (
-    categoria: Pick<Categoria, 'nome' | 'descricao' | 'cor'>,
+    categoria: Pick<Categoria, "nome" | "descricao" | "cor">,
   ) => {
     try {
-      await apiClient.post('/estoque/categorias', categoria);
-      toast.success('Categoria adicionada');
+      await apiClient.post("/estoque/categorias", categoria);
+      toast.success("Categoria adicionada");
       await loadCategorias();
     } catch (error) {
-      toast.error('Erro ao adicionar categoria');
+      toast.error("Erro ao adicionar categoria");
       throw error;
     }
   };
@@ -62,10 +64,10 @@ export function useEstoque() {
   const updateCategoria = async (id: string, categoria: Partial<Categoria>) => {
     try {
       await apiClient.patch(`/estoque/categorias/${id}`, categoria);
-      toast.success('Categoria atualizada');
+      toast.success("Categoria atualizada");
       await loadCategorias();
     } catch (error) {
-      toast.error('Erro ao atualizar categoria');
+      toast.error("Erro ao atualizar categoria");
       throw error;
     }
   };
@@ -73,10 +75,10 @@ export function useEstoque() {
   const deleteCategoria = async (id: string) => {
     try {
       await apiClient.delete(`/estoque/categorias/${id}`);
-      toast.success('Categoria removida');
+      toast.success("Categoria removida");
       await loadCategorias();
     } catch (error) {
-      toast.error('Erro ao remover categoria');
+      toast.error("Erro ao remover categoria");
       throw error;
     }
   };
@@ -86,7 +88,9 @@ export function useEstoque() {
   // Fornecedores
   const loadFornecedores = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/fornecedores');
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/fornecedores",
+      );
       setFornecedores(
         data.map((f) => ({
           id: f.id,
@@ -103,30 +107,30 @@ export function useEstoque() {
           ativo: f.ativo ?? true,
           apiEnabled: f.api_enabled ?? false,
           apiEndpoint: f.api_endpoint,
-          apiAuthType: f.api_auth_type ?? 'none',
+          apiAuthType: f.api_auth_type ?? "none",
           apiUsername: f.api_username,
           apiPassword: f.api_password,
           apiToken: f.api_token,
           apiKeyHeader: f.api_key_header,
           apiKeyValue: f.api_key_value,
-          apiRequestFormat: f.api_request_format ?? 'json',
+          apiRequestFormat: f.api_request_format ?? "json",
           autoOrderEnabled: f.auto_order_enabled ?? false,
           autoOrderConfig: f.auto_order_config,
           createdAt: f.created_at,
         })),
       );
     } catch (error) {
-      console.error('Error loading fornecedores:', error);
+      console.error("Error loading fornecedores:", error);
     }
   }, []);
 
-  const addFornecedor = async (fornecedor: Omit<Fornecedor, 'id'>) => {
+  const addFornecedor = async (fornecedor: Omit<Fornecedor, "id">) => {
     try {
-      await apiClient.post('/estoque/fornecedores', fornecedor);
-      toast.success('Fornecedor adicionado');
+      await apiClient.post("/estoque/fornecedores", fornecedor);
+      toast.success("Fornecedor adicionado");
       await loadFornecedores();
     } catch (error) {
-      toast.error('Erro ao adicionar fornecedor');
+      toast.error("Erro ao adicionar fornecedor");
       throw error;
     }
   };
@@ -137,10 +141,10 @@ export function useEstoque() {
   ) => {
     try {
       await apiClient.patch(`/estoque/fornecedores/${id}`, fornecedor);
-      toast.success('Fornecedor atualizado');
+      toast.success("Fornecedor atualizado");
       await loadFornecedores();
     } catch (error) {
-      toast.error('Erro ao atualizar fornecedor');
+      toast.error("Erro ao atualizar fornecedor");
       throw error;
     }
   };
@@ -148,10 +152,10 @@ export function useEstoque() {
   const deleteFornecedor = async (id: string) => {
     try {
       await apiClient.delete(`/estoque/fornecedores/${id}`);
-      toast.success('Fornecedor removido');
+      toast.success("Fornecedor removido");
       await loadFornecedores();
     } catch (error) {
-      toast.error('Erro ao remover fornecedor');
+      toast.error("Erro ao remover fornecedor");
       throw error;
     }
   };
@@ -162,7 +166,8 @@ export function useEstoque() {
   // Produtos
   const loadProdutos = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/produtos');
+      const data =
+        await apiClient.get<Record<string, any>[]>("/estoque/produtos");
       setProdutos(
         data.map((p) => ({
           id: p.id,
@@ -170,9 +175,10 @@ export function useEstoque() {
           descricao: p.descricao,
           codigo: p.codigo ?? p.codigo_barra ?? p.id,
           codigoBarras: p.codigo_barra,
-          categoriaId: p.categoria_id ?? p.categoria ?? '',
-          fornecedorId: p.fornecedor_id ?? p.fornecedor ?? '',
-          unidadeMedida: (p.unidade_medida ?? 'UNIDADE') as Produto['unidadeMedida'],
+          categoriaId: p.categoria_id ?? p.categoria ?? "",
+          fornecedorId: p.fornecedor_id ?? p.fornecedor ?? "",
+          unidadeMedida: (p.unidade_medida ??
+            "UNIDADE") as Produto["unidadeMedida"],
           quantidadeAtual: Number(p.quantidade_atual ?? 0),
           quantidadeMinima: Number(p.quantidade_minima ?? 0),
           precoCompra: Number(p.preco_compra ?? p.valor_unitario ?? 0),
@@ -184,15 +190,13 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading produtos:', error);
+      console.error("Error loading produtos:", error);
     }
   }, []);
 
-  const addProduto = async (
-    produto: Omit<Produto, 'id' | 'createdAt'>,
-  ) => {
+  const addProduto = async (produto: Omit<Produto, "id" | "createdAt">) => {
     try {
-      const result = await apiClient.post('/estoque/produtos', {
+      const result = await apiClient.post("/estoque/produtos", {
         ...produto,
         unidade_medida: produto.unidadeMedida,
         quantidade_atual: produto.quantidadeAtual,
@@ -204,11 +208,11 @@ export function useEstoque() {
         fornecedor_id: produto.fornecedorId,
         data_validade: produto.dataValidade,
       });
-      toast.success('Produto adicionado com sucesso');
+      toast.success("Produto adicionado com sucesso");
       await loadProdutos();
       return result;
     } catch (error) {
-      toast.error('Erro ao adicionar produto');
+      toast.error("Erro ao adicionar produto");
       throw error;
     }
   };
@@ -242,11 +246,11 @@ export function useEstoque() {
       if (data.ativo !== undefined) updateData.ativo = data.ativo;
 
       await apiClient.patch(`/estoque/produtos/${id}`, updateData);
-      toast.success('Produto atualizado com sucesso');
+      toast.success("Produto atualizado com sucesso");
       await loadProdutos();
       await loadAlertas();
     } catch (error) {
-      toast.error('Erro ao atualizar produto');
+      toast.error("Erro ao atualizar produto");
       throw error;
     }
   };
@@ -254,10 +258,10 @@ export function useEstoque() {
   const deleteProduto = async (id: string) => {
     try {
       await apiClient.delete(`/estoque/produtos/${id}`);
-      toast.success('Produto excluído com sucesso');
+      toast.success("Produto excluído com sucesso");
       await loadProdutos();
     } catch (error) {
-      toast.error('Erro ao excluir produto');
+      toast.error("Erro ao excluir produto");
       throw error;
     }
   };
@@ -267,7 +271,9 @@ export function useEstoque() {
   // Requisições
   const loadRequisicoes = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/requisicoes');
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/requisicoes",
+      );
       setRequisicoes(
         data.map((r) => ({
           id: r.id,
@@ -284,26 +290,26 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading requisicoes:', error);
+      console.error("Error loading requisicoes:", error);
     }
   }, []);
 
   const addRequisicao = async (requisicao: Requisicao) => {
     try {
-      const data = await apiClient.post('/estoque/requisicoes', {
+      const data = await apiClient.post("/estoque/requisicoes", {
         produto_id: requisicao.produtoId,
         quantidade: requisicao.quantidade,
         motivo: requisicao.motivo,
         prioridade: requisicao.prioridade,
-        status: requisicao.status || 'PENDENTE',
+        status: requisicao.status || "PENDENTE",
         solicitado_por: requisicao.solicitadoPor,
         observacoes: requisicao.observacoes,
       });
-      toast.success('Requisição criada com sucesso');
+      toast.success("Requisição criada com sucesso");
       await loadRequisicoes();
       return data;
     } catch (error) {
-      toast.error('Erro ao criar requisição');
+      toast.error("Erro ao criar requisição");
       throw error;
     }
   };
@@ -323,7 +329,7 @@ export function useEstoque() {
       await apiClient.patch(`/estoque/requisicoes/${id}`, updateData);
       await loadRequisicoes();
     } catch (error) {
-      toast.error('Erro ao atualizar requisição');
+      toast.error("Erro ao atualizar requisição");
       throw error;
     }
   };
@@ -334,7 +340,7 @@ export function useEstoque() {
 
     try {
       await updateRequisicao(id, {
-        status: 'APROVADA',
+        status: "APROVADA",
         aprovadoPor,
         dataAprovacao: new Date().toISOString(),
       });
@@ -344,14 +350,14 @@ export function useEstoque() {
       if (produto) {
         await addMovimentacao({
           produtoId: requisicao.produtoId,
-          tipo: 'SAIDA',
+          tipo: "SAIDA",
           quantidade: requisicao.quantidade,
           motivo: `Requisição aprovada: ${requisicao.motivo}`,
           realizadoPor: aprovadoPor,
         });
       }
 
-      toast.success('Requisição aprovada com sucesso');
+      toast.success("Requisição aprovada com sucesso");
     } catch (error) {
       console.error(error);
     }
@@ -359,10 +365,10 @@ export function useEstoque() {
 
   const rejeitarRequisicao = async (id: string, motivo: string) => {
     await updateRequisicao(id, {
-      status: 'REJEITADA',
+      status: "REJEITADA",
       observacoes: motivo,
     });
-    toast.success('Requisição rejeitada');
+    toast.success("Requisição rejeitada");
   };
 
   const getRequisicaoById = (id: string) =>
@@ -371,7 +377,9 @@ export function useEstoque() {
   // Movimentações
   const loadMovimentacoes = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/movimentacoes');
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/movimentacoes",
+      );
       setMovimentacoes(
         data.map((m) => ({
           id: m.id,
@@ -393,13 +401,13 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading movimentacoes:', error);
+      console.error("Error loading movimentacoes:", error);
     }
   }, []);
 
   const addMovimentacao = async (movimentacao: Movimentacao) => {
     try {
-      const data = await apiClient.post('/estoque/movimentacoes', {
+      const data = await apiClient.post("/estoque/movimentacoes", {
         produto_id: movimentacao.produtoId,
         tipo: movimentacao.tipo,
         quantidade: movimentacao.quantidade,
@@ -414,14 +422,14 @@ export function useEstoque() {
         observacoes: movimentacao.observacoes,
       });
 
-      toast.success('Movimentação registrada com sucesso');
+      toast.success("Movimentação registrada com sucesso");
 
       // O backend deve atualizar o estoque e criar alertas, então recarregamos os dados
       await Promise.all([loadMovimentacoes(), loadProdutos(), loadAlertas()]);
 
       return data;
     } catch (error) {
-      toast.error('Erro ao criar movimentação');
+      toast.error("Erro ao criar movimentação");
       throw error;
     }
   };
@@ -432,7 +440,8 @@ export function useEstoque() {
   // Alertas
   const loadAlertas = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/alertas');
+      const data =
+        await apiClient.get<Record<string, any>[]>("/estoque/alertas");
       setAlertas(
         data.map((a) => ({
           id: a.id,
@@ -448,7 +457,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading alertas:', error);
+      console.error("Error loading alertas:", error);
     }
   }, []);
 
@@ -457,18 +466,18 @@ export function useEstoque() {
       await apiClient.patch(`/estoque/alertas/${id}`, { lido: true });
       await loadAlertas();
     } catch (error) {
-      toast.error('Erro ao marcar alerta como lido');
+      toast.error("Erro ao marcar alerta como lido");
       throw error;
     }
   };
 
   const limparAlertasLidos = async () => {
     try {
-      await apiClient.delete('/estoque/alertas/lidos');
-      toast.success('Alertas lidos removidos');
+      await apiClient.delete("/estoque/alertas/lidos");
+      toast.success("Alertas lidos removidos");
       await loadAlertas();
     } catch (error) {
-      toast.error('Erro ao limpar alertas');
+      toast.error("Erro ao limpar alertas");
       throw error;
     }
   };
@@ -483,7 +492,7 @@ export function useEstoque() {
     const movimentacoesSaida = movimentacoes.filter(
       (m) =>
         m.produtoId === produtoId &&
-        (m.tipo === 'SAIDA' || m.tipo === 'PERDA') &&
+        (m.tipo === "SAIDA" || m.tipo === "PERDA") &&
         new Date(m.createdAt!) >= dataLimite,
     );
 
@@ -504,7 +513,8 @@ export function useEstoque() {
   // Pedidos
   const loadPedidos = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/pedidos');
+      const data =
+        await apiClient.get<Record<string, any>[]>("/estoque/pedidos");
       setPedidos(
         data.map((p) => ({
           id: p.id,
@@ -523,13 +533,15 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading pedidos:', error);
+      console.error("Error loading pedidos:", error);
     }
   }, []);
 
   const loadPedidosItens = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/pedidos-itens');
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/pedidos-itens",
+      );
       setPedidosItens(
         data.map((i) => ({
           id: i.id,
@@ -544,13 +556,15 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading pedidos itens:', error);
+      console.error("Error loading pedidos itens:", error);
     }
   }, []);
 
   const loadPedidosConfig = useCallback(async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/estoque/pedidos-config');
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/pedidos-config",
+      );
       setPedidosConfig(
         data.map((c) => ({
           id: c.id,
@@ -563,23 +577,23 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error('Error loading pedidos config:', error);
+      console.error("Error loading pedidos config:", error);
     }
   }, []);
 
   const addPedidoConfig = async (config: PedidoConfig) => {
     try {
-      await apiClient.post('/estoque/pedidos-config', {
+      await apiClient.post("/estoque/pedidos-config", {
         produto_id: config.produtoId,
         quantidade_reposicao: config.quantidadeReposicao,
         ponto_pedido: config.pontoPedido,
         gerar_automaticamente: config.gerarAutomaticamente,
         dias_entrega_estimados: config.diasEntregaEstimados,
       });
-      toast.success('Configuração criada com sucesso');
+      toast.success("Configuração criada com sucesso");
       await loadPedidosConfig();
     } catch (error) {
-      toast.error('Erro ao criar configuração');
+      toast.error("Erro ao criar configuração");
       throw error;
     }
   };
@@ -592,10 +606,10 @@ export function useEstoque() {
         gerar_automaticamente: config.gerarAutomaticamente,
         dias_entrega_estimados: config.diasEntregaEstimados,
       });
-      toast.success('Configuração atualizada com sucesso');
+      toast.success("Configuração atualizada com sucesso");
       await loadPedidosConfig();
     } catch (error) {
-      toast.error('Erro ao atualizar configuração');
+      toast.error("Erro ao atualizar configuração");
       throw error;
     }
   };
@@ -604,27 +618,27 @@ export function useEstoque() {
     try {
       const updates: Record<string, any> = { status };
 
-      if (status === 'RECEBIDO') {
+      if (status === "RECEBIDO") {
         updates.data_recebimento = new Date().toISOString();
       }
 
       await apiClient.patch(`/estoque/pedidos/${id}`, updates);
-      toast.success('Status do pedido atualizado');
+      toast.success("Status do pedido atualizado");
       await loadPedidos();
     } catch (error) {
-      toast.error('Erro ao atualizar status do pedido');
+      toast.error("Erro ao atualizar status do pedido");
       throw error;
     }
   };
 
   const gerarPedidosAutomaticos = async () => {
     try {
-      await apiClient.post('/estoque/pedidos/gerar-automaticos', {});
-      toast.success('Pedidos automáticos gerados com sucesso');
+      await apiClient.post("/estoque/pedidos/gerar-automaticos", {});
+      toast.success("Pedidos automáticos gerados com sucesso");
       await loadPedidos();
       await loadPedidosItens();
     } catch (error) {
-      toast.error('Erro ao gerar pedidos automáticos');
+      toast.error("Erro ao gerar pedidos automáticos");
       throw error;
     }
   };
@@ -646,8 +660,8 @@ export function useEstoque() {
         loadPedidosConfig(),
       ]);
     } catch (error) {
-      console.error('Error loading initial data:', error);
-      toast.error('Erro ao carregar dados do estoque');
+      console.error("Error loading initial data:", error);
+      toast.error("Erro ao carregar dados do estoque");
     } finally {
       setLoading(false);
     }
@@ -710,97 +724,95 @@ export function useEstoque() {
 }
 
 // Mapeamento de prioridades de requisição
-function mapPrioridadeRequisicao(
-  prioridade: string,
-): Requisicao['prioridade'] {
+function mapPrioridadeRequisicao(prioridade: string): Requisicao["prioridade"] {
   switch (prioridade) {
-    case 'NORMAL':
-      return 'MEDIA';
-    case 'BAIXA':
-    case 'MEDIA':
-    case 'ALTA':
-    case 'URGENTE':
-      return prioridade as Requisicao['prioridade'];
+    case "NORMAL":
+      return "MEDIA";
+    case "BAIXA":
+    case "MEDIA":
+    case "ALTA":
+    case "URGENTE":
+      return prioridade as Requisicao["prioridade"];
     default:
-      return 'MEDIA';
+      return "MEDIA";
   }
 }
 
 // Mapeamento de status de requisição
-function mapStatusRequisicao(status: string): Requisicao['status'] {
+function mapStatusRequisicao(status: string): Requisicao["status"] {
   switch (status) {
-    case 'PENDENTE':
-    case 'APROVADA':
-    case 'REJEITADA':
-    case 'ENTREGUE':
-      return status as Requisicao['status'];
+    case "PENDENTE":
+    case "APROVADA":
+    case "REJEITADA":
+    case "ENTREGUE":
+      return status as Requisicao["status"];
     default:
-      return 'PENDENTE';
+      return "PENDENTE";
   }
 }
 
 // Mapeamento de tipos de movimentação
-function mapTipoMovimentacao(tipo: string): Movimentacao['tipo'] {
+function mapTipoMovimentacao(tipo: string): Movimentacao["tipo"] {
   switch (tipo) {
-    case 'VENCIMENTO':
-      return 'PERDA';
-    case 'ENTRADA':
-    case 'SAIDA':
-    case 'AJUSTE':
-    case 'DEVOLUCAO':
-    case 'PERDA':
-      return tipo as Movimentacao['tipo'];
+    case "VENCIMENTO":
+      return "PERDA";
+    case "ENTRADA":
+    case "SAIDA":
+    case "AJUSTE":
+    case "DEVOLUCAO":
+    case "PERDA":
+      return tipo as Movimentacao["tipo"];
     default:
-      return 'AJUSTE';
+      return "AJUSTE";
   }
 }
 
 // Mapeamento de tipos de alerta
-function mapTipoAlerta(tipo: string): Alerta['tipo'] {
+function mapTipoAlerta(tipo: string): Alerta["tipo"] {
   switch (tipo) {
-    case 'ESTOQUE_BAIXO':
-      return 'ESTOQUE_MINIMO';
-    case 'VENCIMENTO_PROXIMO':
-      return 'VALIDADE_PROXIMA';
-    case 'VENCIDO':
-      return 'ESTOQUE_CRITICO';
-    case 'ESTOQUE_MINIMO':
-    case 'ESTOQUE_CRITICO':
-    case 'VALIDADE_PROXIMA':
-    case 'SUGESTAO_REPOSICAO':
-      return tipo as Alerta['tipo'];
+    case "ESTOQUE_BAIXO":
+      return "ESTOQUE_MINIMO";
+    case "VENCIMENTO_PROXIMO":
+      return "VALIDADE_PROXIMA";
+    case "VENCIDO":
+      return "ESTOQUE_CRITICO";
+    case "ESTOQUE_MINIMO":
+    case "ESTOQUE_CRITICO":
+    case "VALIDADE_PROXIMA":
+    case "SUGESTAO_REPOSICAO":
+      return tipo as Alerta["tipo"];
     default:
-      return 'ESTOQUE_MINIMO';
+      return "ESTOQUE_MINIMO";
   }
 }
 
 // Mapeamento de status de pedido
-function mapStatusPedido(status: string): Pedido['status'] {
+function mapStatusPedido(status: string): Pedido["status"] {
   switch (status) {
-    case 'RASCUNHO':
-      return 'PENDENTE';
-    case 'RECEBIDO_PARCIAL':
-      return 'RECEBIDO';
-    case 'PENDENTE':
-    case 'ENVIADO':
-    case 'RECEBIDO':
-    case 'CANCELADO':
-      return status as Pedido['status'];
+    case "RASCUNHO":
+      return "PENDENTE";
+    case "RECEBIDO_PARCIAL":
+      return "RECEBIDO";
+    case "PENDENTE":
+    case "ENVIADO":
+    case "RECEBIDO":
+    case "CANCELADO":
+      return status as Pedido["status"];
     default:
-      return 'PENDENTE';
+      return "PENDENTE";
   }
 }
 
 // Mapeamento de tipo de pedido
-function mapTipoPedido(tipo: string): Pedido['tipo'] {
+function mapTipoPedido(tipo: string): Pedido["tipo"] {
   switch (tipo) {
-    case 'COMPRA':
-    case 'TRANSFERENCIA':
-      return 'MANUAL';
-    case 'MANUAL':
-    case 'AUTOMATICO':
-      return tipo as Pedido['tipo'];
+    case "COMPRA":
+    case "TRANSFERENCIA":
+      return "MANUAL";
+    case "MANUAL":
+    case "AUTOMATICO":
+      return tipo as Pedido["tipo"];
     default:
-      return 'MANUAL';
+      return "MANUAL";
   }
 }

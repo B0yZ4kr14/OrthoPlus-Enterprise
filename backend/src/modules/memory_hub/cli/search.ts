@@ -1,40 +1,41 @@
-import Database from "better-sqlite3"
-import { SearchService } from "../domain/services/SearchService"
-import { EmbeddingClientFactory } from "../infrastructure/EmbeddingClientFactory"
-import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository"
-import { DocumentRepository } from "../infrastructure/DocumentRepository"
+import Database from "better-sqlite3";
+import { SearchService } from "../domain/services/SearchService";
+import { EmbeddingClientFactory } from "../infrastructure/EmbeddingClientFactory";
+import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository";
+import { DocumentRepository } from "../infrastructure/DocumentRepository";
 
-const query = process.argv.slice(2).join(" ")
+const query = process.argv.slice(2).join(" ");
 if (!query) {
-  console.error("Usage: tsx search.ts <query>")
-  process.exit(1)
+  console.error("Usage: tsx search.ts <query>");
+  process.exit(1);
 }
 
-const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db"
-const db = new Database(dbPath)
-EmbeddingClientFactory.validateConfig()
-const embedder = EmbeddingClientFactory.create()
-const embeddings = new EmbeddingRepository(db)
-const documents = new DocumentRepository(db)
-const searchService = new SearchService(embedder, embeddings, documents)
+const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db";
+const db = new Database(dbPath);
+EmbeddingClientFactory.validateConfig();
+const embedder = EmbeddingClientFactory.create();
+const embeddings = new EmbeddingRepository(db);
+const documents = new DocumentRepository(db);
+const searchService = new SearchService(embedder, embeddings, documents);
 
-searchService.search(query, {}, 10)
+searchService
+  .search(query, {}, 10)
   .then(({ results, total }) => {
-    console.log(`\n🔍 Results for: "${query}" (${total} total)\n`)
+    console.log(`\n🔍 Results for: "${query}" (${total} total)\n`);
     for (const r of results) {
-      console.log(`  📄 ${r.title} (${r.docType})`)
-      console.log(`     📂 ${r.sourcePath}`)
-      console.log(`     ⭐ Relevance: ${r.relevanceScore}`)
-      console.log(`     📝 ${r.excerpt.slice(0, 200)}`)
+      console.log(`  📄 ${r.title} (${r.docType})`);
+      console.log(`     📂 ${r.sourcePath}`);
+      console.log(`     ⭐ Relevance: ${r.relevanceScore}`);
+      console.log(`     📝 ${r.excerpt.slice(0, 200)}`);
       if (r.headingPath.length > 0) {
-        console.log(`     🔖 ${r.headingPath.join(" > ")}`)
+        console.log(`     🔖 ${r.headingPath.join(" > ")}`);
       }
-      console.log()
+      console.log();
     }
-    db.close()
+    db.close();
   })
   .catch((err) => {
-    console.error("Search failed:", err)
-    db.close()
-    process.exit(1)
-  })
+    console.error("Search failed:", err);
+    db.close();
+    process.exit(1);
+  });

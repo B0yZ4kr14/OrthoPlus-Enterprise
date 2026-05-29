@@ -2,13 +2,13 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import cron from "node-cron";
 
-
 // Replacing schedule-bi-export edge function
 export const runScheduleBiExportJob = async () => {
   logger.info("Running BI Export job...");
   try {
     // Basic BI export mock logic
-    const reports = await prisma.analytics_events.groupBy({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const reports = await prisma.analytics_events.groupBy({
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       by: ["event_type"],
       _count: {
         id: true,

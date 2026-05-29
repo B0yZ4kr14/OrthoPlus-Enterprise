@@ -75,18 +75,27 @@ export function SidebarMenuItem({
 
     const triggerContent = (
       <CollapsibleTrigger className={baseClasses}>
-        <IconComponent className={`${iconClasses} h-5 w-5`} aria-hidden="true" />
+        <IconComponent
+          className={`${iconClasses} h-5 w-5`}
+          aria-hidden="true"
+        />
         {!collapsed && (
           <>
             <span className="text-sm flex-1 text-left">{item.title}</span>
-            <ChevronDown className="h-4 w-4 opacity-50 transition-transform duration-200 group-data-[state=open]/submenu:rotate-180" aria-hidden="true" />
+            <ChevronDown
+              className="h-4 w-4 opacity-50 transition-transform duration-200 group-data-[state=open]/submenu:rotate-180"
+              aria-hidden="true"
+            />
           </>
         )}
       </CollapsibleTrigger>
     );
 
     return (
-      <Collapsible defaultOpen={isAnySubItemActive} className="group/submenu mb-1">
+      <Collapsible
+        defaultOpen={isAnySubItemActive}
+        className="group/submenu mb-1"
+      >
         {collapsed ? (
           <Tooltip>
             <TooltipTrigger asChild>{triggerContent}</TooltipTrigger>
@@ -117,10 +126,16 @@ export function SidebarMenuItem({
       className={isSubItem ? subItemClasses : baseClasses}
       aria-current={isItemActive ? "page" : undefined}
     >
-      <IconComponent className={`${iconClasses} ${isSubItem ? "h-4 w-4" : "h-5 w-5"}`} aria-hidden="true" />
+      <IconComponent
+        className={`${iconClasses} ${isSubItem ? "h-4 w-4" : "h-5 w-5"}`}
+        aria-hidden="true"
+      />
       {!collapsed && (
         <>
-          <span className={`${isSubItem ? "text-xs" : "text-sm"} flex-1 truncate`} title={item.title}>
+          <span
+            className={`${isSubItem ? "text-xs" : "text-sm"} flex-1 truncate`}
+            title={item.title}
+          >
             {item.title}
           </span>
           {item.badge && Number(item.badge.count) > 0 && (

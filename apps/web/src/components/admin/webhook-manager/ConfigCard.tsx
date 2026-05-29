@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 
 export function ConfigCard() {
   const webhookUrl = `${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api"}/webhooks/github`;
@@ -15,7 +21,9 @@ export function ConfigCard() {
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <h4 className="font-medium">URL do Webhook</h4>
-          <code className="block bg-muted p-3 rounded text-sm">{webhookUrl}</code>
+          <code className="block bg-muted p-3 rounded text-sm">
+            {webhookUrl}
+          </code>
           <p className="text-xs text-muted-foreground">
             Adicione esta URL nas configurações de Webhooks do repositório
             GitHub

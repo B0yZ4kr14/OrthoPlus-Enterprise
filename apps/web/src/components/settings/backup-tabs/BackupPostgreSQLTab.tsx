@@ -1,6 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Loader2, Database, Activity, AlertTriangle } from "lucide-react";
@@ -44,9 +49,7 @@ export function BackupPostgreSQLTab() {
 
   const metrics = healthData?.metrics;
   const alerts = healthData?.alerts || [];
-  const criticalAlerts = alerts.filter(
-    (a) => a.severity === "critical",
-  );
+  const criticalAlerts = alerts.filter((a) => a.severity === "critical");
   const warningAlerts = alerts.filter((a) => a.severity === "warning");
 
   return (
@@ -113,7 +116,8 @@ export function BackupPostgreSQLTab() {
             </div>
             <p className="text-xs text-muted-foreground">
               {(
-                ((metrics?.connections_active || 0) / (metrics?.connections_max || 100)) *
+                ((metrics?.connections_active || 0) /
+                  (metrics?.connections_max || 100)) *
                 100
               ).toFixed(0)}
               % utilização

@@ -13,7 +13,12 @@ import {
   FileImage,
   ChevronRight,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import { formatDate } from "@/lib/utils/date.utils";
@@ -40,8 +45,10 @@ const COLOR_MAP: Record<string, string> = {
   appointment: "bg-info/10 text-info dark:bg-info/20 dark:text-info/80",
   treatment: "bg-success/10 text-success dark:bg-success/20 dark:text-success",
   budget: "bg-warning/10 text-warning dark:bg-warning/30 dark:text-warning",
-  status_change: "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
-  payment: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300",
+  status_change:
+    "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
+  payment:
+    "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300",
   document: "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300",
 };
 
@@ -128,11 +135,15 @@ export const PatientTimeline = memo(function PatientTimeline({
           <div className="space-y-4">
             {sortedEvents.map((event, index) => {
               const Icon = ICON_MAP[event.type] ?? Calendar;
-              const colorClass = COLOR_MAP[event.type] ?? COLOR_MAP.status_change;
+              const colorClass =
+                COLOR_MAP[event.type] ?? COLOR_MAP.status_change;
               const label = LABEL_MAP[event.type] ?? event.type;
 
               return (
-                <div key={`${event.id}-${index}`} className="relative flex items-start gap-3">
+                <div
+                  key={`${event.id}-${index}`}
+                  className="relative flex items-start gap-3"
+                >
                   <div
                     className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-background ${colorClass}`}
                   >
@@ -140,7 +151,10 @@ export const PatientTimeline = memo(function PatientTimeline({
                   </div>
                   <div className="flex-1 min-w-0 pb-2">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-medium truncate" title={event.title}>
+                      <p
+                        className="text-sm font-medium truncate"
+                        title={event.title}
+                      >
                         {event.title}
                       </p>
                       <Badge variant="outline" className="shrink-0 text-xs">

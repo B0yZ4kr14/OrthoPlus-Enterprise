@@ -6,11 +6,18 @@ import type { CampaignSourceValue } from "./types";
 interface UseCampaignSourceProps {
   clinicId: string;
   value: CampaignSourceValue;
-  onChange: (value: CampaignSourceValue & { campanha_origem_nome: string | null }) => void;
+  onChange: (
+    value: CampaignSourceValue & { campanha_origem_nome: string | null },
+  ) => void;
 }
 
-export function useCampaignSource({ clinicId, value, onChange }: UseCampaignSourceProps) {
-  const [selectedCampaign, setSelectedCampaign] = useState<DentalCampaign | null>(null);
+export function useCampaignSource({
+  clinicId,
+  value,
+  onChange,
+}: UseCampaignSourceProps) {
+  const [selectedCampaign, setSelectedCampaign] =
+    useState<DentalCampaign | null>(null);
 
   const { data: campaigns = [], isLoading } = useQuery<DentalCampaign[]>({
     queryKey: ["campaigns", clinicId],

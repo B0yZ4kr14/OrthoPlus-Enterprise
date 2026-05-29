@@ -13,7 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   BarChart,
   Bar,
@@ -75,14 +80,21 @@ export default function EstoqueAnaliseConsumo() {
           const produto = produtos.find((p) => p.id === mov.produtoId);
           if (produto) {
             if (!acc[mov.produtoId!]) {
-              acc[mov.produtoId!] = { nome: produto.nome || "", quantidade: 0, valor: 0 };
+              acc[mov.produtoId!] = {
+                nome: produto.nome || "",
+                quantidade: 0,
+                valor: 0,
+              };
             }
             acc[mov.produtoId!].quantidade += mov.quantidade || 0;
             acc[mov.produtoId!].valor += mov.valorTotal || 0;
           }
           return acc;
         },
-        {} as Record<string, { nome: string; quantidade: number; valor: number }>,
+        {} as Record<
+          string,
+          { nome: string; quantidade: number; valor: number }
+        >,
       );
 
     return Object.entries(consumoPorProduto)
@@ -93,13 +105,19 @@ export default function EstoqueAnaliseConsumo() {
 
   const tendenciasUso = useMemo(() => {
     const dataInicio =
-      periodoAnalise === "12m" ? subMonths(new Date(), 12)
-        : periodoAnalise === "90d" ? subDays(new Date(), 90)
-          : periodoAnalise === "30d" ? subDays(new Date(), 30)
+      periodoAnalise === "12m"
+        ? subMonths(new Date(), 12)
+        : periodoAnalise === "90d"
+          ? subDays(new Date(), 90)
+          : periodoAnalise === "30d"
+            ? subDays(new Date(), 30)
             : subDays(new Date(), 7);
 
     const movimentacoesFiltradas = movimentacoes.filter(
-      (m) => m.tipo === "SAIDA" && m.createdAt && new Date(m.createdAt) >= dataInicio,
+      (m) =>
+        m.tipo === "SAIDA" &&
+        m.createdAt &&
+        new Date(m.createdAt) >= dataInicio,
     );
 
     if (periodoAnalise === "12m") {
@@ -113,7 +131,10 @@ export default function EstoqueAnaliseConsumo() {
             return data && data >= inicio && data <= fim;
           })
           .reduce((sum, m) => sum + (m.quantidade || 0), 0);
-        return { periodo: format(mes, "MMM/yy", { locale: ptBR }), consumo: consumoMes };
+        return {
+          periodo: format(mes, "MMM/yy", { locale: ptBR }),
+          consumo: consumoMes,
+        };
       });
     }
 
@@ -127,33 +148,62 @@ export default function EstoqueAnaliseConsumo() {
         const consumoSemana = movimentacoesFiltradas
           .filter((m) => {
             const data = m.createdAt ? new Date(m.createdAt) : null;
-            return data && data >= semana[0] && data <= semana[semana.length - 1];
+            return (
+              data && data >= semana[0] && data <= semana[semana.length - 1]
+            );
           })
           .reduce((sum, m) => sum + (m.quantidade || 0), 0);
-        semanas.push({ periodo: format(semana[0], "dd/MM", { locale: ptBR }), consumo: consumoSemana });
+        semanas.push({
+          periodo: format(semana[0], "dd/MM", { locale: ptBR }),
+          consumo: consumoSemana,
+        });
       }
       return semanas;
     }
 
     return dias.map((dia) => {
       const consumoDia = movimentacoesFiltradas
-        .filter((m) => m.createdAt && format(new Date(m.createdAt), "yyyy-MM-dd") === format(dia, "yyyy-MM-dd"))
+        .filter(
+          (m) =>
+            m.createdAt &&
+            format(new Date(m.createdAt), "yyyy-MM-dd") ===
+              format(dia, "yyyy-MM-dd"),
+        )
         .reduce((sum, m) => sum + (m.quantidade || 0), 0);
-      return { periodo: format(dia, "dd/MM", { locale: ptBR }), consumo: consumoDia };
+      return {
+        periodo: format(dia, "dd/MM", { locale: ptBR }),
+        consumo: consumoDia,
+      };
     });
   }, [movimentacoes, periodoAnalise]);
 
   const previsaoReposicao = useMemo(() => {
-    const diasAnalise = periodoAnalise === "12m" ? 365 : periodoAnalise === "90d" ? 90 : periodoAnalise === "30d" ? 30 : 7;
+    const diasAnalise =
+      periodoAnalise === "12m"
+        ? 365
+        : periodoAnalise === "90d"
+          ? 90
+          : periodoAnalise === "30d"
+            ? 30
+            : 7;
 
     return produtos
       .map((produto) => {
         const consumoTotal = movimentacoes
-          .filter((m) => m.tipo === "SAIDA" && m.produtoId === produto.id && m.createdAt && new Date(m.createdAt) >= subDays(new Date(), diasAnalise))
+          .filter(
+            (m) =>
+              m.tipo === "SAIDA" &&
+              m.produtoId === produto.id &&
+              m.createdAt &&
+              new Date(m.createdAt) >= subDays(new Date(), diasAnalise),
+          )
           .reduce((sum, m) => sum + (m.quantidade || 0), 0);
 
         const consumoMedioDiario = consumoTotal / diasAnalise;
-        const diasRestantes = consumoMedioDiario > 0 ? Math.floor((produto.quantidadeAtual || 0) / consumoMedioDiario) : Infinity;
+        const diasRestantes =
+          consumoMedioDiario > 0
+            ? Math.floor((produto.quantidadeAtual || 0) / consumoMedioDiario)
+            : Infinity;
 
         return {
           id: produto.id,
@@ -162,10 +212,22 @@ export default function EstoqueAnaliseConsumo() {
           quantidadeMinima: produto.quantidadeMinima || 0,
           consumoMedioDiario: Math.round(consumoMedioDiario * 10) / 10,
           diasRestantes,
-          dataReposicao: diasRestantes !== Infinity
-            ? format(new Date(Date.now() + diasRestantes * 24 * 60 * 60 * 1000), "dd/MM/yyyy", { locale: ptBR })
-            : "N/A",
-          urgencia: diasRestantes < 7 ? "critica" : diasRestantes < 15 ? "alta" : diasRestantes < 30 ? "media" : ("baixa" as const),
+          dataReposicao:
+            diasRestantes !== Infinity
+              ? format(
+                  new Date(Date.now() + diasRestantes * 24 * 60 * 60 * 1000),
+                  "dd/MM/yyyy",
+                  { locale: ptBR },
+                )
+              : "N/A",
+          urgencia:
+            diasRestantes < 7
+              ? "critica"
+              : diasRestantes < 15
+                ? "alta"
+                : diasRestantes < 30
+                  ? "media"
+                  : ("baixa" as const),
         };
       })
       .filter((p) => p.diasRestantes !== Infinity && p.diasRestantes < 60)
@@ -194,25 +256,51 @@ export default function EstoqueAnaliseConsumo() {
   }, [movimentacoes, produtos]);
 
   if (loading) {
-    return <LoadingState variant="spinner" size="lg" message="Carregando análise de consumo..." />;
+    return (
+      <LoadingState
+        variant="spinner"
+        size="lg"
+        message="Carregando análise de consumo..."
+      />
+    );
   }
 
   return (
     <div className="space-y-6 p-6">
-      <PageHeader title="Análise de Consumo de Estoque" description="Análise preditiva e tendências de uso de materiais" icon={TrendingUp} />
+      <PageHeader
+        title="Análise de Consumo de Estoque"
+        description="Análise preditiva e tendências de uso de materiais"
+        icon={TrendingUp}
+      />
 
       <Tabs defaultValue="analise" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="analise"><BarChart3 className="h-4 w-4 mr-2" />Análise de Consumo</TabsTrigger>
-          <TabsTrigger value="previsao"><Sparkles className="h-4 w-4 mr-2" />Previsão Inteligente (IA)</TabsTrigger>
+          <TabsTrigger value="analise">
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Análise de Consumo
+          </TabsTrigger>
+          <TabsTrigger value="previsao">
+            <Sparkles className="h-4 w-4 mr-2" />
+            Previsão Inteligente (IA)
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="analise" className="space-y-6">
           <Card>
-            <CardHeader><CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5" />Período de Análise</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                Período de Análise
+              </CardTitle>
+            </CardHeader>
             <CardContent>
-              <Select value={periodoAnalise} onValueChange={(v) => setPeriodoAnalise(v as PeriodoAnalise)}>
-                <SelectTrigger className="w-[200px]"><SelectValue /></SelectTrigger>
+              <Select
+                value={periodoAnalise}
+                onValueChange={(v) => setPeriodoAnalise(v as PeriodoAnalise)}
+              >
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="7d">Últimos 7 dias</SelectItem>
                   <SelectItem value="30d">Últimos 30 dias</SelectItem>
@@ -225,48 +313,107 @@ export default function EstoqueAnaliseConsumo() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Total Consumido</CardTitle></CardHeader>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Consumido
+                </CardTitle>
+              </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{movimentacoes.filter((m) => m.tipo === "SAIDA").reduce((sum, m) => sum + m.quantidade, 0)}</div>
-                <p className="text-xs text-muted-foreground mt-1">unidades no período</p>
+                <div className="text-2xl font-bold">
+                  {movimentacoes
+                    .filter((m) => m.tipo === "SAIDA")
+                    .reduce((sum, m) => sum + m.quantidade, 0)}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  unidades no período
+                </p>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Produtos Monitorados</CardTitle></CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold flex items-center gap-2">{previsaoReposicao.length}<Package className="h-5 w-5 text-muted-foreground" /></div>
-                <p className="text-xs text-muted-foreground mt-1">com previsão de reposição</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Urgência Crítica</CardTitle></CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold flex items-center gap-2 text-destructive">{previsaoReposicao.filter((p) => p.urgencia === "critica").length}<AlertTriangle className="h-5 w-5" /></div>
-                <p className="text-xs text-muted-foreground mt-1">produtos em menos de 7 dias</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">Tendência</CardTitle></CardHeader>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Produtos Monitorados
+                </CardTitle>
+              </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold flex items-center gap-2">
-                  {(tendenciasUso[tendenciasUso.length - 1]?.consumo ?? 0) > (tendenciasUso[0]?.consumo ?? 0) ? (
-                    <><TrendingUp className="h-5 w-5 text-destructive" /><span className="text-destructive">Alta</span></>
+                  {previsaoReposicao.length}
+                  <Package className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  com previsão de reposição
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Urgência Crítica
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold flex items-center gap-2 text-destructive">
+                  {
+                    previsaoReposicao.filter((p) => p.urgencia === "critica")
+                      .length
+                  }
+                  <AlertTriangle className="h-5 w-5" />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  produtos em menos de 7 dias
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Tendência
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold flex items-center gap-2">
+                  {(tendenciasUso[tendenciasUso.length - 1]?.consumo ?? 0) >
+                  (tendenciasUso[0]?.consumo ?? 0) ? (
+                    <>
+                      <TrendingUp className="h-5 w-5 text-destructive" />
+                      <span className="text-destructive">Alta</span>
+                    </>
                   ) : (
-                    <><TrendingDown className="h-5 w-5 text-success" /><span className="text-success">Baixa</span></>
+                    <>
+                      <TrendingDown className="h-5 w-5 text-success" />
+                      <span className="text-success">Baixa</span>
+                    </>
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">comparado ao início do período</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  comparado ao início do período
+                </p>
               </CardContent>
             </Card>
           </div>
 
           <Card>
-            <CardHeader><CardTitle>Tendências de Consumo</CardTitle><CardDescription>Evolução do consumo ao longo do tempo</CardDescription></CardHeader>
+            <CardHeader>
+              <CardTitle>Tendências de Consumo</CardTitle>
+              <CardDescription>
+                Evolução do consumo ao longo do tempo
+              </CardDescription>
+            </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={tendenciasUso}>
-                  <CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="periodo" /><YAxis /><Tooltip /><Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
-                  <Line type="monotone" dataKey="consumo" stroke="hsl(var(--primary))" strokeWidth={2} name="Consumo (unidades)" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="periodo" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                  <Line
+                    type="monotone"
+                    dataKey="consumo"
+                    stroke="hsl(var(--primary))"
+                    strokeWidth={2}
+                    name="Consumo (unidades)"
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -274,23 +421,54 @@ export default function EstoqueAnaliseConsumo() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
-              <CardHeader><CardTitle>Top 10 Produtos Mais Consumidos</CardTitle><CardDescription>Ranking de produtos por quantidade consumida</CardDescription></CardHeader>
+              <CardHeader>
+                <CardTitle>Top 10 Produtos Mais Consumidos</CardTitle>
+                <CardDescription>
+                  Ranking de produtos por quantidade consumida
+                </CardDescription>
+              </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={400}>
                   <BarChart data={produtosMaisConsumidos} layout="vertical">
-                    <CartesianGrid strokeDasharray="3 3" /><XAxis type="number" /><YAxis type="category" dataKey="nome" width={150} /><Tooltip />
-                    <Bar dataKey="quantidade" fill="hsl(var(--primary))" name="Quantidade" />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis type="category" dataKey="nome" width={150} />
+                    <Tooltip />
+                    <Bar
+                      dataKey="quantidade"
+                      fill="hsl(var(--primary))"
+                      name="Quantidade"
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader><CardTitle>Consumo por Categoria</CardTitle><CardDescription>Distribuição do consumo entre categorias</CardDescription></CardHeader>
+              <CardHeader>
+                <CardTitle>Consumo por Categoria</CardTitle>
+                <CardDescription>
+                  Distribuição do consumo entre categorias
+                </CardDescription>
+              </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={400}>
                   <PieChart>
-                    <Pie data={consumoPorCategoria} cx="50%" cy="50%" labelLine={false} label={(entry) => entry.nome} outerRadius={120} fill="hsl(var(--primary))" dataKey="valor">
-                      {consumoPorCategoria.map((_, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
+                    <Pie
+                      data={consumoPorCategoria}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={(entry) => entry.nome}
+                      outerRadius={120}
+                      fill="hsl(var(--primary))"
+                      dataKey="valor"
+                    >
+                      {consumoPorCategoria.map((_, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
                     </Pie>
                     <Tooltip />
                   </PieChart>
@@ -300,30 +478,58 @@ export default function EstoqueAnaliseConsumo() {
           </div>
 
           <Card>
-            <CardHeader><CardTitle>Previsão de Reposição</CardTitle><CardDescription>Produtos que precisarão de reposição nos próximos 60 dias</CardDescription></CardHeader>
+            <CardHeader>
+              <CardTitle>Previsão de Reposição</CardTitle>
+              <CardDescription>
+                Produtos que precisarão de reposição nos próximos 60 dias
+              </CardDescription>
+            </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {previsaoReposicao.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">Nenhum produto necessita reposição nos próximos 60 dias</p>
+                  <p className="text-center text-muted-foreground py-8">
+                    Nenhum produto necessita reposição nos próximos 60 dias
+                  </p>
                 ) : (
                   previsaoReposicao.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-4 border rounded-lg"
+                    >
                       <div className="flex-1">
                         <h4 className="font-medium">{item.nome}</h4>
-                        <p className="text-sm text-muted-foreground">Estoque: {item.quantidadeAtual} un. | Consumo médio: {item.consumoMedioDiario} un/dia</p>
+                        <p className="text-sm text-muted-foreground">
+                          Estoque: {item.quantidadeAtual} un. | Consumo médio:{" "}
+                          {item.consumoMedioDiario} un/dia
+                        </p>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <p className="text-sm font-medium">{item.diasRestantes} dias</p>
-                          <p className="text-xs text-muted-foreground">até {item.dataReposicao}</p>
+                          <p className="text-sm font-medium">
+                            {item.diasRestantes} dias
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            até {item.dataReposicao}
+                          </p>
                         </div>
-                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          item.urgencia === "critica" ? "bg-destructive/10 text-destructive"
-                            : item.urgencia === "alta" ? "bg-warning/10 text-warning"
-                              : item.urgencia === "media" ? "bg-warning/10 text-warning"
-                                : "bg-info/10 text-info"
-                        }`}>
-                          {item.urgencia === "critica" ? "Crítico" : item.urgencia === "alta" ? "Alta" : item.urgencia === "media" ? "Média" : "Baixa"}
+                        <div
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            item.urgencia === "critica"
+                              ? "bg-destructive/10 text-destructive"
+                              : item.urgencia === "alta"
+                                ? "bg-warning/10 text-warning"
+                                : item.urgencia === "media"
+                                  ? "bg-warning/10 text-warning"
+                                  : "bg-info/10 text-info"
+                          }`}
+                        >
+                          {item.urgencia === "critica"
+                            ? "Crítico"
+                            : item.urgencia === "alta"
+                              ? "Alta"
+                              : item.urgencia === "media"
+                                ? "Média"
+                                : "Baixa"}
                         </div>
                       </div>
                     </div>

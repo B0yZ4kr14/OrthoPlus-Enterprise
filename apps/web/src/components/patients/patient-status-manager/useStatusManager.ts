@@ -10,8 +10,12 @@ interface UseStatusManagerProps {
   onStatusChange: (newStatus: PatientStatus, reason: string) => Promise<void>;
 }
 
-export function useStatusManager({ currentStatus, onStatusChange }: UseStatusManagerProps) {
-  const [selectedStatus, setSelectedStatus] = useState<PatientStatus>(currentStatus);
+export function useStatusManager({
+  currentStatus,
+  onStatusChange,
+}: UseStatusManagerProps) {
+  const [selectedStatus, setSelectedStatus] =
+    useState<PatientStatus>(currentStatus);
   const [reason, setReason] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);

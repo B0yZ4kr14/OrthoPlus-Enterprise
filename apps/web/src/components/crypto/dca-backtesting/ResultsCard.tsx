@@ -77,7 +77,9 @@ export function ResultsCard({ summary, coinType }: ResultsCardProps) {
               <span className="text-muted-foreground">Retorno:</span>
               <span
                 className={`font-semibold ${
-                  summary.lumpSumReturn >= 0 ? "text-success" : "text-destructive"
+                  summary.lumpSumReturn >= 0
+                    ? "text-success"
+                    : "text-destructive"
                 }`}
               >
                 {summary.lumpSumReturn >= 0 ? "+" : ""}

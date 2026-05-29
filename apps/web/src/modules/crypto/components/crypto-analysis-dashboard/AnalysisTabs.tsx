@@ -7,7 +7,12 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   LineChart,
   Line,
@@ -78,7 +83,7 @@ export function AnalysisTabs({
                       borderRadius: "8px",
                     }}
                   />
-                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Line
                     type="monotone"
                     dataKey="BTC"
@@ -111,8 +116,7 @@ export function AnalysisTabs({
           <CardHeader>
             <CardTitle>Volume de Transações por Dia</CardTitle>
             <CardDescription>
-              Visualize o volume de pagamentos em criptomoedas ao longo do
-              tempo
+              Visualize o volume de pagamentos em criptomoedas ao longo do tempo
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -128,7 +132,7 @@ export function AnalysisTabs({
                     borderRadius: "8px",
                   }}
                 />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="volume"
                   fill="hsl(var(--primary))"

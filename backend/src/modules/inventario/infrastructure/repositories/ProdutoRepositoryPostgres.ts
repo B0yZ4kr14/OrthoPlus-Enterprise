@@ -2,9 +2,12 @@
  * MÓDULO INVENTÁRIO - Repositório PostgreSQL de Produtos
  */
 
-import { IDatabaseConnection } from '@/infrastructure/database/IDatabaseConnection';
-import { FindAllOptions, IProdutoRepository } from '../../domain/repositories/IProdutoRepository';
-import { Produto } from '../../domain/entities/Produto';
+import { IDatabaseConnection } from "@/infrastructure/database/IDatabaseConnection";
+import {
+  FindAllOptions,
+  IProdutoRepository,
+} from "../../domain/repositories/IProdutoRepository";
+import { Produto } from "../../domain/entities/Produto";
 
 export class ProdutoRepositoryPostgres implements IProdutoRepository {
   constructor(private db: IDatabaseConnection) {}
@@ -12,25 +15,37 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
   async findById(id: string): Promise<Produto | null> {
     const result = await this.db.query<Record<string, unknown>>(
       `SELECT * FROM inventario.produtos WHERE id = $1`,
-      [id]
+      [id],
     );
 
     if (result.rows.length === 0) return null;
     return this.mapToDomain(result.rows[0]);
   }
 
-  async findByCodigo(codigo: string, clinicId: string): Promise<Produto | null> {
+  async findByCodigo(
+    codigo: string,
+    clinicId: string,
+  ): Promise<Produto | null> {
     const result = await this.db.query<Record<string, unknown>>(
       `SELECT * FROM inventario.produtos WHERE codigo = $1 AND clinic_id = $2`,
-      [codigo, clinicId]
+      [codigo, clinicId],
     );
 
     if (result.rows.length === 0) return null;
     return this.mapToDomain(result.rows[0]);
   }
 
-  async findAll(options: FindAllOptions): Promise<{ items: Produto[]; total: number }> {
-    const { clinicId, categoria, status, searchTerm, skip = 0, take = 50 } = options;
+  async findAll(
+    options: FindAllOptions,
+  ): Promise<{ items: Produto[]; total: number }> {
+    const {
+      clinicId,
+      categoria,
+      status,
+      searchTerm,
+      skip = 0,
+      take = 50,
+    } = options;
     const params: unknown[] = [clinicId];
     let paramIndex = 2;
     let where = `clinic_id = $1`;
@@ -53,25 +68,28 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
 
     const countResult = await this.db.query<{ count: string }>(
       `SELECT COUNT(*) AS count FROM inventario.produtos WHERE ${where}`,
-      params
+      params,
     );
-    const total = parseInt(countResult.rows[0]?.count ?? '0', 10);
+    const total = parseInt(countResult.rows[0]?.count ?? "0", 10);
 
     const dataResult = await this.db.query<Record<string, unknown>>(
       `SELECT * FROM inventario.produtos WHERE ${where} ORDER BY nome LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`,
-      [...params, take, skip]
+      [...params, take, skip],
     );
 
     return { items: dataResult.rows.map((r) => this.mapToDomain(r)), total };
   }
 
-  async findEstoqueBaixo(clinicId: string, limiteMinimo?: number): Promise<Produto[]> {
+  async findEstoqueBaixo(
+    clinicId: string,
+    limiteMinimo?: number,
+  ): Promise<Produto[]> {
     const result = await this.db.query<Record<string, unknown>>(
       `SELECT * FROM inventario.produtos WHERE clinic_id = $1
        AND quantidade_atual <= COALESCE($2, quantidade_minima)
        ORDER BY nome
        LIMIT 1000`,
-      [clinicId, limiteMinimo ?? null]
+      [clinicId, limiteMinimo ?? null],
     );
     return result.rows.map((r) => this.mapToDomain(r));
   }
@@ -84,11 +102,21 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
         created_at, updated_at
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
       [
-        produto.id, produto.clinicId, produto.codigo, produto.nome, produto.descricao,
-        produto.categoria, produto.unidadeMedida, produto.precoCusto, produto.precoVenda,
-        produto.quantidadeMinima, produto.quantidadeAtual, produto.status,
-        produto.createdAt, produto.updatedAt,
-      ]
+        produto.id,
+        produto.clinicId,
+        produto.codigo,
+        produto.nome,
+        produto.descricao,
+        produto.categoria,
+        produto.unidadeMedida,
+        produto.precoCusto,
+        produto.precoVenda,
+        produto.quantidadeMinima,
+        produto.quantidadeAtual,
+        produto.status,
+        produto.createdAt,
+        produto.updatedAt,
+      ],
     );
   }
 
@@ -100,11 +128,18 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
         quantidade_atual = $9, status = $10, updated_at = $11
       WHERE id = $1`,
       [
-        produto.id, produto.nome, produto.descricao, produto.categoria,
-        produto.unidadeMedida, produto.precoCusto, produto.precoVenda,
-        produto.quantidadeMinima, produto.quantidadeAtual, produto.status,
+        produto.id,
+        produto.nome,
+        produto.descricao,
+        produto.categoria,
+        produto.unidadeMedida,
+        produto.precoCusto,
+        produto.precoVenda,
+        produto.quantidadeMinima,
+        produto.quantidadeAtual,
+        produto.status,
         produto.updatedAt,
-      ]
+      ],
     );
   }
 
@@ -112,26 +147,37 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
     await this.db.query(`DELETE FROM inventario.produtos WHERE id = $1`, [id]);
   }
 
-  async findByClinic(clinicId: string, filters?: { categoriaId?: string; fornecedorId?: string; ativo?: boolean; estoqueBaixo?: boolean; search?: string }): Promise<Produto[]> {
+  async findByClinic(
+    clinicId: string,
+    filters?: {
+      categoriaId?: string;
+      fornecedorId?: string;
+      ativo?: boolean;
+      estoqueBaixo?: boolean;
+      search?: string;
+    },
+  ): Promise<Produto[]> {
     const { where, params } = this.buildClinicFilters(clinicId, filters);
     const result = await this.db.query<Record<string, unknown>>(
       `SELECT * FROM inventario.produtos WHERE ${where} ORDER BY nome LIMIT 1000`,
-      params
+      params,
     );
     return result.rows.map((r) => this.mapToDomain(r));
   }
 
-  async findProductsForAutoOrders(clinicId: string): Promise<Array<{
-    produto_id: string;
-    produto_nome: string;
-    quantidade_atual: number;
-    quantidade_minima: number;
-    quantidade_reposicao: number;
-    ponto_pedido: number;
-    dias_entrega_estimados: number | null;
-    fornecedor_id: string | null;
-    valor_unitario: number;
-  }>> {
+  async findProductsForAutoOrders(clinicId: string): Promise<
+    Array<{
+      produto_id: string;
+      produto_nome: string;
+      quantidade_atual: number;
+      quantidade_minima: number;
+      quantidade_reposicao: number;
+      ponto_pedido: number;
+      dias_entrega_estimados: number | null;
+      fornecedor_id: string | null;
+      valor_unitario: number;
+    }>
+  > {
     const result = await this.db.query<Record<string, unknown>>(
       `SELECT
         p.id AS produto_id,
@@ -149,7 +195,7 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
         AND p.quantidade_atual <= COALESCE(pc.ponto_pedido, p.quantidade_minima)
         AND (p.ativo = true OR p.status = 'ATIVO')
       LIMIT 200`,
-      [clinicId]
+      [clinicId],
     );
     return result.rows.map((r) => ({
       produto_id: r.produto_id as string,
@@ -158,18 +204,21 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
       quantidade_minima: Number(r.quantidade_minima),
       quantidade_reposicao: Number(r.quantidade_reposicao),
       ponto_pedido: Number(r.ponto_pedido),
-      dias_entrega_estimados: (r.dias_entrega_estimados as number | null) ?? null,
+      dias_entrega_estimados:
+        (r.dias_entrega_estimados as number | null) ?? null,
       fornecedor_id: (r.fornecedor_id as string | null) ?? null,
       valor_unitario: Number(r.valor_unitario),
     }));
   }
 
-  async findProductsForAlerts(clinicId: string): Promise<Array<{
-    id: string;
-    nome: string;
-    quantidade_atual: number;
-    quantidade_minima: number;
-  }>> {
+  async findProductsForAlerts(clinicId: string): Promise<
+    Array<{
+      id: string;
+      nome: string;
+      quantidade_atual: number;
+      quantidade_minima: number;
+    }>
+  > {
     const result = await this.db.query<Record<string, unknown>>(
       `SELECT id, nome, quantidade_atual, quantidade_minima
       FROM inventario.produtos
@@ -177,7 +226,7 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
         AND quantidade_atual <= quantidade_minima
         AND (ativo = true OR status = 'ATIVO')
       LIMIT 200`,
-      [clinicId]
+      [clinicId],
     );
     return result.rows.map((r) => ({
       id: r.id as string,
@@ -187,16 +236,34 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
     }));
   }
 
-  async count(clinicId: string, filters?: { categoriaId?: string; fornecedorId?: string; ativo?: boolean; estoqueBaixo?: boolean; search?: string }): Promise<number> {
+  async count(
+    clinicId: string,
+    filters?: {
+      categoriaId?: string;
+      fornecedorId?: string;
+      ativo?: boolean;
+      estoqueBaixo?: boolean;
+      search?: string;
+    },
+  ): Promise<number> {
     const { where, params } = this.buildClinicFilters(clinicId, filters);
     const result = await this.db.query<{ count: string }>(
       `SELECT COUNT(*) AS count FROM inventario.produtos WHERE ${where}`,
-      params
+      params,
     );
-    return parseInt(result.rows[0]?.count ?? '0', 10);
+    return parseInt(result.rows[0]?.count ?? "0", 10);
   }
 
-  private buildClinicFilters(clinicId: string, filters?: { categoriaId?: string; fornecedorId?: string; ativo?: boolean; estoqueBaixo?: boolean; search?: string }): { where: string; params: unknown[] } {
+  private buildClinicFilters(
+    clinicId: string,
+    filters?: {
+      categoriaId?: string;
+      fornecedorId?: string;
+      ativo?: boolean;
+      estoqueBaixo?: boolean;
+      search?: string;
+    },
+  ): { where: string; params: unknown[] } {
     const params: unknown[] = [clinicId];
     let paramIndex = 2;
     let where = `clinic_id = $1`;

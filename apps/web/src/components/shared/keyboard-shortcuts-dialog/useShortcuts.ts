@@ -4,7 +4,7 @@ import { SHORTCUTS } from "./SHORTCUTS";
 export function useShortcuts() {
   const categories = useMemo(
     () => [...new Set(SHORTCUTS.map((s) => s.category))],
-    []
+    [],
   );
 
   const getShortcutsByCategory = (category: string) =>

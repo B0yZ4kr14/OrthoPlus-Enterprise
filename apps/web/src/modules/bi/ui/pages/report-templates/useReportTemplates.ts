@@ -52,7 +52,9 @@ export function useReportTemplates(): UseReportTemplatesReturn {
   const [templates, setTemplates] = useState<ReportTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingTemplate, setEditingTemplate] = useState<ReportTemplate | null>(null);
+  const [editingTemplate, setEditingTemplate] = useState<ReportTemplate | null>(
+    null,
+  );
   const [formData, setFormData] = useState<TemplateFormData>(DEFAULT_FORM_DATA);
 
   useEffect(() => {
@@ -104,7 +106,7 @@ export function useReportTemplates(): UseReportTemplatesReturn {
             metrics: formData.metrics,
             layout: formData.layout,
           }
-        : t
+        : t,
     );
 
     setTemplates(updatedTemplates);
@@ -133,7 +135,7 @@ export function useReportTemplates(): UseReportTemplatesReturn {
 
   const handleToggleActive = (id: string) => {
     const updatedTemplates = templates.map((t) =>
-      t.id === id ? { ...t, is_active: !t.is_active } : t
+      t.id === id ? { ...t, is_active: !t.is_active } : t,
     );
     setTemplates(updatedTemplates);
   };

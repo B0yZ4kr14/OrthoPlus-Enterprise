@@ -1,5 +1,8 @@
-import type { DashboardOverviewDTO, DashboardChartData } from "@orthoplus/shared-types"
-import type { DashboardOverviewResult } from "../GetDashboardOverviewUseCase"
+import type {
+  DashboardOverviewDTO,
+  DashboardChartData,
+} from "@orthoplus/shared-types";
+import type { DashboardOverviewResult } from "../GetDashboardOverviewUseCase";
 
 /**
  * Maps DashboardOverviewResult to DashboardOverviewDTO.
@@ -7,9 +10,9 @@ import type { DashboardOverviewResult } from "../GetDashboardOverviewUseCase"
  */
 export class DashboardOverviewMapper {
   static toDTO(result: DashboardOverviewResult): DashboardOverviewDTO {
-    const now = new Date()
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     const charts: DashboardChartData = {
       labels: result.appointmentsData.map((d) => d.name),
@@ -17,7 +20,7 @@ export class DashboardOverviewMapper {
       expenses: result.revenueData.map((d) => d.despesas),
       appointments: result.appointmentsData.map((d) => d.agendadas),
       newPatients: result.treatmentsByStatus.map((d) => d.value),
-    }
+    };
 
     return {
       stats: result.stats,
@@ -26,6 +29,6 @@ export class DashboardOverviewMapper {
         start: startOfMonth.toISOString(),
         end: endOfMonth.toISOString(),
       },
-    }
+    };
   }
 }

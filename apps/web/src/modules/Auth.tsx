@@ -10,7 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -99,7 +104,9 @@ export default function Auth() {
   }, [user, navigate]);
 
   const handleLogin = async (values: LoginFormValues) => {
-    const identifier = values.email.includes("@") ? values.email : values.email + "@tsiapp.io";
+    const identifier = values.email.includes("@")
+      ? values.email
+      : values.email + "@tsiapp.io";
     setIsLoading(true);
     const { error } = await signIn(identifier, values.password);
     setIsLoading(false);
@@ -171,21 +178,9 @@ export default function Auth() {
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-3 dark:bg-muted dark:border-border">
-              <TabsTrigger 
-                value="login" 
-              >
-                Equipe
-              </TabsTrigger>
-              <TabsTrigger 
-                value="patient"
-              >
-                Paciente
-              </TabsTrigger>
-              <TabsTrigger 
-                value="signup"
-              >
-                Cadastro
-              </TabsTrigger>
+              <TabsTrigger value="login">Equipe</TabsTrigger>
+              <TabsTrigger value="patient">Paciente</TabsTrigger>
+              <TabsTrigger value="signup">Cadastro</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login" className="space-y-4">
@@ -202,7 +197,9 @@ export default function Auth() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Email ou Usuário</FormLabel>
+                        <FormLabel className="text-foreground">
+                          Email ou Usuário
+                        </FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input
@@ -241,7 +238,11 @@ export default function Auth() {
                               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                               tabIndex={-1}
                             >
-                              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                              {showPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
                             </button>
                           </div>
                         </FormControl>
@@ -249,10 +250,10 @@ export default function Auth() {
                       </FormItem>
                     )}
                   />
-                  <Button 
-                    type="submit" 
-                    variant="default" 
-                    className="w-full shadow-[0_0_16px_hsl(var(--interactive)/0.2)] hover:shadow-[0_0_24px_hsl(var(--interactive)/0.3)] transition-shadow duration-300" 
+                  <Button
+                    type="submit"
+                    variant="default"
+                    className="w-full shadow-[0_0_16px_hsl(var(--interactive)/0.2)] hover:shadow-[0_0_24px_hsl(var(--interactive)/0.3)] transition-shadow duration-300"
                     disabled={isLoading}
                   >
                     {isLoading ? "Entrando..." : "Entrar"}

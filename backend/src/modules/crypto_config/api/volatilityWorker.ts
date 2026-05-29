@@ -2,12 +2,9 @@ import { logger } from "@/infrastructure/logger";
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
 
-
 export class VolatilityWorkerController {
   async processVolatilityAlerts(_req: Request, res: Response): Promise<void> {
     try {
-      
-
       // Fetch active volatility alerts
       const alerts = await prisma.crypto_price_alerts.findMany({
         where: {
@@ -35,8 +32,10 @@ export class VolatilityWorkerController {
         const coinId = coinIds[alert.coin_type];
         if (!coinId) continue;
 
-        const timeframeMinutes = (alert as any).volatility_timeframe_minutes || 60;
-        const thresholdPercentage = (alert as any).volatility_threshold_percentage || 5;
+        const timeframeMinutes =
+          (alert as any).volatility_timeframe_minutes || 60;
+        const thresholdPercentage =
+          (alert as any).volatility_threshold_percentage || 5;
         const direction = (alert as any).volatility_direction || "both";
 
         const toTimestamp = Math.floor(Date.now() / 1000);
@@ -101,7 +100,9 @@ export class VolatilityWorkerController {
             });
           }
         } catch (error) {
-          logger.error(`Error processing alert for ${alert.coin_type}`, { error });
+          logger.error(`Error processing alert for ${alert.coin_type}`, {
+            error,
+          });
         }
       }
 
@@ -110,7 +111,8 @@ export class VolatilityWorkerController {
         triggeredAlerts,
         message: `Checked ${alerts.length} alerts, triggered ${triggeredAlerts.length}`,
       });
-    } catch (error) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    } catch (error) {
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       logger.error("Error in volatility worker", { error });
       res.status(500).json({ error: "Internal server error" });
     }

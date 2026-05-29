@@ -11,15 +11,15 @@ export function ConfirmStep({ backupDate }: ConfirmStepProps) {
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          <strong>Atenção:</strong> Esta ação irá sobrescrever os dados atuais do sistema.
-          Certifique-se de ter um backup recente antes de continuar.
+          <strong>Atenção:</strong> Esta ação irá sobrescrever os dados atuais
+          do sistema. Certifique-se de ter um backup recente antes de continuar.
         </AlertDescription>
       </Alert>
 
       <div className="bg-muted p-4 rounded-lg space-y-2">
         <div className="flex items-center gap-2 font-medium">
-          <AlertCircle className="h-5 w-5 text-destructive" />
-          O que será restaurado?
+          <AlertCircle className="h-5 w-5 text-destructive" />O que será
+          restaurado?
         </div>
         <ul className="text-sm space-y-1 ml-7 text-muted-foreground">
           <li>• Todos os dados serão revertidos para {backupDate}</li>

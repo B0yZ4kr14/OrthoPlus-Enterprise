@@ -49,7 +49,9 @@ export function ComparativoPDFExport({
       // Logo OrthoPlus Enterprise
       pdf.setFontSize(12);
       pdf.setTextColor(0, 150, 136);
-      pdf.text("OrthoPlus Enterprise", pageWidth / 2, yPosition, { align: "center" });
+      pdf.text("OrthoPlus Enterprise", pageWidth / 2, yPosition, {
+        align: "center",
+      });
       pdf.setTextColor(0, 0, 0);
       yPosition += 15;
 
@@ -165,8 +167,10 @@ export function ComparativoPDFExport({
 
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
-      const data1 = analise1.created_at ? new Date(analise1.created_at).toLocaleDateString("pt-BR") : "Data não disponível"
-      pdf.text(`Data: ${data1}`, margin, yPosition)
+      const data1 = analise1.created_at
+        ? new Date(analise1.created_at).toLocaleDateString("pt-BR")
+        : "Data não disponível";
+      pdf.text(`Data: ${data1}`, margin, yPosition);
       yPosition += 4;
       pdf.text(
         `Tipo: ${tipoRadiografiaLabels[analise1.tipo_radiografia as keyof typeof tipoRadiografiaLabels]}`,
@@ -219,8 +223,10 @@ export function ComparativoPDFExport({
 
       pdf.setFontSize(9);
       pdf.setFont("helvetica", "normal");
-      const data2 = analise2.created_at ? new Date(analise2.created_at).toLocaleDateString("pt-BR") : "Data não disponível"
-      pdf.text(`Data: ${data2}`, margin, yPosition)
+      const data2 = analise2.created_at
+        ? new Date(analise2.created_at).toLocaleDateString("pt-BR")
+        : "Data não disponível";
+      pdf.text(`Data: ${data2}`, margin, yPosition);
       yPosition += 4;
       pdf.text(
         `Tipo: ${tipoRadiografiaLabels[analise2.tipo_radiografia as keyof typeof tipoRadiografiaLabels]}`,
@@ -280,8 +286,11 @@ export function ComparativoPDFExport({
       }
 
       // Salvar PDF
-      const safeName = (analise1.paciente_name || "paciente").replace(/\s+/g, "_")
-      const fileName = `comparativo_${safeName}_${new Date().toISOString().split("T")[0]}.pdf`
+      const safeName = (analise1.paciente_name || "paciente").replace(
+        /\s+/g,
+        "_",
+      );
+      const fileName = `comparativo_${safeName}_${new Date().toISOString().split("T")[0]}.pdf`;
       pdf.save(fileName);
 
       toast.success("PDF exportado com sucesso!");

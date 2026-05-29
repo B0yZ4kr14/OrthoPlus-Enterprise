@@ -11,7 +11,8 @@ import { ScanningView } from "./ScanningView";
 import { SignedView } from "./SignedView";
 
 export function KruxIntegration() {
-  const { status, scanSignedTransaction, broadcastTransaction, reset } = useKruxIntegration();
+  const { status, scanSignedTransaction, broadcastTransaction, reset } =
+    useKruxIntegration();
 
   return (
     <Card>

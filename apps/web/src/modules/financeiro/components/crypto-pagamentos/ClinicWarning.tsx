@@ -13,8 +13,8 @@ export function ClinicWarning() {
               Nenhuma clínica selecionada
             </p>
             <p className="text-sm text-warning mt-1">
-              Selecione uma clínica no menu superior para gerenciar
-              pagamentos em criptomoedas.
+              Selecione uma clínica no menu superior para gerenciar pagamentos
+              em criptomoedas.
             </p>
           </div>
         </div>

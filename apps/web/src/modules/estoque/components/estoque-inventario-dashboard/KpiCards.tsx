@@ -90,9 +90,7 @@ export function KpiCards({ kpis }: KpiCardsProps) {
             <p className="text-sm font-medium text-muted-foreground">
               Total de Divergências
             </p>
-            <p className="text-3xl font-bold mt-2">
-              {kpis.totalDivergencias}
-            </p>
+            <p className="text-3xl font-bold mt-2">{kpis.totalDivergencias}</p>
             <p className="text-xs text-muted-foreground mt-2">
               de {kpis.totalItensAnalisados} itens analisados
             </p>

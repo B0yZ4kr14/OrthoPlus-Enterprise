@@ -6,7 +6,11 @@ interface FieldMessageProps {
   helperText?: string;
 }
 
-export function FieldMessage({ error, success, helperText }: FieldMessageProps) {
+export function FieldMessage({
+  error,
+  success,
+  helperText,
+}: FieldMessageProps) {
   const hasError = !!error;
   const hasSuccess = success && !hasError;
   const showHelperText = helperText && !hasError && !hasSuccess;

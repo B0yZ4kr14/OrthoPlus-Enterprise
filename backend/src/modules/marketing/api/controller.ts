@@ -1,17 +1,22 @@
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
-import { createCampanhaSchema, updateCampanhaSchema, createEnvioSchema, createRecallSchema } from "./schemas";
+import {
+  createCampanhaSchema,
+  updateCampanhaSchema,
+  createEnvioSchema,
+  createRecallSchema,
+} from "./schemas";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 import { marketingMetrics } from "@/infrastructure/metrics/MarketingMetrics";
 import { IMarketingRepository } from "@/modules/marketing/domain/repositories/IMarketingRepository";
 
-import { MarketingRepository } from "@/modules/marketing/infrastructure/MarketingRepository"
+import { MarketingRepository } from "@/modules/marketing/infrastructure/MarketingRepository";
 
 export class MarketingController {
-  private repo: IMarketingRepository
+  private repo: IMarketingRepository;
 
   constructor(repo?: IMarketingRepository) {
-    this.repo = repo ?? new MarketingRepository()
+    this.repo = repo ?? new MarketingRepository();
   }
   // --- Campanhas ---
   listCampanhas = asyncHandler(async (req: Request, res: Response) => {
@@ -22,7 +27,10 @@ export class MarketingController {
     const { status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (status) where.status = String(status);
-    const data = await this.repo.listCampaigns(clinicId, status ? String(status) : undefined);
+    const data = await this.repo.listCampaigns(
+      clinicId,
+      status ? String(status) : undefined,
+    );
     res.json(data);
   });
 
@@ -48,8 +56,11 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await this.repo.createCampaign({ ...parsed.data, clinic_id: clinicId } as any);
-    marketingMetrics.incCampaignsCreated(clinicId)
+    const data = await this.repo.createCampaign({
+      ...parsed.data,
+      clinic_id: clinicId,
+    } as any);
+    marketingMetrics.incCampaignsCreated(clinicId);
     res.status(201).json(data);
   });
 
@@ -78,7 +89,9 @@ export class MarketingController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { campanha_id, status_envio } = req.query;
-    const where: Record<string, unknown> = { campanha: { clinic_id: clinicId } };
+    const where: Record<string, unknown> = {
+      campanha: { clinic_id: clinicId },
+    };
     if (campanha_id) where.campanha_id = String(campanha_id);
     if (status_envio) where.status_envio = String(status_envio);
     const data = await this.repo.listEnvios(where as any);
@@ -94,12 +107,15 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const campanha = await this.repo.getCampaignById(parsed.data.campanha_id, clinicId);
+    const campanha = await this.repo.getCampaignById(
+      parsed.data.campanha_id,
+      clinicId,
+    );
     if (!campanha) {
       throw Errors.notFound("Campanha");
     }
     const data = await this.repo.createEnvio(parsed.data as any);
-    marketingMetrics.incEnviosCreated(clinicId)
+    marketingMetrics.incEnviosCreated(clinicId);
     res.status(201).json(data);
   });
 
@@ -112,7 +128,10 @@ export class MarketingController {
     const { tipo_recall } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (tipo_recall) where.tipo_recall = String(tipo_recall);
-    const data = await this.repo.listRecalls(clinicId, tipo_recall ? String(tipo_recall) : undefined);
+    const data = await this.repo.listRecalls(
+      clinicId,
+      tipo_recall ? String(tipo_recall) : undefined,
+    );
     res.json(data);
   });
 
@@ -125,7 +144,10 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await this.repo.createRecall({ ...parsed.data, clinic_id: clinicId } as any);
+    const data = await this.repo.createRecall({
+      ...parsed.data,
+      clinic_id: clinicId,
+    } as any);
     res.status(201).json(data);
   });
 
@@ -146,34 +168,53 @@ export class MarketingController {
 
     const now = new Date();
     let triggered = 0;
-    const results: Array<{ campaign: string; trigger: string; sends: number }> = [];
+    const results: Array<{ campaign: string; trigger: string; sends: number }> =
+      [];
 
     for (const trigger of activeTriggers) {
       let condition: { event?: string; status?: string; days_after?: number };
       try {
-        const rawCondition = typeof trigger.trigger_condition === "string"
-          ? trigger.trigger_condition
-          : JSON.stringify(trigger.trigger_condition);
+        const rawCondition =
+          typeof trigger.trigger_condition === "string"
+            ? trigger.trigger_condition
+            : JSON.stringify(trigger.trigger_condition);
         condition = JSON.parse(rawCondition);
       } catch (parseError) {
         logger.warn("Invalid trigger_condition JSON", {
           triggerId: trigger.id,
           raw: trigger.trigger_condition,
-          error: parseError instanceof Error ? parseError.message : String(parseError),
+          error:
+            parseError instanceof Error
+              ? parseError.message
+              : String(parseError),
         });
         continue;
       }
 
-      let recipients: Array<{ patient_id: string; patient_name: string; email: string | null }> = [];
+      let recipients: Array<{
+        patient_id: string;
+        patient_name: string;
+        email: string | null;
+      }> = [];
 
       // Match trigger type to patient segment
-      if (trigger.trigger_type === "TIME_BASED" || condition.event === "birthday") {
+      if (
+        trigger.trigger_type === "TIME_BASED" ||
+        condition.event === "birthday"
+      ) {
         // Birthday-based trigger: patients with birthday today.
         // Prisma Client does not support EXTRACT(MONTH/DAY FROM date) natively.
         const todayMonth = now.getMonth() + 1;
         const todayDay = now.getDate();
-        recipients = await this.repo.findPatientsByBirthday(clinicId, todayMonth, todayDay);
-      } else if (condition.event === "appointment" && condition.status === "completed") {
+        recipients = await this.repo.findPatientsByBirthday(
+          clinicId,
+          todayMonth,
+          todayDay,
+        );
+      } else if (
+        condition.event === "appointment" &&
+        condition.status === "completed"
+      ) {
         // Post-appointment trigger: patients who completed appointments recently
         const delayDays = trigger.delay_days || 1;
         const targetDate = new Date(now);
@@ -181,7 +222,11 @@ export class MarketingController {
         const startOfDay = new Date(targetDate.setHours(0, 0, 0, 0));
         const endOfDay = new Date(targetDate.setHours(23, 59, 59, 999));
 
-        const appointmentRecalls = await this.repo.findAppointmentsByDateRange(clinicId, startOfDay, endOfDay);
+        const appointmentRecalls = await this.repo.findAppointmentsByDateRange(
+          clinicId,
+          startOfDay,
+          endOfDay,
+        );
         recipients = appointmentRecalls
           .filter((a) => a.patient)
           .map((a) => ({
@@ -195,15 +240,20 @@ export class MarketingController {
         const cutoffDate = new Date(now);
         cutoffDate.setDate(cutoffDate.getDate() - daysThreshold);
 
-        const recentAppointmentPatientIds = await this.repo.findRecentAppointmentPatientIds(clinicId, cutoffDate);
-        const recentPatientIds = new Set(recentAppointmentPatientIds.map((a) => a.patient_id));
-        recipients = await this.repo.findPatientsNotInIds(clinicId, Array.from(recentPatientIds)).then((patients) =>
-          patients.map((p) => ({
-            patient_id: p.id,
-            patient_name: p.full_name || "",
-            email: p.email || null,
-          })),
+        const recentAppointmentPatientIds =
+          await this.repo.findRecentAppointmentPatientIds(clinicId, cutoffDate);
+        const recentPatientIds = new Set(
+          recentAppointmentPatientIds.map((a) => a.patient_id),
         );
+        recipients = await this.repo
+          .findPatientsNotInIds(clinicId, Array.from(recentPatientIds))
+          .then((patients) =>
+            patients.map((p) => ({
+              patient_id: p.id,
+              patient_name: p.full_name || "",
+              email: p.email || null,
+            })),
+          );
       }
 
       // Skip if no matching recipients
@@ -238,7 +288,11 @@ export class MarketingController {
           clinic_id: clinicId,
           tipo: "MARKETING",
           titulo: "Campanha: " + trigger.campaign.name,
-          mensagem: "Envio agendado para " + (recipient.patient_name || "paciente") + " via " + trigger.campaign.channel,
+          mensagem:
+            "Envio agendado para " +
+            (recipient.patient_name || "paciente") +
+            " via " +
+            trigger.campaign.channel,
           link_acao: "/marketing-auto",
           lida: false,
         } as any);
@@ -262,7 +316,7 @@ export class MarketingController {
       triggered,
     });
 
-    marketingMetrics.incTriggersFired(clinicId)
+    marketingMetrics.incTriggersFired(clinicId);
     res.json({
       success: true,
       triggersChecked: activeTriggers.length,
@@ -282,7 +336,7 @@ export class MarketingController {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
 
-    const pendingRecallsRaw = await this.repo.listRecalls(clinicId) as any[];
+    const pendingRecallsRaw = (await this.repo.listRecalls(clinicId)) as any[];
     const pendingRecalls = pendingRecallsRaw.map((r) => ({
       id: r.id,
       patient_id: r.patient_id,
@@ -296,8 +350,9 @@ export class MarketingController {
 
     let processed = 0;
     for (const recall of pendingRecalls) {
-      const mensagem = recall.mensagem_personalizada
-        || `Olá ${recall.patient_name || ""}, está na hora do seu retorno (${recall.tipo_recall}).`;
+      const mensagem =
+        recall.mensagem_personalizada ||
+        `Olá ${recall.patient_name || ""}, está na hora do seu retorno (${recall.tipo_recall}).`;
 
       // Create notification
       await this.repo.createNotification({
@@ -310,12 +365,15 @@ export class MarketingController {
       } as any);
 
       // Mark recall as sent
-      await this.repo.updateRecall(recall.id, { notificacao_enviada: true, status: "SENT" });
+      await this.repo.updateRecall(recall.id, {
+        notificacao_enviada: true,
+        status: "SENT",
+      });
 
       processed++;
     }
 
-    marketingMetrics.incRecallsProcessed(clinicId)
+    marketingMetrics.incRecallsProcessed(clinicId);
     res.json({
       success: true,
       pending: pendingRecalls.length,

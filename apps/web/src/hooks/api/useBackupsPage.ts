@@ -14,10 +14,7 @@ interface Backup {
 export const useBackupsPage = () => {
   const queryClient = useQueryClient();
 
-  const {
-    data: backups = [],
-    isLoading,
-  } = useQuery({
+  const { data: backups = [], isLoading } = useQuery({
     queryKey: ["backups-page"],
     queryFn: async () => {
       return await apiClient.get<Backup[]>("/backups");

@@ -19,7 +19,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   Card,
   CardContent,
@@ -106,11 +111,15 @@ export default function PEPPage() {
       // Criar tratamentos usando o Use Case via hook customizado
       for (const suggestion of suggestions) {
         await createTratamento({
-          titulo: (suggestion as { procedure?: string }).procedure || "Tratamento sugerido",
+          titulo:
+            (suggestion as { procedure?: string }).procedure ||
+            "Tratamento sugerido",
           descricao:
             (suggestion as { clinical_notes?: string }).clinical_notes ||
             `Tratamento para o dente ${(suggestion as { tooth_number?: number }).tooth_number}`,
-          denteCodigo: String((suggestion as { tooth_number?: number }).tooth_number || 0),
+          denteCodigo: String(
+            (suggestion as { tooth_number?: number }).tooth_number || 0,
+          ),
           dataInicio: new Date(),
           createdBy: user.id,
         });

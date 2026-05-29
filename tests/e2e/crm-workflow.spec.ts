@@ -3,8 +3,8 @@ import { test, expect } from "./fixtures";
 test.describe("CRM Workflow", () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
-    await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
+    await page.goto("/");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test("should navigate to CRM page", async ({ page }) => {
@@ -46,7 +46,9 @@ test.describe("CRM Workflow", () => {
     await page.click('button[type="submit"]');
 
     // Accept any toast response — backend may not be running during E2E
-    const toastLocator = page.locator('[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *');
+    const toastLocator = page.locator(
+      '[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *',
+    );
     await expect(toastLocator.first()).toBeVisible({ timeout: 10000 });
   });
 });

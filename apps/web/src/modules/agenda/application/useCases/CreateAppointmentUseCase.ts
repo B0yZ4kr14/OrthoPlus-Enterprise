@@ -8,15 +8,15 @@ import { IBlockedTimeRepository } from "../../domain/repositories/IBlockedTimeRe
 
 export class BlockedTimeError extends Error {
   constructor(message: string) {
-    super(message)
-    this.name = "BlockedTimeError"
+    super(message);
+    this.name = "BlockedTimeError";
   }
 }
 
 export class SchedulingConflictError extends Error {
   constructor(message: string) {
-    super(message)
-    this.name = "SchedulingConflictError"
+    super(message);
+    this.name = "SchedulingConflictError";
   }
 }
 
@@ -49,7 +49,7 @@ export class CreateAppointmentUseCase {
       );
 
     if (blockedTimes.length > 0) {
-      throw new BlockedTimeError("Horário bloqueado para este dentista")
+      throw new BlockedTimeError("Horário bloqueado para este dentista");
     }
 
     // Verificar conflitos de agendamento
@@ -63,7 +63,9 @@ export class CreateAppointmentUseCase {
     );
 
     if (conflicts.length > 0) {
-      throw new SchedulingConflictError("Já existe um agendamento neste horário")
+      throw new SchedulingConflictError(
+        "Já existe um agendamento neste horário",
+      );
     }
 
     // Criar a entidade

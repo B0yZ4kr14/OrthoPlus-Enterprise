@@ -1,5 +1,5 @@
-import { IProdutoRepository } from '../../domain/repositories/IProdutoRepository';
-import { ProdutoDTO } from '../dto/ProdutoDTO';
+import { IProdutoRepository } from "../../domain/repositories/IProdutoRepository";
+import { ProdutoDTO } from "../dto/ProdutoDTO";
 
 export interface GetProdutoQuery {
   id: string;
@@ -11,7 +11,7 @@ export class GetProdutoQueryHandler {
 
   async execute(query: GetProdutoQuery): Promise<ProdutoDTO | null> {
     const produto = await this.produtoRepository.findById(query.id);
-    
+
     if (!produto || produto.clinicId !== query.clinicId) {
       return null;
     }

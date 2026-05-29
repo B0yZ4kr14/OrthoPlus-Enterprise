@@ -9,7 +9,11 @@ interface CupomActionsProps {
   isPending: boolean;
 }
 
-export function CupomActions({ onPrint, onEmitirNFCe, isPending }: CupomActionsProps) {
+export function CupomActions({
+  onPrint,
+  onEmitirNFCe,
+  isPending,
+}: CupomActionsProps) {
   return (
     <div className="flex gap-3 mt-6">
       <Button variant="outline" onClick={onPrint} className="flex-1">

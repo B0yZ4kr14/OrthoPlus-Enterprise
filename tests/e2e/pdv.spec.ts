@@ -14,9 +14,7 @@ test.describe("Point of Sale (PDV)", () => {
     ).toBeVisible();
 
     // Check that cash register status is visible (open or closed)
-    await expect(
-      page.getByText(/caixa fechado|caixa aberto/i),
-    ).toBeVisible();
+    await expect(page.getByText(/caixa fechado|caixa aberto/i)).toBeVisible();
 
     // Check add item section
     await expect(page.getByText(/adicionar item/i)).toBeVisible();

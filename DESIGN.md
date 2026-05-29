@@ -1,9 +1,11 @@
 # OrthoPlus Enterprise — Design System v4 Premium
 
 ## Overview
+
 SaaS B2B multitenant para clínicas odontológicas. O redesign v4 eleva a experiência de "funcional" para "premium", alinhando identidade visual, micro-interações e acessibilidade com o posicionamento Enterprise.
 
 ## Design Philosophy
+
 - **Clínica & Confiança**: Cores que evocam saúde, limpeza e tecnologia de ponta
 - **Data-First**: Dashboard como centro de comando, não apenas relatório
 - **Motion com Propósito**: Animações guiam atenção, não distraem
@@ -14,6 +16,7 @@ SaaS B2B multitenant para clínicas odontológicas. O redesign v4 eleva a experi
 ## Color Palette
 
 ### Primary — Navy Medical
+
 ```
 navy-900:  #0A1628  (títulos, autoridade)
 navy-800:  #1E293B  (texto primário)
@@ -25,6 +28,7 @@ navy-50:   #F8FAFC  (background principal)
 ```
 
 ### Interactive — Sage Green (CTAs, ações)
+
 ```
 sage-600:  #059669  (primário, hover states)
 sage-700:  #047857  (hover pressionado)
@@ -35,6 +39,7 @@ sage-50:   #F0FDF4  (backgrounds sutis)
 ```
 
 ### Accent — Teal Dental (identidade odontológica)
+
 ```
 teal-500:  #14B8A6  (gráficos, badges informativos)
 teal-400:  #2DD4BF  (hover em badges)
@@ -43,6 +48,7 @@ teal-50:   #F0FDFA  (backgrounds de alerta suave)
 ```
 
 ### Semantic
+
 ```
 danger:    #EF4444  (erros, cancelamentos)
 warning:   #F59E0B  (atenção, pendentes)
@@ -51,6 +57,7 @@ info:      #0EA5E9  (informação, links)
 ```
 
 ### Charts — Gradient Palette
+
 ```
 chart-1: linear-gradient(135deg, #059669, #14B8A6)
 chart-2: linear-gradient(135deg, #0EA5E9, #06B6D4)
@@ -64,37 +71,43 @@ chart-5: linear-gradient(135deg, #EF4444, #F87171)
 ## Typography
 
 ### Font Stack
+
 ```css
---font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
---font-mono: 'JetBrains Mono', monospace;
---font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+--font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+--font-mono: "JetBrains Mono", monospace;
+--font-display: "Plus Jakarta Sans", system-ui, sans-serif;
 ```
 
 ### Scale
-| Token | Size | Weight | Line Height | Usage |
-|-------|------|--------|-------------|-------|
-| display | 2.5rem (40px) | 700 | 1.1 | Page titles, hero |
-| h1 | 1.875rem (30px) | 700 | 1.2 | Section headers |
-| h2 | 1.5rem (24px) | 600 | 1.3 | Card titles |
-| h3 | 1.25rem (20px) | 600 | 1.4 | Sub-sections |
-| body-lg | 1.125rem (18px) | 400 | 1.6 | Lead text |
-| body | 1rem (16px) | 400 | 1.5 | Default text |
-| body-sm | 0.875rem (14px) | 400 | 1.5 | Descriptions |
-| caption | 0.75rem (12px) | 500 | 1.4 | Labels, badges |
-| overline | 0.6875rem (11px) | 600 | 1.2 | Uppercase labels |
+
+| Token    | Size             | Weight | Line Height | Usage             |
+| -------- | ---------------- | ------ | ----------- | ----------------- |
+| display  | 2.5rem (40px)    | 700    | 1.1         | Page titles, hero |
+| h1       | 1.875rem (30px)  | 700    | 1.2         | Section headers   |
+| h2       | 1.5rem (24px)    | 600    | 1.3         | Card titles       |
+| h3       | 1.25rem (20px)   | 600    | 1.4         | Sub-sections      |
+| body-lg  | 1.125rem (18px)  | 400    | 1.6         | Lead text         |
+| body     | 1rem (16px)      | 400    | 1.5         | Default text      |
+| body-sm  | 0.875rem (14px)  | 400    | 1.5         | Descriptions      |
+| caption  | 0.75rem (12px)   | 500    | 1.4         | Labels, badges    |
+| overline | 0.6875rem (11px) | 600    | 1.2         | Uppercase labels  |
 
 ---
 
 ## Spacing System
+
 Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96.
 
 ---
 
 ## Shadows & Elevation
+
 ```css
---shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
---shadow-card-hover: 0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
---shadow-elevated: 0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+--shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+--shadow-card-hover:
+  0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+--shadow-elevated:
+  0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
 --shadow-glow-sage: 0 0 20px rgba(5, 150, 105, 0.15);
 --shadow-glow-teal: 0 0 20px rgba(20, 184, 166, 0.15);
 ```
@@ -102,6 +115,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ---
 
 ## Border Radius
+
 ```css
 --radius-sm: 6px;
 --radius-md: 10px;
@@ -115,6 +129,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ## Animation Tokens
 
 ### Durations
+
 ```css
 --duration-instant: 100ms;
 --duration-fast: 150ms;
@@ -124,6 +139,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ```
 
 ### Easings
+
 ```css
 --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
 --ease-in: cubic-bezier(0.4, 0, 1, 1);
@@ -133,6 +149,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ```
 
 ### Key Patterns
+
 - **Card Entrance**: translateY(12px) + opacity(0→1), 400ms, ease-out, stagger 80ms
 - **Stat Counter**: count-up animation, 800ms, ease-out
 - **Chart Draw**: stroke-dashoffset animation, 1200ms, ease-out
@@ -146,6 +163,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ## Component Patterns
 
 ### StatCard Premium
+
 ```
 - Glassmorphism sutil: bg-white/80 + backdrop-blur-sm
 - Border: 1px solid sage-100
@@ -157,6 +175,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ```
 
 ### ChartCard Premium
+
 ```
 - Header: icon + title + period selector (semanal/mensal/anual)
 - Chart area: gradient fill under lines, rounded bars
@@ -166,6 +185,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ```
 
 ### Sidebar NavItem
+
 ```
 - Default: navy-600 icon, navy-800 text
 - Active: sage-600 icon + text, sage-50 bg, right-border 3px sage-600
@@ -176,6 +196,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ```
 
 ### Dashboard Tab
+
 ```
 - Container: pill-shaped background navy-100
 - Active: white bg, shadow-sm, sage-600 text + icon
@@ -185,6 +206,7 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ```
 
 ### Empty State
+
 ```
 - Ilustração SVG custom (50% opacity)
 - Título: h3, navy-800, "Nenhum paciente cadastrado"
@@ -196,17 +218,19 @@ Base 4px. Tokens: 0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
 ---
 
 ## Responsive Breakpoints
-| Token | Width | Usage |
-|-------|-------|-------|
-| sm | 640px | Mobile landscape |
-| md | 768px | Tablet |
-| lg | 1024px | Desktop |
-| xl | 1280px | Large desktop |
-| 2xl | 1536px | Ultra-wide |
+
+| Token | Width  | Usage            |
+| ----- | ------ | ---------------- |
+| sm    | 640px  | Mobile landscape |
+| md    | 768px  | Tablet           |
+| lg    | 1024px | Desktop          |
+| xl    | 1280px | Large desktop    |
+| 2xl   | 1536px | Ultra-wide       |
 
 ---
 
 ## Accessibility Requirements
+
 - WCAG 2.1 AA minimum, AAA where feasible
 - Focus indicators: 2px solid sage-600, 2px offset
 - Reduced motion: disable animations, instant transitions

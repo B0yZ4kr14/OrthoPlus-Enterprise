@@ -36,9 +36,9 @@ export function WalletAddressField({ form }: WalletAddressFieldProps) {
               </TooltipTrigger>
               <TooltipContent className="max-w-xs">
                 <p>
-                  Endereço da sua carteira principal na exchange para
-                  receber pagamentos diretos. Você pode deixar em branco e
-                  criar carteiras específicas depois.
+                  Endereço da sua carteira principal na exchange para receber
+                  pagamentos diretos. Você pode deixar em branco e criar
+                  carteiras específicas depois.
                 </p>
               </TooltipContent>
             </Tooltip>

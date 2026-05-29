@@ -26,7 +26,6 @@ export const DEPENDENCIES: Dependency[] = [
   {
     module: "Assinatura Digital ICP-Brasil",
     requires: ["Prontuário Eletrônico (PEP)"],
-    reason:
-      "A assinatura digital valida documentos e evoluções do prontuário",
+    reason: "A assinatura digital valida documentos e evoluções do prontuário",
   },
 ];

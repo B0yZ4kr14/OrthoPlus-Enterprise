@@ -26,7 +26,9 @@ export const PatientPhotoUpload = memo(function PatientPhotoUpload({
   patientName,
   onPhotoUpdated,
 }: PatientPhotoUploadProps) {
-  const [preview, setPreview] = useState<string | null>(currentPhotoUrl ?? null);
+  const [preview, setPreview] = useState<string | null>(
+    currentPhotoUrl ?? null,
+  );
   const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -135,7 +137,11 @@ export const PatientPhotoUpload = memo(function PatientPhotoUpload({
         onClick={() => inputRef.current?.click()}
         disabled={isUploading}
       >
-        {isUploading ? "Enviando..." : preview ? "Trocar foto" : "Adicionar foto"}
+        {isUploading
+          ? "Enviando..."
+          : preview
+            ? "Trocar foto"
+            : "Adicionar foto"}
       </Button>
     </div>
   );

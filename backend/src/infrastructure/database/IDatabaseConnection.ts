@@ -1,6 +1,6 @@
 /**
  * IDatabaseConnection - Abstração de conexão com banco de dados
- * 
+ *
  * Permite trocar implementação de banco de dados
  * sem alterar lógica de negócio dos módulos.
  */
@@ -15,7 +15,8 @@ export interface DatabaseConfig {
   ssl?: boolean;
 }
 
-export interface QueryResult<T = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+export interface QueryResult<T = any> {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   rows: T[];
   rowCount: number;
 }
@@ -43,7 +44,7 @@ export interface IDatabaseConnection {
   queryWithRetry<T = any>( // eslint-disable-line @typescript-eslint/no-explicit-any
     sql: string,
     params?: any[], // eslint-disable-line @typescript-eslint/no-explicit-any
-    maxRetries?: number
+    maxRetries?: number,
   ): Promise<QueryResult<T>>;
 
   /**
@@ -66,7 +67,7 @@ export interface IDatabaseConnection {
  * Tipo de implementação de banco
  */
 export enum DatabaseType {
-  HOSTED_CLOUD = 'hosted_cloud',
-  SELF_HOSTED = 'self_hosted',
-  POSTGRES_LOCAL = 'postgres_local',
+  HOSTED_CLOUD = "hosted_cloud",
+  SELF_HOSTED = "self_hosted",
+  POSTGRES_LOCAL = "postgres_local",
 }

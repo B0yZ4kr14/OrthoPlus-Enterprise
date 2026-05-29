@@ -2,7 +2,10 @@ import { useState, useCallback, useEffect } from "react";
 import { useBarcodeScanner as useNativeBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import type { BarcodeScannerProps, ScannerState } from "./types";
 
-export function useScanner({ onScan, onCancel }: Pick<BarcodeScannerProps, "onScan" | "onCancel">) {
+export function useScanner({
+  onScan,
+  onCancel,
+}: Pick<BarcodeScannerProps, "onScan" | "onCancel">) {
   const { isScanning, startScan, stopScan } = useNativeBarcodeScanner();
   const [state, setState] = useState<ScannerState>("idle");
   const [showInstructions, setShowInstructions] = useState(true);

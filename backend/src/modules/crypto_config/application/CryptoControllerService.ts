@@ -28,7 +28,7 @@ export class CryptoControllerService {
       {
         status: "CONVERTIDO",
         price_brl: amountBrl,
-      }
+      },
     );
 
     await this.repo.createAuditLog({
@@ -65,7 +65,7 @@ export class CryptoControllerService {
       reference?: string;
       fee?: number;
     },
-    ipAddress?: string
+    ipAddress?: string,
   ) {
     const { amount, currency, clinicId, walletId, reference, fee } = body;
 
@@ -96,7 +96,10 @@ export class CryptoControllerService {
       status: "PENDENTE",
       type: "INVOICE",
       price_brl: amountBrl,
-      fee: parsedFee !== undefined && Number.isFinite(parsedFee) ? Math.round(parsedFee) : null,
+      fee:
+        parsedFee !== undefined && Number.isFinite(parsedFee)
+          ? Math.round(parsedFee)
+          : null,
       tx_hash: reference ?? null,
     });
 
@@ -128,7 +131,9 @@ export class CryptoControllerService {
   async getCryptoRates() {
     const coins = ["BTC", "ETH", "USDT"];
     const entries = await Promise.all(
-      coins.map(async (coin) => [coin, await fetchExchangeRateBRL(coin)] as const),
+      coins.map(
+        async (coin) => [coin, await fetchExchangeRateBRL(coin)] as const,
+      ),
     );
 
     return {

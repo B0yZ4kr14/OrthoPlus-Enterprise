@@ -10,7 +10,10 @@ import {
 } from "recharts";
 import type { ChartCardMemoProps } from "../types";
 
-type BarChartViewProps = Pick<ChartCardMemoProps, "data" | "dataKey" | "xAxisKey" | "secondaryDataKey">;
+type BarChartViewProps = Pick<
+  ChartCardMemoProps,
+  "data" | "dataKey" | "xAxisKey" | "secondaryDataKey"
+>;
 
 export function BarChartView({
   data,
@@ -22,8 +25,8 @@ export function BarChartView({
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-        <XAxis dataKey={xAxisKey}  stroke="hsl(var(--muted-foreground))" />
-        <YAxis  stroke="hsl(var(--muted-foreground))" />
+        <XAxis dataKey={xAxisKey} stroke="hsl(var(--muted-foreground))" />
+        <YAxis stroke="hsl(var(--muted-foreground))" />
         <Tooltip
           contentStyle={{
             backgroundColor: "hsl(var(--background))",
@@ -31,7 +34,7 @@ export function BarChartView({
             borderRadius: "8px",
           }}
         />
-        <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+        <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
         <Bar
           dataKey={dataKey}
           fill="hsl(var(--primary))"

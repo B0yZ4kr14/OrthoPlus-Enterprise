@@ -99,9 +99,7 @@ export function FormField(props: FormFieldProps) {
           {(hasError || hasSuccess) && (
             <div className="absolute right-3 top-3">
               {hasError && <AlertCircle className="h-5 w-5 text-destructive" />}
-              {hasSuccess && (
-                <CheckCircle2 className="h-5 w-5 text-success" />
-              )}
+              {hasSuccess && <CheckCircle2 className="h-5 w-5 text-success" />}
             </div>
           )}
         </div>
@@ -136,9 +134,7 @@ export function FormField(props: FormFieldProps) {
           {(hasError || hasSuccess) && (
             <div className="absolute right-10 top-1/2 -translate-y-1/2">
               {hasError && <AlertCircle className="h-5 w-5 text-destructive" />}
-              {hasSuccess && (
-                <CheckCircle2 className="h-5 w-5 text-success" />
-              )}
+              {hasSuccess && <CheckCircle2 className="h-5 w-5 text-success" />}
             </div>
           )}
         </div>

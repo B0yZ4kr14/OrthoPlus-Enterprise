@@ -5,7 +5,11 @@ interface EventBadgeProps {
 }
 
 export function EventBadge({ eventType }: EventBadgeProps) {
-  const getVariant = (): "default" | "secondary" | "destructive" | "outline" => {
+  const getVariant = ():
+    | "default"
+    | "secondary"
+    | "destructive"
+    | "outline" => {
     if (eventType.includes("push")) return "default";
     if (eventType.includes("pull_request")) return "secondary";
     if (eventType.includes("error")) return "destructive";

@@ -9,7 +9,10 @@ import type {
 } from "./types";
 import { EXCHANGES, COIN_RATES } from "./types";
 
-function buildHistoricalData(coinType: CoinType): { data: HistoricalData[]; bestMoment: BestMoment } {
+function buildHistoricalData(coinType: CoinType): {
+  data: HistoricalData[];
+  bestMoment: BestMoment;
+} {
   const days = 30;
   const baseRate = COIN_RATES[coinType];
   const data: HistoricalData[] = [];
@@ -45,7 +48,10 @@ function buildHistoricalData(coinType: CoinType): { data: HistoricalData[]; best
   return { data, bestMoment };
 }
 
-function buildExchangeRates(coinType: CoinType, amount: string): ExchangeRate[] {
+function buildExchangeRates(
+  coinType: CoinType,
+  amount: string,
+): ExchangeRate[] {
   const baseRate = COIN_RATES[coinType];
   const amountNum = parseFloat(amount) || 1;
 

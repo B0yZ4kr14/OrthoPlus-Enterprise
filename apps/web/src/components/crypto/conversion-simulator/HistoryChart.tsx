@@ -1,5 +1,10 @@
 // cspell:disable
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import {
   LineChart,
   Line,
@@ -44,7 +49,9 @@ export function HistoryChart({ data, bestMoment }: HistoryChartProps) {
                 return (
                   <div className="bg-card border rounded-lg p-3 shadow-lg">
                     <p className="text-xs text-muted-foreground mb-1">
-                      {format(new Date(item.date), "dd/MM/yyyy", { locale: ptBR })}
+                      {format(new Date(item.date), "dd/MM/yyyy", {
+                        locale: ptBR,
+                      })}
                     </p>
                     <p className="text-sm font-semibold">
                       R${" "}

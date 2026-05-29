@@ -1,22 +1,23 @@
-import { logger } from '@/infrastructure/logger';
+import { logger } from "@/infrastructure/logger";
 /**
  * TerminalController
  * API para terminal web shell seguro
  */
 
-import { Request, Response } from 'express';
-import { TerminalSession } from '../domain/entities/TerminalSession';
+import { Request, Response } from "express";
+import { TerminalSession } from "../domain/entities/TerminalSession";
 
 export class TerminalController {
-
   async createSession(req: Request, res: Response): Promise<void> {
     try {
       const userId = req.user?.id;
       const clinicId = req.user?.clinicId;
       const role = req.user?.role;
 
-      if (!userId || !clinicId || role !== 'ADMIN') {
-        res.status(403).json({ error: 'Acesso negado - apenas administradores' });
+      if (!userId || !clinicId || role !== "ADMIN") {
+        res
+          .status(403)
+          .json({ error: "Acesso negado - apenas administradores" });
         return;
       }
 
@@ -24,22 +25,22 @@ export class TerminalController {
         id: crypto.randomUUID(),
         userId,
         clinicId,
-        status: 'ACTIVE',
+        status: "ACTIVE",
         startedAt: new Date(),
         lastActivityAt: new Date(),
         terminatedAt: null,
         commandsExecuted: 0,
-        ipAddress: req.ip || 'unknown',
-        userAgent: req.headers['user-agent'] || 'unknown',
+        ipAddress: req.ip || "unknown",
+        userAgent: req.headers["user-agent"] || "unknown",
       });
 
       res.status(201).json({
         session: session.toJSON(),
-        message: 'Sessão de terminal criada com sucesso',
+        message: "Sessão de terminal criada com sucesso",
       });
     } catch (error) {
-      logger.error('Error creating terminal session:', { error });
-      res.status(500).json({ error: 'Erro ao criar sessão de terminal' });
+      logger.error("Error creating terminal session:", { error });
+      res.status(500).json({ error: "Erro ao criar sessão de terminal" });
     }
   }
 
@@ -64,19 +65,19 @@ export class TerminalController {
       const { sessionId } = req.params;
       const userId = req.user?.id;
 
-      if (!userId || req.user?.role !== 'ADMIN') {
-        res.status(403).json({ error: 'Acesso negado' });
+      if (!userId || req.user?.role !== "ADMIN") {
+        res.status(403).json({ error: "Acesso negado" });
         return;
       }
 
       res.json({
         sessionId,
         terminatedAt: new Date(),
-        message: 'Sessão encerrada com sucesso',
+        message: "Sessão encerrada com sucesso",
       });
     } catch (error) {
-      logger.error('Error terminating session:', { error });
-      res.status(500).json({ error: 'Erro ao encerrar sessão' });
+      logger.error("Error terminating session:", { error });
+      res.status(500).json({ error: "Erro ao encerrar sessão" });
     }
   }
 }

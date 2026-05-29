@@ -1,5 +1,10 @@
 // cspell:disable
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Package, Users, Building2 } from "lucide-react";
 import type { SummaryData } from "./types";
 

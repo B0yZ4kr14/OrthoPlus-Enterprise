@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 
 export function CardShowcase() {
   return (
@@ -6,7 +12,9 @@ export function CardShowcase() {
       <Card variant="default">
         <CardHeader>
           <CardTitle>Default Card</CardTitle>
-          <CardDescription>Variante padrão sem efeitos especiais</CardDescription>
+          <CardDescription>
+            Variante padrão sem efeitos especiais
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">

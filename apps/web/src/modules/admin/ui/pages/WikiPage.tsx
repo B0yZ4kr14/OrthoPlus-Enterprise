@@ -1,4 +1,13 @@
-import { BookText, Plus, Search, Edit, Trash2, Clock, CheckCircle, FolderOpen } from "lucide-react";
+import {
+  BookText,
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Clock,
+  CheckCircle,
+  FolderOpen,
+} from "lucide-react";
 import { StatsCard } from "@/components/shared/StatsCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
@@ -75,94 +84,100 @@ export default function WikiPage() {
                 Nova Página
               </Button>
             </DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                {editingPage ? "Editar" : "Nova"} Página Wiki
-              </DialogTitle>
-              <DialogDescription>
-                Crie ou edite páginas de documentação usando Markdown
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Título</label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  placeholder="Ex: Como realizar um backup"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  {editingPage ? "Editar" : "Nova"} Página Wiki
+                </DialogTitle>
+                <DialogDescription>
+                  Crie ou edite páginas de documentação usando Markdown
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium">Categoria</label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, category: value })
+                  <label className="text-sm font-medium">Título</label>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
                     }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CATEGORIES.map((cat) => (
-                        <SelectItem key={cat.value} value={cat.value}>
-                          {cat.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Ex: Como realizar um backup"
+                  />
                 </div>
 
-                <div className="flex items-end">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_published}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          is_published: e.target.checked,
-                        })
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium">Categoria</label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, category: value })
                       }
-                      className="rounded"
-                    />
-                    <span className="text-sm font-medium">Publicado</span>
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CATEGORIES.map((cat) => (
+                          <SelectItem key={cat.value} value={cat.value}>
+                            {cat.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={formData.is_published}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            is_published: e.target.checked,
+                          })
+                        }
+                        className="rounded"
+                      />
+                      <span className="text-sm font-medium">Publicado</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">
+                    Conteúdo (Markdown)
                   </label>
+                  <Textarea
+                    value={formData.content}
+                    onChange={(e) =>
+                      setFormData({ ...formData, content: e.target.value })
+                    }
+                    placeholder="# Título\n\nConteúdo da página..."
+                    rows={15}
+                    className="font-mono"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setDialogOpen(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    onClick={handleSave}
+                    disabled={isSaving || isDeleting}
+                  >
+                    Salvar
+                  </Button>
                 </div>
               </div>
-
-              <div>
-                <label className="text-sm font-medium">
-                  Conteúdo (Markdown)
-                </label>
-                <Textarea
-                  value={formData.content}
-                  onChange={(e) =>
-                    setFormData({ ...formData, content: e.target.value })
-                  }
-                  placeholder="# Título\n\nConteúdo da página..."
-                  rows={15}
-                  className="font-mono"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancelar
-                </Button>
-                <Button onClick={handleSave} disabled={isSaving || isDeleting}>
-                  Salvar
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      }
+            </DialogContent>
+          </Dialog>
+        }
       ></PageHeader>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -225,10 +240,15 @@ export default function WikiPage() {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="line-clamp-2">{page.title}</CardTitle>
+                      <CardTitle className="line-clamp-2">
+                        {page.title}
+                      </CardTitle>
                       <CardDescription className="mt-1">
                         <Badge variant="outline" className="mr-2">
-                          {CATEGORIES.find((c) => c.value === page.category)?.label}
+                          {
+                            CATEGORIES.find((c) => c.value === page.category)
+                              ?.label
+                          }
                         </Badge>
                         {page.is_published ? (
                           <Badge variant="default">Publicado</Badge>
@@ -247,7 +267,8 @@ export default function WikiPage() {
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
                     <span>
-                      Atualizado: {new Date(page.updated_at).toLocaleDateString()}
+                      Atualizado:{" "}
+                      {new Date(page.updated_at).toLocaleDateString()}
                     </span>
                     <span>• v{page.version}</span>
                   </div>

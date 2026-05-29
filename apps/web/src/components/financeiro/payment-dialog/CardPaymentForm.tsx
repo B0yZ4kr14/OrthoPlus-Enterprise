@@ -83,7 +83,10 @@ export function CardPaymentForm({
 
       <div className="space-y-2">
         <Label htmlFor="card-type">Tipo de Cartão</Label>
-        <Select value={metodo} onValueChange={(v) => onTypeChange(v as PaymentMethod)}>
+        <Select
+          value={metodo}
+          onValueChange={(v) => onTypeChange(v as PaymentMethod)}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>

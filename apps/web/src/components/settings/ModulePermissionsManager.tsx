@@ -65,7 +65,9 @@ export function ModulePermissionsManager() {
             full_name: String(profile.full_name || "Sem nome"),
             email:
               String(profile.email || "") ||
-              `${String(profile.full_name || "").toLowerCase().replace(/\s+/g, ".")}@ortho.com`,
+              `${String(profile.full_name || "")
+                .toLowerCase()
+                .replace(/\s+/g, ".")}@ortho.com`,
             role: String(profile.role || "MEMBER") as "ADMIN" | "MEMBER",
           }))
           .filter((user) => user.role === "MEMBER") || [];
@@ -76,7 +78,8 @@ export function ModulePermissionsManager() {
       const modulesData = await apiClient.post<{ modules: Module[] }>(
         "/modules/my-modules",
       );
-      const activeModules = modulesData?.modules?.filter((m) => m.is_active) || [];
+      const activeModules =
+        modulesData?.modules?.filter((m) => m.is_active) || [];
       setModules(activeModules);
 
       // Buscar permissões existentes

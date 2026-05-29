@@ -131,7 +131,12 @@ export function OrcamentoForm({
         <div className="space-y-2">
           <Label htmlFor="tipo_plano">Tipo de Plano *</Label>
           <Select
-            onValueChange={(value) => setValue("tipo_plano", value as "BASICO" | "INTERMEDIARIO" | "PREMIUM")}
+            onValueChange={(value) =>
+              setValue(
+                "tipo_plano",
+                value as "BASICO" | "INTERMEDIARIO" | "PREMIUM",
+              )
+            }
             defaultValue={watch("tipo_plano")}
           >
             <SelectTrigger>

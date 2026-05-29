@@ -7,7 +7,12 @@ interface BackupSelectProps {
   onFocus: () => void;
 }
 
-export function BackupSelect({ backups, value, onChange, onFocus }: BackupSelectProps) {
+export function BackupSelect({
+  backups,
+  value,
+  onChange,
+  onFocus,
+}: BackupSelectProps) {
   return (
     <div>
       <label htmlFor="backup-select" className="text-sm font-medium mb-2 block">

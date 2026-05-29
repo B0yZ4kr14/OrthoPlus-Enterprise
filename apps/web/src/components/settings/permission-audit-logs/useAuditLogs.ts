@@ -20,7 +20,7 @@ export function useAuditLogs() {
 
       const data = await apiClient.get<Record<string, unknown>[]>(
         "/configuracoes/permissoes/audit",
-        { params: { limit: 100 } }
+        { params: { limit: 100 } },
       );
 
       const moduleIds =
@@ -30,7 +30,7 @@ export function useAuditLogs() {
       if (moduleIds.length > 0) {
         const modulesData = await apiClient.get<Record<string, unknown>[]>(
           "/configuracoes/modulos",
-          { params: { ids: moduleIds.join(",") } }
+          { params: { ids: moduleIds.join(",") } },
         );
 
         if (modulesData) {
@@ -52,7 +52,8 @@ export function useAuditLogs() {
           },
           target_user: {
             full_name:
-              (log.target_user as { full_name?: string } | undefined)?.full_name || "Desconhecido",
+              (log.target_user as { full_name?: string } | undefined)
+                ?.full_name || "Desconhecido",
           },
           module: log.module_catalog_id
             ? modulesMap[log.module_catalog_id as number]

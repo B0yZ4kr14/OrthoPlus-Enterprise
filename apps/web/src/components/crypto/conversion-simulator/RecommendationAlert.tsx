@@ -1,5 +1,11 @@
 // cspell:disable
-import { TrendingUp, TrendingDown, Award, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Award,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Badge } from "@orthoplus/core-ui/badge";
 import type { BestMoment } from "./types";
@@ -64,7 +70,9 @@ export function RecommendationAlert({ bestMoment }: RecommendationAlertProps) {
               </p>
             </div>
             <div>
-              <span className="text-muted-foreground">Diferença da Máxima:</span>
+              <span className="text-muted-foreground">
+                Diferença da Máxima:
+              </span>
               <p
                 className={`font-semibold flex items-center gap-1 ${
                   bestMoment.percentageFromMax > 0

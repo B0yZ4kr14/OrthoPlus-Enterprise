@@ -39,10 +39,10 @@ src/
 
 ## Workflows
 
-| Workflow | Propósito |
-|----------|-----------|
-| `crud_workflow` | Gera/edita módulos CRUD no backend |
-| `bugfix_workflow` | Diagnóstica e propõe fix para bugs |
+| Workflow            | Propósito                                      |
+| ------------------- | ---------------------------------------------- |
+| `crud_workflow`     | Gera/edita módulos CRUD no backend             |
+| `bugfix_workflow`   | Diagnóstica e propõe fix para bugs             |
 | `refactor_workflow` | Refatora código seguindo convenções do projeto |
 
 Ao adicionar workflow: registrar em `main.py`, criar arquivo em `workflows/`, usar Agno `Workflow` como base.
@@ -79,6 +79,7 @@ uvicorn src.main:app --reload --port 8000  # Alternativa com reload
 ## Variáveis de Ambiente Requeridas
 
 Ver `agent-service/.env.example`. Críticas:
+
 - `OPENAI_API_KEY` ou equivalente (modelo LLM)
 - `BACKEND_URL` — URL do backend (`http://localhost:3005`)
 - `SERVICE_JWT_TOKEN` — token para autenticar chamadas ao backend

@@ -1,92 +1,97 @@
 export interface User {
-    id: string;
-    email: string;
-    name: string;
-    role: UserRole;
-    clinicId: string;
-    avatarUrl?: string;
-    createdAt: string;
-    updatedAt: string;
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  clinicId: string;
+  avatarUrl?: string;
+  createdAt: string;
+  updatedAt: string;
 }
-export type UserRole = "admin" | "dentist" | "receptionist" | "assistant" | "financial";
+export type UserRole =
+  | "admin"
+  | "dentist"
+  | "receptionist"
+  | "assistant"
+  | "financial";
 export interface Clinic {
-    id: string;
-    name: string;
-    cnpj?: string;
-    address?: Address;
-    phone?: string;
-    email?: string;
-    logoUrl?: string;
-    settings: ClinicSettings;
-    activeModules: string[];
+  id: string;
+  name: string;
+  cnpj?: string;
+  address?: Address;
+  phone?: string;
+  email?: string;
+  logoUrl?: string;
+  settings: ClinicSettings;
+  activeModules: string[];
 }
 export interface Address {
-    street: string;
-    number: string;
-    complement?: string;
-    neighborhood: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
+  street: string;
+  number: string;
+  complement?: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
 }
 export interface ClinicSettings {
-    timezone: string;
-    currency: string;
-    language: string;
-    dateFormat: string;
-    timeFormat: "12h" | "24h";
+  timezone: string;
+  currency: string;
+  language: string;
+  dateFormat: string;
+  timeFormat: "12h" | "24h";
 }
 export interface LoginRequest {
-    email: string;
-    password: string;
-    remember?: boolean;
+  email: string;
+  password: string;
+  remember?: boolean;
 }
 export interface LoginResponse {
-    user: User;
-    clinic: Clinic;
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: number;
+  user: User;
+  clinic: Clinic;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
 }
 export interface RefreshTokenRequest {
-    refreshToken: string;
+  refreshToken: string;
 }
 export interface RefreshTokenResponse {
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: number;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
 }
 export interface ChangePasswordRequest {
-    currentPassword: string;
-    newPassword: string;
+  currentPassword: string;
+  newPassword: string;
 }
 export interface RequestPasswordResetRequest {
-    email: string;
+  email: string;
 }
 export interface ResetPasswordRequest {
-    token: string;
-    newPassword: string;
+  token: string;
+  newPassword: string;
 }
 export interface JWTPayload {
-    sub: string;
-    email: string;
-    role: UserRole;
-    clinicId: string;
-    iat: number;
-    exp: number;
+  sub: string;
+  email: string;
+  role: UserRole;
+  clinicId: string;
+  iat: number;
+  exp: number;
 }
 export interface Session {
-    id: string;
-    userId: string;
-    clinicId: string;
-    createdAt: string;
-    expiresAt: string;
-    ipAddress?: string;
-    userAgent?: string;
+  id: string;
+  userId: string;
+  clinicId: string;
+  createdAt: string;
+  expiresAt: string;
+  ipAddress?: string;
+  userAgent?: string;
 }
 export interface SessionInfo {
-    current: Session;
-    others: Session[];
+  current: Session;
+  others: Session[];
 }
 //# sourceMappingURL=auth.d.ts.map

@@ -1,13 +1,10 @@
-import {
-  Phone,
-  Mail,
-  Calendar,
-  MessageSquare,
-  MapPin,
-} from "lucide-react";
+import { Phone, Mail, Calendar, MessageSquare, MapPin } from "lucide-react";
 import type { AtividadeTipo } from "../types";
 
-export const tipoIcons: Record<AtividadeTipo, React.ElementType<{ className?: string }>> = {
+export const tipoIcons: Record<
+  AtividadeTipo,
+  React.ElementType<{ className?: string }>
+> = {
   LIGACAO: Phone,
   EMAIL: Mail,
   REUNIAO: Calendar,

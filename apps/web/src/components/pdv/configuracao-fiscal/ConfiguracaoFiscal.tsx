@@ -12,8 +12,14 @@ import { ContatoESeguranca } from "./ContatoESeguranca";
 import { LoadingState } from "@/components/shared/LoadingState";
 
 export function ConfiguracaoFiscal() {
-  const { fiscalConfig, formData, isLoading, isSaving, updateFormData, handleSubmit } =
-    useFiscalConfig();
+  const {
+    fiscalConfig,
+    formData,
+    isLoading,
+    isSaving,
+    updateFormData,
+    handleSubmit,
+  } = useFiscalConfig();
 
   if (isLoading) {
     return <LoadingState />;
@@ -25,13 +31,19 @@ export function ConfiguracaoFiscal() {
         <ConfigHeader config={fiscalConfig || null} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <AmbienteSelect value={formData.ambiente} onChange={(v) => updateFormData("ambiente", v)} />
+          <AmbienteSelect
+            value={formData.ambiente}
+            onChange={(v) => updateFormData("ambiente", v)}
+          />
           <TipoEmissaoSelect
             value={formData.tipo_emissao}
             onChange={(v) => updateFormData("tipo_emissao", v)}
           />
           <DadosEmpresaInputs formData={formData} onChange={updateFormData} />
-          <RegimeTributarioSelect formData={formData} onChange={updateFormData} />
+          <RegimeTributarioSelect
+            formData={formData}
+            onChange={updateFormData}
+          />
           <CSCInputs formData={formData} onChange={updateFormData} />
           <ContatoESeguranca formData={formData} onChange={updateFormData} />
         </div>

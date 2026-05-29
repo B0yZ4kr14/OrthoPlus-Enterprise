@@ -5,43 +5,55 @@ import { FaturamentoControllerService } from "@/modules/faturamento/application/
 export class FaturamentoController {
   private service = new FaturamentoControllerService();
 
-  createNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      throw Errors.unauthorized("Clinic ID not found in token");
-    }
-    const result = await this.service.createNFe(clinicId, req.body);
-    res.status(201).json({ message: "NFe created successfully", data: result });
-  });
+  createNFe = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        throw Errors.unauthorized("Clinic ID not found in token");
+      }
+      const result = await this.service.createNFe(clinicId, req.body);
+      res
+        .status(201)
+        .json({ message: "NFe created successfully", data: result });
+    },
+  );
 
-  listNFes = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      throw Errors.unauthorized("Clinic ID not found in token");
-    }
-    const result = await this.service.listNFes(clinicId);
-    res.status(200).json({ nfes: result });
-  });
+  listNFes = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        throw Errors.unauthorized("Clinic ID not found in token");
+      }
+      const result = await this.service.listNFes(clinicId);
+      res.status(200).json({ nfes: result });
+    },
+  );
 
-  autorizarNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const { protocolo, xml } = req.body;
-    if (!protocolo || !xml) {
-      throw Errors.validation("Protocolo and XML are required");
-    }
-    await this.service.autorizarNFe(id, protocolo, xml);
-    res.status(200).json({ message: "NFe authorized successfully", protocolo });
-  });
+  autorizarNFe = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const { id } = req.params;
+      const { protocolo, xml } = req.body;
+      if (!protocolo || !xml) {
+        throw Errors.validation("Protocolo and XML are required");
+      }
+      await this.service.autorizarNFe(id, protocolo, xml);
+      res
+        .status(200)
+        .json({ message: "NFe authorized successfully", protocolo });
+    },
+  );
 
-  cancelarNFe = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const { motivo } = req.body;
-    if (!motivo) {
-      throw Errors.validation("Motivo is required");
-    }
-    await this.service.cancelarNFe(id, motivo);
-    res.status(200).json({ message: "NFe canceled successfully" });
-  });
+  cancelarNFe = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const { id } = req.params;
+      const { motivo } = req.body;
+      if (!motivo) {
+        throw Errors.validation("Motivo is required");
+      }
+      await this.service.cancelarNFe(id, motivo);
+      res.status(200).json({ message: "NFe canceled successfully" });
+    },
+  );
 
   autorizarNfceSefaz = asyncHandler(async (req: Request, res: Response) => {
     const { nfceId, ambiente } = req.body;
@@ -83,31 +95,40 @@ export class FaturamentoController {
     });
   });
 
-  inutilizarNumeracaoNfce = asyncHandler(async (req: Request, res: Response) => {
-    const { numeroInicial, numeroFinal } = req.body;
-    if (numeroFinal < numeroInicial) {
-      throw Errors.validation("Numero final deve ser maior que numero inicial");
-    }
-    res.status(200).json({
-      message: "Inutilizacao processada",
-      protocolo: `IN-${Date.now()}`,
-    });
-  });
+  inutilizarNumeracaoNfce = asyncHandler(
+    async (req: Request, res: Response) => {
+      const { numeroInicial, numeroFinal } = req.body;
+      if (numeroFinal < numeroInicial) {
+        throw Errors.validation(
+          "Numero final deve ser maior que numero inicial",
+        );
+      }
+      res.status(200).json({
+        message: "Inutilizacao processada",
+        protocolo: `IN-${Date.now()}`,
+      });
+    },
+  );
 
-  sincronizarNfceContingencia = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      throw Errors.unauthorized("Clinic ID not found in token");
-    }
-    res.status(200).json({
-      message: "Contingency synchronization running",
-      clinicId,
-    });
-  });
+  sincronizarNfceContingencia = asyncHandler(
+    async (req: Request, res: Response) => {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        throw Errors.unauthorized("Clinic ID not found in token");
+      }
+      res.status(200).json({
+        message: "Contingency synchronization running",
+        clinicId,
+      });
+    },
+  );
 
   validateFiscalXml = asyncHandler(async (req: Request, res: Response) => {
     const { xmlContent } = req.body;
-    if (!xmlContent || (!xmlContent.trim().startsWith("<") && !xmlContent.trim().startsWith("|"))) {
+    if (
+      !xmlContent ||
+      (!xmlContent.trim().startsWith("<") && !xmlContent.trim().startsWith("|"))
+    ) {
       throw Errors.validation("Documento nao e XML ou SPED valido");
     }
     res.status(200).json({
@@ -138,44 +159,56 @@ export class FaturamentoController {
     });
   });
 
-  enviarDadosContabilidade = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      throw Errors.unauthorized("Clinic ID not found in token");
-    }
-    const { tipoDocumento } = req.body;
-    res.status(200).json({
-      message: "Data queued for accounting integration",
-      clinicId,
-      tipoDocumento,
-    });
-  });
+  enviarDadosContabilidade = asyncHandler(
+    async (req: Request, res: Response) => {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        throw Errors.unauthorized("Clinic ID not found in token");
+      }
+      const { tipoDocumento } = req.body;
+      res.status(200).json({
+        message: "Data queued for accounting integration",
+        clinicId,
+        tipoDocumento,
+      });
+    },
+  );
 
-  getConfig = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      throw Errors.unauthorized("Clinic ID not found in token");
-    }
-    const config = await this.service.getConfig(clinicId);
-    res.status(200).json({ config });
-  });
+  getConfig = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        throw Errors.unauthorized("Clinic ID not found in token");
+      }
+      const config = await this.service.getConfig(clinicId);
+      res.status(200).json({ config });
+    },
+  );
 
-  upsertConfig = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      throw Errors.unauthorized("Clinic ID not found in token");
-    }
-    const config = await this.service.upsertConfig(clinicId, req.body);
-    res.status(200).json({ message: "Config saved successfully", config });
-  });
+  upsertConfig = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        throw Errors.unauthorized("Clinic ID not found in token");
+      }
+      const config = await this.service.upsertConfig(clinicId, req.body);
+      res.status(200).json({ message: "Config saved successfully", config });
+    },
+  );
 
-  getRelatorio = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const clinicId = req.user?.clinicId;
-    if (!clinicId) {
-      throw Errors.unauthorized("Clinic ID not found in token");
-    }
-    const { dataInicio, dataFim, tipo } = req.query as any;
-    const result = await this.service.getRelatorio(clinicId, { dataInicio, dataFim, tipo });
-    res.status(200).json(result);
-  });
+  getRelatorio = asyncHandler(
+    async (req: Request, res: Response): Promise<void> => {
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) {
+        throw Errors.unauthorized("Clinic ID not found in token");
+      }
+      const { dataInicio, dataFim, tipo } = req.query as any;
+      const result = await this.service.getRelatorio(clinicId, {
+        dataInicio,
+        dataFim,
+        tipo,
+      });
+      res.status(200).json(result);
+    },
+  );
 }

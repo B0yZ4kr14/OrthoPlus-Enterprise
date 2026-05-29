@@ -1,7 +1,10 @@
 // cspell:disable
 
 export type CoinType = "BTC" | "ETH" | "USDT";
-export type Recommendation = "CONVERTER_AGORA" | "AGUARDAR" | "EXCELENTE_MOMENTO";
+export type Recommendation =
+  | "CONVERTER_AGORA"
+  | "AGUARDAR"
+  | "EXCELENTE_MOMENTO";
 
 export interface ExchangeRate {
   exchange: string;

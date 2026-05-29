@@ -3,7 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { PatientAdapter } from "@/lib/adapters/patientAdapter";
 import { Button } from "@orthoplus/core-ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   ArrowLeft,
   User,
@@ -34,7 +39,9 @@ export default function PatientDetailPage() {
     queryKey: ["patient", id],
     queryFn: async () => {
       const data = await apiClient.get<Record<string, any>>(`/pacientes/${id}`);
-      return PatientAdapter.toFrontend(data as Parameters<typeof PatientAdapter.toFrontend>[0]);
+      return PatientAdapter.toFrontend(
+        data as Parameters<typeof PatientAdapter.toFrontend>[0],
+      );
     },
     enabled: !!id,
   });

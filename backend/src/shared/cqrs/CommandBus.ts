@@ -7,9 +7,14 @@ export interface ICommandHandler<T extends ICommand, R = unknown> {
 export class CommandBus {
   private handlers = new Map<string, ICommandHandler<ICommand, unknown>>();
 
-  public register(commandName: string, handler: ICommandHandler<ICommand, unknown>): void {
+  public register(
+    commandName: string,
+    handler: ICommandHandler<ICommand, unknown>,
+  ): void {
     if (this.handlers.has(commandName)) {
-      throw new Error(`CommandHandler for ${commandName} is already registered.`);
+      throw new Error(
+        `CommandHandler for ${commandName} is already registered.`,
+      );
     }
     this.handlers.set(commandName, handler);
   }
@@ -41,7 +46,10 @@ export class CommandBus {
    *   commandBus.register("CreatePatient", new CreatePatientHandler(repo));
    *   const result = await commandBus.executeByKey("CreatePatient", dto);
    */
-  public async executeByKey<R = void>(commandName: string, payload: unknown): Promise<R> {
+  public async executeByKey<R = void>(
+    commandName: string,
+    payload: unknown,
+  ): Promise<R> {
     const handler = this.handlers.get(commandName);
 
     if (!handler) {

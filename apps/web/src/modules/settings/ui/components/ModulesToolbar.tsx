@@ -111,8 +111,8 @@ export function ModulesToolbar({
               Grafo de Dependências dos Módulos
             </DialogTitle>
             <DialogDescription>
-              Visualização interativa das dependências entre os módulos. Use
-              os controles para zoom e navegação.
+              Visualização interativa das dependências entre os módulos. Use os
+              controles para zoom e navegação.
             </DialogDescription>
           </DialogHeader>
           <div className="h-[calc(90vh-120px)]">

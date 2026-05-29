@@ -46,7 +46,7 @@ export function ResultsChart({ results }: ResultsChartProps) {
               borderRadius: "8px",
             }}
           />
-          <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+          <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           <Line
             type="monotone"
             dataKey="dcaValue"

@@ -1,8 +1,17 @@
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
 import { Checkbox } from "@orthoplus/core-ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@orthoplus/core-ui/select";
-import { especialidadesDisponiveis, diasSemana } from "../../types/dentista.types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@orthoplus/core-ui/select";
+import {
+  especialidadesDisponiveis,
+  diasSemana,
+} from "../../types/dentista.types";
 
 interface Props {
   register: any;
@@ -15,13 +24,30 @@ interface Props {
   setSelectedEspecialidades: (esp: string[]) => void;
 }
 
-export function DadosProfissionaisTab({ register, errors, setValue, watch, selectedDias, setSelectedDias, selectedEspecialidades, setSelectedEspecialidades }: Props) {
+export function DadosProfissionaisTab({
+  register,
+  errors,
+  setValue,
+  watch,
+  selectedDias,
+  setSelectedDias,
+  selectedEspecialidades,
+  setSelectedEspecialidades,
+}: Props) {
   const toggleDia = (dia: number) => {
-    setSelectedDias(selectedDias.includes(dia) ? selectedDias.filter((d) => d !== dia) : [...selectedDias, dia]);
+    setSelectedDias(
+      selectedDias.includes(dia)
+        ? selectedDias.filter((d) => d !== dia)
+        : [...selectedDias, dia],
+    );
   };
 
   const toggleEspecialidade = (esp: string) => {
-    setSelectedEspecialidades(selectedEspecialidades.includes(esp) ? selectedEspecialidades.filter((e) => e !== esp) : [...selectedEspecialidades, esp]);
+    setSelectedEspecialidades(
+      selectedEspecialidades.includes(esp)
+        ? selectedEspecialidades.filter((e) => e !== esp)
+        : [...selectedEspecialidades, esp],
+    );
   };
 
   return (
@@ -31,8 +57,14 @@ export function DadosProfissionaisTab({ register, errors, setValue, watch, selec
         <div className="flex flex-wrap gap-2">
           {especialidadesDisponiveis.map((esp) => (
             <div key={esp} className="flex items-center space-x-2">
-              <Checkbox id={`esp-${esp}`} checked={selectedEspecialidades.includes(esp)} onCheckedChange={() => toggleEspecialidade(esp)} />
-              <label htmlFor={`esp-${esp}`} className="text-sm">{esp}</label>
+              <Checkbox
+                id={`esp-${esp}`}
+                checked={selectedEspecialidades.includes(esp)}
+                onCheckedChange={() => toggleEspecialidade(esp)}
+              />
+              <label htmlFor={`esp-${esp}`} className="text-sm">
+                {esp}
+              </label>
             </div>
           ))}
         </div>
@@ -43,8 +75,14 @@ export function DadosProfissionaisTab({ register, errors, setValue, watch, selec
         <div className="flex flex-wrap gap-2">
           {diasSemana.map((dia) => (
             <div key={dia.value} className="flex items-center space-x-2">
-              <Checkbox id={`dia-${dia.value}`} checked={selectedDias.includes(dia.value)} onCheckedChange={() => toggleDia(dia.value)} />
-              <label htmlFor={`dia-${dia.value}`} className="text-sm">{dia.label}</label>
+              <Checkbox
+                id={`dia-${dia.value}`}
+                checked={selectedDias.includes(dia.value)}
+                onCheckedChange={() => toggleDia(dia.value)}
+              />
+              <label htmlFor={`dia-${dia.value}`} className="text-sm">
+                {dia.label}
+              </label>
             </div>
           ))}
         </div>

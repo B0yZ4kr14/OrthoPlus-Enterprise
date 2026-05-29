@@ -10,7 +10,9 @@ export class DbPatientRepository implements IPatientRepository {
     try {
       const data = await apiClient.get<Record<string, any>>(`/pacientes/${id}`);
       if (!data) return null;
-      return PatientMapper.toDomain(data as Parameters<typeof PatientMapper.toDomain>[0]);
+      return PatientMapper.toDomain(
+        data as Parameters<typeof PatientMapper.toDomain>[0],
+      );
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
@@ -25,7 +27,11 @@ export class DbPatientRepository implements IPatientRepository {
       const data = await apiClient.get<Record<string, any>[]>(`/pacientes`, {
         params: { clinic_id: clinicId },
       });
-      return (data || []).map((d) => PatientMapper.toDomain(d as Parameters<typeof PatientMapper.toDomain>[0]));
+      return (data || []).map((d) =>
+        PatientMapper.toDomain(
+          d as Parameters<typeof PatientMapper.toDomain>[0],
+        ),
+      );
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
@@ -53,7 +59,9 @@ export class DbPatientRepository implements IPatientRepository {
         params: { clinic_id: clinicId, cpf },
       });
       if (!data || data.length === 0) return null;
-      return PatientMapper.toDomain(data[0] as Parameters<typeof PatientMapper.toDomain>[0]);
+      return PatientMapper.toDomain(
+        data[0] as Parameters<typeof PatientMapper.toDomain>[0],
+      );
     } catch {
       return null;
     }

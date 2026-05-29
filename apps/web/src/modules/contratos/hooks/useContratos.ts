@@ -37,13 +37,16 @@ export function useContratos() {
     if (!selectedClinic) return;
 
     try {
-      const data: Record<string, any> = await apiClient.get("/contrato-templates", {
-        params: {
-          clinic_id: selectedClinic.id,
-          ativo: "eq.true",
-          sort: "nome.asc",
+      const data: Record<string, any> = await apiClient.get(
+        "/contrato-templates",
+        {
+          params: {
+            clinic_id: selectedClinic.id,
+            ativo: "eq.true",
+            sort: "nome.asc",
+          },
         },
-      });
+      );
       setTemplates(data as ContratoTemplate[]);
     } catch (error) {
       console.error("Erro ao carregar templates:", error);
@@ -166,10 +169,13 @@ export function useContratos() {
     if (!selectedClinic) return null;
 
     try {
-      const data: Record<string, any> = await apiClient.post("/contrato-templates", {
-        ...template,
-        clinic_id: selectedClinic.id,
-      });
+      const data: Record<string, any> = await apiClient.post(
+        "/contrato-templates",
+        {
+          ...template,
+          clinic_id: selectedClinic.id,
+        },
+      );
 
       await loadTemplates();
       toast.success("Template criado com sucesso!");

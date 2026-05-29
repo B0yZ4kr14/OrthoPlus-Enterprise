@@ -32,10 +32,14 @@ export function ModuleCard({
   onToggle,
   onExpand,
 }: ModuleCardProps) {
-  const canToggle = module.is_active ? module.can_deactivate : module.can_activate;
-  const hasWarnings = module.unmet_dependencies?.length || module.blocking_dependents?.length;
+  const canToggle = module.is_active
+    ? module.can_deactivate
+    : module.can_activate;
+  const hasWarnings =
+    module.unmet_dependencies?.length || module.blocking_dependents?.length;
 
-  const Icon = (moduleIcons[module.module_key] || Settings) as React.ComponentType<{ className?: string }>;
+  const Icon = (moduleIcons[module.module_key] ||
+    Settings) as React.ComponentType<{ className?: string }>;
 
   return (
     <Card
@@ -96,7 +100,9 @@ export function ModuleCard({
                   </TooltipProvider>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground">{module.description}</p>
+              <p className="text-sm text-muted-foreground">
+                {module.description}
+              </p>
             </div>
           </div>
 

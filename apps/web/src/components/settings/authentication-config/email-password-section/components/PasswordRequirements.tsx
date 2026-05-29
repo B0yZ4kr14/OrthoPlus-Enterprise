@@ -67,7 +67,9 @@ export function PasswordRequirements({
         </div>
 
         <div className="flex items-center justify-between">
-          <Label className="font-normal">Exigir caractere especial (!@#$%)</Label>
+          <Label className="font-normal">
+            Exigir caractere especial (!@#$%)
+          </Label>
           <Switch
             checked={requireSpecialChar}
             onCheckedChange={onRequireSpecialCharChange}

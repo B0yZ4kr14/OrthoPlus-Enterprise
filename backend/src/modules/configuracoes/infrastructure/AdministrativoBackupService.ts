@@ -2,6 +2,10 @@ import { CategoryBackupService } from "@/infrastructure/database/CategoryBackupS
 
 export class AdministrativoBackupService extends CategoryBackupService {
   constructor() {
-    super(["administrativo", "configuracoes", "database_admin", "backups"], "ADMINISTRATIVO", process.env.DATABASE_URL ?? "");
+    super(
+      ["administrativo", "configuracoes", "database_admin", "backups"],
+      "ADMINISTRATIVO",
+      process.env.DATABASE_URL ?? "",
+    );
   }
 }

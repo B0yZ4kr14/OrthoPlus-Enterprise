@@ -49,7 +49,8 @@ export default function ProfileSettings() {
       console.error("Erro ao salvar:", error);
       toast({
         title: "Erro ao salvar",
-        description: error instanceof Error ? error.message : "Erro ao salvar perfil",
+        description:
+          error instanceof Error ? error.message : "Erro ao salvar perfil",
         variant: "destructive",
       });
     } finally {

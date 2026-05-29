@@ -15,7 +15,8 @@ export function AmountAlert({ amount, coin }: AmountAlertProps) {
     <Alert className="bg-primary/5 border-primary/20">
       <Bitcoin className="h-4 w-4 text-primary" />
       <AlertDescription>
-        <strong>Valor a receber:</strong> R$ {amount.toFixed(2)} (~{cryptoAmount} {coin})
+        <strong>Valor a receber:</strong> R$ {amount.toFixed(2)} (~
+        {cryptoAmount} {coin})
       </AlertDescription>
     </Alert>
   );

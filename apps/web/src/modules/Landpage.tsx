@@ -1,1 +1,1 @@
-export { default } from "./landpage/ui/pages/Landpage"
+export { default } from "./landpage/ui/pages/Landpage";

@@ -61,7 +61,10 @@ export const NotificationDropdown = () => {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 glass-card border-border/50">
+      <DropdownMenuContent
+        align="end"
+        className="w-80 glass-card border-border/50"
+      >
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Notificações</span>
           {unreadCount > 0 && (

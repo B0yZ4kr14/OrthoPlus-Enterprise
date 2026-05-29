@@ -10,9 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@orthoplus/core-ui/popover";
-import {
-  STATUS_LABELS,
-} from "@/types/patient-status";
+import { STATUS_LABELS } from "@/types/patient-status";
 import type { StatusSelectProps, PatientStatus } from "./types";
 import { useStatusSelect } from "./hooks/useStatusSelect";
 import { StatusTrigger } from "./components/StatusTrigger";

@@ -43,9 +43,7 @@ export function CoinTypeField({ form }: CoinTypeFieldProps) {
               ))}
             </SelectContent>
           </Select>
-          <FormDescription>
-            Tipo de criptomoeda desta carteira
-          </FormDescription>
+          <FormDescription>Tipo de criptomoeda desta carteira</FormDescription>
           <FormMessage />
         </FormItem>
       )}

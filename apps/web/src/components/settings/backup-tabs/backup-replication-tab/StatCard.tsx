@@ -9,7 +9,13 @@ interface StatCardProps {
   value: number;
 }
 
-export function StatCard({ icon: Icon, iconColorClass, bgColorClass, label, value }: StatCardProps) {
+export function StatCard({
+  icon: Icon,
+  iconColorClass,
+  bgColorClass,
+  label,
+  value,
+}: StatCardProps) {
   return (
     <Card className="p-6">
       <div className="flex items-center gap-4">

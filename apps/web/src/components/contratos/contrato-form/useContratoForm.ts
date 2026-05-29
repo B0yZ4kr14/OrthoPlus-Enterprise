@@ -8,7 +8,7 @@ import type { ContratoFormProps } from "./types";
 
 export function useContratoForm(
   onSubmit: ContratoFormProps["onSubmit"],
-  initialData?: Partial<Contrato>
+  initialData?: Partial<Contrato>,
 ) {
   const {
     register,

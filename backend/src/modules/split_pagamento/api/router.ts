@@ -14,23 +14,35 @@ router.get("/", (_req, res) => {
     version: "1.0.0",
     endpoints: ["/"],
     status: "active",
-    note: "Module routes available — see router.ts for full endpoint list"
+    note: "Module routes available — see router.ts for full endpoint list",
   });
 });
 
 // Config
 router.get("/config", asyncHandler(controller.getConfig.bind(controller)));
 router.put("/config", asyncHandler(controller.upsertConfig.bind(controller)));
-router.post("/config", asyncHandler(controller.upsertConfig.bind(controller)));  // alias for frontend compatibility
+router.post("/config", asyncHandler(controller.upsertConfig.bind(controller))); // alias for frontend compatibility
 
 // Comissões
-router.get("/comissoes", asyncHandler(controller.listComissoes.bind(controller)));
-router.post("/comissoes", asyncHandler(controller.createComissao.bind(controller)));
+router.get(
+  "/comissoes",
+  asyncHandler(controller.listComissoes.bind(controller)),
+);
+router.post(
+  "/comissoes",
+  asyncHandler(controller.createComissao.bind(controller)),
+);
 
 // Transações
-router.get("/transacoes", asyncHandler(controller.listTransacoes.bind(controller)));
+router.get(
+  "/transacoes",
+  asyncHandler(controller.listTransacoes.bind(controller)),
+);
 
 // Calculate split distribution
-router.post("/calculate", asyncHandler(controller.calculateSplit.bind(controller)));
+router.post(
+  "/calculate",
+  asyncHandler(controller.calculateSplit.bind(controller)),
+);
 
 export default router;

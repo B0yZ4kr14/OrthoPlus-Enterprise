@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { useHardwareWallets } from "./useHardwareWallets";
 import { SecurityAlert } from "./SecurityAlert";
 import { WalletForm } from "./WalletForm";

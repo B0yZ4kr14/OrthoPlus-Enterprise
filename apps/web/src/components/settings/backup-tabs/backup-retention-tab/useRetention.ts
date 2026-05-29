@@ -14,7 +14,9 @@ export function useRetention() {
   const { data: config } = useQuery({
     queryKey: ["backup-retention-config", clinicId],
     queryFn: async () => {
-      const data = await apiClient.get<RetentionConfig[]>("/configuracoes/backups/retencao");
+      const data = await apiClient.get<RetentionConfig[]>(
+        "/configuracoes/backups/retencao",
+      );
       const clinic = data?.[0] || {};
       setRetentionDays(clinic.backup_retention_days || 30);
       setAutoCleanup(clinic.auto_cleanup_enabled || false);
@@ -41,16 +43,19 @@ export function useRetention() {
 
   const cleanupMutation = useMutation({
     mutationFn: async () => {
-      const data = await apiClient.post<CleanupResult[]>("/configuracoes/backups/limpeza", {
-        p_clinic_id: clinicId,
-      });
+      const data = await apiClient.post<CleanupResult[]>(
+        "/configuracoes/backups/limpeza",
+        {
+          p_clinic_id: clinicId,
+        },
+      );
       return data;
     },
     onSuccess: (data) => {
       if (data && data.length > 0) {
         const result = data[0];
         toast.success(
-          `${result.deleted_count} backups removidos (${(result.freed_bytes / 1024 / 1024 / 1024).toFixed(2)} GB liberados)`
+          `${result.deleted_count} backups removidos (${(result.freed_bytes / 1024 / 1024 / 1024).toFixed(2)} GB liberados)`,
         );
       }
       queryClient.invalidateQueries({ queryKey: ["backup-timeline"] });

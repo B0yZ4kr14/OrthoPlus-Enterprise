@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const createTeleconsultaSchema = z.object({
   titulo: z.string().max(200),
@@ -34,12 +34,17 @@ export const addNotesSchema = z.object({
 export const addPrescriptionSchema = z.object({
   teleconsulta_id: z.string().uuid(),
   patient_id: z.string().uuid(),
-  medications: z.array(z.object({
-    name: z.string().max(200),
-    dosage: z.string().max(200),
-    frequency: z.string().max(200),
-    duration: z.string().max(200),
-    instructions: z.string().max(500).optional(),
-  })).min(1).max(20),
+  medications: z
+    .array(
+      z.object({
+        name: z.string().max(200),
+        dosage: z.string().max(200),
+        frequency: z.string().max(200),
+        duration: z.string().max(200),
+        instructions: z.string().max(500).optional(),
+      }),
+    )
+    .min(1)
+    .max(20),
   observations: z.string().max(2000).optional(),
 });

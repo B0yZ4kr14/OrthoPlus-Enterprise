@@ -2,8 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { redisInstance } from "@/infrastructure/redis/redisClient";
 import { logger } from "@/infrastructure/logger";
 
-const DEFAULT_LIMIT = parseInt(process.env.SEARCH_RATE_LIMIT_PER_MINUTE || "30", 10);
-const VIP_LIMIT = parseInt(process.env.SEARCH_RATE_LIMIT_VIP_PER_MINUTE || "100", 10);
+const DEFAULT_LIMIT = parseInt(
+  process.env.SEARCH_RATE_LIMIT_PER_MINUTE || "30",
+  10,
+);
+const VIP_LIMIT = parseInt(
+  process.env.SEARCH_RATE_LIMIT_VIP_PER_MINUTE || "100",
+  10,
+);
 const WINDOW_SECONDS = 60;
 
 function getVipClinicIds(): Set<string> {

@@ -6,25 +6,25 @@
  * after invoking an optional onError callback.
  */
 export interface TimingCallbacks<T> {
-  onSuccess: (durationMs: number, result: T) => void
-  onError?: (durationMs: number, error: unknown) => void
+  onSuccess: (durationMs: number, result: T) => void;
+  onError?: (durationMs: number, error: unknown) => void;
 }
 
 export async function withTiming<T>(
   fn: () => Promise<T>,
   callbacks: TimingCallbacks<T>,
 ): Promise<T> {
-  const start = Date.now()
+  const start = Date.now();
   try {
-    const result = await fn()
-    const durationMs = Date.now() - start
-    callbacks.onSuccess(durationMs, result)
-    return result
+    const result = await fn();
+    const durationMs = Date.now() - start;
+    callbacks.onSuccess(durationMs, result);
+    return result;
   } catch (error) {
-    const durationMs = Date.now() - start
+    const durationMs = Date.now() - start;
     if (callbacks.onError) {
-      callbacks.onError(durationMs, error)
+      callbacks.onError(durationMs, error);
     }
-    throw error
+    throw error;
   }
 }

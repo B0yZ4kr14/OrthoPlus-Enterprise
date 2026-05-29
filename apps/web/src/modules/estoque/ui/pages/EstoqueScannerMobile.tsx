@@ -10,10 +10,18 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
 import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
-import type { Produto, Movimentacao } from "@/modules/estoque/types/estoque.types";
+import type {
+  Produto,
+  Movimentacao,
+} from "@/modules/estoque/types/estoque.types";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingState } from "@/components/shared/LoadingState";
 import {
@@ -48,15 +56,15 @@ export default function EstoqueScannerMobile() {
   const [scanMode, setScanMode] = useState<ScanMode>("consulta");
   const [isScanning, setIsScanning] = useState(false);
   const [scanHistory, setScanHistory] = useState<ScanHistory[]>([]);
-  const [lastScannedProduct, setLastScannedProduct] = useState<Produto | null>(null);
+  const [lastScannedProduct, setLastScannedProduct] = useState<Produto | null>(
+    null,
+  );
 
   const handleScan = async (code: string, format?: string) => {
     setIsScanning(false);
 
     // Buscar produto pelo código
-    const produto = produtos.find(
-      (p) => p.codigoBarras === code,
-    );
+    const produto = produtos.find((p) => p.codigoBarras === code);
 
     const historyEntry: ScanHistory = {
       id: Date.now().toString(),
@@ -96,7 +104,8 @@ export default function EstoqueScannerMobile() {
           tipo: "ENTRADA",
           quantidade: 1,
           motivo: "Entrada via Scanner Mobile",
-          realizadoPor: (user as { nome?: string } | null)?.nome || "Scanner Mobile",
+          realizadoPor:
+            (user as { nome?: string } | null)?.nome || "Scanner Mobile",
           createdAt: new Date().toISOString(),
         });
 
@@ -127,7 +136,8 @@ export default function EstoqueScannerMobile() {
           tipo: "SAIDA",
           quantidade: 1,
           motivo: "Saída via Scanner Mobile",
-          realizadoPor: (user as { nome?: string } | null)?.nome || "Scanner Mobile",
+          realizadoPor:
+            (user as { nome?: string } | null)?.nome || "Scanner Mobile",
           createdAt: new Date().toISOString(),
         });
 

@@ -9,12 +9,17 @@ interface ValorDescontoInputProps {
   onChange: (value: number | null) => void;
 }
 
-export function ValorDescontoInput({ tipo, value, onChange }: ValorDescontoInputProps) {
+export function ValorDescontoInput({
+  tipo,
+  value,
+  onChange,
+}: ValorDescontoInputProps) {
   if (tipo !== "DESCONTO_PERCENTUAL" && tipo !== "DESCONTO_VALOR") {
     return null;
   }
 
-  const label = tipo === "DESCONTO_PERCENTUAL" ? "Desconto (%)" : "Desconto (R$)";
+  const label =
+    tipo === "DESCONTO_PERCENTUAL" ? "Desconto (%)" : "Desconto (R$)";
   const min = tipo === "DESCONTO_PERCENTUAL" ? 1 : 0.01;
   const max = tipo === "DESCONTO_PERCENTUAL" ? 100 : undefined;
 
@@ -28,7 +33,9 @@ export function ValorDescontoInput({ tipo, value, onChange }: ValorDescontoInput
         max={max}
         step={tipo === "DESCONTO_PERCENTUAL" ? 1 : 0.01}
         value={value ?? ""}
-        onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}
+        onChange={(e) =>
+          onChange(e.target.value ? Number(e.target.value) : null)
+        }
         placeholder={label}
       />
     </div>

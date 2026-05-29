@@ -159,8 +159,8 @@ export function OnboardingWizard({
                   </div>
                   <h2 className="text-3xl font-bold">Parabéns! 🎉</h2>
                   <p className="text-muted-foreground text-lg">
-                    Você concluiu o onboarding do OrthoPlus Enterprise. Agora você está pronto
-                    para começar a usar o sistema completo.
+                    Você concluiu o onboarding do OrthoPlus Enterprise. Agora
+                    você está pronto para começar a usar o sistema completo.
                   </p>
                 </div>
 
@@ -234,7 +234,8 @@ export function OnboardingWizard({
                 {/* Header */}
                 <div className="text-center space-y-2 pr-12">
                   <h1 className="text-3xl font-bold">
-                    Bem-vindo ao OrthoPlus <span className="text-primary">Enterprise</span>
+                    Bem-vindo ao OrthoPlus{" "}
+                    <span className="text-primary">Enterprise</span>
                   </h1>
                   <p className="text-muted-foreground">
                     Vamos configurar seu sistema em {STEPS.length} passos

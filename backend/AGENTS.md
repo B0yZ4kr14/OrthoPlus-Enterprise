@@ -8,6 +8,7 @@
 ## Entrada e Middleware
 
 `src/index.ts` — ponto de entrada. Ordem do middleware (não alterar):
+
 ```
 cors → helmet → morgan → express.json → clinicContext → auth → modulesRouter → errorHandler
 ```
@@ -18,6 +19,7 @@ cors → helmet → morgan → express.json → clinicContext → auth → modul
 - `lgpdMiddleware`: middleware LGPD aplicado globalmente
 
 Middleware disponíveis em `src/middleware/`:
+
 - `authMiddleware.ts` — validação JWT
 - `clinicGuard.ts` — validação clinicId (obrigatório em todos os routers)
 - `errorHandler.ts` — handler global de erros
@@ -41,6 +43,7 @@ src/modules/{modulo}/
 ```
 
 **Regras:**
+
 - Novos módulos DEVEM seguir essa estrutura exata
 - `router.ts` DEVE aplicar `clinicGuard` como primeiro middleware de todas as rotas protegidas
 - Controllers NUNCA acessam Prisma diretamente — delegam para Repository
@@ -76,17 +79,17 @@ src/modules/{modulo}/
 
 `workers/index.ts` — scheduler raiz. Jobs em `workers/jobs/`:
 
-| Job | Cronograma principal |
-|-----|---------------------|
-| `adminJobs` | Weekly Sun 02:00, daily 01:00 |
-| `backupJobs` | Daily 01-05h, a cada 30min (streaming) |
-| `cryptoJobs` | A cada 5-15 min |
-| `estoqueJobs` | Daily 02-05h |
-| `financeiroJobs` | Daily 01:00 e 18:00 |
-| `gamificationJobs` | Daily 23:30 |
-| `scheduleAppointments` | A cada hora |
-| `scheduleBiExport` | Daily 02:00 |
-| `notificationJobs` | Daily 08-09h |
+| Job                    | Cronograma principal                   |
+| ---------------------- | -------------------------------------- |
+| `adminJobs`            | Weekly Sun 02:00, daily 01:00          |
+| `backupJobs`           | Daily 01-05h, a cada 30min (streaming) |
+| `cryptoJobs`           | A cada 5-15 min                        |
+| `estoqueJobs`          | Daily 02-05h                           |
+| `financeiroJobs`       | Daily 01:00 e 18:00                    |
+| `gamificationJobs`     | Daily 23:30                            |
+| `scheduleAppointments` | A cada hora                            |
+| `scheduleBiExport`     | Daily 02:00                            |
+| `notificationJobs`     | Daily 08-09h                           |
 
 `workers/categoryBackupScheduler.ts` — backups por categoria DB (CORE 01:00, FINANCEIRO 01:15, etc.)
 
@@ -106,6 +109,7 @@ Ao adicionar job: registrar em `workers/index.ts`, usar `node-cron`, nunca bloqu
 ## Módulo `financeiro` — Atenção
 
 `api/FinanceiroController.ts` tem ~1279 linhas e 38 ocorrências de `as any`. Ao adicionar:
+
 1. Criar método em `application/FinanceiroService.ts` primeiro
 2. Controller apenas chama service e retorna HTTP
 3. Nunca adicionar lógica de negócio no controller
@@ -117,6 +121,7 @@ Ver `backend/src/modules/financeiro/AGENTS.md` para detalhes.
 ## Variáveis de Ambiente Requeridas
 
 Ver `.env.example`. Críticas:
+
 - `DATABASE_URL` — PostgreSQL connection string
 - `JWT_SECRET` — mínimo 256 bits de entropia
 - `NODE_ENV` — `development` | `production`

@@ -68,12 +68,18 @@ export class FilesMetrics {
 
   recordUpload(clinicId: string, categoria: string, durationMs: number): void {
     this.uploadCounter.inc({ clinic_id: clinicId, categoria });
-    this.uploadDurationHistogram.observe({ clinic_id: clinicId, categoria }, durationMs / 1000);
+    this.uploadDurationHistogram.observe(
+      { clinic_id: clinicId, categoria },
+      durationMs / 1000,
+    );
   }
 
   recordDownload(clinicId: string, durationMs: number): void {
     this.downloadCounter.inc({ clinic_id: clinicId });
-    this.downloadDurationHistogram.observe({ clinic_id: clinicId }, durationMs / 1000);
+    this.downloadDurationHistogram.observe(
+      { clinic_id: clinicId },
+      durationMs / 1000,
+    );
   }
 
   recordDelete(clinicId: string): void {

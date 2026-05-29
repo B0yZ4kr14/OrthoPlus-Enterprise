@@ -49,14 +49,17 @@ export default function MetasGamificacao() {
 
       const hoje = new Date().toISOString().split("T")[0];
 
-      const data = await apiClient.get<Record<string, unknown>>("/pdv/metas-gamificacao", {
-        params: {
-          clinicId,
-          userId: user?.id,
-          periodoRanking,
-          dataReferencia: hoje,
+      const data = await apiClient.get<Record<string, unknown>>(
+        "/pdv/metas-gamificacao",
+        {
+          params: {
+            clinicId,
+            userId: user?.id,
+            periodoRanking,
+            dataReferencia: hoje,
+          },
         },
-      });
+      );
 
       setMetas((data.metas as MetaItem[]) || []);
       setRanking((data.ranking as RankingItem[]) || []);
@@ -80,7 +83,8 @@ export default function MetasGamificacao() {
 
   const getBadgeIcon = (badge: string) => {
     if (badge === "OURO") return <Crown className="h-5 w-5 text-warning" />;
-    if (badge === "PRATA") return <Medal className="h-5 w-5 text-muted-foreground" />;
+    if (badge === "PRATA")
+      return <Medal className="h-5 w-5 text-muted-foreground" />;
     if (badge === "BRONZE") return <Medal className="h-5 w-5 text-warning" />;
     return null;
   };
@@ -121,7 +125,9 @@ export default function MetasGamificacao() {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="font-medium">
-                        {new Date(meta.periodo_inicio).toLocaleDateString("pt-BR")}{" "}
+                        {new Date(meta.periodo_inicio).toLocaleDateString(
+                          "pt-BR",
+                        )}{" "}
                         até{" "}
                         {new Date(meta.periodo_fim).toLocaleDateString("pt-BR")}
                       </p>
@@ -129,7 +135,15 @@ export default function MetasGamificacao() {
                         Meta: R$ {parseFloat(meta.meta_valor).toFixed(2)}
                       </p>
                     </div>
-                    <Badge variant={getStatusColor(meta.status) as "default" | "secondary" | "destructive" | "outline"}>
+                    <Badge
+                      variant={
+                        getStatusColor(meta.status) as
+                          | "default"
+                          | "secondary"
+                          | "destructive"
+                          | "outline"
+                      }
+                    >
                       {meta.status.replace("_", " ")}
                     </Badge>
                   </div>

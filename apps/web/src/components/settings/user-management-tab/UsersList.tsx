@@ -33,8 +33,11 @@ export function UsersList({ users, onEdit, onDelete }: UsersListProps) {
               </div>
               <div>
                 <p className="font-medium">{user.full_name || "Sem nome"}</p>
-                <Badge variant={user.role === "ADMIN" ? "default" : "secondary"}>
-                  {ROLE_OPTIONS.find((r) => r.value === user.role)?.label || user.role}
+                <Badge
+                  variant={user.role === "ADMIN" ? "default" : "secondary"}
+                >
+                  {ROLE_OPTIONS.find((r) => r.value === user.role)?.label ||
+                    user.role}
                 </Badge>
               </div>
             </div>
@@ -45,7 +48,11 @@ export function UsersList({ users, onEdit, onDelete }: UsersListProps) {
               <Button variant="ghost" size="icon" onClick={() => onEdit(user)}>
                 <Edit className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => onDelete(user.id)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onDelete(user.id)}
+              >
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>

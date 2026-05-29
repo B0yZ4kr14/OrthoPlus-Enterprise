@@ -6,7 +6,10 @@ interface NotificationEmailsInputProps {
   onChange: (emails: string[]) => void;
 }
 
-export function NotificationEmailsInput({ emails, onChange }: NotificationEmailsInputProps) {
+export function NotificationEmailsInput({
+  emails,
+  onChange,
+}: NotificationEmailsInputProps) {
   return (
     <div className="space-y-2">
       <Label>E-mails para Notificação (opcional)</Label>

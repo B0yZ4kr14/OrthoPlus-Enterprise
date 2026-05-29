@@ -53,12 +53,25 @@ const getTipoLabel = (tipo: AtividadeTipo): string => {
 };
 
 const getStatusBadge = (status: AtividadeStatus) => {
-  const variants: Record<AtividadeStatus, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: LucideIcon }> =
+  const variants: Record<
+    AtividadeStatus,
     {
-      AGENDADA: { variant: "default", icon: Clock },
-      CONCLUIDA: { variant: "default", icon: CheckCircle2 },
-      CANCELADA: { variant: "destructive", icon: XCircle },
-    };
+      variant:
+        | "default"
+        | "secondary"
+        | "destructive"
+        | "outline"
+        | "success"
+        | "warning"
+        | "error"
+        | "info";
+      icon: LucideIcon;
+    }
+  > = {
+    AGENDADA: { variant: "default", icon: Clock },
+    CONCLUIDA: { variant: "default", icon: CheckCircle2 },
+    CANCELADA: { variant: "destructive", icon: XCircle },
+  };
   return variants[status] || variants.AGENDADA;
 };
 

@@ -30,10 +30,10 @@ export function VendedoresTab({ data }: VendedoresTabProps) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="vendedor"  stroke="hsl(var(--muted-foreground))" />
-            <YAxis  stroke="hsl(var(--muted-foreground))" />
+            <XAxis dataKey="vendedor" stroke="hsl(var(--muted-foreground))" />
+            <YAxis stroke="hsl(var(--muted-foreground))" />
             <Tooltip formatter={(value: number) => formatCurrency(value)} />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar
               dataKey="total"
               fill="hsl(var(--primary))"
@@ -48,10 +48,10 @@ export function VendedoresTab({ data }: VendedoresTabProps) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="vendedor"  stroke="hsl(var(--muted-foreground))" />
-            <YAxis  stroke="hsl(var(--muted-foreground))" />
+            <XAxis dataKey="vendedor" stroke="hsl(var(--muted-foreground))" />
+            <YAxis stroke="hsl(var(--muted-foreground))" />
             <Tooltip />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar
               dataKey="quantidade"
               fill="hsl(var(--success))"

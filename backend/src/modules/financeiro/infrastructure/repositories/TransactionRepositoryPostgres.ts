@@ -1,14 +1,14 @@
-import { IDatabaseConnection } from '@/infrastructure/database/IDatabaseConnection';
-import { ITransactionRepository } from '../../domain/repositories/ITransactionRepository';
-import { Transaction } from '../../domain/entities/Transaction';
+import { IDatabaseConnection } from "@/infrastructure/database/IDatabaseConnection";
+import { ITransactionRepository } from "../../domain/repositories/ITransactionRepository";
+import { Transaction } from "../../domain/entities/Transaction";
 
 export class TransactionRepositoryPostgres implements ITransactionRepository {
   constructor(private db: IDatabaseConnection) {}
 
   async findById(id: string): Promise<Transaction | null> {
     const result = await this.db.query<Record<string, unknown>>(
-      'SELECT * FROM financeiro.transactions WHERE id = $1',
-      [id]
+      "SELECT * FROM financeiro.transactions WHERE id = $1",
+      [id],
     );
     if (result.rows.length === 0) return null;
     return this.mapToDomain(result.rows[0]);
@@ -16,8 +16,8 @@ export class TransactionRepositoryPostgres implements ITransactionRepository {
 
   async findByClinic(clinicId: string): Promise<Transaction[]> {
     const result = await this.db.query<Record<string, unknown>>(
-      'SELECT * FROM financeiro.transactions WHERE clinic_id = $1 ORDER BY created_at DESC LIMIT 1000',
-      [clinicId]
+      "SELECT * FROM financeiro.transactions WHERE clinic_id = $1 ORDER BY created_at DESC LIMIT 1000",
+      [clinicId],
     );
     return result.rows.map((row) => this.mapToDomain(row));
   }
@@ -43,7 +43,7 @@ export class TransactionRepositoryPostgres implements ITransactionRepository {
         transaction.paidAt,
         transaction.createdAt,
         transaction.updatedAt,
-      ]
+      ],
     );
   }
 
@@ -67,27 +67,26 @@ export class TransactionRepositoryPostgres implements ITransactionRepository {
         transaction.paymentMethod,
         transaction.paidAt,
         transaction.updatedAt,
-      ]
+      ],
     );
   }
 
   async delete(id: string): Promise<void> {
-    await this.db.query(
-      'DELETE FROM financeiro.transactions WHERE id = $1',
-      [id]
-    );
+    await this.db.query("DELETE FROM financeiro.transactions WHERE id = $1", [
+      id,
+    ]);
   }
 
   private mapToDomain(row: Record<string, unknown>): Transaction {
     return Transaction.create({
       id: row.id as string,
       clinicId: row.clinic_id as string,
-      type: row.type as 'RECEITA' | 'DESPESA',
+      type: row.type as "RECEITA" | "DESPESA",
       category: row.category as string,
       amount: Number(row.amount),
       description: row.description as string,
       dueDate: new Date(row.due_date as string),
-      status: row.status as 'PENDENTE' | 'PAGO' | 'CANCELADO',
+      status: row.status as "PENDENTE" | "PAGO" | "CANCELADO",
       patientId: (row.patient_id as string | null) ?? null,
       appointmentId: (row.appointment_id as string | null) ?? null,
       paymentMethod: (row.payment_method as string | null) ?? null,

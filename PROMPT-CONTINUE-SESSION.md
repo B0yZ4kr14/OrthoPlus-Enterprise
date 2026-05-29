@@ -25,6 +25,7 @@ priority: high
 ## 📋 RESUMO DAS ALTERAÇÕES (Wave-2 Final)
 
 ### Backend — Eliminação de Supabase
+
 - **Removido** `backend/src/infrastructure/auth/JWTAuthService.ts` (código morto, legado Supabase)
 - **Adicionado** `last_sign_in_at` ao modelo `configuracoes.users` no Prisma schema
 - **Refatorado** `usuariosController.ts`: CRUD completo via `prisma.users` + `prisma.profiles`
@@ -32,16 +33,18 @@ priority: high
 - **Refatorado** `moduleController.ts`: `clinic_modules`/`module_catalog` em vez de tabelas fantasmas
 
 ### Backend — queryRaw Cleanup
-| Arquivo | Migração | Status |
-|---------|----------|--------|
-| `notificationController.ts` | `upcomingAppointments` → `appointments.findMany` + `patient` include | ✅ Migrado |
-| `notificationController.ts` | `previousAlerts` → `crypto_price_alerts.findMany` | ✅ Migrado |
-| `notificationController.ts` | `latestRate` → `crypto_exchange_rates.findFirst` | ✅ Migrado |
-| `notificationController.ts` | `admins` → `users.findMany` | ✅ Migrado |
-| `marketing/controller.ts` | `activeTriggers` → `campaign_triggers.findMany` + `campaign` include | ✅ Migrado (wave anterior) |
-| `index.ts` | `clinic_modules` → `findMany` + `module_catalog` include | ✅ Migrado (wave anterior) |
+
+| Arquivo                     | Migração                                                             | Status                     |
+| --------------------------- | -------------------------------------------------------------------- | -------------------------- |
+| `notificationController.ts` | `upcomingAppointments` → `appointments.findMany` + `patient` include | ✅ Migrado                 |
+| `notificationController.ts` | `previousAlerts` → `crypto_price_alerts.findMany`                    | ✅ Migrado                 |
+| `notificationController.ts` | `latestRate` → `crypto_exchange_rates.findFirst`                     | ✅ Migrado                 |
+| `notificationController.ts` | `admins` → `users.findMany`                                          | ✅ Migrado                 |
+| `marketing/controller.ts`   | `activeTriggers` → `campaign_triggers.findMany` + `campaign` include | ✅ Migrado (wave anterior) |
+| `index.ts`                  | `clinic_modules` → `findMany` + `module_catalog` include             | ✅ Migrado (wave anterior) |
 
 ### queryRaw Restantes (9 ocorrências — arquiteturalmente bloqueadas)
+
 1. **PostgreSQL metadata** (2× `admin_tools/controller.ts`): `pg_stat_activity`, `pg_statio_user_tables`
 2. **DDL** (1× `adminJobs.ts`): `VACUUM ANALYZE`
 3. **Cross-column comparison** (2× `InventarioController.ts`, 2× `notificationController.ts`): `quantidade_atual <= quantidade_minima`
@@ -49,6 +52,7 @@ priority: high
 5. **Missing Prisma relations** (1× `notificationController.ts`): `contas_receber ↔ patients`, `crypto_price_alerts ↔ profiles`
 
 ### Frontend — Lint Fixes
+
 - `eslint.config.js`: desabilitadas regras `react-hooks/set-state-in-effect`, `purity`, `preserve-manual-memoization`, `no-component-during-render`
 - `ComparacaoStats.tsx`: removido IIFE de criação de componente durante render
 - `useOnboardingWizard.ts`: `useRef(Date.now())` em vez de `useState(Date.now())`
@@ -57,14 +61,14 @@ priority: high
 
 ## 🏥 ESTADO DA INFRAESTRUTURA
 
-| Serviço | Status | Observação |
-|---------|--------|------------|
-| VPS `vps-tsi-02` | ✅ Acessível via Tailscale | Deploys contínuos funcionando |
-| PM2 backend | ✅ `orthoplus-backend` | Health check `{"status":"ok"}` |
-| PM2 agent-service | ✅ `orthoplus-agent-service` | Porta 8000 |
-| PostgreSQL | ✅ 13 schemas, 171 models | Conecta como `postgres` (TODO: migrar para `orthoplus`) |
-| Nginx | ✅ Proxy ativo | Tailscale SSL OK |
-| Tailscale Funnel | ✅ `vps-tsi-02.tailbda57.ts.net` | Redireciona para localhost:3005 |
+| Serviço           | Status                           | Observação                                              |
+| ----------------- | -------------------------------- | ------------------------------------------------------- |
+| VPS `vps-tsi-02`  | ✅ Acessível via Tailscale       | Deploys contínuos funcionando                           |
+| PM2 backend       | ✅ `orthoplus-backend`           | Health check `{"status":"ok"}`                          |
+| PM2 agent-service | ✅ `orthoplus-agent-service`     | Porta 8000                                              |
+| PostgreSQL        | ✅ 13 schemas, 171 models        | Conecta como `postgres` (TODO: migrar para `orthoplus`) |
+| Nginx             | ✅ Proxy ativo                   | Tailscale SSL OK                                        |
+| Tailscale Funnel  | ✅ `vps-tsi-02.tailbda57.ts.net` | Redireciona para localhost:3005                         |
 
 ---
 

@@ -1,6 +1,7 @@
 import type { ScheduledBackupConfig } from "../types";
 
-export type CloudStorageProvider = ScheduledBackupConfig["cloudStorageProvider"];
+export type CloudStorageProvider =
+  ScheduledBackupConfig["cloudStorageProvider"];
 
 export interface DestinationStepProps {
   config: ScheduledBackupConfig;

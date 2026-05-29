@@ -36,7 +36,10 @@ export function formatDateWithWeekday(date: string | Date): string {
   return formatDate(date, "EEEE, dd 'de' MMMM 'de' yyyy");
 }
 
-export function formatDateCustom(date: string | Date, formatStr: string): string {
+export function formatDateCustom(
+  date: string | Date,
+  formatStr: string,
+): string {
   try {
     const dateObj = typeof date === "string" ? parseISO(date) : date;
     if (!isValid(dateObj)) return "-";

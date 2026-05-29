@@ -1,7 +1,19 @@
 import { useState, lazy, Suspense } from "react";
-import { Scan, History, GitCompare, Brain, Maximize2, Loader2 } from "lucide-react";
+import {
+  Scan,
+  History,
+  GitCompare,
+  Brain,
+  Maximize2,
+  Loader2,
+} from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   Card,
   CardContent,
@@ -20,12 +32,16 @@ import { useOdontograma } from "@/modules/pep/hooks/useOdontograma";
 import type { Patient } from "@/types/patient";
 
 const Odontograma3D = lazy(() =>
-  import("@/modules/pep/components/Odontograma3D").then((m) => ({ default: m.Odontograma3D }))
+  import("@/modules/pep/components/Odontograma3D").then((m) => ({
+    default: m.Odontograma3D,
+  })),
 );
 
 export function OdontogramaPage() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  const [selectedIdsForComparison, setSelectedIdsForComparison] = useState<[string | null, string | null]>([null, null]);
+  const [selectedIdsForComparison, setSelectedIdsForComparison] = useState<
+    [string | null, string | null]
+  >([null, null]);
 
   const prontuarioId = selectedPatient?.id ?? "";
   const { history, restoreFromHistory } = useOdontograma(prontuarioId);
@@ -118,7 +134,13 @@ export function OdontogramaPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Suspense fallback={<div className="flex items-center justify-center h-64"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>}>
+                <Suspense
+                  fallback={
+                    <div className="flex items-center justify-center h-64">
+                      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    </div>
+                  }
+                >
                   <Odontograma3D prontuarioId={selectedPatient.id} />
                 </Suspense>
               </CardContent>

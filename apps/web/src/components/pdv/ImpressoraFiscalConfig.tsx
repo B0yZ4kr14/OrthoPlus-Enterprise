@@ -2,7 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
@@ -55,9 +60,12 @@ export default function ImpressoraFiscalConfig() {
     try {
       setLoading(true);
       try {
-        const data = await apiClient.get<ImpressoraConfig | ImpressoraConfig[]>("/sat-mfe-config", {
-          params: { clinic_id: selectedClinic },
-        });
+        const data = await apiClient.get<ImpressoraConfig | ImpressoraConfig[]>(
+          "/sat-mfe-config",
+          {
+            params: { clinic_id: selectedClinic },
+          },
+        );
         const configData = Array.isArray(data) ? data[0] : data;
         if (configData) {
           setConfig(configData);
@@ -77,7 +85,8 @@ export default function ImpressoraFiscalConfig() {
         if (error?.status !== 404) throw error;
       }
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error loading config:", error);
       toast({
         title: "Erro ao carregar configuração",
@@ -122,7 +131,8 @@ export default function ImpressoraFiscalConfig() {
 
       loadConfig();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error saving config:", error);
       toast({
         title: "Erro ao salvar configuração",

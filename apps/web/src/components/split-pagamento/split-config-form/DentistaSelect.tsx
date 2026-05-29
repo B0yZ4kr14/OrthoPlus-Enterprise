@@ -15,7 +15,11 @@ interface DentistaSelectProps {
   onChange: (value: string) => void;
 }
 
-export function DentistaSelect({ value, dentistas, onChange }: DentistaSelectProps) {
+export function DentistaSelect({
+  value,
+  dentistas,
+  onChange,
+}: DentistaSelectProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="dentist">Dentista *</Label>

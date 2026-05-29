@@ -27,7 +27,10 @@ export function OptionsStep({
             Reduz o tamanho do arquivo de backup
           </div>
         </div>
-        <Switch checked={config.compression} onCheckedChange={onCompressionChange} />
+        <Switch
+          checked={config.compression}
+          onCheckedChange={onCompressionChange}
+        />
       </div>
 
       <div className="flex items-center justify-between border rounded-lg p-4">
@@ -37,7 +40,10 @@ export function OptionsStep({
             Protege os dados com AES-256
           </div>
         </div>
-        <Switch checked={config.encryption} onCheckedChange={onEncryptionChange} />
+        <Switch
+          checked={config.encryption}
+          onCheckedChange={onEncryptionChange}
+        />
       </div>
 
       <Card className="p-4 bg-muted">
@@ -48,11 +54,15 @@ export function OptionsStep({
         <div className="text-sm space-y-1 ml-7 mt-2">
           <p>
             Tipo:{" "}
-            <span className="font-medium">{BACKUP_TYPE_LABELS[config.type]}</span>
+            <span className="font-medium">
+              {BACKUP_TYPE_LABELS[config.type]}
+            </span>
           </p>
           <p>
             Dados:{" "}
-            <span className="font-medium">{config.selectedData.length} categorias</span>
+            <span className="font-medium">
+              {config.selectedData.length} categorias
+            </span>
           </p>
           <p>
             Compressão:{" "}

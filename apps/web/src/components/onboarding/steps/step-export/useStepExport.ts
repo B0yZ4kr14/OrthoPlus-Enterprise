@@ -7,7 +7,8 @@ export const NEXT_STEPS: NextStep[] = [
   {
     icon: Users,
     title: "Configure Usuários",
-    description: "Adicione membros da equipe e defina suas permissões granulares",
+    description:
+      "Adicione membros da equipe e defina suas permissões granulares",
     action: "Ir para Funcionários",
     badge: "Recomendado",
   },
@@ -21,7 +22,8 @@ export const NEXT_STEPS: NextStep[] = [
   {
     icon: Settings,
     title: "Personalize Módulos",
-    description: "Ative ou desative módulos conforme as necessidades da clínica",
+    description:
+      "Ative ou desative módulos conforme as necessidades da clínica",
     action: "Meus Módulos",
     badge: "Essencial",
   },
@@ -35,11 +37,13 @@ export const RESOURCES: ResourceItem[] = [
   },
   {
     title: "Documentação",
-    description: "Acesse a documentação completa do sistema para guias detalhados de cada módulo",
+    description:
+      "Acesse a documentação completa do sistema para guias detalhados de cada módulo",
   },
   {
     title: "Suporte",
-    description: "Em caso de dúvidas, entre em contato com o suporte técnico da TSI Telecom",
+    description:
+      "Em caso de dúvidas, entre em contato com o suporte técnico da TSI Telecom",
   },
 ];
 

@@ -15,14 +15,16 @@ export function SidebarPreview({ modules }: SidebarPreviewProps) {
         <SidebarHeader />
 
         <div className="space-y-4">
-          {Object.entries(groupedModules).map(([category, categoryModules], index) => (
-            <ModuleCategory
-              key={category}
-              category={category}
-              modules={categoryModules}
-              showSeparator={index > 0}
-            />
-          ))}
+          {Object.entries(groupedModules).map(
+            ([category, categoryModules], index) => (
+              <ModuleCategory
+                key={category}
+                category={category}
+                modules={categoryModules}
+                showSeparator={index > 0}
+              />
+            ),
+          )}
 
           <AdminSection />
         </div>

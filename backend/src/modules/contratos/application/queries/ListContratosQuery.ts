@@ -1,5 +1,5 @@
-import { IContratoRepository } from '../../domain/repositories/IContratoRepository';
-import { ContratoDTO } from '../dto/ContratoDTO';
+import { IContratoRepository } from "../../domain/repositories/IContratoRepository";
+import { ContratoDTO } from "../dto/ContratoDTO";
 
 export interface ListContratosQuery {
   clinicId: string;
@@ -29,14 +29,14 @@ export class ListContratosQueryHandler {
       startDate: query.startDate,
       endDate: query.endDate,
       skip: (query.page - 1) * query.limit,
-      take: query.limit
+      take: query.limit,
     });
 
     return {
       items: items.map(ContratoDTO.fromEntity),
       total,
       page: query.page,
-      totalPages: Math.ceil(total / query.limit)
+      totalPages: Math.ceil(total / query.limit),
     };
   }
 }

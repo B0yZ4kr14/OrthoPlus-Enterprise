@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Download, FileText } from "lucide-react";
@@ -64,9 +69,7 @@ export function ConversionsHistory({
                     <Badge variant="outline">{conv.toCoin}</Badge>
                   </div>
                   <Badge
-                    variant={
-                      conv.type === "gain" ? "success" : "destructive"
-                    }
+                    variant={conv.type === "gain" ? "success" : "destructive"}
                   >
                     {conv.type === "gain" ? "Ganho" : "Perda"}
                   </Badge>

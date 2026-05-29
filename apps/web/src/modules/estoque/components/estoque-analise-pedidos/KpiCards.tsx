@@ -35,9 +35,7 @@ export function KpiCards({ stats }: KpiCardsProps) {
             <Package className="h-5 w-5 text-info" />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">
-              Pedidos Automáticos
-            </p>
+            <p className="text-sm text-muted-foreground">Pedidos Automáticos</p>
             <p className="text-2xl font-bold">{stats.pedidosAutomaticos}</p>
             <p className="text-xs text-muted-foreground">
               {stats.totalPedidos > 0
@@ -71,9 +69,7 @@ export function KpiCards({ stats }: KpiCardsProps) {
             <Clock className="h-5 w-5 text-warning" />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">
-              Tempo Médio Entrega
-            </p>
+            <p className="text-sm text-muted-foreground">Tempo Médio Entrega</p>
             <p className="text-2xl font-bold">
               {stats.tempoMedioEntrega.toFixed(1)} dias
             </p>

@@ -15,7 +15,9 @@ export function ModuleAdoptionRoadmap({
 
       {clinicProfile && <ClinicProfileAlert profile={clinicProfile} />}
 
-      {recommendation.insights && <InsightsCard insights={recommendation.insights} />}
+      {recommendation.insights && (
+        <InsightsCard insights={recommendation.insights} />
+      )}
 
       <div className="space-y-4">
         {recommendation.phases?.map((phase, index) => (

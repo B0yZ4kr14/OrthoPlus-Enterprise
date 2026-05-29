@@ -1,5 +1,11 @@
 // cspell:disable
-import { Shield, Clock, DollarSign, AlertTriangle, TrendingUp } from "lucide-react";
+import {
+  Shield,
+  Clock,
+  DollarSign,
+  AlertTriangle,
+  TrendingUp,
+} from "lucide-react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import type { AnaliseIA } from "./types";

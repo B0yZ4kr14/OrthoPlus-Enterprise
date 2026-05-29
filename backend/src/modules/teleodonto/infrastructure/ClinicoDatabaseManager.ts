@@ -3,10 +3,6 @@ import { ClinicoBackupService } from "./ClinicoBackupService";
 
 export class ClinicoDatabaseManager extends CategoryDatabaseManager {
   constructor() {
-    super(
-      ["clinico"],
-      "CLINICO",
-      new ClinicoBackupService()
-    );
+    super(["clinico"], "CLINICO", new ClinicoBackupService());
   }
 }

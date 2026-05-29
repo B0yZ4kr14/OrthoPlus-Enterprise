@@ -1,5 +1,11 @@
 // cspell:disable
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@orthoplus/core-ui/card";
 import { Progress } from "@orthoplus/core-ui/progress";
 import { CheckCircle2 } from "lucide-react";
 
@@ -15,13 +21,18 @@ interface WizardHeaderProps {
   progress: number;
 }
 
-export function WizardHeader({ steps, currentStep, progress }: WizardHeaderProps) {
+export function WizardHeader({
+  steps,
+  currentStep,
+  progress,
+}: WizardHeaderProps) {
   return (
     <>
       {/* Header */}
       <div className="text-center space-y-2 pr-12">
         <h1 className="text-3xl font-bold">
-          Bem-vindo ao OrthoPlus <span className="text-primary">Enterprise</span>
+          Bem-vindo ao OrthoPlus{" "}
+          <span className="text-primary">Enterprise</span>
         </h1>
         <p className="text-muted-foreground">
           Vamos configurar seu sistema em {steps.length} passos simples
@@ -49,8 +60,8 @@ export function WizardHeader({ steps, currentStep, progress }: WizardHeaderProps
               index === currentStep
                 ? "bg-primary text-primary-foreground scale-110"
                 : index < currentStep
-                ? "bg-primary/20 text-primary"
-                : "bg-muted text-muted-foreground"
+                  ? "bg-primary/20 text-primary"
+                  : "bg-muted text-muted-foreground"
             }`}
           >
             {index < currentStep ? (

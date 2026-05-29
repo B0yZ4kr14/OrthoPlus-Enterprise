@@ -1,21 +1,21 @@
-import { ReactNode, useState, memo, useMemo } from "react"
-import { SidebarProvider } from "@orthoplus/core-ui/sidebar"
-import { AppSidebar } from "@/core/layout/Sidebar"
-import { SidebarHoverTrigger } from "@/core/layout/Sidebar/SidebarHoverTrigger"
-import { DashboardHeader } from "@/components/DashboardHeader"
-import { Sheet, SheetContent } from "@orthoplus/core-ui/sheet"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { useFocusMode } from "@/hooks/useFocusMode"
-import { useSidebarHover } from "@/hooks/useSidebarHover"
-import { SkipLink } from "@/components/SkipLink"
-import { cn } from "@/lib/utils"
+import { ReactNode, useState, memo, useMemo } from "react";
+import { SidebarProvider } from "@orthoplus/core-ui/sidebar";
+import { AppSidebar } from "@/core/layout/Sidebar";
+import { SidebarHoverTrigger } from "@/core/layout/Sidebar/SidebarHoverTrigger";
+import { DashboardHeader } from "@/components/DashboardHeader";
+import { Sheet, SheetContent } from "@orthoplus/core-ui/sheet";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useFocusMode } from "@/hooks/useFocusMode";
+import { useSidebarHover } from "@/hooks/useSidebarHover";
+import { SkipLink } from "@/components/SkipLink";
+import { cn } from "@/lib/utils";
 
 interface AppLayoutInnerProps {
-  children: ReactNode
-  isMobile: boolean
-  mobileMenuOpen: boolean
-  setMobileMenuOpen: (open: boolean) => void
-  isFocusMode: boolean
+  children: ReactNode;
+  isMobile: boolean;
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: (open: boolean) => void;
+  isFocusMode: boolean;
 }
 
 /**
@@ -34,13 +34,13 @@ const AppLayoutInner = memo(function AppLayoutInner({
     isAutoHide,
     onMouseEnter,
     onMouseLeave,
-  } = useSidebarHover()
+  } = useSidebarHover();
 
   const contentClassName = useMemo(
     () =>
       `flex-1 bg-background overflow-x-hidden transition-all duration-300 ease-out ${isFocusMode ? "p-3 md:p-5" : "p-5 md:p-8"}`,
     [isFocusMode],
-  )
+  );
 
   return (
     <>
@@ -64,7 +64,7 @@ const AppLayoutInner = memo(function AppLayoutInner({
               sidebarOpen
                 ? "translate-x-0 transition-[transform,box-shadow] duration-500"
                 : "-translate-x-full transition-[transform,box-shadow] duration-300",
-              "shadow-[4px_0_24px_rgba(0,0,0,0.06)]"
+              "shadow-[4px_0_24px_rgba(0,0,0,0.06)]",
             )}
             style={{
               transitionTimingFunction: sidebarOpen
@@ -82,7 +82,10 @@ const AppLayoutInner = memo(function AppLayoutInner({
         {/* Sidebar mobile (Sheet) — inalterado */}
         {isMobile && (
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetContent side="left" className="w-[280px] p-0 border-r border-border">
+            <SheetContent
+              side="left"
+              className="w-[280px] p-0 border-r border-border"
+            >
               <AppSidebar onNavigate={() => setMobileMenuOpen(false)} />
             </SheetContent>
           </Sheet>
@@ -92,7 +95,7 @@ const AppLayoutInner = memo(function AppLayoutInner({
         <div
           className={cn(
             "flex-1 flex flex-col min-w-0 transition-all duration-300 ease-out",
-            isFocusMode && "ml-0"
+            isFocusMode && "ml-0",
           )}
         >
           {(!isFocusMode || isMobile) && (
@@ -113,17 +116,17 @@ const AppLayoutInner = memo(function AppLayoutInner({
         </div>
       </div>
     </>
-  )
-})
+  );
+});
 
 interface AppLayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
-  const isMobile = useIsMobile()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { isFocusMode } = useFocusMode({ enabled: true, timeout: 3000 })
+  const isMobile = useIsMobile();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isFocusMode } = useFocusMode({ enabled: true, timeout: 3000 });
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -136,5 +139,5 @@ export const AppLayout = memo(function AppLayout({ children }: AppLayoutProps) {
         {children}
       </AppLayoutInner>
     </SidebarProvider>
-  )
-})
+  );
+});

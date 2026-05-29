@@ -19,7 +19,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Plus, Check } from "lucide-react";
 import type { ReportTemplate, TemplateFormData } from "./types";
 import {
@@ -68,7 +73,8 @@ export function TemplateForm({
             {editingTemplate ? "Editar Template" : "Criar Novo Template"}
           </DialogTitle>
           <DialogDescription>
-            Configure as métricas, filtros e layout do seu relatório personalizado
+            Configure as métricas, filtros e layout do seu relatório
+            personalizado
           </DialogDescription>
         </DialogHeader>
 
@@ -149,9 +155,11 @@ export function TemplateForm({
                         <div>
                           <p className="font-medium text-sm">{metric.label}</p>
                           <Badge variant="secondary" className="text-xs mt-1">
-                            {TEMPLATE_CATEGORIES.find(
-                              (c) => c.value === metric.category
-                            )?.label}
+                            {
+                              TEMPLATE_CATEGORIES.find(
+                                (c) => c.value === metric.category,
+                              )?.label
+                            }
                           </Badge>
                         </div>
                         {formData.metrics.includes(metric.id) && (

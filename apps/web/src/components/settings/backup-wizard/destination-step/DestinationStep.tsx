@@ -40,7 +40,10 @@ export function DestinationStep({ config, setConfig }: DestinationStepProps) {
       />
 
       {config.cloudStorageProvider === "local" && (
-        <LocalPathInput value={config.localPath || ""} onChange={updateLocalPath} />
+        <LocalPathInput
+          value={config.localPath || ""}
+          onChange={updateLocalPath}
+        />
       )}
 
       {config.cloudStorageProvider === "ftp" && (
@@ -48,7 +51,10 @@ export function DestinationStep({ config, setConfig }: DestinationStepProps) {
       )}
 
       {config.cloudStorageProvider === "storj" && (
-        <StorjConfigForm config={config.storjConfig} onChange={updateStorjConfig} />
+        <StorjConfigForm
+          config={config.storjConfig}
+          onChange={updateStorjConfig}
+        />
       )}
 
       <div className="mt-4">

@@ -1,5 +1,10 @@
 import { Shield } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { ConsentCard } from "./ConsentCard";
 import { LGPD_CONSENTS } from "../constants/consents";
 

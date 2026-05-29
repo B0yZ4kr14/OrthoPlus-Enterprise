@@ -9,18 +9,31 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
   async save(blockedTime: BlockedTime): Promise<BlockedTime> {
     const data = BlockedTimeMapper.toPersistence(blockedTime);
     const result = await apiClient.post<unknown>(this.basePath, data);
-    return BlockedTimeMapper.toDomain(result as Parameters<typeof BlockedTimeMapper.toDomain>[0]);
+    return BlockedTimeMapper.toDomain(
+      result as Parameters<typeof BlockedTimeMapper.toDomain>[0],
+    );
   }
 
   async findById(id: string): Promise<BlockedTime | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`${this.basePath}/${id}`);
-      return data ? BlockedTimeMapper.toDomain(data as Parameters<typeof BlockedTimeMapper.toDomain>[0]) : null;
+      const data = await apiClient.get<Record<string, any>>(
+        `${this.basePath}/${id}`,
+      );
+      return data
+        ? BlockedTimeMapper.toDomain(
+            data as Parameters<typeof BlockedTimeMapper.toDomain>[0],
+          )
+        : null;
     } catch (error: unknown) {
       const axiosErr = error as { response?: { status?: number } };
-      if (axiosErr.response?.status === 404 || axiosErr.response?.status === 400)
+      if (
+        axiosErr.response?.status === 404 ||
+        axiosErr.response?.status === 400
+      )
         return null;
-      throw new Error(`Erro ao buscar bloqueio: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Erro ao buscar bloqueio: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
 
@@ -31,7 +44,11 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         active: true,
       },
     });
-    return data.map((d) => BlockedTimeMapper.toDomain(d as Parameters<typeof BlockedTimeMapper.toDomain>[0]));
+    return data.map((d) =>
+      BlockedTimeMapper.toDomain(
+        d as Parameters<typeof BlockedTimeMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findByDentistAndDateRange(
@@ -46,7 +63,11 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         end_date: endDate.toISOString(),
       },
     });
-    return data.map((d) => BlockedTimeMapper.toDomain(d as Parameters<typeof BlockedTimeMapper.toDomain>[0]));
+    return data.map((d) =>
+      BlockedTimeMapper.toDomain(
+        d as Parameters<typeof BlockedTimeMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findByClinicId(clinicId: string): Promise<BlockedTime[]> {
@@ -56,7 +77,11 @@ export class BlockedTimeRepositoryApi implements IBlockedTimeRepository {
         active: true,
       },
     });
-    return data.map((d) => BlockedTimeMapper.toDomain(d as Parameters<typeof BlockedTimeMapper.toDomain>[0]));
+    return data.map((d) =>
+      BlockedTimeMapper.toDomain(
+        d as Parameters<typeof BlockedTimeMapper.toDomain>[0],
+      ),
+    );
   }
 
   async delete(id: string): Promise<void> {

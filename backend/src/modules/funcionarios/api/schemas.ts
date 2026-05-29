@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const createFuncionarioSchema = z.object({
   nome: z.string().max(200),

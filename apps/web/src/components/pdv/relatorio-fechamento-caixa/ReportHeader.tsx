@@ -16,7 +16,9 @@ export function ReportHeader({ gerandoSped, onGerarSped }: ReportHeaderProps) {
         </div>
         <div>
           <h3 className="text-lg font-semibold">Relatório de Fechamento</h3>
-          <p className="text-sm text-muted-foreground">Comparação PDV vs NFCe Emitidas</p>
+          <p className="text-sm text-muted-foreground">
+            Comparação PDV vs NFCe Emitidas
+          </p>
         </div>
       </div>
       <Button onClick={onGerarSped} disabled={gerandoSped} variant="outline">

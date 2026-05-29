@@ -106,10 +106,7 @@ export function useGlobalSearch(): UseGlobalSearchReturn {
     }
   }, [loading, results.length, total]);
 
-  const groupedResults = useMemo(
-    () => groupByModule(results),
-    [results],
-  );
+  const groupedResults = useMemo(() => groupByModule(results), [results]);
 
   const hasMore = results.length < total && total > 0;
 

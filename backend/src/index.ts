@@ -8,7 +8,6 @@ import fs from "fs";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
-
 // Modules API Routers
 import { createAuthRouter } from "./modules/auth/api/router";
 import agendaRouter from "./modules/agenda/api/router";
@@ -17,7 +16,10 @@ import backupsRouter from "./modules/backups/api/router";
 import { commRouter } from "./modules/comm/api/router";
 import { createConfiguracoesRouter } from "./modules/configuracoes/api/router";
 import { dbRouter as configuracoesDbRouter } from "./modules/configuracoes/api/dbRouter";
-import { createCryptoConfigRouter, createCryptoRouter } from "./modules/crypto_config/api/router";
+import {
+  createCryptoConfigRouter,
+  createCryptoRouter,
+} from "./modules/crypto_config/api/router";
 import databaseRouter from "./modules/database_admin/api/router";
 import { createFaturamentoRouter } from "./modules/faturamento/api/router";
 import filesRouter from "./modules/files/api/router";
@@ -36,10 +38,10 @@ import { startAllWorkers } from "./workers/index";
 import { authMiddleware, tenantGuard } from "./middleware/authMiddleware";
 
 // Batch 8 Module Routers
-import adminToolsRouter from "./modules/admin_tools/api/router"
-import { createMemoryHubModule } from "./modules/memory_hub/MemoryHubModule"
-import { createMemoryHubRouter } from "./modules/memory_hub/api/router"
-import searchIndexRouter from "./modules/search_index/api/router"
+import adminToolsRouter from "./modules/admin_tools/api/router";
+import { createMemoryHubModule } from "./modules/memory_hub/MemoryHubModule";
+import { createMemoryHubRouter } from "./modules/memory_hub/api/router";
+import searchIndexRouter from "./modules/search_index/api/router";
 import contratosRouter from "./modules/contratos/api/router";
 import crmRouter from "./modules/crm/api/router";
 import { dbRouter as crmDbRouter } from "./modules/crm/api/dbRouter";
@@ -78,73 +80,108 @@ import { registerEventHandlers } from "./shared/events/EventRegistry";
 
 import { errorHandler } from "./middleware/errorHandler";
 import { prisma } from "./infrastructure/database/prismaClient";
-import { redisInstance, redisPublisher, redisSubscriber } from "./infrastructure/redis/redisClient";
+import {
+  redisInstance,
+  redisPublisher,
+  redisSubscriber,
+} from "./infrastructure/redis/redisClient";
 import { logger } from "./infrastructure/logger";
 import { prometheusMetrics } from "./infrastructure/metrics/PrometheusMetrics";
-
 
 /**
  * SECURITY: Validate required environment variables on startup
  * Prevents runtime failures and security issues from missing configs
  */
 function validateEnvironment() {
-  const required = ['JWT_SECRET', 'DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
-  const missing = required.filter(key => !process.env[key]);
+  const required = [
+    "JWT_SECRET",
+    "DB_HOST",
+    "DB_NAME",
+    "DB_USER",
+    "DB_PASSWORD",
+  ];
+  const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length > 0) {
-    console.error(`❌ FATAL: Missing required environment variables: ${missing.join(', ')}`);
-    console.error('Please set these variables in your .env file or environment');
+    console.error(
+      `❌ FATAL: Missing required environment variables: ${missing.join(", ")}`,
+    );
+    console.error(
+      "Please set these variables in your .env file or environment",
+    );
     process.exit(1);
   }
 
   // Security check: Prevent using default/mock JWT secret
-  if (process.env.JWT_SECRET === '<REMOVED>') {
-    console.error('❌ FATAL: Using default JWT_SECRET "<REMOVED>" is not allowed');
-    console.error('Please set a secure JWT_SECRET (256-bit random string recommended)');
+  if (process.env.JWT_SECRET === "<REMOVED>") {
+    console.error(
+      '❌ FATAL: Using default JWT_SECRET "<REMOVED>" is not allowed',
+    );
+    console.error(
+      "Please set a secure JWT_SECRET (256-bit random string recommended)",
+    );
     process.exit(1);
   }
 
   // In production: block dangerous settings that are only safe in dev/test
-  if (process.env.NODE_ENV === 'production') {
-    if (process.env.AUTH_ALLOW_MOCK === 'true') {
-      console.error('❌ FATAL: AUTH_ALLOW_MOCK=true is not allowed in production');
-      console.error('Remove AUTH_ALLOW_MOCK or set it to false before deploying');
+  if (process.env.NODE_ENV === "production") {
+    if (process.env.AUTH_ALLOW_MOCK === "true") {
+      console.error(
+        "❌ FATAL: AUTH_ALLOW_MOCK=true is not allowed in production",
+      );
+      console.error(
+        "Remove AUTH_ALLOW_MOCK or set it to false before deploying",
+      );
       process.exit(1);
     }
-    if (process.env.ENABLE_DANGEROUS_ADMIN_ENDPOINTS === 'true') {
-      console.error('❌ FATAL: ENABLE_DANGEROUS_ADMIN_ENDPOINTS=true is not allowed in production');
-      console.error('Remove ENABLE_DANGEROUS_ADMIN_ENDPOINTS or set it to false before deploying');
+    if (process.env.ENABLE_DANGEROUS_ADMIN_ENDPOINTS === "true") {
+      console.error(
+        "❌ FATAL: ENABLE_DANGEROUS_ADMIN_ENDPOINTS=true is not allowed in production",
+      );
+      console.error(
+        "Remove ENABLE_DANGEROUS_ADMIN_ENDPOINTS or set it to false before deploying",
+      );
       process.exit(1);
     }
     // REDIS_URL is required in production; in development it falls back to localhost
     if (!process.env.REDIS_URL) {
-      console.error('❌ FATAL: REDIS_URL environment variable is not set in production');
-      console.error('Please set REDIS_URL in your environment before deploying');
+      console.error(
+        "❌ FATAL: REDIS_URL environment variable is not set in production",
+      );
+      console.error(
+        "Please set REDIS_URL in your environment before deploying",
+      );
       process.exit(1);
     }
   }
 
   // Warn if dangerous endpoints are enabled (non-production)
-  if (process.env.ENABLE_DANGEROUS_ADMIN_ENDPOINTS === 'true') {
-    console.warn('⚠️  WARNING: ENABLE_DANGEROUS_ADMIN_ENDPOINTS=true');
-    console.warn('   This enables OS command execution endpoints - NOT recommended for production!');
+  if (process.env.ENABLE_DANGEROUS_ADMIN_ENDPOINTS === "true") {
+    console.warn("⚠️  WARNING: ENABLE_DANGEROUS_ADMIN_ENDPOINTS=true");
+    console.warn(
+      "   This enables OS command execution endpoints - NOT recommended for production!",
+    );
   }
 
   // Warn if mock auth is enabled (non-production)
-  if (process.env.AUTH_ALLOW_MOCK === 'true') {
-    console.warn('⚠️  WARNING: AUTH_ALLOW_MOCK=true');
-    console.warn('   This allows authentication bypass - ONLY for development/testing!');
+  if (process.env.AUTH_ALLOW_MOCK === "true") {
+    console.warn("⚠️  WARNING: AUTH_ALLOW_MOCK=true");
+    console.warn(
+      "   This allows authentication bypass - ONLY for development/testing!",
+    );
   }
 
   // Validate optional but important variables
-  const optional = ['DB_PORT'];
-  optional.forEach(key => {
+  const optional = ["DB_PORT"];
+  optional.forEach((key) => {
     if (!process.env[key]) {
-      console.warn(`⚠️  WARNING: Optional environment variable ${key} is not set, using default`);
+      console.warn(
+        `⚠️  WARNING: Optional environment variable ${key} is not set, using default`,
+      );
     }
   });
 
-  console.log('✅ Environment validation passed');
+  console.log("✅ Environment validation passed");
 }
 
 validateEnvironment();
@@ -156,34 +193,34 @@ fs.mkdirSync(uploadDir, { recursive: true });
 const app = express();
 
 // Trust proxy for rate limiting (needed when behind Nginx)
-app.set('trust proxy', 'loopback');
+app.set("trust proxy", "loopback");
 
 // Rate limiting — per-context limits instead of a single global limit
 // Auth endpoints: strict limit to prevent brute-force attacks
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 10,
-  message: 'Too many authentication attempts, please try again later.',
+  message: "Too many authentication attempts, please try again later.",
 });
 
 // File upload endpoints: moderate limit
 const uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 50,
-  message: 'Too many upload requests, please try again later.',
+  message: "Too many upload requests, please try again later.",
 });
 
 // General API rate limiter: reasonable for clinical multi-user environments
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 500,
-  message: 'Too many requests from this IP, please try again later.',
+  message: "Too many requests from this IP, please try again later.",
 });
 
 // Auth mutations (login, register, reset): strict brute-force protection.
 // GET /api/auth/me is exempt — called on every page load and must not hit 429.
 // Skip auth rate limiter in test environment to avoid 429s during E2E tests.
-const isTestEnv = process.env.NODE_ENV === 'test';
+const isTestEnv = process.env.NODE_ENV === "test";
 app.use("/api/auth", (req, _res, next) => {
   if (req.method === "GET") return next();
   if (isTestEnv) return next();
@@ -198,13 +235,15 @@ app.use("/api", apiLimiter);
 
 const PORT = process.env.PORT || 3005;
 
-
 // CORS configuration with whitelist
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:5173", "http://localhost:3000"],
+  origin: process.env.ALLOWED_ORIGINS?.split(",") || [
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
@@ -213,24 +252,29 @@ app.use(cookieParser());
 // CSRF protection: for state-changing requests (POST/PUT/PATCH/DELETE), verify
 // that the Origin header matches an allowed origin. This, combined with
 // sameSite: "strict" on the auth cookie, prevents cross-site request forgery.
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const safeMethods = ["GET", "HEAD", "OPTIONS"];
-  if (safeMethods.includes(req.method)) return next();
-  // Skip CSRF check for requests that don't carry a cookie-based session
-  const hasCookieToken = !!(req as express.Request & { cookies?: Record<string, string> }).cookies?.access_token;
-  if (!hasCookieToken) return next();
-  const origin = req.headers.origin || req.headers.referer;
-  const allowedOrigins: string[] = (process.env.ALLOWED_ORIGINS?.split(",") ?? [])
-    .concat(["http://localhost:5173", "http://localhost:3000"]);
-  if (!origin || !allowedOrigins.some((o) => origin.startsWith(o))) {
-    res.status(403).json({ error: "CSRF check failed: invalid origin" });
-    return;
-  }
-  return next();
-});
+app.use(
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const safeMethods = ["GET", "HEAD", "OPTIONS"];
+    if (safeMethods.includes(req.method)) return next();
+    // Skip CSRF check for requests that don't carry a cookie-based session
+    const hasCookieToken = !!(
+      req as express.Request & { cookies?: Record<string, string> }
+    ).cookies?.access_token;
+    if (!hasCookieToken) return next();
+    const origin = req.headers.origin || req.headers.referer;
+    const allowedOrigins: string[] = (
+      process.env.ALLOWED_ORIGINS?.split(",") ?? []
+    ).concat(["http://localhost:5173", "http://localhost:3000"]);
+    if (!origin || !allowedOrigins.some((o) => origin.startsWith(o))) {
+      res.status(403).json({ error: "CSRF check failed: invalid origin" });
+      return;
+    }
+    return next();
+  },
+);
 
 app.use(helmet());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 
 // Health check (public - must be before authMiddleware)
 app.get("/health", (_req, res) => {
@@ -325,24 +369,24 @@ app.use("/api/agents", createAgentsRouter());
 app.use("/api/ai", aiRouter);
 app.use("/api/search-index", searchIndexRouter);
 // Memory Hub Module — initialized with DI factory
-const memoryHubModule = createMemoryHubModule()
+const memoryHubModule = createMemoryHubModule();
 
 // Initialize memory hub asynchronously (API key validation + hot-swap setup)
-;(async () => {
+(async () => {
   try {
-    await memoryHubModule.initialize()
-    memoryHubModule.startFileWatcher()
+    await memoryHubModule.initialize();
+    memoryHubModule.startFileWatcher();
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    logger.error('[MemoryHub] Initialization failed', { error: message })
+    const message = err instanceof Error ? err.message : String(err);
+    logger.error("[MemoryHub] Initialization failed", { error: message });
     // Fail fast in production; warn in development
-    if (process.env.NODE_ENV === 'production') {
-      process.exit(1)
+    if (process.env.NODE_ENV === "production") {
+      process.exit(1);
     }
   }
-})()
+})();
 
-app.use("/api/memory-hub", createMemoryHubRouter(memoryHubModule.controller))
+app.use("/api/memory-hub", createMemoryHubRouter(memoryHubModule.controller));
 
 // Active modules endpoint: returns module keys for a clinic from the database.
 // Falls back to returning all modules when AUTH_ALLOW_MOCK=true to unblock frontend in dev/test.
@@ -431,7 +475,7 @@ async function gracefulShutdown(signal: string) {
 
   // Force-exit if graceful shutdown takes too long
   const forceTimeout = setTimeout(() => {
-    logger.error('Graceful shutdown timed out. Forcing exit.');
+    logger.error("Graceful shutdown timed out. Forcing exit.");
     process.exit(1);
   }, 10000);
   forceTimeout.unref();
@@ -439,41 +483,41 @@ async function gracefulShutdown(signal: string) {
   try {
     await new Promise<void>((resolve) => {
       server.close(() => {
-        logger.info('HTTP server closed.');
+        logger.info("HTTP server closed.");
         resolve();
       });
     });
 
     await prisma.$disconnect();
-    logger.info('Database disconnected.');
+    logger.info("Database disconnected.");
 
     await Promise.allSettled([
       redisInstance.quit(),
       redisPublisher.quit(),
       redisSubscriber.quit(),
     ]);
-    logger.info('Redis connections closed.');
+    logger.info("Redis connections closed.");
 
     clearTimeout(forceTimeout);
-    logger.info('Graceful shutdown complete.');
+    logger.info("Graceful shutdown complete.");
     process.exit(0);
   } catch (error) {
-    logger.error('Error during graceful shutdown:', error);
+    logger.error("Error during graceful shutdown:", error);
     clearTimeout(forceTimeout);
     process.exit(1);
   }
 }
 
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
 // FR-012: Hot-swap API keys via SIGHUP
-process.on('SIGHUP', () => {
-  logger.info('[SIGHUP] Reloading environment variables from .env');
+process.on("SIGHUP", () => {
+  logger.info("[SIGHUP] Reloading environment variables from .env");
   const result = dotenv.config({ override: true });
   if (result.error) {
-    logger.error('[SIGHUP] Failed to reload .env', { error: result.error });
+    logger.error("[SIGHUP] Failed to reload .env", { error: result.error });
   } else {
-    logger.info('[SIGHUP] Environment reloaded successfully');
+    logger.info("[SIGHUP] Environment reloaded successfully");
   }
 });

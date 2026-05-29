@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Trash2 } from "lucide-react";
 
@@ -18,7 +23,8 @@ export function CleanupCard({ onCleanup, isPending }: CleanupCardProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-sm text-muted-foreground">
-          Execute a limpeza manual de backups antigos baseado nas configurações atuais.
+          Execute a limpeza manual de backups antigos baseado nas configurações
+          atuais.
         </p>
         <Button variant="destructive" onClick={onCleanup} disabled={isPending}>
           Executar Limpeza Agora

@@ -1,6 +1,10 @@
-import { Request, Response } from 'express';
-import { DashboardController } from '../../src/modules/dashboard/controllers/DashboardController';
-import { IDatabaseConnection, QueryResult, Transaction } from '../../src/infrastructure/database/IDatabaseConnection';
+import { Request, Response } from "express";
+import { DashboardController } from "../../src/modules/dashboard/controllers/DashboardController";
+import {
+  IDatabaseConnection,
+  QueryResult,
+  Transaction,
+} from "../../src/infrastructure/database/IDatabaseConnection";
 
 // Mock database connection
 const makeQueryResult = (rows: Record<string, unknown>[]): QueryResult => ({
@@ -26,12 +30,12 @@ const mockRes = () => {
 };
 
 const mockReq = (user?: { clinicId?: string }): Partial<Request> => ({
-  user: user as Request['user'],
+  user: user as Request["user"],
 });
 
-describe('DashboardController', () => {
-  describe('getOverview', () => {
-    it('returns 400 when clinicId is missing', async () => {
+describe("DashboardController", () => {
+  describe("getOverview", () => {
+    it("returns 400 when clinicId is missing", async () => {
       const db = mockDb();
       const controller = new DashboardController(db);
       const req = mockReq();
@@ -40,26 +44,28 @@ describe('DashboardController', () => {
       await controller.getOverview(req as Request, res);
 
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Clinic ID is required' });
+      expect(res.json).toHaveBeenCalledWith({ error: "Clinic ID is required" });
       expect(db.query).not.toHaveBeenCalled();
     });
 
-    it('returns dashboard data when clinicId is present', async () => {
+    it("returns dashboard data when clinicId is present", async () => {
       const db = mockDb();
       // All 9 queries (6 stats + appointmentsData + revenueData + treatmentsByStatus)
       db.query
-        .mockResolvedValueOnce(makeQueryResult([{ count: '42' }]))          // totalPatients
-        .mockResolvedValueOnce(makeQueryResult([{ count: '3' }]))           // todayAppointments
-        .mockResolvedValueOnce(makeQueryResult([{ total: '15000.50' }]))    // monthlyRevenue
-        .mockResolvedValueOnce(makeQueryResult([{ completed: '8', total: '10' }])) // occupancy
-        .mockResolvedValueOnce(makeQueryResult([{ count: '5' }]))           // pendingTreatments
-        .mockResolvedValueOnce(makeQueryResult([{ count: '12' }]))          // completedTreatments
-        .mockResolvedValueOnce(makeQueryResult([]))                         // appointmentsData
-        .mockResolvedValueOnce(makeQueryResult([]))                         // revenueData
-        .mockResolvedValueOnce(makeQueryResult([]));                        // treatmentsByStatus
+        .mockResolvedValueOnce(makeQueryResult([{ count: "42" }])) // totalPatients
+        .mockResolvedValueOnce(makeQueryResult([{ count: "3" }])) // todayAppointments
+        .mockResolvedValueOnce(makeQueryResult([{ total: "15000.50" }])) // monthlyRevenue
+        .mockResolvedValueOnce(
+          makeQueryResult([{ completed: "8", total: "10" }]),
+        ) // occupancy
+        .mockResolvedValueOnce(makeQueryResult([{ count: "5" }])) // pendingTreatments
+        .mockResolvedValueOnce(makeQueryResult([{ count: "12" }])) // completedTreatments
+        .mockResolvedValueOnce(makeQueryResult([])) // appointmentsData
+        .mockResolvedValueOnce(makeQueryResult([])) // revenueData
+        .mockResolvedValueOnce(makeQueryResult([])); // treatmentsByStatus
 
       const controller = new DashboardController(db);
-      const req = mockReq({ clinicId: 'clinic-123' });
+      const req = mockReq({ clinicId: "clinic-123" });
       const res = mockRes();
 
       await controller.getOverview(req as Request, res);
@@ -79,7 +85,7 @@ describe('DashboardController', () => {
       });
     });
 
-    it('executes all stat queries in parallel (Promise.all)', async () => {
+    it("executes all stat queries in parallel (Promise.all)", async () => {
       const db = mockDb();
       const callOrder: number[] = [];
       let resolvers: Array<() => void> = [];
@@ -97,8 +103,8 @@ describe('DashboardController', () => {
             resolve(
               makeQueryResult(
                 idx === OCCUPANCY_QUERY_INDEX
-                  ? [{ completed: '0', total: '0' }]
-                  : [{ count: '0', total: '0' }],
+                  ? [{ completed: "0", total: "0" }]
+                  : [{ count: "0", total: "0" }],
               ),
             ),
           );
@@ -106,7 +112,7 @@ describe('DashboardController', () => {
       });
 
       const controller = new DashboardController(db);
-      const req = mockReq({ clinicId: 'clinic-parallel' });
+      const req = mockReq({ clinicId: "clinic-parallel" });
       const res = mockRes();
 
       const overviewPromise = controller.getOverview(req as Request, res);
@@ -123,12 +129,12 @@ describe('DashboardController', () => {
       expect(res.json).toHaveBeenCalled();
     });
 
-    it('returns default stats on database error', async () => {
+    it("returns default stats on database error", async () => {
       const db = mockDb();
-      db.query.mockRejectedValue(new Error('DB connection lost'));
+      db.query.mockRejectedValue(new Error("DB connection lost"));
 
       const controller = new DashboardController(db);
-      const req = mockReq({ clinicId: 'clinic-err' });
+      const req = mockReq({ clinicId: "clinic-err" });
       const res = mockRes();
 
       await controller.getOverview(req as Request, res);

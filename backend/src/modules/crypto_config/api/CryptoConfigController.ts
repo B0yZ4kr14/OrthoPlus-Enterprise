@@ -17,7 +17,11 @@ export class CryptoConfigController {
   createExchange = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
     const isAdmin = req.user?.role === "ADMIN";
-    const result = this.service.createExchange(clinicId || "", req.body, isAdmin);
+    const result = this.service.createExchange(
+      clinicId || "",
+      req.body,
+      isAdmin,
+    );
     res.status(201).json(result);
   });
 
@@ -40,7 +44,10 @@ export class CryptoConfigController {
   });
 
   manageOfflineWallet = asyncHandler(async (req: Request, res: Response) => {
-    const result = await this.service.manageOfflineWallet(req.body, req.user?.clinicId);
+    const result = await this.service.manageOfflineWallet(
+      req.body,
+      req.user?.clinicId,
+    );
     res.json({ success: true, ...result });
   });
 
@@ -68,14 +75,20 @@ export class CryptoConfigController {
     res.json({ success: true, ...result });
   });
 
-  webhookCryptoTransaction = asyncHandler(async (req: Request, res: Response) => {
-    const result = await this.service.webhookCryptoTransaction(
-      req.body,
-      req.user?.clinicId,
-      req.ip || undefined
-    );
-    res.json({ success: true, message: "Webhook processed successfully", ...result });
-  });
+  webhookCryptoTransaction = asyncHandler(
+    async (req: Request, res: Response) => {
+      const result = await this.service.webhookCryptoTransaction(
+        req.body,
+        req.user?.clinicId,
+        req.ip || undefined,
+      );
+      res.json({
+        success: true,
+        message: "Webhook processed successfully",
+        ...result,
+      });
+    },
+  );
 
   generatePaymentAddress = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
@@ -83,7 +96,11 @@ export class CryptoConfigController {
       throw Errors.unauthorized("Nao autenticado");
     }
     const { coin_type, wallet_id } = req.body;
-    const result = this.service.generatePaymentAddress(clinicId, coin_type, wallet_id);
+    const result = this.service.generatePaymentAddress(
+      clinicId,
+      coin_type,
+      wallet_id,
+    );
     res.json(result);
   });
 }

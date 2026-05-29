@@ -32,13 +32,15 @@ const defaultValues: Partial<Fornecedor> = {
   autoOrderEnabled: false,
 };
 
-export function useFornecedorForm({ fornecedor, onSubmit }: UseFornecedorFormProps) {
+export function useFornecedorForm({
+  fornecedor,
+  onSubmit,
+}: UseFornecedorFormProps) {
   const form = useForm<Fornecedor, any, Fornecedor>({
     resolver: zodResolver(fornecedorSchema) as Resolver<Fornecedor>,
     defaultValues: fornecedor || defaultValues,
   });
 
-   
   const handleSubmit = form.handleSubmit(onSubmit);
   const apiEnabled = form.watch("apiEnabled");
   const apiAuthType = form.watch("apiAuthType");

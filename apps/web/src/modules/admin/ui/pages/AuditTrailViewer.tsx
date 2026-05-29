@@ -40,7 +40,21 @@ export default function AuditTrailViewer() {
   } = useAuditTrail();
 
   const getSensitivityBadge = (level: string) => {
-    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; Icon: React.ElementType }> = {
+    const variants: Record<
+      string,
+      {
+        variant:
+          | "default"
+          | "secondary"
+          | "destructive"
+          | "outline"
+          | "success"
+          | "warning"
+          | "error"
+          | "info";
+        Icon: React.ElementType;
+      }
+    > = {
       CRITICAL: { variant: "destructive", Icon: AlertCircle },
       HIGH: { variant: "default", Icon: Shield },
       MEDIUM: { variant: "secondary", Icon: FileText },

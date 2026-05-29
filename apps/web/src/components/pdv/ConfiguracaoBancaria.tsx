@@ -77,7 +77,9 @@ export function ConfiguracaoBancaria() {
     if (!selectedClinic) return;
 
     try {
-      const data = await apiClient.get(`/banco-config?clinic_id=${selectedClinic}`);
+      const data = await apiClient.get(
+        `/banco-config?clinic_id=${selectedClinic}`,
+      );
       setConfigs(Array.isArray(data) ? data : data ? [data] : []);
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Erro desconhecido";

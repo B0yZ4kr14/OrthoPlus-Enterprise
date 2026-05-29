@@ -29,7 +29,7 @@ const splitConfigSchema = z
 
 export function useSplitConfigForm(
   editingConfig: SplitConfigFormProps["editingConfig"],
-  onOpenChange: (open: boolean) => void
+  onOpenChange: (open: boolean) => void,
 ) {
   const { createConfig, updateConfig } = useSplit();
   const [loading, setLoading] = useState(false);
@@ -82,7 +82,7 @@ export function useSplitConfigForm(
 
   const handleInputChange = <K extends keyof SplitConfigFormData>(
     field: K,
-    value: SplitConfigFormData[K]
+    value: SplitConfigFormData[K],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };

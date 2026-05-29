@@ -1,9 +1,24 @@
 import { useState } from "react";
-import { Database, Server, Activity, HardDrive, Layers, Globe, Shield, BarChart3, ExternalLink } from "lucide-react";
+import {
+  Database,
+  Server,
+  Activity,
+  HardDrive,
+  Layers,
+  Globe,
+  Shield,
+  BarChart3,
+  ExternalLink,
+} from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { DatabaseAdvancedPanel } from "../components/database/DatabaseAdvancedPanel";
 import { BackupLocalCard } from "../components/database/BackupLocalCard";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
   Select,
@@ -23,7 +38,12 @@ const CATEGORY_SCHEMAS: Record<string, string[]> = {
   OPERACIONAL: ["operacional", "inventario"],
   COMERCIAL: ["comercial"],
   CLINICO: ["clinico"],
-  ADMINISTRATIVO: ["administrativo", "configuracoes", "database_admin", "backups"],
+  ADMINISTRATIVO: [
+    "administrativo",
+    "configuracoes",
+    "database_admin",
+    "backups",
+  ],
 };
 
 export default function DatabaseManagementPage() {
@@ -79,7 +99,10 @@ export default function DatabaseManagementPage() {
               <Layers className="h-5 w-5 text-muted-foreground" />
               <span className="text-sm font-medium">Categoria:</span>
             </div>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <Select
+              value={selectedCategory}
+              onValueChange={setSelectedCategory}
+            >
               <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Selecione uma categoria" />
               </SelectTrigger>
@@ -113,7 +136,8 @@ export default function DatabaseManagementPage() {
 
             {selectedCategory !== "MASTER" && (
               <p className="text-sm text-muted-foreground">
-                {categories.find((c) => c.name === selectedCategory)?.description ||
+                {categories.find((c) => c.name === selectedCategory)
+                  ?.description ||
                   `Schemas: ${CATEGORY_SCHEMAS[selectedCategory]?.join(", ")}`}
               </p>
             )}
@@ -128,7 +152,9 @@ export default function DatabaseManagementPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Status Geral</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Status Geral
+                </CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -138,15 +164,15 @@ export default function DatabaseManagementPage() {
                   <div className="flex items-center gap-2">
                     <div
                       className={`h-3 w-3 rounded-full ${getStatusColor(
-                        masterHealth?.overallStatus ?? "down"
+                        masterHealth?.overallStatus ?? "down",
                       )}`}
                     />
                     <span className="text-2xl font-bold capitalize">
                       {masterHealth?.overallStatus === "healthy"
                         ? "Saudável"
                         : masterHealth?.overallStatus === "degraded"
-                        ? "Degradado"
-                        : "Indisponível"}
+                          ? "Degradado"
+                          : "Indisponível"}
                     </span>
                   </div>
                 )}
@@ -155,7 +181,9 @@ export default function DatabaseManagementPage() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Categorias</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Categorias
+                </CardTitle>
                 <Layers className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -171,7 +199,9 @@ export default function DatabaseManagementPage() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Tabelas Totais</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Tabelas Totais
+                </CardTitle>
                 <Server className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -187,7 +217,9 @@ export default function DatabaseManagementPage() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Tamanho Total</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Tamanho Total
+                </CardTitle>
                 <HardDrive className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -233,39 +265,37 @@ export default function DatabaseManagementPage() {
               <CardTitle>Health Check por Categoria</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {isLoadingHealth ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className="h-12 w-full" />
-                ))
-              ) : (
-                masterHealth?.categories.map((cat) => (
-                  <div
-                    key={cat.category}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`h-3 w-3 rounded-full ${getStatusColor(cat.status)}`}
-                      />
-                      <div>
-                        <p className="font-medium">{cat.category}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Schemas: {cat.schemas.join(", ")}
-                        </p>
+              {isLoadingHealth
+                ? Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="h-12 w-full" />
+                  ))
+                : masterHealth?.categories.map((cat) => (
+                    <div
+                      key={cat.category}
+                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div
+                          className={`h-3 w-3 rounded-full ${getStatusColor(cat.status)}`}
+                        />
+                        <div>
+                          <p className="font-medium">{cat.category}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Schemas: {cat.schemas.join(", ")}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm text-muted-foreground">
+                          {cat.schemasFound.length}/{cat.schemas.length} schemas
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          {cat.latencyMs}ms
+                        </span>
+                        {getStatusBadge(cat.status)}
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm text-muted-foreground">
-                        {cat.schemasFound.length}/{cat.schemas.length} schemas
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        {cat.latencyMs}ms
-                      </span>
-                      {getStatusBadge(cat.status)}
-                    </div>
-                  </div>
-                ))
-              )}
+                  ))}
             </CardContent>
           </Card>
 
@@ -279,38 +309,48 @@ export default function DatabaseManagementPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
-                      <th className="text-left py-3 px-4 font-medium">Categoria</th>
-                      <th className="text-left py-3 px-4 font-medium">Schemas</th>
-                      <th className="text-right py-3 px-4 font-medium">Tabelas</th>
-                      <th className="text-right py-3 px-4 font-medium">Tamanho</th>
+                      <th className="text-left py-3 px-4 font-medium">
+                        Categoria
+                      </th>
+                      <th className="text-left py-3 px-4 font-medium">
+                        Schemas
+                      </th>
+                      <th className="text-right py-3 px-4 font-medium">
+                        Tabelas
+                      </th>
+                      <th className="text-right py-3 px-4 font-medium">
+                        Tamanho
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {isLoadingStats ? (
-                      Array.from({ length: 4 }).map((_, i) => (
-                        <tr key={i}>
-                          <td colSpan={4}>
-                            <Skeleton className="h-10 w-full my-1" />
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      masterStats?.categories.map((cat) => (
-                        <tr
-                          key={cat.category}
-                          className="border-b hover:bg-muted/30 transition-colors"
-                        >
-                          <td className="py-3 px-4 font-medium">{cat.category}</td>
-                          <td className="py-3 px-4 text-muted-foreground">
-                            {cat.schemas.join(", ")}
-                          </td>
-                          <td className="py-3 px-4 text-right">{cat.tableCount}</td>
-                          <td className="py-3 px-4 text-right font-medium">
-                            {cat.sizeHuman}
-                          </td>
-                        </tr>
-                      ))
-                    )}
+                    {isLoadingStats
+                      ? Array.from({ length: 4 }).map((_, i) => (
+                          <tr key={i}>
+                            <td colSpan={4}>
+                              <Skeleton className="h-10 w-full my-1" />
+                            </td>
+                          </tr>
+                        ))
+                      : masterStats?.categories.map((cat) => (
+                          <tr
+                            key={cat.category}
+                            className="border-b hover:bg-muted/30 transition-colors"
+                          >
+                            <td className="py-3 px-4 font-medium">
+                              {cat.category}
+                            </td>
+                            <td className="py-3 px-4 text-muted-foreground">
+                              {cat.schemas.join(", ")}
+                            </td>
+                            <td className="py-3 px-4 text-right">
+                              {cat.tableCount}
+                            </td>
+                            <td className="py-3 px-4 text-right font-medium">
+                              {cat.sizeHuman}
+                            </td>
+                          </tr>
+                        ))}
                   </tbody>
                 </table>
               </div>

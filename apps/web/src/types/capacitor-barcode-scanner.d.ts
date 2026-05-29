@@ -13,7 +13,9 @@ declare module "@capacitor-community/barcode-scanner" {
   }
 
   export class BarcodeScanner {
-    static checkPermission(options?: { force?: boolean }): Promise<PermissionStatus>;
+    static checkPermission(options?: {
+      force?: boolean;
+    }): Promise<PermissionStatus>;
     static hideBackground(): Promise<void>;
     static showBackground(): Promise<void>;
     static startScan(): Promise<ScanResult>;

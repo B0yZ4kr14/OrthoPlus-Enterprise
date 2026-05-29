@@ -23,19 +23,21 @@ interface PedidosAutomaticosTabProps {
   apiEnabled: boolean;
 }
 
-export function PedidosAutomaticosTab({ form, apiEnabled }: PedidosAutomaticosTabProps) {
+export function PedidosAutomaticosTab({
+  form,
+  apiEnabled,
+}: PedidosAutomaticosTabProps) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Pedidos Automáticos</CardTitle>
         <CardDescription>
-          Configure o envio automático de pedidos quando produtos
-          atingirem estoque mínimo
+          Configure o envio automático de pedidos quando produtos atingirem
+          estoque mínimo
         </CardDescription>
       </CardHeader>
       <CardContent>
         <FormField
-          
           control={form.control}
           name="autoOrderEnabled"
           render={({ field }) => (
@@ -45,8 +47,8 @@ export function PedidosAutomaticosTab({ form, apiEnabled }: PedidosAutomaticosTa
                   Habilitar Pedidos Automáticos
                 </FormLabel>
                 <FormDescription>
-                  Quando ativado, pedidos serão enviados automaticamente
-                  via API quando produtos atingirem estoque mínimo
+                  Quando ativado, pedidos serão enviados automaticamente via API
+                  quando produtos atingirem estoque mínimo
                 </FormDescription>
               </div>
               <FormControl>
@@ -62,8 +64,8 @@ export function PedidosAutomaticosTab({ form, apiEnabled }: PedidosAutomaticosTa
 
         {!apiEnabled && (
           <p className="text-sm text-muted-foreground mt-2">
-            Configure a integração com a API primeiro para habilitar
-            pedidos automáticos
+            Configure a integração com a API primeiro para habilitar pedidos
+            automáticos
           </p>
         )}
       </CardContent>

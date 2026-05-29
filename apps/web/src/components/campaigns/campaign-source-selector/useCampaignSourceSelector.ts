@@ -1,20 +1,37 @@
 import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { CampaignSourceSelectorProps, DentalCampaign, CaptureChannel } from "./types";
+import type {
+  CampaignSourceSelectorProps,
+  DentalCampaign,
+  CaptureChannel,
+} from "./types";
 
 const CAPTURE_CHANNELS: CaptureChannel[] = [
-  { id: "social", name: "Redes Sociais", sources: ["Instagram", "Facebook", "LinkedIn", "TikTok"] },
-  { id: "google", name: "Google Ads", sources: ["Pesquisa", "Display", "YouTube"] },
+  {
+    id: "social",
+    name: "Redes Sociais",
+    sources: ["Instagram", "Facebook", "LinkedIn", "TikTok"],
+  },
+  {
+    id: "google",
+    name: "Google Ads",
+    sources: ["Pesquisa", "Display", "YouTube"],
+  },
   { id: "organic", name: "Orgânico", sources: ["SEO", "Indicação", "Local"] },
-  { id: "partnership", name: "Parcerias", sources: ["Convênios", "Empresas", "Eventos"] },
+  {
+    id: "partnership",
+    name: "Parcerias",
+    sources: ["Convênios", "Empresas", "Eventos"],
+  },
 ];
 
 export function useCampaignSourceSelector(
   value: CampaignSourceSelectorProps["value"],
   onChange: CampaignSourceSelectorProps["onChange"],
-  clinicId?: string
+  clinicId?: string,
 ) {
-  const [selectedCampaign, setSelectedCampaign] = useState<DentalCampaign | null>(null);
+  const [selectedCampaign, setSelectedCampaign] =
+    useState<DentalCampaign | null>(null);
 
   const { data: campaigns = [], isLoading } = useQuery({
     queryKey: ["campaigns", clinicId],
@@ -27,7 +44,7 @@ export function useCampaignSourceSelector(
 
   const selectedChannel = useMemo(
     () => CAPTURE_CHANNELS.find((c) => c.id === value.channel) || null,
-    [value.channel]
+    [value.channel],
   );
 
   const handleCampaignChange = useCallback(
@@ -36,21 +53,21 @@ export function useCampaignSourceSelector(
       setSelectedCampaign(campaign);
       onChange({ ...value, campaignId, channel: campaign?.channel || "" });
     },
-    [campaigns, value, onChange]
+    [campaigns, value, onChange],
   );
 
   const handleChannelChange = useCallback(
     (channelId: string) => {
       onChange({ ...value, channel: channelId, source: "" });
     },
-    [value, onChange]
+    [value, onChange],
   );
 
   const handleSourceChange = useCallback(
     (source: string) => {
       onChange({ ...value, source });
     },
-    [value, onChange]
+    [value, onChange],
   );
 
   return {

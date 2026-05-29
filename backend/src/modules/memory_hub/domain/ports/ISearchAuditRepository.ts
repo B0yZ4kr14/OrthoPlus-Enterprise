@@ -3,13 +3,13 @@
  * Tracks search queries for analytics, compliance, and cost monitoring.
  */
 export interface SearchAuditEntry {
-  id: string
-  clinicId: string
-  userId: string | null
-  queryText: string
-  resultsCount: number
-  durationMs: number
-  timestamp: number
+  id: string;
+  clinicId: string;
+  userId: string | null;
+  queryText: string;
+  resultsCount: number;
+  durationMs: number;
+  timestamp: number;
 }
 
 export interface ISearchAuditRepository {
@@ -19,7 +19,7 @@ export interface ISearchAuditRepository {
     queryText: string,
     resultsCount: number,
     durationMs: number,
-  ): void
+  ): void;
 
-  getRecentQueries(clinicId: string, limit?: number): SearchAuditEntry[]
+  getRecentQueries(clinicId: string, limit?: number): SearchAuditEntry[];
 }

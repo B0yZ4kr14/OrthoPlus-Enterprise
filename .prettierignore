@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+.turbo/
+
+# Coverage & reports
+coverage/
+playwright-report/
+test-results/
+
+# Generated files
+*.generated.ts
+*.generated.tsx
+apps/web/src/types/database.ts
+
+# Cache
+.cache/
+
+# Large data directories
+graphify-out/
+
+# Backup & temp directories
+.specify-backups/
+.specify.backup*/
+.opencode/
+.omk/
+.sisyphus/
+.squad/
+.agent/
+.agents/
+
+# Documentation & specs (not code)
+docs/
+specs/
+evidence/
+.kimi/
+kimi-cli/
+grafana/
+
+# Agent definitions & prompts
+.github/agents/
+.github/prompts/
+.github/workflows/README.md
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env*
+!.env.example
+
+# Misc
+.DS_Store
+Thumbs.db

@@ -43,9 +43,7 @@ export class AdminToolsRepository implements IAdminToolsRepository {
       where: {
         clinic_id: clinicId,
         app_role: { contains: "DENTIST", mode: "insensitive" },
-        OR: [
-          { full_name: { contains: query, mode: "insensitive" } },
-        ],
+        OR: [{ full_name: { contains: query, mode: "insensitive" } }],
       },
       take: 10,
     });

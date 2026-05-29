@@ -18,7 +18,10 @@ export interface IntegracaoTEFProps {
 
 export type TEFOperationType = "DEBITO" | "CREDITO" | "VOUCHER" | "PIX_TEF";
 
-export const OPERATION_OPTIONS: Array<{ value: TEFOperationType; label: string }> = [
+export const OPERATION_OPTIONS: Array<{
+  value: TEFOperationType;
+  label: string;
+}> = [
   { value: "DEBITO", label: "Débito" },
   { value: "CREDITO", label: "Crédito" },
   { value: "VOUCHER", label: "Voucher" },

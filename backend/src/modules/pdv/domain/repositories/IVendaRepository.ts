@@ -1,4 +1,4 @@
-import { Venda } from '../entities/Venda';
+import { Venda } from "../entities/Venda";
 
 export interface FindAllOptions {
   clinicId: string;

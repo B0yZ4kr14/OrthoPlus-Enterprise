@@ -33,35 +33,40 @@ export function useDashboardVendasPDV() {
     enabled: !!clinicId,
   });
 
-  const stats: Stats = useMemo(() => ({
-    totalVendas: vendas?.length || 0,
-    valorTotal: vendas?.reduce((sum, v) => sum + Number(v.valor_total), 0) || 0,
-    ticketMedio: vendas?.length
-      ? vendas.reduce((sum, v) => sum + Number(v.valor_total), 0) / vendas.length
-      : 0,
-    itensVendidos: vendas?.reduce(
-      (sum, v) => sum + (v.pdv_venda_itens?.length || 0),
-      0
-    ) || 0,
-  }), [vendas]);
+  const stats: Stats = useMemo(
+    () => ({
+      totalVendas: vendas?.length || 0,
+      valorTotal:
+        vendas?.reduce((sum, v) => sum + Number(v.valor_total), 0) || 0,
+      ticketMedio: vendas?.length
+        ? vendas.reduce((sum, v) => sum + Number(v.valor_total), 0) /
+          vendas.length
+        : 0,
+      itensVendidos:
+        vendas?.reduce((sum, v) => sum + (v.pdv_venda_itens?.length || 0), 0) ||
+        0,
+    }),
+    [vendas],
+  );
 
   const vendedoresData: VendedorData[] = useMemo(() => {
-    const vendasPorVendedor = vendas?.reduce(
-      (acc, venda) => {
-        const vendedorId = venda.created_by;
-        if (!acc[vendedorId]) {
-          acc[vendedorId] = {
-            vendedor: vendedorId.slice(0, 8),
-            total: 0,
-            quantidade: 0,
-          };
-        }
-        acc[vendedorId].total += Number(venda.valor_total);
-        acc[vendedorId].quantidade += 1;
-        return acc;
-      },
-      {} as Record<string, VendedorData>
-    ) || {};
+    const vendasPorVendedor =
+      vendas?.reduce(
+        (acc, venda) => {
+          const vendedorId = venda.created_by;
+          if (!acc[vendedorId]) {
+            acc[vendedorId] = {
+              vendedor: vendedorId.slice(0, 8),
+              total: 0,
+              quantidade: 0,
+            };
+          }
+          acc[vendedorId].total += Number(venda.valor_total);
+          acc[vendedorId].quantidade += 1;
+          return acc;
+        },
+        {} as Record<string, VendedorData>,
+      ) || {};
 
     return Object.values(vendasPorVendedor)
       .sort((a, b) => b.total - a.total)
@@ -69,20 +74,21 @@ export function useDashboardVendasPDV() {
   }, [vendas]);
 
   const produtosData: ProdutoData[] = useMemo(() => {
-    const produtosMaisVendidos = vendas?.reduce(
-      (acc, venda) => {
-        venda.pdv_venda_itens?.forEach((item) => {
-          const descricao = item.descricao || "Sem descrição";
-          if (!acc[descricao]) {
-            acc[descricao] = { produto: descricao, quantidade: 0, valor: 0 };
-          }
-          acc[descricao].quantidade += Number(item.quantidade);
-          acc[descricao].valor += Number(item.valor_total);
-        });
-        return acc;
-      },
-      {} as Record<string, ProdutoData>
-    ) || {};
+    const produtosMaisVendidos =
+      vendas?.reduce(
+        (acc, venda) => {
+          venda.pdv_venda_itens?.forEach((item) => {
+            const descricao = item.descricao || "Sem descrição";
+            if (!acc[descricao]) {
+              acc[descricao] = { produto: descricao, quantidade: 0, valor: 0 };
+            }
+            acc[descricao].quantidade += Number(item.quantidade);
+            acc[descricao].valor += Number(item.valor_total);
+          });
+          return acc;
+        },
+        {} as Record<string, ProdutoData>,
+      ) || {};
 
     return Object.values(produtosMaisVendidos)
       .sort((a, b) => b.quantidade - a.quantidade)
@@ -90,18 +96,19 @@ export function useDashboardVendasPDV() {
   }, [vendas]);
 
   const horariosData: HorarioData[] = useMemo(() => {
-    const vendasPorHora = vendas?.reduce(
-      (acc, venda) => {
-        const hora = new Date(venda.created_at).getHours();
-        if (!acc[hora]) {
-          acc[hora] = { hora: `${hora}:00`, vendas: 0, valor: 0 };
-        }
-        acc[hora].vendas += 1;
-        acc[hora].valor += Number(venda.valor_total);
-        return acc;
-      },
-      {} as Record<number, HorarioData>
-    ) || {};
+    const vendasPorHora =
+      vendas?.reduce(
+        (acc, venda) => {
+          const hora = new Date(venda.created_at).getHours();
+          if (!acc[hora]) {
+            acc[hora] = { hora: `${hora}:00`, vendas: 0, valor: 0 };
+          }
+          acc[hora].vendas += 1;
+          acc[hora].valor += Number(venda.valor_total);
+          return acc;
+        },
+        {} as Record<number, HorarioData>,
+      ) || {};
 
     return Object.values(vendasPorHora).sort((a, b) => {
       const horaA = parseInt(a.hora.split(":")[0]);
@@ -111,36 +118,38 @@ export function useDashboardVendasPDV() {
   }, [vendas]);
 
   const pagamentosData: PagamentoData[] = useMemo(() => {
-    const formasPagamento = vendas?.reduce(
-      (acc, venda) => {
-        venda.pdv_pagamentos?.forEach((pag) => {
-          const forma = pag.forma_pagamento;
-          if (!acc[forma]) {
-            acc[forma] = { name: forma, value: 0 };
-          }
-          acc[forma].value += Number(pag.valor);
-        });
-        return acc;
-      },
-      {} as Record<string, PagamentoData>
-    ) || {};
+    const formasPagamento =
+      vendas?.reduce(
+        (acc, venda) => {
+          venda.pdv_pagamentos?.forEach((pag) => {
+            const forma = pag.forma_pagamento;
+            if (!acc[forma]) {
+              acc[forma] = { name: forma, value: 0 };
+            }
+            acc[forma].value += Number(pag.valor);
+          });
+          return acc;
+        },
+        {} as Record<string, PagamentoData>,
+      ) || {};
 
     return Object.values(formasPagamento);
   }, [vendas]);
 
   const tempoData: TempoData[] = useMemo(() => {
-    const vendasTempo = vendas?.reduce(
-      (acc, venda) => {
-        const data = new Date(venda.created_at).toLocaleDateString("pt-BR");
-        if (!acc[data]) {
-          acc[data] = { data, vendas: 0, valor: 0 };
-        }
-        acc[data].vendas += 1;
-        acc[data].valor += Number(venda.valor_total);
-        return acc;
-      },
-      {} as Record<string, TempoData>
-    ) || {};
+    const vendasTempo =
+      vendas?.reduce(
+        (acc, venda) => {
+          const data = new Date(venda.created_at).toLocaleDateString("pt-BR");
+          if (!acc[data]) {
+            acc[data] = { data, vendas: 0, valor: 0 };
+          }
+          acc[data].vendas += 1;
+          acc[data].valor += Number(venda.valor_total);
+          return acc;
+        },
+        {} as Record<string, TempoData>,
+      ) || {};
 
     return Object.values(vendasTempo).slice(-30);
   }, [vendas]);

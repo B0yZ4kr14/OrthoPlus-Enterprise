@@ -14,7 +14,8 @@ export function ComparativoCard({ previsao }: ComparativoCardProps) {
         <div className="bg-primary/10 p-3 rounded">
           <Brain className="w-5 h-5 mb-2" />
           <p className="font-bold">
-            IA: {previsao.diasAteEstoqueZero} dias | {previsao.quantidadeSugerida} un
+            IA: {previsao.diasAteEstoqueZero} dias |{" "}
+            {previsao.quantidadeSugerida} un
           </p>
           <p className="text-xs text-muted-foreground mt-2">
             Considera sazonalidade, tendências e eventos futuros

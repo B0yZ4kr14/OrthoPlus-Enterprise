@@ -33,7 +33,9 @@ export function CupomFooter() {
 
       <div className="center text-xs">
         <p>OBRIGADO PELA PREFERÊNCIA!</p>
-        <p className="mt-2">OrthoPlus Enterprise - Sistema de Gestão Odontológica</p>
+        <p className="mt-2">
+          OrthoPlus Enterprise - Sistema de Gestão Odontológica
+        </p>
       </div>
     </>
   );

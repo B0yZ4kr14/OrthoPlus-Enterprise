@@ -9,7 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import {
   Dialog,
@@ -43,8 +48,8 @@ export default function EstoqueMovimentacoes() {
 
   const { user: authUser } = useAuth();
   const currentUser = String(
-    ((authUser as User | null)?.user_metadata?.full_name) ?? "Usuário Atual",
-  )
+    (authUser as User | null)?.user_metadata?.full_name ?? "Usuário Atual",
+  );
 
   const handleSubmit = async (data: Movimentacao) => {
     try {

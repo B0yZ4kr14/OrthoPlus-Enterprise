@@ -71,7 +71,8 @@ export class ProcedimentosController {
     const { especialidade } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (especialidade) where.especialidade = String(especialidade);
-    const data = await prisma.procedimento_templates.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.procedimento_templates.findMany({
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       where,
       orderBy: { nome: "asc" },
     });
@@ -84,7 +85,8 @@ export class ProcedimentosController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const data = await prisma.procedimento_templates.findFirst({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.procedimento_templates.findFirst({
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       where: { id, clinic_id: clinicId },
     });
     if (!data) return res.status(404).json({ error: "Template not found" });
@@ -98,9 +100,12 @@ export class ProcedimentosController {
     }
     const parsed = createTemplateSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
-    const data = await prisma.procedimento_templates.create({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.procedimento_templates.create({
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       data: { ...parsed.data, clinic_id: clinicId } as any,
     });
     return res.status(201).json(data);
@@ -112,13 +117,18 @@ export class ProcedimentosController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.procedimento_templates.findFirst({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const existing = await prisma.procedimento_templates.findFirst({
+      where: { id, clinic_id: clinicId },
+    }); // eslint-disable-line @typescript-eslint/no-explicit-any
     if (!existing) return res.status(404).json({ error: "Template not found" });
     const parsed = updateTemplateSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
-    const data = await prisma.procedimento_templates.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.procedimento_templates.update({
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       where: { id },
       data: parsed.data as any,
     });
@@ -131,13 +141,16 @@ export class ProcedimentosController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    await prisma.procedimento_templates.deleteMany({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await prisma.procedimento_templates.deleteMany({
+      where: { id, clinic_id: clinicId },
+    }); // eslint-disable-line @typescript-eslint/no-explicit-any
     return res.status(204).send();
   }
 
   async listTabelas(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const data = await prisma.tabela_precos.findMany({
       where: { clinic_id: clinicId },
       orderBy: { nome: "asc" },
@@ -147,7 +160,8 @@ export class ProcedimentosController {
 
   async getTabelaById(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { id } = req.params;
     const data = await prisma.tabela_precos.findFirst({
       where: { id, clinic_id: clinicId },
@@ -159,9 +173,13 @@ export class ProcedimentosController {
 
   async createTabela(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const parsed = createTabelaSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     if (parsed.data.is_default) {
       await prisma.tabela_precos.updateMany({
         where: { clinic_id: clinicId, is_default: true },
@@ -176,33 +194,46 @@ export class ProcedimentosController {
 
   async updateTabela(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { id } = req.params;
-    const existing = await prisma.tabela_precos.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tabela_precos.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) return res.status(404).json({ error: "Tabela not found" });
     const parsed = updateTabelaSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     if (parsed.data.is_default) {
       await prisma.tabela_precos.updateMany({
         where: { clinic_id: clinicId, is_default: true, id: { not: id } },
         data: { is_default: false },
       });
     }
-    const data = await prisma.tabela_precos.update({ where: { id }, data: parsed.data });
+    const data = await prisma.tabela_precos.update({
+      where: { id },
+      data: parsed.data,
+    });
     return res.json(data);
   }
 
   async deleteTabela(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { id } = req.params;
-    await prisma.tabela_precos.deleteMany({ where: { id, clinic_id: clinicId } });
+    await prisma.tabela_precos.deleteMany({
+      where: { id, clinic_id: clinicId },
+    });
     return res.status(204).send();
   }
 
   async listPrecos(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { tabela_id, template_id } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (tabela_id) where.tabela_preco_id = String(tabela_id);
@@ -217,9 +248,13 @@ export class ProcedimentosController {
 
   async createPreco(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const parsed = createPrecoSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     const data = await prisma.procedimento_precos.create({
       data: { ...parsed.data, clinic_id: clinicId },
     });
@@ -228,31 +263,49 @@ export class ProcedimentosController {
 
   async updatePreco(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { id } = req.params;
-    const existing = await prisma.procedimento_precos.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.procedimento_precos.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) return res.status(404).json({ error: "Preco not found" });
     const parsed = updatePrecoSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-    const data = await prisma.procedimento_precos.update({ where: { id }, data: parsed.data });
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
+    const data = await prisma.procedimento_precos.update({
+      where: { id },
+      data: parsed.data,
+    });
     return res.json(data);
   }
 
   async deletePreco(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { id } = req.params;
-    await prisma.procedimento_precos.deleteMany({ where: { id, clinic_id: clinicId } });
+    await prisma.procedimento_precos.deleteMany({
+      where: { id, clinic_id: clinicId },
+    });
     return res.status(204).send();
   }
 
   async reajustarPrecos(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const parsed = reajusteSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     const { tabela_preco_id, percentual } = parsed.data;
-    const tabela = await prisma.tabela_precos.findFirst({ where: { id: tabela_preco_id, clinic_id: clinicId } });
+    const tabela = await prisma.tabela_precos.findFirst({
+      where: { id: tabela_preco_id, clinic_id: clinicId },
+    });
     if (!tabela) return res.status(404).json({ error: "Tabela not found" });
     const fator = 1 + percentual / 100;
     await prisma.$queryRaw`
@@ -262,12 +315,17 @@ export class ProcedimentosController {
       WHERE tabela_preco_id = ${tabela_preco_id}
         AND clinic_id = ${clinicId}
     `;
-    return res.json({ message: "Reajuste aplicado", tabela_preco_id, percentual });
+    return res.json({
+      message: "Reajuste aplicado",
+      tabela_preco_id,
+      percentual,
+    });
   }
 
   async listDentistaProcs(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { dentista_id } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (dentista_id) where.dentista_id = String(dentista_id);
@@ -281,9 +339,13 @@ export class ProcedimentosController {
 
   async createDentistaProc(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const parsed = dentistaProcSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     const data = await prisma.dentista_procedimentos.create({
       data: { ...parsed.data, clinic_id: clinicId },
     });
@@ -292,21 +354,34 @@ export class ProcedimentosController {
 
   async updateDentistaProc(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { id } = req.params;
-    const existing = await prisma.dentista_procedimentos.findFirst({ where: { id, clinic_id: clinicId } });
-    if (!existing) return res.status(404).json({ error: "Associação not found" });
+    const existing = await prisma.dentista_procedimentos.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
+    if (!existing)
+      return res.status(404).json({ error: "Associação not found" });
     const parsed = dentistaProcSchema.partial().safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
-    const data = await prisma.dentista_procedimentos.update({ where: { id }, data: parsed.data });
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
+    const data = await prisma.dentista_procedimentos.update({
+      where: { id },
+      data: parsed.data,
+    });
     return res.json(data);
   }
 
   async deleteDentistaProc(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
+    if (!clinicId)
+      return res.status(401).json({ error: "Missing clinic context" });
     const { id } = req.params;
-    await prisma.dentista_procedimentos.deleteMany({ where: { id, clinic_id: clinicId } });
+    await prisma.dentista_procedimentos.deleteMany({
+      where: { id, clinic_id: clinicId },
+    });
     return res.status(204).send();
   }
 }

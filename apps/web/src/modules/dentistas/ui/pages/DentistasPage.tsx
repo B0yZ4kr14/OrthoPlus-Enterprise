@@ -73,16 +73,16 @@ export default function DentistasPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader 
-        icon={UserCog} 
-        title="Dentistas" 
-        description="Gerenciamento de dentistas e especialistas" 
+      <PageHeader
+        icon={UserCog}
+        title="Dentistas"
+        description="Gerenciamento de dentistas e especialistas"
         actions={
           <Button onClick={handleAdd}>
             <Plus className="mr-2 h-4 w-4" />
             Novo Dentista
           </Button>
-        } 
+        }
       />
 
       {/* List View */}

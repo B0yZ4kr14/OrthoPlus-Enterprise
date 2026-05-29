@@ -1,7 +1,20 @@
 import { useState } from "react";
-import { Plus, Package, AlertTriangle, TrendingDown, List, Archive, AlertOctagon } from "lucide-react";
+import {
+  Plus,
+  Package,
+  AlertTriangle,
+  TrendingDown,
+  List,
+  Archive,
+  AlertOctagon,
+} from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { useProdutos } from "../../presentation/hooks";
 import { ProdutoList } from "../components/ProdutoList";
 import { ProdutoForm } from "../components/ProdutoForm";
@@ -37,7 +50,10 @@ export const EstoquePage = () => {
         title="Controle de Estoque"
         description="Gerencie produtos, movimentações e alertas"
         actions={
-          <Button onClick={() => setShowProdutoForm(true)} className="gap-2 glow-interactive">
+          <Button
+            onClick={() => setShowProdutoForm(true)}
+            className="gap-2 glow-interactive"
+          >
             <Plus className="h-4 w-4" />
             Novo Produto
           </Button>
@@ -55,7 +71,10 @@ export const EstoquePage = () => {
         />
         <StatsCard
           title="Valor Total"
-          value={new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valorTotalEstoque)}
+          value={new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(valorTotalEstoque)}
           icon={TrendingDown}
           variant="success"
           description="em estoque"
@@ -79,15 +98,24 @@ export const EstoquePage = () => {
       {/* Tabs Premium */}
       <Tabs defaultValue="todos" className="w-full">
         <TabsList className="grid w-full grid-cols-3 bg-muted/30 backdrop-blur-sm border border-border/50 rounded-xl p-1">
-          <TabsTrigger value="todos" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="todos"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <List className="h-4 w-4" />
             Todos ({produtos.length})
           </TabsTrigger>
-          <TabsTrigger value="alertas" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="alertas"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <AlertTriangle className="h-4 w-4" />
             Alertas ({produtosEstoqueBaixo.length})
           </TabsTrigger>
-          <TabsTrigger value="zerados" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="zerados"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <Archive className="h-4 w-4" />
             Zerados ({produtosZerados.length})
           </TabsTrigger>
@@ -134,7 +162,10 @@ export const EstoquePage = () => {
       </Tabs>
 
       {showProdutoForm && (
-        <ProdutoForm open={showProdutoForm} onClose={() => setShowProdutoForm(false)} />
+        <ProdutoForm
+          open={showProdutoForm}
+          onClose={() => setShowProdutoForm(false)}
+        />
       )}
 
       {showMovimentacaoForm && selectedProdutoId && (

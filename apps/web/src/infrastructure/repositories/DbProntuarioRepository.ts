@@ -11,7 +11,9 @@ export class DbProntuarioRepository implements IProntuarioRepository {
         `/pep/prontuarios/${id}`,
       );
       if (!data) return null;
-      return ProntuarioMapper.toDomain(data as Parameters<typeof ProntuarioMapper.toDomain>[0]);
+      return ProntuarioMapper.toDomain(
+        data as Parameters<typeof ProntuarioMapper.toDomain>[0],
+      );
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário",
@@ -29,7 +31,9 @@ export class DbProntuarioRepository implements IProntuarioRepository {
         `/pep/prontuarios/patient/${patientId}`,
       );
       if (!data || data.length === 0) return null;
-      return ProntuarioMapper.toDomain(data[0] as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0]);
+      return ProntuarioMapper.toDomain(
+        data[0] as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0],
+      );
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário do paciente",
@@ -42,7 +46,11 @@ export class DbProntuarioRepository implements IProntuarioRepository {
     try {
       const data =
         await apiClient.get<Record<string, any>[]>("/pep/prontuarios");
-      return (data || []).map((d) => ProntuarioMapper.toDomain(d as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0]));
+      return (data || []).map((d) =>
+        ProntuarioMapper.toDomain(
+          d as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0],
+        ),
+      );
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuários da clínica",
@@ -65,7 +73,9 @@ export class DbProntuarioRepository implements IProntuarioRepository {
         { params: { search: numero } },
       );
       if (!data || data.length === 0) return null;
-      return ProntuarioMapper.toDomain(data[0] as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0]);
+      return ProntuarioMapper.toDomain(
+        data[0] as unknown as Parameters<typeof ProntuarioMapper.toDomain>[0],
+      );
     } catch (error) {
       throw new InfrastructureError(
         "Erro ao buscar prontuário por número",

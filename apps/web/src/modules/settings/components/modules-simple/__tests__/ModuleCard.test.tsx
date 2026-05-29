@@ -1,28 +1,40 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render, screen, act } from "@testing-library/react"
-import { ModuleCard } from "../ModuleCard"
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+import { ModuleCard } from "../ModuleCard";
 
-const mockOnToggle = vi.fn()
-const mockOnExpand = vi.fn()
+const mockOnToggle = vi.fn();
+const mockOnExpand = vi.fn();
 
 // Mock UI components from @orthoplus/core-ui
 vi.mock("@orthoplus/core-ui/card", () => ({
-  Card: ({ children, className }: any) => <div data-testid="card" className={className}>{children}</div>,
-}))
+  Card: ({ children, className }: any) => (
+    <div data-testid="card" className={className}>
+      {children}
+    </div>
+  ),
+}));
 
 vi.mock("@orthoplus/core-ui/badge", () => ({
   Badge: ({ children, variant, className }: any) => (
-    <span data-testid="badge" data-variant={variant} className={className}>{children}</span>
+    <span data-testid="badge" data-variant={variant} className={className}>
+      {children}
+    </span>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/button", () => ({
   Button: ({ children, onClick, variant, size, className, ...props }: any) => (
-    <button onClick={onClick} data-variant={variant} data-size={size} className={className} {...props}>
+    <button
+      onClick={onClick}
+      data-variant={variant}
+      data-size={size}
+      className={className}
+      {...props}
+    >
       {children}
     </button>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/switch", () => ({
   Switch: ({ checked, disabled, onCheckedChange }: any) => (
@@ -34,24 +46,26 @@ vi.mock("@orthoplus/core-ui/switch", () => ({
       onChange={onCheckedChange}
     />
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/tooltip", () => ({
   Tooltip: ({ children }: any) => <>{children}</>,
-  TooltipContent: ({ children }: any) => <div data-testid="tooltip-content">{children}</div>,
+  TooltipContent: ({ children }: any) => (
+    <div data-testid="tooltip-content">{children}</div>
+  ),
   TooltipProvider: ({ children }: any) => <>{children}</>,
   TooltipTrigger: ({ children, asChild }: any) => <>{children}</>,
-}))
+}));
 
 vi.mock("@/lib/utils", () => ({
   cn: (...classes: any[]) => classes.filter(Boolean).join(" "),
-}))
+}));
 
 vi.mock("@/components/modules/ModuleDependencyGraph", () => ({
   ModuleDependencyGraph: ({ modules, allModules }: any) => (
     <div data-testid="dependency-graph">Dependency Graph</div>
   ),
-}))
+}));
 
 const mockModule = {
   id: 1,
@@ -62,7 +76,7 @@ const mockModule = {
   is_active: true,
   can_activate: true,
   can_deactivate: true,
-}
+};
 
 const mockInactiveModule = {
   ...mockModule,
@@ -70,7 +84,7 @@ const mockInactiveModule = {
   module_key: "FINANCEIRO",
   name: "Financeiro",
   description: "Gestão financeira",
-}
+};
 
 const mockModuleWithDependencies = {
   ...mockModule,
@@ -80,12 +94,12 @@ const mockModuleWithDependencies = {
   can_activate: false,
   can_deactivate: false,
   unmet_dependencies: ["PACIENTES"],
-}
+};
 
 describe("ModuleCard", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it("should render module info (name, description, icon)", () => {
     render(
@@ -97,12 +111,12 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    expect(screen.getByText("Pacientes")).toBeTruthy()
-    expect(screen.getByText("Gerenciamento de pacientes")).toBeTruthy()
-    expect(screen.getByTestId("badge")).toBeTruthy()
-  })
+    expect(screen.getByText("Pacientes")).toBeTruthy();
+    expect(screen.getByText("Gerenciamento de pacientes")).toBeTruthy();
+    expect(screen.getByTestId("badge")).toBeTruthy();
+  });
 
   it("should render active badge when module is active", () => {
     render(
@@ -114,12 +128,12 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const badge = screen.getByTestId("badge")
-    expect(badge.getAttribute("data-variant")).toBe("success")
-    expect(badge.textContent).toBe("Ativo")
-  })
+    const badge = screen.getByTestId("badge");
+    expect(badge.getAttribute("data-variant")).toBe("success");
+    expect(badge.textContent).toBe("Ativo");
+  });
 
   it("should render inactive badge when module is inactive", () => {
     render(
@@ -131,12 +145,12 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const badge = screen.getByTestId("badge")
-    expect(badge.getAttribute("data-variant")).toBe("secondary")
-    expect(badge.textContent).toBe("Inativo")
-  })
+    const badge = screen.getByTestId("badge");
+    expect(badge.getAttribute("data-variant")).toBe("secondary");
+    expect(badge.textContent).toBe("Inativo");
+  });
 
   it("should call onToggle when switch is changed", () => {
     render(
@@ -148,16 +162,16 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const switchEl = screen.getByTestId("switch")
+    const switchEl = screen.getByTestId("switch");
     act(() => {
-      switchEl.click()
-    })
+      switchEl.click();
+    });
 
-    expect(mockOnToggle).toHaveBeenCalledTimes(1)
-    expect(mockOnToggle).toHaveBeenCalledWith("PACIENTES")
-  })
+    expect(mockOnToggle).toHaveBeenCalledTimes(1);
+    expect(mockOnToggle).toHaveBeenCalledWith("PACIENTES");
+  });
 
   it("should disable switch when canToggle is false", () => {
     render(
@@ -169,11 +183,11 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const switchEl = screen.getByTestId("switch") as HTMLInputElement
-    expect(switchEl.disabled).toBe(true)
-  })
+    const switchEl = screen.getByTestId("switch") as HTMLInputElement;
+    expect(switchEl.disabled).toBe(true);
+  });
 
   it("should disable switch when isToggling is true", () => {
     render(
@@ -185,11 +199,11 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const switchEl = screen.getByTestId("switch") as HTMLInputElement
-    expect(switchEl.disabled).toBe(true)
-  })
+    const switchEl = screen.getByTestId("switch") as HTMLInputElement;
+    expect(switchEl.disabled).toBe(true);
+  });
 
   it("should render dependency graph when expanded", () => {
     render(
@@ -201,10 +215,10 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    expect(screen.getByTestId("dependency-graph")).toBeTruthy()
-  })
+    expect(screen.getByTestId("dependency-graph")).toBeTruthy();
+  });
 
   it("should not render dependency graph when not expanded", () => {
     render(
@@ -216,10 +230,10 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    expect(screen.queryByTestId("dependency-graph")).toBeNull()
-  })
+    expect(screen.queryByTestId("dependency-graph")).toBeNull();
+  });
 
   it("should show warning icon when module has unmet dependencies", () => {
     render(
@@ -231,12 +245,12 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
     // The AlertCircle icon is rendered as an svg, but the button wrapping it should be present
-    const buttons = screen.getAllByRole("button")
-    expect(buttons.length).toBeGreaterThan(0)
-  })
+    const buttons = screen.getAllByRole("button");
+    expect(buttons.length).toBeGreaterThan(0);
+  });
 
   it("should call onExpand when warning button is clicked", () => {
     render(
@@ -248,15 +262,15 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const buttons = screen.getAllByRole("button")
+    const buttons = screen.getAllByRole("button");
     act(() => {
-      buttons[0].click()
-    })
+      buttons[0].click();
+    });
 
-    expect(mockOnExpand).toHaveBeenCalledWith("TISS")
-  })
+    expect(mockOnExpand).toHaveBeenCalledWith("TISS");
+  });
 
   it("should apply opacity class when isToggling is true", () => {
     render(
@@ -268,11 +282,11 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const card = screen.getByTestId("card")
-    expect(card.className).toContain("opacity-60")
-  })
+    const card = screen.getByTestId("card");
+    expect(card.className).toContain("opacity-60");
+  });
 
   it("should render switch as checked when module is active", () => {
     render(
@@ -284,11 +298,11 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const switchEl = screen.getByTestId("switch") as HTMLInputElement
-    expect(switchEl.checked).toBe(true)
-  })
+    const switchEl = screen.getByTestId("switch") as HTMLInputElement;
+    expect(switchEl.checked).toBe(true);
+  });
 
   it("should render switch as unchecked when module is inactive", () => {
     render(
@@ -300,9 +314,9 @@ describe("ModuleCard", () => {
         onToggle={mockOnToggle}
         onExpand={mockOnExpand}
       />,
-    )
+    );
 
-    const switchEl = screen.getByTestId("switch") as HTMLInputElement
-    expect(switchEl.checked).toBe(false)
-  })
-})
+    const switchEl = screen.getByTestId("switch") as HTMLInputElement;
+    expect(switchEl.checked).toBe(false);
+  });
+});

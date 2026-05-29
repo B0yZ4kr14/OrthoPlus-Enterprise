@@ -146,7 +146,10 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
             <label className="text-sm font-medium mb-2 block">
               Criptomoeda
             </label>
-            <Select value={selectedCoin} onValueChange={(value) => setSelectedCoin(value as CoinType)}>
+            <Select
+              value={selectedCoin}
+              onValueChange={(value) => setSelectedCoin(value as CoinType)}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

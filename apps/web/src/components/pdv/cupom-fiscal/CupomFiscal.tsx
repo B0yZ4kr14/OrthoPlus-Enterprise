@@ -7,10 +7,11 @@ import { CupomActions } from "./CupomActions";
 import type { CupomFiscalProps } from "./types";
 
 export function CupomFiscal({ venda, items }: CupomFiscalProps) {
-  const { cupomRef, emitirNFCeMutation, handlePrint, valorTotal } = useCupomFiscal({
-    venda,
-    items,
-  });
+  const { cupomRef, emitirNFCeMutation, handlePrint, valorTotal } =
+    useCupomFiscal({
+      venda,
+      items,
+    });
 
   return (
     <div className="space-y-4">

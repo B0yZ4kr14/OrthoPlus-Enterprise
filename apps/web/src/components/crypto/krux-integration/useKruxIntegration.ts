@@ -29,7 +29,9 @@ export function useKruxIntegration() {
   const broadcastTransaction = useCallback(async () => {
     try {
       const data = await broadcastTx({ signedPsbt: signedPSBT });
-      toast.success(`Transação enviada! TxID: ${data.txId.substring(0, 12)}...`);
+      toast.success(
+        `Transação enviada! TxID: ${data.txId.substring(0, 12)}...`,
+      );
       setStatus("idle");
       setSignedPSBT("");
     } catch (error) {

@@ -38,7 +38,9 @@ export function getCoinColor(coin: string): string {
 }
 
 export function getCoinBgClass(coin: string): string {
-  return COIN_COLORS[coin] ? `bg-[${COIN_COLORS[coin]}]` : "bg-muted-foreground";
+  return COIN_COLORS[coin]
+    ? `bg-[${COIN_COLORS[coin]}]`
+    : "bg-muted-foreground";
 }
 
 export function getCoinBorderClass(coin: string): string {

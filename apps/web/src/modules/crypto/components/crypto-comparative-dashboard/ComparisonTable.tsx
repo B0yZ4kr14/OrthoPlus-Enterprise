@@ -1,6 +1,11 @@
 // cspell:disable
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import type { ComparisonMethod, CryptoStats } from "./types";
 
 interface ComparisonTableProps {
@@ -12,7 +17,9 @@ export function ComparisonTable({ data, cryptoStats }: ComparisonTableProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Análise Detalhada por Método</CardTitle>
+        <CardTitle className="text-base">
+          Análise Detalhada por Método
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -32,10 +39,7 @@ export function ComparisonTable({ data, cryptoStats }: ComparisonTableProps) {
                 const isCrypto = item.method === "Crypto";
 
                 return (
-                  <tr
-                    key={item.method}
-                    className="border-b hover:bg-muted/50"
-                  >
+                  <tr key={item.method} className="border-b hover:bg-muted/50">
                     <td className="py-3 px-4 font-medium">
                       {item.method}
                       {isCrypto && (

@@ -34,9 +34,7 @@ export function FormNumberInput({
               max={max}
               placeholder={placeholder}
               {...field}
-              onChange={(e) =>
-                field.onChange(parseFloat(e.target.value) || 0)
-              }
+              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
             />
           </FormControl>
           <FormDescription>{description}</FormDescription>

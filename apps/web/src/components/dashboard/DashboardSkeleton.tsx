@@ -1,10 +1,6 @@
 import { Card, CardContent, CardHeader } from "@orthoplus/core-ui/card";
 
-function ShimmerBlock({
-  className,
-}: {
-  className?: string;
-}) {
+function ShimmerBlock({ className }: { className?: string }) {
   return (
     <div
       className={`animate-pulse bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 dark:from-[hsl(var(--card))] dark:via-[hsl(var(--muted))] dark:to-[hsl(var(--card))] bg-[length:200%_100%] animate-shimmer rounded-lg ${className || ""}`}
@@ -30,10 +26,7 @@ export function DashboardSkeleton() {
       {/* Tabs Skeleton */}
       <div className="bg-muted/50 rounded-full p-1 inline-flex">
         {[1, 2, 3, 4].map((i) => (
-          <ShimmerBlock
-            key={i}
-            className="h-8 w-24 rounded-full mx-0.5"
-          />
+          <ShimmerBlock key={i} className="h-8 w-24 rounded-full mx-0.5" />
         ))}
       </div>
 

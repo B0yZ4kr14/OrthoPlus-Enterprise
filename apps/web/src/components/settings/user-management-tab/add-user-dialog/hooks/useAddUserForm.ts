@@ -13,7 +13,7 @@ export function useAddUserForm(onSubmit: (data: NewUserFormData) => void) {
 
   const updateField = <K extends keyof NewUserFormData>(
     field: K,
-    value: NewUserFormData[K]
+    value: NewUserFormData[K],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };

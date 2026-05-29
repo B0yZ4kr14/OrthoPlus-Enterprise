@@ -30,7 +30,9 @@ export function FormatSelect({ value, onChange }: FormatSelectProps) {
                   <Icon className="h-4 w-4" />
                   <div>
                     <p className="font-medium">{format.label}</p>
-                    <p className="text-xs text-muted-foreground">{format.description}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {format.description}
+                    </p>
                   </div>
                 </div>
               </SelectItem>

@@ -3,7 +3,7 @@
  * Representa uma sessão de terminal web shell
  */
 
-export type SessionStatus = 'ACTIVE' | 'IDLE' | 'TERMINATED';
+export type SessionStatus = "ACTIVE" | "IDLE" | "TERMINATED";
 
 export interface TerminalSessionProps {
   id: string;
@@ -41,8 +41,8 @@ export class TerminalSession {
 
   updateActivity(): void {
     this.props.lastActivityAt = new Date();
-    if (this.props.status === 'IDLE') {
-      this.props.status = 'ACTIVE';
+    if (this.props.status === "IDLE") {
+      this.props.status = "ACTIVE";
     }
   }
 
@@ -52,18 +52,23 @@ export class TerminalSession {
   }
 
   terminate(): void {
-    this.props.status = 'TERMINATED';
+    this.props.status = "TERMINATED";
     this.props.terminatedAt = new Date();
   }
 
   isIdle(): boolean {
-    const idleThreshold = new Date(Date.now() - TerminalSession.IDLE_TIMEOUT_MS);
-    return this.props.lastActivityAt < idleThreshold && this.props.status !== 'TERMINATED';
+    const idleThreshold = new Date(
+      Date.now() - TerminalSession.IDLE_TIMEOUT_MS,
+    );
+    return (
+      this.props.lastActivityAt < idleThreshold &&
+      this.props.status !== "TERMINATED"
+    );
   }
 
   checkAndUpdateIdleStatus(): void {
-    if (this.isIdle() && this.props.status === 'ACTIVE') {
-      this.props.status = 'IDLE';
+    if (this.isIdle() && this.props.status === "ACTIVE") {
+      this.props.status = "IDLE";
     }
   }
 

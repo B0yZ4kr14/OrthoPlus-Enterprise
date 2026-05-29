@@ -149,7 +149,12 @@ export default function ConciliacaoBancaria() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <Filter className="h-5 w-5 text-muted-foreground" />
-            <Select value={filtro} onValueChange={(v) => setFiltro(v as "TODOS" | "CONCILIADO" | "PENDENTE")}>
+            <Select
+              value={filtro}
+              onValueChange={(v) =>
+                setFiltro(v as "TODOS" | "CONCILIADO" | "PENDENTE")
+              }
+            >
               <SelectTrigger className="w-[200px]">
                 <SelectValue />
               </SelectTrigger>

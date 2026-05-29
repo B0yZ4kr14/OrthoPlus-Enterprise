@@ -1,12 +1,12 @@
 /**
  * AgentProxyService - Cliente HTTP para o Agno Agent Service
- * 
+ *
  * Responsabilidade: Comunicar-se com o serviço Python de agents
  * rodando em localhost:8000 (ou URL configurada)
  */
 
-import axios, { AxiosInstance, AxiosError } from 'axios';
-import { logger } from '@/infrastructure/logger';
+import axios, { AxiosInstance, AxiosError } from "axios";
+import { logger } from "@/infrastructure/logger";
 
 // ============================================================================
 // TIPOS
@@ -73,7 +73,7 @@ export interface CodeReviewRequest {
 export interface CodeReviewResponse {
   summary: string;
   issues: Array<{
-    severity: 'critical' | 'warning' | 'info';
+    severity: "critical" | "warning" | "info";
     line?: number;
     message: string;
     suggestion: string;
@@ -97,17 +97,17 @@ export class AgentProxyService {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.AGENT_SERVICE_URL || 'http://localhost:8000';
-    const timeout = parseInt(process.env.AGENT_SERVICE_TIMEOUT || '120000');
+    this.baseURL = process.env.AGENT_SERVICE_URL || "http://localhost:8000";
+    const timeout = parseInt(process.env.AGENT_SERVICE_TIMEOUT || "120000");
 
     this.client = axios.create({
       baseURL: this.baseURL,
       timeout,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
 
     // Log de debug em desenvolvimento
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       logger.info(`[AgentProxyService] Conectado a: ${this.baseURL}`);
     }
   }
@@ -118,10 +118,10 @@ export class AgentProxyService {
 
   async health(): Promise<HealthResponse> {
     try {
-      const response = await this.client.get('/health');
+      const response = await this.client.get("/health");
       return response.data;
     } catch (error) {
-      throw this.handleError(error as AxiosError, 'health');
+      throw this.handleError(error as AxiosError, "health");
     }
   }
 
@@ -131,34 +131,34 @@ export class AgentProxyService {
 
   async createCRUD(request: CRUDRequest): Promise<CRUDResponse> {
     try {
-      const response = await this.client.post('/api/agents/crud', request);
+      const response = await this.client.post("/api/agents/crud", request);
       return response.data;
     } catch (error) {
-      throw this.handleError(error as AxiosError, 'createCRUD');
+      throw this.handleError(error as AxiosError, "createCRUD");
     }
   }
 
   async createCRUDSimple(
     entity_name: string,
-    fields: string
+    fields: string,
   ): Promise<CRUDResponse> {
     try {
       const params = new URLSearchParams();
-      params.append('entity_name', entity_name);
-      params.append('fields', fields);
+      params.append("entity_name", entity_name);
+      params.append("fields", fields);
 
       const response = await this.client.post(
-        '/api/agents/crud/simple',
+        "/api/agents/crud/simple",
         params,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
           },
-        }
+        },
       );
       return response.data;
     } catch (error) {
-      throw this.handleError(error as AxiosError, 'createCRUDSimple');
+      throw this.handleError(error as AxiosError, "createCRUDSimple");
     }
   }
 
@@ -168,10 +168,10 @@ export class AgentProxyService {
 
   async fixBug(request: BugfixRequest): Promise<BugfixResponse> {
     try {
-      const response = await this.client.post('/api/agents/bugfix', request);
+      const response = await this.client.post("/api/agents/bugfix", request);
       return response.data;
     } catch (error) {
-      throw this.handleError(error as AxiosError, 'fixBug');
+      throw this.handleError(error as AxiosError, "fixBug");
     }
   }
 
@@ -181,10 +181,10 @@ export class AgentProxyService {
 
   async refactor(request: RefactorRequest): Promise<RefactorResponse> {
     try {
-      const response = await this.client.post('/api/agents/refactor', request);
+      const response = await this.client.post("/api/agents/refactor", request);
       return response.data;
     } catch (error) {
-      throw this.handleError(error as AxiosError, 'refactor');
+      throw this.handleError(error as AxiosError, "refactor");
     }
   }
 
@@ -194,10 +194,10 @@ export class AgentProxyService {
 
   async codeReview(request: CodeReviewRequest): Promise<CodeReviewResponse> {
     try {
-      const response = await this.client.post('/api/agents/review', request);
+      const response = await this.client.post("/api/agents/review", request);
       return response.data;
     } catch (error) {
-      throw this.handleError(error as AxiosError, 'codeReview');
+      throw this.handleError(error as AxiosError, "codeReview");
     }
   }
 
@@ -207,18 +207,18 @@ export class AgentProxyService {
 
   private handleError(error: AxiosError, operation: string): Error {
     // Connection refused - Agent Service offline
-    if (error.code === 'ECONNREFUSED') {
+    if (error.code === "ECONNREFUSED") {
       return new Error(
         `Agent Service indisponível em ${this.baseURL}. ` +
-        `Verifique se o serviço Python está rodando (python src/main.py).`
+          `Verifique se o serviço Python está rodando (python src/main.py).`,
       );
     }
 
     // Timeout
-    if (error.code === 'ETIMEDOUT' || error.code === 'ECONNABORTED') {
+    if (error.code === "ETIMEDOUT" || error.code === "ECONNABORTED") {
       return new Error(
         `Timeout ao comunicar com Agent Service (${operation}). ` +
-        `A operação pode estar demorando mais que o esperado.`
+          `A operação pode estar demorando mais que o esperado.`,
       );
     }
 

@@ -1,4 +1,8 @@
-import { CardHeader, CardTitle, CardDescription } from "@orthoplus/core-ui/card";
+import {
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Bitcoin, RefreshCw } from "lucide-react";
 
@@ -8,7 +12,11 @@ interface WidgetHeaderProps {
   onRefresh: () => void;
 }
 
-export function WidgetHeader({ lastUpdate, loading, onRefresh }: WidgetHeaderProps) {
+export function WidgetHeader({
+  lastUpdate,
+  loading,
+  onRefresh,
+}: WidgetHeaderProps) {
   return (
     <CardHeader>
       <div className="flex items-center justify-between">
@@ -20,11 +28,18 @@ export function WidgetHeader({ lastUpdate, loading, onRefresh }: WidgetHeaderPro
           <CardDescription>
             Cotações em tempo real
             {lastUpdate && (
-              <span className="ml-2 text-xs">• Atualizado {lastUpdate.toLocaleTimeString()}</span>
+              <span className="ml-2 text-xs">
+                • Atualizado {lastUpdate.toLocaleTimeString()}
+              </span>
             )}
           </CardDescription>
         </div>
-        <Button variant="ghost" size="sm" onClick={onRefresh} disabled={loading}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onRefresh}
+          disabled={loading}
+        >
           <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
         </Button>
       </div>

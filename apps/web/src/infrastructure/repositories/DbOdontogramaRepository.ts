@@ -14,7 +14,9 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
         `/pep/odontogramas/${id}`,
       );
       if (!data) return null;
-      return OdontogramaMapper.toDomain(data as Parameters<typeof OdontogramaMapper.toDomain>[0]);
+      return OdontogramaMapper.toDomain(
+        data as Parameters<typeof OdontogramaMapper.toDomain>[0],
+      );
     } catch {
       return null;
     }
@@ -27,7 +29,9 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
         { params: { prontuario_id: prontuarioId } },
       );
       if (!data || data.length === 0) return null;
-      return OdontogramaMapper.toDomain(data[0] as Parameters<typeof OdontogramaMapper.toDomain>[0]);
+      return OdontogramaMapper.toDomain(
+        data[0] as Parameters<typeof OdontogramaMapper.toDomain>[0],
+      );
     } catch {
       return null;
     }
@@ -36,10 +40,12 @@ export class DbOdontogramaRepository implements IOdontogramaRepository {
   async findByClinicId(clinicId: string): Promise<Odontograma[]> {
     try {
       const data =
-        await apiClient.get<Record<string, any>[]>(
-          "/pep/odontogramas",
-        );
-      return (data || []).map((row) => OdontogramaMapper.toDomain(row as Parameters<typeof OdontogramaMapper.toDomain>[0]));
+        await apiClient.get<Record<string, any>[]>("/pep/odontogramas");
+      return (data || []).map((row) =>
+        OdontogramaMapper.toDomain(
+          row as Parameters<typeof OdontogramaMapper.toDomain>[0],
+        ),
+      );
     } catch {
       return [];
     }

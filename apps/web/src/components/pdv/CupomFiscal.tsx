@@ -9,10 +9,10 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { Printer, FileText, CheckCircle, QrCode } from "lucide-react";
 
 interface Item {
-  descricao: string
-  quantidade: number
-  valor_unitario: number
-  valor_total: number
+  descricao: string;
+  quantidade: number;
+  valor_unitario: number;
+  valor_total: number;
 }
 
 interface CupomFiscalProps {
@@ -56,18 +56,21 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
 
   const imprimirCupomFiscal = async () => {
     try {
-      const data: Record<string, any> = await apiClient.post("/imprimir-cupom-sat", {
-        vendaId: venda.id,
-        clinicId: clinicId,
-        items: items.map((item) => ({
-          descricao: item.descricao,
-          quantidade: item.quantidade,
-          valor_unitario: item.valor_unitario,
-          valor_total: item.valor_total,
-        })),
-        valorTotal: venda.valor_total,
-        formaPagamento: venda.forma_pagamento || "DINHEIRO",
-      });
+      const data: Record<string, any> = await apiClient.post(
+        "/imprimir-cupom-sat",
+        {
+          vendaId: venda.id,
+          clinicId: clinicId,
+          items: items.map((item) => ({
+            descricao: item.descricao,
+            quantidade: item.quantidade,
+            valor_unitario: item.valor_unitario,
+            valor_total: item.valor_total,
+          })),
+          valorTotal: venda.valor_total,
+          formaPagamento: venda.forma_pagamento || "DINHEIRO",
+        },
+      );
 
       if (data.success) {
         toast({
@@ -232,7 +235,9 @@ export const CupomFiscal = ({ venda, items }: CupomFiscalProps) => {
 
           <div className="center text-xs">
             <p>OBRIGADO PELA PREFERÊNCIA!</p>
-            <p className="mt-2">OrthoPlus Enterprise - Sistema de Gestão Odontológica</p>
+            <p className="mt-2">
+              OrthoPlus Enterprise - Sistema de Gestão Odontológica
+            </p>
           </div>
         </div>
 

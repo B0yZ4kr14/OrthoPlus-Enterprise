@@ -33,7 +33,9 @@ export function useFiscalConfig() {
     queryKey: ["faturamento-config", clinicId],
     queryFn: async () => {
       try {
-        const response = await apiClient.get<{ config: FiscalConfig | null }>("/faturamento/config");
+        const response = await apiClient.get<{ config: FiscalConfig | null }>(
+          "/faturamento/config",
+        );
         return response.config;
       } catch (error: unknown) {
         const err = error as Record<string, unknown>;
@@ -76,7 +78,7 @@ export function useFiscalConfig() {
 
   const updateFormData = <K extends keyof FiscalFormData>(
     field: K,
-    value: FiscalFormData[K]
+    value: FiscalFormData[K],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };

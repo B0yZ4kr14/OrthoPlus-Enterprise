@@ -1,5 +1,5 @@
-import { IVendaRepository } from '../../domain/repositories/IVendaRepository';
-import { VendaDTO } from '../dto/VendaDTO';
+import { IVendaRepository } from "../../domain/repositories/IVendaRepository";
+import { VendaDTO } from "../dto/VendaDTO";
 
 export interface GetVendasPorCaixaQuery {
   caixaId: string;
@@ -23,25 +23,29 @@ export class GetVendasPorCaixaQueryHandler {
     const { items } = await this.vendaRepository.findAll({
       clinicId: query.clinicId,
       caixaId: query.caixaId,
-      status: query.status || 'CONCLUIDA'
+      status: query.status || "CONCLUIDA",
     });
 
     const vendas = items.map(VendaDTO.fromEntity);
-    
+
     const totalDinheiro = items
-      .filter(v => v.formaPagamento === 'DINHEIRO')
+      .filter((v) => v.formaPagamento === "DINHEIRO")
       .reduce((sum, v) => sum + v.totalFinal, 0);
-    
+
     const totalCartao = items
-      .filter(v => v.formaPagamento === 'CARTAO_CREDITO' || v.formaPagamento === 'CARTAO_DEBITO')
+      .filter(
+        (v) =>
+          v.formaPagamento === "CARTAO_CREDITO" ||
+          v.formaPagamento === "CARTAO_DEBITO",
+      )
       .reduce((sum, v) => sum + v.totalFinal, 0);
-    
+
     const totalPix = items
-      .filter(v => v.formaPagamento === 'PIX')
+      .filter((v) => v.formaPagamento === "PIX")
       .reduce((sum, v) => sum + v.totalFinal, 0);
-    
+
     const totalCrypto = items
-      .filter(v => v.formaPagamento === 'CRYPTO')
+      .filter((v) => v.formaPagamento === "CRYPTO")
       .reduce((sum, v) => sum + v.totalFinal, 0);
 
     return {
@@ -50,7 +54,7 @@ export class GetVendasPorCaixaQueryHandler {
       totalDinheiro,
       totalCartao,
       totalPix,
-      totalCrypto
+      totalCrypto,
     };
   }
 }

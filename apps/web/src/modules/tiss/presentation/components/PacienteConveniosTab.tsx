@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
@@ -29,7 +34,15 @@ interface PacienteConveniosTabProps {
 
 export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
   const { convenios } = useTISSConvenios();
-  const { vinculos, isLoading, createVinculo, updateVinculo, deleteVinculo, isCreating, isUpdating } = usePacienteConvenios(patientId);
+  const {
+    vinculos,
+    isLoading,
+    createVinculo,
+    updateVinculo,
+    deleteVinculo,
+    isCreating,
+    isUpdating,
+  } = usePacienteConvenios(patientId);
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState({
     convenio_id: "",
@@ -83,7 +96,9 @@ export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Convênios do Paciente ({vinculos.length})</h3>
+        <h3 className="text-lg font-semibold">
+          Convênios do Paciente ({vinculos.length})
+        </h3>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={resetForm} className="gap-2">
@@ -93,7 +108,9 @@ export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editing ? "Editar Vinculo" : "Vincular Convênio"}</DialogTitle>
+              <DialogTitle>
+                {editing ? "Editar Vinculo" : "Vincular Convênio"}
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -101,7 +118,9 @@ export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
                 <select
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   value={form.convenio_id}
-                  onChange={(e) => setForm({ ...form, convenio_id: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, convenio_id: e.target.value })
+                  }
                   required
                 >
                   <option value="">Selecione um convênio</option>
@@ -117,7 +136,9 @@ export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
                   <Label>Número da Carteira</Label>
                   <Input
                     value={form.numero_carteira}
-                    onChange={(e) => setForm({ ...form, numero_carteira: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, numero_carteira: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -125,12 +146,18 @@ export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
                   <Input
                     type="date"
                     value={form.validade_carteira}
-                    onChange={(e) => setForm({ ...form, validade_carteira: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, validade_carteira: e.target.value })
+                    }
                   />
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                >
                   <X className="h-4 w-4 mr-1" />
                   Cancelar
                 </Button>
@@ -173,7 +200,9 @@ export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
                     <TableCell>{v.numero_carteira || "-"}</TableCell>
                     <TableCell>
                       {v.validade_carteira
-                        ? new Date(v.validade_carteira).toLocaleDateString("pt-BR")
+                        ? new Date(v.validade_carteira).toLocaleDateString(
+                            "pt-BR",
+                          )
                         : "-"}
                     </TableCell>
                     <TableCell>
@@ -183,10 +212,18 @@ export function PacienteConveniosTab({ patientId }: PacienteConveniosTabProps) {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-2 justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(v)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEdit(v)}
+                        >
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => deleteVinculo(v.id)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteVinculo(v.id)}
+                        >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>

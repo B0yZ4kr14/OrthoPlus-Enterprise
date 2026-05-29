@@ -64,6 +64,7 @@ npm run dev
 - [ ] Quota disponível (não excedida)
 
 Teste:
+
 ```bash
 cd agent-service
 source venv/bin/activate
@@ -86,6 +87,7 @@ python -c "from src.config import GOOGLE_API_KEY; print('OK:', bool(GOOGLE_API_K
 - [ ] Fallback funciona quando Gemini falha
 
 Teste:
+
 ```bash
 cd agent-service
 source venv/bin/activate
@@ -105,6 +107,7 @@ for p in status['providers']:
 - [ ] Endpoints `/api/agents/*` respondem
 
 Teste:
+
 ```bash
 # Com ambos os serviços rodando:
 curl http://localhost:3005/api/agents/health
@@ -198,6 +201,7 @@ Se todos os checkboxes acima estiverem marcados:
 4. ✅ Documentações disponíveis
 
 **Próximos passos:**
+
 1. Escolher tarefa do `current-state.md`
 2. Atualizar `current-state.md` ao terminar
 3. Sincronizar documentações no Obsidian Vault
@@ -240,5 +244,5 @@ print(router.get_status())
 
 ---
 
-*Validation Checklist - v1.0*  
-*Updated: 2026-04-03*
+_Validation Checklist - v1.0_  
+_Updated: 2026-04-03_

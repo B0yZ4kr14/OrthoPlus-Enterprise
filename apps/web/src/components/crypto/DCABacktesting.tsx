@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Label } from "@orthoplus/core-ui/label";
 import { Input } from "@orthoplus/core-ui/input";
@@ -359,7 +364,9 @@ export function DCABacktesting() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                      <Legend
+                        wrapperStyle={{ fontSize: "12px", paddingTop: 8 }}
+                      />
                       <Line
                         type="monotone"
                         dataKey="dcaValue"

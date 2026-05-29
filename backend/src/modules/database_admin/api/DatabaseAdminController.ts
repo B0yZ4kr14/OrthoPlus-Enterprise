@@ -41,7 +41,11 @@ export class DatabaseAdminController {
   runMaintenance = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
     const isAdmin = req.user?.role === "ADMIN";
-    const result = await this.service.runMaintenance(req.body, clinicId || "", isAdmin);
+    const result = await this.service.runMaintenance(
+      req.body,
+      clinicId || "",
+      isAdmin,
+    );
     if (!result.success) {
       res.status(500).json(result);
       return;

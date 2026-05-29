@@ -5,7 +5,7 @@ import type { MarketComparison } from "./types";
 
 export async function fetchMarketComparison(
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): Promise<MarketComparison> {
   try {
     const prices = await getMarketChartRange(
@@ -21,7 +21,7 @@ export async function fetchMarketComparison(
     const btcReturn = ((btcEndPrice - btcStartPrice) / btcStartPrice) * 100;
 
     const daysDiff = Math.floor(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
     );
     const monthsDiff = daysDiff / 30;
     const sp500Return = monthsDiff * 1.0;

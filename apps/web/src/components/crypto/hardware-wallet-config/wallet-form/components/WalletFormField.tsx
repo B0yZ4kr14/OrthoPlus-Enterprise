@@ -36,9 +36,7 @@ export function WalletFormField({
         maxLength={maxLength}
         className={className}
       />
-      {helpText && (
-        <p className="text-xs text-muted-foreground">{helpText}</p>
-      )}
+      {helpText && <p className="text-xs text-muted-foreground">{helpText}</p>}
     </div>
   );
 }

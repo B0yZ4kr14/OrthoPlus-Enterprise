@@ -17,7 +17,11 @@ interface TreatmentCardProps {
   statusLabel: string;
 }
 
-export function TreatmentCard({ treatment, statusIcon, statusLabel }: TreatmentCardProps) {
+export function TreatmentCard({
+  treatment,
+  statusIcon,
+  statusLabel,
+}: TreatmentCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -27,7 +31,9 @@ export function TreatmentCard({ treatment, statusIcon, statusLabel }: TreatmentC
               <ClipboardPlus className="h-5 w-5" />
               {treatment.titulo}
             </CardTitle>
-            <CardDescription>Dente: {treatment.dente_codigo || "Não especificado"}</CardDescription>
+            <CardDescription>
+              Dente: {treatment.dente_codigo || "Não especificado"}
+            </CardDescription>
           </div>
           <Badge variant="outline" className="flex items-center gap-1">
             {statusIcon}
@@ -52,18 +58,23 @@ export function TreatmentCard({ treatment, statusIcon, statusLabel }: TreatmentC
           {treatment.valor_estimado && (
             <div>
               <span className="font-semibold">Valor Estimado:</span> R${" "}
-              {treatment.valor_estimado.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              {treatment.valor_estimado.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+              })}
             </div>
           )}
           {treatment.descricao && (
             <div>
-              <span className="font-semibold">Descrição:</span> {treatment.descricao}
+              <span className="font-semibold">Descrição:</span>{" "}
+              {treatment.descricao}
             </div>
           )}
         </div>
         {treatment.observacoes && (
           <div className="mt-4 pt-4 border-t">
-            <p className="text-sm text-muted-foreground">{treatment.observacoes}</p>
+            <p className="text-sm text-muted-foreground">
+              {treatment.observacoes}
+            </p>
           </div>
         )}
       </CardContent>

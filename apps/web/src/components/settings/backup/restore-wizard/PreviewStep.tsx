@@ -20,12 +20,17 @@ export function PreviewStep({ backup }: PreviewStepProps) {
         {PREVIEW_ITEMS.map((item, i) => {
           const Icon = item.icon;
           return (
-            <div key={i} className="flex items-center justify-between border rounded-lg p-4">
+            <div
+              key={i}
+              className="flex items-center justify-between border rounded-lg p-4"
+            >
               <div className="flex items-center gap-3">
                 <Icon className="h-5 w-5 text-muted-foreground" />
                 <span className="font-medium">{item.label}</span>
               </div>
-              <span className="text-muted-foreground">{item.count} registros</span>
+              <span className="text-muted-foreground">
+                {item.count} registros
+              </span>
             </div>
           );
         })}

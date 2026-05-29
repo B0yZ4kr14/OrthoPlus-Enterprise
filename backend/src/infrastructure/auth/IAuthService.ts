@@ -1,6 +1,6 @@
 /**
  * IAuthService - Abstração de autenticação
- * 
+ *
  * Permite trocar implementação de autenticação
  * sem alterar lógica de negócio dos módulos.
  */
@@ -9,7 +9,7 @@ export interface User {
   id: string;
   email: string;
   clinicId: string;
-  role: 'ADMIN' | 'MEMBER' | 'ROOT';
+  role: "ADMIN" | "MEMBER" | "ROOT";
   metadata?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
@@ -28,7 +28,7 @@ export interface SignupData {
   email: string;
   password: string;
   clinicId: string;
-  role?: 'ADMIN' | 'MEMBER';
+  role?: "ADMIN" | "MEMBER";
   metadata?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
@@ -36,7 +36,9 @@ export interface IAuthService {
   /**
    * Realiza login e retorna tokens
    */
-  login(credentials: LoginCredentials): Promise<{ user: User; tokens: AuthTokens }>;
+  login(
+    credentials: LoginCredentials,
+  ): Promise<{ user: User; tokens: AuthTokens }>;
 
   /**
    * Cria novo usuário
@@ -66,7 +68,10 @@ export interface IAuthService {
   /**
    * Atualiza metadados do usuário
    */
-  updateUserMetadata(userId: string, metadata: Record<string, any>): Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  updateUserMetadata(
+    userId: string,
+    metadata: Record<string, any>,
+  ): Promise<void>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   /**
    * Verifica saúde do serviço de auth
@@ -78,7 +83,7 @@ export interface IAuthService {
  * Tipo de implementação de autenticação
  */
 export enum AuthType {
-  HOSTED_CLOUD = 'hosted_cloud',
-  SELF_HOSTED = 'self_hosted',
-  JWT_LOCAL = 'jwt_local',
+  HOSTED_CLOUD = "hosted_cloud",
+  SELF_HOSTED = "self_hosted",
+  JWT_LOCAL = "jwt_local",
 }

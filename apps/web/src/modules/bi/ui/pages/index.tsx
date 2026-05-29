@@ -6,7 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import {
   Select,
@@ -193,7 +198,7 @@ export default function BusinessIntelligence() {
                     border: "1px solid hsl(var(--border))",
                   }}
                 />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Line
                   type="monotone"
                   dataKey="receita"

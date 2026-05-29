@@ -6,7 +6,7 @@ export function useDataTable<T extends Record<string, unknown>>(
   data: T[],
   searchable: boolean,
   searchKeys: (keyof T)[],
-  initialPageSize: number
+  initialPageSize: number,
 ) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +23,7 @@ export function useDataTable<T extends Record<string, unknown>>(
         const value = row[key];
         if (value === null || value === undefined) return false;
         return String(value).toLowerCase().includes(term);
-      })
+      }),
     );
   }, [data, searchTerm, searchKeys, searchable]);
 

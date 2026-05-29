@@ -53,10 +53,15 @@ export function usePatientsClean(): UsePatientsReturn {
     }
   };
 
-  const updatePatient = async (patientId: string, patientData: Partial<Patient>) => {
+  const updatePatient = async (
+    patientId: string,
+    patientData: Partial<Patient>,
+  ) => {
     try {
       const updated = await updateUseCase.execute(patientId, patientData);
-      setPatients((prev) => prev.map((p) => (p.id === patientId ? updated : p)));
+      setPatients((prev) =>
+        prev.map((p) => (p.id === patientId ? updated : p)),
+      );
       toast.success("Paciente atualizado com sucesso!");
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };

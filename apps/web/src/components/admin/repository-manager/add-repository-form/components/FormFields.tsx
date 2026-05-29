@@ -12,7 +12,10 @@ import type { RepositoryFormData } from "../types";
 
 interface FormFieldsProps {
   formData: RepositoryFormData;
-  onChange: <K extends keyof RepositoryFormData>(field: K, value: RepositoryFormData[K]) => void;
+  onChange: <K extends keyof RepositoryFormData>(
+    field: K,
+    value: RepositoryFormData[K],
+  ) => void;
 }
 
 export function FormFields({ formData, onChange }: FormFieldsProps) {
@@ -40,7 +43,9 @@ export function FormFields({ formData, onChange }: FormFieldsProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="repo-token">Token de Acesso (Personal Access Token)</Label>
+        <Label htmlFor="repo-token">
+          Token de Acesso (Personal Access Token)
+        </Label>
         <Input
           id="repo-token"
           type="password"
@@ -49,7 +54,8 @@ export function FormFields({ formData, onChange }: FormFieldsProps) {
           onChange={(e) => onChange("token", e.target.value)}
         />
         <p className="text-xs text-muted-foreground">
-          Crie um token em GitHub → Settings → Developer settings → Personal access tokens
+          Crie um token em GitHub → Settings → Developer settings → Personal
+          access tokens
         </p>
       </div>
 
@@ -76,7 +82,9 @@ export function FormFields({ formData, onChange }: FormFieldsProps) {
           checked={formData.enableWebhooks}
           onCheckedChange={(checked) => onChange("enableWebhooks", checked)}
         />
-        <Label htmlFor="enable-webhooks">Habilitar Webhooks (notificações automáticas)</Label>
+        <Label htmlFor="enable-webhooks">
+          Habilitar Webhooks (notificações automáticas)
+        </Label>
       </div>
     </>
   );

@@ -11,7 +11,9 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         `/financeiro/contas-pagar/${id}`,
       );
       if (!data) return null;
-      return ContaPagarMapper.toDomain(data as Parameters<typeof ContaPagarMapper.toDomain>[0]);
+      return ContaPagarMapper.toDomain(
+        data as Parameters<typeof ContaPagarMapper.toDomain>[0],
+      );
     } catch {
       return null;
     }
@@ -22,7 +24,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
       const data = await apiClient.get<Record<string, any>[]>(
         "/financeiro/contas-pagar",
       );
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
+      return (data || []).map((row) =>
+        ContaPagarMapper.toDomain(
+          row as Parameters<typeof ContaPagarMapper.toDomain>[0],
+        ),
+      );
     } catch {
       return [];
     }
@@ -34,7 +40,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { status: "PENDENTE" } },
       );
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
+      return (data || []).map((row) =>
+        ContaPagarMapper.toDomain(
+          row as Parameters<typeof ContaPagarMapper.toDomain>[0],
+        ),
+      );
     } catch {
       return [];
     }
@@ -47,7 +57,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { status: "PENDENTE", vencidas_antes: hoje } },
       );
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
+      return (data || []).map((row) =>
+        ContaPagarMapper.toDomain(
+          row as Parameters<typeof ContaPagarMapper.toDomain>[0],
+        ),
+      );
     } catch {
       return [];
     }
@@ -62,7 +76,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { fornecedor } },
       );
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
+      return (data || []).map((row) =>
+        ContaPagarMapper.toDomain(
+          row as Parameters<typeof ContaPagarMapper.toDomain>[0],
+        ),
+      );
     } catch {
       return [];
     }
@@ -77,7 +95,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
         "/financeiro/contas-pagar",
         { params: { categoria } },
       );
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
+      return (data || []).map((row) =>
+        ContaPagarMapper.toDomain(
+          row as Parameters<typeof ContaPagarMapper.toDomain>[0],
+        ),
+      );
     } catch {
       return [];
     }
@@ -98,7 +120,11 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           },
         },
       );
-      return (data || []).map((row) => ContaPagarMapper.toDomain(row as Parameters<typeof ContaPagarMapper.toDomain>[0]));
+      return (data || []).map((row) =>
+        ContaPagarMapper.toDomain(
+          row as Parameters<typeof ContaPagarMapper.toDomain>[0],
+        ),
+      );
     } catch {
       return [];
     }

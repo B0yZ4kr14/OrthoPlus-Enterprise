@@ -23,7 +23,10 @@ export function CriterioFields({
   onTipoChange,
   onValorChange,
 }: CriterioFieldsProps) {
-  const label = criterioTipo === "pontos_totais" ? "Pontos Necessários *" : "Nível Necessário *";
+  const label =
+    criterioTipo === "pontos_totais"
+      ? "Pontos Necessários *"
+      : "Nível Necessário *";
 
   return (
     <div className="grid grid-cols-2 gap-4">

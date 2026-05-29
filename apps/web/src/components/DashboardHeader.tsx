@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { useSidebarHover } from "@/hooks/useSidebarHover";
 
 function SidebarPinToggle() {
-  const { isAutoHide, toggleAutoHide } = useSidebarHover()
+  const { isAutoHide, toggleAutoHide } = useSidebarHover();
 
   return (
     <Button
@@ -45,7 +45,7 @@ function SidebarPinToggle() {
         <Pin className="h-4 w-4 text-interactive" />
       )}
     </Button>
-  )
+  );
 }
 
 interface DashboardHeaderProps {
@@ -156,13 +156,20 @@ export function DashboardHeader({
                   <Avatar className="h-7 w-7 border-2 border-border shadow-[0_0_8px_hsl(var(--interactive)/0.2)]">
                     {(() => {
                       if (!user || !("user_metadata" in user)) return null;
-                      const meta = user.user_metadata as Record<string, unknown> | undefined;
-                      const avatarUrl = typeof meta?.avatar_url === "string" ? meta.avatar_url : null;
+                      const meta = user.user_metadata as
+                        | Record<string, unknown>
+                        | undefined;
+                      const avatarUrl =
+                        typeof meta?.avatar_url === "string"
+                          ? meta.avatar_url
+                          : null;
                       if (!avatarUrl) return null;
                       return (
                         <AvatarImage
                           src={avatarUrl}
-                          alt={String(meta?.full_name || user.email || "Avatar")}
+                          alt={String(
+                            meta?.full_name || user.email || "Avatar",
+                          )}
                         />
                       );
                     })()}
@@ -180,7 +187,10 @@ export function DashboardHeader({
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 glass-card border-border/50">
+              <DropdownMenuContent
+                align="end"
+                className="w-56 glass-card border-border/50"
+              >
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium">{user?.email}</p>

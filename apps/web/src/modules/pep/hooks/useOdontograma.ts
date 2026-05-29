@@ -71,7 +71,8 @@ export const useOdontograma = (prontuarioId: string) => {
 
           const toothRecord = tooth as Record<string, any>;
           if (toothRecord.surfaces || toothRecord.pep_tooth_surfaces) {
-            const surfaceList = toothRecord.surfaces || toothRecord.pep_tooth_surfaces;
+            const surfaceList =
+              toothRecord.surfaces || toothRecord.pep_tooth_surfaces;
             surfaceList?.forEach((surface: Record<string, any>) => {
               surfaces[surface.surface] = surface.status;
             });

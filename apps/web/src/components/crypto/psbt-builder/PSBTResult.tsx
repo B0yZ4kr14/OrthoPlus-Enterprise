@@ -17,7 +17,8 @@ export function PSBTResult({ psbtBase64, copied, onCopy }: PSBTResultProps) {
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Escaneie o QR Code com seu Krux/Jade ou copie o PSBT para assinar offline
+          Escaneie o QR Code com seu Krux/Jade ou copie o PSBT para assinar
+          offline
         </AlertDescription>
       </Alert>
 
@@ -27,7 +28,12 @@ export function PSBTResult({ psbtBase64, copied, onCopy }: PSBTResultProps) {
 
       <div className="space-y-2">
         <Label>PSBT Base64</Label>
-        <Textarea value={psbtBase64} readOnly rows={4} className="font-mono text-xs" />
+        <Textarea
+          value={psbtBase64}
+          readOnly
+          rows={4}
+          className="font-mono text-xs"
+        />
         <Button variant="outline" size="sm" onClick={onCopy} className="w-full">
           {copied ? (
             <>

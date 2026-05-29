@@ -93,7 +93,8 @@ export const useInventario = () => {
 
   // Produtos com estoque baixo
   const lowStockProducts =
-    data?.produtos?.filter((p) => p.quantidadeAtual <= p.quantidadeMinima) || [];
+    data?.produtos?.filter((p) => p.quantidadeAtual <= p.quantidadeMinima) ||
+    [];
 
   return {
     produtos: data?.produtos || [],

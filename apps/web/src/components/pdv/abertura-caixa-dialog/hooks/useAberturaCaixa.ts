@@ -1,9 +1,12 @@
 import { useState, useCallback } from "react";
-import type { AberturaCaixaDialogProps, UseAberturaCaixaReturn } from "../types";
+import type {
+  AberturaCaixaDialogProps,
+  UseAberturaCaixaReturn,
+} from "../types";
 
 export function useAberturaCaixa(
   onConfirm: AberturaCaixaDialogProps["onConfirm"],
-  onOpenChange: AberturaCaixaDialogProps["onOpenChange"]
+  onOpenChange: AberturaCaixaDialogProps["onOpenChange"],
 ): UseAberturaCaixaReturn {
   const [valorInicial, setValorInicial] = useState("0");
   const [observacoes, setObservacoes] = useState("");

@@ -23,7 +23,9 @@ export function NextStepCard({ step }: NextStepCardProps) {
               {step.badge}
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground mb-3">{step.description}</p>
+          <p className="text-sm text-muted-foreground mb-3">
+            {step.description}
+          </p>
           <Button variant="outline" size="sm">
             {step.action}
           </Button>

@@ -67,9 +67,9 @@ export function PermissionTemplates() {
       setTemplates(templatesData || []);
 
       // Buscar usuários MEMBER
-      const profilesData = await apiClient.get<Array<{ id: string; full_name: string; role?: string }>>(
-        "/configuracoes/usuarios",
-      );
+      const profilesData = await apiClient.get<
+        Array<{ id: string; full_name: string; role?: string }>
+      >("/configuracoes/usuarios");
 
       // Filtrar apenas MEMBERs
       const memberUsers =
@@ -179,7 +179,8 @@ export function PermissionTemplates() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {templates.map((template) => {
-          const Icon = (templateIcons[template.icon] || Briefcase) as LucideIcon;
+          const Icon = (templateIcons[template.icon] ||
+            Briefcase) as LucideIcon;
           const isApplying = applying === template.id;
 
           return (

@@ -148,7 +148,7 @@ export class Lead extends AggregateRoot<LeadProps> {
         : undefined,
       createdAt: new Date(String(data.created_at)),
       updatedAt: new Date(String(data.updated_at)),
-    })
+    });
   }
 
   toPersistence(): unknown {

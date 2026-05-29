@@ -14,7 +14,10 @@ interface StorageProviderSelectProps {
   onChange: (value: ScheduledBackupConfig["cloudStorageProvider"]) => void;
 }
 
-export function StorageProviderSelect({ value, onChange }: StorageProviderSelectProps) {
+export function StorageProviderSelect({
+  value,
+  onChange,
+}: StorageProviderSelectProps) {
   return (
     <div className="space-y-2">
       <Label>Onde deseja armazenar o backup?</Label>

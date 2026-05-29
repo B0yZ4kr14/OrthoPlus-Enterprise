@@ -8,7 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { PrescricaoForm } from "@/modules/pep/components/PrescricaoForm";
 import { ReceitaForm } from "@/modules/pep/components/ReceitaForm";
 import { TratamentoForm } from "@/modules/pep/components/TratamentoForm";
@@ -20,7 +26,10 @@ interface TratamentosTabProps {
     receita: boolean;
     tratamento: boolean;
   };
-  onDialogChange: (key: "prescricao" | "receita" | "tratamento", open: boolean) => void;
+  onDialogChange: (
+    key: "prescricao" | "receita" | "tratamento",
+    open: boolean,
+  ) => void;
 }
 
 export function TratamentosTab({

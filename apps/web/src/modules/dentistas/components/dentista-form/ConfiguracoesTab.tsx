@@ -1,6 +1,12 @@
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@orthoplus/core-ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@orthoplus/core-ui/select";
 import { Switch } from "@orthoplus/core-ui/switch";
 import { coresCalendario } from "../../types/dentista.types";
 
@@ -19,7 +25,10 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>Cor no Calendário</Label>
-        <Select value={corCalendario} onValueChange={(value) => setValue("corCalendario", value)}>
+        <Select
+          value={corCalendario}
+          onValueChange={(value) => setValue("corCalendario", value)}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -27,7 +36,10 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
             {coresCalendario.map((cor) => (
               <SelectItem key={cor} value={cor}>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded" style={{ backgroundColor: cor }} />
+                  <div
+                    className="w-4 h-4 rounded"
+                    style={{ backgroundColor: cor }}
+                  />
                   {cor}
                 </div>
               </SelectItem>
@@ -38,7 +50,10 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
 
       <div className="space-y-2">
         <Label>Status</Label>
-        <Select value={status} onValueChange={(value) => setValue("status", value)}>
+        <Select
+          value={status}
+          onValueChange={(value) => setValue("status", value)}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -51,13 +66,20 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
       </div>
 
       <div className="flex items-center space-x-2">
-        <Switch checked={aceitaEmergencia} onCheckedChange={(checked) => setValue("aceitaEmergencia", checked)} />
+        <Switch
+          checked={aceitaEmergencia}
+          onCheckedChange={(checked) => setValue("aceitaEmergencia", checked)}
+        />
         <Label>Aceita Emergências</Label>
       </div>
 
       <div className="space-y-2">
         <Label>Duração Padrão Consulta (min)</Label>
-        <Input type="number" {...register("duracaoConsulta")} defaultValue={30} />
+        <Input
+          type="number"
+          {...register("duracaoConsulta")}
+          defaultValue={30}
+        />
       </div>
     </div>
   );

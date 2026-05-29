@@ -1,4 +1,4 @@
-import { Venda, ItemVenda } from '../../domain/entities/Venda';
+import { Venda, ItemVenda } from "../../domain/entities/Venda";
 
 export class VendaDTO {
   constructor(
@@ -12,7 +12,7 @@ export class VendaDTO {
     public status: string,
     public clienteId: string | null,
     public observacoes: string | null,
-    public readonly createdAt: Date
+    public readonly createdAt: Date,
   ) {}
 
   static fromEntity(venda: Venda): VendaDTO {
@@ -27,7 +27,7 @@ export class VendaDTO {
       venda.status,
       venda.clienteId,
       venda.observacoes,
-      venda.createdAt
+      venda.createdAt,
     );
   }
 }

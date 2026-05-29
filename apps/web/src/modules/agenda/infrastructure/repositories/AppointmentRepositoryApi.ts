@@ -7,13 +7,21 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
   async save(appointment: Appointment): Promise<Appointment> {
     const data = AppointmentMapper.toPersistence(appointment);
     const result = await apiClient.post<unknown>("/agenda/appointments", data);
-    return AppointmentMapper.toDomain(result as Parameters<typeof AppointmentMapper.toDomain>[0]);
+    return AppointmentMapper.toDomain(
+      result as Parameters<typeof AppointmentMapper.toDomain>[0],
+    );
   }
 
   async findById(id: string): Promise<Appointment | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`/agenda/appointments/${id}`);
-      return data ? AppointmentMapper.toDomain(data as Parameters<typeof AppointmentMapper.toDomain>[0]) : null;
+      const data = await apiClient.get<Record<string, any>>(
+        `/agenda/appointments/${id}`,
+      );
+      return data
+        ? AppointmentMapper.toDomain(
+            data as Parameters<typeof AppointmentMapper.toDomain>[0],
+          )
+        : null;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       const err = error as { response?: { status?: number } };
@@ -24,24 +32,45 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
   }
 
   async findByClinicId(clinicId: string): Promise<Appointment[]> {
-    const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
-      params: { clinic_id: clinicId },
-    });
-    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
+    const data = await apiClient.get<Record<string, any>[]>(
+      `/agenda/appointments`,
+      {
+        params: { clinic_id: clinicId },
+      },
+    );
+    return data.map((d) =>
+      AppointmentMapper.toDomain(
+        d as Parameters<typeof AppointmentMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findByPatient(patientId: string): Promise<Appointment[]> {
-    const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
-      params: { patient_id: patientId },
-    });
-    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
+    const data = await apiClient.get<Record<string, any>[]>(
+      `/agenda/appointments`,
+      {
+        params: { patient_id: patientId },
+      },
+    );
+    return data.map((d) =>
+      AppointmentMapper.toDomain(
+        d as Parameters<typeof AppointmentMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findByDentist(dentistId: string): Promise<Appointment[]> {
-    const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
-      params: { dentist_id: dentistId },
-    });
-    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
+    const data = await apiClient.get<Record<string, any>[]>(
+      `/agenda/appointments`,
+      {
+        params: { dentist_id: dentistId },
+      },
+    );
+    return data.map((d) =>
+      AppointmentMapper.toDomain(
+        d as Parameters<typeof AppointmentMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findByDateRange(
@@ -49,14 +78,21 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
     startDate: Date,
     endDate: Date,
   ): Promise<Appointment[]> {
-    const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
-      params: {
-        clinic_id: clinicId,
-        start_date: startDate.toISOString(),
-        end_date: endDate.toISOString(),
+    const data = await apiClient.get<Record<string, any>[]>(
+      `/agenda/appointments`,
+      {
+        params: {
+          clinic_id: clinicId,
+          start_date: startDate.toISOString(),
+          end_date: endDate.toISOString(),
+        },
       },
-    });
-    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
+    );
+    return data.map((d) =>
+      AppointmentMapper.toDomain(
+        d as Parameters<typeof AppointmentMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findByDentistAndDateRange(
@@ -64,14 +100,21 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
     startDate: Date,
     endDate: Date,
   ): Promise<Appointment[]> {
-    const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
-      params: {
-        dentist_id: dentistId,
-        start_date: startDate.toISOString(),
-        end_date: endDate.toISOString(),
+    const data = await apiClient.get<Record<string, any>[]>(
+      `/agenda/appointments`,
+      {
+        params: {
+          dentist_id: dentistId,
+          start_date: startDate.toISOString(),
+          end_date: endDate.toISOString(),
+        },
       },
-    });
-    return data.map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
+    );
+    return data.map((d) =>
+      AppointmentMapper.toDomain(
+        d as Parameters<typeof AppointmentMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findConflicts(
@@ -96,16 +139,23 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
 
     // If there are conflicts, fetch the conflicting appointments
     if (result?.hasConflict) {
-      const data = await apiClient.get<Record<string, any>[]>(`/agenda/appointments`, {
-        params: {
-          dentist_id: dentistId,
-          start_date: startDatetime.toISOString(),
-          end_date: endDatetime.toISOString(),
+      const data = await apiClient.get<Record<string, any>[]>(
+        `/agenda/appointments`,
+        {
+          params: {
+            dentist_id: dentistId,
+            start_date: startDatetime.toISOString(),
+            end_date: endDatetime.toISOString(),
+          },
         },
-      });
+      );
       return data
         .filter((a) => a.id !== excludeId)
-        .map((d) => AppointmentMapper.toDomain(d as Parameters<typeof AppointmentMapper.toDomain>[0]));
+        .map((d) =>
+          AppointmentMapper.toDomain(
+            d as Parameters<typeof AppointmentMapper.toDomain>[0],
+          ),
+        );
     }
     return [];
   }
@@ -116,7 +166,9 @@ export class AppointmentRepositoryApi implements IAppointmentRepository {
       `/agenda/appointments/${appointment.id}`,
       data,
     );
-    return AppointmentMapper.toDomain(result as Parameters<typeof AppointmentMapper.toDomain>[0]);
+    return AppointmentMapper.toDomain(
+      result as Parameters<typeof AppointmentMapper.toDomain>[0],
+    );
   }
 
   async delete(id: string): Promise<void> {

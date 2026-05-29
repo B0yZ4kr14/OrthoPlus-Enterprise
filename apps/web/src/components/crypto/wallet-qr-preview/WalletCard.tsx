@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Copy, Check, QrCode } from "lucide-react";
@@ -11,7 +16,12 @@ interface WalletCardProps {
   onShowQR: () => void;
 }
 
-export function WalletCard({ wallet, copied, onCopy, onShowQR }: WalletCardProps) {
+export function WalletCard({
+  wallet,
+  copied,
+  onCopy,
+  onShowQR,
+}: WalletCardProps) {
   return (
     <Card depth="normal" className="hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -29,8 +39,15 @@ export function WalletCard({ wallet, copied, onCopy, onShowQR }: WalletCardProps
             Endereço da Carteira
           </p>
           <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg border">
-            <code className="text-xs flex-1 break-all">{wallet.wallet_address}</code>
-            <Button variant="ghost" size="sm" onClick={onCopy} className="shrink-0">
+            <code className="text-xs flex-1 break-all">
+              {wallet.wallet_address}
+            </code>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onCopy}
+              className="shrink-0"
+            >
               {copied ? (
                 <Check className="h-4 w-4 text-success" />
               ) : (
@@ -47,7 +64,12 @@ export function WalletCard({ wallet, copied, onCopy, onShowQR }: WalletCardProps
               {wallet.balance.toFixed(8)} {wallet.coin_type}
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={onShowQR} className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onShowQR}
+            className="gap-2"
+          >
             <QrCode className="h-4 w-4" />
             Ver QR Code
           </Button>

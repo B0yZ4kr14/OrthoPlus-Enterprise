@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import type { AddRepositoryFormProps } from "./types";
 import { FormFields } from "./components/FormFields";
 import { ActionButtons } from "./components/ActionButtons";
@@ -18,7 +24,9 @@ export function AddRepositoryForm({
     <Card>
       <CardHeader>
         <CardTitle>Adicionar Novo Repositório</CardTitle>
-        <CardDescription>Configure um novo repositório GitHub para integração</CardDescription>
+        <CardDescription>
+          Configure um novo repositório GitHub para integração
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={onSubmit} className="space-y-4">

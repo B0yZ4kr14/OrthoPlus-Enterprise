@@ -1,17 +1,26 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.ab203c0d07a2432588930110d34090b0',
-  appName: 'ortho-plus-modules',
-  webDir: 'dist',
+  appId: "app.lovable.ab203c0d07a2432588930110d34090b0",
+  appName: "ortho-plus-modules",
+  webDir: "dist",
   server: {
-    url: 'https://tsiapp.io',
-    cleartext: true
+    url: "https://tsiapp.io",
+    cleartext: true,
   },
   plugins: {
     BarcodeScanner: {
       // Configurações do scanner
-      supportedFormats: ['QR_CODE', 'EAN_13', 'EAN_8', 'CODE_128', 'CODE_39', 'CODE_93', 'UPC_A', 'UPC_E'],
+      supportedFormats: [
+        "QR_CODE",
+        "EAN_13",
+        "EAN_8",
+        "CODE_128",
+        "CODE_39",
+        "CODE_93",
+        "UPC_A",
+        "UPC_E",
+      ],
     },
   },
 };

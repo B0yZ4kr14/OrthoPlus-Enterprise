@@ -11,7 +11,10 @@ export function ImportOptionsStep({
   setImportOptions,
   loading,
   progress,
-}: Pick<ImportStepProps, "importOptions" | "setImportOptions" | "loading" | "progress">) {
+}: Pick<
+  ImportStepProps,
+  "importOptions" | "setImportOptions" | "loading" | "progress"
+>) {
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Opções de Importação</h3>

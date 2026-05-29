@@ -12,7 +12,7 @@ export function useRepositoryManager() {
     executarWorkflow,
     isAutenticando,
   } = useGitHubTools();
-  
+
   const [showForm, setShowForm] = useState(false);
   const [testingConnection, setTestingConnection] = useState(false);
   const [formData, setFormData] = useState<RepositoryFormData>({
@@ -67,7 +67,7 @@ export function useRepositoryManager() {
   const handleExecuteWorkflow = async (
     repoName: string,
     workflowId: string,
-    branch: string
+    branch: string,
   ) => {
     try {
       await executarWorkflow({
@@ -82,7 +82,7 @@ export function useRepositoryManager() {
 
   const updateFormData = <K extends keyof RepositoryFormData>(
     field: K,
-    value: RepositoryFormData[K]
+    value: RepositoryFormData[K],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };

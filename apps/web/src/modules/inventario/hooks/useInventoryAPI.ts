@@ -40,7 +40,7 @@ export function useInventoryAPI() {
     try {
       setLoading(true);
       const response = await apiClient.get<{
-        data: Array<Record<string, unknown>>
+        data: Array<Record<string, unknown>>;
       }>("/inventario/produtos");
 
       // Converter dados da API para formato frontend
@@ -66,7 +66,7 @@ export function useInventoryAPI() {
         ativo: Boolean(apiProduct.ativo),
         createdAt: String(apiProduct.created_at),
         updatedAt: String(apiProduct.updated_at),
-      }))
+      }));
 
       setProducts(transformed);
     } catch (error: unknown) {

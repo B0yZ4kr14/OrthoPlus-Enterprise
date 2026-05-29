@@ -35,11 +35,15 @@ export class ErrorBoundary extends Component<
       console.error(
         `[ErrorBoundary${this.props.moduleName ? `:${this.props.moduleName}` : ""}]`,
         error,
-        errorInfo
+        errorInfo,
       );
     }
 
-    logger.error("ErrorBoundary caught error:", { error, errorInfo, moduleName: this.props.moduleName });
+    logger.error("ErrorBoundary caught error:", {
+      error,
+      errorInfo,
+      moduleName: this.props.moduleName,
+    });
 
     // TODO: Send to error reporting service (e.g., Sentry)
     // reportError({ error, errorInfo, moduleName: this.props.moduleName });

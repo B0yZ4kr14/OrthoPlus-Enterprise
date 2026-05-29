@@ -9,7 +9,10 @@ import { ApiTransactionRepository } from "../../infrastructure/repositories/ApiT
 
 export function useCashFlow(period?: Period) {
   const repository = useMemo(() => new ApiTransactionRepository(), []);
-  const getCashFlowUseCase = useMemo(() => new GetCashFlowUseCase(repository), [repository]);
+  const getCashFlowUseCase = useMemo(
+    () => new GetCashFlowUseCase(repository),
+    [repository],
+  );
   const { clinicId } = useAuth();
   const [cashFlow, setCashFlow] = useState<CashFlowResult | null>(null);
   const [loading, setLoading] = useState(true);

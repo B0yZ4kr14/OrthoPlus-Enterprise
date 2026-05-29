@@ -5,9 +5,13 @@ import cron from "node-cron";
 // Helper for local API calls mapping back to our Express `estoqueController`
 const triggerEstoqueAction = async (action: string) => {
   try {
-    await axios.post("http://localhost:3005/api/estoque/automation", {
-      action,
-    }, { headers: { "X-Internal-Cron": "true" } });
+    await axios.post(
+      "http://localhost:3005/api/estoque/automation",
+      {
+        action,
+      },
+      { headers: { "X-Internal-Cron": "true" } },
+    );
     logger.info(`[node-cron] Scheduled action executed: ${action}`);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);

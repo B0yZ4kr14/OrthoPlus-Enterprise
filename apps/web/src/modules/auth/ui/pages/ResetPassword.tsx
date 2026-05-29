@@ -147,7 +147,11 @@ export default function ResetPassword() {
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
-            <img src={orthoLogo} alt="OrthoPlus Enterprise" className="h-16 w-auto" />
+            <img
+              src={orthoLogo}
+              alt="OrthoPlus Enterprise"
+              className="h-16 w-auto"
+            />
           </div>
           <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
             <Lock className="h-6 w-6 text-primary" />

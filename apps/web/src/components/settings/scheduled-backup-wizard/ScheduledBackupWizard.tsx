@@ -12,7 +12,11 @@ const DestinationStep = (props: any) => null;
 const SummaryStep = (props: any) => null;
 import type { ScheduledBackupWizardProps } from "./types";
 
-export function ScheduledBackupWizard({ open, onClose, initialData }: ScheduledBackupWizardProps) {
+export function ScheduledBackupWizard({
+  open,
+  onClose,
+  initialData,
+}: ScheduledBackupWizardProps) {
   const {
     step,
     totalSteps,
@@ -32,7 +36,12 @@ export function ScheduledBackupWizard({ open, onClose, initialData }: ScheduledB
     <DataToIncludeStep key={3} config={config} setConfig={updateConfig} />,
     <AdvancedOptionsStep key={4} config={config} setConfig={updateConfig} />,
     <DestinationStep key={5} config={config} setConfig={updateConfig} />,
-    <SummaryStep key={6} config={config} setConfig={updateConfig} nextExecutions={nextExecutions} />,
+    <SummaryStep
+      key={6}
+      config={config}
+      setConfig={updateConfig}
+      nextExecutions={nextExecutions}
+    />,
   ];
 
   return (

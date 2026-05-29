@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { FinancialTabProps, Budget, FinancialSummary, PaymentStatus } from "./types";
+import type {
+  FinancialTabProps,
+  Budget,
+  FinancialSummary,
+  PaymentStatus,
+} from "./types";
 
 async function fetchPatientData(patientId: string) {
   // Mock data - replace with actual API call
@@ -38,12 +43,21 @@ function calculateSummary(budgets: Budget[]): FinancialSummary {
   return budgets.reduce(
     (acc, budget) => ({
       totalBudgets: acc.totalBudgets + 1,
-      approvedBudgets: acc.approvedBudgets + (budget.status === "approved" ? 1 : 0),
+      approvedBudgets:
+        acc.approvedBudgets + (budget.status === "approved" ? 1 : 0),
       totalValue: acc.totalValue + budget.total,
-      paidValue: acc.paidValue + (budget.status === "completed" ? budget.total - budget.discount : 0),
+      paidValue:
+        acc.paidValue +
+        (budget.status === "completed" ? budget.total - budget.discount : 0),
       balance: 0, // Calculate based on payments
     }),
-    { totalBudgets: 0, approvedBudgets: 0, totalValue: 0, paidValue: 0, balance: 0 }
+    {
+      totalBudgets: 0,
+      approvedBudgets: 0,
+      totalValue: 0,
+      paidValue: 0,
+      balance: 0,
+    },
   );
 }
 

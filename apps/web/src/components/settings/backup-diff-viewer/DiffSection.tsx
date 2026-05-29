@@ -39,7 +39,10 @@ export function DiffSection({ title, diff }: DiffSectionProps) {
           <ScrollArea className="h-40">
             <div className="space-y-2">
               {diff.added.map((item, idx) => (
-                <div key={idx} className="p-2 bg-success/10 rounded text-sm font-mono">
+                <div
+                  key={idx}
+                  className="p-2 bg-success/10 rounded text-sm font-mono"
+                >
                   {JSON.stringify(item, null, 2)}
                 </div>
               ))}
@@ -53,13 +56,17 @@ export function DiffSection({ title, diff }: DiffSectionProps) {
           <div className="flex items-center gap-2 mb-3">
             <Edit className="h-4 w-4 text-warning" />
             <span className="font-medium text-warning">
-              {diff.modified.length} Modificado{diff.modified.length > 1 ? "s" : ""}
+              {diff.modified.length} Modificado
+              {diff.modified.length > 1 ? "s" : ""}
             </span>
           </div>
           <ScrollArea className="h-40">
             <div className="space-y-2">
               {diff.modified.map((item, idx) => (
-                <div key={idx} className="p-2 bg-warning/10 rounded text-sm font-mono">
+                <div
+                  key={idx}
+                  className="p-2 bg-warning/10 rounded text-sm font-mono"
+                >
                   {JSON.stringify(item, null, 2)}
                 </div>
               ))}
@@ -79,7 +86,10 @@ export function DiffSection({ title, diff }: DiffSectionProps) {
           <ScrollArea className="h-40">
             <div className="space-y-2">
               {diff.removed.map((item, idx) => (
-                <div key={idx} className="p-2 bg-destructive/10 rounded text-sm font-mono">
+                <div
+                  key={idx}
+                  className="p-2 bg-destructive/10 rounded text-sm font-mono"
+                >
                   {JSON.stringify(item, null, 2)}
                 </div>
               ))}

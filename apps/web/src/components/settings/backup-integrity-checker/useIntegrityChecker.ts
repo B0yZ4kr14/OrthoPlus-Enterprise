@@ -29,10 +29,9 @@ export function useIntegrityChecker() {
     setResult(null);
 
     try {
-      const data = await apiClient.post<IntegrityResult>(
-        "/backups/manager",
-        { backupId: selectedBackupId },
-      );
+      const data = await apiClient.post<IntegrityResult>("/backups/manager", {
+        backupId: selectedBackupId,
+      });
 
       setResult(data);
 

@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Loader2, Sparkles, CheckCircle2, Stethoscope } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,7 +17,11 @@ interface TemplateCardProps {
   onApply: (id: string, name: string) => void;
 }
 
-export function TemplateCard({ template, isApplying, onApply }: TemplateCardProps) {
+export function TemplateCard({
+  template,
+  isApplying,
+  onApply,
+}: TemplateCardProps) {
   const Icon = ICON_MAP[template.icon] || Stethoscope;
 
   return (

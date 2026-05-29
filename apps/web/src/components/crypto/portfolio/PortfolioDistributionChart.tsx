@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import {
   PieChart,
   Pie,
@@ -43,10 +48,8 @@ export function PortfolioDistributionChart({
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip
-              formatter={(value: number) => formatBRL(value)}
-            />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Tooltip formatter={(value: number) => formatBRL(value)} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           </PieChart>
         </ResponsiveContainer>
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { IFaturamentoRepository } from "@/modules/faturamento/domain/repositories/IFaturamentoRepository";
 import { logger } from "@/infrastructure/logger";
 
-import { FaturamentoRepository } from "@/modules/faturamento/infrastructure/FaturamentoRepository"
+import { FaturamentoRepository } from "@/modules/faturamento/infrastructure/FaturamentoRepository";
 
 const createNFeSchema = z.object({
   vendaId: z.string().uuid().optional(),
@@ -15,24 +15,29 @@ const createNFeSchema = z.object({
 });
 
 export class FaturamentoControllerService {
-  private repo: IFaturamentoRepository
+  private repo: IFaturamentoRepository;
 
   constructor(repo?: IFaturamentoRepository) {
-    this.repo = repo ?? new FaturamentoRepository()
+    this.repo = repo ?? new FaturamentoRepository();
   }
 
   async createNFe(clinicId: string, body: unknown) {
     const validatedData = createNFeSchema.parse(body);
 
-    await this.repo.createNFe({
-      clinic_id: clinicId,
-      chave_acesso: validatedData.chaveAcesso,
-      valor_total: validatedData.valorTotal,
-      tipo_nota: validatedData.tipoNota,
-      status: "PROCESSANDO",
-    }).catch(err => logger.debug("NFE create error", err));
+    await this.repo
+      .createNFe({
+        clinic_id: clinicId,
+        chave_acesso: validatedData.chaveAcesso,
+        valor_total: validatedData.valorTotal,
+        tipo_nota: validatedData.tipoNota,
+        status: "PROCESSANDO",
+      })
+      .catch((err) => logger.debug("NFE create error", err));
 
-    logger.info("NFe created", { clinicId, chaveAcesso: validatedData.chaveAcesso });
+    logger.info("NFe created", {
+      clinicId,
+      chaveAcesso: validatedData.chaveAcesso,
+    });
     return validatedData;
   }
 
@@ -48,21 +53,25 @@ export class FaturamentoControllerService {
   }
 
   async autorizarNFe(id: string, protocolo: string, xml: string) {
-    await this.repo.updateNFeStatus(id, {
-      status: "AUTORIZADA",
-      protocolo,
-      xml_autorizacao: xml,
-    }).catch(err => logger.debug("NFE autorizar error", err));
+    await this.repo
+      .updateNFeStatus(id, {
+        status: "AUTORIZADA",
+        protocolo,
+        xml_autorizacao: xml,
+      })
+      .catch((err) => logger.debug("NFE autorizar error", err));
 
     logger.info("NFe authorized", { id, protocolo });
   }
 
   async cancelarNFe(id: string, motivo: string) {
-    await this.repo.updateNFeStatus(id, {
-      status: "CANCELADA",
-      motivo_cancelamento: motivo,
-      data_cancelamento: new Date(),
-    }).catch(err => logger.debug("NFE cancelar error", err));
+    await this.repo
+      .updateNFeStatus(id, {
+        status: "CANCELADA",
+        motivo_cancelamento: motivo,
+        data_cancelamento: new Date(),
+      })
+      .catch((err) => logger.debug("NFE cancelar error", err));
 
     logger.info("NFe canceled", { id, motivo });
   }
@@ -75,12 +84,24 @@ export class FaturamentoControllerService {
     return this.repo.upsertConfig(clinicId, data);
   }
 
-  async getRelatorio(clinicId: string, filters: { dataInicio?: string; dataFim?: string; tipo?: string }) {
+  async getRelatorio(
+    clinicId: string,
+    filters: { dataInicio?: string; dataFim?: string; tipo?: string },
+  ) {
     const notas = await this.repo.getRelatorio(clinicId, filters);
     const totais = {
-      valorTotal: notas.reduce((acc: number, n: any) => acc + (n.valor_total || 0), 0),
-      valorIcms: notas.reduce((acc: number, n: any) => acc + (n.valor_icms || 0), 0),
-      valorIss: notas.reduce((acc: number, n: any) => acc + (n.valor_iss || 0), 0),
+      valorTotal: notas.reduce(
+        (acc: number, n: any) => acc + (n.valor_total || 0),
+        0,
+      ),
+      valorIcms: notas.reduce(
+        (acc: number, n: any) => acc + (n.valor_icms || 0),
+        0,
+      ),
+      valorIss: notas.reduce(
+        (acc: number, n: any) => acc + (n.valor_iss || 0),
+        0,
+      ),
       valorIpi: 0,
       valorPis: 0,
       valorCofins: 0,

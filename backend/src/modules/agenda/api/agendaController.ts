@@ -11,7 +11,7 @@ function requireClinic(req: Request): string | null {
 function wrap<T>(
   fn: (clinicId: string, req: Request) => Promise<T>,
   statusCode: number = 200,
-  emptyResponse?: boolean
+  emptyResponse?: boolean,
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const clinicId = requireClinic(req);
@@ -28,7 +28,9 @@ function wrap<T>(
       res.status(statusCode).json(result);
     } catch (error: any) {
       if (error.statusCode) {
-        res.status(error.statusCode).json({ error: error.message, details: error.details });
+        res
+          .status(error.statusCode)
+          .json({ error: error.message, details: error.details });
         return;
       }
       logger.error("Agenda controller error:", { error });
@@ -44,7 +46,11 @@ export const getAppointments = wrap(async (clinicId, req) => {
     if (!status) return undefined;
     const s = status as string;
     if (s.startsWith("not.in.")) {
-      const excluded = s.replace("not.in.", "").replace("(", "").replace(")", "").split(",");
+      const excluded = s
+        .replace("not.in.", "")
+        .replace("(", "")
+        .replace(")", "")
+        .split(",");
       return { notIn: excluded };
     }
     return s;
@@ -53,8 +59,12 @@ export const getAppointments = wrap(async (clinicId, req) => {
   const startTimeFilter =
     start_date || end_date
       ? {
-          ...(start_date ? { gte: new Date(start_date as string).toISOString() } : {}),
-          ...(end_date ? { lte: new Date(end_date as string).toISOString() } : {}),
+          ...(start_date
+            ? { gte: new Date(start_date as string).toISOString() }
+            : {}),
+          ...(end_date
+            ? { lte: new Date(end_date as string).toISOString() }
+            : {}),
         }
       : undefined;
 
@@ -67,22 +77,26 @@ export const getAppointments = wrap(async (clinicId, req) => {
 });
 
 export const getAppointmentById = wrap(async (clinicId, req) =>
-  service.getAppointment(req.params.id, clinicId)
+  service.getAppointment(req.params.id, clinicId),
 );
 
-export const createAppointment = wrap(async (clinicId, req) =>
-  service.createAppointment(clinicId, req.body),
-  201
+export const createAppointment = wrap(
+  async (clinicId, req) => service.createAppointment(clinicId, req.body),
+  201,
 );
 
 export const updateAppointment = wrap(async (clinicId, req) =>
-  service.updateAppointment(req.params.id, clinicId, req.body)
+  service.updateAppointment(req.params.id, clinicId, req.body),
 );
 
-export const deleteAppointment = wrap(async (clinicId, req) => {
-  await service.deleteAppointment(req.params.id, clinicId);
-  return {};
-}, 204, true);
+export const deleteAppointment = wrap(
+  async (clinicId, req) => {
+    await service.deleteAppointment(req.params.id, clinicId);
+    return {};
+  },
+  204,
+  true,
+);
 
 export const checkConflict = wrap(async (clinicId, req) => {
   const { dentist_id, start_time, end_time, exclude_id } = req.query;
@@ -108,50 +122,62 @@ export const getConfirmations = wrap(async (clinicId, req) => {
 });
 
 export const getConfirmationById = wrap(async (clinicId, req) =>
-  service.getConfirmation(req.params.id, clinicId)
+  service.getConfirmation(req.params.id, clinicId),
 );
 
-export const createConfirmation = wrap(async (clinicId, req) =>
-  service.createConfirmation(clinicId, req.body),
-  201
+export const createConfirmation = wrap(
+  async (clinicId, req) => service.createConfirmation(clinicId, req.body),
+  201,
 );
 
 export const updateConfirmation = wrap(async (clinicId, req) =>
-  service.updateConfirmation(req.params.id, clinicId, req.body)
+  service.updateConfirmation(req.params.id, clinicId, req.body),
 );
 
-export const deleteConfirmation = wrap(async (clinicId, req) => {
-  await service.deleteConfirmation(req.params.id, clinicId);
-  return {};
-}, 204, true);
+export const deleteConfirmation = wrap(
+  async (clinicId, req) => {
+    await service.deleteConfirmation(req.params.id, clinicId);
+    return {};
+  },
+  204,
+  true,
+);
 
 export const getBlockedTimes = wrap(async (clinicId, req) => {
   const { dentist_id, active, start_date, end_date } = req.query;
 
   const endDatetimeFilter: { gte?: string; gt?: string } = {};
   if (active === "true") endDatetimeFilter.gte = new Date().toISOString();
-  if (start_date) endDatetimeFilter.gt = new Date(start_date as string).toISOString();
+  if (start_date)
+    endDatetimeFilter.gt = new Date(start_date as string).toISOString();
 
   return service.listBlockedTimes(clinicId, {
     dentistId: dentist_id as string | undefined,
-    endDatetime: Object.keys(endDatetimeFilter).length > 0 ? endDatetimeFilter : undefined,
-    startDatetime: end_date ? { lt: new Date(end_date as string).toISOString() } : undefined,
+    endDatetime:
+      Object.keys(endDatetimeFilter).length > 0 ? endDatetimeFilter : undefined,
+    startDatetime: end_date
+      ? { lt: new Date(end_date as string).toISOString() }
+      : undefined,
   });
 });
 
 export const getBlockedTimeById = wrap(async (clinicId, req) =>
-  service.getBlockedTime(req.params.id, clinicId)
+  service.getBlockedTime(req.params.id, clinicId),
 );
 
-export const createBlockedTime = wrap(async (clinicId, req) =>
-  service.createBlockedTime(clinicId, req.body),
-  201
+export const createBlockedTime = wrap(
+  async (clinicId, req) => service.createBlockedTime(clinicId, req.body),
+  201,
 );
 
-export const deleteBlockedTime = wrap(async (clinicId, req) => {
-  await service.deleteBlockedTime(req.params.id, clinicId);
-  return {};
-}, 204, true);
+export const deleteBlockedTime = wrap(
+  async (clinicId, req) => {
+    await service.deleteBlockedTime(req.params.id, clinicId);
+    return {};
+  },
+  204,
+  true,
+);
 
 export const getDentistSchedules = wrap(async (clinicId, req) => {
   const { dentist_id, day_of_week, is_active } = req.query;
@@ -163,19 +189,23 @@ export const getDentistSchedules = wrap(async (clinicId, req) => {
 });
 
 export const getDentistScheduleById = wrap(async (clinicId, req) =>
-  service.getDentistSchedule(req.params.id, clinicId)
+  service.getDentistSchedule(req.params.id, clinicId),
 );
 
-export const createDentistSchedule = wrap(async (clinicId, req) =>
-  service.createDentistSchedule(clinicId, req.body),
-  201
+export const createDentistSchedule = wrap(
+  async (clinicId, req) => service.createDentistSchedule(clinicId, req.body),
+  201,
 );
 
 export const updateDentistSchedule = wrap(async (clinicId, req) =>
-  service.updateDentistSchedule(req.params.id, clinicId, req.body)
+  service.updateDentistSchedule(req.params.id, clinicId, req.body),
 );
 
-export const deleteDentistSchedule = wrap(async (clinicId, req) => {
-  await service.deleteDentistSchedule(req.params.id, clinicId);
-  return {};
-}, 204, true);
+export const deleteDentistSchedule = wrap(
+  async (clinicId, req) => {
+    await service.deleteDentistSchedule(req.params.id, clinicId);
+    return {};
+  },
+  204,
+  true,
+);

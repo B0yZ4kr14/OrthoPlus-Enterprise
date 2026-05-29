@@ -13,23 +13,15 @@ export function PersonalInfoSection({ patient }: PersonalInfoSectionProps) {
   return (
     <PatientCard title="Dados Pessoais" icon={<User className="h-5 w-5" />}>
       <InfoItem label="Nome Completo" value={patient.full_name} />
-      
+
       {patient.social_name && (
         <InfoItem label="Nome Social" value={patient.social_name} />
       )}
-      
-      <InfoItem
-        label="CPF"
-        value={patient.cpf || "Não informado"}
-        mono
-      />
-      
-      <InfoItem
-        label="RG"
-        value={patient.rg || "Não informado"}
-        mono
-      />
-      
+
+      <InfoItem label="CPF" value={patient.cpf || "Não informado"} mono />
+
+      <InfoItem label="RG" value={patient.rg || "Não informado"} mono />
+
       <InfoItem
         label="Data de Nascimento"
         value={
@@ -41,17 +33,17 @@ export function PersonalInfoSection({ patient }: PersonalInfoSectionProps) {
           </>
         }
       />
-      
+
       <InfoItem
         label="Gênero"
         value={patient.gender?.replace("_", " ") || "Não informado"}
       />
-      
+
       <InfoItem
         label="Estado Civil"
         value={patient.marital_status?.replace("_", " ") || "Não informado"}
       />
-      
+
       <InfoItem label="Nacionalidade" value={patient.nationality} />
     </PatientCard>
   );

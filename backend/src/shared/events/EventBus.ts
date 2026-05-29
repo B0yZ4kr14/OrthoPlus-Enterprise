@@ -1,11 +1,14 @@
-import { DomainEvent } from './DomainEvent';
-import { EventHandler } from './EventHandler';
-import { logger } from '@/infrastructure/logger';
+import { DomainEvent } from "./DomainEvent";
+import { EventHandler } from "./EventHandler";
+import { logger } from "@/infrastructure/logger";
 
 export class EventBus {
   private handlers: Map<string, EventHandler<DomainEvent>[]> = new Map();
 
-  register<T extends DomainEvent>(eventType: string, handler: EventHandler<T>): void {
+  register<T extends DomainEvent>(
+    eventType: string,
+    handler: EventHandler<T>,
+  ): void {
     if (!this.handlers.has(eventType)) {
       this.handlers.set(eventType, []);
     }
@@ -13,13 +16,13 @@ export class EventBus {
     if (existingHandlers) {
       existingHandlers.push(handler as EventHandler<DomainEvent>);
     }
-    logger.debug('Handler registrado para evento ' + eventType);
+    logger.debug("Handler registrado para evento " + eventType);
   }
 
   async publish(event: DomainEvent): Promise<void> {
     const handlers = this.handlers.get(event.eventType);
     if (!handlers || handlers.length === 0) {
-      logger.warn('Nenhum handler encontrado para evento: ' + event.eventType);
+      logger.warn("Nenhum handler encontrado para evento: " + event.eventType);
       return;
     }
 
@@ -27,11 +30,13 @@ export class EventBus {
       handlers.map(async (handler) => {
         try {
           await handler.handle(event);
-          logger.debug('Evento processado com sucesso: ' + event.eventType);
+          logger.debug("Evento processado com sucesso: " + event.eventType);
         } catch (error) {
-          logger.error('Erro ao processar evento: ' + event.eventType, { error });
+          logger.error("Erro ao processar evento: " + event.eventType, {
+            error,
+          });
         }
-      })
+      }),
     );
   }
 

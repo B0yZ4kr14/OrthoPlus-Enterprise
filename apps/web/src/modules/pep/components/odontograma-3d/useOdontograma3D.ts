@@ -28,10 +28,10 @@ export function useOdontograma3D(prontuarioId: string) {
     (toothNumber: number) => {
       updateToothStatus(toothNumber, selectedStatus);
       toast.success(
-        `Dente ${toothNumber} marcado como ${TOOTH_STATUS_LABELS[selectedStatus]}`
+        `Dente ${toothNumber} marcado como ${TOOTH_STATUS_LABELS[selectedStatus]}`,
       );
     },
-    [updateToothStatus, selectedStatus]
+    [updateToothStatus, selectedStatus],
   );
 
   const handleToothRightClick = useCallback(
@@ -42,7 +42,7 @@ export function useOdontograma3D(prontuarioId: string) {
         setIsDetailDialogOpen(true);
       }
     },
-    [teethData]
+    [teethData],
   );
 
   const handleUpdateToothStatus = useCallback(
@@ -52,7 +52,7 @@ export function useOdontograma3D(prontuarioId: string) {
         setSelectedTooth((prev) => (prev ? { ...prev, status } : null));
       }
     },
-    [selectedTooth, updateToothStatus]
+    [selectedTooth, updateToothStatus],
   );
 
   const handleUpdateToothSurface = useCallback(
@@ -65,11 +65,11 @@ export function useOdontograma3D(prontuarioId: string) {
                 ...prev,
                 surfaces: { ...prev.surfaces, [surface]: status },
               }
-            : null
+            : null,
         );
       }
     },
-    [selectedTooth, updateToothSurface]
+    [selectedTooth, updateToothSurface],
   );
 
   const handleUpdateToothNotes = useCallback(
@@ -80,7 +80,7 @@ export function useOdontograma3D(prontuarioId: string) {
         toast.success("Observações salvas");
       }
     },
-    [selectedTooth, updateToothNotes]
+    [selectedTooth, updateToothNotes],
   );
 
   const closeDetailDialog = useCallback(() => {

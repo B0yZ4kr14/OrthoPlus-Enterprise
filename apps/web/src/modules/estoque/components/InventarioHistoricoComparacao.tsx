@@ -32,7 +32,12 @@ import {
 import { useInventario } from "../hooks/useInventario";
 import { Inventario } from "../types/estoque.types";
 
-const COLORS = ["hsl(0, 84%, 60%)", "hsl(38, 92%, 50%)", "hsl(38, 92%, 60%)", "hsl(160, 84%, 30%)"];
+const COLORS = [
+  "hsl(0, 84%, 60%)",
+  "hsl(38, 92%, 50%)",
+  "hsl(38, 92%, 60%)",
+  "hsl(160, 84%, 30%)",
+];
 
 interface ProdutoPerda {
   produtoNome: string;
@@ -298,7 +303,7 @@ export function InventarioHistoricoComparacao() {
             <YAxis yAxisId="left" />
             <YAxis yAxisId="right" orientation="right" />
             <Tooltip />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Line
               yAxisId="left"
               type="monotone"

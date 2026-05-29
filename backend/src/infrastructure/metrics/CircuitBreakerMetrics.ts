@@ -1,6 +1,6 @@
 /**
  * CircuitBreakerMetrics — Observabilidade do Circuit Breaker por Categoria
- * 
+ *
  * Métricas exportadas:
  * - orthoplus_circuit_breaker_state (0=CLOSED, 1=HALF_OPEN, 2=OPEN)
  * - orthoplus_circuit_breaker_failures_total
@@ -51,7 +51,8 @@ export class CircuitBreakerMetrics {
   collect(): void {
     const metrics = circuitBreakerRegistry.getAllMetrics();
     for (const m of metrics) {
-      const stateValue = m.state === "CLOSED" ? 0 : m.state === "HALF_OPEN" ? 1 : 2;
+      const stateValue =
+        m.state === "CLOSED" ? 0 : m.state === "HALF_OPEN" ? 1 : 2;
       this.stateGauge.set({ category: m.category }, stateValue);
       this.failuresCounter.inc({ category: m.category }, 0); // Ensure label exists
       this.rejectedCounter.inc({ category: m.category }, 0);

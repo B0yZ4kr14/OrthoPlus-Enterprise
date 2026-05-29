@@ -1,5 +1,10 @@
 // cspell:disable
-export type TabValue = "overview" | "certificates" | "documents" | "requests" | "validation";
+export type TabValue =
+  | "overview"
+  | "certificates"
+  | "documents"
+  | "requests"
+  | "validation";
 
 export interface KpiData {
   certificadosAtivos: number;

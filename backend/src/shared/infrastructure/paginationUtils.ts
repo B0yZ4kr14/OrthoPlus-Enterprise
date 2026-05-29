@@ -6,7 +6,7 @@ export interface PaginationOptions {
 export function appendPagination(
   query: string,
   params: unknown[],
-  options: PaginationOptions
+  options: PaginationOptions,
 ): { query: string; params: unknown[] } {
   const paginatedParams = [...params];
   let paginatedQuery = query;

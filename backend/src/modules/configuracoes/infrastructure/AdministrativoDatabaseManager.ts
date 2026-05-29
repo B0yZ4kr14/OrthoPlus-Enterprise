@@ -6,7 +6,7 @@ export class AdministrativoDatabaseManager extends CategoryDatabaseManager {
     super(
       ["administrativo", "configuracoes", "database_admin", "backups"],
       "ADMINISTRATIVO",
-      new AdministrativoBackupService()
+      new AdministrativoBackupService(),
     );
   }
 }

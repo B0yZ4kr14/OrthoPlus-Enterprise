@@ -1,5 +1,5 @@
-import { IProdutoRepository } from '../../domain/repositories/IProdutoRepository';
-import { ProdutoDTO } from '../dto/ProdutoDTO';
+import { IProdutoRepository } from "../../domain/repositories/IProdutoRepository";
+import { ProdutoDTO } from "../dto/ProdutoDTO";
 
 export interface ListProdutosQuery {
   clinicId: string;
@@ -27,14 +27,14 @@ export class ListProdutosQueryHandler {
       status: query.status,
       searchTerm: query.searchTerm,
       skip: (query.page - 1) * query.limit,
-      take: query.limit
+      take: query.limit,
     });
 
     return {
       items: items.map(ProdutoDTO.fromEntity),
       total,
       page: query.page,
-      totalPages: Math.ceil(total / query.limit)
+      totalPages: Math.ceil(total / query.limit),
     };
   }
 }

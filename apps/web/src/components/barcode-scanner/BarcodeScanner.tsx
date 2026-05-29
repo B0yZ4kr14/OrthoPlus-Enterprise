@@ -5,11 +5,16 @@ import { InstructionsCard } from "./InstructionsCard";
 import { ScanningOverlay } from "./ScanningOverlay";
 import { ScannerStyles } from "./ScannerStyles";
 
-export function BarcodeScanner({ onScan, onCancel, className }: BarcodeScannerProps) {
-  const { isScanning, showInstructions, handleStartScan, handleCancel } = useScanner({
-    onScan,
-    onCancel,
-  });
+export function BarcodeScanner({
+  onScan,
+  onCancel,
+  className,
+}: BarcodeScannerProps) {
+  const { isScanning, showInstructions, handleStartScan, handleCancel } =
+    useScanner({
+      onScan,
+      onCancel,
+    });
 
   return (
     <div className={cn("relative", className)}>

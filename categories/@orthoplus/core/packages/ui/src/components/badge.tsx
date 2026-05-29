@@ -21,8 +21,7 @@ const badgeVariants = cva(
           "border-transparent bg-amber-500/15 text-amber-700 hover:bg-amber-500/25 dark:text-amber-400",
         error:
           "border-transparent bg-red-500/15 text-red-700 hover:bg-red-500/25 dark:text-red-400",
-        info:
-          "border-transparent bg-sky-500/15 text-sky-700 hover:bg-sky-500/25 dark:text-sky-400",
+        info: "border-transparent bg-sky-500/15 text-sky-700 hover:bg-sky-500/25 dark:text-sky-400",
       },
     },
     defaultVariants: {

@@ -13,7 +13,10 @@ interface IntegracoesListProps {
   onEnviarManual: (software: string) => void;
 }
 
-export function IntegracoesList({ configs, onEnviarManual }: IntegracoesListProps) {
+export function IntegracoesList({
+  configs,
+  onEnviarManual,
+}: IntegracoesListProps) {
   if (configs.length === 0) {
     return (
       <p className="text-center text-muted-foreground py-8">

@@ -36,21 +36,31 @@ const CATEGORIAS: Record<string, string> = {
   OUTRO: "Outro",
 };
 
-const VISIBILIDADE_CONFIG: Record<string, { label: string; className: string }> = {
-  PUBLICO: { label: "Público", className: "bg-success/10 text-success" },
-  RESTRITO: { label: "Restrito", className: "bg-warning/10 text-warning" },
-  CONFIDENCIAL: { label: "Confidencial", className: "bg-destructive/10 text-destructive" },
-};
-
-const OCR_STATUS_CONFIG: Record<
+const VISIBILIDADE_CONFIG: Record<
   string,
   { label: string; className: string }
 > = {
-  PENDENTE: { label: "Pendente", className: "bg-muted text-muted-foreground" },
-  PROCESSANDO: { label: "Processando", className: "bg-warning/10 text-warning" },
-  CONCLUIDO: { label: "Concluído", className: "bg-success/10 text-success" },
-  ERRO: { label: "Erro", className: "bg-destructive/10 text-destructive" },
+  PUBLICO: { label: "Público", className: "bg-success/10 text-success" },
+  RESTRITO: { label: "Restrito", className: "bg-warning/10 text-warning" },
+  CONFIDENCIAL: {
+    label: "Confidencial",
+    className: "bg-destructive/10 text-destructive",
+  },
 };
+
+const OCR_STATUS_CONFIG: Record<string, { label: string; className: string }> =
+  {
+    PENDENTE: {
+      label: "Pendente",
+      className: "bg-muted text-muted-foreground",
+    },
+    PROCESSANDO: {
+      label: "Processando",
+      className: "bg-warning/10 text-warning",
+    },
+    CONCLUIDO: { label: "Concluído", className: "bg-success/10 text-success" },
+    ERRO: { label: "Erro", className: "bg-destructive/10 text-destructive" },
+  };
 
 export default function FileListPage() {
   const [categoriaFilter, setCategoriaFilter] = useState("");
@@ -60,8 +70,10 @@ export default function FileListPage() {
   const deleteMutation = useDeleteFile();
   const downloadFile = useDownloadFile();
 
-  const [selectedFileForOCR, setSelectedFileForOCR] = useState<FileRecord | null>(null);
-  const [selectedFileForVersions, setSelectedFileForVersions] = useState<FileRecord | null>(null);
+  const [selectedFileForOCR, setSelectedFileForOCR] =
+    useState<FileRecord | null>(null);
+  const [selectedFileForVersions, setSelectedFileForVersions] =
+    useState<FileRecord | null>(null);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir este arquivo?")) return;
@@ -189,8 +201,12 @@ export default function FileListPage() {
                     <div className="flex items-center gap-3">
                       <File className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="text-sm font-medium">{file.nomeOriginal}</p>
-                        <p className="text-xs text-muted-foreground">{file.mimeType}</p>
+                        <p className="text-sm font-medium">
+                          {file.nomeOriginal}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {file.mimeType}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -203,7 +219,9 @@ export default function FileListPage() {
                     {(() => {
                       const vis = VISIBILIDADE_CONFIG[file.visibilidade];
                       return vis ? (
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${vis.className}`}>
+                        <span
+                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${vis.className}`}
+                        >
                           {vis.label}
                         </span>
                       ) : (
@@ -215,9 +233,12 @@ export default function FileListPage() {
                   </td>
                   <td className="px-4 py-3">
                     {(() => {
-                      const ocr = OCR_STATUS_CONFIG[file.ocrStatus ?? "PENDENTE"];
+                      const ocr =
+                        OCR_STATUS_CONFIG[file.ocrStatus ?? "PENDENTE"];
                       return (
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${ocr.className}`}>
+                        <span
+                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${ocr.className}`}
+                        >
                           {ocr.label}
                         </span>
                       );
@@ -246,7 +267,9 @@ export default function FileListPage() {
                         <GitBranch className="h-4 w-4 text-muted-foreground" />
                       </button>
                       <button
-                        onClick={() => handleDownload(file.id, file.nomeOriginal)}
+                        onClick={() =>
+                          handleDownload(file.id, file.nomeOriginal)
+                        }
                         className="p-2 hover:bg-muted rounded-md"
                         title="Download"
                       >
@@ -268,7 +291,10 @@ export default function FileListPage() {
         </div>
       )}
 
-      <Dialog open={!!selectedFileForOCR} onOpenChange={(open) => !open && setSelectedFileForOCR(null)}>
+      <Dialog
+        open={!!selectedFileForOCR}
+        onOpenChange={(open) => !open && setSelectedFileForOCR(null)}
+      >
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>OCR — {selectedFileForOCR?.nomeOriginal}</DialogTitle>
@@ -277,12 +303,19 @@ export default function FileListPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!selectedFileForVersions} onOpenChange={(open) => !open && setSelectedFileForVersions(null)}>
+      <Dialog
+        open={!!selectedFileForVersions}
+        onOpenChange={(open) => !open && setSelectedFileForVersions(null)}
+      >
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Versões — {selectedFileForVersions?.nomeOriginal}</DialogTitle>
+            <DialogTitle>
+              Versões — {selectedFileForVersions?.nomeOriginal}
+            </DialogTitle>
           </DialogHeader>
-          {selectedFileForVersions && <FileVersionPanel file={selectedFileForVersions} />}
+          {selectedFileForVersions && (
+            <FileVersionPanel file={selectedFileForVersions} />
+          )}
         </DialogContent>
       </Dialog>
     </div>

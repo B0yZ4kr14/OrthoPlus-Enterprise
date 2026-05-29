@@ -13,24 +13,35 @@ export class FaturamentoRepository implements IFaturamentoRepository {
 
   async updateNFeStatus(
     id: string,
-    data: Prisma.nfe_recordsUpdateManyMutationInput
+    data: Prisma.nfe_recordsUpdateManyMutationInput,
   ) {
     return prisma.nfe_records.updateMany({ where: { id }, data });
   }
 
   async getConfig(clinicId: string) {
-    return prisma.faturamento_config.findUnique({ where: { clinic_id: clinicId } });
-  }
-
-  async upsertConfig(clinicId: string, data: Prisma.faturamento_configUpdateInput) {
-    return prisma.faturamento_config.upsert({
+    return prisma.faturamento_config.findUnique({
       where: { clinic_id: clinicId },
-      update: data,
-      create: { clinic_id: clinicId, ...data } as Prisma.faturamento_configCreateInput,
     });
   }
 
-  async getRelatorio(clinicId: string, filters: { dataInicio?: string; dataFim?: string; tipo?: string }) {
+  async upsertConfig(
+    clinicId: string,
+    data: Prisma.faturamento_configUpdateInput,
+  ) {
+    return prisma.faturamento_config.upsert({
+      where: { clinic_id: clinicId },
+      update: data,
+      create: {
+        clinic_id: clinicId,
+        ...data,
+      } as Prisma.faturamento_configCreateInput,
+    });
+  }
+
+  async getRelatorio(
+    clinicId: string,
+    filters: { dataInicio?: string; dataFim?: string; tipo?: string },
+  ) {
     const where: Prisma.notas_fiscaisWhereInput = { clinic_id: clinicId };
     if (filters.tipo) where.tipo = filters.tipo;
     if (filters.dataInicio || filters.dataFim) {
@@ -40,7 +51,7 @@ export class FaturamentoRepository implements IFaturamentoRepository {
     }
     return prisma.notas_fiscais.findMany({
       where,
-      orderBy: { data_emissao: 'desc' },
+      orderBy: { data_emissao: "desc" },
     });
   }
 }

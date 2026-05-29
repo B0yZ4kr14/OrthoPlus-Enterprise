@@ -18,11 +18,15 @@ export function RateItem({ rate }: RateItemProps) {
         </div>
         <div>
           <p className="font-medium">{rate.name}</p>
-          <p className="text-sm text-muted-foreground">{formatPrice(rate.price_brl)}</p>
+          <p className="text-sm text-muted-foreground">
+            {formatPrice(rate.price_brl)}
+          </p>
         </div>
       </div>
       <div className="text-right">
-        <div className={`flex items-center gap-1 ${change.isPositive ? "text-success" : "text-destructive"}`}>
+        <div
+          className={`flex items-center gap-1 ${change.isPositive ? "text-success" : "text-destructive"}`}
+        >
           {change.isPositive ? (
             <TrendingUp className="h-3 w-3" />
           ) : (

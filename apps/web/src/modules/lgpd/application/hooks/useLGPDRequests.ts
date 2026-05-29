@@ -11,7 +11,8 @@ export const useLGPDRequests = () => {
     queryKey: ["lgpd-requests", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<Record<string, any>[]>("/lgpd/solicitacoes");
+      const data =
+        await apiClient.get<Record<string, any>[]>("/lgpd/solicitacoes");
       return data;
     },
     enabled: !!clinicId,
@@ -21,7 +22,9 @@ export const useLGPDRequests = () => {
     queryKey: ["lgpd-consents", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<Record<string, any>[]>("/lgpd/consentimentos");
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/lgpd/consentimentos",
+      );
       return data;
     },
     enabled: !!clinicId,

@@ -41,11 +41,7 @@ export function ModulesHeader({
           Roadmap de Adoção
         </Button>
 
-        <Button
-          variant="outline"
-          onClick={onShowWizard}
-          className="gap-2"
-        >
+        <Button variant="outline" onClick={onShowWizard} className="gap-2">
           <Sparkles className="h-4 w-4" />
           Assistente de Configuração
         </Button>

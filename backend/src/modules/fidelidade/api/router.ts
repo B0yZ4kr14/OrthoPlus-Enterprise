@@ -14,7 +14,7 @@ router.get("/", (_req, res) => {
     version: "1.0.0",
     endpoints: ["/"],
     status: "active",
-    note: "Module routes available — see router.ts for full endpoint list"
+    note: "Module routes available — see router.ts for full endpoint list",
   });
 });
 
@@ -27,11 +27,23 @@ router.get("/badges", asyncHandler(controller.listBadges.bind(controller)));
 router.post("/badges", asyncHandler(controller.createBadge.bind(controller)));
 
 // Recompensas
-router.get("/recompensas", asyncHandler(controller.listRecompensas.bind(controller)));
-router.post("/recompensas", asyncHandler(controller.createRecompensa.bind(controller)));
+router.get(
+  "/recompensas",
+  asyncHandler(controller.listRecompensas.bind(controller)),
+);
+router.post(
+  "/recompensas",
+  asyncHandler(controller.createRecompensa.bind(controller)),
+);
 
 // Indicações
-router.get("/indicacoes", asyncHandler(controller.listIndicacoes.bind(controller)));
-router.post("/indicacoes", asyncHandler(controller.createIndicacao.bind(controller)));
+router.get(
+  "/indicacoes",
+  asyncHandler(controller.listIndicacoes.bind(controller)),
+);
+router.post(
+  "/indicacoes",
+  asyncHandler(controller.createIndicacao.bind(controller)),
+);
 
 export default router;

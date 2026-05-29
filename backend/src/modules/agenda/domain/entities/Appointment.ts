@@ -16,9 +16,19 @@ export class Appointment {
     return Object.assign(new Appointment(), props);
   }
 
-  start() { this.status = 'EM_ANDAMENTO'; }
-  confirm() { this.status = 'CONFIRMADO'; }
-  complete() { this.status = 'CONCLUIDO'; }
-  cancel() { this.status = 'CANCELADO'; }
-  markNoShow() { this.status = 'NAO_COMPARECEU'; }
+  start() {
+    this.status = "EM_ANDAMENTO";
+  }
+  confirm() {
+    this.status = "CONFIRMADO";
+  }
+  complete() {
+    this.status = "CONCLUIDO";
+  }
+  cancel() {
+    this.status = "CANCELADO";
+  }
+  markNoShow() {
+    this.status = "NAO_COMPARECEU";
+  }
 }

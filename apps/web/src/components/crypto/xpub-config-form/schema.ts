@@ -7,7 +7,10 @@ export const xpubConfigSchema = z.object({
   xpub: z
     .string()
     .min(100, "xPub inválido - muito curto")
-    .regex(/^(xpub|ypub|zpub|tpub|upub|vpub)[a-zA-Z0-9]+$/, "Formato de xPub inválido"),
+    .regex(
+      /^(xpub|ypub|zpub|tpub|upub|vpub)[a-zA-Z0-9]+$/,
+      "Formato de xPub inválido",
+    ),
   derivation_path: z.string().default("m/84'/0'/0'/0"),
   address_type: z.string().default("p2wpkh"),
   notes: z.string().optional(),

@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  type Dentista,
-  dentistaSchema,
-} from "../../types/dentista.types";
+import { type Dentista, dentistaSchema } from "../../types/dentista.types";
 
 interface UseDentistaFormProps {
   dentista?: Dentista;
@@ -31,14 +28,14 @@ export function useDentistaForm({
   onSubmit,
 }: UseDentistaFormProps): UseDentistaFormReturn {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(
-    dentista?.avatar_url || null
+    dentista?.avatar_url || null,
   );
   const [selectedDias, setSelectedDias] = useState<number[]>(
-    dentista?.diasAtendimento || []
+    dentista?.diasAtendimento || [],
   );
-  const [selectedEspecialidades, setSelectedEspecialidades] = useState<string[]>(
-    dentista?.especialidades || []
-  );
+  const [selectedEspecialidades, setSelectedEspecialidades] = useState<
+    string[]
+  >(dentista?.especialidades || []);
 
   const {
     register,

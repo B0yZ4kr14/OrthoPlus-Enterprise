@@ -1,5 +1,10 @@
 // cspell:disable
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import type { Indicacao } from "./types";
 import { getStatusIndicacaoVariant } from "./utils";
@@ -40,7 +45,9 @@ export function IndicacoesTab({ indicacoes }: IndicacoesTabProps) {
                 <div className="text-right mr-4">
                   <div className="text-sm text-muted-foreground">
                     {indicacao.created_at
-                      ? new Date(indicacao.created_at).toLocaleDateString("pt-BR")
+                      ? new Date(indicacao.created_at).toLocaleDateString(
+                          "pt-BR",
+                        )
                       : "—"}
                   </div>
                   {indicacao.pontos_concedidos && (

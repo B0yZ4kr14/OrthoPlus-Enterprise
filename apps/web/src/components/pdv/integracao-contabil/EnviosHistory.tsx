@@ -35,8 +35,8 @@ export function EnviosHistory({ envios }: EnviosHistoryProps) {
                       envio.status === "SUCESSO"
                         ? "success"
                         : envio.status === "ERRO"
-                        ? "destructive"
-                        : "secondary"
+                          ? "destructive"
+                          : "secondary"
                     }
                   >
                     {envio.status}

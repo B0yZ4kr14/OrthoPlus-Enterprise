@@ -8,15 +8,15 @@
 
 ## Definições Canônicas
 
-| Variável | Valor | Descrição |
-|----------|-------|-----------|
-| `VPS_TSiAPP_HOSTNAME` | `TSiAPP` | Hostname do servidor |
-| `VPS_TSiAPP_IP_PUBLIC` | `179.190.15.116` | IP público (Internet) |
-| `VPS_TSiAPP_IP_TAILSCALE` | `100.111.74.69` | IP Tailscale (rede privada) |
-| `VPS_TSiAPP_KEY` | `~/.ssh/keys/private/TSiHomeLab` | Chave SSH canônica |
-| `VPS_TSiAPP_NAME` | `VPS TSiAPP` | Nome descritivo |
-| `VPS_TSiAPP_PORT` | `22` | Porta SSH |
-| `VPS_TSiAPP_USER` | `tsi` | Usuário padrão (NUNCA `ubuntu`) |
+| Variável                  | Valor                            | Descrição                       |
+| ------------------------- | -------------------------------- | ------------------------------- |
+| `VPS_TSiAPP_HOSTNAME`     | `TSiAPP`                         | Hostname do servidor            |
+| `VPS_TSiAPP_IP_PUBLIC`    | `179.190.15.116`                 | IP público (Internet)           |
+| `VPS_TSiAPP_IP_TAILSCALE` | `100.111.74.69`                  | IP Tailscale (rede privada)     |
+| `VPS_TSiAPP_KEY`          | `~/.ssh/keys/private/TSiHomeLab` | Chave SSH canônica              |
+| `VPS_TSiAPP_NAME`         | `VPS TSiAPP`                     | Nome descritivo                 |
+| `VPS_TSiAPP_PORT`         | `22`                             | Porta SSH                       |
+| `VPS_TSiAPP_USER`         | `tsi`                            | Usuário padrão (NUNCA `ubuntu`) |
 
 > **Credenciais sensíveis** (senhas, API keys): ver `.env.vps.credentials` (não versionado, `.gitignore`)
 
@@ -25,11 +25,13 @@
 ## Acesso SSH Passwordless
 
 ### Chave Canônica
+
 - **Path local:** `~/.ssh/keys/private/TSiHomeLab`
 - **Path na VPS (tsi):** `/home/tsi/.ssh/authorized_keys`
 - **Path na VPS (root):** `/root/.ssh/authorized_keys`
 
 ### Usuário `tsi` (padrão / deploy / operações)
+
 ```bash
 # Via Tailscale (rede privada — preferencial)
 ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@100.111.74.69
@@ -39,6 +41,7 @@ ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@179.190.15.116
 ```
 
 ### Usuário `root` (emergência / manutenção)
+
 ```bash
 # Via Tailscale
 ssh -i ~/.ssh/keys/private/TSiHomeLab root@100.111.74.69
@@ -107,13 +110,13 @@ docker compose up --build -d
 
 ## Healthchecks
 
-| Serviço | URL Local | Via Nginx |
-|---------|-----------|-----------|
-| Backend API | `http://127.0.0.1:3005/health` | `https://tsiapp.io/api/orthoplus/health` |
-| Frontend SPA | `http://127.0.0.1:8083/` | `https://tsiapp.io/` |
-| Agent Service | `http://127.0.0.1:8000/` | `https://tsiapp.io/api/agent/` |
-| Prometheus | `http://127.0.0.1:9090/` | — |
-| Grafana | `http://127.0.0.1:3100/` | — |
+| Serviço       | URL Local                      | Via Nginx                                |
+| ------------- | ------------------------------ | ---------------------------------------- |
+| Backend API   | `http://127.0.0.1:3005/health` | `https://tsiapp.io/api/orthoplus/health` |
+| Frontend SPA  | `http://127.0.0.1:8083/`       | `https://tsiapp.io/`                     |
+| Agent Service | `http://127.0.0.1:8000/`       | `https://tsiapp.io/api/agent/`           |
+| Prometheus    | `http://127.0.0.1:9090/`       | —                                        |
+| Grafana       | `http://127.0.0.1:3100/`       | —                                        |
 
 ---
 
@@ -140,17 +143,20 @@ docker compose up --build -d
 ## Comandos de Manutenção
 
 ### Backup
+
 ```bash
 cd /home/tsi/OrthoPlus-Enterprise
 ./scripts/vps/backup.sh
 ```
 
 ### Dashboard do Sistema
+
 ```bash
 /home/tsi/OrthoPlus-Enterprise/scripts/vps/dashboard.sh
 ```
 
 ### Atualizar Código + Deploy
+
 ```bash
 cd /home/tsi/OrthoPlus-Enterprise
 git pull origin main
@@ -161,14 +167,14 @@ docker compose up --build -d
 
 ## Notas Canônicas
 
-| Regra | Valor |
-|-------|-------|
-| **Usuário canônico** | `tsi` — NUNCA usar `ubuntu` |
-| **Path canônico** | `/home/tsi/OrthoPlus-Enterprise` |
-| **Chave canônica** | `~/.ssh/keys/private/TSiHomeLab` |
-| **IP público** | `179.190.15.116` |
-| **IP Tailscale** | `100.111.74.69` |
-| **Porta SSH** | `22` |
+| Regra                | Valor                            |
+| -------------------- | -------------------------------- |
+| **Usuário canônico** | `tsi` — NUNCA usar `ubuntu`      |
+| **Path canônico**    | `/home/tsi/OrthoPlus-Enterprise` |
+| **Chave canônica**   | `~/.ssh/keys/private/TSiHomeLab` |
+| **IP público**       | `179.190.15.116`                 |
+| **IP Tailscale**     | `100.111.74.69`                  |
+| **Porta SSH**        | `22`                             |
 
 ---
 

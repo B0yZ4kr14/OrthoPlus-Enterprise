@@ -32,7 +32,12 @@ interface DBStats {
 }
 
 export default function DatabaseMaintenancePage() {
-  const { stats, isLoading: loading, executeMaintenance, isExecuting: executing } = useDatabaseMaintenancePage();
+  const {
+    stats,
+    isLoading: loading,
+    executeMaintenance,
+    isExecuting: executing,
+  } = useDatabaseMaintenancePage();
 
   return (
     <div className="space-y-6">

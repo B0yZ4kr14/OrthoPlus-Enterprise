@@ -8,7 +8,12 @@ interface ToggleOptionProps {
   onCheckedChange: (checked: boolean) => void;
 }
 
-export function ToggleOption({ label, description, checked, onCheckedChange }: ToggleOptionProps) {
+export function ToggleOption({
+  label,
+  description,
+  checked,
+  onCheckedChange,
+}: ToggleOptionProps) {
   return (
     <div className="flex items-center justify-between">
       <div className="space-y-0.5">

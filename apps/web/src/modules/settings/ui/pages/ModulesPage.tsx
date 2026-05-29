@@ -5,7 +5,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { ModuleCard } from "@/components/settings/ModuleCard";
 import { SidebarPreview } from "@/components/modules/SidebarPreview";

@@ -53,11 +53,10 @@ export function ChartsSection({
             />
             <YAxis />
             <Tooltip
-               
               formatter={(value: any) => formatCurrency(value as number)}
               labelStyle={{ color: "hsl(var(--foreground))" }}
             />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar dataKey="total" fill="#0088FE" name="Valor Total" />
           </BarChart>
         </ResponsiveContainer>
@@ -71,7 +70,7 @@ export function ChartsSection({
             <XAxis type="number" />
             <YAxis dataKey="nome" type="category" width={120} fontSize={12} />
             <Tooltip />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar dataKey="quantidade" fill="#00C49F" name="Quantidade" />
           </BarChart>
         </ResponsiveContainer>
@@ -85,7 +84,7 @@ export function ChartsSection({
             <XAxis dataKey="mes" />
             <YAxis />
             <Tooltip />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Line
               type="monotone"
               dataKey="manual"
@@ -113,9 +112,7 @@ export function ChartsSection({
       </Card>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">
-          Distribuição por Status
-        </h3>
+        <h3 className="text-lg font-semibold mb-4">Distribuição por Status</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie

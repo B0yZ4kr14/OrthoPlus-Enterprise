@@ -11,7 +11,7 @@ import { VolatilityWorkerController } from "./volatilityWorker";
 
 export function createCryptoConfigRouter(): Router {
   const router: Router = Router();
-router.use(clinicGuard);
+  router.use(clinicGuard);
   const controller = new CryptoConfigController();
   const volatilityWorker = new VolatilityWorkerController();
 
@@ -42,7 +42,7 @@ router.use(clinicGuard);
 
 export function createCryptoRouter(): Router {
   const router: Router = Router();
-router.use(clinicGuard);
+  router.use(clinicGuard);
   const controller = new CryptoController();
 
   router.post("/convert", controller.convertCryptoToBrl);

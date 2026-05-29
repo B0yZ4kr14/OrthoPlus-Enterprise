@@ -20,7 +20,9 @@ export function KPICards({
       <Card className="p-4 bg-primary/5 border-primary/20" depth="subtle">
         <div className="flex items-center gap-2 mb-2">
           <Activity className="h-4 w-4 text-primary" />
-          <span className="text-xs text-muted-foreground">Total de Análises</span>
+          <span className="text-xs text-muted-foreground">
+            Total de Análises
+          </span>
         </div>
         <p className="text-2xl font-bold">{totalAnalises}</p>
       </Card>
@@ -38,7 +40,9 @@ export function KPICards({
       <Card className="p-4 bg-success/5 border-success/20" depth="subtle">
         <div className="flex items-center gap-2 mb-2">
           <Target className="h-4 w-4 text-success" />
-          <span className="text-xs text-muted-foreground">Precisão Média IA</span>
+          <span className="text-xs text-muted-foreground">
+            Precisão Média IA
+          </span>
         </div>
         <p className="text-2xl font-bold text-success">{precisaoMediaGeral}%</p>
       </Card>

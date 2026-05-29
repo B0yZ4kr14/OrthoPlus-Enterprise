@@ -1,5 +1,5 @@
-import { logger } from '@/infrastructure/logger';
-import { IPatientRepository } from '../../domain/repositories/IPatientRepository';
+import { logger } from "@/infrastructure/logger";
+import { IPatientRepository } from "../../domain/repositories/IPatientRepository";
 
 export interface PatientStatsDTO {
   clinicId: string;
@@ -18,13 +18,16 @@ export class GetPatientStatsQuery {
 
   async execute(data: PatientStatsDTO): Promise<PatientStatsResult> {
     try {
-      logger.debug('Getting patient stats', { clinicId: data.clinicId });
-      
+      logger.debug("Getting patient stats", { clinicId: data.clinicId });
+
       const stats = await this.patientRepository.getStats(data.clinicId);
-      
+
       return stats;
     } catch (error) {
-      logger.error('Error getting patient stats', { error, clinicId: data.clinicId });
+      logger.error("Error getting patient stats", {
+        error,
+        clinicId: data.clinicId,
+      });
       throw error;
     }
   }

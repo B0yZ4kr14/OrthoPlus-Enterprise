@@ -47,9 +47,7 @@ export default function PatientFormPage() {
 
     const fetchPatient = async () => {
       try {
-        const response = await apiClient.get<PatientAPI>(
-          `/pacientes/${id}`,
-        );
+        const response = await apiClient.get<PatientAPI>(`/pacientes/${id}`);
 
         if (response) {
           // Converter data da API para o formato do formulário
@@ -58,7 +56,8 @@ export default function PatientFormPage() {
         }
       } catch (error: unknown) {
         toast.error("Erro ao carregar paciente", {
-          description: error instanceof Error ? error.message : "Erro desconhecido",
+          description:
+            error instanceof Error ? error.message : "Erro desconhecido",
         });
         navigate("/pacientes");
       } finally {
@@ -68,7 +67,6 @@ export default function PatientFormPage() {
 
     fetchPatient();
   }, [id, form, navigate]);
-
 
   // Calcular IMC automaticamente quando peso ou altura mudar
   useEffect(() => {

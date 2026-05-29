@@ -50,9 +50,11 @@ export function useFidelidade() {
 
       if (configData) setConfig(configData as FidelidadeConfig);
       if (pontosData) setPontos(pontosData as FidelidadePontosComplete[]);
-      if (recompensasData) setRecompensas(recompensasData as FidelidadeRecompensa[]);
+      if (recompensasData)
+        setRecompensas(recompensasData as FidelidadeRecompensa[]);
       if (badgesData) setBadges(badgesData as FidelidadeBadge[]);
-      if (indicacoesData) setIndicacoes(indicacoesData as FidelidadeIndicacao[]);
+      if (indicacoesData)
+        setIndicacoes(indicacoesData as FidelidadeIndicacao[]);
     } catch (error: unknown) {
       console.error("Erro ao carregar dados de fidelidade:", error);
       toast.error("Erro ao carregar dados de fidelidade");

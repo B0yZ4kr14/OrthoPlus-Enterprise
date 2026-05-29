@@ -100,7 +100,9 @@ export interface IPatientRepository {
   /**
    * Lista todos os pacientes com opções simplificadas
    */
-  findAll(options: FindAllOptions): Promise<{ items: Patient[]; total: number }>;
+  findAll(
+    options: FindAllOptions,
+  ): Promise<{ items: Patient[]; total: number }>;
 
   /**
    * Retorna estatísticas dos pacientes da clínica
@@ -110,57 +112,57 @@ export interface IPatientRepository {
   /**
    * Busca consultas do paciente
    */
-  findAppointmentsByPatient(patientId: string): Promise<any[]>
+  findAppointmentsByPatient(patientId: string): Promise<any[]>;
 
   /**
    * Busca tratamentos do paciente
    */
-  findTratamentosByPatient(patientId: string): Promise<any[]>
+  findTratamentosByPatient(patientId: string): Promise<any[]>;
 
   /**
    * Busca orçamentos do paciente
    */
-  findBudgetsByPatient(patientId: string): Promise<any[]>
+  findBudgetsByPatient(patientId: string): Promise<any[]>;
 
   /**
    * Busca histórico de status do paciente (detalhado)
    */
-  findStatusHistoryByPatient(patientId: string): Promise<any[]>
+  findStatusHistoryByPatient(patientId: string): Promise<any[]>;
 
   /**
    * Busca conta do paciente
    */
-  findPatientAccount(patientId: string): Promise<any | null>
+  findPatientAccount(patientId: string): Promise<any | null>;
 
   /**
    * Busca conta do paciente por email
    */
-  findPatientAccountByEmail(email: string): Promise<any | null>
+  findPatientAccountByEmail(email: string): Promise<any | null>;
 
   /**
    * Deleta sessão por ID
    */
-  deletePatientSessionsBySessionId(sessionId: string): Promise<any>
+  deletePatientSessionsBySessionId(sessionId: string): Promise<any>;
 
   /**
    * Cria sessão do paciente
    */
-  createPatientSession(data: any): Promise<any>
+  createPatientSession(data: any): Promise<any>;
 
   /**
    * Deleta sessões do paciente
    */
-  deletePatientSessionsByPatient(patientId: string): Promise<any>
+  deletePatientSessionsByPatient(patientId: string): Promise<any>;
 
   /**
    * Busca paciente por ID (raw)
    */
-  findPatientById(id: string): Promise<any | null>
+  findPatientById(id: string): Promise<any | null>;
 
   /**
    * Deleta paciente permanentemente
    */
-  deletePatientHard(id: string): Promise<any>
+  deletePatientHard(id: string): Promise<any>;
 }
 
 export interface FindAllOptions {

@@ -11,7 +11,12 @@ export function FormActions({ isValid, onCancel }: FormActionsProps) {
   return (
     <div className="flex gap-3">
       {onCancel && (
-        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          className="flex-1"
+        >
           Cancelar
         </Button>
       )}

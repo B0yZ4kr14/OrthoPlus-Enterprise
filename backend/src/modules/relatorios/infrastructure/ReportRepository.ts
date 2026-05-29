@@ -68,7 +68,7 @@ export class ReportRepository implements IReportRepository {
   async upsertClinicModule(
     clinicId: string,
     moduleCatalogId: number,
-    isActive: boolean
+    isActive: boolean,
   ) {
     const existing = await prisma.clinic_modules.findFirst({
       where: { clinic_id: clinicId, module_catalog_id: moduleCatalogId },

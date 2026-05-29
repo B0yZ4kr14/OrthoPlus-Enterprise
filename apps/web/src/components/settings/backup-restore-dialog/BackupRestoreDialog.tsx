@@ -1,6 +1,6 @@
 /**
  * BackupRestoreDialog - Componente Orquestrador (Refatorado)
- * 
+ *
  * ANTES: 520 linhas
  * DEPOIS: ~90 linhas + estrutura modular
  */
@@ -72,8 +72,9 @@ export function BackupRestoreDialog({
               <span className="font-medium">Confirmação</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Você está prestes a restaurar {Object.values(selectedItems).filter(Boolean).length} tipos de dados.
-              Esta ação não pode ser desfeita.
+              Você está prestes a restaurar{" "}
+              {Object.values(selectedItems).filter(Boolean).length} tipos de
+              dados. Esta ação não pode ser desfeita.
             </p>
           </div>
         );

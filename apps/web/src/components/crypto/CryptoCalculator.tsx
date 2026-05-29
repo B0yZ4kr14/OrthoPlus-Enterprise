@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
 import { Button } from "@orthoplus/core-ui/button";
@@ -121,7 +126,10 @@ export function CryptoCalculator() {
   const handleRefreshRates = async () => {
     try {
       const { getSimplePrice } = await import("@/lib/api/cryptoMarketApi");
-      const data = await getSimplePrice(["bitcoin", "ethereum", "tether"], ["brl"]);
+      const data = await getSimplePrice(
+        ["bitcoin", "ethereum", "tether"],
+        ["brl"],
+      );
       const newRates = {
         BTC: data.bitcoin?.brl || rates.BTC,
         ETH: data.ethereum?.brl || rates.ETH,
@@ -189,7 +197,9 @@ export function CryptoCalculator() {
             <div className="grid grid-cols-2 gap-2">
               <Select
                 value={fromCurrency}
-                onValueChange={(value) => setFromCurrency(value as CryptoCurrency)}
+                onValueChange={(value) =>
+                  setFromCurrency(value as CryptoCurrency)
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -242,7 +252,9 @@ export function CryptoCalculator() {
             <div className="grid grid-cols-2 gap-2">
               <Select
                 value={toCurrency}
-                onValueChange={(value) => setToCurrency(value as CryptoCurrency)}
+                onValueChange={(value) =>
+                  setToCurrency(value as CryptoCurrency)
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -284,7 +296,8 @@ export function CryptoCalculator() {
                 {(history24h[history24h.length - 1][
                   fromCurrency !== "BRL" ? fromCurrency : "BTC"
                 ] || 0) >
-                (history24h[0][fromCurrency !== "BRL" ? fromCurrency : "BTC"] || 0) ? (
+                (history24h[0][fromCurrency !== "BRL" ? fromCurrency : "BTC"] ||
+                  0) ? (
                   <>
                     <TrendingUp className="h-3 w-3 text-success" />
                     <span className="text-success">Alta</span>

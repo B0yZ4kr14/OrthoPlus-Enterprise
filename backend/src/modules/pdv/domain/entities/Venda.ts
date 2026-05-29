@@ -15,15 +15,29 @@ export class Venda {
     public total: number,
     public desconto: number,
     public totalFinal: number,
-    public formaPagamento: 'DINHEIRO' | 'CARTAO_CREDITO' | 'CARTAO_DEBITO' | 'PIX' | 'CRYPTO',
-    public status: 'PENDENTE' | 'CONCLUIDA' | 'CANCELADA',
+    public formaPagamento:
+      | "DINHEIRO"
+      | "CARTAO_CREDITO"
+      | "CARTAO_DEBITO"
+      | "PIX"
+      | "CRYPTO",
+    public status: "PENDENTE" | "CONCLUIDA" | "CANCELADA",
     public clienteId: string | null,
     public observacoes: string | null,
     public readonly createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
   ) {}
 
-  static create(props: Omit<Venda, 'adicionarItem' | 'removerItem' | 'aplicarDesconto' | 'concluir' | 'cancelar'>): Venda {
+  static create(
+    props: Omit<
+      Venda,
+      | "adicionarItem"
+      | "removerItem"
+      | "aplicarDesconto"
+      | "concluir"
+      | "cancelar"
+    >,
+  ): Venda {
     return new Venda(
       props.id,
       props.clinicId,
@@ -37,7 +51,7 @@ export class Venda {
       props.clienteId,
       props.observacoes,
       props.createdAt,
-      props.updatedAt
+      props.updatedAt,
     );
   }
 
@@ -57,27 +71,27 @@ export class Venda {
 
   aplicarDesconto(percentual: number): void {
     if (percentual < 0 || percentual > 100) {
-      throw new Error('Desconto deve estar entre 0 e 100');
+      throw new Error("Desconto deve estar entre 0 e 100");
     }
     this.desconto = percentual;
     this.totalFinal = this.total * (1 - percentual / 100);
     this.updatedAt = new Date();
   }
 
-  concluir(formaPagamento: Venda['formaPagamento']): void {
-    if (this.status !== 'PENDENTE') {
-      throw new Error('Apenas vendas pendentes podem ser concluídas');
+  concluir(formaPagamento: Venda["formaPagamento"]): void {
+    if (this.status !== "PENDENTE") {
+      throw new Error("Apenas vendas pendentes podem ser concluídas");
     }
     this.formaPagamento = formaPagamento;
-    this.status = 'CONCLUIDA';
+    this.status = "CONCLUIDA";
     this.updatedAt = new Date();
   }
 
   cancelar(): void {
-    if (this.status === 'CONCLUIDA') {
-      throw new Error('Não é possível cancelar uma venda concluída');
+    if (this.status === "CONCLUIDA") {
+      throw new Error("Não é possível cancelar uma venda concluída");
     }
-    this.status = 'CANCELADA';
+    this.status = "CANCELADA";
     this.updatedAt = new Date();
   }
 

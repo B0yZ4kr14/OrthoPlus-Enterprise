@@ -16,7 +16,11 @@ import { RoleSelect } from "./components/RoleSelect";
 export * from "./types";
 export { useAddUserForm, UserFormField, RoleSelect };
 
-export function AddUserDialog({ isOpen, onOpenChange, onSubmit }: AddUserDialogProps) {
+export function AddUserDialog({
+  isOpen,
+  onOpenChange,
+  onSubmit,
+}: AddUserDialogProps) {
   const { formData, updateField, handleSubmit } = useAddUserForm(onSubmit);
 
   return (
@@ -63,7 +67,11 @@ export function AddUserDialog({ isOpen, onOpenChange, onSubmit }: AddUserDialogP
             onChange={(value) => updateField("role", value)}
           />
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancelar
             </Button>
             <Button type="submit">Criar Usuário</Button>

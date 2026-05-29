@@ -1,4 +1,4 @@
-import { defineConfig } from "@bradygaster/squad-sdk"
+import { defineConfig } from "@bradygaster/squad-sdk";
 
 export default defineConfig({
   project: "OrthoPlus Enterprise",
@@ -145,34 +145,126 @@ export default defineConfig({
   routing: {
     defaultAgent: "implementer",
     rules: [
-      { pattern: /\bspecify\b|\bplan\b|\btasks\b|\barchitecture\b|\bdesign\b|\bestimation\b/i, agent: "planner" },
-      { pattern: /\bspec\.md\b|\bplan\.md\b|\btasks\.md\b|\bconstitution\b/i, agent: "planner" },
-      { pattern: /\buser story\b|\bacceptance criteria\b|\brequirement\b/i, agent: "planner" },
-      { pattern: /\bADR\b|\bdecision record\b|\btechnical context\b/i, agent: "planner" },
-      { pattern: /\bimplement\b|\bcode\b|\bdevelop\b|\bbuild\b|\bcreate\b/i, agent: "implementer" },
-      { pattern: /\bcontroller\b|\bservice\b|\brepository\b|\bcomponent\b|\bhook\b/i, agent: "implementer" },
-      { pattern: /\bendpoint\b|\broute\b|\bAPI\b|\bmiddleware\b/i, agent: "implementer" },
-      { pattern: /\bfrontend\b|\bbackend\b|\bagent-service\b/i, agent: "implementer" },
-      { pattern: /\breview\b|\baudit\b|\binspect\b|\banalyze\b/i, agent: "reviewer" },
-      { pattern: /\bsecurity\b|\bvulnerability\b|\bCVE\b|\binjection\b/i, agent: "reviewer" },
-      { pattern: /\brefactor\b|\bextract\b|\brename\b|\bsplit\b/i, agent: "reviewer" },
-      { pattern: /\bimpact analysis\b|\bblast radius\b|\bdependency\b/i, agent: "reviewer" },
-      { pattern: /\bconstitution\b|\bprinciple\b|\bcompliance\b/i, agent: "reviewer" },
-      { pattern: /\btest\b|\bspec\b|\bverify\b|\bvalidate\b|\bQA\b/i, agent: "verifier" },
-      { pattern: /\bcoverage\b|\bthreshold\b|\bquality gate\b/i, agent: "verifier" },
-      { pattern: /\be2e\b|\bplaywright\b|\bjest\b|\bvitest\b/i, agent: "verifier" },
+      {
+        pattern:
+          /\bspecify\b|\bplan\b|\btasks\b|\barchitecture\b|\bdesign\b|\bestimation\b/i,
+        agent: "planner",
+      },
+      {
+        pattern: /\bspec\.md\b|\bplan\.md\b|\btasks\.md\b|\bconstitution\b/i,
+        agent: "planner",
+      },
+      {
+        pattern: /\buser story\b|\bacceptance criteria\b|\brequirement\b/i,
+        agent: "planner",
+      },
+      {
+        pattern: /\bADR\b|\bdecision record\b|\btechnical context\b/i,
+        agent: "planner",
+      },
+      {
+        pattern: /\bimplement\b|\bcode\b|\bdevelop\b|\bbuild\b|\bcreate\b/i,
+        agent: "implementer",
+      },
+      {
+        pattern:
+          /\bcontroller\b|\bservice\b|\brepository\b|\bcomponent\b|\bhook\b/i,
+        agent: "implementer",
+      },
+      {
+        pattern: /\bendpoint\b|\broute\b|\bAPI\b|\bmiddleware\b/i,
+        agent: "implementer",
+      },
+      {
+        pattern: /\bfrontend\b|\bbackend\b|\bagent-service\b/i,
+        agent: "implementer",
+      },
+      {
+        pattern: /\breview\b|\baudit\b|\binspect\b|\banalyze\b/i,
+        agent: "reviewer",
+      },
+      {
+        pattern: /\bsecurity\b|\bvulnerability\b|\bCVE\b|\binjection\b/i,
+        agent: "reviewer",
+      },
+      {
+        pattern: /\brefactor\b|\bextract\b|\brename\b|\bsplit\b/i,
+        agent: "reviewer",
+      },
+      {
+        pattern: /\bimpact analysis\b|\bblast radius\b|\bdependency\b/i,
+        agent: "reviewer",
+      },
+      {
+        pattern: /\bconstitution\b|\bprinciple\b|\bcompliance\b/i,
+        agent: "reviewer",
+      },
+      {
+        pattern: /\btest\b|\bspec\b|\bverify\b|\bvalidate\b|\bQA\b/i,
+        agent: "verifier",
+      },
+      {
+        pattern: /\bcoverage\b|\bthreshold\b|\bquality gate\b/i,
+        agent: "verifier",
+      },
+      {
+        pattern: /\be2e\b|\bplaywright\b|\bjest\b|\bvitest\b/i,
+        agent: "verifier",
+      },
       { pattern: /\bbuild\b|\blint\b|\btype-check\b/i, agent: "verifier" },
-      { pattern: /\bhealth check\b|\bmetrics\b|\bobservability\b/i, agent: "verifier" },
-      { pattern: /\bai\b|\bllm\b|\bmodel\b|\bembedding\b|\bvision\b|\bradiografia\b|\bgenai\b|\bprompt\b/i, agent: "ai-engineer" },
-      { pattern: /\bollama\b|\bopenai\b|\banthropic\b|\bvector\b|\brag\b|\bsemantic search\b/i, agent: "ai-engineer" },
-      { pattern: /\bia-radiografia\b|\bmemory_hub\b|\bembedding\b/i, agent: "ai-engineer" },
-      { pattern: /\bdeploy\b|\brelease\b|\bship\b|\bdocker\b|\bnginx\b|\bpm2\b|\bci\/cd\b|\bbackup\b/i, agent: "devops-engineer" },
-      { pattern: /\bssl\b|\btls\b|\bcertificate\b|\bworkflow\b|\bpipeline\b|\bdeploy-vps\b/i, agent: "devops-engineer" },
-      { pattern: /\bdockerfile\b|\bdocker-compose\b|\bcontainer\b|\binfrastructure\b/i, agent: "devops-engineer" },
-      { pattern: /\bdashboard\b|\banalytics\b|\bbi\b|\breport\b|\bsql\b|\bquery\b|\bmetric\b|\bkpi\b/i, agent: "data-engineer" },
-      { pattern: /\betl\b|\bpipeline\b|\bdata flow\b|\bimport\b|\bexport\b|\bcsv\b|\bexcel\b/i, agent: "data-engineer" },
-      { pattern: /\bchart\b|\bgraph\b|\bvisualization\b|\brecharts\b|\btimeline\b/i, agent: "data-engineer" },
-      { pattern: /\bdre\b|\bcash flow\b|\bconciliation\b|\bofx\b|\bfinancial report\b/i, agent: "data-engineer" },
+      {
+        pattern: /\bhealth check\b|\bmetrics\b|\bobservability\b/i,
+        agent: "verifier",
+      },
+      {
+        pattern:
+          /\bai\b|\bllm\b|\bmodel\b|\bembedding\b|\bvision\b|\bradiografia\b|\bgenai\b|\bprompt\b/i,
+        agent: "ai-engineer",
+      },
+      {
+        pattern:
+          /\bollama\b|\bopenai\b|\banthropic\b|\bvector\b|\brag\b|\bsemantic search\b/i,
+        agent: "ai-engineer",
+      },
+      {
+        pattern: /\bia-radiografia\b|\bmemory_hub\b|\bembedding\b/i,
+        agent: "ai-engineer",
+      },
+      {
+        pattern:
+          /\bdeploy\b|\brelease\b|\bship\b|\bdocker\b|\bnginx\b|\bpm2\b|\bci\/cd\b|\bbackup\b/i,
+        agent: "devops-engineer",
+      },
+      {
+        pattern:
+          /\bssl\b|\btls\b|\bcertificate\b|\bworkflow\b|\bpipeline\b|\bdeploy-vps\b/i,
+        agent: "devops-engineer",
+      },
+      {
+        pattern:
+          /\bdockerfile\b|\bdocker-compose\b|\bcontainer\b|\binfrastructure\b/i,
+        agent: "devops-engineer",
+      },
+      {
+        pattern:
+          /\bdashboard\b|\banalytics\b|\bbi\b|\breport\b|\bsql\b|\bquery\b|\bmetric\b|\bkpi\b/i,
+        agent: "data-engineer",
+      },
+      {
+        pattern:
+          /\betl\b|\bpipeline\b|\bdata flow\b|\bimport\b|\bexport\b|\bcsv\b|\bexcel\b/i,
+        agent: "data-engineer",
+      },
+      {
+        pattern:
+          /\bchart\b|\bgraph\b|\bvisualization\b|\brecharts\b|\btimeline\b/i,
+        agent: "data-engineer",
+      },
+      {
+        pattern:
+          /\bdre\b|\bcash flow\b|\bconciliation\b|\bofx\b|\bfinancial report\b/i,
+        agent: "data-engineer",
+      },
     ],
   },
 
@@ -181,4 +273,4 @@ export default defineConfig({
     standard: { contextWindow: 64000, temperature: 0.3 },
     basic: { contextWindow: 32000, temperature: 0.4 },
   },
-})
+});

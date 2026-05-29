@@ -24,7 +24,12 @@ export class FilesRepository implements IFilesRepository {
     });
   }
 
-  async updateArquivoUrlTemp(id: string, clinicId: string, urlTemp: string, expiraEm: Date) {
+  async updateArquivoUrlTemp(
+    id: string,
+    clinicId: string,
+    urlTemp: string,
+    expiraEm: Date,
+  ) {
     return prisma.arquivo.updateMany({
       where: { id, clinic_id: clinicId },
       data: { url_temp: urlTemp, expira_em: expiraEm },
@@ -38,14 +43,26 @@ export class FilesRepository implements IFilesRepository {
     });
   }
 
-  async updateArquivoVersaoAtual(id: string, clinicId: string, versaoAtualId: string) {
+  async updateArquivoVersaoAtual(
+    id: string,
+    clinicId: string,
+    versaoAtualId: string,
+  ) {
     return prisma.arquivo.updateMany({
       where: { id, clinic_id: clinicId },
       data: { versao_atual_id: versaoAtualId },
     });
   }
 
-  async updateArquivoFromVersion(id: string, clinicId: string, versionData: { nome_storage: string; tamanho_bytes: number; versao_atual_id: string }) {
+  async updateArquivoFromVersion(
+    id: string,
+    clinicId: string,
+    versionData: {
+      nome_storage: string;
+      tamanho_bytes: number;
+      versao_atual_id: string;
+    },
+  ) {
     return prisma.arquivo.updateMany({
       where: { id, clinic_id: clinicId },
       data: {

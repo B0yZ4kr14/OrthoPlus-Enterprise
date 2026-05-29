@@ -12,7 +12,10 @@ const STATUS_LABELS: Record<KruxStatus, string> = {
   signed: "Transação assinada recebida",
 };
 
-const STATUS_BADGES: Record<KruxStatus, { label: string; variant: "default" | "secondary" }> = {
+const STATUS_BADGES: Record<
+  KruxStatus,
+  { label: string; variant: "default" | "secondary" }
+> = {
   idle: { label: "Inativo", variant: "secondary" },
   scanning: { label: "Escaneando", variant: "secondary" },
   signed: { label: "Pronto", variant: "default" },
@@ -27,7 +30,9 @@ export function StatusDisplay({ status }: StatusDisplayProps) {
         <Shield className="h-8 w-8 text-primary" />
         <div>
           <p className="font-semibold">Status Krux</p>
-          <p className="text-sm text-muted-foreground">{STATUS_LABELS[status]}</p>
+          <p className="text-sm text-muted-foreground">
+            {STATUS_LABELS[status]}
+          </p>
         </div>
       </div>
       <Badge variant={badge.variant}>{badge.label}</Badge>

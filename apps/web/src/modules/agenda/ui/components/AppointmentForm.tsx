@@ -37,7 +37,13 @@ const appointmentSchema = z.object({
   date: z.date({ message: "Selecione uma data válida" }),
   time: z.string().min(1, "Informe o horário"),
   duration: z.string().min(1, "Informe a duração"),
-  appointmentType: z.enum(["CONSULTA", "RETORNO", "EMERGENCIA", "AVALIACAO", "PROCEDIMENTO"]),
+  appointmentType: z.enum([
+    "CONSULTA",
+    "RETORNO",
+    "EMERGENCIA",
+    "AVALIACAO",
+    "PROCEDIMENTO",
+  ]),
   notes: z.string().optional(),
 });
 
@@ -173,7 +179,11 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
               <FormItem>
                 <FormLabel>Horário</FormLabel>
                 <FormControl>
-                  <Input type="time" {...field} data-testid="appointment-form-time" />
+                  <Input
+                    type="time"
+                    {...field}
+                    data-testid="appointment-form-time"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -251,7 +261,12 @@ export function AppointmentForm({ onSubmit, isLoading }: AppointmentFormProps) {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isLoading} data-testid="appointment-form-submit">
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isLoading}
+          data-testid="appointment-form-submit"
+        >
           {isLoading ? "Agendando..." : "Agendar Consulta"}
         </Button>
       </form>

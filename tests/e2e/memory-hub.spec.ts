@@ -15,7 +15,9 @@ test.describe("Memory Hub - Search and Health", () => {
     await page.waitForLoadState("domcontentloaded");
 
     await expect(page.locator("h1")).toContainText("Memory Hub");
-    await expect(page.getByText(/Search and monitor project knowledge/i)).toBeVisible();
+    await expect(
+      page.getByText(/Search and monitor project knowledge/i),
+    ).toBeVisible();
   });
 
   test("should display health metrics", async ({ page }) => {
@@ -56,7 +58,9 @@ test.describe("Memory Hub - Search and Health", () => {
     await page.goto("./");
     await page.waitForLoadState("domcontentloaded");
 
-    const memoryHubLink = page.getByRole("link", { name: /memory hub|memoria/i });
+    const memoryHubLink = page.getByRole("link", {
+      name: /memory hub|memoria/i,
+    });
 
     if (await memoryHubLink.isVisible().catch(() => false)) {
       await memoryHubLink.click();

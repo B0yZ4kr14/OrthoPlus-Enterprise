@@ -16,11 +16,12 @@ export function AlertSection({ fechamento }: AlertSectionProps) {
           <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
           <div>
             <p className="font-medium text-destructive">
-              Divergência Detectada: {fechamento?.percentualDivergencia.toFixed(2)}%
+              Divergência Detectada:{" "}
+              {fechamento?.percentualDivergencia.toFixed(2)}%
             </p>
             <p className="text-sm text-destructive-foreground mt-1">
-              {fechamento?.vendasSemNFCe} vendas sem NFCe emitida. Verifique se todas as vendas geraram cupom fiscal
-              corretamente.
+              {fechamento?.vendasSemNFCe} vendas sem NFCe emitida. Verifique se
+              todas as vendas geraram cupom fiscal corretamente.
             </p>
           </div>
         </div>

@@ -12,17 +12,28 @@ import type { FiscalFormData } from "./types";
 
 interface RegimeTributarioSelectProps {
   formData: FiscalFormData;
-  onChange: <K extends keyof FiscalFormData>(field: K, value: FiscalFormData[K]) => void;
+  onChange: <K extends keyof FiscalFormData>(
+    field: K,
+    value: FiscalFormData[K],
+  ) => void;
 }
 
-export function RegimeTributarioSelect({ formData, onChange }: RegimeTributarioSelectProps) {
+export function RegimeTributarioSelect({
+  formData,
+  onChange,
+}: RegimeTributarioSelectProps) {
   return (
     <>
       <div className="space-y-2">
         <Label htmlFor="regime_tributario">Regime Tributário</Label>
         <Select
           value={formData.regime_tributario}
-          onValueChange={(value) => onChange("regime_tributario", value as FiscalFormData["regime_tributario"])}
+          onValueChange={(value) =>
+            onChange(
+              "regime_tributario",
+              value as FiscalFormData["regime_tributario"],
+            )
+          }
         >
           <SelectTrigger>
             <SelectValue />

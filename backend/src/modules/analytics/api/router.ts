@@ -13,8 +13,16 @@ router.get(
   cacheRoute(300),
   controller.getDashboardOverview.bind(controller),
 );
-router.get("/unified-metrics", cacheRoute(300), controller.getUnifiedMetrics.bind(controller));
-router.get("/marketing-roi", cacheRoute(300), controller.getMarketingROI.bind(controller));
+router.get(
+  "/unified-metrics",
+  cacheRoute(300),
+  controller.getUnifiedMetrics.bind(controller),
+);
+router.get(
+  "/marketing-roi",
+  cacheRoute(300),
+  controller.getMarketingROI.bind(controller),
+);
 
 // Ponto unificado de processamento de analises e background events
 router.post("/processor", controller.processAnalytics.bind(controller));

@@ -65,7 +65,7 @@ export class GitHubRepository {
     this.props.updatedAt = new Date();
   }
 
-  toJSON(): Omit<GitHubRepositoryProps, 'accessToken' | 'webhookSecret'> {
+  toJSON(): Omit<GitHubRepositoryProps, "accessToken" | "webhookSecret"> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { accessToken, webhookSecret, ...rest } = this.props;
     return rest;

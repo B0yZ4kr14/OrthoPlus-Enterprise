@@ -7,7 +7,7 @@ export function addHeader(
   doc: jsPDF,
   clinicName: string,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): number {
   const pageWidth = doc.internal.pageSize.getWidth();
   let yPosition = 20;
@@ -29,7 +29,7 @@ export function addHeader(
     `Período: ${format(startDate, "dd/MM/yyyy", { locale: ptBR })} - ${format(endDate, "dd/MM/yyyy", { locale: ptBR })}`,
     pageWidth / 2,
     yPosition,
-    { align: "center" }
+    { align: "center" },
   );
 
   return yPosition + 15;

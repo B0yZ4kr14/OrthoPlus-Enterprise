@@ -1,4 +1,4 @@
-import { vi } from "vitest"
+import { vi } from "vitest";
 
 // Mock ResizeObserver for jsdom environment
 class ResizeObserverMock {
@@ -7,7 +7,7 @@ class ResizeObserverMock {
   disconnect() {}
 }
 
-global.ResizeObserver = ResizeObserverMock
+global.ResizeObserver = ResizeObserverMock;
 
 // Mock window.matchMedia if not present
 Object.defineProperty(window, "matchMedia", {
@@ -22,4 +22,4 @@ Object.defineProperty(window, "matchMedia", {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
-})
+});

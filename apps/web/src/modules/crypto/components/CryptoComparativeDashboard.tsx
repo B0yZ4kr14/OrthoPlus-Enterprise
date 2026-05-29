@@ -1,5 +1,10 @@
 // Dashboard de comparação de rentabilidade: Crypto vs Métodos Tradicionais (PIX, Cartão)
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
   BarChart,
@@ -269,7 +274,7 @@ export function CryptoComparativeDashboard({
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={comparisonData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="method"  stroke="hsl(var(--muted-foreground))" />
+                <XAxis dataKey="method" stroke="hsl(var(--muted-foreground))" />
                 <YAxis
                   label={{
                     value: "Taxa (R$)",
@@ -287,7 +292,7 @@ export function CryptoComparativeDashboard({
                   }}
                   labelFormatter={(label) => `Método: ${label}`}
                 />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="fee"
                   name="Taxa Cobrada"
@@ -346,7 +351,7 @@ export function CryptoComparativeDashboard({
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={savingsData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="method"  stroke="hsl(var(--muted-foreground))" />
+              <XAxis dataKey="method" stroke="hsl(var(--muted-foreground))" />
               <YAxis
                 label={{
                   value: "Economia (R$)",
@@ -360,7 +365,7 @@ export function CryptoComparativeDashboard({
                   `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
                 }
               />
-              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Bar
                 dataKey="savings"
                 name="Economia em Taxas"

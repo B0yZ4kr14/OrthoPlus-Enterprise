@@ -8,10 +8,20 @@ import {
   CryptoListSkeleton,
   CryptoTableSkeleton,
 } from "@/components/crypto/CryptoSkeleton";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -102,7 +112,9 @@ export default function CryptoPagamentos() {
     deleteAlert,
   } = useCryptoPriceAlerts();
 
-  const [selectedWallet, setSelectedWallet] = useState<CryptoWallet | null>(null);
+  const [selectedWallet, setSelectedWallet] = useState<CryptoWallet | null>(
+    null,
+  );
   const [syncingWallet, setSyncingWallet] = useState<string | null>(null);
   const [convertingTx, setConvertingTx] = useState<string | null>(null);
   const [exchangeDialogOpen, setExchangeDialogOpen] = useState(false);
@@ -386,7 +398,7 @@ export default function CryptoPagamentos() {
 
         {/* Transactions Tab */}
         <TabsContent value="transactions" className="space-y-4">
-          <CryptoTransactionsView 
+          <CryptoTransactionsView
             exchanges={exchanges}
             wallets={wallets}
             transactions={transactions}
@@ -401,7 +413,7 @@ export default function CryptoPagamentos() {
 
         {/* Wallets Tab */}
         <TabsContent value="wallets" className="space-y-4">
-          <CryptoWalletsView 
+          <CryptoWalletsView
             exchanges={exchanges}
             wallets={wallets}
             walletDialogOpen={walletDialogOpen}
@@ -421,7 +433,7 @@ export default function CryptoPagamentos() {
 
         {/* Exchanges Tab */}
         <TabsContent value="exchanges" className="space-y-4">
-          <CryptoExchangesView 
+          <CryptoExchangesView
             exchanges={exchanges}
             setExchangeDialogOpen={setExchangeDialogOpen}
           />
@@ -476,7 +488,9 @@ export default function CryptoPagamentos() {
         open={qrCodeDialogOpen}
         onOpenChange={setQrCodeDialogOpen}
         wallets={wallets}
-        onGeneratePayment={async (data) => { return null; }}
+        onGeneratePayment={async (data) => {
+          return null;
+        }}
       />
     </div>
   );

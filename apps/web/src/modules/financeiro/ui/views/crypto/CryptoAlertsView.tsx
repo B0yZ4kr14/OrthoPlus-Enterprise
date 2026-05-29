@@ -48,10 +48,7 @@ export function CryptoAlertsView({
           Alertas de Preço e Estratégias DCA
         </h3>
         <div className="flex gap-2">
-          <Dialog
-            open={cascadeWizardOpen}
-            onOpenChange={setCascadeWizardOpen}
-          >
+          <Dialog open={cascadeWizardOpen} onOpenChange={setCascadeWizardOpen}>
             <DialogTrigger asChild>
               <Button variant="default" size="sm">
                 <TrendingDown className="h-4 w-4 mr-2" />
@@ -98,8 +95,8 @@ export function CryptoAlertsView({
       ) : alerts.length === 0 ? (
         <Card>
           <CardContent className="py-8 text-center text-muted-foreground">
-            Nenhum alerta configurado. Crie um alerta para ser notificado
-            quando as taxas atingirem valores específicos.
+            Nenhum alerta configurado. Crie um alerta para ser notificado quando
+            as taxas atingirem valores específicos.
           </CardContent>
         </Card>
       ) : (
@@ -123,8 +120,7 @@ export function CryptoAlertsView({
                 const isCascade = groupId !== null;
                 const sortedAlerts = isCascade
                   ? [...groupAlerts].sort(
-                      (a, b) =>
-                        (a.cascade_order || 0) - (b.cascade_order || 0),
+                      (a, b) => (a.cascade_order || 0) - (b.cascade_order || 0),
                     )
                   : groupAlerts;
 
@@ -156,10 +152,7 @@ export function CryptoAlertsView({
                               </div>
                               <div className="flex-1 space-y-1">
                                 <div className="flex items-center gap-2">
-                                  <Badge
-                                    variant="outline"
-                                    className="text-xs"
-                                  >
+                                  <Badge variant="outline" className="text-xs">
                                     {alert.coin_type}
                                   </Badge>
                                   <span className="text-sm font-medium">
@@ -223,9 +216,7 @@ export function CryptoAlertsView({
                       <div className="flex items-center justify-between">
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline">
-                              {alert.coin_type}
-                            </Badge>
+                            <Badge variant="outline">{alert.coin_type}</Badge>
                             <Badge
                               variant={
                                 alert.alert_type === "BELOW"
@@ -237,16 +228,12 @@ export function CryptoAlertsView({
                                 ? "Abaixo de"
                                 : "Acima de"}{" "}
                               R${" "}
-                              {alert.target_rate_brl.toLocaleString(
-                                "pt-BR",
-                                { minimumFractionDigits: 2 },
-                              )}
+                              {alert.target_rate_brl.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
                             </Badge>
                             {alert.stop_loss_enabled && (
-                              <Badge
-                                variant="destructive"
-                                className="text-xs"
-                              >
+                              <Badge variant="destructive" className="text-xs">
                                 Stop-Loss {alert.conversion_percentage}%
                               </Badge>
                             )}

@@ -10,17 +10,50 @@ interface ConfigTabProps {
   selectedEngine: string;
 }
 
-const ENGINE_CONFIG: Record<string, { fields: string[]; portDefault: string; dbLabel: string; userDefault: string; buttonLabel: string }> = {
-  PostgreSQL: { fields: ['host','port','database','user','password'], portDefault: '5432', dbLabel: 'Banco de Dados', userDefault: 'postgres', buttonLabel: 'Testar Conexão PostgreSQL' },
-  Firebird:   { fields: ['host','port','dbpath','user','password'],   portDefault: '3050', dbLabel: 'Caminho do Banco',  userDefault: 'SYSDBA',    buttonLabel: 'Testar Conexão Firebird'   },
-  MariaDB:    { fields: ['host','port','database','user','password'], portDefault: '3306', dbLabel: 'Banco de Dados', userDefault: 'root',      buttonLabel: 'Testar Conexão MariaDB'    },
-  SQLite:     { fields: ['filepath','user','password'],              portDefault: '',     dbLabel: 'Caminho do Arquivo', userDefault: '',         buttonLabel: 'Testar Conexão SQLite'     },
+const ENGINE_CONFIG: Record<
+  string,
+  {
+    fields: string[];
+    portDefault: string;
+    dbLabel: string;
+    userDefault: string;
+    buttonLabel: string;
+  }
+> = {
+  PostgreSQL: {
+    fields: ["host", "port", "database", "user", "password"],
+    portDefault: "5432",
+    dbLabel: "Banco de Dados",
+    userDefault: "postgres",
+    buttonLabel: "Testar Conexão PostgreSQL",
+  },
+  Firebird: {
+    fields: ["host", "port", "dbpath", "user", "password"],
+    portDefault: "3050",
+    dbLabel: "Caminho do Banco",
+    userDefault: "SYSDBA",
+    buttonLabel: "Testar Conexão Firebird",
+  },
+  MariaDB: {
+    fields: ["host", "port", "database", "user", "password"],
+    portDefault: "3306",
+    dbLabel: "Banco de Dados",
+    userDefault: "root",
+    buttonLabel: "Testar Conexão MariaDB",
+  },
+  SQLite: {
+    fields: ["filepath", "user", "password"],
+    portDefault: "",
+    dbLabel: "Caminho do Arquivo",
+    userDefault: "",
+    buttonLabel: "Testar Conexão SQLite",
+  },
 };
 
 export function ConfigTab({ selectedEngine }: ConfigTabProps) {
   const { showInfo } = useToast();
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const config = ENGINE_CONFIG[selectedEngine] || ENGINE_CONFIG.PostgreSQL;
 
   const handleTestConnection = () => {
@@ -34,75 +67,82 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
           <Server className="w-5 h-5 text-interactive" />
           Configuração de Conexão: {selectedEngine}
         </h3>
-        <p className="text-sm text-muted-foreground">Parâmetros para acesso à base de dados</p>
+        <p className="text-sm text-muted-foreground">
+          Parâmetros para acesso à base de dados
+        </p>
       </div>
 
       <div className="p-4 rounded-xl border border-warning/50 bg-warning/10 text-warning text-sm font-medium flex items-center gap-2">
-        <AlertTriangle className="w-5 h-5" />
-        ⚠ Modo Demo: Conexão será simulada
+        <AlertTriangle className="w-5 h-5" />⚠ Modo Demo: Conexão será simulada
       </div>
 
       <Card className="border border-border bg-muted/30">
         <CardContent className="p-6 space-y-4">
-          {config.fields.includes('host') && (
+          {config.fields.includes("host") && (
             <div className="grid grid-cols-4 gap-4 items-center">
               <Label className="text-right text-foreground">Host</Label>
               <div className="col-span-3">
-                <Input 
-                  defaultValue="localhost" 
-                />
+                <Input defaultValue="localhost" />
               </div>
             </div>
           )}
 
-          {config.fields.includes('port') && (
+          {config.fields.includes("port") && (
             <div className="grid grid-cols-4 gap-4 items-center">
               <Label className="text-right text-foreground">Porta</Label>
               <div className="col-span-3">
-                <Input 
-                  defaultValue={config.portDefault} 
-                />
+                <Input defaultValue={config.portDefault} />
               </div>
             </div>
           )}
 
-          {(config.fields.includes('database') || config.fields.includes('dbpath') || config.fields.includes('filepath')) && (
+          {(config.fields.includes("database") ||
+            config.fields.includes("dbpath") ||
+            config.fields.includes("filepath")) && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-foreground">{config.dbLabel}</Label>
+              <Label className="text-right text-foreground">
+                {config.dbLabel}
+              </Label>
               <div className="col-span-3">
-                <Input 
-                  defaultValue={config.fields.includes('database') ? "orthoplus" : "/var/lib/data/db"} 
+                <Input
+                  defaultValue={
+                    config.fields.includes("database")
+                      ? "orthoplus"
+                      : "/var/lib/data/db"
+                  }
                 />
               </div>
             </div>
           )}
 
-          {config.fields.includes('user') && (
+          {config.fields.includes("user") && (
             <div className="grid grid-cols-4 gap-4 items-center">
               <Label className="text-right text-foreground">Usuário</Label>
               <div className="col-span-3">
-                <Input 
-                  defaultValue={config.userDefault} 
-                />
+                <Input defaultValue={config.userDefault} />
               </div>
             </div>
           )}
 
-          {config.fields.includes('password') && (
+          {config.fields.includes("password") && (
             <div className="grid grid-cols-4 gap-4 items-center">
               <Label className="text-right text-foreground">Senha</Label>
               <div className="col-span-3 relative">
-                <Input 
-                  type={showPassword ? "text" : "password"} 
-                  defaultValue="********" 
-                  className="pr-10" 
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  defaultValue="********"
+                  className="pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -111,7 +151,10 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
           <div className="grid grid-cols-4 gap-4 pt-4">
             <div className="col-span-1"></div>
             <div className="col-span-3">
-              <Button onClick={handleTestConnection} className="bg-interactive hover:bg-interactive/90 text-white w-full border-none">
+              <Button
+                onClick={handleTestConnection}
+                className="bg-interactive hover:bg-interactive/90 text-white w-full border-none"
+              >
                 <Play className="w-4 h-4 mr-2" /> {config.buttonLabel}
               </Button>
             </div>

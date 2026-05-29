@@ -5,7 +5,9 @@ interface CryptoComparativeViewProps {
   transactions: any[];
 }
 
-export function CryptoComparativeView({ transactions }: CryptoComparativeViewProps) {
+export function CryptoComparativeView({
+  transactions,
+}: CryptoComparativeViewProps) {
   return (
     <>
       <div className="flex justify-between items-center">
@@ -14,8 +16,7 @@ export function CryptoComparativeView({ transactions }: CryptoComparativeViewPro
             Dashboard Comparativo de Rentabilidade
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Compare taxas e economia entre criptomoedas e métodos
-            tradicionais
+            Compare taxas e economia entre criptomoedas e métodos tradicionais
           </p>
         </div>
       </div>

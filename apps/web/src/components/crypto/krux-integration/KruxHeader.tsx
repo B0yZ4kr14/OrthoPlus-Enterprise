@@ -1,4 +1,8 @@
-import { CardHeader, CardTitle, CardDescription } from "@orthoplus/core-ui/card";
+import {
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@orthoplus/core-ui/card";
 import { Shield } from "lucide-react";
 
 export function KruxHeader() {
@@ -9,7 +13,8 @@ export function KruxHeader() {
         Integração Krux Hardware Wallet
       </CardTitle>
       <CardDescription>
-        Assine transações offline com seu Krux DIY e faça broadcast após validação
+        Assine transações offline com seu Krux DIY e faça broadcast após
+        validação
       </CardDescription>
     </CardHeader>
   );

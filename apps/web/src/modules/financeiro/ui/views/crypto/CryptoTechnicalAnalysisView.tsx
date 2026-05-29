@@ -1,5 +1,10 @@
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { AdvancedTechnicalAnalysis } from "@/components/crypto/AdvancedTechnicalAnalysis";
 
 export function CryptoTechnicalAnalysisView() {

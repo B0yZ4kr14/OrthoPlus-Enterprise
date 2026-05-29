@@ -3,7 +3,11 @@ import { CampaignSelect } from "./CampaignSelect";
 import { ChannelSelect } from "./ChannelSelect";
 import type { CampaignSourceSelectorProps } from "./types";
 
-export function CampaignSourceSelector({ value, onChange, clinicId }: CampaignSourceSelectorProps) {
+export function CampaignSourceSelector({
+  value,
+  onChange,
+  clinicId,
+}: CampaignSourceSelectorProps) {
   const {
     campaigns,
     captureChannels,

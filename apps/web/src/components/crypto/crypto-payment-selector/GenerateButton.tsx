@@ -7,9 +7,17 @@ interface GenerateButtonProps {
   onClick: () => void;
 }
 
-export function GenerateButton({ disabled, loading, onClick }: GenerateButtonProps) {
+export function GenerateButton({
+  disabled,
+  loading,
+  onClick,
+}: GenerateButtonProps) {
   return (
-    <Button onClick={onClick} disabled={disabled || loading} className="w-full gap-2">
+    <Button
+      onClick={onClick}
+      disabled={disabled || loading}
+      className="w-full gap-2"
+    >
       {loading ? (
         <>
           <Loader2 className="h-4 w-4 animate-spin" />

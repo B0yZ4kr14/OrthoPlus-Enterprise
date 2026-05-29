@@ -1,21 +1,21 @@
-import { redisInstance } from "@/infrastructure/redis/redisClient"
-import { logger } from "@/infrastructure/logger"
+import { redisInstance } from "@/infrastructure/redis/redisClient";
+import { logger } from "@/infrastructure/logger";
 
 export interface SearchResultItem {
-  id: string
-  entityType: string
-  entityId: string
-  title: string
-  snippet: string
-  score: number
-  module: string
+  id: string;
+  entityType: string;
+  entityId: string;
+  title: string;
+  snippet: string;
+  score: number;
+  module: string;
 }
 
 export interface SearchResponse {
-  total: number
-  page: number
-  limit: number
-  results: SearchResultItem[]
+  total: number;
+  page: number;
+  limit: number;
+  results: SearchResultItem[];
 }
 
 function buildKey(
@@ -23,10 +23,10 @@ function buildKey(
   query: string,
   module: string | undefined,
   page: number,
-  limit: number
+  limit: number,
 ): string {
-  const mod = module || "__all__"
-  return `search:${clinicId}:${query}:${mod}:${page}:${limit}`
+  const mod = module || "__all__";
+  return `search:${clinicId}:${query}:${mod}:${page}:${limit}`;
 }
 
 export async function getSearchCache(
@@ -34,19 +34,19 @@ export async function getSearchCache(
   query: string,
   module: string | undefined,
   page: number,
-  limit: number
+  limit: number,
 ): Promise<SearchResponse | null> {
   try {
-    const key = buildKey(clinicId, query, module, page, limit)
-    const cached = await redisInstance.get(key)
+    const key = buildKey(clinicId, query, module, page, limit);
+    const cached = await redisInstance.get(key);
     if (cached) {
-      logger.debug(`[SearchCache HIT] ${key}`)
-      return JSON.parse(cached) as SearchResponse
+      logger.debug(`[SearchCache HIT] ${key}`);
+      return JSON.parse(cached) as SearchResponse;
     }
-    return null
+    return null;
   } catch (error) {
-    logger.error("[SearchCache GET Error] Falling back to DB query", error)
-    return null
+    logger.error("[SearchCache GET Error] Falling back to DB query", error);
+    return null;
   }
 }
 
@@ -57,43 +57,46 @@ export async function setSearchCache(
   page: number,
   limit: number,
   data: SearchResponse,
-  ttlMs: number
+  ttlMs: number,
 ): Promise<void> {
   try {
-    const key = buildKey(clinicId, query, module, page, limit)
-    const ttlSeconds = Math.ceil(ttlMs / 1000)
-    await redisInstance.set(key, JSON.stringify(data), "EX", ttlSeconds)
-    logger.debug(`[SearchCache SET] ${key} (TTL: ${ttlSeconds}s)`)
+    const key = buildKey(clinicId, query, module, page, limit);
+    const ttlSeconds = Math.ceil(ttlMs / 1000);
+    await redisInstance.set(key, JSON.stringify(data), "EX", ttlSeconds);
+    logger.debug(`[SearchCache SET] ${key} (TTL: ${ttlSeconds}s)`);
   } catch (error) {
-    logger.error("[SearchCache SET Error] Failed to cache search result", error)
+    logger.error(
+      "[SearchCache SET Error] Failed to cache search result",
+      error,
+    );
   }
 }
 
 export async function invalidateSearchCache(clinicId: string): Promise<void> {
   try {
-    const pattern = `search:${clinicId}:*`
-    let cursor = "0"
+    const pattern = `search:${clinicId}:*`;
+    let cursor = "0";
     do {
       const reply = await redisInstance.scan(
         cursor,
         "MATCH",
         pattern,
         "COUNT",
-        100
-      )
-      cursor = reply[0]
-      const keys = reply[1]
+        100,
+      );
+      cursor = reply[0];
+      const keys = reply[1];
       if (keys.length > 0) {
-        await redisInstance.del(...keys)
+        await redisInstance.del(...keys);
         logger.debug(
-          `[SearchCache INVALIDATE] Deleted ${keys.length} keys for clinic ${clinicId}`
-        )
+          `[SearchCache INVALIDATE] Deleted ${keys.length} keys for clinic ${clinicId}`,
+        );
       }
-    } while (cursor !== "0")
+    } while (cursor !== "0");
   } catch (error) {
     logger.error(
       "[SearchCache INVALIDATE Error] Failed to invalidate search cache",
-      error
-    )
+      error,
+    );
   }
 }

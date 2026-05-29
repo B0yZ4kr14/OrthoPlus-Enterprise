@@ -21,7 +21,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
         <FormField
-          
           control={form.control}
           name="nome"
           render={({ field }) => (
@@ -36,7 +35,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
         />
 
         <FormField
-          
           control={form.control}
           name="razaoSocial"
           render={({ field }) => (
@@ -51,7 +49,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
         />
 
         <FormField
-          
           control={form.control}
           name="cnpj"
           render={({ field }) => (
@@ -66,7 +63,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
         />
 
         <FormField
-          
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -85,7 +81,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
         />
 
         <FormField
-          
           control={form.control}
           name="telefone"
           render={({ field }) => (
@@ -100,7 +95,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
         />
 
         <FormField
-          
           control={form.control}
           name="cep"
           render={({ field }) => (
@@ -116,7 +110,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
       </div>
 
       <FormField
-        
         control={form.control}
         name="endereco"
         render={({ field }) => (
@@ -132,7 +125,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
 
       <div className="grid gap-6 md:grid-cols-2">
         <FormField
-          
           control={form.control}
           name="cidade"
           render={({ field }) => (
@@ -147,7 +139,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
         />
 
         <FormField
-          
           control={form.control}
           name="estado"
           render={({ field }) => (
@@ -163,7 +154,6 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
       </div>
 
       <FormField
-        
         control={form.control}
         name="observacoes"
         render={({ field }) => (
@@ -183,24 +173,18 @@ export function DadosCadastraisTab({ form }: DadosCadastraisTabProps) {
       />
 
       <FormField
-        
         control={form.control}
         name="ativo"
         render={({ field }) => (
           <FormItem className="flex items-center justify-between rounded-lg border p-4">
             <div className="space-y-0.5">
-              <FormLabel className="text-base">
-                Fornecedor Ativo
-              </FormLabel>
+              <FormLabel className="text-base">Fornecedor Ativo</FormLabel>
               <div className="text-sm text-muted-foreground">
                 Desative para interromper temporariamente este fornecedor
               </div>
             </div>
             <FormControl>
-              <Switch
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
+              <Switch checked={field.value} onCheckedChange={field.onChange} />
             </FormControl>
           </FormItem>
         )}

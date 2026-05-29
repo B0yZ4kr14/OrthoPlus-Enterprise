@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { History, Calendar } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { PatientTimeline } from "@/modules/pacientes/components/PatientTimeline";
@@ -10,7 +15,9 @@ interface HistoricoTabProps {
 }
 
 export function HistoricoTab({ patient }: HistoricoTabProps) {
-  const { data: events = [], isLoading } = usePatientTimeline(patient.id as string);
+  const { data: events = [], isLoading } = usePatientTimeline(
+    patient.id as string,
+  );
 
   return (
     <div className="space-y-6">
@@ -29,9 +36,9 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
             </label>
             <p className="text-lg font-semibold mt-2">
               {patient.first_appointment_date
-                ? new Date(patient.first_appointment_date as string).toLocaleDateString(
-                    "pt-BR",
-                  )
+                ? new Date(
+                    patient.first_appointment_date as string,
+                  ).toLocaleDateString("pt-BR")
                 : "Não registrado"}
             </p>
           </div>
@@ -42,9 +49,9 @@ export function HistoricoTab({ patient }: HistoricoTabProps) {
             </label>
             <p className="text-lg font-semibold mt-2">
               {patient.last_appointment_date
-                ? new Date(patient.last_appointment_date as string).toLocaleDateString(
-                    "pt-BR",
-                  )
+                ? new Date(
+                    patient.last_appointment_date as string,
+                  ).toLocaleDateString("pt-BR")
                 : "Nunca consultou"}
             </p>
           </div>

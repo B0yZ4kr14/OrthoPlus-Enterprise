@@ -11,7 +11,9 @@ export const createNfeSchema = z.object({
 });
 
 export const updateNfeSchema = z.object({
-  status: z.enum(["RASCUNHO", "AUTORIZADA", "CANCELADA", "REJEITADA", "INUTILIZADA"]).optional(),
+  status: z
+    .enum(["RASCUNHO", "AUTORIZADA", "CANCELADA", "REJEITADA", "INUTILIZADA"])
+    .optional(),
   chave_acesso: z.string().max(100).nullable().optional(),
   xml: z.string().nullable().optional(),
   pdf_url: z.string().url().nullable().optional(),

@@ -25,9 +25,7 @@ interface ContasReceberChartProps {
   contasReceber: ContaReceber[];
 }
 
-export function ContasReceberChart({
-  contasReceber,
-}: ContasReceberChartProps) {
+export function ContasReceberChart({ contasReceber }: ContasReceberChartProps) {
   const totalReceber = contasReceber
     .filter((c) => c.status !== "pago" && c.status !== "cancelado")
     .reduce((sum, c) => sum + (c.valor - (c.valor_pago || 0)), 0);
@@ -45,9 +43,7 @@ export function ContasReceberChart({
     <Card variant="elevated">
       <CardHeader>
         <CardTitle>Recebido vs Em Aberto</CardTitle>
-        <CardDescription>
-          Visão geral do status de recebimentos
-        </CardDescription>
+        <CardDescription>Visão geral do status de recebimentos</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={250}>
@@ -65,10 +61,8 @@ export function ContasReceberChart({
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip
-              formatter={(value: number) => formatBRL(value)}
-            />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Tooltip formatter={(value: number) => formatBRL(value)} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>

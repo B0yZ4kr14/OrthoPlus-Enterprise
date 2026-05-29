@@ -9,10 +9,12 @@ import type { WalletFormProps } from "./types";
 
 export function useWalletForm(
   onSubmit: WalletFormProps["onSubmit"],
-  initialData?: z.infer<typeof cryptoWalletSchema>
+  initialData?: z.infer<typeof cryptoWalletSchema>,
 ) {
   const form = useForm<z.infer<typeof cryptoWalletSchema>>({
-    resolver: zodResolver(cryptoWalletSchema) as Resolver<z.infer<typeof cryptoWalletSchema>>,
+    resolver: zodResolver(cryptoWalletSchema) as Resolver<
+      z.infer<typeof cryptoWalletSchema>
+    >,
     defaultValues: {
       wallet_name: initialData?.wallet_name || "",
       coin_type: initialData?.coin_type || "BTC",

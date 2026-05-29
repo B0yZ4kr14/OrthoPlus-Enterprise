@@ -27,7 +27,11 @@ export function PermissionTemplates() {
           Aplique rapidamente conjuntos pré-definidos de permissões aos usuários
         </p>
 
-        <UserSelect value={selectedUser} users={users} onChange={setSelectedUser} />
+        <UserSelect
+          value={selectedUser}
+          users={users}
+          onChange={setSelectedUser}
+        />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

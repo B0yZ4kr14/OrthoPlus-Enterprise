@@ -13,7 +13,10 @@ const PERIODS: { value: TimePeriod; label: string }[] = [
   { value: "1y", label: "1 ano" },
 ];
 
-export function PeriodSelector({ period, onPeriodChange }: PeriodSelectorProps) {
+export function PeriodSelector({
+  period,
+  onPeriodChange,
+}: PeriodSelectorProps) {
   return (
     <div className="flex items-center gap-2">
       {PERIODS.map((p) => (

@@ -1,5 +1,8 @@
 import { Card, CardContent, CardHeader } from "@orthoplus/core-ui/card";
-import { Collapsible, CollapsibleContent } from "@orthoplus/core-ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+} from "@orthoplus/core-ui/collapsible";
 import { useBitcoinInfoCard } from "./useBitcoinInfoCard";
 import { BitcoinCardHeader } from "./CardHeader";
 import { AdvantagesGrid } from "./AdvantagesGrid";

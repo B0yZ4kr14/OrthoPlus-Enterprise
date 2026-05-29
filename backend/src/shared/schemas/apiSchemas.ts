@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 // ============================================================================
 // User DTO Schema (T5.4 — Architecture Refactor)
@@ -10,7 +10,7 @@ export const UserRoleSchema = z.enum([
   "receptionist",
   "assistant",
   "financial",
-])
+]);
 
 export const UserDTOSchema = z.object({
   id: z.string().uuid(),
@@ -21,16 +21,21 @@ export const UserDTOSchema = z.object({
   avatarUrl: z.string().url().optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
-})
+});
 
-export type UserDTO = z.infer<typeof UserDTOSchema>
+export type UserDTO = z.infer<typeof UserDTOSchema>;
 
 // ============================================================================
 // Transaction DTO Schema (T5.4 — Architecture Refactor)
 // ============================================================================
 
-export const TransactionTypeSchema = z.enum(["RECEITA", "DESPESA"])
-export const TransactionStatusSchema = z.enum(["PENDENTE", "PAGO", "CANCELADO", "ATRASADO"])
+export const TransactionTypeSchema = z.enum(["RECEITA", "DESPESA"]);
+export const TransactionStatusSchema = z.enum([
+  "PENDENTE",
+  "PAGO",
+  "CANCELADO",
+  "ATRASADO",
+]);
 export const PaymentMethodSchema = z.enum([
   "DINHEIRO",
   "CARTAO_CREDITO",
@@ -39,7 +44,7 @@ export const PaymentMethodSchema = z.enum([
   "BOLETO",
   "TRANSFERENCIA",
   "CHEQUE",
-])
+]);
 
 export const TransactionDTOSchema = z.object({
   id: z.string().uuid(),
@@ -58,9 +63,9 @@ export const TransactionDTOSchema = z.object({
   createdBy: z.string().uuid().optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
-})
+});
 
-export type TransactionDTO = z.infer<typeof TransactionDTOSchema>
+export type TransactionDTO = z.infer<typeof TransactionDTOSchema>;
 
 export const CreateTransactionRequestSchema = z.object({
   clinicId: z.string().uuid(),
@@ -75,7 +80,7 @@ export const CreateTransactionRequestSchema = z.object({
   appointmentId: z.string().uuid().optional(),
   notes: z.string().max(2000).optional(),
   createdBy: z.string().uuid().optional(),
-})
+});
 
 // ============================================================================
 // Dashboard Overview DTO Schema (T5.4 — Architecture Refactor)
@@ -88,7 +93,7 @@ export const DashboardStatsSchema = z.object({
   occupancyRate: z.number().min(0).max(1),
   pendingTreatments: z.number().int().nonnegative(),
   completedTreatments: z.number().int().nonnegative(),
-})
+});
 
 export const DashboardChartDataSchema = z.object({
   labels: z.array(z.string()),
@@ -96,7 +101,7 @@ export const DashboardChartDataSchema = z.object({
   expenses: z.array(z.number()),
   appointments: z.array(z.number()),
   newPatients: z.array(z.number()),
-})
+});
 
 export const DashboardOverviewDTOSchema = z.object({
   stats: DashboardStatsSchema,
@@ -105,9 +110,9 @@ export const DashboardOverviewDTOSchema = z.object({
     start: z.string().datetime(),
     end: z.string().datetime(),
   }),
-})
+});
 
-export type DashboardOverviewDTO = z.infer<typeof DashboardOverviewDTOSchema>
+export type DashboardOverviewDTO = z.infer<typeof DashboardOverviewDTOSchema>;
 
 // ============================================================================
 // Standardized API Response Envelope (T5.5 — Architecture Refactor)
@@ -118,7 +123,7 @@ export const ValidationErrorSchema = z.object({
   message: z.string(),
   code: z.string(),
   value: z.unknown().optional(),
-})
+});
 
 export const ProblemDetailSchema = z.object({
   type: z.string().url(),
@@ -130,9 +135,11 @@ export const ProblemDetailSchema = z.object({
   errors: z.array(ValidationErrorSchema).optional(),
   timestamp: z.string().datetime().optional(),
   requestId: z.string().uuid().optional(),
-})
+});
 
-export function createStandardResponseSchema<T extends z.ZodTypeAny>(dataSchema: T) {
+export function createStandardResponseSchema<T extends z.ZodTypeAny>(
+  dataSchema: T,
+) {
   return z.object({
     success: z.boolean(),
     data: dataSchema.nullable(),
@@ -145,5 +152,5 @@ export function createStandardResponseSchema<T extends z.ZodTypeAny>(dataSchema:
         totalPages: z.number().optional(),
       })
       .optional(),
-  })
+  });
 }

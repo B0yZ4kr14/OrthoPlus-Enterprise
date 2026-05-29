@@ -5,7 +5,10 @@ import { AnaliseRiscoCard } from "./AnaliseRiscoCard";
 import { SangriaForm } from "./SangriaForm";
 import type { SangriaInteligenteProps } from "./types";
 
-export function SangriaInteligente({ caixaId, valorAtualCaixa }: SangriaInteligenteProps) {
+export function SangriaInteligente({
+  caixaId,
+  valorAtualCaixa,
+}: SangriaInteligenteProps) {
   const {
     sugestaoIA,
     valorSangria,

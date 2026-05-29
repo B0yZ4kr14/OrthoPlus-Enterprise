@@ -13,7 +13,11 @@ export class ReportController {
       throw Errors.unauthorized("Unauthorized: Missing clinicId or userId");
     }
 
-    const result = await this.service.exportClinicData(clinicId, userId, req.body);
+    const result = await this.service.exportClinicData(
+      clinicId,
+      userId,
+      req.body,
+    );
     res.status(200).json(result);
   });
 
@@ -30,7 +34,11 @@ export class ReportController {
       throw Errors.forbidden("Forbidden: Admin access required");
     }
 
-    const result = await this.service.importClinicData(clinicId, userId, req.body);
+    const result = await this.service.importClinicData(
+      clinicId,
+      userId,
+      req.body,
+    );
     res.status(200).json(result);
   });
 

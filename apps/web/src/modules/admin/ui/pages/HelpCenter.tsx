@@ -8,7 +8,12 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   BookOpen,
   AlertTriangle,
@@ -306,7 +311,10 @@ export default function HelpCenter() {
               </CardContent>
             </Card>
           ) : (
-            <Card variant="elevated" className="h-full flex items-center justify-center glass-card">
+            <Card
+              variant="elevated"
+              className="h-full flex items-center justify-center glass-card"
+            >
               <CardContent className="text-center py-12">
                 <Info className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
                 <h3 className="text-lg font-semibold mb-2">

@@ -66,7 +66,8 @@ export class SendConfirmacaoWhatsAppUseCase {
         await this.confirmacaoRepository.save(confirmacao);
       }
 
-      const { sendWhatsAppNotification } = await import("@/lib/api/cryptoInternalApi");
+      const { sendWhatsAppNotification } =
+        await import("@/lib/api/cryptoInternalApi");
       await sendWhatsAppNotification({
         to: input.phoneNumber,
         message: messageContent,

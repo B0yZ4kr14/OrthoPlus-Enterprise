@@ -162,7 +162,10 @@ export function PrescricaoForm({
             <Select
               value={currentMed.via || "oral"}
               onValueChange={(value) =>
-                setCurrentMed({ ...currentMed, via: value as MedicamentoFormData["via"] })
+                setCurrentMed({
+                  ...currentMed,
+                  via: value as MedicamentoFormData["via"],
+                })
               }
             >
               <SelectTrigger>

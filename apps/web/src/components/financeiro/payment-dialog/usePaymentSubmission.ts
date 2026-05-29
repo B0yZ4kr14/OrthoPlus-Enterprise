@@ -8,7 +8,10 @@ import type { PaymentMethod } from "./types";
 export function usePaymentSubmission(
   contaId: string,
   metodo: PaymentMethod,
-  getPaymentData: () => { valorNumerico: number; dadosPagamento: Record<string, string> },
+  getPaymentData: () => {
+    valorNumerico: number;
+    dadosPagamento: Record<string, string>;
+  },
   onSuccess: () => void,
   onClose: () => void,
   resetForm: () => void,
@@ -28,15 +31,12 @@ export function usePaymentSubmission(
           throw new Error("Valor inválido");
         }
 
-        const data = await apiClient.post<unknown>(
-          "/financeiro/processar",
-          {
-            conta_receber_id: contaId,
-            valor: valorNumerico,
-            metodo_pagamento: metodo,
-            dados_pagamento: dadosPagamento,
-          },
-        );
+        const data = await apiClient.post<unknown>("/financeiro/processar", {
+          conta_receber_id: contaId,
+          valor: valorNumerico,
+          metodo_pagamento: metodo,
+          dados_pagamento: dadosPagamento,
+        });
 
         triggerSuccessConfetti();
 
@@ -57,7 +57,15 @@ export function usePaymentSubmission(
         setLoading(false);
       }
     },
-    [contaId, metodo, getPaymentData, onSuccess, onClose, resetForm, triggerSuccessConfetti],
+    [
+      contaId,
+      metodo,
+      getPaymentData,
+      onSuccess,
+      onClose,
+      resetForm,
+      triggerSuccessConfetti,
+    ],
   );
 
   return { submit, loading };

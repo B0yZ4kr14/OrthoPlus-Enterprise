@@ -29,7 +29,10 @@ export function TypeStep({ value, onChange }: TypeStepProps) {
   return (
     <div className="space-y-4 py-4">
       <Label>Tipo de Backup</Label>
-      <RadioGroup value={value} onValueChange={(v) => onChange(v as BackupType)}>
+      <RadioGroup
+        value={value}
+        onValueChange={(v) => onChange(v as BackupType)}
+      >
         {TYPE_OPTIONS.map((option) => (
           <div
             key={option.value}

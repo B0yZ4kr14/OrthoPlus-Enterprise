@@ -1,12 +1,12 @@
 /**
  * MasterDatabaseManager — Federation Hub para Categorias de BD
- * 
+ *
  * Responsabilidades:
  * - Agregar health checks de todas as categorias (com Circuit Breaker)
  * - Consolidar estatísticas (tamanho, tabelas, backups)
  * - Fornecer camada de federation para queries cross-schema (read-only)
  * - Gerenciar conexões entre categorias (routing + circuit breaker)
- * 
+ *
  * Princípios DevSecOps:
  * - Circuit Breaker por categoria (evita cascade failure)
  * - Read-only por padrão (princípio do menor privilégio)
@@ -155,7 +155,7 @@ export class MasterDatabaseManager {
             `;
             return result;
           },
-          () => [] as { schema_name: string }[] // fallback: assume nenhum schema encontrado
+          () => [] as { schema_name: string }[], // fallback: assume nenhum schema encontrado
         );
 
         const foundSchemas = result.map((r) => r.schema_name);
@@ -206,7 +206,9 @@ export class MasterDatabaseManager {
       try {
         const result = await cb.execute(
           async () => {
-            const tableCountResult = await prisma.$queryRaw<{ count: bigint }[]>`
+            const tableCountResult = await prisma.$queryRaw<
+              { count: bigint }[]
+            >`
               SELECT COUNT(*) as count
               FROM information_schema.tables
               WHERE table_schema = ANY(${cat.schemas}::text[])
@@ -223,7 +225,7 @@ export class MasterDatabaseManager {
 
             return { tableCount, sizeBytes };
           },
-          () => ({ tableCount: 0, sizeBytes: 0 }) // fallback
+          () => ({ tableCount: 0, sizeBytes: 0 }), // fallback
         );
 
         totalTables += result.tableCount;
@@ -262,7 +264,7 @@ export class MasterDatabaseManager {
 
   /**
    * Executa uma query cross-schema (read-only).
-   * 
+   *
    * RESTRIÇÕES de segurança:
    * - Apenas SELECTs são permitidos
    * - Schemas devem estar na whitelist de categorias
@@ -272,7 +274,7 @@ export class MasterDatabaseManager {
   async crossQuery(
     sql: string,
     targetSchemas: string[],
-    params?: unknown[]
+    params?: unknown[],
   ): Promise<CrossQueryResult> {
     const start = Date.now();
 
@@ -294,7 +296,7 @@ export class MasterDatabaseManager {
     for (const schema of targetSchemas) {
       finalQuery = finalQuery.replace(
         new RegExp(`{{${schema}}}`, "g"),
-        `"${schema}"`
+        `"${schema}"`,
       );
     }
 

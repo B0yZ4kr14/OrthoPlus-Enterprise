@@ -1,17 +1,17 @@
 /**
  * Types for Agents Module
- * 
+ *
  * Tipagens para integração com Agno Agent Service
  */
 
 // Re-exportar tipos do service para conveniência
-export * from '../services/AgentProxyService';
+export * from "../services/AgentProxyService";
 
 // Tipos adicionais específicos do backend
 export interface AgentJob {
   id: string;
-  type: 'crud' | 'bugfix' | 'refactor' | 'review';
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  type: "crud" | "bugfix" | "refactor" | "review";
+  status: "pending" | "running" | "completed" | "failed";
   request: unknown;
   result?: unknown;
   error?: string;

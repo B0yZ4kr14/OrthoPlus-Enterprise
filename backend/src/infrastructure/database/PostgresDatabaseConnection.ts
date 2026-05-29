@@ -51,7 +51,8 @@ export class PostgresDatabaseConnection implements IDatabaseConnection {
     });
   }
 
-  async query<T = any>(sql: string, params?: any[]): Promise<QueryResult<T>> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  async query<T = any>(sql: string, params?: any[]): Promise<QueryResult<T>> {
+    // eslint-disable-line @typescript-eslint/no-explicit-any
     const start = Date.now();
     try {
       const result = await this.pool.query(sql, params);
@@ -83,7 +84,8 @@ export class PostgresDatabaseConnection implements IDatabaseConnection {
     await client.query("BEGIN");
 
     return {
-      query: async <T = any>(sql: string, params?: any[]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+      query: async <T = any>(sql: string, params?: any[]) => {
+        // eslint-disable-line @typescript-eslint/no-explicit-any
         const result = await client.query(sql, params);
         return {
           rows: result.rows as T[],

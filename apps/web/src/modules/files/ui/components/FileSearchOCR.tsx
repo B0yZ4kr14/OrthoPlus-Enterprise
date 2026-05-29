@@ -54,7 +54,11 @@ export function FileSearchOCR() {
           )}
         </div>
         <Button onClick={handleSearch} disabled={isLoading}>
-          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Search className="h-4 w-4" />
+          )}
         </Button>
       </div>
 
@@ -72,8 +76,12 @@ export function FileSearchOCR() {
               >
                 <FileText className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-sm font-medium truncate">{file.nomeOriginal}</p>
-                  <p className="text-xs text-muted-foreground">{file.categoria}</p>
+                  <p className="text-sm font-medium truncate">
+                    {file.nomeOriginal}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {file.categoria}
+                  </p>
                 </div>
               </button>
             ))}

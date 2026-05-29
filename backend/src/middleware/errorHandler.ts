@@ -59,14 +59,14 @@ export const ErrorCodes = {
   UNAUTHORIZED: "AUTH_UNAUTHORIZED",
   FORBIDDEN: "AUTH_FORBIDDEN",
   RATE_LIMITED: "GENERIC_RATE_LIMITED",
-  
+
   // Auth errors
   AUTH_INVALID_CREDENTIALS: "AUTH_INVALID_CREDENTIALS",
   AUTH_TOKEN_EXPIRED: "AUTH_TOKEN_EXPIRED",
   AUTH_TOKEN_INVALID: "AUTH_TOKEN_INVALID",
   AUTH_NO_CLINIC: "AUTH_NO_CLINIC_ASSIGNED",
   AUTH_SESSION_EXPIRED: "AUTH_SESSION_EXPIRED",
-  
+
   // Validation errors
   VALIDATION_REQUIRED_FIELD: "VALIDATION_REQUIRED_FIELD",
   VALIDATION_INVALID_FORMAT: "VALIDATION_INVALID_FORMAT",
@@ -76,24 +76,24 @@ export const ErrorCodes = {
   VALIDATION_MIN_LENGTH: "VALIDATION_MIN_LENGTH",
   VALIDATION_MAX_LENGTH: "VALIDATION_MAX_LENGTH",
   VALIDATION_UNIQUE_VIOLATION: "VALIDATION_UNIQUE_VIOLATION",
-  
+
   // Business logic errors
   BUSINESS_RESOURCE_NOT_FOUND: "BUSINESS_RESOURCE_NOT_FOUND",
   BUSINESS_RESOURCE_CONFLICT: "BUSINESS_RESOURCE_CONFLICT",
   BUSINESS_OPERATION_NOT_ALLOWED: "BUSINESS_OPERATION_NOT_ALLOWED",
   BUSINESS_INSUFFICIENT_PERMISSIONS: "BUSINESS_INSUFFICIENT_PERMISSIONS",
-  
+
   // Database errors
   DB_CONNECTION_ERROR: "DB_CONNECTION_ERROR",
   DB_QUERY_ERROR: "DB_QUERY_ERROR",
   DB_CONSTRAINT_VIOLATION: "DB_CONSTRAINT_VIOLATION",
-  
+
   // External service errors
   EXTERNAL_SERVICE_ERROR: "EXTERNAL_SERVICE_ERROR",
   EXTERNAL_TIMEOUT: "EXTERNAL_TIMEOUT",
 } as const;
 
-export type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
+export type ErrorCode = (typeof ErrorCodes)[keyof typeof ErrorCodes];
 
 /**
  * Custom API Error class with Problem Details support
@@ -113,7 +113,7 @@ export class ApiError extends Error {
     title: string,
     detail?: string,
     errors?: ValidationError[],
-    type?: string
+    type?: string,
   ) {
     super(detail || title);
     this.status = status;
@@ -123,7 +123,7 @@ export class ApiError extends Error {
     this.type = type || `https://tsiapp.io/errors/${this.toKebabCase(code)}`;
     this.timestamp = new Date().toISOString();
     this.requestId = this.generateRequestId();
-    
+
     // Maintain proper stack trace
     Error.captureStackTrace(this, this.constructor);
   }
@@ -157,46 +157,87 @@ export class ApiError extends Error {
 export const Errors = {
   // 400 Bad Request
   validation: (detail: string, errors?: ValidationError[]) =>
-    new ApiError(400, ErrorCodes.VALIDATION_ERROR, "Validation Failed", detail, errors),
-  
+    new ApiError(
+      400,
+      ErrorCodes.VALIDATION_ERROR,
+      "Validation Failed",
+      detail,
+      errors,
+    ),
+
   // 401 Unauthorized
   unauthorized: (detail = "Authentication required") =>
     new ApiError(401, ErrorCodes.UNAUTHORIZED, "Unauthorized", detail),
-  
+
   invalidCredentials: () =>
-    new ApiError(401, ErrorCodes.AUTH_INVALID_CREDENTIALS, "Invalid Credentials", "Email or password is incorrect"),
-  
+    new ApiError(
+      401,
+      ErrorCodes.AUTH_INVALID_CREDENTIALS,
+      "Invalid Credentials",
+      "Email or password is incorrect",
+    ),
+
   tokenExpired: () =>
-    new ApiError(401, ErrorCodes.AUTH_TOKEN_EXPIRED, "Token Expired", "Your session has expired. Please log in again."),
-  
+    new ApiError(
+      401,
+      ErrorCodes.AUTH_TOKEN_EXPIRED,
+      "Token Expired",
+      "Your session has expired. Please log in again.",
+    ),
+
   // 403 Forbidden
   forbidden: (detail = "You don't have permission to perform this action") =>
     new ApiError(403, ErrorCodes.FORBIDDEN, "Forbidden", detail),
-  
+
   noClinicAssigned: () =>
-    new ApiError(403, ErrorCodes.AUTH_NO_CLINIC, "No Clinic Assigned", "User has no clinic associated. Contact administrator."),
-  
+    new ApiError(
+      403,
+      ErrorCodes.AUTH_NO_CLINIC,
+      "No Clinic Assigned",
+      "User has no clinic associated. Contact administrator.",
+    ),
+
   // 404 Not Found
   notFound: (resource: string, id?: string) =>
-    new ApiError(404, ErrorCodes.NOT_FOUND, "Not Found", `${resource}${id ? ` with id '${id}'` : ""} not found`),
-  
+    new ApiError(
+      404,
+      ErrorCodes.NOT_FOUND,
+      "Not Found",
+      `${resource}${id ? ` with id '${id}'` : ""} not found`,
+    ),
+
   // 409 Conflict
   conflict: (detail: string) =>
-    new ApiError(409, ErrorCodes.BUSINESS_RESOURCE_CONFLICT, "Conflict", detail),
-  
+    new ApiError(
+      409,
+      ErrorCodes.BUSINESS_RESOURCE_CONFLICT,
+      "Conflict",
+      detail,
+    ),
+
   // 429 Too Many Requests
   rateLimited: (detail = "Too many requests. Please try again later.") =>
     new ApiError(429, ErrorCodes.RATE_LIMITED, "Rate Limited", detail),
-  
+
   // 500 Internal Server Error
   internal: (detail = "An unexpected error occurred") =>
-    new ApiError(500, ErrorCodes.INTERNAL_ERROR, "Internal Server Error", detail),
-  
+    new ApiError(
+      500,
+      ErrorCodes.INTERNAL_ERROR,
+      "Internal Server Error",
+      detail,
+    ),
+
   database: (detail = "Database operation failed") =>
     new ApiError(500, ErrorCodes.DB_QUERY_ERROR, "Database Error", detail),
-  
+
   externalService: (service: string) =>
-    new ApiError(502, ErrorCodes.EXTERNAL_SERVICE_ERROR, "External Service Error", `${service} service is unavailable`),
+    new ApiError(
+      502,
+      ErrorCodes.EXTERNAL_SERVICE_ERROR,
+      "External Service Error",
+      `${service} service is unavailable`,
+    ),
 };
 
 /**
@@ -207,20 +248,22 @@ export function errorHandler(
   err: Error | ApiError,
   req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ): void {
   // Generate request ID for tracking
-  const requestId = (err as ApiError).requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  
+  const requestId =
+    (err as ApiError).requestId ||
+    `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
   // Default error values
   let status = 500;
   let problemDetail: ProblemDetail;
-  
+
   if (err instanceof ApiError) {
     // Known operational error
     status = err.status;
     problemDetail = err.toProblemDetail(req.originalUrl);
-    
+
     // Log operational errors with context
     logger.warn(`Operational error: ${err.code}`, {
       requestId,
@@ -232,22 +275,23 @@ export function errorHandler(
       ip: req.ip,
       errors: err.errors,
     });
-    
   } else {
     // Unexpected error - don't leak details to client
     const isDev = process.env.NODE_ENV === "development";
-    
+
     problemDetail = {
       type: "https://tsiapp.io/errors/internal-error",
       title: "Internal Server Error",
       status: 500,
-      detail: isDev ? err.message : "An unexpected error occurred. Please try again later.",
+      detail: isDev
+        ? err.message
+        : "An unexpected error occurred. Please try again later.",
       instance: req.originalUrl,
       code: ErrorCodes.INTERNAL_ERROR,
       timestamp: new Date().toISOString(),
       requestId,
     };
-    
+
     // Log full error details for debugging
     logger.error("Unexpected error occurred", {
       requestId,
@@ -261,9 +305,10 @@ export function errorHandler(
       ip: req.ip,
     });
   }
-  
+
   // Send response with proper content type
-  res.status(status)
+  res
+    .status(status)
     .setHeader("Content-Type", "application/problem+json")
     .json(problemDetail);
 }
@@ -273,7 +318,7 @@ export function errorHandler(
  * Usage: router.get('/path', asyncHandler(async (req, res) => { ... }))
  */
 export function asyncHandler(
-  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>
+  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>,
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
     return Promise.resolve(fn(req, res, next)).catch(next);
@@ -283,14 +328,15 @@ export function asyncHandler(
 /**
  * Validation helper for Express routes
  */
-export function validateRequest(
-  req: Request,
-  requiredFields: string[]
-): void {
+export function validateRequest(req: Request, requiredFields: string[]): void {
   const missing: ValidationError[] = [];
-  
+
   for (const field of requiredFields) {
-    if (req.body[field] === undefined || req.body[field] === null || req.body[field] === "") {
+    if (
+      req.body[field] === undefined ||
+      req.body[field] === null ||
+      req.body[field] === ""
+    ) {
       missing.push({
         field,
         message: `Field '${field}' is required`,
@@ -298,7 +344,7 @@ export function validateRequest(
       });
     }
   }
-  
+
   if (missing.length > 0) {
     throw Errors.validation("Required fields are missing", missing);
   }

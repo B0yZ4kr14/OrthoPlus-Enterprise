@@ -19,17 +19,20 @@ export const ADVANTAGES: Advantage[] = [
   {
     icon: "shield",
     title: "Segurança Máxima",
-    description: "Transações protegidas por blockchain com criptografia de ponta",
+    description:
+      "Transações protegidas por blockchain com criptografia de ponta",
   },
   {
     icon: "zap",
     title: "Taxas Reduzidas",
-    description: "Até 90% mais barato que cartões de crédito (2-5% vs 0.1-0.5%)",
+    description:
+      "Até 90% mais barato que cartões de crédito (2-5% vs 0.1-0.5%)",
   },
   {
     icon: "globe",
     title: "Global 24/7",
-    description: "Receba de qualquer lugar do mundo, sem fronteiras ou horários",
+    description:
+      "Receba de qualquer lugar do mundo, sem fronteiras ou horários",
   },
   {
     icon: "lock",

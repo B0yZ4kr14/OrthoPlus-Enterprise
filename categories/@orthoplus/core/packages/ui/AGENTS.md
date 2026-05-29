@@ -17,20 +17,21 @@
 
 Exports via `src/index.ts`:
 
-| Componente | Sub-exports | Notas |
-|------------|-------------|-------|
-| `Button` | `buttonVariants` | CVA variants: default, destructive, outline, secondary, ghost, link |
-| `Card` | `CardHeader`, `CardFooter`, `CardTitle`, `CardDescription`, `CardContent`, `cardVariants` | — |
-| `Input` | — | Controlled/uncontrolled |
-| `Label` | — | Radix UI Label |
-| `Tabs` | `TabsList`, `TabsTrigger`, `TabsContent` | Radix UI Tabs |
-| `cn` | — | `clsx` + `tailwind-merge` |
+| Componente | Sub-exports                                                                               | Notas                                                               |
+| ---------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `Button`   | `buttonVariants`                                                                          | CVA variants: default, destructive, outline, secondary, ghost, link |
+| `Card`     | `CardHeader`, `CardFooter`, `CardTitle`, `CardDescription`, `CardContent`, `cardVariants` | —                                                                   |
+| `Input`    | —                                                                                         | Controlled/uncontrolled                                             |
+| `Label`    | —                                                                                         | Radix UI Label                                                      |
+| `Tabs`     | `TabsList`, `TabsTrigger`, `TabsContent`                                                  | Radix UI Tabs                                                       |
+| `cn`       | —                                                                                         | `clsx` + `tailwind-merge`                                           |
 
 Import por sub-path:
+
 ```ts
-import { Button } from '@orthoplus/core-ui'            // tudo
-import { Button } from '@orthoplus/core-ui/button'     // tree-shakeable
-import { cn } from '@orthoplus/core-ui/utils'
+import { Button } from "@orthoplus/core-ui"; // tudo
+import { Button } from "@orthoplus/core-ui/button"; // tree-shakeable
+import { cn } from "@orthoplus/core-ui/utils";
 ```
 
 ---

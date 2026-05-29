@@ -12,7 +12,8 @@ const tabsListVariants = cva(
     variants: {
       variant: {
         default: "h-10 rounded-lg bg-muted p-1",
-        underline: "h-11 w-full rounded-none border-b border-border bg-transparent p-0 gap-0",
+        underline:
+          "h-11 w-full rounded-none border-b border-border bg-transparent p-0 gap-0",
       },
     },
     defaultVariants: {
@@ -39,11 +40,13 @@ const tabsTriggerVariants = cva(
 );
 
 export interface TabsListProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>,
     VariantProps<typeof tabsListVariants> {}
 
 export interface TabsTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>,
     VariantProps<typeof tabsTriggerVariants> {}
 
 const TabsList = React.forwardRef<

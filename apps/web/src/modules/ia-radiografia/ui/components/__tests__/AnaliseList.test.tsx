@@ -1,28 +1,34 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render, screen, act } from "@testing-library/react"
-import { AnaliseList } from "../AnaliseList"
-import type { AnaliseComplete } from "../../../types/radiografia.types"
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+import { AnaliseList } from "../AnaliseList";
+import type { AnaliseComplete } from "../../../types/radiografia.types";
 
-const mockOnPageChange = vi.fn()
-const mockOnViewDetails = vi.fn()
+const mockOnPageChange = vi.fn();
+const mockOnViewDetails = vi.fn();
 
 vi.mock("@orthoplus/core-ui/badge", () => ({
   Badge: ({ children, variant }: any) => (
     <span data-variant={variant}>{children}</span>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/button", () => ({
   Button: ({ children, onClick, disabled, size, variant, ...props }: any) => (
-    <button onClick={onClick} disabled={disabled} data-size={size} data-variant={variant} {...props}>
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      data-size={size}
+      data-variant={variant}
+      {...props}
+    >
       {children}
     </button>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/skeleton", () => ({
   Skeleton: ({ className }: any) => <div className={className}>skeleton</div>,
-}))
+}));
 
 const mockAnalises: AnaliseComplete[] = [
   {
@@ -53,12 +59,12 @@ const mockAnalises: AnaliseComplete[] = [
     confidence_score: 92,
     created_at: "2024-01-20T14:30:00Z",
   },
-]
+];
 
 describe("AnaliseList", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it("should render loading skeletons", () => {
     render(
@@ -72,10 +78,10 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    expect(screen.getAllByText("skeleton").length).toBeGreaterThan(0)
-  })
+    expect(screen.getAllByText("skeleton").length).toBeGreaterThan(0);
+  });
 
   it("should render empty state when no analises", () => {
     render(
@@ -89,11 +95,13 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    expect(screen.getByText("Nenhuma análise realizada ainda")).toBeTruthy()
-    expect(screen.getByText("Faça upload de um raio-X para começar")).toBeTruthy()
-  })
+    expect(screen.getByText("Nenhuma análise realizada ainda")).toBeTruthy();
+    expect(
+      screen.getByText("Faça upload de um raio-X para começar"),
+    ).toBeTruthy();
+  });
 
   it("should render list of analises", () => {
     render(
@@ -107,17 +115,17 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    expect(screen.getByText("João Silva")).toBeTruthy()
-    expect(screen.getByText("Maria Souza")).toBeTruthy()
-    expect(screen.getByText("Panorâmica")).toBeTruthy()
-    expect(screen.getByText("Periapical")).toBeTruthy()
-    expect(screen.getByText("CONCLUIDA")).toBeTruthy()
-    expect(screen.getByText("PROCESSANDO")).toBeTruthy()
-    expect(screen.getByText("3 problema(s) detectado(s)")).toBeTruthy()
-    expect(screen.getByText("1 problema(s) detectado(s)")).toBeTruthy()
-  })
+    expect(screen.getByText("João Silva")).toBeTruthy();
+    expect(screen.getByText("Maria Souza")).toBeTruthy();
+    expect(screen.getByText("Panorâmica")).toBeTruthy();
+    expect(screen.getByText("Periapical")).toBeTruthy();
+    expect(screen.getByText("CONCLUIDA")).toBeTruthy();
+    expect(screen.getByText("PROCESSANDO")).toBeTruthy();
+    expect(screen.getByText("3 problema(s) detectado(s)")).toBeTruthy();
+    expect(screen.getByText("1 problema(s) detectado(s)")).toBeTruthy();
+  });
 
   it("should display confidence score when available", () => {
     render(
@@ -131,12 +139,12 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    expect(screen.getByText("87%")).toBeTruthy()
-    expect(screen.getByText("92%")).toBeTruthy()
-    expect(screen.getAllByText("Confiança da IA")).toHaveLength(2)
-  })
+    expect(screen.getByText("87%")).toBeTruthy();
+    expect(screen.getByText("92%")).toBeTruthy();
+    expect(screen.getAllByText("Confiança da IA")).toHaveLength(2);
+  });
 
   it("should call onViewDetails when clicking Ver Detalhes", () => {
     render(
@@ -150,25 +158,28 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    const buttons = screen.getAllByText("Ver Detalhes")
+    const buttons = screen.getAllByText("Ver Detalhes");
     act(() => {
-      buttons[0].click()
-    })
+      buttons[0].click();
+    });
 
-    expect(mockOnViewDetails).toHaveBeenCalledTimes(1)
+    expect(mockOnViewDetails).toHaveBeenCalledTimes(1);
     expect(mockOnViewDetails).toHaveBeenCalledWith(
       expect.objectContaining({ id: "a1", paciente_name: "João Silva" }),
-    )
-  })
+    );
+  });
 
   it("should render pagination when multiple pages", () => {
-    const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
-      ...mockAnalises[0],
-      id: `a${i + 1}`,
-      paciente_name: `Paciente ${i + 1}`,
-    }))
+    const manyAnalises: AnaliseComplete[] = Array.from(
+      { length: 15 },
+      (_, i) => ({
+        ...mockAnalises[0],
+        id: `a${i + 1}`,
+        paciente_name: `Paciente ${i + 1}`,
+      }),
+    );
 
     render(
       <AnaliseList
@@ -181,19 +192,22 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    expect(screen.getByText("Mostrando 1 a 10 de 15 análises")).toBeTruthy()
-    expect(screen.getByText("1")).toBeTruthy()
-    expect(screen.getByText("2")).toBeTruthy()
-  })
+    expect(screen.getByText("Mostrando 1 a 10 de 15 análises")).toBeTruthy();
+    expect(screen.getByText("1")).toBeTruthy();
+    expect(screen.getByText("2")).toBeTruthy();
+  });
 
   it("should call onPageChange when clicking page number", () => {
-    const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
-      ...mockAnalises[0],
-      id: `a${i + 1}`,
-      paciente_name: `Paciente ${i + 1}`,
-    }))
+    const manyAnalises: AnaliseComplete[] = Array.from(
+      { length: 15 },
+      (_, i) => ({
+        ...mockAnalises[0],
+        id: `a${i + 1}`,
+        paciente_name: `Paciente ${i + 1}`,
+      }),
+    );
 
     render(
       <AnaliseList
@@ -206,22 +220,25 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    const page2Button = screen.getByText("2")
+    const page2Button = screen.getByText("2");
     act(() => {
-      page2Button.click()
-    })
+      page2Button.click();
+    });
 
-    expect(mockOnPageChange).toHaveBeenCalledWith(2)
-  })
+    expect(mockOnPageChange).toHaveBeenCalledWith(2);
+  });
 
   it("should call onPageChange with previous page when clicking left chevron", () => {
-    const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
-      ...mockAnalises[0],
-      id: `a${i + 1}`,
-      paciente_name: `Paciente ${i + 1}`,
-    }))
+    const manyAnalises: AnaliseComplete[] = Array.from(
+      { length: 15 },
+      (_, i) => ({
+        ...mockAnalises[0],
+        id: `a${i + 1}`,
+        paciente_name: `Paciente ${i + 1}`,
+      }),
+    );
 
     render(
       <AnaliseList
@@ -234,28 +251,31 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
     // Find prev button by chevron-left icon title or by searching buttons with chevron
-    const buttons = screen.getAllByRole("button")
+    const buttons = screen.getAllByRole("button");
     // Prev button is the first pagination button (before page numbers)
     const prevButton = buttons.find((b) =>
       b.innerHTML.includes("lucide-chevron-left"),
-    )
-    expect(prevButton).toBeTruthy()
+    );
+    expect(prevButton).toBeTruthy();
     act(() => {
-      prevButton!.click()
-    })
+      prevButton!.click();
+    });
 
-    expect(mockOnPageChange).toHaveBeenCalledWith(1)
-  })
+    expect(mockOnPageChange).toHaveBeenCalledWith(1);
+  });
 
   it("should disable prev button on first page", () => {
-    const manyAnalises: AnaliseComplete[] = Array.from({ length: 15 }, (_, i) => ({
-      ...mockAnalises[0],
-      id: `a${i + 1}`,
-      paciente_name: `Paciente ${i + 1}`,
-    }))
+    const manyAnalises: AnaliseComplete[] = Array.from(
+      { length: 15 },
+      (_, i) => ({
+        ...mockAnalises[0],
+        id: `a${i + 1}`,
+        paciente_name: `Paciente ${i + 1}`,
+      }),
+    );
 
     render(
       <AnaliseList
@@ -268,13 +288,13 @@ describe("AnaliseList", () => {
         onPageChange={mockOnPageChange}
         onViewDetails={mockOnViewDetails}
       />,
-    )
+    );
 
-    const allButtons = screen.getAllByRole("button")
+    const allButtons = screen.getAllByRole("button");
     // Find the prev chevron button (first pagination button)
     const prevButton = allButtons.find((b) =>
       b.innerHTML.includes("lucide-chevron-left"),
-    )
-    expect(prevButton).toHaveProperty("disabled", true)
-  })
-})
+    );
+    expect(prevButton).toHaveProperty("disabled", true);
+  });
+});

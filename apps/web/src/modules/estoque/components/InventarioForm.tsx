@@ -84,7 +84,9 @@ export function InventarioForm({
           <Label htmlFor="tipo">Tipo de Inventário *</Label>
           <Select
             value={watch("tipo")}
-            onValueChange={(value) => setValue("tipo", value as Inventario["tipo"])}
+            onValueChange={(value) =>
+              setValue("tipo", value as Inventario["tipo"])
+            }
           >
             <SelectTrigger className={errors.tipo ? "border-destructive" : ""}>
               <SelectValue placeholder="Selecione o tipo" />

@@ -3,7 +3,12 @@ import { Button } from "@orthoplus/core-ui/button";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Package, Scan } from "lucide-react";
 import { BarcodeScannerDialog } from "../../components/BarcodeScannerDialog";
 import { useEstoqueCadastros } from "./useEstoqueCadastros";

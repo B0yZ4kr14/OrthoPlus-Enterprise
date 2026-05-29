@@ -1,5 +1,5 @@
-import { INFeRepository } from '../../domain/repositories/INFeRepository';
-import { NFeDTO } from '../dto/NFeDTO';
+import { INFeRepository } from "../../domain/repositories/INFeRepository";
+import { NFeDTO } from "../dto/NFeDTO";
 
 export interface ListNFeQuery {
   clinicId: string;
@@ -29,14 +29,14 @@ export class ListNFeQueryHandler {
       startDate: query.startDate,
       endDate: query.endDate,
       skip: (query.page - 1) * query.limit,
-      take: query.limit
+      take: query.limit,
     });
 
     return {
       items: items.map(NFeDTO.fromEntity),
       total,
       page: query.page,
-      totalPages: Math.ceil(total / query.limit)
+      totalPages: Math.ceil(total / query.limit),
     };
   }
 }

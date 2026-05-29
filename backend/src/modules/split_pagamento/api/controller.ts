@@ -1,7 +1,11 @@
 import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
-import { upsertConfigSchema, createComissaoSchema, calculateSplitSchema } from "./schemas";
+import {
+  upsertConfigSchema,
+  createComissaoSchema,
+  calculateSplitSchema,
+} from "./schemas";
 
 export class SplitPagamentoController {
   // --- Configuração de split ---
@@ -23,7 +27,9 @@ export class SplitPagamentoController {
     }
     const parsed = upsertConfigSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const existing = await prisma.split_payment_config.findFirst({
       where: { clinic_id: clinicId },
@@ -36,7 +42,11 @@ export class SplitPagamentoController {
       });
     } else {
       data = await prisma.split_payment_config.create({
-        data: { ...parsed.data, clinic_id: clinicId, is_active: parsed.data.is_active ?? true },
+        data: {
+          ...parsed.data,
+          clinic_id: clinicId,
+          is_active: parsed.data.is_active ?? true,
+        },
       });
     }
     return res.json(data);
@@ -65,10 +75,16 @@ export class SplitPagamentoController {
     }
     const parsed = createComissaoSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await prisma.split_comissoes.create({
-      data: { ...parsed.data, clinic_id: clinicId, status: parsed.data.status || "PENDENTE" },
+      data: {
+        ...parsed.data,
+        clinic_id: clinicId,
+        status: parsed.data.status || "PENDENTE",
+      },
     });
     return res.status(201).json(data);
   }
@@ -97,10 +113,13 @@ export class SplitPagamentoController {
     }
     const parsed = calculateSplitSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
 
-    const { transaction_id, total_amount, professional_id, procedure_type } = parsed.data;
+    const { transaction_id, total_amount, professional_id, procedure_type } =
+      parsed.data;
 
     // Find matching config for this professional + optional procedure type
     const where: Record<string, unknown> = {
@@ -124,14 +143,18 @@ export class SplitPagamentoController {
     }
 
     if (!config) {
-      return res.status(404).json({ error: "No active split config found for this professional" });
+      return res
+        .status(404)
+        .json({ error: "No active split config found for this professional" });
     }
 
     const percentage = config.percentage as number;
     if (percentage < 0 || percentage > 100) {
-      return res.status(422).json({ error: "Invalid percentage in config", percentage });
+      return res
+        .status(422)
+        .json({ error: "Invalid percentage in config", percentage });
     }
-    const professional_amount = Math.round(total_amount * percentage / 100);
+    const professional_amount = Math.round((total_amount * percentage) / 100);
     const clinic_amount = total_amount - professional_amount;
 
     // Create the split transaction record

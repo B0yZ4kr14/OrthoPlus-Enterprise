@@ -5,7 +5,10 @@ import type { FiscalFormData } from "./types";
 
 interface CSCInputsProps {
   formData: FiscalFormData;
-  onChange: <K extends keyof FiscalFormData>(field: K, value: FiscalFormData[K]) => void;
+  onChange: <K extends keyof FiscalFormData>(
+    field: K,
+    value: FiscalFormData[K],
+  ) => void;
 }
 
 export function CSCInputs({ formData, onChange }: CSCInputsProps) {

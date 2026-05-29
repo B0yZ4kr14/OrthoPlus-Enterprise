@@ -1,9 +1,17 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Settings, Plus, AlertCircle } from "lucide-react";
-import { ExchangeConfig, exchangeLabels } from "@/modules/crypto/types/crypto.types";
+import {
+  ExchangeConfig,
+  exchangeLabels,
+} from "@/modules/crypto/types/crypto.types";
 
 export interface CryptoExchangesViewProps {
   exchanges: ExchangeConfig[];
@@ -49,8 +57,8 @@ export function CryptoExchangesView({
                 <AlertDescription>
                   <strong>Importante:</strong> Suas credenciais API são
                   armazenadas de forma segura e criptografada. Recomendamos
-                  criar uma API Key com permissões somente de leitura para
-                  maior segurança.
+                  criar uma API Key com permissões somente de leitura para maior
+                  segurança.
                 </AlertDescription>
               </Alert>
             </div>
@@ -72,11 +80,11 @@ export function CryptoExchangesView({
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-base">
-                    {exchangeLabels[exchange.exchange_name as keyof typeof exchangeLabels] || exchange.exchange_name}
+                    {exchangeLabels[
+                      exchange.exchange_name as keyof typeof exchangeLabels
+                    ] || exchange.exchange_name}
                   </CardTitle>
-                  <Badge
-                    variant={exchange.is_active ? "default" : "secondary"}
-                  >
+                  <Badge variant={exchange.is_active ? "default" : "secondary"}>
                     {exchange.is_active ? "Ativa" : "Inativa"}
                   </Badge>
                 </div>
@@ -88,11 +96,7 @@ export function CryptoExchangesView({
                   </span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {exchange.supported_coins?.map((coin) => (
-                      <Badge
-                        key={coin}
-                        variant="outline"
-                        className="text-xs"
-                      >
+                      <Badge key={coin} variant="outline" className="text-xs">
                         {coin}
                       </Badge>
                     ))}
@@ -119,9 +123,7 @@ export function CryptoExchangesView({
                       exchange.auto_convert_to_brl ? "default" : "outline"
                     }
                   >
-                    {exchange.auto_convert_to_brl
-                      ? "Ativada"
-                      : "Desativada"}
+                    {exchange.auto_convert_to_brl ? "Ativada" : "Desativada"}
                   </Badge>
                 </div>
 

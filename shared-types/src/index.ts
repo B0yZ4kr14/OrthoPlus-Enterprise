@@ -1,6 +1,6 @@
 /**
  * OrthoPlus Shared Types
- * 
+ *
  * This package contains types shared between backend and frontend
  * to ensure type-safe API communication.
  */

@@ -5,7 +5,9 @@ import { IItemOrcamentoRepository } from "../../domain/repositories/IItemOrcamen
 export class ItemOrcamentoRepositoryApi implements IItemOrcamentoRepository {
   async findById(id: string): Promise<ItemOrcamento | null> {
     try {
-      const data: Record<string, any> = await apiClient.get(`/orcamentos/items/${id}`);
+      const data: Record<string, any> = await apiClient.get(
+        `/orcamentos/items/${id}`,
+      );
       return this.toDomain(data);
     } catch {
       return null;
@@ -53,9 +55,7 @@ export class ItemOrcamentoRepositoryApi implements IItemOrcamentoRepository {
       procedimentoId: data.procedimento_id
         ? String(data.procedimento_id)
         : undefined,
-      denteRegiao: data.dente_regiao
-        ? String(data.dente_regiao)
-        : undefined,
+      denteRegiao: data.dente_regiao ? String(data.dente_regiao) : undefined,
       quantidade: Number(data.quantidade),
       valorUnitario: Number(data.valor_unitario),
       descontoPercentual: data.desconto_percentual
@@ -65,9 +65,7 @@ export class ItemOrcamentoRepositoryApi implements IItemOrcamentoRepository {
         ? Number(data.desconto_valor)
         : undefined,
       valorTotal: Number(data.valor_total),
-      observacoes: data.observacoes
-        ? String(data.observacoes)
-        : undefined,
+      observacoes: data.observacoes ? String(data.observacoes) : undefined,
       createdAt: new Date(String(data.created_at)),
     });
   }

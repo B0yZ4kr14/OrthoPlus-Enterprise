@@ -1,6 +1,6 @@
 /**
  * DatabaseCategoryMetrics — Observabilidade de Categorias de BD
- * 
+ *
  * Métricas exportadas:
  * - orthoplus_db_category_latency_ms
  * - orthoplus_db_category_tables
@@ -47,9 +47,14 @@ export class DatabaseCategoryMetrics {
     });
   }
 
-  recordHealthCheck(category: string, latencyMs: number, status: "healthy" | "degraded" | "down" | "circuit_open"): void {
+  recordHealthCheck(
+    category: string,
+    latencyMs: number,
+    status: "healthy" | "degraded" | "down" | "circuit_open",
+  ): void {
     this.latencyHistogram.observe({ category }, latencyMs);
-    const healthValue = status === "healthy" ? 2 : status === "degraded" ? 1 : 0;
+    const healthValue =
+      status === "healthy" ? 2 : status === "degraded" ? 1 : 0;
     this.healthGauge.set({ category }, healthValue);
   }
 

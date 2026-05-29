@@ -7,14 +7,20 @@ import { PatientMarketingInfo } from "./PatientMarketingInfo";
 import type { PatientHeaderProps } from "./types";
 
 export function PatientHeader({ patientId }: PatientHeaderProps) {
-  const { patient, isLoading, initials, handleEdit } = usePatientHeader({ patientId });
+  const { patient, isLoading, initials, handleEdit } = usePatientHeader({
+    patientId,
+  });
 
   if (isLoading) {
     return <div className="animate-pulse h-32 bg-muted rounded-lg" />;
   }
 
   if (!patient) {
-    return <div className="text-center text-muted-foreground">Paciente não encontrado</div>;
+    return (
+      <div className="text-center text-muted-foreground">
+        Paciente não encontrado
+      </div>
+    );
   }
 
   return (

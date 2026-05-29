@@ -37,8 +37,8 @@ import {
   Lock,
   Trash2,
   Stethoscope,
-} from "lucide-react"
-import { PageHeader } from "@/components/shared/PageHeader"
+} from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { TableFilter } from "@/components/shared/TableFilter";
@@ -117,7 +117,9 @@ export default function TemplatesProcedimentosPage() {
     return <Badge className={colors[categoria] || ""}>{categoria}</Badge>;
   };
 
-  const [activeTab, setActiveTab] = useState<"templates" | "tabelas" | "dentistas">("templates")
+  const [activeTab, setActiveTab] = useState<
+    "templates" | "tabelas" | "dentistas"
+  >("templates");
 
   return (
     <div className="space-y-6">
@@ -138,7 +140,8 @@ export default function TemplatesProcedimentosPage() {
                 <DialogHeader>
                   <DialogTitle>Criar Template de Procedimento</DialogTitle>
                   <DialogDescription>
-                    Defina um template reutilizavel com procedimentos, tempo e valor
+                    Defina um template reutilizavel com procedimentos, tempo e
+                    valor
                   </DialogDescription>
                 </DialogHeader>
                 <TemplateForm onClose={() => setIsDialogOpen(false)} />
@@ -188,115 +191,117 @@ export default function TemplatesProcedimentosPage() {
         <DentistaProcedimentosManager />
       ) : (
         <>
-      {/* Filters */}
-      <TableFilter
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchPlaceholder="Buscar templates..."
-        filters={[
-          {
-            label: "Categoria",
-            value: categoryFilter,
-            options: [
-              { label: "Todas as categorias", value: "all" },
-              { label: "Restauração", value: "RESTAURACAO" },
-              { label: "Endodontia", value: "ENDODONTIA" },
-              { label: "Prótese", value: "PROTESE" },
-              { label: "Ortodontia", value: "ORTODONTIA" },
-              { label: "Cirurgia", value: "CIRURGIA" },
-              { label: "Periodontia", value: "PERIODONTIA" },
-              { label: "Estética", value: "ESTETICA" },
-              { label: "Preventiva", value: "PREVENTIVA" },
-            ],
-            onChange: setCategoryFilter,
-          },
-        ]}
-        onClear={() => {
-          setSearchTerm("");
-          setCategoryFilter("all");
-        }}
-      />
+          {/* Filters */}
+          <TableFilter
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            searchPlaceholder="Buscar templates..."
+            filters={[
+              {
+                label: "Categoria",
+                value: categoryFilter,
+                options: [
+                  { label: "Todas as categorias", value: "all" },
+                  { label: "Restauração", value: "RESTAURACAO" },
+                  { label: "Endodontia", value: "ENDODONTIA" },
+                  { label: "Prótese", value: "PROTESE" },
+                  { label: "Ortodontia", value: "ORTODONTIA" },
+                  { label: "Cirurgia", value: "CIRURGIA" },
+                  { label: "Periodontia", value: "PERIODONTIA" },
+                  { label: "Estética", value: "ESTETICA" },
+                  { label: "Preventiva", value: "PREVENTIVA" },
+                ],
+                onChange: setCategoryFilter,
+              },
+            ]}
+            onClear={() => {
+              setSearchTerm("");
+              setCategoryFilter("all");
+            }}
+          />
 
-      {/* Templates Grid */}
-      {isLoading ? (
-        <div className="text-center py-8 text-muted-foreground">
-          Carregando templates...
-        </div>
-      ) : filteredTemplates.length === 0 ? (
-        <Card>
-          <CardContent className="py-8 text-center text-muted-foreground">
-            Nenhum template encontrado
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredTemplates.map((template) => (
-            <Card
-              key={template.id}
-              className="hover:shadow-lg transition-shadow"
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">{template.nome}</CardTitle>
-                    <CardDescription className="mt-1">
-                      {template.descricao}
-                    </CardDescription>
-                  </div>
-                  {template.is_public ? (
-                    <Globe className="h-5 w-5 text-info" />
-                  ) : (
-                    <Lock className="h-5 w-5 text-muted-foreground" />
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2">
-                  {getCategoryBadge(template.categoria)}
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>{template.tempo_estimado_minutos} min</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <DollarSign className="h-4 w-4" />
-                    <span>R$ {template.valor_sugerido.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {template.tags && template.tags.length > 0 && (
-                  <div className="flex items-center gap-1 flex-wrap">
-                    <Tag className="h-3 w-3 text-muted-foreground" />
-                    {template.tags.slice(0, 3).map((tag, i) => (
-                      <Badge key={i} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-
-                <div className="flex items-center gap-2 pt-2">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    Usar Template
-                  </Button>
-                  {template.created_by === user?.id && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => deleteMutation.mutate(template.id)}
-                      disabled={deleteMutation.isPending}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
+          {/* Templates Grid */}
+          {isLoading ? (
+            <div className="text-center py-8 text-muted-foreground">
+              Carregando templates...
+            </div>
+          ) : filteredTemplates.length === 0 ? (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                Nenhum template encontrado
               </CardContent>
             </Card>
-          ))}
-        </div>
-      )}
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredTemplates.map((template) => (
+                <Card
+                  key={template.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">
+                          {template.nome}
+                        </CardTitle>
+                        <CardDescription className="mt-1">
+                          {template.descricao}
+                        </CardDescription>
+                      </div>
+                      {template.is_public ? (
+                        <Globe className="h-5 w-5 text-info" />
+                      ) : (
+                        <Lock className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      {getCategoryBadge(template.categoria)}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="h-4 w-4" />
+                        <span>{template.tempo_estimado_minutos} min</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <DollarSign className="h-4 w-4" />
+                        <span>R$ {template.valor_sugerido.toFixed(2)}</span>
+                      </div>
+                    </div>
+
+                    {template.tags && template.tags.length > 0 && (
+                      <div className="flex items-center gap-1 flex-wrap">
+                        <Tag className="h-3 w-3 text-muted-foreground" />
+                        {template.tags.slice(0, 3).map((tag, i) => (
+                          <Badge key={i} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2 pt-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        Usar Template
+                      </Button>
+                      {template.created_by === user?.id && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteMutation.mutate(template.id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </>
       )}
     </div>

@@ -52,8 +52,12 @@ export function FechamentoCaixaDialog({
         {caixaAberto ? (
           <div className="space-y-4 py-4">
             <div className="bg-muted p-4 rounded-lg">
-              <div className="text-sm text-muted-foreground">Valor Esperado</div>
-              <div className="text-2xl font-bold">{formatCurrency(valorEsperado)}</div>
+              <div className="text-sm text-muted-foreground">
+                Valor Esperado
+              </div>
+              <div className="text-2xl font-bold">
+                {formatCurrency(valorEsperado)}
+              </div>
             </div>
 
             <ValorFinalInput value={valorFinal} onChange={setValorFinal} />

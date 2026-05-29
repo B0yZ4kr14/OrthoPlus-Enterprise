@@ -2,7 +2,12 @@
 import { BarChart3, Users, Award, Clock, CreditCard } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { useDashboardVendasPDV } from "./useDashboardVendasPDV";
 import { KPICards } from "./KPICards";
 import { PeriodFilter } from "./PeriodFilter";

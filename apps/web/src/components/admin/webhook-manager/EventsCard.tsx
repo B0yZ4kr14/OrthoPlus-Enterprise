@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Webhook } from "lucide-react";
 import type { GitHubEvent } from "./types";
@@ -20,7 +26,9 @@ export function EventsCard({ events, loading, onRefresh }: EventsCardProps) {
               <Webhook className="h-5 w-5" />
               <CardTitle>Webhooks do GitHub</CardTitle>
             </div>
-            <CardDescription>Eventos recebidos do repositório GitHub</CardDescription>
+            <CardDescription>
+              Eventos recebidos do repositório GitHub
+            </CardDescription>
           </div>
           <Button onClick={onRefresh} disabled={loading}>
             {loading ? "Carregando..." : "Atualizar"}

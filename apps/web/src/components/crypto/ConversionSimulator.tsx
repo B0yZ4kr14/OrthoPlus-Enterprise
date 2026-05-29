@@ -1,6 +1,11 @@
 // ConversionSimulator.tsx - Unified Crypto Conversion & Analysis
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
 import { Button } from "@orthoplus/core-ui/button";
@@ -183,7 +188,9 @@ export function ConversionSimulator() {
               <Label>Criptomoeda</Label>
               <Select
                 value={coinType}
-                onValueChange={(value: "BTC" | "ETH" | "USDT") => setCoinType(value)}
+                onValueChange={(value: "BTC" | "ETH" | "USDT") =>
+                  setCoinType(value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue />

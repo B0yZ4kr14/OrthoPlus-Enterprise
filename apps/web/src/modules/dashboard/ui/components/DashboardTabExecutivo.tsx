@@ -24,7 +24,12 @@ import {
 } from "recharts";
 import { Users, Calendar, DollarSign, Activity } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
-import { AnimatedSection, StaggerGrid, statsStagger, chartsStagger } from "./DashboardAnimations";
+import {
+  AnimatedSection,
+  StaggerGrid,
+  statsStagger,
+  chartsStagger,
+} from "./DashboardAnimations";
 import type { DashboardStats } from "@orthoplus/shared-types";
 import type { DashboardChartData } from "@/hooks/useDashboard";
 
@@ -103,10 +108,15 @@ export default function DashboardTabExecutivo({
               <CardTitle className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
                 Visao Geral de Consultas
               </CardTitle>
-              <CardDescription>Consultas agendadas vs realizadas por dia</CardDescription>
+              <CardDescription>
+                Consultas agendadas vs realizadas por dia
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div role="img" aria-label="Gráfico de Visão Geral de Consultas: Consultas agendadas vs realizadas por dia">
+              <div
+                role="img"
+                aria-label="Gráfico de Visão Geral de Consultas: Consultas agendadas vs realizadas por dia"
+              >
                 <span className="sr-only">
                   <table>
                     <caption>Consultas agendadas vs realizadas por dia</caption>
@@ -134,9 +144,19 @@ export default function DashboardTabExecutivo({
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
-                    <Bar dataKey="agendadas" fill="hsl(168, 45%, 52%)" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="realizadas" fill="hsl(158, 32%, 50%)" radius={[4, 4, 0, 0]} />
+                    <Legend
+                      wrapperStyle={{ fontSize: "12px", paddingTop: 8 }}
+                    />
+                    <Bar
+                      dataKey="agendadas"
+                      fill="hsl(168, 45%, 52%)"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="realizadas"
+                      fill="hsl(158, 32%, 50%)"
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -153,7 +173,10 @@ export default function DashboardTabExecutivo({
               <CardDescription>Receita vs Despesas mensal</CardDescription>
             </CardHeader>
             <CardContent>
-              <div role="img" aria-label="Gráfico de Desempenho Financeiro: Receita vs Despesas mensal">
+              <div
+                role="img"
+                aria-label="Gráfico de Desempenho Financeiro: Receita vs Despesas mensal"
+              >
                 <span className="sr-only">
                   <table>
                     <caption>Receita vs Despesas mensal</caption>
@@ -181,13 +204,20 @@ export default function DashboardTabExecutivo({
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                    <Legend
+                      wrapperStyle={{ fontSize: "12px", paddingTop: 8 }}
+                    />
                     <Line
                       type="monotone"
                       dataKey="receita"
                       stroke="hsl(168, 45%, 52%)"
                       strokeWidth={2.5}
-                      dot={{ r: 4, fill: "hsl(168, 45%, 52%)", strokeWidth: 2, stroke: "#fff" }}
+                      dot={{
+                        r: 4,
+                        fill: "hsl(168, 45%, 52%)",
+                        strokeWidth: 2,
+                        stroke: "#fff",
+                      }}
                       activeDot={{ r: 6, strokeWidth: 2, stroke: "#fff" }}
                     />
                     <Line
@@ -195,7 +225,12 @@ export default function DashboardTabExecutivo({
                       dataKey="despesas"
                       stroke="hsl(4, 42%, 60%)"
                       strokeWidth={2.5}
-                      dot={{ r: 4, fill: "hsl(168, 45%, 52%)", strokeWidth: 2, stroke: "#fff" }}
+                      dot={{
+                        r: 4,
+                        fill: "hsl(168, 45%, 52%)",
+                        strokeWidth: 2,
+                        stroke: "#fff",
+                      }}
                       activeDot={{ r: 6, strokeWidth: 2, stroke: "#fff" }}
                     />
                   </LineChart>
@@ -212,10 +247,15 @@ export default function DashboardTabExecutivo({
             <CardTitle className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
               Tratamentos por Status
             </CardTitle>
-            <CardDescription>Distribuicao atual dos tratamentos</CardDescription>
+            <CardDescription>
+              Distribuicao atual dos tratamentos
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div role="img" aria-label="Gráfico de Tratamentos por Status: Distribuição atual dos tratamentos">
+            <div
+              role="img"
+              aria-label="Gráfico de Tratamentos por Status: Distribuição atual dos tratamentos"
+            >
               <span className="sr-only">
                 <table>
                   <caption>Distribuição atual dos tratamentos</caption>
@@ -249,12 +289,17 @@ export default function DashboardTabExecutivo({
                     outerRadius={100}
                     label
                   >
-                    {treatmentsByStatus?.map((_entry: unknown, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
+                    {treatmentsByStatus?.map(
+                      (_entry: unknown, index: number) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ),
+                    )}
                   </Pie>
                   <Tooltip />
-                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>

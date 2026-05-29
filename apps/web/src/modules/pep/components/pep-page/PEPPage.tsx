@@ -1,8 +1,22 @@
 // cspell:disable
-import { FileText, History, Activity, Smile, Box, Clock, GitCompare, Upload } from "lucide-react";
+import {
+  FileText,
+  History,
+  Activity,
+  Smile,
+  Box,
+  Clock,
+  GitCompare,
+  Upload,
+} from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { ProntuarioPDF } from "@/modules/pep/components/ProntuarioPDF";
 import { AssinaturaDigital } from "@/modules/pep/components/AssinaturaDigital";
 import { usePEPPage } from "./usePEPPage";
@@ -145,11 +159,7 @@ export function PEPPage() {
         </TabsContent>
       </Tabs>
 
-      {prontuarioId && (
-        <AssinaturaDigital
-          onSave={() => undefined}
-        />
-      )}
+      {prontuarioId && <AssinaturaDigital onSave={() => undefined} />}
     </div>
   );
 }

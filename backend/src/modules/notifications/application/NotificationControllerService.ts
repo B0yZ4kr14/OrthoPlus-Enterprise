@@ -65,7 +65,9 @@ export interface StockAlertResult {
 }
 
 export class NotificationControllerService {
-  constructor(private repo: INotificationRepository = new NotificationRepository()) {}
+  constructor(
+    private repo: INotificationRepository = new NotificationRepository(),
+  ) {}
 
   async runAutoNotifications(): Promise<AutoNotificationsResult> {
     let notificationsCreated = 0;
@@ -77,7 +79,7 @@ export class NotificationControllerService {
 
     const upcomingAppointments = await this.repo.findUpcomingAppointments(
       tomorrowStart.toISOString(),
-      tomorrowEnd.toISOString()
+      tomorrowEnd.toISOString(),
     );
 
     for (const app of upcomingAppointments) {
@@ -124,7 +126,10 @@ export class NotificationControllerService {
     const todayMonth = today.getMonth() + 1;
     const todayDay = today.getDate();
 
-    const birthdayPatients = await this.repo.findBirthdayPatients(todayMonth, todayDay);
+    const birthdayPatients = await this.repo.findBirthdayPatients(
+      todayMonth,
+      todayDay,
+    );
     for (const patient of birthdayPatients) {
       await this.repo.createNotification({
         clinic_id: patient.clinic_id,
@@ -154,7 +159,9 @@ export class NotificationControllerService {
     const { clinic_id, user_id, tipo, titulo, mensagem, link_acao } = body;
 
     if (!clinic_id || !tipo || !titulo || !mensagem) {
-      throw Errors.validation("Missing required fields: clinic_id, tipo, titulo, mensagem");
+      throw Errors.validation(
+        "Missing required fields: clinic_id, tipo, titulo, mensagem",
+      );
     }
 
     const notif = await this.repo.createNotification({
@@ -198,7 +205,7 @@ export class NotificationControllerService {
 
       try {
         const response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart/range?vs_currency=brl&from=${fromTimestamp}&to=${toTimestamp}`
+          `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart/range?vs_currency=brl&from=${fromTimestamp}&to=${toTimestamp}`,
         );
         if (!response.ok) continue;
 
@@ -214,9 +221,15 @@ export class NotificationControllerService {
         let shouldTrigger = false;
         if (direction === "up" && changePercentage >= thresholdPercentage)
           shouldTrigger = true;
-        else if (direction === "down" && changePercentage <= -thresholdPercentage)
+        else if (
+          direction === "down" &&
+          changePercentage <= -thresholdPercentage
+        )
           shouldTrigger = true;
-        else if (direction === "both" && Math.abs(changePercentage) >= thresholdPercentage)
+        else if (
+          direction === "both" &&
+          Math.abs(changePercentage) >= thresholdPercentage
+        )
           shouldTrigger = true;
 
         if (shouldTrigger) {
@@ -263,7 +276,7 @@ export class NotificationControllerService {
       if (alert.cascade_enabled && alert.cascade_order > 1) {
         const previousAlerts = await this.repo.findCryptoAlertsByCascadeGroup(
           alert.cascade_group_id,
-          alert.cascade_order
+          alert.cascade_order,
         );
         if (previousAlerts.length > 0) continue;
       }
@@ -284,7 +297,8 @@ export class NotificationControllerService {
 
       if (alert.last_triggered_at) {
         const hours =
-          (Date.now() - new Date(alert.last_triggered_at).getTime()) / (1000 * 60 * 60);
+          (Date.now() - new Date(alert.last_triggered_at).getTime()) /
+          (1000 * 60 * 60);
         if (hours < 24) continue;
       }
 
@@ -297,7 +311,8 @@ export class NotificationControllerService {
       ) {
         try {
           await mailer.sendMail({
-            from: process.env.SMTP_FROM || "OrthoPlus <noreply@orthoplus.local>",
+            from:
+              process.env.SMTP_FROM || "OrthoPlus <noreply@orthoplus.local>",
             to: alert.email,
             subject: `Alerta de Taxa ${alert.coin_type}`,
             html: `<p>Taxa atingida: ${currentRate}</p>`,
@@ -335,14 +350,21 @@ export class NotificationControllerService {
       throw Errors.validation("Nenhuma previsao fornecida");
     }
 
-    return { message: "Replenishment alerts processed", destinatorios: previsoes.length };
+    return {
+      message: "Replenishment alerts processed",
+      destinatorios: previsoes.length,
+    };
   }
 
   async sendStockAlerts(): Promise<StockAlertResult> {
     const produtos = await this.repo.findLowStockInventoryProducts();
 
     if (!produtos || produtos.length === 0) {
-      return { alertas_enviados: 0, detalhes: [], message: "Nenhum alerta de estoque encontrado" };
+      return {
+        alertas_enviados: 0,
+        detalhes: [],
+        message: "Nenhum alerta de estoque encontrado",
+      };
     }
 
     const detalhes: StockAlertResult["detalhes"] = [];

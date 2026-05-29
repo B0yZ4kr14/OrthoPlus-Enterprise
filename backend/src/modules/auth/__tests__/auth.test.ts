@@ -46,7 +46,9 @@ describe("Auth Module — Integration Tests", () => {
 
   describe("POST /auth/token (login)", () => {
     it("returns 400 when email or password is missing", async () => {
-      const res = await request(app).post("/auth/token").send({ email: "a@b.com" });
+      const res = await request(app)
+        .post("/auth/token")
+        .send({ email: "a@b.com" });
       expect(res.status).toBe(400);
       expect(res.body.code).toBe("GENERIC_VALIDATION_ERROR");
     });
@@ -65,7 +67,8 @@ describe("Auth Module — Integration Tests", () => {
         {
           id: "user-1",
           email: "user@clinic.com",
-          password_hash: "$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+          password_hash:
+            "$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
           role: "ADMIN",
           clinic_id: "clinic-1",
         },
@@ -99,7 +102,10 @@ describe("Auth Module — Integration Tests", () => {
       expect(res.body.user.email).toBe("admin@clinic.com");
 
       // Verify JWT structure
-      const decoded = jwt.verify(res.body.accessToken, JWT_SECRET) as { sub: string; role: string };
+      const decoded = jwt.verify(res.body.accessToken, JWT_SECRET) as {
+        sub: string;
+        role: string;
+      };
       expect(decoded.sub).toBe("user-1");
       expect(decoded.role).toBe("ADMIN");
     });
@@ -112,17 +118,26 @@ describe("Auth Module — Integration Tests", () => {
     });
 
     it("returns 401 for an invalid token", async () => {
-      const res = await request(app).get("/auth/user").set("Authorization", "Bearer invalidtoken");
+      const res = await request(app)
+        .get("/auth/user")
+        .set("Authorization", "Bearer invalidtoken");
       expect(res.status).toBe(401);
     });
 
     it("returns user data for a valid token", async () => {
       const token = jwt.sign(
-        { sub: "user-123", email: "test@clinic.com", role: "ADMIN", clinicId: "clinic-1" },
+        {
+          sub: "user-123",
+          email: "test@clinic.com",
+          role: "ADMIN",
+          clinicId: "clinic-1",
+        },
         JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "1h" },
       );
-      const res = await request(app).get("/auth/user").set("Authorization", `Bearer ${token}`);
+      const res = await request(app)
+        .get("/auth/user")
+        .set("Authorization", `Bearer ${token}`);
       expect(res.status).toBe(200);
       expect(res.body.user.email).toBe("test@clinic.com");
     });
@@ -173,13 +188,17 @@ describe("Auth Module — Integration Tests", () => {
     });
 
     it("returns mock tokens when DB is empty but mock is allowed", async () => {
-      (prisma.$queryRaw as jest.Mock).mockRejectedValueOnce(new Error("DB down"));
+      (prisma.$queryRaw as jest.Mock).mockRejectedValueOnce(
+        new Error("DB down"),
+      );
       const res = await request(app)
         .post("/auth/token")
         .send({ email: "admin@clinic.com", password: "correct" });
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty("accessToken");
-      const decoded = jwt.verify(res.body.accessToken, JWT_SECRET) as { role: string };
+      const decoded = jwt.verify(res.body.accessToken, JWT_SECRET) as {
+        role: string;
+      };
       expect(decoded.role).toBe("authenticated");
     });
   });

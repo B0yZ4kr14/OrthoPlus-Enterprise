@@ -1,7 +1,13 @@
 // cspell:disable
 import { FileText } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { PatientSelector } from "@/components/shared/PatientSelector";
 import type { Patient } from "@/types/patient";
 

@@ -406,9 +406,13 @@ export function useFinanceiro() {
 
     addTransaction: async (transaction: unknown) => {
       if ((transaction as Record<string, unknown>).tipo === "RECEITA") {
-        return addContaReceber(transaction as Parameters<typeof addContaReceber>[0]);
+        return addContaReceber(
+          transaction as Parameters<typeof addContaReceber>[0],
+        );
       } else {
-        return addContaPagar(transaction as Parameters<typeof addContaPagar>[0]);
+        return addContaPagar(
+          transaction as Parameters<typeof addContaPagar>[0],
+        );
       }
     },
 
@@ -416,9 +420,15 @@ export function useFinanceiro() {
       // Tentar atualizar em contas a receber primeiro
       const isReceber = contasReceber.some((c) => c.id === id);
       if (isReceber) {
-        return updateContaReceber(id, updates as Parameters<typeof updateContaReceber>[1]);
+        return updateContaReceber(
+          id,
+          updates as Parameters<typeof updateContaReceber>[1],
+        );
       } else {
-        return updateContaPagar(id, updates as Parameters<typeof updateContaPagar>[1]);
+        return updateContaPagar(
+          id,
+          updates as Parameters<typeof updateContaPagar>[1],
+        );
       }
     },
 
@@ -513,7 +523,9 @@ export function useFinanceiro() {
       contasReceber
         .filter((c) => c.status === "pago")
         .forEach((c) => {
-          const category = String((c as Record<string, unknown>).categoria || "OUTROS");
+          const category = String(
+            (c as Record<string, unknown>).categoria || "OUTROS",
+          );
           categories[category] =
             (categories[category] || 0) + (c.valor_pago || 0);
         });

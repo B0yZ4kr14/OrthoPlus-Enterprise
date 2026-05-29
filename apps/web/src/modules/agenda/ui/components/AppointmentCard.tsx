@@ -83,7 +83,12 @@ export function AppointmentCard({
 
         <div className="flex gap-2 pt-2">
           {appointment.canBeConfirmed && onConfirm && (
-            <Button size="sm" onClick={onConfirm} disabled={isLoading} data-testid="appointment-confirm-button">
+            <Button
+              size="sm"
+              onClick={onConfirm}
+              disabled={isLoading}
+              data-testid="appointment-confirm-button"
+            >
               Confirmar
             </Button>
           )}

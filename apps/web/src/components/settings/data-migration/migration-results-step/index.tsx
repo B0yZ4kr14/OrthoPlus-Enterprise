@@ -16,7 +16,10 @@ interface ImportResultsData {
   errors?: unknown[];
 }
 
-export function MigrationResultsStep({ mode, importResults }: ResultsStepProps) {
+export function MigrationResultsStep({
+  mode,
+  importResults,
+}: ResultsStepProps) {
   if (mode === "export") {
     return <ExportSuccess />;
   }

@@ -19,7 +19,9 @@ function calculateRequirements(password: string) {
   };
 }
 
-function calculateScore(requirements: ReturnType<typeof calculateRequirements>): number {
+function calculateScore(
+  requirements: ReturnType<typeof calculateRequirements>,
+): number {
   const metCount = Object.values(requirements).filter(Boolean).length;
 
   if (metCount === 5) return 4;
@@ -35,7 +37,10 @@ export function usePasswordStrength(password: string): PasswordStrength {
     let score = calculateScore(requirements);
 
     // Bonus por comprimento extra (15+ caracteres)
-    if (password.length >= 15 && Object.values(requirements).filter(Boolean).length >= 4) {
+    if (
+      password.length >= 15 &&
+      Object.values(requirements).filter(Boolean).length >= 4
+    ) {
       score = Math.min(4, score + 1);
     }
 

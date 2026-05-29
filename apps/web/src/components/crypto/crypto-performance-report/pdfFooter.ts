@@ -16,7 +16,7 @@ export function addFooter(doc: jsPDF): void {
       `Página ${i} de ${totalPages} - Gerado em ${format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`,
       pageWidth / 2,
       pageHeight - 10,
-      { align: "center" }
+      { align: "center" },
     );
   }
 }

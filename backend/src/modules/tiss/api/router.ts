@@ -14,7 +14,7 @@ router.get("/", (_req, res) => {
     version: "1.0.0",
     endpoints: ["/"],
     status: "active",
-    note: "Module routes available — see router.ts for full endpoint list"
+    note: "Module routes available — see router.ts for full endpoint list",
   });
 });
 
@@ -22,35 +22,80 @@ router.get("/", (_req, res) => {
 router.get("/guias", asyncHandler(controller.listGuias.bind(controller)));
 router.get("/guias/:id", asyncHandler(controller.getGuiaById.bind(controller)));
 router.post("/guias", asyncHandler(controller.createGuia.bind(controller)));
-router.patch("/guias/:id", asyncHandler(controller.updateGuia.bind(controller)));
-router.delete("/guias/:id", asyncHandler(controller.deleteGuia.bind(controller)));
+router.patch(
+  "/guias/:id",
+  asyncHandler(controller.updateGuia.bind(controller)),
+);
+router.delete(
+  "/guias/:id",
+  asyncHandler(controller.deleteGuia.bind(controller)),
+);
 
 // Lotes TISS
 router.get("/lotes", asyncHandler(controller.listLotes.bind(controller)));
 router.post("/lotes", asyncHandler(controller.createLote.bind(controller)));
-router.patch("/lotes/:id", asyncHandler(controller.updateLote.bind(controller)));
+router.patch(
+  "/lotes/:id",
+  asyncHandler(controller.updateLote.bind(controller)),
+);
 
 // Batch submission — group guides and submit to insurance
-router.post("/lotes/submit", asyncHandler(controller.submitBatch.bind(controller)));
+router.post(
+  "/lotes/submit",
+  asyncHandler(controller.submitBatch.bind(controller)),
+);
 
 // Statistics
-router.get("/statistics", asyncHandler(controller.getStatistics.bind(controller)));
+router.get(
+  "/statistics",
+  asyncHandler(controller.getStatistics.bind(controller)),
+);
 
 // Glosas
 router.get("/glosas", asyncHandler(controller.listGlosas.bind(controller)));
-router.patch("/glosas/:id", asyncHandler(controller.updateGlosa.bind(controller)));
-router.post("/glosas/:id/reprocessar", asyncHandler(controller.reprocessarGlosa.bind(controller)));
+router.patch(
+  "/glosas/:id",
+  asyncHandler(controller.updateGlosa.bind(controller)),
+);
+router.post(
+  "/glosas/:id/reprocessar",
+  asyncHandler(controller.reprocessarGlosa.bind(controller)),
+);
 
 // Convênios
-router.get("/convenios", asyncHandler(controller.listConvenios.bind(controller)));
-router.post("/convenios", asyncHandler(controller.createConvenio.bind(controller)));
-router.patch("/convenios/:id", asyncHandler(controller.updateConvenio.bind(controller)));
-router.delete("/convenios/:id", asyncHandler(controller.deleteConvenio.bind(controller)));
+router.get(
+  "/convenios",
+  asyncHandler(controller.listConvenios.bind(controller)),
+);
+router.post(
+  "/convenios",
+  asyncHandler(controller.createConvenio.bind(controller)),
+);
+router.patch(
+  "/convenios/:id",
+  asyncHandler(controller.updateConvenio.bind(controller)),
+);
+router.delete(
+  "/convenios/:id",
+  asyncHandler(controller.deleteConvenio.bind(controller)),
+);
 
 // Vinculação Paciente-Convênio
-router.get("/paciente-convenios", asyncHandler(controller.listPacienteConvenios.bind(controller)));
-router.post("/paciente-convenios", asyncHandler(controller.createPacienteConvenio.bind(controller)));
-router.patch("/paciente-convenios/:id", asyncHandler(controller.updatePacienteConvenio.bind(controller)));
-router.delete("/paciente-convenios/:id", asyncHandler(controller.deletePacienteConvenio.bind(controller)));
+router.get(
+  "/paciente-convenios",
+  asyncHandler(controller.listPacienteConvenios.bind(controller)),
+);
+router.post(
+  "/paciente-convenios",
+  asyncHandler(controller.createPacienteConvenio.bind(controller)),
+);
+router.patch(
+  "/paciente-convenios/:id",
+  asyncHandler(controller.updatePacienteConvenio.bind(controller)),
+);
+router.delete(
+  "/paciente-convenios/:id",
+  asyncHandler(controller.deletePacienteConvenio.bind(controller)),
+);
 
 export default router;

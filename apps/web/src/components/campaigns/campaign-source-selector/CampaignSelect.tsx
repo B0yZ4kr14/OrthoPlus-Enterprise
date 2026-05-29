@@ -1,5 +1,11 @@
 import { Label } from "@orthoplus/core-ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@orthoplus/core-ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@orthoplus/core-ui/select";
 import { DollarSign, TrendingUp, Users } from "lucide-react";
 import type { DentalCampaign } from "./types";
 
@@ -29,7 +35,12 @@ function CampaignDetails({ campaign }: { campaign: DentalCampaign }) {
   );
 }
 
-export function CampaignSelect({ value, campaigns, selectedCampaign, onChange }: CampaignSelectProps) {
+export function CampaignSelect({
+  value,
+  campaigns,
+  selectedCampaign,
+  onChange,
+}: CampaignSelectProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="campaign">Campanha</Label>
@@ -51,7 +62,7 @@ export function CampaignSelect({ value, campaigns, selectedCampaign, onChange }:
           )}
         </SelectContent>
       </Select>
-      
+
       {selectedCampaign && (
         <div className="p-3 bg-muted rounded-md">
           <div className="font-medium text-sm">{selectedCampaign.name}</div>

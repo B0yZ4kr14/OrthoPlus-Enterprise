@@ -3,7 +3,11 @@
  * Configuração de exchange de criptomoedas
  */
 
-export type ExchangeType = 'BINANCE' | 'COINBASE' | 'KRAKEN' | 'MERCADO_BITCOIN';
+export type ExchangeType =
+  | "BINANCE"
+  | "COINBASE"
+  | "KRAKEN"
+  | "MERCADO_BITCOIN";
 
 export interface ExchangeConfigProps {
   id: string;
@@ -56,7 +60,7 @@ export class ExchangeConfig {
     return this.props.lastSyncAt < fiveMinutesAgo;
   }
 
-  toJSON(): Omit<ExchangeConfigProps, 'apiSecret'> {
+  toJSON(): Omit<ExchangeConfigProps, "apiSecret"> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { apiSecret, ...rest } = this.props;
     return rest;

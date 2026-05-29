@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const createDashboardSchema = z.object({
   name: z.string().max(200),

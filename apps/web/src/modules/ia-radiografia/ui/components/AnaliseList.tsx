@@ -121,17 +121,16 @@ export function AnaliseList({
               </div>
             </div>
             <div className="text-right space-y-2">
-              {analise.confidence_score &&
-                analise.confidence_score > 0 && (
-                  <div>
-                    <div className="text-2xl font-bold text-success">
-                      {Math.round(analise.confidence_score)}%
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Confiança da IA
-                    </div>
+              {analise.confidence_score && analise.confidence_score > 0 && (
+                <div>
+                  <div className="text-2xl font-bold text-success">
+                    {Math.round(analise.confidence_score)}%
                   </div>
-                )}
+                  <div className="text-xs text-muted-foreground">
+                    Confiança da IA
+                  </div>
+                </div>
+              )}
               <Button
                 size="sm"
                 variant="outline"

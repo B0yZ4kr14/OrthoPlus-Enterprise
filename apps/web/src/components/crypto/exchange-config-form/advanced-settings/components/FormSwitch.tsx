@@ -8,7 +8,12 @@ import {
 import { Switch } from "@orthoplus/core-ui/switch";
 import type { FormSwitchProps } from "../types";
 
-export function FormSwitch({ name, label, description, form }: FormSwitchProps) {
+export function FormSwitch({
+  name,
+  label,
+  description,
+  form,
+}: FormSwitchProps) {
   return (
     <FormField
       control={form.control}
@@ -20,10 +25,7 @@ export function FormSwitch({ name, label, description, form }: FormSwitchProps) 
             <FormDescription>{description}</FormDescription>
           </div>
           <FormControl>
-            <Switch
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
+            <Switch checked={field.value} onCheckedChange={field.onChange} />
           </FormControl>
         </FormItem>
       )}

@@ -35,7 +35,9 @@ export function KPICards({ stats }: KPICardsProps) {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Valor Total</p>
-            <p className="text-2xl font-bold">{formatCurrency(stats.valorTotal)}</p>
+            <p className="text-2xl font-bold">
+              {formatCurrency(stats.valorTotal)}
+            </p>
           </div>
         </div>
       </Card>
@@ -47,7 +49,9 @@ export function KPICards({ stats }: KPICardsProps) {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Ticket Médio</p>
-            <p className="text-2xl font-bold">{formatCurrency(stats.ticketMedio)}</p>
+            <p className="text-2xl font-bold">
+              {formatCurrency(stats.ticketMedio)}
+            </p>
           </div>
         </div>
       </Card>

@@ -10,7 +10,8 @@ interface StatusIconProps {
 export function StatusIcon({ testing, testResult }: StatusIconProps) {
   if (testing) return <Loader2 className="h-5 w-5 animate-spin text-info" />;
   if (!testResult) return <Info className="h-5 w-5 text-muted-foreground" />;
-  if (testResult.success) return <CheckCircle2 className="h-5 w-5 text-success" />;
+  if (testResult.success)
+    return <CheckCircle2 className="h-5 w-5 text-success" />;
   return <XCircle className="h-5 w-5 text-destructive" />;
 }
 

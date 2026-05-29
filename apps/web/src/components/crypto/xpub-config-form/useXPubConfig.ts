@@ -5,7 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { apiClient } from "@/lib/api/apiClient";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
-import { xpubConfigSchema, type XPubConfigFormValues, type XPubConfigFormProps } from "./schema";
+import {
+  xpubConfigSchema,
+  type XPubConfigFormValues,
+  type XPubConfigFormProps,
+} from "./schema";
 
 export function useXPubConfig({ onSuccess }: XPubConfigFormProps) {
   const [testingXPub, setTestingXPub] = useState(false);
@@ -35,11 +39,14 @@ export function useXPubConfig({ onSuccess }: XPubConfigFormProps) {
 
     setTestingXPub(true);
     try {
-      const data = await apiClient.post<Record<string, string>>("/crypto/wallet/validate-xpub", {
-        xpub,
-        derivationPath,
-        index: 0,
-      });
+      const data = await apiClient.post<Record<string, string>>(
+        "/crypto/wallet/validate-xpub",
+        {
+          xpub,
+          derivationPath,
+          index: 0,
+        },
+      );
 
       setTestAddress(data.address);
       setIsValid(true);

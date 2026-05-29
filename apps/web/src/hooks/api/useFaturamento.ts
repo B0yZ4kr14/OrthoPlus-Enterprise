@@ -111,10 +111,16 @@ export const useFaturamento = () => {
     },
   });
 
-  const { data: relatorioData, isLoading: isLoadingRelatorio, refetch: refetchRelatorio } = useQuery({
+  const {
+    data: relatorioData,
+    isLoading: isLoadingRelatorio,
+    refetch: refetchRelatorio,
+  } = useQuery({
     queryKey: ["faturamento-relatorio"],
     queryFn: async () => {
-      return await apiClient.get<{ notas: NFe[]; totais: any }>("/faturamento/relatorio");
+      return await apiClient.get<{ notas: NFe[]; totais: any }>(
+        "/faturamento/relatorio",
+      );
     },
     enabled: false,
   });
@@ -122,7 +128,9 @@ export const useFaturamento = () => {
   const { data: config, isLoading: isLoadingConfig } = useQuery({
     queryKey: ["faturamento-config"],
     queryFn: async () => {
-      return await apiClient.get<{ config: FiscalConfig | null }>("/faturamento/config");
+      return await apiClient.get<{ config: FiscalConfig | null }>(
+        "/faturamento/config",
+      );
     },
   });
 

@@ -10,7 +10,12 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   Select,
   SelectContent,
@@ -64,19 +69,13 @@ export function BackupDiffViewer({
 
     try {
       // Buscar dados dos dois backups
-      const data1 = await apiClient.post<{ data: string }>(
-        "/backups/manager",
-        {
-          backup_id: backup1,
-        },
-      );
+      const data1 = await apiClient.post<{ data: string }>("/backups/manager", {
+        backup_id: backup1,
+      });
 
-      const data2 = await apiClient.post<{ data: string }>(
-        "/backups/manager",
-        {
-          backup_id: backup2,
-        },
-      );
+      const data2 = await apiClient.post<{ data: string }>("/backups/manager", {
+        backup_id: backup2,
+      });
 
       if (!data1?.data || !data2?.data) {
         throw new Error("Erro ao carregar dados dos backups");
@@ -111,7 +110,10 @@ export function BackupDiffViewer({
     }
   };
 
-  const compareArrays = (arr1: Record<string, unknown>[], arr2: Record<string, unknown>[]): DiffResult => {
+  const compareArrays = (
+    arr1: Record<string, unknown>[],
+    arr2: Record<string, unknown>[],
+  ): DiffResult => {
     const map1 = new Map(arr1.map((item) => [item.id, item]));
     const map2 = new Map(arr2.map((item) => [item.id, item]));
 
@@ -240,8 +242,7 @@ export function BackupDiffViewer({
                 <SelectContent>
                   {backups?.map((backup) => (
                     <SelectItem key={backup.id} value={backup.id}>
-                      {formatDateTime(backup.created_at)}{" "}
-                      - {backup.backup_type}
+                      {formatDateTime(backup.created_at)} - {backup.backup_type}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -257,8 +258,7 @@ export function BackupDiffViewer({
                 <SelectContent>
                   {backups?.map((backup) => (
                     <SelectItem key={backup.id} value={backup.id}>
-                      {formatDateTime(backup.created_at)}{" "}
-                      - {backup.backup_type}
+                      {formatDateTime(backup.created_at)} - {backup.backup_type}
                     </SelectItem>
                   ))}
                 </SelectContent>

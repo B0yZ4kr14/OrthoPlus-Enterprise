@@ -1,6 +1,14 @@
 import { motion } from "framer-motion";
 import { StatsCard } from "@/components/shared/StatsCard";
-import { Users, TrendingUp, DollarSign, Megaphone, Activity, AlertTriangle, CheckCircle2 } from "lucide-react";
+import {
+  Users,
+  TrendingUp,
+  DollarSign,
+  Megaphone,
+  Activity,
+  AlertTriangle,
+  CheckCircle2,
+} from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { StaggerGrid, statsStagger } from "./DashboardAnimations";
 

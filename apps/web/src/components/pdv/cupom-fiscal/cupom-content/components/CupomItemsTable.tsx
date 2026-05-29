@@ -30,7 +30,7 @@ export function CupomItemsTable({ items }: CupomItemsTableProps) {
                 <span className="bold">
                   {formatCurrency(
                     (item as Record<string, any>).valor_unitario *
-                      (item as Record<string, any>).quantidade
+                      (item as Record<string, any>).quantidade,
                   )}
                 </span>
               </div>

@@ -8,7 +8,10 @@ interface FTPConfigFormProps {
 }
 
 export function FTPConfigForm({ config, onChange }: FTPConfigFormProps) {
-  const updateField = (field: keyof NonNullable<typeof config>, value: string | number) => {
+  const updateField = (
+    field: keyof NonNullable<typeof config>,
+    value: string | number,
+  ) => {
     onChange({
       ...config,
       [field]: value,

@@ -29,9 +29,16 @@ export function ScanningOverlay({ onCancel }: ScanningOverlayProps) {
           <p className="text-lg font-medium">Escaneando código...</p>
         </div>
 
-        <p className="text-sm text-white/70">Posicione o código dentro da área destacada</p>
+        <p className="text-sm text-white/70">
+          Posicione o código dentro da área destacada
+        </p>
 
-        <Button onClick={onCancel} variant="destructive" size="lg" className="w-full gap-2">
+        <Button
+          onClick={onCancel}
+          variant="destructive"
+          size="lg"
+          className="w-full gap-2"
+        >
           <X className="h-5 w-5" />
           Cancelar Scanner
         </Button>

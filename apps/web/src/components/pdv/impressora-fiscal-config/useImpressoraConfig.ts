@@ -32,9 +32,12 @@ export function useImpressoraConfig() {
     try {
       setLoading(true);
       try {
-        const data = await apiClient.get<ImpressoraConfig | ImpressoraConfig[]>("/sat-mfe-config", {
-          params: { clinic_id: selectedClinic },
-        });
+        const data = await apiClient.get<ImpressoraConfig | ImpressoraConfig[]>(
+          "/sat-mfe-config",
+          {
+            params: { clinic_id: selectedClinic },
+          },
+        );
         const configData = Array.isArray(data) ? data[0] : data;
         if (configData) {
           setConfig(configData);
@@ -54,7 +57,8 @@ export function useImpressoraConfig() {
         if ((error as { status?: number })?.status !== 404) throw error;
       }
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       logger.error("Error loading config:", error);
       toast({
         title: "Erro ao carregar configuração",
@@ -99,7 +103,8 @@ export function useImpressoraConfig() {
 
       loadConfig();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       logger.error("Error saving config:", error);
       toast({
         title: "Erro ao salvar configuração",
@@ -111,7 +116,10 @@ export function useImpressoraConfig() {
     }
   };
 
-  const updateFormData = <K extends keyof FormData>(field: K, value: FormData[K]) => {
+  const updateFormData = <K extends keyof FormData>(
+    field: K,
+    value: FormData[K],
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

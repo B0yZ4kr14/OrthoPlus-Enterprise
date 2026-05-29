@@ -10,7 +10,11 @@ import { MODULE_DATA } from "./constants";
 import { TooltipContentView } from "./TooltipContent";
 import type { ModuleTooltipProps } from "./types";
 
-export function ModuleTooltip({ moduleKey, children, variant = "icon" }: ModuleTooltipProps) {
+export function ModuleTooltip({
+  moduleKey,
+  children,
+  variant = "icon",
+}: ModuleTooltipProps) {
   const data = MODULE_DATA[moduleKey];
 
   if (!data) {

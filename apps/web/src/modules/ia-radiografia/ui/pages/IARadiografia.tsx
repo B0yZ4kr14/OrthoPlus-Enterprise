@@ -63,7 +63,8 @@ export default function IARadiografia() {
     }
     if (filterPeriodo !== "TODOS") {
       const now = new Date();
-      const days = filterPeriodo === "7_DIAS" ? 7 : filterPeriodo === "30_DIAS" ? 30 : 90;
+      const days =
+        filterPeriodo === "7_DIAS" ? 7 : filterPeriodo === "30_DIAS" ? 30 : 90;
       const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
       filtered = filtered.filter((a) => {
         const date = a.created_at ? new Date(a.created_at) : null;
@@ -126,15 +127,28 @@ export default function IARadiografia() {
 
   const handleUpload = async () => {
     if (!selectedFile || !selectedPatient || !selectedTipo) {
-      toast({ title: "Campos obrigatórios", description: "Preencha todos os campos antes de enviar", variant: "destructive" });
+      toast({
+        title: "Campos obrigatórios",
+        description: "Preencha todos os campos antes de enviar",
+        variant: "destructive",
+      });
       return;
     }
     if (consentStatus !== "consented") {
-      toast({ title: "Consentimento necessário", description: "O paciente precisa consentir com o processamento de IA", variant: "destructive" });
+      toast({
+        title: "Consentimento necessário",
+        description: "O paciente precisa consentir com o processamento de IA",
+        variant: "destructive",
+      });
       return;
     }
     try {
-      await uploadRadiografia(selectedPatient, undefined, selectedTipo, selectedFile);
+      await uploadRadiografia(
+        selectedPatient,
+        undefined,
+        selectedTipo,
+        selectedFile,
+      );
       setUploadDialogOpen(false);
       setSelectedFile(null);
       setSelectedPatient("");
@@ -156,7 +170,11 @@ export default function IARadiografia() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <PageHeader icon={Scan} title="IA Análise de Radiografias" description="Detecção automática de problemas dentários via Inteligência Artificial" />
+        <PageHeader
+          icon={Scan}
+          title="IA Análise de Radiografias"
+          description="Detecção automática de problemas dentários via Inteligência Artificial"
+        />
         <Button variant="elevated" onClick={() => setUploadDialogOpen(true)}>
           <Upload className="h-4 w-4 mr-2" />
           Fazer Upload de Raio-X
@@ -174,7 +192,9 @@ export default function IARadiografia() {
         selectedTipo={selectedTipo}
         onTipoChange={setSelectedTipo}
         selectedFile={selectedFile}
-        onFileChange={(e) => e.target.files?.[0] && setSelectedFile(e.target.files[0])}
+        onFileChange={(e) =>
+          e.target.files?.[0] && setSelectedFile(e.target.files[0])
+        }
         onUpload={handleUpload}
       />
 
@@ -192,26 +212,70 @@ export default function IARadiografia() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="p-6">
-            <div className="text-sm text-muted-foreground">Total de Análises</div>
-            <div className="text-3xl font-bold mt-2">{analises.length}</div>
-            <Badge variant="success" className="mt-2">Radiografias analisadas</Badge>
-          </Card>
-          <Card className="p-6">
-            <div className="text-sm text-muted-foreground">Problemas Detectados</div>
-            <div className="text-3xl font-bold mt-2 text-warning">{analises.reduce((sum, a) => sum + (a.problemas_detectados || 0), 0)}</div>
-            <Badge variant="warning" className="mt-2">Requer atenção</Badge>
-          </Card>
-          <Card className="p-6">
-            <div className="text-sm text-muted-foreground">Precisão Média da IA</div>
-            <div className="text-3xl font-bold mt-2 text-success">
-              {analises.length > 0 ? Math.round(analises.reduce((sum, a) => sum + (a.confidence_score || 0), 0) / analises.length) : 0}%
+            <div className="text-sm text-muted-foreground">
+              Total de Análises
             </div>
-            <Progress value={analises.length > 0 ? analises.reduce((sum, a) => sum + (a.confidence_score || 0), 0) / analises.length : 0} className="mt-2" />
+            <div className="text-3xl font-bold mt-2">{analises.length}</div>
+            <Badge variant="success" className="mt-2">
+              Radiografias analisadas
+            </Badge>
           </Card>
           <Card className="p-6">
-            <div className="text-sm text-muted-foreground">Em Processamento</div>
-            <div className="text-3xl font-bold mt-2">{analises.filter((a) => a.status === "PROCESSANDO" || a.status === "PENDENTE").length}</div>
-            <div className="flex items-center gap-1 mt-2 text-sm text-muted-foreground"><Clock className="h-3 w-3" />Processando...</div>
+            <div className="text-sm text-muted-foreground">
+              Problemas Detectados
+            </div>
+            <div className="text-3xl font-bold mt-2 text-warning">
+              {analises.reduce(
+                (sum, a) => sum + (a.problemas_detectados || 0),
+                0,
+              )}
+            </div>
+            <Badge variant="warning" className="mt-2">
+              Requer atenção
+            </Badge>
+          </Card>
+          <Card className="p-6">
+            <div className="text-sm text-muted-foreground">
+              Precisão Média da IA
+            </div>
+            <div className="text-3xl font-bold mt-2 text-success">
+              {analises.length > 0
+                ? Math.round(
+                    analises.reduce(
+                      (sum, a) => sum + (a.confidence_score || 0),
+                      0,
+                    ) / analises.length,
+                  )
+                : 0}
+              %
+            </div>
+            <Progress
+              value={
+                analises.length > 0
+                  ? analises.reduce(
+                      (sum, a) => sum + (a.confidence_score || 0),
+                      0,
+                    ) / analises.length
+                  : 0
+              }
+              className="mt-2"
+            />
+          </Card>
+          <Card className="p-6">
+            <div className="text-sm text-muted-foreground">
+              Em Processamento
+            </div>
+            <div className="text-3xl font-bold mt-2">
+              {
+                analises.filter(
+                  (a) => a.status === "PROCESSANDO" || a.status === "PENDENTE",
+                ).length
+              }
+            </div>
+            <div className="flex items-center gap-1 mt-2 text-sm text-muted-foreground">
+              <Clock className="h-3 w-3" />
+              Processando...
+            </div>
           </Card>
         </div>
       )}
@@ -219,13 +283,31 @@ export default function IARadiografia() {
       {/* Info Card */}
       <Card className="p-6 bg-primary/5 border-primary/20">
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-primary/10 rounded-lg"><Scan className="h-6 w-6 text-primary" /></div>
+          <div className="p-3 bg-primary/10 rounded-lg">
+            <Scan className="h-6 w-6 text-primary" />
+          </div>
           <div className="flex-1">
-            <h3 className="font-semibold mb-2">Como funciona a Análise por IA?</h3>
-            <p className="text-sm text-muted-foreground mb-3">Nossa IA utiliza Google Gemini Vision avançada treinada com milhares de radiografias odontológicas para detectar automaticamente cáries, fraturas, problemas periodontais e outras condições. A precisão média é de 94%, mas sempre recomendamos revisão profissional.</p>
+            <h3 className="font-semibold mb-2">
+              Como funciona a Análise por IA?
+            </h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              Nossa IA utiliza Google Gemini Vision avançada treinada com
+              milhares de radiografias odontológicas para detectar
+              automaticamente cáries, fraturas, problemas periodontais e outras
+              condições. A precisão média é de 94%, mas sempre recomendamos
+              revisão profissional.
+            </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-              {["Detecção de Cáries", "Fraturas Dentárias", "Problemas Periodontais", "Lesões Periapicais"].map((item) => (
-                <div key={item} className="flex items-center gap-2"><CheckCircle className="h-3 w-3 text-success" /><span>{item}</span></div>
+              {[
+                "Detecção de Cáries",
+                "Fraturas Dentárias",
+                "Problemas Periodontais",
+                "Lesões Periapicais",
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <CheckCircle className="h-3 w-3 text-success" />
+                  <span>{item}</span>
+                </div>
               ))}
             </div>
           </div>
@@ -233,9 +315,13 @@ export default function IARadiografia() {
       </Card>
 
       {/* Dashboards */}
-      {!loading && analises.length > 0 && <IAInsightsDashboard analises={analises} />}
+      {!loading && analises.length > 0 && (
+        <IAInsightsDashboard analises={analises} />
+      )}
       {!loading && analises.length > 0 && <AnaliseCharts analises={analises} />}
-      {!loading && analises.length > 0 && <RadiografiaComparison analises={analises} />}
+      {!loading && analises.length > 0 && (
+        <RadiografiaComparison analises={analises} />
+      )}
       {!loading && analises.length > 0 && <PatientRadiographyTimeline />}
 
       {/* Analysis List */}
@@ -252,7 +338,9 @@ export default function IARadiografia() {
           <div>
             <Label className="text-xs">Status</Label>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="TODOS">Todos</SelectItem>
                 <SelectItem value="PENDENTE">Pendente</SelectItem>
@@ -265,11 +353,15 @@ export default function IARadiografia() {
           <div>
             <Label className="text-xs">Tipo de Radiografia</Label>
             <Select value={filterTipo} onValueChange={setFilterTipo}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="TODOS">Todos</SelectItem>
                 {Object.entries(tipoRadiografiaLabels).map(([key, label]) => (
-                  <SelectItem key={key} value={key}>{label}</SelectItem>
+                  <SelectItem key={key} value={key}>
+                    {label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -277,7 +369,9 @@ export default function IARadiografia() {
           <div>
             <Label className="text-xs">Período</Label>
             <Select value={filterPeriodo} onValueChange={setFilterPeriodo}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="TODOS">Todos</SelectItem>
                 <SelectItem value="7_DIAS">Últimos 7 dias</SelectItem>
@@ -300,7 +394,12 @@ export default function IARadiografia() {
         />
       </Card>
 
-      <AnaliseDetailsDialog analise={selectedAnalise} open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen} auditLogs={auditLogs} />
+      <AnaliseDetailsDialog
+        analise={selectedAnalise}
+        open={detailsDialogOpen}
+        onOpenChange={setDetailsDialogOpen}
+        auditLogs={auditLogs}
+      />
     </div>
   );
 }

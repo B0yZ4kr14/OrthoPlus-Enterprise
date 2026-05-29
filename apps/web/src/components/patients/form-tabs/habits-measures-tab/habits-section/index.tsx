@@ -3,7 +3,10 @@ import { useWatch } from "react-hook-form";
 import type { HabitsMeasuresTabProps } from "./types";
 import { HabitToggle } from "./components/HabitToggle";
 import { HabitFrequencySelect } from "./components/HabitFrequencySelect";
-import { smokingFrequencies, alcoholFrequencies } from "./constants/frequencies";
+import {
+  smokingFrequencies,
+  alcoholFrequencies,
+} from "./constants/frequencies";
 
 export * from "./types";
 export { HabitToggle, HabitFrequencySelect };

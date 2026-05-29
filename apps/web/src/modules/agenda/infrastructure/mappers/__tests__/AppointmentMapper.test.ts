@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest"
-import { AppointmentMapper } from "../AppointmentMapper"
-import { Appointment } from "../../../domain/entities/Appointment"
+import { describe, it, expect } from "vitest";
+import { AppointmentMapper } from "../AppointmentMapper";
+import { Appointment } from "../../../domain/entities/Appointment";
 
 describe("AppointmentMapper", () => {
   describe("toDomain", () => {
@@ -19,22 +19,24 @@ describe("AppointmentMapper", () => {
         created_at: "2024-01-01T00:00:00.000Z",
         updated_at: "2024-01-01T00:00:00.000Z",
         treatment_id: null,
-      }
+      };
 
-      const apt = AppointmentMapper.toDomain(row)
+      const apt = AppointmentMapper.toDomain(row);
 
-      expect(apt).toBeInstanceOf(Appointment)
-      expect(apt.id).toBe("apt-1")
-      expect(apt.clinicId).toBe("clinic-1")
-      expect(apt.patientId).toBe("patient-1")
-      expect(apt.dentistId).toBe("dentist-1")
-      expect(apt.scheduledDatetime.toISOString()).toBe("2024-01-01T10:00:00.000Z")
-      expect(apt.durationMinutes).toBe(30)
-      expect(apt.status).toBe("AGENDADO")
-      expect(apt.appointmentType).toBe("CONSULTA")
-      expect(apt.notes).toBe("Primeira consulta")
-      expect(apt.createdBy).toBe("user-1")
-    })
+      expect(apt).toBeInstanceOf(Appointment);
+      expect(apt.id).toBe("apt-1");
+      expect(apt.clinicId).toBe("clinic-1");
+      expect(apt.patientId).toBe("patient-1");
+      expect(apt.dentistId).toBe("dentist-1");
+      expect(apt.scheduledDatetime.toISOString()).toBe(
+        "2024-01-01T10:00:00.000Z",
+      );
+      expect(apt.durationMinutes).toBe(30);
+      expect(apt.status).toBe("AGENDADO");
+      expect(apt.appointmentType).toBe("CONSULTA");
+      expect(apt.notes).toBe("Primeira consulta");
+      expect(apt.createdBy).toBe("user-1");
+    });
 
     it("should default appointmentType to CONSULTA when title is null", () => {
       const row = {
@@ -51,12 +53,12 @@ describe("AppointmentMapper", () => {
         created_at: "2024-01-01T00:00:00.000Z",
         updated_at: "2024-01-01T00:00:00.000Z",
         treatment_id: null,
-      }
+      };
 
-      const apt = AppointmentMapper.toDomain(row)
-      expect(apt.appointmentType).toBe("CONSULTA")
-      expect(apt.notes).toBeUndefined()
-    })
+      const apt = AppointmentMapper.toDomain(row);
+      expect(apt.appointmentType).toBe("CONSULTA");
+      expect(apt.notes).toBeUndefined();
+    });
 
     it("should calculate durationMinutes correctly for 1 hour", () => {
       const row = {
@@ -73,12 +75,12 @@ describe("AppointmentMapper", () => {
         created_at: "2024-01-01T00:00:00.000Z",
         updated_at: "2024-01-01T00:00:00.000Z",
         treatment_id: null,
-      }
+      };
 
-      const apt = AppointmentMapper.toDomain(row)
-      expect(apt.durationMinutes).toBe(60)
-    })
-  })
+      const apt = AppointmentMapper.toDomain(row);
+      expect(apt.durationMinutes).toBe(60);
+    });
+  });
 
   describe("toPersistence", () => {
     it("should map Appointment entity to database insert format", () => {
@@ -96,21 +98,21 @@ describe("AppointmentMapper", () => {
         createdBy: "user-1",
         createdAt: new Date("2024-01-01T00:00:00.000Z"),
         updatedAt: new Date("2024-01-01T00:00:00.000Z"),
-      })
+      });
 
-      const data = AppointmentMapper.toPersistence(apt)
+      const data = AppointmentMapper.toPersistence(apt);
 
-      expect(data.clinic_id).toBe("clinic-1")
-      expect(data.patient_id).toBe("patient-1")
-      expect(data.dentist_id).toBe("dentist-1")
-      expect(data.start_time).toBe("2024-01-01T10:00:00.000Z")
-      expect(data.end_time).toBe("2024-01-01T10:45:00.000Z")
-      expect(data.status).toBe("AGENDADO")
-      expect(data.title).toBe("AVALIACAO")
-      expect(data.description).toBe("Observação")
-      expect(data.created_by).toBe("user-1")
-      expect(data.treatment_id).toBeNull()
-    })
+      expect(data.clinic_id).toBe("clinic-1");
+      expect(data.patient_id).toBe("patient-1");
+      expect(data.dentist_id).toBe("dentist-1");
+      expect(data.start_time).toBe("2024-01-01T10:00:00.000Z");
+      expect(data.end_time).toBe("2024-01-01T10:45:00.000Z");
+      expect(data.status).toBe("AGENDADO");
+      expect(data.title).toBe("AVALIACAO");
+      expect(data.description).toBe("Observação");
+      expect(data.created_by).toBe("user-1");
+      expect(data.treatment_id).toBeNull();
+    });
 
     it("should handle undefined notes by setting description to null", () => {
       const apt = new Appointment({
@@ -127,12 +129,12 @@ describe("AppointmentMapper", () => {
         createdBy: "user-1",
         createdAt: new Date("2024-01-01T00:00:00.000Z"),
         updatedAt: new Date("2024-01-01T00:00:00.000Z"),
-      })
+      });
 
-      const data = AppointmentMapper.toPersistence(apt)
-      expect(data.description).toBeNull()
-    })
-  })
+      const data = AppointmentMapper.toPersistence(apt);
+      expect(data.description).toBeNull();
+    });
+  });
 
   describe("toUpdate", () => {
     it("should map Appointment entity to partial update format", () => {
@@ -150,18 +152,18 @@ describe("AppointmentMapper", () => {
         createdBy: "user-1",
         createdAt: new Date("2024-01-01T00:00:00.000Z"),
         updatedAt: new Date("2024-01-01T00:00:00.000Z"),
-      })
+      });
 
-      const data = AppointmentMapper.toUpdate(apt)
+      const data = AppointmentMapper.toUpdate(apt);
 
-      expect(data.patient_id).toBe("patient-1")
-      expect(data.dentist_id).toBe("dentist-1")
-      expect(data.start_time).toBe("2024-01-01T10:00:00.000Z")
-      expect(data.end_time).toBe("2024-01-01T10:30:00.000Z")
-      expect(data.status).toBe("CONFIRMADO")
-      expect(data.title).toBe("RETORNO")
-      expect(data.description).toBe("Notas atualizadas")
-      expect(data.updated_at).toBeDefined()
-    })
-  })
-})
+      expect(data.patient_id).toBe("patient-1");
+      expect(data.dentist_id).toBe("dentist-1");
+      expect(data.start_time).toBe("2024-01-01T10:00:00.000Z");
+      expect(data.end_time).toBe("2024-01-01T10:30:00.000Z");
+      expect(data.status).toBe("CONFIRMADO");
+      expect(data.title).toBe("RETORNO");
+      expect(data.description).toBe("Notas atualizadas");
+      expect(data.updated_at).toBeDefined();
+    });
+  });
+});

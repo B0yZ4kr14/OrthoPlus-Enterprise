@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import {
   ComposedChart,
   XAxis,
@@ -76,7 +81,7 @@ export function PriceChart({ chartData }: PriceChartProps) {
                 );
               }}
             />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Area
               type="monotone"
               dataKey="upperBand"

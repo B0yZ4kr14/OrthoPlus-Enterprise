@@ -27,7 +27,9 @@ export function AnaliseSelector({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label className="text-sm font-medium mb-2 block">Primeira Análise</label>
+        <label className="text-sm font-medium mb-2 block">
+          Primeira Análise
+        </label>
         <Select value={analise1Id} onValueChange={onAnalise1Change}>
           <SelectTrigger>
             <SelectValue />
@@ -35,8 +37,13 @@ export function AnaliseSelector({
           <SelectContent>
             {analises.map((analise) => (
               <SelectItem key={analise.id ?? ""} value={analise.id ?? ""}>
-                {new Date(analise.created_at ?? "").toLocaleDateString("pt-BR")} -{" "}
-                {tipoRadiografiaLabels[analise.tipo_radiografia as keyof typeof tipoRadiografiaLabels]}
+                {new Date(analise.created_at ?? "").toLocaleDateString("pt-BR")}{" "}
+                -{" "}
+                {
+                  tipoRadiografiaLabels[
+                    analise.tipo_radiografia as keyof typeof tipoRadiografiaLabels
+                  ]
+                }
               </SelectItem>
             ))}
           </SelectContent>
@@ -44,7 +51,9 @@ export function AnaliseSelector({
       </div>
 
       <div>
-        <label className="text-sm font-medium mb-2 block">Segunda Análise</label>
+        <label className="text-sm font-medium mb-2 block">
+          Segunda Análise
+        </label>
         <Select value={analise2Id} onValueChange={onAnalise2Change}>
           <SelectTrigger>
             <SelectValue />
@@ -52,8 +61,13 @@ export function AnaliseSelector({
           <SelectContent>
             {analises.map((analise) => (
               <SelectItem key={analise.id ?? ""} value={analise.id ?? ""}>
-                {new Date(analise.created_at ?? "").toLocaleDateString("pt-BR")} -{" "}
-                {tipoRadiografiaLabels[analise.tipo_radiografia as keyof typeof tipoRadiografiaLabels]}
+                {new Date(analise.created_at ?? "").toLocaleDateString("pt-BR")}{" "}
+                -{" "}
+                {
+                  tipoRadiografiaLabels[
+                    analise.tipo_radiografia as keyof typeof tipoRadiografiaLabels
+                  ]
+                }
               </SelectItem>
             ))}
           </SelectContent>

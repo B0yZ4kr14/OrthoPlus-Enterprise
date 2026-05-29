@@ -30,8 +30,7 @@ export function BudgetCard({ budget }: BudgetCardProps) {
           <div>
             <CardTitle className="text-base">{budget.titulo}</CardTitle>
             <CardDescription>
-              Nº {budget.numero_orcamento} •{" "}
-              {formatDate(budget.created_at)}
+              Nº {budget.numero_orcamento} • {formatDate(budget.created_at)}
             </CardDescription>
           </div>
           {getBudgetStatusBadge(budget.status)}
@@ -46,7 +45,8 @@ export function BudgetCard({ budget }: BudgetCardProps) {
             })}
           </div>
           <div>
-            <span className="font-semibold">Tipo de Plano:</span> {budget.tipo_plano}
+            <span className="font-semibold">Tipo de Plano:</span>{" "}
+            {budget.tipo_plano}
           </div>
           {budget.data_expiracao && (
             <div>

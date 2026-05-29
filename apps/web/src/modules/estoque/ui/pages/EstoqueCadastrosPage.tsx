@@ -2,7 +2,12 @@ import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { Card } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import { SearchInput } from "@/components/shared/SearchInput";
 import { DeleteConfirmDialog } from "@/components/shared/DeleteConfirmDialog";

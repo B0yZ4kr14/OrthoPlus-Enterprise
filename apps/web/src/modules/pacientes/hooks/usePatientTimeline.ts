@@ -8,7 +8,13 @@ import { apiClient } from "@/lib/api/apiClient";
 
 export interface TimelineEvent {
   id: string;
-  type: "appointment" | "treatment" | "budget" | "status_change" | "payment" | "document";
+  type:
+    | "appointment"
+    | "treatment"
+    | "budget"
+    | "status_change"
+    | "payment"
+    | "document";
   title: string;
   description: string;
   date: string;

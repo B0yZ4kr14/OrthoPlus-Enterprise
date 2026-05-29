@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface SidebarHoverTriggerProps {
-  onMouseEnter: () => void
-  onMouseLeave: () => void
-  isAutoHide: boolean
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  isAutoHide: boolean;
 }
 
 /**
@@ -16,7 +16,7 @@ export function SidebarHoverTrigger({
   onMouseLeave,
   isAutoHide,
 }: SidebarHoverTriggerProps) {
-  if (!isAutoHide) return null
+  if (!isAutoHide) return null;
 
   return (
     <div
@@ -26,7 +26,7 @@ export function SidebarHoverTrigger({
         "cursor-pointer",
         "transition-all duration-500 ease-out",
         "hover:w-5",
-        "hover:bg-gradient-to-r hover:from-sidebar-accent/10 hover:to-transparent"
+        "hover:bg-gradient-to-r hover:from-sidebar-accent/10 hover:to-transparent",
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -41,9 +41,9 @@ export function SidebarHoverTrigger({
           "shadow-[0_0_6px_hsl(var(--interactive)/0.5),0_0_12px_hsl(var(--interactive)/0.3)]",
           "animate-neon-pulse",
           "transition-all duration-500",
-          "group-hover:opacity-100 group-hover:shadow-[0_0_10px_hsl(var(--interactive)/0.7),0_0_20px_hsl(var(--interactive)/0.4)]"
+          "group-hover:opacity-100 group-hover:shadow-[0_0_10px_hsl(var(--interactive)/0.7),0_0_20px_hsl(var(--interactive)/0.4)]",
         )}
       />
     </div>
-  )
+  );
 }

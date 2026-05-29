@@ -20,9 +20,12 @@ export class UsuariosRepository implements IUsuariosRepository {
   async updateProfile(
     id: string,
     clinicId: string,
-    data: Prisma.profilesUpdateManyMutationInput
+    data: Prisma.profilesUpdateManyMutationInput,
   ) {
-    return prisma.profiles.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.profiles.updateMany({
+      where: { id, clinic_id: clinicId },
+      data,
+    });
   }
 
   async updateOwnProfile(id: string, data: Prisma.profilesUpdateInput) {

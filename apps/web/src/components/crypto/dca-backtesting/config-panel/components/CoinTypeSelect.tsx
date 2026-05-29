@@ -23,10 +23,7 @@ export function CoinTypeSelect({ value, onChange }: CoinTypeSelectProps) {
   return (
     <div className="space-y-2">
       <Label>Criptomoeda</Label>
-      <Select
-        value={value}
-        onValueChange={(v) => onChange(v as CoinType)}
-      >
+      <Select value={value} onValueChange={(v) => onChange(v as CoinType)}>
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>

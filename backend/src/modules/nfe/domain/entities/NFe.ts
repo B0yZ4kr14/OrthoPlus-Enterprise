@@ -15,10 +15,10 @@ export class NFe {
     public dataEmissao: Date,
     public protocolo: string | null,
     public readonly createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
   ) {}
 
-  static create(props: Omit<NFe, 'cancelar'>): NFe {
+  static create(props: Omit<NFe, "cancelar">): NFe {
     return new NFe(
       props.id,
       props.clinicId,
@@ -35,15 +35,15 @@ export class NFe {
       props.dataEmissao,
       props.protocolo,
       props.createdAt,
-      props.updatedAt
+      props.updatedAt,
     );
   }
 
   cancelar(): void {
-    if (this.status !== 'AUTORIZADA') {
-      throw new Error('Apenas NFe autorizada pode ser cancelada');
+    if (this.status !== "AUTORIZADA") {
+      throw new Error("Apenas NFe autorizada pode ser cancelada");
     }
-    this.status = 'CANCELADA';
+    this.status = "CANCELADA";
     this.updatedAt = new Date();
   }
 }

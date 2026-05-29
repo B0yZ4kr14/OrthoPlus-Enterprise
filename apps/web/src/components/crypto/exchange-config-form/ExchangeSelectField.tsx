@@ -63,7 +63,9 @@ export function ExchangeSelectField({ form }: ExchangeSelectFieldProps) {
               ))}
             </SelectContent>
           </Select>
-          <FormDescription>Escolha a exchange que será integrada</FormDescription>
+          <FormDescription>
+            Escolha a exchange que será integrada
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}

@@ -40,25 +40,25 @@ export function ExchangeConfigForm({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <ConnectionAlert status={connectionStatus} />
-          
+
           <ExchangeSelectField form={form} />
           <ApiKeyFields form={form} />
-          
+
           <TestConnectionButton
             onClick={handleTestConnection}
             isTesting={testingConnection}
           />
-          
+
           <WalletAddressField form={form} />
-          
+
           <CoinSelector
             selectedCoins={selectedCoins}
             onAddCoin={handleAddCoin}
             onRemoveCoin={handleRemoveCoin}
           />
-          
+
           <AdvancedSettings form={form} />
-          
+
           <FormActions onCancel={onCancel} isSubmitting={testingConnection} />
         </form>
       </Form>

@@ -26,43 +26,44 @@ export function useAgendaApi() {
       const clinicId =
         typeof selectedClinic === "string" ? selectedClinic : selectedClinic.id;
 
-      const data = await apiClient.get<Record<string, any>[]>("/agenda/appointments", {
-        params: { clinic_id: clinicId },
-      });
-
-      // Transform database row to Appointment format
-      const transformedAppointments: Appointment[] = (data || []).map(
-        (apt) => {
-          const startDate = new Date(apt.start_time);
-          const endDate = new Date(apt.end_time);
-
-          return {
-            id: apt.id,
-            pacienteId: apt.patient_id,
-            pacienteNome: apt.patient?.profiles?.full_name || "Paciente",
-            dentistaId: apt.dentist_id,
-            dentistaNome: apt.dentist?.full_name || "Dentista",
-            data: startDate.toISOString().split("T")[0],
-            horaInicio: startDate.toTimeString().slice(0, 5),
-            horaFim: endDate.toTimeString().slice(0, 5),
-            procedimento: apt.title || "",
-            status:
-              apt.status === "agendado"
-                ? "Agendada"
-                : apt.status === "confirmado"
-                  ? "Confirmada"
-                  : apt.status === "cancelado"
-                    ? "Cancelada"
-                    : apt.status === "concluido"
-                      ? "Realizada"
-                      : "Agendada",
-            observacoes: apt.description || "",
-            lembreteEnviado: apt.reminder_sent || false,
-            createdAt: apt.created_at,
-            updatedAt: apt.updated_at,
-          };
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/agenda/appointments",
+        {
+          params: { clinic_id: clinicId },
         },
       );
+
+      // Transform database row to Appointment format
+      const transformedAppointments: Appointment[] = (data || []).map((apt) => {
+        const startDate = new Date(apt.start_time);
+        const endDate = new Date(apt.end_time);
+
+        return {
+          id: apt.id,
+          pacienteId: apt.patient_id,
+          pacienteNome: apt.patient?.profiles?.full_name || "Paciente",
+          dentistaId: apt.dentist_id,
+          dentistaNome: apt.dentist?.full_name || "Dentista",
+          data: startDate.toISOString().split("T")[0],
+          horaInicio: startDate.toTimeString().slice(0, 5),
+          horaFim: endDate.toTimeString().slice(0, 5),
+          procedimento: apt.title || "",
+          status:
+            apt.status === "agendado"
+              ? "Agendada"
+              : apt.status === "confirmado"
+                ? "Confirmada"
+                : apt.status === "cancelado"
+                  ? "Cancelada"
+                  : apt.status === "concluido"
+                    ? "Realizada"
+                    : "Agendada",
+          observacoes: apt.description || "",
+          lembreteEnviado: apt.reminder_sent || false,
+          createdAt: apt.created_at,
+          updatedAt: apt.updated_at,
+        };
+      });
 
       setAppointments(transformedAppointments);
     } catch (error: unknown) {
@@ -80,11 +81,14 @@ export function useAgendaApi() {
       const clinicId =
         typeof selectedClinic === "string" ? selectedClinic : selectedClinic.id;
 
-      const data = await apiClient.get<Record<string, any>[]>("/pacientes/dentists", {
-        params: {
-          clinic_id: clinicId,
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/pacientes/dentists",
+        {
+          params: {
+            clinic_id: clinicId,
+          },
         },
-      });
+      );
 
       const transformedDentistas: Dentista[] = (data || []).map(
         (dentista, index) => ({

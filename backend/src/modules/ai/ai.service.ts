@@ -2,10 +2,13 @@ import { z } from "zod";
 import { logger } from "@/infrastructure/logger";
 
 const AI_GATEWAY_URL = "https://ai-gateway.vercel.sh/v1/chat/completions";
-const AI_GATEWAY_API_KEY = process.env.VERCEL_AI_GATEWAY_API_KEY || process.env.AI_GATEWAY_API_KEY;
+const AI_GATEWAY_API_KEY =
+  process.env.VERCEL_AI_GATEWAY_API_KEY || process.env.AI_GATEWAY_API_KEY;
 
 if (!AI_GATEWAY_API_KEY) {
-  logger.warn("[AI] VERCEL_AI_GATEWAY_API_KEY não configurada. Módulo AI desativado.");
+  logger.warn(
+    "[AI] VERCEL_AI_GATEWAY_API_KEY não configurada. Módulo AI desativado.",
+  );
 }
 
 export const TriagemSchema = z.object({
@@ -43,7 +46,9 @@ function buildTriagemPrompt(input: TriagemInput): string {
   return prompt;
 }
 
-export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult> {
+export async function triagemVirtual(
+  input: TriagemInput,
+): Promise<TriagemResult> {
   if (!AI_GATEWAY_API_KEY) {
     throw new Error("AI Gateway API key não configurada");
   }
@@ -53,7 +58,7 @@ export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult
   const response = await fetch(AI_GATEWAY_URL, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${AI_GATEWAY_API_KEY}`,
+      Authorization: `Bearer ${AI_GATEWAY_API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -72,7 +77,7 @@ export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult
     throw new Error(`AI Gateway error ${response.status}: ${error}`);
   }
 
-  const data = await response.json() as any;
+  const data = (await response.json()) as any;
   const content = data.choices?.[0]?.message?.content;
 
   if (!content) {
@@ -90,7 +95,10 @@ export async function triagemVirtual(input: TriagemInput): Promise<TriagemResult
   }
 }
 
-export async function healthCheckAI(): Promise<{ status: string; model?: string }> {
+export async function healthCheckAI(): Promise<{
+  status: string;
+  model?: string;
+}> {
   if (!AI_GATEWAY_API_KEY) {
     return { status: "disabled" };
   }
@@ -99,7 +107,7 @@ export async function healthCheckAI(): Promise<{ status: string; model?: string 
     const response = await fetch(AI_GATEWAY_URL, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${AI_GATEWAY_API_KEY}`,
+        Authorization: `Bearer ${AI_GATEWAY_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

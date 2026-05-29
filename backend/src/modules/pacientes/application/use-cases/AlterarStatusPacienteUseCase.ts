@@ -1,16 +1,16 @@
 /**
  * AlterarStatusPacienteUseCase - Altera status do paciente
- * 
+ *
  * Use Case que orquestra mudança de status com validações,
  * histórico e eventos.
  */
 
-import { IPatientRepository } from '../../domain/repositories/IPatientRepository';
-import { PatientStatus } from '../../domain/value-objects/PatientStatus';
-import { eventBus } from '@/shared/events/EventBus';
-import { PatientUpdatedEvent } from '../../domain/events/PatientUpdatedEvent';
-import { logger } from '@/infrastructure/logger';
-import { pacientesMetrics } from '@/infrastructure/metrics/PacientesMetrics';
+import { IPatientRepository } from "../../domain/repositories/IPatientRepository";
+import { PatientStatus } from "../../domain/value-objects/PatientStatus";
+import { eventBus } from "@/shared/events/EventBus";
+import { PatientUpdatedEvent } from "../../domain/events/PatientUpdatedEvent";
+import { logger } from "@/infrastructure/logger";
+import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics";
 
 export interface AlterarStatusPacienteDTO {
   patientId: string;
@@ -25,7 +25,7 @@ export class AlterarStatusPacienteUseCase {
   constructor(private patientRepository: IPatientRepository) {}
 
   async execute(dto: AlterarStatusPacienteDTO): Promise<void> {
-    logger.info('AlterarStatusPacienteUseCase: Starting', {
+    logger.info("AlterarStatusPacienteUseCase: Starting", {
       patientId: dto.patientId,
       novoStatus: dto.novoStatusCode,
     });
@@ -33,15 +33,15 @@ export class AlterarStatusPacienteUseCase {
     // Buscar paciente
     const patient = await this.patientRepository.findById(
       dto.patientId,
-      dto.clinicId
+      dto.clinicId,
     );
 
     if (!patient) {
-      throw new Error('Paciente não encontrado');
+      throw new Error("Paciente não encontrado");
     }
 
     if (!patient.isActive) {
-      throw new Error('Não é possível alterar status de paciente inativo');
+      throw new Error("Não é possível alterar status de paciente inativo");
     }
 
     // Validar novo status
@@ -61,7 +61,7 @@ export class AlterarStatusPacienteUseCase {
       novoStatus.code,
       dto.reason,
       dto.changedBy,
-      dto.metadata
+      dto.metadata,
     );
 
     // Atualizar métricas: decrementar status anterior, incrementar novo (TD004)
@@ -76,7 +76,7 @@ export class AlterarStatusPacienteUseCase {
     ]);
     patient.clearDomainEvents();
 
-    logger.info('AlterarStatusPacienteUseCase: Success', {
+    logger.info("AlterarStatusPacienteUseCase: Success", {
       patientId: dto.patientId,
       fromStatus: statusAnterior.code,
       toStatus: novoStatus.code,

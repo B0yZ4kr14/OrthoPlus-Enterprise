@@ -10,17 +10,28 @@ import type { RecompensaFormData, RecompensaFormProps } from "./types";
 const recompensaSchema = z.object({
   nome: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
   descricao: z.string().optional(),
-  pontos_necessarios: z.number().min(1, "Pontos necessários deve ser pelo menos 1"),
-  tipo: z.enum(["BRINDE", "DESCONTO_PERCENTUAL", "DESCONTO_VALOR", "PROCEDIMENTO_GRATIS"]),
+  pontos_necessarios: z
+    .number()
+    .min(1, "Pontos necessários deve ser pelo menos 1"),
+  tipo: z.enum([
+    "BRINDE",
+    "DESCONTO_PERCENTUAL",
+    "DESCONTO_VALOR",
+    "PROCEDIMENTO_GRATIS",
+  ]),
   valor_desconto: z.number().optional().nullable(),
   procedimento_id: z.string().uuid().optional().nullable(),
   ativo: z.boolean(),
 });
 
-export function useRecompensaForm({ editingRecompensa, onSuccess }: RecompensaFormProps) {
+export function useRecompensaForm({
+  editingRecompensa,
+  onSuccess,
+}: RecompensaFormProps) {
   const { createRecompensa, updateRecompensa } = useFidelidade();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<RecompensaFormData>(DEFAULT_FORM_DATA);
+  const [formData, setFormData] =
+    useState<RecompensaFormData>(DEFAULT_FORM_DATA);
 
   useEffect(() => {
     if (editingRecompensa) {
@@ -36,7 +47,10 @@ export function useRecompensaForm({ editingRecompensa, onSuccess }: RecompensaFo
     }
   }, [editingRecompensa]);
 
-  const handleInputChange = (field: keyof RecompensaFormData, value: unknown) => {
+  const handleInputChange = (
+    field: keyof RecompensaFormData,
+    value: unknown,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

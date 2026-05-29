@@ -17,9 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { ArrowLeft, Save, FileText } from "lucide-react"
-import { PageHeader } from "@/components/shared/PageHeader"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import { ArrowLeft, Save, FileText } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { PatientSelector } from "@/components/shared/PatientSelector";
 import type { Patient } from "@/types/patient";
 import { tipoPlanoLabels } from "../../types/orcamento.types";
@@ -67,7 +72,9 @@ export default function OrcamentoFormPage() {
     const fetchOrcamento = async () => {
       try {
         setIsFetching(true);
-        const data = await apiClient.get<Record<string, any>>(`/orcamentos/${id}`);
+        const data = await apiClient.get<Record<string, any>>(
+          `/orcamentos/${id}`,
+        );
         if (data) {
           form.reset({
             patient_id: data.patient_id,
@@ -117,7 +124,8 @@ export default function OrcamentoFormPage() {
       }
       navigate("/orcamentos");
     } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : "Erro ao salvar orçamento";
+      const msg =
+        error instanceof Error ? error.message : "Erro ao salvar orçamento";
       toast.error(msg);
     } finally {
       setIsLoading(false);
@@ -126,9 +134,7 @@ export default function OrcamentoFormPage() {
 
   if (isFetching) {
     return (
-      <div className="flex items-center justify-center h-96">
-        Carregando...
-      </div>
+      <div className="flex items-center justify-center h-96">Carregando...</div>
     );
   }
 
@@ -139,7 +145,11 @@ export default function OrcamentoFormPage() {
         description="Preencha os dados do orcamento para o paciente"
         icon={FileText}
         actions={
-          <Button variant="ghost" size="icon" onClick={() => navigate("/orcamentos")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/orcamentos")}
+          >
             <ArrowLeft className="h-5 w-5" />
           </Button>
         }
@@ -202,7 +212,10 @@ export default function OrcamentoFormPage() {
               <Select
                 value={form.watch("tipo_plano")}
                 onValueChange={(v) =>
-                  form.setValue("tipo_plano", v as "BASICO" | "INTERMEDIARIO" | "PREMIUM")
+                  form.setValue(
+                    "tipo_plano",
+                    v as "BASICO" | "INTERMEDIARIO" | "PREMIUM",
+                  )
                 }
               >
                 <SelectTrigger>
@@ -243,7 +256,9 @@ export default function OrcamentoFormPage() {
                   type="number"
                   min={0}
                   max={100}
-                  {...form.register("desconto_percentual", { valueAsNumber: true })}
+                  {...form.register("desconto_percentual", {
+                    valueAsNumber: true,
+                  })}
                 />
               </div>
 

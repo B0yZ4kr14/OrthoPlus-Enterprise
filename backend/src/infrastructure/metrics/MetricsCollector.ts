@@ -1,11 +1,11 @@
 /**
  * MetricsCollector — Agregador de métricas customizadas OrthoPlus
- * 
+ *
  * Integra:
  * - CircuitBreakerMetrics
  * - BackupMetrics
  * - DatabaseCategoryMetrics
- * 
+ *
  * Uso: Chamar .record*() nos controllers/services para emitir métricas.
  */
 

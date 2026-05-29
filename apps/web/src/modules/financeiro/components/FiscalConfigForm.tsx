@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
@@ -33,7 +38,12 @@ interface Props {
   isSaving: boolean;
 }
 
-export function FiscalConfigForm({ config, onSave, isLoading, isSaving }: Props) {
+export function FiscalConfigForm({
+  config,
+  onSave,
+  isLoading,
+  isSaving,
+}: Props) {
   const [form, setForm] = useState<Partial<FiscalConfig>>({
     ambiente: "homologacao",
   });
@@ -135,8 +145,12 @@ export function FiscalConfigForm({ config, onSave, isLoading, isSaving }: Props)
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="simples_nacional">Simples Nacional</SelectItem>
-                  <SelectItem value="lucro_presumido">Lucro Presumido</SelectItem>
+                  <SelectItem value="simples_nacional">
+                    Simples Nacional
+                  </SelectItem>
+                  <SelectItem value="lucro_presumido">
+                    Lucro Presumido
+                  </SelectItem>
                   <SelectItem value="lucro_real">Lucro Real</SelectItem>
                 </SelectContent>
               </Select>
@@ -146,7 +160,9 @@ export function FiscalConfigForm({ config, onSave, isLoading, isSaving }: Props)
               <Input
                 id="ie"
                 value={form.inscricao_estadual || ""}
-                onChange={(e) => handleChange("inscricao_estadual", e.target.value)}
+                onChange={(e) =>
+                  handleChange("inscricao_estadual", e.target.value)
+                }
                 placeholder="000.000.000.000"
               />
             </div>
@@ -155,7 +171,9 @@ export function FiscalConfigForm({ config, onSave, isLoading, isSaving }: Props)
               <Input
                 id="im"
                 value={form.inscricao_municipal || ""}
-                onChange={(e) => handleChange("inscricao_municipal", e.target.value)}
+                onChange={(e) =>
+                  handleChange("inscricao_municipal", e.target.value)
+                }
                 placeholder="000.000.000.000"
               />
             </div>
@@ -164,7 +182,9 @@ export function FiscalConfigForm({ config, onSave, isLoading, isSaving }: Props)
               <Input
                 id="cert_path"
                 value={form.certificado_a1_path || ""}
-                onChange={(e) => handleChange("certificado_a1_path", e.target.value)}
+                onChange={(e) =>
+                  handleChange("certificado_a1_path", e.target.value)
+                }
                 placeholder="/caminho/para/certificado.pfx"
               />
             </div>
@@ -174,7 +194,9 @@ export function FiscalConfigForm({ config, onSave, isLoading, isSaving }: Props)
                 id="cert_senha"
                 type="password"
                 value={form.certificado_senha || ""}
-                onChange={(e) => handleChange("certificado_senha", e.target.value)}
+                onChange={(e) =>
+                  handleChange("certificado_senha", e.target.value)
+                }
                 placeholder="••••••••"
               />
             </div>
@@ -184,7 +206,9 @@ export function FiscalConfigForm({ config, onSave, isLoading, isSaving }: Props)
                 id="cert_venc"
                 type="date"
                 value={form.certificado_vencimento || ""}
-                onChange={(e) => handleChange("certificado_vencimento", e.target.value)}
+                onChange={(e) =>
+                  handleChange("certificado_vencimento", e.target.value)
+                }
               />
             </div>
           </div>

@@ -46,8 +46,8 @@ const upload = multer({
     } else {
       cb(
         new Error(
-          `Tipo de arquivo não permitido: ${file.mimetype}. Permitidos: PDF, JPG, PNG, DOCX, XLSX, DICOM`
-        )
+          `Tipo de arquivo não permitido: ${file.mimetype}. Permitidos: PDF, JPG, PNG, DOCX, XLSX, DICOM`,
+        ),
       );
     }
   },
@@ -90,7 +90,10 @@ router.post(
   filesController.createVersion.bind(filesController),
 );
 router.get("/:id/versions", filesController.listVersions.bind(filesController));
-router.post("/:id/versions/:versionId/restore", filesController.restoreVersion.bind(filesController));
+router.post(
+  "/:id/versions/:versionId/restore",
+  filesController.restoreVersion.bind(filesController),
+);
 
 // ----------------------------------------
 // Cloud Backup routes

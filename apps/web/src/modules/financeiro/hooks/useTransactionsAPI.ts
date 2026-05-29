@@ -42,7 +42,9 @@ export function useTransactionsAPI() {
 
       // Converter dados da API para formato frontend
       const transformed = response.transactions.map((apiTx: unknown) => {
-        const frontendTx = TransactionAdapter.toFrontend(apiTx as Parameters<typeof TransactionAdapter.toFrontend>[0]);
+        const frontendTx = TransactionAdapter.toFrontend(
+          apiTx as Parameters<typeof TransactionAdapter.toFrontend>[0],
+        );
 
         return {
           id: frontendTx.id,

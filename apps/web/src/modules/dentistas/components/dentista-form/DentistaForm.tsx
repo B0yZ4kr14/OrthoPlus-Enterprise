@@ -1,13 +1,24 @@
 /**
  * DentistaForm - Componente Orquestrador (Refatorado)
- * 
+ *
  * ANTES: 574 linhas
  * DEPOIS: ~100 linhas + estrutura modular
  */
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { useDentistaForm } from "./useDentistaForm";
 import { DadosPessoaisTab } from "./DadosPessoaisTab";
 import { DadosProfissionaisTab } from "./DadosProfissionaisTab";
@@ -43,9 +54,7 @@ export function DentistaForm({
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
-        <CardTitle>
-          {dentista ? "Editar Dentista" : "Novo Dentista"}
-        </CardTitle>
+        <CardTitle>{dentista ? "Editar Dentista" : "Novo Dentista"}</CardTitle>
       </CardHeader>
 
       <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -95,9 +104,7 @@ export function DentistaForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">
-            {dentista ? "Atualizar" : "Cadastrar"}
-          </Button>
+          <Button type="submit">{dentista ? "Atualizar" : "Cadastrar"}</Button>
         </CardFooter>
       </form>
     </Card>

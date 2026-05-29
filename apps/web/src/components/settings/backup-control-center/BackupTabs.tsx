@@ -1,4 +1,9 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 
 interface BackupTabsProps {
   settingsTab: React.ReactNode;
@@ -6,7 +11,11 @@ interface BackupTabsProps {
   logsTab: React.ReactNode;
 }
 
-export function BackupTabs({ settingsTab, historyTab, logsTab }: BackupTabsProps) {
+export function BackupTabs({
+  settingsTab,
+  historyTab,
+  logsTab,
+}: BackupTabsProps) {
   return (
     <Tabs defaultValue="settings" className="w-full">
       <TabsList className="grid w-full grid-cols-3">

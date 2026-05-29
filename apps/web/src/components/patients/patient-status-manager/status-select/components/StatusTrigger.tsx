@@ -8,7 +8,10 @@ interface StatusTriggerProps {
   disabled?: boolean;
 }
 
-export function StatusTrigger({ selectedStatus, disabled }: StatusTriggerProps) {
+export function StatusTrigger({
+  selectedStatus,
+  disabled,
+}: StatusTriggerProps) {
   return (
     <Button
       variant="outline"

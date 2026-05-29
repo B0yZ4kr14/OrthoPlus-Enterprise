@@ -6,7 +6,10 @@ interface RenovacaoCheckboxProps {
   onChange: (checked: boolean) => void;
 }
 
-export function RenovacaoCheckbox({ checked, onChange }: RenovacaoCheckboxProps) {
+export function RenovacaoCheckbox({
+  checked,
+  onChange,
+}: RenovacaoCheckboxProps) {
   return (
     <div className="flex items-center space-x-2">
       <Checkbox

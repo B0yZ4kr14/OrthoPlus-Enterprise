@@ -98,7 +98,9 @@ describe("Lead Aggregate", () => {
       lead.assignTo("user-1");
 
       const persistence = lead.toPersistence();
-      expect((persistence as Record<string, unknown>).assigned_to).toBe("user-1");
+      expect((persistence as Record<string, unknown>).assigned_to).toBe(
+        "user-1",
+      );
     });
   });
 });

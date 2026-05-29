@@ -1,11 +1,31 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { useTransactions } from "../../presentation/hooks/useTransactions";
 import { useCashFlow } from "../../presentation/hooks/useCashFlow";
 import { useCashRegister } from "../../presentation/hooks/useCashRegister";
 import { Period } from "../../domain/valueObjects/Period";
-import { DollarSign, TrendingUp, TrendingDown, Wallet, BarChart3, List, Tags, Archive, FileText } from "lucide-react";
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  BarChart3,
+  List,
+  Tags,
+  Archive,
+  FileText,
+} from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatsCard } from "@/components/shared/StatsCard";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -40,21 +60,30 @@ export function FinanceiroPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Receitas"
-          value={new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(totalReceitas)}
+          value={new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(totalReceitas)}
           icon={TrendingUp}
           variant="success"
           description={`Pendentes: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(receitasPendentes)}`}
         />
         <StatsCard
           title="Despesas"
-          value={new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(totalDespesas)}
+          value={new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(totalDespesas)}
           icon={TrendingDown}
           variant="danger"
           description={`Pendentes: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(despesasPendentes)}`}
         />
         <StatsCard
           title="Saldo"
-          value={new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(saldo)}
+          value={new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(saldo)}
           icon={DollarSign}
           variant={saldo >= 0 ? "success" : "danger"}
           description="Receitas − Despesas"
@@ -75,23 +104,38 @@ export function FinanceiroPage() {
       {/* Abas de Navegação Premium */}
       <Tabs defaultValue="dashboard" className="w-full">
         <TabsList className="grid w-full grid-cols-5 bg-muted/30 backdrop-blur-sm border border-border/50 rounded-xl p-1">
-          <TabsTrigger value="dashboard" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="dashboard"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <BarChart3 className="h-4 w-4" />
             Dashboard
           </TabsTrigger>
-          <TabsTrigger value="transacoes" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="transacoes"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <List className="h-4 w-4" />
             Transações
           </TabsTrigger>
-          <TabsTrigger value="categorias" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="categorias"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <Tags className="h-4 w-4" />
             Categorias
           </TabsTrigger>
-          <TabsTrigger value="caixa" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="caixa"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <Archive className="h-4 w-4" />
             Caixa
           </TabsTrigger>
-          <TabsTrigger value="relatorios" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="relatorios"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+          >
             <FileText className="h-4 w-4" />
             Relatórios
           </TabsTrigger>
@@ -101,7 +145,9 @@ export function FinanceiroPage() {
           <Card className="glass-card overflow-hidden">
             <CardTopBorder color="interactive" opacity={40} />
             <CardHeader>
-              <CardTitle className="text-lg font-semibold tracking-tight">Fluxo de Caixa</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">
+                Fluxo de Caixa
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {flowLoading ? (
@@ -116,7 +162,10 @@ export function FinanceiroPage() {
                         Receitas Realizadas
                       </p>
                       <p className="text-xl font-bold text-success">
-                        {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cashFlow.totalReceitas)}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(cashFlow.totalReceitas)}
                       </p>
                     </div>
                     <div className="glass-card rounded-xl p-4 border-l-4 border-l-destructive">
@@ -124,15 +173,23 @@ export function FinanceiroPage() {
                         Despesas Realizadas
                       </p>
                       <p className="text-xl font-bold text-destructive">
-                        {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cashFlow.totalDespesas)}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(cashFlow.totalDespesas)}
                       </p>
                     </div>
                     <div className="glass-card rounded-xl p-4 border-l-4 border-l-interactive">
                       <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
                         Saldo do Período
                       </p>
-                      <p className={`text-xl font-bold ${cashFlow.saldo >= 0 ? "text-success" : "text-destructive"}`}>
-                        {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cashFlow.saldo)}
+                      <p
+                        className={`text-xl font-bold ${cashFlow.saldo >= 0 ? "text-success" : "text-destructive"}`}
+                      >
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(cashFlow.saldo)}
                       </p>
                     </div>
                   </div>
@@ -152,7 +209,9 @@ export function FinanceiroPage() {
           <Card className="glass-card overflow-hidden">
             <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
-              <CardTitle className="text-lg font-semibold tracking-tight">Transações Financeiras</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">
+                Transações Financeiras
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <EmptyState
@@ -168,7 +227,9 @@ export function FinanceiroPage() {
           <Card className="glass-card overflow-hidden">
             <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
-              <CardTitle className="text-lg font-semibold tracking-tight">Categorias</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">
+                Categorias
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <EmptyState
@@ -184,7 +245,9 @@ export function FinanceiroPage() {
           <Card className="glass-card overflow-hidden">
             <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
-              <CardTitle className="text-lg font-semibold tracking-tight">Controle de Caixa</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">
+                Controle de Caixa
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <EmptyState
@@ -200,7 +263,9 @@ export function FinanceiroPage() {
           <Card className="glass-card overflow-hidden">
             <CardTopBorder color="warning" opacity={40} />
             <CardHeader>
-              <CardTitle className="text-lg font-semibold tracking-tight">Relatórios</CardTitle>
+              <CardTitle className="text-lg font-semibold tracking-tight">
+                Relatórios
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <EmptyState

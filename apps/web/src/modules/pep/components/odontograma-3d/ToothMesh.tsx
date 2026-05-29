@@ -25,7 +25,8 @@ export function ToothMesh({
 
   if (!toothData) return null;
 
-  const color = TOOTH_STATUS_COLORS[toothData.status] || TOOTH_STATUS_COLORS["higido"];
+  const color =
+    TOOTH_STATUS_COLORS[toothData.status] || TOOTH_STATUS_COLORS["higido"];
   const isExtraido = toothData.status === "extraido";
 
   const handleClick = (e: { stopPropagation: () => void; button: number }) => {

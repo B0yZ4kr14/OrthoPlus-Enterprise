@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Package, Plus, Settings, Play } from "lucide-react";
 import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
 import { PedidosList } from "@/modules/estoque/components/PedidosList";

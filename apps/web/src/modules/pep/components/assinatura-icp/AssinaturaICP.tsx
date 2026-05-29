@@ -1,6 +1,11 @@
 // cspell:disable
 import { Card, CardContent } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Shield } from "lucide-react";
 import { useAssinaturaICP } from "./useAssinaturaICP";
 import { Header } from "./Header";

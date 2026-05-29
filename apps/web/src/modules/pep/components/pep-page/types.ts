@@ -1,13 +1,13 @@
 // cspell:disable
 import type { Patient } from "@/types/patient";
 
-export type TabValue = 
-  | "historico" 
-  | "tratamentos" 
-  | "odontograma" 
-  | "odontograma-3d" 
-  | "historico-odonto" 
-  | "comparacao-odonto" 
+export type TabValue =
+  | "historico"
+  | "tratamentos"
+  | "odontograma"
+  | "odontograma-3d"
+  | "historico-odonto"
+  | "comparacao-odonto"
   | "anexos";
 
 export interface DialogState {

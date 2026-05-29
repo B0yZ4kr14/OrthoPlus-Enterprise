@@ -109,7 +109,8 @@ export default function AuditLogs() {
           title="Ações de Criação"
           value={
             logs.filter(
-              (l) => l.action.includes("CREATE") || l.action.includes("ACTIVATE"),
+              (l) =>
+                l.action.includes("CREATE") || l.action.includes("ACTIVATE"),
             ).length
           }
           icon={PlusCircle}
@@ -119,7 +120,8 @@ export default function AuditLogs() {
           title="Ações de Deleção"
           value={
             logs.filter(
-              (l) => l.action.includes("DELETE") || l.action.includes("DEACTIVATE"),
+              (l) =>
+                l.action.includes("DELETE") || l.action.includes("DEACTIVATE"),
             ).length
           }
           icon={Trash2}

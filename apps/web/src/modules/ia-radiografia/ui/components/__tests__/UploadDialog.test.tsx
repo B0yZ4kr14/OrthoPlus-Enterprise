@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render, screen, act } from "@testing-library/react"
-import { UploadDialog } from "../UploadDialog"
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+import { UploadDialog } from "../UploadDialog";
 
-const mockOnOpenChange = vi.fn()
-const mockOnPatientChange = vi.fn()
-const mockOnTipoChange = vi.fn()
-const mockOnFileChange = vi.fn()
-const mockOnUpload = vi.fn()
+const mockOnOpenChange = vi.fn();
+const mockOnPatientChange = vi.fn();
+const mockOnTipoChange = vi.fn();
+const mockOnFileChange = vi.fn();
+const mockOnUpload = vi.fn();
 
 vi.mock("@orthoplus/core-ui/button", () => ({
   Button: ({ children, onClick, disabled, className }: any) => (
@@ -14,7 +14,7 @@ vi.mock("@orthoplus/core-ui/button", () => ({
       {children}
     </button>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/dialog", () => ({
   Dialog: ({ children, open }: any) => (open ? <div>{children}</div> : null),
@@ -22,11 +22,13 @@ vi.mock("@orthoplus/core-ui/dialog", () => ({
   DialogDescription: ({ children }: any) => <p>{children}</p>,
   DialogHeader: ({ children }: any) => <div>{children}</div>,
   DialogTitle: ({ children }: any) => <h2>{children}</h2>,
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/label", () => ({
-  Label: ({ children, className }: any) => <label className={className}>{children}</label>,
-}))
+  Label: ({ children, className }: any) => (
+    <label className={className}>{children}</label>
+  ),
+}));
 
 vi.mock("@orthoplus/core-ui/input", () => ({
   Input: ({ value, onChange, type, accept, placeholder }: any) => (
@@ -38,7 +40,7 @@ vi.mock("@orthoplus/core-ui/input", () => ({
       placeholder={placeholder}
     />
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/select", () => ({
   Select: ({ children, value, onValueChange }: any) => (
@@ -49,15 +51,17 @@ vi.mock("@orthoplus/core-ui/select", () => ({
     </div>
   ),
   SelectContent: ({ children }: any) => <>{children}</>,
-  SelectItem: ({ children, value }: any) => <option value={value}>{children}</option>,
+  SelectItem: ({ children, value }: any) => (
+    <option value={value}>{children}</option>
+  ),
   SelectTrigger: ({ children }: any) => <div>{children}</div>,
   SelectValue: ({ placeholder }: any) => <span>{placeholder}</span>,
-}))
+}));
 
 describe("UploadDialog", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it("should render dialog when open", () => {
     render(
@@ -72,11 +76,13 @@ describe("UploadDialog", () => {
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
       />,
-    )
+    );
 
-    expect(screen.getByText("Upload de Radiografia")).toBeTruthy()
-    expect(screen.getByText("Envie uma radiografia para análise automática com IA")).toBeTruthy()
-  })
+    expect(screen.getByText("Upload de Radiografia")).toBeTruthy();
+    expect(
+      screen.getByText("Envie uma radiografia para análise automática com IA"),
+    ).toBeTruthy();
+  });
 
   it("should not render when closed", () => {
     render(
@@ -91,10 +97,10 @@ describe("UploadDialog", () => {
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
       />,
-    )
+    );
 
-    expect(screen.queryByText("Upload de Radiografia")).toBeNull()
-  })
+    expect(screen.queryByText("Upload de Radiografia")).toBeNull();
+  });
 
   it("should disable upload button when fields are empty", () => {
     render(
@@ -109,14 +115,14 @@ describe("UploadDialog", () => {
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
       />,
-    )
+    );
 
-    const uploadButton = screen.getByText("Enviar e Analisar com IA")
-    expect(uploadButton).toHaveProperty("disabled", true)
-  })
+    const uploadButton = screen.getByText("Enviar e Analisar com IA");
+    expect(uploadButton).toHaveProperty("disabled", true);
+  });
 
   it("should enable upload button when all fields are filled and consent given", () => {
-    const file = new File(["dummy"], "xray.jpg", { type: "image/jpeg" })
+    const file = new File(["dummy"], "xray.jpg", { type: "image/jpeg" });
 
     render(
       <UploadDialog
@@ -131,14 +137,14 @@ describe("UploadDialog", () => {
         onUpload={mockOnUpload}
         consentStatus="consented"
       />,
-    )
+    );
 
-    const uploadButton = screen.getByText("Enviar e Analisar com IA")
-    expect(uploadButton).toHaveProperty("disabled", false)
-  })
+    const uploadButton = screen.getByText("Enviar e Analisar com IA");
+    expect(uploadButton).toHaveProperty("disabled", false);
+  });
 
   it("should call onUpload when clicking upload button", () => {
-    const file = new File(["dummy"], "xray.jpg", { type: "image/jpeg" })
+    const file = new File(["dummy"], "xray.jpg", { type: "image/jpeg" });
 
     render(
       <UploadDialog
@@ -153,15 +159,15 @@ describe("UploadDialog", () => {
         onUpload={mockOnUpload}
         consentStatus="consented"
       />,
-    )
+    );
 
-    const uploadButton = screen.getByText("Enviar e Analisar com IA")
+    const uploadButton = screen.getByText("Enviar e Analisar com IA");
     act(() => {
-      uploadButton.click()
-    })
+      uploadButton.click();
+    });
 
-    expect(mockOnUpload).toHaveBeenCalledTimes(1)
-  })
+    expect(mockOnUpload).toHaveBeenCalledTimes(1);
+  });
 
   it("should call onPatientChange when typing patient id", () => {
     render(
@@ -176,16 +182,16 @@ describe("UploadDialog", () => {
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
       />,
-    )
+    );
 
-    const patientInput = screen.getByPlaceholderText("ID do paciente")
+    const patientInput = screen.getByPlaceholderText("ID do paciente");
     act(() => {
-      patientInput.setAttribute("value", "patient-1")
-      patientInput.dispatchEvent(new Event("input", { bubbles: true }))
-    })
+      patientInput.setAttribute("value", "patient-1");
+      patientInput.dispatchEvent(new Event("input", { bubbles: true }));
+    });
 
-    expect(mockOnPatientChange).toHaveBeenCalled()
-  })
+    expect(mockOnPatientChange).toHaveBeenCalled();
+  });
 
   it("should render tipo radiografia options", () => {
     render(
@@ -200,14 +206,14 @@ describe("UploadDialog", () => {
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
       />,
-    )
+    );
 
-    expect(screen.getByText("Panorâmica")).toBeTruthy()
-    expect(screen.getByText("Periapical")).toBeTruthy()
-    expect(screen.getByText("Bite-Wing")).toBeTruthy()
-    expect(screen.getByText("Oclusal")).toBeTruthy()
-    expect(screen.getByText("Lateral")).toBeTruthy()
-  })
+    expect(screen.getByText("Panorâmica")).toBeTruthy();
+    expect(screen.getByText("Periapical")).toBeTruthy();
+    expect(screen.getByText("Bite-Wing")).toBeTruthy();
+    expect(screen.getByText("Oclusal")).toBeTruthy();
+    expect(screen.getByText("Lateral")).toBeTruthy();
+  });
 
   it("should call onFileChange when selecting a file", () => {
     render(
@@ -222,20 +228,20 @@ describe("UploadDialog", () => {
         onFileChange={mockOnFileChange}
         onUpload={mockOnUpload}
       />,
-    )
+    );
 
     // File input is not a textbox; query all inputs
-    const inputs = screen.getAllByRole("textbox")
+    const inputs = screen.getAllByRole("textbox");
     // Should have patient input (textbox) and select; file input may not be textbox
-    expect(inputs.length).toBeGreaterThanOrEqual(1)
+    expect(inputs.length).toBeGreaterThanOrEqual(1);
 
     // Trigger file change via the patient input to verify callback wiring works
-    const patientInput = screen.getByPlaceholderText("ID do paciente")
+    const patientInput = screen.getByPlaceholderText("ID do paciente");
     act(() => {
-      patientInput.setAttribute("value", "patient-1")
-      patientInput.dispatchEvent(new Event("input", { bubbles: true }))
-    })
+      patientInput.setAttribute("value", "patient-1");
+      patientInput.dispatchEvent(new Event("input", { bubbles: true }));
+    });
 
-    expect(mockOnPatientChange).toHaveBeenCalled()
-  })
-})
+    expect(mockOnPatientChange).toHaveBeenCalled();
+  });
+});

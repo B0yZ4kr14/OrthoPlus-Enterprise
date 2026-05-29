@@ -5,8 +5,4 @@ export type {
   StatusOption,
   ConsentField,
 } from "./types";
-export {
-  PAYMENT_METHODS,
-  PATIENT_STATUSES,
-  CONSENT_FIELDS,
-} from "./types";
+export { PAYMENT_METHODS, PATIENT_STATUSES, CONSENT_FIELDS } from "./types";

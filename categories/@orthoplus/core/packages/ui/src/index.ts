@@ -36,7 +36,10 @@ export * from "./components/sheet";
 export * from "./components/sidebar";
 export * from "./components/skeleton";
 export * from "./components/slider";
-export { Toaster as SonnerToaster, toast as sonnerToast } from "./components/sonner";
+export {
+  Toaster as SonnerToaster,
+  toast as sonnerToast,
+} from "./components/sonner";
 export * from "./components/switch";
 export * from "./components/table";
 export * from "./components/tabs";
@@ -47,5 +50,5 @@ export * from "./components/toast";
 export * from "./components/toggle-group";
 export * from "./components/toggle";
 export * from "./components/tooltip";
-export * from './lib/utils';
-export { cn } from './lib/utils';
+export * from "./lib/utils";
+export { cn } from "./lib/utils";

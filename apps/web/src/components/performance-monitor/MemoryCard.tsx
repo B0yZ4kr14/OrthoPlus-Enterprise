@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Gauge } from "lucide-react";
 import type { MemoryMetrics } from "./types";
@@ -7,7 +12,9 @@ interface MemoryCardProps {
   memory: MemoryMetrics;
 }
 
-function getMemoryColor(usage: string): "default" | "secondary" | "warning" | "destructive" {
+function getMemoryColor(
+  usage: string,
+): "default" | "secondary" | "warning" | "destructive" {
   const percent = parseFloat(usage);
   if (percent < 60) return "success" as unknown as "default";
   if (percent < 80) return "warning";

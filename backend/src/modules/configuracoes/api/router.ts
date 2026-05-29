@@ -32,8 +32,10 @@ export function createConfiguracoesRouter(): Router {
   router.get("/backups/agendados", async (req: Request, res: Response) => {
     try {
       const clinicId = req.user?.clinicId;
-      if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
-      const data = await prisma.scheduled_backups.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      if (!clinicId)
+        return res.status(401).json({ error: "Missing clinic context" });
+      const data = await prisma.scheduled_backups.findMany({
+        // eslint-disable-line @typescript-eslint/no-explicit-any
         where: { clinic_id: clinicId },
         orderBy: { created_at: "desc" },
       });
@@ -44,32 +46,41 @@ export function createConfiguracoesRouter(): Router {
     }
   });
 
-  router.patch("/backups/agendados/:id", async (req: Request, res: Response) => {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
-      const data = await prisma.scheduled_backups.update({ // eslint-disable-line @typescript-eslint/no-explicit-any
-        where: { id: req.params.id },
-        data: req.body,
-      });
-      return res.json(data);
-    } catch (error) {
-      logger.error("Error updating scheduled backup", { error });
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  });
+  router.patch(
+    "/backups/agendados/:id",
+    async (req: Request, res: Response) => {
+      try {
+        const clinicId = req.user?.clinicId;
+        if (!clinicId)
+          return res.status(401).json({ error: "Missing clinic context" });
+        const data = await prisma.scheduled_backups.update({
+          // eslint-disable-line @typescript-eslint/no-explicit-any
+          where: { id: req.params.id },
+          data: req.body,
+        });
+        return res.json(data);
+      } catch (error) {
+        logger.error("Error updating scheduled backup", { error });
+        return res.status(500).json({ error: "Internal server error" });
+      }
+    },
+  );
 
-  router.delete("/backups/agendados/:id", async (req: Request, res: Response) => {
-    try {
-      const clinicId = req.user?.clinicId;
-      if (!clinicId) return res.status(401).json({ error: "Missing clinic context" });
-      await prisma.scheduled_backups.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
-      return res.status(204).send();
-    } catch (error) {
-      logger.error("Error deleting scheduled backup", { error });
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  });
+  router.delete(
+    "/backups/agendados/:id",
+    async (req: Request, res: Response) => {
+      try {
+        const clinicId = req.user?.clinicId;
+        if (!clinicId)
+          return res.status(401).json({ error: "Missing clinic context" });
+        await prisma.scheduled_backups.delete({ where: { id: req.params.id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+        return res.status(204).send();
+      } catch (error) {
+        logger.error("Error deleting scheduled backup", { error });
+        return res.status(500).json({ error: "Internal server error" });
+      }
+    },
+  );
 
   return router;
 }

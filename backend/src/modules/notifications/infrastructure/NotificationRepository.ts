@@ -119,10 +119,12 @@ export class NotificationRepository implements INotificationRepository {
   // ── Raw SQL Queries (Prisma limitations: cross-column comparisons, EXTRACT, JOINs) ──
 
   async findOverduePayments(today: Date) {
-    return prisma.$queryRaw<Array<{
-      clinic_id: string;
-      patient_name: string | null;
-    }>>`
+    return prisma.$queryRaw<
+      Array<{
+        clinic_id: string;
+        patient_name: string | null;
+      }>
+    >`
       SELECT cr.clinic_id, p.full_name as patient_name
       FROM contas_receber cr
       LEFT JOIN patients p ON cr.patient_id = p.id
@@ -133,11 +135,13 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   async findLowStockProducts() {
-    return prisma.$queryRaw<Array<{
-      clinic_id: string;
-      nome: string;
-      quantidade_atual: number;
-    }>>`
+    return prisma.$queryRaw<
+      Array<{
+        clinic_id: string;
+        nome: string;
+        quantidade_atual: number;
+      }>
+    >`
       SELECT clinic_id, nome, quantidade_atual
       FROM produtos
       WHERE quantidade_atual <= quantidade_minima
@@ -146,10 +150,12 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   async findBirthdayPatients(month: number, day: number) {
-    return prisma.$queryRaw<Array<{
-      clinic_id: string;
-      patient_name: string | null;
-    }>>`
+    return prisma.$queryRaw<
+      Array<{
+        clinic_id: string;
+        patient_name: string | null;
+      }>
+    >`
       SELECT p.clinic_id, pat.full_name as patient_name
       FROM prontuarios p
       JOIN patients pat ON p.patient_id = pat.id
@@ -160,20 +166,22 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   async findActiveCryptoPriceAlertsWithEmail() {
-    return prisma.$queryRaw<Array<{
-      id: string;
-      email: string | null;
-      coin_type: string;
-      alert_type: string;
-      target_rate_brl: number;
-      cascade_enabled: boolean;
-      cascade_order: number;
-      cascade_group_id: string;
-      last_triggered_at: string | null;
-      notification_method: string | null;
-      clinic_id: string;
-      created_by: string;
-    }>>`
+    return prisma.$queryRaw<
+      Array<{
+        id: string;
+        email: string | null;
+        coin_type: string;
+        alert_type: string;
+        target_rate_brl: number;
+        cascade_enabled: boolean;
+        cascade_order: number;
+        cascade_group_id: string;
+        last_triggered_at: string | null;
+        notification_method: string | null;
+        clinic_id: string;
+        created_by: string;
+      }>
+    >`
       SELECT
         cpa.id, p.email, cpa.coin_type, cpa.alert_type, cpa.target_rate_brl,
         cpa.cascade_enabled, cpa.cascade_order, cpa.cascade_group_id,
@@ -186,13 +194,15 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   async findLowStockInventoryProducts() {
-    return prisma.$queryRaw<Array<{
-      id: string;
-      nome: string;
-      quantidade_atual: number;
-      quantidade_minima: number;
-      clinic_id: string;
-    }>>`
+    return prisma.$queryRaw<
+      Array<{
+        id: string;
+        nome: string;
+        quantidade_atual: number;
+        quantidade_minima: number;
+        clinic_id: string;
+      }>
+    >`
       SELECT id, nome, quantidade_atual, quantidade_minima, clinic_id
       FROM inventario.produtos
       WHERE quantidade_atual <= quantidade_minima

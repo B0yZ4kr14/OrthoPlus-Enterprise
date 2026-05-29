@@ -40,7 +40,9 @@ export interface SidebarBadgesResult {
 
 export class AnalyticsControllerService {
   private repo = new AnalyticsRepository();
-  private getDashboardOverviewUseCase = new GetDashboardOverviewUseCase(this.repo);
+  private getDashboardOverviewUseCase = new GetDashboardOverviewUseCase(
+    this.repo,
+  );
   private getUnifiedMetricsUseCase = new GetUnifiedMetricsUseCase();
 
   async getDashboardOverview(clinicId: string) {
@@ -86,7 +88,10 @@ export class AnalyticsControllerService {
       };
     });
 
-    const sourcePerformanceAcc: Record<string, { total: number; converted: number }> = {};
+    const sourcePerformanceAcc: Record<
+      string,
+      { total: number; converted: number }
+    > = {};
 
     patients.forEach((p) => {
       const source = (p as any).marketing_source || "Nao especificado";
@@ -131,7 +136,7 @@ export class AnalyticsControllerService {
       points?: number;
       goalType?: string;
       analyticsData?: Record<string, unknown>;
-    }
+    },
   ) {
     const { action, userId, patientId, points, goalType, analyticsData } = body;
 
@@ -157,7 +162,11 @@ export class AnalyticsControllerService {
     }
   }
 
-  private async processLoyaltyPoints(clinicId: string, patientId: string, points: number) {
+  private async processLoyaltyPoints(
+    clinicId: string,
+    patientId: string,
+    points: number,
+  ) {
     try {
       let loyalty = await this.repo.findLoyaltyByPatient(clinicId, patientId);
 
@@ -230,7 +239,10 @@ export class AnalyticsControllerService {
     goalType?: string,
   ) {
     try {
-      const goals = await this.repo.findActiveGamificationGoals(clinicId, userId);
+      const goals = await this.repo.findActiveGamificationGoals(
+        clinicId,
+        userId,
+      );
       const goalsProcessed = [];
 
       for (const goal of goals) {
@@ -296,7 +308,9 @@ export class AnalyticsControllerService {
     }
   }
 
-  private async saveOnboardingAnalytics(analyticsData: Record<string, unknown>) {
+  private async saveOnboardingAnalytics(
+    analyticsData: Record<string, unknown>,
+  ) {
     try {
       const { userId, clinicId, step, action, duration, metadata } =
         analyticsData;
@@ -317,12 +331,18 @@ export class AnalyticsControllerService {
   async getSidebarBadges(clinicId: string): Promise<SidebarBadgesResult> {
     const today = new Date();
     const todayStr = today.toISOString().split("T")[0];
-    const tomorrowStr = new Date(today.getTime() + 86400000).toISOString().split("T")[0];
+    const tomorrowStr = new Date(today.getTime() + 86400000)
+      .toISOString()
+      .split("T")[0];
 
     const [appointments, overdue, recalls] = await Promise.all([
-      this.repo.countAppointmentsToday(clinicId, todayStr, tomorrowStr).catch(() => 0),
+      this.repo
+        .countAppointmentsToday(clinicId, todayStr, tomorrowStr)
+        .catch(() => 0),
       this.repo.countOverdueContasReceber(clinicId, todayStr).catch(() => 0),
-      this.repo.countRecallsToday(clinicId, todayStr, tomorrowStr).catch(() => 0),
+      this.repo
+        .countRecallsToday(clinicId, todayStr, tomorrowStr)
+        .catch(() => 0),
     ]);
 
     return {

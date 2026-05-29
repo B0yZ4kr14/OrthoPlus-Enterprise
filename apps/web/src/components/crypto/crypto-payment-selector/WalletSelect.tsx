@@ -17,7 +17,9 @@ interface WalletSelectProps {
 export function WalletSelect({ wallets, value, onChange }: WalletSelectProps) {
   return (
     <div>
-      <label className="text-sm font-medium mb-2 block">Wallet de Recebimento</label>
+      <label className="text-sm font-medium mb-2 block">
+        Wallet de Recebimento
+      </label>
       <Select value={value || ""} onValueChange={onChange}>
         <SelectTrigger>
           <SelectValue placeholder="Selecione uma wallet" />

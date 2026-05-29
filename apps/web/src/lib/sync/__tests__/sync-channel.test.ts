@@ -93,7 +93,11 @@ function createSyncChannel(ChannelClass: typeof MockBroadcastChannel) {
 
   function postSyncUpdate(type: SyncMessageType, data?: unknown): void {
     const ch = getChannel();
-    const message: SyncMessage = { type, data: data as Record<string, any>, timestamp: Date.now() };
+    const message: SyncMessage = {
+      type,
+      data: data as Record<string, any>,
+      timestamp: Date.now(),
+    };
     ch.postMessage(message);
   }
 

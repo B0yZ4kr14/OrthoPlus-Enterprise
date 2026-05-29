@@ -1,4 +1,4 @@
-declare module 'canvas-confetti' {
+declare module "canvas-confetti" {
   interface Options {
     particleCount?: number;
     angle?: number;
@@ -21,7 +21,7 @@ declare module 'canvas-confetti' {
   namespace confetti {
     function create(
       canvas: HTMLCanvasElement,
-      options?: { resize?: boolean; useWorker?: boolean }
+      options?: { resize?: boolean; useWorker?: boolean },
     ): (options?: Options) => Promise<null>;
     function reset(): void;
   }

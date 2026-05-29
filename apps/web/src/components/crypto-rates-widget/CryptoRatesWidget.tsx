@@ -9,7 +9,11 @@ export function CryptoRatesWidget() {
 
   return (
     <Card>
-      <WidgetHeader lastUpdate={lastUpdate} loading={loading} onRefresh={fetchRates} />
+      <WidgetHeader
+        lastUpdate={lastUpdate}
+        loading={loading}
+        onRefresh={fetchRates}
+      />
       <CardContent>
         <div className="space-y-3">
           {rates.map((rate) => (

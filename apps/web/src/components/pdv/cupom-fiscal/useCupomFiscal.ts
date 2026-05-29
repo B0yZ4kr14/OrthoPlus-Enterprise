@@ -40,18 +40,21 @@ export function useCupomFiscal({ venda, items }: CupomFiscalProps) {
 
   const imprimirCupomFiscal = async () => {
     try {
-      const data: Record<string, any> = await apiClient.post("/imprimir-cupom-sat", {
-        vendaId: venda.id,
-        clinicId: clinicId,
-        items: (items as Record<string, any>[]).map((item) => ({
-          descricao: item.descricao,
-          quantidade: item.quantidade,
-          valor_unitario: item.valor_unitario,
-          valor_total: item.valor_total,
-        })),
-        valorTotal: venda.valor_total,
-        formaPagamento: venda.forma_pagamento || "DINHEIRO",
-      });
+      const data: Record<string, any> = await apiClient.post(
+        "/imprimir-cupom-sat",
+        {
+          vendaId: venda.id,
+          clinicId: clinicId,
+          items: (items as Record<string, any>[]).map((item) => ({
+            descricao: item.descricao,
+            quantidade: item.quantidade,
+            valor_unitario: item.valor_unitario,
+            valor_total: item.valor_total,
+          })),
+          valorTotal: venda.valor_total,
+          formaPagamento: venda.forma_pagamento || "DINHEIRO",
+        },
+      );
 
       if (data.success) {
         toast({
@@ -99,7 +102,7 @@ export function useCupomFiscal({ venda, items }: CupomFiscalProps) {
 
   const valorTotal = (items as Record<string, any>[]).reduce(
     (sum, item) => sum + item.valor_unitario * item.quantidade,
-    0
+    0,
   );
 
   return {

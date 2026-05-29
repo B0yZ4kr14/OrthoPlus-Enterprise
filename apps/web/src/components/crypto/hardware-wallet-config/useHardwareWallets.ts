@@ -1,5 +1,9 @@
 import { useState, useCallback } from "react";
-import type { HardwareWallet, WalletFormData, HardwareWalletType } from "./types";
+import type {
+  HardwareWallet,
+  WalletFormData,
+  HardwareWalletType,
+} from "./types";
 
 const INITIAL_FORM_DATA: WalletFormData = {
   name: "",

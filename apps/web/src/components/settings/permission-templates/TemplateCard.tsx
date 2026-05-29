@@ -29,7 +29,9 @@ export function TemplateCard({
         </div>
         <div className="flex-1">
           <h4 className="font-semibold mb-1">{template.name}</h4>
-          <p className="text-sm text-muted-foreground">{template.description}</p>
+          <p className="text-sm text-muted-foreground">
+            {template.description}
+          </p>
         </div>
       </div>
 

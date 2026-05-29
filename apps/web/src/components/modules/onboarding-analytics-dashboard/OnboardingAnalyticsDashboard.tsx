@@ -19,7 +19,9 @@ export function OnboardingAnalyticsDashboard() {
   if (!analytics) {
     return (
       <Card>
-        <CardContent className="p-8 text-center text-muted-foreground">Nenhum dado de analytics disponível</CardContent>
+        <CardContent className="p-8 text-center text-muted-foreground">
+          Nenhum dado de analytics disponível
+        </CardContent>
       </Card>
     );
   }

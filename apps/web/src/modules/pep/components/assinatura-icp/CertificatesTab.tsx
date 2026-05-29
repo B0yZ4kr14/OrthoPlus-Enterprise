@@ -1,5 +1,11 @@
 // cspell:disable
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Key, CheckCircle, AlertTriangle, Upload } from "lucide-react";
@@ -50,9 +56,7 @@ export function CertificatesTab({ certificados }: CertificatesTabProps) {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {cert.name}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{cert.name}</p>
                   <p className="text-xs text-muted-foreground">
                     Serial: {cert.serial} • Emissor: {cert.issuer}
                   </p>

@@ -18,7 +18,9 @@ const patientRepository = new PatientRepositoryPostgres();
 
 const cadastrarUseCase = new CadastrarPacienteUseCase(patientRepository);
 const atualizarUseCase = new AtualizarPacienteUseCase(patientRepository);
-const alterarStatusUseCase = new AlterarStatusPacienteUseCase(patientRepository);
+const alterarStatusUseCase = new AlterarStatusPacienteUseCase(
+  patientRepository,
+);
 
 const controller = new PacientesController(
   cadastrarUseCase,

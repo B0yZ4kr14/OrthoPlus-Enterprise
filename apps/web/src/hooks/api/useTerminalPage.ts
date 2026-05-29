@@ -27,7 +27,9 @@ export const useTerminalPage = () => {
 
       const entry: CommandHistory = {
         command,
-        output: data.output.stdout + (data.output.stderr ? "\n" + data.output.stderr : ""),
+        output:
+          data.output.stdout +
+          (data.output.stderr ? "\n" + data.output.stderr : ""),
         exitCode: data.output.exitCode,
         timestamp: new Date(),
       };
@@ -40,10 +42,16 @@ export const useTerminalPage = () => {
         toast.success("Comando executado");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      const errorMessage =
+        error instanceof Error ? error.message : "Erro desconhecido";
       setHistory((prev) => [
         ...prev,
-        { command, output: `Error: ${errorMessage}`, exitCode: 1, timestamp: new Date() },
+        {
+          command,
+          output: `Error: ${errorMessage}`,
+          exitCode: 1,
+          timestamp: new Date(),
+        },
       ]);
       toast.error("Erro ao executar comando");
     } finally {

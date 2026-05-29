@@ -52,10 +52,22 @@ describe("searchRateLimiter", () => {
     delete process.env.SEARCH_RATE_LIMIT_VIP_CLINIC_IDS;
   });
 
-  const mockPipelineExec = (count: number, ttl: number, error?: Error | null) => {
+  const mockPipelineExec = (
+    count: number,
+    ttl: number,
+    error?: Error | null,
+  ) => {
     const pipeline = redisInstance.pipeline();
     (pipeline.exec as jest.Mock).mockResolvedValue(
-      error ? [[error, null], [error, null]] : [[null, count], [null, ttl]],
+      error
+        ? [
+            [error, null],
+            [error, null],
+          ]
+        : [
+            [null, count],
+            [null, ttl],
+          ],
     );
   };
 
@@ -75,7 +87,10 @@ describe("searchRateLimiter", () => {
 
     await searchRateLimiter(req as Request, res as Response, next);
 
-    expect(redisInstance.expire).toHaveBeenCalledWith("ratelimit:search:clinic-123", 60);
+    expect(redisInstance.expire).toHaveBeenCalledWith(
+      "ratelimit:search:clinic-123",
+      60,
+    );
     expect(next).toHaveBeenCalled();
   });
 
@@ -112,7 +127,9 @@ describe("searchRateLimiter", () => {
 
   it("should fail open when Redis throws an error", async () => {
     const pipeline = redisInstance.pipeline();
-    (pipeline.exec as jest.Mock).mockRejectedValue(new Error("Redis connection lost"));
+    (pipeline.exec as jest.Mock).mockRejectedValue(
+      new Error("Redis connection lost"),
+    );
 
     await searchRateLimiter(req as Request, res as Response, next);
 
@@ -156,7 +173,8 @@ describe("searchRateLimiter", () => {
   });
 
   it("should support multiple VIP clinic IDs from env", async () => {
-    process.env.SEARCH_RATE_LIMIT_VIP_CLINIC_IDS = "clinic-a, clinic-123, clinic-b";
+    process.env.SEARCH_RATE_LIMIT_VIP_CLINIC_IDS =
+      "clinic-a, clinic-123, clinic-b";
     mockPipelineExec(50, 40);
 
     await searchRateLimiter(req as Request, res as Response, next);

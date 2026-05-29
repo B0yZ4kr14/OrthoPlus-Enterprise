@@ -69,7 +69,9 @@ export function DadosProfissionaisTab({
             </SelectContent>
           </Select>
           {errors?.cargo && (
-            <p className="text-sm text-destructive">{String(errors.cargo.message)}</p>
+            <p className="text-sm text-destructive">
+              {String(errors.cargo.message)}
+            </p>
           )}
         </div>
 
@@ -81,15 +83,11 @@ export function DadosProfissionaisTab({
                 variant="outline"
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !dataAdmissao && "text-muted-foreground"
+                  !dataAdmissao && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {dataAdmissao ? (
-                  formatDate(dataAdmissao)
-                ) : (
-                  "Selecione uma data"
-                )}
+                {dataAdmissao ? formatDate(dataAdmissao) : "Selecione uma data"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">

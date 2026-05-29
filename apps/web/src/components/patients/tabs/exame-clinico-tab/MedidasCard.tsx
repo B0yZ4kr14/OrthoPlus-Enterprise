@@ -1,6 +1,11 @@
 // cspell:disable
 import { Scale, Ruler } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import type { Patient } from "./types";
 import { getBMICategory } from "./utils";
@@ -52,13 +57,18 @@ export function MedidasCard({ patient }: MedidasCardProps) {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-muted-foreground">IMC</label>
+          <label className="text-sm font-medium text-muted-foreground">
+            IMC
+          </label>
           {patient.bmi ? (
             <div className="mt-2">
               <p className="text-3xl font-bold">{patient.bmi.toFixed(1)}</p>
               <p className="text-sm text-muted-foreground">kg/m²</p>
               {bmiCategory && (
-                <Badge className={`mt-2 ${bmiCategory.color}`} variant="outline">
+                <Badge
+                  className={`mt-2 ${bmiCategory.color}`}
+                  variant="outline"
+                >
                   {bmiCategory.label}
                 </Badge>
               )}

@@ -16,15 +16,27 @@ import {
 import { ReportSection } from "./ComercialReports";
 
 const MESES = [
-  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
 ];
 
 interface ProfissionaisReportsProps {
   onGenerateReport: (reportType: string) => void;
 }
 
-export function ProfissionaisReports({ onGenerateReport }: ProfissionaisReportsProps) {
+export function ProfissionaisReports({
+  onGenerateReport,
+}: ProfissionaisReportsProps) {
   return (
     <Card>
       <CardHeader>

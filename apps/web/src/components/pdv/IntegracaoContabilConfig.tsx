@@ -2,7 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
@@ -15,7 +20,12 @@ import {
 } from "@orthoplus/core-ui/select";
 import { Switch } from "@orthoplus/core-ui/switch";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Loader2, Building2, CheckCircle2, XCircle, Send } from "lucide-react";
 
 interface ContabilConfig {
@@ -108,7 +118,8 @@ export default function IntegracaoContabilConfig() {
           .slice(0, 50),
       );
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error loading data:", error);
       toast({
         title: "Erro ao carregar dados",
@@ -158,7 +169,8 @@ export default function IntegracaoContabilConfig() {
         ativo: true,
       });
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       console.error("Error saving config:", error);
       toast({
         title: "Erro ao salvar configuração",

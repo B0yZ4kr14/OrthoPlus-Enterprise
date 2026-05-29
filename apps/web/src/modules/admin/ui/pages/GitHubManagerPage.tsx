@@ -17,14 +17,23 @@ import {
 } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { useGitHubManagerPage } from "@/hooks/api/useGitHubManagerPage";
 import { RepositoryManager } from "@/components/admin/RepositoryManager";
 import { WebhookManager } from "@/components/admin/WebhookManager";
 import { GitHubIntegrationConfig } from "@/components/settings/GitHubIntegrationConfig";
 
 export default function GitHubManagerPage() {
-  const { data, isLoading: loading, refresh: fetchGitHubData } = useGitHubManagerPage();
+  const {
+    data,
+    isLoading: loading,
+    refresh: fetchGitHubData,
+  } = useGitHubManagerPage();
 
   return (
     <div className="space-y-6">

@@ -27,7 +27,12 @@ export function ContactSection({ form, onPhoneChange }: ContactSectionProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="email@exemplo.com" {...field} value={field.value || ""} />
+                <Input
+                  type="email"
+                  placeholder="email@exemplo.com"
+                  {...field}
+                  value={field.value || ""}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -44,7 +49,9 @@ export function ContactSection({ form, onPhoneChange }: ContactSectionProps) {
                 <Input
                   placeholder="(00) 00000-0000"
                   {...field}
-                  onChange={(e) => field.onChange(onPhoneChange(e.target.value))}
+                  onChange={(e) =>
+                    field.onChange(onPhoneChange(e.target.value))
+                  }
                   maxLength={15}
                 />
               </FormControl>
@@ -64,7 +71,9 @@ export function ContactSection({ form, onPhoneChange }: ContactSectionProps) {
                   placeholder="(00) 00000-0000"
                   {...field}
                   value={field.value || ""}
-                  onChange={(e) => field.onChange(onPhoneChange(e.target.value))}
+                  onChange={(e) =>
+                    field.onChange(onPhoneChange(e.target.value))
+                  }
                   maxLength={15}
                 />
               </FormControl>
@@ -84,7 +93,9 @@ export function ContactSection({ form, onPhoneChange }: ContactSectionProps) {
                   placeholder="(00) 00000-0000"
                   {...field}
                   value={field.value || ""}
-                  onChange={(e) => field.onChange(onPhoneChange(e.target.value))}
+                  onChange={(e) =>
+                    field.onChange(onPhoneChange(e.target.value))
+                  }
                   maxLength={15}
                 />
               </FormControl>
@@ -100,7 +111,11 @@ export function ContactSection({ form, onPhoneChange }: ContactSectionProps) {
             <FormItem>
               <FormLabel>Nome do Contato de Emergência</FormLabel>
               <FormControl>
-                <Input placeholder="Nome completo" {...field} value={field.value || ""} />
+                <Input
+                  placeholder="Nome completo"
+                  {...field}
+                  value={field.value || ""}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -114,7 +129,11 @@ export function ContactSection({ form, onPhoneChange }: ContactSectionProps) {
             <FormItem>
               <FormLabel>Parentesco do Contato</FormLabel>
               <FormControl>
-                <Input placeholder="Ex: Mãe, Pai, Cônjuge" {...field} value={field.value || ""} />
+                <Input
+                  placeholder="Ex: Mãe, Pai, Cônjuge"
+                  {...field}
+                  value={field.value || ""}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

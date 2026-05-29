@@ -8,8 +8,8 @@ Este pacote fornece hooks React customizados e reutilizáveis para funcionalidad
 
 ## Hooks Disponíveis
 
-| Hook | Descrição |
-|------|-----------|
+| Hook         | Descrição                                                 |
+| ------------ | --------------------------------------------------------- |
 | **useToast** | Gerenciamento de notificações toast (sucesso, erro, info) |
 
 ## Instalação
@@ -35,7 +35,7 @@ function useToast(): {
   showError: (message: string, options?: ToastOptions) => void;
   showInfo: (message: string, options?: ToastOptions) => void;
   toast: typeof toast; // Exportação direta do sonner
-}
+};
 ```
 
 ### Exemplo de Uso
@@ -66,21 +66,17 @@ function MyComponent() {
     });
   };
 
-  return (
-    <button onClick={handleSave}>
-      Salvar
-    </button>
-  );
+  return <button onClick={handleSave}>Salvar</button>;
 }
 ```
 
 ### Configurações Padrão
 
-| Método | Duração Padrão | Ícone |
-|--------|----------------|-------|
-| `showSuccess` | 3000ms | ✅ |
-| `showError` | 5000ms | ❌ |
-| `showInfo` | 3000ms | ℹ️ |
+| Método        | Duração Padrão | Ícone |
+| ------------- | -------------- | ----- |
+| `showSuccess` | 3000ms         | ✅    |
+| `showError`   | 5000ms         | ❌    |
+| `showInfo`    | 3000ms         | ℹ️    |
 
 ### Uso Direto do Sonner
 

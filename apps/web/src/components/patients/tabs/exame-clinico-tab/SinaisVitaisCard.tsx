@@ -1,6 +1,11 @@
 // cspell:disable
 import { Activity, Heart, Droplet } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import type { Patient } from "./types";
 import { getBPStatus } from "./utils";
@@ -10,7 +15,10 @@ interface SinaisVitaisCardProps {
 }
 
 export function SinaisVitaisCard({ patient }: SinaisVitaisCardProps) {
-  const bpStatus = getBPStatus(patient.blood_pressure_systolic, patient.blood_pressure_diastolic);
+  const bpStatus = getBPStatus(
+    patient.blood_pressure_systolic,
+    patient.blood_pressure_diastolic,
+  );
 
   return (
     <Card>
@@ -26,10 +34,12 @@ export function SinaisVitaisCard({ patient }: SinaisVitaisCardProps) {
             <Heart className="h-4 w-4" />
             Pressão Arterial
           </label>
-          {patient.blood_pressure_systolic && patient.blood_pressure_diastolic ? (
+          {patient.blood_pressure_systolic &&
+          patient.blood_pressure_diastolic ? (
             <div className="mt-2">
               <p className="text-3xl font-bold font-mono">
-                {patient.blood_pressure_systolic}/{patient.blood_pressure_diastolic}
+                {patient.blood_pressure_systolic}/
+                {patient.blood_pressure_diastolic}
               </p>
               <p className="text-sm text-muted-foreground">mmHg</p>
               {bpStatus && (
@@ -50,7 +60,9 @@ export function SinaisVitaisCard({ patient }: SinaisVitaisCardProps) {
           </label>
           {patient.heart_rate ? (
             <div className="mt-2">
-              <p className="text-3xl font-bold font-mono">{patient.heart_rate}</p>
+              <p className="text-3xl font-bold font-mono">
+                {patient.heart_rate}
+              </p>
               <p className="text-sm text-muted-foreground">bpm</p>
             </div>
           ) : (
@@ -65,7 +77,9 @@ export function SinaisVitaisCard({ patient }: SinaisVitaisCardProps) {
           </label>
           {patient.blood_type ? (
             <div className="mt-2">
-              <p className="text-3xl font-bold font-mono">{patient.blood_type}</p>
+              <p className="text-3xl font-bold font-mono">
+                {patient.blood_type}
+              </p>
             </div>
           ) : (
             <p className="text-muted-foreground mt-2">Não informado</p>

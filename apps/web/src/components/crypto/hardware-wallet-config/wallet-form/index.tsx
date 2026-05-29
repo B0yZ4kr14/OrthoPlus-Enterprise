@@ -6,12 +6,7 @@ import { MultisigToggle } from "./components/MultisigToggle";
 import { AddWalletButton } from "./components/AddWalletButton";
 
 export * from "./types";
-export {
-  WalletTypeSelect,
-  WalletFormField,
-  MultisigToggle,
-  AddWalletButton,
-};
+export { WalletTypeSelect, WalletFormField, MultisigToggle, AddWalletButton };
 export { useWalletForm };
 
 export function WalletForm({ formData, onUpdate, onSubmit }: WalletFormProps) {

@@ -1,6 +1,11 @@
 import { useMemo } from "react";
 import { Card } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   BarChart,
   Bar,
@@ -99,10 +104,7 @@ export function AnaliseCharts({ analises }: AnaliseChartsProps) {
     const status = new Map<string, number>();
 
     analises.forEach((analise) => {
-      status.set(
-        analise.status,
-        (status.get(analise.status) || 0) + 1,
-      );
+      status.set(analise.status, (status.get(analise.status) || 0) + 1);
     });
 
     return Array.from(status.entries()).map(([name, value]) => ({
@@ -190,7 +192,7 @@ export function AnaliseCharts({ analises }: AnaliseChartsProps) {
                     borderRadius: "8px",
                   }}
                 />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="total"
                   name="Total de Análises"
@@ -317,7 +319,7 @@ export function AnaliseCharts({ analises }: AnaliseChartsProps) {
                   }}
                   formatter={(value: number) => [`${value}%`, "Precisão"]}
                 />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Line
                   type="monotone"
                   dataKey="precisao"

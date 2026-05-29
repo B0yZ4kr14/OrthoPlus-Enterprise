@@ -24,15 +24,15 @@ export function KpiCards({ stats }: KpiCardsProps) {
     <div className="grid gap-4 md:grid-cols-4">
       <Card depth="normal">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">
-            Economia Total
-          </CardTitle>
+          <CardTitle className="text-sm font-medium">Economia Total</CardTitle>
           <DollarSign className="h-4 w-4 text-success" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-success">
             R${" "}
-            {stats.savings.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            {stats.savings.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+            })}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             {stats.savingsPercent}% menos que métodos tradicionais
@@ -42,9 +42,7 @@ export function KpiCards({ stats }: KpiCardsProps) {
 
       <Card depth="normal">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">
-            Taxa Atual BTC
-          </CardTitle>
+          <CardTitle className="text-sm font-medium">Taxa Atual BTC</CardTitle>
           {stats.rateChange >= 0 ? (
             <TrendingUp className="h-4 w-4 text-success" />
           ) : (

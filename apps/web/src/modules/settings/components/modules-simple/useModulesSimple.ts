@@ -43,29 +43,34 @@ export function useModulesSimple() {
     fetchModules();
   }, [fetchModules]);
 
-  const handleToggle = useCallback(async (moduleKey: string) => {
-    setToggling(moduleKey);
+  const handleToggle = useCallback(
+    async (moduleKey: string) => {
+      setToggling(moduleKey);
 
-    try {
-      const data = await apiClient.post<{ cascade_activated?: number; message?: string }>(
-        "/modules/toggle",
-        { module_key: moduleKey },
-      );
+      try {
+        const data = await apiClient.post<{
+          cascade_activated?: number;
+          message?: string;
+        }>("/modules/toggle", { module_key: moduleKey });
 
-      if ((data?.cascade_activated ?? 0) > 0) {
-        toast.success(data.message ?? "Módulos ativados!");
-      } else {
-        toast.success("Módulo atualizado com sucesso!");
+        if ((data?.cascade_activated ?? 0) > 0) {
+          toast.success(data.message ?? "Módulos ativados!");
+        } else {
+          toast.success("Módulo atualizado com sucesso!");
+        }
+
+        await fetchModules();
+      } catch (error: unknown) {
+        logger.error("Erro ao alternar módulo", error, { moduleKey });
+        toast.error(
+          error instanceof Error ? error.message : "Erro ao alterar módulo",
+        );
+      } finally {
+        setToggling(null);
       }
-
-      await fetchModules();
-    } catch (error: unknown) {
-      logger.error("Erro ao alternar módulo", error, { moduleKey });
-      toast.error(error instanceof Error ? error.message : "Erro ao alterar módulo");
-    } finally {
-      setToggling(null);
-    }
-  }, [fetchModules]);
+    },
+    [fetchModules],
+  );
 
   const handleLoadRoadmap = useCallback(async () => {
     setLoadingRoadmap(true);
@@ -80,37 +85,49 @@ export function useModulesSimple() {
       toast.success("Roadmap de adoção gerado com sucesso!");
     } catch (error: unknown) {
       logger.error("Erro ao gerar roadmap", error);
-      toast.error(error instanceof Error ? error.message : "Erro ao gerar roadmap de adoção");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Erro ao gerar roadmap de adoção",
+      );
     } finally {
       setLoadingRoadmap(false);
     }
   }, []);
 
-  const handleActivatePhase = useCallback(async (moduleNames: string[]) => {
-    const modulesToActivate = modules.filter((m) =>
-      moduleNames.some(
-        (name) => m.name.includes(name) || name.includes(m.name),
-      ),
-    );
+  const handleActivatePhase = useCallback(
+    async (moduleNames: string[]) => {
+      const modulesToActivate = modules.filter((m) =>
+        moduleNames.some(
+          (name) => m.name.includes(name) || name.includes(m.name),
+        ),
+      );
 
-    for (const module of modulesToActivate) {
-      if (!module.is_active) {
-        await handleToggle(module.module_key);
+      for (const module of modulesToActivate) {
+        if (!module.is_active) {
+          await handleToggle(module.module_key);
+        }
       }
-    }
 
-    toast.success(`${modulesToActivate.length} módulo(s) ativado(s) com sucesso!`);
-    setShowRoadmap(false);
-  }, [modules, handleToggle]);
+      toast.success(
+        `${modulesToActivate.length} módulo(s) ativado(s) com sucesso!`,
+      );
+      setShowRoadmap(false);
+    },
+    [modules, handleToggle],
+  );
 
-  const handleWizardActivate = useCallback(async (moduleKeys: string[]) => {
-    for (const key of moduleKeys) {
-      const module = modules.find((m) => m.module_key === key);
-      if (module && !module.is_active) {
-        await handleToggle(key);
+  const handleWizardActivate = useCallback(
+    async (moduleKeys: string[]) => {
+      for (const key of moduleKeys) {
+        const module = modules.find((m) => m.module_key === key);
+        if (module && !module.is_active) {
+          await handleToggle(key);
+        }
       }
-    }
-  }, [modules, handleToggle]);
+    },
+    [modules, handleToggle],
+  );
 
   const groupedModules = useMemo(() => {
     const grouped: Record<string, Module[]> = {};

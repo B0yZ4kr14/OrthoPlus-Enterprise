@@ -2,7 +2,12 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { addHeader } from "./pdfHeader";
-import { addSummarySection, addDistributionSection, addMarketComparisonSection, addConversionsSection } from "./pdfSections";
+import {
+  addSummarySection,
+  addDistributionSection,
+  addMarketComparisonSection,
+  addConversionsSection,
+} from "./pdfSections";
 import { addFooter } from "./pdfFooter";
 import { fetchMarketComparison } from "./marketData";
 import type { PortfolioData } from "./types";
@@ -11,7 +16,7 @@ export async function generateCryptoPerformanceReport(
   portfolioData: PortfolioData,
   clinicName: string,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): Promise<void> {
   const { jsPDF } = await import("jspdf");
   const doc = new jsPDF();

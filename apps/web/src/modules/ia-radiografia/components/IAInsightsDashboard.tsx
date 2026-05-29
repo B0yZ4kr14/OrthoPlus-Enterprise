@@ -17,7 +17,15 @@ interface IAInsightsDashboardProps {
   analises: AnaliseComplete[];
 }
 
-type BadgeVariant = "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info";
+type BadgeVariant =
+  | "default"
+  | "secondary"
+  | "destructive"
+  | "outline"
+  | "success"
+  | "warning"
+  | "error"
+  | "info";
 
 const getPrioridadeColor = (prioridade: string): BadgeVariant => {
   const colors: Record<string, BadgeVariant> = {
@@ -411,9 +419,7 @@ export const IAInsightsDashboard = memo(function IAInsightsDashboard({
                           {rec.descricao}
                         </AlertDescription>
                       </div>
-                      <Badge
-                        variant={getPrioridadeColor(rec.prioridade)}
-                      >
+                      <Badge variant={getPrioridadeColor(rec.prioridade)}>
                         {rec.prioridade.toUpperCase()}
                       </Badge>
                     </div>

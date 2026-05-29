@@ -9,13 +9,21 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
   async save(schedule: DentistSchedule): Promise<DentistSchedule> {
     const data = DentistScheduleMapper.toPersistence(schedule);
     const result = await apiClient.post<unknown>(this.basePath, data);
-    return DentistScheduleMapper.toDomain(result as Parameters<typeof DentistScheduleMapper.toDomain>[0]);
+    return DentistScheduleMapper.toDomain(
+      result as Parameters<typeof DentistScheduleMapper.toDomain>[0],
+    );
   }
 
   async findById(id: string): Promise<DentistSchedule | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`${this.basePath}/${id}`);
-      return data ? DentistScheduleMapper.toDomain(data as Parameters<typeof DentistScheduleMapper.toDomain>[0]) : null;
+      const data = await apiClient.get<Record<string, any>>(
+        `${this.basePath}/${id}`,
+      );
+      return data
+        ? DentistScheduleMapper.toDomain(
+            data as Parameters<typeof DentistScheduleMapper.toDomain>[0],
+          )
+        : null;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       const err = error as { response?: { status?: number } };
@@ -29,7 +37,11 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
     const data = await apiClient.get<Record<string, any>[]>(this.basePath, {
       params: { dentist_id: dentistId, is_active: true },
     });
-    return data.map((d) => DentistScheduleMapper.toDomain(d as Parameters<typeof DentistScheduleMapper.toDomain>[0]));
+    return data.map((d) =>
+      DentistScheduleMapper.toDomain(
+        d as Parameters<typeof DentistScheduleMapper.toDomain>[0],
+      ),
+    );
   }
 
   async findByDentistAndDayOfWeek(
@@ -44,7 +56,10 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
           is_active: true,
         },
       });
-      if (data.length > 0) return DentistScheduleMapper.toDomain(data[0] as Parameters<typeof DentistScheduleMapper.toDomain>[0]);
+      if (data.length > 0)
+        return DentistScheduleMapper.toDomain(
+          data[0] as Parameters<typeof DentistScheduleMapper.toDomain>[0],
+        );
       return null;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
@@ -56,7 +71,11 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
     const data = await apiClient.get<Record<string, any>[]>(this.basePath, {
       params: { clinic_id: clinicId, is_active: true },
     });
-    return data.map((d) => DentistScheduleMapper.toDomain(d as Parameters<typeof DentistScheduleMapper.toDomain>[0]));
+    return data.map((d) =>
+      DentistScheduleMapper.toDomain(
+        d as Parameters<typeof DentistScheduleMapper.toDomain>[0],
+      ),
+    );
   }
 
   async update(schedule: DentistSchedule): Promise<DentistSchedule> {
@@ -65,7 +84,9 @@ export class DentistScheduleRepositoryApi implements IDentistScheduleRepository 
       `${this.basePath}/${schedule.id}`,
       data,
     );
-    return DentistScheduleMapper.toDomain(result as Parameters<typeof DentistScheduleMapper.toDomain>[0]);
+    return DentistScheduleMapper.toDomain(
+      result as Parameters<typeof DentistScheduleMapper.toDomain>[0],
+    );
   }
 
   async delete(id: string): Promise<void> {

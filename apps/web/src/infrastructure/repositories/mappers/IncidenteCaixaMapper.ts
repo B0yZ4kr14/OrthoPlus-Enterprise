@@ -51,7 +51,8 @@ export class IncidenteCaixaMapper {
       valor_caixa_momento: incidente.valorCaixaMomento,
       descricao: incidente.descricao,
       boletim_ocorrencia: incidente.boletimOcorrencia,
-      metadata: incidente.metadata as unknown as IncidenteCaixaInsert["metadata"],
+      metadata:
+        incidente.metadata as unknown as IncidenteCaixaInsert["metadata"],
       created_at: incidente.createdAt.toISOString(),
     };
   }

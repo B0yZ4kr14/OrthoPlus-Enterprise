@@ -30,7 +30,12 @@ export class Prontuario {
     this.props = props;
   }
 
-  static create(props: Omit<ProntuarioProps, 'id' | 'assinadoDigitalmente' | 'createdAt' | 'updatedAt'>): Prontuario {
+  static create(
+    props: Omit<
+      ProntuarioProps,
+      "id" | "assinadoDigitalmente" | "createdAt" | "updatedAt"
+    >,
+  ): Prontuario {
     return new Prontuario({
       ...props,
       id: crypto.randomUUID(),
@@ -45,15 +50,23 @@ export class Prontuario {
   }
 
   // Getters
-  get id(): string { return this.props.id; }
-  get clinicId(): string { return this.props.clinicId; }
-  get patientId(): string { return this.props.patientId; }
-  get assinadoDigitalmente(): boolean { return this.props.assinadoDigitalmente; }
+  get id(): string {
+    return this.props.id;
+  }
+  get clinicId(): string {
+    return this.props.clinicId;
+  }
+  get patientId(): string {
+    return this.props.patientId;
+  }
+  get assinadoDigitalmente(): boolean {
+    return this.props.assinadoDigitalmente;
+  }
 
   // Domain methods
   assinarDigitalmente(hash: string): void {
     if (this.props.assinadoDigitalmente) {
-      throw new Error('Prontuário já foi assinado digitalmente');
+      throw new Error("Prontuário já foi assinado digitalmente");
     }
 
     this.props.assinadoDigitalmente = true;
@@ -73,7 +86,7 @@ export class Prontuario {
 
   atualizarDiagnostico(diagnostico: string): void {
     if (this.props.assinadoDigitalmente) {
-      throw new Error('Não é possível editar prontuário assinado digitalmente');
+      throw new Error("Não é possível editar prontuário assinado digitalmente");
     }
 
     this.props.diagnostico = diagnostico;
@@ -82,7 +95,7 @@ export class Prontuario {
 
   atualizarPlanoDeTratamento(plano: string): void {
     if (this.props.assinadoDigitalmente) {
-      throw new Error('Não é possível editar prontuário assinado digitalmente');
+      throw new Error("Não é possível editar prontuário assinado digitalmente");
     }
 
     this.props.planoDeTratamento = plano;

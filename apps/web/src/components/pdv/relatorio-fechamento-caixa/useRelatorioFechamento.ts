@@ -6,7 +6,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import type { RelatorioFechamentoCaixaProps, FechamentoData } from "./types";
 
-export function useRelatorioFechamento({ caixaMovimentoId }: RelatorioFechamentoCaixaProps) {
+export function useRelatorioFechamento({
+  caixaMovimentoId,
+}: RelatorioFechamentoCaixaProps) {
   const { clinicId } = useAuth();
   const { toast } = useToast();
   const [gerandoSped, setGerandoSped] = useState(false);
@@ -19,9 +21,14 @@ export function useRelatorioFechamento({ caixaMovimentoId }: RelatorioFechamento
       });
 
       const totalVendasPDV =
-        vendas?.reduce((sum: number, v: unknown) => sum + Number((v as Record<string, number>).valor_total), 0) || 0;
+        vendas?.reduce(
+          (sum: number, v: unknown) =>
+            sum + Number((v as Record<string, number>).valor_total),
+          0,
+        ) || 0;
 
-      const vendaIds = vendas?.map((v) => (v as Record<string, string>).id) || [];
+      const vendaIds =
+        vendas?.map((v) => (v as Record<string, string>).id) || [];
       const nfces: unknown[] =
         vendaIds.length > 0
           ? await apiClient.get("/nfce-emitidas", {
@@ -30,13 +37,23 @@ export function useRelatorioFechamento({ caixaMovimentoId }: RelatorioFechamento
           : [];
 
       const totalNFCe =
-        nfces?.reduce((sum: number, n: unknown) => sum + Number((n as Record<string, number>).valor_total), 0) || 0;
+        nfces?.reduce(
+          (sum: number, n: unknown) =>
+            sum + Number((n as Record<string, number>).valor_total),
+          0,
+        ) || 0;
 
-      const vendasComNFCe = new Set(nfces?.map((n) => (n as Record<string, string>).venda_id) || []);
-      const vendasSemNFCe = vendas?.filter((v) => !vendasComNFCe.has((v as Record<string, string>).id)).length || 0;
+      const vendasComNFCe = new Set(
+        nfces?.map((n) => (n as Record<string, string>).venda_id) || [],
+      );
+      const vendasSemNFCe =
+        vendas?.filter(
+          (v) => !vendasComNFCe.has((v as Record<string, string>).id),
+        ).length || 0;
 
       const divergencia = totalVendasPDV - totalNFCe;
-      const percentualDivergencia = totalVendasPDV > 0 ? (divergencia / totalVendasPDV) * 100 : 0;
+      const percentualDivergencia =
+        totalVendasPDV > 0 ? (divergencia / totalVendasPDV) * 100 : 0;
 
       return {
         totalVendasPDV,
@@ -67,7 +84,9 @@ export function useRelatorioFechamento({ caixaMovimentoId }: RelatorioFechamento
       return data;
     },
     onSuccess: (data) => {
-      const blob = new Blob([(data as Record<string, string>).arquivo], { type: "text/plain" });
+      const blob = new Blob([(data as Record<string, string>).arquivo], {
+        type: "text/plain",
+      });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

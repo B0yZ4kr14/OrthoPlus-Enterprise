@@ -15,7 +15,8 @@ const BUDGET_STATUS_CONFIG: Record<string, any> = {
 };
 
 export function getPaymentStatusBadge(status: string) {
-  const config = PAYMENT_STATUS_CONFIG[status] || PAYMENT_STATUS_CONFIG.pendente;
+  const config =
+    PAYMENT_STATUS_CONFIG[status] || PAYMENT_STATUS_CONFIG.pendente;
   return <Badge variant={config.variant}>{config.label}</Badge>;
 }
 

@@ -31,7 +31,12 @@ interface Backup {
 }
 
 export default function BackupsPage() {
-  const { backups, isLoading: loading, createBackup, isCreating: creating } = useBackupsPage();
+  const {
+    backups,
+    isLoading: loading,
+    createBackup,
+    isCreating: creating,
+  } = useBackupsPage();
 
   const formatFileSize = (bytes: number) => {
     const mb = bytes / (1024 * 1024);
@@ -72,10 +77,10 @@ export default function BackupsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={HardDrive} 
-        title="Backups" 
-        description="Central de backups e restauração de dados" 
+      <PageHeader
+        icon={HardDrive}
+        title="Backups"
+        description="Central de backups e restauração de dados"
         actions={
           <Button onClick={() => createBackup()} disabled={creating}>
             {creating ? (
@@ -90,7 +95,7 @@ export default function BackupsPage() {
               </>
             )}
           </Button>
-        } 
+        }
       />
 
       <div className="grid gap-4 md:grid-cols-3">

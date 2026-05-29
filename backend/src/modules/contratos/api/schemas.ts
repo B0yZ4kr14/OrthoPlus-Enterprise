@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const createContratoSchema = z.object({
   titulo: z.string().max(200),

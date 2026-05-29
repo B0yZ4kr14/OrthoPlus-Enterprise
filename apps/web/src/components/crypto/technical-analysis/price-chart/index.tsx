@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import {
   ComposedChart,
   XAxis,
@@ -39,9 +44,9 @@ export function PriceChart({ chartData }: PriceChartProps) {
               }
               className="text-xs"
             />
-            <YAxis className="text-xs"  stroke="hsl(var(--muted-foreground))" />
+            <YAxis className="text-xs" stroke="hsl(var(--muted-foreground))" />
             <Tooltip content={<PriceTooltip />} />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <UpperBandArea />
             <LowerBandArea />
             <SMALine />

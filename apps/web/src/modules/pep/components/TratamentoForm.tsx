@@ -125,7 +125,12 @@ export function TratamentoForm({
           <Label htmlFor="status">Status *</Label>
           <Select
             defaultValue="EM_ANDAMENTO"
-            onValueChange={(value) => setValue("status", value as "EM_ANDAMENTO" | "CONCLUIDO" | "PAUSADO" | "CANCELADO")}
+            onValueChange={(value) =>
+              setValue(
+                "status",
+                value as "EM_ANDAMENTO" | "CONCLUIDO" | "PAUSADO" | "CANCELADO",
+              )
+            }
           >
             <SelectTrigger id="status">
               <SelectValue />

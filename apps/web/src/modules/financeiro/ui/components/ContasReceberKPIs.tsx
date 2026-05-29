@@ -66,8 +66,8 @@ export function ContasReceberKPIs({ contasReceber }: ContasReceberKPIsProps) {
             {formatBRL(totalAtrasado)}
           </div>
           <p className="text-xs text-muted-foreground mt-2">
-            {contasReceber.filter((c) => c.status === "atrasado").length}{" "}
-            contas vencidas
+            {contasReceber.filter((c) => c.status === "atrasado").length} contas
+            vencidas
           </p>
         </CardContent>
       </Card>

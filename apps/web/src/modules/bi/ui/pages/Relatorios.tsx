@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { BarChart3, Users, UserCheck, DollarSign } from "lucide-react";
 import { toast } from "sonner";
 import { ComercialReports } from "../components/ComercialReports";

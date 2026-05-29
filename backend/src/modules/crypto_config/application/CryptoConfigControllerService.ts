@@ -4,7 +4,9 @@ import { ExchangeConfig } from "@/modules/crypto_config/domain/entities/Exchange
 import { fetchExchangeRateBRL } from "@/modules/crypto_config/api/exchangeRate";
 
 export class CryptoConfigControllerService {
-  constructor(private cryptoRepo: CryptoConfigRepository = new CryptoConfigRepository()) {}
+  constructor(
+    private cryptoRepo: CryptoConfigRepository = new CryptoConfigRepository(),
+  ) {}
 
   listExchanges(clinicId: string) {
     const exchanges = [
@@ -25,7 +27,12 @@ export class CryptoConfigControllerService {
 
   createExchange(clinicId: string, body: unknown, isAdmin: boolean) {
     const schema = z.object({
-      exchangeType: z.enum(["BINANCE", "COINBASE", "KRAKEN", "MERCADO_BITCOIN"]),
+      exchangeType: z.enum([
+        "BINANCE",
+        "COINBASE",
+        "KRAKEN",
+        "MERCADO_BITCOIN",
+      ]),
       apiKey: z.string().min(10),
       apiSecret: z.string().min(10),
     });
@@ -48,7 +55,10 @@ export class CryptoConfigControllerService {
       updatedAt: new Date(),
     });
 
-    return { exchange: exchange.toJSON(), message: "Exchange configurada com sucesso" };
+    return {
+      exchange: exchange.toJSON(),
+      message: "Exchange configurada com sucesso",
+    };
   }
 
   getPortfolio() {
@@ -76,15 +86,25 @@ export class CryptoConfigControllerService {
     ];
   }
 
-  async manageOfflineWallet(body: {
-    action: string;
-    address: string;
-    currency: string;
-    network: string;
-    label?: string;
-    clinicId?: string;
-  }, authClinicId?: string) {
-    const { action, address, currency, network, label, clinicId: clinicIdBody } = body;
+  async manageOfflineWallet(
+    body: {
+      action: string;
+      address: string;
+      currency: string;
+      network: string;
+      label?: string;
+      clinicId?: string;
+    },
+    authClinicId?: string,
+  ) {
+    const {
+      action,
+      address,
+      currency,
+      network,
+      label,
+      clinicId: clinicIdBody,
+    } = body;
 
     if (action !== "create") {
       throw new Error("Invalid action");
@@ -140,21 +160,29 @@ export class CryptoConfigControllerService {
   async webhookCryptoTransaction(
     payload: Record<string, unknown>,
     authClinicId: string | undefined,
-    ipAddress: string | undefined
+    ipAddress: string | undefined,
   ) {
     const walletAddress = payload.wallet_address ?? payload.address;
-    const coin = (payload.coin_type ?? payload.coin ?? "").toString().toUpperCase();
+    const coin = (payload.coin_type ?? payload.coin ?? "")
+      .toString()
+      .toUpperCase();
     const txHash = payload.transaction_hash ?? payload.tx_hash;
     const clinicId = payload.clinic_id ?? authClinicId;
     const confirmations = Number(payload.confirmations) || 0;
     const amountRaw = Number(payload.amount);
-    const feeRaw = payload.network_fee === undefined ? undefined : Number(payload.network_fee);
+    const feeRaw =
+      payload.network_fee === undefined
+        ? undefined
+        : Number(payload.network_fee);
 
     if (!walletAddress || !coin || !txHash || !Number.isFinite(amountRaw)) {
       throw new Error("Missing or invalid transaction data");
     }
 
-    const wallet = await this.cryptoRepo.findWalletByAddressAndCoin(walletAddress as string, coin);
+    const wallet = await this.cryptoRepo.findWalletByAddressAndCoin(
+      walletAddress as string,
+      coin,
+    );
 
     if (!wallet) {
       throw new Error("Wallet not found");
@@ -164,9 +192,14 @@ export class CryptoConfigControllerService {
     const exchangeRate = await fetchExchangeRateBRL(coin);
     const amount = Math.round(amountRaw);
     const amountBrl = Math.round(amountRaw * exchangeRate);
-    const fee = feeRaw !== undefined && Number.isFinite(feeRaw) ? Math.round(feeRaw) : null;
+    const fee =
+      feeRaw !== undefined && Number.isFinite(feeRaw)
+        ? Math.round(feeRaw)
+        : null;
 
-    const existingTx = await this.cryptoRepo.findTransactionByTxHash(txHash as string);
+    const existingTx = await this.cryptoRepo.findTransactionByTxHash(
+      txHash as string,
+    );
 
     const transaction = existingTx
       ? await this.cryptoRepo.updateTransaction(existingTx.id, {
@@ -222,7 +255,11 @@ export class CryptoConfigControllerService {
     };
   }
 
-  generatePaymentAddress(clinicId: string, coin_type?: string, wallet_id?: string) {
+  generatePaymentAddress(
+    clinicId: string,
+    coin_type?: string,
+    wallet_id?: string,
+  ) {
     const address = `${coin_type?.toLowerCase() || "btc"}_${wallet_id || clinicId}_${Date.now()}`;
     return {
       address,

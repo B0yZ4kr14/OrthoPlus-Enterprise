@@ -8,10 +8,13 @@ import { AlertSection } from "./AlertSection";
 import { LoadingState } from "@/components/shared/LoadingState";
 import type { RelatorioFechamentoCaixaProps } from "./types";
 
-export function RelatorioFechamentoCaixa({ caixaMovimentoId }: RelatorioFechamentoCaixaProps) {
-  const { fechamento, isLoading, gerandoSped, gerarSpedMutation } = useRelatorioFechamento({
-    caixaMovimentoId,
-  });
+export function RelatorioFechamentoCaixa({
+  caixaMovimentoId,
+}: RelatorioFechamentoCaixaProps) {
+  const { fechamento, isLoading, gerandoSped, gerarSpedMutation } =
+    useRelatorioFechamento({
+      caixaMovimentoId,
+    });
 
   if (isLoading) {
     return <LoadingState />;
@@ -20,7 +23,10 @@ export function RelatorioFechamentoCaixa({ caixaMovimentoId }: RelatorioFechamen
   return (
     <div className="space-y-6">
       <Card className="p-6">
-        <ReportHeader gerandoSped={gerandoSped} onGerarSped={() => gerarSpedMutation.mutate()} />
+        <ReportHeader
+          gerandoSped={gerandoSped}
+          onGerarSped={() => gerarSpedMutation.mutate()}
+        />
         <KPICards fechamento={fechamento} />
         <ComparisonChart fechamento={fechamento} />
         <AlertSection fechamento={fechamento} />

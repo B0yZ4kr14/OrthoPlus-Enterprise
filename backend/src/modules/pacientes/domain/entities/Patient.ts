@@ -205,7 +205,9 @@ export class Patient {
       full_name: this.props.fullName,
       cpf: this.props.cpf ?? null,
       rg: this.props.rg ?? null,
-      birth_date: this.props.birthDate ? this.props.birthDate.toISOString() : null,
+      birth_date: this.props.birthDate
+        ? this.props.birthDate.toISOString()
+        : null,
       gender: this.props.gender ?? null,
       email: this.props.email ?? null,
       phone_primary: this.props.phone ?? null,
@@ -274,7 +276,11 @@ export class Patient {
 
   changeStatus(statusCode: string, changedBy?: string, reason?: string): void {
     const novoStatus = PatientStatus.fromCode(statusCode);
-    this.alterarStatus(novoStatus, reason ?? 'Status change', changedBy ?? 'system');
+    this.alterarStatus(
+      novoStatus,
+      reason ?? "Status change",
+      changedBy ?? "system",
+    );
   }
 
   // Business logic: Atualizar dados comerciais

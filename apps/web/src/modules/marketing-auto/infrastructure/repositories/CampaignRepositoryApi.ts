@@ -16,11 +16,16 @@ import { MessageTemplate } from "../../domain/valueObjects/MessageTemplate";
 export class CampaignRepositoryApi implements ICampaignRepository {
   async findById(id: string): Promise<Campaign | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`/marketing/campanhas/${id}`);
+      const data = await apiClient.get<Record<string, any>>(
+        `/marketing/campanhas/${id}`,
+      );
       if (!data) return null;
       return this.toDomain(data);
     } catch (error: unknown) {
-      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      const _e = error as {
+        response?: { status?: number; data?: { error?: string } };
+        message?: string;
+      };
       if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
       throw new Error(`Erro ao buscar campanha: ${_e.message}`);
@@ -42,9 +47,12 @@ export class CampaignRepositoryApi implements ICampaignRepository {
         params.end_date = filters.period.endDate.toISOString();
       }
 
-      const data = await apiClient.get<Record<string, any>[]>("/marketing/campanhas", {
-        params,
-      });
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/marketing/campanhas",
+        {
+          params,
+        },
+      );
       return data?.map((row) => this.toDomain(row)) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
@@ -83,9 +91,12 @@ export class CampaignRepositoryApi implements ICampaignRepository {
 
   async getActiveCampaigns(clinicId: string): Promise<Campaign[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/marketing/campanhas", {
-        params: { status: "ATIVA" },
-      });
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/marketing/campanhas",
+        {
+          params: { status: "ATIVA" },
+        },
+      );
       return data?.map((row) => this.toDomain(row)) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
@@ -95,9 +106,12 @@ export class CampaignRepositoryApi implements ICampaignRepository {
 
   async getScheduledCampaigns(clinicId: string): Promise<Campaign[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/marketing/campanhas", {
-        params: { status: "ATIVA", scheduled: true },
-      });
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/marketing/campanhas",
+        {
+          params: { status: "ATIVA", scheduled: true },
+        },
+      );
       return data?.map((row) => this.toDomain(row)) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };

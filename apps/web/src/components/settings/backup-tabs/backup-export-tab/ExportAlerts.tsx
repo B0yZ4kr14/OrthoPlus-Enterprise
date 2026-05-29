@@ -21,8 +21,8 @@ export function LGPDAlert() {
   return (
     <Alert>
       <AlertDescription className="text-sm">
-        <strong>Conformidade LGPD:</strong> Todas as exportações são registradas no audit log
-        para fins de compliance e rastreabilidade.
+        <strong>Conformidade LGPD:</strong> Todas as exportações são registradas
+        no audit log para fins de compliance e rastreabilidade.
       </AlertDescription>
     </Alert>
   );

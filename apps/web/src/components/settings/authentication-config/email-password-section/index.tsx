@@ -8,7 +8,10 @@ import { MainToggle } from "./components/MainToggle";
 export * from "./types";
 export { MainToggle };
 
-export function EmailPasswordSection({ config, onUpdate }: EmailPasswordSectionProps) {
+export function EmailPasswordSection({
+  config,
+  onUpdate,
+}: EmailPasswordSectionProps) {
   return (
     <div className="space-y-4">
       <MainToggle
@@ -73,7 +76,9 @@ export function EmailPasswordSection({ config, onUpdate }: EmailPasswordSectionP
             </div>
 
             <div className="flex items-center justify-between">
-              <Label className="font-normal">Exigir caractere especial (!@#$%)</Label>
+              <Label className="font-normal">
+                Exigir caractere especial (!@#$%)
+              </Label>
               <Switch
                 checked={config.require_special_char || false}
                 onCheckedChange={(checked) =>

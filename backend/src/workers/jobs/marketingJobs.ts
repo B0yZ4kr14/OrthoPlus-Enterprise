@@ -6,7 +6,11 @@ const BASE_URL = process.env.API_BASE_URL || "http://localhost:3005";
 
 const triggerMarketingAction = async (endpoint: string) => {
   try {
-    await axios.post(`${BASE_URL}/api/marketing/${endpoint}`, {}, { headers: { "X-Internal-Cron": "true" } });
+    await axios.post(
+      `${BASE_URL}/api/marketing/${endpoint}`,
+      {},
+      { headers: { "X-Internal-Cron": "true" } },
+    );
     logger.info(`[node-cron] Marketing action executed: ${endpoint}`);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);

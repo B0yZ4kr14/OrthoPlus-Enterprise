@@ -1,5 +1,11 @@
 // cspell:disable
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Plus } from "lucide-react";
 import { CategoriaForm } from "../../components/CategoriaForm";
@@ -34,9 +40,7 @@ export function CategoriasTab({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>Categorias</CardTitle>
-            <CardDescription>
-              Organize produtos em categorias
-            </CardDescription>
+            <CardDescription>Organize produtos em categorias</CardDescription>
           </div>
           <Button onClick={onAdd}>
             <Plus className="h-4 w-4 mr-2" />

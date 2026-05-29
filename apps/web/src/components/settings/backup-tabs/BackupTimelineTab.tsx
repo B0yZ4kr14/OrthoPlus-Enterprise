@@ -18,7 +18,9 @@ interface BackupEntry {
 
 export function BackupTimelineTab() {
   const { clinicId } = useAuth();
-  const [selectedBackup, setSelectedBackup] = useState<BackupEntry | null>(null);
+  const [selectedBackup, setSelectedBackup] = useState<BackupEntry | null>(
+    null,
+  );
   const [isRestoreDialogOpen, setIsRestoreDialogOpen] = useState(false);
 
   const { data: backups } = useQuery({
@@ -69,60 +71,58 @@ export function BackupTimelineTab() {
     <div className="space-y-6">
       <ScrollArea className="h-[600px]">
         <div className="space-y-6">
-          {Object.entries(groupedBackups).map(
-            ([date, dateBackups]) => (
-              <div key={date}>
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <h3 className="text-sm font-semibold text-muted-foreground">
-                    {date}
-                  </h3>
-                </div>
-                <div className="space-y-3 pl-6 border-l-2 border-border">
-                  {dateBackups.map((backup) => (
-                    <Card key={backup.id} className="p-4 ml-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`h-3 w-3 rounded-full ${getBackupTypeColor(backup.backup_type)}`}
-                          />
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium">
-                                {new Date(backup.created_at).toLocaleTimeString(
-                                  "pt-BR",
-                                )}
-                              </span>
-                              <Badge variant="outline">
-                                {backup.backup_type}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                              {formatBytes(backup.file_size_bytes || 0)}
-                            </p>
+          {Object.entries(groupedBackups).map(([date, dateBackups]) => (
+            <div key={date}>
+              <div className="flex items-center gap-2 mb-3">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <h3 className="text-sm font-semibold text-muted-foreground">
+                  {date}
+                </h3>
+              </div>
+              <div className="space-y-3 pl-6 border-l-2 border-border">
+                {dateBackups.map((backup) => (
+                  <Card key={backup.id} className="p-4 ml-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`h-3 w-3 rounded-full ${getBackupTypeColor(backup.backup_type)}`}
+                        />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">
+                              {new Date(backup.created_at).toLocaleTimeString(
+                                "pt-BR",
+                              )}
+                            </span>
+                            <Badge variant="outline">
+                              {backup.backup_type}
+                            </Badge>
                           </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            <Download className="h-4 w-4 mr-1" />
-                            Download
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleRestoreClick(backup)}
-                          >
-                            <Eye className="h-4 w-4 mr-1" />
-                            Ver
-                          </Button>
+                          <p className="text-sm text-muted-foreground">
+                            {formatBytes(backup.file_size_bytes || 0)}
+                          </p>
                         </div>
                       </div>
-                    </Card>
-                  ))}
-                </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Download className="h-4 w-4 mr-1" />
+                          Download
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRestoreClick(backup)}
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          Ver
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
               </div>
-            ),
-          )}
+            </div>
+          ))}
         </div>
       </ScrollArea>
 

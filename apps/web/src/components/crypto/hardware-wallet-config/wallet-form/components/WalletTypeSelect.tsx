@@ -18,7 +18,10 @@ export function WalletTypeSelect({ value, onChange }: WalletTypeSelectProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="wallet-type">Tipo de Hardware</Label>
-      <Select value={value} onValueChange={(v) => onChange(v as HardwareWalletType)}>
+      <Select
+        value={value}
+        onValueChange={(v) => onChange(v as HardwareWalletType)}
+      >
         <SelectTrigger id="wallet-type">
           <SelectValue />
         </SelectTrigger>

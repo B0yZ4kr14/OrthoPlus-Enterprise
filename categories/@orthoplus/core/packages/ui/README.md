@@ -8,13 +8,13 @@ Este pacote fornece componentes React reutilizáveis e estilizados usando Tailwi
 
 ## Componentes Exportados
 
-| Componente | Descrição | Exports |
-|------------|-----------|---------|
-| **Button** | Botão interativo com variantes | `Button`, `buttonVariants` |
-| **Card** | Container de conteúdo | `Card`, `CardHeader`, `CardFooter`, `CardTitle`, `CardDescription`, `CardContent`, `cardVariants` |
-| **Input** | Campo de entrada de texto | `Input` |
-| **Label** | Rótulo para formulários | `Label` |
-| **Tabs** | Sistema de abas | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` |
+| Componente | Descrição                      | Exports                                                                                           |
+| ---------- | ------------------------------ | ------------------------------------------------------------------------------------------------- |
+| **Button** | Botão interativo com variantes | `Button`, `buttonVariants`                                                                        |
+| **Card**   | Container de conteúdo          | `Card`, `CardHeader`, `CardFooter`, `CardTitle`, `CardDescription`, `CardContent`, `cardVariants` |
+| **Input**  | Campo de entrada de texto      | `Input`                                                                                           |
+| **Label**  | Rótulo para formulários        | `Label`                                                                                           |
+| **Tabs**   | Sistema de abas                | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`                                                  |
 
 ### Utilitários
 
@@ -53,9 +53,7 @@ function Example() {
       <CardHeader>
         <CardTitle>Título do Card</CardTitle>
       </CardHeader>
-      <CardContent>
-        Conteúdo do card aqui
-      </CardContent>
+      <CardContent>Conteúdo do card aqui</CardContent>
     </Card>
   );
 }

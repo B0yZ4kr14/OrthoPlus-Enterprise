@@ -18,7 +18,11 @@ const sizeClasses = {
   lg: "h-12 w-12 text-sm",
 };
 
-export function PatientAvatar({ name, size = "md", className }: PatientAvatarProps) {
+export function PatientAvatar({
+  name,
+  size = "md",
+  className,
+}: PatientAvatarProps) {
   const initials = getInitials(name);
 
   return (
@@ -26,7 +30,7 @@ export function PatientAvatar({ name, size = "md", className }: PatientAvatarPro
       className={cn(
         "flex items-center justify-center rounded-full bg-interactive/10 text-interactive font-semibold shrink-0",
         sizeClasses[size],
-        className
+        className,
       )}
       aria-label={`Avatar de ${name}`}
     >

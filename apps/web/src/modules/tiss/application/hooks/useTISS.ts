@@ -13,7 +13,17 @@ export interface TISSGuide {
   procedure_code: string;
   procedure_name: string;
   amount: number;
-  status: "RASCUNHO" | "PENDENTE" | "SUBMITTED" | "GLOSADA" | "APROVADA" | "REJEITADA" | "pendente" | "enviada" | "aprovada" | "glosada";
+  status:
+    | "RASCUNHO"
+    | "PENDENTE"
+    | "SUBMITTED"
+    | "GLOSADA"
+    | "APROVADA"
+    | "REJEITADA"
+    | "pendente"
+    | "enviada"
+    | "aprovada"
+    | "glosada";
   service_date: string;
   submission_date?: string;
   response_date?: string;

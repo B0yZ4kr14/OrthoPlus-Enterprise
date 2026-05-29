@@ -2,10 +2,10 @@
  * Dashboard Controller - Fornece dados agregados para o Dashboard
  */
 
-import { Request, Response } from 'express';
-import { IDatabaseConnection } from '@/infrastructure/database/IDatabaseConnection';
-import { logger } from '@/infrastructure/logger';
-import { dashboardMetrics } from '@/infrastructure/metrics/DashboardMetrics';
+import { Request, Response } from "express";
+import { IDatabaseConnection } from "@/infrastructure/database/IDatabaseConnection";
+import { logger } from "@/infrastructure/logger";
+import { dashboardMetrics } from "@/infrastructure/metrics/DashboardMetrics";
 
 export class DashboardController {
   constructor(private db: IDatabaseConnection) {}
@@ -18,8 +18,8 @@ export class DashboardController {
     const clinicId = req.user?.clinicId;
     try {
       if (!clinicId) {
-        dashboardMetrics.incRequests('unknown', 'error_missing_clinic')
-        res.status(400).json({ error: 'Clinic ID is required' });
+        dashboardMetrics.incRequests("unknown", "error_missing_clinic");
+        res.status(400).json({ error: "Clinic ID is required" });
         return;
       }
 
@@ -32,17 +32,17 @@ export class DashboardController {
           this.getTreatmentsByStatus(clinicId).catch(() => []),
         ]);
 
-        dashboardMetrics.incRequests(clinicId, 'success')
-        res.json({
+      dashboardMetrics.incRequests(clinicId, "success");
+      res.json({
         stats,
         appointmentsData,
         revenueData,
         treatmentsByStatus,
       });
     } catch (error) {
-      logger.error('[DashboardController] Error fetching overview:', error);
-        dashboardMetrics.incRequests(clinicId || 'unknown', 'error')
-        res.status(500).json({ error: 'Failed to fetch dashboard data' });
+      logger.error("[DashboardController] Error fetching overview:", error);
+      dashboardMetrics.incRequests(clinicId || "unknown", "error");
+      res.status(500).json({ error: "Failed to fetch dashboard data" });
     }
   }
 
@@ -58,8 +58,8 @@ export class DashboardController {
   }
 
   private async getStats(clinicId: string) {
-    const today = new Date().toISOString().split('T')[0];
-    const todayPrefix = today + '%'; // appointments.start_time is a String
+    const today = new Date().toISOString().split("T")[0];
+    const todayPrefix = today + "%"; // appointments.start_time is a String
 
     const [
       totalPatientsResult,
@@ -71,14 +71,14 @@ export class DashboardController {
     ] = await Promise.all([
       // Total de pacientes
       this.db.query(
-        'SELECT COUNT(*) as count FROM pacientes.patients WHERE clinic_id = $1',
-        [clinicId]
+        "SELECT COUNT(*) as count FROM pacientes.patients WHERE clinic_id = $1",
+        [clinicId],
       ),
       // Consultas de hoje (start_time is a String like '2026-04-24T...')
       this.db.query(
         `SELECT COUNT(*) as count FROM pacientes.appointments
          WHERE clinic_id = $1 AND start_time LIKE $2`,
-        [clinicId, todayPrefix]
+        [clinicId, todayPrefix],
       ),
       // Receita mensal (últimos 30 dias) — financial_transactions
       this.db.query(
@@ -87,7 +87,7 @@ export class DashboardController {
          WHERE clinic_id = $1
          AND type = 'RECEITA'
          AND transaction_date >= TO_CHAR(CURRENT_DATE - INTERVAL '30 days', 'YYYY-MM-DD')`,
-        [clinicId]
+        [clinicId],
       ),
       // Taxa de ocupação
       this.db.query(
@@ -98,32 +98,43 @@ export class DashboardController {
          WHERE clinic_id = $1
          AND start_time >= TO_CHAR(DATE_TRUNC('week', CURRENT_DATE), 'YYYY-MM-DD')
          AND start_time < TO_CHAR(DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '7 days', 'YYYY-MM-DD')`,
-        [clinicId]
+        [clinicId],
       ),
       // Tratamentos pendentes (pep_tratamentos has no clinic_id — skip clinic filter)
       this.db.query(
         `SELECT COUNT(*) as count FROM pep.pep_tratamentos
          WHERE status = 'EM_ANDAMENTO'`,
-        []
+        [],
       ),
       // Tratamentos concluídos (últimos 30 dias)
       this.db.query(
         `SELECT COUNT(*) as count FROM pep.pep_tratamentos
          WHERE status = 'CONCLUIDO'
          AND updated_at >= CURRENT_DATE - INTERVAL '30 days'`,
-        []
+        [],
       ),
     ]);
 
     return {
-      totalPatients: parseInt(totalPatientsResult.rows[0]?.count || '0'),
-      todayAppointments: parseInt(todayAppointmentsResult.rows[0]?.count || '0'),
-      monthlyRevenue: parseFloat(monthlyRevenueResult.rows[0]?.total || '0'),
-      occupancyRate: occupancyResult.rows[0]?.total > 0
-        ? Math.round((occupancyResult.rows[0].completed / occupancyResult.rows[0].total) * 100)
-        : 0,
-      pendingTreatments: parseInt(pendingTreatmentsResult.rows[0]?.count || '0'),
-      completedTreatments: parseInt(completedTreatmentsResult.rows[0]?.count || '0'),
+      totalPatients: parseInt(totalPatientsResult.rows[0]?.count || "0"),
+      todayAppointments: parseInt(
+        todayAppointmentsResult.rows[0]?.count || "0",
+      ),
+      monthlyRevenue: parseFloat(monthlyRevenueResult.rows[0]?.total || "0"),
+      occupancyRate:
+        occupancyResult.rows[0]?.total > 0
+          ? Math.round(
+              (occupancyResult.rows[0].completed /
+                occupancyResult.rows[0].total) *
+                100,
+            )
+          : 0,
+      pendingTreatments: parseInt(
+        pendingTreatmentsResult.rows[0]?.count || "0",
+      ),
+      completedTreatments: parseInt(
+        completedTreatmentsResult.rows[0]?.count || "0",
+      ),
     };
   }
 
@@ -140,10 +151,10 @@ export class DashboardController {
        AND start_time < TO_CHAR(CURRENT_DATE, 'YYYY-MM-DD')
        GROUP BY DATE(start_time::timestamp), TO_CHAR(start_time::timestamp, 'Dy')
        ORDER BY DATE(start_time::timestamp)`,
-      [clinicId]
+      [clinicId],
     );
 
-    return result.rows.map(row => ({
+    return result.rows.map((row) => ({
       name: row.name,
       agendadas: parseInt(row.agendadas),
       realizadas: parseInt(row.realizadas),
@@ -162,10 +173,10 @@ export class DashboardController {
        AND transaction_date >= TO_CHAR(CURRENT_DATE - INTERVAL '6 months', 'YYYY-MM-DD')
        GROUP BY DATE_TRUNC('month', transaction_date::date), TO_CHAR(transaction_date::date, 'Mon')
        ORDER BY DATE_TRUNC('month', transaction_date::date)`,
-      [clinicId]
+      [clinicId],
     );
 
-    return result.rows.map(row => ({
+    return result.rows.map((row) => ({
       name: row.name,
       receita: parseFloat(row.receita),
       despesas: parseFloat(row.despesas),
@@ -181,17 +192,17 @@ export class DashboardController {
        FROM pep.pep_tratamentos
        GROUP BY status
        ORDER BY value DESC`,
-      []
+      [],
     );
 
     const statusLabels: Record<string, string> = {
-      CONCLUIDO: 'Concluído',
-      EM_ANDAMENTO: 'Em Andamento',
-      PLANEJADO: 'Planejado',
-      CANCELADO: 'Cancelado',
+      CONCLUIDO: "Concluído",
+      EM_ANDAMENTO: "Em Andamento",
+      PLANEJADO: "Planejado",
+      CANCELADO: "Cancelado",
     };
 
-    return result.rows.map(row => ({
+    return result.rows.map((row) => ({
       name: statusLabels[row.name] || row.name,
       value: parseInt(row.value),
     }));

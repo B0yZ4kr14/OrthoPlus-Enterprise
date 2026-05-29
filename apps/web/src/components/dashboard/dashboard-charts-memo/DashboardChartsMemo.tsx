@@ -16,9 +16,10 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
     return (
       JSON.stringify(prevProps.appointmentsData) ===
         JSON.stringify(nextProps.appointmentsData) &&
-      JSON.stringify(prevProps.revenueData) === JSON.stringify(nextProps.revenueData)
+      JSON.stringify(prevProps.revenueData) ===
+        JSON.stringify(nextProps.revenueData)
     );
-  }
+  },
 );
 
 DashboardChartsMemo.displayName = "DashboardChartsMemo";

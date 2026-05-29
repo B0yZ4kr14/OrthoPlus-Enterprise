@@ -7,8 +7,14 @@ import { ModuleCard } from "./ModuleCard";
 import { InstructionsCard } from "./InstructionsCard";
 
 export function StepSimulation() {
-  const { modules, lastAction, toggleModule, resetSimulation, canActivate, canDeactivate } =
-    useModuleSimulation();
+  const {
+    modules,
+    lastAction,
+    toggleModule,
+    resetSimulation,
+    canActivate,
+    canDeactivate,
+  } = useModuleSimulation();
 
   return (
     <div className="space-y-6">
@@ -46,7 +52,11 @@ export function StepSimulation() {
         })}
       </div>
 
-      <Button variant="outline" className="w-full gap-2" onClick={resetSimulation}>
+      <Button
+        variant="outline"
+        className="w-full gap-2"
+        onClick={resetSimulation}
+      >
         <RefreshCw className="h-4 w-4" />
         Reiniciar Simulação
       </Button>

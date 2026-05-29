@@ -4,7 +4,12 @@ export interface BackupWizardProps {
 }
 
 export type BackupType = "full" | "incremental" | "differential";
-export type DataCategory = "patients" | "appointments" | "records" | "financial" | "inventory";
+export type DataCategory =
+  | "patients"
+  | "appointments"
+  | "records"
+  | "financial"
+  | "inventory";
 
 export interface DataOption {
   id: DataCategory;

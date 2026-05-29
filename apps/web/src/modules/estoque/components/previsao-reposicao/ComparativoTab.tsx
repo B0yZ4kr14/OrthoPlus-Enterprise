@@ -1,5 +1,10 @@
 // cspell:disable
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { ComparativoCard } from "./ComparativoCard";
 import type { Previsao } from "./types";
 

@@ -48,7 +48,9 @@ test.describe("Appointment Management", () => {
     await page.getByRole("button", { name: /agendar/i }).click();
 
     // Accept any toast response — backend may not be running during E2E
-    const toastLocator = page.locator('[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *');
+    const toastLocator = page.locator(
+      '[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *',
+    );
     await expect(toastLocator.first()).toBeVisible({ timeout: 10000 });
   });
 
@@ -194,7 +196,9 @@ test.describe("Appointment Management", () => {
     await submitBtn.click();
 
     // Accept any toast response — backend may not be running during E2E
-    const toastLocator = page.locator('[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *');
+    const toastLocator = page.locator(
+      '[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *',
+    );
     await expect(toastLocator.first()).toBeVisible({ timeout: 10000 });
   });
 
@@ -223,7 +227,9 @@ test.describe("Appointment Management", () => {
     await page.getByRole("button", { name: /agendar consulta/i }).click();
 
     // Accept any toast response — backend may not be running during E2E
-    const toastLocator = page.locator('[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *');
+    const toastLocator = page.locator(
+      '[data-sonner-toast], [role="status"], [data-radix-toast-viewport] > *',
+    );
     await expect(toastLocator.first()).toBeVisible({ timeout: 10000 });
   });
 });

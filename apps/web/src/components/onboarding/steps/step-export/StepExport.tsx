@@ -14,8 +14,8 @@ export function StepExport() {
       <Alert>
         <Sparkles className="h-4 w-4" />
         <AlertDescription>
-          Parabéns! Você concluiu o tour de onboarding. Agora está pronto para começar a usar o
-          OrthoPlus Enterprise com confiança.
+          Parabéns! Você concluiu o tour de onboarding. Agora está pronto para
+          começar a usar o OrthoPlus Enterprise com confiança.
         </AlertDescription>
       </Alert>
 

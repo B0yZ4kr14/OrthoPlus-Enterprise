@@ -21,9 +21,7 @@ export function PriceTooltip({ active, payload }: PriceTooltipProps) {
       <p className="text-xs text-muted-foreground mb-2">
         {format(new Date(data.timestamp), "dd/MM/yyyy HH:mm", { locale: ptBR })}
       </p>
-      <p className="text-sm font-semibold">
-        Preço: R$ {formatCurrency(price)}
-      </p>
+      <p className="text-sm font-semibold">Preço: R$ {formatCurrency(price)}</p>
       {upperBand && (
         <p className="text-xs text-muted-foreground">
           Banda Superior: R$ {formatCurrency(upperBand)}

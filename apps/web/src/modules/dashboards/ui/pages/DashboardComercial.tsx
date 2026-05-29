@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { DollarSign, TrendingUp, Users, Target } from "lucide-react";
 import { useMarketingROI } from "@/hooks/useMarketingROI";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -112,10 +117,13 @@ export default function DashboardComercial() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={metrics.campaignROI}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="campaign"  stroke="hsl(var(--muted-foreground))" />
-                <YAxis  stroke="hsl(var(--muted-foreground))" />
+                <XAxis
+                  dataKey="campaign"
+                  stroke="hsl(var(--muted-foreground))"
+                />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
                 <Tooltip />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="conversionRate"
                   fill="hsl(var(--primary))"

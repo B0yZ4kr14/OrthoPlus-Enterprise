@@ -1,5 +1,10 @@
 // cspell:disable
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 
 interface BadgesTabProps {
@@ -15,8 +20,8 @@ export function BadgesTab({ onCreateBadge }: BadgesTabProps) {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">
-          Configure badges que pacientes podem conquistar e compartilhar
-          nas redes sociais
+          Configure badges que pacientes podem conquistar e compartilhar nas
+          redes sociais
         </p>
       </CardContent>
     </Card>

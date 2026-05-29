@@ -26,7 +26,9 @@ export class CRMController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const data = await prisma.crm_leads.findFirst({ where: { id, clinic_id: clinicId } });
+    const data = await prisma.crm_leads.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!data) {
       throw Errors.notFound("Lead", id);
     }
@@ -44,7 +46,13 @@ export class CRMController {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await prisma.crm_leads.create({
-      data: { ...parsed.data, clinic_id: clinicId, created_by: req.user?.id || "system", status: parsed.data.status || "NOVO", source: parsed.data.source || "manual" },
+      data: {
+        ...parsed.data,
+        clinic_id: clinicId,
+        created_by: req.user?.id || "system",
+        status: parsed.data.status || "NOVO",
+        source: parsed.data.source || "manual",
+      },
     });
     res.status(201).json(data);
     return;
@@ -56,7 +64,9 @@ export class CRMController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await prisma.crm_leads.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.crm_leads.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       throw Errors.notFound("Lead", id);
     }
@@ -78,7 +88,9 @@ export class CRMController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await prisma.crm_leads.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.crm_leads.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       throw Errors.notFound("Lead", id);
     }

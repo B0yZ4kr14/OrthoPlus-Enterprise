@@ -8,10 +8,19 @@ interface FormActionsProps {
   onCancel: () => void;
 }
 
-export function FormActions({ isLoading, isEditing, onCancel }: FormActionsProps) {
+export function FormActions({
+  isLoading,
+  isEditing,
+  onCancel,
+}: FormActionsProps) {
   return (
     <div className="flex justify-end gap-4 pt-4">
-      <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={onCancel}
+        disabled={isLoading}
+      >
         Cancelar
       </Button>
       <Button type="submit" disabled={isLoading}>

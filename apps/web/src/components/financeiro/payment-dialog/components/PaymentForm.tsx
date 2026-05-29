@@ -39,7 +39,12 @@ export function PaymentForm({
       {children}
 
       <DialogFooter>
-        <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={isLoading}
+        >
           Cancelar
         </Button>
         <Button type="submit" disabled={isLoading}>

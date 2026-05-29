@@ -45,7 +45,9 @@ export class NFeController {
     }
     const parsed = createNfeSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const now = new Date();
     const nfe = NFe.create({
@@ -82,13 +84,17 @@ export class NFeController {
     }
     const parsed = updateNfeSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     if (parsed.data.status !== undefined) nfe.status = parsed.data.status;
-    if (parsed.data.chave_acesso !== undefined) nfe.chaveAcesso = parsed.data.chave_acesso;
+    if (parsed.data.chave_acesso !== undefined)
+      nfe.chaveAcesso = parsed.data.chave_acesso;
     if (parsed.data.xml !== undefined) nfe.xml = parsed.data.xml;
     if (parsed.data.pdf_url !== undefined) nfe.pdfUrl = parsed.data.pdf_url;
-    if (parsed.data.protocolo !== undefined) nfe.protocolo = parsed.data.protocolo;
+    if (parsed.data.protocolo !== undefined)
+      nfe.protocolo = parsed.data.protocolo;
     nfe.updatedAt = new Date();
     await repository.update(nfe);
     return res.json(nfe);
@@ -106,7 +112,8 @@ export class NFeController {
     try {
       nfe.cancelar();
     } catch (domainError) {
-      const message = domainError instanceof Error ? domainError.message : "Cannot cancel";
+      const message =
+        domainError instanceof Error ? domainError.message : "Cannot cancel";
       return res.status(422).json({ error: message });
     }
     await repository.update(nfe);
@@ -118,7 +125,14 @@ export class NFeController {
     return res.json({
       module: "NFE",
       status: "active",
-      endpoints: ["GET /", "GET /:id", "POST /", "PATCH /:id", "POST /:id/cancelar", "GET /status"],
+      endpoints: [
+        "GET /",
+        "GET /:id",
+        "POST /",
+        "PATCH /:id",
+        "POST /:id/cancelar",
+        "GET /status",
+      ],
     });
   }
 }

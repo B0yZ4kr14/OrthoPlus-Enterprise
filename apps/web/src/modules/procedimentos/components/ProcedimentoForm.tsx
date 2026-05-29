@@ -20,7 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { useProcedimentosStore } from "../hooks/useProcedimentosStore";
 import {
   CriarProcedimento,

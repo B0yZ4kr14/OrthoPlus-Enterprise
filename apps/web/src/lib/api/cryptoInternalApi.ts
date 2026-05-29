@@ -7,50 +7,50 @@
  * Constitution AP-3: Toda comunicacao HTTP deve usar abstracoes centralizadas.
  */
 
-import { apiClient } from "./apiClient"
+import { apiClient } from "./apiClient";
 
 export interface CreatePSBTPayload {
-  recipient: string
-  amount: number
-  coinType?: string
+  recipient: string;
+  amount: number;
+  coinType?: string;
 }
 
 export interface CreatePSBTResponse {
-  psbt: string
-  txId?: string
+  psbt: string;
+  txId?: string;
 }
 
 export async function createPSBT(
   payload: CreatePSBTPayload,
 ): Promise<CreatePSBTResponse> {
-  return apiClient.post<CreatePSBTResponse>("/crypto/create-psbt", payload)
+  return apiClient.post<CreatePSBTResponse>("/crypto/create-psbt", payload);
 }
 
 export interface BroadcastPayload {
-  signedPsbt: string
-  network?: string
+  signedPsbt: string;
+  network?: string;
 }
 
 export interface BroadcastResponse {
-  txId: string
-  status: "broadcasted" | "pending"
+  txId: string;
+  status: "broadcasted" | "pending";
 }
 
 export async function broadcastTransaction(
   payload: BroadcastPayload,
 ): Promise<BroadcastResponse> {
-  return apiClient.post<BroadcastResponse>("/crypto/broadcast", payload)
+  return apiClient.post<BroadcastResponse>("/crypto/broadcast", payload);
 }
 
 export interface WhatsAppNotificationPayload {
-  to: string
-  message: string
-  agendamentoId?: string
+  to: string;
+  message: string;
+  agendamentoId?: string;
 }
 
 export interface WhatsAppNotificationResponse {
-  ok: boolean
-  messageId?: string
+  ok: boolean;
+  messageId?: string;
 }
 
 export async function sendWhatsAppNotification(
@@ -59,5 +59,5 @@ export async function sendWhatsAppNotification(
   return apiClient.post<WhatsAppNotificationResponse>(
     "/rest/notifications/whatsapp",
     payload,
-  )
+  );
 }

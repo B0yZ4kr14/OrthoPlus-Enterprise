@@ -2,9 +2,9 @@
  * MÓDULO INVENTÁRIO - Use Case: Cadastrar Produto
  */
 
-import { randomUUID } from 'crypto';
-import { Produto } from '../../domain/entities/Produto';
-import { IProdutoRepository } from '../../domain/repositories/IProdutoRepository';
+import { randomUUID } from "crypto";
+import { Produto } from "../../domain/entities/Produto";
+import { IProdutoRepository } from "../../domain/repositories/IProdutoRepository";
 
 interface CadastrarProdutoDTO {
   clinicId: string;
@@ -26,7 +26,10 @@ export class CadastrarProdutoUseCase {
 
   async execute(dto: CadastrarProdutoDTO): Promise<Produto> {
     // Verificar duplicação por código
-    const produtoExistente = await this.produtoRepository.findByCodigo(dto.codigo, dto.clinicId);
+    const produtoExistente = await this.produtoRepository.findByCodigo(
+      dto.codigo,
+      dto.clinicId,
+    );
     if (produtoExistente) {
       throw new Error(`Já existe um produto com o código ${dto.codigo}`);
     }
@@ -38,13 +41,13 @@ export class CadastrarProdutoUseCase {
       codigo: dto.codigo,
       nome: dto.nome,
       descricao: dto.descricao ?? null,
-      categoria: dto.categoriaId ?? 'GERAL',
+      categoria: dto.categoriaId ?? "GERAL",
       unidadeMedida: dto.unidadeMedida,
       quantidadeMinima: dto.quantidadeMinima,
       quantidadeAtual: dto.quantidadeEstoque,
       precoCusto: dto.precoCusto ?? 0,
       precoVenda: dto.precoVenda ?? 0,
-      status: dto.temNfe ? 'ATIVO_NF' : 'ATIVO',
+      status: dto.temNfe ? "ATIVO_NF" : "ATIVO",
       createdAt: new Date(),
       updatedAt: new Date(),
     });

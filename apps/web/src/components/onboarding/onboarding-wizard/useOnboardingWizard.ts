@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 export function useOnboardingWizard(
   onClose?: () => void,
-  onComplete?: () => void
+  onComplete?: () => void,
 ) {
   const [currentStep, setCurrentStep] = useState(0);
   const [completed, setCompleted] = useState(false);
@@ -16,7 +16,9 @@ export function useOnboardingWizard(
 
   const trackEvent = useCallback(
     async (eventType: string, stepNumber?: number, stepName?: string) => {
-      const timeSpent = Math.floor((Date.now() - stepStartTimeRef.current) / 1000);
+      const timeSpent = Math.floor(
+        (Date.now() - stepStartTimeRef.current) / 1000,
+      );
 
       try {
         await apiClient.post("/analytics/processor", {
@@ -30,7 +32,7 @@ export function useOnboardingWizard(
         logger.error("Error tracking analytics:", error);
       }
     },
-    []
+    [],
   );
 
   const handleClose = useCallback(() => {
@@ -53,7 +55,7 @@ export function useOnboardingWizard(
         toast.success("🎉 Onboarding concluído com sucesso!");
       }
     },
-    [currentStep, trackEvent]
+    [currentStep, trackEvent],
   );
 
   const handlePrevious = useCallback(() => {

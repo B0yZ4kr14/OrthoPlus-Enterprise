@@ -42,12 +42,12 @@ export function useGitHubConfig() {
     loadConfig();
   }, [loadConfig]);
 
-  const updateConfig = useCallback(<K extends keyof GitHubConfig>(
-    field: K,
-    value: GitHubConfig[K],
-  ) => {
-    setConfig((prev) => ({ ...prev, [field]: value }));
-  }, []);
+  const updateConfig = useCallback(
+    <K extends keyof GitHubConfig>(field: K, value: GitHubConfig[K]) => {
+      setConfig((prev) => ({ ...prev, [field]: value }));
+    },
+    [],
+  );
 
   const saveConfig = useCallback(async () => {
     if (!selectedClinic) return;
@@ -65,7 +65,8 @@ export function useGitHubConfig() {
     } catch (error) {
       toast({
         title: "Erro ao salvar",
-        description: error instanceof Error ? error.message : "Erro desconhecido",
+        description:
+          error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
       });
     } finally {

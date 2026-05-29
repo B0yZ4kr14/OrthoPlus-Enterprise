@@ -33,14 +33,18 @@ interface ApiIntegracaoTabProps {
   apiAuthType: string;
 }
 
-export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegracaoTabProps) {
+export function ApiIntegracaoTab({
+  form,
+  apiEnabled,
+  apiAuthType,
+}: ApiIntegracaoTabProps) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Configuração de Integração com API</CardTitle>
         <CardDescription>
-          Configure a conexão com a API do fornecedor para envio
-          automático de pedidos
+          Configure a conexão com a API do fornecedor para envio automático de
+          pedidos
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -54,8 +58,8 @@ export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegraca
                   Habilitar Integração API
                 </FormLabel>
                 <FormDescription>
-                  Ative para permitir envio automático de pedidos via
-                  API do fornecedor
+                  Ative para permitir envio automático de pedidos via API do
+                  fornecedor
                 </FormDescription>
               </div>
               <FormControl>
@@ -96,23 +100,16 @@ export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegraca
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tipo de Autenticação *</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o tipo" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="none">
-                        Sem autenticação
-                      </SelectItem>
+                      <SelectItem value="none">Sem autenticação</SelectItem>
                       <SelectItem value="basic">Basic Auth</SelectItem>
-                      <SelectItem value="bearer">
-                        Bearer Token
-                      </SelectItem>
+                      <SelectItem value="bearer">Bearer Token</SelectItem>
                       <SelectItem value="api_key">API Key</SelectItem>
                     </SelectContent>
                   </Select>
@@ -137,7 +134,6 @@ export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegraca
                   )}
                 />
                 <FormField
-                  
                   control={form.control}
                   name="apiPassword"
                   render={({ field }) => (
@@ -159,7 +155,6 @@ export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegraca
 
             {apiAuthType === "bearer" && (
               <FormField
-                
                 control={form.control}
                 name="apiToken"
                 render={({ field }) => (
@@ -180,7 +175,6 @@ export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegraca
             {apiAuthType === "api_key" && (
               <div className="grid gap-4 md:grid-cols-2">
                 <FormField
-                  
                   control={form.control}
                   name="apiKeyHeader"
                   render={({ field }) => (
@@ -194,7 +188,6 @@ export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegraca
                   )}
                 />
                 <FormField
-                  
                   control={form.control}
                   name="apiKeyValue"
                   render={({ field }) => (
@@ -215,16 +208,12 @@ export function ApiIntegracaoTab({ form, apiEnabled, apiAuthType }: ApiIntegraca
             )}
 
             <FormField
-              
               control={form.control}
               name="apiRequestFormat"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Formato da Requisição</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o formato" />

@@ -283,7 +283,7 @@ export default function Transacoes() {
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -298,8 +298,8 @@ export default function Transacoes() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={volumeData}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="dia"  stroke="hsl(var(--muted-foreground))" />
-                <YAxis  stroke="hsl(var(--muted-foreground))" />
+                <XAxis dataKey="dia" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
                 <Tooltip
                   formatter={(value: number) =>
                     new Intl.NumberFormat("pt-BR", {

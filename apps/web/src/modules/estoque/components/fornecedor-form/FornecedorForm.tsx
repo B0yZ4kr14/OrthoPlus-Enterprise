@@ -1,7 +1,12 @@
 // cspell:disable
 import { Button } from "@orthoplus/core-ui/button";
 import { Form } from "@orthoplus/core-ui/form";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import type { Fornecedor } from "../../types/estoque.types";
 import { useFornecedorForm } from "./useFornecedorForm";
 import { DadosCadastraisTab } from "./DadosCadastraisTab";
@@ -19,14 +24,15 @@ export function FornecedorForm({
   onSubmit,
   onCancel,
 }: FornecedorFormProps) {
-  const { form, handleSubmit, apiEnabled, apiAuthType, isEditing } = useFornecedorForm({
-    fornecedor,
-    onSubmit,
-  });
+  const { form, handleSubmit, apiEnabled, apiAuthType, isEditing } =
+    useFornecedorForm({
+      fornecedor,
+      onSubmit,
+    });
 
   return (
     <Form {...form}>
-      { }
+      {}
       <form onSubmit={handleSubmit} className="space-y-6">
         <Tabs defaultValue="dados" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
@@ -36,12 +42,12 @@ export function FornecedorForm({
           </TabsList>
 
           <TabsContent value="dados" className="space-y-6">
-            { }
+            {}
             <DadosCadastraisTab form={form} />
           </TabsContent>
 
           <TabsContent value="api" className="space-y-6">
-            { }
+            {}
             <ApiIntegracaoTab
               form={form}
               apiEnabled={apiEnabled}
@@ -50,7 +56,7 @@ export function FornecedorForm({
           </TabsContent>
 
           <TabsContent value="pedidos" className="space-y-6">
-            { }
+            {}
             <PedidosAutomaticosTab form={form} apiEnabled={apiEnabled} />
           </TabsContent>
         </Tabs>
@@ -59,9 +65,7 @@ export function FornecedorForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">
-            {isEditing ? "Atualizar" : "Cadastrar"}
-          </Button>
+          <Button type="submit">{isEditing ? "Atualizar" : "Cadastrar"}</Button>
         </div>
       </form>
     </Form>

@@ -1,8 +1,5 @@
 // cspell:disable
-import {
-  Card,
-  CardContent,
-} from "@orthoplus/core-ui/card";
+import { Card, CardContent } from "@orthoplus/core-ui/card";
 import { useCryptoAnalysis } from "./useCryptoAnalysis";
 import { KpiCards } from "./KpiCards";
 import { AnalysisTabs } from "./AnalysisTabs";

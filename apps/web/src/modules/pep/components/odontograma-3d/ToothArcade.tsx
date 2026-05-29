@@ -131,10 +131,7 @@ export function ToothArcade({
         </Text>
       </Suspense>
 
-      <gridHelper
-        args={[20, 20, "#cccccc", "#eeeeee"]}
-        position={[0, -4, 0]}
-      />
+      <gridHelper args={[20, 20, "#cccccc", "#eeeeee"]} position={[0, -4, 0]} />
     </>
   );
 }

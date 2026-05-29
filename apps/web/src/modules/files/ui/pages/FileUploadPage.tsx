@@ -13,9 +13,21 @@ const CATEGORIAS = [
 ];
 
 const VISIBILIDADES = [
-  { value: "PUBLICO", label: "Público", description: "Visível para todos os usuários" },
-  { value: "RESTRITO", label: "Restrito", description: "Visível apenas para staff da clínica" },
-  { value: "CONFIDENCIAL", label: "Confidencial", description: "Visível apenas para administradores" },
+  {
+    value: "PUBLICO",
+    label: "Público",
+    description: "Visível para todos os usuários",
+  },
+  {
+    value: "RESTRITO",
+    label: "Restrito",
+    description: "Visível apenas para staff da clínica",
+  },
+  {
+    value: "CONFIDENCIAL",
+    label: "Confidencial",
+    description: "Visível apenas para administradores",
+  },
 ];
 
 export default function FileUploadPage() {
@@ -93,12 +105,16 @@ export default function FileUploadPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Visibilidade</label>
+            <label className="block text-sm font-medium mb-1">
+              Visibilidade
+            </label>
             <select
               value={visibilidade}
               onChange={(e) => setVisibilidade(e.target.value)}
               className="w-full border rounded-md px-3 py-2"
-              title={VISIBILIDADES.find((v) => v.value === visibilidade)?.description}
+              title={
+                VISIBILIDADES.find((v) => v.value === visibilidade)?.description
+              }
             >
               {VISIBILIDADES.map((vis) => (
                 <option key={vis.value} value={vis.value}>
@@ -108,7 +124,9 @@ export default function FileUploadPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">ID do Paciente (opcional)</label>
+            <label className="block text-sm font-medium mb-1">
+              ID do Paciente (opcional)
+            </label>
             <input
               type="text"
               value={pacienteId}
@@ -158,7 +176,9 @@ export default function FileUploadPage() {
                   <File className="h-5 w-5 text-muted-foreground" />
                   <div>
                     <p className="text-sm font-medium">{file.name}</p>
-                    <p className="text-xs text-muted-foreground">{formatSize(file.size)}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatSize(file.size)}
+                    </p>
                   </div>
                 </div>
                 <button

@@ -48,7 +48,9 @@ function generateMockCandlestickData(): CandlestickDataPoint[] {
 export function useCryptoAnalysis({ clinicId }: UseCryptoAnalysisProps) {
   const [exchangeRates, setExchangeRates] = useState<ExchangeRate[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [candlestickData, setCandlestickData] = useState<CandlestickDataPoint[]>([]);
+  const [candlestickData, setCandlestickData] = useState<
+    CandlestickDataPoint[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   const fetchAnalysisData = useCallback(async () => {
@@ -98,7 +100,9 @@ export function useCryptoAnalysis({ clinicId }: UseCryptoAnalysisProps) {
     const previousRate =
       exchangeRates[exchangeRates.length - 7]?.rate_brl || currentRate;
     const rateChange =
-      previousRate > 0 ? ((currentRate - previousRate) / previousRate) * 100 : 0;
+      previousRate > 0
+        ? ((currentRate - previousRate) / previousRate) * 100
+        : 0;
 
     const totalTransactions = transactions.length;
     const totalVolumeBRL = transactions.reduce(
@@ -114,12 +118,15 @@ export function useCryptoAnalysis({ clinicId }: UseCryptoAnalysisProps) {
     const cryptoFees = totalVolumeBRL * 0.005;
     const savings = traditionalFees - cryptoFees;
     const savingsPercent =
-      traditionalFees > 0 ? ((savings / traditionalFees) * 100).toFixed(1) : "0.0";
+      traditionalFees > 0
+        ? ((savings / traditionalFees) * 100).toFixed(1)
+        : "0.0";
 
     const rates = exchangeRates.map((r) => r.rate_brl);
     const lowestRate = rates.length > 0 ? Math.min(...rates) : 0;
     const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
-    const optimalConversionRate = lowestRate + (highestRate - lowestRate) * 0.25;
+    const optimalConversionRate =
+      lowestRate + (highestRate - lowestRate) * 0.25;
 
     return {
       currentRate,
@@ -138,17 +145,19 @@ export function useCryptoAnalysis({ clinicId }: UseCryptoAnalysisProps) {
     };
   }, [exchangeRates, transactions]);
 
-  const rateHistoryData: RateHistoryData[] = useMemo(() =>
-    exchangeRates.map((rate) => ({
-      date: new Date(rate.timestamp).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "2-digit",
-      }),
-      BTC: rate.coin_type === "BTC" ? rate.rate_brl : null,
-      ETH: rate.coin_type === "ETH" ? rate.rate_brl : null,
-      USDT: rate.coin_type === "USDT" ? rate.rate_brl : null,
-    })),
-  [exchangeRates]);
+  const rateHistoryData: RateHistoryData[] = useMemo(
+    () =>
+      exchangeRates.map((rate) => ({
+        date: new Date(rate.timestamp).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+        }),
+        BTC: rate.coin_type === "BTC" ? rate.rate_brl : null,
+        ETH: rate.coin_type === "ETH" ? rate.rate_brl : null,
+        USDT: rate.coin_type === "USDT" ? rate.rate_brl : null,
+      })),
+    [exchangeRates],
+  );
 
   const volumeData: VolumeData[] = useMemo(() => {
     const volumeByDay = transactions.reduce(

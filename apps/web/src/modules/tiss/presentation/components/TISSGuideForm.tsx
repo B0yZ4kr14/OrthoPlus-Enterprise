@@ -21,7 +21,10 @@ import { usePacientes } from "@/hooks/api/usePacientes";
 import { useTISSConvenios } from "@/modules/tiss/application/hooks/useTISSConvenios";
 import { useProcedimentosStore } from "@/modules/procedimentos/hooks/useProcedimentosStore";
 import { useTISSGuides } from "@/modules/tiss/application/hooks/useTISSGuides";
-import { guideFormSchema, type GuideFormData } from "@/modules/tiss/presentation/schemas/guideFormSchema";
+import {
+  guideFormSchema,
+  type GuideFormData,
+} from "@/modules/tiss/presentation/schemas/guideFormSchema";
 import { useState } from "react";
 
 export function TISSGuideForm() {
@@ -50,7 +53,7 @@ export function TISSGuideForm() {
 
   const onSubmit = (data: GuideFormData) => {
     const amountInCents = Math.round(
-      parseFloat(data.amount.replace(",", ".")) * 100
+      parseFloat(data.amount.replace(",", ".")) * 100,
     );
 
     const payload = {
@@ -96,7 +99,9 @@ export function TISSGuideForm() {
           <CardDescription>Carregando dados...</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Carregando pacientes e convênios...</p>
+          <p className="text-muted-foreground">
+            Carregando pacientes e convênios...
+          </p>
         </CardContent>
       </Card>
     );
@@ -138,7 +143,9 @@ export function TISSGuideForm() {
                 </SelectContent>
               </Select>
               {errors.patient_id && (
-                <p className="text-xs text-destructive">{errors.patient_id.message}</p>
+                <p className="text-xs text-destructive">
+                  {errors.patient_id.message}
+                </p>
               )}
             </div>
 
@@ -224,13 +231,11 @@ export function TISSGuideForm() {
 
             <div className="space-y-2">
               <Label htmlFor="amount">Valor (R$)</Label>
-              <Input
-                id="amount"
-                placeholder="0,00"
-                {...register("amount")}
-              />
+              <Input id="amount" placeholder="0,00" {...register("amount")} />
               {errors.amount && (
-                <p className="text-xs text-destructive">{errors.amount.message}</p>
+                <p className="text-xs text-destructive">
+                  {errors.amount.message}
+                </p>
               )}
             </div>
           </div>

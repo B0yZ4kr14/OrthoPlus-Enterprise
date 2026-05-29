@@ -21,7 +21,9 @@ export function useTreatmentPlan({ patientId }: TreatmentPlanTabProps) {
   const { data, isLoading } = useQuery({
     queryKey: ["patient-treatments", patientId],
     queryFn: async () => {
-      const response = await apiClient.get<Treatment[]>(`/pep/tratamentos/patient/${patientId}`);
+      const response = await apiClient.get<Treatment[]>(
+        `/pep/tratamentos/patient/${patientId}`,
+      );
       return response || [];
     },
   });

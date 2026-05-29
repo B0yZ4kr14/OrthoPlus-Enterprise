@@ -40,19 +40,19 @@ export function useGlobalSearch() {
 
       const [patients, appointments, procedures] = await Promise.all([
         apiClient
-          .get<{ id: string; full_name?: string; cpf?: string }[]>(
-            `/patients?clinic_id=eq.${clinicId}&or=(full_name.ilike.%25${query}%25,cpf.ilike.%25${query}%25)&limit=3&select=id,full_name,cpf`,
-          )
+          .get<
+            { id: string; full_name?: string; cpf?: string }[]
+          >(`/patients?clinic_id=eq.${clinicId}&or=(full_name.ilike.%25${query}%25,cpf.ilike.%25${query}%25)&limit=3&select=id,full_name,cpf`)
           .catch(() => null),
         apiClient
-          .get<{ id: string; title?: string; start_time?: string }[]>(
-            `/appointments?clinic_id=eq.${clinicId}&title=ilike.%25${query}%25&limit=3&select=id,title,start_time`,
-          )
+          .get<
+            { id: string; title?: string; start_time?: string }[]
+          >(`/appointments?clinic_id=eq.${clinicId}&title=ilike.%25${query}%25&limit=3&select=id,title,start_time`)
           .catch(() => null),
         apiClient
-          .get<Procedure[]>(
-            `/procedimentos_odontologicos?nome=ilike.%25${query}%25&limit=3&select=id,nome,codigo`,
-          )
+          .get<
+            Procedure[]
+          >(`/procedimentos_odontologicos?nome=ilike.%25${query}%25&limit=3&select=id,nome,codigo`)
           .catch(() => null),
       ]);
 
@@ -74,7 +74,9 @@ export function useGlobalSearch() {
           ...appointments.map((a) => ({
             id: a.id,
             title: a.title || "",
-            subtitle: a.start_time ? new Date(a.start_time).toLocaleDateString("pt-BR") : "",
+            subtitle: a.start_time
+              ? new Date(a.start_time).toLocaleDateString("pt-BR")
+              : "",
             type: "appointment" as const,
             route: `/agenda`,
             icon: Calendar,

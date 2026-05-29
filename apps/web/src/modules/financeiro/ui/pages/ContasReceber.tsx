@@ -7,7 +7,10 @@ import { PaymentDialog } from "@/components/financeiro/PaymentDialog";
 import { useContasReceberController } from "../../application/hooks/useContasReceberController";
 import { ContasReceberKPIs } from "../components/ContasReceberKPIs";
 import { ContasReceberChart } from "../components/ContasReceberChart";
-import { ContasReceberFilters, type ContasReceberFormData } from "../components/ContasReceberFilters";
+import {
+  ContasReceberFilters,
+  type ContasReceberFormData,
+} from "../components/ContasReceberFilters";
 import { ContasReceberTable } from "../components/ContasReceberTable";
 import { NovaContaWizard } from "../components/NovaContaWizard";
 

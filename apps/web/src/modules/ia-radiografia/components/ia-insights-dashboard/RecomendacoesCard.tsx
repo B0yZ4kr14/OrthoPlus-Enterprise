@@ -36,7 +36,11 @@ export function RecomendacoesCard({ recomendacoes }: RecomendacoesCardProps) {
                   {rec.descricao}
                 </AlertDescription>
               </div>
-              <Badge variant={getPrioridadeColor(rec.prioridade) as unknown as undefined}>
+              <Badge
+                variant={
+                  getPrioridadeColor(rec.prioridade) as unknown as undefined
+                }
+              >
                 {rec.prioridade.toUpperCase()}
               </Badge>
             </div>

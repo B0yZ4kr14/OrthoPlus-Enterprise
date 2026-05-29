@@ -6,7 +6,7 @@ export class OperacionalDatabaseManager extends CategoryDatabaseManager {
     super(
       ["operacional", "inventario"],
       "OPERACIONAL",
-      new OperacionalBackupService()
+      new OperacionalBackupService(),
     );
   }
 }

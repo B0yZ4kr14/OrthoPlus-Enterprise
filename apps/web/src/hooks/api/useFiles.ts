@@ -64,9 +64,11 @@ export function useFiles(filters?: FileListFilters) {
       const params = new URLSearchParams();
       if (filters?.pacienteId) params.append("pacienteId", filters.pacienteId);
       if (filters?.consultaId) params.append("consultaId", filters.consultaId);
-      if (filters?.orcamentoId) params.append("orcamentoId", filters.orcamentoId);
+      if (filters?.orcamentoId)
+        params.append("orcamentoId", filters.orcamentoId);
       if (filters?.categoria) params.append("categoria", filters.categoria);
-      if (filters?.visibilidade) params.append("visibilidade", filters.visibilidade);
+      if (filters?.visibilidade)
+        params.append("visibilidade", filters.visibilidade);
 
       const query = params.toString();
       const url = `/files${query ? `?${query}` : ""}`;
@@ -87,13 +89,18 @@ export function useUploadFile() {
       if (input.consultaId) formData.append("consultaId", input.consultaId);
       if (input.orcamentoId) formData.append("orcamentoId", input.orcamentoId);
       if (input.categoria) formData.append("categoria", input.categoria);
-      if (input.visibilidade) formData.append("visibilidade", input.visibilidade);
+      if (input.visibilidade)
+        formData.append("visibilidade", input.visibilidade);
 
-      const response = await apiClient.post<{ data: FileRecord }>("/files/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const response = await apiClient.post<{ data: FileRecord }>(
+        "/files/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
       return response.data;
     },
     onSuccess: () => {
@@ -174,7 +181,9 @@ export function useSearchFilesByText(query: string) {
     queryFn: async () => {
       const params = new URLSearchParams();
       params.append("query", query);
-      return await apiClient.get<SearchFilesByTextResult[]>(`/files/search?${params.toString()}`);
+      return await apiClient.get<SearchFilesByTextResult[]>(
+        `/files/search?${params.toString()}`,
+      );
     },
     enabled: query.length >= 2,
   });
@@ -205,14 +214,20 @@ export function useCreateVersion() {
       const formData = new FormData();
       formData.append("file", input.file);
 
-      return await apiClient.post<FileVersion>(`/files/${input.fileId}/versions`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      return await apiClient.post<FileVersion>(
+        `/files/${input.fileId}/versions`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
     },
     onSuccess: (_data, input) => {
-      queryClient.invalidateQueries({ queryKey: ["files", input.fileId, "versions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["files", input.fileId, "versions"],
+      });
       queryClient.invalidateQueries({ queryKey: [FILES_QUERY_KEY] });
     },
   });
@@ -233,7 +248,9 @@ export function useRestoreVersion() {
       );
     },
     onSuccess: (_data, input) => {
-      queryClient.invalidateQueries({ queryKey: ["files", input.fileId, "versions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["files", input.fileId, "versions"],
+      });
       queryClient.invalidateQueries({ queryKey: [FILES_QUERY_KEY] });
     },
   });

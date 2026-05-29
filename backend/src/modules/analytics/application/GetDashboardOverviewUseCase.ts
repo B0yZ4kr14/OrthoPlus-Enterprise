@@ -1,26 +1,34 @@
-import { MetricsEmitter } from "@/infrastructure/metrics"
-import type { DashboardStats } from "@orthoplus/shared-types"
-import type { IAnalyticsRepository } from "../domain/repositories/IAnalyticsRepository"
+import { MetricsEmitter } from "@/infrastructure/metrics";
+import type { DashboardStats } from "@orthoplus/shared-types";
+import type { IAnalyticsRepository } from "../domain/repositories/IAnalyticsRepository";
 
 export interface DashboardOverviewResult {
-  stats: DashboardStats
-  appointmentsData: Array<{ name: string; agendadas: number; realizadas: number }>
-  revenueData: Array<{ name: string; receita: number; despesas: number }>
-  treatmentsByStatus: Array<{ name: string; value: number }>
+  stats: DashboardStats;
+  appointmentsData: Array<{
+    name: string;
+    agendadas: number;
+    realizadas: number;
+  }>;
+  revenueData: Array<{ name: string; receita: number; despesas: number }>;
+  treatmentsByStatus: Array<{ name: string; value: number }>;
 }
 
 /**
  * GetDashboardOverviewUseCase — computes the dashboard overview for a clinic.
  */
 export class GetDashboardOverviewUseCase {
-  private repo: IAnalyticsRepository
+  private repo: IAnalyticsRepository;
 
   constructor(repo: IAnalyticsRepository) {
-    this.repo = repo
+    this.repo = repo;
   }
 
   async execute(clinicId: string): Promise<DashboardOverviewResult> {
-    MetricsEmitter.incrementCounter("analytics_dashboard_queried", "Dashboard overview queried", { clinicId })
+    MetricsEmitter.incrementCounter(
+      "analytics_dashboard_queried",
+      "Dashboard overview queried",
+      { clinicId },
+    );
 
     const [
       totalPatients,
@@ -36,7 +44,7 @@ export class GetDashboardOverviewUseCase {
       this.repo.calculateOccupancyRate(clinicId),
       this.repo.countTreatmentsByStatus(clinicId, "EM_ANDAMENTO"),
       this.repo.countTreatmentsByStatus(clinicId, "CONCLUIDO"),
-    ])
+    ]);
 
     let stats: DashboardStats = {
       totalPatients,
@@ -45,13 +53,13 @@ export class GetDashboardOverviewUseCase {
       occupancyRate,
       pendingTreatments,
       completedTreatments,
-    }
+    };
 
     // Fallback to demo data when no real data exists
     const isEmpty =
       stats.totalPatients === 0 &&
       stats.todayAppointments === 0 &&
-      stats.monthlyRevenue === 0
+      stats.monthlyRevenue === 0;
 
     if (isEmpty) {
       stats = {
@@ -61,7 +69,7 @@ export class GetDashboardOverviewUseCase {
         occupancyRate: 78,
         pendingTreatments: 42,
         completedTreatments: 156,
-      }
+      };
     }
 
     return {
@@ -88,6 +96,6 @@ export class GetDashboardOverviewUseCase {
         { name: "Pendente", value: 18 },
         { name: "Cancelado", value: 5 },
       ],
-    }
+    };
   }
 }

@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 import { StatsCard } from "@/components/shared/StatsCard";
-import { Calendar, FileText, CheckCircle2, Activity, Users } from "lucide-react";
+import {
+  Calendar,
+  FileText,
+  CheckCircle2,
+  Activity,
+  Users,
+} from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { StaggerGrid, statsStagger } from "./DashboardAnimations";
 import type { DashboardStats } from "@orthoplus/shared-types";
@@ -9,7 +15,9 @@ interface DashboardTabClinicoProps {
   stats: DashboardStats;
 }
 
-export default function DashboardTabClinico({ stats }: DashboardTabClinicoProps) {
+export default function DashboardTabClinico({
+  stats,
+}: DashboardTabClinicoProps) {
   return (
     <StaggerGrid
       variants={statsStagger}

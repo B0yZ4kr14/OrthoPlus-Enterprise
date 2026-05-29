@@ -1,12 +1,15 @@
-import Database from "better-sqlite3"
-import crypto from "crypto"
-import { ISearchAuditRepository, SearchAuditEntry } from "../domain/ports/ISearchAuditRepository"
+import Database from "better-sqlite3";
+import crypto from "crypto";
+import {
+  ISearchAuditRepository,
+  SearchAuditEntry,
+} from "../domain/ports/ISearchAuditRepository";
 
 export class SearchAuditRepository implements ISearchAuditRepository {
-  private db: Database.Database
+  private db: Database.Database;
 
   constructor(db: Database.Database) {
-    this.db = db
+    this.db = db;
   }
 
   logQuery(
@@ -19,7 +22,7 @@ export class SearchAuditRepository implements ISearchAuditRepository {
     const stmt = this.db.prepare(
       `INSERT INTO search_queries (id, clinic_id, user_id, query_text, results_count, duration_ms, timestamp)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    )
+    );
     stmt.run(
       crypto.randomUUID(),
       clinicId,
@@ -28,7 +31,7 @@ export class SearchAuditRepository implements ISearchAuditRepository {
       resultsCount,
       durationMs,
       Date.now(),
-    )
+    );
   }
 
   getRecentQueries(clinicId: string, limit = 100): SearchAuditEntry[] {
@@ -39,7 +42,7 @@ export class SearchAuditRepository implements ISearchAuditRepository {
        WHERE clinic_id = ?
        ORDER BY timestamp DESC
        LIMIT ?`,
-    )
-    return stmt.all(clinicId, limit) as SearchAuditEntry[]
+    );
+    return stmt.all(clinicId, limit) as SearchAuditEntry[];
   }
 }

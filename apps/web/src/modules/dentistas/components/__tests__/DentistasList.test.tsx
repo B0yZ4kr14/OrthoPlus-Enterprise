@@ -1,17 +1,17 @@
-import React from "react"
-import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render, screen, act, fireEvent } from "@testing-library/react"
-import { DentistasList } from "../DentistasList"
-import type { Dentista } from "../../types/dentista.types"
+import React from "react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, act, fireEvent } from "@testing-library/react";
+import { DentistasList } from "../DentistasList";
+import type { Dentista } from "../../types/dentista.types";
 
-const mockOnEdit = vi.fn()
-const mockOnDelete = vi.fn()
-const mockOnView = vi.fn()
-const mockOnAdd = vi.fn()
+const mockOnEdit = vi.fn();
+const mockOnDelete = vi.fn();
+const mockOnView = vi.fn();
+const mockOnAdd = vi.fn();
 
 vi.mock("@/modules/dentistas/hooks/useDentistasStore", () => ({
   useDentistasStore: () => ({}),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/select", () => ({
   Select: ({ children, value, onValueChange }: any) => (
@@ -22,10 +22,12 @@ vi.mock("@orthoplus/core-ui/select", () => ({
     </div>
   ),
   SelectContent: ({ children }: any) => <>{children}</>,
-  SelectItem: ({ value, children }: any) => <option value={value}>{children}</option>,
+  SelectItem: ({ value, children }: any) => (
+    <option value={value}>{children}</option>
+  ),
   SelectTrigger: () => null,
   SelectValue: ({ placeholder }: any) => <span>{placeholder}</span>,
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/alert-dialog", () => ({
   AlertDialog: ({ children, open }: any) =>
@@ -45,7 +47,7 @@ vi.mock("@orthoplus/core-ui/alert-dialog", () => ({
   AlertDialogFooter: ({ children }: any) => <div>{children}</div>,
   AlertDialogHeader: ({ children }: any) => <div>{children}</div>,
   AlertDialogTitle: ({ children }: any) => <h2>{children}</h2>,
-}))
+}));
 
 function createMockDentistas(): Dentista[] {
   return [
@@ -134,13 +136,13 @@ function createMockDentistas(): Dentista[] {
       createdAt: "2024-03-05T11:00:00",
       updatedAt: "2024-03-05T11:00:00",
     },
-  ] as Dentista[]
+  ] as Dentista[];
 }
 
 describe("DentistasList", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it("should render dentistas list with data", () => {
     render(
@@ -151,14 +153,14 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    expect(screen.getByText("Dr. Carlos Silva")).toBeTruthy()
-    expect(screen.getByText("Dra. Ana Santos")).toBeTruthy()
-    expect(screen.getByText("Dr. Pedro Costa")).toBeTruthy()
-    expect(screen.getByText("CRO-SP 12345")).toBeTruthy()
-    expect(screen.getByText("3 dentista(s) encontrado(s)")).toBeTruthy()
-  })
+    expect(screen.getByText("Dr. Carlos Silva")).toBeTruthy();
+    expect(screen.getByText("Dra. Ana Santos")).toBeTruthy();
+    expect(screen.getByText("Dr. Pedro Costa")).toBeTruthy();
+    expect(screen.getByText("CRO-SP 12345")).toBeTruthy();
+    expect(screen.getByText("3 dentista(s) encontrado(s)")).toBeTruthy();
+  });
 
   it("should render empty state when no dentistas are provided", () => {
     render(
@@ -169,11 +171,11 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    expect(screen.getByText("Nenhum dentista encontrado")).toBeTruthy()
-    expect(screen.getByText("0 dentista(s) encontrado(s)")).toBeTruthy()
-  })
+    expect(screen.getByText("Nenhum dentista encontrado")).toBeTruthy();
+    expect(screen.getByText("0 dentista(s) encontrado(s)")).toBeTruthy();
+  });
 
   it("should call onAdd when Novo Dentista button is clicked", () => {
     render(
@@ -184,15 +186,15 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const addButton = screen.getByText("Novo Dentista")
+    const addButton = screen.getByText("Novo Dentista");
     act(() => {
-      addButton.click()
-    })
+      addButton.click();
+    });
 
-    expect(mockOnAdd).toHaveBeenCalled()
-  })
+    expect(mockOnAdd).toHaveBeenCalled();
+  });
 
   it("should call onView when view button is clicked", () => {
     render(
@@ -203,17 +205,17 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const viewButtons = screen.getAllByTitle("Visualizar")
+    const viewButtons = screen.getAllByTitle("Visualizar");
     act(() => {
-      viewButtons[0].click()
-    })
+      viewButtons[0].click();
+    });
 
     expect(mockOnView).toHaveBeenCalledWith(
       expect.objectContaining({ id: "1", nome: "Dr. Carlos Silva" }),
-    )
-  })
+    );
+  });
 
   it("should call onEdit when edit button is clicked", () => {
     render(
@@ -224,17 +226,17 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const editButtons = screen.getAllByTitle("Editar")
+    const editButtons = screen.getAllByTitle("Editar");
     act(() => {
-      editButtons[0].click()
-    })
+      editButtons[0].click();
+    });
 
     expect(mockOnEdit).toHaveBeenCalledWith(
       expect.objectContaining({ id: "1", nome: "Dr. Carlos Silva" }),
-    )
-  })
+    );
+  });
 
   it("should show delete confirmation dialog and call onDelete on confirm", () => {
     render(
@@ -245,23 +247,23 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const deleteButtons = screen.getAllByTitle("Excluir")
+    const deleteButtons = screen.getAllByTitle("Excluir");
     act(() => {
-      deleteButtons[0].click()
-    })
+      deleteButtons[0].click();
+    });
 
-    expect(screen.getByTestId("alert-dialog")).toBeTruthy()
-    expect(screen.getByText("Confirmar exclusão")).toBeTruthy()
+    expect(screen.getByTestId("alert-dialog")).toBeTruthy();
+    expect(screen.getByText("Confirmar exclusão")).toBeTruthy();
 
-    const confirmButton = screen.getByTestId("alert-action")
+    const confirmButton = screen.getByTestId("alert-action");
     act(() => {
-      confirmButton.click()
-    })
+      confirmButton.click();
+    });
 
-    expect(mockOnDelete).toHaveBeenCalledWith("1")
-  })
+    expect(mockOnDelete).toHaveBeenCalledWith("1");
+  });
 
   it("should filter by search term (nome)", () => {
     render(
@@ -272,18 +274,20 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const searchInput = screen.getByPlaceholderText("Buscar por nome, CRO, CPF, email...")
+    const searchInput = screen.getByPlaceholderText(
+      "Buscar por nome, CRO, CPF, email...",
+    );
 
     act(() => {
-      fireEvent.change(searchInput, { target: { value: "Ana" } })
-    })
+      fireEvent.change(searchInput, { target: { value: "Ana" } });
+    });
 
-    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy()
-    expect(screen.queryByText("Dr. Carlos Silva")).toBeNull()
-    expect(screen.getByText("Dra. Ana Santos")).toBeTruthy()
-  })
+    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy();
+    expect(screen.queryByText("Dr. Carlos Silva")).toBeNull();
+    expect(screen.getByText("Dra. Ana Santos")).toBeTruthy();
+  });
 
   it("should filter by search term (cro)", () => {
     render(
@@ -294,17 +298,19 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const searchInput = screen.getByPlaceholderText("Buscar por nome, CRO, CPF, email...")
+    const searchInput = screen.getByPlaceholderText(
+      "Buscar por nome, CRO, CPF, email...",
+    );
 
     act(() => {
-      fireEvent.change(searchInput, { target: { value: "67890" } })
-    })
+      fireEvent.change(searchInput, { target: { value: "67890" } });
+    });
 
-    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy()
-    expect(screen.getByText("Dr. Pedro Costa")).toBeTruthy()
-  })
+    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy();
+    expect(screen.getByText("Dr. Pedro Costa")).toBeTruthy();
+  });
 
   it("should filter by status", () => {
     render(
@@ -315,19 +321,21 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const selects = screen.getAllByTestId("select")
-    const statusSelect = selects[0].querySelector("select") as HTMLSelectElement
+    const selects = screen.getAllByTestId("select");
+    const statusSelect = selects[0].querySelector(
+      "select",
+    ) as HTMLSelectElement;
 
     act(() => {
-      fireEvent.change(statusSelect, { target: { value: "Férias" } })
-    })
+      fireEvent.change(statusSelect, { target: { value: "Férias" } });
+    });
 
-    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy()
-    expect(screen.getByText("Dr. Pedro Costa")).toBeTruthy()
-    expect(screen.queryByText("Dr. Carlos Silva")).toBeNull()
-  })
+    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy();
+    expect(screen.getByText("Dr. Pedro Costa")).toBeTruthy();
+    expect(screen.queryByText("Dr. Carlos Silva")).toBeNull();
+  });
 
   it("should filter by especialidade", () => {
     render(
@@ -338,19 +346,23 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const selects = screen.getAllByTestId("select")
-    const especialidadeSelect = selects[1].querySelector("select") as HTMLSelectElement
+    const selects = screen.getAllByTestId("select");
+    const especialidadeSelect = selects[1].querySelector(
+      "select",
+    ) as HTMLSelectElement;
 
     act(() => {
-      fireEvent.change(especialidadeSelect, { target: { value: "Ortodontia" } })
-    })
+      fireEvent.change(especialidadeSelect, {
+        target: { value: "Ortodontia" },
+      });
+    });
 
-    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy()
-    expect(screen.getByText("Dr. Carlos Silva")).toBeTruthy()
-    expect(screen.queryByText("Dra. Ana Santos")).toBeNull()
-  })
+    expect(screen.getByText("1 dentista(s) encontrado(s)")).toBeTruthy();
+    expect(screen.getByText("Dr. Carlos Silva")).toBeTruthy();
+    expect(screen.queryByText("Dra. Ana Santos")).toBeNull();
+  });
 
   it("should show empty state when filter matches nothing", () => {
     render(
@@ -361,15 +373,17 @@ describe("DentistasList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const searchInput = screen.getByPlaceholderText("Buscar por nome, CRO, CPF, email...")
+    const searchInput = screen.getByPlaceholderText(
+      "Buscar por nome, CRO, CPF, email...",
+    );
 
     act(() => {
-      fireEvent.change(searchInput, { target: { value: "zzzzzzz" } })
-    })
+      fireEvent.change(searchInput, { target: { value: "zzzzzzz" } });
+    });
 
-    expect(screen.getByText("Nenhum dentista encontrado")).toBeTruthy()
-    expect(screen.getByText("0 dentista(s) encontrado(s)")).toBeTruthy()
-  })
-})
+    expect(screen.getByText("Nenhum dentista encontrado")).toBeTruthy();
+    expect(screen.getByText("0 dentista(s) encontrado(s)")).toBeTruthy();
+  });
+});

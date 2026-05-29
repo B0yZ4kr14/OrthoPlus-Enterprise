@@ -1,6 +1,6 @@
 /**
  * BackupMetrics — Observabilidade de Backups por Categoria
- * 
+ *
  * Métricas exportadas:
  * - orthoplus_backup_duration_seconds
  * - orthoplus_backup_size_bytes

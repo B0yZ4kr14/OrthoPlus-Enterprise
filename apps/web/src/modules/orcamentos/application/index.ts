@@ -19,4 +19,4 @@
 
 // Exportar DTOs quando criados
 // export * from './dto';
-export {}
+export {};

@@ -52,7 +52,9 @@ export function DadosPessoaisTab({
             placeholder="Nome do funcionário"
           />
           {errors?.nome && (
-            <p className="text-sm text-destructive">{String(errors.nome.message)}</p>
+            <p className="text-sm text-destructive">
+              {String(errors.nome.message)}
+            </p>
           )}
         </div>
 
@@ -65,19 +67,19 @@ export function DadosPessoaisTab({
             placeholder="email@exemplo.com"
           />
           {errors?.email && (
-            <p className="text-sm text-destructive">{String(errors.email.message)}</p>
+            <p className="text-sm text-destructive">
+              {String(errors.email.message)}
+            </p>
           )}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="cpf">CPF *</Label>
-          <Input
-            id="cpf"
-            {...register("cpf")}
-            placeholder="000.000.000-00"
-          />
+          <Input id="cpf" {...register("cpf")} placeholder="000.000.000-00" />
           {errors?.cpf && (
-            <p className="text-sm text-destructive">{String(errors.cpf.message)}</p>
+            <p className="text-sm text-destructive">
+              {String(errors.cpf.message)}
+            </p>
           )}
         </div>
 
@@ -89,7 +91,9 @@ export function DadosPessoaisTab({
             placeholder="(00) 00000-0000"
           />
           {errors?.telefone && (
-            <p className="text-sm text-destructive">{String(errors.telefone.message)}</p>
+            <p className="text-sm text-destructive">
+              {String(errors.telefone.message)}
+            </p>
           )}
         </div>
 
@@ -101,15 +105,13 @@ export function DadosPessoaisTab({
                 variant="outline"
                 className={cn(
                   "w-full justify-start text-left font-normal",
-                  !dataNascimento && "text-muted-foreground"
+                  !dataNascimento && "text-muted-foreground",
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {dataNascimento ? (
-                  formatDate(dataNascimento)
-                ) : (
-                  "Selecione uma data"
-                )}
+                {dataNascimento
+                  ? formatDate(dataNascimento)
+                  : "Selecione uma data"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">

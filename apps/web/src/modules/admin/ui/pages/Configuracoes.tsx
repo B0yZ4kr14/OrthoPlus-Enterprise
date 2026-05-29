@@ -20,7 +20,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import { useNavigate } from "react-router-dom";
 import ModulesSimple from "@/modules/settings/ui/pages/ModulesSimple";
@@ -96,10 +101,34 @@ export default function Configuracoes() {
       />
 
       <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard title="Módulos Ativos" value={7} icon={Package} variant="primary" description="Funcionalidades habilitadas" />
-        <StatsCard title="Usuários" value={1} icon={Users} variant="success" description="Administradores e membros" />
-        <StatsCard title="Backups" value={0} icon={Database} variant="warning" description="Backups automáticos" />
-        <StatsCard title="Notificações" value={0} icon={Bell} variant="default" description="Alertas configurados" />
+        <StatsCard
+          title="Módulos Ativos"
+          value={7}
+          icon={Package}
+          variant="primary"
+          description="Funcionalidades habilitadas"
+        />
+        <StatsCard
+          title="Usuários"
+          value={1}
+          icon={Users}
+          variant="success"
+          description="Administradores e membros"
+        />
+        <StatsCard
+          title="Backups"
+          value={0}
+          icon={Database}
+          variant="warning"
+          description="Backups automáticos"
+        />
+        <StatsCard
+          title="Notificações"
+          value={0}
+          icon={Bell}
+          variant="default"
+          description="Alertas configurados"
+        />
       </div>
 
       <Tabs
@@ -133,24 +162,42 @@ export default function Configuracoes() {
         </TabsContent>
 
         <TabsContent value="permissions" className="space-y-4">
-          <Card variant="elevated"><PermissionTemplates /></Card>
-          <Card variant="elevated"><ModulePermissionsManager /></Card>
-          <Card variant="elevated"><PermissionAuditLogs /></Card>
+          <Card variant="elevated">
+            <PermissionTemplates />
+          </Card>
+          <Card variant="elevated">
+            <ModulePermissionsManager />
+          </Card>
+          <Card variant="elevated">
+            <PermissionAuditLogs />
+          </Card>
         </TabsContent>
 
         <TabsContent value="users" className="space-y-4">
-          <Card variant="elevated"><UserManagementTab /></Card>
+          <Card variant="elevated">
+            <UserManagementTab />
+          </Card>
         </TabsContent>
 
         <TabsContent value="administration" className="space-y-4">
-          <Card variant="elevated"><BackendSelector /></Card>
-          <Card variant="elevated"><GitHubIntegrationConfig /></Card>
-          <Card variant="elevated"><AuthenticationConfig /></Card>
-          <Card variant="elevated"><AIModelConfig /></Card>
+          <Card variant="elevated">
+            <BackendSelector />
+          </Card>
+          <Card variant="elevated">
+            <GitHubIntegrationConfig />
+          </Card>
+          <Card variant="elevated">
+            <AuthenticationConfig />
+          </Card>
+          <Card variant="elevated">
+            <AIModelConfig />
+          </Card>
         </TabsContent>
 
         <TabsContent value="backups" className="space-y-4">
-          <Card variant="elevated"><DatabaseBackupTab /></Card>
+          <Card variant="elevated">
+            <DatabaseBackupTab />
+          </Card>
         </TabsContent>
 
         <TabsContent value="database" className="space-y-4">
@@ -168,7 +215,8 @@ export default function Configuracoes() {
                 </Button>
               </CardTitle>
               <CardDescription>
-                Controle por categoria, backups, manutenção e monitoramento de motores de banco de dados.
+                Controle por categoria, backups, manutenção e monitoramento de
+                motores de banco de dados.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -203,7 +251,9 @@ export default function Configuracoes() {
             </CardContent>
           </Card>
 
-          <Card variant="elevated"><DatabaseBackupTab /></Card>
+          <Card variant="elevated">
+            <DatabaseBackupTab />
+          </Card>
         </TabsContent>
 
         <DataMigrationWizard

@@ -15,16 +15,16 @@ O **OrthoPlus Enterprise** é um sistema de gestão odontológica completo, comp
 
 > **Arquivo de configuração:** `VPS-TSiAPP.md`
 
-| Variável | Valor |
-|----------|-------|
-| Variável | Valor | Descrição |
-|----------|-------|-----------|
-| `VPS_TSiAPP_HOSTNAME` | `TSiAPP` | Hostname do servidor |
-| `VPS_TSiAPP_IP_PUBLIC` | `179.190.15.116` | IP público (Internet) |
-| `VPS_TSiAPP_IP_TAILSCALE` | `100.111.74.69` | IP Tailscale (rede privada) |
-| `VPS_TSiAPP_KEY` | `~/.ssh/keys/private/TSiHomeLab` | Chave SSH canônica |
-| `VPS_TSiAPP_USER` | `tsi` | Usuário padrão |
-| `VPS_TSiAPP_PORT` | `22` | Porta SSH |
+| Variável                  | Valor                            |
+| ------------------------- | -------------------------------- | --------------------------- |
+| Variável                  | Valor                            | Descrição                   |
+| ----------                | -------                          | -----------                 |
+| `VPS_TSiAPP_HOSTNAME`     | `TSiAPP`                         | Hostname do servidor        |
+| `VPS_TSiAPP_IP_PUBLIC`    | `179.190.15.116`                 | IP público (Internet)       |
+| `VPS_TSiAPP_IP_TAILSCALE` | `100.111.74.69`                  | IP Tailscale (rede privada) |
+| `VPS_TSiAPP_KEY`          | `~/.ssh/keys/private/TSiHomeLab` | Chave SSH canônica          |
+| `VPS_TSiAPP_USER`         | `tsi`                            | Usuário padrão              |
+| `VPS_TSiAPP_PORT`         | `22`                             | Porta SSH                   |
 
 ### Acesso SSH (passwordless)
 
@@ -52,11 +52,11 @@ docker compose ps
 
 ### Healthchecks
 
-| Serviço | URL Local | Via Nginx |
-|---------|-----------|-----------|
-| Backend API | `http://127.0.0.1:3005/health` | `https://tsiapp.io/api/orthoplus/health` |
-| Frontend SPA | `http://127.0.0.1:8083/` | `https://tsiapp.io/` |
-| Agent Service | `http://127.0.0.1:8000/` | `https://tsiapp.io/api/agent/` |
+| Serviço       | URL Local                      | Via Nginx                                |
+| ------------- | ------------------------------ | ---------------------------------------- |
+| Backend API   | `http://127.0.0.1:3005/health` | `https://tsiapp.io/api/orthoplus/health` |
+| Frontend SPA  | `http://127.0.0.1:8083/`       | `https://tsiapp.io/`                     |
+| Agent Service | `http://127.0.0.1:8000/`       | `https://tsiapp.io/api/agent/`           |
 
 ## Estrutura do Monorepo
 
@@ -76,55 +76,55 @@ OrthoPlus-Enterprise/
 
 ## Módulos Backend (35)
 
-| Domínio | Módulo | Status |
-|---------|--------|--------|
-| Agenda | `agenda` | ✅ Funcional |
-| Admin | `admin_tools` | ✅ Funcional |
-| Analytics | `analytics` | ✅ Funcional |
-| Auth | `auth` | ✅ Funcional |
-| Backups | `backups` | ✅ Funcional |
-| BI | `bi` | ✅ Funcional |
-| Comunicação | `comm` | ✅ Funcional |
-| Configurações | `configuracoes` | ✅ Funcional |
-| Contratos | `contratos` | ✅ Funcional |
-| CRM | `crm` | ✅ Funcional |
-| Crypto | `crypto_config` | ✅ Funcional |
-| Dashboard | `dashboard` | ✅ Funcional |
-| Database Admin | `database_admin` | ✅ Funcional |
-| Faturamento | `faturamento` | ✅ Funcional |
-| Fidelidade | `fidelidade` | ✅ Funcional |
-| Arquivos | `files` | ✅ Funcional |
-| Financeiro | `financeiro` | ✅ Funcional |
-| Funcionários | `funcionarios` | ✅ Funcional |
-| GitHub Tools | `github_tools` | ✅ Funcional |
-| Inadimplência | `inadimplencia` | ✅ Funcional |
-| Inventário | `inventario` | ✅ Funcional |
-| LGPD | `lgpd` | ✅ Funcional |
-| Marketing | `marketing` | ✅ Funcional |
-| NF-e | `nfe` | ✅ Funcional |
-| Notificações | `notifications` | ✅ Funcional |
-| Orçamentos | `orcamentos` | ✅ Funcional |
-| Pacientes | `pacientes` | ✅ Funcional |
-| PDV | `pdv` | ✅ Funcional |
-| PEP | `pep` | ✅ Funcional |
-| Procedimentos | `procedimentos` | ✅ Funcional |
+| Domínio         | Módulo            | Status       |
+| --------------- | ----------------- | ------------ |
+| Agenda          | `agenda`          | ✅ Funcional |
+| Admin           | `admin_tools`     | ✅ Funcional |
+| Analytics       | `analytics`       | ✅ Funcional |
+| Auth            | `auth`            | ✅ Funcional |
+| Backups         | `backups`         | ✅ Funcional |
+| BI              | `bi`              | ✅ Funcional |
+| Comunicação     | `comm`            | ✅ Funcional |
+| Configurações   | `configuracoes`   | ✅ Funcional |
+| Contratos       | `contratos`       | ✅ Funcional |
+| CRM             | `crm`             | ✅ Funcional |
+| Crypto          | `crypto_config`   | ✅ Funcional |
+| Dashboard       | `dashboard`       | ✅ Funcional |
+| Database Admin  | `database_admin`  | ✅ Funcional |
+| Faturamento     | `faturamento`     | ✅ Funcional |
+| Fidelidade      | `fidelidade`      | ✅ Funcional |
+| Arquivos        | `files`           | ✅ Funcional |
+| Financeiro      | `financeiro`      | ✅ Funcional |
+| Funcionários    | `funcionarios`    | ✅ Funcional |
+| GitHub Tools    | `github_tools`    | ✅ Funcional |
+| Inadimplência   | `inadimplencia`   | ✅ Funcional |
+| Inventário      | `inventario`      | ✅ Funcional |
+| LGPD            | `lgpd`            | ✅ Funcional |
+| Marketing       | `marketing`       | ✅ Funcional |
+| NF-e            | `nfe`             | ✅ Funcional |
+| Notificações    | `notifications`   | ✅ Funcional |
+| Orçamentos      | `orcamentos`      | ✅ Funcional |
+| Pacientes       | `pacientes`       | ✅ Funcional |
+| PDV             | `pdv`             | ✅ Funcional |
+| PEP             | `pep`             | ✅ Funcional |
+| Procedimentos   | `procedimentos`   | ✅ Funcional |
 | Split Pagamento | `split_pagamento` | ✅ Funcional |
-| Teleodonto | `teleodonto` | ✅ Funcional |
-| Terminal | `terminal` | ✅ Funcional |
-| TISS | `tiss` | ✅ Funcional |
-| Usuários | `usuarios` | ✅ Funcional |
-| Agents IA | `agents` | ✅ Funcional |
+| Teleodonto      | `teleodonto`      | ✅ Funcional |
+| Terminal        | `terminal`        | ✅ Funcional |
+| TISS            | `tiss`            | ✅ Funcional |
+| Usuários        | `usuarios`        | ✅ Funcional |
+| Agents IA       | `agents`          | ✅ Funcional |
 
 ## Stack Tecnológica
 
-| Camada | Tecnologia |
-|--------|------------|
-| **Frontend** | React 19, Vite 6, Tailwind CSS, shadcn/ui, Zustand |
-| **Backend** | Node.js 20, Express 4, Prisma 6, TypeScript 5.9 |
-| **Agent Service** | Python 3.14, FastAPI, Agno 2.5 |
-| **Database** | PostgreSQL 16, Redis 7 |
-| **Auth** | JWT + bcrypt |
-| **Deploy** | PM2, Nginx, Docker |
+| Camada            | Tecnologia                                         |
+| ----------------- | -------------------------------------------------- |
+| **Frontend**      | React 19, Vite 6, Tailwind CSS, shadcn/ui, Zustand |
+| **Backend**       | Node.js 20, Express 4, Prisma 6, TypeScript 5.9    |
+| **Agent Service** | Python 3.14, FastAPI, Agno 2.5                     |
+| **Database**      | PostgreSQL 16, Redis 7                             |
+| **Auth**          | JWT + bcrypt                                       |
+| **Deploy**        | PM2, Nginx, Docker                                 |
 
 ## Comandos
 

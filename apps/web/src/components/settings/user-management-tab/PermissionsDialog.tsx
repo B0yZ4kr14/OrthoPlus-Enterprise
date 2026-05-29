@@ -37,14 +37,19 @@ export function PermissionsDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Permissões de {user?.full_name || "Usuário"}</DialogTitle>
+          <DialogTitle>
+            Permissões de {user?.full_name || "Usuário"}
+          </DialogTitle>
           <DialogDescription>
             Gerencie as permissões de acesso aos módulos
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           {permissions.map((perm, index) => (
-            <div key={perm.module_key} className="flex items-center justify-between p-3 border rounded">
+            <div
+              key={perm.module_key}
+              className="flex items-center justify-between p-3 border rounded"
+            >
               <span className="font-medium">{perm.module_name}</span>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -64,7 +69,9 @@ export function PermissionsDialog({
                 <div className="flex items-center gap-2">
                   <Switch
                     checked={perm.can_delete}
-                    onCheckedChange={() => togglePermission(index, "can_delete")}
+                    onCheckedChange={() =>
+                      togglePermission(index, "can_delete")
+                    }
                   />
                   <Label className="text-sm">Excluir</Label>
                 </div>

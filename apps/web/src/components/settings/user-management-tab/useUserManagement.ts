@@ -20,19 +20,25 @@ interface UseUserManagementReturn {
   handleUpdatePermissions: () => Promise<void>;
 }
 
-export function useUserManagement(clinicId: string | null): UseUserManagementReturn {
+export function useUserManagement(
+  clinicId: string | null,
+): UseUserManagementReturn {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [modules, setModules] = useState<unknown[]>([]);
-  const [userPermissions, setUserPermissions] = useState<ModulePermission[]>([]);
+  const [userPermissions, setUserPermissions] = useState<ModulePermission[]>(
+    [],
+  );
 
   const loadUsers = useCallback(async () => {
     if (!clinicId) return;
     try {
       setLoading(true);
-      const response = await apiClient.get<User[]>(`/clinics/${clinicId}/users`);
+      const response = await apiClient.get<User[]>(
+        `/clinics/${clinicId}/users`,
+      );
       setUsers(response);
     } catch (error) {
       logger.error("Error loading users:", error);

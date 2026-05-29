@@ -124,7 +124,9 @@ class PerformanceTracker {
     }
 
     if (filter?.minDuration) {
-      filtered = filtered.filter((m) => m.duration >= (filter.minDuration ?? 0));
+      filtered = filtered.filter(
+        (m) => m.duration >= (filter.minDuration ?? 0),
+      );
     }
 
     if (filter?.limit) {

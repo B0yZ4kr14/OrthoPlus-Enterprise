@@ -19,16 +19,18 @@ export function usePermissionTemplates() {
       setLoading(true);
 
       const templatesData = await apiClient.get<Record<string, any>[]>(
-        "/configuracoes/permissoes/templates"
+        "/configuracoes/permissoes/templates",
       );
       setTemplates((templatesData || []) as Template[]);
 
       const profilesData = await apiClient.get<Record<string, any>[]>(
-        "/configuracoes/usuarios"
+        "/configuracoes/usuarios",
       );
 
       const memberUsers =
-        profilesData?.filter((profile) => (profile.role || "MEMBER") === "MEMBER") || [];
+        profilesData?.filter(
+          (profile) => (profile.role || "MEMBER") === "MEMBER",
+        ) || [];
 
       setUsers(memberUsers as User[]);
     } catch (error) {
@@ -50,7 +52,7 @@ export function usePermissionTemplates() {
 
       const modulesData = await apiClient.get<Record<string, any>[]>(
         "/configuracoes/modulos",
-        { params: { module_keys: template.module_keys.join(",") } }
+        { params: { module_keys: template.module_keys.join(",") } },
       );
 
       await apiClient.delete(`/configuracoes/permissoes/${selectedUser}`);

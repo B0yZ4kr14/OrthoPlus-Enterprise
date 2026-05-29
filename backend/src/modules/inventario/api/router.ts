@@ -3,26 +3,26 @@ import { clinicGuard } from "@/middleware/clinicGuard";
  * MÓDULO INVENTÁRIO - Router
  */
 
-import { Router } from 'express';
-import { IDatabaseConnection } from '@/infrastructure/database/IDatabaseConnection';
-import { ProdutoRepositoryPostgres } from '../infrastructure/repositories/ProdutoRepositoryPostgres';
-import { dbRouter } from './dbRouter';
-import { InventarioController } from './InventarioController';
+import { Router } from "express";
+import { IDatabaseConnection } from "@/infrastructure/database/IDatabaseConnection";
+import { ProdutoRepositoryPostgres } from "../infrastructure/repositories/ProdutoRepositoryPostgres";
+import { dbRouter } from "./dbRouter";
+import { InventarioController } from "./InventarioController";
 
 export function createInventarioRouter(db?: IDatabaseConnection): Router {
   const router: Router = Router();
-router.use(clinicGuard);
+  router.use(clinicGuard);
 
   const produtoRepository = db ? new ProdutoRepositoryPostgres(db) : undefined;
   const controller = new InventarioController(undefined, produtoRepository);
 
   // Rotas
-  router.get('/', controller.listarProdutos);
-  router.post('/produtos', controller.cadastrarProduto);
-  router.get('/produtos', controller.listarProdutos);
-  router.get('/produtos/:id', controller.obterProduto);
-  router.patch('/produtos/:id', controller.atualizarProduto);
-  router.delete('/produtos/:id', controller.removerProduto);
+  router.get("/", controller.listarProdutos);
+  router.post("/produtos", controller.cadastrarProduto);
+  router.get("/produtos", controller.listarProdutos);
+  router.get("/produtos/:id", controller.obterProduto);
+  router.patch("/produtos/:id", controller.atualizarProduto);
+  router.delete("/produtos/:id", controller.removerProduto);
 
   // Automations / Legacy / Webhooks
   router.post("/automation", controller.manageAutomation);
@@ -58,7 +58,7 @@ router.use(clinicGuard);
     controller.manageAutomation(req, res, next);
   });
 
-  router.use('/db', dbRouter);
+  router.use("/db", dbRouter);
 
   return router;
 }

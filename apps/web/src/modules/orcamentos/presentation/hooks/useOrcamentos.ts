@@ -9,10 +9,22 @@ import { OrcamentoRepositoryApi } from "../../infrastructure/repositories/Orcame
 
 export function useOrcamentos() {
   const repository = useMemo(() => new OrcamentoRepositoryApi(), []);
-  const createUseCase = useMemo(() => new CreateOrcamentoUseCase(repository), [repository]);
-  const listUseCase = useMemo(() => new ListOrcamentosUseCase(repository), [repository]);
-  const enviarUseCase = useMemo(() => new EnviarOrcamentoUseCase(repository), [repository]);
-  const aprovarUseCase = useMemo(() => new AprovarOrcamentoUseCase(repository), [repository]);
+  const createUseCase = useMemo(
+    () => new CreateOrcamentoUseCase(repository),
+    [repository],
+  );
+  const listUseCase = useMemo(
+    () => new ListOrcamentosUseCase(repository),
+    [repository],
+  );
+  const enviarUseCase = useMemo(
+    () => new EnviarOrcamentoUseCase(repository),
+    [repository],
+  );
+  const aprovarUseCase = useMemo(
+    () => new AprovarOrcamentoUseCase(repository),
+    [repository],
+  );
   const { clinicId, user, isPatient } = useAuth();
   const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
   const [loading, setLoading] = useState(true);

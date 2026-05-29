@@ -9,7 +9,12 @@ interface SearchResultsProps {
   onSelect: () => void;
 }
 
-export function SearchResultsGroup({ results, type, title, onSelect }: SearchResultsProps) {
+export function SearchResultsGroup({
+  results,
+  type,
+  title,
+  onSelect,
+}: SearchResultsProps) {
   const navigate = useNavigate();
   const filtered = results.filter((r) => r.type === type);
 
@@ -30,7 +35,9 @@ export function SearchResultsGroup({ results, type, title, onSelect }: SearchRes
             <Icon className="mr-2 h-4 w-4" />
             <div className="flex flex-col">
               <span>{result.title}</span>
-              <span className="text-xs text-muted-foreground">{result.subtitle}</span>
+              <span className="text-xs text-muted-foreground">
+                {result.subtitle}
+              </span>
             </div>
           </CommandItem>
         );

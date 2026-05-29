@@ -35,11 +35,15 @@ export function CryptoPortfolioDashboard({
   wallets,
   transactions,
 }: CryptoPortfolioDashboardProps) {
-  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
+  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [rates, setRates] = useState<Record<string, number>>({});
 
-  const fetchRealRates = useCallback(async (): Promise<Record<string, number>> => {
+  const fetchRealRates = useCallback(async (): Promise<
+    Record<string, number>
+  > => {
     try {
       const { getSimplePrice } = await import("@/lib/api/cryptoMarketApi");
       const data = await getSimplePrice(

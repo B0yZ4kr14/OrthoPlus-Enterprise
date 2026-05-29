@@ -9,12 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@orthoplus/core-ui/table";
-import {
-  Calendar,
-  CreditCard,
-  Mail,
-  Send,
-} from "lucide-react";
+import { Calendar, CreditCard, Mail, Send } from "lucide-react";
 import { formatDate } from "@/lib/utils/date.utils";
 import type { ContaReceber } from "@/modules/financeiro/types/financeiro-completo.types";
 
@@ -93,7 +88,10 @@ export function ContasReceberTable({
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  <Calendar
+                    className="h-4 w-4 text-muted-foreground"
+                    aria-hidden="true"
+                  />
                   {formatDate(conta.data_vencimento)}
                 </div>
               </TableCell>
@@ -132,20 +130,19 @@ export function ContasReceberTable({
                       </Button>
                     </>
                   )}
-                  {conta.status !== "pago" &&
-                    conta.status !== "cancelado" && (
-                      <Button
-                        variant="default"
-                        size="sm"
-                        className="gap-2"
-                        title="Registrar recebimento"
-                        aria-label={`Receber pagamento de ${conta.patient_name}`}
-                        onClick={() => onOpenPayment(conta)}
-                      >
-                        <CreditCard className="h-4 w-4" aria-hidden="true" />
-                        Receber
-                      </Button>
-                    )}
+                  {conta.status !== "pago" && conta.status !== "cancelado" && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="gap-2"
+                      title="Registrar recebimento"
+                      aria-label={`Receber pagamento de ${conta.patient_name}`}
+                      onClick={() => onOpenPayment(conta)}
+                    >
+                      <CreditCard className="h-4 w-4" aria-hidden="true" />
+                      Receber
+                    </Button>
+                  )}
                 </div>
               </TableCell>
             </TableRow>

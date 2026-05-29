@@ -12,11 +12,16 @@ import {
 export class CampaignSendRepositoryApi implements ICampaignSendRepository {
   async findById(id: string): Promise<CampaignSend | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`/marketing/envios/${id}`);
+      const data = await apiClient.get<Record<string, any>>(
+        `/marketing/envios/${id}`,
+      );
       if (!data) return null;
       return this.toDomain(data);
     } catch (error: unknown) {
-      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      const _e = error as {
+        response?: { status?: number; data?: { error?: string } };
+        message?: string;
+      };
       if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
       throw new Error(`Erro ao buscar envio de campanha: ${_e.message}`);
@@ -38,9 +43,12 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
         params.has_error = filters.hasError;
       }
 
-      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
-        params,
-      });
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/marketing/envios",
+        {
+          params,
+        },
+      );
       return data?.map((row) => this.toDomain(row)) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
@@ -50,15 +58,16 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
 
   async findByPatient(patientId: string): Promise<CampaignSend[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
-        params: { patient_id: patientId },
-      });
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/marketing/envios",
+        {
+          params: { patient_id: patientId },
+        },
+      );
       return data?.map((row) => this.toDomain(row)) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      throw new Error(
-        `Erro ao buscar envios para o paciente: ${_e.message}`,
-      );
+      throw new Error(`Erro ao buscar envios para o paciente: ${_e.message}`);
     }
   }
 
@@ -93,13 +102,16 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
 
   async getScheduledSends(campaignId: string): Promise<CampaignSend[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
-        params: {
-          campaign_id: campaignId,
-          status: "AGENDADO",
-          due: true,
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/marketing/envios",
+        {
+          params: {
+            campaign_id: campaignId,
+            status: "AGENDADO",
+            due: true,
+          },
         },
-      });
+      );
       return data?.map((row) => this.toDomain(row)) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
@@ -109,12 +121,15 @@ export class CampaignSendRepositoryApi implements ICampaignSendRepository {
 
   async getErrorSends(campaignId: string): Promise<CampaignSend[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/marketing/envios", {
-        params: {
-          campaign_id: campaignId,
-          status: "ERRO",
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/marketing/envios",
+        {
+          params: {
+            campaign_id: campaignId,
+            status: "ERRO",
+          },
         },
-      });
+      );
       return data?.map((row) => this.toDomain(row)) ?? [];
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };

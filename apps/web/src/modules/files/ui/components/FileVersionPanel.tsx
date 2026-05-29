@@ -9,7 +9,14 @@ import {
 import { Button } from "@orthoplus/core-ui";
 import { Badge } from "@orthoplus/core-ui";
 import { ScrollArea } from "@orthoplus/core-ui/scroll-area";
-import { Loader2, Upload, RotateCcw, Clock, User, HardDrive } from "lucide-react";
+import {
+  Loader2,
+  Upload,
+  RotateCcw,
+  Clock,
+  User,
+  HardDrive,
+} from "lucide-react";
 import { toast } from "sonner";
 import { formatDateTime } from "@/lib/utils/date.utils";
 
@@ -43,9 +50,13 @@ function VersionItem({
       <div className="flex items-start gap-3 min-w-0">
         <div className="mt-0.5">
           {isCurrent ? (
-            <Badge variant="info" className="text-xs">Atual</Badge>
+            <Badge variant="info" className="text-xs">
+              Atual
+            </Badge>
           ) : (
-            <Badge variant="outline" className="text-xs">v{version.numeroVersao}</Badge>
+            <Badge variant="outline" className="text-xs">
+              v{version.numeroVersao}
+            </Badge>
           )}
         </div>
         <div className="min-w-0">
@@ -135,7 +146,9 @@ export function FileVersionPanel({ file }: FileVersionPanelProps) {
     return (
       <div className="flex items-center justify-center py-8">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
-        <span className="ml-2 text-sm text-muted-foreground">Carregando versões...</span>
+        <span className="ml-2 text-sm text-muted-foreground">
+          Carregando versões...
+        </span>
       </div>
     );
   }

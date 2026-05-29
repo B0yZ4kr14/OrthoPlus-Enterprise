@@ -7,7 +7,11 @@ interface ObservacoesInputProps {
   required?: boolean;
 }
 
-export function ObservacoesInput({ value, onChange, required }: ObservacoesInputProps) {
+export function ObservacoesInput({
+  value,
+  onChange,
+  required,
+}: ObservacoesInputProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="observacoes">

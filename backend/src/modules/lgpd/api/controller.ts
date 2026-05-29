@@ -32,7 +32,9 @@ export class LGPDController {
     }
     const parsed = createConsentimentoSchema.safeParse(req.body);
     if (!parsed.success) {
-      res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
     const data = await prisma.lgpd_data_consents.create({
@@ -66,11 +68,19 @@ export class LGPDController {
     }
     const parsed = createSolicitacaoSchema.safeParse(req.body);
     if (!parsed.success) {
-      res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
     const data = await prisma.lgpd_data_requests.create({
-      data: { ...parsed.data, clinic_id: clinicId, requested_at: new Date().toISOString(), requested_by: req.user?.id || "system", status: parsed.data.status || "PENDENTE" },
+      data: {
+        ...parsed.data,
+        clinic_id: clinicId,
+        requested_at: new Date().toISOString(),
+        requested_by: req.user?.id || "system",
+        status: parsed.data.status || "PENDENTE",
+      },
     });
     res.status(201).json(data);
   }
@@ -91,7 +101,9 @@ export class LGPDController {
     }
     const parsed = updateSolicitacaoSchema.safeParse(req.body);
     if (!parsed.success) {
-      res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
     const data = await prisma.lgpd_data_requests.update({

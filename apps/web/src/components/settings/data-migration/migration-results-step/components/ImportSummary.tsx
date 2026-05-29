@@ -26,10 +26,22 @@ export function ImportSummary({ results }: ImportSummaryProps) {
           <CardTitle className="text-sm">Resumo da Importação</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <SummaryItem label="Módulos importados:" value={results.imported.modules} />
-          <SummaryItem label="Pacientes importados:" value={results.imported.patients} />
-          <SummaryItem label="Prontuários importados:" value={results.imported.prontuarios} />
-          <SummaryItem label="Agendamentos importados:" value={results.imported.appointments} />
+          <SummaryItem
+            label="Módulos importados:"
+            value={results.imported.modules}
+          />
+          <SummaryItem
+            label="Pacientes importados:"
+            value={results.imported.patients}
+          />
+          <SummaryItem
+            label="Prontuários importados:"
+            value={results.imported.prontuarios}
+          />
+          <SummaryItem
+            label="Agendamentos importados:"
+            value={results.imported.appointments}
+          />
 
           {(results.skipped?.length ?? 0) > 0 && (
             <>
@@ -66,7 +78,9 @@ interface SummaryItemProps {
 function SummaryItem({ label, value, variant = "default" }: SummaryItemProps) {
   return (
     <div className="flex justify-between">
-      <span className={`text-sm ${variant === "destructive" ? "text-destructive" : ""}`}>
+      <span
+        className={`text-sm ${variant === "destructive" ? "text-destructive" : ""}`}
+      >
         {label}
       </span>
       <Badge variant={variant === "destructive" ? "destructive" : "secondary"}>

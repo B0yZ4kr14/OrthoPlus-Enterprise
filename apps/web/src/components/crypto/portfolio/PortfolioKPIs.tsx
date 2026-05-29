@@ -1,10 +1,5 @@
 import { Card, CardContent } from "@orthoplus/core-ui/card";
-import {
-  Wallet,
-  TrendingUp,
-  TrendingDown,
-  DollarSign,
-} from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
 import { formatBRL } from "./types";
 
 interface PortfolioKPIsProps {

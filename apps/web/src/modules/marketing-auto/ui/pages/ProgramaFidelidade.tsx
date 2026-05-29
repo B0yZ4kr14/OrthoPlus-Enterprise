@@ -9,8 +9,18 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Progress } from "@orthoplus/core-ui/progress";
@@ -26,7 +36,8 @@ export default function ProgramaFidelidade() {
   const { pontos, recompensas, badges, indicacoes, loading } = useFidelidade();
   const [recompensaFormOpen, setRecompensaFormOpen] = useState(false);
   const [badgeFormOpen, setBadgeFormOpen] = useState(false);
-  const [editingRecompensa, setEditingRecompensa] = useState<FidelidadeRecompensa | null>(null);
+  const [editingRecompensa, setEditingRecompensa] =
+    useState<FidelidadeRecompensa | null>(null);
 
   const triggerConfetti = () => {
     confetti({
@@ -338,9 +349,11 @@ export default function ProgramaFidelidade() {
                       </div>
                       <div className="text-right mr-4">
                         <div className="text-sm text-muted-foreground">
-                          {indicacao.created_at ? new Date(indicacao.created_at).toLocaleDateString(
-                            "pt-BR",
-                          ) : "—"}
+                          {indicacao.created_at
+                            ? new Date(indicacao.created_at).toLocaleDateString(
+                                "pt-BR",
+                              )
+                            : "—"}
                         </div>
                         {indicacao.pontos_concedidos && (
                           <div className="font-medium text-success">
@@ -386,7 +399,10 @@ export default function ProgramaFidelidade() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="pontos_consulta" className="text-sm font-medium">
+                  <label
+                    htmlFor="pontos_consulta"
+                    className="text-sm font-medium"
+                  >
                     Pontos por Consulta
                   </label>
                   <input
@@ -413,7 +429,10 @@ export default function ProgramaFidelidade() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="pontos_indicacao" className="text-sm font-medium">
+                  <label
+                    htmlFor="pontos_indicacao"
+                    className="text-sm font-medium"
+                  >
                     Pontos por Indicação
                   </label>
                   <input
@@ -426,7 +445,10 @@ export default function ProgramaFidelidade() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="validade_pontos" className="text-sm font-medium">
+                  <label
+                    htmlFor="validade_pontos"
+                    className="text-sm font-medium"
+                  >
                     Validade dos Pontos (dias)
                   </label>
                   <input

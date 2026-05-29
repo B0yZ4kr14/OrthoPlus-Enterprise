@@ -1,13 +1,24 @@
 /**
  * FuncionarioForm - Componente Orquestrador (Refatorado)
- * 
+ *
  * ANTES: 606 linhas
  * DEPOIS: ~90 linhas + estrutura modular
  */
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { useFuncionarioForm } from "./useFuncionarioForm";
 import { DadosPessoaisTab } from "./DadosPessoaisTab";
 import { DadosProfissionaisTab } from "./DadosProfissionaisTab";
@@ -53,7 +64,9 @@ export function FuncionarioForm({
           <Tabs defaultValue="pessoais" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="pessoais">Dados Pessoais</TabsTrigger>
-              <TabsTrigger value="profissionais">Dados Profissionais</TabsTrigger>
+              <TabsTrigger value="profissionais">
+                Dados Profissionais
+              </TabsTrigger>
               <TabsTrigger value="permissoes">Permissões</TabsTrigger>
             </TabsList>
 

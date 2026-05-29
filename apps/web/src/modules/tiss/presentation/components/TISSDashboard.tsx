@@ -1,21 +1,47 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { FileText, Send, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import {
+  FileText,
+  Send,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+} from "lucide-react";
 import { useTISSStatistics } from "../../application/hooks/useTISSStatistics";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 
 export function TISSDashboard() {
   const { data: stats, isLoading } = useTISSStatistics();
 
-  const pendingGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "pendente" || s.status === "PENDENTE")?._count.id ?? 0;
-  const sentGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "enviada" || s.status === "SUBMITTED")?._count.id ?? 0;
-  const approvedGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "aprovada" || s.status === "APROVADA")?._count.id ?? 0;
-  const glosadasGuides = stats?.guides.by_status.find((s: { status: string; _count: { id: number } }) => s.status === "glosada" || s.status === "GLOSADA")?._count.id ?? 0;
+  const pendingGuides =
+    stats?.guides.by_status.find(
+      (s: { status: string; _count: { id: number } }) =>
+        s.status === "pendente" || s.status === "PENDENTE",
+    )?._count.id ?? 0;
+  const sentGuides =
+    stats?.guides.by_status.find(
+      (s: { status: string; _count: { id: number } }) =>
+        s.status === "enviada" || s.status === "SUBMITTED",
+    )?._count.id ?? 0;
+  const approvedGuides =
+    stats?.guides.by_status.find(
+      (s: { status: string; _count: { id: number } }) =>
+        s.status === "aprovada" || s.status === "APROVADA",
+    )?._count.id ?? 0;
+  const glosadasGuides =
+    stats?.guides.by_status.find(
+      (s: { status: string; _count: { id: number } }) =>
+        s.status === "glosada" || s.status === "GLOSADA",
+    )?._count.id ?? 0;
   const totalGuides = stats?.guides.total ?? 0;
   const totalGlosa = stats?.guides.total_glosa ?? 0;
 
-  const approvalRate = totalGuides > 0
-    ? Math.round((approvedGuides / totalGuides) * 100)
-    : 0;
+  const approvalRate =
+    totalGuides > 0 ? Math.round((approvedGuides / totalGuides) * 100) : 0;
 
   const statCards = [
     {
@@ -77,9 +103,7 @@ export function TISSDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stat.value}</div>
-            <p className="text-xs text-muted-foreground">
-              {stat.description}
-            </p>
+            <p className="text-xs text-muted-foreground">{stat.description}</p>
           </CardContent>
         </Card>
       ))}

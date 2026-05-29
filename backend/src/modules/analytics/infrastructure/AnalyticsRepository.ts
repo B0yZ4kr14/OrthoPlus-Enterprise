@@ -1,5 +1,5 @@
-import { prisma } from "@/infrastructure/database/prismaClient"
-import { IAnalyticsRepository } from "../domain/repositories/IAnalyticsRepository"
+import { prisma } from "@/infrastructure/database/prismaClient";
+import { IAnalyticsRepository } from "../domain/repositories/IAnalyticsRepository";
 
 /**
  * AnalyticsRepository — encapsulates all database access for analytics queries.
@@ -12,27 +12,27 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     try {
       return await prisma.patients.count({
         where: { clinic_id: clinicId },
-      })
+      });
     } catch {
-      return 0
+      return 0;
     }
   }
 
   async countTodayAppointments(clinicId: string): Promise<number> {
     try {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 1)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
 
       return await prisma.appointments.count({
         where: {
           clinic_id: clinicId,
           start_time: { gte: today.toISOString(), lt: tomorrow.toISOString() },
         },
-      })
+      });
     } catch {
-      return 0
+      return 0;
     }
   }
 
@@ -42,45 +42,47 @@ export class AnalyticsRepository implements IAnalyticsRepository {
         new Date().getFullYear(),
         new Date().getMonth(),
         1,
-      )
+      );
 
       const sumResult = await prisma.financial_transactions.aggregate({
         _sum: { amount: true },
         where: {
           clinic_id: clinicId,
           type: "RECEITA",
-          transaction_date: { gte: firstDayOfMonth.toISOString().split("T")[0] },
+          transaction_date: {
+            gte: firstDayOfMonth.toISOString().split("T")[0],
+          },
         },
-      })
+      });
 
-      return sumResult._sum.amount ? Number(sumResult._sum.amount) : 0
+      return sumResult._sum.amount ? Number(sumResult._sum.amount) : 0;
     } catch {
-      return 0
+      return 0;
     }
   }
 
   async calculateOccupancyRate(clinicId: string): Promise<number> {
     try {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 1)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
 
       const totalAppointments = await prisma.appointments.count({
         where: {
           clinic_id: clinicId,
           start_time: { gte: today.toISOString(), lt: tomorrow.toISOString() },
         },
-      })
+      });
 
       const dentistsCount = await prisma.profiles.count({
         where: { clinic_id: clinicId },
-      })
+      });
 
-      const totalSlots = (dentistsCount || 1) * 8
-      return totalSlots > 0 ? (totalAppointments / totalSlots) * 100 : 0
+      const totalSlots = (dentistsCount || 1) * 8;
+      return totalSlots > 0 ? (totalAppointments / totalSlots) * 100 : 0;
     } catch {
-      return 0
+      return 0;
     }
   }
 
@@ -91,9 +93,9 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     try {
       return await prisma.pep_tratamentos.count({
         where: { prontuario: { clinic_id: clinicId }, status },
-      })
+      });
     } catch {
-      return 0
+      return 0;
     }
   }
 
@@ -111,17 +113,17 @@ export class AnalyticsRepository implements IAnalyticsRepository {
         type,
         status: "PAGO",
         created_at: { gte: startDate },
-      }
+      };
       if (endDate) {
-        (where.created_at as Record<string, Date>).lt = endDate
+        (where.created_at as Record<string, Date>).lt = endDate;
       }
       const result = await prisma.financial_transactions.aggregate({
         _sum: { amount: true },
         where: where as any,
-      })
-      return Number(result._sum.amount) || 0
+      });
+      return Number(result._sum.amount) || 0;
     } catch {
-      return 0
+      return 0;
     }
   }
 
@@ -131,16 +133,22 @@ export class AnalyticsRepository implements IAnalyticsRepository {
   ): Promise<Array<{ start_time: string; end_time: string; status: string }>> {
     try {
       return await prisma.appointments.findMany({
-        where: { clinic_id: clinicId, start_time: { gte: startDate.toISOString() } },
+        where: {
+          clinic_id: clinicId,
+          start_time: { gte: startDate.toISOString() },
+        },
         select: { start_time: true, end_time: true, status: true },
         take: 1000,
-      })
+      });
     } catch {
-      return []
+      return [];
     }
   }
 
-  async getUniquePayingPatients(clinicId: string, startDate: Date): Promise<number> {
+  async getUniquePayingPatients(
+    clinicId: string,
+    startDate: Date,
+  ): Promise<number> {
     try {
       const result = await prisma.contas_receber.groupBy({
         by: ["patient_id"],
@@ -150,14 +158,16 @@ export class AnalyticsRepository implements IAnalyticsRepository {
           created_at: { gte: startDate },
           patient_id: { not: null },
         },
-      })
-      return result.length
+      });
+      return result.length;
     } catch {
-      return 0
+      return 0;
     }
   }
 
-  async getPendingReceivables(clinicId: string): Promise<Array<{ data_vencimento: string }>> {
+  async getPendingReceivables(
+    clinicId: string,
+  ): Promise<Array<{ data_vencimento: string }>> {
     try {
       return await prisma.contas_receber.findMany({
         where: {
@@ -166,9 +176,9 @@ export class AnalyticsRepository implements IAnalyticsRepository {
         },
         select: { data_vencimento: true },
         take: 1000,
-      })
+      });
     } catch {
-      return []
+      return [];
     }
   }
 
@@ -176,13 +186,16 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     try {
       return await prisma.crm_leads.count({
         where: { clinic_id: clinicId, created_at: { gte: startDate } },
-      })
+      });
     } catch {
-      return 0
+      return 0;
     }
   }
 
-  async countConvertedLeads(clinicId: string, startDate: Date): Promise<number> {
+  async countConvertedLeads(
+    clinicId: string,
+    startDate: Date,
+  ): Promise<number> {
     try {
       return await prisma.crm_leads.count({
         where: {
@@ -190,13 +203,16 @@ export class AnalyticsRepository implements IAnalyticsRepository {
           status: "CONVERTIDO",
           created_at: { gte: startDate },
         },
-      })
+      });
     } catch {
-      return 0
+      return 0;
     }
   }
 
-  async getMarketingExpenses(clinicId: string, startDate: Date): Promise<number> {
+  async getMarketingExpenses(
+    clinicId: string,
+    startDate: Date,
+  ): Promise<number> {
     try {
       const result = await prisma.financial_transactions.aggregate({
         _sum: { amount: true },
@@ -206,10 +222,10 @@ export class AnalyticsRepository implements IAnalyticsRepository {
           category: "MARKETING",
           created_at: { gte: startDate },
         },
-      })
-      return Number(result._sum.amount) || 0
+      });
+      return Number(result._sum.amount) || 0;
     } catch {
-      return 0
+      return 0;
     }
   }
 
@@ -305,7 +321,11 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 
   // ── Sidebar Badges ────────────────────────────────────────────────────
 
-  async countAppointmentsToday(clinicId: string, todayStr: string, tomorrowStr: string) {
+  async countAppointmentsToday(
+    clinicId: string,
+    todayStr: string,
+    tomorrowStr: string,
+  ) {
     return prisma.appointments.count({
       where: {
         clinic_id: clinicId,
@@ -324,7 +344,11 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     });
   }
 
-  async countRecallsToday(clinicId: string, todayStr: string, tomorrowStr: string) {
+  async countRecallsToday(
+    clinicId: string,
+    todayStr: string,
+    tomorrowStr: string,
+  ) {
     return prisma.recalls.count({
       where: {
         clinic_id: clinicId,

@@ -1,15 +1,15 @@
-import { SearchService } from "./SearchService"
-import { IDocumentRepository } from "../ports/IDocumentRepository"
-import { TokenCounter } from "../../infrastructure/TokenCounter"
-import { logger } from "@/infrastructure/logger"
-import type { ContextBrief } from "@orthoplus/shared-types"
+import { SearchService } from "./SearchService";
+import { IDocumentRepository } from "../ports/IDocumentRepository";
+import { TokenCounter } from "../../infrastructure/TokenCounter";
+import { logger } from "@/infrastructure/logger";
+import type { ContextBrief } from "@orthoplus/shared-types";
 
 /**
  * Sanitize document excerpts to prevent prompt injection attacks.
  * Removes known instruction-override patterns and markdown boundary breakers.
  */
 function sanitizeExcerpt(text: string): string {
-  if (!text) return ""
+  if (!text) return "";
 
   // Known prompt-injection patterns
   const injectionPatterns = [
@@ -30,11 +30,11 @@ function sanitizeExcerpt(text: string): string {
     /<instruction>/gi,
     /<\/instruction>/gi,
     /---\s*\n\s*system/gi,
-  ]
+  ];
 
-  let sanitized = text
+  let sanitized = text;
   for (const pattern of injectionPatterns) {
-    sanitized = sanitized.replace(pattern, "[REDACTED]")
+    sanitized = sanitized.replace(pattern, "[REDACTED]");
   }
 
   // Escape markdown metacharacters that could break brief structure
@@ -43,9 +43,9 @@ function sanitizeExcerpt(text: string): string {
     .replace(/\n---\s*\n/g, "\n---\n") // Normalize horizontal rules
     .replace(/\n# /g, "\n\\# ") // Escape headings that could break structure
     .replace(/\n## /g, "\n\\## ")
-    .replace(/\n### /g, "\n\\### ")
+    .replace(/\n### /g, "\n\\### ");
 
-  return sanitized
+  return sanitized;
 }
 
 /**
@@ -54,23 +54,26 @@ function sanitizeExcerpt(text: string): string {
 function sanitizeTopic(topic: string): string {
   // Allow only alphanumeric, hyphens, underscores, dots, and slashes (feature IDs)
   // Reject control characters, newlines, and YAML metacharacters
-  const safe = topic.replace(/[^\w\-.\s/]/g, "")
+  const safe = topic.replace(/[^\w\-.\s/]/g, "");
   if (safe !== topic) {
-    logger.warn("[ContextBriefService] Topic contained unsafe characters, sanitized", {
-      original: topic.slice(0, 100),
-      sanitized: safe.slice(0, 100),
-    })
+    logger.warn(
+      "[ContextBriefService] Topic contained unsafe characters, sanitized",
+      {
+        original: topic.slice(0, 100),
+        sanitized: safe.slice(0, 100),
+      },
+    );
   }
-  return safe.trim()
+  return safe.trim();
 }
 
 export class ContextBriefService {
-  private searchService: SearchService
-  private documents: IDocumentRepository
+  private searchService: SearchService;
+  private documents: IDocumentRepository;
 
   constructor(searchService: SearchService, documents: IDocumentRepository) {
-    this.searchService = searchService
-    this.documents = documents
+    this.searchService = searchService;
+    this.documents = documents;
   }
 
   async generateBrief(
@@ -79,59 +82,77 @@ export class ContextBriefService {
     _includeRelated = true,
     clinicId = "default",
   ): Promise<ContextBrief> {
-    const { results } = await this.searchService.search(topic, {}, 20, 0, clinicId)
+    const { results } = await this.searchService.search(
+      topic,
+      {},
+      20,
+      0,
+      clinicId,
+    );
 
     // Priority ranking: spec > plan > architecture > contract > memory > doc
-    const priorityOrder = ["spec", "plan", "architecture", "contract", "memory", "doc"]
+    const priorityOrder = [
+      "spec",
+      "plan",
+      "architecture",
+      "contract",
+      "memory",
+      "doc",
+    ];
     const ranked = results.sort((a, b) => {
-      const pa = priorityOrder.indexOf(a.docType)
-      const pb = priorityOrder.indexOf(b.docType)
-      if (pa !== pb) return pa - pb
-      return b.relevanceScore - a.relevanceScore
-    })
+      const pa = priorityOrder.indexOf(a.docType);
+      const pb = priorityOrder.indexOf(b.docType);
+      if (pa !== pb) return pa - pb;
+      return b.relevanceScore - a.relevanceScore;
+    });
 
     // Filter out confidential documents (Constitution GP-3 / FR-008)
     // Default-deny: if doc record is missing, exclude (F-RT-020-002)
-    let confidentialExcluded = 0
-    const accessible: typeof ranked = []
+    let confidentialExcluded = 0;
+    const accessible: typeof ranked = [];
     for (const r of ranked) {
-      const doc = this.documents.findByPath(r.sourcePath)
+      const doc = this.documents.findByPath(r.sourcePath);
       if (!doc) {
-        logger.warn("[ContextBriefService] Document record missing for search result, excluding", {
-          sourcePath: r.sourcePath,
-        })
-        confidentialExcluded++
-        continue
+        logger.warn(
+          "[ContextBriefService] Document record missing for search result, excluding",
+          {
+            sourcePath: r.sourcePath,
+          },
+        );
+        confidentialExcluded++;
+        continue;
       }
       if (this.documents.isConfidential(doc)) {
-        confidentialExcluded++
-        continue
+        confidentialExcluded++;
+        continue;
       }
-      accessible.push(r)
+      accessible.push(r);
     }
 
     // Select documents within token budget using accurate token counting (P3)
-    const selected: ContextBrief["documents"] = []
-    let tokenCount = TokenCounter.count(`# Context Brief: ${topic}\n\n`) // overhead for header
+    const selected: ContextBrief["documents"] = [];
+    let tokenCount = TokenCounter.count(`# Context Brief: ${topic}\n\n`); // overhead for header
 
     for (const r of accessible) {
-      const sanitizedExcerpt = sanitizeExcerpt(r.excerpt)
-      const docTokens = TokenCounter.count(sanitizedExcerpt) + TokenCounter.count(`\n## ${r.sourcePath}\n\n`)
+      const sanitizedExcerpt = sanitizeExcerpt(r.excerpt);
+      const docTokens =
+        TokenCounter.count(sanitizedExcerpt) +
+        TokenCounter.count(`\n## ${r.sourcePath}\n\n`);
       // Hard token budget cap — never exceed regardless of document count (F-RT-020-003)
       if (tokenCount + docTokens > maxTokens) {
-        break
+        break;
       }
       selected.push({
         sourcePath: r.sourcePath,
         docType: r.docType,
         relevance: r.relevanceScore,
         summary: sanitizedExcerpt.slice(0, 500),
-      })
-      tokenCount += docTokens
+      });
+      tokenCount += docTokens;
     }
 
     // Generate Markdown brief
-    const markdown = this.renderMarkdown(topic, selected)
+    const markdown = this.renderMarkdown(topic, selected);
 
     return {
       topic,
@@ -139,14 +160,14 @@ export class ContextBriefService {
       documents: selected,
       markdown,
       confidentialExcluded,
-    }
+    };
   }
 
   private renderMarkdown(
     topic: string,
     documents: ContextBrief["documents"],
   ): string {
-    const safeTopic = sanitizeTopic(topic)
+    const safeTopic = sanitizeTopic(topic);
     const lines: string[] = [
       "---",
       `topic: ${safeTopic}`,
@@ -158,19 +179,19 @@ export class ContextBriefService {
       "",
       "## Relevant Documents",
       "",
-    ]
+    ];
 
     for (const doc of documents) {
-      const safeSummary = sanitizeExcerpt(doc.summary)
-      lines.push(`### ${doc.sourcePath.split("/").pop()} (${doc.docType})`)
-      lines.push(``)
-      lines.push(`- **Relevance**: ${doc.relevance}`)
-      lines.push(`- **Path**: ${doc.sourcePath}`)
-      lines.push(``)
-      lines.push(safeSummary)
-      lines.push(``)
+      const safeSummary = sanitizeExcerpt(doc.summary);
+      lines.push(`### ${doc.sourcePath.split("/").pop()} (${doc.docType})`);
+      lines.push(``);
+      lines.push(`- **Relevance**: ${doc.relevance}`);
+      lines.push(`- **Path**: ${doc.sourcePath}`);
+      lines.push(``);
+      lines.push(safeSummary);
+      lines.push(``);
     }
 
-    return lines.join("\n")
+    return lines.join("\n");
   }
 }

@@ -5,7 +5,7 @@ export class FinanceiroBackupService extends CategoryBackupService {
     super(
       ["financeiro", "pdv", "faturamento", "crypto_config"],
       "FINANCEIRO",
-      process.env.DATABASE_URL ?? ""
+      process.env.DATABASE_URL ?? "",
     );
   }
 }

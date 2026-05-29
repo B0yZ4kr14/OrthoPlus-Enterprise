@@ -9,8 +9,8 @@ export function WelcomeContent() {
     <div className="space-y-3">
       <h3 className="text-lg font-bold">Bem-vindo aos Pagamentos Cripto! 🚀</h3>
       <p className="text-sm text-muted-foreground">
-        Vamos guiá-lo pelo processo completo de configuração para começar a receber
-        pagamentos em Bitcoin e outras criptomoedas.
+        Vamos guiá-lo pelo processo completo de configuração para começar a
+        receber pagamentos em Bitcoin e outras criptomoedas.
       </p>
     </div>
   );

@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Label } from "@orthoplus/core-ui/label";
 import { Input } from "@orthoplus/core-ui/input";
 import { Button } from "@orthoplus/core-ui/button";
@@ -42,14 +47,17 @@ export function RetentionConfigCard({
             onChange={(e) => onRetentionChange(parseInt(e.target.value))}
           />
           <p className="text-sm text-muted-foreground">
-            Backups mais antigos que {retentionDays} dias serão automaticamente removidos.
+            Backups mais antigos que {retentionDays} dias serão automaticamente
+            removidos.
           </p>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <Label>Limpeza Automática</Label>
-            <p className="text-sm text-muted-foreground">Ativar remoção automática de backups antigos</p>
+            <p className="text-sm text-muted-foreground">
+              Ativar remoção automática de backups antigos
+            </p>
           </div>
           <Switch checked={autoCleanup} onCheckedChange={onAutoCleanupChange} />
         </div>

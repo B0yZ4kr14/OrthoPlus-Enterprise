@@ -16,7 +16,7 @@ export const useTISSGuides = (options: UseTISSGuidesOptions = {}) => {
     queryKey: ["tiss-guides", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<Record<string, any>[]>('/tiss/guias');
+      const data = await apiClient.get<Record<string, any>[]>("/tiss/guias");
       return data;
     },
     enabled: !!clinicId,
@@ -26,8 +26,13 @@ export const useTISSGuides = (options: UseTISSGuidesOptions = {}) => {
     queryKey: ["tiss-batches", clinicId, batchStatus],
     queryFn: async () => {
       if (!clinicId) return [];
-      const config = batchStatus ? { params: { status: batchStatus } } : undefined;
-      const data = await apiClient.get<Record<string, any>[]>('/tiss/lotes', config);
+      const config = batchStatus
+        ? { params: { status: batchStatus } }
+        : undefined;
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/tiss/lotes",
+        config,
+      );
       return data;
     },
     enabled: !!clinicId,

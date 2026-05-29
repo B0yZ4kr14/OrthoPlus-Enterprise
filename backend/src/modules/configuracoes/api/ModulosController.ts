@@ -58,10 +58,12 @@ export class ModulosController {
     res.status(200).json(result);
   });
 
-  recommendModuleSequence = asyncHandler(async (_req: Request, res: Response) => {
-    const result = this.service.recommendModuleSequence();
-    res.status(200).json(result);
-  });
+  recommendModuleSequence = asyncHandler(
+    async (_req: Request, res: Response) => {
+      const result = this.service.recommendModuleSequence();
+      res.status(200).json(result);
+    },
+  );
 
   importClinicData = asyncHandler(async (req: Request, res: Response) => {
     const { data } = req.body as { data: unknown[] };

@@ -18,7 +18,9 @@ export function getNivelColor(nivel: NivelFidelidade): string {
   }
 }
 
-export function getStatusIndicacaoVariant(status: StatusIndicacao): "default" | "info" | "warning" | "destructive" | "secondary" {
+export function getStatusIndicacaoVariant(
+  status: StatusIndicacao,
+): "default" | "info" | "warning" | "destructive" | "secondary" {
   switch (status) {
     case "COMPARECEU":
       return "default";

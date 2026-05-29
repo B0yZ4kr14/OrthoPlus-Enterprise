@@ -25,6 +25,7 @@ Generate or repair canonical documentation. DocGuard splits fixes into two kinds
 ```bash
 npx docguard-cli fix --write          # removes stale documented endpoints; idempotent
 ```
+
 - Only edits docs marked `<!-- docguard:generated true -->` (use `--force` to override).
 - Prints exactly what it removed. Re-run is a no-op if nothing changed.
 - Run `docguard guard` afterward; whatever remains is agent work (below).
@@ -32,11 +33,13 @@ npx docguard-cli fix --write          # removes stale documented endpoints; idem
 ## What to do (agent work)
 
 1. **Identify what needs fixing** (each issue is tagged `mechanical` or `agent`):
+
 ```bash
 npx docguard-cli diagnose
 ```
 
 2. **For a specific document**, generate a research-aware fix prompt:
+
 ```bash
 npx docguard-cli fix --doc architecture
 npx docguard-cli fix --doc security
@@ -58,6 +61,7 @@ npx docguard-cli fix --doc environment
    - Ensure Flesch-Kincaid grade level 8-10
 
 5. **Include metadata header** in every canonical doc:
+
 ```markdown
 <!-- docguard:version X.X.X -->
 <!-- docguard:status active -->
@@ -65,6 +69,7 @@ npx docguard-cli fix --doc environment
 ```
 
 6. **Validate the fix** (iterate up to 3 times):
+
 ```bash
 npx docguard-cli guard
 ```

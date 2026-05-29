@@ -6,7 +6,10 @@ export class CryptoRepository {
     return prisma.crypto_transactions.findUnique({ where: { id } });
   }
 
-  async updateTransaction(id: string, data: Prisma.crypto_transactionsUpdateInput) {
+  async updateTransaction(
+    id: string,
+    data: Prisma.crypto_transactionsUpdateInput,
+  ) {
     return prisma.crypto_transactions.update({ where: { id }, data });
   }
 

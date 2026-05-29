@@ -21,10 +21,10 @@ export interface User {
 // DTO alias for Architecture Refactor T5.1
 export type UserDTO = User;
 
-export type UserRole = 
-  | "admin" 
-  | "dentist" 
-  | "receptionist" 
+export type UserRole =
+  | "admin"
+  | "dentist"
+  | "receptionist"
   | "assistant"
   | "financial";
 
@@ -106,7 +106,7 @@ export interface ResetPasswordRequest {
 // ============================================================================
 
 export interface JWTPayload {
-  sub: string;        // user id
+  sub: string; // user id
   email: string;
   role: UserRole;
   clinicId: string;

@@ -1,6 +1,6 @@
 /**
  * Integração Contábil Config - Componente Principal (Orquestrador)
- * 
+ *
  * REFATORADO: 501 linhas → ~150 linhas
  * - Extraiu lógica de dados para useContabilConfig
  * - Extraiu formulário para ConfigForm
@@ -11,8 +11,18 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Loader2, Building2 } from "lucide-react";
 
 import { useContabilConfig } from "../useContabilConfig";
@@ -31,14 +41,8 @@ export default function IntegracaoContabilConfig() {
   const [formData, setFormData] = useState<ConfigFormData>(DEFAULT_FORM_DATA);
   const clinicId = selectedClinic?.id ?? null;
 
-  const {
-    configs,
-    envios,
-    loading,
-    saving,
-    saveConfig,
-    enviarManual,
-  } = useContabilConfig(clinicId, toast);
+  const { configs, envios, loading, saving, saveConfig, enviarManual } =
+    useContabilConfig(clinicId, toast);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

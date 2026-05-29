@@ -32,13 +32,13 @@ export function useFuncionarioForm({
   onSubmit,
 }: UseFuncionarioFormProps): UseFuncionarioFormReturn {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(
-    funcionario?.avatar_url || null
+    funcionario?.avatar_url || null,
   );
   const [selectedDias, setSelectedDias] = useState<number[]>(
-    funcionario?.diasTrabalho || []
+    funcionario?.diasTrabalho || [],
   );
   const [permissoes, setPermissoes] = useState<Permissoes>(
-    funcionario?.permissoes || {}
+    funcionario?.permissoes || {},
   );
 
   const {
@@ -48,7 +48,9 @@ export function useFuncionarioForm({
     setValue,
     watch,
   } = useForm<Funcionario>({
-    resolver: zodResolver(funcionarioSchema) as unknown as Resolver<Funcionario>,
+    resolver: zodResolver(
+      funcionarioSchema,
+    ) as unknown as Resolver<Funcionario>,
     defaultValues: funcionario || {
       status: "Ativo",
       permissoes: {},

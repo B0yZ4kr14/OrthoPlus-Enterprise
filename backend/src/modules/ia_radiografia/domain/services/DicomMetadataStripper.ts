@@ -1,4 +1,4 @@
-import crypto from "crypto"
+import crypto from "crypto";
 
 export class DicomMetadataStripper {
   /**
@@ -6,31 +6,40 @@ export class DicomMetadataStripper {
    * Em producao, usar biblioteca especializada (ex: dicom-parser + sharp).
    */
   async strip(imageBuffer: Buffer): Promise<{
-    cleanBuffer: Buffer
-    originalHash: string
-    cleanHash: string
+    cleanBuffer: Buffer;
+    originalHash: string;
+    cleanHash: string;
   }> {
-    const originalHash = crypto.createHash("sha256").update(imageBuffer).digest("hex")
+    const originalHash = crypto
+      .createHash("sha256")
+      .update(imageBuffer)
+      .digest("hex");
 
     // Heuristica: verificar header DICOM
-    const isDicom = imageBuffer.length > 132 &&
-      imageBuffer.slice(128, 132).toString("ascii") === "DICM"
+    const isDicom =
+      imageBuffer.length > 132 &&
+      imageBuffer.slice(128, 132).toString("ascii") === "DICM";
 
     if (isDicom) {
       // TODO: em producao, extrair pixels do DICOM e reconstruir PNG
       // Simplificacao: retorna buffer original marcado como DICOM
-      console.warn("[DicomMetadataStripper] DICOM detectado. Em producao, extrair pixels e reconstruir PNG.")
+      console.warn(
+        "[DicomMetadataStripper] DICOM detectado. Em producao, extrair pixels e reconstruir PNG.",
+      );
     }
 
     // TODO: em producao, usar sharp para re-encode JPEG/PNG e remover EXIF/ICC/XMP
     // Simplificacao: retorna buffer original (seguranca reduzida em dev)
-    const cleanHash = crypto.createHash("sha256").update(imageBuffer).digest("hex")
+    const cleanHash = crypto
+      .createHash("sha256")
+      .update(imageBuffer)
+      .digest("hex");
 
     return {
       cleanBuffer: imageBuffer,
       originalHash,
       cleanHash,
-    }
+    };
   }
 
   /**
@@ -38,13 +47,15 @@ export class DicomMetadataStripper {
    * Metodo heuristico basico.
    */
   async validateNoPII(buffer: Buffer): Promise<boolean> {
-    const sample = buffer.slice(0, Math.min(buffer.length, 1024 * 100)).toString("utf-8", 0, Math.min(buffer.length, 1024 * 100))
+    const sample = buffer
+      .slice(0, Math.min(buffer.length, 1024 * 100))
+      .toString("utf-8", 0, Math.min(buffer.length, 1024 * 100));
     const piiPatterns = [
       /PatientName/i,
       /PatientID/i,
       /PatientBirthDate/i,
       /InstitutionName/i,
-    ]
-    return !piiPatterns.some((p) => p.test(sample))
+    ];
+    return !piiPatterns.some((p) => p.test(sample));
   }
 }

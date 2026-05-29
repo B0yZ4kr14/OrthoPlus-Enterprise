@@ -9,7 +9,7 @@ import {
   recommendModuleSequence,
   importClinicData,
   exportClinicData,
-  requestNewModule
+  requestNewModule,
 } from "../controllers/moduleController";
 
 const modulesRouter: Router = Router();
@@ -22,7 +22,10 @@ modulesRouter.post("/apply-template", asyncHandler(applyModuleTemplate));
 modulesRouter.get("/my-modules", asyncHandler(getMyModules));
 modulesRouter.post("/suggest", asyncHandler(suggestModules));
 modulesRouter.post("/toggle", asyncHandler(toggleModuleState));
-modulesRouter.post("/recommend-sequence", asyncHandler(recommendModuleSequence));
+modulesRouter.post(
+  "/recommend-sequence",
+  asyncHandler(recommendModuleSequence),
+);
 
 // Data Import/Export Routes
 modulesRouter.post("/import-data", asyncHandler(importClinicData));

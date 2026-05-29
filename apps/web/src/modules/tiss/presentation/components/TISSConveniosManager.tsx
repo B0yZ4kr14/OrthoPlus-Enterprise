@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
@@ -20,10 +25,21 @@ import {
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
 import { Plus, Pencil, Trash2, Save, X } from "lucide-react";
-import { useTISSConvenios, Convenio } from "@/modules/tiss/application/hooks/useTISSConvenios";
+import {
+  useTISSConvenios,
+  Convenio,
+} from "@/modules/tiss/application/hooks/useTISSConvenios";
 
 export function TISSConveniosManager() {
-  const { convenios, isLoading, createConvenio, updateConvenio, deleteConvenio, isCreating, isUpdating } = useTISSConvenios();
+  const {
+    convenios,
+    isLoading,
+    createConvenio,
+    updateConvenio,
+    deleteConvenio,
+    isCreating,
+    isUpdating,
+  } = useTISSConvenios();
   const [editing, setEditing] = useState<Convenio | null>(null);
   const [form, setForm] = useState<Partial<Convenio>>({ is_active: true });
   const [open, setOpen] = useState(false);
@@ -64,7 +80,9 @@ export function TISSConveniosManager() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Convênios ({convenios.length})</h3>
+        <h3 className="text-lg font-semibold">
+          Convênios ({convenios.length})
+        </h3>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={resetForm} className="gap-2">
@@ -74,33 +92,61 @@ export function TISSConveniosManager() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editing ? "Editar Convênio" : "Novo Convênio"}</DialogTitle>
+              <DialogTitle>
+                {editing ? "Editar Convênio" : "Novo Convênio"}
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label>Nome *</Label>
-                <Input value={form.nome || ""} onChange={(e) => setForm({ ...form, nome: e.target.value })} required />
+                <Input
+                  value={form.nome || ""}
+                  onChange={(e) => setForm({ ...form, nome: e.target.value })}
+                  required
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Código Operadora</Label>
-                  <Input value={form.codigo_operadora || ""} onChange={(e) => setForm({ ...form, codigo_operadora: e.target.value })} />
+                  <Input
+                    value={form.codigo_operadora || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, codigo_operadora: e.target.value })
+                    }
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>CNPJ</Label>
-                  <Input value={form.cnpj || ""} onChange={(e) => setForm({ ...form, cnpj: e.target.value })} />
+                  <Input
+                    value={form.cnpj || ""}
+                    onChange={(e) => setForm({ ...form, cnpj: e.target.value })}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>Registro ANS</Label>
-                  <Input value={form.registro_ans || ""} onChange={(e) => setForm({ ...form, registro_ans: e.target.value })} />
+                  <Input
+                    value={form.registro_ans || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, registro_ans: e.target.value })
+                    }
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>Tipo Plano</Label>
-                  <Input value={form.tipo_plano || ""} onChange={(e) => setForm({ ...form, tipo_plano: e.target.value })} />
+                  <Input
+                    value={form.tipo_plano || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, tipo_plano: e.target.value })
+                    }
+                  />
                 </div>
               </div>
               <div className="flex justify-end gap-2">
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                >
                   <X className="h-4 w-4 mr-1" />
                   Cancelar
                 </Button>
@@ -143,10 +189,18 @@ export function TISSConveniosManager() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
-                      <Button variant="ghost" size="sm" onClick={() => handleEdit(c)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEdit(c)}
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => deleteConvenio(c.id)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => deleteConvenio(c.id)}
+                      >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>

@@ -10,23 +10,25 @@ export interface GitHubData {
 }
 
 export const useGitHubManagerPage = () => {
-  const {
-    data,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["github-manager-page"],
     queryFn: async () => {
       const reposRes = await apiClient.get<{ repositories: { id: string }[] }>(
-        "/github/repositories"
+        "/github/repositories",
       );
       const repo = reposRes.repositories?.[0];
       if (!repo) throw new Error("Nenhum repositório conectado");
 
       const [branchesRes, prsRes, workflowsRes] = await Promise.all([
-        apiClient.get<{ branches: any[] }>(`/github/repositories/${repo.id}/branches`),
-        apiClient.get<{ pullRequests: any[] }>(`/github/repositories/${repo.id}/pull-requests`),
-        apiClient.get<{ workflows: any[] }>(`/github/repositories/${repo.id}/workflows`),
+        apiClient.get<{ branches: any[] }>(
+          `/github/repositories/${repo.id}/branches`,
+        ),
+        apiClient.get<{ pullRequests: any[] }>(
+          `/github/repositories/${repo.id}/pull-requests`,
+        ),
+        apiClient.get<{ workflows: any[] }>(
+          `/github/repositories/${repo.id}/workflows`,
+        ),
       ]);
 
       return {

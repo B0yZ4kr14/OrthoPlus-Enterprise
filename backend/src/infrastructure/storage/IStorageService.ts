@@ -1,6 +1,6 @@
 /**
  * IStorageService - Abstração de armazenamento de arquivos
- * 
+ *
  * Permite trocar implementação de armazenamento (S3/MinIO)
  * sem alterar lógica de negócio dos módulos.
  */
@@ -70,7 +70,11 @@ export interface IStorageService {
   /**
    * Gera URL assinada temporária
    */
-  getSignedUrl(bucket: string, path: string, expiresIn: number): Promise<string>;
+  getSignedUrl(
+    bucket: string,
+    path: string,
+    expiresIn: number,
+  ): Promise<string>;
 
   /**
    * Move/renomeia arquivo
@@ -102,8 +106,8 @@ export interface IStorageService {
  * Tipo de implementação de storage
  */
 export enum StorageType {
-  HOSTED_CLOUD = 'hosted_cloud',
-  SELF_HOSTED = 'self_hosted',
-  MINIO_LOCAL = 'minio_local',
-  S3_COMPATIBLE = 's3_compatible',
+  HOSTED_CLOUD = "hosted_cloud",
+  SELF_HOSTED = "self_hosted",
+  MINIO_LOCAL = "minio_local",
+  S3_COMPATIBLE = "s3_compatible",
 }

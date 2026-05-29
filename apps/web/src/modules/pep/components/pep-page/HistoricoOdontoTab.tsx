@@ -1,6 +1,12 @@
 // cspell:disable
 import { AlertCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { OdontogramaHistory } from "@/modules/pep/components/OdontogramaHistory";
 import type { OdontogramaHistoryEntry } from "@/modules/pep/types/odontograma.types";
@@ -25,8 +31,8 @@ export function HistoricoOdontoTab({
       <CardHeader>
         <CardTitle>Histórico de Alterações do Odontograma</CardTitle>
         <CardDescription>
-          Versionamento completo das mudanças realizadas no odontograma ao
-          longo do tempo
+          Versionamento completo das mudanças realizadas no odontograma ao longo
+          do tempo
         </CardDescription>
       </CardHeader>
       <CardContent>

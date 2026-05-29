@@ -10,7 +10,12 @@ import { Button } from "@orthoplus/core-ui/button";
 import { Search } from "lucide-react";
 import type { AddressSectionProps } from "./types";
 
-export function CEPField({ form, loadingCEP, onCEPChange, onSearchCEP }: AddressSectionProps) {
+export function CEPField({
+  form,
+  loadingCEP,
+  onCEPChange,
+  onSearchCEP,
+}: AddressSectionProps) {
   return (
     <FormField
       control={form.control}
@@ -28,7 +33,13 @@ export function CEPField({ form, loadingCEP, onCEPChange, onSearchCEP }: Address
                 maxLength={9}
               />
             </FormControl>
-            <Button type="button" variant="outline" size="icon" onClick={onSearchCEP} disabled={loadingCEP}>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={onSearchCEP}
+              disabled={loadingCEP}
+            >
               <Search className="h-4 w-4" />
             </Button>
           </div>

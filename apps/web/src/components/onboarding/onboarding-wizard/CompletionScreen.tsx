@@ -32,8 +32,8 @@ export function CompletionScreen({ onClose, onFinish }: CompletionScreenProps) {
           </div>
           <h2 className="text-3xl font-bold">Parabéns! 🎉</h2>
           <p className="text-muted-foreground text-lg">
-            Você concluiu o onboarding do OrthoPlus Enterprise. Agora você está pronto para começar a usar o
-            sistema completo.
+            Você concluiu o onboarding do OrthoPlus Enterprise. Agora você está
+            pronto para começar a usar o sistema completo.
           </p>
         </div>
 
@@ -42,7 +42,9 @@ export function CompletionScreen({ onClose, onFinish }: CompletionScreenProps) {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-              <span>Acesse o Dashboard para visualizar métricas da sua clínica</span>
+              <span>
+                Acesse o Dashboard para visualizar métricas da sua clínica
+              </span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />

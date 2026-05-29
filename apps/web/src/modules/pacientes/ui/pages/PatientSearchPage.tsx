@@ -5,16 +5,19 @@
  * dentista responsável e ordenação por relevância/recência.
  */
 
-import { useState, useCallback, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { useDebounce } from "use-debounce"
-import { usePatientsQuery, type PatientSearchItem } from "../../hooks/usePatientsQuery"
-import { useAuth } from "@/contexts/AuthContext"
-import { Button } from "@orthoplus/core-ui/button"
-import { Input } from "@orthoplus/core-ui/input"
-import { Card, CardContent } from "@orthoplus/core-ui/card"
-import { Badge } from "@orthoplus/core-ui/badge"
-import { Skeleton } from "@orthoplus/core-ui/skeleton"
+import { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDebounce } from "use-debounce";
+import {
+  usePatientsQuery,
+  type PatientSearchItem,
+} from "../../hooks/usePatientsQuery";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@orthoplus/core-ui/button";
+import { Input } from "@orthoplus/core-ui/input";
+import { Card, CardContent } from "@orthoplus/core-ui/card";
+import { Badge } from "@orthoplus/core-ui/badge";
+import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import {
   Search,
   User,
@@ -23,8 +26,8 @@ import {
   ChevronRight,
   Filter,
   X,
-} from "lucide-react"
-import { PageHeader } from "@/components/shared/PageHeader"
+} from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 const STATUS_OPTIONS = [
   { value: "", label: "Todos" },
@@ -33,43 +36,43 @@ const STATUS_OPTIONS = [
   { value: "EM_TRATAMENTO", label: "Em Tratamento" },
   { value: "INATIVO", label: "Inativo" },
   { value: "ARQUIVADO", label: "Arquivado" },
-]
+];
 
 export default function PatientSearchPage() {
-  const navigate = useNavigate()
-  const { clinicId } = useAuth()
+  const navigate = useNavigate();
+  const { clinicId } = useAuth();
 
-  const [searchInput, setSearchInput] = useState("")
-  const [statusFilter, setStatusFilter] = useState("")
-  const [page, setPage] = useState(1)
+  const [searchInput, setSearchInput] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [page, setPage] = useState(1);
 
-  const [debouncedQuery] = useDebounce(searchInput, 300)
+  const [debouncedQuery] = useDebounce(searchInput, 300);
 
   const { data, isLoading, isFetching } = usePatientsQuery({
     query: debouncedQuery,
     status: statusFilter || undefined,
     page,
     limit: 20,
-  })
+  });
 
   useEffect(() => {
-    setPage(1)
-  }, [debouncedQuery, statusFilter])
+    setPage(1);
+  }, [debouncedQuery, statusFilter]);
 
   const handlePatientClick = useCallback(
     (patientId: string) => {
-      navigate(`/pacientes/${patientId}`)
+      navigate(`/pacientes/${patientId}`);
     },
     [navigate],
-  )
+  );
 
   const clearFilters = useCallback(() => {
-    setSearchInput("")
-    setStatusFilter("")
-    setPage(1)
-  }, [])
+    setSearchInput("");
+    setStatusFilter("");
+    setPage(1);
+  }, []);
 
-  const hasFilters = searchInput || statusFilter
+  const hasFilters = searchInput || statusFilter;
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -183,7 +186,10 @@ export default function PatientSearchPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium truncate" title={patient.fullName}>
+                      <p
+                        className="font-medium truncate"
+                        title={patient.fullName}
+                      >
                         {patient.fullName}
                       </p>
                       <Badge variant="outline" className="text-xs">
@@ -247,5 +253,5 @@ export default function PatientSearchPage() {
         </div>
       )}
     </div>
-  )
+  );
 }

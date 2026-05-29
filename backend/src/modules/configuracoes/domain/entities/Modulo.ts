@@ -10,15 +10,25 @@ export class Modulo {
     public moduleKey: string,
     public nome: string,
     public descricao: string,
-    public categoria: 'CLINICA' | 'FINANCEIRO' | 'MARKETING' | 'COMPLIANCE' | 'INOVACAO',
+    public categoria:
+      | "CLINICA"
+      | "FINANCEIRO"
+      | "MARKETING"
+      | "COMPLIANCE"
+      | "INOVACAO",
     public isActive: boolean,
     public dependencies: ModuloDependency[],
     public configuracoes: Record<string, any>,
     public readonly createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
   ) {}
 
-  static create(props: Omit<Modulo, 'ativar' | 'desativar' | 'atualizarConfiguracao' | 'temDependencia'>): Modulo {
+  static create(
+    props: Omit<
+      Modulo,
+      "ativar" | "desativar" | "atualizarConfiguracao" | "temDependencia"
+    >,
+  ): Modulo {
     return new Modulo(
       props.id,
       props.clinicId,
@@ -30,7 +40,7 @@ export class Modulo {
       props.dependencies,
       props.configuracoes,
       props.createdAt,
-      props.updatedAt
+      props.updatedAt,
     );
   }
 
@@ -50,6 +60,6 @@ export class Modulo {
   }
 
   temDependencia(moduleKey: string): boolean {
-    return this.dependencies.some(dep => dep.moduleKey === moduleKey);
+    return this.dependencies.some((dep) => dep.moduleKey === moduleKey);
   }
 }

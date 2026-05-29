@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import {
   LineChart,
   XAxis,
@@ -34,9 +39,13 @@ export function RSIChart({ chartData }: RSIChartProps) {
               }
               className="text-xs"
             />
-            <YAxis domain={[0, 100]} className="text-xs"  stroke="hsl(var(--muted-foreground))" />
+            <YAxis
+              domain={[0, 100]}
+              className="text-xs"
+              stroke="hsl(var(--muted-foreground))"
+            />
             <Tooltip content={<RSITooltip />} />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <RSILine />
             <OverboughtLine />
             <OversoldLine />

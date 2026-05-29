@@ -8,7 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   AgendaProvider,
   useAgenda,
@@ -56,12 +61,10 @@ function AgendaContent() {
     endDate: new Date(weekStart.getTime() + 7 * 24 * 60 * 60 * 1000),
   });
 
-  const {
-    createSchedule,
-    isCreating: isCreatingSchedule,
-  } = useDentistSchedules({
-    clinicId: clinicId || undefined,
-  });
+  const { createSchedule, isCreating: isCreatingSchedule } =
+    useDentistSchedules({
+      clinicId: clinicId || undefined,
+    });
 
   const { createBlockedTime, isCreating: isCreatingBlock } = useBlockedTimes({
     clinicId: clinicId || undefined,
@@ -115,9 +118,16 @@ function AgendaContent() {
         description="Gerencie agendamentos, horários e bloqueios"
         actions={
           <div className="flex items-center gap-2">
-            <Dialog open={isScheduleDialogOpen} onOpenChange={setIsScheduleDialogOpen}>
+            <Dialog
+              open={isScheduleDialogOpen}
+              onOpenChange={setIsScheduleDialogOpen}
+            >
               <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2" data-testid="agenda-schedules-button">
+                <Button
+                  variant="outline"
+                  className="gap-2"
+                  data-testid="agenda-schedules-button"
+                >
                   <Settings className="h-4 w-4" />
                   Horários
                 </Button>
@@ -126,13 +136,23 @@ function AgendaContent() {
                 <DialogHeader>
                   <DialogTitle>Configurar Horário</DialogTitle>
                 </DialogHeader>
-                <DentistScheduleForm onSubmit={handleCreateSchedule} isLoading={isCreatingSchedule} />
+                <DentistScheduleForm
+                  onSubmit={handleCreateSchedule}
+                  isLoading={isCreatingSchedule}
+                />
               </DialogContent>
             </Dialog>
 
-            <Dialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
+            <Dialog
+              open={isBlockDialogOpen}
+              onOpenChange={setIsBlockDialogOpen}
+            >
               <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2" data-testid="agenda-block-button">
+                <Button
+                  variant="outline"
+                  className="gap-2"
+                  data-testid="agenda-block-button"
+                >
                   <Clock className="h-4 w-4" />
                   Bloquear
                 </Button>
@@ -141,13 +161,22 @@ function AgendaContent() {
                 <DialogHeader>
                   <DialogTitle>Bloquear Horário</DialogTitle>
                 </DialogHeader>
-                <BlockedTimeForm onSubmit={handleCreateBlock} isLoading={isCreatingBlock} />
+                <BlockedTimeForm
+                  onSubmit={handleCreateBlock}
+                  isLoading={isCreatingBlock}
+                />
               </DialogContent>
             </Dialog>
 
-            <Dialog open={isAppointmentDialogOpen} onOpenChange={setIsAppointmentDialogOpen}>
+            <Dialog
+              open={isAppointmentDialogOpen}
+              onOpenChange={setIsAppointmentDialogOpen}
+            >
               <DialogTrigger asChild>
-                <Button className="gap-2 glow-interactive" data-testid="agenda-new-appointment-button">
+                <Button
+                  className="gap-2 glow-interactive"
+                  data-testid="agenda-new-appointment-button"
+                >
                   <Plus className="h-4 w-4" />
                   Novo Agendamento
                 </Button>
@@ -156,7 +185,10 @@ function AgendaContent() {
                 <DialogHeader>
                   <DialogTitle>Novo Agendamento</DialogTitle>
                 </DialogHeader>
-                <AppointmentForm onSubmit={handleCreateAppointment} isLoading={isCreating} />
+                <AppointmentForm
+                  onSubmit={handleCreateAppointment}
+                  isLoading={isCreating}
+                />
               </DialogContent>
             </Dialog>
           </div>
@@ -165,11 +197,19 @@ function AgendaContent() {
 
       <Tabs defaultValue="calendar" className="w-full">
         <TabsList className="grid w-full grid-cols-2 bg-muted/30 backdrop-blur-sm border border-border/50 rounded-xl p-1 max-w-md">
-          <TabsTrigger value="calendar" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground" data-testid="agenda-tab-calendar">
+          <TabsTrigger
+            value="calendar"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+            data-testid="agenda-tab-calendar"
+          >
             <Calendar className="h-4 w-4" />
             Calendário
           </TabsTrigger>
-          <TabsTrigger value="list" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground" data-testid="agenda-tab-list">
+          <TabsTrigger
+            value="list"
+            className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground"
+            data-testid="agenda-tab-list"
+          >
             Lista
           </TabsTrigger>
         </TabsList>
@@ -199,7 +239,10 @@ function AgendaContent() {
                 icon={CalendarDays}
                 message="Nenhum agendamento"
                 description="Não há agendamentos para este período."
-                action={{ label: "Novo Agendamento", onClick: () => setIsAppointmentDialogOpen(true) }}
+                action={{
+                  label: "Novo Agendamento",
+                  onClick: () => setIsAppointmentDialogOpen(true),
+                }}
               />
             </Card>
           ) : (
@@ -209,7 +252,9 @@ function AgendaContent() {
                   key={appointment.id}
                   appointment={appointment}
                   onConfirm={() => confirmAppointment(appointment.id)}
-                  onCancel={() => cancelAppointment({ appointmentId: appointment.id })}
+                  onCancel={() =>
+                    cancelAppointment({ appointmentId: appointment.id })
+                  }
                 />
               ))}
             </div>

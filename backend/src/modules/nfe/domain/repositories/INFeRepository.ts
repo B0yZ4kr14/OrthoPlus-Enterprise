@@ -1,4 +1,4 @@
-import { NFe } from '../entities/NFe';
+import { NFe } from "../entities/NFe";
 
 export interface NFeQueryOptions {
   clinicId: string;

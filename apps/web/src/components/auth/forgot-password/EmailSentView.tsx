@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { CheckCircle2, Mail, ArrowLeft } from "lucide-react";
@@ -17,14 +23,16 @@ export function EmailSentView({ email, onBack }: EmailSentViewProps) {
         </div>
         <CardTitle>Email Enviado!</CardTitle>
         <CardDescription>
-          Enviamos um link para redefinição de senha para <strong>{email}</strong>
+          Enviamos um link para redefinição de senha para{" "}
+          <strong>{email}</strong>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Alert>
           <Mail className="h-4 w-4" />
           <AlertDescription>
-            Verifique sua caixa de entrada e sua pasta de spam. O link expira em 1 hora.
+            Verifique sua caixa de entrada e sua pasta de spam. O link expira em
+            1 hora.
           </AlertDescription>
         </Alert>
         <Button variant="outline" className="w-full" onClick={onBack}>

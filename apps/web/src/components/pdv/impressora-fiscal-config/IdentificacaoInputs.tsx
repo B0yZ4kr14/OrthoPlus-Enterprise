@@ -8,7 +8,10 @@ interface IdentificacaoInputsProps {
   onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }
 
-export function IdentificacaoInputs({ formData, onChange }: IdentificacaoInputsProps) {
+export function IdentificacaoInputs({
+  formData,
+  onChange,
+}: IdentificacaoInputsProps) {
   return (
     <>
       <div className="space-y-2">

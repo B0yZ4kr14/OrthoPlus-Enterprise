@@ -10,7 +10,10 @@ interface GoogleOAuthSectionProps {
   onUpdate: (updates: Partial<AuthConfig>) => void;
 }
 
-export function GoogleOAuthSection({ config, onUpdate }: GoogleOAuthSectionProps) {
+export function GoogleOAuthSection({
+  config,
+  onUpdate,
+}: GoogleOAuthSectionProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -25,7 +28,9 @@ export function GoogleOAuthSection({ config, onUpdate }: GoogleOAuthSectionProps
         </div>
         <Switch
           checked={config.google_oauth_enabled || false}
-          onCheckedChange={(checked) => onUpdate({ google_oauth_enabled: checked })}
+          onCheckedChange={(checked) =>
+            onUpdate({ google_oauth_enabled: checked })
+          }
         />
       </div>
 
@@ -71,7 +76,9 @@ export function GoogleOAuthSection({ config, onUpdate }: GoogleOAuthSectionProps
               type="password"
               placeholder="GOCSPX-*********************"
               value={config.google_client_secret || ""}
-              onChange={(e) => onUpdate({ google_client_secret: e.target.value })}
+              onChange={(e) =>
+                onUpdate({ google_client_secret: e.target.value })
+              }
             />
             <p className="text-xs text-muted-foreground">
               🔒 Armazenado de forma criptografada

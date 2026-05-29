@@ -123,7 +123,9 @@ export function ReceitaForm({
           <Label htmlFor="validade">Validade (dias)</Label>
           <Select
             defaultValue="30"
-            onValueChange={(value) => setValue("validade", value as "30" | "60" | "90" | "120")}
+            onValueChange={(value) =>
+              setValue("validade", value as "30" | "60" | "90" | "120")
+            }
           >
             <SelectTrigger>
               <SelectValue />

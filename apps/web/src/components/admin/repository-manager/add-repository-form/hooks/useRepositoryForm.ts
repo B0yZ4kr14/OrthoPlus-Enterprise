@@ -11,24 +11,30 @@ const initialFormData: RepositoryFormData = {
 
 export function useRepositoryForm(
   externalFormData?: RepositoryFormData,
-  onChange?: <K extends keyof RepositoryFormData>(field: K, value: RepositoryFormData[K]) => void
+  onChange?: <K extends keyof RepositoryFormData>(
+    field: K,
+    value: RepositoryFormData[K],
+  ) => void,
 ) {
   const [internalFormData, setInternalFormData] = useState<RepositoryFormData>(
-    externalFormData ?? initialFormData
+    externalFormData ?? initialFormData,
   );
 
   const formData = externalFormData ?? internalFormData;
 
-  const handleChange = useCallback(<K extends keyof RepositoryFormData>(
-    field: K,
-    value: RepositoryFormData[K]
-  ) => {
-    if (onChange) {
-      onChange(field, value);
-    } else {
-      setInternalFormData((prev) => ({ ...prev, [field]: value }));
-    }
-  }, [onChange]);
+  const handleChange = useCallback(
+    <K extends keyof RepositoryFormData>(
+      field: K,
+      value: RepositoryFormData[K],
+    ) => {
+      if (onChange) {
+        onChange(field, value);
+      } else {
+        setInternalFormData((prev) => ({ ...prev, [field]: value }));
+      }
+    },
+    [onChange],
+  );
 
   const resetForm = useCallback(() => {
     setInternalFormData(initialFormData);

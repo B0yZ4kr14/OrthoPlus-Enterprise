@@ -9,7 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { HistoricoClinicoForm } from "@/modules/pep/components/HistoricoClinicoForm";
 import { EvolucoesTimeline } from "@/modules/pep/components/EvolucoesTimeline";

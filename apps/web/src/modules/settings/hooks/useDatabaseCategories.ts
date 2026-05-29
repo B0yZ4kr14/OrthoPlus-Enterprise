@@ -50,7 +50,7 @@ export function useDatabaseCategories() {
     queryKey: ["database-categories", clinicId],
     queryFn: async () => {
       const res = await apiClient.get<{ categories: CategoryConfig[] }>(
-        "/database_admin/categories"
+        "/database_admin/categories",
       );
       return res;
     },
@@ -61,7 +61,7 @@ export function useDatabaseCategories() {
     queryKey: ["database-master-health", clinicId],
     queryFn: async () => {
       const res = await apiClient.get<MasterHealthResult>(
-        "/database_admin/master/health"
+        "/database_admin/master/health",
       );
       return res;
     },
@@ -73,7 +73,7 @@ export function useDatabaseCategories() {
     queryKey: ["database-master-stats", clinicId],
     queryFn: async () => {
       const res = await apiClient.get<MasterStatsResult>(
-        "/database_admin/master/stats"
+        "/database_admin/master/stats",
       );
       return res;
     },

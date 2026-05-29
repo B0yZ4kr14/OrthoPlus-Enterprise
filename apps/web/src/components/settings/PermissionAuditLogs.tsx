@@ -58,7 +58,9 @@ export function PermissionAuditLogs() {
 
   const fetchUsers = async () => {
     try {
-      const data = await apiClient.get<Array<{ id: string; full_name: string }>>('/configuracoes/usuarios');
+      const data = await apiClient.get<
+        Array<{ id: string; full_name: string }>
+      >("/configuracoes/usuarios");
       setUsers(data || []);
     } catch (error) {
       console.error("Erro ao carregar usuários:", error);
@@ -110,8 +112,8 @@ export function PermissionAuditLogs() {
           },
           target_user: {
             full_name:
-              (log.target_user as Record<string, any>)?.full_name?.[0]?.full_name ||
-              "Desconhecido",
+              (log.target_user as Record<string, any>)?.full_name?.[0]
+                ?.full_name || "Desconhecido",
           },
           module: log.module_catalog_id
             ? modulesMap[log.module_catalog_id]

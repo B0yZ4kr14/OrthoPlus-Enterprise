@@ -1,4 +1,7 @@
-import { MODULE_CATALOG, CatalogModule } from "@/modules/configuracoes/domain/moduleCatalog";
+import {
+  MODULE_CATALOG,
+  CatalogModule,
+} from "@/modules/configuracoes/domain/moduleCatalog";
 import { ClinicDataRepository } from "@/modules/configuracoes/infrastructure/ClinicDataRepository";
 
 export interface ModuleView {
@@ -33,11 +36,7 @@ function buildModuleView(catalog: CatalogModule[]): ModuleView[] {
     );
 
     const active_dependents = catalog
-      .filter(
-        (m) =>
-          m.is_active &&
-          m.dependencies.includes(mod.module_key),
-      )
+      .filter((m) => m.is_active && m.dependencies.includes(mod.module_key))
       .map((m) => m.module_key);
 
     const can_activate = !mod.is_active && unmet_dependencies.length === 0;
@@ -108,7 +107,7 @@ export class ModulosControllerService {
       );
       if (dependents.length > 0) {
         throw new Error(
-          `Modulo tem dependentes ativos: ${dependents.map((d) => d.name).join(", ")}`
+          `Modulo tem dependentes ativos: ${dependents.map((d) => d.name).join(", ")}`,
         );
       }
     }
@@ -127,7 +126,9 @@ export class ModulosControllerService {
     return { message: "Template applied successfully" };
   }
 
-  suggestModules(): { suggestions: Array<{ id: string; name: string; reason: string }> } {
+  suggestModules(): {
+    suggestions: Array<{ id: string; name: string; reason: string }>;
+  } {
     return {
       suggestions: [
         {
@@ -152,7 +153,9 @@ export class ModulosControllerService {
     return { message: "Data imported successfully", processed: data.length };
   }
 
-  async exportClinicData(clinicId?: string): Promise<{ export: unknown[]; format: string }> {
+  async exportClinicData(
+    clinicId?: string,
+  ): Promise<{ export: unknown[]; format: string }> {
     if (!clinicId) {
       throw new Error("Unauthorized");
     }

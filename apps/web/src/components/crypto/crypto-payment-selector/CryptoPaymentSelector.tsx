@@ -85,7 +85,9 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
               is_active: true,
             },
           ]}
-          onGeneratePayment={async () => { handlePaymentGenerated(); }}
+          onGeneratePayment={async () => {
+            handlePaymentGenerated();
+          }}
         />
       )}
     </div>

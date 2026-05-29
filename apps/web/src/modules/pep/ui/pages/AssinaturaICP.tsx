@@ -7,7 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
@@ -24,8 +29,8 @@ import {
   User,
   Calendar,
   Lock,
-} from "lucide-react"
-import { PageHeader } from "@/components/shared/PageHeader"
+} from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function AssinaturaICP() {
   const { hasModuleAccess } = useAuth();
@@ -180,9 +185,7 @@ export default function AssinaturaICP() {
                     </Badge>
                     <span className="text-sm">1 certificado</span>
                   </div>
-                  <span className="text-sm text-warning">
-                    Expira em breve
-                  </span>
+                  <span className="text-sm text-warning">Expira em breve</span>
                 </div>
               </CardContent>
             </Card>

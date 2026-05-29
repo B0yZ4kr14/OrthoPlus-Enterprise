@@ -36,7 +36,22 @@ export function BackupReplicationTab() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: LucideIcon; label: string }> = {
+    const variants: Record<
+      string,
+      {
+        variant:
+          | "default"
+          | "secondary"
+          | "destructive"
+          | "outline"
+          | "success"
+          | "warning"
+          | "error"
+          | "info";
+        icon: LucideIcon;
+        label: string;
+      }
+    > = {
       COMPLETED: { variant: "success", icon: CheckCircle, label: "Completo" },
       FAILED: { variant: "destructive", icon: XCircle, label: "Falhou" },
       PENDING: { variant: "warning", icon: Clock, label: "Pendente" },
@@ -47,10 +62,7 @@ export function BackupReplicationTab() {
     const Icon = config.icon;
 
     return (
-      <Badge
-        variant={config.variant}
-        className="flex items-center gap-1"
-      >
+      <Badge variant={config.variant} className="flex items-center gap-1">
         <Icon className="h-3 w-3" />
         {config.label}
       </Badge>

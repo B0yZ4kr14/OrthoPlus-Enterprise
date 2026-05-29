@@ -4,8 +4,13 @@
  * Compatível com CSS variables do ThemeContext v3
  */
 
-export type SemanticColorType = "warning" | "info" | "accent" | "destructive" | "success"
-export type SemanticVariant = "bg" | "text" | "border"
+export type SemanticColorType =
+  | "warning"
+  | "info"
+  | "accent"
+  | "destructive"
+  | "success";
+export type SemanticVariant = "bg" | "text" | "border";
 
 /**
  * Retorna classe Tailwind para uma cor semântica com opacidade opcional
@@ -17,8 +22,8 @@ export function getSemanticColorClass(
   variant: SemanticVariant,
   opacity?: number,
 ): string {
-  const base = `${variant}-${type}`
-  return opacity !== undefined ? `${base}/${opacity}` : base
+  const base = `${variant}-${type}`;
+  return opacity !== undefined ? `${base}/${opacity}` : base;
 }
 
 /**
@@ -57,18 +62,18 @@ export const semanticColorMap: Record<string, string> = {
   // Dark mode info
   "dark:text-cyan-200": "dark:text-info",
   "dark:bg-cyan-900": "dark:bg-info/20",
-}
+};
 
 /**
  * Substitui cores hardcoded em uma string de classes Tailwind
  * @example mapLegacyColors("bg-amber-100 text-amber-800") // "bg-warning/10 text-warning"
  */
 export function mapLegacyColors(classString: string): string {
-  let result = classString
+  let result = classString;
   for (const [legacy, semantic] of Object.entries(semanticColorMap)) {
-    result = result.replace(new RegExp(`\\b${legacy}\\b`, "g"), semantic)
+    result = result.replace(new RegExp(`\\b${legacy}\\b`, "g"), semantic);
   }
-  return result
+  return result;
 }
 
 /**
@@ -77,12 +82,14 @@ export function mapLegacyColors(classString: string): string {
  */
 export function semanticStatusColors(
   type: SemanticColorType,
-  options: { bgOpacity?: number; darkBgOpacity?: number; textOpacity?: number; darkTextOpacity?: number } = {},
+  options: {
+    bgOpacity?: number;
+    darkBgOpacity?: number;
+    textOpacity?: number;
+    darkTextOpacity?: number;
+  } = {},
 ): string {
-  const {
-    bgOpacity = 10,
-    darkBgOpacity = 20,
-  } = options
+  const { bgOpacity = 10, darkBgOpacity = 20 } = options;
 
-  return `bg-${type}/${bgOpacity} text-${type} dark:bg-${type}/${darkBgOpacity} dark:text-${type}`
+  return `bg-${type}/${bgOpacity} text-${type} dark:bg-${type}/${darkBgOpacity} dark:text-${type}`;
 }

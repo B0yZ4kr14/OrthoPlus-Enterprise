@@ -1,27 +1,30 @@
 import { IUsuariosRepository } from "@/modules/usuarios/domain/repositories/IUsuariosRepository";
 import { logger } from "@/infrastructure/logger";
 import bcrypt from "bcrypt";
-import { randomBytes } from "crypto"
+import { randomBytes } from "crypto";
 import { Request, Response } from "express";
 
-import { UsuariosRepository } from "@/modules/usuarios/infrastructure/UsuariosRepository"
+import { UsuariosRepository } from "@/modules/usuarios/infrastructure/UsuariosRepository";
 
 export class UsuariosController {
-  private repo: IUsuariosRepository
+  private repo: IUsuariosRepository;
 
   constructor(repo?: IUsuariosRepository) {
-    this.repo = repo ?? new UsuariosRepository()
+    this.repo = repo ?? new UsuariosRepository();
   }
   async list(req: Request, res: Response): Promise<void> {
     try {
       const user = req.user;
 
-      const profiles = await this.repo.findProfilesByClinic(user?.clinicId as string);
+      const profiles = await this.repo.findProfilesByClinic(
+        user?.clinicId as string,
+      );
 
       const profileIds = profiles.map((p: { id: string }) => p.id);
       const users = await this.repo.findUsersByIds(profileIds);
 
-      const usersWithEmail = profiles.map((p: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+      const usersWithEmail = profiles.map((p: any) => {
+        // eslint-disable-line @typescript-eslint/no-explicit-any
         const u = users.find((u) => u.id === p.id);
         return {
           id: p.id,
@@ -48,9 +51,13 @@ export class UsuariosController {
       const user = req.user;
       const { email, password, full_name, app_role, is_active } = req.body;
 
-      if (!user?.clinicId) { res.status(401).json({ error: "Auth required" }); return; }
+      if (!user?.clinicId) {
+        res.status(401).json({ error: "Auth required" });
+        return;
+      }
 
-      const effectivePassword = password || randomBytes(24).toString("base64url");
+      const effectivePassword =
+        password || randomBytes(24).toString("base64url");
       const hashedPassword = await bcrypt.hash(effectivePassword, 12);
 
       const newUser = await this.repo.createUser({
@@ -82,10 +89,16 @@ export class UsuariosController {
       const { full_name, app_role, is_active, password } = req.body;
 
       const clinicId = req.user?.clinicId;
-      if (!clinicId) { res.status(401).json({ error: "Auth required" }); return; }
+      if (!clinicId) {
+        res.status(401).json({ error: "Auth required" });
+        return;
+      }
 
       const profile = await this.repo.findProfileByIdAndClinic(id, clinicId);
-      if (!profile) { res.status(404).json({ error: "User not found" }); return; }
+      if (!profile) {
+        res.status(404).json({ error: "User not found" });
+        return;
+      }
 
       await this.repo.updateProfile(id, clinicId, {
         ...(full_name !== undefined && { full_name }),
@@ -111,10 +124,16 @@ export class UsuariosController {
       const { is_active } = req.body;
 
       const clinicId = req.user?.clinicId;
-      if (!clinicId) { res.status(401).json({ error: "Auth required" }); return; }
+      if (!clinicId) {
+        res.status(401).json({ error: "Auth required" });
+        return;
+      }
 
       const profile = await this.repo.findProfileByIdAndClinic(id, clinicId);
-      if (!profile) { res.status(404).json({ error: "User not found" }); return; }
+      if (!profile) {
+        res.status(404).json({ error: "User not found" });
+        return;
+      }
 
       await this.repo.updateProfile(id, clinicId, { is_active });
       await this.repo.updateUser(id, { is_active });
@@ -131,10 +150,16 @@ export class UsuariosController {
       const { id } = req.params;
 
       const clinicId = req.user?.clinicId;
-      if (!clinicId) { res.status(401).json({ error: "Auth required" }); return; }
+      if (!clinicId) {
+        res.status(401).json({ error: "Auth required" });
+        return;
+      }
 
       const profile = await this.repo.findProfileByIdAndClinic(id, clinicId);
-      if (!profile) { res.status(404).json({ error: "User not found" }); return; }
+      if (!profile) {
+        res.status(404).json({ error: "User not found" });
+        return;
+      }
 
       await this.repo.deleteProfilesByIdAndClinic(id, clinicId);
       await this.repo.deleteUser(id);

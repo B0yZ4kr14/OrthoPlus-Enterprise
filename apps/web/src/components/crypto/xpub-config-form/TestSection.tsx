@@ -11,17 +11,29 @@ interface TestSectionProps {
   onTest: () => void;
 }
 
-export function TestSection({ testing, testAddress, hasXpub, onTest }: TestSectionProps) {
+export function TestSection({
+  testing,
+  testAddress,
+  hasXpub,
+  onTest,
+}: TestSectionProps) {
   return (
     <>
       <Alert>
         <ShieldCheck className="h-4 w-4" />
         <AlertDescription>
-          <strong>Verificação:</strong> Gere um endereço de teste para confirmar que a xPub está correta.
+          <strong>Verificação:</strong> Gere um endereço de teste para confirmar
+          que a xPub está correta.
         </AlertDescription>
       </Alert>
 
-      <Button type="button" onClick={onTest} variant="outline" disabled={testing || !hasXpub} className="w-full gap-2">
+      <Button
+        type="button"
+        onClick={onTest}
+        variant="outline"
+        disabled={testing || !hasXpub}
+        className="w-full gap-2"
+      >
         {testing ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -38,7 +50,9 @@ export function TestSection({ testing, testAddress, hasXpub, onTest }: TestSecti
       {testAddress && (
         <Card className="p-4 bg-muted">
           <p className="font-mono text-sm break-all">{testAddress}</p>
-          <p className="text-xs text-muted-foreground mt-2">✅ Confirme que este endereço bate com o da sua wallet (índice 0)</p>
+          <p className="text-xs text-muted-foreground mt-2">
+            ✅ Confirme que este endereço bate com o da sua wallet (índice 0)
+          </p>
         </Card>
       )}
     </>

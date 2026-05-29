@@ -5,14 +5,14 @@
  * outside the project root.
  */
 
-import path from "path"
-import { logger } from "@/infrastructure/logger"
+import path from "path";
+import { logger } from "@/infrastructure/logger";
 
 export class PathSandbox {
-  private rootDir: string
+  private rootDir: string;
 
   constructor(rootDir: string) {
-    this.rootDir = path.resolve(rootDir)
+    this.rootDir = path.resolve(rootDir);
   }
 
   /**
@@ -20,21 +20,21 @@ export class PathSandbox {
    * Resolves symlinks and relative path traversal.
    */
   isAllowed(targetPath: string): boolean {
-    const resolved = path.resolve(targetPath)
-    const relative = path.relative(this.rootDir, resolved)
+    const resolved = path.resolve(targetPath);
+    const relative = path.relative(this.rootDir, resolved);
 
     // Path must be within root (not starting with ..)
     // Empty relative means target === root, which is allowed
     if (relative.startsWith("..")) {
-      return false
+      return false;
     }
 
     // No path traversal sequences in the relative path
     if (relative.includes("..")) {
-      return false
+      return false;
     }
 
-    return true
+    return true;
   }
 
   /**
@@ -45,11 +45,11 @@ export class PathSandbox {
       logger.warn("[PathSandbox] Blocked path traversal attempt", {
         targetPath,
         rootDir: this.rootDir,
-      })
+      });
       throw new Error(
         `PathSandbox: Access denied to "${targetPath}". ` +
           `Only paths within "${this.rootDir}" are allowed.`,
-      )
+      );
     }
   }
 
@@ -57,8 +57,8 @@ export class PathSandbox {
    * Safely resolve a path within the sandbox.
    */
   resolve(subPath: string): string {
-    const resolved = path.resolve(this.rootDir, subPath)
-    this.assertAllowed(resolved)
-    return resolved
+    const resolved = path.resolve(this.rootDir, subPath);
+    this.assertAllowed(resolved);
+    return resolved;
   }
 }

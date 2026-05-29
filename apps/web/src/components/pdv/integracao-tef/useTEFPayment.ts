@@ -15,21 +15,26 @@ export function useTEFPayment(
   const [processando, setProcessando] = useState(false);
   const [tipoOperacao, setTipoOperacao] = useState<TEFOperationType>("DEBITO");
   const [numParcelas, setNumParcelas] = useState(1);
-  const [transacao, setTransacao] = useState<TEFTransaction["transacao"] | null>(null);
+  const [transacao, setTransacao] = useState<
+    TEFTransaction["transacao"] | null
+  >(null);
   const [showComprovante, setShowComprovante] = useState(false);
 
   const processar = useCallback(async () => {
     try {
       setProcessando(true);
 
-      const data = await apiClient.post<TEFTransaction>("/processar-pagamento-tef", {
-        clinic_id: clinicId,
-        venda_id: vendaId,
-        tipo_operacao: tipoOperacao,
-        valor: valorTotal,
-        num_parcelas: tipoOperacao === "CREDITO" ? numParcelas : 1,
-        provedor: "SITEF",
-      });
+      const data = await apiClient.post<TEFTransaction>(
+        "/processar-pagamento-tef",
+        {
+          clinic_id: clinicId,
+          venda_id: vendaId,
+          tipo_operacao: tipoOperacao,
+          valor: valorTotal,
+          num_parcelas: tipoOperacao === "CREDITO" ? numParcelas : 1,
+          provedor: "SITEF",
+        },
+      );
 
       if (data.success) {
         setTransacao(data.transacao);
@@ -56,7 +61,15 @@ export function useTEFPayment(
     } finally {
       setProcessando(false);
     }
-  }, [clinicId, vendaId, tipoOperacao, valorTotal, numParcelas, onSuccess, toast]);
+  }, [
+    clinicId,
+    vendaId,
+    tipoOperacao,
+    valorTotal,
+    numParcelas,
+    onSuccess,
+    toast,
+  ]);
 
   const reset = useCallback(() => {
     setShowComprovante(false);

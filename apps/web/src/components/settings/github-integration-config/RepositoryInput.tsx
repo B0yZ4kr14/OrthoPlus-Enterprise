@@ -9,7 +9,11 @@ interface RepositoryInputProps {
   onTest: () => void;
 }
 
-export function RepositoryInput({ value, onChange, onTest }: RepositoryInputProps) {
+export function RepositoryInput({
+  value,
+  onChange,
+  onTest,
+}: RepositoryInputProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="repo-url">URL do Repositório</Label>
@@ -20,7 +24,12 @@ export function RepositoryInput({ value, onChange, onTest }: RepositoryInputProp
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
-        <Button variant="outline" size="icon" onClick={onTest} title="Testar conexão">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onTest}
+          title="Testar conexão"
+        >
           <ExternalLink className="h-4 w-4" />
         </Button>
       </div>

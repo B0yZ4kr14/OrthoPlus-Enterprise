@@ -14,7 +14,11 @@ export function WizardHeader({ mode }: WizardHeaderProps) {
   return (
     <DialogHeader>
       <DialogTitle className="flex items-center gap-2">
-        {mode === "export" ? <Download className="h-5 w-5" /> : <Upload className="h-5 w-5" />}
+        {mode === "export" ? (
+          <Download className="h-5 w-5" />
+        ) : (
+          <Upload className="h-5 w-5" />
+        )}
         {mode === "export" ? "Exportar Dados" : "Importar Dados"}
       </DialogTitle>
       <DialogDescription>

@@ -29,7 +29,11 @@ interface SidebarGroupProps {
   disableToggle?: boolean;
 }
 
-export function SidebarGroup({ group, onNavigate, disableToggle = false }: SidebarGroupProps) {
+export function SidebarGroup({
+  group,
+  onNavigate,
+  disableToggle = false,
+}: SidebarGroupProps) {
   const { state } = useSidebar();
   const { hasModuleAccess } = useAuth();
   const { isExpanded, toggleGroup } = useSidebarCategory();
@@ -82,7 +86,9 @@ export function SidebarGroup({ group, onNavigate, disableToggle = false }: Sideb
           aria-controls={`sidebar-group-${group.boundedContext}`}
           disabled={disableToggle}
         >
-          <SidebarGroupLabel className={`px-0 pt-0 pb-0 text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--sidebar-foreground))]/60 select-none ${disableToggle ? "" : "cursor-pointer"}`}>
+          <SidebarGroupLabel
+            className={`px-0 pt-0 pb-0 text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--sidebar-foreground))]/60 select-none ${disableToggle ? "" : "cursor-pointer"}`}
+          >
             {group.label}
           </SidebarGroupLabel>
           <motion.span
@@ -114,15 +120,9 @@ export function SidebarGroup({ group, onNavigate, disableToggle = false }: Sideb
                   animate="visible"
                 >
                   {visibleItems.map((item) => (
-                    <motion.div
-                      key={item.title}
-                      variants={categoryItem}
-                    >
+                    <motion.div key={item.title} variants={categoryItem}>
                       <ShadcnSidebarMenuItem>
-                        <SidebarMenuItem
-                          item={item}
-                          onNavigate={onNavigate}
-                        />
+                        <SidebarMenuItem item={item} onNavigate={onNavigate} />
                       </ShadcnSidebarMenuItem>
                     </motion.div>
                   ))}
@@ -144,10 +144,7 @@ export function SidebarGroup({ group, onNavigate, disableToggle = false }: Sideb
               {visibleItems.map((item) => (
                 <motion.div key={item.title} variants={fadeUp}>
                   <ShadcnSidebarMenuItem>
-                    <SidebarMenuItem
-                      item={item}
-                      onNavigate={onNavigate}
-                    />
+                    <SidebarMenuItem item={item} onNavigate={onNavigate} />
                   </ShadcnSidebarMenuItem>
                 </motion.div>
               ))}

@@ -1,7 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { apiClient } from "@/lib/api/apiClient";
@@ -40,14 +45,17 @@ export default function RelatorioCaixa() {
         dataInicio.setDate(dataInicio.getDate() - 30);
       }
 
-      const params: Record<string, string> = { 
+      const params: Record<string, string> = {
         status: "FECHADO",
-        start_date: dataInicio.toISOString()
+        start_date: dataInicio.toISOString(),
       };
 
-      const data = await apiClient.get<MovimentoCaixa[]>("/financeiro/movimentos", {
-        params,
-      });
+      const data = await apiClient.get<MovimentoCaixa[]>(
+        "/financeiro/movimentos",
+        {
+          params,
+        },
+      );
       setMovimentos(data || []);
     } catch (error) {
       console.error("Error loading movimentos:", error);
@@ -157,7 +165,9 @@ export default function RelatorioCaixa() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Sobras</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Sobras
+                </p>
                 <p className="text-2xl font-black text-success">
                   +R${" "}
                   {totalSobras.toLocaleString("pt-BR", {
@@ -177,7 +187,9 @@ export default function RelatorioCaixa() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Faltas</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Faltas
+                </p>
                 <p className="text-2xl font-black text-destructive">
                   -R${" "}
                   {totalFaltas.toLocaleString("pt-BR", {
@@ -206,7 +218,9 @@ export default function RelatorioCaixa() {
           {movimentos.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
               <FileText className="h-12 w-12 mx-auto mb-4 opacity-20" />
-              <p className="font-medium">Nenhum fechamento de caixa encontrado</p>
+              <p className="font-medium">
+                Nenhum fechamento de caixa encontrado
+              </p>
               <p className="text-sm">Tente alterar o período selecionado</p>
             </div>
           ) : (
@@ -224,14 +238,20 @@ export default function RelatorioCaixa() {
                       <div className="flex flex-wrap items-center gap-3">
                         <div className="px-3 py-1 bg-accent/30 rounded-full text-sm font-bold flex items-center gap-2">
                           <Calendar className="h-3.5 w-3.5" />
-                          {mov.fechado_em ? format(
-                            new Date(mov.fechado_em),
-                            "dd/MM/yyyy 'às' HH:mm",
-                            { locale: ptBR },
-                          ) : "--/--/----"}
+                          {mov.fechado_em
+                            ? format(
+                                new Date(mov.fechado_em),
+                                "dd/MM/yyyy 'às' HH:mm",
+                                { locale: ptBR },
+                              )
+                            : "--/--/----"}
                         </div>
-                        <Badge variant="secondary" className="px-2 font-mono text-[10px]">
-                          OPERADOR: {mov.user?.full_name?.toUpperCase() || "SISTEMA"}
+                        <Badge
+                          variant="secondary"
+                          className="px-2 font-mono text-[10px]"
+                        >
+                          OPERADOR:{" "}
+                          {mov.user?.full_name?.toUpperCase() || "SISTEMA"}
                         </Badge>
                       </div>
 
@@ -241,7 +261,10 @@ export default function RelatorioCaixa() {
                             Valor Inicial
                           </dt>
                           <dd className="font-mono text-base font-semibold">
-                            R$ {(mov.valor_inicial || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            R${" "}
+                            {(mov.valor_inicial || 0).toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </dd>
                         </div>
                         <div className="space-y-1">
@@ -249,7 +272,10 @@ export default function RelatorioCaixa() {
                             Valor Esperado
                           </dt>
                           <dd className="font-mono text-base font-semibold text-primary">
-                            R$ {(mov.valor_esperado || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            R${" "}
+                            {(mov.valor_esperado || 0).toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </dd>
                         </div>
                         <div className="space-y-1">
@@ -257,7 +283,10 @@ export default function RelatorioCaixa() {
                             Valor Contado
                           </dt>
                           <dd className="font-mono text-base font-semibold italic">
-                            R$ {(mov.valor_final || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            R${" "}
+                            {(mov.valor_final || 0).toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </dd>
                         </div>
                       </dl>
@@ -273,22 +302,31 @@ export default function RelatorioCaixa() {
 
                     <div className="flex items-center gap-4 mt-6 md:mt-0">
                       {hasDiferenca ? (
-                        <div className={`px-4 py-2 rounded-xl border flex flex-col items-end ${
-                          diferenca > 0 
-                            ? "bg-success/5 border-success/20 text-success" 
-                            : "bg-destructive/5 border-destructive/20 text-destructive"
-                        }`}>
+                        <div
+                          className={`px-4 py-2 rounded-xl border flex flex-col items-end ${
+                            diferenca > 0
+                              ? "bg-success/5 border-success/20 text-success"
+                              : "bg-destructive/5 border-destructive/20 text-destructive"
+                          }`}
+                        >
                           <span className="text-[10px] font-black uppercase tracking-tighter">
-                            {diferenca > 0 ? "Sobra de Caixa" : "Falta de Caixa"}
+                            {diferenca > 0
+                              ? "Sobra de Caixa"
+                              : "Falta de Caixa"}
                           </span>
                           <span className="text-lg font-black font-mono">
-                            {diferenca > 0 ? "+" : "-"}R$ {Math.abs(diferenca).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            {diferenca > 0 ? "+" : "-"}R${" "}
+                            {Math.abs(diferenca).toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </span>
                         </div>
                       ) : (
                         <div className="px-4 py-2 rounded-xl bg-success/10 text-success border border-success/20 flex items-center gap-2">
                           <Zap className="h-4 w-4" />
-                          <span className="text-xs font-bold uppercase">Conferido</span>
+                          <span className="text-xs font-bold uppercase">
+                            Conferido
+                          </span>
                         </div>
                       )}
                     </div>

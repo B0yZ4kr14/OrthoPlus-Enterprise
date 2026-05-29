@@ -53,7 +53,8 @@ export function RadiografiaComparison({
         patientName: analisesArr[0].paciente_name,
         analises: analisesArr.sort(
           (a, b) =>
-            new Date(b.created_at ?? "").getTime() - new Date(a.created_at ?? "").getTime(),
+            new Date(b.created_at ?? "").getTime() -
+            new Date(a.created_at ?? "").getTime(),
         ),
       }));
   }, [analises]);
@@ -194,10 +195,12 @@ export function RadiografiaComparison({
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <Badge variant="outline">Primeira Análise</Badge>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(analise1.created_at ?? "").toLocaleDateString("pt-BR")}
-                        </div>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Calendar className="h-3 w-3" />
+                        {new Date(analise1.created_at ?? "").toLocaleDateString(
+                          "pt-BR",
+                        )}
+                      </div>
                     </div>
 
                     <div className="relative rounded-lg overflow-hidden bg-black/5 aspect-video">
@@ -249,10 +252,12 @@ export function RadiografiaComparison({
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <Badge variant="outline">Segunda Análise</Badge>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(analise2.created_at ?? "").toLocaleDateString("pt-BR")}
-                        </div>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Calendar className="h-3 w-3" />
+                        {new Date(analise2.created_at ?? "").toLocaleDateString(
+                          "pt-BR",
+                        )}
+                      </div>
                     </div>
 
                     <div className="relative rounded-lg overflow-hidden bg-black/5 aspect-video">
@@ -436,10 +441,13 @@ export function RadiografiaComparison({
                       {analisesPorPaciente
                         .find((p) => p.patientId === analise1.paciente_id)
                         ?.analises.map((analise) => (
-                          <SelectItem key={analise.id ?? ""} value={analise.id ?? ""}>
-                            {new Date(analise.created_at ?? "").toLocaleDateString(
-                              "pt-BR",
-                            )}{" "}
+                          <SelectItem
+                            key={analise.id ?? ""}
+                            value={analise.id ?? ""}
+                          >
+                            {new Date(
+                              analise.created_at ?? "",
+                            ).toLocaleDateString("pt-BR")}{" "}
                             -{" "}
                             {
                               tipoRadiografiaLabels[
@@ -464,10 +472,13 @@ export function RadiografiaComparison({
                       {analisesPorPaciente
                         .find((p) => p.patientId === analise2.paciente_id)
                         ?.analises.map((analise) => (
-                          <SelectItem key={analise.id ?? ""} value={analise.id ?? ""}>
-                            {new Date(analise.created_at ?? "").toLocaleDateString(
-                              "pt-BR",
-                            )}{" "}
+                          <SelectItem
+                            key={analise.id ?? ""}
+                            value={analise.id ?? ""}
+                          >
+                            {new Date(
+                              analise.created_at ?? "",
+                            ).toLocaleDateString("pt-BR")}{" "}
                             -{" "}
                             {
                               tipoRadiografiaLabels[

@@ -9,8 +9,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import { Plus, TrendingUp, Users, Mail, BarChart3, Megaphone } from "lucide-react";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
+import {
+  Plus,
+  TrendingUp,
+  Users,
+  Mail,
+  BarChart3,
+  Megaphone,
+} from "lucide-react";
 import { toast } from "sonner";
 import { CampaignType, TargetSegment } from "../../domain/entities/Campaign";
 import {
@@ -82,16 +94,16 @@ export function MarketingAutoPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={Megaphone} 
-        title="Marketing Automação" 
-        description="Campanhas automáticas e comunicação com pacientes" 
+      <PageHeader
+        icon={Megaphone}
+        title="Marketing Automação"
+        description="Campanhas automáticas e comunicação com pacientes"
         actions={
           <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Campanha
           </Button>
-        } 
+        }
       />
 
       {/* Métricas Gerais */}

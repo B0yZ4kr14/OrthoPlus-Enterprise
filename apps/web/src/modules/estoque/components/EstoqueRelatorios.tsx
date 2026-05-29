@@ -82,15 +82,20 @@ export function EstoqueRelatorios() {
         yPos += 10;
       }
 
-      const fornecedorSelecionado = fornecedores.find((f) => f.id === fornecedorId)
-      const filteredProds = fornecedorId && fornecedorSelecionado
-        ? produtos.filter((p) => p.fornecedorId === fornecedorId)
-        : produtos
+      const fornecedorSelecionado = fornecedores.find(
+        (f) => f.id === fornecedorId,
+      );
+      const filteredProds =
+        fornecedorId && fornecedorSelecionado
+          ? produtos.filter((p) => p.fornecedorId === fornecedorId)
+          : produtos;
 
-      doc.setFontSize(10)
+      doc.setFontSize(10);
       filteredProds.forEach((prod) => {
-        const categoriaNome = categorias.find((c) => c.id === prod.categoriaId)?.nome
-        const text = `${prod.nome} - Cat: ${categoriaNome || "N/A"} - Qtd: ${prod.quantidadeAtual} - R$ ${prod.precoCompra.toFixed(2)}`
+        const categoriaNome = categorias.find(
+          (c) => c.id === prod.categoriaId,
+        )?.nome;
+        const text = `${prod.nome} - Cat: ${categoriaNome || "N/A"} - Qtd: ${prod.quantidadeAtual} - R$ ${prod.precoCompra.toFixed(2)}`;
         doc.text(text, 20, yPos);
         yPos += 7;
         if (yPos > 280) {
@@ -106,7 +111,7 @@ export function EstoqueRelatorios() {
       const valorTotal = produtos.reduce(
         (sum, p) => sum + p.quantidadeAtual * p.precoCompra,
         0,
-      )
+      );
 
       doc.setFontSize(12);
       doc.text(
@@ -116,10 +121,10 @@ export function EstoqueRelatorios() {
       );
       yPos += 15;
 
-      doc.setFontSize(10)
+      doc.setFontSize(10);
       produtos.forEach((prod) => {
-        const valorProd = prod.quantidadeAtual * prod.precoCompra
-        const text = `${prod.nome} - Qtd: ${prod.quantidadeAtual} x R$ ${prod.precoCompra.toFixed(2)} = R$ ${valorProd.toFixed(2)}`
+        const valorProd = prod.quantidadeAtual * prod.precoCompra;
+        const text = `${prod.nome} - Qtd: ${prod.quantidadeAtual} x R$ ${prod.precoCompra.toFixed(2)} = R$ ${valorProd.toFixed(2)}`;
         doc.text(text, 20, yPos);
         yPos += 7;
         if (yPos > 280) {
@@ -187,14 +192,19 @@ export function EstoqueRelatorios() {
       });
       sheetName = "Movimentações";
     } else if (reportType === "produtos-fornecedor") {
-      const fornecedorSelecionado = fornecedores.find((f) => f.id === fornecedorId)
-      const filteredProds = fornecedorId && fornecedorSelecionado
-        ? produtos.filter((p) => p.fornecedorId === fornecedorId)
-        : produtos
+      const fornecedorSelecionado = fornecedores.find(
+        (f) => f.id === fornecedorId,
+      );
+      const filteredProds =
+        fornecedorId && fornecedorSelecionado
+          ? produtos.filter((p) => p.fornecedorId === fornecedorId)
+          : produtos;
 
       data = filteredProds.map((prod) => {
-        const fornecedor = fornecedores.find((f) => f.id === prod.fornecedorId)
-        const categoriaNome = categorias.find((c) => c.id === prod.categoriaId)?.nome
+        const fornecedor = fornecedores.find((f) => f.id === prod.fornecedorId);
+        const categoriaNome = categorias.find(
+          (c) => c.id === prod.categoriaId,
+        )?.nome;
         return {
           Código: prod.codigoBarras || prod.codigo,
           Produto: prod.nome,
@@ -206,12 +216,14 @@ export function EstoqueRelatorios() {
           "Preço Venda": prod.precoVenda || 0,
           "Valor Total": prod.quantidadeAtual * prod.precoCompra,
           Status: prod.ativo ? "Ativo" : "Inativo",
-        }
-      })
+        };
+      });
       sheetName = "Produtos";
     } else if (reportType === "valor-inventario") {
       data = produtos.map((prod) => {
-        const categoriaNome = categorias.find((c) => c.id === prod.categoriaId)?.nome
+        const categoriaNome = categorias.find(
+          (c) => c.id === prod.categoriaId,
+        )?.nome;
         return {
           Código: prod.codigoBarras || prod.codigo,
           Produto: prod.nome,
@@ -219,8 +231,8 @@ export function EstoqueRelatorios() {
           Quantidade: prod.quantidadeAtual,
           "Preço Unitário": prod.precoCompra,
           "Valor Total": prod.quantidadeAtual * prod.precoCompra,
-        }
-      })
+        };
+      });
       sheetName = "Inventário";
     } else if (reportType === "historico-requisicoes") {
       const filteredReqs = requisicoes.filter((r) => {

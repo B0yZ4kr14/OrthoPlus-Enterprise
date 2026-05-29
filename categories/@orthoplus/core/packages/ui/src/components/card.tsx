@@ -22,8 +22,7 @@ const cardVariants = cva(
       depth: {
         subtle: "shadow-lg hover:shadow-xl",
         normal: "shadow-card hover:shadow-card-hover",
-        intense:
-          "shadow-2xl hover:shadow-[0_25px_60px_rgba(0,0,0,0.35)]",
+        intense: "shadow-2xl hover:shadow-[0_25px_60px_rgba(0,0,0,0.35)]",
       },
     },
     defaultVariants: {

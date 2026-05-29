@@ -14,7 +14,10 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
       if (!data) return null;
       return EvolucaoMapper.toDomain(data);
     } catch (error) {
-      throw new InfrastructureError("Erro ao buscar evolução", error instanceof Error ? error : new Error(String(error)));
+      throw new InfrastructureError(
+        "Erro ao buscar evolução",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 
@@ -95,7 +98,10 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
       const data = EvolucaoMapper.toInsert(evolucao);
       await apiClient.post("/pep/evolucoes", data);
     } catch (error) {
-      throw new InfrastructureError("Erro ao salvar evolução", error instanceof Error ? error : new Error(String(error)));
+      throw new InfrastructureError(
+        "Erro ao salvar evolução",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 
@@ -104,7 +110,10 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
       const data = EvolucaoMapper.toPersistence(evolucao);
       await apiClient.patch(`/pep/evolucoes/${evolucao.id}`, data);
     } catch (error) {
-      throw new InfrastructureError("Erro ao atualizar evolução", error instanceof Error ? error : new Error(String(error)));
+      throw new InfrastructureError(
+        "Erro ao atualizar evolução",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 
@@ -112,7 +121,10 @@ export class DbEvolucaoRepository implements IEvolucaoRepository {
     try {
       await apiClient.delete(`/pep/evolucoes/${id}`);
     } catch (error) {
-      throw new InfrastructureError("Erro ao deletar evolução", error instanceof Error ? error : new Error(String(error)));
+      throw new InfrastructureError(
+        "Erro ao deletar evolução",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }
 }

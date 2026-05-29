@@ -1,19 +1,11 @@
 {
-  "extends": [
-    "eslint:recommended"
-  ],
+  "extends": ["eslint:recommended"],
   "rules": {
-    "no-console": [
-      "warn"
-    ]
+    "no-console": ["warn"]
   },
   "overrides": [
     {
-      "files": [
-        "*.config.js",
-        "*.config.ts",
-        "vite.config.ts"
-      ],
+      "files": ["*.config.js", "*.config.ts", "vite.config.ts"],
       "rules": {
         "no-console": "off"
       }

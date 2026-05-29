@@ -1,14 +1,30 @@
-import { useFileOCR, useRequestOCR, type FileRecord } from "@/hooks/api/useFiles";
+import {
+  useFileOCR,
+  useRequestOCR,
+  type FileRecord,
+} from "@/hooks/api/useFiles";
 import { Button } from "@orthoplus/core-ui";
 import { Badge } from "@orthoplus/core-ui";
-import { Loader2, FileText, RefreshCw, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  Loader2,
+  FileText,
+  RefreshCw,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface FileOCRPanelProps {
   file: FileRecord;
 }
 
-const STATUS_CONFIG: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+const STATUS_CONFIG: Record<
+  string,
+  {
+    label: string;
+    variant: "default" | "secondary" | "destructive" | "outline";
+  }
+> = {
   PENDENTE: { label: "Pendente", variant: "secondary" },
   PROCESSANDO: { label: "Processando", variant: "default" },
   CONCLUIDO: { label: "Concluído", variant: "outline" },
@@ -33,7 +49,9 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
     return (
       <div className="flex items-center justify-center py-8">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
-        <span className="ml-2 text-sm text-muted-foreground">Carregando OCR...</span>
+        <span className="ml-2 text-sm text-muted-foreground">
+          Carregando OCR...
+        </span>
       </div>
     );
   }
@@ -55,7 +73,9 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
         <div className="rounded-md border bg-muted p-3">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle className="h-4 w-4 text-success" />
-            <span className="text-xs text-success font-medium">Texto extraído com sucesso</span>
+            <span className="text-xs text-success font-medium">
+              Texto extraído com sucesso
+            </span>
             {ocr.confidence && (
               <span className="text-xs text-muted-foreground">
                 (confiança: {(ocr.confidence * 100).toFixed(1)}%)
@@ -77,7 +97,12 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
             <AlertCircle className="h-4 w-4" />
             Falha ao extrair texto do documento.
           </div>
-          <Button variant="outline" size="sm" onClick={handleRequestOCR} disabled={requestOCR.isPending}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRequestOCR}
+            disabled={requestOCR.isPending}
+          >
             {requestOCR.isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
@@ -89,9 +114,15 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
       ) : (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            O texto deste documento ainda não foi extraído. Inicie o OCR para permitir busca por conteúdo.
+            O texto deste documento ainda não foi extraído. Inicie o OCR para
+            permitir busca por conteúdo.
           </p>
-          <Button variant="outline" size="sm" onClick={handleRequestOCR} disabled={requestOCR.isPending}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRequestOCR}
+            disabled={requestOCR.isPending}
+          >
             {requestOCR.isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (

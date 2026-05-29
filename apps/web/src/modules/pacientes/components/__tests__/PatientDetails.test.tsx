@@ -1,26 +1,42 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render, screen, act } from "@testing-library/react"
-import type { ReactNode } from "react"
-import { PatientDetails } from "../PatientDetails"
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+import type { ReactNode } from "react";
+import { PatientDetails } from "../PatientDetails";
 
-const mockOnEdit = vi.fn()
-const mockOnClose = vi.fn()
+const mockOnEdit = vi.fn();
+const mockOnClose = vi.fn();
 
 // Mock UI primitives that may use portal or complex rendering
 vi.mock("@orthoplus/core-ui/tabs", () => ({
-  Tabs: ({ children, defaultValue }: { children?: ReactNode; defaultValue?: string }) => (
+  Tabs: ({
+    children,
+    defaultValue,
+  }: {
+    children?: ReactNode;
+    defaultValue?: string;
+  }) => (
     <div data-testid="tabs" data-default={defaultValue}>
       {children}
     </div>
   ),
-  TabsList: ({ children }: { children?: ReactNode }) => <div data-testid="tabs-list">{children}</div>,
-  TabsTrigger: ({ children, value }: { children?: ReactNode; value: string }) => (
-    <button data-testid={`tab-trigger-${value}`}>{children}</button>
+  TabsList: ({ children }: { children?: ReactNode }) => (
+    <div data-testid="tabs-list">{children}</div>
   ),
-  TabsContent: ({ children, value }: { children?: ReactNode; value: string }) => (
-    <div data-testid={`tab-content-${value}`}>{children}</div>
-  ),
-}))
+  TabsTrigger: ({
+    children,
+    value,
+  }: {
+    children?: ReactNode;
+    value: string;
+  }) => <button data-testid={`tab-trigger-${value}`}>{children}</button>,
+  TabsContent: ({
+    children,
+    value,
+  }: {
+    children?: ReactNode;
+    value: string;
+  }) => <div data-testid={`tab-content-${value}`}>{children}</div>,
+}));
 
 function createMockPatient() {
   return {
@@ -50,7 +66,7 @@ function createMockPatient() {
       validade: "2025-12-31",
     },
     observacoes: "Paciente com histórico de alergia a penicilina.",
-  }
+  };
 }
 
 function createMockPatientNoConvenio() {
@@ -65,150 +81,244 @@ function createMockPatientNoConvenio() {
     rg: undefined,
     email: undefined,
     observacoes: undefined,
-  }
+  };
 }
 
 describe("PatientDetails", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it("should render patient name and status badge", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText("João Silva")).toBeTruthy()
-    expect(screen.getByText("Ativo")).toBeTruthy()
-  })
+    expect(screen.getByText("João Silva")).toBeTruthy();
+    expect(screen.getByText("Ativo")).toBeTruthy();
+  });
 
   it("should render registration date", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText(/Cadastrado em/)).toBeTruthy()
-  })
+    expect(screen.getByText(/Cadastrado em/)).toBeTruthy();
+  });
 
   it("should call onEdit when edit button is clicked", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    const editButton = screen.getByText("Editar")
+    const editButton = screen.getByText("Editar");
     act(() => {
-      editButton.click()
-    })
+      editButton.click();
+    });
 
-    expect(mockOnEdit).toHaveBeenCalled()
-  })
+    expect(mockOnEdit).toHaveBeenCalled();
+  });
 
   it("should call onClose when close button is clicked", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    const closeButton = screen.getByText("Fechar")
+    const closeButton = screen.getByText("Fechar");
     act(() => {
-      closeButton.click()
-    })
+      closeButton.click();
+    });
 
-    expect(mockOnClose).toHaveBeenCalled()
-  })
+    expect(mockOnClose).toHaveBeenCalled();
+  });
 
   it("should render dados cadastrais tab with personal info", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByTestId("tab-trigger-dados")).toBeTruthy()
-    expect(screen.getByTestId("tab-content-dados")).toBeTruthy()
-    expect(screen.getByText("Informações Pessoais")).toBeTruthy()
-    expect(screen.getByText("123.456.789-00")).toBeTruthy()
-    expect(screen.getByText("12.345.678-9")).toBeTruthy()
-    expect(screen.getByText("Masculino")).toBeTruthy()
-  })
+    expect(screen.getByTestId("tab-trigger-dados")).toBeTruthy();
+    expect(screen.getByTestId("tab-content-dados")).toBeTruthy();
+    expect(screen.getByText("Informações Pessoais")).toBeTruthy();
+    expect(screen.getByText("123.456.789-00")).toBeTruthy();
+    expect(screen.getByText("12.345.678-9")).toBeTruthy();
+    expect(screen.getByText("Masculino")).toBeTruthy();
+  });
 
   it("should render contact tab with phone and email", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByTestId("tab-trigger-dados")).toBeTruthy()
-    expect(screen.getByText("Contato")).toBeTruthy()
-    expect(screen.getByText("(11) 3333-4444")).toBeTruthy()
-    expect(screen.getByText("(11) 99999-8888")).toBeTruthy()
-    expect(screen.getByText("joao@test.com")).toBeTruthy()
-  })
+    expect(screen.getByTestId("tab-trigger-dados")).toBeTruthy();
+    expect(screen.getByText("Contato")).toBeTruthy();
+    expect(screen.getByText("(11) 3333-4444")).toBeTruthy();
+    expect(screen.getByText("(11) 99999-8888")).toBeTruthy();
+    expect(screen.getByText("joao@test.com")).toBeTruthy();
+  });
 
   it("should render address tab with full address", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText("Endereço")).toBeTruthy()
-    expect(screen.getByText(/Rua das Flores, 123/)).toBeTruthy()
-    expect(screen.getByText(/Apto 45/)).toBeTruthy()
-    expect(screen.getByText(/Centro - São Paulo\/SP/)).toBeTruthy()
-    expect(screen.getByText(/CEP: 01000-000/)).toBeTruthy()
-  })
+    expect(screen.getByText("Endereço")).toBeTruthy();
+    expect(screen.getByText(/Rua das Flores, 123/)).toBeTruthy();
+    expect(screen.getByText(/Apto 45/)).toBeTruthy();
+    expect(screen.getByText(/Centro - São Paulo\/SP/)).toBeTruthy();
+    expect(screen.getByText(/CEP: 01000-000/)).toBeTruthy();
+  });
 
   it("should render convenio info when patient has convenio", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText("Convênio")).toBeTruthy()
-    expect(screen.getByText("Unimed")).toBeTruthy()
-    expect(screen.getByText("123456789")).toBeTruthy()
-  })
+    expect(screen.getByText("Convênio")).toBeTruthy();
+    expect(screen.getByText("Unimed")).toBeTruthy();
+    expect(screen.getByText("123456789")).toBeTruthy();
+  });
 
   it("should render 'sem convenio' message when patient has no convenio", () => {
-    const patient = createMockPatientNoConvenio()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatientNoConvenio();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText(/Paciente particular/)).toBeTruthy()
-  })
+    expect(screen.getByText(/Paciente particular/)).toBeTruthy();
+  });
 
   it("should render observacoes when present", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText("Paciente com histórico de alergia a penicilina.")).toBeTruthy()
-  })
+    expect(
+      screen.getByText("Paciente com histórico de alergia a penicilina."),
+    ).toBeTruthy();
+  });
 
   it("should not render observacoes section when absent", () => {
-    const patient = createMockPatientNoConvenio()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatientNoConvenio();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.queryByText("Paciente com histórico de alergia a penicilina.")).toBeNull()
-  })
+    expect(
+      screen.queryByText("Paciente com histórico de alergia a penicilina."),
+    ).toBeNull();
+  });
 
   it("should render consultas tab with mock data", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByTestId("tab-trigger-consultas")).toBeTruthy()
-    expect(screen.getByTestId("tab-content-consultas")).toBeTruthy()
-    expect(screen.getByText("Consultas Realizadas e Agendadas")).toBeTruthy()
-    expect(screen.getByText("Limpeza")).toBeTruthy()
-    expect(screen.getByText("Restauração")).toBeTruthy()
-  })
+    expect(screen.getByTestId("tab-trigger-consultas")).toBeTruthy();
+    expect(screen.getByTestId("tab-content-consultas")).toBeTruthy();
+    expect(screen.getByText("Consultas Realizadas e Agendadas")).toBeTruthy();
+    expect(screen.getByText("Limpeza")).toBeTruthy();
+    expect(screen.getByText("Restauração")).toBeTruthy();
+  });
 
   it("should render prontuario tab with mock data", () => {
-    const patient = createMockPatient()
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = createMockPatient();
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByTestId("tab-trigger-prontuario")).toBeTruthy()
-    expect(screen.getByTestId("tab-content-prontuario")).toBeTruthy()
-    expect(screen.getByText("Prontuário Odontológico")).toBeTruthy()
-    expect(screen.getByText("Anamnese")).toBeTruthy()
-    expect(screen.getByText("Diagnóstico")).toBeTruthy()
-  })
+    expect(screen.getByTestId("tab-trigger-prontuario")).toBeTruthy();
+    expect(screen.getByTestId("tab-content-prontuario")).toBeTruthy();
+    expect(screen.getByText("Prontuário Odontológico")).toBeTruthy();
+    expect(screen.getByText("Anamnese")).toBeTruthy();
+    expect(screen.getByText("Diagnóstico")).toBeTruthy();
+  });
 
   it("should render female sexo correctly", () => {
-    const patient = { ...createMockPatient(), sexo: "F" }
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = { ...createMockPatient(), sexo: "F" };
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText("Feminino")).toBeTruthy()
-  })
+    expect(screen.getByText("Feminino")).toBeTruthy();
+  });
 
   it("should render other sexo correctly", () => {
-    const patient = { ...createMockPatient(), sexo: "O" }
-    render(<PatientDetails patient={patient} onEdit={mockOnEdit} onClose={mockOnClose} />)
+    const patient = { ...createMockPatient(), sexo: "O" };
+    render(
+      <PatientDetails
+        patient={patient}
+        onEdit={mockOnEdit}
+        onClose={mockOnClose}
+      />,
+    );
 
-    expect(screen.getByText("Outro")).toBeTruthy()
-  })
-})
+    expect(screen.getByText("Outro")).toBeTruthy();
+  });
+});

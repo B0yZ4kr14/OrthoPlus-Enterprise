@@ -1,4 +1,4 @@
-import { Patient } from '../../domain/entities/Patient';
+import { Patient } from "../../domain/entities/Patient";
 
 export class PatientDTO {
   constructor(

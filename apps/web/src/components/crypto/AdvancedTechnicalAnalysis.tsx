@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import type { ChartDataItem, TechnicalIndicatorResults, CoinType, TimePeriod } from "@/types/crypto";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
+import type {
+  ChartDataItem,
+  TechnicalIndicatorResults,
+  CoinType,
+  TimePeriod,
+} from "@/types/crypto";
 import { IndicatorKPIs } from "./technical-analysis/IndicatorKPIs";
 import { PeriodSelector } from "./technical-analysis/PeriodSelector";
 import { PriceChart } from "./technical-analysis/PriceChart";
@@ -24,11 +34,16 @@ const BASE_PRICES: Record<string, number> = {
 
 function getDataPoints(period: TimePeriod): number {
   switch (period) {
-    case "24h": return 24;
-    case "7d": return 168;
-    case "30d": return 720;
-    case "1y": return 365;
-    default: return 168;
+    case "24h":
+      return 24;
+    case "7d":
+      return 168;
+    case "30d":
+      return 720;
+    case "1y":
+      return 365;
+    default:
+      return 168;
   }
 }
 
@@ -37,7 +52,8 @@ export function AdvancedTechnicalAnalysis({
 }: TechnicalAnalysisProps) {
   const [period, setPeriod] = useState<TimePeriod>("7d");
   const [chartData, setChartData] = useState<ChartDataItem[]>([]);
-  const [indicators, setIndicators] = useState<TechnicalIndicatorResults | null>(null);
+  const [indicators, setIndicators] =
+    useState<TechnicalIndicatorResults | null>(null);
 
   useEffect(() => {
     generateMockData();
@@ -104,9 +120,7 @@ export function AdvancedTechnicalAnalysis({
 
   return (
     <div className="space-y-6">
-      {indicators && (
-        <IndicatorKPIs indicators={indicators} period={period} />
-      )}
+      {indicators && <IndicatorKPIs indicators={indicators} period={period} />}
 
       <PeriodSelector period={period} onPeriodChange={setPeriod} />
 

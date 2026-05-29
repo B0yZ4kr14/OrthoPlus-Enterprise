@@ -54,21 +54,26 @@ export default function IntegracaoTEF({
   const [processando, setProcessando] = useState(false);
   const [tipoOperacao, setTipoOperacao] = useState("DEBITO");
   const [numParcelas, setNumParcelas] = useState(1);
-  const [transacao, setTransacao] = useState<TEFTransaction["transacao"] | null>(null);
+  const [transacao, setTransacao] = useState<
+    TEFTransaction["transacao"] | null
+  >(null);
   const [showComprovante, setShowComprovante] = useState(false);
 
   const processar = async () => {
     try {
       setProcessando(true);
 
-      const data = await apiClient.post<TEFTransaction>("/processar-pagamento-tef", {
-        clinic_id: clinicId,
-        venda_id: vendaId,
-        tipo_operacao: tipoOperacao,
-        valor: valorTotal,
-        num_parcelas: tipoOperacao === "CREDITO" ? numParcelas : 1,
-        provedor: "SITEF",
-      });
+      const data = await apiClient.post<TEFTransaction>(
+        "/processar-pagamento-tef",
+        {
+          clinic_id: clinicId,
+          venda_id: vendaId,
+          tipo_operacao: tipoOperacao,
+          valor: valorTotal,
+          num_parcelas: tipoOperacao === "CREDITO" ? numParcelas : 1,
+          provedor: "SITEF",
+        },
+      );
 
       if (data.success) {
         setTransacao(data.transacao);

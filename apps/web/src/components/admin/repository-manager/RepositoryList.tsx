@@ -1,5 +1,11 @@
 // cspell:disable
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Github, ExternalLink, Play, RefreshCw, Trash2 } from "lucide-react";
@@ -9,7 +15,11 @@ interface RepositoryListProps {
   repos: Repository[];
   isLoading: boolean;
   onAddRepo: () => void;
-  onExecuteWorkflow: (repoName: string, workflowId: string, branch: string) => void;
+  onExecuteWorkflow: (
+    repoName: string,
+    workflowId: string,
+    branch: string,
+  ) => void;
 }
 
 export function RepositoryList({
@@ -24,7 +34,9 @@ export function RepositoryList({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>Repositórios Conectados</CardTitle>
-            <CardDescription>Gerencie os repositórios GitHub vinculados ao sistema</CardDescription>
+            <CardDescription>
+              Gerencie os repositórios GitHub vinculados ao sistema
+            </CardDescription>
           </div>
           <Button onClick={onAddRepo}>+ Adicionar Repositório</Button>
         </div>
@@ -65,7 +77,9 @@ export function RepositoryList({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onExecuteWorkflow(repo.name, "deploy", "main")}
+                      onClick={() =>
+                        onExecuteWorkflow(repo.name, "deploy", "main")
+                      }
                     >
                       <Play className="h-4 w-4 mr-2" />
                       Deploy

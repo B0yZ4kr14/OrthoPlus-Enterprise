@@ -28,20 +28,14 @@ interface ExchangeFormData {
 export const useCryptoConfigPage = () => {
   const queryClient = useQueryClient();
 
-  const {
-    data: exchanges = [],
-    isLoading: isLoadingExchanges,
-  } = useQuery({
+  const { data: exchanges = [], isLoading: isLoadingExchanges } = useQuery({
     queryKey: ["crypto-config-page", "exchanges"],
     queryFn: async () => {
       return await apiClient.get<ExchangeItem[]>("/crypto-config/exchanges");
     },
   });
 
-  const {
-    data: portfolio,
-    isLoading: isLoadingPortfolio,
-  } = useQuery({
+  const { data: portfolio, isLoading: isLoadingPortfolio } = useQuery({
     queryKey: ["crypto-config-page", "portfolio"],
     queryFn: async () => {
       return await apiClient.get<PortfolioData>("/crypto-config/portfolio");

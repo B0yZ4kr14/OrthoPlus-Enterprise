@@ -5,8 +5,19 @@
  * DEPOIS: ~70 linhas + estrutura modular
  */
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Settings, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserManagement } from "../useUserManagement";

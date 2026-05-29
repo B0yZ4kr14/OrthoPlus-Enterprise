@@ -27,7 +27,9 @@ export function useInventario() {
   // Inventários
   const loadInventarios = async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/estoque/inventarios");
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/inventarios",
+      );
       setInventarios(
         data.map((inv: any) => ({
           id: inv.id,
@@ -120,7 +122,9 @@ export function useInventario() {
   // Itens do Inventário
   const loadInventarioItems = async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/estoque/inventarios/itens");
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/estoque/inventarios/itens",
+      );
       setInventarioItems(
         data.map((item: any) => ({
           id: item.id,
@@ -128,9 +132,10 @@ export function useInventario() {
           produtoId: item.produto_id,
           produtoNome: item.produto_nome,
           quantidadeSistema: Number(item.quantidade_sistema),
-          quantidadeFisica: item.quantidade_fisica !== null
-            ? Number(item.quantidade_fisica)
-            : null,
+          quantidadeFisica:
+            item.quantidade_fisica !== null
+              ? Number(item.quantidade_fisica)
+              : null,
           divergencia: item.divergencia ? Number(item.divergencia) : undefined,
           percentualDivergencia: item.percentual_divergencia
             ? Number(item.percentual_divergencia)

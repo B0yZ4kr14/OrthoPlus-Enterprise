@@ -8,9 +8,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Plus, FileText, Clock, CheckCircle, XCircle, Calculator } from "lucide-react";
+import {
+  Plus,
+  FileText,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Calculator,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/utils/formatting.utils";
@@ -49,7 +61,21 @@ export default function OrcamentosPage() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: any }> = {
+    const variants: Record<
+      string,
+      {
+        variant:
+          | "default"
+          | "secondary"
+          | "destructive"
+          | "outline"
+          | "success"
+          | "warning"
+          | "error"
+          | "info";
+        icon: any;
+      }
+    > = {
       RASCUNHO: { variant: "secondary", icon: FileText },
       PENDENTE: { variant: "info", icon: Clock },
       APROVADO: { variant: "success", icon: CheckCircle },
@@ -74,16 +100,16 @@ export default function OrcamentosPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={Calculator} 
-        title="Orçamentos" 
-        description="Gerencie propostas e aprovações de tratamentos" 
+      <PageHeader
+        icon={Calculator}
+        title="Orçamentos"
+        description="Gerencie propostas e aprovações de tratamentos"
         actions={
           <Button>
             <Plus className="h-4 w-4 mr-2" />
             Novo Orçamento
           </Button>
-        } 
+        }
       />
 
       {/* Métricas */}

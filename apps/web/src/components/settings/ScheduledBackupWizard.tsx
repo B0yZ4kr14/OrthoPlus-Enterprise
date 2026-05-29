@@ -73,7 +73,8 @@ interface ApiScheduledBackupConfig {
 interface ScheduledBackupWizardProps {
   open: boolean;
   onClose: () => void;
-  initialData?: Partial<ScheduledBackupConfig> & Partial<ApiScheduledBackupConfig>;
+  initialData?: Partial<ScheduledBackupConfig> &
+    Partial<ApiScheduledBackupConfig>;
 }
 
 export function ScheduledBackupWizard({
@@ -290,10 +291,22 @@ export function ScheduledBackupWizard({
 
         {step === 1 && <BasicInfoStep config={config} setConfig={setConfig} />}
         {step === 2 && <BackupTypeStep config={config} setConfig={setConfig} />}
-        {step === 3 && <DataToIncludeStep config={config} setConfig={setConfig} />}
-        {step === 4 && <AdvancedOptionsStep config={config} setConfig={setConfig} />}
-        {step === 5 && <DestinationStep config={config} setConfig={setConfig} />}
-        {step === 6 && <SummaryStep config={config} setConfig={setConfig} nextExecutions={nextExecutions} />}
+        {step === 3 && (
+          <DataToIncludeStep config={config} setConfig={setConfig} />
+        )}
+        {step === 4 && (
+          <AdvancedOptionsStep config={config} setConfig={setConfig} />
+        )}
+        {step === 5 && (
+          <DestinationStep config={config} setConfig={setConfig} />
+        )}
+        {step === 6 && (
+          <SummaryStep
+            config={config}
+            setConfig={setConfig}
+            nextExecutions={nextExecutions}
+          />
+        )}
 
         <div className="flex justify-between mt-6">
           <Button variant="outline" onClick={prevStep} disabled={step === 1}>

@@ -13,7 +13,10 @@ interface TipoEquipamentoSelectProps {
   onChange: (value: string) => void;
 }
 
-export function TipoEquipamentoSelect({ value, onChange }: TipoEquipamentoSelectProps) {
+export function TipoEquipamentoSelect({
+  value,
+  onChange,
+}: TipoEquipamentoSelectProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="tipo_equipamento">Tipo de Equipamento</Label>
@@ -22,7 +25,9 @@ export function TipoEquipamentoSelect({ value, onChange }: TipoEquipamentoSelect
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="SAT">SAT (Sistema Autenticador e Transmissor)</SelectItem>
+          <SelectItem value="SAT">
+            SAT (Sistema Autenticador e Transmissor)
+          </SelectItem>
           <SelectItem value="MFE">MFe (Módulo Fiscal Eletrônico)</SelectItem>
         </SelectContent>
       </Select>

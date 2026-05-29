@@ -1,6 +1,12 @@
 // cspell:disable
 import { AlertCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { OdontogramaComparison } from "@/modules/pep/components/OdontogramaComparison";
 import type { OdontogramaHistoryEntry } from "@/modules/pep/types/odontograma.types";
@@ -39,8 +45,8 @@ export function ComparacaoOdontoTab({
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Selecione duas versões do odontograma na aba "Histórico
-              Odonto" para compará-las.
+              Selecione duas versões do odontograma na aba "Histórico Odonto"
+              para compará-las.
             </AlertDescription>
           </Alert>
         )}

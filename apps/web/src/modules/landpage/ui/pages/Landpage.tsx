@@ -13,7 +13,12 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@orthoplus/core-ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 
 const fadeInUp = {
@@ -182,7 +187,11 @@ export default function Landpage() {
             variants={staggerContainer}
             className="space-y-8"
           >
-            <motion.div variants={motionVariants} initial="hidden" animate="visible">
+            <motion.div
+              variants={motionVariants}
+              initial="hidden"
+              animate="visible"
+            >
               <Badge
                 variant="outline"
                 className="mb-6 rounded-full border-[hsl(var(--interactive)/0.3)] bg-[hsl(var(--interactive)/0.1)] px-4 py-1.5 text-sm font-medium text-[hsl(var(--interactive))] dark:border-[hsl(var(--interactive)/0.2)] dark:bg-[hsl(var(--interactive)/0.05)] dark:text-[hsl(var(--interactive))]"
@@ -265,8 +274,8 @@ export default function Landpage() {
               Tudo que sua clínica precisa
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-muted-foreground">
-              Módulos integrados que conversam entre si, eliminando retrabalho
-              e aumentando a produtividade da sua equipe.
+              Módulos integrados que conversam entre si, eliminando retrabalho e
+              aumentando a produtividade da sua equipe.
             </p>
           </motion.div>
 
@@ -279,7 +288,11 @@ export default function Landpage() {
                 >
                   <CardHeader className="pb-4">
                     <div
-                      className={"mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br " + feature.gradient + " shadow-[hsl(var(--interactive)/0.2)]"}
+                      className={
+                        "mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br " +
+                        feature.gradient +
+                        " shadow-[hsl(var(--interactive)/0.2)]"
+                      }
                     >
                       <feature.icon className="h-6 w-6 text-white" />
                     </div>
@@ -329,7 +342,12 @@ export default function Landpage() {
                     </div>
                   )}
                   <Card
-                    className={"h-full border bg-white/70 backdrop-blur-md dark:bg-card " + (plan.highlighted ? "border-[hsl(var(--interactive)/0.5)] shadow-[hsl(var(--interactive)/0.1)] dark:border-[hsl(var(--interactive)/0.3)]" : "border-white/50 dark:border-border")}
+                    className={
+                      "h-full border bg-white/70 backdrop-blur-md dark:bg-card " +
+                      (plan.highlighted
+                        ? "border-[hsl(var(--interactive)/0.5)] shadow-[hsl(var(--interactive)/0.1)] dark:border-[hsl(var(--interactive)/0.3)]"
+                        : "border-white/50 dark:border-border")
+                    }
                   >
                     <CardHeader className="pb-4 text-center">
                       <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -364,7 +382,12 @@ export default function Landpage() {
                       <Button
                         onClick={handleCta}
                         variant={plan.highlighted ? "elevated" : "outline"}
-                        className={"mt-4 w-full rounded-xl " + (plan.highlighted ? "shadow-[hsl(var(--interactive)/0.2)]" : "")}
+                        className={
+                          "mt-4 w-full rounded-xl " +
+                          (plan.highlighted
+                            ? "shadow-[hsl(var(--interactive)/0.2)]"
+                            : "")
+                        }
                       >
                         {plan.cta}
                       </Button>
@@ -399,11 +422,15 @@ export default function Landpage() {
               >
                 Entrar no Sistema
               </button>
-              <span className="hidden text-slate-300 dark:text-foreground sm:inline">|</span>
+              <span className="hidden text-slate-300 dark:text-foreground sm:inline">
+                |
+              </span>
               <span className="cursor-pointer transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]">
                 Termos de Uso
               </span>
-              <span className="hidden text-slate-300 dark:text-foreground sm:inline">|</span>
+              <span className="hidden text-slate-300 dark:text-foreground sm:inline">
+                |
+              </span>
               <span className="cursor-pointer transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]">
                 Privacidade
               </span>

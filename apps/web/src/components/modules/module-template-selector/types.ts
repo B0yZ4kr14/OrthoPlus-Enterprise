@@ -21,7 +21,10 @@ export interface ModuleTemplateSelectorProps {
   onApply?: () => void;
 }
 
-export const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+export const ICON_MAP: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
   Building,
   Stethoscope,
   Activity,

@@ -22,7 +22,7 @@ export function usePrevisaoReposicao() {
         .filter((p) => p.quantidadeAtual <= p.quantidadeMinima * 1.5)
         .map((produto) => {
           const movimentacoesProduto = movimentacoes.filter(
-            (m) => m.produtoId === produto.id
+            (m) => m.produtoId === produto.id,
           );
 
           return {

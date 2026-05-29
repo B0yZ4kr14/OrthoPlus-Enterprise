@@ -92,8 +92,12 @@ export default function EstoqueIntegracoes() {
       setLoading(true);
 
       const [fornecedoresData, pedidosData] = await Promise.all([
-        apiClient.get<FornecedorIntegracao[]>("/estoque/fornecedores?api_enabled=true"),
-        apiClient.get<PedidoAutomatico[]>("/estoque/pedidos/automaticos?limit=100"),
+        apiClient.get<FornecedorIntegracao[]>(
+          "/estoque/fornecedores?api_enabled=true",
+        ),
+        apiClient.get<PedidoAutomatico[]>(
+          "/estoque/pedidos/automaticos?limit=100",
+        ),
       ]);
 
       setFornecedores(fornecedoresData || []);
@@ -106,11 +110,9 @@ export default function EstoqueIntegracoes() {
           (p) => p.status === "enviado" || p.status === "confirmado",
         ).length || 0;
       const confirmados =
-        pedidosData?.filter((p) => p.status === "confirmado").length ||
-        0;
+        pedidosData?.filter((p) => p.status === "confirmado").length || 0;
       const falhos =
-        pedidosData?.filter((p) => p.status === "cancelado").length ||
-        0;
+        pedidosData?.filter((p) => p.status === "cancelado").length || 0;
       const taxaSucesso = total > 0 ? (confirmados / total) * 100 : 0;
 
       // Calcular tempo médio de resposta (mock - deveria vir dos logs)
@@ -144,9 +146,12 @@ export default function EstoqueIntegracoes() {
     try {
       setTestingAPI(fornecedorId);
 
-      const data = await apiClient.post<{ message?: string }>(`/estoque/integracoes/testar-api`, {
-        fornecedor_id: fornecedorId,
-      });
+      const data = await apiClient.post<{ message?: string }>(
+        `/estoque/integracoes/testar-api`,
+        {
+          fornecedor_id: fornecedorId,
+        },
+      );
 
       toast({
         title: "Teste concluído",
@@ -357,10 +362,10 @@ export default function EstoqueIntegracoes() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={historicoData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="data"  stroke="hsl(var(--muted-foreground))" />
-                <YAxis  stroke="hsl(var(--muted-foreground))" />
+                <XAxis dataKey="data" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
                 <Tooltip />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar dataKey="enviados" fill="#10b981" name="Enviados" />
                 <Bar dataKey="falhos" fill="#ef4444" name="Falhos" />
               </BarChart>

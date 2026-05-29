@@ -33,7 +33,12 @@ import {
   TableHeader,
   TableRow,
 } from "@orthoplus/core-ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   FileText,
   Plus,
@@ -57,7 +62,15 @@ import { useFinanceiro } from "@/modules/financeiro/application/hooks/useFinance
 import type { NotaFiscal } from "@/modules/financeiro/types/financeiro-completo.types";
 
 export default function NotasFiscais() {
-  const { config, isLoadingConfig, saveConfig, isSavingConfig, relatorio, isLoadingRelatorio, refetchRelatorio } = useFaturamento();
+  const {
+    config,
+    isLoadingConfig,
+    saveConfig,
+    isSavingConfig,
+    relatorio,
+    isLoadingRelatorio,
+    refetchRelatorio,
+  } = useFaturamento();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("todas");
   const [filterTipo, setFilterTipo] = useState("todos");
@@ -410,9 +423,7 @@ export default function NotasFiscais() {
                       }).format(nota.valor_total)}
                     </TableCell>
                     <TableCell>
-                      {nota.data_emissao
-                        ? formatDate(nota.data_emissao)
-                        : "-"}
+                      {nota.data_emissao ? formatDate(nota.data_emissao) : "-"}
                     </TableCell>
                     <TableCell>{getStatusBadge(nota.status)}</TableCell>
                     <TableCell className="text-right">

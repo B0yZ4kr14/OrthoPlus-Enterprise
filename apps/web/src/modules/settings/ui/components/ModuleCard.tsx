@@ -100,10 +100,7 @@ export function ModuleCard({
     <Card
       ref={cardRef}
       variant="elevated"
-      className={cn(
-        getModuleStatusColor(module),
-        isToggling && "opacity-60",
-      )}
+      className={cn(getModuleStatusColor(module), isToggling && "opacity-60")}
     >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
@@ -132,20 +129,18 @@ export function ModuleCard({
               >
                 {module.is_active ? "Ativo" : "Inativo"}
               </Badge>
-              {module.unmet_dependencies.length > 0 &&
-                !module.is_active && (
-                  <Badge variant="error" className="text-xs">
-                    <Lock className="h-3 w-3 mr-1" />
-                    Bloqueado
-                  </Badge>
-                )}
-              {module.blocking_dependencies.length > 0 &&
-                module.is_active && (
-                  <Badge variant="info" className="text-xs">
-                    <Link2 className="h-3 w-3 mr-1" />
-                    Em uso
-                  </Badge>
-                )}
+              {module.unmet_dependencies.length > 0 && !module.is_active && (
+                <Badge variant="error" className="text-xs">
+                  <Lock className="h-3 w-3 mr-1" />
+                  Bloqueado
+                </Badge>
+              )}
+              {module.blocking_dependencies.length > 0 && module.is_active && (
+                <Badge variant="info" className="text-xs">
+                  <Link2 className="h-3 w-3 mr-1" />
+                  Em uso
+                </Badge>
+              )}
             </>
           ) : (
             <Badge variant="outline" className="text-xs">
@@ -176,9 +171,7 @@ export function ModuleCard({
                 <div className="flex items-start gap-2">
                   <Link2 className="h-3 w-3 mt-0.5 text-primary flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-primary">
-                      Requerido por:
-                    </p>
+                    <p className="font-medium text-primary">Requerido por:</p>
                     <p className="text-muted-foreground mt-0.5">
                       {module.blocking_dependencies.join(", ")}
                     </p>
@@ -199,9 +192,7 @@ export function ModuleCard({
                       <tooltipInfo.icon className="h-4 w-4 text-muted-foreground" />
                     )}
                     <span className="text-sm font-medium text-foreground">
-                      {module.is_active
-                        ? "Desativar módulo"
-                        : "Ativar módulo"}
+                      {module.is_active ? "Desativar módulo" : "Ativar módulo"}
                     </span>
                   </div>
                   <Switch
@@ -216,9 +207,7 @@ export function ModuleCard({
               {tooltipInfo && (
                 <TooltipContent side="bottom" className="max-w-xs">
                   <div className="space-y-1">
-                    <p className="font-semibold text-sm">
-                      {tooltipInfo.title}
-                    </p>
+                    <p className="font-semibold text-sm">{tooltipInfo.title}</p>
                     <p className="text-xs text-muted-foreground">
                       {tooltipInfo.description}
                     </p>

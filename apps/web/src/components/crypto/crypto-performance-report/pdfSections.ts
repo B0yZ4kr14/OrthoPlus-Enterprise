@@ -7,7 +7,7 @@ import type { PortfolioData, MarketComparison } from "./types";
 export function addSummarySection(
   doc: jsPDF,
   portfolioData: PortfolioData,
-  startY: number
+  startY: number,
 ): number {
   const pageWidth = doc.internal.pageSize.getWidth();
   let yPosition = startY;
@@ -21,11 +21,32 @@ export function addSummarySection(
   doc.setFont("helvetica", "normal");
 
   const summaryData = [
-    ["Valor Total do Portfolio:", portfolioData.totalBRL.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })],
-    ["Ganhos Realizados:", `+${portfolioData.gains.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`],
-    ["Perdas Realizadas:", `-${portfolioData.losses.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`],
-    ["Resultado Líquido:", (portfolioData.gains - portfolioData.losses).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })],
-    ["Total de Conversões:", portfolioData.conversionsHistory.length.toString()],
+    [
+      "Valor Total do Portfolio:",
+      portfolioData.totalBRL.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }),
+    ],
+    [
+      "Ganhos Realizados:",
+      `+${portfolioData.gains.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`,
+    ],
+    [
+      "Perdas Realizadas:",
+      `-${portfolioData.losses.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`,
+    ],
+    [
+      "Resultado Líquido:",
+      (portfolioData.gains - portfolioData.losses).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }),
+    ],
+    [
+      "Total de Conversões:",
+      portfolioData.conversionsHistory.length.toString(),
+    ],
   ];
 
   summaryData.forEach(([label, value]) => {
@@ -40,7 +61,7 @@ export function addSummarySection(
 export function addDistributionSection(
   doc: jsPDF,
   portfolioData: PortfolioData,
-  startY: number
+  startY: number,
 ): number {
   const pageWidth = doc.internal.pageSize.getWidth();
   let yPosition = startY;
@@ -55,12 +76,17 @@ export function addDistributionSection(
 
   portfolioData.distribution.forEach((item) => {
     doc.text(item.coin, 20, yPosition);
-    doc.text(`${item.percentage.toFixed(2)}%`, pageWidth / 2 - 10, yPosition, { align: "right" });
+    doc.text(`${item.percentage.toFixed(2)}%`, pageWidth / 2 - 10, yPosition, {
+      align: "right",
+    });
     doc.text(
-      item.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+      item.value.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }),
       pageWidth - 20,
       yPosition,
-      { align: "right" }
+      { align: "right" },
     );
     yPosition += 6;
   });
@@ -71,7 +97,7 @@ export function addDistributionSection(
 export function addMarketComparisonSection(
   doc: jsPDF,
   marketComparison: MarketComparison,
-  startY: number
+  startY: number,
 ): number {
   const pageWidth = doc.internal.pageSize.getWidth();
   let yPosition = startY;
@@ -85,9 +111,18 @@ export function addMarketComparisonSection(
   doc.setFont("helvetica", "normal");
 
   const comparisonData = [
-    ["Bitcoin (BTC):", `${marketComparison.btcReturn > 0 ? "+" : ""}${marketComparison.btcReturn.toFixed(2)}%`],
-    ["S&P 500 (Estimado):", `${marketComparison.sp500Return > 0 ? "+" : ""}${marketComparison.sp500Return.toFixed(2)}%`],
-    ["Seu Portfolio:", `${marketComparison.portfolioReturn > 0 ? "+" : ""}${marketComparison.portfolioReturn.toFixed(2)}%`],
+    [
+      "Bitcoin (BTC):",
+      `${marketComparison.btcReturn > 0 ? "+" : ""}${marketComparison.btcReturn.toFixed(2)}%`,
+    ],
+    [
+      "S&P 500 (Estimado):",
+      `${marketComparison.sp500Return > 0 ? "+" : ""}${marketComparison.sp500Return.toFixed(2)}%`,
+    ],
+    [
+      "Seu Portfolio:",
+      `${marketComparison.portfolioReturn > 0 ? "+" : ""}${marketComparison.portfolioReturn.toFixed(2)}%`,
+    ],
   ];
 
   comparisonData.forEach(([label, value]) => {
@@ -103,7 +138,7 @@ export function addConversionsSection(
   doc: jsPDF,
   portfolioData: PortfolioData,
   startY: number,
-  pageHeight: number
+  pageHeight: number,
 ): number {
   let yPosition = startY;
 
@@ -140,9 +175,12 @@ export function addConversionsSection(
     doc.text(`${conv.fromCoin}→${conv.toCoin}`, 50, yPosition);
     doc.text(conv.amount.toFixed(8), 90, yPosition);
     doc.text(
-      conv.valueBRL.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }),
+      conv.valueBRL.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }),
       130,
-      yPosition
+      yPosition,
     );
     doc.text(conv.type === "gain" ? "Ganho" : "Perda", 170, yPosition);
     yPosition += 6;

@@ -22,9 +22,7 @@ export function FeatureCard({ feature }: FeatureCardProps) {
               {feature.badge}
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground">
-            {feature.description}
-          </p>
+          <p className="text-sm text-muted-foreground">{feature.description}</p>
         </div>
       </div>
     </Card>

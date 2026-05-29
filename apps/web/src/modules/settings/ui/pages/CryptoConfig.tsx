@@ -4,7 +4,12 @@
  * /settings/crypto
  */
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Bitcoin, Wallet, Server } from "lucide-react";
 import { ExchangeConfigForm } from "@/components/crypto/ExchangeConfigForm";

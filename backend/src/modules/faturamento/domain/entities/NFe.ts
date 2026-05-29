@@ -16,7 +16,12 @@ export class NFe {
     public numero: string,
     public serie: string,
     public chaveAcesso: string | null,
-    public status: 'RASCUNHO' | 'EMITIDA' | 'AUTORIZADA' | 'CANCELADA' | 'DENEGADA',
+    public status:
+      | "RASCUNHO"
+      | "EMITIDA"
+      | "AUTORIZADA"
+      | "CANCELADA"
+      | "DENEGADA",
     public clienteId: string,
     public clienteNome: string,
     public clienteCpfCnpj: string,
@@ -29,10 +34,10 @@ export class NFe {
     public protocoloAutorizacao: string | null,
     public observacoes: string | null,
     public readonly createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
   ) {}
 
-  static create(props: Omit<NFe, 'autorizar' | 'cancelar'>): NFe {
+  static create(props: Omit<NFe, "autorizar" | "cancelar">): NFe {
     return new NFe(
       props.id,
       props.clinicId,
@@ -52,15 +57,15 @@ export class NFe {
       props.protocoloAutorizacao,
       props.observacoes,
       props.createdAt,
-      props.updatedAt
+      props.updatedAt,
     );
   }
 
   autorizar(protocolo: string, chave: string): void {
-    if (this.status !== 'EMITIDA') {
-      throw new Error('Apenas NFe emitida pode ser autorizada');
+    if (this.status !== "EMITIDA") {
+      throw new Error("Apenas NFe emitida pode ser autorizada");
     }
-    this.status = 'AUTORIZADA';
+    this.status = "AUTORIZADA";
     this.protocoloAutorizacao = protocolo;
     this.chaveAcesso = chave;
     this.dataAutorizacao = new Date();
@@ -68,10 +73,10 @@ export class NFe {
   }
 
   cancelar(): void {
-    if (this.status !== 'AUTORIZADA') {
-      throw new Error('Apenas NFe autorizada pode ser cancelada');
+    if (this.status !== "AUTORIZADA") {
+      throw new Error("Apenas NFe autorizada pode ser cancelada");
     }
-    this.status = 'CANCELADA';
+    this.status = "CANCELADA";
     this.updatedAt = new Date();
   }
 }

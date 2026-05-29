@@ -22,9 +22,12 @@ const tipoToIcon: Record<string, string> = {
 };
 
 export function AtividadeItem({ atividade, onConcluir }: AtividadeItemProps) {
-  const IconComponent = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[
-    tipoToIcon[atividade.tipo] ?? "Calendar"
-  ];
+  const IconComponent = (
+    Icons as unknown as Record<
+      string,
+      React.ComponentType<{ className?: string }>
+    >
+  )[tipoToIcon[atividade.tipo] ?? "Calendar"];
 
   return (
     <Card className="p-4">
@@ -33,10 +36,7 @@ export function AtividadeItem({ atividade, onConcluir }: AtividadeItemProps) {
           <div className="flex items-center gap-2">
             {IconComponent && <IconComponent className="h-4 w-4" />}
             <h4 className="font-semibold">{atividade.titulo}</h4>
-            <Badge
-              className={statusColors[atividade.status]}
-              variant="outline"
-            >
+            <Badge className={statusColors[atividade.status]} variant="outline">
               {statusLabels[atividade.status]}
             </Badge>
           </div>
@@ -51,13 +51,19 @@ export function AtividadeItem({ atividade, onConcluir }: AtividadeItemProps) {
             {atividade.dataAgendada && (
               <span>
                 Agendada:{" "}
-                {formatDateCustom(atividade.dataAgendada, "dd/MM/yyyy 'às' HH:mm")}
+                {formatDateCustom(
+                  atividade.dataAgendada,
+                  "dd/MM/yyyy 'às' HH:mm",
+                )}
               </span>
             )}
             {atividade.dataConclusao && (
               <span>
                 Concluída:{" "}
-                {formatDateCustom(atividade.dataConclusao, "dd/MM/yyyy 'às' HH:mm")}
+                {formatDateCustom(
+                  atividade.dataConclusao,
+                  "dd/MM/yyyy 'às' HH:mm",
+                )}
               </span>
             )}
           </div>

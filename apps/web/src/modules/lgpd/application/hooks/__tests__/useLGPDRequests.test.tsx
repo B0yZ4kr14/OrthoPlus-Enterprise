@@ -1,17 +1,17 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { render, screen, waitFor, act } from "@testing-library/react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ReactNode } from "react"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, waitFor, act } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactNode } from "react";
 
 // Mutable auth state so individual tests can change clinicId
 const authState: { clinicId: string | null; user: { id: string } | null } = {
   clinicId: "clinic-1",
   user: { id: "user-1" },
-}
+};
 
-const mockGet = vi.fn()
-const mockPost = vi.fn()
-const mockPatch = vi.fn()
+const mockGet = vi.fn();
+const mockPost = vi.fn();
+const mockPatch = vi.fn();
 
 vi.mock("@/lib/api/apiClient", () => ({
   apiClient: {
@@ -20,21 +20,21 @@ vi.mock("@/lib/api/apiClient", () => ({
     patch: (...args: unknown[]) => mockPatch(...args),
     delete: vi.fn(),
   },
-}))
+}));
 
 vi.mock("sonner", () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
-}))
+}));
 
 vi.mock("@/contexts/AuthContext", () => ({
   useAuth: () => authState,
-}))
+}));
 
-import { toast } from "sonner"
-import { useLGPDRequests } from "../useLGPDRequests"
+import { toast } from "sonner";
+import { useLGPDRequests } from "../useLGPDRequests";
 
 const mockRequests = [
   {
@@ -53,7 +53,7 @@ const mockRequests = [
     status: "em_analise",
     deadline: "2025-11-29",
   },
-]
+];
 
 const mockConsents = [
   {
@@ -72,11 +72,11 @@ const mockConsents = [
     date: "2025-11-05",
     expires: "-",
   },
-]
+];
 
 function TestConsumer() {
   const { requests, consents, isLoading, createRequest, updateRequestStatus } =
-    useLGPDRequests()
+    useLGPDRequests();
 
   return (
     <div>
@@ -108,31 +108,33 @@ function TestConsumer() {
         Atualizar Status
       </button>
     </div>
-  )
+  );
 }
 
 function createWrapper() {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
-  })
+  });
   return function Wrapper({ children }: { children: ReactNode }) {
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  }
+    return (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+  };
 }
 
 describe("useLGPDRequests", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-    mockGet.mockReset()
-    mockPost.mockReset()
-    mockPatch.mockReset()
-    authState.clinicId = "clinic-1"
-    authState.user = { id: "user-1" }
-  })
+    vi.clearAllMocks();
+    mockGet.mockReset();
+    mockPost.mockReset();
+    mockPatch.mockReset();
+    authState.clinicId = "clinic-1";
+    authState.user = { id: "user-1" };
+  });
 
   afterEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   // ─────────────────────────────────────────────────────────────
   // Loading state & data fetching
@@ -140,66 +142,75 @@ describe("useLGPDRequests", () => {
 
   it("should show loading state then fetch requests and consents", async () => {
     mockGet.mockImplementation((url: string) => {
-      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests)
-      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents)
-      return Promise.resolve([])
-    })
+      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests);
+      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents);
+      return Promise.resolve([]);
+    });
 
-    render(<TestConsumer />, { wrapper: createWrapper() })
+    render(<TestConsumer />, { wrapper: createWrapper() });
 
-    expect(screen.getByTestId("loading").textContent).toBe("loading")
+    expect(screen.getByTestId("loading").textContent).toBe("loading");
 
-    await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("ready"))
+    await waitFor(() =>
+      expect(screen.getByTestId("loading").textContent).toBe("ready"),
+    );
 
-    expect(screen.getByTestId("requests-count").textContent).toBe("2")
-    expect(screen.getByTestId("consents-count").textContent).toBe("2")
-    expect(screen.getByTestId("requests").textContent).toContain("req-1")
-    expect(screen.getByTestId("consents").textContent).toContain("cons-1")
-    expect(mockGet).toHaveBeenCalledWith("/lgpd/solicitacoes")
-    expect(mockGet).toHaveBeenCalledWith("/lgpd/consentimentos")
-  })
+    expect(screen.getByTestId("requests-count").textContent).toBe("2");
+    expect(screen.getByTestId("consents-count").textContent).toBe("2");
+    expect(screen.getByTestId("requests").textContent).toContain("req-1");
+    expect(screen.getByTestId("consents").textContent).toContain("cons-1");
+    expect(mockGet).toHaveBeenCalledWith("/lgpd/solicitacoes");
+    expect(mockGet).toHaveBeenCalledWith("/lgpd/consentimentos");
+  });
 
   it("should not fetch when clinicId is null", async () => {
-    authState.clinicId = null
+    authState.clinicId = null;
 
-    render(<TestConsumer />, { wrapper: createWrapper() })
+    render(<TestConsumer />, { wrapper: createWrapper() });
 
-    await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("ready"))
+    await waitFor(() =>
+      expect(screen.getByTestId("loading").textContent).toBe("ready"),
+    );
 
-    expect(screen.getByTestId("requests-count").textContent).toBe("0")
-    expect(screen.getByTestId("consents-count").textContent).toBe("0")
-    expect(mockGet).not.toHaveBeenCalled()
-  })
+    expect(screen.getByTestId("requests-count").textContent).toBe("0");
+    expect(screen.getByTestId("consents-count").textContent).toBe("0");
+    expect(mockGet).not.toHaveBeenCalled();
+  });
 
   it("should show empty arrays when requests fetch returns empty", async () => {
     mockGet.mockImplementation((url: string) => {
-      if (url === "/lgpd/solicitacoes") return Promise.resolve([])
-      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents)
-      return Promise.resolve([])
-    })
+      if (url === "/lgpd/solicitacoes") return Promise.resolve([]);
+      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents);
+      return Promise.resolve([]);
+    });
 
-    render(<TestConsumer />, { wrapper: createWrapper() })
+    render(<TestConsumer />, { wrapper: createWrapper() });
 
-    await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("ready"))
+    await waitFor(() =>
+      expect(screen.getByTestId("loading").textContent).toBe("ready"),
+    );
 
-    expect(screen.getByTestId("requests-count").textContent).toBe("0")
-    expect(screen.getByTestId("consents-count").textContent).toBe("2")
-  })
+    expect(screen.getByTestId("requests-count").textContent).toBe("0");
+    expect(screen.getByTestId("consents-count").textContent).toBe("2");
+  });
 
   it("should handle fetch errors gracefully", async () => {
     mockGet.mockImplementation((url: string) => {
-      if (url === "/lgpd/solicitacoes") return Promise.reject(new Error("Network error"))
-      if (url === "/lgpd/consentimentos") return Promise.resolve([])
-      return Promise.resolve([])
-    })
+      if (url === "/lgpd/solicitacoes")
+        return Promise.reject(new Error("Network error"));
+      if (url === "/lgpd/consentimentos") return Promise.resolve([]);
+      return Promise.resolve([]);
+    });
 
-    render(<TestConsumer />, { wrapper: createWrapper() })
+    render(<TestConsumer />, { wrapper: createWrapper() });
 
-    await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("ready"))
+    await waitFor(() =>
+      expect(screen.getByTestId("loading").textContent).toBe("ready"),
+    );
 
     // On error, requests should be empty and loading should finish
-    expect(screen.getByTestId("requests-count").textContent).toBe("0")
-  })
+    expect(screen.getByTestId("requests-count").textContent).toBe("0");
+  });
 
   // ─────────────────────────────────────────────────────────────
   // CRUD - Create request
@@ -207,21 +218,25 @@ describe("useLGPDRequests", () => {
 
   it("should create a request via mutation", async () => {
     mockGet.mockImplementation((url: string) => {
-      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests)
-      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents)
-      return Promise.resolve([])
-    })
-    mockPost.mockResolvedValueOnce({ id: "req-3", type: "Portabilidade" })
+      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests);
+      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents);
+      return Promise.resolve([]);
+    });
+    mockPost.mockResolvedValueOnce({ id: "req-3", type: "Portabilidade" });
 
-    render(<TestConsumer />, { wrapper: createWrapper() })
+    render(<TestConsumer />, { wrapper: createWrapper() });
 
-    await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("ready"))
+    await waitFor(() =>
+      expect(screen.getByTestId("loading").textContent).toBe("ready"),
+    );
 
     await act(async () => {
-      screen.getByTestId("create-request").click()
-    })
+      screen.getByTestId("create-request").click();
+    });
 
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Solicitação criada!"))
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith("Solicitação criada!"),
+    );
 
     expect(mockPost).toHaveBeenCalledWith(
       "/lgpd/solicitacoes",
@@ -229,28 +244,32 @@ describe("useLGPDRequests", () => {
         type: "Portabilidade",
         patient: "Pedro Costa",
         requested_by: "user-1",
-      })
-    )
-  })
+      }),
+    );
+  });
 
   it("should show toast.error on create request failure", async () => {
     mockGet.mockImplementation((url: string) => {
-      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests)
-      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents)
-      return Promise.resolve([])
-    })
-    mockPost.mockRejectedValueOnce(new Error("Save failed"))
+      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests);
+      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents);
+      return Promise.resolve([]);
+    });
+    mockPost.mockRejectedValueOnce(new Error("Save failed"));
 
-    render(<TestConsumer />, { wrapper: createWrapper() })
+    render(<TestConsumer />, { wrapper: createWrapper() });
 
-    await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("ready"))
+    await waitFor(() =>
+      expect(screen.getByTestId("loading").textContent).toBe("ready"),
+    );
 
     await act(async () => {
-      screen.getByTestId("create-request").click()
-    })
+      screen.getByTestId("create-request").click();
+    });
 
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Erro ao criar solicitação"))
-  })
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith("Erro ao criar solicitação"),
+    );
+  });
 
   // ─────────────────────────────────────────────────────────────
   // CRUD - Update request status
@@ -258,22 +277,28 @@ describe("useLGPDRequests", () => {
 
   it("should update request status via mutation", async () => {
     mockGet.mockImplementation((url: string) => {
-      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests)
-      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents)
-      return Promise.resolve([])
-    })
-    mockPatch.mockResolvedValueOnce({})
+      if (url === "/lgpd/solicitacoes") return Promise.resolve(mockRequests);
+      if (url === "/lgpd/consentimentos") return Promise.resolve(mockConsents);
+      return Promise.resolve([]);
+    });
+    mockPatch.mockResolvedValueOnce({});
 
-    render(<TestConsumer />, { wrapper: createWrapper() })
+    render(<TestConsumer />, { wrapper: createWrapper() });
 
-    await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("ready"))
+    await waitFor(() =>
+      expect(screen.getByTestId("loading").textContent).toBe("ready"),
+    );
 
     await act(async () => {
-      screen.getByTestId("update-status").click()
-    })
+      screen.getByTestId("update-status").click();
+    });
 
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Status atualizado!"))
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith("Status atualizado!"),
+    );
 
-    expect(mockPatch).toHaveBeenCalledWith("/lgpd/solicitacoes/req-1", { status: "concluida" })
-  })
-})
+    expect(mockPatch).toHaveBeenCalledWith("/lgpd/solicitacoes/req-1", {
+      status: "concluida",
+    });
+  });
+});

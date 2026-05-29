@@ -3,7 +3,7 @@ import { SAMPLE_MODULES } from "./types";
 
 export function useStepActivation() {
   const [activeModules, setActiveModules] = useState<string[]>(
-    SAMPLE_MODULES.filter((m) => m.essential).map((m) => m.id)
+    SAMPLE_MODULES.filter((m) => m.essential).map((m) => m.id),
   );
 
   const toggleModule = useCallback((id: string) => {
@@ -11,7 +11,7 @@ export function useStepActivation() {
     if (module?.essential) return;
 
     setActiveModules((prev) =>
-      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id],
     );
   }, []);
 
@@ -24,15 +24,18 @@ export function useStepActivation() {
         acc[module.category].push(module);
         return acc;
       },
-      {} as Record<string, typeof SAMPLE_MODULES>
+      {} as Record<string, typeof SAMPLE_MODULES>,
     );
   }, []);
 
-  const stats = useMemo(() => ({
-    active: activeModules.length,
-    total: SAMPLE_MODULES.length,
-    inactive: SAMPLE_MODULES.length - activeModules.length,
-  }), [activeModules.length]);
+  const stats = useMemo(
+    () => ({
+      active: activeModules.length,
+      total: SAMPLE_MODULES.length,
+      inactive: SAMPLE_MODULES.length - activeModules.length,
+    }),
+    [activeModules.length],
+  );
 
   return {
     activeModules,

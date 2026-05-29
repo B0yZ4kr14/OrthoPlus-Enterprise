@@ -1,5 +1,8 @@
 import { Odontograma, OdontogramaProps } from "@/domain/entities/Odontograma";
-import { ToothData, OdontogramaHistoryEntry } from "@/modules/pep/types/odontograma.types";
+import {
+  ToothData,
+  OdontogramaHistoryEntry,
+} from "@/modules/pep/types/odontograma.types";
 import { Database } from "@/types/database";
 
 type OdontogramaRow = Database["public"]["Tables"]["odontogramas"]["Row"];

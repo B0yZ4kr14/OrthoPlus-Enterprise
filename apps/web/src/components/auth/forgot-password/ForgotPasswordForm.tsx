@@ -8,7 +8,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@orthoplus/core-ui/form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { ArrowLeft } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import type { ForgotPasswordValues } from "./types";

@@ -275,8 +275,12 @@ export function OnboardingAnalyticsDashboard() {
                 />
                 <YAxis />
                 <Tooltip />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
-                <Bar dataKey="completions" fill="hsl(160, 84%, 30%)" name="Conclusões" />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Bar
+                  dataKey="completions"
+                  fill="hsl(160, 84%, 30%)"
+                  name="Conclusões"
+                />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -302,7 +306,7 @@ export function OnboardingAnalyticsDashboard() {
                 />
                 <YAxis />
                 <Tooltip formatter={(value: number) => formatTime(value)} />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Line
                   type="monotone"
                   dataKey="average_time"
@@ -334,8 +338,12 @@ export function OnboardingAnalyticsDashboard() {
                   <XAxis dataKey="step_name" />
                   <YAxis />
                   <Tooltip />
-                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
-                  <Bar dataKey="abandoned" fill="hsl(0, 84%, 60%)" name="Abandonos" />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                  <Bar
+                    dataKey="abandoned"
+                    fill="hsl(0, 84%, 60%)"
+                    name="Abandonos"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

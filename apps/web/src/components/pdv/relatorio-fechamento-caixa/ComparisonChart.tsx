@@ -31,7 +31,10 @@ export function ComparisonChart({ fechamento }: ComparisonChartProps) {
   ];
 
   const formatCurrency = (value: number) =>
-    new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+    new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
 
   return (
     <Card className="p-4 mb-6">
@@ -39,12 +42,16 @@ export function ComparisonChart({ fechamento }: ComparisonChartProps) {
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name"  stroke="hsl(var(--muted-foreground))" />
-          <YAxis  stroke="hsl(var(--muted-foreground))" />
+          <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+          <YAxis stroke="hsl(var(--muted-foreground))" />
           <Tooltip formatter={(value: number) => formatCurrency(value)} />
-          <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+          <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
           <Bar dataKey="valor" fill="hsl(var(--primary))" name="Valor" />
-          <Bar dataKey="quantidade" fill="hsl(var(--success))" name="Quantidade" />
+          <Bar
+            dataKey="quantidade"
+            fill="hsl(var(--success))"
+            name="Quantidade"
+          />
         </BarChart>
       </ResponsiveContainer>
     </Card>

@@ -9,7 +9,7 @@ export function useStatusSelect(onSelect: (status: PatientStatus) => void) {
       onSelect(status);
       setOpen(false);
     },
-    [onSelect]
+    [onSelect],
   );
 
   return {

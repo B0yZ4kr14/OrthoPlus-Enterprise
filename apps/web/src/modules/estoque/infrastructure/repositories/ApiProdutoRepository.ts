@@ -51,16 +51,22 @@ export class ApiProdutoRepository implements IProdutoRepository {
   }
 
   async findByClinicId(clinicId: string): Promise<Produto[]> {
-    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
-      params: { clinicId },
-    });
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>(
+      "/estoque/produtos",
+      {
+        params: { clinicId },
+      },
+    );
     return unwrapData(response) || [];
   }
 
   async findActiveByClinicId(clinicId: string): Promise<Produto[]> {
-    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
-      params: { clinicId, ativo: true },
-    });
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>(
+      "/estoque/produtos",
+      {
+        params: { clinicId, ativo: true },
+      },
+    );
     return unwrapData(response) || [];
   }
 
@@ -73,23 +79,32 @@ export class ApiProdutoRepository implements IProdutoRepository {
       | "CONSUMIVEL"
       | "OUTRO",
   ): Promise<Produto[]> {
-    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
-      params: { clinicId, categoria },
-    });
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>(
+      "/estoque/produtos",
+      {
+        params: { clinicId, categoria },
+      },
+    );
     return unwrapData(response) || [];
   }
 
   async findEstoqueBaixo(clinicId: string): Promise<Produto[]> {
-    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
-      params: { clinicId, filter: "baixo_estoque" },
-    });
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>(
+      "/estoque/produtos",
+      {
+        params: { clinicId, filter: "baixo_estoque" },
+      },
+    );
     return unwrapData(response) || [];
   }
 
   async findEstoqueZerado(clinicId: string): Promise<Produto[]> {
-    const response = await apiClient.get<Produto[] | { data?: Produto[] }>("/estoque/produtos", {
-      params: { clinicId, filter: "zerado" },
-    });
+    const response = await apiClient.get<Produto[] | { data?: Produto[] }>(
+      "/estoque/produtos",
+      {
+        params: { clinicId, filter: "zerado" },
+      },
+    );
     return unwrapData(response) || [];
   }
 

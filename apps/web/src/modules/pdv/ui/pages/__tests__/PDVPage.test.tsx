@@ -1,27 +1,27 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { render, screen, act } from "@testing-library/react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import React from "react"
-import PDVPage from "../PDVPage"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
+import PDVPage from "../PDVPage";
 
 function createWrapper() {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
-  })
+  });
   return ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  )
+  );
 }
 
-const mockUsePDV = vi.fn()
+const mockUsePDV = vi.fn();
 
 vi.mock("@/hooks/usePDV", () => ({
   usePDV: (...args: unknown[]) => mockUsePDV(...args),
-}))
+}));
 
 vi.mock("@/contexts/AuthContext", () => ({
   useAuth: () => ({ clinicId: "clinic-1" }),
-}))
+}));
 
 vi.mock("@/components/shared/PageHeader", () => ({
   PageHeader: ({ title, description }: any) => (
@@ -30,33 +30,61 @@ vi.mock("@/components/shared/PageHeader", () => ({
       <p>{description}</p>
     </div>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/card", () => ({
   Card: ({ children, className, ...props }: any) => (
-    <div className={className} {...props}>{children}</div>
+    <div className={className} {...props}>
+      {children}
+    </div>
   ),
   CardContent: ({ children, className }: any) => (
     <div className={className}>{children}</div>
   ),
   CardHeader: ({ children }: any) => <div>{children}</div>,
   CardTitle: ({ children }: any) => <h2>{children}</h2>,
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/button", () => ({
-  Button: ({ children, onClick, disabled, title, className, variant, size, ...props }: any) => (
-    <button onClick={onClick} disabled={disabled} title={title} className={className} {...props}>
+  Button: ({
+    children,
+    onClick,
+    disabled,
+    title,
+    className,
+    variant,
+    size,
+    ...props
+  }: any) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+      className={className}
+      {...props}
+    >
       {children}
     </button>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/badge", () => ({
   Badge: ({ children }: any) => <span>{children}</span>,
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/input", () => ({
-  Input: ({ value, onChange, placeholder, id, type, step, min, max, disabled, ...props }: any) => (
+  Input: ({
+    value,
+    onChange,
+    placeholder,
+    id,
+    type,
+    step,
+    min,
+    max,
+    disabled,
+    ...props
+  }: any) => (
     <input
       id={id}
       type={type || "text"}
@@ -70,23 +98,25 @@ vi.mock("@orthoplus/core-ui/input", () => ({
       {...props}
     />
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/label", () => ({
-  Label: ({ children, htmlFor }: any) => <label htmlFor={htmlFor}>{children}</label>,
-}))
+  Label: ({ children, htmlFor }: any) => (
+    <label htmlFor={htmlFor}>{children}</label>
+  ),
+}));
 
 vi.mock("@orthoplus/core-ui/separator", () => ({
   Separator: () => <hr />,
-}))
+}));
 
 vi.mock("@/components/shared/EmptyState", () => ({
   EmptyState: ({ message }: any) => <div>{message}</div>,
-}))
+}));
 
 vi.mock("@/components/shared/CardTopBorder", () => ({
   CardTopBorder: () => null,
-}))
+}));
 
 vi.mock("@/components/pdv/AberturaCaixaDialog", () => ({
   AberturaCaixaDialog: ({ open, onOpenChange }: any) =>
@@ -95,7 +125,7 @@ vi.mock("@/components/pdv/AberturaCaixaDialog", () => ({
         <button onClick={() => onOpenChange(false)}>Fechar Dialog</button>
       </div>
     ) : null,
-}))
+}));
 
 vi.mock("@/components/pdv/FechamentoCaixaDialog", () => ({
   FechamentoCaixaDialog: ({ open, onOpenChange }: any) =>
@@ -104,17 +134,17 @@ vi.mock("@/components/pdv/FechamentoCaixaDialog", () => ({
         <button onClick={() => onOpenChange(false)}>Fechar Dialog</button>
       </div>
     ) : null,
-}))
+}));
 
 describe("PDVPage", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-    mockUsePDV.mockReset()
-  })
+    vi.clearAllMocks();
+    mockUsePDV.mockReset();
+  });
 
   afterEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   const defaultUsePDVReturn = {
     caixaAberto: null,
@@ -125,39 +155,41 @@ describe("PDVPage", () => {
     criarVenda: vi.fn(),
     cancelarVenda: vi.fn(),
     reload: vi.fn(),
-  }
+  };
 
   it("should render loading state", () => {
-    mockUsePDV.mockReturnValue({ ...defaultUsePDVReturn, loading: true })
+    mockUsePDV.mockReturnValue({ ...defaultUsePDVReturn, loading: true });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText("Carregando...")).toBeTruthy()
-    expect(screen.getByText("Ponto de Venda (PDV)")).toBeTruthy()
-  })
+    expect(screen.getByText("Carregando...")).toBeTruthy();
+    expect(screen.getByText("Ponto de Venda (PDV)")).toBeTruthy();
+  });
 
   it("should render caixa fechado state", () => {
-    mockUsePDV.mockReturnValue(defaultUsePDVReturn)
+    mockUsePDV.mockReturnValue(defaultUsePDVReturn);
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText("Caixa Fechado")).toBeTruthy()
-    expect(screen.getByText("Abra o caixa para iniciar as vendas.")).toBeTruthy()
-    expect(screen.getByText("Abrir Caixa")).toBeTruthy()
-  })
+    expect(screen.getByText("Caixa Fechado")).toBeTruthy();
+    expect(
+      screen.getByText("Abra o caixa para iniciar as vendas."),
+    ).toBeTruthy();
+    expect(screen.getByText("Abrir Caixa")).toBeTruthy();
+  });
 
   it("should open abertura dialog when clicking Abrir Caixa", () => {
-    mockUsePDV.mockReturnValue(defaultUsePDVReturn)
+    mockUsePDV.mockReturnValue(defaultUsePDVReturn);
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    const abrirButton = screen.getByText("Abrir Caixa")
+    const abrirButton = screen.getByText("Abrir Caixa");
     act(() => {
-      abrirButton.click()
-    })
+      abrirButton.click();
+    });
 
-    expect(screen.getByTestId("abertura-dialog")).toBeTruthy()
-  })
+    expect(screen.getByTestId("abertura-dialog")).toBeTruthy();
+  });
 
   it("should render caixa aberto state with valor inicial", () => {
     mockUsePDV.mockReturnValue({
@@ -167,15 +199,15 @@ describe("PDVPage", () => {
         valor_inicial: 500,
         created_at: "2024-01-15T08:00:00Z",
       },
-    })
+    });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText("Caixa Aberto")).toBeTruthy()
+    expect(screen.getByText("Caixa Aberto")).toBeTruthy();
     // The valor_inicial is formatted as R$ 500,00
-    const valores = screen.getAllByText(/R\$/)
-    expect(valores.length).toBeGreaterThanOrEqual(1)
-  })
+    const valores = screen.getAllByText(/R\$/);
+    expect(valores.length).toBeGreaterThanOrEqual(1);
+  });
 
   it("should render fechar caixa button when caixa is open", () => {
     mockUsePDV.mockReturnValue({
@@ -185,12 +217,12 @@ describe("PDVPage", () => {
         valor_inicial: 500,
         created_at: "2024-01-15T08:00:00Z",
       },
-    })
+    });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText("Fechar Caixa")).toBeTruthy()
-  })
+    expect(screen.getByText("Fechar Caixa")).toBeTruthy();
+  });
 
   it("should open fechamento dialog when clicking Fechar Caixa", () => {
     mockUsePDV.mockReturnValue({
@@ -200,17 +232,17 @@ describe("PDVPage", () => {
         valor_inicial: 500,
         created_at: "2024-01-15T08:00:00Z",
       },
-    })
+    });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    const fecharButton = screen.getByText("Fechar Caixa")
+    const fecharButton = screen.getByText("Fechar Caixa");
     act(() => {
-      fecharButton.click()
-    })
+      fecharButton.click();
+    });
 
-    expect(screen.getByTestId("fechamento-dialog")).toBeTruthy()
-  })
+    expect(screen.getByTestId("fechamento-dialog")).toBeTruthy();
+  });
 
   it("should render adicionar item form", () => {
     mockUsePDV.mockReturnValue({
@@ -220,24 +252,24 @@ describe("PDVPage", () => {
         valor_inicial: 500,
         created_at: "2024-01-15T08:00:00Z",
       },
-    })
+    });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText("Adicionar Item")).toBeTruthy()
-    expect(screen.getByLabelText("Descrição")).toBeTruthy()
-    expect(screen.getByLabelText("Valor")).toBeTruthy()
-    expect(screen.getByLabelText("Qtd")).toBeTruthy()
-  })
+    expect(screen.getByText("Adicionar Item")).toBeTruthy();
+    expect(screen.getByLabelText("Descrição")).toBeTruthy();
+    expect(screen.getByLabelText("Valor")).toBeTruthy();
+    expect(screen.getByLabelText("Qtd")).toBeTruthy();
+  });
 
   it("should disable inputs when caixa is closed", () => {
-    mockUsePDV.mockReturnValue(defaultUsePDVReturn)
+    mockUsePDV.mockReturnValue(defaultUsePDVReturn);
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    const descInput = screen.getByLabelText("Descrição") as HTMLInputElement
-    expect(descInput.disabled).toBe(true)
-  })
+    const descInput = screen.getByLabelText("Descrição") as HTMLInputElement;
+    expect(descInput.disabled).toBe(true);
+  });
 
   it("should render formas de pagamento buttons", () => {
     mockUsePDV.mockReturnValue({
@@ -247,17 +279,17 @@ describe("PDVPage", () => {
         valor_inicial: 500,
         created_at: "2024-01-15T08:00:00Z",
       },
-    })
+    });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText("Dinheiro")).toBeTruthy()
-    expect(screen.getByText("Cartão Crédito")).toBeTruthy()
-    expect(screen.getByText("Cartão Débito")).toBeTruthy()
-    expect(screen.getByText("PIX")).toBeTruthy()
-    expect(screen.getByText("Transferência")).toBeTruthy()
-    expect(screen.getByText("Criptomoeda")).toBeTruthy()
-  })
+    expect(screen.getByText("Dinheiro")).toBeTruthy();
+    expect(screen.getByText("Cartão Crédito")).toBeTruthy();
+    expect(screen.getByText("Cartão Débito")).toBeTruthy();
+    expect(screen.getByText("PIX")).toBeTruthy();
+    expect(screen.getByText("Transferência")).toBeTruthy();
+    expect(screen.getByText("Criptomoeda")).toBeTruthy();
+  });
 
   it("should render pagamento section", () => {
     mockUsePDV.mockReturnValue({
@@ -267,13 +299,13 @@ describe("PDVPage", () => {
         valor_inicial: 500,
         created_at: "2024-01-15T08:00:00Z",
       },
-    })
+    });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    expect(screen.getByText("Pagamento")).toBeTruthy()
-    expect(screen.getByText("Finalizar Venda")).toBeTruthy()
-  })
+    expect(screen.getByText("Pagamento")).toBeTruthy();
+    expect(screen.getByText("Finalizar Venda")).toBeTruthy();
+  });
 
   it("should disable finalizar venda when no items", () => {
     mockUsePDV.mockReturnValue({
@@ -283,11 +315,13 @@ describe("PDVPage", () => {
         valor_inicial: 500,
         created_at: "2024-01-15T08:00:00Z",
       },
-    })
+    });
 
-    render(<PDVPage />, { wrapper: createWrapper() })
+    render(<PDVPage />, { wrapper: createWrapper() });
 
-    const finalizarButton = screen.getByText("Finalizar Venda") as HTMLButtonElement
-    expect(finalizarButton.disabled).toBe(true)
-  })
-})
+    const finalizarButton = screen.getByText(
+      "Finalizar Venda",
+    ) as HTMLButtonElement;
+    expect(finalizarButton.disabled).toBe(true);
+  });
+});

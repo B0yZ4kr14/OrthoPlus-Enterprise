@@ -16,29 +16,39 @@ export function authMiddleware(
   _res: Response,
   next: NextFunction,
 ) {
-  const cookieToken = (req as Request & { cookies?: Record<string, string> }).cookies?.access_token;
+  const cookieToken = (req as Request & { cookies?: Record<string, string> })
+    .cookies?.access_token;
   const authHeader = req.headers.authorization;
-  const token = cookieToken || (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : undefined);
+  const token =
+    cookieToken ||
+    (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : undefined);
 
-  const isApiRoute = req.path.startsWith("/api") || req.path.startsWith("/functions/v1");
-  const isPublicApi = req.path.startsWith("/api/auth") || req.path === "/health";
+  const isApiRoute =
+    req.path.startsWith("/api") || req.path.startsWith("/functions/v1");
+  const isPublicApi =
+    req.path.startsWith("/api/auth") || req.path === "/health";
   const allowMock = process.env.AUTH_ALLOW_MOCK === "true";
 
   // BYPASS FOR INTERNAL CRON JOBS
-  const isInternalCron = req.headers["x-internal-cron"] === "true" && 
-    (req.ip === "127.0.0.1" || req.ip === "::ffff:127.0.0.1" || req.ip === "::1");
+  const isInternalCron =
+    req.headers["x-internal-cron"] === "true" &&
+    (req.ip === "127.0.0.1" ||
+      req.ip === "::ffff:127.0.0.1" ||
+      req.ip === "::1");
 
   // If no token on protected API routes, block unless mock mode is enabled
   if (!token) {
     if (isApiRoute && !isPublicApi && !allowMock && !isInternalCron) {
-      return _res.status(401).json({ error: "Unauthorized - JWT token required" });
+      return _res
+        .status(401)
+        .json({ error: "Unauthorized - JWT token required" });
     }
-    
+
     if (isInternalCron) {
       req.clinicId = "SYSTEM";
       req.user = { id: "SYSTEM", clinicId: "SYSTEM", role: "ROOT" };
     }
-    
+
     return next();
   }
 
@@ -53,15 +63,18 @@ export function authMiddleware(
       throw new Error("JWT_SECRET is not configured");
     }
 
-    const decoded: any = jwt.verify( // eslint-disable-line @typescript-eslint/no-explicit-any
+    const decoded: any = jwt.verify(
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       token,
       jwtSecret,
-      { algorithms: ['HS256'] },
+      { algorithms: ["HS256"] },
     );
 
     // SECURITY: clinicId MUST exist in token (except in explicit mock mode)
     if (!decoded.clinicId && !allowMock) {
-      throw new Error("Missing clinicId in token - multi-tenant isolation required");
+      throw new Error(
+        "Missing clinicId in token - multi-tenant isolation required",
+      );
     }
 
     // Set clinicId from token — explicit conditional to avoid accidental fallback
@@ -110,7 +123,11 @@ export function tenantGuard(req: Request, res: Response, next: NextFunction) {
   }
   const routeClinicId =
     req.params.clinicId || req.params.clinic_id || req.params.id;
-  if (routeClinicId && routeClinicId !== user.clinicId && user.role !== "ROOT") {
+  if (
+    routeClinicId &&
+    routeClinicId !== user.clinicId &&
+    user.role !== "ROOT"
+  ) {
     return res.status(403).json({ error: "Cross-tenant access denied" });
   }
   return next();

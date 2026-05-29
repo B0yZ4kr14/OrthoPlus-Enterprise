@@ -54,7 +54,9 @@ export class SearchIndexPatientHandler implements EventHandler<DomainEvent> {
       });
 
       await prisma.search_index.create({
-        data: entry as unknown as Parameters<typeof prisma.search_index.create>[0]["data"],
+        data: entry as unknown as Parameters<
+          typeof prisma.search_index.create
+        >[0]["data"],
       });
 
       logger.debug("SearchIndex: paciente indexado com sucesso", {

@@ -9,7 +9,12 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { CryptoPaymentCheckout } from "@/modules/crypto/presentation/components/CryptoPaymentCheckout";
 import { CryptoPaymentStatus } from "@/modules/crypto/presentation/components/CryptoPaymentStatus";
 import { CryptoPaymentHistory } from "@/modules/crypto/presentation/components/CryptoPaymentHistory";
@@ -90,10 +95,10 @@ export default function CryptoPaymentPage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader 
-        icon={Bitcoin} 
-        title="Crypto Pagamentos" 
-        description="Pagamentos em criptomoeda e gestão de invoices" 
+      <PageHeader
+        icon={Bitcoin}
+        title="Crypto Pagamentos"
+        description="Pagamentos em criptomoeda e gestão de invoices"
       />
 
       <div className="grid md:grid-cols-3 gap-4">

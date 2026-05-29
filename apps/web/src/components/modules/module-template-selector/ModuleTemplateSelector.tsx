@@ -5,7 +5,9 @@ import { TemplateDialog } from "./TemplateDialog";
 import { LoadingState } from "./LoadingState";
 import type { ModuleTemplateSelectorProps } from "./types";
 
-export function ModuleTemplateSelector({ onApply }: ModuleTemplateSelectorProps) {
+export function ModuleTemplateSelector({
+  onApply,
+}: ModuleTemplateSelectorProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { templates, loading } = useTemplates();
   const { applyTemplate, applying } = useTemplateApplication({

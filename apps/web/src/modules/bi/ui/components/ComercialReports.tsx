@@ -23,7 +23,11 @@ interface ReportSectionProps {
   onGenerate: () => void;
 }
 
-export function ReportSection({ title, children, onGenerate }: ReportSectionProps) {
+export function ReportSection({
+  title,
+  children,
+  onGenerate,
+}: ReportSectionProps) {
   return (
     <div className="p-4 border rounded-lg space-y-4">
       <h3 className="font-semibold">{title}</h3>
@@ -56,7 +60,11 @@ export function DateRangeFields({
         <Input
           type="date"
           value={dateFrom}
-          onChange={onDateFromChange ? (e) => onDateFromChange(e.target.value) : undefined}
+          onChange={
+            onDateFromChange
+              ? (e) => onDateFromChange(e.target.value)
+              : undefined
+          }
         />
       </div>
       <div>
@@ -64,7 +72,9 @@ export function DateRangeFields({
         <Input
           type="date"
           value={dateTo}
-          onChange={onDateToChange ? (e) => onDateToChange(e.target.value) : undefined}
+          onChange={
+            onDateToChange ? (e) => onDateToChange(e.target.value) : undefined
+          }
         />
       </div>
     </>
@@ -150,8 +160,18 @@ export function ComercialReports({
                 </SelectTrigger>
                 <SelectContent>
                   {[
-                    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-                    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+                    "Janeiro",
+                    "Fevereiro",
+                    "Março",
+                    "Abril",
+                    "Maio",
+                    "Junho",
+                    "Julho",
+                    "Agosto",
+                    "Setembro",
+                    "Outubro",
+                    "Novembro",
+                    "Dezembro",
                   ].map((mes) => (
                     <SelectItem key={mes} value={mes.toLowerCase()}>
                       {mes}

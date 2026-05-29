@@ -9,7 +9,7 @@ export { BACKUP_OPTIONS, BackupTypeCard };
 export function BackupTypeStep({ config, setConfig }: WizardStepProps) {
   const handleTypeChange = (
     type: "full" | "incremental" | "differential",
-    isIncremental?: boolean
+    isIncremental?: boolean,
   ) => {
     setConfig({
       ...config,

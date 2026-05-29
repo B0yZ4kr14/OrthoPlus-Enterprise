@@ -14,7 +14,7 @@ import { Errors } from "@/middleware/errorHandler";
 export function clinicGuard(
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void {
   const clinicId = req.user?.clinicId;
   if (!clinicId) {

@@ -118,10 +118,13 @@ export function useContasReceber() {
     return contasReceber.filter((conta) => {
       const matchesSearch =
         conta.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (conta.patient_name || "").toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesStatus = filterStatus === "todos" || conta.status === filterStatus;
-      
+        (conta.patient_name || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
+      const matchesStatus =
+        filterStatus === "todos" || conta.status === filterStatus;
+
       return matchesSearch && matchesStatus;
     });
   }, [contasReceber, searchTerm, filterStatus]);

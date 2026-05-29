@@ -8,7 +8,12 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Bitcoin, Wallet, TrendingUp, Bell, Key, Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -78,11 +83,15 @@ export default function CryptoConfigPage() {
             <StatsCard
               title="Portfolio Total"
               value={
-                portfolio ? formatCurrency(portfolio.total_value_usd, "USD") : "$0.00"
+                portfolio
+                  ? formatCurrency(portfolio.total_value_usd, "USD")
+                  : "$0.00"
               }
               icon={Bitcoin}
               variant="primary"
-              description={portfolio ? `${portfolio.total_btc.toFixed(8)} BTC` : undefined}
+              description={
+                portfolio ? `${portfolio.total_btc.toFixed(8)} BTC` : undefined
+              }
             />
             <StatsCard
               title="Exchanges"

@@ -10,7 +10,7 @@ import type { TabValue, DialogState, AISuggestion } from "./types";
 export function usePEPPage() {
   const { user, clinicId } = useAuth();
   const { toast } = useToast();
-  
+
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [activeTab, setActiveTab] = useState<TabValue>("historico");
   const [dialogs, setDialogs] = useState<DialogState>({
@@ -24,7 +24,7 @@ export function usePEPPage() {
   >([null, null]);
 
   const prontuarioId = selectedPatient?.id || null;
-  
+
   const { createTratamento } = useTratamentos(prontuarioId, clinicId || "");
   const { history, restoreFromHistory } = useOdontograma(prontuarioId || "");
 
@@ -53,41 +53,46 @@ export function usePEPPage() {
     setActiveTab("historico-odonto");
   }, []);
 
-  const handleCreateTreatmentsFromAI = useCallback(async (suggestions: AISuggestion[]) => {
-    if (!user) {
-      toast({
-        title: "Erro",
-        description: "Usuário não autenticado",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      for (const suggestion of suggestions) {
-        await createTratamento({
-          titulo: suggestion.procedure,
-          descricao: suggestion.clinical_notes || `Tratamento para o dente ${suggestion.tooth_number}`,
-          denteCodigo: suggestion.tooth_number,
-          dataInicio: new Date(),
-          createdBy: user.id,
-        } as Parameters<typeof createTratamento>[0]);
+  const handleCreateTreatmentsFromAI = useCallback(
+    async (suggestions: AISuggestion[]) => {
+      if (!user) {
+        toast({
+          title: "Erro",
+          description: "Usuário não autenticado",
+          variant: "destructive",
+        });
+        return;
       }
 
-      toast({
-        title: "Sucesso",
-        description: `${suggestions.length} tratamento(s) criado(s) com sucesso`,
-      });
+      try {
+        for (const suggestion of suggestions) {
+          await createTratamento({
+            titulo: suggestion.procedure,
+            descricao:
+              suggestion.clinical_notes ||
+              `Tratamento para o dente ${suggestion.tooth_number}`,
+            denteCodigo: suggestion.tooth_number,
+            dataInicio: new Date(),
+            createdBy: user.id,
+          } as Parameters<typeof createTratamento>[0]);
+        }
 
-      setActiveTab("tratamentos");
-    } catch (error: unknown) {
-      toast({
-        title: "Erro ao criar tratamentos",
-        description: error instanceof Error ? error.message : "Erro",
-        variant: "destructive",
-      });
-    }
-  }, [user, createTratamento, toast]);
+        toast({
+          title: "Sucesso",
+          description: `${suggestions.length} tratamento(s) criado(s) com sucesso`,
+        });
+
+        setActiveTab("tratamentos");
+      } catch (error: unknown) {
+        toast({
+          title: "Erro ao criar tratamentos",
+          description: error instanceof Error ? error.message : "Erro",
+          variant: "destructive",
+        });
+      }
+    },
+    [user, createTratamento, toast],
+  );
 
   return {
     user,

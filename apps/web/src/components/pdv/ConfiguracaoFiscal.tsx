@@ -28,7 +28,9 @@ export const ConfiguracaoFiscal = () => {
     queryKey: ["faturamento-config", clinicId],
     queryFn: async () => {
       try {
-        const response = await apiClient.get<{ config: any | null }>("/faturamento/config");
+        const response = await apiClient.get<{ config: any | null }>(
+          "/faturamento/config",
+        );
         return response.config;
       } catch (error: unknown) {
         const err = error as Record<string, unknown>;

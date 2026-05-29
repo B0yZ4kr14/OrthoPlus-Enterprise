@@ -4,12 +4,17 @@ import { StatsBar } from "./StatsBar";
 import { ModuleCategory } from "./ModuleCategory";
 
 export function StepActivation() {
-  const { activeModules, groupedModules, stats, toggleModule } = useStepActivation();
+  const { activeModules, groupedModules, stats, toggleModule } =
+    useStepActivation();
 
   return (
     <div className="space-y-6">
       <InfoCard />
-      <StatsBar active={stats.active} total={stats.total} inactive={stats.inactive} />
+      <StatsBar
+        active={stats.active}
+        total={stats.total}
+        inactive={stats.inactive}
+      />
 
       <div className="space-y-6">
         {Object.entries(groupedModules).map(([category, modules]) => (

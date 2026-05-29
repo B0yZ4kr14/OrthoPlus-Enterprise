@@ -1,6 +1,11 @@
 // cspell:disable
 import { MessageSquare } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Progress } from "@orthoplus/core-ui/progress";
 import type { Patient } from "./types";
 

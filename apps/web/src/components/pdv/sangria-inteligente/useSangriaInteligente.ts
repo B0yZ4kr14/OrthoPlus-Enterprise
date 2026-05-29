@@ -7,7 +7,10 @@ import { useToast } from "@/hooks/use-toast";
 import { toast as sonnerToast } from "sonner";
 import type { SugestaoIA } from "./types";
 
-export function useSangriaInteligente(caixaId: string, valorAtualCaixa: number) {
+export function useSangriaInteligente(
+  caixaId: string,
+  valorAtualCaixa: number,
+) {
   const { clinicId, user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -34,7 +37,9 @@ export function useSangriaInteligente(caixaId: string, valorAtualCaixa: number) 
   useEffect(() => {
     if (sugestaoIA?.deveSugerirSangria && sugestaoIA?.valorSugerido > 0) {
       setValorSangria(sugestaoIA.valorSugerido);
-      setObservacoes(`Sangria sugerida automaticamente pela IA: ${sugestaoIA.motivo}`);
+      setObservacoes(
+        `Sangria sugerida automaticamente pela IA: ${sugestaoIA.motivo}`,
+      );
     }
   }, [sugestaoIA]);
 
@@ -48,7 +53,9 @@ export function useSangriaInteligente(caixaId: string, valorAtualCaixa: number) 
         tipo: "SANGRIA",
         valor: valorSangria,
         observacoes,
-        motivo_sangria: sugestaoIA?.deveSugerirSangria ? sugestaoIA.motivo : "Manual",
+        motivo_sangria: sugestaoIA?.deveSugerirSangria
+          ? sugestaoIA.motivo
+          : "Manual",
         sugerido_por_ia: sugestaoIA?.deveSugerirSangria || false,
         risco_calculado: sugestaoIA?.analise?.riscoPercentual || 0,
         horario_risco: new Date().getHours().toString(),
@@ -84,7 +91,8 @@ export function useSangriaInteligente(caixaId: string, valorAtualCaixa: number) 
     if (valorSangria > valorAtualCaixa) {
       toast({
         title: "Valor inválido",
-        description: "Valor da sangria não pode ser maior que o disponível em caixa",
+        description:
+          "Valor da sangria não pode ser maior que o disponível em caixa",
         variant: "destructive",
       });
       return;

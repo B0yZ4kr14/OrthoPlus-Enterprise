@@ -8,13 +8,13 @@ export function useWalletForm(formData: WalletFormData) {
 
   const handleUpdate = useCallback(
     <K extends keyof WalletFormData>(
-      onUpdate: (field: K, value: WalletFormData[K]) => void
+      onUpdate: (field: K, value: WalletFormData[K]) => void,
     ) => {
       return (field: K, value: WalletFormData[K]) => {
         onUpdate(field, value);
       };
     },
-    []
+    [],
   );
 
   return {

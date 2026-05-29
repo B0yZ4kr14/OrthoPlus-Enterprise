@@ -4,9 +4,17 @@ import { Clock, CheckCircle2 } from "lucide-react";
 import { PhaseNumber } from "./PhaseNumber";
 import type { Phase, PhaseCardProps } from "../types";
 
-type PhaseHeaderProps = Pick<PhaseCardProps, "phase" | "index" | "isFirst" | "onActivate">;
+type PhaseHeaderProps = Pick<
+  PhaseCardProps,
+  "phase" | "index" | "isFirst" | "onActivate"
+>;
 
-export function PhaseHeader({ phase, index, isFirst, onActivate }: PhaseHeaderProps) {
+export function PhaseHeader({
+  phase,
+  index,
+  isFirst,
+  onActivate,
+}: PhaseHeaderProps) {
   return (
     <div className="flex items-start justify-between gap-4">
       <div className="flex items-start gap-4 flex-1">

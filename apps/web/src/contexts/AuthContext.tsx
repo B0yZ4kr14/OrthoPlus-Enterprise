@@ -150,7 +150,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           ...currentUser,
           full_name:
             profileData?.full_name ||
-            ((currentUser as User).user_metadata?.full_name as string | undefined),
+            ((currentUser as User).user_metadata?.full_name as
+              | string
+              | undefined),
           avatar_url: profileData?.avatar_url,
           user_metadata: {
             ...(currentUser as User).user_metadata,
@@ -215,7 +217,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           "/auth/me",
         );
         if (data && data.user) {
-          setSession(data.session ? { access_token: data.session } : { access_token: "cookie" });
+          setSession(
+            data.session
+              ? { access_token: data.session }
+              : { access_token: "cookie" },
+          );
           setUser(data.user);
 
           // Set role immediately from /auth/me response (fallback if fetchUserMetadata fails)
@@ -267,7 +273,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     full_name: string;
   }) => {
     try {
-      const data = await apiClient.post<{ user?: User }>("/auth/register", payload);
+      const data = await apiClient.post<{ user?: User }>(
+        "/auth/register",
+        payload,
+      );
       return { user: data.user, error: null };
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Tente novamente.";
@@ -287,7 +296,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = response.access_token || response.accessToken;
       setSession(token ? { access_token: token } : { access_token: "cookie" });
       setUser(response.user ?? null);
-      
+
       // Set role immediately from login response (fallback if fetchUserMetadata fails)
       const loginRole = response.user?.role;
       if (loginRole) {
@@ -295,7 +304,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUserRole(normalizedRole as "ADMIN" | "MEMBER");
         setUserProfile(normalizedRole as UserProfile);
       }
-      
+
       toast.success("Login realizado com sucesso!");
 
       if (response.user?.id) {
@@ -305,7 +314,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: null };
     } catch (error: unknown) {
       const err = error as ApiError;
-      const errorMessage = err.response?.data?.error || err.message || "Erro desconhecido";
+      const errorMessage =
+        err.response?.data?.error || err.message || "Erro desconhecido";
       toast.error("Erro ao fazer login", { description: errorMessage });
       return { error };
     }
@@ -326,7 +336,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       setUser(data.user || data.patient || null);
-      setSession(data.access_token ? { access_token: data.access_token } : data.token ? { access_token: data.token } : null);
+      setSession(
+        data.access_token
+          ? { access_token: data.access_token }
+          : data.token
+            ? { access_token: data.token }
+            : null,
+      );
       setUserProfile("PATIENT");
 
       toast.success("Bem-vindo ao Portal do Paciente!");
@@ -380,7 +396,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Check if module is active for the clinic (case-insensitive comparison)
     const normalizedKey = moduleKey.toLowerCase();
-    const isModuleActive = activeModules.some((m) => m.toLowerCase() === normalizedKey);
+    const isModuleActive = activeModules.some(
+      (m) => m.toLowerCase() === normalizedKey,
+    );
 
     // ADMIN can see all active modules; if no modules configured yet, allow access (fallback)
     if (userRole === "ADMIN") {
@@ -435,7 +453,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export { AuthContext }
+export { AuthContext };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
@@ -445,4 +463,3 @@ export function useAuth() {
   }
   return context;
 }
-

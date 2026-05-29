@@ -16,11 +16,7 @@ import {
   CommandGroup,
   CommandItem,
 } from "@orthoplus/core-ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@orthoplus/core-ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@orthoplus/core-ui/dialog";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { ScrollArea } from "@orthoplus/core-ui/scroll-area";
@@ -188,7 +184,9 @@ const GlobalSearch = memo(function GlobalSearch() {
                   <div className="py-10 text-center text-sm text-muted-foreground">
                     <div className="flex flex-col items-center gap-2">
                       <Search className="h-8 w-8 text-muted-foreground/40" />
-                      <p>Nenhum resultado encontrado para &quot;{query}&quot;</p>
+                      <p>
+                        Nenhum resultado encontrado para &quot;{query}&quot;
+                      </p>
                       <p className="text-xs text-muted-foreground/60">
                         Tente buscar com termos diferentes
                       </p>
@@ -210,11 +208,15 @@ const GlobalSearch = memo(function GlobalSearch() {
                         key={moduleKey}
                         heading={
                           <div className="flex items-center gap-2 py-1">
-                            <Badge variant={config.badgeVariant} className="text-[10px] px-1.5 py-0">
+                            <Badge
+                              variant={config.badgeVariant}
+                              className="text-[10px] px-1.5 py-0"
+                            >
                               {config.label}
                             </Badge>
                             <span className="text-xs text-muted-foreground">
-                              {items.length} resultado{items.length !== 1 ? "s" : ""}
+                              {items.length} resultado
+                              {items.length !== 1 ? "s" : ""}
                             </span>
                           </div>
                         }

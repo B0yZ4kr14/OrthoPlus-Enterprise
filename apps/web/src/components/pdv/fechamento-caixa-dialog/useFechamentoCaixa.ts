@@ -1,5 +1,9 @@
 import { useState, useMemo, useCallback } from "react";
-import type { FechamentoCaixaDialogProps, FechamentoData, DiferencaInfo } from "./types";
+import type {
+  FechamentoCaixaDialogProps,
+  FechamentoData,
+  DiferencaInfo,
+} from "./types";
 
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat("pt-BR", {
@@ -40,31 +44,32 @@ function getDiferencaInfo(diferenca: number): DiferencaInfo {
 export function useFechamentoCaixa(
   valorEsperado: number,
   onConfirm: FechamentoCaixaDialogProps["onConfirm"],
-  onClose: () => void
+  onClose: () => void,
 ) {
   const [valorFinal, setValorFinal] = useState("");
   const [observacoes, setObservacoes] = useState("");
 
   const diferenca = useMemo(
     () => calculateDiferenca(valorFinal, valorEsperado),
-    [valorFinal, valorEsperado]
+    [valorFinal, valorEsperado],
   );
 
   const diferencaInfo = useMemo(() => getDiferencaInfo(diferenca), [diferenca]);
-  
+
   const hasDiferenca = diferenca !== 0;
   const isObservacaoRequired = hasDiferenca;
-  const isValid = valorFinal !== "" && (!isObservacaoRequired || observacoes.trim() !== "");
+  const isValid =
+    valorFinal !== "" && (!isObservacaoRequired || observacoes.trim() !== "");
 
   const handleConfirm = useCallback(() => {
     if (!isValid) return;
-    
+
     const data: FechamentoData = {
       valorFinal: parseFloat(valorFinal),
       observacoes,
       diferenca,
     };
-    
+
     onConfirm(data);
     // Reset state
     setValorFinal("");

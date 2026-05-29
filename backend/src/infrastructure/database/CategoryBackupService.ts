@@ -26,11 +26,11 @@ export class CategoryBackupService {
   constructor(
     protected readonly schemas: string[],
     protected readonly categoryName: string,
-    protected readonly databaseUrl: string = process.env.DATABASE_URL ?? ""
+    protected readonly databaseUrl: string = process.env.DATABASE_URL ?? "",
   ) {
     this.backupDir = path.join(
       process.env.BACKUP_DIR ?? path.join(process.cwd(), "backups"),
-      categoryName.toLowerCase()
+      categoryName.toLowerCase(),
     );
     fs.mkdirSync(this.backupDir, { recursive: true });
   }
@@ -85,12 +85,23 @@ export class CategoryBackupService {
         const checkDone = () => {
           if (pgDumpCode !== null && gzipCode !== null) {
             if (pgDumpCode === 0 && gzipCode === 0) resolve();
-            else reject(new Error(`pg_dump exited ${pgDumpCode}, gzip exited ${gzipCode}`));
+            else
+              reject(
+                new Error(
+                  `pg_dump exited ${pgDumpCode}, gzip exited ${gzipCode}`,
+                ),
+              );
           }
         };
 
-        pgDump.on("close", (code) => { pgDumpCode = code ?? 1; checkDone(); });
-        gzip.on("close", (code) => { gzipCode = code ?? 1; checkDone(); });
+        pgDump.on("close", (code) => {
+          pgDumpCode = code ?? 1;
+          checkDone();
+        });
+        gzip.on("close", (code) => {
+          gzipCode = code ?? 1;
+          checkDone();
+        });
       } else {
         const args = [...pgDumpArgs, "--file", filePath];
         const proc = spawn("pg_dump", args);
@@ -120,7 +131,11 @@ export class CategoryBackupService {
     try {
       const files = fs.readdirSync(this.backupDir);
       return files
-        .filter((f) => f.startsWith("backup-") && (f.endsWith(".sql") || f.endsWith(".sql.gz")))
+        .filter(
+          (f) =>
+            f.startsWith("backup-") &&
+            (f.endsWith(".sql") || f.endsWith(".sql.gz")),
+        )
         .map((f) => {
           const fullPath = path.join(this.backupDir, f);
           const stat = fs.statSync(fullPath);

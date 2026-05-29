@@ -51,7 +51,8 @@ export const useConsentimento = () => {
 
         toast({
           title: "Consentimento registrado",
-          description: "Paciente pode agora enviar radiografias para análise IA",
+          description:
+            "Paciente pode agora enviar radiografias para análise IA",
         });
 
         return result;

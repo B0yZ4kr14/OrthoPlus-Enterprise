@@ -17,7 +17,9 @@ interface DashboardTabFinanceiroProps {
   stats: DashboardStats;
 }
 
-export default function DashboardTabFinanceiro({ stats }: DashboardTabFinanceiroProps) {
+export default function DashboardTabFinanceiro({
+  stats,
+}: DashboardTabFinanceiroProps) {
   return (
     <StaggerGrid
       variants={statsStagger}

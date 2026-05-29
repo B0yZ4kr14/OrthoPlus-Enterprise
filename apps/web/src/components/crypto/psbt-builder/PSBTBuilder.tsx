@@ -30,8 +30,8 @@ export function PSBTBuilder() {
           Construtor PSBT (Offline Transaction)
         </CardTitle>
         <CardDescription>
-          Crie transações Bitcoin parcialmente assinadas para assinatura offline com
-          hardware wallets
+          Crie transações Bitcoin parcialmente assinadas para assinatura offline
+          com hardware wallets
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -44,7 +44,11 @@ export function PSBTBuilder() {
         />
 
         {psbtBase64 && (
-          <PSBTResult psbtBase64={psbtBase64} copied={copied} onCopy={copyToClipboard} />
+          <PSBTResult
+            psbtBase64={psbtBase64}
+            copied={copied}
+            onCopy={copyToClipboard}
+          />
         )}
       </CardContent>
     </Card>

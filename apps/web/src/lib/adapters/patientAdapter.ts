@@ -126,7 +126,10 @@ export class PatientAdapter {
       image_usage_consent: null,
       treatment_consent: null,
       data_sharing_consent: null,
-      status: (typeof apiPatient.status === "object" && apiPatient.status !== null ? String((apiPatient.status as Record<string, unknown>).code || "") : apiPatient.status) || "ativo",
+      status:
+        (typeof apiPatient.status === "object" && apiPatient.status !== null
+          ? String((apiPatient.status as Record<string, unknown>).code || "")
+          : apiPatient.status) || "ativo",
       first_appointment_date: null,
       last_appointment_date: null,
       total_appointments: 0,

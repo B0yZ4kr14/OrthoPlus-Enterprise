@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Label } from "@orthoplus/core-ui/label";
 import { Switch } from "@orthoplus/core-ui/switch";
 import {
@@ -33,7 +38,9 @@ export function ScheduleCard() {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <Label>Backup Automático</Label>
-            <p className="text-sm text-muted-foreground">Criar backups automaticamente</p>
+            <p className="text-sm text-muted-foreground">
+              Criar backups automaticamente
+            </p>
           </div>
           <Switch defaultChecked />
         </div>

@@ -1,6 +1,11 @@
 // cspell:disable
 import { Zap, Share2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Progress } from "@orthoplus/core-ui/progress";
 import type { PacientePontos } from "./types";
@@ -40,7 +45,10 @@ export function PacientesTab({
       <CardContent>
         <div className="space-y-4">
           {pacientes.map((paciente, index) => (
-            <Card key={paciente.id} className="p-4 transition-all hover:shadow-lg">
+            <Card
+              key={paciente.id}
+              className="p-4 transition-all hover:shadow-lg"
+            >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
                   <div className="text-3xl font-bold text-muted-foreground">

@@ -78,13 +78,19 @@ export function AtividadeList({ atividades, onConcluir }: AtividadeListProps) {
                 {atividade.dataAgendada && (
                   <span>
                     Agendada:{" "}
-                    {formatDateCustom(atividade.dataAgendada, "dd/MM/yyyy 'às' HH:mm")}
+                    {formatDateCustom(
+                      atividade.dataAgendada,
+                      "dd/MM/yyyy 'às' HH:mm",
+                    )}
                   </span>
                 )}
                 {atividade.dataConclusao && (
                   <span>
                     Concluída:{" "}
-                    {formatDateCustom(atividade.dataConclusao, "dd/MM/yyyy 'às' HH:mm")}
+                    {formatDateCustom(
+                      atividade.dataConclusao,
+                      "dd/MM/yyyy 'às' HH:mm",
+                    )}
                   </span>
                 )}
               </div>

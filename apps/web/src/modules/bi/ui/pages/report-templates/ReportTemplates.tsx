@@ -1,6 +1,6 @@
 /**
  * ReportTemplates - Componente Orquestrador (Refatorado)
- * 
+ *
  * ANTES: 511 linhas
  * DEPOIS: ~80 linhas + estrutura modular
  */

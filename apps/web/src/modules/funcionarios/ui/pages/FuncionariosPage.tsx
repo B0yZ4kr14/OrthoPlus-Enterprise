@@ -78,16 +78,16 @@ export default function FuncionariosPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader 
-        icon={UsersRound} 
-        title="Funcionários" 
-        description="Gestão da equipe e colaboradores da clínica" 
+      <PageHeader
+        icon={UsersRound}
+        title="Funcionários"
+        description="Gestão da equipe e colaboradores da clínica"
         actions={
           <Button onClick={handleAdd}>
             <Plus className="mr-2 h-4 w-4" />
             Novo Funcionário
           </Button>
-        } 
+        }
       />
 
       {/* List View */}

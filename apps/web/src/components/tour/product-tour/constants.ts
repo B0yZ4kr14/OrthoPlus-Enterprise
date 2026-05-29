@@ -51,7 +51,8 @@ export const TOUR_STYLES = {
     padding: "1rem",
     fontSize: "0.8125rem",
     maxWidth: "320px",
-    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+    boxShadow:
+      "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
   },
   tooltipContent: {
     padding: "0.25rem 0",

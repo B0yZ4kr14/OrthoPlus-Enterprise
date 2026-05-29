@@ -44,8 +44,7 @@ export function AdvancedOptionsStep({ config, setConfig }: WizardStepProps) {
           <Label>
             Criptografia AES-256-GCM
             <p className="text-xs text-muted-foreground">
-              Protege backups com senha forte (recomendado para dados
-              sensíveis)
+              Protege backups com senha forte (recomendado para dados sensíveis)
             </p>
           </Label>
         </div>

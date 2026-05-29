@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Server, Clock } from "lucide-react";
 import { useBackendStatus } from "./useBackendStatus";
 import { StatusBadge } from "./StatusBadge";
@@ -11,8 +17,8 @@ export function BackendSelector() {
       <CardHeader>
         <CardTitle>Status do Servidor Local</CardTitle>
         <CardDescription>
-          A aplicação está conectada ao servidor local (Ubuntu Server) usando a nova
-          infraestrutura.
+          A aplicação está conectada ao servidor local (Ubuntu Server) usando a
+          nova infraestrutura.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -26,8 +32,8 @@ export function BackendSelector() {
               <StatusBadge status={backend.status} />
             </div>
             <p className="text-sm text-muted-foreground">
-              Servidor PostgreSQL e API Node.js local/on-premises. Controle total da sua
-              infraestrutura.
+              Servidor PostgreSQL e API Node.js local/on-premises. Controle
+              total da sua infraestrutura.
             </p>
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <span>URL: {backend.url}</span>

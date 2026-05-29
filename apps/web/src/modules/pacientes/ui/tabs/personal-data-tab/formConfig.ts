@@ -79,6 +79,7 @@ export const personalDataFields: FormFieldConfig[] = [
     name: "referral_source",
     label: "Indicação",
     placeholder: "Quem indicou este paciente?",
-    description: "Nome do paciente, profissional ou parceiro que fez a indicação",
+    description:
+      "Nome do paciente, profissional ou parceiro que fez a indicação",
   },
 ];

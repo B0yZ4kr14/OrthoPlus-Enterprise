@@ -41,7 +41,8 @@ export function RequisicoesList({
     "bg-muted-foreground";
 
   const getStatusColor = (status: string) =>
-    statusRequisicao.find((s) => s.value === status)?.color || "bg-muted-foreground";
+    statusRequisicao.find((s) => s.value === status)?.color ||
+    "bg-muted-foreground";
 
   return (
     <div className="space-y-4">

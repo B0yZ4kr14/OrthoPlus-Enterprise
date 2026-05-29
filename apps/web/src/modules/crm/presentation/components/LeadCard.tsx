@@ -51,7 +51,15 @@ export const LeadCard = ({
             <h3 className="text-lg font-semibold text-foreground">
               {lead.nome}
             </h3>
-            <Badge variant={getStatusColor(lead.status) as "default" | "secondary" | "destructive" | "outline"}>
+            <Badge
+              variant={
+                getStatusColor(lead.status) as
+                  | "default"
+                  | "secondary"
+                  | "destructive"
+                  | "outline"
+              }
+            >
               {getStatusLabel(lead.status)}
             </Badge>
           </div>

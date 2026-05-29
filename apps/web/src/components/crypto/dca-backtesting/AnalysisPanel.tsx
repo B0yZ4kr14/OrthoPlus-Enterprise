@@ -28,8 +28,8 @@ export function AnalysisPanel({ summary }: AnalysisPanelProps) {
             <span className="font-semibold text-secondary">
               Investimento único foi {difference.toFixed(2)}% melhor
             </span>{" "}
-            que DCA neste período. Em mercados em alta constante, lump sum
-            tende a superar DCA por entrar com capital total no início.
+            que DCA neste período. Em mercados em alta constante, lump sum tende
+            a superar DCA por entrar com capital total no início.
           </>
         )}
       </p>

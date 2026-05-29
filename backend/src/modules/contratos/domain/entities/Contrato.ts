@@ -18,8 +18,14 @@ export class Contrato {
     public valorTotal: number,
     public valorDesconto: number,
     public valorFinal: number,
-    public status: 'RASCUNHO' | 'PENDENTE_ASSINATURA' | 'ASSINADO' | 'EM_EXECUCAO' | 'CONCLUIDO' | 'CANCELADO',
-    public formaPagamento: 'AVISTA' | 'PARCELADO' | 'MENSALIDADE',
+    public status:
+      | "RASCUNHO"
+      | "PENDENTE_ASSINATURA"
+      | "ASSINADO"
+      | "EM_EXECUCAO"
+      | "CONCLUIDO"
+      | "CANCELADO",
+    public formaPagamento: "AVISTA" | "PARCELADO" | "MENSALIDADE",
     public numeroParcelas: number,
     public dataInicio: Date,
     public dataFimPrevista: Date,
@@ -27,10 +33,10 @@ export class Contrato {
     public assinaturaDigital: string | null,
     public observacoes: string | null,
     public readonly createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
   ) {}
 
-  static create(props: Omit<Contrato, 'assinar' | 'cancelar'>): Contrato {
+  static create(props: Omit<Contrato, "assinar" | "cancelar">): Contrato {
     return new Contrato(
       props.id,
       props.clinicId,
@@ -50,25 +56,25 @@ export class Contrato {
       props.assinaturaDigital,
       props.observacoes,
       props.createdAt,
-      props.updatedAt
+      props.updatedAt,
     );
   }
 
   assinar(assinaturaDigital: string): void {
-    if (this.status !== 'PENDENTE_ASSINATURA') {
-      throw new Error('Contrato não está pendente de assinatura');
+    if (this.status !== "PENDENTE_ASSINATURA") {
+      throw new Error("Contrato não está pendente de assinatura");
     }
-    this.status = 'ASSINADO';
+    this.status = "ASSINADO";
     this.assinaturaDigital = assinaturaDigital;
     this.dataAssinatura = new Date();
     this.updatedAt = new Date();
   }
 
   cancelar(): void {
-    if (['CONCLUIDO'].includes(this.status)) {
-      throw new Error('Não é possível cancelar um contrato concluído');
+    if (["CONCLUIDO"].includes(this.status)) {
+      throw new Error("Não é possível cancelar um contrato concluído");
     }
-    this.status = 'CANCELADO';
+    this.status = "CANCELADO";
     this.updatedAt = new Date();
   }
 }

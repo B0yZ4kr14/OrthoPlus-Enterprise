@@ -49,7 +49,9 @@ export function WelcomeBanner({ userName }: WelcomeBannerProps) {
           initial={reduced ? false : { opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={reduced ? undefined : { opacity: 0, y: -12 }}
-          transition={reduced ? { duration: 0 } : { duration: 0.35, ease: [0, 0, 0.2, 1] }}
+          transition={
+            reduced ? { duration: 0 } : { duration: 0.35, ease: [0, 0, 0.2, 1] }
+          }
           className="relative overflow-hidden glass-card rounded-2xl p-5 border border-[hsl(var(--interactive))]/20"
         >
           <CardTopBorder color="interactive" opacity={40} />
@@ -61,7 +63,10 @@ export function WelcomeBanner({ userName }: WelcomeBannerProps) {
                 {getGreeting()}, {userName}
               </h2>
               <div className="mt-2 flex items-start gap-2 text-sm text-muted-foreground">
-                <Lightbulb className="h-4 w-4 mt-0.5 text-[hsl(var(--interactive))] shrink-0 drop-shadow-[0_0_4px_hsl(var(--interactive)/0.3)]" aria-hidden="true" />
+                <Lightbulb
+                  className="h-4 w-4 mt-0.5 text-[hsl(var(--interactive))] shrink-0 drop-shadow-[0_0_4px_hsl(var(--interactive)/0.3)]"
+                  aria-hidden="true"
+                />
                 <p className="text-muted-foreground">{tips[tipIndex]}</p>
               </div>
             </div>

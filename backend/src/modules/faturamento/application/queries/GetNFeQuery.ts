@@ -1,5 +1,5 @@
-import { INFeRepository } from '../../domain/repositories/INFeRepository';
-import { NFeDTO } from '../dto/NFeDTO';
+import { INFeRepository } from "../../domain/repositories/INFeRepository";
+import { NFeDTO } from "../dto/NFeDTO";
 
 export interface GetNFeQuery {
   id: string;
@@ -11,7 +11,7 @@ export class GetNFeQueryHandler {
 
   async execute(query: GetNFeQuery): Promise<NFeDTO | null> {
     const nfe = await this.nfeRepository.findById(query.id);
-    
+
     if (!nfe || nfe.clinicId !== query.clinicId) {
       return null;
     }

@@ -16,7 +16,11 @@ const variantClasses = {
   success: "border-2 border-success/20",
 };
 
-export function AnaliseCard({ analise, variant, badgeLabel }: AnaliseCardProps) {
+export function AnaliseCard({
+  analise,
+  variant,
+  badgeLabel,
+}: AnaliseCardProps) {
   return (
     <Card className={`p-4 ${variantClasses[variant]}`} depth="normal">
       <div className="space-y-4">
@@ -40,19 +44,30 @@ export function AnaliseCard({ analise, variant, badgeLabel }: AnaliseCardProps) 
           <div>
             <span className="text-xs text-muted-foreground">Tipo:</span>
             <p className="text-sm font-medium">
-              {tipoRadiografiaLabels[analise.tipo_radiografia as keyof typeof tipoRadiografiaLabels]}
+              {
+                tipoRadiografiaLabels[
+                  analise.tipo_radiografia as keyof typeof tipoRadiografiaLabels
+                ]
+              }
             </p>
           </div>
           <div>
-            <span className="text-xs text-muted-foreground">Problemas Detectados:</span>
+            <span className="text-xs text-muted-foreground">
+              Problemas Detectados:
+            </span>
             <p className="text-2xl font-bold text-warning">
               {analise.problemas_detectados || 0}
             </p>
           </div>
           <div>
-            <span className="text-xs text-muted-foreground">Precisão da IA:</span>
+            <span className="text-xs text-muted-foreground">
+              Precisão da IA:
+            </span>
             <p className="text-2xl font-bold text-primary">
-              {analise.confidence_score ? Math.round(analise.confidence_score) : 0}%
+              {analise.confidence_score
+                ? Math.round(analise.confidence_score)
+                : 0}
+              %
             </p>
           </div>
         </div>

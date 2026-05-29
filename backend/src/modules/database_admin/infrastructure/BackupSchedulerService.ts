@@ -1,11 +1,11 @@
 /**
  * BackupSchedulerService — Orquestração unificada de backups por categoria
- * 
+ *
  * Responsabilidades:
  * - Executar backup de qualquer categoria via pg_dump
  * - Listar backups de todas as categorias
  * - Fornecer status consolidado de backup
- * 
+ *
  * DevSecOps:
  * - Nunca expõe DATABASE_URL diretamente
  * - Sanitiza inputs (category whitelist)
@@ -14,7 +14,10 @@
 
 import { CategoryBackupService } from "@/infrastructure/database/CategoryBackupService";
 import { DB_CATEGORIES } from "./MasterDatabaseManager";
-import type { CategoryBackupStatus, BackupExecutionResult } from "@orthoplus/shared-types";
+import type {
+  CategoryBackupStatus,
+  BackupExecutionResult,
+} from "@orthoplus/shared-types";
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 B";
@@ -31,7 +34,7 @@ export class BackupSchedulerService {
     return new CategoryBackupService(
       catConfig.schemas,
       catConfig.name,
-      process.env.DATABASE_URL ?? ""
+      process.env.DATABASE_URL ?? "",
     );
   }
 
@@ -81,7 +84,7 @@ export class BackupSchedulerService {
 
   async executeBackup(
     category: string,
-    options: { compress?: boolean } = {}
+    options: { compress?: boolean } = {},
   ): Promise<BackupExecutionResult> {
     const catConfig = DB_CATEGORIES.find((c) => c.name === category);
     if (!catConfig) {

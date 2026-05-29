@@ -17,7 +17,7 @@ export function useTISSGlosas() {
     queryKey: ["tiss-glosas", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data = await apiClient.get<Record<string, any>[]>('/tiss/glosas');
+      const data = await apiClient.get<Record<string, any>[]>("/tiss/glosas");
       return data;
     },
     enabled: !!clinicId,
@@ -25,13 +25,18 @@ export function useTISSGlosas() {
 
   const registerGlosa = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: GlosaData }) => {
-      const response = await apiClient.patch<unknown>(`/tiss/glosas/${id}`, data);
+      const response = await apiClient.patch<unknown>(
+        `/tiss/glosas/${id}`,
+        data,
+      );
       return response;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tiss-glosas", clinicId] });
       queryClient.invalidateQueries({ queryKey: ["tiss-guides", clinicId] });
-      queryClient.invalidateQueries({ queryKey: ["tiss-statistics", clinicId] });
+      queryClient.invalidateQueries({
+        queryKey: ["tiss-statistics", clinicId],
+      });
       toast.success("Glosa registrada!");
     },
     onError: () => {
@@ -41,13 +46,18 @@ export function useTISSGlosas() {
 
   const reprocessarGlosa = useMutation({
     mutationFn: async (id: string) => {
-      const response = await apiClient.post<unknown>(`/tiss/glosas/${id}/reprocessar`, {});
+      const response = await apiClient.post<unknown>(
+        `/tiss/glosas/${id}/reprocessar`,
+        {},
+      );
       return response;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tiss-glosas", clinicId] });
       queryClient.invalidateQueries({ queryKey: ["tiss-guides", clinicId] });
-      queryClient.invalidateQueries({ queryKey: ["tiss-statistics", clinicId] });
+      queryClient.invalidateQueries({
+        queryKey: ["tiss-statistics", clinicId],
+      });
       toast.success("Guia reprocessada!");
     },
     onError: () => {

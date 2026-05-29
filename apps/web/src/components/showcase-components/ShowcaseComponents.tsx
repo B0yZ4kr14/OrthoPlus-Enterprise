@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { ButtonShowcase } from "./ButtonShowcase";
 import { BadgeShowcase } from "./BadgeShowcase";
 import { CardShowcase } from "./CardShowcase";
@@ -9,7 +15,9 @@ export function ShowcaseComponents() {
       <Card variant="elevated">
         <CardHeader>
           <CardTitle>Variantes de Botões</CardTitle>
-          <CardDescription>Todas as variantes disponíveis com micro-interações</CardDescription>
+          <CardDescription>
+            Todas as variantes disponíveis com micro-interações
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ButtonShowcase />
@@ -19,7 +27,9 @@ export function ShowcaseComponents() {
       <Card variant="elevated">
         <CardHeader>
           <CardTitle>Variantes de Badges</CardTitle>
-          <CardDescription>Todas as variantes disponíveis com shimmer effect</CardDescription>
+          <CardDescription>
+            Todas as variantes disponíveis com shimmer effect
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <BadgeShowcase />

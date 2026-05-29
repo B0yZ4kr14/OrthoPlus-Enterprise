@@ -1,17 +1,17 @@
-import { useMutation } from "@tanstack/react-query"
-import { apiClient } from "@/lib/api/apiClient"
-import { SearchResult, SearchFilters } from "../types"
+import { useMutation } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api/apiClient";
+import { SearchResult, SearchFilters } from "../types";
 
 interface SearchResponse {
-  results: SearchResult[]
-  total: number
+  results: SearchResult[];
+  total: number;
 }
 
 interface UseMemoryHubSearchReturn {
-  results: SearchResult[]
-  loading: boolean
-  error: string | null
-  search: (query: string, filters?: SearchFilters) => void
+  results: SearchResult[];
+  loading: boolean;
+  error: string | null;
+  search: (query: string, filters?: SearchFilters) => void;
 }
 
 export function useMemoryHubSearch(): UseMemoryHubSearchReturn {
@@ -20,19 +20,19 @@ export function useMemoryHubSearch(): UseMemoryHubSearchReturn {
       query,
       filters,
     }: {
-      query: string
-      filters?: SearchFilters
+      query: string;
+      filters?: SearchFilters;
     }) => {
       return await apiClient.post<SearchResponse>("/memory-hub/search", {
         query,
         filters,
-      })
+      });
     },
-  })
+  });
 
   const search = (query: string, filters?: SearchFilters) => {
-    mutation.mutate({ query, filters })
-  }
+    mutation.mutate({ query, filters });
+  };
 
   return {
     results: mutation.data?.results || [],
@@ -43,5 +43,5 @@ export function useMemoryHubSearch(): UseMemoryHubSearchReturn {
         : "Search failed"
       : null,
     search,
-  }
+  };
 }

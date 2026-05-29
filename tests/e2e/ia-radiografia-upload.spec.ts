@@ -116,7 +116,10 @@ test.describe("AI X-Ray - Upload and Analysis", () => {
     // Select x-ray type
     const tipoSelect = page.getByRole("combobox").first();
     await tipoSelect.click();
-    await page.getByRole("option", { name: /panorâmica/i }).first().click();
+    await page
+      .getByRole("option", { name: /panorâmica/i })
+      .first()
+      .click();
 
     // Upload file (create temporary file)
     const fileInput = page.locator('input[type="file"]');
@@ -132,7 +135,9 @@ test.describe("AI X-Ray - Upload and Analysis", () => {
     });
 
     // Check that upload button is enabled (if consent OK)
-    const uploadButton = page.getByRole("button", { name: /enviar e analisar/i });
+    const uploadButton = page.getByRole("button", {
+      name: /enviar e analisar/i,
+    });
 
     // If consent is confirmed, button should be enabled
     const isEnabled = await uploadButton.isEnabled().catch(() => false);
@@ -144,9 +149,21 @@ test.describe("AI X-Ray - Upload and Analysis", () => {
 
       // Check if there was feedback (success or error)
       const hasFeedback = await Promise.race([
-        page.getByText(/análise concluída/i).first().isVisible().catch(() => false),
-        page.getByText(/erro ao processar/i).first().isVisible().catch(() => false),
-        page.getByText(/analisando/i).first().isVisible().catch(() => false),
+        page
+          .getByText(/análise concluída/i)
+          .first()
+          .isVisible()
+          .catch(() => false),
+        page
+          .getByText(/erro ao processar/i)
+          .first()
+          .isVisible()
+          .catch(() => false),
+        page
+          .getByText(/analisando/i)
+          .first()
+          .isVisible()
+          .catch(() => false),
       ]);
 
       expect(hasFeedback).toBeTruthy();

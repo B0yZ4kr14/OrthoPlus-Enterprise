@@ -1,19 +1,19 @@
 /**
  * CadastrarPacienteUseCase - Cadastra novo paciente
- * 
+ *
  * Use Case que orquestra criação de paciente com validações,
  * persistência e publicação de eventos.
  */
 
-import { Patient } from '../../domain/entities/Patient';
-import { PatientStatus } from '../../domain/value-objects/PatientStatus';
-import { DadosComerciaisVO } from '../../domain/value-objects/DadosComerciaisVO';
-import { IPatientRepository } from '../../domain/repositories/IPatientRepository';
-import { eventBus } from '@/shared/events/EventBus';
-import { PatientCreatedEvent } from '../../domain/events/PatientCreatedEvent';
-import { logger } from '@/infrastructure/logger';
-import { pacientesMetrics } from '@/infrastructure/metrics/PacientesMetrics';
-import { withTiming } from '@/infrastructure/metrics/withTiming';
+import { Patient } from "../../domain/entities/Patient";
+import { PatientStatus } from "../../domain/value-objects/PatientStatus";
+import { DadosComerciaisVO } from "../../domain/value-objects/DadosComerciaisVO";
+import { IPatientRepository } from "../../domain/repositories/IPatientRepository";
+import { eventBus } from "@/shared/events/EventBus";
+import { PatientCreatedEvent } from "../../domain/events/PatientCreatedEvent";
+import { logger } from "@/infrastructure/logger";
+import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics";
+import { withTiming } from "@/infrastructure/metrics/withTiming";
 
 export interface CadastrarPacienteDTO {
   clinicId: string;
@@ -25,7 +25,7 @@ export interface CadastrarPacienteDTO {
   email?: string;
   phone?: string;
   mobile?: string;
-  
+
   // Endereço
   addressStreet?: string;
   addressNumber?: string;
@@ -34,10 +34,10 @@ export interface CadastrarPacienteDTO {
   addressCity?: string;
   addressState?: string;
   addressZipcode?: string;
-  
+
   // Status inicial (padrão: PROSPECT)
   statusCode?: string;
-  
+
   // Dados comerciais
   campanhaOrigemId?: string;
   origemId?: string;
@@ -49,7 +49,7 @@ export interface CadastrarPacienteDTO {
   profissao?: string;
   empresa?: string;
   rendaMensal?: number;
-  
+
   notes?: string;
   createdBy?: string;
 }
@@ -64,7 +64,7 @@ export class CadastrarPacienteUseCase {
 
     return withTiming(
       async () => {
-        logger.info('CadastrarPacienteUseCase: Starting', {
+        logger.info("CadastrarPacienteUseCase: Starting", {
           clinicId: dto.clinicId,
           fullName: dto.fullName,
         });
@@ -73,10 +73,10 @@ export class CadastrarPacienteUseCase {
         if (dto.cpf) {
           const existingByCPF = await this.patientRepository.findByCPF(
             dto.cpf,
-            dto.clinicId
+            dto.clinicId,
           );
           if (existingByCPF) {
-            throw new Error('Já existe paciente cadastrado com este CPF');
+            throw new Error("Já existe paciente cadastrado com este CPF");
           }
         }
 
@@ -84,10 +84,10 @@ export class CadastrarPacienteUseCase {
         if (dto.email) {
           const existingByEmail = await this.patientRepository.findByEmail(
             dto.email,
-            dto.clinicId
+            dto.clinicId,
           );
           if (existingByEmail) {
-            throw new Error('Já existe paciente cadastrado com este email');
+            throw new Error("Já existe paciente cadastrado com este email");
           }
         }
 
@@ -140,20 +140,20 @@ export class CadastrarPacienteUseCase {
           patient.id,
           null,
           status.code,
-          'Cadastro inicial',
-          dto.createdBy || 'system'
+          "Cadastro inicial",
+          dto.createdBy || "system",
         );
 
         // Publicar eventos de domínio em paralelo (PacienteCadastrado + eventos do aggregate)
         const events = patient.getDomainEvents();
-        
+
         await Promise.all([
           eventBus.publish({
             eventId: crypto.randomUUID(),
-            eventType: 'Pacientes.PacienteCadastrado',
+            eventType: "Pacientes.PacienteCadastrado",
             occurredOn: new Date(),
             aggregateId: patient.id,
-            aggregateType: 'Patient',
+            aggregateType: "Patient",
             payload: {
               patientId: patient.id,
               patientName: patient.fullName,
@@ -172,7 +172,7 @@ export class CadastrarPacienteUseCase {
 
         patient.clearDomainEvents();
 
-        logger.info('CadastrarPacienteUseCase: Success', {
+        logger.info("CadastrarPacienteUseCase: Success", {
           patientId: patient.id,
           patientName: patient.fullName,
         });
@@ -181,14 +181,23 @@ export class CadastrarPacienteUseCase {
       },
       {
         onSuccess: (durationMs) => {
-          pacientesMetrics.observePatientCreateDuration(dto.clinicId, durationMs);
+          pacientesMetrics.observePatientCreateDuration(
+            dto.clinicId,
+            durationMs,
+          );
           pacientesMetrics.incPatientsTotal(status.code, dto.clinicId);
         },
         onError: (durationMs, error) => {
-          pacientesMetrics.observePatientCreateDuration(dto.clinicId, durationMs);
-          logger.error('CadastrarPacienteUseCase: Error', { error, clinicId: dto.clinicId });
+          pacientesMetrics.observePatientCreateDuration(
+            dto.clinicId,
+            durationMs,
+          );
+          logger.error("CadastrarPacienteUseCase: Error", {
+            error,
+            clinicId: dto.clinicId,
+          });
         },
-      }
+      },
     );
   }
 

@@ -40,7 +40,8 @@ import {
 
 export default function ScheduledBackupsManagement() {
   const [wizardOpen, setWizardOpen] = useState(false);
-  const [backupToEdit, setBackupToEdit] = useState<ScheduledBackupConfig | null>(null);
+  const [backupToEdit, setBackupToEdit] =
+    useState<ScheduledBackupConfig | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [backupToDelete, setBackupToDelete] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -285,7 +286,13 @@ export default function ScheduledBackupsManagement() {
           setBackupToEdit(null);
           queryClient.invalidateQueries({ queryKey: ["scheduled-backups"] });
         }}
-        initialData={backupToEdit ? (backupToEdit as unknown as NonNullable<Parameters<typeof ScheduledBackupWizard>[0]["initialData"]>) : undefined}
+        initialData={
+          backupToEdit
+            ? (backupToEdit as unknown as NonNullable<
+                Parameters<typeof ScheduledBackupWizard>[0]["initialData"]
+              >)
+            : undefined
+        }
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

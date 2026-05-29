@@ -1,5 +1,11 @@
 import { Label } from "@orthoplus/core-ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@orthoplus/core-ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@orthoplus/core-ui/select";
 import { SourceSelect } from "./SourceSelect";
 import type { CaptureChannel } from "./types";
 

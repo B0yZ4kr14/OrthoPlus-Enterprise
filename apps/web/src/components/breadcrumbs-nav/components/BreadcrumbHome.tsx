@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import { Home } from "lucide-react";
-import {
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from "@orthoplus/core-ui/breadcrumb";
+import { BreadcrumbItem, BreadcrumbLink } from "@orthoplus/core-ui/breadcrumb";
 
 export function BreadcrumbHome() {
   return (

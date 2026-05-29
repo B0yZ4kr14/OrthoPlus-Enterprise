@@ -4,7 +4,7 @@ import type { Module } from "./types";
 export function useSidebarModules(modules: Module[]) {
   const activeModules = useMemo(
     () => modules.filter((m) => m.is_active),
-    [modules]
+    [modules],
   );
 
   const groupedModules = useMemo(() => {
@@ -17,7 +17,7 @@ export function useSidebarModules(modules: Module[]) {
         acc[category].push(module);
         return acc;
       },
-      {} as Record<string, Module[]>
+      {} as Record<string, Module[]>,
     );
   }, [activeModules]);
 

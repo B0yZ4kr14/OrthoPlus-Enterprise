@@ -9,7 +9,10 @@ interface ResultDisplayProps {
 
 export function ResultDisplay({ result }: ResultDisplayProps) {
   return (
-    <Alert variant={result.isValid ? "default" : "destructive"} className="mt-4">
+    <Alert
+      variant={result.isValid ? "default" : "destructive"}
+      className="mt-4"
+    >
       <div className="flex items-start gap-3">
         {result.isValid ? (
           <CheckCircle2 className="h-5 w-5 text-success" />
@@ -47,8 +50,8 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
           {!result.isValid && (
             <Alert variant="destructive">
               <AlertDescription>
-                <strong>Atenção:</strong> Este backup pode estar corrompido ou foi
-                modificado. Recomenda-se não utilizá-lo para restauração.
+                <strong>Atenção:</strong> Este backup pode estar corrompido ou
+                foi modificado. Recomenda-se não utilizá-lo para restauração.
               </AlertDescription>
             </Alert>
           )}

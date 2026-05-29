@@ -16,12 +16,16 @@ const FieldDefinitionSchema = z.object({
 
 const CRUDRequestSchema = z.object({
   entity_name: z.string().min(1, "Nome da entidade e obrigatorio"),
-  fields: z.array(FieldDefinitionSchema).min(1, "Pelo menos um campo e obrigatorio"),
+  fields: z
+    .array(FieldDefinitionSchema)
+    .min(1, "Pelo menos um campo e obrigatorio"),
   clinica_relationship: z.boolean().default(true),
 });
 
 const BugfixRequestSchema = z.object({
-  bug_report: z.string().min(10, "Descricao do bug deve ter pelo menos 10 caracteres"),
+  bug_report: z
+    .string()
+    .min(10, "Descricao do bug deve ter pelo menos 10 caracteres"),
   file_path: z.string().optional(),
   error_message: z.string().optional(),
 });
@@ -41,7 +45,10 @@ const CodeReviewRequestSchema = z.object({
 export class AgentsControllerService {
   private agentService = new AgentProxyService();
 
-  checkPermission(userRole: string | undefined, allowedRoles: string[]): boolean {
+  checkPermission(
+    userRole: string | undefined,
+    allowedRoles: string[],
+  ): boolean {
     return !!userRole && allowedRoles.includes(userRole);
   }
 
@@ -57,7 +64,9 @@ export class AgentsControllerService {
   async createCRUD(body: unknown) {
     const validationResult = CRUDRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(`Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`);
+      throw new Error(
+        `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
+      );
     }
 
     const data = validationResult.data;
@@ -83,7 +92,10 @@ export class AgentsControllerService {
       throw new Error("fields e obrigatorio (ex: nome:String,ativo:Boolean)");
     }
 
-    const result = await this.agentService.createCRUDSimple(entity_name, fields);
+    const result = await this.agentService.createCRUDSimple(
+      entity_name,
+      fields,
+    );
 
     return {
       request: { entity: entity_name, fields },
@@ -94,7 +106,9 @@ export class AgentsControllerService {
   async fixBug(body: unknown) {
     const validationResult = BugfixRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(`Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`);
+      throw new Error(
+        `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
+      );
     }
 
     const data = validationResult.data;
@@ -112,7 +126,9 @@ export class AgentsControllerService {
   async refactor(body: unknown) {
     const validationResult = RefactorRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(`Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`);
+      throw new Error(
+        `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
+      );
     }
 
     const data = validationResult.data;
@@ -132,11 +148,15 @@ export class AgentsControllerService {
   async codeReview(body: unknown) {
     const validationResult = CodeReviewRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(`Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`);
+      throw new Error(
+        `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
+      );
     }
 
     const data = validationResult.data;
-    const result = await this.agentService.codeReview(data as CodeReviewRequest);
+    const result = await this.agentService.codeReview(
+      data as CodeReviewRequest,
+    );
 
     return {
       request: {

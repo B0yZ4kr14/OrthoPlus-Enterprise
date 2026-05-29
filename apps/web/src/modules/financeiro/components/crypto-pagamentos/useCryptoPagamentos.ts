@@ -6,12 +6,16 @@ import { useCryptoNotifications } from "@/hooks/useCryptoNotifications";
 import { useCryptoPriceAlerts } from "@/modules/crypto/hooks/useCryptoPriceAlerts";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
-import type { CryptoWallet, ExchangeConfig } from "@/modules/crypto/types/crypto.types";
+import type {
+  CryptoWallet,
+  ExchangeConfig,
+} from "@/modules/crypto/types/crypto.types";
 import type { PriceAlert } from "@/modules/crypto/hooks/useCryptoPriceAlerts";
 
 export function useCryptoPagamentos() {
   const { clinicId } = useAuth();
-  const { connected: notificationsConnected, requestNotificationPermission } = useCryptoNotifications();
+  const { connected: notificationsConnected, requestNotificationPermission } =
+    useCryptoNotifications();
 
   const {
     exchanges,
@@ -34,7 +38,9 @@ export function useCryptoPagamentos() {
     deleteAlert,
   } = useCryptoPriceAlerts();
 
-  const [selectedWallet, setSelectedWallet] = useState<CryptoWallet | null>(null);
+  const [selectedWallet, setSelectedWallet] = useState<CryptoWallet | null>(
+    null,
+  );
   const [syncingWallet, setSyncingWallet] = useState<string | null>(null);
   const [convertingTx, setConvertingTx] = useState<string | null>(null);
   const [exchangeDialogOpen, setExchangeDialogOpen] = useState(false);
@@ -46,51 +52,81 @@ export function useCryptoPagamentos() {
 
   const dashboardData = getDashboardData();
 
-  const handleSyncWallet = useCallback(async (walletId: string) => {
-    setSyncingWallet(walletId);
-    try {
-      await syncWalletBalance(walletId);
-    } finally {
-      setSyncingWallet(null);
-    }
-  }, [syncWalletBalance]);
-
-  const handleConvert = useCallback(async (transactionId: string) => {
-    setConvertingTx(transactionId);
-    try {
-      await convertCryptoToBRL(transactionId);
-    } finally {
-      setConvertingTx(null);
-    }
-  }, [convertCryptoToBRL]);
-
-  const handleExchangeSubmit = useCallback(async (data: Partial<ExchangeConfig>) => {
-    await createExchangeConfig(data);
-    setExchangeDialogOpen(false);
-  }, [createExchangeConfig]);
-
-  const handleWalletSubmit = useCallback(async (data: Partial<CryptoWallet>) => {
-    await createWallet(data);
-    setWalletDialogOpen(false);
-  }, [createWallet]);
-
-  const handleAlertSubmit = useCallback(async (data: Omit<PriceAlert, "id" | "created_at" | "last_triggered_at" | "is_active">) => {
-    await createAlert(data);
-    setAlertDialogOpen(false);
-  }, [createAlert]);
-
-  const handleCascadeSubmit = useCallback(async (cascadeAlerts: Omit<PriceAlert, "id" | "created_at" | "last_triggered_at" | "is_active">[]) => {
-    try {
-      for (const alertData of cascadeAlerts) {
-        await createAlert(alertData);
+  const handleSyncWallet = useCallback(
+    async (walletId: string) => {
+      setSyncingWallet(walletId);
+      try {
+        await syncWalletBalance(walletId);
+      } finally {
+        setSyncingWallet(null);
       }
-      toast.success(`Estratégia DCA criada com ${cascadeAlerts.length} níveis!`);
-      setCascadeWizardOpen(false);
-    } catch (error) {
-      logger.error("Error creating cascade:", error);
-      toast.error("Erro ao criar estratégia em cascata");
-    }
-  }, [createAlert]);
+    },
+    [syncWalletBalance],
+  );
+
+  const handleConvert = useCallback(
+    async (transactionId: string) => {
+      setConvertingTx(transactionId);
+      try {
+        await convertCryptoToBRL(transactionId);
+      } finally {
+        setConvertingTx(null);
+      }
+    },
+    [convertCryptoToBRL],
+  );
+
+  const handleExchangeSubmit = useCallback(
+    async (data: Partial<ExchangeConfig>) => {
+      await createExchangeConfig(data);
+      setExchangeDialogOpen(false);
+    },
+    [createExchangeConfig],
+  );
+
+  const handleWalletSubmit = useCallback(
+    async (data: Partial<CryptoWallet>) => {
+      await createWallet(data);
+      setWalletDialogOpen(false);
+    },
+    [createWallet],
+  );
+
+  const handleAlertSubmit = useCallback(
+    async (
+      data: Omit<
+        PriceAlert,
+        "id" | "created_at" | "last_triggered_at" | "is_active"
+      >,
+    ) => {
+      await createAlert(data);
+      setAlertDialogOpen(false);
+    },
+    [createAlert],
+  );
+
+  const handleCascadeSubmit = useCallback(
+    async (
+      cascadeAlerts: Omit<
+        PriceAlert,
+        "id" | "created_at" | "last_triggered_at" | "is_active"
+      >[],
+    ) => {
+      try {
+        for (const alertData of cascadeAlerts) {
+          await createAlert(alertData);
+        }
+        toast.success(
+          `Estratégia DCA criada com ${cascadeAlerts.length} níveis!`,
+        );
+        setCascadeWizardOpen(false);
+      } catch (error) {
+        logger.error("Error creating cascade:", error);
+        toast.error("Erro ao criar estratégia em cascata");
+      }
+    },
+    [createAlert],
+  );
 
   const openQrCode = useCallback((wallet: CryptoWallet) => {
     setSelectedWallet(wallet);

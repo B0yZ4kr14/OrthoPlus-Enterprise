@@ -24,7 +24,8 @@ async function main() {
       entity_id: "paciente-001",
       clinic_id: "seed-clinic-search-index",
       title: "Paciente João Silva",
-      content: "João Silva, 35 anos, queixa de dor de dente no molar superior direito. Histórico de cárie. Tratamento indicado: restauração.",
+      content:
+        "João Silva, 35 anos, queixa de dor de dente no molar superior direito. Histórico de cárie. Tratamento indicado: restauração.",
       tokens: null,
       module: "pacientes",
     },
@@ -34,7 +35,8 @@ async function main() {
       entity_id: "agendamento-001",
       clinic_id: "seed-clinic-search-index",
       title: "Agendamento Consulta João Silva",
-      content: "Consulta de retorno agendada para próxima semana. Paciente relatou melhora após tratamento de canal.",
+      content:
+        "Consulta de retorno agendada para próxima semana. Paciente relatou melhora após tratamento de canal.",
       tokens: null,
       module: "agenda",
     },
@@ -44,7 +46,8 @@ async function main() {
       entity_id: "prontuario-001",
       clinic_id: "seed-clinic-search-index",
       title: "Prontuário Maria Oliveira",
-      content: "Maria Oliveira, 28 anos, gestante, relata sensibilidade nos dentes anteriores. Exame clínico indicou gengivite leve.",
+      content:
+        "Maria Oliveira, 28 anos, gestante, relata sensibilidade nos dentes anteriores. Exame clínico indicou gengivite leve.",
       tokens: null,
       module: "pep",
     },

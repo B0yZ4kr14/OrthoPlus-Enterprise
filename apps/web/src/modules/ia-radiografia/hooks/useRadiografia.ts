@@ -115,7 +115,9 @@ export const useRadiografia = () => {
       loadData();
 
       // Adaptive polling: 5s when pending analyses exist, 30s otherwise
-      const hasPending = analises.some((a) => a.status === "PENDENTE" || a.status === "PROCESSANDO");
+      const hasPending = analises.some(
+        (a) => a.status === "PENDENTE" || a.status === "PROCESSANDO",
+      );
       const intervalMs = hasPending ? 5000 : 30000;
 
       const interval = setInterval(() => {

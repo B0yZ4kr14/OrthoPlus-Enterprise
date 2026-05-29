@@ -52,9 +52,7 @@ export function BasicInfoStep({ config, setConfig }: WizardStepProps) {
         <Input
           type="time"
           value={config.timeOfDay}
-          onChange={(e) =>
-            setConfig({ ...config, timeOfDay: e.target.value })
-          }
+          onChange={(e) => setConfig({ ...config, timeOfDay: e.target.value })}
         />
       </div>
 

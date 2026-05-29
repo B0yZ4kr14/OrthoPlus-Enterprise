@@ -156,7 +156,11 @@ export const AvatarUpload = ({
       if (currentAvatarUrl) {
         const oldPath = currentAvatarUrl.split("/").pop();
         if (oldPath) {
-          await apiClient.delete(`/storage/avatars/${oldPath}`).catch((_e: unknown) => { /* intentional: best-effort delete */ });
+          await apiClient
+            .delete(`/storage/avatars/${oldPath}`)
+            .catch((_e: unknown) => {
+              /* intentional: best-effort delete */
+            });
         }
       }
 
@@ -169,7 +173,10 @@ export const AvatarUpload = ({
       });
     } catch (error: unknown) {
       console.error("Erro no upload:", error);
-      const msg = error instanceof Error ? error.message : "Não foi possível fazer upload da foto";
+      const msg =
+        error instanceof Error
+          ? error.message
+          : "Não foi possível fazer upload da foto";
       toast({
         title: "Erro no upload",
         description: msg,
@@ -189,7 +196,11 @@ export const AvatarUpload = ({
       if (currentAvatarUrl) {
         const path = currentAvatarUrl.split("/").pop();
         if (path) {
-          await apiClient.delete(`/storage/avatars/${path}`).catch((_e: unknown) => { /* intentional: best-effort delete */ });
+          await apiClient
+            .delete(`/storage/avatars/${path}`)
+            .catch((_e: unknown) => {
+              /* intentional: best-effort delete */
+            });
         }
       }
 

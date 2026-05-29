@@ -28,7 +28,7 @@ export class CategoryDatabaseManager {
   constructor(
     protected readonly schemas: string[],
     protected readonly categoryName: string,
-    protected readonly backupService?: CategoryBackupService
+    protected readonly backupService?: CategoryBackupService,
   ) {}
 
   /** Lazy pg Pool for operations that cannot run inside Prisma transactions (VACUUM, REINDEX) */
@@ -121,7 +121,7 @@ export class CategoryDatabaseManager {
       try {
         const res = await pool.query<{ tablename: string }>(
           "SELECT tablename FROM pg_tables WHERE schemaname = $1",
-          [schema]
+          [schema],
         );
         tables = res.rows;
       } catch {

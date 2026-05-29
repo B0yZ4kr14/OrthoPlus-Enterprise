@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import {
@@ -23,7 +28,9 @@ const BATCH_STATUS_OPTIONS = [
 
 export function TISSBatchList() {
   const [statusFilter, setStatusFilter] = useState("");
-  const { batches, isLoading } = useTISSGuides({ batchStatus: statusFilter || undefined });
+  const { batches, isLoading } = useTISSGuides({
+    batchStatus: statusFilter || undefined,
+  });
 
   if (isLoading) {
     return (
@@ -43,7 +50,9 @@ export function TISSBatchList() {
       <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <CardTitle>Lotes TISS ({batches.length})</CardTitle>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Filtrar por status:</span>
+          <span className="text-sm text-muted-foreground">
+            Filtrar por status:
+          </span>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="Todos" />
@@ -69,9 +78,16 @@ export function TISSBatchList() {
                 className="flex items-center justify-between p-4 border rounded-lg"
               >
                 <div>
-                  <p className="font-medium">Lote {batch.batch_number || batch.number || batch.id}</p>
+                  <p className="font-medium">
+                    Lote {batch.batch_number || batch.number || batch.id}
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    {batch.insurance_company || batch.insurance || "-"} • {batch.total_guides || batch.guide_count || batch.guides || 0} guias
+                    {batch.insurance_company || batch.insurance || "-"} •{" "}
+                    {batch.total_guides ||
+                      batch.guide_count ||
+                      batch.guides ||
+                      0}{" "}
+                    guias
                   </p>
                   {batch.created_at && (
                     <p className="text-xs text-muted-foreground">
@@ -82,7 +98,10 @@ export function TISSBatchList() {
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <p className="font-bold">
-                      R$ {((batch.total_amount || batch.value || 0) / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                      R${" "}
+                      {(
+                        (batch.total_amount || batch.value || 0) / 100
+                      ).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                     </p>
                     <Badge variant={getStatusColor(batch.status)}>
                       {batch.status}

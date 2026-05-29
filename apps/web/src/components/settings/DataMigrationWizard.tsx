@@ -112,15 +112,22 @@ export function DataMigrationWizard({
 
     try {
       setProgress(20);
-      const data = await apiClient.post<unknown>(
-        "/modules/import-data",
-        { data: importData, options: importOptions },
-      );
+      const data = await apiClient.post<unknown>("/modules/import-data", {
+        data: importData,
+        options: importOptions,
+      });
       setProgress(80);
       setProgress(100);
       setImportResults(data);
 
-      const result = data as { imported: { modules: number; patients: number; prontuarios: number; appointments: number } };
+      const result = data as {
+        imported: {
+          modules: number;
+          patients: number;
+          prontuarios: number;
+          appointments: number;
+        };
+      };
       toast.success("Importação concluída!", {
         description: `${result.imported.modules + result.imported.patients + result.imported.prontuarios + result.imported.appointments} registros importados.`,
       });
@@ -190,11 +197,7 @@ export function DataMigrationWizard({
                         : "bg-muted text-muted-foreground"
                   }`}
                 >
-                  {i + 1 < step ? (
-                    <CheckCircle2 className="h-4 w-4" />
-                  ) : (
-                    i + 1
-                  )}
+                  {i + 1 < step ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
                 </div>
                 {i < totalSteps - 1 && (
                   <div

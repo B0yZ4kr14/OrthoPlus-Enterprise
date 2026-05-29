@@ -1,6 +1,6 @@
-import { IAppointmentRepository } from '../../domain/repositories/IAppointmentRepository';
-import { Appointment } from '../../domain/entities/Appointment';
-import { prisma } from '@/infrastructure/database/prismaClient';
+import { IAppointmentRepository } from "../../domain/repositories/IAppointmentRepository";
+import { Appointment } from "../../domain/entities/Appointment";
+import { prisma } from "@/infrastructure/database/prismaClient";
 
 export class AppointmentRepositoryPostgres implements IAppointmentRepository {
   async findById(id: string): Promise<Appointment | null> {
@@ -8,11 +8,15 @@ export class AppointmentRepositoryPostgres implements IAppointmentRepository {
     return result ? this.mapToEntity(result) : null;
   }
 
-  async findAll(options: { clinicId: string; skip?: number; take?: number }): Promise<{ items: Appointment[]; total: number }> {
+  async findAll(options: {
+    clinicId: string;
+    skip?: number;
+    take?: number;
+  }): Promise<{ items: Appointment[]; total: number }> {
     const [rows, count] = await Promise.all([
       prisma.appointments.findMany({
         where: { clinic_id: options.clinicId },
-        orderBy: { start_time: 'asc' },
+        orderBy: { start_time: "asc" },
         skip: options.skip ?? 0,
         take: options.take ?? 50,
       }),
@@ -59,7 +63,12 @@ export class AppointmentRepositoryPostgres implements IAppointmentRepository {
     await prisma.appointments.delete({ where: { id } });
   }
 
-  async hasTimeConflict(dentistId: string, startTime: Date, endTime: Date, clinicId: string): Promise<boolean> {
+  async hasTimeConflict(
+    dentistId: string,
+    startTime: Date,
+    endTime: Date,
+    clinicId: string,
+  ): Promise<boolean> {
     const count = await prisma.appointments.count({
       where: {
         dentist_id: dentistId,

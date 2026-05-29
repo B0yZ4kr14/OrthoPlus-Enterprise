@@ -62,9 +62,13 @@ export class UpdateAgendamentoUseCase {
 
       props.updatedAt = new Date();
 
-      const updatedAgendamento = (agendamento as unknown as { constructor: { restore: (props: unknown) => typeof agendamento | null } }).constructor.restore(
-        props,
-      );
+      const updatedAgendamento = (
+        agendamento as unknown as {
+          constructor: {
+            restore: (props: unknown) => typeof agendamento | null;
+          };
+        }
+      ).constructor.restore(props);
       if (!updatedAgendamento) {
         throw new Error("Falha ao restaurar agendamento atualizado");
       }

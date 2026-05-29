@@ -1,5 +1,5 @@
-import type { Response } from "express"
-import type { ProblemDetail, ResponseMeta } from "@orthoplus/shared-types"
+import type { Response } from "express";
+import type { ProblemDetail, ResponseMeta } from "@orthoplus/shared-types";
 
 /**
  * Standardized API Response Envelope
@@ -21,10 +21,10 @@ import type { ProblemDetail, ResponseMeta } from "@orthoplus/shared-types"
  */
 
 export interface StandardApiResponse<T> {
-  success: boolean
-  data: T | null
-  error: ProblemDetail | null
-  meta?: ResponseMeta
+  success: boolean;
+  data: T | null;
+  error: ProblemDetail | null;
+  meta?: ResponseMeta;
 }
 
 export class ApiResponse {
@@ -38,11 +38,11 @@ export class ApiResponse {
       success: true,
       data,
       error: null,
-    }
+    };
     if (meta) {
-      payload.meta = meta
+      payload.meta = meta;
     }
-    return res.status(statusCode).json(payload)
+    return res.status(statusCode).json(payload);
   }
 
   static error(
@@ -54,15 +54,15 @@ export class ApiResponse {
       success: false,
       data: null,
       error: problem,
-    }
-    return res.status(statusCode ?? problem.status).json(payload)
+    };
+    return res.status(statusCode ?? problem.status).json(payload);
   }
 
   static created<T>(res: Response, data: T): Response {
-    return this.success(res, data, 201)
+    return this.success(res, data, 201);
   }
 
   static noContent(res: Response): Response {
-    return res.status(204).send()
+    return res.status(204).send();
   }
 }

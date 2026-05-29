@@ -3,7 +3,10 @@ import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api/apiClient";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
-import type { ScheduledBackupConfig, ScheduledBackupWizardProps } from "./types";
+import type {
+  ScheduledBackupConfig,
+  ScheduledBackupWizardProps,
+} from "./types";
 
 const DEFAULT_CONFIG: ScheduledBackupConfig = {
   name: "",
@@ -25,7 +28,11 @@ const DEFAULT_CONFIG: ScheduledBackupConfig = {
   isActive: true,
 };
 
-export function useBackupWizard({ open, onClose, initialData }: ScheduledBackupWizardProps) {
+export function useBackupWizard({
+  open,
+  onClose,
+  initialData,
+}: ScheduledBackupWizardProps) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [nextExecutions, setNextExecutions] = useState<string[]>([]);
@@ -39,11 +46,15 @@ export function useBackupWizard({ open, onClose, initialData }: ScheduledBackupW
       setConfig({
         ...DEFAULT_CONFIG,
         name: initialData.name || "",
-        frequency: (initialData.frequency as ScheduledBackupConfig["frequency"]) || "daily",
+        frequency:
+          (initialData.frequency as ScheduledBackupConfig["frequency"]) ||
+          "daily",
         timeOfDay: initialData.timeOfDay || "02:00",
         dayOfWeek: initialData.dayOfWeek,
         dayOfMonth: initialData.dayOfMonth,
-        backupType: (initialData.backupType as ScheduledBackupConfig["backupType"]) || "full",
+        backupType:
+          (initialData.backupType as ScheduledBackupConfig["backupType"]) ||
+          "full",
         isIncremental: initialData.isIncremental ?? false,
         includeModules: initialData.includeModules ?? true,
         includePatients: initialData.includePatients ?? true,
@@ -65,7 +76,10 @@ export function useBackupWizard({ open, onClose, initialData }: ScheduledBackupW
     }
   }, [initialData, open]);
 
-  const calculateNextExecutions = (cfg: ScheduledBackupConfig, count = 5): string[] => {
+  const calculateNextExecutions = (
+    cfg: ScheduledBackupConfig,
+    count = 5,
+  ): string[] => {
     const executions: string[] = [];
     const now = new Date();
     const [hours, minutes] = cfg.timeOfDay.split(":").map(Number);
@@ -76,7 +90,9 @@ export function useBackupWizard({ open, onClose, initialData }: ScheduledBackupW
 
       switch (cfg.frequency) {
         case "daily":
-          nextDate.setDate(nextDate.getDate() + i + (i === 0 && nextDate <= now ? 1 : 0));
+          nextDate.setDate(
+            nextDate.getDate() + i + (i === 0 && nextDate <= now ? 1 : 0),
+          );
           break;
         case "weekly":
           if (cfg.dayOfWeek !== undefined) {
@@ -114,7 +130,10 @@ export function useBackupWizard({ open, onClose, initialData }: ScheduledBackupW
     setLoading(true);
     try {
       if (initialData?.id) {
-        await apiClient.patch(`/configuracoes/backups/agendados/${initialData.id}`, config);
+        await apiClient.patch(
+          `/configuracoes/backups/agendados/${initialData.id}`,
+          config,
+        );
         toast.success("Backup agendado atualizado com sucesso!");
       } else {
         await apiClient.post("/backups/manager", config);
@@ -124,7 +143,9 @@ export function useBackupWizard({ open, onClose, initialData }: ScheduledBackupW
       setStep(1);
     } catch (error) {
       logger.error("Error:", error);
-      toast.error(error instanceof Error ? error.message : "Erro ao configurar backup");
+      toast.error(
+        error instanceof Error ? error.message : "Erro ao configurar backup",
+      );
     } finally {
       setLoading(false);
     }

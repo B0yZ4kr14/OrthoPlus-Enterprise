@@ -18,7 +18,7 @@ export function ContactSection({ patient }: ContactSectionProps) {
           </span>
         }
       />
-      
+
       <InfoItem
         label="Telefone Principal"
         value={
@@ -29,7 +29,7 @@ export function ContactSection({ patient }: ContactSectionProps) {
         }
         mono
       />
-      
+
       {patient.phone_secondary && (
         <InfoItem
           label="Telefone Secundário"
@@ -37,7 +37,7 @@ export function ContactSection({ patient }: ContactSectionProps) {
           mono
         />
       )}
-      
+
       {patient.phone_emergency && (
         <InfoItem
           label="Telefone de Emergência"
@@ -45,7 +45,7 @@ export function ContactSection({ patient }: ContactSectionProps) {
           mono
         />
       )}
-      
+
       {patient.emergency_contact_name && (
         <InfoItem
           label="Contato de Emergência"

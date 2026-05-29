@@ -19,9 +19,7 @@ export async function fetchExchangeRateBRL(coin: string): Promise<number> {
   }
 
   try {
-    const response = await fetch(
-      `${exchangeUrl}?symbol=${normalizedCoin}BRL`,
-    );
+    const response = await fetch(`${exchangeUrl}?symbol=${normalizedCoin}BRL`);
 
     if (response.ok) {
       const payload = (await response.json()) as { price?: string };

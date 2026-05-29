@@ -16,7 +16,7 @@ export function ContratoForm({
 }: ContratoFormProps) {
   const { register, handleSubmit, errors, setValue, watch } = useContratoForm(
     onSubmit,
-    initialData
+    initialData,
   );
 
   return (
@@ -92,7 +92,17 @@ export function ContratoForm({
 
         <StatusSelect
           value={watch("status") || ""}
-          onChange={(value) => setValue("status", value as "CONCLUIDO" | "CANCELADO" | "EXPIRADO" | "AGUARDANDO_ASSINATURA" | "ASSINADO")}
+          onChange={(value) =>
+            setValue(
+              "status",
+              value as
+                | "CONCLUIDO"
+                | "CANCELADO"
+                | "EXPIRADO"
+                | "AGUARDANDO_ASSINATURA"
+                | "ASSINADO",
+            )
+          }
         />
 
         <div className="flex items-center md:col-span-2">

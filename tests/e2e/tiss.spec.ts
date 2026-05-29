@@ -40,17 +40,25 @@ test.describe("TISS — Insurance Billing", () => {
 
   test("should display dashboard KPIs", async ({ page }) => {
     await expect(page.getByRole("tab", { name: /dashboard/i })).toBeVisible();
-    
+
     // Check for KPI cards - use card titles to avoid ambiguity with tab names
-    await expect(page.locator('.text-sm.font-medium', { hasText: /guias pendentes/i })).toBeVisible();
-    await expect(page.locator('.text-sm.font-medium', { hasText: /enviadas/i })).toBeVisible();
-    await expect(page.locator('.text-sm.font-medium', { hasText: /taxa de aprovação/i })).toBeVisible();
-    await expect(page.locator('.text-sm.font-medium', { hasText: /glosas/i }).first()).toBeVisible();
+    await expect(
+      page.locator(".text-sm.font-medium", { hasText: /guias pendentes/i }),
+    ).toBeVisible();
+    await expect(
+      page.locator(".text-sm.font-medium", { hasText: /enviadas/i }),
+    ).toBeVisible();
+    await expect(
+      page.locator(".text-sm.font-medium", { hasText: /taxa de aprovação/i }),
+    ).toBeVisible();
+    await expect(
+      page.locator(".text-sm.font-medium", { hasText: /glosas/i }).first(),
+    ).toBeVisible();
   });
 
   test("should display glosas tab", async ({ page }) => {
     await page.getByRole("tab", { name: /glosas/i }).click();
-    
+
     await expect(
       page.getByRole("heading", { name: /gestão de glosas/i }),
     ).toBeVisible();
@@ -58,7 +66,7 @@ test.describe("TISS — Insurance Billing", () => {
 
   test("should display convenios tab", async ({ page }) => {
     await page.getByRole("tab", { name: /convênios/i }).click();
-    
+
     await expect(
       page.getByRole("heading", { name: /convênios/i }),
     ).toBeVisible();

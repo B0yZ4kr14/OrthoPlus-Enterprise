@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
@@ -22,10 +27,7 @@ export function BitcoinInfoCard() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Card
-      depth="normal"
-      className="border-l-4 border-l-orange-500"
-    >
+    <Card depth="normal" className="border-l-4 border-l-orange-500">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader>
           <div className="flex items-center justify-between">

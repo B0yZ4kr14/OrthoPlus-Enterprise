@@ -68,9 +68,12 @@ export const OdontogramaAIAnalysis = ({
     setSelectedSuggestions(new Set());
 
     try {
-      const data = await apiClient.post<Record<string, unknown>>("/ia/analyze-odontogram", {
-        prontuarioId,
-      });
+      const data = await apiClient.post<Record<string, unknown>>(
+        "/ia/analyze-odontogram",
+        {
+          prontuarioId,
+        },
+      );
 
       const suggestions = data.suggestions as unknown[];
       if (suggestions && suggestions.length > 0) {
@@ -141,13 +144,18 @@ export const OdontogramaAIAnalysis = ({
       onTreatmentCreate?.(selectedItems);
 
       // Depois agendar as consultas automaticamente
-      const data = await apiClient.post<Record<string, unknown>>("/ia/schedule-appointments", {
-        treatments: selectedItems,
-        patientId: patientId,
-        dentistId: "mock-dentist-id", // Em produção, seria selecionado pelo usuário
-      });
+      const data = await apiClient.post<Record<string, unknown>>(
+        "/ia/schedule-appointments",
+        {
+          treatments: selectedItems,
+          patientId: patientId,
+          dentistId: "mock-dentist-id", // Em produção, seria selecionado pelo usuário
+        },
+      );
 
-      toast.success(String(data.message || "Consultas agendadas automaticamente!"));
+      toast.success(
+        String(data.message || "Consultas agendadas automaticamente!"),
+      );
       setSuggestions([]);
       setSelectedSuggestions(new Set());
     } catch (error) {
@@ -264,7 +272,17 @@ export const OdontogramaAIAnalysis = ({
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant={config.color as "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"}
+                          variant={
+                            config.color as
+                              | "default"
+                              | "secondary"
+                              | "destructive"
+                              | "outline"
+                              | "success"
+                              | "warning"
+                              | "error"
+                              | "info"
+                          }
                           className="gap-1"
                         >
                           <Icon className="h-3 w-3" />

@@ -1,7 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import { Scan, Send, Package } from "lucide-react"
-import { PageHeader } from "@/components/shared/PageHeader"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
+import { Scan, Send, Package } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function FluxoDigital() {
   return (

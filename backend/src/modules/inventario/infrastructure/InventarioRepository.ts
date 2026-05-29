@@ -6,9 +6,12 @@ export class InventarioRepository implements IInventarioRepository {
   async updateProduto(
     id: string,
     clinicId: string,
-    data: Prisma.produtosUpdateManyMutationInput
+    data: Prisma.produtosUpdateManyMutationInput,
   ) {
-    return prisma.produtos.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.produtos.updateMany({
+      where: { id, clinic_id: clinicId },
+      data,
+    });
   }
 
   async deleteProduto(id: string, clinicId: string) {

@@ -6,12 +6,7 @@ import { CupomTotal } from "./components/CupomTotal";
 import { CupomFooter } from "./components/CupomFooter";
 
 export * from "./types";
-export {
-  CupomHeader,
-  CupomItemsTable,
-  CupomTotal,
-  CupomFooter,
-};
+export { CupomHeader, CupomItemsTable, CupomTotal, CupomFooter };
 export { useCurrencyFormatter } from "./hooks/useCurrencyFormatter";
 
 export function CupomContent({ items, valorTotal }: CupomContentProps) {

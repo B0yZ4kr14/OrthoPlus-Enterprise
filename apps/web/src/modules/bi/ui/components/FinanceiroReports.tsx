@@ -20,7 +20,9 @@ interface FinanceiroReportsProps {
   onGenerateReport: (reportType: string) => void;
 }
 
-export function FinanceiroReports({ onGenerateReport }: FinanceiroReportsProps) {
+export function FinanceiroReports({
+  onGenerateReport,
+}: FinanceiroReportsProps) {
   return (
     <Card>
       <CardHeader>

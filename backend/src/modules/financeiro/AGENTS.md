@@ -36,18 +36,18 @@ financeiro/
 
 `FinanceiroController` (1277 linhas) acessa Prisma diretamente — **exceção arquitetural conhecida**. Não expandir esse padrão.
 
-| Grupo | Métodos |
-|-------|---------|
-| Transactions | `listTransactions`, `getTransaction`, `createTransaction`, `updateTransaction`, `deleteTransaction`, `markTransactionAsPaid` |
-| Categories | `listCategories`, `getCategory`, `createCategory`, `updateCategory`, `deleteCategory` |
-| Cash Registers | `listCashRegisters`, `getCashRegister`, `createCashRegister`, `updateCashRegister`, `deleteCashRegister` |
-| Movimentos | `listMovimentos`, `getMovimento`, `createMovimento`, `updateMovimento`, `deleteMovimento` |
-| Incidentes | `listIncidentes`, `getIncidente`, `createIncidente`, `updateIncidente`, `deleteIncidente` |
-| Contas Receber | `listContasReceber`, `createContaReceber`, `updateContaReceber`, `deleteContaReceber` |
-| Contas Pagar | `listContasPagar`, `createContaPagar`, `updateContaPagar`, `deleteContaPagar` |
-| Notas Fiscais | `listNotasFiscais`, `createNotaFiscal`, `updateNotaFiscal`, `deleteNotaFiscal` |
-| PDV / Extrato | `listVendasPDV`, `listExtratos`, `updateExtrato` |
-| Reports | `getResumo`, `getCashFlow` |
+| Grupo          | Métodos                                                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Transactions   | `listTransactions`, `getTransaction`, `createTransaction`, `updateTransaction`, `deleteTransaction`, `markTransactionAsPaid` |
+| Categories     | `listCategories`, `getCategory`, `createCategory`, `updateCategory`, `deleteCategory`                                        |
+| Cash Registers | `listCashRegisters`, `getCashRegister`, `createCashRegister`, `updateCashRegister`, `deleteCashRegister`                     |
+| Movimentos     | `listMovimentos`, `getMovimento`, `createMovimento`, `updateMovimento`, `deleteMovimento`                                    |
+| Incidentes     | `listIncidentes`, `getIncidente`, `createIncidente`, `updateIncidente`, `deleteIncidente`                                    |
+| Contas Receber | `listContasReceber`, `createContaReceber`, `updateContaReceber`, `deleteContaReceber`                                        |
+| Contas Pagar   | `listContasPagar`, `createContaPagar`, `updateContaPagar`, `deleteContaPagar`                                                |
+| Notas Fiscais  | `listNotasFiscais`, `createNotaFiscal`, `updateNotaFiscal`, `deleteNotaFiscal`                                               |
+| PDV / Extrato  | `listVendasPDV`, `listExtratos`, `updateExtrato`                                                                             |
+| Reports        | `getResumo`, `getCashFlow`                                                                                                   |
 
 ---
 

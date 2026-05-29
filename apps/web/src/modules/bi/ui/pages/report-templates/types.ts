@@ -27,7 +27,11 @@ export const AVAILABLE_METRICS = [
   { id: "consultas", label: "Total de Consultas", category: "agenda" },
   { id: "cancelamentos", label: "Taxa de Cancelamento", category: "agenda" },
   { id: "ocupacao", label: "Taxa de Ocupação", category: "agenda" },
-  { id: "procedimentos", label: "Procedimentos Realizados", category: "procedimentos" },
+  {
+    id: "procedimentos",
+    label: "Procedimentos Realizados",
+    category: "procedimentos",
+  },
   { id: "ticket_medio", label: "Ticket Médio", category: "financeiro" },
 ];
 

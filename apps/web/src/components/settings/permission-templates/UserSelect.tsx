@@ -17,7 +17,9 @@ interface UserSelectProps {
 export function UserSelect({ value, users, onChange }: UserSelectProps) {
   return (
     <div className="mb-6">
-      <label className="text-sm font-medium mb-2 block">Selecionar Usuário</label>
+      <label className="text-sm font-medium mb-2 block">
+        Selecionar Usuário
+      </label>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger>
           <SelectValue placeholder="Escolha um usuário MEMBER" />

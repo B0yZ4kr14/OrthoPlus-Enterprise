@@ -16,9 +16,7 @@ export function IndicatorKPIs({ indicators, period }: IndicatorKPIsProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground mb-1">RSI (14)</p>
-              <p className="text-2xl font-bold">
-                {indicators.rsi.toFixed(2)}
-              </p>
+              <p className="text-2xl font-bold">{indicators.rsi.toFixed(2)}</p>
               <Badge
                 variant={
                   indicators.rsiSignal === "SOBRECOMPRA"
@@ -42,9 +40,7 @@ export function IndicatorKPIs({ indicators, period }: IndicatorKPIsProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground mb-1">MACD</p>
-              <p className="text-2xl font-bold">
-                {indicators.macd.toFixed(2)}
-              </p>
+              <p className="text-2xl font-bold">{indicators.macd.toFixed(2)}</p>
               <Badge
                 variant={
                   indicators.macdSignal === "ALTA" ? "success" : "destructive"
@@ -66,7 +62,9 @@ export function IndicatorKPIs({ indicators, period }: IndicatorKPIsProps) {
               <p className="text-xs text-muted-foreground mb-1">Tendência</p>
               <p className="text-2xl font-bold">{indicators.trend}</p>
               <Badge
-                variant={indicators.trend === "ALTA" ? "success" : "destructive"}
+                variant={
+                  indicators.trend === "ALTA" ? "success" : "destructive"
+                }
                 className="mt-2"
               >
                 {indicators.trend === "ALTA" ? "Bullish" : "Bearish"}

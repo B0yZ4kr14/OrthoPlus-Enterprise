@@ -1,7 +1,7 @@
-import { logger } from '@/infrastructure/logger';
-import { IPatientRepository } from '../../domain/repositories/IPatientRepository';
-import { Patient } from '../../domain/entities/Patient';
-import { PatientStatus } from '../../domain/value-objects/PatientStatus';
+import { logger } from "@/infrastructure/logger";
+import { IPatientRepository } from "../../domain/repositories/IPatientRepository";
+import { Patient } from "../../domain/entities/Patient";
+import { PatientStatus } from "../../domain/value-objects/PatientStatus";
 
 export interface CreatePatientDTO {
   fullName: string;
@@ -30,8 +30,8 @@ export class CreatePatientCommand {
 
   async execute(data: CreatePatientDTO): Promise<Patient> {
     try {
-      logger.info('Creating patient', { fullName: data.fullName });
-      
+      logger.info("Creating patient", { fullName: data.fullName });
+
       const patient = Patient.create({
         fullName: data.fullName,
         email: data.email,
@@ -52,16 +52,21 @@ export class CreatePatientCommand {
         clinicId: data.clinicId,
         createdBy: data.createdBy,
         // Default status for new patients
-        status: data.statusCode ? PatientStatus.fromCode(data.statusCode) : PatientStatus.prospect(),
+        status: data.statusCode
+          ? PatientStatus.fromCode(data.statusCode)
+          : PatientStatus.prospect(),
         isActive: true,
       });
 
       await this.patientRepository.save(patient);
-      
-      logger.info('Patient created successfully', { patientId: patient.id });
+
+      logger.info("Patient created successfully", { patientId: patient.id });
       return patient;
     } catch (error) {
-      logger.error('Error creating patient', { error, fullName: data.fullName });
+      logger.error("Error creating patient", {
+        error,
+        fullName: data.fullName,
+      });
       throw error;
     }
   }

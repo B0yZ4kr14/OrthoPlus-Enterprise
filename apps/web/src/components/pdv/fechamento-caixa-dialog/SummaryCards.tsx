@@ -40,7 +40,9 @@ export function SummaryCards({
           }`}
         >
           <p className="text-sm text-muted-foreground mb-1">Diferença</p>
-          <p className={`text-2xl font-bold ${diferenca > 0 ? "text-success" : "text-destructive"}`}>
+          <p
+            className={`text-2xl font-bold ${diferenca > 0 ? "text-success" : "text-destructive"}`}
+          >
             {diferenca > 0 ? "+" : ""}R${" "}
             {Math.abs(diferenca).toLocaleString("pt-BR", {
               minimumFractionDigits: 2,

@@ -1,5 +1,5 @@
-import { IContratoRepository } from '../../domain/repositories/IContratoRepository';
-import { ContratoDTO } from '../dto/ContratoDTO';
+import { IContratoRepository } from "../../domain/repositories/IContratoRepository";
+import { ContratoDTO } from "../dto/ContratoDTO";
 
 export interface GetContratosPorPacienteQuery {
   pacienteId: string;
@@ -18,15 +18,17 @@ export interface ContratosPorPacienteResult {
 export class GetContratosPorPacienteQueryHandler {
   constructor(private contratoRepository: IContratoRepository) {}
 
-  async execute(query: GetContratosPorPacienteQuery): Promise<ContratosPorPacienteResult> {
+  async execute(
+    query: GetContratosPorPacienteQuery,
+  ): Promise<ContratosPorPacienteResult> {
     const { items } = await this.contratoRepository.findAll({
       clinicId: query.clinicId,
-      pacienteId: query.pacienteId
+      pacienteId: query.pacienteId,
     });
 
     const contratos = items.map(ContratoDTO.fromEntity);
-    const contratosAtivos = items.filter(c => 
-      ['ASSINADO', 'EM_EXECUCAO'].includes(c.status)
+    const contratosAtivos = items.filter((c) =>
+      ["ASSINADO", "EM_EXECUCAO"].includes(c.status),
     );
 
     return {
@@ -34,9 +36,11 @@ export class GetContratosPorPacienteQueryHandler {
       totalContratos: items.length,
       contratosAtivos: contratosAtivos.length,
       valorTotalContratado: items.reduce((sum, c) => sum + c.valorFinal, 0),
-      items: query.onlyActive 
-        ? contratos.filter(c => ['ASSINADO', 'EM_EXECUCAO'].includes(c.status))
-        : contratos
+      items: query.onlyActive
+        ? contratos.filter((c) =>
+            ["ASSINADO", "EM_EXECUCAO"].includes(c.status),
+          )
+        : contratos,
     };
   }
 }

@@ -49,9 +49,7 @@ export function BasicInfoStep({ config, setConfig }: WizardStepProps) {
       {config.frequency === "monthly" && (
         <DayOfMonthInput
           value={config.dayOfMonth}
-          onChange={(value) =>
-            setConfig({ ...config, dayOfMonth: value })
-          }
+          onChange={(value) => setConfig({ ...config, dayOfMonth: value })}
         />
       )}
     </div>

@@ -1,9 +1,7 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CommandItem } from "@orthoplus/core-ui/command";
-import {
-  isValidStatusTransition,
-} from "@/types/patient-status";
+import { isValidStatusTransition } from "@/types/patient-status";
 import { StatusBadge } from "./StatusBadge";
 import type { PatientStatus } from "../types";
 
@@ -33,7 +31,7 @@ export function StatusOption({
       <Check
         className={cn(
           "mr-2 h-4 w-4",
-          selectedStatus === status ? "opacity-100" : "opacity-0"
+          selectedStatus === status ? "opacity-100" : "opacity-0",
         )}
       />
       <StatusBadge status={status} />

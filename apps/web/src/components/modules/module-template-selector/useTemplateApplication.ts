@@ -7,7 +7,9 @@ interface UseTemplateApplicationProps {
   onSuccess?: () => void;
 }
 
-export function useTemplateApplication({ onSuccess }: UseTemplateApplicationProps = {}) {
+export function useTemplateApplication({
+  onSuccess,
+}: UseTemplateApplicationProps = {}) {
   const { toast } = useToast();
   const [applying, setApplying] = useState<string | null>(null);
 

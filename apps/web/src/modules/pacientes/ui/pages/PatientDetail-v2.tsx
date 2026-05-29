@@ -1,7 +1,17 @@
 import { PatientPhotoUpload } from "../../components/PatientPhotoUpload";
 import { useParams } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import {
@@ -75,7 +85,9 @@ export default function PatientDetail() {
   const { data: patient, isLoading } = useQuery<Patient>({
     queryKey: ["patient", patientId],
     queryFn: async () => {
-      const data = await apiClient.get<PatientAPIData>(`/pacientes/${patientId}`);
+      const data = await apiClient.get<PatientAPIData>(
+        `/pacientes/${patientId}`,
+      );
       return PatientAdapter.toFrontend(data);
     },
     enabled: !!patientId,
@@ -87,7 +99,6 @@ export default function PatientDetail() {
       setPhotoUrl(patient.photo_url);
     }
   }, [patient?.photo_url]);
-
 
   if (isLoading) {
     return (

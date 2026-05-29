@@ -11,7 +11,9 @@ export function Header({ onNewConfig }: HeaderProps) {
     <div className="flex items-center justify-between">
       <div>
         <h2 className="text-2xl font-bold">Configuração Bancária</h2>
-        <p className="text-muted-foreground">Configure integração com APIs bancárias para conciliação automática</p>
+        <p className="text-muted-foreground">
+          Configure integração com APIs bancárias para conciliação automática
+        </p>
       </div>
       <Button onClick={onNewConfig}>
         <Plus className="h-4 w-4 mr-2" />

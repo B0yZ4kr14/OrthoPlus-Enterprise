@@ -32,10 +32,15 @@ export function BackupWizard({ open, onOpenChange }: BackupWizardProps) {
           <DialogTitle>Criar Backup - Etapa {step} de 3</DialogTitle>
         </DialogHeader>
 
-        {step === 1 && <TypeStep value={config.type} onChange={setBackupType} />}
+        {step === 1 && (
+          <TypeStep value={config.type} onChange={setBackupType} />
+        )}
 
         {step === 2 && (
-          <DataStep selectedData={config.selectedData} onToggle={toggleDataCategory} />
+          <DataStep
+            selectedData={config.selectedData}
+            onToggle={toggleDataCategory}
+          />
         )}
 
         {step === 3 && (
@@ -47,7 +52,11 @@ export function BackupWizard({ open, onOpenChange }: BackupWizardProps) {
         )}
 
         <DialogFooter>
-          {step > 1 && <Button variant="outline" onClick={prevStep}>Voltar</Button>}
+          {step > 1 && (
+            <Button variant="outline" onClick={prevStep}>
+              Voltar
+            </Button>
+          )}
           {step < 3 ? (
             <Button onClick={nextStep}>Próximo</Button>
           ) : (

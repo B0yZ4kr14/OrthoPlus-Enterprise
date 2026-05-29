@@ -17,14 +17,15 @@ const INITIAL_FORM_DATA: Partial<BadgeFormData> = {
 export function useBadgeForm(onOpenChange: (open: boolean) => void) {
   const { createBadge } = useFidelidade();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<Partial<BadgeFormData>>(INITIAL_FORM_DATA);
+  const [formData, setFormData] =
+    useState<Partial<BadgeFormData>>(INITIAL_FORM_DATA);
 
-  const updateField = useCallback(<K extends keyof BadgeFormData>(
-    field: K,
-    value: BadgeFormData[K]
-  ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  }, []);
+  const updateField = useCallback(
+    <K extends keyof BadgeFormData>(field: K, value: BadgeFormData[K]) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    },
+    [],
+  );
 
   const updateCriterioTipo = useCallback((tipo: CriterioTipo) => {
     setFormData((prev) => ({
@@ -38,26 +39,29 @@ export function useBadgeForm(onOpenChange: (open: boolean) => void) {
     setFormData(INITIAL_FORM_DATA);
   }, []);
 
-  const submit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const submit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setLoading(true);
 
-    try {
-      const validated = badgeSchema.parse(formData);
-      await createBadge(validated);
+      try {
+        const validated = badgeSchema.parse(formData);
+        await createBadge(validated);
 
-      onOpenChange(false);
-      resetForm();
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        toast.error(error.issues[0].message);
-      } else {
-        toast.error("Erro ao criar badge");
+        onOpenChange(false);
+        resetForm();
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          toast.error(error.issues[0].message);
+        } else {
+          toast.error("Erro ao criar badge");
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [formData, createBadge, onOpenChange, resetForm]);
+    },
+    [formData, createBadge, onOpenChange, resetForm],
+  );
 
   return {
     formData,

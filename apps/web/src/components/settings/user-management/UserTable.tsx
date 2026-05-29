@@ -1,28 +1,28 @@
-import { Button } from "@orthoplus/core-ui/button"
+import { Button } from "@orthoplus/core-ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@orthoplus/core-ui/card"
-import { Badge } from "@orthoplus/core-ui/badge"
+} from "@orthoplus/core-ui/card";
+import { Badge } from "@orthoplus/core-ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@orthoplus/core-ui/select"
-import { Edit, Trash2, Shield, Settings } from "lucide-react"
-import type { User } from "./types"
+} from "@orthoplus/core-ui/select";
+import { Edit, Trash2, Shield, Settings } from "lucide-react";
+import type { User } from "./types";
 
 interface UserTableProps {
-  users: User[]
-  loading: boolean
-  onUpdateRole: (userId: string, role: "ADMIN" | "MEMBER") => void
-  onEdit: (user: User) => void
-  onDelete: (userId: string) => void
+  users: User[];
+  loading: boolean;
+  onUpdateRole: (userId: string, role: "ADMIN" | "MEMBER") => void;
+  onEdit: (user: User) => void;
+  onDelete: (userId: string) => void;
 }
 
 export function UserTable({
@@ -121,5 +121,5 @@ export function UserTable({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

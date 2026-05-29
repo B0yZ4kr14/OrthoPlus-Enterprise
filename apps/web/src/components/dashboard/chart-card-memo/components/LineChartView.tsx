@@ -10,7 +10,10 @@ import {
 } from "recharts";
 import type { ChartCardMemoProps } from "../types";
 
-type LineChartViewProps = Pick<ChartCardMemoProps, "data" | "dataKey" | "xAxisKey" | "secondaryDataKey">;
+type LineChartViewProps = Pick<
+  ChartCardMemoProps,
+  "data" | "dataKey" | "xAxisKey" | "secondaryDataKey"
+>;
 
 export function LineChartView({
   data,
@@ -31,7 +34,7 @@ export function LineChartView({
             borderRadius: "8px",
           }}
         />
-        <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+        <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
         <Line
           type="monotone"
           dataKey={dataKey}

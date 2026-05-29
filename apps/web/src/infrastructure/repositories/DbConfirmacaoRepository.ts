@@ -21,9 +21,12 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
     agendamentoId: string,
   ): Promise<Confirmacao | null> {
     try {
-      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
-        params: { appointment_id: agendamentoId },
-      });
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(
+        `/agenda/confirmations`,
+        {
+          params: { appointment_id: agendamentoId },
+        },
+      );
       if (!data || data.length === 0) return null;
       return ConfirmacaoMapper.toDomain(data[0]);
     } catch {
@@ -44,9 +47,12 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
             : "ERROR";
 
     try {
-      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
-        params: { status: dbStatus },
-      });
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(
+        `/agenda/confirmations`,
+        {
+          params: { status: dbStatus },
+        },
+      );
       return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
     } catch {
       return [];
@@ -55,9 +61,12 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
 
   async findPendentes(): Promise<Confirmacao[]> {
     try {
-      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
-        params: { status: "PENDING" },
-      });
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(
+        `/agenda/confirmations`,
+        {
+          params: { status: "PENDING" },
+        },
+      );
       return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
     } catch {
       return [];
@@ -66,9 +75,12 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
 
   async findEnviadasNaoConfirmadas(): Promise<Confirmacao[]> {
     try {
-      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(`/agenda/confirmations`, {
-        params: { status: "SENT" },
-      });
+      const data = await apiClient.get<Tables<"appointment_confirmations">[]>(
+        `/agenda/confirmations`,
+        {
+          params: { status: "SENT" },
+        },
+      );
       return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
     } catch {
       return [];

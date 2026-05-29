@@ -62,7 +62,9 @@ function ChartTooltip({
   if (!active || !payload || payload.length === 0) return null;
   return (
     <div className="bg-card shadow-lg rounded-lg p-3 border border-border min-w-[140px]">
-      <p className="text-xs font-medium text-muted-foreground mb-2">{String(label)}</p>
+      <p className="text-xs font-medium text-muted-foreground mb-2">
+        {String(label)}
+      </p>
       <div className="space-y-1.5">
         {payload.map((item) => (
           <div
@@ -74,9 +76,7 @@ function ChartTooltip({
                 className="w-2 h-2 rounded-full"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="text-xs text-muted-foreground">
-                {item.name}
-              </span>
+              <span className="text-xs text-muted-foreground">{item.name}</span>
             </div>
             <span className="text-sm font-bold text-foreground">
               {formatter ? formatter(item.value) : item.value}
@@ -108,9 +108,15 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                 </div>
                 <Tabs defaultValue="semana" className="w-auto">
                   <TabsList aria-label="Período do gráfico de consultas">
-                    <TabsTrigger value="semana" className="min-h-[44px]">Semana</TabsTrigger>
-                    <TabsTrigger value="mes" className="min-h-[44px]">Mês</TabsTrigger>
-                    <TabsTrigger value="ano" className="min-h-[44px]">Ano</TabsTrigger>
+                    <TabsTrigger value="semana" className="min-h-[44px]">
+                      Semana
+                    </TabsTrigger>
+                    <TabsTrigger value="mes" className="min-h-[44px]">
+                      Mês
+                    </TabsTrigger>
+                    <TabsTrigger value="ano" className="min-h-[44px]">
+                      Ano
+                    </TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
@@ -122,10 +128,15 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                   description="Não há dados de consultas para o período selecionado."
                 />
               ) : (
-                <div role="img" aria-label="Gráfico de Consultas da Semana: Agendadas vs Realizadas">
+                <div
+                  role="img"
+                  aria-label="Gráfico de Consultas da Semana: Agendadas vs Realizadas"
+                >
                   <span className="sr-only">
                     <table>
-                      <caption>Gráfico de Consultas da Semana: Agendadas vs Realizadas</caption>
+                      <caption>
+                        Gráfico de Consultas da Semana: Agendadas vs Realizadas
+                      </caption>
                       <thead>
                         <tr>
                           <th>Período</th>
@@ -202,7 +213,9 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                           />
                         )}
                       />
-                      <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                      <Legend
+                        wrapperStyle={{ fontSize: "12px", paddingTop: 8 }}
+                      />
                       <Bar
                         dataKey="agendadas"
                         fill="url(#gradientAgendadas)"
@@ -234,9 +247,15 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                 </div>
                 <Tabs defaultValue="semana" className="w-auto">
                   <TabsList aria-label="Período do gráfico financeiro">
-                    <TabsTrigger value="semana" className="min-h-[44px]">Semana</TabsTrigger>
-                    <TabsTrigger value="mes" className="min-h-[44px]">Mês</TabsTrigger>
-                    <TabsTrigger value="ano" className="min-h-[44px]">Ano</TabsTrigger>
+                    <TabsTrigger value="semana" className="min-h-[44px]">
+                      Semana
+                    </TabsTrigger>
+                    <TabsTrigger value="mes" className="min-h-[44px]">
+                      Mês
+                    </TabsTrigger>
+                    <TabsTrigger value="ano" className="min-h-[44px]">
+                      Ano
+                    </TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
@@ -248,10 +267,15 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                   description="Não há dados financeiros para o período selecionado."
                 />
               ) : (
-                <div role="img" aria-label="Gráfico de Desempenho Financeiro: Receitas e Despesas">
+                <div
+                  role="img"
+                  aria-label="Gráfico de Desempenho Financeiro: Receitas e Despesas"
+                >
                   <span className="sr-only">
                     <table>
-                      <caption>Gráfico de Desempenho Financeiro: Receitas e Despesas</caption>
+                      <caption>
+                        Gráfico de Desempenho Financeiro: Receitas e Despesas
+                      </caption>
                       <thead>
                         <tr>
                           <th>Período</th>
@@ -329,7 +353,9 @@ export const DashboardChartsMemo = memo<DashboardChartsProps>(
                           />
                         )}
                       />
-                      <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                      <Legend
+                        wrapperStyle={{ fontSize: "12px", paddingTop: 8 }}
+                      />
                       <Area
                         type="monotone"
                         dataKey="receita"

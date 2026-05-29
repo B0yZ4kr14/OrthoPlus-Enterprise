@@ -41,7 +41,9 @@ export function WalletForm({
   exchanges = [],
 }: WalletFormProps) {
   const form = useForm<z.infer<typeof cryptoWalletSchema>>({
-    resolver: zodResolver(cryptoWalletSchema) as Resolver<z.infer<typeof cryptoWalletSchema>>,
+    resolver: zodResolver(cryptoWalletSchema) as Resolver<
+      z.infer<typeof cryptoWalletSchema>
+    >,
     defaultValues: {
       wallet_name: initialData?.wallet_name || "",
       coin_type: initialData?.coin_type || "BTC",
@@ -141,7 +143,12 @@ export function WalletForm({
                   <SelectContent>
                     <SelectItem value="">Nenhuma</SelectItem>
                     {exchanges.map((exchange) => (
-                      <SelectItem key={exchange.id || `exchange-${exchange.exchange_name}`} value={exchange.id || ""}>
+                      <SelectItem
+                        key={
+                          exchange.id || `exchange-${exchange.exchange_name}`
+                        }
+                        value={exchange.id || ""}
+                      >
                         {exchange.exchange_name}
                       </SelectItem>
                     ))}

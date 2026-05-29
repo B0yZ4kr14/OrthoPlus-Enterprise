@@ -1,8 +1,17 @@
-import { Request, Response } from 'express';
-import { logger } from '@/infrastructure/logger';
-import { CreatePatientCommand, CreatePatientDTO } from '../../application/commands/CreatePatientCommand';
-import { UpdatePatientCommand, UpdatePatientDTO } from '../../application/commands/UpdatePatientCommand';
-import { ChangePatientStatusCommand, ChangePatientStatusDTO } from '../../application/commands/ChangePatientStatusCommand';
+import { Request, Response } from "express";
+import { logger } from "@/infrastructure/logger";
+import {
+  CreatePatientCommand,
+  CreatePatientDTO,
+} from "../../application/commands/CreatePatientCommand";
+import {
+  UpdatePatientCommand,
+  UpdatePatientDTO,
+} from "../../application/commands/UpdatePatientCommand";
+import {
+  ChangePatientStatusCommand,
+  ChangePatientStatusDTO,
+} from "../../application/commands/ChangePatientStatusCommand";
 
 export class PatientCommandController {
   constructor(
@@ -23,8 +32,8 @@ export class PatientCommandController {
       const patient = await this.createPatientCommand.execute(data);
       res.status(201).json(patient);
     } catch (error) {
-      logger.error('Error creating patient', { error });
-      res.status(500).json({ error: 'Failed to create patient' });
+      logger.error("Error creating patient", { error });
+      res.status(500).json({ error: "Failed to create patient" });
     }
   }
 
@@ -41,8 +50,8 @@ export class PatientCommandController {
       const patient = await this.updatePatientCommand.execute(data);
       res.status(200).json(patient);
     } catch (error) {
-      logger.error('Error updating patient', { error });
-      res.status(500).json({ error: 'Failed to update patient' });
+      logger.error("Error updating patient", { error });
+      res.status(500).json({ error: "Failed to update patient" });
     }
   }
 
@@ -60,8 +69,8 @@ export class PatientCommandController {
       const patient = await this.changeStatusCommand.execute(data);
       res.status(200).json(patient);
     } catch (error) {
-      logger.error('Error changing patient status', { error });
-      res.status(500).json({ error: 'Failed to change patient status' });
+      logger.error("Error changing patient status", { error });
+      res.status(500).json({ error: "Failed to change patient status" });
     }
   }
 }

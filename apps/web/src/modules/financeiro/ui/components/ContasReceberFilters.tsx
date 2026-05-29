@@ -9,13 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import {
-  Plus,
-  Search,
-  Filter,
-  Download,
-  Calendar,
-} from "lucide-react";
+import { Plus, Search, Filter, Download, Calendar } from "lucide-react";
 
 export interface ContasReceberFormData {
   patient_name: string;
@@ -106,8 +100,12 @@ export function ContasReceberFilters({
                 <SelectItem value="excel">Exportar Excel</SelectItem>
               </SelectContent>
             </Select>
-            
-            <Button variant="elevated" className="gap-2" onClick={onOpenNovaConta}>
+
+            <Button
+              variant="elevated"
+              className="gap-2"
+              onClick={onOpenNovaConta}
+            >
               <Plus className="h-4 w-4" />
               Nova Conta a Receber
             </Button>

@@ -6,7 +6,7 @@ export class FinanceiroDatabaseManager extends CategoryDatabaseManager {
     super(
       ["financeiro", "pdv", "faturamento", "crypto_config"],
       "FINANCEIRO",
-      new FinanceiroBackupService()
+      new FinanceiroBackupService(),
     );
   }
 }

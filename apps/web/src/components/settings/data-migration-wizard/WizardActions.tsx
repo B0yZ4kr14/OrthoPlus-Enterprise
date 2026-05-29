@@ -33,7 +33,11 @@ export function WizardActions({
 
   return (
     <div className="flex justify-between pt-4">
-      <Button variant="outline" onClick={() => (step === 1 ? onClose() : onPrev())} disabled={loading || isLastStep}>
+      <Button
+        variant="outline"
+        onClick={() => (step === 1 ? onClose() : onPrev())}
+        disabled={loading || isLastStep}
+      >
         <ArrowLeft className="h-4 w-4 mr-2" />
         {step === 1 ? "Cancelar" : "Voltar"}
       </Button>
@@ -61,7 +65,9 @@ export function WizardActions({
         </Button>
       )}
 
-      {mode === "export" && step === 3 && <Button onClick={onClose}>Concluir</Button>}
+      {mode === "export" && step === 3 && (
+        <Button onClick={onClose}>Concluir</Button>
+      )}
 
       {mode === "import" && step === 2 && (
         <Button onClick={onNext} disabled={!importData}>
@@ -86,7 +92,9 @@ export function WizardActions({
         </Button>
       )}
 
-      {mode === "import" && step === 4 && <Button onClick={onClose}>Concluir</Button>}
+      {mode === "import" && step === 4 && (
+        <Button onClick={onClose}>Concluir</Button>
+      )}
     </div>
   );
 }

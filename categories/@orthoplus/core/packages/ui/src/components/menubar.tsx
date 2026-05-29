@@ -4,15 +4,24 @@ import { Check, ChevronRight, Circle } from "lucide-react";
 
 import { cn } from "../lib/utils";
 
-const MenubarMenu: React.FC<React.ComponentProps<typeof MenubarPrimitive.Menu>> = MenubarPrimitive.Menu;
+const MenubarMenu: React.FC<
+  React.ComponentProps<typeof MenubarPrimitive.Menu>
+> = MenubarPrimitive.Menu;
 
-const MenubarGroup: React.FC<React.ComponentProps<typeof MenubarPrimitive.Group>> = MenubarPrimitive.Group;
+const MenubarGroup: React.FC<
+  React.ComponentProps<typeof MenubarPrimitive.Group>
+> = MenubarPrimitive.Group;
 
-const MenubarPortal: React.FC<React.ComponentProps<typeof MenubarPrimitive.Portal>> = MenubarPrimitive.Portal;
+const MenubarPortal: React.FC<
+  React.ComponentProps<typeof MenubarPrimitive.Portal>
+> = MenubarPrimitive.Portal;
 
-const MenubarSub: React.FC<React.ComponentProps<typeof MenubarPrimitive.Sub>> = MenubarPrimitive.Sub;
+const MenubarSub: React.FC<React.ComponentProps<typeof MenubarPrimitive.Sub>> =
+  MenubarPrimitive.Sub;
 
-const MenubarRadioGroup: React.FC<React.ComponentProps<typeof MenubarPrimitive.RadioGroup>> = MenubarPrimitive.RadioGroup;
+const MenubarRadioGroup: React.FC<
+  React.ComponentProps<typeof MenubarPrimitive.RadioGroup>
+> = MenubarPrimitive.RadioGroup;
 
 const Menubar = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Root>,

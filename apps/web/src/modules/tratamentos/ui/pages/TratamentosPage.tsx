@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { ClipboardPlus, Plus, Clock, CheckCircle, XCircle, Pause } from "lucide-react";
+import {
+  ClipboardPlus,
+  Plus,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Pause,
+} from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@orthoplus/core-ui/button";
@@ -10,7 +17,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -20,7 +32,13 @@ import { toast } from "sonner";
 import type { Patient } from "@/types/patient";
 
 function StatusBadge({ status }: { status: string }) {
-  const config: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; icon: typeof Clock }> = {
+  const config: Record<
+    string,
+    {
+      variant: "default" | "secondary" | "destructive" | "outline";
+      icon: typeof Clock;
+    }
+  > = {
     PLANEJADO: { variant: "secondary", icon: Clock },
     EM_ANDAMENTO: { variant: "default", icon: ClipboardPlus },
     CONCLUIDO: { variant: "outline", icon: CheckCircle },
@@ -39,12 +57,8 @@ function StatusBadge({ status }: { status: string }) {
 export function TratamentosPage() {
   const { clinicId } = useAuth();
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  const {
-    tratamentos,
-    isLoading,
-    createTratamento,
-    updateStatus,
-  } = useTratamentos(selectedPatient?.id ?? null, clinicId || "");
+  const { tratamentos, isLoading, createTratamento, updateStatus } =
+    useTratamentos(selectedPatient?.id ?? null, clinicId || "");
 
   const planejados = tratamentos.filter((t) => t.status === "PLANEJADO");
   const emAndamento = tratamentos.filter((t) => t.status === "EM_ANDAMENTO");
@@ -121,75 +135,83 @@ export function TratamentosPage() {
             </TabsTrigger>
           </TabsList>
 
-          {(["todos", "planejados", "andamento", "concluidos"] as const).map((tab) => {
-            const items =
-              tab === "todos"
-                ? tratamentos
-                : tab === "planejados"
-                ? planejados
-                : tab === "andamento"
-                ? emAndamento
-                : concluidos;
+          {(["todos", "planejados", "andamento", "concluidos"] as const).map(
+            (tab) => {
+              const items =
+                tab === "todos"
+                  ? tratamentos
+                  : tab === "planejados"
+                    ? planejados
+                    : tab === "andamento"
+                      ? emAndamento
+                      : concluidos;
 
-            return (
-              <TabsContent key={tab} value={tab} className="space-y-4">
-                {items.length === 0 ? (
-                  <Card>
-                    <CardContent className="py-8 text-center text-muted-foreground">
-                      Nenhum tratamento encontrado nesta categoria.
-                    </CardContent>
-                  </Card>
-                ) : (
-                  items.map((tratamento) => (
-                    <Card key={tratamento.id}>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <div>
-                          <CardTitle className="text-lg">
-                            {tratamento.descricao || "Plano de Tratamento"}
-                          </CardTitle>
-                          <CardDescription>
-                            {tratamento.denteCodigo || "Sem dente especificado"}
-                          </CardDescription>
-                        </div>
-                        <StatusBadge status={tratamento.status} />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm text-muted-foreground">
-                            {tratamento.procedimentoId ? "1 procedimento" : "0 procedimentos"}
-                            {tratamento.dataInicio && (
-                              <span className="ml-4">
-                                Início: {new Date(tratamento.dataInicio).toLocaleDateString("pt-BR")}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            {tratamento.status === "PLANEJADO" && (
-                              <Button
-                                size="sm"
-                                onClick={() => handleIniciar(tratamento.id)}
-                              >
-                                Iniciar
-                              </Button>
-                            )}
-                            {tratamento.status === "EM_ANDAMENTO" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => handleConcluir(tratamento.id)}
-                              >
-                                Concluir
-                              </Button>
-                            )}
-                          </div>
-                        </div>
+              return (
+                <TabsContent key={tab} value={tab} className="space-y-4">
+                  {items.length === 0 ? (
+                    <Card>
+                      <CardContent className="py-8 text-center text-muted-foreground">
+                        Nenhum tratamento encontrado nesta categoria.
                       </CardContent>
                     </Card>
-                  ))
-                )}
-              </TabsContent>
-            );
-          })}
+                  ) : (
+                    items.map((tratamento) => (
+                      <Card key={tratamento.id}>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                          <div>
+                            <CardTitle className="text-lg">
+                              {tratamento.descricao || "Plano de Tratamento"}
+                            </CardTitle>
+                            <CardDescription>
+                              {tratamento.denteCodigo ||
+                                "Sem dente especificado"}
+                            </CardDescription>
+                          </div>
+                          <StatusBadge status={tratamento.status} />
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center justify-between">
+                            <div className="text-sm text-muted-foreground">
+                              {tratamento.procedimentoId
+                                ? "1 procedimento"
+                                : "0 procedimentos"}
+                              {tratamento.dataInicio && (
+                                <span className="ml-4">
+                                  Início:{" "}
+                                  {new Date(
+                                    tratamento.dataInicio,
+                                  ).toLocaleDateString("pt-BR")}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex gap-2">
+                              {tratamento.status === "PLANEJADO" && (
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleIniciar(tratamento.id)}
+                                >
+                                  Iniciar
+                                </Button>
+                              )}
+                              {tratamento.status === "EM_ANDAMENTO" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleConcluir(tratamento.id)}
+                                >
+                                  Concluir
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </TabsContent>
+              );
+            },
+          )}
         </Tabs>
       )}
     </div>

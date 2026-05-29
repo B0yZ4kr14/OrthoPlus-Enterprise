@@ -8,7 +8,10 @@ interface StorjConfigFormProps {
 }
 
 export function StorjConfigForm({ config, onChange }: StorjConfigFormProps) {
-  const updateField = (field: keyof NonNullable<typeof config>, value: string) => {
+  const updateField = (
+    field: keyof NonNullable<typeof config>,
+    value: string,
+  ) => {
     onChange({
       ...config,
       [field]: value,

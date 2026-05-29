@@ -34,8 +34,8 @@ export function BackupTypeStep({ config, setConfig }: WizardStepProps) {
               <div>
                 <h4 className="font-semibold">Backup Completo (Full)</h4>
                 <p className="text-sm text-muted-foreground">
-                  Copia todos os dados do sistema. Ocupa mais espaço mas
-                  permite restauração independente.
+                  Copia todos os dados do sistema. Ocupa mais espaço mas permite
+                  restauração independente.
                 </p>
               </div>
             </div>
@@ -44,7 +44,9 @@ export function BackupTypeStep({ config, setConfig }: WizardStepProps) {
 
         <Card
           className={`cursor-pointer transition-all ${
-            config.backupType === "incremental" ? "border-primary bg-primary/5" : ""
+            config.backupType === "incremental"
+              ? "border-primary bg-primary/5"
+              : ""
           }`}
           onClick={() =>
             setConfig({
@@ -64,8 +66,8 @@ export function BackupTypeStep({ config, setConfig }: WizardStepProps) {
               <div>
                 <h4 className="font-semibold">Backup Incremental</h4>
                 <p className="text-sm text-muted-foreground">
-                  Copia apenas dados modificados desde o último backup
-                  (full ou incremental). Mais rápido e econômico.
+                  Copia apenas dados modificados desde o último backup (full ou
+                  incremental). Mais rápido e econômico.
                 </p>
               </div>
             </div>
@@ -74,11 +76,11 @@ export function BackupTypeStep({ config, setConfig }: WizardStepProps) {
 
         <Card
           className={`cursor-pointer transition-all ${
-            config.backupType === "differential" ? "border-primary bg-primary/5" : ""
+            config.backupType === "differential"
+              ? "border-primary bg-primary/5"
+              : ""
           }`}
-          onClick={() =>
-            setConfig({ ...config, backupType: "differential" })
-          }
+          onClick={() => setConfig({ ...config, backupType: "differential" })}
         >
           <CardContent className="p-4">
             <div className="flex items-start gap-3">

@@ -1,76 +1,80 @@
-import { useState, useEffect } from "react"
-import { apiClient } from "@/lib/api/apiClient"
+import { useState, useEffect } from "react";
+import { apiClient } from "@/lib/api/apiClient";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@orthoplus/core-ui/card"
-import { toast } from "sonner"
-import { useAuth } from "@/contexts/AuthContext"
-import { UserFilters, UserForm, UserTable } from "./user-management"
-import type { User, ModulePermission } from "./user-management"
+} from "@orthoplus/core-ui/card";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserFilters, UserForm, UserTable } from "./user-management";
+import type { User, ModulePermission } from "./user-management";
 
 export const UserManagementTab = () => {
-  const { clinicId, hasRole, registerStaffUser } = useAuth()
-  const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
-  const [modules, setModules] = useState<unknown[]>([])
+  const { clinicId, hasRole, registerStaffUser } = useAuth();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [modules, setModules] = useState<unknown[]>([]);
 
   // Form states
-  const [newUserEmail, setNewUserEmail] = useState("")
-  const [newUserName, setNewUserName] = useState("")
-  const [newUserPassword, setNewUserPassword] = useState("")
+  const [newUserEmail, setNewUserEmail] = useState("");
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserPassword, setNewUserPassword] = useState("");
   const [newUserRole, setNewUserRole] = useState<"ADMIN" | "MEMBER" | "ROOT">(
     "MEMBER",
-  )
+  );
   const [userPermissions, setUserPermissions] = useState<ModulePermission[]>(
     [],
-  )
+  );
 
   useEffect(() => {
     if (hasRole("ADMIN")) {
-      loadUsers()
-      loadModules()
+      loadUsers();
+      loadModules();
     }
-  }, [hasRole, clinicId])
+  }, [hasRole, clinicId]);
 
   const loadUsers = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       // Buscar perfis da clínica
       const profiles = await apiClient.get<Record<string, any>[]>(
         "/configuracoes/usuarios",
-      )
+      );
 
       // Buscar roles de cada usuário
       // Backend retorna profiles com roles já incluídos
-      const usersWithRoles = (profiles || []).map((profile: Record<string, unknown>) => ({
-        id: String(profile.id),
-        full_name: String(profile.full_name),
-        role: String(profile.role || "MEMBER") as "ADMIN" | "MEMBER" | "ROOT",
-        clinic_id: String(profile.clinic_id),
-        created_at: String(profile.created_at),
-      }))
+      const usersWithRoles = (profiles || []).map(
+        (profile: Record<string, unknown>) => ({
+          id: String(profile.id),
+          full_name: String(profile.full_name),
+          role: String(profile.role || "MEMBER") as "ADMIN" | "MEMBER" | "ROOT",
+          clinic_id: String(profile.clinic_id),
+          created_at: String(profile.created_at),
+        }),
+      );
 
-      setUsers(usersWithRoles)
+      setUsers(usersWithRoles);
     } catch (error: unknown) {
-      console.error("Erro ao carregar usuários:", error)
-      toast.error("Erro ao carregar usuários")
+      console.error("Erro ao carregar usuários:", error);
+      toast.error("Erro ao carregar usuários");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const loadModules = async () => {
     try {
-      const data = await apiClient.get<Record<string, any>[]>('/configuracoes/modulos')
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/configuracoes/modulos",
+      );
 
-      setModules(data || [])
+      setModules(data || []);
 
       // Inicializar permissões
       const initialPermissions: ModulePermission[] = (data || []).map(
@@ -81,17 +85,17 @@ export const UserManagementTab = () => {
           can_edit: false,
           can_delete: false,
         }),
-      )
-      setUserPermissions(initialPermissions)
+      );
+      setUserPermissions(initialPermissions);
     } catch (error: unknown) {
-      console.error("Erro ao carregar módulos:", error)
+      console.error("Erro ao carregar módulos:", error);
     }
-  }
+  };
 
   const handleAddUser = async () => {
     if (!newUserEmail || !newUserName || !newUserPassword) {
-      toast.error("Preencha todos os campos")
-      return
+      toast.error("Preencha todos os campos");
+      return;
     }
 
     try {
@@ -100,22 +104,22 @@ export const UserManagementTab = () => {
         email: newUserEmail,
         password: newUserPassword,
         full_name: newUserName,
-      })
+      });
 
       if (error || !newUser) {
-        throw new Error("Usuário não criado")
+        throw new Error("Usuário não criado");
       }
 
       // Atualizar perfil com clinic_id
       await apiClient.patch(`/configuracoes/usuarios/${newUser.id}`, {
         clinic_id: clinicId,
-      })
+      });
 
       // Adicionar role
       await apiClient.post("/configuracoes/usuarios/roles", {
         user_id: newUser.id,
         role: newUserRole,
-      })
+      });
 
       // Adicionar permissões de módulos se for MEMBER
       if (newUserRole === "MEMBER") {
@@ -130,26 +134,26 @@ export const UserManagementTab = () => {
             can_edit: p.can_edit,
             can_delete: p.can_delete,
           }))
-          .filter((p) => p.module_catalog_id !== undefined)
+          .filter((p) => p.module_catalog_id !== undefined);
 
         if (permissionsToInsert.length > 0) {
           await apiClient.post(
             "/configuracoes/permissoes",
             permissionsToInsert,
-          )
+          );
         }
       }
 
-      toast.success("Usuário criado com sucesso")
-      setIsAddDialogOpen(false)
-      resetForm()
-      loadUsers()
+      toast.success("Usuário criado com sucesso");
+      setIsAddDialogOpen(false);
+      resetForm();
+      loadUsers();
     } catch (error: unknown) {
-      const _e = error instanceof Error ? error : { message: String(error) }
-      console.error("Erro ao criar usuário:", error)
-      toast.error(_e.message || "Erro ao criar usuário")
+      const _e = error instanceof Error ? error : { message: String(error) };
+      console.error("Erro ao criar usuário:", error);
+      toast.error(_e.message || "Erro ao criar usuário");
     }
-  }
+  };
 
   const handleUpdateUserRole = async (
     userId: string,
@@ -158,39 +162,39 @@ export const UserManagementTab = () => {
     try {
       await apiClient.patch(`/configuracoes/usuarios/${userId}/role`, {
         role: newRole,
-      })
+      });
 
-      toast.success("Role atualizada com sucesso")
-      loadUsers()
+      toast.success("Role atualizada com sucesso");
+      loadUsers();
     } catch (error: unknown) {
-      console.error("Erro ao atualizar role:", error)
-      toast.error("Erro ao atualizar role")
+      console.error("Erro ao atualizar role:", error);
+      toast.error("Erro ao atualizar role");
     }
-  }
+  };
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm("Tem certeza que deseja remover este usuário?")) return
+    if (!confirm("Tem certeza que deseja remover este usuário?")) return;
 
     try {
       // Remover roles
-      await apiClient.delete(`/configuracoes/usuarios/${userId}`)
+      await apiClient.delete(`/configuracoes/usuarios/${userId}`);
 
       // Nota: A exclusão do perfil será automática devido ao trigger on delete cascade
-      toast.success("Usuário removido com sucesso")
-      loadUsers()
+      toast.success("Usuário removido com sucesso");
+      loadUsers();
     } catch (error: unknown) {
-      console.error("Erro ao remover usuário:", error)
-      toast.error("Erro ao remover usuário")
+      console.error("Erro ao remover usuário:", error);
+      toast.error("Erro ao remover usuário");
     }
-  }
+  };
 
   const resetForm = () => {
-    setNewUserEmail("")
-    setNewUserName("")
-    setNewUserPassword("")
-    setNewUserRole("MEMBER")
-    setUserPermissions([])
-  }
+    setNewUserEmail("");
+    setNewUserName("");
+    setNewUserPassword("");
+    setNewUserRole("MEMBER");
+    setUserPermissions([]);
+  };
 
   const updatePermission = (
     moduleKey: string,
@@ -201,8 +205,8 @@ export const UserManagementTab = () => {
       prev.map((perm) =>
         perm.module_key === moduleKey ? { ...perm, [field]: value } : perm,
       ),
-    )
-  }
+    );
+  };
 
   if (!hasRole("ADMIN")) {
     return (
@@ -214,7 +218,7 @@ export const UserManagementTab = () => {
           </CardDescription>
         </CardHeader>
       </Card>
-    )
+    );
   }
 
   return (
@@ -245,5 +249,5 @@ export const UserManagementTab = () => {
         onDelete={handleDeleteUser}
       />
     </div>
-  )
-}
+  );
+};

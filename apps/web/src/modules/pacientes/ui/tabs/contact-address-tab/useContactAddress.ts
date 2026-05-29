@@ -1,7 +1,10 @@
 // cspell:disable
 import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { PatientFormValues, fetchAddressFromCEP } from "@/lib/patient-validation";
+import {
+  PatientFormValues,
+  fetchAddressFromCEP,
+} from "@/lib/patient-validation";
 import { maskPhone, maskCEP } from "@/lib/input-masks";
 import { toast } from "sonner";
 

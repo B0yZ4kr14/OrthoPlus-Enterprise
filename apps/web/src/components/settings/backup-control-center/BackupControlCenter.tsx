@@ -31,8 +31,14 @@ export function BackupControlCenter() {
         logsTab={<BackupLogsTab />}
       />
 
-      <BackupWizard open={isBackupWizardOpen} onOpenChange={setIsBackupWizardOpen} />
-      <RestoreWizard open={isRestoreWizardOpen} onOpenChange={setIsRestoreWizardOpen} />
+      <BackupWizard
+        open={isBackupWizardOpen}
+        onOpenChange={setIsBackupWizardOpen}
+      />
+      <RestoreWizard
+        open={isRestoreWizardOpen}
+        onOpenChange={setIsRestoreWizardOpen}
+      />
     </div>
   );
 }

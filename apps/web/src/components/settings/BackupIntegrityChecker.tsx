@@ -57,12 +57,9 @@ export function BackupIntegrityChecker({
     setResult(null);
 
     try {
-      const data = await apiClient.post<IntegrityResult>(
-        "/backups/manager",
-        {
-          backupId: selectedBackupId,
-        },
-      );
+      const data = await apiClient.post<IntegrityResult>("/backups/manager", {
+        backupId: selectedBackupId,
+      });
 
       setResult(data);
 
@@ -100,7 +97,10 @@ export function BackupIntegrityChecker({
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="backup-select" className="text-sm font-medium mb-2 block">
+            <label
+              htmlFor="backup-select"
+              className="text-sm font-medium mb-2 block"
+            >
               Selecione um Backup para Validar
             </label>
             <select

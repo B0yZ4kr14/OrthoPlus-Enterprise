@@ -4,7 +4,11 @@ import { Request, Response } from "express";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 import { IAdminToolsRepository } from "@/modules/admin_tools/domain/repositories/IAdminToolsRepository";
 import { AdminToolsRepository } from "@/modules/admin_tools/infrastructure/AdminToolsRepository";
-import { createADRSchema, createWikiPageSchema, updateWikiPageSchema } from "./schemas";
+import {
+  createADRSchema,
+  createWikiPageSchema,
+  updateWikiPageSchema,
+} from "./schemas";
 import { ListAdrsUseCase } from "../application/ListAdrsUseCase";
 import { CreateAdrUseCase } from "../application/CreateAdrUseCase";
 import { ListWikiEntriesUseCase } from "../application/ListWikiEntriesUseCase";
@@ -13,7 +17,9 @@ import { UpdateWikiEntryUseCase } from "../application/UpdateWikiEntryUseCase";
 import { DeleteWikiEntryUseCase } from "../application/DeleteWikiEntryUseCase";
 
 export class AdminToolsController {
-  constructor(private repo: IAdminToolsRepository = new AdminToolsRepository()) {}
+  constructor(
+    private repo: IAdminToolsRepository = new AdminToolsRepository(),
+  ) {}
 
   private listAdrsUC = new ListAdrsUseCase();
   private createAdrUC = new CreateAdrUseCase();
@@ -42,7 +48,11 @@ export class AdminToolsController {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const createdBy = req.user?.id ?? "";
-    const data = await this.createAdrUC.execute(clinicId, createdBy, parsed.data);
+    const data = await this.createAdrUC.execute(
+      clinicId,
+      createdBy,
+      parsed.data,
+    );
     res.status(201).json(data);
     return;
   });
@@ -67,7 +77,11 @@ export class AdminToolsController {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const createdBy = req.user?.id ?? "";
-    const data = await this.createWikiUC.execute(clinicId, createdBy, parsed.data);
+    const data = await this.createWikiUC.execute(
+      clinicId,
+      createdBy,
+      parsed.data,
+    );
     res.status(201).json(data);
     return;
   });
@@ -128,9 +142,7 @@ export class AdminToolsController {
       .getActiveConnections()
       .catch(() => [{ count: 0 }]);
 
-    const tableSizes = await this.repo
-      .getTableSizes()
-      .catch(() => []);
+    const tableSizes = await this.repo.getTableSizes().catch(() => []);
 
     res.status(200).json({
       status: "healthy",

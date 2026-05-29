@@ -7,7 +7,8 @@ import { TextareaField } from "./TextareaField";
 import { SelectField } from "./SelectField";
 
 export function FormField(props: FormFieldProps) {
-  const { label, name, error, success, helperText, required, className } = props;
+  const { label, name, error, success, helperText, required, className } =
+    props;
 
   const hasError = !!error;
   const hasSuccess = !!success && !hasError;

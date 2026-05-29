@@ -83,7 +83,9 @@ export function BackupRestoreDialog({
     financeiro: false,
   });
 
-  const [restoreResults, setRestoreResults] = useState<RestoreResults | null>(null);
+  const [restoreResults, setRestoreResults] = useState<RestoreResults | null>(
+    null,
+  );
 
   const loadBackupFile = async (file: File) => {
     setLoading(true);
@@ -176,9 +178,12 @@ export function BackupRestoreDialog({
 
       setProgress(40);
 
-      const data = await apiClient.post<{ results: RestoreResults }>("/backups/manager", {
-        backupData: JSON.stringify(dataToRestore),
-      });
+      const data = await apiClient.post<{ results: RestoreResults }>(
+        "/backups/manager",
+        {
+          backupData: JSON.stringify(dataToRestore),
+        },
+      );
 
       setProgress(80);
 

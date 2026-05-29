@@ -299,7 +299,9 @@ describe("FilesService", () => {
     it("should throw not found if file does not exist", async () => {
       (prisma.arquivo.findFirst as jest.Mock).mockResolvedValue(null);
 
-      await expect(service.extractOCR("non-existent", testClinicId)).rejects.toThrow("not found");
+      await expect(
+        service.extractOCR("non-existent", testClinicId),
+      ).rejects.toThrow("not found");
     });
   });
 
@@ -341,10 +343,7 @@ describe("FilesService", () => {
 
   describe("searchFilesByText", () => {
     it("should return files matching OCR text", async () => {
-      const mockOCRs = [
-        { arquivo_id: "file-1" },
-        { arquivo_id: "file-2" },
-      ];
+      const mockOCRs = [{ arquivo_id: "file-1" }, { arquivo_id: "file-2" }];
 
       const mockFiles = [
         {
@@ -377,7 +376,10 @@ describe("FilesService", () => {
     it("should return empty array when no matches", async () => {
       (prisma.arquivo_ocr.findMany as jest.Mock).mockResolvedValue([]);
 
-      const result = await service.searchFilesByText(testClinicId, "nonexistent");
+      const result = await service.searchFilesByText(
+        testClinicId,
+        "nonexistent",
+      );
 
       expect(result).toHaveLength(0);
     });
@@ -399,14 +401,20 @@ describe("FilesService", () => {
 
       (prisma.arquivo.findFirst as jest.Mock).mockResolvedValue(mockFile);
       (prisma.arquivo_versao.findFirst as jest.Mock).mockResolvedValue(null);
-      (prisma.arquivo_versao.create as jest.Mock).mockResolvedValue(mockVersion);
+      (prisma.arquivo_versao.create as jest.Mock).mockResolvedValue(
+        mockVersion,
+      );
       (prisma.arquivo.updateMany as jest.Mock).mockResolvedValue({ count: 1 });
 
-      const result = await service.createVersion("file-id-001", {
-        nomeStorage: "v1.pdf",
-        tamanhoBytes: 1024,
-        createdBy: testUserId,
-      }, testClinicId);
+      const result = await service.createVersion(
+        "file-id-001",
+        {
+          nomeStorage: "v1.pdf",
+          tamanhoBytes: 1024,
+          createdBy: testUserId,
+        },
+        testClinicId,
+      );
 
       expect(prisma.arquivo_versao.create).toHaveBeenCalledWith({
         data: {
@@ -424,11 +432,17 @@ describe("FilesService", () => {
     it("should throw not found if file does not exist", async () => {
       (prisma.arquivo.findFirst as jest.Mock).mockResolvedValue(null);
 
-      await expect(service.createVersion("non-existent", {
-        nomeStorage: "v1.pdf",
-        tamanhoBytes: 1024,
-        createdBy: testUserId,
-      }, testClinicId)).rejects.toThrow("not found");
+      await expect(
+        service.createVersion(
+          "non-existent",
+          {
+            nomeStorage: "v1.pdf",
+            tamanhoBytes: 1024,
+            createdBy: testUserId,
+          },
+          testClinicId,
+        ),
+      ).rejects.toThrow("not found");
     });
   });
 
@@ -459,7 +473,9 @@ describe("FilesService", () => {
       ];
 
       (prisma.arquivo.findFirst as jest.Mock).mockResolvedValue(mockFile);
-      (prisma.arquivo_versao.findMany as jest.Mock).mockResolvedValue(mockVersions);
+      (prisma.arquivo_versao.findMany as jest.Mock).mockResolvedValue(
+        mockVersions,
+      );
 
       const result = await service.listVersions("file-id-001", testClinicId);
 
@@ -505,10 +521,16 @@ describe("FilesService", () => {
           nome_storage: mockVersion.nome_storage,
           tamanho_bytes: mockVersion.tamanho_bytes,
         });
-      (prisma.arquivo_versao.findFirst as jest.Mock).mockResolvedValue(mockVersion);
+      (prisma.arquivo_versao.findFirst as jest.Mock).mockResolvedValue(
+        mockVersion,
+      );
       (prisma.arquivo.updateMany as jest.Mock).mockResolvedValue({ count: 1 });
 
-      const result = await service.restoreVersion("file-id-001", "ver-id-001", testClinicId);
+      const result = await service.restoreVersion(
+        "file-id-001",
+        "ver-id-001",
+        testClinicId,
+      );
 
       expect(prisma.arquivo.updateMany).toHaveBeenCalledWith({
         where: { id: "file-id-001", clinic_id: testClinicId },
@@ -527,7 +549,9 @@ describe("FilesService", () => {
       (prisma.arquivo.findFirst as jest.Mock).mockResolvedValue(mockFile);
       (prisma.arquivo_versao.findFirst as jest.Mock).mockResolvedValue(null);
 
-      await expect(service.restoreVersion("file-id-001", "bad-ver", testClinicId)).rejects.toThrow("not found");
+      await expect(
+        service.restoreVersion("file-id-001", "bad-ver", testClinicId),
+      ).rejects.toThrow("not found");
     });
   });
 });

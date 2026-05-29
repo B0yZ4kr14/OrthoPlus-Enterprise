@@ -1,4 +1,4 @@
-import { logger } from '@/infrastructure/logger';
+import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
 import { ApiError, Errors, asyncHandler } from "@/middleware/errorHandler";
 import type { LoginRequest } from "@orthoplus/shared-types";
@@ -18,9 +18,13 @@ const COOKIE_OPTIONS = {
 };
 
 function getToken(req: Request): string | undefined {
-  const cookieToken = (req as Request & { cookies?: Record<string, string> }).cookies?.access_token;
+  const cookieToken = (req as Request & { cookies?: Record<string, string> })
+    .cookies?.access_token;
   const authHeader = req.headers.authorization;
-  return cookieToken || (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : undefined);
+  return (
+    cookieToken ||
+    (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : undefined)
+  );
 }
 
 function allowMock(): boolean {
@@ -36,8 +40,24 @@ export class AuthController {
 
     if (!email || !password) {
       throw Errors.validation("Email and password are required", [
-        ...(!email ? [{ field: "email", message: "Email is required", code: "VALIDATION_REQUIRED_FIELD" as const }] : []),
-        ...(!password ? [{ field: "password", message: "Password is required", code: "VALIDATION_REQUIRED_FIELD" as const }] : []),
+        ...(!email
+          ? [
+              {
+                field: "email",
+                message: "Email is required",
+                code: "VALIDATION_REQUIRED_FIELD" as const,
+              },
+            ]
+          : []),
+        ...(!password
+          ? [
+              {
+                field: "password",
+                message: "Password is required",
+                code: "VALIDATION_REQUIRED_FIELD" as const,
+              },
+            ]
+          : []),
       ]);
     }
 
@@ -65,14 +85,29 @@ export class AuthController {
         },
       });
     } catch {
-      throw new ApiError(401, "AUTH_TOKEN_INVALID", "Invalid Token", "The provided token is invalid or expired");
+      throw new ApiError(
+        401,
+        "AUTH_TOKEN_INVALID",
+        "Invalid Token",
+        "The provided token is invalid or expired",
+      );
     }
   });
 
   // POST /auth/logout
   public logout = asyncHandler(async (_req: Request, res: Response) => {
-    res.clearCookie("access_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/" });
-    res.clearCookie("refresh_token", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/" });
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
+    res.clearCookie("refresh_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
     res.status(204).send();
   });
 
@@ -83,7 +118,11 @@ export class AuthController {
 
     try {
       const tokens = await this.authService.refreshAccessToken(refreshToken);
-      res.json({ accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, expiresIn: 3600 });
+      res.json({
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        expiresIn: 3600,
+      });
     } catch (err) {
       if (err instanceof ApiError) throw err;
       throw Errors.tokenExpired();
@@ -96,13 +135,32 @@ export class AuthController {
 
     if (!cpf || !birthDate) {
       throw Errors.validation("CPF and birth date are required", [
-        ...(!cpf ? [{ field: "cpf", message: "CPF is required", code: "VALIDATION_REQUIRED_FIELD" as const }] : []),
-        ...(!birthDate ? [{ field: "birthDate", message: "Birth date is required", code: "VALIDATION_REQUIRED_FIELD" as const }] : []),
+        ...(!cpf
+          ? [
+              {
+                field: "cpf",
+                message: "CPF is required",
+                code: "VALIDATION_REQUIRED_FIELD" as const,
+              },
+            ]
+          : []),
+        ...(!birthDate
+          ? [
+              {
+                field: "birthDate",
+                message: "Birth date is required",
+                code: "VALIDATION_REQUIRED_FIELD" as const,
+              },
+            ]
+          : []),
       ]);
     }
 
     const normalizedCpf = cpf.replace(/\D/g, "");
-    const result = await this.authService.loginPatient(normalizedCpf, birthDate);
+    const result = await this.authService.loginPatient(
+      normalizedCpf,
+      birthDate,
+    );
     res.cookie("access_token", result.access_token, COOKIE_OPTIONS);
     res.json(result);
   });
@@ -114,7 +172,10 @@ export class AuthController {
 
     try {
       const metadata = await this.authService.getUserMetadata(userId);
-      if (metadata) { res.json(metadata); return; }
+      if (metadata) {
+        res.json(metadata);
+        return;
+      }
     } catch (err) {
       logger.error("getUserMetadata error", { error: err });
       throw Errors.internal("Error loading user metadata");
@@ -131,28 +192,79 @@ export class AuthController {
   // POST /auth/register
   public registerStaff = asyncHandler(async (req: Request, res: Response) => {
     const caller = req.user;
-    const hasPermission = caller?.role === "ADMIN" || caller?.role === "ROOT" || (allowMock() && caller?.role === "authenticated");
-    if (!caller || !hasPermission) throw Errors.forbidden("Admin role required to register staff");
+    const hasPermission =
+      caller?.role === "ADMIN" ||
+      caller?.role === "ROOT" ||
+      (allowMock() && caller?.role === "authenticated");
+    if (!caller || !hasPermission)
+      throw Errors.forbidden("Admin role required to register staff");
 
-    const { email, password, role, clinicId } = req.body as { email?: string; password?: string; role?: string; clinicId?: string };
+    const { email, password, role, clinicId } = req.body as {
+      email?: string;
+      password?: string;
+      role?: string;
+      clinicId?: string;
+    };
 
     const validationErrors = [];
-    if (!email) validationErrors.push({ field: "email", message: "Email is required", code: "VALIDATION_REQUIRED_FIELD" as const });
-    if (!password) validationErrors.push({ field: "password", message: "Password is required", code: "VALIDATION_REQUIRED_FIELD" as const });
-    if (!role) validationErrors.push({ field: "role", message: "Role is required", code: "VALIDATION_REQUIRED_FIELD" as const });
-    if (!clinicId) validationErrors.push({ field: "clinicId", message: "Clinic ID is required", code: "VALIDATION_REQUIRED_FIELD" as const });
-    if (validationErrors.length > 0) throw Errors.validation("Required fields are missing", validationErrors);
+    if (!email)
+      validationErrors.push({
+        field: "email",
+        message: "Email is required",
+        code: "VALIDATION_REQUIRED_FIELD" as const,
+      });
+    if (!password)
+      validationErrors.push({
+        field: "password",
+        message: "Password is required",
+        code: "VALIDATION_REQUIRED_FIELD" as const,
+      });
+    if (!role)
+      validationErrors.push({
+        field: "role",
+        message: "Role is required",
+        code: "VALIDATION_REQUIRED_FIELD" as const,
+      });
+    if (!clinicId)
+      validationErrors.push({
+        field: "clinicId",
+        message: "Clinic ID is required",
+        code: "VALIDATION_REQUIRED_FIELD" as const,
+      });
+    if (validationErrors.length > 0)
+      throw Errors.validation("Required fields are missing", validationErrors);
 
     const allowedRoles = ["ADMIN", "MEMBER", "ROOT"];
     if (!allowedRoles.includes(role!)) {
-      throw Errors.validation(`Role must be one of: ${allowedRoles.join(", ")}`, [{
-        field: "role", message: `Role must be one of: ${allowedRoles.join(", ")}`, code: "VALIDATION_INVALID_FORMAT",
-      }]);
+      throw Errors.validation(
+        `Role must be one of: ${allowedRoles.join(", ")}`,
+        [
+          {
+            field: "role",
+            message: `Role must be one of: ${allowedRoles.join(", ")}`,
+            code: "VALIDATION_INVALID_FORMAT",
+          },
+        ],
+      );
     }
 
     try {
-      const newUser = await this.authService.registerStaff(email!, password!, role!, clinicId!);
-      res.status(201).json({ user: { id: newUser.id, email: newUser.email, role: newUser.role, clinicId: newUser.clinicId } });
+      const newUser = await this.authService.registerStaff(
+        email!,
+        password!,
+        role!,
+        clinicId!,
+      );
+      res
+        .status(201)
+        .json({
+          user: {
+            id: newUser.id,
+            email: newUser.email,
+            role: newUser.role,
+            clinicId: newUser.clinicId,
+          },
+        });
     } catch (err) {
       if (err instanceof ApiError) throw err;
       logger.error("registerStaff error", { error: err });

@@ -24,23 +24,23 @@ export function AddressSection({ patient }: AddressSectionProps) {
         }
         fullWidth
       />
-      
+
       <InfoItem
         label="Bairro"
         value={patient.address_neighborhood || "Não informado"}
       />
-      
+
       <InfoItem
         label="CEP"
         value={patient.address_zipcode || "Não informado"}
         mono
       />
-      
+
       <InfoItem
         label="Cidade"
         value={patient.address_city || "Não informado"}
       />
-      
+
       <InfoItem
         label="Estado"
         value={patient.address_state || "Não informado"}

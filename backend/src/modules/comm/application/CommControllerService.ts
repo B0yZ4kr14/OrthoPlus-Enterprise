@@ -42,12 +42,12 @@ function getAgoraConfig(): AgoraConfig {
     if (process.env.NODE_ENV === "production") {
       throw new Error(
         "FATAL: AGORA_APP_ID environment variable is not set. " +
-        "Agora video/recording features will not work in production.",
+          "Agora video/recording features will not work in production.",
       );
     }
     logger.warn(
       "AGORA_APP_ID is not set. Agora features will be unavailable. " +
-      "Set AGORA_APP_ID in your environment to enable video/recording.",
+        "Set AGORA_APP_ID in your environment to enable video/recording.",
     );
   }
   return {
@@ -58,7 +58,10 @@ function getAgoraConfig(): AgoraConfig {
   };
 }
 
-function buildAgoraAuthHeader(customerId: string, customerSecret: string): string {
+function buildAgoraAuthHeader(
+  customerId: string,
+  customerSecret: string,
+): string {
   return `Basic ${Buffer.from(`${customerId}:${customerSecret}`).toString("base64")}`;
 }
 
@@ -93,7 +96,9 @@ export class CommControllerService {
       token = `agora-stub-token-${Date.now()}`;
     } else {
       if (process.env.NODE_ENV === "production") {
-        throw Errors.externalService("Video conferencing is not configured. Set AGORA_APP_CERTIFICATE.");
+        throw Errors.externalService(
+          "Video conferencing is not configured. Set AGORA_APP_CERTIFICATE.",
+        );
       }
       token = `dev-token-${Date.now()}`;
     }
@@ -145,7 +150,9 @@ export class CommControllerService {
 
     if (action === "start") {
       if (!customerId || !customerSecret) {
-        logger.info("Agora credentials not configured, simulating recording start");
+        logger.info(
+          "Agora credentials not configured, simulating recording start",
+        );
         const mockResourceId = `resource-${Date.now()}`;
         const mockSid = `sid-${Date.now()}`;
 
@@ -268,7 +275,9 @@ export class CommControllerService {
       }
 
       if (!customerId || !customerSecret) {
-        logger.info("Agora credentials not configured, simulating recording stop");
+        logger.info(
+          "Agora credentials not configured, simulating recording stop",
+        );
 
         await prisma.teleconsultas.update({
           where: { id: teleconsultaId },

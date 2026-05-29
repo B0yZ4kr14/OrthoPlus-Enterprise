@@ -1,7 +1,12 @@
 // cspell:disable
 import { Award } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { RecompensaForm } from "@/components/fidelidade/RecompensaForm";
 import { BadgeForm } from "@/components/fidelidade/BadgeForm";
 import { useProgramaFidelidade } from "./useProgramaFidelidade";

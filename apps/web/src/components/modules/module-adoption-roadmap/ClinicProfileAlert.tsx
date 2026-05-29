@@ -18,15 +18,21 @@ export function ClinicProfileAlert({ profile }: ClinicProfileAlertProps) {
           </div>
           <div>
             <span className="text-muted-foreground">Dias de uso:</span>
-            <span className="ml-2 font-semibold">{profile.days_since_creation}</span>
+            <span className="ml-2 font-semibold">
+              {profile.days_since_creation}
+            </span>
           </div>
           <div>
             <span className="text-muted-foreground">Módulos ativos:</span>
-            <span className="ml-2 font-semibold">{profile.active_modules_count}</span>
+            <span className="ml-2 font-semibold">
+              {profile.active_modules_count}
+            </span>
           </div>
           <div>
             <span className="text-muted-foreground">Disponíveis:</span>
-            <span className="ml-2 font-semibold">{profile.inactive_modules_count}</span>
+            <span className="ml-2 font-semibold">
+              {profile.inactive_modules_count}
+            </span>
           </div>
         </div>
       </AlertDescription>

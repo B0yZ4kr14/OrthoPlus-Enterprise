@@ -40,11 +40,7 @@ const AI_PROVIDERS = [
     id: "local",
     name: "Local / Self-Hosted",
     free: true,
-    models: [
-      "local/llama-3.3",
-      "local/qwen-2.5",
-      "local/deepseek-r1",
-    ],
+    models: ["local/llama-3.3", "local/qwen-2.5", "local/deepseek-r1"],
   },
   {
     id: "openai",

@@ -12,11 +12,15 @@ export function usePortfolioData(
   wallets: CryptoWallet[],
   transactions: CryptoTransaction[],
 ) {
-  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
+  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [rates, setRates] = useState<Record<string, number>>(DEFAULT_RATES);
 
-  const fetchRealRates = useCallback(async (): Promise<Record<string, number>> => {
+  const fetchRealRates = useCallback(async (): Promise<
+    Record<string, number>
+  > => {
     try {
       const coins = Object.values(COIN_IDS);
       const data = await getSimplePrice(coins, ["brl"]);

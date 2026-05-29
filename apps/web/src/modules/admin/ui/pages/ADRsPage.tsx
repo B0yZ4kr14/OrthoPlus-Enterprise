@@ -123,7 +123,10 @@ export default function ADRsPage() {
                 <Select
                   value={formData.status}
                   onValueChange={(value: string) =>
-                    setFormData({ ...formData, status: value as typeof formData.status })
+                    setFormData({
+                      ...formData,
+                      status: value as typeof formData.status,
+                    })
                   }
                 >
                   <SelectTrigger>
@@ -226,7 +229,8 @@ export default function ADRsPage() {
                       </div>
                       <CardTitle className="text-xl">{adr.title}</CardTitle>
                       <CardDescription>
-                        Criado em {new Date(adr.created_at).toLocaleDateString()}
+                        Criado em{" "}
+                        {new Date(adr.created_at).toLocaleDateString()}
                         {adr.decided_at &&
                           ` • Decidido em ${new Date(adr.decided_at).toLocaleDateString()}`}
                       </CardDescription>

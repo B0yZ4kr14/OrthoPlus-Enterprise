@@ -36,7 +36,9 @@ export function useConfiguracaoBancaria() {
     if (!selectedClinic) return;
 
     try {
-      const data = await apiClient.get(`/banco-config?clinic_id=${selectedClinic}`);
+      const data = await apiClient.get(
+        `/banco-config?clinic_id=${selectedClinic}`,
+      );
       setConfigs(Array.isArray(data) ? data : data ? [data] : []);
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Erro desconhecido";
@@ -73,7 +75,9 @@ export function useConfiguracaoBancaria() {
     setLoading(true);
     try {
       const hoje = new Date();
-      const trintaDiasAtras = new Date(hoje.getTime() - 30 * 24 * 60 * 60 * 1000);
+      const trintaDiasAtras = new Date(
+        hoje.getTime() - 30 * 24 * 60 * 60 * 1000,
+      );
 
       const data = await apiClient.post<any>("/sincronizar-extrato-bancario", {
         bancoConfigId: configId,
@@ -81,7 +85,7 @@ export function useConfiguracaoBancaria() {
         dataFim: hoje.toISOString().split("T")[0],
       });
       toast.success(
-        `${data.lancamentos_sincronizados} lançamentos sincronizados (${data.conciliados_automaticamente} conciliados)`
+        `${data.lancamentos_sincronizados} lançamentos sincronizados (${data.conciliados_automaticamente} conciliados)`,
       );
       loadConfigs();
     } catch (error: unknown) {
@@ -93,7 +97,8 @@ export function useConfiguracaoBancaria() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Deseja realmente excluir esta configuração bancária?")) return;
+    if (!confirm("Deseja realmente excluir esta configuração bancária?"))
+      return;
 
     try {
       await apiClient.delete(`/banco-config/${id}`);
@@ -105,7 +110,10 @@ export function useConfiguracaoBancaria() {
     }
   };
 
-  const updateEditando = <K extends keyof BancoConfig>(field: K, value: BancoConfig[K]) => {
+  const updateEditando = <K extends keyof BancoConfig>(
+    field: K,
+    value: BancoConfig[K],
+  ) => {
     setEditando((prev) => (prev ? { ...prev, [field]: value } : null));
   };
 

@@ -9,7 +9,12 @@ import { motion, useReducedMotion } from "framer-motion";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   LayoutDashboard,
   Users,

@@ -11,7 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -100,20 +105,26 @@ export default function Auth() {
   }, [user, navigate]);
 
   const handleLogin = async (values: LoginFormValues) => {
-    const identifier = values.email.includes("@") ? values.email.toLowerCase() : values.email.toLowerCase() + "@orthoplus.com";
+    const identifier = values.email.includes("@")
+      ? values.email.toLowerCase()
+      : values.email.toLowerCase() + "@orthoplus.com";
     setIsLoading(true);
     try {
       // Use AuthContext signIn — it saves tokens to localStorage AND updates global user state.
       // The useEffect above (line 95-99) will redirect to /dashboard when user becomes non-null.
       const { error } = await signIn(identifier, values.password);
       if (error) {
-        toast.error("Erro ao fazer login", { description: "Email ou senha incorretos" });
+        toast.error("Erro ao fazer login", {
+          description: "Email ou senha incorretos",
+        });
       }
       // On success, signIn updated user state → useEffect will navigate automatically.
       // No manual navigate needed here.
     } catch (e) {
       console.error("Login error:", e);
-      toast.error("Erro ao fazer login", { description: "Não foi possível conectar ao servidor. Tente novamente." });
+      toast.error("Erro ao fazer login", {
+        description: "Não foi possível conectar ao servidor. Tente novamente.",
+      });
     }
     setIsLoading(false);
   };
@@ -181,21 +192,9 @@ export default function Auth() {
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-3 dark:bg-muted dark:border-border">
-              <TabsTrigger 
-                value="login" 
-              >
-                Equipe
-              </TabsTrigger>
-              <TabsTrigger 
-                value="patient"
-              >
-                Paciente
-              </TabsTrigger>
-              <TabsTrigger 
-                value="signup"
-              >
-                Cadastro
-              </TabsTrigger>
+              <TabsTrigger value="login">Equipe</TabsTrigger>
+              <TabsTrigger value="patient">Paciente</TabsTrigger>
+              <TabsTrigger value="signup">Cadastro</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login" className="space-y-4">
@@ -212,7 +211,9 @@ export default function Auth() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-foreground">Email ou Usuário</FormLabel>
+                        <FormLabel className="text-foreground">
+                          Email ou Usuário
+                        </FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input
@@ -251,7 +252,11 @@ export default function Auth() {
                               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                               tabIndex={-1}
                             >
-                              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                              {showPassword ? (
+                                <EyeOff className="h-4 w-4" />
+                              ) : (
+                                <Eye className="h-4 w-4" />
+                              )}
                             </button>
                           </div>
                         </FormControl>
@@ -259,10 +264,10 @@ export default function Auth() {
                       </FormItem>
                     )}
                   />
-                  <Button 
-                    type="submit" 
-                    variant="default" 
-                    className="w-full shadow-[0_0_16px_hsl(var(--interactive)/0.2)] hover:shadow-[0_0_24px_hsl(var(--interactive)/0.3)] transition-shadow duration-300" 
+                  <Button
+                    type="submit"
+                    variant="default"
+                    className="w-full shadow-[0_0_16px_hsl(var(--interactive)/0.2)] hover:shadow-[0_0_24px_hsl(var(--interactive)/0.3)] transition-shadow duration-300"
                     disabled={isLoading}
                   >
                     {isLoading ? "Entrando..." : "Entrar"}

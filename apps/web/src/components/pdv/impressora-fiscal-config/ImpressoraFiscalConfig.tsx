@@ -36,7 +36,10 @@ export function ImpressoraFiscalConfig() {
               value={formData.tipo_equipamento}
               onChange={(v) => updateFormData("tipo_equipamento", v)}
             />
-            <IdentificacaoInputs formData={formData} onChange={updateFormData} />
+            <IdentificacaoInputs
+              formData={formData}
+              onChange={updateFormData}
+            />
             <EquipamentoInputs formData={formData} onChange={updateFormData} />
             <RedeInputs formData={formData} onChange={updateFormData} />
           </div>

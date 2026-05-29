@@ -1,7 +1,4 @@
-import {
-  Breadcrumb,
-  BreadcrumbList,
-} from "@orthoplus/core-ui/breadcrumb";
+import { Breadcrumb, BreadcrumbList } from "@orthoplus/core-ui/breadcrumb";
 import { useBreadcrumbs } from "./hooks/useBreadcrumbs";
 import { BreadcrumbHome } from "./components/BreadcrumbHome";
 import { BreadcrumbPathItem } from "./components/BreadcrumbItem";

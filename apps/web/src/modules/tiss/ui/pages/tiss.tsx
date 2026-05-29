@@ -1,7 +1,18 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
-import { FileText, Send, CheckCircle, Building2, AlertTriangle } from "lucide-react";
+import {
+  FileText,
+  Send,
+  CheckCircle,
+  Building2,
+  AlertTriangle,
+} from "lucide-react";
 import { TISSBatchList } from "@/modules/tiss/presentation/components/TISSBatchList";
 import { TISSGuideForm } from "@/modules/tiss/presentation/components/TISSGuideForm";
 import { TISSDashboard } from "@/modules/tiss/presentation/components/TISSDashboard";
@@ -17,16 +28,16 @@ export default function TISSPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={FileSpreadsheet} 
-        title="TISS" 
-        description="Troca de Informações em Saúde Suplementar" 
+      <PageHeader
+        icon={FileSpreadsheet}
+        title="TISS"
+        description="Troca de Informações em Saúde Suplementar"
         actions={
           <Button onClick={() => setActiveTab("guides")}>
             <FileText className="mr-2 h-4 w-4" />
             Nova Guia
           </Button>
-        } 
+        }
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>

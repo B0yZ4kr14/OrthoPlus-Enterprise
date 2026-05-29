@@ -5,7 +5,7 @@ import { InfrastructureError } from "../errors";
 import { UserMapper } from "../mappers/UserMapper";
 import type { Tables } from "@/types/database";
 
-type ProfileWithEmail = Tables<"profiles"> & { email?: string }
+type ProfileWithEmail = Tables<"profiles"> & { email?: string };
 
 export class DbUserRepository implements IUserRepository {
   async findById(id: string): Promise<User | null> {
@@ -27,22 +27,22 @@ export class DbUserRepository implements IUserRepository {
       const data = await apiClient.get<unknown>(`/auth/users`, {
         params: { email },
       });
-      const dataRecord = data as Record<string, unknown>
-      const users = (dataRecord.users as ProfileWithEmail[] | undefined) || []
+      const dataRecord = data as Record<string, unknown>;
+      const users = (dataRecord.users as ProfileWithEmail[] | undefined) || [];
       const authUser =
         users.find((u) => u.email === email) ||
         (dataRecord && (dataRecord as ProfileWithEmail).email === email
           ? (data as ProfileWithEmail)
-          : null)
+          : null);
 
-      if (!authUser) return null
+      if (!authUser) return null;
 
       const profile = await apiClient.get<Tables<"profiles">>(
         `/usuarios/${authUser.id}`,
-      )
-      if (!profile) return null
+      );
+      if (!profile) return null;
 
-      return UserMapper.toDomain(profile, email)
+      return UserMapper.toDomain(profile, email);
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
@@ -58,7 +58,9 @@ export class DbUserRepository implements IUserRepository {
         params: { clinicId },
       });
       const profiles =
-        ((data as Record<string, unknown>).users as ProfileWithEmail[] | undefined) ||
+        ((data as Record<string, unknown>).users as
+          | ProfileWithEmail[]
+          | undefined) ||
         (Array.isArray(data) ? (data as ProfileWithEmail[]) : []);
 
       return profiles.map((profile) =>
@@ -79,14 +81,14 @@ export class DbUserRepository implements IUserRepository {
         params: { clinicId },
       });
       const profiles =
-        ((data as Record<string, unknown>).users as ProfileWithEmail[] | undefined) ||
+        ((data as Record<string, unknown>).users as
+          | ProfileWithEmail[]
+          | undefined) ||
         (Array.isArray(data) ? (data as ProfileWithEmail[]) : []);
 
       return profiles
         .filter((profile) => profile.is_active !== false)
-        .map((profile) =>
-          UserMapper.toDomain(profile, profile.email || ""),
-        );
+        .map((profile) => UserMapper.toDomain(profile, profile.email || ""));
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(
@@ -102,14 +104,14 @@ export class DbUserRepository implements IUserRepository {
         params: { clinicId },
       });
       const profiles =
-        ((data as Record<string, unknown>).users as ProfileWithEmail[] | undefined) ||
+        ((data as Record<string, unknown>).users as
+          | ProfileWithEmail[]
+          | undefined) ||
         (Array.isArray(data) ? (data as ProfileWithEmail[]) : []);
 
       return profiles
         .filter((profile) => profile.app_role === "ADMIN")
-        .map((profile) =>
-          UserMapper.toDomain(profile, profile.email || ""),
-        );
+        .map((profile) => UserMapper.toDomain(profile, profile.email || ""));
     } catch (error) {
       if (error instanceof InfrastructureError) throw error;
       throw new InfrastructureError(

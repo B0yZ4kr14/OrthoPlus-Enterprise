@@ -79,7 +79,10 @@ export function FormFields({ form }: FormFieldsProps) {
                 {...field}
               />
             </FormControl>
-            <FormDescription>⚠️ Exporte APENAS a xPub da sua wallet. NUNCA a chave privada (seed).</FormDescription>
+            <FormDescription>
+              ⚠️ Exporte APENAS a xPub da sua wallet. NUNCA a chave privada
+              (seed).
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -98,12 +101,20 @@ export function FormFields({ form }: FormFieldsProps) {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="m/84'/0'/0'/0">BIP84 (bc1...) - SegWit Native</SelectItem>
-                <SelectItem value="m/49'/0'/0'/0">BIP49 (3...) - SegWit Wrapped</SelectItem>
-                <SelectItem value="m/44'/0'/0'/0">BIP44 (1...) - Legacy</SelectItem>
+                <SelectItem value="m/84'/0'/0'/0">
+                  BIP84 (bc1...) - SegWit Native
+                </SelectItem>
+                <SelectItem value="m/49'/0'/0'/0">
+                  BIP49 (3...) - SegWit Wrapped
+                </SelectItem>
+                <SelectItem value="m/44'/0'/0'/0">
+                  BIP44 (1...) - Legacy
+                </SelectItem>
               </SelectContent>
             </Select>
-            <FormDescription>Recomendado: BIP84 (endereços bc1... - menores taxas)</FormDescription>
+            <FormDescription>
+              Recomendado: BIP84 (endereços bc1... - menores taxas)
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -116,7 +127,11 @@ export function FormFields({ form }: FormFieldsProps) {
           <FormItem>
             <FormLabel>Notas (Opcional)</FormLabel>
             <FormControl>
-              <Textarea placeholder="Ex: Wallet para recebimentos de implantes" rows={2} {...field} />
+              <Textarea
+                placeholder="Ex: Wallet para recebimentos de implantes"
+                rows={2}
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

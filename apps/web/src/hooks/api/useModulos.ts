@@ -49,7 +49,9 @@ export const useModulos = () => {
     },
     onError: (error: unknown) => {
       // Erro 412 indica dependências não atendidas
-      const axiosErr = error as { response?: { status?: number; data?: { error?: string } } };
+      const axiosErr = error as {
+        response?: { status?: number; data?: { error?: string } };
+      };
       if (axiosErr.response?.status === 412) {
         toast.error(
           axiosErr.response.data?.error ??

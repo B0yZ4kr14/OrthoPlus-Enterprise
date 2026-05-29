@@ -116,7 +116,10 @@ export const PatientRadiographyTimeline = () => {
           })
         : "--/--",
       problemas: analise.problemas_detectados || 0,
-      confianca: Math.round((analise.confidence_score || 0) * (analise.confidence_score && analise.confidence_score <= 1 ? 100 : 1)),
+      confianca: Math.round(
+        (analise.confidence_score || 0) *
+          (analise.confidence_score && analise.confidence_score <= 1 ? 100 : 1),
+      ),
       tipo: analise.tipo_radiografia,
       status: analise.status,
     }));
@@ -145,7 +148,14 @@ export const PatientRadiographyTimeline = () => {
     return "Estável";
   };
 
-  const getTendenciaVariant = (): "default" | "secondary" | "destructive" | "outline" | "info" | "warning" | "success" => {
+  const getTendenciaVariant = ():
+    | "default"
+    | "secondary"
+    | "destructive"
+    | "outline"
+    | "info"
+    | "warning"
+    | "success" => {
     if (tendenciaProblemas === "aumentando") return "destructive";
     if (tendenciaProblemas === "diminuindo") return "success";
     return "outline";
@@ -211,7 +221,10 @@ export const PatientRadiographyTimeline = () => {
         </div>
 
         <div>
-          <label htmlFor="patient-select" className="text-sm font-medium mb-2 block">
+          <label
+            htmlFor="patient-select"
+            className="text-sm font-medium mb-2 block"
+          >
             Selecione o Paciente
           </label>
           <Select
@@ -269,14 +282,20 @@ export const PatientRadiographyTimeline = () => {
                         fontSize: "12px",
                       }}
                     />
-                    <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                    <Legend
+                      wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }}
+                    />
                     <Line
                       type="monotone"
                       dataKey="problemas"
                       name="Problemas Detectados"
                       stroke="hsl(var(--destructive))"
                       strokeWidth={3}
-                      dot={{ fill: "hsl(var(--destructive))", r: 4, strokeWidth: 2 }}
+                      dot={{
+                        fill: "hsl(var(--destructive))",
+                        r: 4,
+                        strokeWidth: 2,
+                      }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
                     />
                     <Line
@@ -285,7 +304,11 @@ export const PatientRadiographyTimeline = () => {
                       name="Confiança da IA (%)"
                       stroke="hsl(var(--primary))"
                       strokeWidth={3}
-                      dot={{ fill: "hsl(var(--primary))", r: 4, strokeWidth: 2 }}
+                      dot={{
+                        fill: "hsl(var(--primary))",
+                        r: 4,
+                        strokeWidth: 2,
+                      }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
                     />
                   </LineChart>
@@ -309,10 +332,12 @@ export const PatientRadiographyTimeline = () => {
                         Ref #{patientAnalises.length - index}
                       </div>
                       <div className="text-sm font-bold text-foreground">
-                        {analise.created_at ? new Date(analise.created_at).toLocaleDateString(
-                          "pt-BR",
-                          { day: "2-digit", month: "short" },
-                        ) : "--/--"}
+                        {analise.created_at
+                          ? new Date(analise.created_at).toLocaleDateString(
+                              "pt-BR",
+                              { day: "2-digit", month: "short" },
+                            )
+                          : "--/--"}
                       </div>
                     </div>
                     <div className="h-14 w-14 rounded-lg overflow-hidden bg-muted border border-border/50 flex-shrink-0">
@@ -324,7 +349,10 @@ export const PatientRadiographyTimeline = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5">
-                        <Badge variant="secondary" className="text-[10px] h-5 px-1.5">
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] h-5 px-1.5"
+                        >
                           {analise.tipo_radiografia}
                         </Badge>
                         <Badge
@@ -347,12 +375,22 @@ export const PatientRadiographyTimeline = () => {
                         </span>
                         <span className="flex items-center gap-1">
                           Confiança:{" "}
-                          <strong className={`font-bold ${
-                            (analise.confidence_score || 0) > 0.8 || (analise.confidence_score || 0) > 80 
-                              ? "text-success" 
-                              : "text-warning"
-                          }`}>
-                            {Math.round((analise.confidence_score || 0) * (analise.confidence_score && analise.confidence_score <= 1 ? 100 : 1))}%
+                          <strong
+                            className={`font-bold ${
+                              (analise.confidence_score || 0) > 0.8 ||
+                              (analise.confidence_score || 0) > 80
+                                ? "text-success"
+                                : "text-warning"
+                            }`}
+                          >
+                            {Math.round(
+                              (analise.confidence_score || 0) *
+                                (analise.confidence_score &&
+                                analise.confidence_score <= 1
+                                  ? 100
+                                  : 1),
+                            )}
+                            %
                           </strong>
                         </span>
                       </div>
@@ -385,14 +423,20 @@ export const PatientRadiographyTimeline = () => {
               </div>
               <div className="text-center p-3 rounded-lg bg-accent/20">
                 <div className="text-2xl font-black text-success">
-                  {patientAnalises.length > 0 ? Math.round(
-                    (patientAnalises.reduce(
-                      (sum, a) => sum + (a.confidence_score || 0),
-                      0,
-                    ) /
-                      (patientAnalises.length * (patientAnalises[0].confidence_score && patientAnalises[0].confidence_score > 1 ? 100 : 1))) *
-                      100,
-                  ) : 0}
+                  {patientAnalises.length > 0
+                    ? Math.round(
+                        (patientAnalises.reduce(
+                          (sum, a) => sum + (a.confidence_score || 0),
+                          0,
+                        ) /
+                          (patientAnalises.length *
+                            (patientAnalises[0].confidence_score &&
+                            patientAnalises[0].confidence_score > 1
+                              ? 100
+                              : 1))) *
+                          100,
+                      )
+                    : 0}
                   %
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">

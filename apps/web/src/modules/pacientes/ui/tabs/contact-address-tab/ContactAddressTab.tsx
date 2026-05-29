@@ -6,7 +6,8 @@ import { AddressSection } from "./AddressSection";
 import type { ContactAddressTabProps } from "./types";
 
 export function ContactAddressTab({ form }: ContactAddressTabProps) {
-  const { loadingCEP, handleSearchCEP, handlePhoneChange, handleCEPChange } = useContactAddress(form);
+  const { loadingCEP, handleSearchCEP, handlePhoneChange, handleCEPChange } =
+    useContactAddress(form);
 
   return (
     <Card className="p-6 space-y-6">

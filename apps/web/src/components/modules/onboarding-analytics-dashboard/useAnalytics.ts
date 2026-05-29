@@ -10,20 +10,34 @@ export function useAnalytics() {
 
   const fetchAnalytics = async () => {
     try {
-      const events = await apiClient.get<Record<string, any>[]>("/onboarding_analytics?order=created_at.desc");
+      const events = await apiClient.get<Record<string, any>[]>(
+        "/onboarding_analytics?order=created_at.desc",
+      );
 
-      const starts = events?.filter((e) => e.event_type === "started").length || 0;
-      const completions = events?.filter((e) => e.event_type === "completed").length || 0;
-      const abandoned = events?.filter((e) => e.event_type === "abandoned").length || 0;
+      const starts =
+        events?.filter((e) => e.event_type === "started").length || 0;
+      const completions =
+        events?.filter((e) => e.event_type === "completed").length || 0;
+      const abandoned =
+        events?.filter((e) => e.event_type === "abandoned").length || 0;
 
       const completionRate = starts > 0 ? (completions / starts) * 100 : 0;
 
-      const completedSessions = events?.filter((e) => e.event_type === "completed") || [];
-      const totalTime = completedSessions.reduce((sum, e) => sum + (e.time_spent_seconds || 0), 0);
-      const averageTime = completedSessions.length > 0 ? totalTime / completedSessions.length : 0;
+      const completedSessions =
+        events?.filter((e) => e.event_type === "completed") || [];
+      const totalTime = completedSessions.reduce(
+        (sum, e) => sum + (e.time_spent_seconds || 0),
+        0,
+      );
+      const averageTime =
+        completedSessions.length > 0 ? totalTime / completedSessions.length : 0;
 
-      const stepEvents = events?.filter((e) => e.event_type === "step_completed") || [];
-      const stepStatsMap = new Map<string, { count: number; totalTime: number }>();
+      const stepEvents =
+        events?.filter((e) => e.event_type === "step_completed") || [];
+      const stepStatsMap = new Map<
+        string,
+        { count: number; totalTime: number }
+      >();
 
       stepEvents.forEach((event) => {
         const key = `${event.step_number}-${event.step_name}`;
@@ -46,19 +60,25 @@ export function useAnalytics() {
         })
         .sort((a, b) => a.step_number - b.step_number);
 
-      const abandonedEvents = events?.filter((e) => e.event_type === "abandoned") || [];
+      const abandonedEvents =
+        events?.filter((e) => e.event_type === "abandoned") || [];
       const dropOffMap = new Map<string, number>();
 
       abandonedEvents.forEach((event) => {
         if (event.step_name) {
-          dropOffMap.set(event.step_name, (dropOffMap.get(event.step_name) || 0) + 1);
+          dropOffMap.set(
+            event.step_name,
+            (dropOffMap.get(event.step_name) || 0) + 1,
+          );
         }
       });
 
-      const dropOffByStep = Array.from(dropOffMap.entries()).map(([step_name, abandoned]) => ({
-        step_name,
-        abandoned,
-      }));
+      const dropOffByStep = Array.from(dropOffMap.entries()).map(
+        ([step_name, abandoned]) => ({
+          step_name,
+          abandoned,
+        }),
+      );
 
       setAnalytics({
         totalStarts: starts,

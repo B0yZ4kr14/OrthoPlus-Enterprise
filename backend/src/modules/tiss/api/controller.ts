@@ -51,10 +51,16 @@ export class TISSController {
     }
     const parsed = createGuiaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await prisma.tiss_guides.create({
-      data: { ...parsed.data, clinic_id: clinicId, status: parsed.data.status || "RASCUNHO" },
+      data: {
+        ...parsed.data,
+        clinic_id: clinicId,
+        status: parsed.data.status || "RASCUNHO",
+      },
     });
     return res.status(201).json(data);
   }
@@ -65,13 +71,17 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tiss_guides.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Guia not found" });
     }
     const parsed = updateGuiaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await prisma.tiss_guides.update({
       where: { id },
@@ -86,7 +96,9 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tiss_guides.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Guia not found" });
     }
@@ -118,10 +130,16 @@ export class TISSController {
     }
     const parsed = createLoteSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await prisma.tiss_batches.create({
-      data: { ...parsed.data, clinic_id: clinicId, status: parsed.data.status || "PENDENTE" },
+      data: {
+        ...parsed.data,
+        clinic_id: clinicId,
+        status: parsed.data.status || "PENDENTE",
+      },
     });
     return res.status(201).json(data);
   }
@@ -132,13 +150,17 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_batches.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tiss_batches.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Lote not found" });
     }
     const parsed = updateLoteSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await prisma.tiss_batches.update({
       where: { id },
@@ -155,7 +177,9 @@ export class TISSController {
     }
     const parsed = submitBatchSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
 
     const { guide_ids, insurance_company, batch_number } = parsed.data;
@@ -183,7 +207,8 @@ export class TISSController {
     );
 
     const generatedBatchNumber =
-      batch_number || `LOTE-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      batch_number ||
+      `LOTE-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
     // Create the batch
     const batch = await prisma.tiss_batches.create({
@@ -232,30 +257,31 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
 
-    const [guidesByStatus, batchesByStatus, totalAmount, totalGlosa] = await Promise.all([
-      prisma.tiss_guides.groupBy({
-        by: ["status"],
-        where: { clinic_id: clinicId },
-        _count: { id: true },
-        _sum: { amount: true, glosa_amount: true },
-      }),
-      prisma.tiss_batches.groupBy({
-        by: ["status"],
-        where: { clinic_id: clinicId },
-        _count: { id: true },
-        _sum: { total_amount: true },
-      }),
-      prisma.tiss_guides.aggregate({
-        where: { clinic_id: clinicId },
-        _count: { id: true },
-        _sum: { amount: true },
-      }),
-      prisma.tiss_guides.aggregate({
-        where: { clinic_id: clinicId, glosa_amount: { not: null } },
-        _count: { id: true },
-        _sum: { glosa_amount: true },
-      }),
-    ]);
+    const [guidesByStatus, batchesByStatus, totalAmount, totalGlosa] =
+      await Promise.all([
+        prisma.tiss_guides.groupBy({
+          by: ["status"],
+          where: { clinic_id: clinicId },
+          _count: { id: true },
+          _sum: { amount: true, glosa_amount: true },
+        }),
+        prisma.tiss_batches.groupBy({
+          by: ["status"],
+          where: { clinic_id: clinicId },
+          _count: { id: true },
+          _sum: { total_amount: true },
+        }),
+        prisma.tiss_guides.aggregate({
+          where: { clinic_id: clinicId },
+          _count: { id: true },
+          _sum: { amount: true },
+        }),
+        prisma.tiss_guides.aggregate({
+          where: { clinic_id: clinicId, glosa_amount: { not: null } },
+          _count: { id: true },
+          _sum: { glosa_amount: true },
+        }),
+      ]);
 
     return res.json({
       guides: {
@@ -290,13 +316,17 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tiss_guides.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Guia not found" });
     }
     const parsed = registerGlosaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await prisma.tiss_guides.update({
       where: { id },
@@ -307,7 +337,11 @@ export class TISSController {
         glosa_date: new Date(),
       },
     });
-    logger.info("TISS glosa registered", { clinicId, guideId: id, glosaAmount: parsed.data.glosa_amount });
+    logger.info("TISS glosa registered", {
+      clinicId,
+      guideId: id,
+      glosaAmount: parsed.data.glosa_amount,
+    });
     return res.json(data);
   }
 
@@ -317,13 +351,20 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tiss_guides.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Guia not found" });
     }
     const data = await prisma.tiss_guides.update({
       where: { id },
-      data: { status: "RASCUNHO", glosa_reason: null, glosa_amount: null, glosa_date: null },
+      data: {
+        status: "RASCUNHO",
+        glosa_reason: null,
+        glosa_amount: null,
+        glosa_date: null,
+      },
     });
     logger.info("TISS glosa reprocessed", { clinicId, guideId: id });
     return res.json({ message: "Guia reprocessada", guide: data });
@@ -347,12 +388,27 @@ export class TISSController {
     if (!clinicId) {
       return res.status(401).json({ error: "Missing clinic context" });
     }
-    const { nome, codigo_operadora, cnpj, registro_ans, tipo_plano, is_active } = req.body;
+    const {
+      nome,
+      codigo_operadora,
+      cnpj,
+      registro_ans,
+      tipo_plano,
+      is_active,
+    } = req.body;
     if (!nome) {
       return res.status(400).json({ error: "Nome is required" });
     }
     const data = await prisma.tiss_convenios.create({
-      data: { clinic_id: clinicId, nome, codigo_operadora, cnpj, registro_ans, tipo_plano, is_active },
+      data: {
+        clinic_id: clinicId,
+        nome,
+        codigo_operadora,
+        cnpj,
+        registro_ans,
+        tipo_plano,
+        is_active,
+      },
     });
     return res.status(201).json(data);
   }
@@ -363,7 +419,9 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tiss_convenios.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Convenio not found" });
     }
@@ -380,7 +438,9 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.tiss_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.tiss_convenios.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Convenio not found" });
     }
@@ -409,14 +469,27 @@ export class TISSController {
     if (!clinicId) {
       return res.status(401).json({ error: "Missing clinic context" });
     }
-    const { patient_id, convenio_id, numero_carteira, validade_carteira } = req.body;
+    const { patient_id, convenio_id, numero_carteira, validade_carteira } =
+      req.body;
     if (!patient_id || !convenio_id) {
-      return res.status(400).json({ error: "patient_id and convenio_id are required" });
+      return res
+        .status(400)
+        .json({ error: "patient_id and convenio_id are required" });
     }
     const data = await prisma.paciente_convenios.create({
-      data: { clinic_id: clinicId, patient_id, convenio_id, numero_carteira, validade_carteira },
+      data: {
+        clinic_id: clinicId,
+        patient_id,
+        convenio_id,
+        numero_carteira,
+        validade_carteira,
+      },
     });
-    logger.info("Paciente convenio created", { clinicId, patientId: patient_id, convenioId: convenio_id });
+    logger.info("Paciente convenio created", {
+      clinicId,
+      patientId: patient_id,
+      convenioId: convenio_id,
+    });
     return res.status(201).json(data);
   }
 
@@ -426,7 +499,9 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.paciente_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.paciente_convenios.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Vinculacao not found" });
     }
@@ -443,7 +518,9 @@ export class TISSController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await prisma.paciente_convenios.findFirst({ where: { id, clinic_id: clinicId } });
+    const existing = await prisma.paciente_convenios.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     if (!existing) {
       return res.status(404).json({ error: "Vinculacao not found" });
     }

@@ -1,22 +1,22 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { render, screen, waitFor, act } from "@testing-library/react"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, waitFor, act } from "@testing-library/react";
 
-const mockNavigate = vi.fn()
+const mockNavigate = vi.fn();
 
 vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
-}))
+}));
 
 vi.mock("sonner", () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
-}))
+}));
 
 vi.mock("@/lib/utils/formatting.utils", () => ({
   formatCurrency: (value: number) => `R$ ${value.toFixed(2)}`,
-}))
+}));
 
 // Mock UI components
 vi.mock("@orthoplus/core-ui/button", () => ({
@@ -25,7 +25,7 @@ vi.mock("@orthoplus/core-ui/button", () => ({
       {children}
     </button>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/card", () => ({
   Card: ({ children }: any) => <div>{children}</div>,
@@ -33,7 +33,7 @@ vi.mock("@orthoplus/core-ui/card", () => ({
   CardDescription: ({ children }: any) => <p>{children}</p>,
   CardHeader: ({ children }: any) => <div>{children}</div>,
   CardTitle: ({ children }: any) => <h3>{children}</h3>,
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/tabs", () => ({
   Tabs: ({ children, defaultValue }: any) => (
@@ -48,7 +48,7 @@ vi.mock("@orthoplus/core-ui/tabs", () => ({
   TabsContent: ({ children, value }: any) => (
     <div data-testid={`tab-content-${value}`}>{children}</div>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/badge", () => ({
   Badge: ({ children, variant, className }: any) => (
@@ -56,7 +56,7 @@ vi.mock("@orthoplus/core-ui/badge", () => ({
       {children}
     </span>
   ),
-}))
+}));
 
 vi.mock("@/components/shared/PageHeader", () => ({
   PageHeader: ({ title, description, actions }: any) => (
@@ -66,16 +66,16 @@ vi.mock("@/components/shared/PageHeader", () => ({
       {actions && <div>{actions}</div>}
     </div>
   ),
-}))
+}));
 
 // Mock the presentation hook
-const mockUseOrcamentos = vi.fn()
+const mockUseOrcamentos = vi.fn();
 
 vi.mock("../../../presentation/hooks/useOrcamentos", () => ({
   useOrcamentos: () => mockUseOrcamentos(),
-}))
+}));
 
-import OrcamentosPage from "../OrcamentosPage"
+import OrcamentosPage from "../OrcamentosPage";
 
 function createMockOrcamento(overrides: any = {}) {
   return {
@@ -108,19 +108,19 @@ function createMockOrcamento(overrides: any = {}) {
     isPending: () => overrides.status === "PENDENTE",
     isApproved: () => overrides.status === "APROVADO",
     ...overrides,
-  }
+  };
 }
 
 describe("OrcamentosPage", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-    mockNavigate.mockReset()
-    mockUseOrcamentos.mockReset()
-  })
+    vi.clearAllMocks();
+    mockNavigate.mockReset();
+    mockUseOrcamentos.mockReset();
+  });
 
   afterEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it("should render loading state", () => {
     mockUseOrcamentos.mockReturnValue({
@@ -133,143 +133,207 @@ describe("OrcamentosPage", () => {
       orcamentosAprovados: [],
       totalOrcamentos: 0,
       totalValor: 0,
-    })
+    });
 
-    render(<OrcamentosPage />)
+    render(<OrcamentosPage />);
 
-    expect(screen.getByText("Carregando...")).toBeTruthy()
-  })
+    expect(screen.getByText("Carregando...")).toBeTruthy();
+  });
 
   it("should render page with orcamentos", () => {
     mockUseOrcamentos.mockReturnValue({
       orcamentos: [
-        createMockOrcamento({ id: "orc-1", titulo: "Tratamento 1", status: "RASCUNHO" }),
-        createMockOrcamento({ id: "orc-2", titulo: "Tratamento 2", status: "PENDENTE" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Tratamento 1",
+          status: "RASCUNHO",
+        }),
+        createMockOrcamento({
+          id: "orc-2",
+          titulo: "Tratamento 2",
+          status: "PENDENTE",
+        }),
       ],
       loading: false,
       enviarOrcamento: vi.fn(),
       aprovarOrcamento: vi.fn(),
       orcamentosRascunho: [
-        createMockOrcamento({ id: "orc-1", titulo: "Tratamento 1", status: "RASCUNHO" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Tratamento 1",
+          status: "RASCUNHO",
+        }),
       ],
       orcamentosPendentes: [
-        createMockOrcamento({ id: "orc-2", titulo: "Tratamento 2", status: "PENDENTE" }),
+        createMockOrcamento({
+          id: "orc-2",
+          titulo: "Tratamento 2",
+          status: "PENDENTE",
+        }),
       ],
       orcamentosAprovados: [],
       totalOrcamentos: 2,
       totalValor: 9000,
-    })
+    });
 
-    render(<OrcamentosPage />)
+    render(<OrcamentosPage />);
 
-    expect(screen.getByText("Orçamentos")).toBeTruthy()
-    expect(screen.getByText("Gerencie propostas e aprovações de tratamentos")).toBeTruthy()
+    expect(screen.getByText("Orçamentos")).toBeTruthy();
+    expect(
+      screen.getByText("Gerencie propostas e aprovações de tratamentos"),
+    ).toBeTruthy();
 
     // Both orcamentos appear in the "all" tab
-    const allTab = screen.getByTestId("tab-content-all")
-    expect(allTab.textContent).toContain("Tratamento 1")
-    expect(allTab.textContent).toContain("Tratamento 2")
+    const allTab = screen.getByTestId("tab-content-all");
+    expect(allTab.textContent).toContain("Tratamento 1");
+    expect(allTab.textContent).toContain("Tratamento 2");
     // Total value appears in the metrics cards (outside tabs)
-    expect(screen.getByText("R$ 9000.00")).toBeTruthy()
-  })
+    expect(screen.getByText("R$ 9000.00")).toBeTruthy();
+  });
 
   it("should render tabs for filtering by status", () => {
     mockUseOrcamentos.mockReturnValue({
       orcamentos: [
-        createMockOrcamento({ id: "orc-1", titulo: "Rascunho 1", status: "RASCUNHO" }),
-        createMockOrcamento({ id: "orc-2", titulo: "Pendente 1", status: "PENDENTE" }),
-        createMockOrcamento({ id: "orc-3", titulo: "Aprovado 1", status: "APROVADO" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Rascunho 1",
+          status: "RASCUNHO",
+        }),
+        createMockOrcamento({
+          id: "orc-2",
+          titulo: "Pendente 1",
+          status: "PENDENTE",
+        }),
+        createMockOrcamento({
+          id: "orc-3",
+          titulo: "Aprovado 1",
+          status: "APROVADO",
+        }),
       ],
       loading: false,
       enviarOrcamento: vi.fn(),
       aprovarOrcamento: vi.fn(),
       orcamentosRascunho: [
-        createMockOrcamento({ id: "orc-1", titulo: "Rascunho 1", status: "RASCUNHO" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Rascunho 1",
+          status: "RASCUNHO",
+        }),
       ],
       orcamentosPendentes: [
-        createMockOrcamento({ id: "orc-2", titulo: "Pendente 1", status: "PENDENTE" }),
+        createMockOrcamento({
+          id: "orc-2",
+          titulo: "Pendente 1",
+          status: "PENDENTE",
+        }),
       ],
       orcamentosAprovados: [
-        createMockOrcamento({ id: "orc-3", titulo: "Aprovado 1", status: "APROVADO" }),
+        createMockOrcamento({
+          id: "orc-3",
+          titulo: "Aprovado 1",
+          status: "APROVADO",
+        }),
       ],
       totalOrcamentos: 3,
       totalValor: 13500,
-    })
+    });
 
-    render(<OrcamentosPage />)
+    render(<OrcamentosPage />);
 
-    expect(screen.getByTestId("tab-all")).toBeTruthy()
-    expect(screen.getByTestId("tab-rascunho")).toBeTruthy()
-    expect(screen.getByTestId("tab-pendente")).toBeTruthy()
-    expect(screen.getByTestId("tab-aprovado")).toBeTruthy()
+    expect(screen.getByTestId("tab-all")).toBeTruthy();
+    expect(screen.getByTestId("tab-rascunho")).toBeTruthy();
+    expect(screen.getByTestId("tab-pendente")).toBeTruthy();
+    expect(screen.getByTestId("tab-aprovado")).toBeTruthy();
 
     // Check tab content contains the right items
-    expect(screen.getByTestId("tab-content-rascunho").textContent).toContain("Rascunho 1")
-    expect(screen.getByTestId("tab-content-pendente").textContent).toContain("Pendente 1")
-    expect(screen.getByTestId("tab-content-aprovado").textContent).toContain("Aprovado 1")
-  })
+    expect(screen.getByTestId("tab-content-rascunho").textContent).toContain(
+      "Rascunho 1",
+    );
+    expect(screen.getByTestId("tab-content-pendente").textContent).toContain(
+      "Pendente 1",
+    );
+    expect(screen.getByTestId("tab-content-aprovado").textContent).toContain(
+      "Aprovado 1",
+    );
+  });
 
   it("should call enviarOrcamento when clicking Enviar on a draft", async () => {
-    const mockEnviar = vi.fn().mockResolvedValue(undefined)
+    const mockEnviar = vi.fn().mockResolvedValue(undefined);
 
     mockUseOrcamentos.mockReturnValue({
       orcamentos: [
-        createMockOrcamento({ id: "orc-1", titulo: "Rascunho 1", status: "RASCUNHO" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Rascunho 1",
+          status: "RASCUNHO",
+        }),
       ],
       loading: false,
       enviarOrcamento: mockEnviar,
       aprovarOrcamento: vi.fn(),
       orcamentosRascunho: [
-        createMockOrcamento({ id: "orc-1", titulo: "Rascunho 1", status: "RASCUNHO" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Rascunho 1",
+          status: "RASCUNHO",
+        }),
       ],
       orcamentosPendentes: [],
       orcamentosAprovados: [],
       totalOrcamentos: 1,
       totalValor: 4500,
-    })
+    });
 
-    render(<OrcamentosPage />)
+    render(<OrcamentosPage />);
 
     // Click the first "Enviar" button (in the "all" tab)
-    const enviarButtons = screen.getAllByText("Enviar")
+    const enviarButtons = screen.getAllByText("Enviar");
     await act(async () => {
-      enviarButtons[0].click()
-    })
+      enviarButtons[0].click();
+    });
 
-    expect(mockEnviar).toHaveBeenCalledTimes(1)
-    expect(mockEnviar).toHaveBeenCalledWith("orc-1")
-  })
+    expect(mockEnviar).toHaveBeenCalledTimes(1);
+    expect(mockEnviar).toHaveBeenCalledWith("orc-1");
+  });
 
   it("should call aprovarOrcamento when clicking Aprovar on a pending orcamento", async () => {
-    const mockAprovar = vi.fn().mockResolvedValue(undefined)
+    const mockAprovar = vi.fn().mockResolvedValue(undefined);
 
     mockUseOrcamentos.mockReturnValue({
       orcamentos: [
-        createMockOrcamento({ id: "orc-1", titulo: "Pendente 1", status: "PENDENTE" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Pendente 1",
+          status: "PENDENTE",
+        }),
       ],
       loading: false,
       enviarOrcamento: vi.fn(),
       aprovarOrcamento: mockAprovar,
       orcamentosRascunho: [],
       orcamentosPendentes: [
-        createMockOrcamento({ id: "orc-1", titulo: "Pendente 1", status: "PENDENTE" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Pendente 1",
+          status: "PENDENTE",
+        }),
       ],
       orcamentosAprovados: [],
       totalOrcamentos: 1,
       totalValor: 4500,
-    })
+    });
 
-    render(<OrcamentosPage />)
+    render(<OrcamentosPage />);
 
     // Click the first "Aprovar" button (in the "all" tab)
-    const aprovarButtons = screen.getAllByText("Aprovar")
+    const aprovarButtons = screen.getAllByText("Aprovar");
     await act(async () => {
-      aprovarButtons[0].click()
-    })
+      aprovarButtons[0].click();
+    });
 
-    expect(mockAprovar).toHaveBeenCalledTimes(1)
-    expect(mockAprovar).toHaveBeenCalledWith("orc-1")
-  })
+    expect(mockAprovar).toHaveBeenCalledTimes(1);
+    expect(mockAprovar).toHaveBeenCalledWith("orc-1");
+  });
 
   it("should render empty state when no orcamentos", () => {
     mockUseOrcamentos.mockReturnValue({
@@ -282,46 +346,54 @@ describe("OrcamentosPage", () => {
       orcamentosAprovados: [],
       totalOrcamentos: 0,
       totalValor: 0,
-    })
+    });
 
-    render(<OrcamentosPage />)
+    render(<OrcamentosPage />);
 
-    expect(screen.getByText("Orçamentos")).toBeTruthy()
+    expect(screen.getByText("Orçamentos")).toBeTruthy();
     // The total value should show R$ 0.00
-    expect(screen.getByText("R$ 0.00")).toBeTruthy()
+    expect(screen.getByText("R$ 0.00")).toBeTruthy();
     // Empty tabs should not contain orcamento cards
-    expect(screen.getByTestId("tab-content-all").children.length).toBe(0)
-  })
+    expect(screen.getByTestId("tab-content-all").children.length).toBe(0);
+  });
 
   it("should show error toast when enviar fails", async () => {
-    const mockEnviar = vi.fn().mockRejectedValue(new Error("Erro"))
+    const mockEnviar = vi.fn().mockRejectedValue(new Error("Erro"));
 
     mockUseOrcamentos.mockReturnValue({
       orcamentos: [
-        createMockOrcamento({ id: "orc-1", titulo: "Rascunho 1", status: "RASCUNHO" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Rascunho 1",
+          status: "RASCUNHO",
+        }),
       ],
       loading: false,
       enviarOrcamento: mockEnviar,
       aprovarOrcamento: vi.fn(),
       orcamentosRascunho: [
-        createMockOrcamento({ id: "orc-1", titulo: "Rascunho 1", status: "RASCUNHO" }),
+        createMockOrcamento({
+          id: "orc-1",
+          titulo: "Rascunho 1",
+          status: "RASCUNHO",
+        }),
       ],
       orcamentosPendentes: [],
       orcamentosAprovados: [],
       totalOrcamentos: 1,
       totalValor: 4500,
-    })
+    });
 
-    const { toast } = await import("sonner")
-    render(<OrcamentosPage />)
+    const { toast } = await import("sonner");
+    render(<OrcamentosPage />);
 
-    const enviarButtons = screen.getAllByText("Enviar")
+    const enviarButtons = screen.getAllByText("Enviar");
     await act(async () => {
-      enviarButtons[0].click()
-    })
+      enviarButtons[0].click();
+    });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith("Erro ao enviar orçamento")
-    })
-  })
-})
+      expect(toast.error).toHaveBeenCalledWith("Erro ao enviar orçamento");
+    });
+  });
+});

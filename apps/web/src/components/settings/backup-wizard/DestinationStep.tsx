@@ -23,9 +23,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
         <Label>Onde deseja armazenar o backup?</Label>
         <Select
           value={config.cloudStorageProvider}
-          onValueChange={(value: ScheduledBackupConfig["cloudStorageProvider"]) =>
-            setConfig({ ...config, cloudStorageProvider: value })
-          }
+          onValueChange={(
+            value: ScheduledBackupConfig["cloudStorageProvider"],
+          ) => setConfig({ ...config, cloudStorageProvider: value })}
         >
           <SelectTrigger>
             <SelectValue />

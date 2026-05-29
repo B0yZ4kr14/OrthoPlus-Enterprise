@@ -32,15 +32,27 @@ export function RestoreWizard({ open, onOpenChange }: RestoreWizardProps) {
         </DialogHeader>
 
         {step === 1 && (
-          <BackupSelect backups={backups} value={selectedBackup} onChange={setSelectedBackup} />
+          <BackupSelect
+            backups={backups}
+            value={selectedBackup}
+            onChange={setSelectedBackup}
+          />
         )}
 
-        {step === 2 && selectedBackupData && <PreviewStep backup={selectedBackupData} />}
+        {step === 2 && selectedBackupData && (
+          <PreviewStep backup={selectedBackupData} />
+        )}
 
-        {step === 3 && selectedBackupData && <ConfirmStep backupDate={selectedBackupData.date} />}
+        {step === 3 && selectedBackupData && (
+          <ConfirmStep backupDate={selectedBackupData.date} />
+        )}
 
         <DialogFooter>
-          {step > 1 && <Button variant="outline" onClick={prevStep}>Voltar</Button>}
+          {step > 1 && (
+            <Button variant="outline" onClick={prevStep}>
+              Voltar
+            </Button>
+          )}
           {step < 3 ? (
             <Button onClick={nextStep} disabled={step === 1 && !selectedBackup}>
               Próximo

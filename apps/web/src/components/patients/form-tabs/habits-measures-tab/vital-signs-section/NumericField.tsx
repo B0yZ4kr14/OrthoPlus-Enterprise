@@ -29,7 +29,9 @@ export function NumericField({ form, field }: NumericFieldProps) {
               value={String(formField.value || "")}
               disabled={field.disabled}
               onChange={(e) =>
-                formField.onChange(e.target.value ? parseFloat(e.target.value) : null)
+                formField.onChange(
+                  e.target.value ? parseFloat(e.target.value) : null,
+                )
               }
             />
           </FormControl>

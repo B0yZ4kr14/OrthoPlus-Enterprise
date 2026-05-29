@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
 import type { FinancialTabProps } from "./types";
 import { useFinancialTab } from "./useFinancialTab";
@@ -32,7 +37,10 @@ export function FinancialTab({ patientId }: FinancialTabProps) {
 
   return (
     <div className="space-y-6">
-      <FinancialSummary summary={summary} paymentStatus={patient.paymentStatus} />
+      <FinancialSummary
+        summary={summary}
+        paymentStatus={patient.paymentStatus}
+      />
 
       <Card>
         <CardHeader>

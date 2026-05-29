@@ -5,7 +5,12 @@ interface RateValueProps {
   prefix?: string;
 }
 
-export function RateValue({ label, value, highlight, prefix = "R$ " }: RateValueProps) {
+export function RateValue({
+  label,
+  value,
+  highlight,
+  prefix = "R$ ",
+}: RateValueProps) {
   return (
     <div>
       <p className="text-muted-foreground mb-1">{label}</p>

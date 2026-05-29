@@ -19,9 +19,14 @@ export class LeadRepositoryApi implements ILeadRepository {
     try {
       const data = await apiClient.get<Record<string, any>>(`/crm/leads/${id}`);
       if (!data) return null;
-      return LeadMapper.toDomain(data as Parameters<typeof LeadMapper.toDomain>[0]);
+      return LeadMapper.toDomain(
+        data as Parameters<typeof LeadMapper.toDomain>[0],
+      );
     } catch (error: unknown) {
-      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      const _e = error as {
+        response?: { status?: number; data?: { error?: string } };
+        message?: string;
+      };
       if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
       throw new Error(`Erro ao buscar lead: ${_e.message}`);
@@ -31,7 +36,11 @@ export class LeadRepositoryApi implements ILeadRepository {
   async findByClinicId(clinicId: string): Promise<Lead[]> {
     try {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads");
-      return data?.map((d) => LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0])) ?? [];
+      return (
+        data?.map((d) =>
+          LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0]),
+        ) ?? []
+      );
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar leads: ${_e.message}`);
@@ -43,7 +52,11 @@ export class LeadRepositoryApi implements ILeadRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads", {
         params: { assigned_to: responsavelId },
       });
-      return data?.map((d) => LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0])) ?? [];
+      return (
+        data?.map((d) =>
+          LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0]),
+        ) ?? []
+      );
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar leads do responsável: ${_e.message}`);
@@ -55,7 +68,11 @@ export class LeadRepositoryApi implements ILeadRepository {
       const data = await apiClient.get<Record<string, any>[]>("/crm/leads", {
         params: { status },
       });
-      return data?.map((d) => LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0])) ?? [];
+      return (
+        data?.map((d) =>
+          LeadMapper.toDomain(d as Parameters<typeof LeadMapper.toDomain>[0]),
+        ) ?? []
+      );
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar leads por status: ${_e.message}`);

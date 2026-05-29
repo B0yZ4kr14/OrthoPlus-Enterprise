@@ -26,12 +26,11 @@ import { useState } from "react";
 
 export const useDatabaseMaintenancePage = () => {
   const queryClient = useQueryClient();
-  const [executingOperation, setExecutingOperation] = useState<string | null>(null);
+  const [executingOperation, setExecutingOperation] = useState<string | null>(
+    null,
+  );
 
-  const {
-    data: stats,
-    isLoading,
-  } = useQuery<DBStats>({
+  const { data: stats, isLoading } = useQuery<DBStats>({
     queryKey: ["database-maintenance-page"],
     queryFn: async () => {
       const data = await apiClient.get<{ health: DBStats }>("/db/health");
@@ -40,16 +39,24 @@ export const useDatabaseMaintenancePage = () => {
   });
 
   const maintenanceMutation = useMutation({
-    mutationFn: async (payload: { operation: string; targetSchema?: string }) => {
+    mutationFn: async (payload: {
+      operation: string;
+      targetSchema?: string;
+    }) => {
       setExecutingOperation(payload.operation);
-      return await apiClient.post<{ message: string }>("/db/maintenance", payload);
+      return await apiClient.post<{ message: string }>(
+        "/db/maintenance",
+        payload,
+      );
     },
     onSettled: () => {
       setExecutingOperation(null);
     },
     onSuccess: (data) => {
       toast.success(data.message);
-      queryClient.invalidateQueries({ queryKey: ["database-maintenance-page"] });
+      queryClient.invalidateQueries({
+        queryKey: ["database-maintenance-page"],
+      });
     },
     onError: () => {
       toast.error("Erro ao executar manutenção");

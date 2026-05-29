@@ -1,12 +1,17 @@
-import { useState } from "react"
-import { useNFes } from "@/modules/faturamento/application/hooks/useNFes"
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card"
-import { Button } from "@orthoplus/core-ui/button"
-import { Input } from "@orthoplus/core-ui/input"
-import { Label } from "@orthoplus/core-ui/label"
-import { LoadingState } from "@/components/shared/LoadingState"
-import { PageHeader } from "@/components/shared/PageHeader"
-import { EmptyState } from "@/components/shared/EmptyState"
+import { useState } from "react";
+import { useNFes } from "@/modules/faturamento/application/hooks/useNFes";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import { Button } from "@orthoplus/core-ui/button";
+import { Input } from "@orthoplus/core-ui/input";
+import { Label } from "@orthoplus/core-ui/label";
+import { LoadingState } from "@/components/shared/LoadingState";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { EmptyState } from "@/components/shared/EmptyState";
 import {
   FileText,
   Search,
@@ -16,7 +21,7 @@ import {
   Clock,
   AlertCircle,
   type LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -24,7 +29,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@orthoplus/core-ui/table"
+} from "@orthoplus/core-ui/table";
 import {
   Dialog,
   DialogContent,
@@ -33,67 +38,88 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@orthoplus/core-ui/dialog"
-import { toast } from "sonner"
+} from "@orthoplus/core-ui/dialog";
+import { toast } from "sonner";
 
 function StatusBadge({ status }: { status: string }) {
-  const config: Record<string, { icon: React.ReactNode; className: string; label: string }> = {
-    PENDENTE: { icon: <Clock className="h-3 w-3" />, className: "bg-warning/10 text-warning", label: "Pendente" },
-    AUTORIZADA: { icon: <CheckCircle2 className="h-3 w-3" />, className: "bg-success/10 text-success", label: "Autorizada" },
-    CANCELADA: { icon: <XCircle className="h-3 w-3" />, className: "bg-destructive/10 text-destructive", label: "Cancelada" },
-    REJEITADA: { icon: <AlertCircle className="h-3 w-3" />, className: "bg-warning/10 text-warning", label: "Rejeitada" },
-  }
+  const config: Record<
+    string,
+    { icon: React.ReactNode; className: string; label: string }
+  > = {
+    PENDENTE: {
+      icon: <Clock className="h-3 w-3" />,
+      className: "bg-warning/10 text-warning",
+      label: "Pendente",
+    },
+    AUTORIZADA: {
+      icon: <CheckCircle2 className="h-3 w-3" />,
+      className: "bg-success/10 text-success",
+      label: "Autorizada",
+    },
+    CANCELADA: {
+      icon: <XCircle className="h-3 w-3" />,
+      className: "bg-destructive/10 text-destructive",
+      label: "Cancelada",
+    },
+    REJEITADA: {
+      icon: <AlertCircle className="h-3 w-3" />,
+      className: "bg-warning/10 text-warning",
+      label: "Rejeitada",
+    },
+  };
 
-  const cfg = config[status] || config.PENDENTE
+  const cfg = config[status] || config.PENDENTE;
 
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${cfg.className}`}>
+    <span
+      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${cfg.className}`}
+    >
       {cfg.icon}
       {cfg.label}
     </span>
-  )
+  );
 }
 
 export default function NFesPage() {
-  const { nfes, isLoading, cancelNFe, isCanceling } = useNFes()
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("TODOS")
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
-  const [selectedNFe, setSelectedNFe] = useState<string | null>(null)
-  const [motivoCancelamento, setMotivoCancelamento] = useState("")
+  const { nfes, isLoading, cancelNFe, isCanceling } = useNFes();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("TODOS");
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [selectedNFe, setSelectedNFe] = useState<string | null>(null);
+  const [motivoCancelamento, setMotivoCancelamento] = useState("");
 
   const filteredNfes = nfes.filter((nfe) => {
     const matchesSearch =
       searchTerm === "" ||
       nfe.numero.toString().includes(searchTerm) ||
-      nfe.chave_acesso.includes(searchTerm)
+      nfe.chave_acesso.includes(searchTerm);
     const matchesStatus =
-      statusFilter === "TODOS" || nfe.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+      statusFilter === "TODOS" || nfe.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   const handleCancel = () => {
-    if (!selectedNFe || !motivoCancelamento.trim()) return
+    if (!selectedNFe || !motivoCancelamento.trim()) return;
     cancelNFe(
       { id: selectedNFe, motivo: motivoCancelamento },
       {
         onSuccess: () => {
-          setCancelDialogOpen(false)
-          setSelectedNFe(null)
-          setMotivoCancelamento("")
+          setCancelDialogOpen(false);
+          setSelectedNFe(null);
+          setMotivoCancelamento("");
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   const openCancelDialog = (id: string) => {
-    setSelectedNFe(id)
-    setMotivoCancelamento("")
-    setCancelDialogOpen(true)
-  }
+    setSelectedNFe(id);
+    setMotivoCancelamento("");
+    setCancelDialogOpen(true);
+  };
 
   if (isLoading) {
-    return <LoadingState message="Carregando notas fiscais..." />
+    return <LoadingState message="Carregando notas fiscais..." />;
   }
 
   return (
@@ -256,5 +282,5 @@ export default function NFesPage() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 import { logger } from "@/infrastructure/logger";
 import { IReportRepository } from "@/modules/relatorios/domain/repositories/IReportRepository";
 
-import { ReportRepository } from "@/modules/relatorios/infrastructure/ReportRepository"
+import { ReportRepository } from "@/modules/relatorios/infrastructure/ReportRepository";
 
 interface ExportOptions {
   includeModules: boolean;
@@ -14,13 +14,17 @@ interface ExportOptions {
 }
 
 export class ReportControllerService {
-  private repo: IReportRepository
+  private repo: IReportRepository;
 
   constructor(repo?: IReportRepository) {
-    this.repo = repo ?? new ReportRepository()
+    this.repo = repo ?? new ReportRepository();
   }
 
-  async exportClinicData(clinicId: string, userId: string, options: ExportOptions) {
+  async exportClinicData(
+    clinicId: string,
+    userId: string,
+    options: ExportOptions,
+  ) {
     const exportData: any = {
       version: "1.0.0",
       exportedAt: new Date().toISOString(),
@@ -30,13 +34,20 @@ export class ReportControllerService {
 
     if (options.includeModules) {
       const clinicModules = await this.repo.findClinicModules(clinicId);
-      const moduleCatalogIds = clinicModules.map((m: { module_catalog_id: number }) => m.module_catalog_id);
-      const moduleCatalogs = await this.repo.findModuleCatalogs(moduleCatalogIds);
+      const moduleCatalogIds = clinicModules.map(
+        (m: { module_catalog_id: number }) => m.module_catalog_id,
+      );
+      const moduleCatalogs =
+        await this.repo.findModuleCatalogs(moduleCatalogIds);
 
-      exportData.data.modules = clinicModules.map((cm: { module_catalog_id: number; [key: string]: unknown }) => ({
-        ...cm,
-        module_catalog: moduleCatalogs.find((mc: { id: number }) => mc.id === cm.module_catalog_id),
-      }));
+      exportData.data.modules = clinicModules.map(
+        (cm: { module_catalog_id: number; [key: string]: unknown }) => ({
+          ...cm,
+          module_catalog: moduleCatalogs.find(
+            (mc: { id: number }) => mc.id === cm.module_catalog_id,
+          ),
+        }),
+      );
     }
 
     if (options.includePatients) {
@@ -50,11 +61,13 @@ export class ReportControllerService {
     }
 
     if (options.includeProntuarios) {
-      exportData.data.prontuarios = await this.repo.findProntuariosByClinic(clinicId);
+      exportData.data.prontuarios =
+        await this.repo.findProntuariosByClinic(clinicId);
     }
 
     if (options.includeAppointments) {
-      exportData.data.appointments = await this.repo.findAppointmentsOrthoByClinic(clinicId);
+      exportData.data.appointments =
+        await this.repo.findAppointmentsOrthoByClinic(clinicId);
     }
 
     if (options.includeFinanceiro) {
@@ -114,14 +127,14 @@ export class ReportControllerService {
       for (const moduleData of importData.data.modules) {
         try {
           const catalogModule = await this.repo.findModuleCatalogByKey(
-            moduleData.module_catalog?.module_key
+            moduleData.module_catalog?.module_key,
           );
 
           if (catalogModule) {
             await this.repo.upsertClinicModule(
               clinicId,
               catalogModule.id,
-              moduleData.is_active
+              moduleData.is_active,
             );
             results.imported.modules++;
           }

@@ -15,7 +15,11 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   return (
     <div className="flex gap-2">
-      <Button onClick={onConfirm} disabled={isSubmitting || !canConfirm} className="flex-1">
+      <Button
+        onClick={onConfirm}
+        disabled={isSubmitting || !canConfirm}
+        className="flex-1"
+      >
         {isSubmitting ? "Salvando..." : "Confirmar Mudança"}
       </Button>
       <Button variant="outline" onClick={onCancel} disabled={isSubmitting}>

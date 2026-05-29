@@ -1,5 +1,10 @@
 // cspell:disable
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { usePrevisaoReposicao } from "./usePrevisaoReposicao";
 import { HeaderSection } from "./HeaderSection";
 import { ActionButtons } from "./ActionButtons";

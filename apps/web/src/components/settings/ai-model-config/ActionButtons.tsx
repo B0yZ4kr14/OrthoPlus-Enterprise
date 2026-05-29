@@ -8,7 +8,11 @@ interface ActionButtonsProps {
   onReload: () => void;
 }
 
-export function ActionButtons({ saving, onSave, onReload }: ActionButtonsProps) {
+export function ActionButtons({
+  saving,
+  onSave,
+  onReload,
+}: ActionButtonsProps) {
   return (
     <div className="flex gap-2">
       <Button onClick={onSave} disabled={saving}>

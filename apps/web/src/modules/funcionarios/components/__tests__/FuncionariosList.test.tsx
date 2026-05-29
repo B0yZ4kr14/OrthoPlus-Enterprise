@@ -1,16 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render, screen, act } from "@testing-library/react"
-import { FuncionariosList } from "../FuncionariosList"
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+import { FuncionariosList } from "../FuncionariosList";
 
-const mockOnEdit = vi.fn()
-const mockOnDelete = vi.fn()
-const mockOnView = vi.fn()
-const mockOnAdd = vi.fn()
+const mockOnEdit = vi.fn();
+const mockOnDelete = vi.fn();
+const mockOnView = vi.fn();
+const mockOnAdd = vi.fn();
 
 // Mock UI components from @orthoplus/core-ui
 vi.mock("@/lib/utils/status.utils", () => ({
   getStatusColor: () => "default",
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/button", () => ({
   Button: ({ children, onClick, title, ...props }: any) => (
@@ -18,7 +18,7 @@ vi.mock("@orthoplus/core-ui/button", () => ({
       {children}
     </button>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/input", () => ({
   Input: ({ value, onChange, placeholder, ...props }: any) => (
@@ -29,7 +29,7 @@ vi.mock("@orthoplus/core-ui/input", () => ({
       {...props}
     />
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/table", () => ({
   Table: ({ children }: any) => <table>{children}</table>,
@@ -42,7 +42,7 @@ vi.mock("@orthoplus/core-ui/table", () => ({
   TableHead: ({ children }: any) => <th>{children}</th>,
   TableHeader: ({ children }: any) => <thead>{children}</thead>,
   TableRow: ({ children }: any) => <tr>{children}</tr>,
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/select", () => ({
   Select: ({ children, value, onValueChange }: any) => (
@@ -53,16 +53,18 @@ vi.mock("@orthoplus/core-ui/select", () => ({
     </div>
   ),
   SelectContent: ({ children }: any) => <>{children}</>,
-  SelectItem: ({ children, value }: any) => <option value={value}>{children}</option>,
+  SelectItem: ({ children, value }: any) => (
+    <option value={value}>{children}</option>
+  ),
   SelectTrigger: ({ children }: any) => <div>{children}</div>,
   SelectValue: ({ placeholder }: any) => <span>{placeholder}</span>,
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/badge", () => ({
   Badge: ({ children, variant }: any) => (
     <span data-variant={variant}>{children}</span>
   ),
-}))
+}));
 
 vi.mock("@orthoplus/core-ui/alert-dialog", () => ({
   AlertDialog: ({ children, open }: any) =>
@@ -82,7 +84,7 @@ vi.mock("@orthoplus/core-ui/alert-dialog", () => ({
   AlertDialogFooter: ({ children }: any) => <div>{children}</div>,
   AlertDialogHeader: ({ children }: any) => <div>{children}</div>,
   AlertDialogTitle: ({ children }: any) => <h2>{children}</h2>,
-}))
+}));
 
 const mockFuncionarios = [
   {
@@ -135,12 +137,12 @@ const mockFuncionarios = [
     horarioTrabalho: { inicio: "08:00", fim: "17:00" },
     diasTrabalho: [1, 2, 3, 4, 5],
   },
-]
+];
 
 describe("FuncionariosList", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it("should render list of funcionarios", () => {
     render(
@@ -151,15 +153,19 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    expect(screen.getByText("João Silva")).toBeTruthy()
-    expect(screen.getByText("Maria Souza")).toBeTruthy()
-    expect(screen.getByText("111.222.333-44")).toBeTruthy()
-    expect(screen.getByText("222.333.444-55")).toBeTruthy()
-    expect(screen.getAllByText("Administrador").length).toBeGreaterThanOrEqual(1)
-    expect(screen.getAllByText("Recepcionista").length).toBeGreaterThanOrEqual(1)
-  })
+    expect(screen.getByText("João Silva")).toBeTruthy();
+    expect(screen.getByText("Maria Souza")).toBeTruthy();
+    expect(screen.getByText("111.222.333-44")).toBeTruthy();
+    expect(screen.getByText("222.333.444-55")).toBeTruthy();
+    expect(screen.getAllByText("Administrador").length).toBeGreaterThanOrEqual(
+      1,
+    );
+    expect(screen.getAllByText("Recepcionista").length).toBeGreaterThanOrEqual(
+      1,
+    );
+  });
 
   it("should render empty state when no funcionarios", () => {
     render(
@@ -170,10 +176,10 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    expect(screen.getByText("Nenhum funcionário encontrado")).toBeTruthy()
-  })
+    expect(screen.getByText("Nenhum funcionário encontrado")).toBeTruthy();
+  });
 
   it("should render results count", () => {
     render(
@@ -184,10 +190,10 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    expect(screen.getByText("2 funcionário(s) encontrado(s)")).toBeTruthy()
-  })
+    expect(screen.getByText("2 funcionário(s) encontrado(s)")).toBeTruthy();
+  });
 
   it("should call onAdd when clicking Novo Funcionário", () => {
     render(
@@ -198,15 +204,15 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const addButton = screen.getByText("Novo Funcionário")
+    const addButton = screen.getByText("Novo Funcionário");
     act(() => {
-      addButton.click()
-    })
+      addButton.click();
+    });
 
-    expect(mockOnAdd).toHaveBeenCalledTimes(1)
-  })
+    expect(mockOnAdd).toHaveBeenCalledTimes(1);
+  });
 
   it("should call onView when clicking view button", () => {
     render(
@@ -217,18 +223,18 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const viewButtons = screen.getAllByTitle("Visualizar")
+    const viewButtons = screen.getAllByTitle("Visualizar");
     act(() => {
-      viewButtons[0].click()
-    })
+      viewButtons[0].click();
+    });
 
-    expect(mockOnView).toHaveBeenCalledTimes(1)
+    expect(mockOnView).toHaveBeenCalledTimes(1);
     expect(mockOnView).toHaveBeenCalledWith(
       expect.objectContaining({ id: "f1", nome: "João Silva" }),
-    )
-  })
+    );
+  });
 
   it("should call onEdit when clicking edit button", () => {
     render(
@@ -239,18 +245,18 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const editButtons = screen.getAllByTitle("Editar")
+    const editButtons = screen.getAllByTitle("Editar");
     act(() => {
-      editButtons[1].click()
-    })
+      editButtons[1].click();
+    });
 
-    expect(mockOnEdit).toHaveBeenCalledTimes(1)
+    expect(mockOnEdit).toHaveBeenCalledTimes(1);
     expect(mockOnEdit).toHaveBeenCalledWith(
       expect.objectContaining({ id: "f2", nome: "Maria Souza" }),
-    )
-  })
+    );
+  });
 
   it("should show delete confirmation dialog and call onDelete when confirmed", () => {
     render(
@@ -261,30 +267,30 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
     // Click delete button for first funcionario
-    const deleteButtons = screen.getAllByTitle("Excluir")
+    const deleteButtons = screen.getAllByTitle("Excluir");
     act(() => {
-      deleteButtons[0].click()
-    })
+      deleteButtons[0].click();
+    });
 
     // Dialog should be open
-    expect(screen.getByTestId("alert-dialog")).toBeTruthy()
-    expect(screen.getByText("Confirmar exclusão")).toBeTruthy()
+    expect(screen.getByTestId("alert-dialog")).toBeTruthy();
+    expect(screen.getByText("Confirmar exclusão")).toBeTruthy();
 
     // Click confirm
-    const confirmButton = screen.getByTestId("alert-action")
+    const confirmButton = screen.getByTestId("alert-action");
     act(() => {
-      confirmButton.click()
-    })
+      confirmButton.click();
+    });
 
-    expect(mockOnDelete).toHaveBeenCalledTimes(1)
-    expect(mockOnDelete).toHaveBeenCalledWith("f1")
+    expect(mockOnDelete).toHaveBeenCalledTimes(1);
+    expect(mockOnDelete).toHaveBeenCalledWith("f1");
 
     // Dialog should be closed (no longer rendered)
-    expect(screen.queryByTestId("alert-dialog")).toBeNull()
-  })
+    expect(screen.queryByTestId("alert-dialog")).toBeNull();
+  });
 
   it("should not call onDelete when clicking cancelar", () => {
     render(
@@ -295,23 +301,23 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
-    const deleteButtons = screen.getAllByTitle("Excluir")
+    const deleteButtons = screen.getAllByTitle("Excluir");
     act(() => {
-      deleteButtons[0].click()
-    })
+      deleteButtons[0].click();
+    });
 
-    expect(screen.getByTestId("alert-dialog")).toBeTruthy()
+    expect(screen.getByTestId("alert-dialog")).toBeTruthy();
 
-    const cancelButton = screen.getByTestId("alert-cancel")
+    const cancelButton = screen.getByTestId("alert-cancel");
     act(() => {
-      cancelButton.click()
-    })
+      cancelButton.click();
+    });
 
-    expect(mockOnDelete).not.toHaveBeenCalled()
+    expect(mockOnDelete).not.toHaveBeenCalled();
     // Note: dialog close is handled by Radix UI internals not fully mocked here
-  })
+  });
 
   it("should filter funcionarios by search input", async () => {
     render(
@@ -322,19 +328,19 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
     const searchInput = screen.getByPlaceholderText(
       "Buscar por nome, CPF, email...",
-    )
+    );
 
     await act(async () => {
-      searchInput.setAttribute("value", "Maria")
-      searchInput.dispatchEvent(new Event("input", { bubbles: true }))
-    })
+      searchInput.setAttribute("value", "Maria");
+      searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+    });
 
-    expect(searchInput.getAttribute("value")).toBe("Maria")
-  })
+    expect(searchInput.getAttribute("value")).toBe("Maria");
+  });
 
   it("should filter funcionarios to empty when search has no matches", async () => {
     render(
@@ -345,19 +351,19 @@ describe("FuncionariosList", () => {
         onView={mockOnView}
         onAdd={mockOnAdd}
       />,
-    )
+    );
 
     const searchInput = screen.getByPlaceholderText(
       "Buscar por nome, CPF, email...",
-    )
+    );
 
     await act(async () => {
-      searchInput.setAttribute("value", "zzzzz")
-      searchInput.dispatchEvent(new Event("input", { bubbles: true }))
-    })
+      searchInput.setAttribute("value", "zzzzz");
+      searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+    });
 
     // After filtering, empty state should appear
-    expect(screen.getByText("Nenhum funcionário encontrado")).toBeTruthy()
-    expect(screen.getByText("0 funcionário(s) encontrado(s)")).toBeTruthy()
-  })
-})
+    expect(screen.getByText("Nenhum funcionário encontrado")).toBeTruthy();
+    expect(screen.getByText("0 funcionário(s) encontrado(s)")).toBeTruthy();
+  });
+});

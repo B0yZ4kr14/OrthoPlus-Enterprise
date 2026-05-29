@@ -116,10 +116,10 @@ export default function Usuarios() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={KeyRound} 
-        title="Usuários" 
-        description="Gerenciamento de acessos e permissões" 
+      <PageHeader
+        icon={KeyRound}
+        title="Usuários"
+        description="Gerenciamento de acessos e permissões"
         actions={
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -146,7 +146,7 @@ export default function Usuarios() {
               />
             </DialogContent>
           </Dialog>
-        } 
+        }
       />
 
       <div className="grid gap-4 md:grid-cols-3">

@@ -1,6 +1,11 @@
 // cspell:disable
 import { Card } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   LineChart,
   Line,
@@ -52,7 +57,7 @@ export function ChartsSection({
               <XAxis dataKey="mes" />
               <YAxis domain={[0, 100]} />
               <Tooltip />
-              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Line
                 type="monotone"
                 dataKey="acuracidade"
@@ -83,7 +88,7 @@ export function ChartsSection({
               <XAxis dataKey="mes" />
               <YAxis />
               <Tooltip />
-              <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
               <Bar
                 dataKey="perdas"
                 fill="hsl(var(--destructive))"

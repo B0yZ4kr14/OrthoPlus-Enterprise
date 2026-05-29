@@ -11,7 +11,14 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Calendar } from "@orthoplus/core-ui/calendar";
-import { Bell, CheckCircle, Clock, XCircle, MessageSquare, Megaphone } from "lucide-react";
+import {
+  Bell,
+  CheckCircle,
+  Clock,
+  XCircle,
+  MessageSquare,
+  Megaphone,
+} from "lucide-react";
 import { format, addDays, isAfter, isBefore } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
@@ -36,11 +43,14 @@ export default function RecallPage() {
   const { data: recalls = [], isLoading } = useQuery({
     queryKey: ["recalls"],
     queryFn: async () => {
-      const data: Record<string, any> = await apiClient.get("/marketing/recalls", {
-        params: {
-          sort: "data_prevista.asc",
+      const data: Record<string, any> = await apiClient.get(
+        "/marketing/recalls",
+        {
+          params: {
+            sort: "data_prevista.asc",
+          },
         },
-      });
+      );
 
       return data as Recall[];
     },
@@ -89,7 +99,22 @@ export default function RecallPage() {
   });
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, { variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "error" | "info"; icon: React.ComponentType<{ className?: string }>; label: string }> = {
+    const config: Record<
+      string,
+      {
+        variant:
+          | "default"
+          | "secondary"
+          | "destructive"
+          | "outline"
+          | "success"
+          | "warning"
+          | "error"
+          | "info";
+        icon: React.ComponentType<{ className?: string }>;
+        label: string;
+      }
+    > = {
       PENDENTE: { variant: "secondary", icon: Clock, label: "Pendente" },
       AGENDADO: { variant: "default", icon: Calendar, label: "Agendado" },
       CONFIRMADO: {
@@ -113,10 +138,10 @@ export default function RecallPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={Megaphone} 
-        title="Recall de Pacientes" 
-        description="Gerenciamento de lembretes e retornos" 
+      <PageHeader
+        icon={Megaphone}
+        title="Recall de Pacientes"
+        description="Gerenciamento de lembretes e retornos"
       />
 
       {/* Stats Cards */}

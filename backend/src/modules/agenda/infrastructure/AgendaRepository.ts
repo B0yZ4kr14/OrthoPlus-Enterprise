@@ -19,7 +19,7 @@ export class AgendaRepository implements IAgendaRepository {
       patientId?: string;
       status?: AppointmentStatusFilter;
       startTime?: AppointmentTimeFilter;
-    }
+    },
   ) {
     return prisma.appointments.findMany({
       where: {
@@ -40,10 +40,7 @@ export class AgendaRepository implements IAgendaRepository {
     });
   }
 
-  async updateAppointment(
-    id: string,
-    data: Prisma.appointmentsUpdateInput
-  ) {
+  async updateAppointment(id: string, data: Prisma.appointmentsUpdateInput) {
     return prisma.appointments.update({ where: { id }, data });
   }
 
@@ -56,7 +53,7 @@ export class AgendaRepository implements IAgendaRepository {
     dentistId: string,
     startIso: string,
     endIso: string,
-    excludeId?: string
+    excludeId?: string,
   ) {
     return prisma.appointments.findMany({
       where: {
@@ -77,7 +74,7 @@ export class AgendaRepository implements IAgendaRepository {
 
   async findConfirmationsByAppointmentIds(
     appointmentIds: string[],
-    status?: string
+    status?: string,
   ) {
     const where: Prisma.appointment_confirmationsWhereInput = {
       appointment_id: { in: appointmentIds },
@@ -99,7 +96,7 @@ export class AgendaRepository implements IAgendaRepository {
 
   async updateConfirmation(
     id: string,
-    data: Prisma.appointment_confirmationsUpdateInput
+    data: Prisma.appointment_confirmationsUpdateInput,
   ) {
     return prisma.appointment_confirmations.update({ where: { id }, data });
   }
@@ -116,7 +113,7 @@ export class AgendaRepository implements IAgendaRepository {
       dentistId?: string;
       endDatetime?: Prisma.StringFilter<"blocked_times">;
       startDatetime?: Prisma.StringFilter<"blocked_times">;
-    }
+    },
   ) {
     return prisma.blocked_times.findMany({
       where: {
@@ -153,7 +150,7 @@ export class AgendaRepository implements IAgendaRepository {
       dentistId?: string;
       dayOfWeek?: number;
       isActive?: boolean;
-    }
+    },
   ) {
     return prisma.dentist_schedules.findMany({
       where: {
@@ -182,7 +179,7 @@ export class AgendaRepository implements IAgendaRepository {
 
   async updateDentistSchedule(
     id: string,
-    data: Prisma.dentist_schedulesUpdateInput
+    data: Prisma.dentist_schedulesUpdateInput,
   ) {
     return prisma.dentist_schedules.update({ where: { id }, data });
   }

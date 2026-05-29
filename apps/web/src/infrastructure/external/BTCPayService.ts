@@ -49,8 +49,7 @@ export class BTCPayService {
 
   constructor() {
     // Configurações virão de secrets/env
-    this.baseUrl =
-      process.env.BTCPAY_SERVER_URL || "";
+    this.baseUrl = process.env.BTCPAY_SERVER_URL || "";
     this.storeId = process.env.BTCPAY_STORE_ID || "";
     this.apiKey = process.env.BTCPAY_API_KEY || "";
   }

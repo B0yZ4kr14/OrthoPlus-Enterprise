@@ -19,8 +19,8 @@ export function HeaderSection({
         Previsão Inteligente de Reposição (IA)
       </h3>
       <p className="text-sm text-muted-foreground">
-        Análise preditiva usando machine learning baseada em padrões
-        históricos de consumo
+        Análise preditiva usando machine learning baseada em padrões históricos
+        de consumo
       </p>
       <Button
         onClick={onGerarPrevisoes}

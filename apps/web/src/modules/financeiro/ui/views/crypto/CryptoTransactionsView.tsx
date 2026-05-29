@@ -71,9 +71,10 @@ export function CryptoTransactionsView({
               configurar uma exchange (Binance, Coinbase, etc.)
             </p>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto mt-4">
-              <strong>Dica:</strong> Você pode gerar suas credenciais API na seção
-              de API Management da sua conta na exchange. Certifique-se de habilitar
-              apenas as permissões necessárias (leitura de saldo e histórico).
+              <strong>Dica:</strong> Você pode gerar suas credenciais API na
+              seção de API Management da sua conta na exchange. Certifique-se de
+              habilitar apenas as permissões necessárias (leitura de saldo e
+              histórico).
             </p>
           </div>
           <div className="flex justify-center gap-4">
@@ -202,7 +203,9 @@ export function CryptoTransactionsView({
                         </p>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Valor BRL:</span>
+                        <span className="text-muted-foreground">
+                          Valor BRL:
+                        </span>
                         <p className="font-semibold">
                           R${" "}
                           {tx.amount_brl?.toLocaleString("pt-BR", {
@@ -262,7 +265,9 @@ export function CryptoTransactionsView({
 
                     {tx.patient_name && (
                       <div className="text-sm">
-                        <span className="text-muted-foreground">Paciente: </span>
+                        <span className="text-muted-foreground">
+                          Paciente:{" "}
+                        </span>
                         <span className="font-medium">{tx.patient_name}</span>
                       </div>
                     )}

@@ -14,7 +14,9 @@ interface ModulesListProps {
 }
 
 export function ModulesList({ modules, toggling, onToggle }: ModulesListProps) {
-  const categorizedModules = groupModulesByCategory(modules as unknown as import("@/core/config/modules.config").Module[]);
+  const categorizedModules = groupModulesByCategory(
+    modules as unknown as import("@/core/config/modules.config").Module[],
+  );
 
   return (
     <div className="space-y-8">

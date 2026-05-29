@@ -25,7 +25,8 @@ export function useRadiografiaComparison(analises: AnaliseComplete[]) {
         patientName: analisesArr[0]?.paciente_name || "Paciente",
         analises: analisesArr.sort(
           (a, b) =>
-            new Date(b.created_at ?? "").getTime() - new Date(a.created_at ?? "").getTime(),
+            new Date(b.created_at ?? "").getTime() -
+            new Date(a.created_at ?? "").getTime(),
         ),
       }));
   }, [analises]);
@@ -62,26 +63,42 @@ export function useRadiografiaComparison(analises: AnaliseComplete[]) {
     return {
       problemas: {
         valor: diferencaProblemas,
-        percentual: problemas1 > 0 ? ((diferencaProblemas / problemas1) * 100).toFixed(1) : "0",
+        percentual:
+          problemas1 > 0
+            ? ((diferencaProblemas / problemas1) * 100).toFixed(1)
+            : "0",
         tendencia:
-          diferencaProblemas > 0 ? "aumentou" : diferencaProblemas < 0 ? "diminuiu" : "manteve",
+          diferencaProblemas > 0
+            ? "aumentou"
+            : diferencaProblemas < 0
+              ? "diminuiu"
+              : "manteve",
       },
       precisao: {
         valor: diferencaPrecisao.toFixed(1),
         tendencia:
-          diferencaPrecisao > 0 ? "melhorou" : diferencaPrecisao < 0 ? "piorou" : "manteve",
+          diferencaPrecisao > 0
+            ? "melhorou"
+            : diferencaPrecisao < 0
+              ? "piorou"
+              : "manteve",
       },
       diasEntre,
     };
   }, [analise1, analise2]);
 
-  const handlePacienteSelect = useCallback((patientId: string) => {
-    const paciente = analisesPorPaciente.find((p) => p.patientId === patientId);
-    if (paciente && paciente.analises.length >= 2) {
-      setAnalise1Id(paciente.analises[0].id ?? "");
-      setAnalise2Id(paciente.analises[1].id ?? "");
-    }
-  }, [analisesPorPaciente]);
+  const handlePacienteSelect = useCallback(
+    (patientId: string) => {
+      const paciente = analisesPorPaciente.find(
+        (p) => p.patientId === patientId,
+      );
+      if (paciente && paciente.analises.length >= 2) {
+        setAnalise1Id(paciente.analises[0].id ?? "");
+        setAnalise2Id(paciente.analises[1].id ?? "");
+      }
+    },
+    [analisesPorPaciente],
+  );
 
   return {
     analise1Id,

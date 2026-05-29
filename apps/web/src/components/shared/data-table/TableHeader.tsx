@@ -32,7 +32,10 @@ export function DataTableHeader<T extends Record<string, unknown>>({
             className="p-4 border-b-0 bg-muted/50"
           >
             <div className="relative max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <Search
+                className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
+              />
               <Input
                 placeholder="Buscar..."
                 value={searchTerm}
@@ -58,7 +61,11 @@ export function DataTableHeader<T extends Record<string, unknown>>({
                   : "descending"
                 : undefined
             }
-            aria-label={column.sortable ? `${String(column.header)} — Clique para ordenar` : undefined}
+            aria-label={
+              column.sortable
+                ? `${String(column.header)} — Clique para ordenar`
+                : undefined
+            }
           >
             <div className="flex items-center gap-1">
               {column.header}

@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import {
   Select,
@@ -52,13 +57,10 @@ export function BackupExportTab() {
   const handleExport = async () => {
     setIsExporting(true);
     try {
-      const data = await apiClient.post<unknown>(
-        "/modules/export-data",
-        {
-          clinic_id: clinicId,
-          format: selectedFormat,
-        },
-      );
+      const data = await apiClient.post<unknown>("/modules/export-data", {
+        clinic_id: clinicId,
+        format: selectedFormat,
+      });
 
       const blob = new Blob([JSON.stringify(data)], {
         type: selectedFormat === "json" ? "application/json" : "text/csv",

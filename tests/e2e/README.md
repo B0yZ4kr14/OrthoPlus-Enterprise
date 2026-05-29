@@ -93,6 +93,7 @@ npx playwright show-report
 ### playwright.config.ts
 
 Configurações principais:
+
 - **Base URL**: `http://localhost:5173`
 - **Timeout**: 30 segundos por teste
 - **Retries**: 2 tentativas em CI, 0 localmente
@@ -112,6 +113,7 @@ Configurações principais:
 ## Cobertura de Testes
 
 ### 1. Autenticação (`auth.spec.ts`)
+
 - ✅ Exibição da página de login
 - ✅ Login com credenciais válidas
 - ✅ Erro com credenciais inválidas
@@ -119,6 +121,7 @@ Configurações principais:
 - ✅ Proteção de rotas privadas
 
 ### 2. Gestão de Pacientes (`pacientes.spec.ts`)
+
 - ✅ Listagem de pacientes
 - ✅ Busca por nome
 - ✅ Criação de paciente
@@ -127,6 +130,7 @@ Configurações principais:
 - ✅ Filtro por status
 
 ### 3. Módulo PEP (`pep.spec.ts`)
+
 - ✅ Exibição de abas
 - ✅ Preenchimento de histórico clínico
 - ✅ Criação de tratamentos
@@ -136,6 +140,7 @@ Configurações principais:
 - ✅ Visualização de histórico
 
 ### 4. Módulo Financeiro (`financeiro.spec.ts`)
+
 - ✅ Resumo financeiro
 - ✅ Gráficos
 - ✅ Criação de receita
@@ -146,6 +151,7 @@ Configurações principais:
 - ✅ Cálculo de totais
 
 ### 5. Gestão de Módulos (`modules-management.spec.ts`)
+
 - ✅ Catálogo de módulos
 - ✅ Agrupamento por categoria
 - ✅ Ativação de módulo
@@ -156,11 +162,13 @@ Configurações principais:
 - ✅ Solicitação de novos módulos
 
 ### 6. Fluxo Integrado (`workflow-integration.spec.ts`)
+
 - ✅ Fluxo completo: Paciente → PEP → Tratamento → Financeiro
 - ✅ Consistência de dados entre módulos
 - ✅ Preservação de dados na navegação
 
 ### 7. Acessibilidade (`accessibility.spec.ts`)
+
 - ✅ Análise automática com axe-core
 - ✅ Navegação por teclado
 - ✅ Labels em formulários
@@ -184,6 +192,7 @@ O workflow `.github/workflows/e2e-tests.yml` executa automaticamente:
 ### Acessar Relatórios
 
 Após execução no GitHub Actions:
+
 1. Vá para a aba "Actions" do repositório
 2. Clique no workflow run desejado
 3. Baixe os artefatos na seção "Artifacts"
@@ -193,45 +202,52 @@ Após execução no GitHub Actions:
 ### 1. Seletores
 
 ✅ **BOM - Use ARIA roles e labels:**
+
 ```typescript
-page.getByRole('button', { name: /salvar/i })
-page.getByLabel(/email/i)
-page.getByText('Paciente Teste')
+page.getByRole("button", { name: /salvar/i });
+page.getByLabel(/email/i);
+page.getByText("Paciente Teste");
 ```
 
 ❌ **RUIM - Evite seletores frágeis:**
+
 ```typescript
-page.locator('.css-class-123')
-page.locator('#unique-id')
+page.locator(".css-class-123");
+page.locator("#unique-id");
 ```
 
 ### 2. Esperas
 
 ✅ **BOM - Esperas automáticas:**
+
 ```typescript
-await expect(page.getByText('Sucesso')).toBeVisible()
+await expect(page.getByText("Sucesso")).toBeVisible();
 ```
 
 ❌ **RUIM - Timeouts fixos:**
+
 ```typescript
-await page.waitForTimeout(3000)
+await page.waitForTimeout(3000);
 ```
 
 ### 3. Dados de Teste
 
 ✅ **BOM - Dados únicos:**
+
 ```typescript
 const patientName = `Paciente Teste ${Date.now()}`;
 ```
 
 ❌ **RUIM - Dados hardcoded:**
+
 ```typescript
-const patientName = 'João Silva';
+const patientName = "João Silva";
 ```
 
 ### 4. Limpeza
 
 ✅ **BOM - Limpar dados após teste:**
+
 ```typescript
 test.afterEach(async () => {
   // Deletar dados criados
@@ -241,6 +257,7 @@ test.afterEach(async () => {
 ### 5. Isolamento
 
 ✅ **BOM - Testes independentes:**
+
 ```typescript
 test.beforeEach(async ({ page }) => {
   // Configurar estado inicial
@@ -248,6 +265,7 @@ test.beforeEach(async ({ page }) => {
 ```
 
 ❌ **RUIM - Testes dependentes:**
+
 ```typescript
 // Teste 1 cria dados
 // Teste 2 depende dos dados do Teste 1
@@ -278,6 +296,7 @@ npx playwright show-trace trace.zip
 ### Screenshots e Vídeos
 
 Localizados em `test-results/`:
+
 ```
 test-results/
 ├── auth-login-chromium/
@@ -323,14 +342,14 @@ await page.pause();
 ### Template de Teste
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Nome do Módulo', () => {
+test.describe("Nome do Módulo", () => {
   test.beforeEach(async ({ page }) => {
     // Setup comum
   });
 
-  test('deve realizar ação X', async ({ page }) => {
+  test("deve realizar ação X", async ({ page }) => {
     // Arrange
     // Act
     // Assert
@@ -348,6 +367,7 @@ test.describe('Nome do Módulo', () => {
 ## Suporte
 
 Para problemas ou dúvidas sobre os testes E2E, consulte:
+
 1. Esta documentação
 2. Logs de execução no CI
 3. [Issues do Playwright](https://github.com/microsoft/playwright/issues)

@@ -1,5 +1,10 @@
 import { ContaPagar } from "@/domain/entities/ContaPagar";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
@@ -87,13 +92,11 @@ export function ContasPagarList({
                   }).format(conta.valor)}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Vencimento:{" "}
-                  {formatDate(conta.dataVencimento)}
+                  Vencimento: {formatDate(conta.dataVencimento)}
                 </p>
                 {conta.dataPagamento && (
                   <p className="text-sm text-success">
-                    Pago em:{" "}
-                    {formatDate(conta.dataPagamento)}
+                    Pago em: {formatDate(conta.dataPagamento)}
                   </p>
                 )}
               </div>

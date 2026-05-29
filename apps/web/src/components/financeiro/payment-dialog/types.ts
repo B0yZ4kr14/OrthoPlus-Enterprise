@@ -1,6 +1,10 @@
 import type { ContaReceber } from "@/modules/financeiro/types/financeiro-completo.types";
 
-export type PaymentMethod = "PIX" | "CARTAO_CREDITO" | "CARTAO_DEBITO" | "CRYPTO";
+export type PaymentMethod =
+  | "PIX"
+  | "CARTAO_CREDITO"
+  | "CARTAO_DEBITO"
+  | "CRYPTO";
 
 export interface PaymentDialogProps {
   open: boolean;

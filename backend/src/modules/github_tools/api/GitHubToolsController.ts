@@ -3,17 +3,17 @@
  * API para integração com GitHub (repos, branches, PRs, workflows)
  */
 
-import { Request, Response } from 'express';
-import { z } from 'zod';
-import { logger } from '@/infrastructure/logger';
-import { GitHubRepository } from '../domain/entities/GitHubRepository';
+import { Request, Response } from "express";
+import { z } from "zod";
+import { logger } from "@/infrastructure/logger";
+import { GitHubRepository } from "../domain/entities/GitHubRepository";
 
 export class GitHubToolsController {
   async listRepositories(req: Request, res: Response): Promise<void> {
     try {
       const clinicId = req.user?.clinicId;
       if (!clinicId) {
-        res.status(401).json({ error: 'Não autenticado' });
+        res.status(401).json({ error: "Não autenticado" });
         return;
       }
 
@@ -22,12 +22,12 @@ export class GitHubToolsController {
         new GitHubRepository({
           id: crypto.randomUUID(),
           clinicId,
-          repoName: 'ortho-plus-main',
-          repoUrl: 'https://github.com/clinic/ortho-plus-main',
-          defaultBranch: 'main',
+          repoName: "ortho-plus-main",
+          repoUrl: "https://github.com/clinic/ortho-plus-main",
+          defaultBranch: "main",
           isPrivate: true,
-          accessToken: 'encrypted_token',
-          webhookSecret: 'encrypted_secret',
+          accessToken: "encrypted_token",
+          webhookSecret: "encrypted_secret",
           lastSyncAt: new Date(),
           isActive: true,
           createdAt: new Date(),
@@ -36,11 +36,11 @@ export class GitHubToolsController {
       ];
 
       res.json({
-        repositories: repos.map(r => r.toJSON()),
+        repositories: repos.map((r) => r.toJSON()),
       });
     } catch (error) {
-      logger.error('Error listing repositories:', error);
-      res.status(500).json({ error: 'Erro ao listar repositórios' });
+      logger.error("Error listing repositories:", error);
+      res.status(500).json({ error: "Erro ao listar repositórios" });
     }
   }
 
@@ -50,14 +50,14 @@ export class GitHubToolsController {
         repoName: z.string().min(1),
         repoUrl: z.string().url(),
         accessToken: z.string().min(10),
-        defaultBranch: z.string().default('main'),
+        defaultBranch: z.string().default("main"),
       });
 
       const data = schema.parse(req.body);
       const clinicId = req.user?.clinicId;
 
-      if (!clinicId || req.user?.role !== 'ADMIN') {
-        res.status(403).json({ error: 'Acesso negado' });
+      if (!clinicId || req.user?.role !== "ADMIN") {
+        res.status(403).json({ error: "Acesso negado" });
         return;
       }
 
@@ -78,15 +78,17 @@ export class GitHubToolsController {
 
       res.status(201).json({
         repository: repo.toJSON(),
-        message: 'Repositório conectado com sucesso',
+        message: "Repositório conectado com sucesso",
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        res.status(400).json({ error: 'Dados inválidos', details: error.errors });
+        res
+          .status(400)
+          .json({ error: "Dados inválidos", details: error.errors });
         return;
       }
-      logger.error('Error connecting repository:', error);
-      res.status(500).json({ error: 'Erro ao conectar repositório' });
+      logger.error("Error connecting repository:", error);
+      res.status(500).json({ error: "Erro ao conectar repositório" });
     }
   }
 
@@ -96,21 +98,33 @@ export class GitHubToolsController {
       const clinicId = req.user?.clinicId;
 
       if (!clinicId) {
-        res.status(401).json({ error: 'Não autenticado' });
+        res.status(401).json({ error: "Não autenticado" });
         return;
       }
 
       // Mock branches
       const branches = [
-        { name: 'main', lastCommit: 'feat: add patient module', lastUpdated: new Date() },
-        { name: 'develop', lastCommit: 'fix: resolve bug in billing', lastUpdated: new Date() },
-        { name: 'feature/new-dashboard', lastCommit: 'wip: dashboard redesign', lastUpdated: new Date() },
+        {
+          name: "main",
+          lastCommit: "feat: add patient module",
+          lastUpdated: new Date(),
+        },
+        {
+          name: "develop",
+          lastCommit: "fix: resolve bug in billing",
+          lastUpdated: new Date(),
+        },
+        {
+          name: "feature/new-dashboard",
+          lastCommit: "wip: dashboard redesign",
+          lastUpdated: new Date(),
+        },
       ];
 
       res.json({ repoId, branches });
     } catch (error) {
-      logger.error('Error getting branches:', error);
-      res.status(500).json({ error: 'Erro ao obter branches' });
+      logger.error("Error getting branches:", error);
+      res.status(500).json({ error: "Erro ao obter branches" });
     }
   }
 
@@ -120,7 +134,7 @@ export class GitHubToolsController {
       const clinicId = req.user?.clinicId;
 
       if (!clinicId) {
-        res.status(401).json({ error: 'Não autenticado' });
+        res.status(401).json({ error: "Não autenticado" });
         return;
       }
 
@@ -128,17 +142,17 @@ export class GitHubToolsController {
       const pullRequests = [
         {
           id: 123,
-          title: 'Add backup module',
-          state: 'OPEN',
-          author: 'dev-team',
+          title: "Add backup module",
+          state: "OPEN",
+          author: "dev-team",
           createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
           mergedAt: null,
         },
         {
           id: 122,
-          title: 'Fix crypto integration',
-          state: 'MERGED',
-          author: 'dev-team',
+          title: "Fix crypto integration",
+          state: "MERGED",
+          author: "dev-team",
           createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
           mergedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
         },
@@ -146,8 +160,8 @@ export class GitHubToolsController {
 
       res.json({ repoId, pullRequests });
     } catch (error) {
-      logger.error('Error getting pull requests:', error);
-      res.status(500).json({ error: 'Erro ao obter pull requests' });
+      logger.error("Error getting pull requests:", error);
+      res.status(500).json({ error: "Erro ao obter pull requests" });
     }
   }
 
@@ -157,7 +171,7 @@ export class GitHubToolsController {
       const clinicId = req.user?.clinicId;
 
       if (!clinicId) {
-        res.status(401).json({ error: 'Não autenticado' });
+        res.status(401).json({ error: "Não autenticado" });
         return;
       }
 
@@ -165,15 +179,15 @@ export class GitHubToolsController {
       const workflows = [
         {
           id: 1,
-          name: 'CI/CD Pipeline',
-          status: 'SUCCESS',
+          name: "CI/CD Pipeline",
+          status: "SUCCESS",
           lastRun: new Date(),
           duration: 180,
         },
         {
           id: 2,
-          name: 'Deploy to Production',
-          status: 'SUCCESS',
+          name: "Deploy to Production",
+          status: "SUCCESS",
           lastRun: new Date(Date.now() - 24 * 60 * 60 * 1000),
           duration: 300,
         },
@@ -181,8 +195,8 @@ export class GitHubToolsController {
 
       res.json({ repoId, workflows });
     } catch (error) {
-      logger.error('Error getting workflows:', error);
-      res.status(500).json({ error: 'Erro ao obter workflows' });
+      logger.error("Error getting workflows:", error);
+      res.status(500).json({ error: "Erro ao obter workflows" });
     }
   }
 }

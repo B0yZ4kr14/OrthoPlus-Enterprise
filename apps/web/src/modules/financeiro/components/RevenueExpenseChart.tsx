@@ -65,7 +65,7 @@ export function RevenueExpenseChart({ data }: RevenueExpenseChartProps) {
               tickFormatter={(value) => `R$ ${value / 1000}k`}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar
               dataKey="revenue"
               fill="hsl(var(--primary))"

@@ -10,7 +10,12 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
   FileHeart,
@@ -69,7 +74,8 @@ export default function QuickChart() {
           </Button>
           <div>
             <h1 className="text-2xl font-bold">
-              {(patient as { patient_name?: string })?.patient_name || "Carregando..."}
+              {(patient as { patient_name?: string })?.patient_name ||
+                "Carregando..."}
             </h1>
             <p className="text-sm text-muted-foreground">
               Quick Chart - Atendimento Rápido
@@ -200,18 +206,27 @@ export default function QuickChart() {
                       <Card key={(trat as { id: string }).id}>
                         <CardHeader>
                           <CardTitle className="text-base">
-                            {(trat as { procedimento?: { nome?: string } }).procedimento?.nome || "Procedimento"}
+                            {(trat as { procedimento?: { nome?: string } })
+                              .procedimento?.nome || "Procedimento"}
                           </CardTitle>
                           <CardDescription>
                             Código TUSS:{" "}
-                            {(trat as { procedimento?: { codigo_tuss?: string } }).procedimento?.codigo_tuss || "N/A"}
+                            {(
+                              trat as {
+                                procedimento?: { codigo_tuss?: string };
+                              }
+                            ).procedimento?.codigo_tuss || "N/A"}
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center justify-between">
-                            <Badge>{(trat as { status?: string }).status}</Badge>
+                            <Badge>
+                              {(trat as { status?: string }).status}
+                            </Badge>
                             <span className="text-sm text-muted-foreground">
-                              Dente: {(trat as { dente?: string }).dente || "Múltiplos"}
+                              Dente:{" "}
+                              {(trat as { dente?: string }).dente ||
+                                "Múltiplos"}
                             </span>
                           </div>
                         </CardContent>

@@ -8,7 +8,10 @@ interface EquipamentoInputsProps {
   onChange: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }
 
-export function EquipamentoInputs({ formData, onChange }: EquipamentoInputsProps) {
+export function EquipamentoInputs({
+  formData,
+  onChange,
+}: EquipamentoInputsProps) {
   return (
     <>
       <div className="space-y-2">

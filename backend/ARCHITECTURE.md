@@ -32,45 +32,46 @@
 
 ## Backend Modules (35)
 
-| # | Domain | Module | Controller | Prisma | Router |
-|---|--------|--------|------------|--------|--------|
-| 1 | Agenda | `agenda` | ✅ | ✅ | ✅ |
-| 2 | Analytics | `analytics` | ✅ | ⚠️ | ✅ |
-| 3 | Auth | `auth` | ✅ | ⚠️ | ✅ |
-| 4 | Backups | `backups` | ✅ | ❌ | ✅ |
-| 5 | BI | `bi` | ❌ | ❌ | ✅ |
-| 6 | Communication | `comm` | ✅ | ❌ | ✅ |
-| 7 | Config | `configuracoes` | ✅ | ❌ | ✅ |
-| 8 | Contracts | `contratos` | ✅ | ❌ | ✅ |
-| 9 | CRM | `crm` | ✅ | ❌ | ✅ |
-| 10 | Crypto Config | `crypto_config` | ✅ | ✅ | ✅ |
-| 11 | Dashboard | `dashboard` | ✅ | ✅ | ✅ |
-| 12 | Database Admin | `database_admin` | ✅ | ✅ | ✅ |
-| 13 | Billing | `faturamento` | ✅ | ⚠️ | ✅ |
-| 14 | Loyalty | `fidelidade` | ❌ | ❌ | ✅ |
-| 15 | Files | `files` | ✅ | ✅ | ✅ |
-| 16 | Finance | `financeiro` | ✅ | ✅ | ✅ |
-| 17 | Employees | `funcionarios` | ❌ | ❌ | ✅ |
-| 18 | GitHub Tools | `github_tools` | ✅ | ❌ | ✅ |
-| 19 | Collections | `inadimplencia` | ❌ | ❌ | ✅ |
-| 20 | Inventory | `inventario` | ✅ | ⚠️ | ✅ |
-| 21 | LGPD | `lgpd` | ❌ | ❌ | ✅ |
-| 22 | Marketing | `marketing` | ✅ | ⚠️ | ✅ |
-| 23 | NF-e | `nfe` | ❌ | ❌ | ✅ |
-| 24 | Notifications | `notifications` | ✅ | ⚠️ | ✅ |
-| 25 | Quotes | `orcamentos` | ✅ | ❌ | ✅ |
-| 26 | Patients | `pacientes` | ✅ | ✅ | ✅ |
-| 27 | PDV | `pdv` | ✅ | ✅ | ✅ |
-| 28 | PEP | `pep` | ✅ | ⚠️ | ✅ |
-| 29 | Procedures | `procedimentos` | ✅ | ⚠️ | ✅ |
-| 30 | Split Payment | `split_pagamento` | ✅ | ❌ | ✅ |
-| 31 | Teledentistry | `teleodonto` | ✅ | ⚠️ | ✅ |
-| 32 | Terminal | `terminal` | ✅ | ❌ | ✅ |
-| 33 | TISS | `tiss` | ❌ | ❌ | ✅ |
-| 34 | Users | `usuarios` | ✅ | ⚠️ | ✅ |
-| 35 | Agents IA | `agents` | ✅ | ❌ | ✅ |
+| #   | Domain         | Module            | Controller | Prisma | Router |
+| --- | -------------- | ----------------- | ---------- | ------ | ------ |
+| 1   | Agenda         | `agenda`          | ✅         | ✅     | ✅     |
+| 2   | Analytics      | `analytics`       | ✅         | ⚠️     | ✅     |
+| 3   | Auth           | `auth`            | ✅         | ⚠️     | ✅     |
+| 4   | Backups        | `backups`         | ✅         | ❌     | ✅     |
+| 5   | BI             | `bi`              | ❌         | ❌     | ✅     |
+| 6   | Communication  | `comm`            | ✅         | ❌     | ✅     |
+| 7   | Config         | `configuracoes`   | ✅         | ❌     | ✅     |
+| 8   | Contracts      | `contratos`       | ✅         | ❌     | ✅     |
+| 9   | CRM            | `crm`             | ✅         | ❌     | ✅     |
+| 10  | Crypto Config  | `crypto_config`   | ✅         | ✅     | ✅     |
+| 11  | Dashboard      | `dashboard`       | ✅         | ✅     | ✅     |
+| 12  | Database Admin | `database_admin`  | ✅         | ✅     | ✅     |
+| 13  | Billing        | `faturamento`     | ✅         | ⚠️     | ✅     |
+| 14  | Loyalty        | `fidelidade`      | ❌         | ❌     | ✅     |
+| 15  | Files          | `files`           | ✅         | ✅     | ✅     |
+| 16  | Finance        | `financeiro`      | ✅         | ✅     | ✅     |
+| 17  | Employees      | `funcionarios`    | ❌         | ❌     | ✅     |
+| 18  | GitHub Tools   | `github_tools`    | ✅         | ❌     | ✅     |
+| 19  | Collections    | `inadimplencia`   | ❌         | ❌     | ✅     |
+| 20  | Inventory      | `inventario`      | ✅         | ⚠️     | ✅     |
+| 21  | LGPD           | `lgpd`            | ❌         | ❌     | ✅     |
+| 22  | Marketing      | `marketing`       | ✅         | ⚠️     | ✅     |
+| 23  | NF-e           | `nfe`             | ❌         | ❌     | ✅     |
+| 24  | Notifications  | `notifications`   | ✅         | ⚠️     | ✅     |
+| 25  | Quotes         | `orcamentos`      | ✅         | ❌     | ✅     |
+| 26  | Patients       | `pacientes`       | ✅         | ✅     | ✅     |
+| 27  | PDV            | `pdv`             | ✅         | ✅     | ✅     |
+| 28  | PEP            | `pep`             | ✅         | ⚠️     | ✅     |
+| 29  | Procedures     | `procedimentos`   | ✅         | ⚠️     | ✅     |
+| 30  | Split Payment  | `split_pagamento` | ✅         | ❌     | ✅     |
+| 31  | Teledentistry  | `teleodonto`      | ✅         | ⚠️     | ✅     |
+| 32  | Terminal       | `terminal`        | ✅         | ❌     | ✅     |
+| 33  | TISS           | `tiss`            | ❌         | ❌     | ✅     |
+| 34  | Users          | `usuarios`        | ✅         | ⚠️     | ✅     |
+| 35  | Agents IA      | `agents`          | ✅         | ❌     | ✅     |
 
 **Legenda:**
+
 - ✅ Completo (Controller + Prisma Client + Router)
 - ⚠️ Parcial (usa queryRaw ou tem gaps técnicos)
 - ❌ API-only / stub (router existe, controller é mock)
@@ -98,16 +99,16 @@ app.use("/api/crypto_config", cryptoConfigRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/db", databaseAdminRouter);
 app.use("/api/faturamento", faturamentoRouter);
-app.use("/api/fiscal", faturamentoRouter);        // alias
+app.use("/api/fiscal", faturamentoRouter); // alias
 app.use("/api/fidelidade", fidelidadeRouter);
 app.use("/api/files", filesRouter);
 app.use("/api/financeiro", financeiroRouter);
-app.use("/api/payments", financeiroRouter);       // alias
+app.use("/api/payments", financeiroRouter); // alias
 app.use("/api/funcionarios", funcionariosRouter);
 app.use("/api/github", githubToolsRouter);
 app.use("/api/inadimplencia", inadimplenciaRouter);
 app.use("/api/estoque", inventarioRouter);
-app.use("/api/inventario", inventarioRouter);     // alias (removed duplicate)
+app.use("/api/inventario", inventarioRouter); // alias (removed duplicate)
 app.use("/api/lgpd", lgpdRouter);
 app.use("/api/marketing", marketingRouter);
 app.use("/api/nfe", nfeRouter);
@@ -118,7 +119,7 @@ app.use("/api/pdv", pdvRouter);
 app.use("/api/pep", pepRouter);
 app.use("/api/procedimentos", procedimentosRouter);
 app.use("/api/split-pagamento", splitPagamentoRouter);
-app.use("/api/split", splitPagamentoRouter);      // alias
+app.use("/api/split", splitPagamentoRouter); // alias
 app.use("/api/teleodonto", teleodontoRouter);
 app.use("/api/terminal", terminalRouter);
 app.use("/api/tiss", tissRouter);
@@ -148,6 +149,7 @@ app.use("/api/modules", modulesRouter);
 ```
 
 ### clinicGuard
+
 Aplicado em **100% dos routers de módulos** (35/35). Valida `req.user?.clinicId` e injeta `req.clinicId`.
 
 ---
@@ -161,38 +163,39 @@ Aplicado em **100% dos routers de módulos** (35/35). Valida `req.user?.clinicId
 
 ### Models por Módulo (principais)
 
-| Módulo | Models |
-|--------|--------|
-| `pacientes` | patients, prontuarios, historico_clinico, odontogramas |
-| `agenda` | appointments, appointment_confirmations, blocked_times |
-| `financeiro` | financial_transactions, financial_categories, caixa_movimentos |
-| `faturamento` | notas_fiscais, nfce_emitidas, sat_mfe_config |
-| `inventario` | produtos, inventario_itens, movimentacoes_estoque |
-| `pep` | pep_tratamentos, pep_odontograma, pep_assinaturas |
-| `pdv` | pdv_vendas, cash_registers, pdv_dashboard |
-| `crypto_config` | crypto_wallets, crypto_transactions, crypto_payments |
+| Módulo          | Models                                                         |
+| --------------- | -------------------------------------------------------------- |
+| `pacientes`     | patients, prontuarios, historico_clinico, odontogramas         |
+| `agenda`        | appointments, appointment_confirmations, blocked_times         |
+| `financeiro`    | financial_transactions, financial_categories, caixa_movimentos |
+| `faturamento`   | notas_fiscais, nfce_emitidas, sat_mfe_config                   |
+| `inventario`    | produtos, inventario_itens, movimentacoes_estoque              |
+| `pep`           | pep_tratamentos, pep_odontograma, pep_assinaturas              |
+| `pdv`           | pdv_vendas, cash_registers, pdv_dashboard                      |
+| `crypto_config` | crypto_wallets, crypto_transactions, crypto_payments           |
 
 ---
 
 ## Workers (9 cron jobs)
 
-| Worker | Descrição | Frequência |
-|--------|-----------|------------|
-| `adminJobs` | Tarefas administrativas | Diário |
-| `backupJobs` | Backup automático PostgreSQL | 4x/dia |
-| `cryptoJobs` | Sincronização de taxas crypto | 15 min |
-| `estoqueJobs` | Alertas de reposição | 1 hora |
-| `financeiroJobs` | Reconciliação bancária | 6 horas |
-| `gamificationJobs` | Atualização de rankings | 1 hora |
-| `scheduleAppointments` | Lembretes de consulta | 15 min |
-| `scheduleBiExport` | Exportação de relatórios BI | Diário |
-| `notificationJobs` | Push e alertas | 5 min |
+| Worker                 | Descrição                     | Frequência |
+| ---------------------- | ----------------------------- | ---------- |
+| `adminJobs`            | Tarefas administrativas       | Diário     |
+| `backupJobs`           | Backup automático PostgreSQL  | 4x/dia     |
+| `cryptoJobs`           | Sincronização de taxas crypto | 15 min     |
+| `estoqueJobs`          | Alertas de reposição          | 1 hora     |
+| `financeiroJobs`       | Reconciliação bancária        | 6 horas    |
+| `gamificationJobs`     | Atualização de rankings       | 1 hora     |
+| `scheduleAppointments` | Lembretes de consulta         | 15 min     |
+| `scheduleBiExport`     | Exportação de relatórios BI   | Diário     |
+| `notificationJobs`     | Push e alertas                | 5 min      |
 
 ---
 
 ## Error Handling
 
 ### ApiError Class
+
 ```typescript
 class ApiError extends Error {
   statusCode: number;
@@ -202,6 +205,7 @@ class ApiError extends Error {
 ```
 
 ### Factory Methods
+
 - `ApiError.badRequest()` — 400
 - `ApiError.unauthorized()` — 401
 - `ApiError.forbidden()` — 403
@@ -226,6 +230,7 @@ POST /api/agents/review    → Python FastAPI
 ## Deploy
 
 ### VPS (Produção)
+
 ```bash
 # Build
 pnpm --filter orthoplus-backend build
@@ -242,6 +247,7 @@ pm2 reload orthoplus-backend
 ```
 
 ### GitHub Actions
+
 Workflow: `.github/workflows/deploy-vps-orthoplus.yml`
 Trigger: push para `main`
 

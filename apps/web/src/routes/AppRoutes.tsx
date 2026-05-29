@@ -13,23 +13,57 @@ import Auth from "@/modules/auth/ui/pages/Auth";
 import Landpage from "@/modules/landpage/ui/pages/Landpage";
 
 // Lazy loaded modules - usando barrel exports
-const PacientesListPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PacientesListPage })));
-const PatientFormPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PatientFormPage })));
-const PatientDetailPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PatientDetailPage })));
-const PatientSearchPage = lazy(() => import("@/modules/pacientes").then((m) => ({ default: m.PatientSearchPage })));
-const AgendaPage = lazy(() => import("@/modules/agenda").then((m) => ({ default: m.AgendaPage })));
-const FinanceiroPage = lazy(() => import("@/modules/financeiro").then((m) => ({ default: m.FinanceiroPage })));
-const PEPPage = lazy(() => import("@/modules/pep").then((m) => ({ default: m.PEPPage })));
-const EstoquePage = lazy(() => import("@/modules/estoque").then((m) => ({ default: m.EstoquePage })));
-const PDVPage = lazy(() => import("@/modules/pdv").then((m) => ({ default: m.PDVPage })));
-const PDVDashboardPage = lazy(() => import("@/modules/pdv").then((m) => ({ default: m.DashboardExecutivoPDV })));
-const PDVMetasPage = lazy(() => import("@/modules/pdv").then((m) => ({ default: m.MetasGamificacao })));
-const CRMPage = lazy(() => import("@/modules/crm").then((m) => ({ default: m.CRMPage })));
+const PacientesListPage = lazy(() =>
+  import("@/modules/pacientes").then((m) => ({ default: m.PacientesListPage })),
+);
+const PatientFormPage = lazy(() =>
+  import("@/modules/pacientes").then((m) => ({ default: m.PatientFormPage })),
+);
+const PatientDetailPage = lazy(() =>
+  import("@/modules/pacientes").then((m) => ({ default: m.PatientDetailPage })),
+);
+const PatientSearchPage = lazy(() =>
+  import("@/modules/pacientes").then((m) => ({ default: m.PatientSearchPage })),
+);
+const AgendaPage = lazy(() =>
+  import("@/modules/agenda").then((m) => ({ default: m.AgendaPage })),
+);
+const FinanceiroPage = lazy(() =>
+  import("@/modules/financeiro").then((m) => ({ default: m.FinanceiroPage })),
+);
+const PEPPage = lazy(() =>
+  import("@/modules/pep").then((m) => ({ default: m.PEPPage })),
+);
+const EstoquePage = lazy(() =>
+  import("@/modules/estoque").then((m) => ({ default: m.EstoquePage })),
+);
+const PDVPage = lazy(() =>
+  import("@/modules/pdv").then((m) => ({ default: m.PDVPage })),
+);
+const PDVDashboardPage = lazy(() =>
+  import("@/modules/pdv").then((m) => ({ default: m.DashboardExecutivoPDV })),
+);
+const PDVMetasPage = lazy(() =>
+  import("@/modules/pdv").then((m) => ({ default: m.MetasGamificacao })),
+);
+const CRMPage = lazy(() =>
+  import("@/modules/crm").then((m) => ({ default: m.CRMPage })),
+);
 
 // Outros lazy imports (diretos)
-const DentistasPage = lazy(() => import("@/modules/dentistas").then((m) => ({ default: m.DentistasPage })));
-const FuncionariosPage = lazy(() => import("@/modules/funcionarios").then((m) => ({ default: m.FuncionariosPage })));
-const ProcedimentosPage = lazy(() => import("@/modules/procedimentos").then((m) => ({ default: m.ProcedimentosPage })));
+const DentistasPage = lazy(() =>
+  import("@/modules/dentistas").then((m) => ({ default: m.DentistasPage })),
+);
+const FuncionariosPage = lazy(() =>
+  import("@/modules/funcionarios").then((m) => ({
+    default: m.FuncionariosPage,
+  })),
+);
+const ProcedimentosPage = lazy(() =>
+  import("@/modules/procedimentos").then((m) => ({
+    default: m.ProcedimentosPage,
+  })),
+);
 const OrcamentosPage = lazy(
   () => import("@/modules/orcamentos/ui/pages/OrcamentosPage"),
 );
@@ -54,15 +88,27 @@ const ContratosPage = lazy(
 );
 
 // Cobranca / Inadimplência
-const InadimplenciaPage = lazy(() => import("@/modules/cobranca").then((m) => ({ default: m.InadimplenciaPage })));
-const FileListPage = lazy(() => import("@/modules/files/ui/pages/FileListPage"));
-const FileUploadPage = lazy(() => import("@/modules/files/ui/pages/FileUploadPage"));
+const InadimplenciaPage = lazy(() =>
+  import("@/modules/cobranca").then((m) => ({ default: m.InadimplenciaPage })),
+);
+const FileListPage = lazy(
+  () => import("@/modules/files/ui/pages/FileListPage"),
+);
+const FileUploadPage = lazy(
+  () => import("@/modules/files/ui/pages/FileUploadPage"),
+);
 
 // Crypto
-const CryptoPaymentPage = lazy(() => import("@/modules/crypto").then((m) => ({ default: m.CryptoPaymentPage })));
+const CryptoPaymentPage = lazy(() =>
+  import("@/modules/crypto").then((m) => ({ default: m.CryptoPaymentPage })),
+);
 
 // Split Pagamento
-const SplitPagamentoPage = lazy(() => import("@/modules/split-pagamento").then((m) => ({ default: m.SplitPagamentoPage })));
+const SplitPagamentoPage = lazy(() =>
+  import("@/modules/split-pagamento").then((m) => ({
+    default: m.SplitPagamentoPage,
+  })),
+);
 
 // Estoque sub-pages
 const EstoqueInventarioHistorico = lazy(
@@ -73,33 +119,61 @@ const ScannerMobile = lazy(
 );
 
 // Inventário
-const InventarioDashboard = lazy(() => import("@/modules/inventario").then((m) => ({ default: m.InventarioDashboard })));
+const InventarioDashboard = lazy(() =>
+  import("@/modules/inventario").then((m) => ({
+    default: m.InventarioDashboard,
+  })),
+);
 
 // Marketing & Relacionamento
-const MarketingAutoPage = lazy(() => import("@/modules/marketing-auto").then((m) => ({ default: m.MarketingAutoPage })));
-const FidelidadePage = lazy(() => import("@/modules/marketing-auto").then((m) => ({ default: m.FidelidadePage })));
-const RecallPage = lazy(() => import("@/modules/marketing-auto").then((m) => ({ default: m.RecallPage })));
-const PortalPacientePage = lazy(() => import("@/modules/portal-paciente").then((m) => ({ default: m.PortalPacientePage })));
+const MarketingAutoPage = lazy(() =>
+  import("@/modules/marketing-auto").then((m) => ({
+    default: m.MarketingAutoPage,
+  })),
+);
+const FidelidadePage = lazy(() =>
+  import("@/modules/marketing-auto").then((m) => ({
+    default: m.FidelidadePage,
+  })),
+);
+const RecallPage = lazy(() =>
+  import("@/modules/marketing-auto").then((m) => ({ default: m.RecallPage })),
+);
+const PortalPacientePage = lazy(() =>
+  import("@/modules/portal-paciente").then((m) => ({
+    default: m.PortalPacientePage,
+  })),
+);
 
 // BI & Dashboards
-const BusinessIntelligence = lazy(() => import("@/modules/bi").then((m) => ({ default: m.BusinessIntelligence })));
-const DashboardComercial = lazy(() => import("@/modules/dashboards").then((m) => ({ default: m.DashboardComercial })));
+const BusinessIntelligence = lazy(() =>
+  import("@/modules/bi").then((m) => ({ default: m.BusinessIntelligence })),
+);
+const DashboardComercial = lazy(() =>
+  import("@/modules/dashboards").then((m) => ({
+    default: m.DashboardComercial,
+  })),
+);
 
 // Conformidade & Legal
-const LGPDPage = lazy(() => import("@/modules/lgpd").then((m) => ({ default: m.LGPDPage })));
+const LGPDPage = lazy(() =>
+  import("@/modules/lgpd").then((m) => ({ default: m.LGPDPage })),
+);
 const AssinaturaICP = lazy(
   () => import("@/modules/pep/ui/pages/AssinaturaICP"),
 );
-const TISSPage = lazy(() => import("@/modules/tiss").then((m) => ({ default: m.TISSPage })));
-const TeleodontoPage = lazy(() => import("@/modules/teleodonto").then((m) => ({ default: m.TeleodontoPage })));
+const TISSPage = lazy(() =>
+  import("@/modules/tiss").then((m) => ({ default: m.TISSPage })),
+);
+const TeleodontoPage = lazy(() =>
+  import("@/modules/teleodonto").then((m) => ({ default: m.TeleodontoPage })),
+);
 
 // Faturamento
 const RelatorioFiscalPage = lazy(
   () => import("@/modules/faturamento/ui/pages/RelatorioFiscalPage"),
 );
-const NFesPage = lazy(
-  () => import("@/modules/faturamento/ui/pages/NFesPage"),
-);
+const NFesPage = lazy(() => import("@/modules/faturamento/ui/pages/NFesPage"));
 
 // Odontograma (standalone page — reuses PEP components)
 const OdontogramaPage = lazy(
@@ -111,21 +185,25 @@ const TratamentosPage = lazy(
 );
 
 // Inovação
-const IARadiografia = lazy(() => import("@/modules/ia-radiografia").then((m) => ({ default: m.IARadiografia })));
-const FluxoDigital = lazy(
-  () => import("@/modules/pep/ui/pages/FluxoDigital"),
+const IARadiografia = lazy(() =>
+  import("@/modules/ia-radiografia").then((m) => ({
+    default: m.IARadiografia,
+  })),
 );
+const FluxoDigital = lazy(() => import("@/modules/pep/ui/pages/FluxoDigital"));
 
 // Memory Hub
-const MemoryHubDashboard = lazy(() => import("@/modules/memory-hub").then((m) => ({ default: m.MemoryHubDashboard })));
+const MemoryHubDashboard = lazy(() =>
+  import("@/modules/memory-hub").then((m) => ({
+    default: m.MemoryHubDashboard,
+  })),
+);
 
 // Admin pages
 const DatabaseMaintenancePage = lazy(
   () => import("@/modules/admin/ui/pages/DatabaseMaintenancePage"),
 );
-const BackupsPage = lazy(
-  () => import("@/modules/admin/ui/pages/BackupsPage"),
-);
+const BackupsPage = lazy(() => import("@/modules/admin/ui/pages/BackupsPage"));
 const CryptoConfigPage = lazy(
   () => import("@/modules/admin/ui/pages/CryptoConfigPage"),
 );
@@ -135,24 +213,16 @@ const GitHubManagerPage = lazy(
 const TerminalPage = lazy(
   () => import("@/modules/admin/ui/pages/TerminalPage"),
 );
-const WikiPage = lazy(
-  () => import("@/modules/admin/ui/pages/WikiPage"),
-);
-const ADRsPage = lazy(
-  () => import("@/modules/admin/ui/pages/ADRsPage"),
-);
+const WikiPage = lazy(() => import("@/modules/admin/ui/pages/WikiPage"));
+const ADRsPage = lazy(() => import("@/modules/admin/ui/pages/ADRsPage"));
 const MonitoringPage = lazy(
   () => import("@/modules/admin/ui/pages/MonitoringPage"),
 );
 const SystemLogsPage = lazy(
   () => import("@/modules/admin/ui/pages/SystemLogsPage"),
 );
-const ApiDocsPage = lazy(
-  () => import("@/modules/admin/ui/pages/ApiDocsPage"),
-);
-const AuditLogs = lazy(
-  () => import("@/modules/admin/ui/pages/AuditLogs"),
-);
+const ApiDocsPage = lazy(() => import("@/modules/admin/ui/pages/ApiDocsPage"));
+const AuditLogs = lazy(() => import("@/modules/admin/ui/pages/AuditLogs"));
 const AuditTrailViewer = lazy(
   () => import("@/modules/admin/ui/pages/AuditTrailViewer"),
 );
@@ -164,15 +234,11 @@ const ModulesPage = lazy(
 const DatabaseManagementPage = lazy(
   () => import("@/modules/settings/ui/pages/DatabaseManagementPage"),
 );
-const Usuarios = lazy(
-  () => import("@/modules/admin/ui/pages/Usuarios"),
-);
+const Usuarios = lazy(() => import("@/modules/admin/ui/pages/Usuarios"));
 const Configuracoes = lazy(
   () => import("@/modules/admin/ui/pages/Configuracoes"),
 );
-const HelpCenter = lazy(
-  () => import("@/modules/admin/ui/pages/HelpCenter"),
-);
+const HelpCenter = lazy(() => import("@/modules/admin/ui/pages/HelpCenter"));
 
 /** Helper: wraps a page in ProtectedRoute + AppLayout + ErrorBoundary + Suspense */
 function protectedRoute(
@@ -180,7 +246,10 @@ function protectedRoute(
   opts?: { moduleKey?: string; requireAdmin?: boolean },
 ) {
   return (
-    <ProtectedRoute moduleKey={opts?.moduleKey} requireAdmin={opts?.requireAdmin}>
+    <ProtectedRoute
+      moduleKey={opts?.moduleKey}
+      requireAdmin={opts?.requireAdmin}
+    >
       <AppLayout>
         <ErrorBoundary moduleName={opts?.moduleKey?.toLowerCase()}>
           <Suspense fallback={<LoadingState />}>{page}</Suspense>
@@ -210,114 +279,344 @@ const AppRoutes = () => (
     />
 
     {/* Pacientes Module */}
-    <Route path="/pacientes" element={protectedRoute(<PacientesListPage />, { moduleKey: "PACIENTES" })} />
-    <Route path="/pacientes/novo" element={protectedRoute(<PatientFormPage />, { moduleKey: "PACIENTES" })} />
-    <Route path="/pacientes/:id" element={protectedRoute(<PatientDetailPage />, { moduleKey: "PACIENTES" })} />
-    <Route path="/pacientes/busca" element={protectedRoute(<PatientSearchPage />, { moduleKey: "PACIENTES" })} />
+    <Route
+      path="/pacientes"
+      element={protectedRoute(<PacientesListPage />, {
+        moduleKey: "PACIENTES",
+      })}
+    />
+    <Route
+      path="/pacientes/novo"
+      element={protectedRoute(<PatientFormPage />, { moduleKey: "PACIENTES" })}
+    />
+    <Route
+      path="/pacientes/:id"
+      element={protectedRoute(<PatientDetailPage />, {
+        moduleKey: "PACIENTES",
+      })}
+    />
+    <Route
+      path="/pacientes/busca"
+      element={protectedRoute(<PatientSearchPage />, {
+        moduleKey: "PACIENTES",
+      })}
+    />
 
     {/* Agenda Module */}
-    <Route path="/agenda" element={protectedRoute(<AgendaPage />, { moduleKey: "AGENDA" })} />
+    <Route
+      path="/agenda"
+      element={protectedRoute(<AgendaPage />, { moduleKey: "AGENDA" })}
+    />
 
     {/* Financeiro Module */}
-    <Route path="/financeiro" element={protectedRoute(<FinanceiroPage />, { moduleKey: "FINANCEIRO" })} />
-    <Route path="/financeiro/receber" element={protectedRoute(<ContasReceber />, { moduleKey: "FINANCEIRO" })} />
-    <Route path="/financeiro/fiscal/notas" element={protectedRoute(<NotasFiscais />, { moduleKey: "FINANCEIRO" })} />
-    <Route path="/financeiro/conciliacao" element={protectedRoute(<Conciliacao />, { moduleKey: "FINANCEIRO" })} />
+    <Route
+      path="/financeiro"
+      element={protectedRoute(<FinanceiroPage />, { moduleKey: "FINANCEIRO" })}
+    />
+    <Route
+      path="/financeiro/receber"
+      element={protectedRoute(<ContasReceber />, { moduleKey: "FINANCEIRO" })}
+    />
+    <Route
+      path="/financeiro/fiscal/notas"
+      element={protectedRoute(<NotasFiscais />, { moduleKey: "FINANCEIRO" })}
+    />
+    <Route
+      path="/financeiro/conciliacao"
+      element={protectedRoute(<Conciliacao />, { moduleKey: "FINANCEIRO" })}
+    />
 
     {/* PEP Module */}
-    <Route path="/pep" element={protectedRoute(<PEPPage />, { moduleKey: "PEP" })} />
-    <Route path="/pep/:patientId" element={protectedRoute(<PEPPage />, { moduleKey: "PEP" })} />
-    <Route path="/assinatura-icp" element={protectedRoute(<AssinaturaICP />, { moduleKey: "PEP" })} />
-    <Route path="/fluxo-digital" element={protectedRoute(<FluxoDigital />, { moduleKey: "PEP" })} />
+    <Route
+      path="/pep"
+      element={protectedRoute(<PEPPage />, { moduleKey: "PEP" })}
+    />
+    <Route
+      path="/pep/:patientId"
+      element={protectedRoute(<PEPPage />, { moduleKey: "PEP" })}
+    />
+    <Route
+      path="/assinatura-icp"
+      element={protectedRoute(<AssinaturaICP />, { moduleKey: "PEP" })}
+    />
+    <Route
+      path="/fluxo-digital"
+      element={protectedRoute(<FluxoDigital />, { moduleKey: "PEP" })}
+    />
 
     {/* Odontograma Module (standalone dental chart) */}
-    <Route path="/odontograma" element={protectedRoute(<OdontogramaPage />, { moduleKey: "ODONTOGRAMA" })} />
+    <Route
+      path="/odontograma"
+      element={protectedRoute(<OdontogramaPage />, {
+        moduleKey: "ODONTOGRAMA",
+      })}
+    />
 
     {/* Tratamentos (treatment plans) */}
-    <Route path="/tratamentos" element={protectedRoute(<TratamentosPage />, { moduleKey: "PEP" })} />
+    <Route
+      path="/tratamentos"
+      element={protectedRoute(<TratamentosPage />, { moduleKey: "PEP" })}
+    />
 
     {/* Estoque Module */}
-    <Route path="/estoque" element={protectedRoute(<EstoquePage />, { moduleKey: "ESTOQUE" })} />
-    <Route path="/estoque/inventario-historico" element={protectedRoute(<EstoqueInventarioHistorico />, { moduleKey: "ESTOQUE" })} />
-    <Route path="/estoque/scanner" element={protectedRoute(<ScannerMobile />, { moduleKey: "ESTOQUE" })} />
-    <Route path="/inventario/dashboard" element={protectedRoute(<InventarioDashboard />, { moduleKey: "INVENTARIO" })} />
+    <Route
+      path="/estoque"
+      element={protectedRoute(<EstoquePage />, { moduleKey: "ESTOQUE" })}
+    />
+    <Route
+      path="/estoque/inventario-historico"
+      element={protectedRoute(<EstoqueInventarioHistorico />, {
+        moduleKey: "ESTOQUE",
+      })}
+    />
+    <Route
+      path="/estoque/scanner"
+      element={protectedRoute(<ScannerMobile />, { moduleKey: "ESTOQUE" })}
+    />
+    <Route
+      path="/inventario/dashboard"
+      element={protectedRoute(<InventarioDashboard />, {
+        moduleKey: "INVENTARIO",
+      })}
+    />
 
     {/* PDV Module */}
-    <Route path="/pdv" element={protectedRoute(<PDVPage />, { moduleKey: "PDV" })} />
-    <Route path="/pdv/dashboard" element={protectedRoute(<PDVDashboardPage />, { moduleKey: "PDV" })} />
-    <Route path="/pdv/metas" element={protectedRoute(<PDVMetasPage />, { moduleKey: "PDV" })} />
+    <Route
+      path="/pdv"
+      element={protectedRoute(<PDVPage />, { moduleKey: "PDV" })}
+    />
+    <Route
+      path="/pdv/dashboard"
+      element={protectedRoute(<PDVDashboardPage />, { moduleKey: "PDV" })}
+    />
+    <Route
+      path="/pdv/metas"
+      element={protectedRoute(<PDVMetasPage />, { moduleKey: "PDV" })}
+    />
 
     {/* CRM Module */}
-    <Route path="/crm" element={protectedRoute(<CRMPage />, { moduleKey: "CRM" })} />
+    <Route
+      path="/crm"
+      element={protectedRoute(<CRMPage />, { moduleKey: "CRM" })}
+    />
 
     {/* Contratos */}
-    <Route path="/contratos" element={protectedRoute(<ContratosPage />, { moduleKey: "CONTRATOS" })} />
+    <Route
+      path="/contratos"
+      element={protectedRoute(<ContratosPage />, { moduleKey: "CONTRATOS" })}
+    />
 
     {/* Orçamentos */}
-    <Route path="/orcamentos" element={protectedRoute(<OrcamentosPage />, { moduleKey: "ORCAMENTOS" })} />
-    <Route path="/orcamentos/novo" element={protectedRoute(<OrcamentoFormPage />, { moduleKey: "ORCAMENTOS" })} />
-    <Route path="/orcamentos/editar/:id" element={protectedRoute(<OrcamentoFormPage />, { moduleKey: "ORCAMENTOS" })} />
+    <Route
+      path="/orcamentos"
+      element={protectedRoute(<OrcamentosPage />, { moduleKey: "ORCAMENTOS" })}
+    />
+    <Route
+      path="/orcamentos/novo"
+      element={protectedRoute(<OrcamentoFormPage />, {
+        moduleKey: "ORCAMENTOS",
+      })}
+    />
+    <Route
+      path="/orcamentos/editar/:id"
+      element={protectedRoute(<OrcamentoFormPage />, {
+        moduleKey: "ORCAMENTOS",
+      })}
+    />
 
     {/* Procedimentos */}
-    <Route path="/procedimentos" element={protectedRoute(<ProcedimentosPage />, { moduleKey: "PROCEDIMENTOS" })} />
+    <Route
+      path="/procedimentos"
+      element={protectedRoute(<ProcedimentosPage />, {
+        moduleKey: "PROCEDIMENTOS",
+      })}
+    />
 
     {/* Dentistas / Funcionários */}
-    <Route path="/dentistas" element={protectedRoute(<DentistasPage />, { moduleKey: "DENTISTAS" })} />
-    <Route path="/funcionarios" element={protectedRoute(<FuncionariosPage />, { moduleKey: "FUNCIONARIOS" })} />
+    <Route
+      path="/dentistas"
+      element={protectedRoute(<DentistasPage />, { moduleKey: "DENTISTAS" })}
+    />
+    <Route
+      path="/funcionarios"
+      element={protectedRoute(<FuncionariosPage />, {
+        moduleKey: "FUNCIONARIOS",
+      })}
+    />
 
     {/* Cobranca / Inadimplência */}
-    <Route path="/inadimplencia" element={protectedRoute(<InadimplenciaPage />, { moduleKey: "INADIMPLENCIA" })} />
+    <Route
+      path="/inadimplencia"
+      element={protectedRoute(<InadimplenciaPage />, {
+        moduleKey: "INADIMPLENCIA",
+      })}
+    />
 
     {/* Crypto Payments */}
-    <Route path="/crypto-payment" element={protectedRoute(<CryptoPaymentPage />, { moduleKey: "CRYPTO_PAYMENTS" })} />
+    <Route
+      path="/crypto-payment"
+      element={protectedRoute(<CryptoPaymentPage />, {
+        moduleKey: "CRYPTO_PAYMENTS",
+      })}
+    />
 
     {/* Split Pagamento */}
-    <Route path="/split-pagamento" element={protectedRoute(<SplitPagamentoPage />, { moduleKey: "SPLIT_PAGAMENTO" })} />
+    <Route
+      path="/split-pagamento"
+      element={protectedRoute(<SplitPagamentoPage />, {
+        moduleKey: "SPLIT_PAGAMENTO",
+      })}
+    />
 
     {/* Marketing & Relacionamento */}
-    <Route path="/marketing-auto" element={protectedRoute(<MarketingAutoPage />, { moduleKey: "MARKETING_AUTO" })} />
-    <Route path="/fidelidade" element={protectedRoute(<FidelidadePage />, { moduleKey: "FIDELIDADE" })} />
-    <Route path="/recall" element={protectedRoute(<RecallPage />, { moduleKey: "MARKETING_AUTO" })} />
-    <Route path="/portal-paciente" element={protectedRoute(<PortalPacientePage />, { moduleKey: "PORTAL_PACIENTE" })} />
+    <Route
+      path="/marketing-auto"
+      element={protectedRoute(<MarketingAutoPage />, {
+        moduleKey: "MARKETING_AUTO",
+      })}
+    />
+    <Route
+      path="/fidelidade"
+      element={protectedRoute(<FidelidadePage />, { moduleKey: "FIDELIDADE" })}
+    />
+    <Route
+      path="/recall"
+      element={protectedRoute(<RecallPage />, { moduleKey: "MARKETING_AUTO" })}
+    />
+    <Route
+      path="/portal-paciente"
+      element={protectedRoute(<PortalPacientePage />, {
+        moduleKey: "PORTAL_PACIENTE",
+      })}
+    />
 
     {/* BI & Dashboards */}
-    <Route path="/bi" element={protectedRoute(<BusinessIntelligence />, { moduleKey: "BI" })} />
-    <Route path="/dashboards/comercial" element={protectedRoute(<DashboardComercial />, { moduleKey: "BI" })} />
+    <Route
+      path="/bi"
+      element={protectedRoute(<BusinessIntelligence />, { moduleKey: "BI" })}
+    />
+    <Route
+      path="/dashboards/comercial"
+      element={protectedRoute(<DashboardComercial />, { moduleKey: "BI" })}
+    />
 
     {/* Conformidade & Legal */}
-    <Route path="/lgpd" element={protectedRoute(<LGPDPage />, { moduleKey: "LGPD" })} />
-    <Route path="/files" element={protectedRoute(<FileListPage />, { moduleKey: "FILES" })} />
-    <Route path="/files/upload" element={protectedRoute(<FileUploadPage />, { moduleKey: "FILES" })} />
-    <Route path="/faturamento-tiss" element={protectedRoute(<TISSPage />, { moduleKey: "TISS" })} />
-    <Route path="/faturamento/nfes" element={protectedRoute(<NFesPage />, { moduleKey: "FATURAMENTO" })} />
-    <Route path="/faturamento/relatorio" element={protectedRoute(<RelatorioFiscalPage />, { moduleKey: "FATURAMENTO" })} />
-    <Route path="/teleodonto" element={protectedRoute(<TeleodontoPage />, { moduleKey: "TELEODONTO" })} />
+    <Route
+      path="/lgpd"
+      element={protectedRoute(<LGPDPage />, { moduleKey: "LGPD" })}
+    />
+    <Route
+      path="/files"
+      element={protectedRoute(<FileListPage />, { moduleKey: "FILES" })}
+    />
+    <Route
+      path="/files/upload"
+      element={protectedRoute(<FileUploadPage />, { moduleKey: "FILES" })}
+    />
+    <Route
+      path="/faturamento-tiss"
+      element={protectedRoute(<TISSPage />, { moduleKey: "TISS" })}
+    />
+    <Route
+      path="/faturamento/nfes"
+      element={protectedRoute(<NFesPage />, { moduleKey: "FATURAMENTO" })}
+    />
+    <Route
+      path="/faturamento/relatorio"
+      element={protectedRoute(<RelatorioFiscalPage />, {
+        moduleKey: "FATURAMENTO",
+      })}
+    />
+    <Route
+      path="/teleodonto"
+      element={protectedRoute(<TeleodontoPage />, { moduleKey: "TELEODONTO" })}
+    />
 
     {/* Memory Hub */}
-    <Route path="/memory-hub" element={protectedRoute(<MemoryHubDashboard />, { moduleKey: "MEMORY_HUB" })} />
+    <Route
+      path="/memory-hub"
+      element={protectedRoute(<MemoryHubDashboard />, {
+        moduleKey: "MEMORY_HUB",
+      })}
+    />
 
     {/* Inovação & Tecnologia */}
-    <Route path="/ia-radiografia" element={protectedRoute(<IARadiografia />, { moduleKey: "IA" })} />
+    <Route
+      path="/ia-radiografia"
+      element={protectedRoute(<IARadiografia />, { moduleKey: "IA" })}
+    />
 
     {/* Admin Pages (requireAdmin) */}
-    <Route path="/admin/database" element={protectedRoute(<DatabaseMaintenancePage />, { requireAdmin: true })} />
-    <Route path="/admin/backups" element={protectedRoute(<BackupsPage />, { requireAdmin: true })} />
-    <Route path="/admin/crypto-config" element={protectedRoute(<CryptoConfigPage />, { requireAdmin: true })} />
-    <Route path="/admin/github" element={protectedRoute(<GitHubManagerPage />, { requireAdmin: true })} />
-    <Route path="/admin/terminal" element={protectedRoute(<TerminalPage />, { requireAdmin: true })} />
-    <Route path="/admin/wiki" element={protectedRoute(<WikiPage />, { requireAdmin: true })} />
-    <Route path="/admin/adrs" element={protectedRoute(<ADRsPage />, { requireAdmin: true })} />
-    <Route path="/admin/monitoring" element={protectedRoute(<MonitoringPage />, { requireAdmin: true })} />
-    <Route path="/admin/logs" element={protectedRoute(<SystemLogsPage />, { requireAdmin: true })} />
-    <Route path="/admin/api-docs" element={protectedRoute(<ApiDocsPage />, { requireAdmin: true })} />
-    <Route path="/admin/audit" element={protectedRoute(<AuditLogs />, { requireAdmin: true })} />
-    <Route path="/admin/audit-trail" element={protectedRoute(<AuditTrailViewer />, { requireAdmin: true })} />
+    <Route
+      path="/admin/database"
+      element={protectedRoute(<DatabaseMaintenancePage />, {
+        requireAdmin: true,
+      })}
+    />
+    <Route
+      path="/admin/backups"
+      element={protectedRoute(<BackupsPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/crypto-config"
+      element={protectedRoute(<CryptoConfigPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/github"
+      element={protectedRoute(<GitHubManagerPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/terminal"
+      element={protectedRoute(<TerminalPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/wiki"
+      element={protectedRoute(<WikiPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/adrs"
+      element={protectedRoute(<ADRsPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/monitoring"
+      element={protectedRoute(<MonitoringPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/logs"
+      element={protectedRoute(<SystemLogsPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/api-docs"
+      element={protectedRoute(<ApiDocsPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/audit"
+      element={protectedRoute(<AuditLogs />, { requireAdmin: true })}
+    />
+    <Route
+      path="/admin/audit-trail"
+      element={protectedRoute(<AuditTrailViewer />, { requireAdmin: true })}
+    />
 
     {/* Configurações */}
-    <Route path="/configuracoes/modulos" element={protectedRoute(<ModulesPage />, { requireAdmin: true })} />
-    <Route path="/configuracoes/database" element={protectedRoute(<DatabaseManagementPage />, { requireAdmin: true })} />
-    <Route path="/usuarios" element={protectedRoute(<Usuarios />, { requireAdmin: true })} />
-    <Route path="/configuracoes" element={protectedRoute(<Configuracoes />, { requireAdmin: true })} />
+    <Route
+      path="/configuracoes/modulos"
+      element={protectedRoute(<ModulesPage />, { requireAdmin: true })}
+    />
+    <Route
+      path="/configuracoes/database"
+      element={protectedRoute(<DatabaseManagementPage />, {
+        requireAdmin: true,
+      })}
+    />
+    <Route
+      path="/usuarios"
+      element={protectedRoute(<Usuarios />, { requireAdmin: true })}
+    />
+    <Route
+      path="/configuracoes"
+      element={protectedRoute(<Configuracoes />, { requireAdmin: true })}
+    />
     <Route path="/help" element={protectedRoute(<HelpCenter />)} />
 
     {/* 403 Forbidden page - v2.9.5 */}

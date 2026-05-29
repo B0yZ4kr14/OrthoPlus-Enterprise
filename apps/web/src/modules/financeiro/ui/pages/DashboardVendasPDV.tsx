@@ -5,7 +5,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card } from "@orthoplus/core-ui/card";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
   TrendingUp,
@@ -56,9 +61,12 @@ export default function DashboardVendasPDV() {
       const dataInicio = new Date();
       dataInicio.setDate(dataInicio.getDate() - diasAtras);
 
-      const data = await apiClient.get<Record<string, any>[]>("/financeiro/vendas-pdv", {
-        params: { start_date: dataInicio.toISOString() },
-      });
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/financeiro/vendas-pdv",
+        {
+          params: { start_date: dataInicio.toISOString() },
+        },
+      );
       return data || [];
     },
     enabled: !!clinicId,
@@ -142,13 +150,11 @@ export default function DashboardVendasPDV() {
       {} as Record<number, { hora: string; vendas: number; valor: number }>,
     ) || {};
 
-  const horariosData = Object.values(vendasPorHora).sort(
-    (a, b) => {
-      const horaA = parseInt(a.hora.split(":")[0]);
-      const horaB = parseInt(b.hora.split(":")[0]);
-      return horaA - horaB;
-    },
-  );
+  const horariosData = Object.values(vendasPorHora).sort((a, b) => {
+    const horaA = parseInt(a.hora.split(":")[0]);
+    const horaB = parseInt(b.hora.split(":")[0]);
+    return horaA - horaB;
+  });
 
   // Formas de pagamento
   const formasPagamento =
@@ -311,7 +317,7 @@ export default function DashboardVendasPDV() {
                       }).format(value)
                     }
                   />
-                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Bar
                     dataKey="total"
                     fill="hsl(var(--primary))"
@@ -331,7 +337,7 @@ export default function DashboardVendasPDV() {
                   <XAxis dataKey="vendedor" />
                   <YAxis />
                   <Tooltip />
-                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Bar
                     dataKey="quantidade"
                     fill="hsl(var(--success))"
@@ -354,7 +360,7 @@ export default function DashboardVendasPDV() {
                 <XAxis type="number" />
                 <YAxis dataKey="produto" type="category" width={150} />
                 <Tooltip />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Bar
                   dataKey="quantidade"
                   fill="hsl(var(--primary))"
@@ -377,7 +383,7 @@ export default function DashboardVendasPDV() {
                 <YAxis yAxisId="left" />
                 <YAxis yAxisId="right" orientation="right" />
                 <Tooltip />
-                <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                 <Area
                   yAxisId="left"
                   type="monotone"
@@ -455,7 +461,7 @@ export default function DashboardVendasPDV() {
                       }).format(value)
                     }
                   />
-                  <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+                  <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
                   <Line
                     type="monotone"
                     dataKey="valor"

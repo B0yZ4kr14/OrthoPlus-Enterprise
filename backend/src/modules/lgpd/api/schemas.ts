@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const createConsentimentoSchema = z.object({
   consent_type: z.string(),

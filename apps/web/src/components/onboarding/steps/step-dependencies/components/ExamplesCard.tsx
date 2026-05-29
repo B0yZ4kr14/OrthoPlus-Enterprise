@@ -18,8 +18,8 @@ export function ExamplesCard() {
           Pagamento" estiver ativo
         </li>
         <li>
-          ✅ <strong>Pode:</strong> Ativar "Split de Pagamento" se
-          "Financeiro" já estiver ativo
+          ✅ <strong>Pode:</strong> Ativar "Split de Pagamento" se "Financeiro"
+          já estiver ativo
         </li>
         <li>
           ❌ <strong>Não pode:</strong> Ativar "Split de Pagamento" se

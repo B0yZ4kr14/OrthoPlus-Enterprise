@@ -14,8 +14,14 @@ import {
   Lightbulb,
   LucideIcon,
 } from "lucide-react";
-import type { AnaliseComplete, ProblemaRadiografico } from "../types/radiografia.types";
-import { tipoRadiografiaLabels, tipoProblemaLabels } from "../types/radiografia.types";
+import type {
+  AnaliseComplete,
+  ProblemaRadiografico,
+} from "../types/radiografia.types";
+import {
+  tipoRadiografiaLabels,
+  tipoProblemaLabels,
+} from "../types/radiografia.types";
 import type { AuditLogEntry } from "../hooks/useAuditTrail";
 
 interface AnaliseDetailsDialogProps {
@@ -54,7 +60,16 @@ export function AnaliseDetailsDialog({
     return <Icon className="h-5 w-5" />;
   };
 
-  const getSeverityVariant = (severity: string): "default" | "secondary" | "destructive" | "outline" | "info" | "warning" | "success" => {
+  const getSeverityVariant = (
+    severity: string,
+  ):
+    | "default"
+    | "secondary"
+    | "destructive"
+    | "outline"
+    | "info"
+    | "warning"
+    | "success" => {
     const variants: Record<string, "success" | "warning" | "destructive"> = {
       LEVE: "success",
       MODERADA: "warning",
@@ -81,14 +96,18 @@ export function AnaliseDetailsDialog({
                 <dt className="text-sm font-medium text-muted-foreground mb-1">
                   Paciente
                 </dt>
-                <dd className="text-lg font-semibold">{analise.paciente_name || "Paciente não identificado"}</dd>
+                <dd className="text-lg font-semibold">
+                  {analise.paciente_name || "Paciente não identificado"}
+                </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-muted-foreground mb-1">
                   Data da Análise
                 </dt>
                 <dd className="text-lg">
-                  {analise.created_at ? new Date(analise.created_at).toLocaleString("pt-BR") : "Data não disponível"}
+                  {analise.created_at
+                    ? new Date(analise.created_at).toLocaleString("pt-BR")
+                    : "Data não disponível"}
                 </dd>
               </div>
               <div>
@@ -97,7 +116,8 @@ export function AnaliseDetailsDialog({
                 </dt>
                 <dd>
                   <Badge variant="outline" className="text-sm">
-                    {tipoRadiografiaLabels[analise.tipo_radiografia] || analise.tipo_radiografia}
+                    {tipoRadiografiaLabels[analise.tipo_radiografia] ||
+                      analise.tipo_radiografia}
                   </Badge>
                 </dd>
               </div>
@@ -130,23 +150,31 @@ export function AnaliseDetailsDialog({
           </Card>
 
           {/* Confiança da IA */}
-          {analise.confidence_score !== undefined && analise.confidence_score > 0 && (
-            <Card className="p-6 bg-primary/5 border-primary/20" depth="subtle">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">
-                    Confiança da IA
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Nível de certeza da análise automatizada
-                  </p>
+          {analise.confidence_score !== undefined &&
+            analise.confidence_score > 0 && (
+              <Card
+                className="p-6 bg-primary/5 border-primary/20"
+                depth="subtle"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1">
+                      Confiança da IA
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Nível de certeza da análise automatizada
+                    </p>
+                  </div>
+                  <div className="text-4xl font-bold text-primary">
+                    {Math.round(
+                      analise.confidence_score *
+                        (analise.confidence_score <= 1 ? 100 : 1),
+                    )}
+                    %
+                  </div>
                 </div>
-                <div className="text-4xl font-bold text-primary">
-                  {Math.round(analise.confidence_score * (analise.confidence_score <= 1 ? 100 : 1))}%
-                </div>
-              </div>
-            </Card>
-          )}
+              </Card>
+            )}
 
           {/* Problemas Detectados */}
           {problemas.length > 0 && (
@@ -156,35 +184,42 @@ export function AnaliseDetailsDialog({
                 Problemas Detectados ({problemas.length})
               </h3>
               <div className="space-y-4">
-                {problemas.map((problema: ProblemaRadiografico, index: number) => (
-                  <div
-                    key={problema.id || index}
-                    className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className="font-semibold">
-                          {tipoProblemaLabels[problema.tipo_problema] || problema.tipo_problema}
-                          {problema.dente_codigo && ` - Dente ${problema.dente_codigo}`}
-                        </h4>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {problema.localizacao || "Localização não especificada"}
-                        </p>
+                {problemas.map(
+                  (problema: ProblemaRadiografico, index: number) => (
+                    <div
+                      key={problema.id || index}
+                      className="border rounded-lg p-4 hover:bg-accent/50 transition-colors"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h4 className="font-semibold">
+                            {tipoProblemaLabels[problema.tipo_problema] ||
+                              problema.tipo_problema}
+                            {problema.dente_codigo &&
+                              ` - Dente ${problema.dente_codigo}`}
+                          </h4>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {problema.localizacao ||
+                              "Localização não especificada"}
+                          </p>
+                        </div>
+                        <Badge
+                          variant={getSeverityVariant(problema.severidade)}
+                        >
+                          {problema.severidade}
+                        </Badge>
                       </div>
-                      <Badge variant={getSeverityVariant(problema.severidade)}>
-                        {problema.severidade}
-                      </Badge>
+                      {problema.descricao && (
+                        <p className="text-sm mt-2">{problema.descricao}</p>
+                      )}
+                      {problema.confianca !== undefined && (
+                        <div className="mt-2 text-xs text-muted-foreground">
+                          Confiança: {Math.round(problema.confianca)}%
+                        </div>
+                      )}
                     </div>
-                    {problema.descricao && (
-                      <p className="text-sm mt-2">{problema.descricao}</p>
-                    )}
-                    {problema.confianca !== undefined && (
-                      <div className="mt-2 text-xs text-muted-foreground">
-                        Confiança: {Math.round(problema.confianca)}%
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  ),
+                )}
               </div>
             </Card>
           )}
@@ -241,7 +276,9 @@ export function AnaliseDetailsDialog({
           {/* Audit Trail */}
           {auditLogs.length > 0 && (
             <Card className="p-6" depth="normal">
-              <h3 className="text-lg font-semibold mb-4">Trilha de Auditoria</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                Trilha de Auditoria
+              </h3>
               <div className="space-y-3">
                 {auditLogs.map((log) => (
                   <div
@@ -260,7 +297,9 @@ export function AnaliseDetailsDialog({
                       {log.detalhes && Object.keys(log.detalhes).length > 0 && (
                         <p className="text-muted-foreground mt-1 text-xs">
                           {JSON.stringify(log.detalhes).slice(0, 120)}
-                          {JSON.stringify(log.detalhes).length > 120 ? "..." : ""}
+                          {JSON.stringify(log.detalhes).length > 120
+                            ? "..."
+                            : ""}
                         </p>
                       )}
                     </div>

@@ -1,7 +1,7 @@
-import { Request, Response } from "express"
-import { asyncHandler, Errors } from "@/middleware/errorHandler"
-import { teleodontoMetrics } from "@/infrastructure/metrics/TeleodontoMetrics"
-import { TeleodontoService } from "../services/TeleodontoService"
+import { Request, Response } from "express";
+import { asyncHandler, Errors } from "@/middleware/errorHandler";
+import { teleodontoMetrics } from "@/infrastructure/metrics/TeleodontoMetrics";
+import { TeleodontoService } from "../services/TeleodontoService";
 import {
   createTeleconsultaSchema,
   updateTeleconsultaSchema,
@@ -9,153 +9,202 @@ import {
   endSessionSchema,
   addNotesSchema,
   addPrescriptionSchema,
-} from "./schemas"
+} from "./schemas";
 
 export class TeleodontoController {
-  private service: TeleodontoService
+  private service: TeleodontoService;
 
   constructor(service?: TeleodontoService) {
-    this.service = service || new TeleodontoService()
+    this.service = service || new TeleodontoService();
   }
 
   listTeleconsultas = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const { status, dentist_id } = req.query
+    const { status, dentist_id } = req.query;
     const data = await this.service.listTeleconsultas(clinicId, {
       status: status ? String(status) : undefined,
       dentist_id: dentist_id ? String(dentist_id) : undefined,
-    })
+    });
 
-    res.json(data)
-  })
+    res.json(data);
+  });
 
   getById = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const { id } = req.params
-    const data = await this.service.getById(id, clinicId)
-    res.json(data)
-  })
+    const { id } = req.params;
+    const data = await this.service.getById(id, clinicId);
+    res.json(data);
+  });
 
   create = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const parsed = createTeleconsultaSchema.safeParse(req.body)
+    const parsed = createTeleconsultaSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.errors as unknown as Array<{ field: string; message: string; code: string }>)
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.errors as unknown as Array<{
+          field: string;
+          message: string;
+          code: string;
+        }>,
+      );
     }
 
-    const start = Date.now()
-    const data = await this.service.create(parsed.data, clinicId, req.user?.id)
-    teleodontoMetrics.observeCreateDuration(clinicId, Date.now() - start)
-    teleodontoMetrics.incTeleconsultasTotal(clinicId, data.status || "scheduled")
-    res.status(201).json(data)
-  })
+    const start = Date.now();
+    const data = await this.service.create(parsed.data, clinicId, req.user?.id);
+    teleodontoMetrics.observeCreateDuration(clinicId, Date.now() - start);
+    teleodontoMetrics.incTeleconsultasTotal(
+      clinicId,
+      data.status || "scheduled",
+    );
+    res.status(201).json(data);
+  });
 
   update = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const { id } = req.params
-    const parsed = updateTeleconsultaSchema.safeParse(req.body)
+    const { id } = req.params;
+    const parsed = updateTeleconsultaSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.errors as unknown as Array<{ field: string; message: string; code: string }>)
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.errors as unknown as Array<{
+          field: string;
+          message: string;
+          code: string;
+        }>,
+      );
     }
 
-    const data = await this.service.update(id, parsed.data, clinicId)
-    res.json(data)
-  })
+    const data = await this.service.update(id, parsed.data, clinicId);
+    res.json(data);
+  });
 
   delete = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const { id } = req.params
-    await this.service.delete(id, clinicId)
-    res.status(204).send()
-  })
+    const { id } = req.params;
+    await this.service.delete(id, clinicId);
+    res.status(204).send();
+  });
 
   startSession = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const parsed = startSessionSchema.safeParse(req.body)
+    const parsed = startSessionSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.errors as unknown as Array<{ field: string; message: string; code: string }>)
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.errors as unknown as Array<{
+          field: string;
+          message: string;
+          code: string;
+        }>,
+      );
     }
 
-    const data = await this.service.startSession(parsed.data, clinicId)
-    teleodontoMetrics.incSessionsStarted(clinicId)
-    res.json({ ...data, message: "Session started successfully" })
-  })
+    const data = await this.service.startSession(parsed.data, clinicId);
+    teleodontoMetrics.incSessionsStarted(clinicId);
+    res.json({ ...data, message: "Session started successfully" });
+  });
 
   endSession = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const parsed = endSessionSchema.safeParse(req.body)
+    const parsed = endSessionSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.errors as unknown as Array<{ field: string; message: string; code: string }>)
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.errors as unknown as Array<{
+          field: string;
+          message: string;
+          code: string;
+        }>,
+      );
     }
 
-    const data = await this.service.endSession(parsed.data, clinicId)
-    teleodontoMetrics.incSessionsEnded(clinicId)
+    const data = await this.service.endSession(parsed.data, clinicId);
+    teleodontoMetrics.incSessionsEnded(clinicId);
     if (data.duracao_minutos) {
-      teleodontoMetrics.observeSessionDuration(clinicId, data.status || "completed", (data.duracao_minutos as number) * 60)
+      teleodontoMetrics.observeSessionDuration(
+        clinicId,
+        data.status || "completed",
+        (data.duracao_minutos as number) * 60,
+      );
     }
-    res.json({ ...data, message: "Session ended successfully" })
-  })
+    res.json({ ...data, message: "Session ended successfully" });
+  });
 
   addNotes = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const parsed = addNotesSchema.safeParse(req.body)
+    const parsed = addNotesSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.errors as unknown as Array<{ field: string; message: string; code: string }>)
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.errors as unknown as Array<{
+          field: string;
+          message: string;
+          code: string;
+        }>,
+      );
     }
 
-    const data = await this.service.addNotes(parsed.data, clinicId)
-    res.json(data)
-  })
+    const data = await this.service.addNotes(parsed.data, clinicId);
+    res.json(data);
+  });
 
   addPrescription = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.user?.clinicId
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.unauthorized("Missing clinic context")
+      throw Errors.unauthorized("Missing clinic context");
     }
 
-    const parsed = addPrescriptionSchema.safeParse(req.body)
+    const parsed = addPrescriptionSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.errors as unknown as Array<{ field: string; message: string; code: string }>)
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.errors as unknown as Array<{
+          field: string;
+          message: string;
+          code: string;
+        }>,
+      );
     }
 
     const { data, prescription } = await this.service.addPrescription(
       parsed.data,
       clinicId,
       req.user?.id,
-    )
-    teleodontoMetrics.incPrescriptions(clinicId)
-    res.json({ ...data, prescription })
-  })
+    );
+    teleodontoMetrics.incPrescriptions(clinicId);
+    res.json({ ...data, prescription });
+  });
 }

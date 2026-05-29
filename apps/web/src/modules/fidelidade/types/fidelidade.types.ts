@@ -75,9 +75,11 @@ export const fidelidadeIndicacaoSchema = z.object({
     .default("PENDENTE"),
   pontos_concedidos: z.number().optional(),
   created_at: z.string().optional(),
-  indicador: z.object({
-    nome: z.string()
-  }).optional()
+  indicador: z
+    .object({
+      nome: z.string(),
+    })
+    .optional(),
 });
 
 export type FidelidadeConfig = z.infer<typeof fidelidadeConfigSchema>;

@@ -14,7 +14,8 @@ function countProblemas(analises: AnaliseComplete[]): Map<string, number> {
   const problemas = new Map<string, number>();
 
   analises.forEach((analise) => {
-    const problemasDetectados = analise.resultado_ia?.problemas_detectados || [];
+    const problemasDetectados =
+      analise.resultado_ia?.problemas_detectados || [];
     problemasDetectados.forEach((problema: Record<string, unknown>) => {
       const tipo = (problema.tipo_problema as string) || "Problema Dentário";
       problemas.set(tipo, (problemas.get(tipo) || 0) + 1);
@@ -28,9 +29,11 @@ function countAreas(analises: AnaliseComplete[]): Map<string, number> {
   const areas = new Map<string, number>();
 
   analises.forEach((analise) => {
-    const problemasDetectados = analise.resultado_ia?.problemas_detectados || [];
+    const problemasDetectados =
+      analise.resultado_ia?.problemas_detectados || [];
     problemasDetectados.forEach((problema: Record<string, unknown>) => {
-      const localizacao = (problema.localizacao as string) || "Não especificada";
+      const localizacao =
+        (problema.localizacao as string) || "Não especificada";
       areas.set(localizacao, (areas.get(localizacao) || 0) + 1);
     });
   });
@@ -42,7 +45,8 @@ function countSeveridades(analises: AnaliseComplete[]): Map<string, number> {
   const sevs = new Map<string, number>();
 
   analises.forEach((analise) => {
-    const problemasDetectados = analise.resultado_ia?.problemas_detectados || [];
+    const problemasDetectados =
+      analise.resultado_ia?.problemas_detectados || [];
     problemasDetectados.forEach((problema: Record<string, unknown>) => {
       const sev = (problema.severidade as string) || "MÉDIA";
       sevs.set(sev, (sevs.get(sev) || 0) + 1);
@@ -102,19 +106,19 @@ export function useIAInsights(analises: AnaliseComplete[]) {
     if (analises.length === 0) return 0;
     const totalProblemas = analises.reduce(
       (sum, a) => sum + (a.problemas_detectados || 0),
-      0
+      0,
     );
     return (totalProblemas / analises.length).toFixed(1);
   }, [analises]);
 
   const precisaoMediaGeral = useMemo(() => {
     const analisesComPrecisao = analises.filter(
-      (a) => a.confidence_score && a.confidence_score > 0
+      (a) => a.confidence_score && a.confidence_score > 0,
     );
     if (analisesComPrecisao.length === 0) return 0;
     const totalPrecisao = analisesComPrecisao.reduce(
       (sum, a) => sum + (a.confidence_score || 0),
-      0
+      0,
     );
     return Math.round(totalPrecisao / analisesComPrecisao.length);
   }, [analises]);
@@ -129,7 +133,7 @@ export function useIAInsights(analises: AnaliseComplete[]) {
       recomendacoes.push({
         titulo: `Foco em ${padroesMaisComuns[0].tipo}`,
         descricao: `Este tipo de problema representa ${Math.round(
-          (padroesMaisComuns[0].ocorrencias / analises.length) * 100
+          (padroesMaisComuns[0].ocorrencias / analises.length) * 100,
         )}% das análises. Considere implementar protocolos preventivos específicos.`,
         prioridade: "alta",
       });

@@ -1,4 +1,11 @@
-import { Zap, Shield, Blocks, Sparkles, TrendingUp, Database } from "lucide-react";
+import {
+  Zap,
+  Shield,
+  Blocks,
+  Sparkles,
+  TrendingUp,
+  Database,
+} from "lucide-react";
 
 export interface Feature {
   icon: React.ComponentType<{ className?: string }>;

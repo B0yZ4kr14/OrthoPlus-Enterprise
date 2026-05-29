@@ -23,10 +23,15 @@ export function AdvantagesGrid() {
         const colorClass = ICON_COLORS[advantage.icon];
 
         return (
-          <div key={advantage.title} className="p-4 rounded-lg border bg-card/50">
+          <div
+            key={advantage.title}
+            className="p-4 rounded-lg border bg-card/50"
+          >
             <Icon className={`h-8 w-8 ${colorClass} mb-3`} />
             <h4 className="font-semibold text-sm mb-2">{advantage.title}</h4>
-            <p className="text-xs text-muted-foreground">{advantage.description}</p>
+            <p className="text-xs text-muted-foreground">
+              {advantage.description}
+            </p>
           </div>
         );
       })}

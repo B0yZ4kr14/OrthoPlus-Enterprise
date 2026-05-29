@@ -1,5 +1,5 @@
-import { IVendaRepository } from '../../domain/repositories/IVendaRepository';
-import { VendaDTO } from '../dto/VendaDTO';
+import { IVendaRepository } from "../../domain/repositories/IVendaRepository";
+import { VendaDTO } from "../dto/VendaDTO";
 
 export interface ListVendasQuery {
   clinicId: string;
@@ -29,14 +29,14 @@ export class ListVendasQueryHandler {
       startDate: query.startDate,
       endDate: query.endDate,
       skip: (query.page - 1) * query.limit,
-      take: query.limit
+      take: query.limit,
     });
 
     return {
       items: items.map(VendaDTO.fromEntity),
       total,
       page: query.page,
-      totalPages: Math.ceil(total / query.limit)
+      totalPages: Math.ceil(total / query.limit),
     };
   }
 }

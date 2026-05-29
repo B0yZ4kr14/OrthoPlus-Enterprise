@@ -1,5 +1,5 @@
-import { IModuloRepository } from '../../domain/repositories/IModuloRepository';
-import { ModuloDTO } from '../dto/ModuloDTO';
+import { IModuloRepository } from "../../domain/repositories/IModuloRepository";
+import { ModuloDTO } from "../dto/ModuloDTO";
 
 export interface ListModulosQuery {
   clinicId: string;
@@ -21,7 +21,7 @@ export class ListModulosQueryHandler {
     const { items } = await this.moduloRepository.findAll({
       clinicId: query.clinicId,
       categoria: query.categoria,
-      onlyActive: query.onlyActive
+      onlyActive: query.onlyActive,
     });
 
     const modulos = items.map(ModuloDTO.fromEntity);
@@ -29,8 +29,8 @@ export class ListModulosQueryHandler {
     return {
       items: modulos,
       total: items.length,
-      ativos: items.filter(m => m.isActive).length,
-      inativos: items.filter(m => !m.isActive).length
+      ativos: items.filter((m) => m.isActive).length,
+      inativos: items.filter((m) => !m.isActive).length,
     };
   }
 }

@@ -20,7 +20,9 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
           </div>
           <span
             className={`ml-2 text-sm ${
-              step.id <= currentStep ? "text-foreground" : "text-muted-foreground"
+              step.id <= currentStep
+                ? "text-foreground"
+                : "text-muted-foreground"
             }`}
           >
             {step.label}

@@ -1,24 +1,40 @@
-import { Button } from "@orthoplus/core-ui"
-import { useMemoryHubHealth } from "../hooks/useMemoryHubHealth"
+import { Button } from "@orthoplus/core-ui";
+import { useMemoryHubHealth } from "../hooks/useMemoryHubHealth";
 
 export function MemoryHubHealth() {
-  const { metrics, loading, error, refresh } = useMemoryHubHealth()
+  const { metrics, loading, error, refresh } = useMemoryHubHealth();
 
   if (loading) {
-    return <div className="p-4 text-sm text-muted-foreground" data-testid="health-loading">Loading health metrics...</div>
+    return (
+      <div
+        className="p-4 text-sm text-muted-foreground"
+        data-testid="health-loading"
+      >
+        Loading health metrics...
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div className="rounded-md bg-destructive/10 p-4 text-sm text-destructive" data-testid="health-error">
+      <div
+        className="rounded-md bg-destructive/10 p-4 text-sm text-destructive"
+        data-testid="health-error"
+      >
         {error}
-        <Button variant="link" onClick={refresh} className="ml-2 h-auto p-0">Retry</Button>
+        <Button variant="link" onClick={refresh} className="ml-2 h-auto p-0">
+          Retry
+        </Button>
       </div>
-    )
+    );
   }
 
   if (!metrics) {
-    return <div className="p-4 text-sm text-muted-foreground">No health data available</div>
+    return (
+      <div className="p-4 text-sm text-muted-foreground">
+        No health data available
+      </div>
+    );
   }
 
   return (
@@ -36,5 +52,5 @@ export function MemoryHubHealth() {
         <div className="text-sm text-muted-foreground">Drift Issues</div>
       </div>
     </div>
-  )
+  );
 }

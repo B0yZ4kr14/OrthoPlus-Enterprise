@@ -1,12 +1,14 @@
-import { MemoryHubSearch } from "./MemoryHubSearch"
-import { MemoryHubHealth } from "./MemoryHubHealth"
+import { MemoryHubSearch } from "./MemoryHubSearch";
+import { MemoryHubHealth } from "./MemoryHubHealth";
 
 export function MemoryHubDashboard() {
   return (
     <div className="space-y-8 p-6">
       <div>
         <h1 className="text-2xl font-bold">Memory Hub</h1>
-        <p className="text-muted-foreground">Search and monitor project knowledge</p>
+        <p className="text-muted-foreground">
+          Search and monitor project knowledge
+        </p>
       </div>
 
       <section>
@@ -19,5 +21,5 @@ export function MemoryHubDashboard() {
         <MemoryHubSearch />
       </section>
     </div>
-  )
+  );
 }

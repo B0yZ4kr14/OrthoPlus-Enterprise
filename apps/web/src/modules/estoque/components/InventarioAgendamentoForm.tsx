@@ -95,7 +95,9 @@ export function InventarioAgendamentoForm({
               {...register("nome")}
             />
             {errors.nome && (
-              <p className="text-sm text-destructive">{errors.nome.message?.toString()}</p>
+              <p className="text-sm text-destructive">
+                {errors.nome.message?.toString()}
+              </p>
             )}
           </div>
 
@@ -128,7 +130,10 @@ export function InventarioAgendamentoForm({
             <Select
               value={watch("periodicidade")}
               onValueChange={(value) =>
-                setValue("periodicidade", value as AgendamentoFormData["periodicidade"])
+                setValue(
+                  "periodicidade",
+                  value as AgendamentoFormData["periodicidade"],
+                )
               }
             >
               <SelectTrigger>
@@ -193,7 +198,10 @@ export function InventarioAgendamentoForm({
             <Select
               value={watch("tipoInventario")}
               onValueChange={(value) =>
-                setValue("tipoInventario", value as AgendamentoFormData["tipoInventario"])
+                setValue(
+                  "tipoInventario",
+                  value as AgendamentoFormData["tipoInventario"],
+                )
               }
             >
               <SelectTrigger>

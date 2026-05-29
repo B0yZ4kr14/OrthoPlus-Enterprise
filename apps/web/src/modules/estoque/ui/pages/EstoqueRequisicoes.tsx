@@ -8,7 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
 import {
   Dialog,
@@ -33,7 +38,11 @@ import { RequisicaoForm } from "@/modules/estoque/components/RequisicaoForm";
 import { RequisicoesList } from "@/modules/estoque/components/RequisicoesList";
 import { AlertasEstoque } from "@/modules/estoque/components/AlertasEstoque";
 import { useToast } from "@/hooks/use-toast";
-import type { Requisicao, Produto, Alerta } from "@/modules/estoque/types/estoque.types";
+import type {
+  Requisicao,
+  Produto,
+  Alerta,
+} from "@/modules/estoque/types/estoque.types";
 
 export default function EstoqueRequisicoes() {
   const { toast } = useToast();
@@ -63,7 +72,7 @@ export default function EstoqueRequisicoes() {
   const currentUser =
     authUser && "full_name" in authUser
       ? (authUser.full_name ?? "Usuário Atual")
-      : "Usuário Atual"
+      : "Usuário Atual";
 
   const handleSubmit = async (data: Requisicao) => {
     try {

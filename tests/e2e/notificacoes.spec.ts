@@ -17,10 +17,14 @@ test.describe("Notifications", () => {
     await bellButton.first().click();
 
     // Check that the notifications panel opened
-    await expect(page.getByText(/nenhuma notificação|notificações/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/nenhuma notificação|notificações/i).first(),
+    ).toBeVisible();
   });
 
-  test("should navigate to dashboard and access notifications", async ({ page }) => {
+  test("should navigate to dashboard and access notifications", async ({
+    page,
+  }) => {
     // Navigate to the dashboard where the notifications dropdown is available
     await page.goto("./dashboard");
     await page.waitForLoadState("domcontentloaded");

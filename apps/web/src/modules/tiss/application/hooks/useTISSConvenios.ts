@@ -39,7 +39,13 @@ export function useTISSConvenios() {
   });
 
   const updateConvenio = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<Convenio> }) => {
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<Convenio>;
+    }) => {
       return await apiClient.patch<Convenio>(`/tiss/convenios/${id}`, data);
     },
     onSuccess: () => {

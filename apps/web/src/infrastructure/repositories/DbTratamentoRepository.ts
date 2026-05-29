@@ -71,9 +71,8 @@ export class DbTratamentoRepository implements ITratamentoRepository {
 
   async findByClinicId(clinicId: string): Promise<Tratamento[]> {
     try {
-      const data = await apiClient.get<Tables<"pep_tratamentos">[]>(
-        "/pep/tratamentos",
-      );
+      const data =
+        await apiClient.get<Tables<"pep_tratamentos">[]>("/pep/tratamentos");
       return (data || []).map(TratamentoMapper.toDomain);
     } catch (error) {
       throw new InfrastructureError(

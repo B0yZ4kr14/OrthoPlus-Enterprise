@@ -137,7 +137,14 @@ export function ContratoForm({
         <div className="space-y-2">
           <Label htmlFor="status">Status</Label>
           <Select
-            onValueChange={(value: "AGUARDANDO_ASSINATURA" | "ASSINADO" | "CANCELADO" | "EXPIRADO" | "CONCLUIDO") => setValue("status", value)}
+            onValueChange={(
+              value:
+                | "AGUARDANDO_ASSINATURA"
+                | "ASSINADO"
+                | "CANCELADO"
+                | "EXPIRADO"
+                | "CONCLUIDO",
+            ) => setValue("status", value)}
             defaultValue={watch("status")}
           >
             <SelectTrigger>

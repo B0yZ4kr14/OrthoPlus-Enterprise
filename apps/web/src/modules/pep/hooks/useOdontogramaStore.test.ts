@@ -6,9 +6,15 @@ const localStorageMock = (() => {
   let store: Record<string, string> = {};
   return {
     getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { store = {}; },
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
   };
 })();
 
@@ -65,7 +71,9 @@ describe("useOdontogramaStore", () => {
     });
 
     it("should add history entry when updating tooth", () => {
-      const { result } = renderHook(() => useOdontogramaStore(testProntuarioId));
+      const { result } = renderHook(() =>
+        useOdontogramaStore(testProntuarioId),
+      );
 
       const initialHistoryLength = result.current.history.length;
 

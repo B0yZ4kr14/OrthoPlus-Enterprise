@@ -1,4 +1,4 @@
-import { NFe, NFeItem } from '../../domain/entities/NFe';
+import { NFe, NFeItem } from "../../domain/entities/NFe";
 
 export class NFeDTO {
   constructor(
@@ -15,7 +15,7 @@ export class NFeDTO {
     public valorIpi: number,
     public dataEmissao: Date,
     public dataAutorizacao: Date | null,
-    public protocoloAutorizacao: string | null
+    public protocoloAutorizacao: string | null,
   ) {}
 
   static fromEntity(nfe: NFe): NFeDTO {
@@ -33,7 +33,7 @@ export class NFeDTO {
       nfe.valorIpi,
       nfe.dataEmissao,
       nfe.dataAutorizacao,
-      nfe.protocoloAutorizacao
+      nfe.protocoloAutorizacao,
     );
   }
 }

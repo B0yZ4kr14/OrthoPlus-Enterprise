@@ -31,13 +31,16 @@ export function RestoreProgress({ progress, results }: RestoreProgressProps) {
             <span className="font-medium">{results.historico}</span> históricos
           </div>
           <div className="bg-muted p-2 rounded">
-            <span className="font-medium">{results.prontuarios}</span> prontuários
+            <span className="font-medium">{results.prontuarios}</span>{" "}
+            prontuários
           </div>
           <div className="bg-muted p-2 rounded">
-            <span className="font-medium">{results.appointments}</span> agendamentos
+            <span className="font-medium">{results.appointments}</span>{" "}
+            agendamentos
           </div>
           <div className="bg-muted p-2 rounded">
-            <span className="font-medium">{results.financeiro}</span> registros financeiros
+            <span className="font-medium">{results.financeiro}</span> registros
+            financeiros
           </div>
         </div>
       </div>
@@ -49,9 +52,7 @@ export function RestoreProgress({ progress, results }: RestoreProgressProps) {
       <Loader2 className="h-8 w-8 animate-spin mx-auto" />
       <div>
         <h3 className="font-medium">Restaurando dados...</h3>
-        <p className="text-sm text-muted-foreground">
-          Não feche esta janela
-        </p>
+        <p className="text-sm text-muted-foreground">Não feche esta janela</p>
       </div>
       <Progress value={progress} className="w-full" />
       <p className="text-sm text-muted-foreground">{progress}%</p>

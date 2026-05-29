@@ -1,5 +1,5 @@
-import type { TransactionDTO } from "@orthoplus/shared-types"
-import { Transaction } from "../../domain/entities/Transaction"
+import type { TransactionDTO } from "@orthoplus/shared-types";
+import { Transaction } from "../../domain/entities/Transaction";
 
 /**
  * Maps Transaction domain entity to TransactionDTO.
@@ -14,7 +14,8 @@ export class TransactionMapper {
       description: entity.description,
       amount: entity.amount,
       status: entity.status,
-      paymentMethod: (entity.paymentMethod as TransactionDTO["paymentMethod"]) ?? undefined,
+      paymentMethod:
+        (entity.paymentMethod as TransactionDTO["paymentMethod"]) ?? undefined,
       category: entity.category,
       dueDate: entity.dueDate.toISOString(),
       paidAt: entity.paidAt?.toISOString(),
@@ -24,10 +25,10 @@ export class TransactionMapper {
       createdBy: undefined, // not stored in entity yet
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
-    }
+    };
   }
 
   static toDTOList(entities: Transaction[]): TransactionDTO[] {
-    return entities.map((e) => this.toDTO(e))
+    return entities.map((e) => this.toDTO(e));
   }
 }

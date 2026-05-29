@@ -19,7 +19,7 @@ const THEME_OPTIONS = [
     value: "premium-dental-dark" as const,
     label: "Noite Clínica",
     icon: Moon,
-    iconClass: "text-interactive"
+    iconClass: "text-interactive",
   },
 ];
 
@@ -48,10 +48,7 @@ export const ThemeToggle = memo(function ThemeToggle() {
           {currentIcon}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="w-56 bg-popover z-50 border"
-      >
+      <DropdownMenuContent align="end" className="w-56 bg-popover z-50 border">
         <div className="px-2 py-1.5 text-sm font-medium text-foreground">
           Tema
         </div>

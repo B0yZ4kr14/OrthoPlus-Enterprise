@@ -27,7 +27,7 @@ interface UseBackupRestoreReturn {
 export function useBackupRestore(
   open: boolean,
   onClose: () => void,
-  backupFile?: File
+  backupFile?: File,
 ): UseBackupRestoreReturn {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,9 @@ export function useBackupRestore(
   const [decryptionPassword, setDecryptionPassword] = useState("");
   const [requiresDecryption, setRequiresDecryption] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [selectedItems, setSelectedItems] = useState<SelectedItems>(DEFAULT_SELECTED_ITEMS);
+  const [selectedItems, setSelectedItems] = useState<SelectedItems>(
+    DEFAULT_SELECTED_ITEMS,
+  );
   const [results, setResults] = useState<RestoreResults | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,14 +50,18 @@ export function useBackupRestore(
   const handleValidateBackup = async (file: File) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const formData = new FormData();
       formData.append("backup", file);
 
-      const response = await apiClient.post<BackupData>("/backup/validate", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await apiClient.post<BackupData>(
+        "/backup/validate",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
       if (response.requiresDecryption) {
         setRequiresDecryption(true);
@@ -65,7 +71,8 @@ export function useBackupRestore(
         setStep(2);
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Erro ao validar backup";
+      const message =
+        err instanceof Error ? err.message : "Erro ao validar backup";
       setError(message);
       logger.error("Backup validation error:", err);
     } finally {
@@ -75,16 +82,20 @@ export function useBackupRestore(
 
   const handleDecrypt = async () => {
     if (!backupFile) return;
-    
+
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("backup", backupFile);
       formData.append("password", decryptionPassword);
 
-      const response = await apiClient.post<BackupData>("/backup/decrypt", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await apiClient.post<BackupData>(
+        "/backup/decrypt",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
       setBackupData(response);
       setRequiresDecryption(false);
@@ -98,7 +109,7 @@ export function useBackupRestore(
 
   const handleRestore = async () => {
     if (!backupData) return;
-    
+
     setLoading(true);
     setStep(4);
     setProgress(0);
@@ -126,7 +137,8 @@ export function useBackupRestore(
         setProgress(100);
       }, 5000);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Erro na restauração";
+      const message =
+        err instanceof Error ? err.message : "Erro na restauração";
       setError(message);
       setStep(3);
     } finally {

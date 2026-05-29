@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { monitorMemoryUsage, getAllCacheMetrics } from "@/lib/performance";
 import { Activity, Database, Gauge, Zap } from "lucide-react";

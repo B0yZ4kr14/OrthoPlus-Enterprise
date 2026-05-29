@@ -1,16 +1,21 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card"
-import { Label } from "@orthoplus/core-ui/label"
-import { Switch } from "@orthoplus/core-ui/switch"
-import type { ModulePermission } from "./types"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import { Label } from "@orthoplus/core-ui/label";
+import { Switch } from "@orthoplus/core-ui/switch";
+import type { ModulePermission } from "./types";
 
 interface PermissionModalProps {
-  role: "ADMIN" | "MEMBER" | "ROOT"
-  permissions: ModulePermission[]
+  role: "ADMIN" | "MEMBER" | "ROOT";
+  permissions: ModulePermission[];
   onPermissionChange: (
     moduleKey: string,
     field: "can_view" | "can_edit" | "can_delete",
     value: boolean,
-  ) => void
+  ) => void;
 }
 
 export function PermissionModal({
@@ -25,7 +30,7 @@ export function PermissionModal({
           Administradores têm acesso total a todos os módulos automaticamente.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -37,10 +42,7 @@ export function PermissionModal({
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label
-                htmlFor={`${perm.module_key}-view`}
-                className="text-sm"
-              >
+              <Label htmlFor={`${perm.module_key}-view`} className="text-sm">
                 Visualizar
               </Label>
               <Switch
@@ -52,10 +54,7 @@ export function PermissionModal({
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label
-                htmlFor={`${perm.module_key}-edit`}
-                className="text-sm"
-              >
+              <Label htmlFor={`${perm.module_key}-edit`} className="text-sm">
                 Editar
               </Label>
               <Switch
@@ -68,10 +67,7 @@ export function PermissionModal({
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label
-                htmlFor={`${perm.module_key}-delete`}
-                className="text-sm"
-              >
+              <Label htmlFor={`${perm.module_key}-delete`} className="text-sm">
                 Excluir
               </Label>
               <Switch
@@ -87,5 +83,5 @@ export function PermissionModal({
         </Card>
       ))}
     </div>
-  )
+  );
 }

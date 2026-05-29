@@ -19,38 +19,40 @@ Calculate and display the project's Canonical-Driven Development maturity score 
 ## What to do
 
 1. **Run the scoring engine**:
+
 ```bash
 npx docguard-cli score
 ```
 
 2. **For JSON output** (CI/CD integration):
+
 ```bash
 npx docguard-cli score --format json
 ```
 
 3. **Interpret the grade**:
 
-   | Grade | Score | Meaning |
-   |-------|:-----:|---------|
-   | A+ | 95-100 | Exemplary — production-grade documentation |
-   | A | 85-94 | Strong — minor improvements possible |
-   | B | 70-84 | Good — some gaps to address |
-   | C | 50-69 | Fair — significant documentation debt |
-   | D | 30-49 | Poor — major gaps in documentation |
-   | F | 0-29 | Critical — documentation infrastructure missing |
+   | Grade | Score  | Meaning                                         |
+   | ----- | :----: | ----------------------------------------------- |
+   | A+    | 95-100 | Exemplary — production-grade documentation      |
+   | A     | 85-94  | Strong — minor improvements possible            |
+   | B     | 70-84  | Good — some gaps to address                     |
+   | C     | 50-69  | Fair — significant documentation debt           |
+   | D     | 30-49  | Poor — major gaps in documentation              |
+   | F     |  0-29  | Critical — documentation infrastructure missing |
 
 4. **Analyze category breakdown** (sorted by weight):
 
-   | Category | Weight | What It Measures |
-   |----------|:------:|-----------------|
-   | Structure | 25% | Required CDD files exist |
-   | Doc Quality | 20% | Readability, sections, IEEE 830 compliance |
-   | Testing | 15% | Test documentation coverage |
-   | Security | 10% | Security docs, secrets handling |
-   | Environment | 10% | Environment and setup docs |
-   | Drift | 10% | Code deviation tracking |
-   | Changelog | 5% | Change log maintenance |
-   | Architecture | 5% | Architecture documentation |
+   | Category     | Weight | What It Measures                           |
+   | ------------ | :----: | ------------------------------------------ |
+   | Structure    |  25%   | Required CDD files exist                   |
+   | Doc Quality  |  20%   | Readability, sections, IEEE 830 compliance |
+   | Testing      |  15%   | Test documentation coverage                |
+   | Security     |  10%   | Security docs, secrets handling            |
+   | Environment  |  10%   | Environment and setup docs                 |
+   | Drift        |  10%   | Code deviation tracking                    |
+   | Changelog    |   5%   | Change log maintenance                     |
+   | Architecture |   5%   | Architecture documentation                 |
 
 5. **Build an ROI-ranked improvement roadmap**:
    - Calculate `Potential Gain = weight - current points` for each category

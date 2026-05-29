@@ -28,7 +28,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { FileText, Plus, Edit, Trash2, Copy, Eye } from "lucide-react";
 import { toast } from "sonner";

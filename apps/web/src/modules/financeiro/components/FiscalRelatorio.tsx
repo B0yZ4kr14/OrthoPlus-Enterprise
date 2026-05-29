@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
@@ -18,7 +23,15 @@ import {
   TableHeader,
   TableRow,
 } from "@orthoplus/core-ui/table";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 import { FileBarChart, Download, Search, FileSpreadsheet } from "lucide-react";
 
 interface NFe {
@@ -50,7 +63,11 @@ interface RelatorioData {
 interface Props {
   data: any;
   isLoading: boolean;
-  onGenerate: (filters: { dataInicio?: string; dataFim?: string; tipo?: string }) => void;
+  onGenerate: (filters: {
+    dataInicio?: string;
+    dataFim?: string;
+    tipo?: string;
+  }) => void;
 }
 
 export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
@@ -64,7 +81,17 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
 
   const handleExportCSV = () => {
     if (!data?.notas.length) return;
-    const headers = ["Numero", "Serie", "Tipo", "Status", "Data Emissao", "Destinatario", "Valor Total", "ICMS", "ISS"];
+    const headers = [
+      "Numero",
+      "Serie",
+      "Tipo",
+      "Status",
+      "Data Emissao",
+      "Destinatario",
+      "Valor Total",
+      "ICMS",
+      "ISS",
+    ];
     const rows = data.notas.map((n: any) => [
       n.numero,
       n.serie || "",
@@ -76,7 +103,9 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
       ((n.valor_icms || 0) / 100).toFixed(2),
       ((n.valor_iss || 0) / 100).toFixed(2),
     ]);
-    const csv = [headers.join(";"), ...rows.map((r: any) => r.join(";"))].join("\n");
+    const csv = [headers.join(";"), ...rows.map((r: any) => r.join(";"))].join(
+      "\n",
+    );
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -86,12 +115,13 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
     URL.revokeObjectURL(url);
   };
 
-  const chartData = data?.notas.slice(0, 12).map((n: any) => ({
-    name: n.numero,
-    total: (n.valor_total || 0) / 100,
-    icms: (n.valor_icms || 0) / 100,
-    iss: (n.valor_iss || 0) / 100,
-  })) || [];
+  const chartData =
+    data?.notas.slice(0, 12).map((n: any) => ({
+      name: n.numero,
+      total: (n.valor_total || 0) / 100,
+      icms: (n.valor_icms || 0) / 100,
+      iss: (n.valor_iss || 0) / 100,
+    })) || [];
 
   const totais = data?.totais;
 
@@ -108,11 +138,19 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div className="space-y-2">
               <Label>Data Início</Label>
-              <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
+              <Input
+                type="date"
+                value={dataInicio}
+                onChange={(e) => setDataInicio(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label>Data Fim</Label>
-              <Input type="date" value={dataFim} onChange={(e) => setDataFim(e.target.value)} />
+              <Input
+                type="date"
+                value={dataFim}
+                onChange={(e) => setDataFim(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label>Tipo</Label>
@@ -129,13 +167,21 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
               </Select>
             </div>
             <div className="flex gap-2">
-              <Button onClick={handleGenerate} disabled={isLoading} className="gap-2">
+              <Button
+                onClick={handleGenerate}
+                disabled={isLoading}
+                className="gap-2"
+              >
                 <Search className="h-4 w-4" />
                 {isLoading ? "Gerando..." : "Gerar"}
               </Button>
               {data && (
                 <>
-                  <Button variant="outline" onClick={handleExportCSV} className="gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={handleExportCSV}
+                    className="gap-2"
+                  >
                     <Download className="h-4 w-4" />
                     CSV
                   </Button>
@@ -158,7 +204,10 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground">Valor Total</p>
               <p className="text-2xl font-bold">
-                R$ {(totais.valorTotal / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                R${" "}
+                {(totais.valorTotal / 100).toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                })}
               </p>
             </CardContent>
           </Card>
@@ -166,7 +215,10 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground">ICMS</p>
               <p className="text-2xl font-bold">
-                R$ {(totais.valorIcms / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                R${" "}
+                {(totais.valorIcms / 100).toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                })}
               </p>
             </CardContent>
           </Card>
@@ -174,7 +226,10 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
             <CardContent className="pt-6">
               <p className="text-sm text-muted-foreground">ISS</p>
               <p className="text-2xl font-bold">
-                R$ {(totais.valorIss / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                R${" "}
+                {(totais.valorIss / 100).toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                })}
               </p>
             </CardContent>
           </Card>
@@ -192,7 +247,9 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip formatter={(value: number) => `R$ ${value.toFixed(2)}`} />
+                <Tooltip
+                  formatter={(value: number) => `R$ ${value.toFixed(2)}`}
+                />
                 <Bar dataKey="total" fill="#8884d8" name="Total" />
                 <Bar dataKey="icms" fill="#82ca9d" name="ICMS" />
                 <Bar dataKey="iss" fill="#ffc658" name="ISS" />
@@ -205,7 +262,9 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
       {data?.notas && data.notas.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Notas Fiscais ({data.notas.length})</CardTitle>
+            <CardTitle className="text-lg">
+              Notas Fiscais ({data.notas.length})
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
@@ -224,7 +283,9 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
               <TableBody>
                 {data.notas.map((n: any) => (
                   <TableRow key={n.id}>
-                    <TableCell>{n.numero}/{n.serie || "-"}</TableCell>
+                    <TableCell>
+                      {n.numero}/{n.serie || "-"}
+                    </TableCell>
                     <TableCell>{n.tipo}</TableCell>
                     <TableCell>{n.status}</TableCell>
                     <TableCell>{n.data_emissao}</TableCell>

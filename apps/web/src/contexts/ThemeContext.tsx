@@ -12,20 +12,24 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const CSS_CLASS_THEMES: Theme[] = ["premium-light", "premium-dental-dark", "system"];
+const CSS_CLASS_THEMES: Theme[] = [
+  "premium-light",
+  "premium-dental-dark",
+  "system",
+];
 
 // Mapa: tema → classe CSS aplicada em <html>
 const THEME_CLASS_MAP: Record<Exclude<Theme, "system">, string> = {
-  "premium-light":       "premium-light",
+  "premium-light": "premium-light",
   "premium-dental-dark": "premium-dental-dark",
 };
 
 // Temas legados removidos — mapear para o padrão mais próximo
 const LEGACY_THEME_MAP: Record<string, Exclude<Theme, "system">> = {
-  "light":              "premium-light",
-  "dark":               "premium-dental-dark",
-  "professional-dark":  "premium-dental-dark",
-  "high-contrast":      "premium-light",
+  light: "premium-light",
+  dark: "premium-dental-dark",
+  "professional-dark": "premium-dental-dark",
+  "high-contrast": "premium-light",
   "high-contrast-dark": "premium-dental-dark",
 };
 

@@ -1,10 +1,12 @@
-import { Prisma } from "@prisma/client"
-import { RegistrarAcaoAuditDTO } from "../entities/audit"
-import { IIARadiografiaRepository } from "../repositories/IIARadiografiaRepository"
-import { IARadiografiaRepository } from "../../infrastructure/IARadiografiaRepository"
+import { Prisma } from "@prisma/client";
+import { RegistrarAcaoAuditDTO } from "../entities/audit";
+import { IIARadiografiaRepository } from "../repositories/IIARadiografiaRepository";
+import { IARadiografiaRepository } from "../../infrastructure/IARadiografiaRepository";
 
 export class IAAuditService {
-  constructor(private repo: IIARadiografiaRepository = new IARadiografiaRepository()) {}
+  constructor(
+    private repo: IIARadiografiaRepository = new IARadiografiaRepository(),
+  ) {}
 
   async registrarAcao(dto: RegistrarAcaoAuditDTO) {
     return this.repo.createAuditLog({
@@ -16,14 +18,14 @@ export class IAAuditService {
       ip_address: dto.ipAddress,
       user_agent: dto.userAgent,
       detalhes: (dto.detalhes ?? {}) as Prisma.InputJsonValue,
-    })
+    });
   }
 
   async obterAuditoriaPorAnalise(analiseId: string) {
-    return this.repo.findAuditLogsByAnalise(analiseId)
+    return this.repo.findAuditLogsByAnalise(analiseId);
   }
 
   async obterAuditoriaPorPaciente(pacienteId: string, clinicId: string) {
-    return this.repo.findAuditLogsByPaciente(pacienteId, clinicId)
+    return this.repo.findAuditLogsByPaciente(pacienteId, clinicId);
   }
 }

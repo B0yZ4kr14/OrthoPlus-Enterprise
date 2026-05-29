@@ -1,7 +1,27 @@
 // cspell:disable
-import { Bitcoin, Wallet, TrendingUp, ArrowRightLeft, Settings, Activity, Bell, BarChart3, AlertTriangle } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@orthoplus/core-ui/dialog";
+import {
+  Bitcoin,
+  Wallet,
+  TrendingUp,
+  ArrowRightLeft,
+  Settings,
+  Activity,
+  Bell,
+  BarChart3,
+  AlertTriangle,
+} from "lucide-react";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@orthoplus/core-ui/dialog";
 import { Card } from "@orthoplus/core-ui/card";
 import { NotificationBadge } from "./NotificationBadge";
 import { BitcoinInfoSection } from "./BitcoinInfoSection";
@@ -69,7 +89,11 @@ export function CryptoPagamentos() {
 
       {/* KPIs Dashboard */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card variant="metric" depth="normal" className="p-6 border-l-orange-500">
+        <Card
+          variant="metric"
+          depth="normal"
+          className="p-6 border-l-orange-500"
+        >
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
@@ -83,7 +107,11 @@ export function CryptoPagamentos() {
           </div>
         </Card>
 
-        <Card variant="metric" depth="normal" className="p-6 border-l-green-500">
+        <Card
+          variant="metric"
+          depth="normal"
+          className="p-6 border-l-green-500"
+        >
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
@@ -100,7 +128,11 @@ export function CryptoPagamentos() {
           </div>
         </Card>
 
-        <Card variant="metric" depth="normal" className="p-6 border-l-yellow-500">
+        <Card
+          variant="metric"
+          depth="normal"
+          className="p-6 border-l-yellow-500"
+        >
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
@@ -192,7 +224,7 @@ export function CryptoPagamentos() {
 
         {/* Transactions Tab */}
         <TabsContent value="transactions" className="space-y-4">
-          <CryptoTransactionsView 
+          <CryptoTransactionsView
             exchanges={exchanges}
             wallets={wallets}
             transactions={transactions}
@@ -207,7 +239,7 @@ export function CryptoPagamentos() {
 
         {/* Wallets Tab */}
         <TabsContent value="wallets" className="space-y-4">
-          <CryptoWalletsView 
+          <CryptoWalletsView
             exchanges={exchanges}
             wallets={wallets}
             walletDialogOpen={walletDialogOpen}
@@ -227,7 +259,7 @@ export function CryptoPagamentos() {
 
         {/* Exchanges Tab */}
         <TabsContent value="exchanges" className="space-y-4">
-          <CryptoExchangesView 
+          <CryptoExchangesView
             exchanges={exchanges}
             setExchangeDialogOpen={setExchangeDialogOpen}
           />

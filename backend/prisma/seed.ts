@@ -36,8 +36,12 @@ async function main() {
 
   const adminPassword = getAdminPassword();
   if (!adminPassword) {
-    console.log("[seed] SEED_ADMIN_PASSWORD not set or too short. Skipping admin user creation.");
-    console.log("[seed] To create admin users, set SEED_ADMIN_PASSWORD env var (min 8 chars).");
+    console.log(
+      "[seed] SEED_ADMIN_PASSWORD not set or too short. Skipping admin user creation.",
+    );
+    console.log(
+      "[seed] To create admin users, set SEED_ADMIN_PASSWORD env var (min 8 chars).",
+    );
     console.log("[seed] Seed completed.");
     return;
   }
@@ -50,7 +54,9 @@ async function main() {
     });
 
     if (existing) {
-      console.log(`[seed] User already exists: ${admin.email} (${existing.id})`);
+      console.log(
+        `[seed] User already exists: ${admin.email} (${existing.id})`,
+      );
       continue;
     }
 
@@ -65,7 +71,9 @@ async function main() {
       },
     });
 
-    console.log(`[seed] User created: ${user.email} (${user.id}) — role: ${user.role}`);
+    console.log(
+      `[seed] User created: ${user.email} (${user.id}) — role: ${user.role}`,
+    );
   }
 
   console.log("[seed] Database seed completed.");

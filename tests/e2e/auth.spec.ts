@@ -25,7 +25,10 @@ test.describe("Authentication", () => {
       .locator('input[name="email"]:visible')
       .first()
       .fill("admin@orthoplus.com");
-    await page.locator('input[type="password"]:visible').first().fill("admin123!");
+    await page
+      .locator('input[type="password"]:visible')
+      .first()
+      .fill("admin123!");
 
     await page
       .getByRole("button", { name: /entrar/i })
@@ -35,7 +38,9 @@ test.describe("Authentication", () => {
     await expect(page).toHaveURL(/.*\/dashboard/);
     await page.waitForLoadState("networkidle");
     // Check that user left the login screen (breadcrumb shows Dashboard)
-    await expect(page.locator('nav[aria-label="breadcrumb"]')).toContainText("Dashboard");
+    await expect(page.locator('nav[aria-label="breadcrumb"]')).toContainText(
+      "Dashboard",
+    );
   });
 
   test("should display error with invalid credentials", async ({ page }) => {
@@ -45,7 +50,10 @@ test.describe("Authentication", () => {
       .locator('input[name="email"]:visible')
       .first()
       .fill("invalido@email.com");
-    await page.locator('input[type="password"]:visible').first().fill("senhaErrada");
+    await page
+      .locator('input[type="password"]:visible')
+      .first()
+      .fill("senhaErrada");
 
     await page
       .getByRole("button", { name: /entrar/i })
@@ -61,7 +69,10 @@ test.describe("Authentication", () => {
       .locator('input[name="email"]:visible')
       .first()
       .fill("admin@orthoplus.com");
-    await page.locator('input[type="password"]:visible').first().fill("admin123!");
+    await page
+      .locator('input[type="password"]:visible')
+      .first()
+      .fill("admin123!");
     await page
       .getByRole("button", { name: /entrar/i })
       .first()

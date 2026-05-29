@@ -34,7 +34,12 @@ import {
   TableHeader,
   TableRow,
 } from "@orthoplus/core-ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import {
   CreditCard,
   Plus,
@@ -76,12 +81,10 @@ export default function ContasPagar() {
 
   const getCategoryBadge = (categoria: string) => {
     const colors: Record<string, string> = {
-      "Materiais Odontológicos":
-        "bg-info/10 text-info border-info/20",
+      "Materiais Odontológicos": "bg-info/10 text-info border-info/20",
       "Contas Fixas": "bg-purple-500/10 text-purple-700 border-purple-500/20",
       Laboratório: "bg-interactive/10 text-interactive border-interactive/20",
-      "Taxas e Impostos":
-        "bg-warning/10 text-warning border-warning/20",
+      "Taxas e Impostos": "bg-warning/10 text-warning border-warning/20",
     };
     return (
       <Badge variant="outline" className={colors[categoria] || ""}>

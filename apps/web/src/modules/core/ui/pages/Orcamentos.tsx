@@ -34,12 +34,8 @@ type BadgeVariant =
   | "info";
 
 export default function Orcamentos() {
-  const {
-    orcamentos,
-    loading,
-    enviarOrcamento,
-    aprovarOrcamento,
-  } = useOrcamentos();
+  const { orcamentos, loading, enviarOrcamento, aprovarOrcamento } =
+    useOrcamentos();
 
   const convertToTreatmentPlan = (_orcamentoId: string) => {
     toast.info("Conversão para plano de tratamento ainda não implementada");

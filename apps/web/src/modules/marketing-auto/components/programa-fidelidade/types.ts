@@ -1,7 +1,16 @@
 // cspell:disable
 
-export type NivelFidelidade = "DIAMANTE" | "PLATINA" | "OURO" | "PRATA" | "BRONZE";
-export type StatusIndicacao = "COMPARECEU" | "AGENDADO" | "PENDENTE" | "NAO_COMPARECEU";
+export type NivelFidelidade =
+  | "DIAMANTE"
+  | "PLATINA"
+  | "OURO"
+  | "PRATA"
+  | "BRONZE";
+export type StatusIndicacao =
+  | "COMPARECEU"
+  | "AGENDADO"
+  | "PENDENTE"
+  | "NAO_COMPARECEU";
 
 export interface Badge {
   nome: string;

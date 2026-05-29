@@ -11,7 +11,7 @@ export function useReplications() {
     queryFn: async () => {
       const data = await apiClient.get<ReplicationRecord[]>(
         "/configuracoes/backups/replicacoes",
-        { params: { limit: 50 } }
+        { params: { limit: 50 } },
       );
       return data;
     },
@@ -20,9 +20,15 @@ export function useReplications() {
 
   const stats: ReplicationStats = {
     total: replications?.length || 0,
-    completed: replications?.filter((r) => r.replication_status === "COMPLETED").length || 0,
-    failed: replications?.filter((r) => r.replication_status === "FAILED").length || 0,
-    pending: replications?.filter((r) => r.replication_status === "PENDING").length || 0,
+    completed:
+      replications?.filter((r) => r.replication_status === "COMPLETED")
+        .length || 0,
+    failed:
+      replications?.filter((r) => r.replication_status === "FAILED").length ||
+      0,
+    pending:
+      replications?.filter((r) => r.replication_status === "PENDING").length ||
+      0,
   };
 
   return { replications, stats, isLoading };

@@ -7,7 +7,11 @@ interface ValidateButtonProps {
   onClick: () => void;
 }
 
-export function ValidateButton({ disabled, loading, onClick }: ValidateButtonProps) {
+export function ValidateButton({
+  disabled,
+  loading,
+  onClick,
+}: ValidateButtonProps) {
   return (
     <Button onClick={onClick} disabled={disabled || loading} className="w-full">
       {loading ? (

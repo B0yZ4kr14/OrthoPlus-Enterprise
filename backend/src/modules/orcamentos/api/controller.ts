@@ -1,7 +1,15 @@
 import { logger } from "@/infrastructure/logger";
 import { Request, Response } from "express";
-import { OrcamentoService, CreateOrcamentoInput, AddItemInput } from "../application/services/OrcamentoService";
-import { createOrcamentoSchema, updateOrcamentoSchema, addItemSchema } from "./schemas";
+import {
+  OrcamentoService,
+  CreateOrcamentoInput,
+  AddItemInput,
+} from "../application/services/OrcamentoService";
+import {
+  createOrcamentoSchema,
+  updateOrcamentoSchema,
+  addItemSchema,
+} from "./schemas";
 
 export class OrcamentosController {
   private service: OrcamentoService;
@@ -45,9 +53,14 @@ export class OrcamentosController {
     }
     const parsed = createOrcamentoSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
-    const data = await this.service.create({ ...parsed.data, created_by: createdBy } as CreateOrcamentoInput, clinicId);
+    const data = await this.service.create(
+      { ...parsed.data, created_by: createdBy } as CreateOrcamentoInput,
+      clinicId,
+    );
     return res.status(201).json(data);
   }
 
@@ -59,7 +72,9 @@ export class OrcamentosController {
     const { id } = req.params;
     const parsed = updateOrcamentoSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
     const data = await this.service.update(id, parsed.data, clinicId);
     if (!data) {
@@ -95,7 +110,8 @@ export class OrcamentosController {
       }
       return res.json(data);
     } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : "Internal server error";
+      const msg =
+        error instanceof Error ? error.message : "Internal server error";
       logger.error("Error enviando orcamento", { error });
       return res.status(400).json({ error: msg });
     }
@@ -115,7 +131,8 @@ export class OrcamentosController {
       }
       return res.json(data);
     } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : "Internal server error";
+      const msg =
+        error instanceof Error ? error.message : "Internal server error";
       logger.error("Error aprovando orcamento", { error });
       return res.status(400).json({ error: msg });
     }
@@ -130,16 +147,24 @@ export class OrcamentosController {
     const { id } = req.params;
     const { motivo } = req.body;
     if (!motivo || typeof motivo !== "string") {
-      return res.status(400).json({ error: "Motivo de rejeição é obrigatório" });
+      return res
+        .status(400)
+        .json({ error: "Motivo de rejeição é obrigatório" });
     }
     try {
-      const data = await this.service.rejeitar(id, rejeitadoPor, motivo, clinicId);
+      const data = await this.service.rejeitar(
+        id,
+        rejeitadoPor,
+        motivo,
+        clinicId,
+      );
       if (!data) {
         return res.status(404).json({ error: "Orçamento not found" });
       }
       return res.json(data);
     } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : "Internal server error";
+      const msg =
+        error instanceof Error ? error.message : "Internal server error";
       logger.error("Error rejeitando orcamento", { error });
       return res.status(400).json({ error: msg });
     }
@@ -164,9 +189,15 @@ export class OrcamentosController {
     const { orcamento_id } = req.params;
     const parsed = addItemSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      return res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
     }
-    const data = await this.service.addItem(orcamento_id, parsed.data as AddItemInput, clinicId);
+    const data = await this.service.addItem(
+      orcamento_id,
+      parsed.data as AddItemInput,
+      clinicId,
+    );
     if (!data) {
       return res.status(404).json({ error: "Orçamento not found" });
     }

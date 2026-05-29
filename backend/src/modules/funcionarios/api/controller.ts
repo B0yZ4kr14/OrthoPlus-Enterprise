@@ -9,7 +9,8 @@ export class FuncionariosController {
       res.status(401).json({ error: "Missing clinic context" });
       return;
     }
-    const data = await prisma.funcionarios.findMany({ // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.funcionarios.findMany({
+      // eslint-disable-line @typescript-eslint/no-explicit-any
       where: { clinic_id: clinicId },
       orderBy: { nome: "asc" },
     });
@@ -23,7 +24,9 @@ export class FuncionariosController {
       return;
     }
     const { id } = req.params;
-    const data = await prisma.funcionarios.findFirst({ where: { id, clinic_id: clinicId } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await prisma.funcionarios.findFirst({
+      where: { id, clinic_id: clinicId },
+    }); // eslint-disable-line @typescript-eslint/no-explicit-any
     if (!data) {
       res.status(404).json({ error: "Funcionário not found" });
       return;
@@ -39,7 +42,9 @@ export class FuncionariosController {
     }
     const parsed = createFuncionarioSchema.safeParse(req.body);
     if (!parsed.success) {
-      res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
     const data = await prisma.funcionarios.create({
@@ -57,7 +62,9 @@ export class FuncionariosController {
     const { id } = req.params;
     const parsed = updateFuncionarioSchema.safeParse(req.body);
     if (!parsed.success) {
-      res.status(400).json({ error: "Invalid input", details: parsed.error.flatten() });
+      res
+        .status(400)
+        .json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
     const data = await prisma.funcionarios.update({

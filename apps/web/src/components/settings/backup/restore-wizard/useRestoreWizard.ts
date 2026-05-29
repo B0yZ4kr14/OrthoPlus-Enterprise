@@ -2,9 +2,27 @@ import { useState, useCallback } from "react";
 import type { BackupOption } from "./types";
 
 const BACKUPS: BackupOption[] = [
-  { id: "1", date: "15/11/2025 18:30", type: "Full", size: "2.3 GB", status: "success" },
-  { id: "2", date: "15/11/2025 12:00", type: "Incremental", size: "156 MB", status: "success" },
-  { id: "3", date: "14/11/2025 18:30", type: "Full", size: "2.2 GB", status: "success" },
+  {
+    id: "1",
+    date: "15/11/2025 18:30",
+    type: "Full",
+    size: "2.3 GB",
+    status: "success",
+  },
+  {
+    id: "2",
+    date: "15/11/2025 12:00",
+    type: "Incremental",
+    size: "156 MB",
+    status: "success",
+  },
+  {
+    id: "3",
+    date: "14/11/2025 18:30",
+    type: "Full",
+    size: "2.2 GB",
+    status: "success",
+  },
 ];
 
 export function useRestoreWizard(onClose: () => void) {

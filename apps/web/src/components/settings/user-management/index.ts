@@ -1,5 +1,5 @@
-export * from "./types"
-export { UserFilters } from "./UserFilters"
-export { UserForm } from "./UserForm"
-export { UserTable } from "./UserTable"
-export { PermissionModal } from "./PermissionModal"
+export * from "./types";
+export { UserFilters } from "./UserFilters";
+export { UserForm } from "./UserForm";
+export { UserTable } from "./UserTable";
+export { PermissionModal } from "./PermissionModal";

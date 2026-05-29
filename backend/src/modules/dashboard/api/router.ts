@@ -1,17 +1,19 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
-import { Router } from 'express';
-import { IDatabaseConnection } from '@/infrastructure/database/IDatabaseConnection';
-import { DashboardController } from '../controllers/DashboardController';
-import { cacheRoute } from '@/infrastructure/redis/cacheRoute';
+import { Router } from "express";
+import { IDatabaseConnection } from "@/infrastructure/database/IDatabaseConnection";
+import { DashboardController } from "../controllers/DashboardController";
+import { cacheRoute } from "@/infrastructure/redis/cacheRoute";
 
 export function createDashboardRouter(db?: IDatabaseConnection): Router {
   const router: Router = Router();
-router.use(clinicGuard);
+  router.use(clinicGuard);
 
   if (!db) {
     // Without a database connection, return a stub router
-    router.get('/overview', (_req, res) => {
-      res.status(503).json({ error: 'Dashboard module requires database connection' });
+    router.get("/overview", (_req, res) => {
+      res
+        .status(503)
+        .json({ error: "Dashboard module requires database connection" });
     });
     return router;
   }
@@ -23,8 +25,11 @@ router.use(clinicGuard);
    * Rota raiz — retorna overview do dashboard
    */
   router.get(
-    '/',
-    cacheRoute(60, (req) => `cache:dashboard:root:${req.user?.clinicId ?? 'unknown'}`),
+    "/",
+    cacheRoute(
+      60,
+      (req) => `cache:dashboard:root:${req.user?.clinicId ?? "unknown"}`,
+    ),
     (req, res) => controller.getOverview(req, res),
   );
 
@@ -34,8 +39,11 @@ router.use(clinicGuard);
    * Cache Redis de 60 segundos por clínica para reduzir carga no banco de dados
    */
   router.get(
-    '/overview',
-    cacheRoute(60, (req) => `cache:dashboard:overview:${req.user?.clinicId ?? 'unknown'}`),
+    "/overview",
+    cacheRoute(
+      60,
+      (req) => `cache:dashboard:overview:${req.user?.clinicId ?? "unknown"}`,
+    ),
     (req, res) => controller.getOverview(req, res),
   );
 

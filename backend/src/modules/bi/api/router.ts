@@ -15,7 +15,7 @@ router.get("/", (_req, res) => {
     version: "1.0.0",
     endpoints: ["/"],
     status: "active",
-    note: "Module routes available — see router.ts for full endpoint list"
+    note: "Module routes available — see router.ts for full endpoint list",
   });
 });
 

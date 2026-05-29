@@ -1,5 +1,8 @@
 import type { z } from "zod";
-import type { cryptoWalletSchema, ExchangeConfig } from "@/modules/crypto/types/crypto.types";
+import type {
+  cryptoWalletSchema,
+  ExchangeConfig,
+} from "@/modules/crypto/types/crypto.types";
 
 export interface WalletFormProps {
   onSubmit: (data: z.infer<typeof cryptoWalletSchema>) => Promise<void>;

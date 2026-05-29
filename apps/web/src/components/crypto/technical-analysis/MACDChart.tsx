@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import {
   ComposedChart,
   XAxis,
@@ -22,9 +27,7 @@ export function MACDChart({ chartData }: MACDChartProps) {
   return (
     <Card depth="normal">
       <CardHeader>
-        <CardTitle>
-          MACD - Moving Average Convergence Divergence
-        </CardTitle>
+        <CardTitle>MACD - Moving Average Convergence Divergence</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>
@@ -57,14 +60,13 @@ export function MACDChart({ chartData }: MACDChartProps) {
                       Signal: {(payload[1].value as number)?.toFixed(2)}
                     </p>
                     <p className="text-sm">
-                      Histogram:{" "}
-                      {(payload[2].value as number)?.toFixed(2)}
+                      Histogram: {(payload[2].value as number)?.toFixed(2)}
                     </p>
                   </div>
                 );
               }}
             />
-            <Legend  wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: "12px", paddingTop: 8 }} />
             <Bar
               dataKey="histogram"
               fill="hsl(var(--muted))"

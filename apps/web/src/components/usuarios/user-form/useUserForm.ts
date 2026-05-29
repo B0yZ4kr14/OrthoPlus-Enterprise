@@ -6,7 +6,11 @@ import { apiClient } from "@/lib/api/apiClient";
 import { useAuth } from "@/contexts/AuthContext";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
-import { userFormSchema, type UserFormValues, type UserFormProps } from "./types";
+import {
+  userFormSchema,
+  type UserFormValues,
+  type UserFormProps,
+} from "./types";
 
 export function useUserForm({ user, onSuccess }: UserFormProps) {
   const { clinicId } = useAuth();

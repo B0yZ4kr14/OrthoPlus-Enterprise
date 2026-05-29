@@ -1,8 +1,17 @@
-import { Request, Response } from 'express';
-import { logger } from '@/infrastructure/logger';
-import { GetPatientQuery, GetPatientDTO } from '../../application/queries/GetPatientQuery';
-import { ListPatientsQuery, ListPatientsDTO } from '../../application/queries/ListPatientsQuery';
-import { GetPatientStatsQuery, PatientStatsDTO } from '../../application/queries/GetPatientStatsQuery';
+import { Request, Response } from "express";
+import { logger } from "@/infrastructure/logger";
+import {
+  GetPatientQuery,
+  GetPatientDTO,
+} from "../../application/queries/GetPatientQuery";
+import {
+  ListPatientsQuery,
+  ListPatientsDTO,
+} from "../../application/queries/ListPatientsQuery";
+import {
+  GetPatientStatsQuery,
+  PatientStatsDTO,
+} from "../../application/queries/GetPatientStatsQuery";
 
 export class PatientQueryController {
   constructor(
@@ -20,13 +29,13 @@ export class PatientQueryController {
 
       const patient = await this.getPatientQuery.execute(dto);
       if (!patient) {
-        res.status(404).json({ error: 'Patient not found' });
+        res.status(404).json({ error: "Patient not found" });
         return;
       }
       res.status(200).json(patient);
     } catch (error: unknown) {
-      logger.error('Error getting patient', { error });
-      res.status(500).json({ error: 'Failed to get patient' });
+      logger.error("Error getting patient", { error });
+      res.status(500).json({ error: "Failed to get patient" });
     }
   }
 
@@ -43,8 +52,8 @@ export class PatientQueryController {
       const result = await this.listPatientsQuery.execute(dto);
       res.status(200).json(result);
     } catch (error: unknown) {
-      logger.error('Error listing patients', { error });
-      res.status(500).json({ error: 'Failed to list patients' });
+      logger.error("Error listing patients", { error });
+      res.status(500).json({ error: "Failed to list patients" });
     }
   }
 
@@ -57,8 +66,8 @@ export class PatientQueryController {
       const stats = await this.getPatientStatsQuery.execute(dto);
       res.status(200).json(stats);
     } catch (error: unknown) {
-      logger.error('Error getting patient stats', { error });
-      res.status(500).json({ error: 'Failed to get patient stats' });
+      logger.error("Error getting patient stats", { error });
+      res.status(500).json({ error: "Failed to get patient stats" });
     }
   }
 }

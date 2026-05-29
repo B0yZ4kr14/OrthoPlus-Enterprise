@@ -15,7 +15,12 @@ interface ReceiptDialogProps {
   onPrint: () => void;
 }
 
-export function ReceiptDialog({ open, onClose, transacao, onPrint }: ReceiptDialogProps) {
+export function ReceiptDialog({
+  open,
+  onClose,
+  transacao,
+  onPrint,
+}: ReceiptDialogProps) {
   if (!transacao) return null;
 
   return (
@@ -45,7 +50,9 @@ export function ReceiptDialog({ open, onClose, transacao, onPrint }: ReceiptDial
               </div>
               <div>
                 <p className="text-muted-foreground">Valor</p>
-                <p className="font-medium">R$ {parseFloat(transacao.valor).toFixed(2)}</p>
+                <p className="font-medium">
+                  R$ {parseFloat(transacao.valor).toFixed(2)}
+                </p>
               </div>
             </div>
           </div>

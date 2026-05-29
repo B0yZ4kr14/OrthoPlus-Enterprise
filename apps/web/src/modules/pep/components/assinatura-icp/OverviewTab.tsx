@@ -1,9 +1,19 @@
 // cspell:disable
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { FileText, CheckCircle, Download, FileSignature } from "lucide-react";
-import type { DocumentoAssinado, SolicitacaoPendente, CertificadoTipo } from "./types";
+import type {
+  DocumentoAssinado,
+  SolicitacaoPendente,
+  CertificadoTipo,
+} from "./types";
 
 interface OverviewTabProps {
   documentos: DocumentoAssinado[];
@@ -17,7 +27,11 @@ const variantClasses: Record<CertificadoTipo["variant"], string> = {
   purple: "bg-purple-50",
 };
 
-export function OverviewTab({ documentos, solicitacoes, certificadosTipos }: OverviewTabProps) {
+export function OverviewTab({
+  documentos,
+  solicitacoes,
+  certificadosTipos,
+}: OverviewTabProps) {
   return (
     <div className="space-y-4">
       <div className="grid gap-4 md:grid-cols-2">
@@ -32,12 +46,20 @@ export function OverviewTab({ documentos, solicitacoes, certificadosTipos }: Ove
             {certificadosTipos.map((cert, index) => (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Badge variant="outline" className={variantClasses[cert.variant]}>
+                  <Badge
+                    variant="outline"
+                    className={variantClasses[cert.variant]}
+                  >
                     {cert.tipo}
                   </Badge>
-                  <span className="text-sm">{cert.quantidade} certificado{cert.quantidade > 1 ? "s" : ""}</span>
+                  <span className="text-sm">
+                    {cert.quantidade} certificado
+                    {cert.quantidade > 1 ? "s" : ""}
+                  </span>
                 </div>
-                <span className={`text-sm ${cert.status === "Válidos" ? "text-muted-foreground" : "text-warning"}`}>
+                <span
+                  className={`text-sm ${cert.status === "Válidos" ? "text-muted-foreground" : "text-warning"}`}
+                >
                   {cert.status}
                 </span>
               </div>
@@ -48,9 +70,7 @@ export function OverviewTab({ documentos, solicitacoes, certificadosTipos }: Ove
         <Card>
           <CardHeader>
             <CardTitle>Documentos Assinados Recentemente</CardTitle>
-            <CardDescription>
-              Últimas assinaturas realizadas
-            </CardDescription>
+            <CardDescription>Últimas assinaturas realizadas</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {documentos.map((doc, index) => (

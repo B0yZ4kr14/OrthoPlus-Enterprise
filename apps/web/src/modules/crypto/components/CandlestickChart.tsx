@@ -249,7 +249,13 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
             fill="hsl(var(--primary))"
             radius={[2, 2, 2, 2]}
             shape={(props: unknown) => {
-              const { x, y, width, height, payload } = props as { x: number; y: number; width: number; height: number; payload: { color: string } };
+              const { x, y, width, height, payload } = props as {
+                x: number;
+                y: number;
+                width: number;
+                height: number;
+                payload: { color: string };
+              };
               return (
                 <rect
                   x={x}

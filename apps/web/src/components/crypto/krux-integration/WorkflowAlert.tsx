@@ -6,8 +6,8 @@ export function WorkflowAlert() {
     <Alert>
       <QrCode className="h-4 w-4" />
       <AlertDescription>
-        <strong>Workflow:</strong> Gere PSBT → Assine no Krux → Escaneie transação assinada →
-        Broadcast
+        <strong>Workflow:</strong> Gere PSBT → Assine no Krux → Escaneie
+        transação assinada → Broadcast
       </AlertDescription>
     </Alert>
   );

@@ -25,11 +25,11 @@ export interface Patient {
   lastVisit?: string;
 }
 
-export type MaritalStatus = 
-  | "single" 
-  | "married" 
-  | "divorced" 
-  | "widowed" 
+export type MaritalStatus =
+  | "single"
+  | "married"
+  | "divorced"
+  | "widowed"
   | "separated";
 
 export interface PatientAddress {

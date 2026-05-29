@@ -14,7 +14,11 @@ interface ItemSelectionProps {
 const ITEMS_CONFIG = [
   { key: "modules" as const, label: "Módulos", icon: Database },
   { key: "patients" as const, label: "Pacientes", icon: Users },
-  { key: "historicoClinico" as const, label: "Histórico Clínico", icon: FileText },
+  {
+    key: "historicoClinico" as const,
+    label: "Histórico Clínico",
+    icon: FileText,
+  },
   { key: "prontuarios" as const, label: "Prontuários", icon: FileText },
   { key: "odontogramas" as const, label: "Odontogramas", icon: FileText },
   { key: "appointments" as const, label: "Agendamentos", icon: Calendar },
@@ -42,8 +46,10 @@ export function ItemSelection({
       case "appointments":
         return data.appointments?.length || 0;
       case "financeiro":
-        return (data.financeiro?.contasReceber?.length || 0) +
-               (data.financeiro?.contasPagar?.length || 0);
+        return (
+          (data.financeiro?.contasReceber?.length || 0) +
+          (data.financeiro?.contasPagar?.length || 0)
+        );
       default:
         return 0;
     }

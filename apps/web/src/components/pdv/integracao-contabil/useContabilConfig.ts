@@ -19,7 +19,11 @@ interface UseContabilConfigReturn {
 
 export function useContabilConfig(
   selectedClinic: string | null,
-  toast: (props: { title: string; description?: string; variant?: "default" | "destructive" }) => void
+  toast: (props: {
+    title: string;
+    description?: string;
+    variant?: "default" | "destructive";
+  }) => void,
 ): UseContabilConfigReturn {
   const [configs, setConfigs] = useState<ContabilConfig[]>([]);
   const [envios, setEnvios] = useState<ContabilEnvio[]>([]);
@@ -51,20 +55,21 @@ export function useContabilConfig(
       setConfigs(
         configsList.sort(
           (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        ),
       );
       setEnvios(
         enviosList
           .sort(
             (a, b) =>
               new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
+              new Date(a.created_at).getTime(),
           )
-          .slice(0, 50)
+          .slice(0, 50),
       );
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       logger.error("Error loading data:", error);
       toast({
         title: "Erro ao carregar dados",
@@ -94,7 +99,8 @@ export function useContabilConfig(
 
       await loadData();
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Erro desconhecido";
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
       logger.error("Error saving config:", error);
       toast({
         title: "Erro ao salvar configuração",

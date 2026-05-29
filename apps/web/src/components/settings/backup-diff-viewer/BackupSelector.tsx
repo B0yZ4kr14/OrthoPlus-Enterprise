@@ -15,7 +15,12 @@ interface BackupSelectorProps {
   onChange: (value: string) => void;
 }
 
-export function BackupSelector({ label, value, backups, onChange }: BackupSelectorProps) {
+export function BackupSelector({
+  label,
+  value,
+  backups,
+  onChange,
+}: BackupSelectorProps) {
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium">{label}</label>

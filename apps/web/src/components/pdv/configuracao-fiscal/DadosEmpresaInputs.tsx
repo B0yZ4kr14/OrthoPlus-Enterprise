@@ -5,10 +5,16 @@ import type { FiscalFormData } from "./types";
 
 interface DadosEmpresaInputsProps {
   formData: FiscalFormData;
-  onChange: <K extends keyof FiscalFormData>(field: K, value: FiscalFormData[K]) => void;
+  onChange: <K extends keyof FiscalFormData>(
+    field: K,
+    value: FiscalFormData[K],
+  ) => void;
 }
 
-export function DadosEmpresaInputs({ formData, onChange }: DadosEmpresaInputsProps) {
+export function DadosEmpresaInputs({
+  formData,
+  onChange,
+}: DadosEmpresaInputsProps) {
   return (
     <>
       <div className="space-y-2">

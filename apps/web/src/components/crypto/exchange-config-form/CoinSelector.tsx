@@ -17,8 +17,14 @@ interface CoinSelectorProps {
   onRemoveCoin: (coin: string) => void;
 }
 
-export function CoinSelector({ selectedCoins, onAddCoin, onRemoveCoin }: CoinSelectorProps) {
-  const availableCoins = AVAILABLE_COINS.filter((coin) => !selectedCoins.includes(coin));
+export function CoinSelector({
+  selectedCoins,
+  onAddCoin,
+  onRemoveCoin,
+}: CoinSelectorProps) {
+  const availableCoins = AVAILABLE_COINS.filter(
+    (coin) => !selectedCoins.includes(coin),
+  );
 
   return (
     <div className="space-y-3">

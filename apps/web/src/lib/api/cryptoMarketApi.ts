@@ -122,9 +122,8 @@ export interface ExchangeRateResponse {
  * Replaces raw fetch in: useMarketRates, MarketRatesWidget
  */
 export async function getUSDRates(): Promise<ExchangeRateResponse> {
-  const { data } = await exchangeRateClient.get<ExchangeRateResponse>(
-    "/latest/USD",
-  );
+  const { data } =
+    await exchangeRateClient.get<ExchangeRateResponse>("/latest/USD");
   return data;
 }
 

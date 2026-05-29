@@ -30,9 +30,7 @@ export function DataTableBody<T extends Record<string, unknown>>({
         data.map((row, index) => (
           <TableRow key={index}>
             {columns.map((column) => (
-              <TableCell key={String(column.key)}>
-                {column.cell(row)}
-              </TableCell>
+              <TableCell key={String(column.key)}>{column.cell(row)}</TableCell>
             ))}
           </TableRow>
         ))

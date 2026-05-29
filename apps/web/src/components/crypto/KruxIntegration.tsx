@@ -45,7 +45,8 @@ export function KruxIntegration() {
 
   const broadcastTransaction = async () => {
     try {
-      const { broadcastTransaction: broadcastTx } = await import("@/lib/api/cryptoInternalApi");
+      const { broadcastTransaction: broadcastTx } =
+        await import("@/lib/api/cryptoInternalApi");
       const data = await broadcastTx({ signedPsbt: signedPSBT });
       toast.success(
         `Transação enviada! TxID: ${data.txId.substring(0, 12)}...`,

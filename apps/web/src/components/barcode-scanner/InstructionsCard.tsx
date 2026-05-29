@@ -17,8 +17,12 @@ export function InstructionsCard({ onStart, onCancel }: InstructionsCardProps) {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-2">Scanner de Código de Barras/QR Code</h3>
-        <p className="text-sm text-muted-foreground">Posicione o código dentro da área de leitura da câmera</p>
+        <h3 className="text-lg font-semibold mb-2">
+          Scanner de Código de Barras/QR Code
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Posicione o código dentro da área de leitura da câmera
+        </p>
       </div>
 
       <div className="bg-muted/50 rounded-lg p-4 text-xs text-muted-foreground space-y-2">

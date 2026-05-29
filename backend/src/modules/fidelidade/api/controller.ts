@@ -37,7 +37,9 @@ const createIndicacaoSchema = z.object({
 });
 
 export class FidelidadeController {
-  constructor(private repo: IFidelidadeRepository = new FidelidadeRepository()) {}
+  constructor(
+    private repo: IFidelidadeRepository = new FidelidadeRepository(),
+  ) {}
 
   async getPoints(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
@@ -45,7 +47,10 @@ export class FidelidadeController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { patient_id } = req.query;
-    const data = await this.repo.findPontosByClinic(clinicId, patient_id ? String(patient_id) : undefined);
+    const data = await this.repo.findPontosByClinic(
+      clinicId,
+      patient_id ? String(patient_id) : undefined,
+    );
     res.json(data);
   }
 
@@ -61,23 +66,29 @@ export class FidelidadeController {
 
     const { patient_id, pontos } = parsed.data;
 
-    const [pointRecord, , unlockedBadges] = await this.repo.addPointsTransaction(
+    const [pointRecord, , unlockedBadges] =
+      await this.repo.addPointsTransaction(
+        clinicId,
+        patient_id,
+        pontos,
+        parsed.data,
+      );
+
+    const patientRecord = await this.repo.findPacienteFidelidade(
       clinicId,
       patient_id,
-      pontos,
-      parsed.data,
     );
-
-    const patientRecord = await this.repo.findPacienteFidelidade(clinicId, patient_id);
     const totalPoints = patientRecord?.pontos_acumulados || pontos;
     const newlyUnlocked = (unlockedBadges || []).filter(
-      (badge: { pontos_necessarios: number }) => totalPoints >= badge.pontos_necessarios
+      (badge: { pontos_necessarios: number }) =>
+        totalPoints >= badge.pontos_necessarios,
     );
 
     res.status(201).json({
       ...pointRecord,
       pontos_acumulados: totalPoints,
-      badges_desbloqueados: newlyUnlocked.length > 0 ? newlyUnlocked : undefined,
+      badges_desbloqueados:
+        newlyUnlocked.length > 0 ? newlyUnlocked : undefined,
     });
   }
 
@@ -99,7 +110,10 @@ export class FidelidadeController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.createBadge({ ...parsed.data, clinic_id: clinicId });
+    const data = await this.repo.createBadge({
+      ...parsed.data,
+      clinic_id: clinicId,
+    });
     res.status(201).json(data);
   }
 
@@ -125,7 +139,10 @@ export class FidelidadeController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.createRecompensa({ ...parsed.data, clinic_id: clinicId });
+    const data = await this.repo.createRecompensa({
+      ...parsed.data,
+      clinic_id: clinicId,
+    });
     res.status(201).json(data);
   }
 
@@ -151,7 +168,10 @@ export class FidelidadeController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.createIndicacao({ ...parsed.data, clinic_id: clinicId });
+    const data = await this.repo.createIndicacao({
+      ...parsed.data,
+      clinic_id: clinicId,
+    });
     res.status(201).json(data);
   }
 }

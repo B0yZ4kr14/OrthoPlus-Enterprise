@@ -1,4 +1,4 @@
-import { Contrato, ItemContrato } from '../../domain/entities/Contrato';
+import { Contrato, ItemContrato } from "../../domain/entities/Contrato";
 
 export class ContratoDTO {
   constructor(
@@ -15,7 +15,7 @@ export class ContratoDTO {
     public numeroParcelas: number,
     public dataInicio: Date,
     public dataFimPrevista: Date,
-    public dataAssinatura: Date | null
+    public dataAssinatura: Date | null,
   ) {}
 
   static fromEntity(contrato: Contrato): ContratoDTO {
@@ -33,7 +33,7 @@ export class ContratoDTO {
       contrato.numeroParcelas,
       contrato.dataInicio,
       contrato.dataFimPrevista,
-      contrato.dataAssinatura
+      contrato.dataAssinatura,
     );
   }
 }

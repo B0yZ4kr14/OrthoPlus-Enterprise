@@ -29,7 +29,10 @@ import {
   Terminal,
 } from "lucide-react";
 
-export const MODULE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+export const MODULE_ICONS: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
   DASHBOARD: LayoutDashboard,
   PACIENTES: Users,
   DENTISTAS: UserPlus,

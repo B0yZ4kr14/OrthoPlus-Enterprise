@@ -14,8 +14,8 @@ export function ImportFileUploadStep({
       <Alert>
         <Upload className="h-4 w-4" />
         <AlertDescription>
-          Selecione um arquivo de exportação do OrthoPlus Enterprise (formato JSON) para
-          importar os dados.
+          Selecione um arquivo de exportação do OrthoPlus Enterprise (formato
+          JSON) para importar os dados.
         </AlertDescription>
       </Alert>
 

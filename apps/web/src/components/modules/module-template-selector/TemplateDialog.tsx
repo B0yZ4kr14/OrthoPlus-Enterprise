@@ -42,7 +42,8 @@ export function TemplateDialog({
           </DialogTitle>
           <DialogDescription>
             Escolha um template pré-configurado baseado na especialidade da sua
-            clínica. Todos os módulos necessários serão ativados automaticamente.
+            clínica. Todos os módulos necessários serão ativados
+            automaticamente.
           </DialogDescription>
         </DialogHeader>
 

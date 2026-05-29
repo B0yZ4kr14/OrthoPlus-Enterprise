@@ -12,8 +12,12 @@ export function PatientFormTab({ patientId }: PatientFormTabProps) {
   const { data: patient, isLoading } = useQuery({
     queryKey: ["patient-form", patientId],
     queryFn: async () => {
-      const data = await apiClient.get<Record<string, any>>(`/pacientes/${patientId}`);
-      return PatientAdapter.toFrontend(data as Parameters<typeof PatientAdapter.toFrontend>[0]);
+      const data = await apiClient.get<Record<string, any>>(
+        `/pacientes/${patientId}`,
+      );
+      return PatientAdapter.toFrontend(
+        data as Parameters<typeof PatientAdapter.toFrontend>[0],
+      );
     },
   });
 

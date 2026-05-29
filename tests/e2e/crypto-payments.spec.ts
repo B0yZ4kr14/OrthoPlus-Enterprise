@@ -3,8 +3,8 @@ import { test, expect } from "./fixtures";
 test.describe("Crypto Payments Module", () => {
   test.beforeEach(async ({ page }) => {
     // Auth token injected via fixtures.ts
-    await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
+    await page.goto("/");
+    await page.waitForLoadState("domcontentloaded");
   });
 
   test("should navigate to crypto payments page", async ({ page }) => {

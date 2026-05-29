@@ -23,7 +23,11 @@ export function AuthenticationConfig() {
         <EmailPasswordSection config={config} onUpdate={updateConfig} />
         <Separator />
         <GoogleOAuthSection config={config} onUpdate={updateConfig} />
-        <ActionButtons saving={saving} onSave={saveConfig} onReload={loadConfig} />
+        <ActionButtons
+          saving={saving}
+          onSave={saveConfig}
+          onReload={loadConfig}
+        />
       </CardContent>
     </Card>
   );

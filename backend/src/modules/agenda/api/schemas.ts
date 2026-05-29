@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const appointmentCreateSchema = z.object({
   dentist_id: z.string().uuid(),
@@ -6,11 +6,17 @@ export const appointmentCreateSchema = z.object({
   start_time: z.string(),
   end_time: z.string(),
   status: z.string(),
-  title: z.enum(["CONSULTA", "RETORNO", "EMERGENCIA", "AVALIACAO", "PROCEDIMENTO"]),
+  title: z.enum([
+    "CONSULTA",
+    "RETORNO",
+    "EMERGENCIA",
+    "AVALIACAO",
+    "PROCEDIMENTO",
+  ]),
   description: z.string().optional(),
   treatment_id: z.string().uuid().optional().nullable(),
   created_by: z.string(),
-})
+});
 
 export const appointmentUpdateSchema = z.object({
   dentist_id: z.string().uuid().optional(),
@@ -21,7 +27,7 @@ export const appointmentUpdateSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   treatment_id: z.string().uuid().optional().nullable(),
-})
+});
 
 export const confirmationCreateSchema = z.object({
   appointment_id: z.string().uuid(),
@@ -32,7 +38,7 @@ export const confirmationCreateSchema = z.object({
   phone_number: z.string().optional().nullable(),
   sent_at: z.string().optional().nullable(),
   error_message: z.string().optional().nullable(),
-})
+});
 
 export const confirmationUpdateSchema = z.object({
   status: z.string().optional(),
@@ -42,7 +48,7 @@ export const confirmationUpdateSchema = z.object({
   phone_number: z.string().optional().nullable(),
   sent_at: z.string().optional().nullable(),
   error_message: z.string().optional().nullable(),
-})
+});
 
 export const blockedTimeCreateSchema = z.object({
   dentist_id: z.string().uuid(),
@@ -50,7 +56,7 @@ export const blockedTimeCreateSchema = z.object({
   end_datetime: z.string(),
   reason: z.string(),
   created_by: z.string(),
-})
+});
 
 export const dentistScheduleCreateSchema = z.object({
   dentist_id: z.string().uuid(),
@@ -59,7 +65,7 @@ export const dentistScheduleCreateSchema = z.object({
   end_time: z.string(),
   is_active: z.boolean(),
   created_by: z.string(),
-})
+});
 
 export const dentistScheduleUpdateSchema = z.object({
   dentist_id: z.string().uuid().optional(),
@@ -67,4 +73,4 @@ export const dentistScheduleUpdateSchema = z.object({
   start_time: z.string().optional(),
   end_time: z.string().optional(),
   is_active: z.boolean().optional(),
-})
+});

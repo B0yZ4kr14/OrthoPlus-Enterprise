@@ -1,5 +1,11 @@
 // cspell:disable
-import { ArrowRight, TrendingDown, TrendingUp, Minus, AlertCircle } from "lucide-react";
+import {
+  ArrowRight,
+  TrendingDown,
+  TrendingUp,
+  Minus,
+  AlertCircle,
+} from "lucide-react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Separator } from "@orthoplus/core-ui/separator";
 import { ComparativoPDFExport } from "../ComparativoPDFExport";
@@ -12,7 +18,10 @@ interface ComparacaoStatsProps {
   comparacao: ComparacaoData;
 }
 
-const TENDENCIA_ICONS: Record<string, React.ElementType<{ className?: string }>> = {
+const TENDENCIA_ICONS: Record<
+  string,
+  React.ElementType<{ className?: string }>
+> = {
   aumentou: TrendingUp,
   piorou: TrendingUp,
   diminuiu: TrendingDown,
@@ -32,12 +41,24 @@ const getTendenciaColor = (tendencia: string, invertido = false) => {
   return "text-muted-foreground";
 };
 
-function TendenciaIcon({ tendencia, invertido = false }: { tendencia: string; invertido?: boolean }) {
+function TendenciaIcon({
+  tendencia,
+  invertido = false,
+}: {
+  tendencia: string;
+  invertido?: boolean;
+}) {
   const Icon = TENDENCIA_ICONS[tendencia] || Minus;
-  return <Icon className={`h-5 w-5 ${getTendenciaColor(tendencia, invertido)}`} />;
+  return (
+    <Icon className={`h-5 w-5 ${getTendenciaColor(tendencia, invertido)}`} />
+  );
 }
 
-export function ComparacaoStats({ analise1, analise2, comparacao }: ComparacaoStatsProps) {
+export function ComparacaoStats({
+  analise1,
+  analise2,
+  comparacao,
+}: ComparacaoStatsProps) {
   return (
     <Card className="p-6 bg-primary/5 border-primary/20" depth="normal">
       <div className="flex items-center justify-between mb-4">
@@ -54,15 +75,22 @@ export function ComparacaoStats({ analise1, analise2, comparacao }: ComparacaoSt
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">Período entre análises</p>
+          <p className="text-sm text-muted-foreground">
+            Período entre análises
+          </p>
           <p className="text-3xl font-bold">{comparacao.diasEntre} dias</p>
         </div>
 
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">Problemas Detectados</p>
           <div className="flex items-center gap-2">
-            <TendenciaIcon tendencia={comparacao.problemas.tendencia} invertido />
-            <span className={`text-3xl font-bold ${getTendenciaColor(comparacao.problemas.tendencia, true)}`}>
+            <TendenciaIcon
+              tendencia={comparacao.problemas.tendencia}
+              invertido
+            />
+            <span
+              className={`text-3xl font-bold ${getTendenciaColor(comparacao.problemas.tendencia, true)}`}
+            >
               {comparacao.problemas.valor > 0 ? "+" : ""}
               {comparacao.problemas.valor}
             </span>
@@ -76,12 +104,16 @@ export function ComparacaoStats({ analise1, analise2, comparacao }: ComparacaoSt
           <p className="text-sm text-muted-foreground">Precisão da IA</p>
           <div className="flex items-center gap-2">
             <TendenciaIcon tendencia={comparacao.precisao.tendencia} />
-            <span className={`text-3xl font-bold ${getTendenciaColor(comparacao.precisao.tendencia)}`}>
+            <span
+              className={`text-3xl font-bold ${getTendenciaColor(comparacao.precisao.tendencia)}`}
+            >
               {Number(comparacao.precisao.valor) > 0 ? "+" : ""}
               {comparacao.precisao.valor}%
             </span>
           </div>
-          <p className="text-xs text-muted-foreground">{comparacao.precisao.tendencia}</p>
+          <p className="text-xs text-muted-foreground">
+            {comparacao.precisao.tendencia}
+          </p>
         </div>
       </div>
 
@@ -93,14 +125,14 @@ export function ComparacaoStats({ analise1, analise2, comparacao }: ComparacaoSt
           <div className="text-sm">
             {comparacao.problemas.valor < 0 && (
               <p className="text-success font-medium">
-                Evolução positiva: Redução de {Math.abs(comparacao.problemas.valor)} problema(s)
-                detectado(s).
+                Evolução positiva: Redução de{" "}
+                {Math.abs(comparacao.problemas.valor)} problema(s) detectado(s).
               </p>
             )}
             {comparacao.problemas.valor > 0 && (
               <p className="text-destructive font-medium">
-                Atenção necessária: Aumento de {comparacao.problemas.valor} problema(s)
-                detectado(s).
+                Atenção necessária: Aumento de {comparacao.problemas.valor}{" "}
+                problema(s) detectado(s).
               </p>
             )}
             {comparacao.problemas.valor === 0 && (

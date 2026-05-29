@@ -7,13 +7,13 @@
 
 export interface QuantizedEmbedding {
   /** Int8 quantized values */
-  values: Int8Array
+  values: Int8Array;
   /** Original min value for dequantization */
-  min: number
+  min: number;
   /** Original max value for dequantization */
-  max: number
+  max: number;
   /** Compression ratio achieved */
-  compressionRatio: number
+  compressionRatio: number;
 }
 
 /**
@@ -23,29 +23,29 @@ export interface QuantizedEmbedding {
  */
 export function quantize(embedding: number[]): QuantizedEmbedding {
   if (embedding.length === 0) {
-    return { values: new Int8Array(0), min: 0, max: 0, compressionRatio: 1 }
+    return { values: new Int8Array(0), min: 0, max: 0, compressionRatio: 1 };
   }
 
-  const min = Math.min(...embedding)
-  const max = Math.max(...embedding)
-  const range = max - min
+  const min = Math.min(...embedding);
+  const max = Math.max(...embedding);
+  const range = max - min;
 
-  const values = new Int8Array(embedding.length)
+  const values = new Int8Array(embedding.length);
 
   if (range === 0) {
     // All values are the same
-    values.fill(0)
-    return { values, min, max, compressionRatio: 4 }
+    values.fill(0);
+    return { values, min, max, compressionRatio: 4 };
   }
 
   for (let i = 0; i < embedding.length; i++) {
     // Scale to [0, 255] then offset to [-128, 127]
-    const normalized = (embedding[i] - min) / range
-    const scaled = Math.round(normalized * 255) - 128
-    values[i] = Math.max(-128, Math.min(127, scaled))
+    const normalized = (embedding[i] - min) / range;
+    const scaled = Math.round(normalized * 255) - 128;
+    values[i] = Math.max(-128, Math.min(127, scaled));
   }
 
-  return { values, min, max, compressionRatio: 4 }
+  return { values, min, max, compressionRatio: 4 };
 }
 
 /**
@@ -54,18 +54,18 @@ export function quantize(embedding: number[]): QuantizedEmbedding {
  * @returns Reconstructed float32 array
  */
 export function dequantize(quantized: QuantizedEmbedding): number[] {
-  const { values, min, max } = quantized
-  if (values.length === 0) return []
+  const { values, min, max } = quantized;
+  if (values.length === 0) return [];
 
-  const range = max - min
-  const result = new Array<number>(values.length)
+  const range = max - min;
+  const result = new Array<number>(values.length);
 
   for (let i = 0; i < values.length; i++) {
-    const normalized = (values[i] + 128) / 255
-    result[i] = normalized * range + min
+    const normalized = (values[i] + 128) / 255;
+    result[i] = normalized * range + min;
   }
 
-  return result
+  return result;
 }
 
 /**
@@ -77,49 +77,49 @@ export function cosineSimilarityQuantized(
   queryVec: Float32Array,
   quantized: QuantizedEmbedding,
 ): number {
-  const { values, min, max } = quantized
-  if (values.length === 0 || queryVec.length !== values.length) return 0
+  const { values, min, max } = quantized;
+  if (values.length === 0 || queryVec.length !== values.length) return 0;
 
-  const range = max - min
+  const range = max - min;
   if (range === 0) {
     // All quantized values map to the same float; similarity depends only on query
-    const constantValue = min
-    let dot = 0
-    let normA = 0
+    const constantValue = min;
+    let dot = 0;
+    let normA = 0;
     for (let i = 0; i < queryVec.length; i++) {
-      dot += queryVec[i] * constantValue
-      normA += queryVec[i] * queryVec[i]
+      dot += queryVec[i] * constantValue;
+      normA += queryVec[i] * queryVec[i];
     }
-    const normB = constantValue * constantValue * queryVec.length
-    if (normA === 0 || normB === 0) return 0
-    return dot / (Math.sqrt(normA) * Math.sqrt(normB))
+    const normB = constantValue * constantValue * queryVec.length;
+    if (normA === 0 || normB === 0) return 0;
+    return dot / (Math.sqrt(normA) * Math.sqrt(normB));
   }
 
-  let dot = 0
-  let normA = 0
-  let normB = 0
+  let dot = 0;
+  let normA = 0;
+  let normB = 0;
 
   for (let i = 0; i < queryVec.length; i++) {
-    const deq = ((values[i] + 128) / 255) * range + min
-    dot += queryVec[i] * deq
-    normA += queryVec[i] * queryVec[i]
-    normB += deq * deq
+    const deq = ((values[i] + 128) / 255) * range + min;
+    dot += queryVec[i] * deq;
+    normA += queryVec[i] * queryVec[i];
+    normB += deq * deq;
   }
 
-  if (normA === 0 || normB === 0) return 0
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB))
+  if (normA === 0 || normB === 0) return 0;
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
 /**
  * Pack an Int8Array into a Buffer for SQLite BLOB storage.
  */
 export function packInt8(values: Int8Array): Buffer {
-  return Buffer.from(values.buffer, values.byteOffset, values.byteLength)
+  return Buffer.from(values.buffer, values.byteOffset, values.byteLength);
 }
 
 /**
  * Unpack a Buffer back into an Int8Array.
  */
 export function unpackInt8(buffer: Buffer): Int8Array {
-  return new Int8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength)
+  return new Int8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 }

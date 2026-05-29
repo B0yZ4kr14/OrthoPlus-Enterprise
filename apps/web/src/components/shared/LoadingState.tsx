@@ -53,7 +53,10 @@ export function LoadingState({
         )}
       >
         {Array.from({ length: rows }).map((_, i) => (
-          <div key={i} className="space-y-3 p-4 border border-border/50 rounded-xl glass-card">
+          <div
+            key={i}
+            className="space-y-3 p-4 border border-border/50 rounded-xl glass-card"
+          >
             <Skeleton className="h-8 w-8 rounded-lg" />
             <Skeleton className="h-4 w-3/4 rounded-md" />
             <Skeleton className="h-3 w-full rounded-md" />
@@ -123,7 +126,12 @@ export function LoadingState({
         className,
       )}
     >
-      <Loader2 className={cn("animate-spin text-interactive drop-shadow-[0_0_8px_hsl(var(--interactive)/0.4)]", sizeClasses[size])} />
+      <Loader2
+        className={cn(
+          "animate-spin text-interactive drop-shadow-[0_0_8px_hsl(var(--interactive)/0.4)]",
+          sizeClasses[size],
+        )}
+      />
       {message && (
         <p className="text-sm text-muted-foreground mt-4">{message}</p>
       )}

@@ -32,7 +32,11 @@ export function AnimatedSection({
       initial={reduced ? false : "hidden"}
       animate="visible"
       variants={reduced ? undefined : fadeUp}
-      transition={reduced ? { duration: 0 } : { delay, duration: 0.4, ease: [0, 0, 0.2, 1] }}
+      transition={
+        reduced
+          ? { duration: 0 }
+          : { delay, duration: 0.4, ease: [0, 0, 0.2, 1] }
+      }
       className={className}
     >
       {children}

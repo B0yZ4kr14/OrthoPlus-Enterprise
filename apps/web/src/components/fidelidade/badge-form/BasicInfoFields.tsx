@@ -17,7 +17,12 @@ interface BasicInfoFieldsProps {
   onUpdate: (field: "nome" | "descricao" | "icone", value: string) => void;
 }
 
-export function BasicInfoFields({ nome, descricao, icone, onUpdate }: BasicInfoFieldsProps) {
+export function BasicInfoFields({
+  nome,
+  descricao,
+  icone,
+  onUpdate,
+}: BasicInfoFieldsProps) {
   return (
     <>
       <div className="space-y-2">
@@ -44,7 +49,10 @@ export function BasicInfoFields({ nome, descricao, icone, onUpdate }: BasicInfoF
 
       <div className="space-y-2">
         <Label htmlFor="icone">Ícone *</Label>
-        <Select value={icone} onValueChange={(value) => onUpdate("icone", value)}>
+        <Select
+          value={icone}
+          onValueChange={(value) => onUpdate("icone", value)}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>

@@ -2,7 +2,7 @@ import { logger } from "@/infrastructure/logger";
 import { IInventarioRepository } from "@/modules/inventario/domain/repositories/IInventarioRepository";
 import { IProdutoRepository } from "@/modules/inventario/domain/repositories/IProdutoRepository";
 
-import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository"
+import { InventarioRepository } from "@/modules/inventario/infrastructure/InventarioRepository";
 
 export interface AutoOrderDetail {
   orderId: string;
@@ -12,15 +12,15 @@ export interface AutoOrderDetail {
 }
 
 export class InventarioControllerService {
-  private repo: IInventarioRepository
-  private produtoRepository?: IProdutoRepository
+  private repo: IInventarioRepository;
+  private produtoRepository?: IProdutoRepository;
 
   constructor(
     repo?: IInventarioRepository,
     produtoRepository?: IProdutoRepository,
   ) {
-    this.repo = repo ?? new InventarioRepository()
-    this.produtoRepository = produtoRepository
+    this.repo = repo ?? new InventarioRepository();
+    this.produtoRepository = produtoRepository;
   }
 
   async createAutoOrders(clinicId: string): Promise<{
@@ -32,7 +32,8 @@ export class InventarioControllerService {
       throw new Error("Repository not initialized");
     }
 
-    const lowStockProducts = await this.produtoRepository.findProductsForAutoOrders(clinicId);
+    const lowStockProducts =
+      await this.produtoRepository.findProductsForAutoOrders(clinicId);
 
     if (lowStockProducts.length === 0) {
       return { ordersCreated: 0, details: [], lowStockCount: 0 };
@@ -50,7 +51,8 @@ export class InventarioControllerService {
 
     for (const [supplierId, products] of supplierGroups) {
       const totalValue = products.reduce(
-        (sum: number, p: typeof lowStockProducts[0]) => sum + p.valor_unitario * p.quantidade_reposicao,
+        (sum: number, p: (typeof lowStockProducts)[0]) =>
+          sum + p.valor_unitario * p.quantidade_reposicao,
         0,
       );
       const numeroPedido = `AUTO-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
@@ -118,19 +120,25 @@ export class InventarioControllerService {
       throw new Error("Repository not initialized");
     }
 
-    const alertProducts = await this.produtoRepository.findProductsForAlerts(clinicId);
+    const alertProducts =
+      await this.produtoRepository.findProductsForAlerts(clinicId);
 
     let alertsSent = 0;
     for (const product of alertProducts) {
-      const tipoAlerta = product.quantidade_atual === 0 ? "ESTOQUE_CRITICO" : "ESTOQUE_MINIMO";
-      const mensagem = product.quantidade_atual === 0
-        ? `CRITICO: ${product.nome} sem estoque!`
-        : `Estoque minimo: ${product.nome} (${product.quantidade_atual}/${product.quantidade_minima} un)`;
+      const tipoAlerta =
+        product.quantidade_atual === 0 ? "ESTOQUE_CRITICO" : "ESTOQUE_MINIMO";
+      const mensagem =
+        product.quantidade_atual === 0
+          ? `CRITICO: ${product.nome} sem estoque!`
+          : `Estoque minimo: ${product.nome} (${product.quantidade_atual}/${product.quantidade_minima} un)`;
 
       await this.repo.createNotification({
         clinic_id: clinicId,
         tipo: "ALERTA",
-        titulo: tipoAlerta === "ESTOQUE_CRITICO" ? "Estoque Critico" : "Estoque Baixo",
+        titulo:
+          tipoAlerta === "ESTOQUE_CRITICO"
+            ? "Estoque Critico"
+            : "Estoque Baixo",
         mensagem,
         link_acao: "/estoque",
       });

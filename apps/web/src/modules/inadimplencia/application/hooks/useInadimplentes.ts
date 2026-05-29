@@ -23,9 +23,12 @@ export const useInadimplentes = () => {
     queryKey: ["campanhas-inadimplencia", clinicId],
     queryFn: async () => {
       if (!clinicId) return [];
-      const data: Record<string, any> = await apiClient.get("/campanhas-inadimplencia", {
-        params: { clinic_id: clinicId, sort: "created_at.desc" },
-      });
+      const data: Record<string, any> = await apiClient.get(
+        "/campanhas-inadimplencia",
+        {
+          params: { clinic_id: clinicId, sort: "created_at.desc" },
+        },
+      );
       return data;
     },
     enabled: !!clinicId,
@@ -39,12 +42,15 @@ export const useInadimplentes = () => {
       inadimplenteId: string;
       tipo: string;
     }) => {
-      const data: Record<string, any> = await apiClient.post("/campanhas-inadimplencia", {
-        clinic_id: clinicId,
-        inadimplente_id: inadimplenteId,
-        tipo_campanha: tipo,
-        status: "ATIVA",
-      });
+      const data: Record<string, any> = await apiClient.post(
+        "/campanhas-inadimplencia",
+        {
+          clinic_id: clinicId,
+          inadimplente_id: inadimplenteId,
+          tipo_campanha: tipo,
+          status: "ATIVA",
+        },
+      );
 
       return data;
     },

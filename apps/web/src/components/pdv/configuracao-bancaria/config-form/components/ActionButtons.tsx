@@ -7,7 +7,11 @@ interface ActionButtonsProps {
   onCancel: () => void;
 }
 
-export function ActionButtons({ loading, onSave, onCancel }: ActionButtonsProps) {
+export function ActionButtons({
+  loading,
+  onSave,
+  onCancel,
+}: ActionButtonsProps) {
   return (
     <div className="flex gap-2 mt-4">
       <Button onClick={onSave} disabled={loading}>

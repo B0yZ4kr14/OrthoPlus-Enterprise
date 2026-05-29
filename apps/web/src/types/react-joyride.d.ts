@@ -18,8 +18,34 @@ declare module "react-joyride" {
     event?: string;
     isFixed?: boolean;
     offset?: number;
-    placement?: "top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | "center" | "auto";
-    placementBeacon?: "top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end";
+    placement?:
+      | "top"
+      | "top-start"
+      | "top-end"
+      | "bottom"
+      | "bottom-start"
+      | "bottom-end"
+      | "left"
+      | "left-start"
+      | "left-end"
+      | "right"
+      | "right-start"
+      | "right-end"
+      | "center"
+      | "auto";
+    placementBeacon?:
+      | "top"
+      | "top-start"
+      | "top-end"
+      | "bottom"
+      | "bottom-start"
+      | "bottom-end"
+      | "left"
+      | "left-start"
+      | "left-end"
+      | "right"
+      | "right-start"
+      | "right-end";
     showSkipButton?: boolean;
     spotlightClicks?: boolean;
     spotlightPadding?: number;

@@ -45,7 +45,10 @@ interface SidebarPreviewProps {
   modules: Module[];
 }
 
-const moduleIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+const moduleIcons: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
   DASHBOARD: LayoutDashboard,
   PACIENTES: Users,
   DENTISTAS: UserPlus,

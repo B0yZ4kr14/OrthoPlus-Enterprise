@@ -1,27 +1,29 @@
-import cron from "node-cron"
-import { logger } from "@/infrastructure/logger"
-import { prisma } from "@/infrastructure/database/prismaClient"
-import { PacienteIndexer } from "@/modules/search_index/services/PacienteIndexer"
-import { AgendaIndexer } from "@/modules/search_index/services/AgendaIndexer"
-import { PepIndexer } from "@/modules/search_index/services/PepIndexer"
+import cron from "node-cron";
+import { logger } from "@/infrastructure/logger";
+import { prisma } from "@/infrastructure/database/prismaClient";
+import { PacienteIndexer } from "@/modules/search_index/services/PacienteIndexer";
+import { AgendaIndexer } from "@/modules/search_index/services/AgendaIndexer";
+import { PepIndexer } from "@/modules/search_index/services/PepIndexer";
 
-const SIX_HOURS_MS = 6 * 60 * 60 * 1000
+const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
 
 interface IndexerJob {
-  name: string
-  run: (since: Date) => Promise<{ indexed: number; durationMs: number }>
+  name: string;
+  run: (since: Date) => Promise<{ indexed: number; durationMs: number }>;
 }
 
 export function startSearchIndexScheduler(): void {
-  const enabled = process.env.SEARCH_INDEX_CRON_ENABLED !== "false"
+  const enabled = process.env.SEARCH_INDEX_CRON_ENABLED !== "false";
   if (!enabled) {
-    logger.info("[SearchIndexScheduler] Cron desabilitado via SEARCH_INDEX_CRON_ENABLED")
-    return
+    logger.info(
+      "[SearchIndexScheduler] Cron desabilitado via SEARCH_INDEX_CRON_ENABLED",
+    );
+    return;
   }
 
-  const pacienteIndexer = new PacienteIndexer(prisma)
-  const agendaIndexer = new AgendaIndexer(prisma)
-  const pepIndexer = new PepIndexer(prisma)
+  const pacienteIndexer = new PacienteIndexer(prisma);
+  const agendaIndexer = new AgendaIndexer(prisma);
+  const pepIndexer = new PepIndexer(prisma);
 
   const jobs: IndexerJob[] = [
     {
@@ -36,23 +38,31 @@ export function startSearchIndexScheduler(): void {
       name: "pep",
       run: (since) => pepIndexer.incremental(since),
     },
-  ]
+  ];
 
   cron.schedule("0 */6 * * *", async () => {
-    const since = new Date(Date.now() - SIX_HOURS_MS)
-    logger.info(`[SearchIndexScheduler] Iniciando reindexacao incremental desde ${since.toISOString()}`)
+    const since = new Date(Date.now() - SIX_HOURS_MS);
+    logger.info(
+      `[SearchIndexScheduler] Iniciando reindexacao incremental desde ${since.toISOString()}`,
+    );
 
     for (const job of jobs) {
       try {
-        const result = await job.run(since)
-        logger.info(`[SearchIndexScheduler] ${job.name} reindexados: ${result.indexed} em ${result.durationMs}ms`)
+        const result = await job.run(since);
+        logger.info(
+          `[SearchIndexScheduler] ${job.name} reindexados: ${result.indexed} em ${result.durationMs}ms`,
+        );
       } catch (err: any) {
-        logger.error(`[SearchIndexScheduler] Falha na reindexacao de ${job.name}: ${err.message}`)
+        logger.error(
+          `[SearchIndexScheduler] Falha na reindexacao de ${job.name}: ${err.message}`,
+        );
       }
     }
 
-    logger.info("[SearchIndexScheduler] Ciclo de reindexacao incremental concluido")
-  })
+    logger.info(
+      "[SearchIndexScheduler] Ciclo de reindexacao incremental concluido",
+    );
+  });
 
-  logger.info("[SearchIndexScheduler] Agendador iniciado (a cada 6 horas)")
+  logger.info("[SearchIndexScheduler] Agendador iniciado (a cada 6 horas)");
 }

@@ -6,7 +6,8 @@ import { TreatmentCard } from "./TreatmentCard";
 import { EmptyState } from "./EmptyState";
 
 export function TreatmentPlanTab({ patientId }: TreatmentPlanTabProps) {
-  const { treatments, isLoading, getStatusIcon, getStatusLabel } = useTreatmentPlan({ patientId });
+  const { treatments, isLoading, getStatusIcon, getStatusLabel } =
+    useTreatmentPlan({ patientId });
 
   if (isLoading) {
     return <div>Carregando planos de tratamento...</div>;
@@ -17,7 +18,9 @@ export function TreatmentPlanTab({ patientId }: TreatmentPlanTabProps) {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold">Plano de Tratamento</h2>
-          <p className="text-muted-foreground">Procedimentos planejados e realizados</p>
+          <p className="text-muted-foreground">
+            Procedimentos planejados e realizados
+          </p>
         </div>
         <Button>
           <Plus className="h-4 w-4 mr-2" />

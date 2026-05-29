@@ -64,8 +64,7 @@ export const VALID_STATUS_TRANSITIONS: Record<PatientStatus, PatientStatus[]> =
  */
 export const STATUS_COLORS: Record<PatientStatus, string> = {
   PROSPECT: "bg-info/10 text-info dark:bg-info/20 dark:text-info",
-  TRATAMENTO:
-    "bg-success/10 text-success dark:bg-success/20 dark:text-success",
+  TRATAMENTO: "bg-success/10 text-success dark:bg-success/20 dark:text-success",
   CONTENCAO:
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
   ERUPCAO: "bg-info/10 text-info dark:bg-info/20 dark:text-info",
@@ -73,11 +72,14 @@ export const STATUS_COLORS: Record<PatientStatus, string> = {
     "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning",
   CONCLUIDO:
     "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200",
-  ABANDONO: "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive",
+  ABANDONO:
+    "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive",
   A_PROTESTAR:
     "bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning",
-  PROTESTO: "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive/80",
-  INATIVO: "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
+  PROTESTO:
+    "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive/80",
+  INATIVO:
+    "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
   CANCELADO:
     "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
   MIGRADO:

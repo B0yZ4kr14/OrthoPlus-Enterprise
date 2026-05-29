@@ -55,7 +55,11 @@ export function UploadDialog({
   uploadError = null,
 }: UploadDialogProps) {
   const canUpload =
-    selectedFile && selectedPatient && selectedTipo && consentStatus === "consented" && !isUploading;
+    selectedFile &&
+    selectedPatient &&
+    selectedTipo &&
+    consentStatus === "consented" &&
+    !isUploading;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -81,7 +85,9 @@ export function UploadDialog({
             <div>
               {checkingConsent ? (
                 <Alert className="bg-muted">
-                  <AlertDescription>Verificando consentimento LGPD...</AlertDescription>
+                  <AlertDescription>
+                    Verificando consentimento LGPD...
+                  </AlertDescription>
                 </Alert>
               ) : consentStatus === "consented" ? (
                 <Alert className="bg-success/10 border-success/30">
@@ -94,7 +100,8 @@ export function UploadDialog({
                 <Alert className="bg-destructive/10 border-destructive/30">
                   <ShieldAlert className="h-4 w-4 text-destructive" />
                   <AlertDescription className="text-destructive">
-                    Consentimento LGPD ausente. Registre o consentimento antes de enviar.
+                    Consentimento LGPD ausente. Registre o consentimento antes
+                    de enviar.
                   </AlertDescription>
                   {onRegisterConsent && (
                     <Button
@@ -111,7 +118,8 @@ export function UploadDialog({
                 <Alert className="bg-warning/10 border-warning/30">
                   <ShieldX className="h-4 w-4 text-warning" />
                   <AlertDescription className="text-warning">
-                    Consentimento foi revogado. Não é possível enviar radiografias.
+                    Consentimento foi revogado. Não é possível enviar
+                    radiografias.
                   </AlertDescription>
                 </Alert>
               ) : null}
@@ -145,11 +153,7 @@ export function UploadDialog({
               </AlertDescription>
             </Alert>
           )}
-          <Button
-            onClick={onUpload}
-            disabled={!canUpload}
-            className="w-full"
-          >
+          <Button onClick={onUpload} disabled={!canUpload} className="w-full">
             {isUploading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

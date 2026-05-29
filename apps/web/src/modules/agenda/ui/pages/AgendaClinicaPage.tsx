@@ -11,8 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
-import { Calendar } from "lucide-react"
-import { PageHeader } from "@/components/shared/PageHeader"
+import { Calendar } from "lucide-react";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 type ViewMode = "calendar" | "form" | "details";
 

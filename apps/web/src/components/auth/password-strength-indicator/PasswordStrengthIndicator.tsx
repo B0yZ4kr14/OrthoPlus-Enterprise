@@ -13,7 +13,9 @@ export function PasswordStrengthIndicator({
   const strength = usePasswordStrength(password);
 
   if (minimal) {
-    return <StrengthBar score={strength.score} color={strength.color} minimal />;
+    return (
+      <StrengthBar score={strength.score} color={strength.color} minimal />
+    );
   }
 
   return (

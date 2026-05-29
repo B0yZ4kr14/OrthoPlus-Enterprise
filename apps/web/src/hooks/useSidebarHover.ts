@@ -1,21 +1,21 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /** Delay para abertura — rápido o suficiente para sentir responsivo */
-const ENTER_DELAY_MS = 80
+const ENTER_DELAY_MS = 80;
 /** Debounce para fechamento — tolerante para clicks e scroll dentro da sidebar */
-const LEAVE_DEBOUNCE_MS = 450
+const LEAVE_DEBOUNCE_MS = 450;
 
 interface UseSidebarHoverReturn {
   /** Sidebar visível por hover ou fixa */
-  isOpen: boolean
+  isOpen: boolean;
   /** Sidebar está em modo auto-hide (oculta por padrão) */
-  isAutoHide: boolean
+  isAutoHide: boolean;
   /** Handler para mouse enter no trigger ou sidebar */
-  onMouseEnter: () => void
+  onMouseEnter: () => void;
   /** Handler para mouse leave da sidebar */
-  onMouseLeave: () => void
+  onMouseLeave: () => void;
   /** Alternar modo auto-hide / fixo */
-  toggleAutoHide: () => void
+  toggleAutoHide: () => void;
 }
 
 /**
@@ -30,87 +30,87 @@ interface UseSidebarHoverReturn {
 export function useSidebarHover(): UseSidebarHoverReturn {
   const [isAutoHide, setIsAutoHide] = useState(() => {
     try {
-      const raw = localStorage.getItem("orthoplus:sidebar:auto-hide")
-      return raw !== "false" // padrão: true (auto-hide ativado)
+      const raw = localStorage.getItem("orthoplus:sidebar:auto-hide");
+      return raw !== "false"; // padrão: true (auto-hide ativado)
     } catch {
-      return true
+      return true;
     }
-  })
+  });
 
-  const [hoverOpen, setHoverOpen] = useState(false)
-  const enterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [hoverOpen, setHoverOpen] = useState(false);
+  const enterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearTimers = useCallback(() => {
     if (enterTimeoutRef.current) {
-      clearTimeout(enterTimeoutRef.current)
-      enterTimeoutRef.current = null
+      clearTimeout(enterTimeoutRef.current);
+      enterTimeoutRef.current = null;
     }
     if (leaveTimeoutRef.current) {
-      clearTimeout(leaveTimeoutRef.current)
-      leaveTimeoutRef.current = null
+      clearTimeout(leaveTimeoutRef.current);
+      leaveTimeoutRef.current = null;
     }
-  }, [])
+  }, []);
 
   const onMouseEnter = useCallback(() => {
-    if (!isAutoHide) return
-    clearTimers()
+    if (!isAutoHide) return;
+    clearTimers();
     enterTimeoutRef.current = setTimeout(() => {
-      setHoverOpen(true)
-    }, ENTER_DELAY_MS)
-  }, [isAutoHide, clearTimers])
+      setHoverOpen(true);
+    }, ENTER_DELAY_MS);
+  }, [isAutoHide, clearTimers]);
 
   const onMouseLeave = useCallback(() => {
-    if (!isAutoHide) return
-    clearTimers()
+    if (!isAutoHide) return;
+    clearTimers();
     leaveTimeoutRef.current = setTimeout(() => {
-      setHoverOpen(false)
-    }, LEAVE_DEBOUNCE_MS)
-  }, [isAutoHide, clearTimers])
+      setHoverOpen(false);
+    }, LEAVE_DEBOUNCE_MS);
+  }, [isAutoHide, clearTimers]);
 
   const toggleAutoHide = useCallback(() => {
     setIsAutoHide((prev) => {
-      const next = !prev
+      const next = !prev;
       try {
-        localStorage.setItem("orthoplus:sidebar:auto-hide", String(next))
+        localStorage.setItem("orthoplus:sidebar:auto-hide", String(next));
       } catch {
         // ignore
       }
-      return next
-    })
-    clearTimers()
-    setHoverOpen(false)
-  }, [clearTimers])
+      return next;
+    });
+    clearTimers();
+    setHoverOpen(false);
+  }, [clearTimers]);
 
   // Quando alternar para modo fixo, limpar hover state
   useEffect(() => {
     if (!isAutoHide) {
-      clearTimers()
-      setHoverOpen(false)
+      clearTimers();
+      setHoverOpen(false);
     }
-  }, [isAutoHide, clearTimers])
+  }, [isAutoHide, clearTimers]);
 
   // Intercept Ctrl+B para alternar auto-hide em vez do comportamento padrão do provider
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "b" && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault()
-        toggleAutoHide()
+        event.preventDefault();
+        toggleAutoHide();
       }
-    }
+    };
 
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [toggleAutoHide])
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [toggleAutoHide]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      clearTimers()
-    }
-  }, [clearTimers])
+      clearTimers();
+    };
+  }, [clearTimers]);
 
-  const isOpen = !isAutoHide || hoverOpen
+  const isOpen = !isAutoHide || hoverOpen;
 
   return {
     isOpen,
@@ -118,5 +118,5 @@ export function useSidebarHover(): UseSidebarHoverReturn {
     onMouseEnter,
     onMouseLeave,
     toggleAutoHide,
-  }
+  };
 }

@@ -1,4 +1,5 @@
 # PROMPT PROFISSIONAL - KIMI + OPENSQUAD
+
 ## Validação Completa OrthoPlus Enterprise v2
 
 > **Versão**: 1.0  
@@ -10,6 +11,7 @@
 ## 🎯 OBJETIVO
 
 Orquestrar 5 agentes especializados via OpenSquad para realizar validação completa do OrthoPlus Enterprise v2, cobrindo:
+
 - ✅ Módulo Banco de Dados Avançado (SQLite, PostgreSQL, MariaDB, Firebird)
 - ✅ Navegação frontend com tema v2 (cyan/amber)
 - ✅ CRUDs: Clientes, Serviços, Produtos, Funcionários, Dentistas, Permissões
@@ -21,10 +23,12 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 ## 🏗️ AGENTES DO SQUAD
 
 ### 1. **database-validator**
+
 **Skill**: `orthoplus-database-architect`  
 **Objetivo**: Validar módulo Banco de Dados Avançado e conexões PostgreSQL
 
 **Tarefas**:
+
 - [ ] Validar conexão PostgreSQL na VPS (porta 5432)
 - [ ] Verificar schemas existentes (public, pacientes, financeiro, pep, inventario, pdv, faturamento, configuracoes)
 - [ ] Validar suporte a SQLite, PostgreSQL, MariaDB, Firebird
@@ -35,16 +39,19 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 - [ ] Verificar agendamento automático de backup
 
 **Outputs**:
+
 - `output/database-report.json` - Status de conexões e schemas
 - `output/database-screenshots/` - Screenshots das validações
 
 ---
 
 ### 2. **module-navigator**
+
 **Skill**: `orthoplus-frontend-auditor`  
 **Objetivo**: Validar navegação nos cards e tema v2 no frontend
 
 **Tarefas**:
+
 - [ ] Acessar https://100.111.74.69/ via browser (Playwright)
 - [ ] Realizar login com credenciais de teste
 - [ ] Validar tema v2 (cyan #06B6D4 / amber #F59E0B) em todos os cards
@@ -61,16 +68,19 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 - [ ] Testar interações (hover, clicks, modais)
 
 **Outputs**:
+
 - `output/navigation-report.json` - Status de navegação por módulo
 - `output/navigation-screenshots/` - Screenshots de cada módulo
 
 ---
 
 ### 3. **crud-tester**
+
 **Skill**: `orthoplus-backend-refactorer`  
 **Objetivo**: Testar cadastros de clientes, serviços, produtos, funcionários e dentistas
 
 **Tarefas**:
+
 - [ ] Obter token JWT via POST /api/auth/login
 - [ ] Testar cadastro de CLIENTES/PACIENTES:
   - POST /api/pacientes
@@ -84,16 +94,19 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 - [ ] Testar PERMISSÕES EDITÁVEIS por módulo
 
 **Outputs**:
+
 - `output/crud-report.json` - Matriz de testes CRUD
 - `output/crud-test-data.json` - Dados criados durante os testes
 
 ---
 
 ### 4. **module-catalog-analyzer**
+
 **Skill**: `orthoplus-database-architect`  
 **Objetivo**: Analisar estrutura de módulos por categoria e mapear tabelas
 
 **Tarefas**:
+
 - [ ] Analisar estrutura de módulos por categoria:
   - Dashboard
   - Atendimento (agenda, pacientes, pep)
@@ -108,16 +121,19 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 - [ ] Verificar integridade referencial entre módulos
 
 **Outputs**:
+
 - `output/module-catalog.json` - Mapeamento completo de módulos
 - `output/module-matrix.md` - Tabela de módulos x categorias
 
 ---
 
 ### 5. **vps-sync-validator**
+
 **Skills**: `devops-pipelines`, `homelab-automation`  
 **Objetivo**: Validar VPS como fonte de verdade e executar health checks
 
 **Tarefas**:
+
 - [ ] Comparar código local com VPS (`/home/tsi/OrthoPlus-Enterprise/`)
 - [ ] Verificar se build está atualizado (`/var/www/orthoplus/`)
 - [ ] Confirmar que banco está sincronizado
@@ -128,6 +144,7 @@ Orquestrar 5 agentes especializados via OpenSquad para realizar validação comp
 - [ ] Validar SSL certificado (válido até Apr 2027)
 
 **Outputs**:
+
 - `output/vps-sync-report.json` - Status de sincronização
 - `output/health-check-log.txt` - Log do health check
 
@@ -140,22 +157,22 @@ phases:
   - name: Database Validation
     agent: database-validator
     checkpoint: PostgreSQL respondendo e schemas verificados
-    
+
   - name: Module Navigation
     agent: module-navigator
-    depends_on: []  # Pode rodar em paralelo com Database
+    depends_on: [] # Pode rodar em paralelo com Database
     checkpoint: Todos os módulos navegáveis com tema v2
-    
+
   - name: CRUD Testing
     agent: crud-tester
-    depends_on: [Database Validation]  # Precisa do banco
+    depends_on: [Database Validation] # Precisa do banco
     checkpoint: Todos os cadastros funcionais
-    
+
   - name: Module Catalog Analysis
     agent: module-catalog-analyzer
     depends_on: [Database Validation]
     checkpoint: Módulos mapeados por categoria
-    
+
   - name: VPS Sync Validation
     agent: vps-sync-validator
     depends_on: [Module Navigation, CRUD Testing]
@@ -174,15 +191,15 @@ final_checkpoint:
 
 ## 📊 CRITÉRIOS DE SUCESSO
 
-| Critério | Métrica | Threshold |
-|----------|---------|-----------|
-| Conectividade DB | Latência | < 100ms |
-| Navegação Frontend | Módulos acessíveis | 100% |
-| CRUDs Funcionais | Endpoints testados | 100% |
-| Cobertura de Módulos | Módulos mapeados | 33+ |
-| Sincronização VPS | Diff local vs VPS | 0 arquivos |
-| Health Check | Status | PASS |
-| Tema v2 | Componentes atualizados | 100% |
+| Critério             | Métrica                 | Threshold  |
+| -------------------- | ----------------------- | ---------- |
+| Conectividade DB     | Latência                | < 100ms    |
+| Navegação Frontend   | Módulos acessíveis      | 100%       |
+| CRUDs Funcionais     | Endpoints testados      | 100%       |
+| Cobertura de Módulos | Módulos mapeados        | 33+        |
+| Sincronização VPS    | Diff local vs VPS       | 0 arquivos |
+| Health Check         | Status                  | PASS       |
+| Tema v2              | Componentes atualizados | 100%       |
 
 ---
 
@@ -238,11 +255,13 @@ opensquad/squads/orthoplus-complete-validation/output/
 Antes de executar, garantir:
 
 1. **OpenSquad instalado**:
+
    ```bash
    cd ~/opensquad && npm list opensquad
    ```
 
 2. **Acesso à VPS configurado**:
+
    ```bash
    ssh tsi@100.111.74.69 "echo 'VPS OK'"
    ```
@@ -260,13 +279,13 @@ Antes de executar, garantir:
 
 ## 🛡️ TRATAMENTO DE ERROS
 
-| Erro | Ação |
-|------|------|
-| Falha de conexão PostgreSQL | Verificar se VPS está online, tentar reconectar em 30s |
-| Auth required (401) | Obter novo token JWT, verificar credenciais |
-| Timeout na navegação | Aumentar timeout do Playwright, verificar performance do frontend |
-| Divergência VPS | Executar sync manual, verificar último deploy |
-| Build falhando | Executar `pnpm build` localmente antes de validar |
+| Erro                        | Ação                                                              |
+| --------------------------- | ----------------------------------------------------------------- |
+| Falha de conexão PostgreSQL | Verificar se VPS está online, tentar reconectar em 30s            |
+| Auth required (401)         | Obter novo token JWT, verificar credenciais                       |
+| Timeout na navegação        | Aumentar timeout do Playwright, verificar performance do frontend |
+| Divergência VPS             | Executar sync manual, verificar último deploy                     |
+| Build falhando              | Executar `pnpm build` localmente antes de validar                 |
 
 ---
 
@@ -276,32 +295,39 @@ O relatório `VALIDATION-REPORT-COMPLETE.md` deve conter:
 
 ```markdown
 # Relatório de Validação OrthoPlus Enterprise v2
+
 **Data**: {{date}}  
 **Squad**: orthoplus-complete-validation  
 **Status**: {{PASS/FAIL}}
 
 ## Resumo Executivo
+
 - Total de módulos validados: {{X}}/33
 - CRUDs testados: {{X}}/6
 - Frontend navegável: {{SIM/NÃO}}
 - VPS sincronizada: {{SIM/NÃO}}
 
 ## Resultados por Agente
+
 ### database-validator
+
 - Status: {{PASS/FAIL}}
 - Schemas verificados: {{lista}}
 - Latência média: {{X}}ms
 
 ### module-navigator
+
 ...
 
 ## Recomendações
+
 - {{lista de ações se necessário}}
 
 ## Anexos
+
 - [database-report.json](output/database-report.json)
 - [navigation-report.json](output/navigation-report.json)
-...
+  ...
 ```
 
 ---

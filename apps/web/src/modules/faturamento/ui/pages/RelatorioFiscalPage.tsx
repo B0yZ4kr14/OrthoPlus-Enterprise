@@ -1,15 +1,20 @@
-import { useState } from "react"
-import { useQuery } from "@tanstack/react-query"
-import { apiClient } from "@/lib/api/apiClient"
-import { useAuth } from "@/contexts/AuthContext"
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card"
-import { Button } from "@orthoplus/core-ui/button"
-import { Input } from "@orthoplus/core-ui/input"
-import { Label } from "@orthoplus/core-ui/label"
-import { LoadingState } from "@/components/shared/LoadingState"
-import { PageHeader } from "@/components/shared/PageHeader"
-import { FileText, Download, TrendingUp } from "lucide-react"
-import ExcelJS from "exceljs"
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api/apiClient";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import { Button } from "@orthoplus/core-ui/button";
+import { Input } from "@orthoplus/core-ui/input";
+import { Label } from "@orthoplus/core-ui/label";
+import { LoadingState } from "@/components/shared/LoadingState";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { FileText, Download, TrendingUp } from "lucide-react";
+import ExcelJS from "exceljs";
 import {
   BarChart,
   Bar,
@@ -18,57 +23,68 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts"
+} from "recharts";
 
 interface RelatorioFilters {
-  dataInicio?: string
-  dataFim?: string
-  tipo?: string
+  dataInicio?: string;
+  dataFim?: string;
+  tipo?: string;
 }
 
 interface RelatorioResponse {
   notas: Array<{
-    id: string
-    numero: number
-    serie: number
-    chave_acesso: string
-    valor_total: number
-    valor_icms: number
-    valor_iss: number
-    status: string
-    data_emissao: string
-  }>
+    id: string;
+    numero: number;
+    serie: number;
+    chave_acesso: string;
+    valor_total: number;
+    valor_icms: number;
+    valor_iss: number;
+    status: string;
+    data_emissao: string;
+  }>;
   totais: {
-    valorTotal: number
-    valorIcms: number
-    valorIss: number
-    valorIpi: number
-    valorPis: number
-    valorCofins: number
-    quantidade: number
-  }
+    valorTotal: number;
+    valorIcms: number;
+    valorIss: number;
+    valorIpi: number;
+    valorPis: number;
+    valorCofins: number;
+    quantidade: number;
+  };
 }
 
 export default function RelatorioFiscalPage() {
-  const { clinicId } = useAuth()
-  const [filters, setFilters] = useState<RelatorioFilters>({})
+  const { clinicId } = useAuth();
+  const [filters, setFilters] = useState<RelatorioFilters>({});
 
   const { data, isLoading } = useQuery({
     queryKey: ["faturamento-relatorio", clinicId, filters],
     queryFn: async () => {
-      const params = new URLSearchParams()
-      if (filters.dataInicio) params.append("dataInicio", filters.dataInicio)
-      if (filters.dataFim) params.append("dataFim", filters.dataFim)
-      if (filters.tipo) params.append("tipo", filters.tipo)
-      const response = await apiClient.get<RelatorioResponse>(`/faturamento/relatorio?${params.toString()}`)
-      return response
+      const params = new URLSearchParams();
+      if (filters.dataInicio) params.append("dataInicio", filters.dataInicio);
+      if (filters.dataFim) params.append("dataFim", filters.dataFim);
+      if (filters.tipo) params.append("tipo", filters.tipo);
+      const response = await apiClient.get<RelatorioResponse>(
+        `/faturamento/relatorio?${params.toString()}`,
+      );
+      return response;
     },
     enabled: !!clinicId,
-  })
+  });
 
   const handleExportCSV = () => {
-    if (!data) return
-    const headers = ["Numero", "Serie", "Chave Acesso", "Valor Total", "ICMS", "ISS", "Status", "Data Emissao"]
+    if (!data) return;
+    const headers = [
+      "Numero",
+      "Serie",
+      "Chave Acesso",
+      "Valor Total",
+      "ICMS",
+      "ISS",
+      "Status",
+      "Data Emissao",
+    ];
     const rows = data.notas.map((n) => [
       n.numero,
       n.serie,
@@ -78,23 +94,26 @@ export default function RelatorioFiscalPage() {
       (n.valor_iss / 100).toFixed(2),
       n.status,
       n.data_emissao,
-    ])
-    const csvContent = [headers.join(";"), ...rows.map((r) => r.join(";"))].join("\n")
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `relatorio-fiscal-${new Date().toISOString().slice(0, 10)}.csv`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }
+    ]);
+    const csvContent = [
+      headers.join(";"),
+      ...rows.map((r) => r.join(";")),
+    ].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `relatorio-fiscal-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const handleExportExcel = async () => {
-    if (!data) return
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet("Relatorio Fiscal")
+    if (!data) return;
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Relatorio Fiscal");
     worksheet.columns = [
       { header: "Numero", key: "numero", width: 12 },
       { header: "Serie", key: "serie", width: 8 },
@@ -104,7 +123,7 @@ export default function RelatorioFiscalPage() {
       { header: "ISS", key: "valor_iss", width: 15 },
       { header: "Status", key: "status", width: 15 },
       { header: "Data Emissao", key: "data_emissao", width: 18 },
-    ]
+    ];
     data.notas.forEach((n) => {
       worksheet.addRow({
         numero: n.numero,
@@ -115,30 +134,32 @@ export default function RelatorioFiscalPage() {
         valor_iss: (n.valor_iss / 100).toFixed(2),
         status: n.status,
         data_emissao: n.data_emissao,
-      })
-    })
+      });
+    });
     // Add totals row
-    worksheet.addRow({})
+    worksheet.addRow({});
     worksheet.addRow({
       numero: "TOTAIS",
       valor_total: (data.totais.valorTotal / 100).toFixed(2),
       valor_icms: (data.totais.valorIcms / 100).toFixed(2),
       valor_iss: (data.totais.valorIss / 100).toFixed(2),
-    })
-    const buffer = await workbook.xlsx.writeBuffer()
-    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `relatorio-fiscal-${new Date().toISOString().slice(0, 10)}.xlsx`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }
+    });
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `relatorio-fiscal-${new Date().toISOString().slice(0, 10)}.xlsx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   if (isLoading) {
-    return <LoadingState />
+    return <LoadingState />;
   }
 
   return (
@@ -171,21 +192,27 @@ export default function RelatorioFiscalPage() {
               <Label>Data Inicio</Label>
               <Input
                 type="date"
-                onChange={(e) => setFilters({ ...filters, dataInicio: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, dataInicio: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
               <Label>Data Fim</Label>
               <Input
                 type="date"
-                onChange={(e) => setFilters({ ...filters, dataFim: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, dataFim: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
               <Label>Tipo de Nota</Label>
               <Input
                 placeholder="NFE, NFCE, NFSE"
-                onChange={(e) => setFilters({ ...filters, tipo: e.target.value })}
+                onChange={(e) =>
+                  setFilters({ ...filters, tipo: e.target.value })
+                }
               />
             </div>
           </div>
@@ -197,11 +224,16 @@ export default function RelatorioFiscalPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total em Notas</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total em Notas
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  R$ {(data.totais.valorTotal / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  R${" "}
+                  {(data.totais.valorTotal / 100).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -211,16 +243,23 @@ export default function RelatorioFiscalPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  R$ {(data.totais.valorIcms / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  R${" "}
+                  {(data.totais.valorIcms / 100).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                  })}
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Quantidade</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Quantidade
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{data.totais.quantidade}</div>
+                <div className="text-2xl font-bold">
+                  {data.totais.quantidade}
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -247,7 +286,11 @@ export default function RelatorioFiscalPage() {
                         `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
                       }
                     />
-                    <Bar dataKey="valor" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                    <Bar
+                      dataKey="valor"
+                      fill="hsl(var(--primary))"
+                      radius={[4, 4, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -276,9 +319,14 @@ export default function RelatorioFiscalPage() {
                       <tr key={nota.id} className="border-b">
                         <td className="py-2 px-4">{nota.numero}</td>
                         <td className="py-2 px-4">{nota.serie}</td>
-                        <td className="py-2 px-4 font-mono text-xs">{nota.chave_acesso}</td>
+                        <td className="py-2 px-4 font-mono text-xs">
+                          {nota.chave_acesso}
+                        </td>
                         <td className="py-2 px-4 text-right">
-                          R$ {(nota.valor_total / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          R${" "}
+                          {(nota.valor_total / 100).toLocaleString("pt-BR", {
+                            minimumFractionDigits: 2,
+                          })}
                         </td>
                         <td className="py-2 px-4">
                           <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10">
@@ -296,5 +344,5 @@ export default function RelatorioFiscalPage() {
         </>
       )}
     </div>
-  )
+  );
 }

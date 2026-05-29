@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Switch } from "@orthoplus/core-ui/switch";
@@ -58,10 +64,13 @@ export function TemplatesList({
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">
-                  {TEMPLATE_CATEGORIES.find((c) => c.value === template.category)
-                    ?.label || template.category}
+                  {TEMPLATE_CATEGORIES.find(
+                    (c) => c.value === template.category,
+                  )?.label || template.category}
                 </Badge>
-                <Badge variant="outline">{template.metrics.length} métricas</Badge>
+                <Badge variant="outline">
+                  {template.metrics.length} métricas
+                </Badge>
               </div>
 
               <div className="flex items-center gap-1">

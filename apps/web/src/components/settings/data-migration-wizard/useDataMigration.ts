@@ -24,12 +24,19 @@ const DEFAULT_IMPORT_OPTIONS: ImportOptions = {
   mergeData: false,
 };
 
-export function useDataMigration(mode: "export" | "import", onClose: () => void) {
+export function useDataMigration(
+  mode: "export" | "import",
+  onClose: () => void,
+) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [exportOptions, setExportOptions] = useState<ExportOptions>(DEFAULT_EXPORT_OPTIONS);
-  const [importOptions, setImportOptions] = useState<ImportOptions>(DEFAULT_IMPORT_OPTIONS);
+  const [exportOptions, setExportOptions] = useState<ExportOptions>(
+    DEFAULT_EXPORT_OPTIONS,
+  );
+  const [importOptions, setImportOptions] = useState<ImportOptions>(
+    DEFAULT_IMPORT_OPTIONS,
+  );
   const [importFile, setImportFile] = useState<File | null>(null);
   const [importData, setImportData] = useState<unknown>(null);
   const [importResults, setImportResults] = useState<unknown>(null);
@@ -42,11 +49,16 @@ export function useDataMigration(mode: "export" | "import", onClose: () => void)
 
     try {
       setProgress(20);
-      const data = await apiClient.post<unknown>("/backups/manager", exportOptions);
+      const data = await apiClient.post<unknown>(
+        "/backups/manager",
+        exportOptions,
+      );
       setProgress(60);
       setProgress(80);
 
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -86,7 +98,17 @@ export function useDataMigration(mode: "export" | "import", onClose: () => void)
       setProgress(100);
       setImportResults(data);
 
-      const imported = (data as Record<string, { modules: number; patients: number; prontuarios: number; appointments: number }>).imported;
+      const imported = (
+        data as Record<
+          string,
+          {
+            modules: number;
+            patients: number;
+            prontuarios: number;
+            appointments: number;
+          }
+        >
+      ).imported;
       toast.success("Importação concluída!", {
         description: `${imported.modules + imported.patients + imported.prontuarios + imported.appointments} registros importados.`,
       });
@@ -114,7 +136,9 @@ export function useDataMigration(mode: "export" | "import", onClose: () => void)
         toast.success("Arquivo carregado com sucesso!");
         setStep(2);
       } catch (_err) {
-        toast.error("Erro ao ler arquivo", { description: "Arquivo JSON inválido" });
+        toast.error("Erro ao ler arquivo", {
+          description: "Arquivo JSON inválido",
+        });
       }
     };
 

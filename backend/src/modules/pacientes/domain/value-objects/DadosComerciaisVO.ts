@@ -1,6 +1,6 @@
 /**
  * DadosComerciaisVO - Value Object
- * 
+ *
  * Encapsula dados comerciais/CRM do paciente.
  */
 
@@ -10,8 +10,19 @@ export interface DadosComerciaisProps {
   promotorId?: string;
   eventoId?: string;
   telemarketingAgent?: string;
-  escolaridade?: 'fundamental' | 'medio' | 'superior' | 'pos_graduacao' | 'mestrado' | 'doutorado';
-  estadoCivil?: 'solteiro' | 'casado' | 'divorciado' | 'viuvo' | 'uniao_estavel';
+  escolaridade?:
+    | "fundamental"
+    | "medio"
+    | "superior"
+    | "pos_graduacao"
+    | "mestrado"
+    | "doutorado";
+  estadoCivil?:
+    | "solteiro"
+    | "casado"
+    | "divorciado"
+    | "viuvo"
+    | "uniao_estavel";
   profissao?: string;
   empresa?: string;
   rendaMensal?: number;
@@ -46,27 +57,27 @@ export class DadosComerciaisVO {
 
   private validate(): void {
     if (this.rendaMensal !== undefined && this.rendaMensal < 0) {
-      throw new Error('Renda mensal não pode ser negativa');
+      throw new Error("Renda mensal não pode ser negativa");
     }
 
     const escolaridadeValida = [
-      'fundamental',
-      'medio',
-      'superior',
-      'pos_graduacao',
-      'mestrado',
-      'doutorado',
+      "fundamental",
+      "medio",
+      "superior",
+      "pos_graduacao",
+      "mestrado",
+      "doutorado",
     ];
     if (this.escolaridade && !escolaridadeValida.includes(this.escolaridade)) {
       throw new Error(`Escolaridade inválida: ${this.escolaridade}`);
     }
 
     const estadoCivilValido = [
-      'solteiro',
-      'casado',
-      'divorciado',
-      'viuvo',
-      'uniao_estavel',
+      "solteiro",
+      "casado",
+      "divorciado",
+      "viuvo",
+      "uniao_estavel",
     ];
     if (this.estadoCivil && !estadoCivilValido.includes(this.estadoCivil)) {
       throw new Error(`Estado civil inválido: ${this.estadoCivil}`);

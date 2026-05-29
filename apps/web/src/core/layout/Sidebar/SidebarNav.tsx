@@ -27,29 +27,40 @@ export function SidebarNav({ onNavigate }: SidebarNavProps = {}) {
   const { data: badges } = useSidebarBadges();
 
   const enrichedGroups = useMemo(() => {
-    return menuGroups.map(group => ({
+    return menuGroups.map((group) => ({
       ...group,
-      items: group.items.map(item => {
+      items: group.items.map((item) => {
         const enrichedItem = { ...item };
-        
+
         if (badges) {
           if (enrichedItem.url === "/agenda") {
-            enrichedItem.badge = { count: badges.appointments, variant: "default" };
+            enrichedItem.badge = {
+              count: badges.appointments,
+              variant: "default",
+            };
           } else if (enrichedItem.url === "/financeiro/receber") {
-            enrichedItem.badge = { count: badges.overdue, variant: "destructive" };
+            enrichedItem.badge = {
+              count: badges.overdue,
+              variant: "destructive",
+            };
           } else if (enrichedItem.url === "/inadimplencia") {
-            enrichedItem.badge = { count: badges.defaulters, variant: "destructive" };
+            enrichedItem.badge = {
+              count: badges.defaulters,
+              variant: "destructive",
+            };
           } else if (enrichedItem.url === "/recall") {
             enrichedItem.badge = { count: badges.recalls, variant: "default" };
           }
         }
-        
+
         return enrichedItem;
-      })
+      }),
     }));
   }, [badges]);
 
-  const nonGeneralGroups = enrichedGroups.filter(g => g.label !== "VISÃO GERAL" && g.items.length > 0);
+  const nonGeneralGroups = enrichedGroups.filter(
+    (g) => g.label !== "VISÃO GERAL" && g.items.length > 0,
+  );
   const isSingleVisibleGroup = nonGeneralGroups.length <= 1;
 
   return (

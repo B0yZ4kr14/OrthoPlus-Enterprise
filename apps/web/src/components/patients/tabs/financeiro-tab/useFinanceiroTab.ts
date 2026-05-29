@@ -1,4 +1,10 @@
-import { DollarSign, TrendingUp, TrendingDown, AlertCircle, type LucideIcon } from "lucide-react";
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  AlertCircle,
+  type LucideIcon,
+} from "lucide-react";
 import type { PaymentStatusConfig } from "./types";
 
 export function useFinanceiroTab(paymentStatus: string) {
@@ -9,7 +15,11 @@ export function useFinanceiroTab(paymentStatus: string) {
       case "atrasado":
         return { label: "Atrasado", variant: "warning", icon: AlertCircle };
       case "inadimplente":
-        return { label: "Inadimplente", variant: "destructive", icon: TrendingDown };
+        return {
+          label: "Inadimplente",
+          variant: "destructive",
+          icon: TrendingDown,
+        };
       default:
         return { label: status, variant: "outline", icon: DollarSign };
     }

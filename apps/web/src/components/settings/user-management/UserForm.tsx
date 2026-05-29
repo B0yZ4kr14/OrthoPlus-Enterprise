@@ -1,4 +1,4 @@
-import { Button } from "@orthoplus/core-ui/button"
+import { Button } from "@orthoplus/core-ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,39 +6,44 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@orthoplus/core-ui/dialog"
-import { Input } from "@orthoplus/core-ui/input"
-import { Label } from "@orthoplus/core-ui/label"
+} from "@orthoplus/core-ui/dialog";
+import { Input } from "@orthoplus/core-ui/input";
+import { Label } from "@orthoplus/core-ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@orthoplus/core-ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs"
-import { UserPlus, Shield, Settings } from "lucide-react"
-import type { ModulePermission } from "./types"
-import { PermissionModal } from "./PermissionModal"
+} from "@orthoplus/core-ui/select";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
+import { UserPlus, Shield, Settings } from "lucide-react";
+import type { ModulePermission } from "./types";
+import { PermissionModal } from "./PermissionModal";
 
 interface UserFormProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  newUserEmail: string
-  setNewUserEmail: (value: string) => void
-  newUserName: string
-  setNewUserName: (value: string) => void
-  newUserPassword: string
-  setNewUserPassword: (value: string) => void
-  newUserRole: "ADMIN" | "MEMBER" | "ROOT"
-  setNewUserRole: (value: "ADMIN" | "MEMBER" | "ROOT") => void
-  userPermissions: ModulePermission[]
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  newUserEmail: string;
+  setNewUserEmail: (value: string) => void;
+  newUserName: string;
+  setNewUserName: (value: string) => void;
+  newUserPassword: string;
+  setNewUserPassword: (value: string) => void;
+  newUserRole: "ADMIN" | "MEMBER" | "ROOT";
+  setNewUserRole: (value: "ADMIN" | "MEMBER" | "ROOT") => void;
+  userPermissions: ModulePermission[];
   updatePermission: (
     moduleKey: string,
     field: "can_view" | "can_edit" | "can_delete",
     value: boolean,
-  ) => void
-  onSubmit: () => void
+  ) => void;
+  onSubmit: () => void;
 }
 
 export function UserForm({
@@ -158,14 +163,11 @@ export function UserForm({
           <Button onClick={onSubmit} className="flex-1">
             Criar Usuário
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

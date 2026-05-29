@@ -3,7 +3,10 @@ import { Bitcoin } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card, CardContent, CardHeader } from "@orthoplus/core-ui/card";
 import { Skeleton } from "@orthoplus/core-ui/skeleton";
-import { CryptoKPISkeleton, CryptoListSkeleton } from "@/components/crypto/CryptoSkeleton";
+import {
+  CryptoKPISkeleton,
+  CryptoListSkeleton,
+} from "@/components/crypto/CryptoSkeleton";
 
 export function LoadingStateCrypto() {
   return (

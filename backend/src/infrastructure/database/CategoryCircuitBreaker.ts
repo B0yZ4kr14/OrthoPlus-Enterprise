@@ -1,24 +1,24 @@
 /**
  * CategoryCircuitBreaker — Circuit Breaker por Categoria de Banco de Dados
- * 
+ *
  * Arquitetura DevSecOps:
  * - Estado distribuído (memory-local, escala horizontal via Redis futuramente)
  * - 3 estados: CLOSED → OPEN → HALF_OPEN → CLOSED
  * - Thresholds configuráveis por categoria
  * - Fallback automático: health degradado quando circuito aberto
  * - Métricas exportáveis (Prometheus-ready)
- * 
+ *
  * Padrão: Circuit Breaker (Release It! — Michael Nygard)
  */
 
 export type CircuitState = "CLOSED" | "OPEN" | "HALF_OPEN";
 
 export interface CircuitBreakerConfig {
-  failureThreshold: number;      // Falhas consecutivas para abrir
-  successThreshold: number;      // Sucessos em HALF_OPEN para fechar
-  timeoutMs: number;             // Tempo máximo de execução antes de contar como falha
-  recoveryTimeoutMs: number;     // Tempo em OPEN antes de tentar HALF_OPEN
-  halfOpenMaxCalls: number;      // Máximo de chamadas em HALF_OPEN
+  failureThreshold: number; // Falhas consecutivas para abrir
+  successThreshold: number; // Sucessos em HALF_OPEN para fechar
+  timeoutMs: number; // Tempo máximo de execução antes de contar como falha
+  recoveryTimeoutMs: number; // Tempo em OPEN antes de tentar HALF_OPEN
+  halfOpenMaxCalls: number; // Máximo de chamadas em HALF_OPEN
 }
 
 export interface CircuitBreakerMetrics {
@@ -58,7 +58,7 @@ class CategoryCircuitBreakerInstance {
 
   constructor(
     private category: string,
-    private config: CircuitBreakerConfig = DEFAULT_CONFIG
+    private config: CircuitBreakerConfig = DEFAULT_CONFIG,
   ) {}
 
   getState(): CircuitState {
@@ -84,17 +84,20 @@ class CategoryCircuitBreakerInstance {
         return fallback();
       }
       throw new Error(
-        `Circuit breaker OPEN for category "${this.category}" — service temporarily unavailable`
+        `Circuit breaker OPEN for category "${this.category}" — service temporarily unavailable`,
       );
     }
 
-    if (currentState === "HALF_OPEN" && this.halfOpenCalls >= this.config.halfOpenMaxCalls) {
+    if (
+      currentState === "HALF_OPEN" &&
+      this.halfOpenCalls >= this.config.halfOpenMaxCalls
+    ) {
       this.rejectedCalls++;
       if (fallback) {
         return fallback();
       }
       throw new Error(
-        `Circuit breaker HALF_OPEN limit reached for category "${this.category}"`
+        `Circuit breaker HALF_OPEN limit reached for category "${this.category}"`,
       );
     }
 
@@ -115,7 +118,10 @@ class CategoryCircuitBreakerInstance {
     }
   }
 
-  private async runWithTimeout<T>(fn: () => Promise<T>, timeoutMs: number): Promise<T> {
+  private async runWithTimeout<T>(
+    fn: () => Promise<T>,
+    timeoutMs: number,
+  ): Promise<T> {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         reject(new Error(`Timeout after ${timeoutMs}ms`));
@@ -139,7 +145,10 @@ class CategoryCircuitBreakerInstance {
     this.consecutiveSuccesses++;
     this.consecutiveFailures = 0;
 
-    if (this.state === "HALF_OPEN" && this.consecutiveSuccesses >= this.config.successThreshold) {
+    if (
+      this.state === "HALF_OPEN" &&
+      this.consecutiveSuccesses >= this.config.successThreshold
+    ) {
       this.state = "CLOSED";
       this.failures = 0;
       this.consecutiveFailures = 0;
@@ -202,14 +211,21 @@ export class CategoryCircuitBreakerRegistry {
 
   static getInstance(): CategoryCircuitBreakerRegistry {
     if (!CategoryCircuitBreakerRegistry.instance) {
-      CategoryCircuitBreakerRegistry.instance = new CategoryCircuitBreakerRegistry();
+      CategoryCircuitBreakerRegistry.instance =
+        new CategoryCircuitBreakerRegistry();
     }
     return CategoryCircuitBreakerRegistry.instance;
   }
 
-  getBreaker(category: string, config?: CircuitBreakerConfig): CategoryCircuitBreakerInstance {
+  getBreaker(
+    category: string,
+    config?: CircuitBreakerConfig,
+  ): CategoryCircuitBreakerInstance {
     if (!this.breakers.has(category)) {
-      this.breakers.set(category, new CategoryCircuitBreakerInstance(category, config));
+      this.breakers.set(
+        category,
+        new CategoryCircuitBreakerInstance(category, config),
+      );
     }
     return this.breakers.get(category)!;
   }
@@ -230,4 +246,5 @@ export class CategoryCircuitBreakerRegistry {
   }
 }
 
-export const circuitBreakerRegistry = CategoryCircuitBreakerRegistry.getInstance();
+export const circuitBreakerRegistry =
+  CategoryCircuitBreakerRegistry.getInstance();

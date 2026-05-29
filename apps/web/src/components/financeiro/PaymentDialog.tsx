@@ -17,7 +17,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { CreditCard, QrCode, Loader2, Bitcoin } from "lucide-react";
 import { CryptoPaymentSelector } from "@/components/crypto/CryptoPaymentSelector";
 import { toast } from "sonner";
@@ -67,23 +72,20 @@ export function PaymentDialog({
         throw new Error("Valor inválido");
       }
 
-      const data = await apiClient.post<unknown>(
-        "/financeiro/processar",
-        {
-          conta_receber_id: conta.id,
-          valor: valorNumerico,
-          metodo_pagamento: metodo,
-          dados_pagamento:
-            metodo === "PIX"
-              ? { pix_key: pixKey }
-              : {
-                  card_number: cardNumber,
-                  card_holder: cardHolder,
-                  card_expiry: cardExpiry,
-                  card_cvv: cardCvv,
-                },
-        },
-      );
+      const data = await apiClient.post<unknown>("/financeiro/processar", {
+        conta_receber_id: conta.id,
+        valor: valorNumerico,
+        metodo_pagamento: metodo,
+        dados_pagamento:
+          metodo === "PIX"
+            ? { pix_key: pixKey }
+            : {
+                card_number: cardNumber,
+                card_holder: cardHolder,
+                card_expiry: cardExpiry,
+                card_cvv: cardCvv,
+              },
+      });
 
       // Trigger confetti celebration for successful payment
       triggerSuccessConfetti();
@@ -130,7 +132,14 @@ export function PaymentDialog({
             />
           </div>
 
-          <Tabs value={metodo} onValueChange={(v) => setMetodo(v as "PIX" | "CARTAO_CREDITO" | "CARTAO_DEBITO" | "CRYPTO")}>
+          <Tabs
+            value={metodo}
+            onValueChange={(v) =>
+              setMetodo(
+                v as "PIX" | "CARTAO_CREDITO" | "CARTAO_DEBITO" | "CRYPTO",
+              )
+            }
+          >
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="PIX" className="gap-2">
                 <QrCode className="h-4 w-4" />
@@ -212,7 +221,9 @@ export function PaymentDialog({
                 <Label htmlFor="card-type">Tipo de Cartão</Label>
                 <Select
                   value={metodo}
-                  onValueChange={(v) => setMetodo(v as "CARTAO_CREDITO" | "CARTAO_DEBITO")}
+                  onValueChange={(v) =>
+                    setMetodo(v as "CARTAO_CREDITO" | "CARTAO_DEBITO")
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />

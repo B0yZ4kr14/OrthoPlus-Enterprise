@@ -1,6 +1,11 @@
 // cspell:disable
 import { Gift, Star } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import type { Recompensa } from "./types";
@@ -11,7 +16,11 @@ interface RecompensasTabProps {
   onEdit: (recompensa: Recompensa) => void;
 }
 
-export function RecompensasTab({ recompensas, onAdd, onEdit }: RecompensasTabProps) {
+export function RecompensasTab({
+  recompensas,
+  onAdd,
+  onEdit,
+}: RecompensasTabProps) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -33,7 +42,9 @@ export function RecompensasTab({ recompensas, onAdd, onEdit }: RecompensasTabPro
                     {recompensa.ativo ? "Ativo" : "Inativo"}
                   </Badge>
                 </div>
-                <h3 className="font-semibold text-lg mb-2">{recompensa.nome}</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  {recompensa.nome}
+                </h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   {recompensa.descricao}
                 </p>

@@ -90,7 +90,11 @@ export function AIModelConfig() {
 
         <RecommendationAlert />
 
-        <ActionButtons saving={saving} onSave={saveConfig} onReload={loadConfig} />
+        <ActionButtons
+          saving={saving}
+          onSave={saveConfig}
+          onReload={loadConfig}
+        />
       </CardContent>
     </Card>
   );

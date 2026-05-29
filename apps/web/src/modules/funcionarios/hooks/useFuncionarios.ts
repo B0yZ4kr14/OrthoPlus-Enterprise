@@ -2,7 +2,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Funcionario, FuncionarioFilters, Cargo, Permissoes } from "../types/funcionario.types";
+import {
+  Funcionario,
+  FuncionarioFilters,
+  Cargo,
+  Permissoes,
+} from "../types/funcionario.types";
 
 interface FuncionarioRow {
   id: string;

@@ -23,11 +23,18 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
 
   async findById(id: string): Promise<Atividade | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`/crm/atividades/${id}`);
+      const data = await apiClient.get<Record<string, any>>(
+        `/crm/atividades/${id}`,
+      );
       if (!data) return null;
-      return AtividadeMapper.toDomain(data as Parameters<typeof AtividadeMapper.toDomain>[0]);
+      return AtividadeMapper.toDomain(
+        data as Parameters<typeof AtividadeMapper.toDomain>[0],
+      );
     } catch (error: unknown) {
-      const _e = error as { response?: { status?: number; data?: { error?: string } }; message?: string };
+      const _e = error as {
+        response?: { status?: number; data?: { error?: string } };
+        message?: string;
+      };
       if (_e.response?.status === 404 || _e.response?.status === 406)
         return null;
       throw new Error(`Erro ao buscar atividade: ${_e.message}`);
@@ -36,10 +43,19 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
 
   async findByLeadId(leadId: string): Promise<Atividade[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
-        params: { lead_id: leadId },
-      });
-      return data?.map((d) => AtividadeMapper.toDomain(d as Parameters<typeof AtividadeMapper.toDomain>[0])) ?? [];
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/crm/atividades",
+        {
+          params: { lead_id: leadId },
+        },
+      );
+      return (
+        data?.map((d) =>
+          AtividadeMapper.toDomain(
+            d as Parameters<typeof AtividadeMapper.toDomain>[0],
+          ),
+        ) ?? []
+      );
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar atividades do lead: ${_e.message}`);
@@ -48,10 +64,19 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
 
   async findByResponsavel(responsavelId: string): Promise<Atividade[]> {
     try {
-      const data = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
-        params: { assigned_to: responsavelId },
-      });
-      return data?.map((d) => AtividadeMapper.toDomain(d as Parameters<typeof AtividadeMapper.toDomain>[0])) ?? [];
+      const data = await apiClient.get<Record<string, any>[]>(
+        "/crm/atividades",
+        {
+          params: { assigned_to: responsavelId },
+        },
+      );
+      return (
+        data?.map((d) =>
+          AtividadeMapper.toDomain(
+            d as Parameters<typeof AtividadeMapper.toDomain>[0],
+          ),
+        ) ?? []
+      );
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(
@@ -71,14 +96,23 @@ export class AtividadeRepositoryApi implements IAtividadeRepository {
     endOfDay.setHours(23, 59, 59, 999);
 
     try {
-      const activities = await apiClient.get<Record<string, any>[]>("/crm/atividades", {
-        params: {
-          status: "AGENDADA",
-          start_date: startOfDay.toISOString(),
-          end_date: endOfDay.toISOString(),
+      const activities = await apiClient.get<Record<string, any>[]>(
+        "/crm/atividades",
+        {
+          params: {
+            status: "AGENDADA",
+            start_date: startOfDay.toISOString(),
+            end_date: endOfDay.toISOString(),
+          },
         },
-      });
-      return activities?.map((d) => AtividadeMapper.toDomain(d as Parameters<typeof AtividadeMapper.toDomain>[0])) ?? [];
+      );
+      return (
+        activities?.map((d) =>
+          AtividadeMapper.toDomain(
+            d as Parameters<typeof AtividadeMapper.toDomain>[0],
+          ),
+        ) ?? []
+      );
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
       throw new Error(`Erro ao buscar atividades agendadas: ${_e.message}`);

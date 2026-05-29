@@ -1,5 +1,15 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@orthoplus/core-ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@orthoplus/core-ui/tabs";
 import { BarChart3, TrendingUp, Users, DollarSign } from "lucide-react";
 import { BIMetrics } from "@/modules/bi/presentation/components/BIMetrics";
 import { BICharts } from "@/modules/bi/presentation/components/BICharts";
@@ -11,10 +21,10 @@ export default function BIDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader 
-        icon={BarChart3} 
-        title="Business Intelligence" 
-        description="Dashboards e análises estratégicas" 
+      <PageHeader
+        icon={BarChart3}
+        title="Business Intelligence"
+        description="Dashboards e análises estratégicas"
       />
 
       <Tabs defaultValue="overview">

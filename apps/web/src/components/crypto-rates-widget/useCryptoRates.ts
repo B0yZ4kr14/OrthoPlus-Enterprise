@@ -17,7 +17,7 @@ export function useCryptoRates() {
     try {
       const response = await apiClient.post<CryptoRatesResponse>(
         "/crypto/rates",
-        {}
+        {},
       );
 
       const data = response as unknown as CryptoRatesResponse;

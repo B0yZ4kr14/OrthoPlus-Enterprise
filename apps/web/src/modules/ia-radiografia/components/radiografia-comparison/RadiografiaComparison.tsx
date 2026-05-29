@@ -13,7 +13,9 @@ interface RadiografiaComparisonProps {
   analises: AnaliseComplete[];
 }
 
-export function RadiografiaComparison({ analises }: RadiografiaComparisonProps) {
+export function RadiografiaComparison({
+  analises,
+}: RadiografiaComparisonProps) {
   const {
     analise1Id,
     analise2Id,
@@ -27,7 +29,8 @@ export function RadiografiaComparison({ analises }: RadiografiaComparisonProps) 
   } = useRadiografiaComparison(analises);
 
   const pacienteAnalises = analise1
-    ? analisesPorPaciente.find((p) => p.patientId === analise1.paciente_id)?.analises || []
+    ? analisesPorPaciente.find((p) => p.patientId === analise1.paciente_id)
+        ?.analises || []
     : [];
 
   return (

@@ -13,10 +13,20 @@ export class Produto {
     public quantidadeAtual: number,
     public status: string,
     public readonly createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
   ) {}
 
-  static create(props: Omit<Produto, 'adicionarEstoque' | 'removerEstoque' | 'ajustarEstoque' | 'estaEmEstoqueBaixo' | 'atualizarPrecos' | 'toObject'>): Produto {
+  static create(
+    props: Omit<
+      Produto,
+      | "adicionarEstoque"
+      | "removerEstoque"
+      | "ajustarEstoque"
+      | "estaEmEstoqueBaixo"
+      | "atualizarPrecos"
+      | "toObject"
+    >,
+  ): Produto {
     return new Produto(
       props.id,
       props.clinicId,
@@ -31,13 +41,13 @@ export class Produto {
       props.quantidadeAtual,
       props.status,
       props.createdAt,
-      props.updatedAt
+      props.updatedAt,
     );
   }
 
   adicionarEstoque(quantidade: number): void {
     if (quantidade <= 0) {
-      throw new Error('Quantidade deve ser positiva');
+      throw new Error("Quantidade deve ser positiva");
     }
     this.quantidadeAtual += quantidade;
     this.updatedAt = new Date();
@@ -45,10 +55,10 @@ export class Produto {
 
   removerEstoque(quantidade: number): void {
     if (quantidade <= 0) {
-      throw new Error('Quantidade deve ser positiva');
+      throw new Error("Quantidade deve ser positiva");
     }
     if (quantidade > this.quantidadeAtual) {
-      throw new Error('Estoque insuficiente');
+      throw new Error("Estoque insuficiente");
     }
     this.quantidadeAtual -= quantidade;
     this.updatedAt = new Date();
@@ -56,7 +66,7 @@ export class Produto {
 
   ajustarEstoque(novaQuantidade: number): void {
     if (novaQuantidade < 0) {
-      throw new Error('Quantidade não pode ser negativa');
+      throw new Error("Quantidade não pode ser negativa");
     }
     this.quantidadeAtual = novaQuantidade;
     this.updatedAt = new Date();

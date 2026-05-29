@@ -8,7 +8,10 @@ export interface ConfigFormProps {
   loading: boolean;
   onSave: () => void;
   onCancel: () => void;
-  onChange: <K extends keyof BancoConfig>(field: K, value: BancoConfig[K]) => void;
+  onChange: <K extends keyof BancoConfig>(
+    field: K,
+    value: BancoConfig[K],
+  ) => void;
 }
 
 export interface BancoSelectProps {

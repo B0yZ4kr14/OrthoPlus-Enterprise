@@ -1,5 +1,10 @@
 // cspell:disable
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@orthoplus/core-ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@orthoplus/core-ui/dialog";
 import { Button } from "@orthoplus/core-ui/button";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Info, CheckCircle2, Loader2 } from "lucide-react";
@@ -9,7 +14,12 @@ import { ProgressSection } from "./ProgressSection";
 import { TestResultView } from "./TestResultView";
 import type { BackupTestDialogProps } from "./types";
 
-export function BackupTestDialog({ open, onOpenChange, backupId, backupName }: BackupTestDialogProps) {
+export function BackupTestDialog({
+  open,
+  onOpenChange,
+  backupId,
+  backupName,
+}: BackupTestDialogProps) {
   const { testing, testResult, progress, runTest } = useBackupTest(backupId);
 
   return (
@@ -26,8 +36,9 @@ export function BackupTestDialog({ open, onOpenChange, backupId, backupName }: B
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              Este teste valida a integridade e restaurabilidade do backup sem aplicar mudanças reais. Ideal para
-              garantir que seus backups estão funcionando corretamente.
+              Este teste valida a integridade e restaurabilidade do backup sem
+              aplicar mudanças reais. Ideal para garantir que seus backups estão
+              funcionando corretamente.
             </AlertDescription>
           </Alert>
 

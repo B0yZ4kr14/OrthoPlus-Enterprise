@@ -7,7 +7,7 @@ export function usePatientImages(patientId: string) {
     queryKey: ["patient-images", patientId],
     queryFn: async () => {
       const data = await apiClient.get<PatientImage[]>(
-        `/pacientes/${patientId}/imaging`
+        `/pacientes/${patientId}/imaging`,
       );
       return data || [];
     },

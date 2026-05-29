@@ -54,7 +54,9 @@ export function BudgetsList({ budgets }: BudgetsListProps) {
               <TableCell className="font-medium">{budget.number}</TableCell>
               <TableCell>{budget.date}</TableCell>
               <TableCell>{formatCurrency(budget.total)}</TableCell>
-              <TableCell>{formatDiscount(budget.discount, budget.total)}</TableCell>
+              <TableCell>
+                {formatDiscount(budget.discount, budget.total)}
+              </TableCell>
               <TableCell>
                 <BudgetStatusBadge status={budget.status} />
               </TableCell>

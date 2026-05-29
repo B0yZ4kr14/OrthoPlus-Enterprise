@@ -6,7 +6,10 @@ interface MonthlyAmountInputProps {
   onChange: (value: number) => void;
 }
 
-export function MonthlyAmountInput({ value, onChange }: MonthlyAmountInputProps) {
+export function MonthlyAmountInput({
+  value,
+  onChange,
+}: MonthlyAmountInputProps) {
   return (
     <div className="space-y-2">
       <Label>Valor Mensal (R$)</Label>

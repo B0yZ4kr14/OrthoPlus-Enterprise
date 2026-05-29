@@ -16,7 +16,9 @@ export function useInventarioDashboard() {
   const kpis: KpiData = useMemo(() => {
     const now = new Date();
     const periodDays = parseInt(selectedPeriod);
-    const periodStart = new Date(now.getTime() - periodDays * 24 * 60 * 60 * 1000);
+    const periodStart = new Date(
+      now.getTime() - periodDays * 24 * 60 * 60 * 1000,
+    );
 
     const inventariosPeriodo = inventarios.filter((inv) => {
       const createdAt = inv.createdAt ? new Date(inv.createdAt) : null;
@@ -38,13 +40,18 @@ export function useInventarioDashboard() {
     );
     const acuracidadeMedia =
       totalItensAnalisados > 0
-        ? ((totalItensAnalisados - totalDivergencias) / totalItensAnalisados) * 100
+        ? ((totalItensAnalisados - totalDivergencias) / totalItensAnalisados) *
+          100
         : 100;
 
-    const prevPeriodStart = new Date(periodStart.getTime() - periodDays * 24 * 60 * 60 * 1000);
+    const prevPeriodStart = new Date(
+      periodStart.getTime() - periodDays * 24 * 60 * 60 * 1000,
+    );
     const inventariosPeriodoAnterior = inventarios.filter((inv) => {
       const createdAt = inv.createdAt ? new Date(inv.createdAt) : null;
-      return createdAt && createdAt >= prevPeriodStart && createdAt < periodStart;
+      return (
+        createdAt && createdAt >= prevPeriodStart && createdAt < periodStart
+      );
     });
 
     const perdasPeriodoAnterior = inventariosPeriodoAnterior.reduce(
@@ -71,7 +78,10 @@ export function useInventarioDashboard() {
       const date = new Date();
       date.setMonth(date.getMonth() - (5 - i));
       return {
-        mes: date.toLocaleDateString("pt-BR", { month: "short", year: "2-digit" }),
+        mes: date.toLocaleDateString("pt-BR", {
+          month: "short",
+          year: "2-digit",
+        }),
         mesNum: date.getMonth(),
         anoNum: date.getFullYear(),
       };
@@ -80,15 +90,23 @@ export function useInventarioDashboard() {
     return ultimos6Meses.map(({ mes, mesNum, anoNum }) => {
       const inventariosMes = inventarios.filter((inv) => {
         const createdAt = inv.createdAt ? new Date(inv.createdAt) : null;
-        return createdAt && createdAt.getMonth() === mesNum && createdAt.getFullYear() === anoNum;
+        return (
+          createdAt &&
+          createdAt.getMonth() === mesNum &&
+          createdAt.getFullYear() === anoNum
+        );
       });
 
-      const totalItens = inventariosMes.reduce((sum, inv) => sum + (inv.totalItens || 0), 0);
+      const totalItens = inventariosMes.reduce(
+        (sum, inv) => sum + (inv.totalItens || 0),
+        0,
+      );
       const totalDiverg = inventariosMes.reduce(
         (sum, inv) => sum + (inv.divergenciasEncontradas || 0),
         0,
       );
-      const acuracidade = totalItens > 0 ? ((totalItens - totalDiverg) / totalItens) * 100 : 100;
+      const acuracidade =
+        totalItens > 0 ? ((totalItens - totalDiverg) / totalItens) * 100 : 100;
 
       return {
         mes,
@@ -103,7 +121,10 @@ export function useInventarioDashboard() {
       const date = new Date();
       date.setMonth(date.getMonth() - (5 - i));
       return {
-        mes: date.toLocaleDateString("pt-BR", { month: "short", year: "2-digit" }),
+        mes: date.toLocaleDateString("pt-BR", {
+          month: "short",
+          year: "2-digit",
+        }),
         mesNum: date.getMonth(),
         anoNum: date.getFullYear(),
       };
@@ -112,17 +133,27 @@ export function useInventarioDashboard() {
     return ultimos6Meses.map(({ mes, mesNum, anoNum }) => {
       const inventariosMes = inventarios.filter((inv) => {
         const createdAt = inv.createdAt ? new Date(inv.createdAt) : null;
-        return createdAt && createdAt.getMonth() === mesNum && createdAt.getFullYear() === anoNum;
+        return (
+          createdAt &&
+          createdAt.getMonth() === mesNum &&
+          createdAt.getFullYear() === anoNum
+        );
       });
 
-      const perdas = inventariosMes.reduce((sum, inv) => sum + (inv.valorDivergencias || 0), 0);
+      const perdas = inventariosMes.reduce(
+        (sum, inv) => sum + (inv.valorDivergencias || 0),
+        0,
+      );
 
       return { mes, perdas: parseFloat(perdas.toFixed(2)) };
     });
   }, [inventarios]);
 
   const rankingProdutos: ProdutoPerda[] = useMemo(() => {
-    const produtoPerdas = new Map<string, { nome: string; perda: number; quantidade: number }>();
+    const produtoPerdas = new Map<
+      string,
+      { nome: string; perda: number; quantidade: number }
+    >();
 
     inventarioItems.forEach((item) => {
       if (item.valorDivergencia && item.valorDivergencia > 0) {

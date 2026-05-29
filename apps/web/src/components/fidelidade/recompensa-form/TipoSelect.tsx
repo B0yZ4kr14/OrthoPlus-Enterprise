@@ -19,7 +19,10 @@ export function TipoSelect({ value, onChange }: TipoSelectProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor="tipo">Tipo</Label>
-      <Select value={value} onValueChange={(v) => onChange(v as TipoRecompensa)}>
+      <Select
+        value={value}
+        onValueChange={(v) => onChange(v as TipoRecompensa)}
+      >
         <SelectTrigger id="tipo">
           <SelectValue placeholder="Selecione o tipo" />
         </SelectTrigger>

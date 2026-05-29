@@ -48,7 +48,11 @@ export function EventoDialog({
   });
 
   const handleAdicionar = () => {
-    if (!novoEvento.dataInicio || !novoEvento.dataFim || !novoEvento.descricao) {
+    if (
+      !novoEvento.dataInicio ||
+      !novoEvento.dataFim ||
+      !novoEvento.descricao
+    ) {
       toast.error("Preencha todos os campos do evento");
       return;
     }
@@ -161,7 +165,11 @@ export function EventoDialog({
                     <Badge variant="outline">{e.tipo}</Badge>{" "}
                     <span className="text-sm">{e.descricao}</span>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => onRemover(i)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onRemover(i)}
+                  >
                     Remover
                   </Button>
                 </div>

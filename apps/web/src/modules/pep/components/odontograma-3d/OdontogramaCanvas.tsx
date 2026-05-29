@@ -1,6 +1,11 @@
 // cspell:disable
 import { Canvas } from "@react-three/fiber";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Info } from "lucide-react";
 import { ToothArcade } from "./ToothArcade";
 import type { ToothData, ToothStatus } from "../../types/odontograma.types";
@@ -49,8 +54,8 @@ export function OdontogramaCanvas({
               Clique direito para editar faces específicas e adicionar
               observações.
             </strong>{" "}
-            Use o mouse para rotacionar (arrastar), aproximar/afastar
-            (scroll) e mover (botão direito + arrastar) a visualização.
+            Use o mouse para rotacionar (arrastar), aproximar/afastar (scroll) e
+            mover (botão direito + arrastar) a visualização.
           </p>
         </div>
       </CardContent>

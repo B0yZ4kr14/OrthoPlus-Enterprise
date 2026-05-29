@@ -10,7 +10,10 @@ import {
 import { Wallet, Plus, Info, Settings } from "lucide-react";
 import { WalletForm } from "@/components/crypto/WalletForm";
 import { WalletQRPreview } from "@/components/crypto/WalletQRPreview";
-import { CryptoWallet, ExchangeConfig } from "@/modules/crypto/types/crypto.types";
+import {
+  CryptoWallet,
+  ExchangeConfig,
+} from "@/modules/crypto/types/crypto.types";
 
 export interface CryptoWalletsViewProps {
   exchanges: ExchangeConfig[];
@@ -100,8 +103,8 @@ export function CryptoWalletsView({
                 Nenhuma carteira configurada
               </h3>
               <p className="text-muted-foreground max-w-md mx-auto">
-                Crie uma carteira para receber pagamentos em Bitcoin, Ethereum ou
-                outras criptomoedas.
+                Crie uma carteira para receber pagamentos em Bitcoin, Ethereum
+                ou outras criptomoedas.
               </p>
             </div>
             <div className="flex justify-center">

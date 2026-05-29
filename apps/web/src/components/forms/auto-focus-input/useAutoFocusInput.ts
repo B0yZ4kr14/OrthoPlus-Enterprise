@@ -7,7 +7,7 @@ export function useAutoFocusInput(
   mask: AutoFocusInputProps["mask"],
   maxLength: number,
   nextInputRef?: React.RefObject<HTMLInputElement>,
-  previousInputRef?: React.RefObject<HTMLInputElement>
+  previousInputRef?: React.RefObject<HTMLInputElement>,
 ) {
   const internalRef = useRef<HTMLInputElement>(null);
 
@@ -22,11 +22,18 @@ export function useAutoFocusInput(
   }, [value, mask, maxLength, nextInputRef]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && value.length === 0 && previousInputRef?.current) {
+    if (
+      e.key === "Backspace" &&
+      value.length === 0 &&
+      previousInputRef?.current
+    ) {
       e.preventDefault();
       previousInputRef.current.focus();
       const prevValue = previousInputRef.current.value;
-      previousInputRef.current.setSelectionRange(prevValue.length, prevValue.length);
+      previousInputRef.current.setSelectionRange(
+        prevValue.length,
+        prevValue.length,
+      );
     }
   };
 

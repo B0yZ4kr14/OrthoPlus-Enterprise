@@ -26,7 +26,9 @@ export function ModulesList({
       {categories.map((category) => (
         <div key={category} className="space-y-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold text-foreground">{category}</h2>
+            <h2 className="text-lg font-semibold text-foreground">
+              {category}
+            </h2>
             <div className="flex-1 h-px bg-border"></div>
           </div>
 

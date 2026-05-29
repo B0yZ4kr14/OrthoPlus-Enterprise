@@ -195,20 +195,21 @@ export const usePDV = (clinicId: string | undefined) => {
 
     try {
       const response = await apiClient.post<{
-        venda: PDVVenda
+        venda: PDVVenda;
         estoqueAlertas?: Array<{
-          produtoId: string
-          nome: string
-          estoqueAtual: number
-          quantidade: number
-        }>
+          produtoId: string;
+          nome: string;
+          estoqueAtual: number;
+          quantidade: number;
+        }>;
       }>(`/pdv/caixa/${caixaAberto.id}/vendas`, {
         ...venda,
         itens,
         pagamentos,
       });
 
-      if (!response || !response.venda) throw new Error("Failed to create venda");
+      if (!response || !response.venda)
+        throw new Error("Failed to create venda");
 
       await loadVendas();
       sonnerToast.success(
@@ -218,11 +219,10 @@ export const usePDV = (clinicId: string | undefined) => {
       // Show stock alert if any product fell below minimum
       if (response.estoqueAlertas && response.estoqueAlertas.length > 0) {
         response.estoqueAlertas.forEach((alerta) => {
-          sonnerToast.warning(
-            `Estoque crítico: ${alerta.nome}`,
-            { description: `Restam apenas ${alerta.estoqueAtual} unidades em estoque.` },
-          )
-        })
+          sonnerToast.warning(`Estoque crítico: ${alerta.nome}`, {
+            description: `Restam apenas ${alerta.estoqueAtual} unidades em estoque.`,
+          });
+        });
       }
 
       return response.venda;

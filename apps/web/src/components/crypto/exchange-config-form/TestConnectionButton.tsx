@@ -7,7 +7,10 @@ interface TestConnectionButtonProps {
   isTesting: boolean;
 }
 
-export function TestConnectionButton({ onClick, isTesting }: TestConnectionButtonProps) {
+export function TestConnectionButton({
+  onClick,
+  isTesting,
+}: TestConnectionButtonProps) {
   return (
     <div className="flex justify-end">
       <Button

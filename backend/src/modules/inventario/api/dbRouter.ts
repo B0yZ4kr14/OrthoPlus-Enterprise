@@ -20,24 +20,41 @@ const dbRouter: Router = Router();
 
 dbRouter.use(clinicGuard);
 
-dbRouter.get("/health", asyncHandler(async (_req, res) => {
-  res.json(await manager.getHealth());
-}));
+dbRouter.get(
+  "/health",
+  asyncHandler(async (_req, res) => {
+    res.json(await manager.getHealth());
+  }),
+);
 
-dbRouter.get("/stats", asyncHandler(async (_req, res) => {
-  res.json(await manager.getStats());
-}));
+dbRouter.get(
+  "/stats",
+  asyncHandler(async (_req, res) => {
+    res.json(await manager.getStats());
+  }),
+);
 
-dbRouter.post("/backup", adminOnly, asyncHandler(async (_req, res) => {
-  res.json(await backup.runBackup());
-}));
+dbRouter.post(
+  "/backup",
+  adminOnly,
+  asyncHandler(async (_req, res) => {
+    res.json(await backup.runBackup());
+  }),
+);
 
-dbRouter.get("/backups", asyncHandler(async (_req, res) => {
-  res.json(await backup.listBackups());
-}));
+dbRouter.get(
+  "/backups",
+  asyncHandler(async (_req, res) => {
+    res.json(await backup.listBackups());
+  }),
+);
 
-dbRouter.post("/maintenance", adminOnly, asyncHandler(async (_req, res) => {
-  res.json(await manager.runMaintenance());
-}));
+dbRouter.post(
+  "/maintenance",
+  adminOnly,
+  asyncHandler(async (_req, res) => {
+    res.json(await manager.runMaintenance());
+  }),
+);
 
 export { dbRouter };

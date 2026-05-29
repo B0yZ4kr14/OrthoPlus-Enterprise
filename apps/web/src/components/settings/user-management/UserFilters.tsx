@@ -1,5 +1,5 @@
 interface UserFiltersProps {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 export function UserFilters({ children }: UserFiltersProps) {
@@ -13,5 +13,5 @@ export function UserFilters({ children }: UserFiltersProps) {
       </div>
       {children}
     </div>
-  )
+  );
 }

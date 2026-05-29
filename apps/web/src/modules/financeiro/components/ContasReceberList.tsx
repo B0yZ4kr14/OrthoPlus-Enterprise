@@ -1,5 +1,10 @@
 import { ContaReceber } from "@/domain/entities/ContaReceber";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
@@ -88,13 +93,11 @@ export function ContasReceberList({
                   }).format(conta.valor)}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Vencimento:{" "}
-                  {formatDate(conta.dataVencimento)}
+                  Vencimento: {formatDate(conta.dataVencimento)}
                 </p>
                 {conta.dataPagamento && (
                   <p className="text-sm text-success">
-                    Recebido em:{" "}
-                    {formatDate(conta.dataPagamento)}
+                    Recebido em: {formatDate(conta.dataPagamento)}
                   </p>
                 )}
               </div>

@@ -15,7 +15,9 @@ export class ApiTransactionRepository implements ITransactionRepository {
 
   async findById(id: string): Promise<Transaction | null> {
     try {
-      const data = await apiClient.get<Record<string, any>>(`${this.baseUrl}/${id}`);
+      const data = await apiClient.get<Record<string, any>>(
+        `${this.baseUrl}/${id}`,
+      );
       if (!data) return null;
       return this.toDomain(data);
     } catch {
@@ -43,7 +45,9 @@ export class ApiTransactionRepository implements ITransactionRepository {
       if (filters?.relatedEntityId)
         params.related_entity_id = filters.relatedEntityId;
 
-      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, { params });
+      const data = await apiClient.get<Record<string, any>[]>(this.baseUrl, {
+        params,
+      });
       return (data || []).map((row) => this.toDomain(row));
     } catch (e) {
       console.error(e);

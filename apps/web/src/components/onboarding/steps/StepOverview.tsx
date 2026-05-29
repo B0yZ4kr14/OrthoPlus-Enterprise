@@ -58,8 +58,8 @@ export function StepOverview() {
     <div className="space-y-6">
       <div className="prose prose-sm max-w-none">
         <p className="text-lg text-muted-foreground">
-          O <strong>OrthoPlus Enterprise</strong> é uma plataforma completa de gestão
-          odontológica construída com arquitetura descentralizada de{" "}
+          O <strong>OrthoPlus Enterprise</strong> é uma plataforma completa de
+          gestão odontológica construída com arquitetura descentralizada de{" "}
           <strong>22 módulos plug-and-play</strong>.
         </p>
         <p className="text-muted-foreground">

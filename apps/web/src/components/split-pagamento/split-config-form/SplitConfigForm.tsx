@@ -21,8 +21,13 @@ export function SplitConfigForm({
   procedimentos,
   editingConfig,
 }: SplitConfigFormProps) {
-  const { formData, loading, handleSubmit, handlePercentualDentistaChange, handleInputChange } =
-    useSplitConfigForm(editingConfig, onOpenChange);
+  const {
+    formData,
+    loading,
+    handleSubmit,
+    handlePercentualDentistaChange,
+    handleInputChange,
+  } = useSplitConfigForm(editingConfig, onOpenChange);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

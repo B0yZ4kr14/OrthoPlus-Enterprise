@@ -8,14 +8,25 @@ interface StrengthLabelProps {
   score: number;
 }
 
-export function StrengthLabel({ password, label, color, score }: StrengthLabelProps) {
+export function StrengthLabel({
+  password,
+  label,
+  color,
+  score,
+}: StrengthLabelProps) {
   if (password.length === 0) {
-    return <p className="text-sm font-medium text-muted-foreground">Digite uma senha</p>;
+    return (
+      <p className="text-sm font-medium text-muted-foreground">
+        Digite uma senha
+      </p>
+    );
   }
 
   return (
     <div className="flex items-center justify-between">
-      <p className={`text-sm font-medium transition-colors ${getTextColorClass(color)}`}>
+      <p
+        className={`text-sm font-medium transition-colors ${getTextColorClass(color)}`}
+      >
         {label}
       </p>
       {score === 4 && <CheckCircle className="h-4 w-4 text-success" />}

@@ -1,11 +1,19 @@
 // cspell:disable
 import { lazy, Suspense } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 
 const Odontograma3D = lazy(() =>
-  import("@/modules/pep/components/Odontograma3D").then((m) => ({ default: m.Odontograma3D }))
+  import("@/modules/pep/components/Odontograma3D").then((m) => ({
+    default: m.Odontograma3D,
+  })),
 );
 
 interface Odontograma3DTabProps {
@@ -23,7 +31,13 @@ export function Odontograma3DTab({ prontuarioId }: Odontograma3DTabProps) {
       </CardHeader>
       <CardContent>
         {prontuarioId ? (
-          <Suspense fallback={<div className="flex items-center justify-center h-64"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>}>
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center h-64">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
+            }
+          >
             <Odontograma3D prontuarioId={prontuarioId} />
           </Suspense>
         ) : (

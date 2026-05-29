@@ -58,13 +58,10 @@ export function BackupTestDialog({
         setProgress((prev) => Math.min(prev + 15, 90));
       }, 500);
 
-      const data = await apiClient.post<TestResult>(
-        "/backups/manager",
-        {
-          backupId,
-          testEnvironment: "sandbox",
-        },
-      );
+      const data = await apiClient.post<TestResult>("/backups/manager", {
+        backupId,
+        testEnvironment: "sandbox",
+      });
 
       clearInterval(progressInterval);
       setProgress(100);
@@ -96,8 +93,7 @@ export function BackupTestDialog({
   };
 
   const getStatusIcon = () => {
-    if (testing)
-      return <Loader2 className="h-5 w-5 animate-spin text-info" />;
+    if (testing) return <Loader2 className="h-5 w-5 animate-spin text-info" />;
     if (!testResult) return <Info className="h-5 w-5 text-muted-foreground" />;
     if (testResult.success)
       return <CheckCircle2 className="h-5 w-5 text-success" />;

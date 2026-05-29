@@ -31,7 +31,10 @@ export function FormField({
         id={id}
         type={type}
         placeholder={placeholder}
-        {...register(id, type === "number" ? { valueAsNumber: true } : undefined)}
+        {...register(
+          id,
+          type === "number" ? { valueAsNumber: true } : undefined,
+        )}
       />
       {error && <p className="text-sm text-destructive">{error.message}</p>}
     </div>

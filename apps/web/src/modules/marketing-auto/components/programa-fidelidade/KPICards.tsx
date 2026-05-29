@@ -1,6 +1,11 @@
 // cspell:disable
 import { Award, Users, Star, Gift, TrendingUp } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 
 export function KPICards() {
   return (

@@ -10,6 +10,7 @@
 `src/main.tsx` → `src/App.tsx` → React Router v6 → módulos em `src/modules/`
 
 Providers aninhados (App.tsx):
+
 ```
 QueryClientProvider → ThemeProvider → BrowserRouter → AuthProvider → ModulesProvider → AppRoutes
 ```
@@ -20,15 +21,15 @@ Todas as rotas: `src/routes/AppRoutes.tsx` — lazy-loaded, usa `protectedRoute(
 
 ## Convenções Obrigatórias
 
-| O quê | Como | Nunca |
-|-------|------|-------|
-| Requisições HTTP | `apiClient` de `lib/api/apiClient.ts` | `fetch` ou `axios` direto |
-| Datas | `lib/utils/date.utils.ts` | `date-fns` importado direto |
-| Auth state | `useAuth()` de `contexts/AuthContext.tsx` | localStorage manual |
-| Toast/notif | `useToast` de `@orthoplus/core-hooks` | `alert()` |
-| Componentes UI | `@orthoplus/core-ui` (Button, Card, Input...) | shadcn local se já existir no core |
-| Estado global | Zustand stores em módulos (`use{Modulo}Store.ts`) | Context para estado server-side |
-| Estado servidor | React Query (`useQuery`/`useMutation`) | useState para dados async |
+| O quê            | Como                                              | Nunca                              |
+| ---------------- | ------------------------------------------------- | ---------------------------------- |
+| Requisições HTTP | `apiClient` de `lib/api/apiClient.ts`             | `fetch` ou `axios` direto          |
+| Datas            | `lib/utils/date.utils.ts`                         | `date-fns` importado direto        |
+| Auth state       | `useAuth()` de `contexts/AuthContext.tsx`         | localStorage manual                |
+| Toast/notif      | `useToast` de `@orthoplus/core-hooks`             | `alert()`                          |
+| Componentes UI   | `@orthoplus/core-ui` (Button, Card, Input...)     | shadcn local se já existir no core |
+| Estado global    | Zustand stores em módulos (`use{Modulo}Store.ts`) | Context para estado server-side    |
+| Estado servidor  | React Query (`useQuery`/`useMutation`)            | useState para dados async          |
 
 ---
 
@@ -75,6 +76,7 @@ src/modules/{modulo}/
 ## Zustand Stores
 
 Stores existentes (colocados em módulo/hooks):
+
 - `modules/dentistas/hooks/useDentistasStore.ts`
 - `modules/estoque/hooks/useEstoqueStore.ts` (~793 linhas — extrair ao adicionar)
 - `modules/funcionarios/hooks/useFuncionariosStore.ts`
@@ -118,17 +120,21 @@ Stores existentes (colocados em módulo/hooks):
 ## Correções de UI/CSS Aplicadas (2026-05-13)
 
 ### CSS Fantasmas → Criados em `src/index.css`
+
 - `.glass-card` — 52 usos em 28 arquivos. Criado no `@layer components`.
 - `.stat-card-premium` — 1 uso em `StatsCard.tsx`. Criado com gradiente de topo via `::before`.
 - `.chart-card-premium` — 3 usos em `DashboardUnified.tsx`. Criado como card base com sombra.
 
 ### Sidebar Hardcoded → Refatorada para CSS vars
+
 Arquivos modificados:
+
 - `src/core/layout/Sidebar/SidebarMenuItem.tsx`
 - `src/core/layout/Sidebar/SidebarHeader.tsx`
 - `src/core/layout/Sidebar/SidebarFooter.tsx`
 
 Substituições aplicadas:
+
 - `emerald-500` → `hsl(var(--interactive))`
 - `teal-400` → `hsl(var(--interactive-hover))`
 - `emerald-50` → `hsl(var(--accent))`
@@ -139,14 +145,17 @@ Substituições aplicadas:
 Todas as classes dark: redundantes foram removidas pois as CSS vars já respondem ao tema.
 
 ### Tokens v3 Integrados
+
 - `tokensV3` exportado de `src/theme/tokens-v3.ts` agora disponível via `useTheme().tokensV3`.
 - `src/contexts/ThemeContext.tsx` atualizado para incluir `tokensV3` no provider value.
 
 ### Arquivos Órfãos Removidos
+
 - `src/components/ThemeProvider.tsx` — legado, não usado (App.tsx usa `contexts/ThemeContext.tsx`)
 - `src/App.css` — legado Vite, nunca importado
 
 ### Conflito clinical.ts Documentado
+
 - `src/themes/clinical.ts` recebeu WARNING no header: `applyClinicalTheme()` injeta vars inline que podem conflitar com `ThemeContext`.
 
 ## Build e Verificação

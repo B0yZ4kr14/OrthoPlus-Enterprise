@@ -1,6 +1,6 @@
-import { IOrcamentoRepository } from "@/modules/orcamentos/domain/repositories/IOrcamentoRepository"
+import { IOrcamentoRepository } from "@/modules/orcamentos/domain/repositories/IOrcamentoRepository";
 
-import { OrcamentoRepository } from "@/modules/orcamentos/infrastructure/OrcamentoRepository"
+import { OrcamentoRepository } from "@/modules/orcamentos/infrastructure/OrcamentoRepository";
 
 export interface CreateOrcamentoInput {
   numero_orcamento: string;
@@ -47,18 +47,21 @@ export interface AddItemInput {
 }
 
 export class OrcamentoService {
-  private repo: IOrcamentoRepository
+  private repo: IOrcamentoRepository;
 
   constructor(repo?: IOrcamentoRepository) {
-    this.repo = repo ?? new OrcamentoRepository()
+    this.repo = repo ?? new OrcamentoRepository();
   }
 
-  async list(clinicId: string, filters?: { patient_id?: string; status?: string }) {
-    return this.repo.listOrcamentos(clinicId, filters)
+  async list(
+    clinicId: string,
+    filters?: { patient_id?: string; status?: string },
+  ) {
+    return this.repo.listOrcamentos(clinicId, filters);
   }
 
   async getById(id: string, clinicId: string) {
-    return this.repo.getOrcamentoById(id, clinicId)
+    return this.repo.getOrcamentoById(id, clinicId);
   }
 
   async create(data: CreateOrcamentoInput, clinicId: string) {
@@ -82,7 +85,7 @@ export class OrcamentoService {
       desconto_valor: data.desconto_valor,
       observacoes: data.observacoes,
       descricao: data.descricao,
-    })
+    });
   }
 
   async update(id: string, data: UpdateOrcamentoInput, clinicId: string) {
@@ -92,7 +95,7 @@ export class OrcamentoService {
     return this.repo.updateOrcamento(id, {
       ...data,
       updated_at: new Date(),
-    })
+    });
   }
 
   async delete(id: string, clinicId: string) {
@@ -110,7 +113,10 @@ export class OrcamentoService {
       throw new Error("Apenas orçamentos em rascunho podem ser enviados");
     }
 
-    return this.repo.updateOrcamento(id, { status: "PENDENTE", updated_at: new Date() })
+    return this.repo.updateOrcamento(id, {
+      status: "PENDENTE",
+      updated_at: new Date(),
+    });
   }
 
   async aprovar(id: string, aprovadoPor: string, clinicId: string) {
@@ -126,10 +132,15 @@ export class OrcamentoService {
       aprovado_por: aprovadoPor,
       aprovado_em: now.toISOString(),
       updated_at: now,
-    })
+    });
   }
 
-  async rejeitar(id: string, _rejeitadoPor: string, motivo: string, clinicId: string) {
+  async rejeitar(
+    id: string,
+    _rejeitadoPor: string,
+    motivo: string,
+    clinicId: string,
+  ) {
     const existing = await this.getById(id, clinicId);
     if (!existing) return null;
     if (existing.status !== "PENDENTE") {
@@ -142,14 +153,14 @@ export class OrcamentoService {
       rejeitado_em: now.toISOString(),
       motivo_rejeicao: motivo,
       updated_at: now,
-    })
+    });
   }
 
   async listItems(orcamentoId: string, clinicId: string) {
     const orcamento = await this.repo.getOrcamentoById(orcamentoId, clinicId);
     if (!orcamento) return [];
 
-    return this.repo.listItems(orcamentoId)
+    return this.repo.listItems(orcamentoId);
   }
 
   async addItem(orcamentoId: string, data: AddItemInput, clinicId: string) {
@@ -166,6 +177,6 @@ export class OrcamentoService {
       procedimento_id: data.procedimento_id,
       observacoes: data.observacoes,
       dente_codigo: data.dente_codigo,
-    })
+    });
   }
 }

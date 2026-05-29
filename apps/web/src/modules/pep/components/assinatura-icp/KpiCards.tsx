@@ -1,5 +1,10 @@
 // cspell:disable
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Key, FileSignature, Clock, CheckCircle } from "lucide-react";
 import type { KpiData } from "./types";
 
@@ -35,7 +40,8 @@ export function KpiCards({ data }: KpiCardsProps) {
         <CardContent>
           <div className="text-2xl font-bold">{data.docsAssinadosMes}</div>
           <p className="text-xs text-muted-foreground">
-            <span className="text-success">+{data.docsAssinadosVariacao}%</span> vs. mês anterior
+            <span className="text-success">+{data.docsAssinadosVariacao}%</span>{" "}
+            vs. mês anterior
           </p>
         </CardContent>
       </Card>
@@ -49,7 +55,9 @@ export function KpiCards({ data }: KpiCardsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{data.aguardandoAssinatura}</div>
-          <p className="text-xs text-muted-foreground">{data.aguardandoPrazoProximo} com prazo próximo</p>
+          <p className="text-xs text-muted-foreground">
+            {data.aguardandoPrazoProximo} com prazo próximo
+          </p>
         </CardContent>
       </Card>
 

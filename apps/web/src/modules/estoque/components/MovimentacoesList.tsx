@@ -11,34 +11,34 @@ import { ptBR } from "date-fns/locale";
 import { tiposMovimentacao } from "../types/estoque.types";
 
 interface MovimentacaoItem {
-  id?: string
-  produtoId: string
-  tipo: string
-  quantidade: number
-  motivo?: string
-  realizadoPor: string
-  createdAt?: string
-  lote?: string
-  fornecedorId?: string
-  notaFiscal?: string
-  valorTotal?: number
-  observacoes?: string
+  id?: string;
+  produtoId: string;
+  tipo: string;
+  quantidade: number;
+  motivo?: string;
+  realizadoPor: string;
+  createdAt?: string;
+  lote?: string;
+  fornecedorId?: string;
+  notaFiscal?: string;
+  valorTotal?: number;
+  observacoes?: string;
 }
 
 interface ProdutoRef {
-  id?: string
-  nome: string
+  id?: string;
+  nome: string;
 }
 
 interface FornecedorRef {
-  id?: string
-  nome: string
+  id?: string;
+  nome: string;
 }
 
 interface MovimentacoesListProps {
-  movimentacoes: MovimentacaoItem[]
-  produtos: ProdutoRef[]
-  fornecedores: FornecedorRef[]
+  movimentacoes: MovimentacaoItem[];
+  produtos: ProdutoRef[];
+  fornecedores: FornecedorRef[];
 }
 
 export function MovimentacoesList({
@@ -61,7 +61,8 @@ export function MovimentacoesList({
     id ? fornecedores.find((f) => f.id === id)?.nome || "-" : "-";
 
   const getTipoColor = (tipo: string) =>
-    tiposMovimentacao.find((t) => t.value === tipo)?.color || "bg-muted-foreground";
+    tiposMovimentacao.find((t) => t.value === tipo)?.color ||
+    "bg-muted-foreground";
 
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {

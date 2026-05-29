@@ -4,18 +4,26 @@ import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import type { ExchangeConfig } from "@/modules/crypto/types/crypto.types";
-import { exchangeFormSchema, type ExchangeFormValues, type ConnectionStatus } from "./types";
+import {
+  exchangeFormSchema,
+  type ExchangeFormValues,
+  type ConnectionStatus,
+} from "./types";
 
 interface UseExchangeConfigFormProps {
   onSubmit: (data: ExchangeFormValues) => Promise<void>;
   initialData?: Partial<ExchangeConfig>;
 }
 
-export function useExchangeConfigForm({ onSubmit, initialData }: UseExchangeConfigFormProps) {
+export function useExchangeConfigForm({
+  onSubmit,
+  initialData,
+}: UseExchangeConfigFormProps) {
   const [testingConnection, setTestingConnection] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("idle");
+  const [connectionStatus, setConnectionStatus] =
+    useState<ConnectionStatus>("idle");
   const [selectedCoins, setSelectedCoins] = useState<string[]>(
-    initialData?.supported_coins || ["BTC"]
+    initialData?.supported_coins || ["BTC"],
   );
 
   const form = useForm<ExchangeFormValues>({
@@ -35,7 +43,11 @@ export function useExchangeConfigForm({ onSubmit, initialData }: UseExchangeConf
 
   const handleTestConnection = useCallback(async () => {
     const values = form.getValues();
-    const { exchange_name: exchange, api_key: apiKey, api_secret: apiSecret } = values;
+    const {
+      exchange_name: exchange,
+      api_key: apiKey,
+      api_secret: apiSecret,
+    } = values;
 
     if (!exchange || !apiKey || !apiSecret) {
       toast.error("Preencha Exchange, API Key e API Secret para testar");
@@ -57,23 +69,32 @@ export function useExchangeConfigForm({ onSubmit, initialData }: UseExchangeConf
     }
   }, [form]);
 
-  const handleAddCoin = useCallback((coin: string) => {
-    if (!selectedCoins.includes(coin)) {
-      const newCoins = [...selectedCoins, coin];
+  const handleAddCoin = useCallback(
+    (coin: string) => {
+      if (!selectedCoins.includes(coin)) {
+        const newCoins = [...selectedCoins, coin];
+        setSelectedCoins(newCoins);
+        form.setValue("supported_coins", newCoins);
+      }
+    },
+    [selectedCoins, form],
+  );
+
+  const handleRemoveCoin = useCallback(
+    (coin: string) => {
+      const newCoins = selectedCoins.filter((c) => c !== coin);
       setSelectedCoins(newCoins);
       form.setValue("supported_coins", newCoins);
-    }
-  }, [selectedCoins, form]);
+    },
+    [selectedCoins, form],
+  );
 
-  const handleRemoveCoin = useCallback((coin: string) => {
-    const newCoins = selectedCoins.filter((c) => c !== coin);
-    setSelectedCoins(newCoins);
-    form.setValue("supported_coins", newCoins);
-  }, [selectedCoins, form]);
-
-  const handleSubmit = useCallback(async (data: ExchangeFormValues) => {
-    await onSubmit(data);
-  }, [onSubmit]);
+  const handleSubmit = useCallback(
+    async (data: ExchangeFormValues) => {
+      await onSubmit(data);
+    },
+    [onSubmit],
+  );
 
   return {
     form,

@@ -51,17 +51,28 @@ export function EmptyState({
         className,
       )}
     >
-      <div className={cn("mb-4 p-4 rounded-2xl bg-muted/80 shadow-inner", config.iconColor)}>
+      <div
+        className={cn(
+          "mb-4 p-4 rounded-2xl bg-muted/80 shadow-inner",
+          config.iconColor,
+        )}
+      >
         <Icon className="h-10 w-10" />
       </div>
-      <h3 className="text-lg font-semibold text-foreground mb-1.5">{message}</h3>
+      <h3 className="text-lg font-semibold text-foreground mb-1.5">
+        {message}
+      </h3>
       {description && (
         <p className="text-sm text-muted-foreground text-center max-w-md mb-6">
           {description}
         </p>
       )}
       {action && (
-        <Button onClick={action.onClick} size="sm" className="rounded-full px-6">
+        <Button
+          onClick={action.onClick}
+          size="sm"
+          className="rounded-full px-6"
+        >
           {action.label}
         </Button>
       )}

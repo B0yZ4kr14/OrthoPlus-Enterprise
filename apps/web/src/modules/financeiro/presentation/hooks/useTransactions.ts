@@ -9,9 +9,18 @@ import { ApiTransactionRepository } from "../../infrastructure/repositories/ApiT
 
 export function useTransactions(filters?: TransactionFilters) {
   const repository = useMemo(() => new ApiTransactionRepository(), []);
-  const createUseCase = useMemo(() => new CreateTransactionUseCase(repository), [repository]);
-  const payUseCase = useMemo(() => new PayTransactionUseCase(repository), [repository]);
-  const listUseCase = useMemo(() => new ListTransactionsUseCase(repository), [repository]);
+  const createUseCase = useMemo(
+    () => new CreateTransactionUseCase(repository),
+    [repository],
+  );
+  const payUseCase = useMemo(
+    () => new PayTransactionUseCase(repository),
+    [repository],
+  );
+  const listUseCase = useMemo(
+    () => new ListTransactionsUseCase(repository),
+    [repository],
+  );
   const { clinicId, user } = useAuth();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);

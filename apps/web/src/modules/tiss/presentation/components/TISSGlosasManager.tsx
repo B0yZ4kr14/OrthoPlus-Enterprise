@@ -1,8 +1,26 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@orthoplus/core-ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@orthoplus/core-ui/table";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@orthoplus/core-ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@orthoplus/core-ui/dialog";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
 import { useTISSGlosas } from "../../application/hooks/useTISSGlosas";
@@ -10,13 +28,21 @@ import { useState } from "react";
 import { RefreshCw, AlertTriangle } from "lucide-react";
 
 export function TISSGlosasManager() {
-  const { glosas, isLoading, registerGlosa, reprocessarGlosa } = useTISSGlosas();
+  const { glosas, isLoading, registerGlosa, reprocessarGlosa } =
+    useTISSGlosas();
   const [selectedGlosa, setSelectedGlosa] = useState<string | null>(null);
   const [glosaReason, setGlosaReason] = useState("");
   const [glosaAmount, setGlosaAmount] = useState("");
 
   const handleRegistrarGlosa = (id: string) => {
-    registerGlosa({ id, data: { glosa_amount: Number(glosaAmount), glosa_reason: glosaReason, glosa_date: new Date().toISOString() } });
+    registerGlosa({
+      id,
+      data: {
+        glosa_amount: Number(glosaAmount),
+        glosa_reason: glosaReason,
+        glosa_date: new Date().toISOString(),
+      },
+    });
     setSelectedGlosa(null);
     setGlosaReason("");
     setGlosaAmount("");
@@ -69,26 +95,38 @@ export function TISSGlosasManager() {
                   <TableCell>{glosa.procedure_name}</TableCell>
                   <TableCell>R$ {(glosa.amount / 100).toFixed(2)}</TableCell>
                   <TableCell>
-                    {glosa.glosa_amount ? `R$ ${(glosa.glosa_amount / 100).toFixed(2)}` : "-"}
+                    {glosa.glosa_amount
+                      ? `R$ ${(glosa.glosa_amount / 100).toFixed(2)}`
+                      : "-"}
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline">{glosa.glosa_reason || "Não informado"}</Badge>
+                    <Badge variant="outline">
+                      {glosa.glosa_reason || "Não informado"}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button variant="outline" size="sm" onClick={() => setSelectedGlosa(glosa.id)}>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setSelectedGlosa(glosa.id)}
+                          >
                             Registrar Glosa
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Registrar Glosa - Guia {glosa.guide_number}</DialogTitle>
+                            <DialogTitle>
+                              Registrar Glosa - Guia {glosa.guide_number}
+                            </DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
-                              <Label htmlFor="glosaReason">Motivo da Glosa</Label>
+                              <Label htmlFor="glosaReason">
+                                Motivo da Glosa
+                              </Label>
                               <Input
                                 id="glosaReason"
                                 value={glosaReason}
@@ -97,7 +135,9 @@ export function TISSGlosasManager() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="glosaAmount">Valor Glosado (centavos)</Label>
+                              <Label htmlFor="glosaAmount">
+                                Valor Glosado (centavos)
+                              </Label>
                               <Input
                                 id="glosaAmount"
                                 type="number"
@@ -106,7 +146,9 @@ export function TISSGlosasManager() {
                                 placeholder="Ex: 5000"
                               />
                             </div>
-                            <Button onClick={() => handleRegistrarGlosa(glosa.id)}>
+                            <Button
+                              onClick={() => handleRegistrarGlosa(glosa.id)}
+                            >
                               Salvar Glosa
                             </Button>
                           </div>

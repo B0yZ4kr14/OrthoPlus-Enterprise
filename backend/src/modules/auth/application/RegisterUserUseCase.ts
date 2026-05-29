@@ -1,27 +1,27 @@
-import { Errors } from "@/middleware/errorHandler"
-import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository"
-import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository"
-import { MetricsEmitter } from "@/infrastructure/metrics"
-import bcrypt from "bcrypt"
+import { Errors } from "@/middleware/errorHandler";
+import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository";
+import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository";
+import { MetricsEmitter } from "@/infrastructure/metrics";
+import bcrypt from "bcrypt";
 
-import { UserRepository } from "@/modules/auth/infrastructure/UserRepository"
+import { UserRepository } from "@/modules/auth/infrastructure/UserRepository";
 
 export interface RegisterUserResult {
-  id: string
-  email: string
-  role: string
-  clinicId: string | null
+  id: string;
+  email: string;
+  role: string;
+  clinicId: string | null;
 }
 
 /**
  * RegisterUserUseCase — registers a new staff user.
  */
 export class RegisterUserUseCase {
-  private repo: IUserRepository
-  private audit = new AuditLogRepository()
+  private repo: IUserRepository;
+  private audit = new AuditLogRepository();
 
   constructor(repo?: IUserRepository) {
-    this.repo = repo ?? new UserRepository()
+    this.repo = repo ?? new UserRepository();
   }
 
   async execute(
@@ -30,12 +30,12 @@ export class RegisterUserUseCase {
     role: string,
     clinicId: string,
   ): Promise<RegisterUserResult> {
-    const existing = await this.repo.findUserByEmail(email)
+    const existing = await this.repo.findUserByEmail(email);
     if (existing) {
-      throw Errors.conflict("Email already in use")
+      throw Errors.conflict("Email already in use");
     }
 
-    const passwordHash = await bcrypt.hash(password, 12)
+    const passwordHash = await bcrypt.hash(password, 12);
 
     const newUser = await this.repo.createUser({
       email,
@@ -43,9 +43,13 @@ export class RegisterUserUseCase {
       role,
       clinic_id: clinicId,
       is_active: true,
-    })
+    });
 
-    MetricsEmitter.incrementCounter("auth_user_registered", "New user registrations", { role, clinicId })
+    MetricsEmitter.incrementCounter(
+      "auth_user_registered",
+      "New user registrations",
+      { role, clinicId },
+    );
 
     try {
       await this.audit.createLog({
@@ -55,16 +59,23 @@ export class RegisterUserUseCase {
         clinic_id: clinicId,
         user_id: newUser.id,
         old_data: null,
-        new_data: { id: newUser.id, email: newUser.email, role: newUser.role, clinic_id: clinicId },
+        new_data: {
+          id: newUser.id,
+          email: newUser.email,
+          role: newUser.role,
+          clinic_id: clinicId,
+        },
         created_at: new Date(),
-      })
-    } catch { /* audit failure is non-blocking */ }
+      });
+    } catch {
+      /* audit failure is non-blocking */
+    }
 
     return {
       id: newUser.id,
       email: newUser.email,
       role: newUser.role,
       clinicId: newUser.clinic_id,
-    }
+    };
   }
 }

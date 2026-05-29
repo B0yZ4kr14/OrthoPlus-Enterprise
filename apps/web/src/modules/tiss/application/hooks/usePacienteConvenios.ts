@@ -21,14 +21,19 @@ export function usePacienteConvenios(patientId?: string) {
     queryKey: ["paciente-convenios", patientId],
     queryFn: async () => {
       const params = patientId ? `?patient_id=${patientId}` : "";
-      return await apiClient.get<PacienteConvenio[]>(`/tiss/paciente-convenios${params}`);
+      return await apiClient.get<PacienteConvenio[]>(
+        `/tiss/paciente-convenios${params}`,
+      );
     },
     enabled: !!patientId,
   });
 
   const createVinculo = useMutation({
     mutationFn: async (data: Partial<PacienteConvenio>) => {
-      return await apiClient.post<PacienteConvenio>("/tiss/paciente-convenios", data);
+      return await apiClient.post<PacienteConvenio>(
+        "/tiss/paciente-convenios",
+        data,
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["paciente-convenios"] });
@@ -40,8 +45,17 @@ export function usePacienteConvenios(patientId?: string) {
   });
 
   const updateVinculo = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: Partial<PacienteConvenio> }) => {
-      return await apiClient.patch<PacienteConvenio>(`/tiss/paciente-convenios/${id}`, data);
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: Partial<PacienteConvenio>;
+    }) => {
+      return await apiClient.patch<PacienteConvenio>(
+        `/tiss/paciente-convenios/${id}`,
+        data,
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["paciente-convenios"] });

@@ -1,7 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-} from "@orthoplus/core-ui/dialog";
+import { Dialog, DialogContent } from "@orthoplus/core-ui/dialog";
 import type { PaymentDialogProps } from "./types";
 import { usePaymentForm } from "./usePaymentForm";
 import { usePaymentSubmission } from "./usePaymentSubmission";
@@ -33,7 +30,7 @@ export function PaymentDialog({
   } = usePaymentForm(conta);
 
   const { submit, loading } = usePaymentSubmission(
-    (conta.id as string),
+    conta.id as string,
     metodo,
     getPaymentData,
     onSuccess,

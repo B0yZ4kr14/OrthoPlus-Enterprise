@@ -1,5 +1,10 @@
 // cspell:disable
-import { Card, CardContent, CardDescription, CardHeader } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Users, CheckCircle2, TrendingUp, Clock } from "lucide-react";
 import type { AnalyticsData } from "./types";
@@ -37,7 +42,9 @@ export function KPICards({ analytics }: KPICardsProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold text-success">{analytics.totalCompletions}</div>
+          <div className="text-3xl font-bold text-success">
+            {analytics.totalCompletions}
+          </div>
         </CardContent>
       </Card>
 
@@ -50,7 +57,9 @@ export function KPICards({ analytics }: KPICardsProps) {
         </CardHeader>
         <CardContent>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold">{analytics.completionRate.toFixed(1)}%</span>
+            <span className="text-3xl font-bold">
+              {analytics.completionRate.toFixed(1)}%
+            </span>
             {analytics.completionRate >= 70 ? (
               <Badge variant="success">Excelente</Badge>
             ) : analytics.completionRate >= 50 ? (
@@ -70,7 +79,9 @@ export function KPICards({ analytics }: KPICardsProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold">{formatTime(analytics.averageTimeSeconds)}</div>
+          <div className="text-3xl font-bold">
+            {formatTime(analytics.averageTimeSeconds)}
+          </div>
         </CardContent>
       </Card>
     </div>

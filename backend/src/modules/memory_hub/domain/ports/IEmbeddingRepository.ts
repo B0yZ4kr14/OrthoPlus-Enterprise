@@ -2,7 +2,11 @@
  * Port (interface) for embedding repository operations.
  */
 export interface IEmbeddingRepository {
-  getCompressionStats(): { compressionRatio: number; compressedEmbeddings: number; spaceSavedBytes: number }
+  getCompressionStats(): {
+    compressionRatio: number;
+    compressedEmbeddings: number;
+    spaceSavedBytes: number;
+  };
   searchSimilar(
     embedding: number[],
     model: string,
@@ -13,7 +17,7 @@ export interface IEmbeddingRepository {
     featureNumber?: string,
     dateFrom?: number,
     dateTo?: number,
-  ): any[]
-  bulkInsert(data: any[], useCompression?: boolean): void
-  deleteByDocument(documentId: string): void
+  ): any[];
+  bulkInsert(data: any[], useCompression?: boolean): void;
+  deleteByDocument(documentId: string): void;
 }

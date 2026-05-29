@@ -67,58 +67,67 @@ export class NotificationController {
     res.json({ success: true, ...result });
   });
 
-  checkCryptoPriceAlerts = asyncHandler(async (_req: Request, res: Response) => {
-    const result = await this.service.checkCryptoPriceAlerts();
-    res.json({ success: true, ...result });
-  });
+  checkCryptoPriceAlerts = asyncHandler(
+    async (_req: Request, res: Response) => {
+      const result = await this.service.checkCryptoPriceAlerts();
+      res.json({ success: true, ...result });
+    },
+  );
 
-  sendReplenishmentAlerts = asyncHandler(async (req: Request, res: Response) => {
-    const { previsoes, resumo } = req.body;
-    const clinic_id = req.user?.clinicId;
-    const user_id = req.user?.id || null;
+  sendReplenishmentAlerts = asyncHandler(
+    async (req: Request, res: Response) => {
+      const { previsoes, resumo } = req.body;
+      const clinic_id = req.user?.clinicId;
+      const user_id = req.user?.id || null;
 
-    if (!clinic_id) {
-      throw Errors.unauthorized("Missing clinic context");
-    }
-
-    const result = await this.service.sendReplenishmentAlerts({ previsoes, resumo });
-
-    const admins = await this.service["repo"].findAdminsByClinic(clinic_id);
-    const adminEmails = admins.map((a: any) => a.email).filter(Boolean);
-
-    if (adminEmails.length > 0) {
-      const produtosCriticos = previsoes.filter(
-        (p: any) => p.status === "CRITICO",
-      );
-      const produtosAlerta = previsoes.filter(
-        (p: any) => p.status === "ALERTA",
-      );
-
-      try {
-        await mailer.sendMail({
-          from: process.env.SMTP_FROM || "OrthoPlus Enterprise <noreply@orthoplus.local>",
-          to: adminEmails,
-          subject: `Alerta de Reposicao IA: ${produtosCriticos.length} Criticos, ${produtosAlerta.length} Alertas`,
-          html: `<p>Verifique o estoque no sistema. Detalhes: ${JSON.stringify(resumo)}</p>`,
-        });
-      } catch (e) {
-        logger.error("Email failed", e);
+      if (!clinic_id) {
+        throw Errors.unauthorized("Missing clinic context");
       }
 
-      await this.service["repo"].createAuditLog({
-        clinic_id,
-        user_id,
-        action: "ALERTAS_REPOSICAO_ENVIADOS",
-        details: { total_produtos: previsoes.length },
+      const result = await this.service.sendReplenishmentAlerts({
+        previsoes,
+        resumo,
       });
-    }
 
-    res.json({
-      success: true,
-      message: result.message,
-      destinatorios: adminEmails.length,
-    });
-  });
+      const admins = await this.service["repo"].findAdminsByClinic(clinic_id);
+      const adminEmails = admins.map((a: any) => a.email).filter(Boolean);
+
+      if (adminEmails.length > 0) {
+        const produtosCriticos = previsoes.filter(
+          (p: any) => p.status === "CRITICO",
+        );
+        const produtosAlerta = previsoes.filter(
+          (p: any) => p.status === "ALERTA",
+        );
+
+        try {
+          await mailer.sendMail({
+            from:
+              process.env.SMTP_FROM ||
+              "OrthoPlus Enterprise <noreply@orthoplus.local>",
+            to: adminEmails,
+            subject: `Alerta de Reposicao IA: ${produtosCriticos.length} Criticos, ${produtosAlerta.length} Alertas`,
+            html: `<p>Verifique o estoque no sistema. Detalhes: ${JSON.stringify(resumo)}</p>`,
+          });
+        } catch (e) {
+          logger.error("Email failed", e);
+        }
+
+        await this.service["repo"].createAuditLog({
+          clinic_id,
+          user_id,
+          action: "ALERTAS_REPOSICAO_ENVIADOS",
+          details: { total_produtos: previsoes.length },
+        });
+      }
+
+      res.json({
+        success: true,
+        message: result.message,
+        destinatorios: adminEmails.length,
+      });
+    },
+  );
 
   sendStockAlerts = asyncHandler(async (_req: Request, res: Response) => {
     const result = await this.service.sendStockAlerts();

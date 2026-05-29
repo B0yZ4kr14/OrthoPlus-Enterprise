@@ -8,7 +8,11 @@ interface FormActionsProps {
   onCancel?: () => void;
 }
 
-export function FormActions({ loading, isEditing, onCancel }: FormActionsProps) {
+export function FormActions({
+  loading,
+  isEditing,
+  onCancel,
+}: FormActionsProps) {
   return (
     <div className="flex justify-end gap-2">
       {onCancel && (

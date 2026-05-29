@@ -7,13 +7,7 @@ import { ImageGrid } from "./components/ImageGrid";
 import { EmptyState } from "./components/EmptyState";
 
 export * from "./types";
-export {
-  ImagingHeader,
-  ImageViewerModal,
-  ImageCard,
-  ImageGrid,
-  EmptyState,
-};
+export { ImagingHeader, ImageViewerModal, ImageCard, ImageGrid, EmptyState };
 export { usePatientImages };
 
 const ImageCardPlaceholder = (props: any) => <div {...props} />;

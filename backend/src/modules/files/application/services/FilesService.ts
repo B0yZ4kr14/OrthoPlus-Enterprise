@@ -20,14 +20,16 @@ const CB_CONFIG: CircuitBreakerConfig = {
 
 const CATEGORY = "administrativo";
 
-export function parseVisibilidade(value: string | undefined): VisibilidadeArquivo | undefined {
-  if (!value) return undefined
+export function parseVisibilidade(
+  value: string | undefined,
+): VisibilidadeArquivo | undefined {
+  if (!value) return undefined;
   const map: Record<string, VisibilidadeArquivo> = {
     PUBLICO: VisibilidadeArquivo.PUBLICO,
     RESTRITO: VisibilidadeArquivo.RESTRITO,
     CONFIDENCIAL: VisibilidadeArquivo.CONFIDENCIAL,
-  }
-  return map[value] ?? VisibilidadeArquivo.RESTRITO
+  };
+  return map[value] ?? VisibilidadeArquivo.RESTRITO;
 }
 
 export interface CreateFileInput {
@@ -43,7 +45,6 @@ export interface CreateFileInput {
   visibilidade?: string;
   uploadedBy: string;
 }
-
 
 export interface FileFilters {
   clinicId: string;
@@ -77,20 +78,25 @@ export class FilesService {
   }> {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     const record = await cb.execute(
-      async () => this.repo.createArquivo({
-        clinic_id: data.clinicId,
-        paciente_id: data.pacienteId ?? null,
-        consulta_id: data.consultaId ?? null,
-        orcamento_id: data.orcamentoId ?? null,
-        nome_original: data.nomeOriginal,
-        nome_storage: data.nomeStorage,
-        mime_type: data.mimeType,
-        tamanho_bytes: data.tamanhoBytes,
-        categoria: data.categoria ?? "OUTRO",
-        visibilidade: parseVisibilidade(data.visibilidade) ?? VisibilidadeArquivo.RESTRITO,
-        uploaded_by: data.uploadedBy,
-      }),
-      () => { throw Errors.externalService("Database"); }
+      async () =>
+        this.repo.createArquivo({
+          clinic_id: data.clinicId,
+          paciente_id: data.pacienteId ?? null,
+          consulta_id: data.consultaId ?? null,
+          orcamento_id: data.orcamentoId ?? null,
+          nome_original: data.nomeOriginal,
+          nome_storage: data.nomeStorage,
+          mime_type: data.mimeType,
+          tamanho_bytes: data.tamanhoBytes,
+          categoria: data.categoria ?? "OUTRO",
+          visibilidade:
+            parseVisibilidade(data.visibilidade) ??
+            VisibilidadeArquivo.RESTRITO,
+          uploaded_by: data.uploadedBy,
+        }),
+      () => {
+        throw Errors.externalService("Database");
+      },
     );
 
     return {
@@ -153,9 +159,13 @@ export class FilesService {
           // ADMIN sees all — no visibility filter needed
         }
 
-        return this.repo.findArquivos(where, { created_at: "desc" }, 1000) as Promise<ArquivoRecord[]>;
+        return this.repo.findArquivos(
+          where,
+          { created_at: "desc" },
+          1000,
+        ) as Promise<ArquivoRecord[]>;
       },
-      () => []
+      () => [],
     );
 
     return records.map((r) => ({
@@ -170,7 +180,10 @@ export class FilesService {
     }));
   }
 
-  async getById(id: string, clinicId: string): Promise<{
+  async getById(
+    id: string,
+    clinicId: string,
+  ): Promise<{
     id: string;
     nomeOriginal: string;
     nomeStorage: string;
@@ -187,7 +200,7 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     const record = await cb.execute(
       async () => this.repo.findArquivoById(id, clinicId),
-      () => null
+      () => null,
     );
 
     if (!record) return null;
@@ -213,7 +226,7 @@ export class FilesService {
     try {
       const result = await cb.execute(
         async () => this.repo.deleteArquivo(id, clinicId),
-        () => ({ count: 0 })
+        () => ({ count: 0 }),
       );
 
       return result.count > 0;
@@ -232,8 +245,9 @@ export class FilesService {
     const cb = circuitBreakerRegistry.getBreaker(CATEGORY, CB_CONFIG);
     try {
       const result = await cb.execute(
-        async () => this.repo.updateArquivoUrlTemp(id, clinicId, urlTemp, expiraEm),
-        () => ({ count: 0 })
+        async () =>
+          this.repo.updateArquivoUrlTemp(id, clinicId, urlTemp, expiraEm),
+        () => ({ count: 0 }),
       );
 
       return result.count > 0;
@@ -246,7 +260,10 @@ export class FilesService {
   // --------------------
   // OCR Methods (US3)
   // --------------------
-  async extractOCR(arquivoId: string, clinicId: string): Promise<{
+  async extractOCR(
+    arquivoId: string,
+    clinicId: string,
+  ): Promise<{
     id: string;
     arquivoId: string;
     textoExtraido: string | null;
@@ -260,7 +277,7 @@ export class FilesService {
 
     const file = await cb.execute(
       async () => this.repo.findArquivoById(arquivoId, clinicId),
-      () => null
+      () => null,
     );
 
     if (!file) {
@@ -268,19 +285,25 @@ export class FilesService {
     }
 
     const record = await cb.execute(
-      async () => this.repo.createOCR({
-        arquivo_id: arquivoId,
-        status: "PROCESSANDO",
-        texto_extraido: null,
-        idioma: "pt",
-        confidence: null,
-      }),
-      () => { throw Errors.externalService("Database"); }
+      async () =>
+        this.repo.createOCR({
+          arquivo_id: arquivoId,
+          status: "PROCESSANDO",
+          texto_extraido: null,
+          idioma: "pt",
+          confidence: null,
+        }),
+      () => {
+        throw Errors.externalService("Database");
+      },
     );
 
     await cb.execute(
-      async () => this.repo.updateArquivoOcrStatus(arquivoId, clinicId, "PROCESSANDO"),
-      () => { throw Errors.externalService("Database"); }
+      async () =>
+        this.repo.updateArquivoOcrStatus(arquivoId, clinicId, "PROCESSANDO"),
+      () => {
+        throw Errors.externalService("Database");
+      },
     );
 
     return {
@@ -295,7 +318,10 @@ export class FilesService {
     };
   }
 
-  async getOCRResult(arquivoId: string, clinicId: string): Promise<{
+  async getOCRResult(
+    arquivoId: string,
+    clinicId: string,
+  ): Promise<{
     id: string;
     arquivoId: string;
     textoExtraido: string | null;
@@ -309,7 +335,7 @@ export class FilesService {
 
     const file = await cb.execute(
       async () => this.repo.findArquivoById(arquivoId, clinicId),
-      () => null
+      () => null,
     );
 
     if (!file) {
@@ -318,7 +344,7 @@ export class FilesService {
 
     const record = await cb.execute(
       async () => this.repo.findOCRByArquivoId(arquivoId),
-      () => null
+      () => null,
     );
 
     if (!record) return null;
@@ -335,7 +361,10 @@ export class FilesService {
     };
   }
 
-  async searchFilesByText(clinicId: string, searchTerm: string): Promise<
+  async searchFilesByText(
+    clinicId: string,
+    searchTerm: string,
+  ): Promise<
     Array<{
       id: string;
       nomeOriginal: string;
@@ -351,19 +380,20 @@ export class FilesService {
 
     const ocrRecords = await cb.execute(
       async () => this.repo.findOCRsByText(searchTerm),
-      () => []
+      () => [],
     );
 
     const arquivoIds = ocrRecords.map((r: any) => r.arquivo_id);
     if (arquivoIds.length === 0) return [];
 
     const files = await cb.execute(
-      async () => this.repo.findArquivos(
-        { id: { in: arquivoIds }, clinic_id: clinicId },
-        { created_at: "desc" },
-        1000,
-      ),
-      () => []
+      async () =>
+        this.repo.findArquivos(
+          { id: { in: arquivoIds }, clinic_id: clinicId },
+          { created_at: "desc" },
+          1000,
+        ),
+      () => [],
     );
 
     return files.map((f: any) => ({
@@ -399,7 +429,7 @@ export class FilesService {
 
     const file = await cb.execute(
       async () => this.repo.findArquivoById(arquivoId, clinicId),
-      () => null
+      () => null,
     );
 
     if (!file) {
@@ -408,26 +438,32 @@ export class FilesService {
 
     const lastVersion = await cb.execute(
       async () => this.repo.findLastVersion(arquivoId),
-      () => null
+      () => null,
     );
 
     const nextVersionNumber = (lastVersion?.numero_versao ?? 0) + 1;
 
     const record = await cb.execute(
-      async () => this.repo.createVersion({
-        arquivo_id: arquivoId,
-        numero_versao: nextVersionNumber,
-        nome_storage: data.nomeStorage,
-        tamanho_bytes: data.tamanhoBytes,
-        url_temp: data.urlTemp ?? null,
-        created_by: data.createdBy,
-      }),
-      () => { throw Errors.externalService("Database"); }
+      async () =>
+        this.repo.createVersion({
+          arquivo_id: arquivoId,
+          numero_versao: nextVersionNumber,
+          nome_storage: data.nomeStorage,
+          tamanho_bytes: data.tamanhoBytes,
+          url_temp: data.urlTemp ?? null,
+          created_by: data.createdBy,
+        }),
+      () => {
+        throw Errors.externalService("Database");
+      },
     );
 
     await cb.execute(
-      async () => this.repo.updateArquivoVersaoAtual(arquivoId, clinicId, record.id),
-      () => { throw Errors.externalService("Database"); }
+      async () =>
+        this.repo.updateArquivoVersaoAtual(arquivoId, clinicId, record.id),
+      () => {
+        throw Errors.externalService("Database");
+      },
     );
 
     return {
@@ -442,7 +478,10 @@ export class FilesService {
     };
   }
 
-  async listVersions(arquivoId: string, clinicId: string): Promise<
+  async listVersions(
+    arquivoId: string,
+    clinicId: string,
+  ): Promise<
     Array<{
       id: string;
       arquivoId: string;
@@ -458,7 +497,7 @@ export class FilesService {
 
     const file = await cb.execute(
       async () => this.repo.findArquivoById(arquivoId, clinicId),
-      () => null
+      () => null,
     );
 
     if (!file) {
@@ -467,7 +506,7 @@ export class FilesService {
 
     const records = await cb.execute(
       async () => this.repo.findVersionsByArquivoId(arquivoId),
-      () => []
+      () => [],
     );
 
     return records.map((r: any) => ({
@@ -504,7 +543,7 @@ export class FilesService {
 
     const file = await cb.execute(
       async () => this.repo.findArquivoById(arquivoId, clinicId),
-      () => null
+      () => null,
     );
 
     if (!file) {
@@ -513,7 +552,7 @@ export class FilesService {
 
     const version = await cb.execute(
       async () => this.repo.findVersionById(versionId, arquivoId),
-      () => null
+      () => null,
     );
 
     if (!version) {
@@ -521,12 +560,13 @@ export class FilesService {
     }
 
     const updated = await cb.execute(
-      async () => this.repo.updateArquivoFromVersion(arquivoId, clinicId, {
-        nome_storage: version.nome_storage,
-        tamanho_bytes: version.tamanho_bytes,
-        versao_atual_id: version.id,
-      }),
-      () => ({ count: 0 })
+      async () =>
+        this.repo.updateArquivoFromVersion(arquivoId, clinicId, {
+          nome_storage: version.nome_storage,
+          tamanho_bytes: version.tamanho_bytes,
+          versao_atual_id: version.id,
+        }),
+      () => ({ count: 0 }),
     );
 
     if (updated.count === 0) {
@@ -535,7 +575,7 @@ export class FilesService {
 
     const refreshed = await cb.execute(
       async () => this.repo.findArquivoById(arquivoId, clinicId),
-      () => null
+      () => null,
     );
 
     if (!refreshed) {
@@ -566,22 +606,38 @@ export class FilesService {
     status: "CLEAN" | "SUSPICIOUS" | "BLOCKED";
     reason?: string;
   }> {
-    const hash = crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
+    const hash = crypto
+      .createHash("sha256")
+      .update(fs.readFileSync(filePath))
+      .digest("hex");
 
     // Check against known malicious hashes (empty list = placeholder for integration)
-    const BLOCKED_HASHES: string[] = process.env.BLOCKED_FILE_HASHES?.split(",") ?? [];
+    const BLOCKED_HASHES: string[] =
+      process.env.BLOCKED_FILE_HASHES?.split(",") ?? [];
     if (BLOCKED_HASHES.includes(hash)) {
-      logger.warn("[FilesService] Blocked file upload — known malicious hash detected", { hash });
+      logger.warn(
+        "[FilesService] Blocked file upload — known malicious hash detected",
+        { hash },
+      );
       return { hash, status: "BLOCKED", reason: "Known malicious file hash" };
     }
 
     // Check for suspicious patterns (e.g., double extensions, executable in disguise)
     const suspiciousPatterns = [".exe.pdf", ".js.pdf", ".bat.pdf", ".scr.pdf"];
-    const isSuspicious = suspiciousPatterns.some((p) => filePath.toLowerCase().includes(p));
+    const isSuspicious = suspiciousPatterns.some((p) =>
+      filePath.toLowerCase().includes(p),
+    );
 
     if (isSuspicious) {
-      logger.warn("[FilesService] Suspicious file upload — double extension detected", { filePath });
-      return { hash, status: "SUSPICIOUS", reason: "Suspicious file extension pattern" };
+      logger.warn(
+        "[FilesService] Suspicious file upload — double extension detected",
+        { filePath },
+      );
+      return {
+        hash,
+        status: "SUSPICIOUS",
+        reason: "Suspicious file extension pattern",
+      };
     }
 
     return { hash, status: "CLEAN" };
@@ -603,17 +659,23 @@ export class FilesService {
     );
 
     if (!patient) {
-      logger.warn("[FilesService] Patient not found for permission inheritance", { patientId });
+      logger.warn(
+        "[FilesService] Patient not found for permission inheritance",
+        { patientId },
+      );
       return requestedVisibility;
     }
 
     // When linked to a patient, enforce maximum RESTRITO visibility
     // Only CONFIDENCIAL is more restrictive
     if (requestedVisibility === VisibilidadeArquivo.PUBLICO) {
-      logger.info("[FilesService] Visibility restricted to RESTRITO due to patient linkage", {
-        patientId,
-        requested: requestedVisibility,
-      });
+      logger.info(
+        "[FilesService] Visibility restricted to RESTRITO due to patient linkage",
+        {
+          patientId,
+          requested: requestedVisibility,
+        },
+      );
       return VisibilidadeArquivo.RESTRITO;
     }
 

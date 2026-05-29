@@ -2,7 +2,6 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import cron from "node-cron";
 
-
 /** Upper bound on how many active goals are processed per run to avoid OOM. */
 const MAX_ACTIVE_GOALS_BATCH_SIZE = 10_000;
 
@@ -42,9 +41,7 @@ export async function runGamificationMetricsJob() {
     // instead of one COUNT query per goal (eliminates the inner N+1 pattern).
     const consultasMesGoals = metas.filter((m) => m.type === "CONSULTAS_MES");
     const dentistIds = [
-      ...new Set(
-        consultasMesGoals.map((m) => m.user_id).filter(Boolean),
-      ),
+      ...new Set(consultasMesGoals.map((m) => m.user_id).filter(Boolean)),
     ] as string[];
 
     // appointmentCountByDentist maps user_id → count for O(1) lookup below.

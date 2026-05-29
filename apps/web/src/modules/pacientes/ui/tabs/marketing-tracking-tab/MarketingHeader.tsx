@@ -1,4 +1,8 @@
-import { CardHeader, CardTitle, CardDescription } from "@orthoplus/core-ui/card";
+import {
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@orthoplus/core-ui/card";
 import { Megaphone } from "lucide-react";
 
 export function MarketingHeader() {
@@ -9,7 +13,8 @@ export function MarketingHeader() {
         Origem do Paciente - Inteligência Comercial
       </CardTitle>
       <CardDescription>
-        Rastreamento de origem para análise de ROI de campanhas e canais de captação
+        Rastreamento de origem para análise de ROI de campanhas e canais de
+        captação
       </CardDescription>
     </CardHeader>
   );

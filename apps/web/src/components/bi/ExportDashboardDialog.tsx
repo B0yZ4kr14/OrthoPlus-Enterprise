@@ -275,7 +275,9 @@ export function ExportDashboardDialog({
             <Label>Formato de Exportação</Label>
             <Select
               value={format}
-              onValueChange={(value: string) => setFormat(value as "pdf" | "excel" | "csv")}
+              onValueChange={(value: string) =>
+                setFormat(value as "pdf" | "excel" | "csv")
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -308,7 +310,9 @@ export function ExportDashboardDialog({
                   <Label>Frequência</Label>
                   <Select
                     value={frequency}
-                    onValueChange={(value: string) => setFrequency(value as "daily" | "weekly" | "monthly")}
+                    onValueChange={(value: string) =>
+                      setFrequency(value as "daily" | "weekly" | "monthly")
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />

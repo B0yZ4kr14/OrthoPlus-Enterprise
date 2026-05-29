@@ -9,7 +9,11 @@ export interface RecompensaFormData {
   nome: string;
   descricao: string;
   pontos_necessarios: number;
-  tipo: "BRINDE" | "DESCONTO_PERCENTUAL" | "DESCONTO_VALOR" | "PROCEDIMENTO_GRATIS";
+  tipo:
+    | "BRINDE"
+    | "DESCONTO_PERCENTUAL"
+    | "DESCONTO_VALOR"
+    | "PROCEDIMENTO_GRATIS";
   valor_desconto?: number | null;
   procedimento_id?: string | null;
   ativo: boolean;

@@ -14,7 +14,12 @@ export class GamificationRepository implements IGamificationRepository {
     });
   }
 
-  async findVendasByVendedor(clinicId: string, _vendedorId: string, periodoInicio: Date, periodoFim: Date) {
+  async findVendasByVendedor(
+    clinicId: string,
+    _vendedorId: string,
+    periodoInicio: Date,
+    periodoFim: Date,
+  ) {
     return prisma.pdv_vendas.findMany({
       where: {
         clinic_id: clinicId,
@@ -48,7 +53,12 @@ export class GamificationRepository implements IGamificationRepository {
     });
   }
 
-  async findRankingEntry(clinicId: string, vendedorId: string, periodo: string, _dataReferencia: string) {
+  async findRankingEntry(
+    clinicId: string,
+    vendedorId: string,
+    periodo: string,
+    _dataReferencia: string,
+  ) {
     return prisma.vendedor_ranking.findFirst({
       where: {
         clinic_id: clinicId,

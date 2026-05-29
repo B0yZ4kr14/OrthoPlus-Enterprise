@@ -147,7 +147,10 @@ export function BitcoinQRCodeDialog({
                   {wallets
                     .filter((w) => w.is_active)
                     .map((wallet) => (
-                      <SelectItem key={wallet.id} value={wallet.id || "unknown"}>
+                      <SelectItem
+                        key={wallet.id}
+                        value={wallet.id || "unknown"}
+                      >
                         {wallet.wallet_name} ({wallet.coin_type})
                       </SelectItem>
                     ))}

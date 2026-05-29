@@ -4,31 +4,33 @@ import { db } from "@/infrastructure/database/connection";
 import { logger } from "@/infrastructure/logger";
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository";
 import { DatabaseHealth } from "@/modules/database_admin/domain/entities/DatabaseHealth";
-import type { SlowQuery } from "@orthoplus/shared-types"
+import type { SlowQuery } from "@orthoplus/shared-types";
 
 export interface HealthResult {
-  health: ReturnType<DatabaseHealth["toJSON"]>
-  isHealthy: boolean
-  needsMaintenance: boolean
+  health: ReturnType<DatabaseHealth["toJSON"]>;
+  isHealthy: boolean;
+  needsMaintenance: boolean;
 }
 
 export interface PoolStats {
-  maxConnections: number
-  activeConnections: number
-  idleConnections: number
-  waitingConnections: number
-  connectionsByModule: Record<string, number>
+  maxConnections: number;
+  activeConnections: number;
+  idleConnections: number;
+  waitingConnections: number;
+  connectionsByModule: Record<string, number>;
 }
 
 export interface MaintenanceResult {
-  success: boolean
-  operation: string
-  startedAt: Date
-  message: string
+  success: boolean;
+  operation: string;
+  startedAt: Date;
+  message: string;
 }
 
 export class DatabaseAdminControllerService {
-  constructor(private auditRepo: AuditLogRepository = new AuditLogRepository()) {}
+  constructor(
+    private auditRepo: AuditLogRepository = new AuditLogRepository(),
+  ) {}
 
   async getHealth(clinicId: string): Promise<HealthResult> {
     let activeConnections = 0;
@@ -47,7 +49,7 @@ export class DatabaseAdminControllerService {
         else if (row.state === "idle") idleConnections = count;
       }
       const maxConnResult = await db.query<{ setting: string }>(
-        "SELECT setting FROM pg_settings WHERE name = 'max_connections'"
+        "SELECT setting FROM pg_settings WHERE name = 'max_connections'",
       );
       if (maxConnResult.rows.length > 0) {
         connectionPoolSize = parseInt(maxConnResult.rows[0].setting, 10);
@@ -58,10 +60,13 @@ export class DatabaseAdminControllerService {
 
     let slowQueriesCount = 0;
     try {
-      const sqResult = await db.query<{ count: string }>(`
+      const sqResult = await db.query<{ count: string }>(
+        `
         SELECT COUNT(*) AS count FROM database_admin.slow_queries
         WHERE clinic_id = $1
-      `, [clinicId]);
+      `,
+        [clinicId],
+      );
       slowQueriesCount = parseInt(sqResult.rows[0]?.count ?? "0", 10);
     } catch (err) {
       logger.warn("Could not query slow_queries count for health", { err });
@@ -93,17 +98,22 @@ export class DatabaseAdminControllerService {
     }
 
     try {
-      const avgResult = await db.query<{ avg_time: string | null }>(`
+      const avgResult = await db.query<{ avg_time: string | null }>(
+        `
         SELECT AVG(execution_time_ms) AS avg_time
         FROM database_admin.slow_queries
         WHERE clinic_id = $1
-      `, [clinicId]);
+      `,
+        [clinicId],
+      );
       const raw = avgResult.rows[0]?.avg_time;
       if (raw !== null && raw !== undefined) {
         averageQueryTime = parseFloat(raw);
       }
     } catch (err) {
-      logger.warn("Could not query avg execution time from slow_queries", { err });
+      logger.warn("Could not query avg execution time from slow_queries", {
+        err,
+      });
     }
 
     const health = new DatabaseHealth({
@@ -129,7 +139,7 @@ export class DatabaseAdminControllerService {
 
   async getAuditLogs(
     clinicId: string,
-    filters: { user_id?: string; action?: string; from?: string; to?: string }
+    filters: { user_id?: string; action?: string; from?: string; to?: string },
   ) {
     const { user_id, action, from, to } = filters;
 
@@ -195,13 +205,16 @@ export class DatabaseAdminControllerService {
         calls: number;
         execution_time_ms: number;
         recorded_at: Date;
-      }>(`
+      }>(
+        `
         SELECT query_text, calls, execution_time_ms, recorded_at
         FROM database_admin.slow_queries
         WHERE clinic_id = $1
         ORDER BY execution_time_ms DESC
         LIMIT 50
-      `, [clinicId]);
+      `,
+        [clinicId],
+      );
 
       if (result.rows.length > 0) {
         slowQueries = result.rows.map((row) => ({
@@ -246,7 +259,7 @@ export class DatabaseAdminControllerService {
   async runMaintenance(
     body: unknown,
     clinicId: string,
-    isAdmin: boolean
+    isAdmin: boolean,
   ): Promise<MaintenanceResult> {
     const schema = z.object({
       operation: z.enum(["VACUUM", "ANALYZE", "REINDEX", "VACUUM_FULL"]),
@@ -277,7 +290,11 @@ export class DatabaseAdminControllerService {
         await db.query(`REINDEX SCHEMA ${schemaTarget}`);
       }
     } catch (err) {
-      logger.error("Maintenance operation failed", { operation, schemaTarget, err });
+      logger.error("Maintenance operation failed", {
+        operation,
+        schemaTarget,
+        err,
+      });
       return {
         success: false,
         operation,
@@ -303,7 +320,7 @@ export class DatabaseAdminControllerService {
 
     try {
       const maxConnResult = await db.query<{ setting: string }>(
-        "SELECT setting FROM pg_settings WHERE name = 'max_connections'"
+        "SELECT setting FROM pg_settings WHERE name = 'max_connections'",
       );
       if (maxConnResult.rows.length > 0) {
         maxConnections = parseInt(maxConnResult.rows[0].setting, 10);
@@ -313,7 +330,10 @@ export class DatabaseAdminControllerService {
     }
 
     try {
-      const stateResult = await db.query<{ state: string | null; count: string }>(`
+      const stateResult = await db.query<{
+        state: string | null;
+        count: string;
+      }>(`
         SELECT state, COUNT(*) AS count
         FROM pg_stat_activity
         WHERE datname = current_database()
@@ -326,11 +346,16 @@ export class DatabaseAdminControllerService {
         else if (row.state === null) waitingConnections += count;
       }
     } catch (err) {
-      logger.warn("Could not query connection states from pg_stat_activity", { err });
+      logger.warn("Could not query connection states from pg_stat_activity", {
+        err,
+      });
     }
 
     try {
-      const appResult = await db.query<{ application_name: string | null; count: string }>(`
+      const appResult = await db.query<{
+        application_name: string | null;
+        count: string;
+      }>(`
         SELECT application_name, COUNT(*) AS count
         FROM pg_stat_activity
         WHERE datname = current_database()
@@ -344,7 +369,10 @@ export class DatabaseAdminControllerService {
         }
       }
     } catch (err) {
-      logger.warn("Could not query connections by application from pg_stat_activity", { err });
+      logger.warn(
+        "Could not query connections by application from pg_stat_activity",
+        { err },
+      );
     }
 
     return {
@@ -357,12 +385,12 @@ export class DatabaseAdminControllerService {
   }
 
   async createAuditLog(body: {
-    clinicId: string
-    userId?: string
-    action?: string
-    actionType?: string
-    details?: unknown
-    ipAddress?: string
+    clinicId: string;
+    userId?: string;
+    action?: string;
+    actionType?: string;
+    details?: unknown;
+    ipAddress?: string;
   }) {
     const { clinicId, userId, action, actionType, details, ipAddress } = body;
     return this.auditRepo.createLog({

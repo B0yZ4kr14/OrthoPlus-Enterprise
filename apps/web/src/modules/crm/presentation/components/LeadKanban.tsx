@@ -62,7 +62,9 @@ const KanbanColumn = ({
                 {lead.email && (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Mail className="h-3 w-3" />
-                    <span className="truncate" title={lead.email}>{lead.email}</span>
+                    <span className="truncate" title={lead.email}>
+                      {lead.email}
+                    </span>
                   </div>
                 )}
                 {lead.telefone && (
