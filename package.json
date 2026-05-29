@@ -46,9 +46,11 @@
       "@prisma/engines",
       "@swc/core",
       "bcrypt",
+      "better-sqlite3",
       "canvas",
       "core-js",
       "esbuild",
+      "msgpackr-extract",
       "prisma"
     ],
     "overrides": {
