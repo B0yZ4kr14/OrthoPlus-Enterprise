@@ -37,7 +37,7 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: orthoplus
-          POSTGRES_PASSWORD: <REMOVED>
+          POSTGRES_PASSWORD: orthoplus
           POSTGRES_DB: orthoplus
         ports:
           - 5432:5432
