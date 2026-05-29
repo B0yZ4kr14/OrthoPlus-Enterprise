@@ -4,7 +4,9 @@ test.describe("Smoke Tests", () => {
   test("frontend loads authenticated dashboard", async ({ page }) => {
     await page.goto("./dashboard");
     await expect(page).toHaveURL(/.*\/dashboard/);
-    await expect(page.getByRole("heading", { name: /dashboard/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /dashboard/i }),
+    ).toBeVisible();
   });
 
   test("backend health endpoint responds", async ({ request }) => {
