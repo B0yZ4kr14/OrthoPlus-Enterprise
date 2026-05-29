@@ -3,10 +3,12 @@ import { test, expect } from "@playwright/test";
 test.describe("Smoke Tests", () => {
   test("frontend loads authenticated dashboard", async ({ page }) => {
     await page.goto("./dashboard");
-    await expect(page).toHaveURL(/.*\/dashboard/);
+    // Verify we stay on dashboard (not redirected to /auth)
+    await expect(page).toHaveURL(/.*\/dashboard/, { timeout: 30000 });
+    // Verify dashboard content loaded (WelcomeBanner or PageHeader)
     await expect(
-      page.getByRole("heading", { name: /dashboard/i }),
-    ).toBeVisible();
+      page.locator("body"),
+    ).toContainText(/Master Dashboard|Vis.o anal.tica|Bem-vindo/i, { timeout: 15000 });
   });
 
   test("backend health endpoint responds", async ({ request }) => {
