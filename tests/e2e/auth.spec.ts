@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Authentication", () => {
+  // Auth tests need to start unauthenticated
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test.beforeEach(async ({ page }) => {
     page.on("console", (msg) =>
       console.log(`[Browser Console] ${msg.type()}: ${msg.text()}`),
