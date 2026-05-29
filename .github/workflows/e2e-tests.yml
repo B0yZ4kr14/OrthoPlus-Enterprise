@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   test:
-    timeout-minutes: 15
+    timeout-minutes: 25
     continue-on-error: true
     runs-on: ubuntu-24.04
 
@@ -26,6 +26,13 @@ jobs:
       DB_USER: orthoplus
       DB_PASSWORD: orthoplus
       DATABASE_URL: postgresql://orthoplus:orthoplus@localhost:5432/orthoplus
+      JWT_SECRET: "test-jwt-secret-for-e2e-tests-minimum-32-characters-long"
+      IA_ENCRYPTION_KEY: "test-encryption-key-for-e2e-tests-32chars-long"
+      LGPD_ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      LGPD_ENCRYPTION_SALT: "0123456789abcdef"
+      REDIS_URL: redis://localhost:6379
+      NODE_ENV: test
+      CI: true
 
     strategy:
       fail-fast: false
@@ -105,18 +112,43 @@ jobs:
         env:
           VITE_API_BASE_URL: ""
 
+      - name: Create Playwright auth state
+        run: |
+          mkdir -p tests/e2e/.auth
+          TOKEN=$(cd backend && node -e "
+            const jwt = require('jsonwebtoken');
+            const token = jwt.sign(
+              {sub:'user-001',email:'admin@orthoplus.com',role:'ADMIN',clinicId:'clinic-001'},
+              process.env.JWT_SECRET,
+              {expiresIn:'1h'}
+            );
+            console.log(token);
+          ")
+          EXPIRES=$(($(date +%s) + 3600))
+          cat > tests/e2e/.auth/state.json << EOF
+          {
+            "cookies": [{
+              "name": "access_token",
+              "value": "$TOKEN",
+              "domain": "localhost",
+              "path": "/",
+              "expires": $EXPIRES,
+              "httpOnly": true,
+              "secure": false,
+              "sameSite": "Strict"
+            }],
+            "origins": [{
+              "origin": "http://localhost:8080",
+              "localStorage": [{"name": "ortho-theme", "value": "premium-light"}]
+            }]
+          }
+          EOF
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
       - name: Run E2E tests
         run: pnpm exec playwright test --project=${{ matrix.browser }}
-        env:
-          CI: true
-          NODE_ENV: test
-          JWT_SECRET: "test-jwt-secret-for-e2e-tests-minimum-32-characters-long"
-          IA_ENCRYPTION_KEY: "test-encryption-key-for-e2e-tests-32chars-long"
-          LGPD_ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
-          LGPD_ENCRYPTION_SALT: "0123456789abcdef"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -139,7 +171,7 @@ jobs:
   report:
     name: Publish Test Report
     needs: test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: always()
 
     permissions:

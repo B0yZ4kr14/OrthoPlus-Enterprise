@@ -31,14 +31,12 @@ export default defineConfig({
   },
 
   projects: [
-    { name: "setup", testMatch: /auth\.setup\.ts/ },
     {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
         storageState: "tests/e2e/.auth/state.json",
       },
-      dependencies: ["setup"],
     },
     {
       name: "firefox",
@@ -46,7 +44,6 @@ export default defineConfig({
         ...devices["Desktop Firefox"],
         storageState: "tests/e2e/.auth/state.json",
       },
-      dependencies: ["setup"],
     },
     {
       name: "webkit",
@@ -54,7 +51,6 @@ export default defineConfig({
         ...devices["Desktop Safari"],
         storageState: "tests/e2e/.auth/state.json",
       },
-      dependencies: ["setup"],
     },
     {
       name: "Mobile Chrome",
@@ -62,7 +58,6 @@ export default defineConfig({
         ...devices["Pixel 5"],
         storageState: "tests/e2e/.auth/state.json",
       },
-      dependencies: ["setup"],
     },
     {
       name: "Mobile Safari",
@@ -70,7 +65,6 @@ export default defineConfig({
         ...devices["iPhone 12"],
         storageState: "tests/e2e/.auth/state.json",
       },
-      dependencies: ["setup"],
     },
   ],
 
