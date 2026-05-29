@@ -2,23 +2,34 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Smoke Tests", () => {
   test("frontend loads authenticated dashboard", async ({ page, context }) => {
-    // Debug: log all cookies
-    const cookies = await context.cookies();
-    console.log("[DEBUG] Cookies:", cookies.map(c => ({ name: c.name, domain: c.domain, path: c.path })));
+    // Capture console logs
+    const consoleLogs: string[] = [];
+    page.on("console", (msg) => {
+      consoleLogs.push(`[${msg.type()}] ${msg.text()}`);
+    });
+    page.on("pageerror", (err) => {
+      consoleLogs.push(`[PAGE ERROR] ${err.message}`);
+    });
+    
+    // Capture network errors
+    page.on("requestfailed", (request) => {
+      consoleLogs.push(`[NETWORK FAILED] ${request.method()} ${request.url()} — ${request.failure()?.errorText}`);
+    });
     
     await page.goto("./dashboard");
     
-    // Debug: log current URL
+    // Wait a bit for JS to execute and capture logs
+    await page.waitForTimeout(3000);
+    
     console.log("[DEBUG] Current URL:", page.url());
+    console.log("[DEBUG] Console logs:", consoleLogs.slice(0, 20));
+    
+    // Check if body has content
+    const bodyHTML = await page.locator("body").innerHTML({ timeout: 5000 }).catch(() => "[failed]");
+    console.log("[DEBUG] Body HTML (first 1000 chars):", bodyHTML.substring(0, 1000));
     
     // Verify we stay on dashboard (not redirected to /auth)
     await expect(page).toHaveURL(/.*\/dashboard/, { timeout: 30000 });
-    
-    // Debug: log page title and body text snippet
-    const title = await page.title();
-    const bodyText = await page.locator("body").innerText({ timeout: 5000 }).catch(() => "[failed to get body text]");
-    console.log("[DEBUG] Title:", title);
-    console.log("[DEBUG] Body text (first 500 chars):", bodyText.substring(0, 500));
     
     // Verify dashboard content loaded (Master Dashboard heading or WelcomeBanner)
     await expect(
