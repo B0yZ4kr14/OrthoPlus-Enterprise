@@ -30,87 +30,49 @@ export default defineConfig({
     navigationTimeout: 30000,
   },
 
-  projects: process.env.CI
-    ? [
-        {
-          name: "chromium",
-          use: {
-            ...devices["Desktop Chrome"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-        },
-        {
-          name: "firefox",
-          use: {
-            ...devices["Desktop Firefox"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-        },
-        {
-          name: "webkit",
-          use: {
-            ...devices["Desktop Safari"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-        },
-        {
-          name: "Mobile Chrome",
-          use: {
-            ...devices["Pixel 5"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-        },
-        {
-          name: "Mobile Safari",
-          use: {
-            ...devices["iPhone 12"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-        },
-      ]
-    : [
-        { name: "setup", testMatch: /auth\.setup\.ts/ },
-        {
-          name: "chromium",
-          use: {
-            ...devices["Desktop Chrome"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-          dependencies: ["setup"],
-        },
-        {
-          name: "firefox",
-          use: {
-            ...devices["Desktop Firefox"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-          dependencies: ["setup"],
-        },
-        {
-          name: "webkit",
-          use: {
-            ...devices["Desktop Safari"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-          dependencies: ["setup"],
-        },
-        {
-          name: "Mobile Chrome",
-          use: {
-            ...devices["Pixel 5"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-          dependencies: ["setup"],
-        },
-        {
-          name: "Mobile Safari",
-          use: {
-            ...devices["iPhone 12"],
-            storageState: "tests/e2e/.auth/state.json",
-          },
-          dependencies: ["setup"],
-        },
-      ],
+  projects: [
+    { name: "setup", testMatch: /auth\.setup\.ts/ },
+    {
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
+    },
+    {
+      name: "firefox",
+      use: {
+        ...devices["Desktop Firefox"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
+    },
+    {
+      name: "webkit",
+      use: {
+        ...devices["Desktop Safari"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
+    },
+    {
+      name: "Mobile Chrome",
+      use: {
+        ...devices["Pixel 5"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
+    },
+    {
+      name: "Mobile Safari",
+      use: {
+        ...devices["iPhone 12"],
+        storageState: "tests/e2e/.auth/state.json",
+      },
+      dependencies: ["setup"],
+    },
+  ],
 
   webServer: [
     {

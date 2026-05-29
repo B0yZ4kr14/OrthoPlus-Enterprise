@@ -69,53 +69,21 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm --filter orthoplus-backend exec prisma generate
 
+      - name: Run Prisma migrations
+        run: pnpm --filter orthoplus-backend exec prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
+
+      - name: Seed database
+        run: pnpm --filter orthoplus-backend exec tsx prisma/seed.ts
+        env:
+          DATABASE_URL: postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
+          SEED_ADMIN_PASSWORD: "admin123!"
+
       - name: Build frontend
         run: pnpm --filter @orthoplus/web build
         env:
           VITE_API_BASE_URL: ""
-
-      - name: Create Playwright auth state
-        run: |
-          mkdir -p tests/e2e/.auth
-          TOKEN=$(cd backend && node -e "
-            const jwt = require('jsonwebtoken');
-            const token = jwt.sign(
-              {sub:'user-001',email:'admin@orthoplus.com',role:'ADMIN',clinicId:'clinic-001'},
-              process.env.JWT_SECRET,
-              {expiresIn:'1h'}
-            );
-            console.log(token);
-          ")
-          EXPIRES=$(($(date +%s) + 3600))
-          cat > tests/e2e/.auth/state.json << EOF
-          {
-            "cookies": [
-              {
-                "name": "access_token",
-                "value": "$TOKEN",
-                "domain": "localhost",
-                "path": "/",
-                "expires": $EXPIRES,
-                "httpOnly": true,
-                "secure": false,
-                "sameSite": "Strict"
-              }
-            ],
-            "origins": [
-              {
-                "origin": "http://localhost:8080",
-                "localStorage": [
-                  {
-                    "name": "ortho-theme",
-                    "value": "premium-light"
-                  }
-                ]
-              }
-            ]
-          }
-          EOF
-        env:
-          JWT_SECRET: test-jwt-secret-for-e2e-tests-minimum-32-characters-long
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
