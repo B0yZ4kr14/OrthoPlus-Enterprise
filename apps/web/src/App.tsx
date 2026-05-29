@@ -35,7 +35,7 @@ const App = () => (
     <TooltipProvider>
       <ThemeProvider>
         <BrowserRouter
-          basename="/OrthoPlus-Enterprise"
+          basename={import.meta.env.VITE_BASENAME || "/OrthoPlus-Enterprise"}
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
         >
           <HotkeysManager />
