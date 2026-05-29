@@ -77,7 +77,7 @@ export default defineConfig({
       timeout: 60000,
     },
     {
-      command: "node scripts/e2e-server.js",
+      command: "node scripts/e2e-server.cjs",
       url: "http://localhost:8080/",
       reuseExistingServer: !process.env.CI,
       timeout: 60000,
