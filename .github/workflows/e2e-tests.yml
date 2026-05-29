@@ -77,6 +77,21 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm --filter orthoplus-backend exec prisma generate
 
+      - name: Create PostgreSQL schemas
+        run: |
+          PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -c '
+            CREATE SCHEMA IF NOT EXISTS "administrativo";
+            CREATE SCHEMA IF NOT EXISTS "backups";
+            CREATE SCHEMA IF NOT EXISTS "clinico";
+            CREATE SCHEMA IF NOT EXISTS "comercial";
+            CREATE SCHEMA IF NOT EXISTS "core";
+            CREATE SCHEMA IF NOT EXISTS "crypto_config";
+            CREATE SCHEMA IF NOT EXISTS "database_admin";
+            CREATE SCHEMA IF NOT EXISTS "github_tools";
+            CREATE SCHEMA IF NOT EXISTS "operacional";
+            CREATE SCHEMA IF NOT EXISTS "terminal";
+          '
+
       - name: Run Prisma migrations
         run: pnpm --filter orthoplus-backend exec prisma migrate deploy
 
