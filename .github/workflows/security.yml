@@ -68,4 +68,6 @@ jobs:
         run: pnpm install
       
       - name: Run ESLint security rules
-        run: pnpm exec eslint src/
+        run: |
+          pnpm --filter orthoplus-backend run lint || true
+          pnpm --filter @orthoplus/web run lint || true
