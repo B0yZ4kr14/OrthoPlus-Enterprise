@@ -77,7 +77,7 @@ export default defineConfig({
       timeout: 60000,
     },
     {
-      command: "cd apps/web && npx serve dist -s -l 8080",
+      command: "node scripts/e2e-server.js",
       url: "http://localhost:8080/",
       reuseExistingServer: !process.env.CI,
       timeout: 60000,
