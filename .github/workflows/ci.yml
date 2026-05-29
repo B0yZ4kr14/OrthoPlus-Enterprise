@@ -64,5 +64,6 @@ jobs:
       - run: pnpm --filter @orthoplus/shared-types build
         working-directory: .
       - run: pnpm install
+      - run: pnpm --filter orthoplus-backend exec prisma generate
       - run: npx tsc --noEmit || true
       - run: pnpm build
