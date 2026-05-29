@@ -74,6 +74,9 @@ jobs:
           DB_USER: orthoplus
           DB_PASSWORD: <REMOVED>
           DATABASE_URL: postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
+          IA_ENCRYPTION_KEY: "test-encryption-key-for-e2e-tests-32chars-long"
+          LGPD_ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+          LGPD_ENCRYPTION_SALT: "0123456789abcdef"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
