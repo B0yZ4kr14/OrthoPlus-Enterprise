@@ -92,8 +92,8 @@ jobs:
             CREATE SCHEMA IF NOT EXISTS "terminal";
           '
 
-      - name: Run Prisma migrations
-        run: pnpm --filter orthoplus-backend exec prisma migrate deploy
+      - name: Sync Prisma schema (db push)
+        run: pnpm --filter orthoplus-backend exec prisma db push --accept-data-loss
 
       - name: Seed database
         run: pnpm --filter orthoplus-backend exec tsx prisma/seed.ts
