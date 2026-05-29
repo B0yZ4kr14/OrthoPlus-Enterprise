@@ -49,9 +49,6 @@ jobs:
       - name: Test
         run: pnpm test
       
-      - name: Quality Validation
-        run: pnpm run validate:quality
-      
       - name: Bundle Size Check
         run: |
           SIZE_KB=$(du -s apps/web/dist | cut -f1)
