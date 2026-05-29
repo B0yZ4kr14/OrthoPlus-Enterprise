@@ -19,6 +19,14 @@ jobs:
     continue-on-error: true
     runs-on: ubuntu-24.04
 
+    env:
+      DB_HOST: localhost
+      DB_PORT: "5432"
+      DB_NAME: orthoplus
+      DB_USER: orthoplus
+      DB_PASSWORD: orthoplus
+      DATABASE_URL: postgresql://orthoplus:orthoplus@localhost:5432/orthoplus
+
     strategy:
       fail-fast: false
       matrix:
@@ -71,13 +79,10 @@ jobs:
 
       - name: Run Prisma migrations
         run: pnpm --filter orthoplus-backend exec prisma migrate deploy
-        env:
-          DATABASE_URL: postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
 
       - name: Seed database
         run: pnpm --filter orthoplus-backend exec tsx prisma/seed.ts
         env:
-          DATABASE_URL: postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
           SEED_ADMIN_PASSWORD: "admin123!"
 
       - name: Build frontend
@@ -94,12 +99,6 @@ jobs:
           CI: true
           NODE_ENV: test
           JWT_SECRET: "test-jwt-secret-for-e2e-tests-minimum-32-characters-long"
-          DB_HOST: localhost
-          DB_PORT: "5432"
-          DB_NAME: orthoplus
-          DB_USER: orthoplus
-          DB_PASSWORD: <REMOVED>
-          DATABASE_URL: postgresql://${{ env.DB_USER }}:${{ env.DB_PASSWORD }}@localhost:5432/${{ env.DB_NAME }}
           IA_ENCRYPTION_KEY: "test-encryption-key-for-e2e-tests-32chars-long"
           LGPD_ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
           LGPD_ENCRYPTION_SALT: "0123456789abcdef"
