@@ -77,6 +77,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       root.classList.add(cssClass);
     }
 
+    // 3. Sincroniza classe 'dark' para Tailwind dark: variants funcionarem
+    if (resolvedTheme === "premium-dental-dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+
     // 3. Persiste
     localStorage.setItem("ortho-theme", theme);
   }, [theme, resolvedTheme]);
