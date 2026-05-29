@@ -14,26 +14,22 @@ export class FinanceiroController {
         await fn(req, res);
       } catch (error: any) {
         if (error.statusCode) {
-          res
-            .status(error.statusCode)
-            .json({
-              type: `https://httpstatuses.com/${error.statusCode}`,
-              title: error.message,
-              status: error.statusCode,
-              detail: error.message,
-              errors: error.details,
-            });
+          res.status(error.statusCode).json({
+            type: `https://httpstatuses.com/${error.statusCode}`,
+            title: error.message,
+            status: error.statusCode,
+            detail: error.message,
+            errors: error.details,
+          });
           return;
         }
         logger.error(context, { error });
-        res
-          .status(500)
-          .json({
-            type: "https://httpstatuses.com/500",
-            title: "Internal server error",
-            status: 500,
-            detail: "Internal server error",
-          });
+        res.status(500).json({
+          type: "https://httpstatuses.com/500",
+          title: "Internal server error",
+          status: 500,
+          detail: "Internal server error",
+        });
       }
     };
   }
@@ -46,25 +42,21 @@ export class FinanceiroController {
     return this.wrap(async (req, res) => {
       const clinicId = req.user?.clinicId;
       if (!clinicId) {
-        res
-          .status(401)
-          .json({
-            type: "https://httpstatuses.com/401",
-            title: "Unauthorized",
-            status: 401,
-            detail: "Clinic ID not found",
-          });
+        res.status(401).json({
+          type: "https://httpstatuses.com/401",
+          title: "Unauthorized",
+          status: 401,
+          detail: "Clinic ID not found",
+        });
         return;
       }
       if (options?.needsUserId && !req.user?.id) {
-        res
-          .status(401)
-          .json({
-            type: "https://httpstatuses.com/401",
-            title: "Unauthorized",
-            status: 401,
-            detail: "Auth required",
-          });
+        res.status(401).json({
+          type: "https://httpstatuses.com/401",
+          title: "Unauthorized",
+          status: 401,
+          detail: "Auth required",
+        });
         return;
       }
       await fn(clinicId, req, res);

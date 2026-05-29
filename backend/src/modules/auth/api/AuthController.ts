@@ -255,16 +255,14 @@ export class AuthController {
         role!,
         clinicId!,
       );
-      res
-        .status(201)
-        .json({
-          user: {
-            id: newUser.id,
-            email: newUser.email,
-            role: newUser.role,
-            clinicId: newUser.clinicId,
-          },
-        });
+      res.status(201).json({
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          role: newUser.role,
+          clinicId: newUser.clinicId,
+        },
+      });
     } catch (err) {
       if (err instanceof ApiError) throw err;
       logger.error("registerStaff error", { error: err });

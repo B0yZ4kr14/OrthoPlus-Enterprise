@@ -106,13 +106,11 @@ export class FilesController {
     const clinicId = req.user?.clinicId as string;
     if (!clinicId) throw Errors.unauthorized("Authentication required");
     const ocrRecord = await service.triggerOCR(req.params.id, clinicId);
-    res
-      .status(202)
-      .json({
-        success: true,
-        message: "OCR extraction started",
-        data: ocrRecord,
-      });
+    res.status(202).json({
+      success: true,
+      message: "OCR extraction started",
+      data: ocrRecord,
+    });
   });
 
   getOCRResult = asyncHandler(async (req: Request, res: Response) => {
@@ -120,13 +118,11 @@ export class FilesController {
     if (!clinicId) throw Errors.unauthorized("Authentication required");
     const ocrRecord = await service.getOCRResult(req.params.id, clinicId);
     if (!ocrRecord) {
-      res
-        .status(200)
-        .json({
-          success: true,
-          data: null,
-          message: "No OCR result found for this file",
-        });
+      res.status(200).json({
+        success: true,
+        data: null,
+        message: "No OCR result found for this file",
+      });
       return;
     }
     res.status(200).json({ success: true, data: ocrRecord });
@@ -174,12 +170,10 @@ export class FilesController {
       req.params.versionId,
       clinicId,
     );
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Version restored successfully",
-        data: file,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Version restored successfully",
+      data: file,
+    });
   });
 }

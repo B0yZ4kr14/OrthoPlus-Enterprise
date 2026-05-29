@@ -55,12 +55,10 @@ export class CryptoController {
 
   manageOfflineWallet = asyncHandler(async (req: Request, res: Response) => {
     const { action } = req.body;
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: `Action ${action} processed for offline wallet`,
-      });
+    res.status(200).json({
+      success: true,
+      message: `Action ${action} processed for offline wallet`,
+    });
   });
 
   runCryptoJobs = asyncHandler(async (req: Request, res: Response) => {

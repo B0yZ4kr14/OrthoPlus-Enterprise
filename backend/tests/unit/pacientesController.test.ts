@@ -122,30 +122,26 @@ const mockPatientRepository = {
   findById: jest.fn().mockResolvedValue(null),
   findByCPF: jest.fn().mockResolvedValue(null),
   findByEmail: jest.fn().mockResolvedValue(null),
-  findMany: jest
-    .fn()
-    .mockResolvedValue({
-      data: [],
-      total: 0,
-      page: 1,
-      limit: 20,
-      totalPages: 0,
-    }),
+  findMany: jest.fn().mockResolvedValue({
+    data: [],
+    total: 0,
+    page: 1,
+    limit: 20,
+    totalPages: 0,
+  }),
   countByStatus: jest.fn().mockResolvedValue({}),
   saveStatusHistory: jest.fn().mockResolvedValue(undefined),
   getStatusHistory: jest.fn().mockResolvedValue([]),
   exists: jest.fn().mockResolvedValue(false),
   delete: jest.fn().mockResolvedValue(undefined),
   findAll: jest.fn().mockResolvedValue({ items: [], total: 0 }),
-  getStats: jest
-    .fn()
-    .mockResolvedValue({
-      total: 0,
-      ativos: 0,
-      inativos: 0,
-      arquivados: 0,
-      novosEsteMes: 0,
-    }),
+  getStats: jest.fn().mockResolvedValue({
+    total: 0,
+    ativos: 0,
+    inativos: 0,
+    arquivados: 0,
+    novosEsteMes: 0,
+  }),
   findAppointmentsByPatient: jest.fn().mockResolvedValue([]),
   findTratamentosByPatient: jest.fn().mockResolvedValue([]),
   findBudgetsByPatient: jest.fn().mockResolvedValue([]),
