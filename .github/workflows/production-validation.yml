@@ -24,7 +24,7 @@ jobs:
         env:
           NODE_ENV: production
           PORT: "3005"
-          JWT_SECRET: "<REMOVED>"
+          JWT_SECRET: "test-jwt-secret-for-ci-validation-only-32chars"
           AUTH_ALLOW_MOCK: "false"
           ENABLE_DANGEROUS_ADMIN_ENDPOINTS: "false"
           DB_SSL: "true"
@@ -74,6 +74,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Build shared-types
+        run: pnpm --filter @orthoplus/shared-types build
+
+      - name: Generate Prisma Client
+        run: pnpm --filter orthoplus-backend exec prisma generate
 
       - name: Build frontend (production)
         run: pnpm run build
