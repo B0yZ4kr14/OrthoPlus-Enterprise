@@ -20,8 +20,6 @@ jobs:
         with:
           node-version: '20'
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
       - run: pnpm install
       - run: pnpm build
 
@@ -39,8 +37,6 @@ jobs:
         with:
           node-version: '20'
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
       - run: pnpm install --filter "@orthoplus/shared-types" --filter "./apps/web..."
         working-directory: .
       - run: pnpm --filter @orthoplus/shared-types build
@@ -63,8 +59,6 @@ jobs:
         with:
           node-version: '20'
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
       - run: pnpm install --filter @orthoplus/shared-types
         working-directory: .
       - run: pnpm --filter @orthoplus/shared-types build
