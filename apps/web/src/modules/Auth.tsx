@@ -170,7 +170,7 @@ export default function Auth() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 dark:bg-slate-800 dark:border-slate-700">
+            <TabsList className="grid w-full grid-cols-3 dark:bg-muted dark:border-border">
               <TabsTrigger 
                 value="login" 
               >
