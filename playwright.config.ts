@@ -77,7 +77,7 @@ export default defineConfig({
       timeout: 60000,
     },
     {
-      command: "cd apps/web && pnpm preview --port 8080 --host",
+      command: "cd apps/web && npx serve dist -s -l 8080",
       url: "http://localhost:8080/OrthoPlus-Enterprise/",
       reuseExistingServer: !process.env.CI,
       timeout: 60000,
