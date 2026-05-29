@@ -9,9 +9,9 @@ export default defineConfig({
   // globalSetup removed — using project dependency + storageState instead
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 1 : undefined,
-  timeout: 120000,
+  timeout: 60000,
   expect: {
     timeout: 15000,
   },
