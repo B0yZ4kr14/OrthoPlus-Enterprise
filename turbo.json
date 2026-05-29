@@ -17,7 +17,7 @@
       "dependsOn": []
     },
     "test": {
-      "dependsOn": []
+      "dependsOn": ["^build"]
     },
     "clean": {
       "cache": false
