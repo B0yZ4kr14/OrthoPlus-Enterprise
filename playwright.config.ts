@@ -22,7 +22,7 @@ export default defineConfig({
   ],
 
   use: {
-    baseURL: "http://localhost:8080/OrthoPlus-Enterprise/",
+    baseURL: "http://localhost:8080/",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -78,7 +78,7 @@ export default defineConfig({
     },
     {
       command: "cd apps/web && npx serve dist -s -l 8080",
-      url: "http://localhost:8080/OrthoPlus-Enterprise/",
+      url: "http://localhost:8080/",
       reuseExistingServer: !process.env.CI,
       timeout: 60000,
     },
