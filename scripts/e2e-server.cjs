@@ -7,12 +7,12 @@ const PORT = process.env.PORT || 8080;
 const DIST_DIR = path.join(__dirname, '../apps/web/dist');
 const API_TARGET = process.env.API_URL || 'http://localhost:3005';
 
-// Parse API target
 const apiUrl = new URL(API_TARGET);
 
-// Proxy API requests to backend
-function createProxyHandler() {
+function createProxyHandler(prefix) {
   return (req, res) => {
+    console.log(`[e2e-server] ${req.method} ${req.originalUrl} -> ${API_TARGET}${req.originalUrl}`);
+    
     const options = {
       hostname: apiUrl.hostname,
       port: apiUrl.port,
@@ -25,6 +25,7 @@ function createProxyHandler() {
     };
 
     const proxy = http.request(options, (proxyRes) => {
+      console.log(`[e2e-server] <- ${proxyRes.statusCode} ${req.originalUrl}`);
       res.writeHead(proxyRes.statusCode, proxyRes.headers);
       proxyRes.pipe(res, { end: true });
     });
@@ -40,13 +41,11 @@ function createProxyHandler() {
   };
 }
 
-app.use('/api', createProxyHandler());
-app.use('/rest', createProxyHandler());
+app.use('/api', createProxyHandler('api'));
+app.use('/rest', createProxyHandler('rest'));
 
-// Serve static files
 app.use(express.static(DIST_DIR));
 
-// SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
