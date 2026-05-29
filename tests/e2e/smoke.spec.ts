@@ -2,39 +2,36 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Smoke Tests", () => {
   test("frontend loads authenticated dashboard", async ({ page, context }) => {
-    // Capture console logs
-    const consoleLogs: string[] = [];
-    page.on("console", (msg) => {
-      consoleLogs.push(`[${msg.type()}] ${msg.text()}`);
-    });
-    page.on("pageerror", (err) => {
-      consoleLogs.push(`[PAGE ERROR] ${err.message}`);
-    });
-    
-    // Capture network errors
-    page.on("requestfailed", (request) => {
-      consoleLogs.push(`[NETWORK FAILED] ${request.method()} ${request.url()} — ${request.failure()?.errorText}`);
-    });
-    
     await page.goto("./dashboard");
     
-    // Wait a bit for JS to execute and capture logs
-    await page.waitForTimeout(3000);
+    // Use page.content() instead of innerHTML
+    const content = await page.content();
+    console.log("[DEBUG] page.content() length:", content.length);
+    console.log("[DEBUG] page.content() (first 1000 chars):", content.substring(0, 1000));
     
-    console.log("[DEBUG] Current URL:", page.url());
-    console.log("[DEBUG] Console logs:", consoleLogs.slice(0, 20));
+    // Also check specific element
+    const rootHTML = await page.locator("#root").innerHTML({ timeout: 5000 }).catch((e) => `[error: ${e.message}]`);
+    console.log("[DEBUG] #root innerHTML:", rootHTML.substring(0, 500));
     
-    // Check if body has content
-    const bodyHTML = await page.locator("body").innerHTML({ timeout: 5000 }).catch(() => "[failed]");
-    console.log("[DEBUG] Body HTML (first 1000 chars):", bodyHTML.substring(0, 1000));
+    // Check network requests
+    const requests = await page.evaluate(() => {
+      return performance.getEntriesByType("resource").map((r: any) => r.name);
+    });
+    console.log("[DEBUG] Network requests:", requests.slice(0, 10));
+    
+    // Wait for React to mount
+    await page.waitForTimeout(5000);
+    
+    const rootAfterWait = await page.locator("#root").innerHTML({ timeout: 5000 }).catch((e) => `[error: ${e.message}]`);
+    console.log("[DEBUG] #root after 5s:", rootAfterWait.substring(0, 500));
     
     // Verify we stay on dashboard (not redirected to /auth)
     await expect(page).toHaveURL(/.*\/dashboard/, { timeout: 30000 });
     
-    // Verify dashboard content loaded (Master Dashboard heading or WelcomeBanner)
+    // Verify dashboard content loaded
     await expect(
       page.locator("body"),
-    ).toContainText(/Master Dashboard|Bom dia|Boa tarde|Boa noite|Vis.o anal.tica/i, { timeout: 15000 });
+    ).toContainText(/Master Dashboard|Bom dia|Boa tarde|Boa noite/i, { timeout: 15000 });
   });
 
   test("backend health endpoint responds", async ({ request }) => {
