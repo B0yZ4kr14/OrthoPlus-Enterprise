@@ -68,6 +68,11 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm --filter orthoplus-backend exec prisma generate
 
+      - name: Build frontend
+        run: pnpm --filter @orthoplus/web build
+        env:
+          VITE_API_BASE_URL: ""
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
 
