@@ -38,7 +38,10 @@ export class FuncionariosController {
     }
     const parsed = createFuncionarioSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.flatten().fieldErrors as any);
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.flatten().fieldErrors as any,
+      );
     }
     const data = await this.repo.create({
       ...parsed.data,
@@ -55,7 +58,10 @@ export class FuncionariosController {
     const { id } = req.params;
     const parsed = updateFuncionarioSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw Errors.validation("Invalid input", parsed.error.flatten().fieldErrors as any);
+      throw Errors.validation(
+        "Invalid input",
+        parsed.error.flatten().fieldErrors as any,
+      );
     }
     const data = await this.repo.update(id, parsed.data);
     res.json(data);

@@ -82,7 +82,9 @@ describe("TISSController.listGuias", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await expect(controller.listGuias(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.listGuias(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns guides for the clinic", async () => {
@@ -129,14 +131,18 @@ describe("TISSController.getGuiaById", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "guide-1" } });
     const res = mockRes();
-    await expect(controller.getGuiaById(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.getGuiaById(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when guide not found", async () => {
     guides.findFirst.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "guide-missing" } });
     const res = mockRes();
-    await expect(controller.getGuiaById(req as Request, res)).rejects.toMatchObject({ status: 404 });
+    await expect(
+      controller.getGuiaById(req as Request, res),
+    ).rejects.toMatchObject({ status: 404 });
   });
 
   it("returns the guide when found", async () => {
@@ -172,13 +178,17 @@ describe("TISSController.createGuia", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, body: validBody });
     const res = mockRes();
-    await expect(controller.createGuia(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.createGuia(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 on invalid body", async () => {
     const req = mockReq({ body: { guide_number: "G-001" } });
     const res = mockRes();
-    await expect(controller.createGuia(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(
+      controller.createGuia(req as Request, res),
+    ).rejects.toMatchObject({ status: 400 });
   });
 
   it("creates a guide and returns 201", async () => {
@@ -212,7 +222,9 @@ describe("TISSController.updateGuia", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "guide-1" } });
     const res = mockRes();
-    await expect(controller.updateGuia(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.updateGuia(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when guide not found", async () => {
@@ -222,7 +234,9 @@ describe("TISSController.updateGuia", () => {
       body: { status: "SUBMITTED" },
     });
     const res = mockRes();
-    await expect(controller.updateGuia(req as Request, res)).rejects.toMatchObject({ status: 404 });
+    await expect(
+      controller.updateGuia(req as Request, res),
+    ).rejects.toMatchObject({ status: 404 });
   });
 
   it("returns 400 on invalid body", async () => {
@@ -230,7 +244,9 @@ describe("TISSController.updateGuia", () => {
     // amount must be a non-negative integer; string is invalid
     const req = mockReq({ params: { id: "guide-1" }, body: { amount: -1 } });
     const res = mockRes();
-    await expect(controller.updateGuia(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(
+      controller.updateGuia(req as Request, res),
+    ).rejects.toMatchObject({ status: 400 });
   });
 
   it("updates the guide and returns it", async () => {
@@ -252,14 +268,18 @@ describe("TISSController.deleteGuia", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "guide-1" } });
     const res = mockRes();
-    await expect(controller.deleteGuia(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.deleteGuia(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when guide not found", async () => {
     guides.findFirst.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "guide-x" } });
     const res = mockRes();
-    await expect(controller.deleteGuia(req as Request, res)).rejects.toMatchObject({ status: 404 });
+    await expect(
+      controller.deleteGuia(req as Request, res),
+    ).rejects.toMatchObject({ status: 404 });
   });
 
   it("deletes the guide and returns 204", async () => {
@@ -279,7 +299,9 @@ describe("TISSController.listLotes", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await expect(controller.listLotes(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.listLotes(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns batches for the clinic", async () => {
@@ -315,13 +337,17 @@ describe("TISSController.createLote", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, body: validBatch });
     const res = mockRes();
-    await expect(controller.createLote(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.createLote(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 on invalid body", async () => {
     const req = mockReq({ body: {} });
     const res = mockRes();
-    await expect(controller.createLote(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(
+      controller.createLote(req as Request, res),
+    ).rejects.toMatchObject({ status: 400 });
   });
 
   it("creates a batch and returns 201", async () => {
@@ -346,13 +372,17 @@ describe("TISSController.submitBatch", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, body: validBody });
     const res = mockRes();
-    await expect(controller.submitBatch(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.submitBatch(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 when guide_ids is empty", async () => {
     const req = mockReq({ body: { ...validBody, guide_ids: [] } });
     const res = mockRes();
-    await expect(controller.submitBatch(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(
+      controller.submitBatch(req as Request, res),
+    ).rejects.toMatchObject({ status: 400 });
   });
 
   it("returns 400 when some guides are not found", async () => {
@@ -360,7 +390,9 @@ describe("TISSController.submitBatch", () => {
     guides.findMany.mockResolvedValueOnce([{ id: guideId1, amount: 200 }]);
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await expect(controller.submitBatch(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(
+      controller.submitBatch(req as Request, res),
+    ).rejects.toMatchObject({ status: 400 });
   });
 
   it("creates a batch with correct totals and returns 201", async () => {
@@ -398,7 +430,9 @@ describe("TISSController.getStatistics", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await expect(controller.getStatistics(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(
+      controller.getStatistics(req as Request, res),
+    ).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns aggregated statistics", async () => {

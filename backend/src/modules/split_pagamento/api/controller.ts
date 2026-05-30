@@ -114,7 +114,9 @@ export class SplitPagamentoController {
     }
 
     if (!config) {
-      throw Errors.notFound("No active split config found for this professional");
+      throw Errors.notFound(
+        "No active split config found for this professional",
+      );
     }
 
     const percentage = (config as any).percentage as number;

@@ -100,7 +100,9 @@ describe("NFeController.list", () => {
   it("returns 401 when no clinicId on user", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await expect(controller.list(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(controller.list(req as Request, res)).rejects.toMatchObject({
+      status: 401,
+    });
   });
 
   it("calls repository.findAll and returns result", async () => {
@@ -144,14 +146,18 @@ describe("NFeController.getById", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "nfe-id-1" } });
     const res = mockRes();
-    await expect(controller.getById(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(controller.getById(req as Request, res)).rejects.toMatchObject(
+      { status: 401 },
+    );
   });
 
   it("returns 404 when NFe not found", async () => {
     mockRepo.findById.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "nfe-missing" } });
     const res = mockRes();
-    await expect(controller.getById(req as Request, res)).rejects.toMatchObject({ status: 404 });
+    await expect(controller.getById(req as Request, res)).rejects.toMatchObject(
+      { status: 404 },
+    );
   });
 
   it("returns 404 when NFe belongs to different clinic", async () => {
@@ -161,7 +167,9 @@ describe("NFeController.getById", () => {
     });
     const req = mockReq({ params: { id: "nfe-id-1" } });
     const res = mockRes();
-    await expect(controller.getById(req as Request, res)).rejects.toMatchObject({ status: 404 });
+    await expect(controller.getById(req as Request, res)).rejects.toMatchObject(
+      { status: 404 },
+    );
   });
 
   it("returns NFe when found and belongs to clinic", async () => {
@@ -195,19 +203,25 @@ describe("NFeController.create", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, body: validBody });
     const res = mockRes();
-    await expect(controller.create(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(controller.create(req as Request, res)).rejects.toMatchObject({
+      status: 401,
+    });
   });
 
   it("returns 400 on invalid body (missing required fields)", async () => {
     const req = mockReq({ body: { numero: "000001" } });
     const res = mockRes();
-    await expect(controller.create(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(controller.create(req as Request, res)).rejects.toMatchObject({
+      status: 400,
+    });
   });
 
   it("returns 400 on invalid tipo enum value", async () => {
     const req = mockReq({ body: { ...validBody, tipo: "INVALID" } });
     const res = mockRes();
-    await expect(controller.create(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(controller.create(req as Request, res)).rejects.toMatchObject({
+      status: 400,
+    });
   });
 
   it("saves NFe and returns 201 on valid data", async () => {
@@ -237,7 +251,9 @@ describe("NFeController.update", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "nfe-id-1" } });
     const res = mockRes();
-    await expect(controller.update(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(controller.update(req as Request, res)).rejects.toMatchObject({
+      status: 401,
+    });
   });
 
   it("returns 404 when NFe not found", async () => {
@@ -247,7 +263,9 @@ describe("NFeController.update", () => {
       body: { status: "AUTORIZADA" },
     });
     const res = mockRes();
-    await expect(controller.update(req as Request, res)).rejects.toMatchObject({ status: 404 });
+    await expect(controller.update(req as Request, res)).rejects.toMatchObject({
+      status: 404,
+    });
   });
 
   it("returns 400 on invalid update body (bad status value)", async () => {
@@ -257,7 +275,9 @@ describe("NFeController.update", () => {
       body: { status: "INVALID_STATUS" },
     });
     const res = mockRes();
-    await expect(controller.update(req as Request, res)).rejects.toMatchObject({ status: 400 });
+    await expect(controller.update(req as Request, res)).rejects.toMatchObject({
+      status: 400,
+    });
   });
 
   it("updates fields and returns the NFe", async () => {
@@ -294,14 +314,18 @@ describe("NFeController.cancel", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "nfe-id-1" } });
     const res = mockRes();
-    await expect(controller.cancel(req as Request, res)).rejects.toMatchObject({ status: 401 });
+    await expect(controller.cancel(req as Request, res)).rejects.toMatchObject({
+      status: 401,
+    });
   });
 
   it("returns 404 when NFe not found", async () => {
     mockRepo.findById.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "nfe-x" } });
     const res = mockRes();
-    await expect(controller.cancel(req as Request, res)).rejects.toMatchObject({ status: 404 });
+    await expect(controller.cancel(req as Request, res)).rejects.toMatchObject({
+      status: 404,
+    });
   });
 
   it("returns 422 when domain cancelar throws (e.g. not AUTORIZADA)", async () => {
@@ -315,7 +339,9 @@ describe("NFeController.cancel", () => {
     mockRepo.findById.mockResolvedValueOnce(nfeCopy);
     const req = mockReq({ params: { id: "nfe-id-1" } });
     const res = mockRes();
-    await expect(controller.cancel(req as Request, res)).rejects.toThrow("Apenas NFe autorizada pode ser cancelada");
+    await expect(controller.cancel(req as Request, res)).rejects.toThrow(
+      "Apenas NFe autorizada pode ser cancelada",
+    );
   });
 
   it("cancels and returns the NFe when AUTORIZADA", async () => {

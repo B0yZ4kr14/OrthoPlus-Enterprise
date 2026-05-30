@@ -7,7 +7,11 @@ import { startGamificationJobs } from "./jobs/gamificationJobs";
 import { startAdminJobs } from "./jobs/adminJobs";
 import { startMarketingJobsCron } from "./jobs/marketingJobs";
 import { startMemoryHubDriftCron } from "./jobs/memoryHubDrift";
-import { startScheduleAppointmentsCron } from "./jobs/scheduleAppointments";
+import {
+  startScheduleAppointmentsCron,
+  startAutoConfirmCron,
+  startRecallCron,
+} from "./jobs/scheduleAppointments";
 import { startScheduleBiExportCron } from "./jobs/scheduleBiExport";
 import { startSearchIndexScheduler } from "./searchIndexScheduler";
 import { iaRadiografiaWorker } from "./iaRadiografiaWorker";
@@ -16,6 +20,8 @@ export const startAllWorkers = () => {
   logger.info("Starting all background workers (cron jobs)...");
 
   startScheduleAppointmentsCron();
+  startAutoConfirmCron();
+  startRecallCron();
   startScheduleBiExportCron();
   startBackupJobsCron();
   startEstoqueJobsCron();

@@ -159,7 +159,9 @@ export class TISSController {
     })) as Array<{ amount?: number }>;
 
     if (guides.length !== guide_ids.length) {
-            throw Errors.validation("Some guides not found or do not belong to this clinic");
+      throw Errors.validation(
+        "Some guides not found or do not belong to this clinic",
+      );
     }
 
     // Calculate totals from guides

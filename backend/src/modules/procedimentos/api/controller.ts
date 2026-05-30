@@ -88,7 +88,7 @@ export class ProcedimentosController {
     }
     const { id } = req.params;
     const data = await this.repo.findTemplateById(id, clinicId as string);
-    if (!data)     if (!data) throw Errors.notFound("Template", id);
+    if (!data) if (!data) throw Errors.notFound("Template", id);
     return res.json(data);
   }
 
@@ -115,7 +115,7 @@ export class ProcedimentosController {
     }
     const { id } = req.params;
     const existing = await this.repo.findTemplateById(id, clinicId as string);
-    if (!existing)     if (!existing) throw Errors.notFound("Template", id);
+    if (!existing) if (!existing) throw Errors.notFound("Template", id);
     const parsed = updateTemplateSchema.safeParse(req.body);
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -136,26 +136,23 @@ export class ProcedimentosController {
 
   async listTabelas(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const data = await this.repo.findManyTabelas(clinicId as string);
     return res.json(data);
   }
 
   async getTabelaById(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { id } = req.params;
     const data = await this.repo.findTabelaById(id, clinicId as string);
-    if (!data)     if (!data) throw Errors.notFound("Tabela", id);
+    if (!data) if (!data) throw Errors.notFound("Tabela", id);
     return res.json(data);
   }
 
   async createTabela(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const parsed = createTabelaSchema.safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -174,11 +171,10 @@ export class ProcedimentosController {
 
   async updateTabela(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { id } = req.params;
     const existing = await this.repo.findTabelaById(id, clinicId as string);
-    if (!existing)     if (!existing) throw Errors.notFound("Tabela", id);
+    if (!existing) if (!existing) throw Errors.notFound("Tabela", id);
     const parsed = updateTabelaSchema.safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -194,8 +190,7 @@ export class ProcedimentosController {
 
   async deleteTabela(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { id } = req.params;
     await this.repo.deleteTabela(id, clinicId as string);
     return res.status(204).send();
@@ -203,8 +198,7 @@ export class ProcedimentosController {
 
   async listPrecos(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { tabela_id, template_id } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (tabela_id) where.tabela_preco_id = String(tabela_id);
@@ -215,8 +209,7 @@ export class ProcedimentosController {
 
   async createPreco(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const parsed = createPrecoSchema.safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -229,11 +222,10 @@ export class ProcedimentosController {
 
   async updatePreco(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { id } = req.params;
     const existing = await this.repo.findPrecoById(id, clinicId as string);
-    if (!existing)     if (!existing) throw Errors.notFound("Preco", id);
+    if (!existing) if (!existing) throw Errors.notFound("Preco", id);
     const parsed = updatePrecoSchema.safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -243,8 +235,7 @@ export class ProcedimentosController {
 
   async deletePreco(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { id } = req.params;
     await this.repo.deletePreco(id, clinicId as string);
     return res.status(204).send();
@@ -252,8 +243,7 @@ export class ProcedimentosController {
 
   async reajustarPrecos(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const parsed = reajusteSchema.safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -274,8 +264,7 @@ export class ProcedimentosController {
 
   async listDentistaProcs(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { dentista_id } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (dentista_id) where.dentista_id = String(dentista_id);
@@ -285,8 +274,7 @@ export class ProcedimentosController {
 
   async createDentistaProc(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const parsed = dentistaProcSchema.safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -299,15 +287,13 @@ export class ProcedimentosController {
 
   async updateDentistaProc(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { id } = req.params;
     const existing = await this.repo.findDentistaProcById(
       id,
       clinicId as string,
     );
-    if (!existing)
-      throw Errors.notFound("Associação", id);
+    if (!existing) throw Errors.notFound("Associação", id);
     const parsed = dentistaProcSchema.partial().safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
@@ -317,8 +303,7 @@ export class ProcedimentosController {
 
   async deleteDentistaProc(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
-    if (!clinicId)
-      throw Errors.unauthorized("Missing clinic context");
+    if (!clinicId) throw Errors.unauthorized("Missing clinic context");
     const { id } = req.params;
     await this.repo.deleteDentistaProc(id, clinicId as string);
     return res.status(204).send();

@@ -54,10 +54,10 @@ RUN pnpm install --prod --frozen-lockfile
 COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/shared-types/dist ./shared-types/dist
 
-# Also copy prisma schema if needed for production (usually yes)
+# Copy prisma schema and generated client from builder
 COPY --from=builder /app/backend/prisma ./backend/prisma
-# Generate prisma client in production stage
-RUN cd backend && pnpm prisma generate
+COPY --from=builder /app/node_modules/.pnpm/@prisma+client@* ./node_modules/.pnpm/
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 WORKDIR /app/backend
 EXPOSE 3005

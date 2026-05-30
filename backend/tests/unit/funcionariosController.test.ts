@@ -34,7 +34,9 @@ describe("FuncionariosController", () => {
     it("throws unauthorized when clinicId is missing", async () => {
       const req = mockReq({}, {}, {} as any);
       const res = mockRes();
-      await expect(controller.list(req, res)).rejects.toThrow("Missing clinic context");
+      await expect(controller.list(req, res)).rejects.toThrow(
+        "Missing clinic context",
+      );
     });
 
     it("returns funcionarios for clinic", async () => {
@@ -69,7 +71,9 @@ describe("FuncionariosController", () => {
     it("throws validation on invalid input", async () => {
       const req = mockReq({ nome: "" });
       const res = mockRes();
-      await expect(controller.create(req, res)).rejects.toThrow("Invalid input");
+      await expect(controller.create(req, res)).rejects.toThrow(
+        "Invalid input",
+      );
     });
 
     it("creates funcionario with clinic_id", async () => {
@@ -101,7 +105,9 @@ describe("FuncionariosController", () => {
     it("throws validation on invalid input", async () => {
       const req = mockReq({ nome: 123 }, { id: "f1" });
       const res = mockRes();
-      await expect(controller.update(req, res)).rejects.toThrow("Invalid input");
+      await expect(controller.update(req, res)).rejects.toThrow(
+        "Invalid input",
+      );
     });
 
     it("updates funcionario", async () => {

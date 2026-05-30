@@ -23,7 +23,7 @@ module.exports = {
       min_uptime: '10s',
       listen_timeout: 10000,
       kill_timeout: 5000,
-      wait_ready: false,
+      wait_ready: true,
       env_file: '.env.production'
     }
   ],
@@ -35,7 +35,7 @@ module.exports = {
       ref: 'origin/main',
       repo: 'https://github.com/B0yZ4kr14/OrthoPlus-Enterprise.git',
       path: '/var/www/orthoplus',
-      'post-deploy': 'npm install && npm run build && pm2 reload ecosystem.config.js --env production'
+      'post-deploy': 'pnpm install --frozen-lockfile && pnpm build && pm2 reload ecosystem.config.cjs --env production'
     }
   }
 };

@@ -365,11 +365,8 @@ const memoryHubModule = createMemoryHubModule();
     memoryHubModule.startFileWatcher();
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    logger.error("[MemoryHub] Initialization failed", { error: message });
-    // Fail fast in production; warn in development
-    if (process.env.NODE_ENV === "production") {
-      process.exit(1);
-    }
+    logger.error("[MemoryHub] Initialization failed — continuing without memory hub features", { error: message });
+    // Degrade gracefully: memory hub is non-critical
   }
 })();
 
@@ -452,6 +449,10 @@ app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  // Notify PM2 that the process is ready (required when wait_ready: true)
+  if (process.send) {
+    process.send("ready");
+  }
 });
 
 // ---------------------------------------------------------------------------

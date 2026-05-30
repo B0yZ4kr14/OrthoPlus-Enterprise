@@ -57,7 +57,7 @@ export class InadimplenciaController {
     }
     const { id } = req.params;
     const data = await this.repo.findInadimplenteById(id, clinicId as string);
-    if (!data)     if (!data) throw Errors.notFound("Inadimplente", id);
+    if (!data) if (!data) throw Errors.notFound("Inadimplente", id);
     return res.json(data);
   }
 
@@ -71,8 +71,7 @@ export class InadimplenciaController {
       id,
       clinicId as string,
     );
-    if (!existing)
-      throw Errors.notFound("Inadimplente", id);
+    if (!existing) throw Errors.notFound("Inadimplente", id);
 
     const parsed = updateInadimplenteSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -119,7 +118,7 @@ export class InadimplenciaController {
     }
     const { id } = req.params;
     const existing = await this.repo.findCampanhaById(id, clinicId as string);
-    if (!existing)     if (!existing) throw Errors.notFound("Campanha", id);
+    if (!existing) if (!existing) throw Errors.notFound("Campanha", id);
 
     const parsed = updateCampanhaSchema.safeParse(req.body);
     if (!parsed.success) {
