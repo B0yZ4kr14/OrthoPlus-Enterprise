@@ -121,7 +121,7 @@ describe("Auth Controller (mock mode)", () => {
       expect(res.json).toHaveBeenCalled();
       const payload = (res.json as jest.Mock).mock.calls[0][0];
       expect(payload).toHaveProperty("accessToken");
-      expect(payload).toHaveProperty("expiresIn", 3600);
+      expect(payload).toHaveProperty("expiresIn", 900);
       expect(payload.user.email).toBe("admin@clinic.com");
       // token must be verifiable
       const decoded = jwt.verify(payload.accessToken, JWT_SECRET) as {
@@ -306,7 +306,7 @@ describe("Auth Controller (shared)", () => {
       const token = jwt.sign(
         { sub: "uid-123", email: "test@clinic.com", role: "authenticated" },
         JWT_SECRET,
-        { expiresIn: "1h" },
+        { expiresIn: "15m" },
       );
       const req = mockReq({}, { authorization: `Bearer ${token}` });
       const res = mockRes();

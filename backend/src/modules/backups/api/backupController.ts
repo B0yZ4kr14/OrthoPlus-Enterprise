@@ -112,7 +112,7 @@ async function prepareDownload(backupId: string) {
   return {
     backupId,
     downloadUrl: `/api/backups/downloads/mock-${backupId}.zip`,
-    expiresIn: 3600,
+    expiresIn: 900,
     fileSizeBytes: 10485760,
   };
 }

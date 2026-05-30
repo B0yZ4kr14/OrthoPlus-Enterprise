@@ -140,7 +140,7 @@ export class AuthenticateUserUseCase {
     const accessToken = jwt.sign(
       { sub: user.id, email: user.email, role: user.role, clinicId },
       requireJwtSecret(),
-      { expiresIn: "1h" },
+      { expiresIn: "15m" },
     );
 
     const refreshToken = jwt.sign(

@@ -133,7 +133,7 @@ export class AuthService {
         clinicId: user.clinic_id,
       },
       requireJwtSecret(),
-      { expiresIn: "1h" },
+      { expiresIn: "15m" },
     );
 
     const newRefreshToken = jwt.sign(
@@ -178,7 +178,7 @@ export class AuthService {
     const accessToken = jwt.sign(
       { sub: patient.id, email: patientEmail, role: "patient", clinicId },
       requireJwtSecret(),
-      { expiresIn: "1h" },
+      { expiresIn: "15m" },
     );
 
     const refreshToken = jwt.sign(
@@ -329,7 +329,7 @@ export class AuthService {
     const accessToken = jwt.sign(
       { sub: dummyId, email, role, clinicId },
       requireJwtSecret(),
-      { expiresIn: "1h" },
+      { expiresIn: "15m" },
     );
     const refreshToken = jwt.sign(
       { sub: dummyId, type: "refresh" },
@@ -348,7 +348,7 @@ export class AuthService {
     const accessToken = jwt.sign(
       { sub: dummyId, email: patientEmail, role: "patient", clinicId },
       requireJwtSecret(),
-      { expiresIn: "1h" },
+      { expiresIn: "15m" },
     );
     const refreshToken = jwt.sign(
       { sub: dummyId, type: "refresh" },
@@ -408,7 +408,7 @@ export class AuthService {
       },
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
-      expiresIn: 3600,
+      expiresIn: 900,
     };
   }
 
@@ -436,7 +436,7 @@ export class AuthService {
       },
       accessToken,
       refreshToken,
-      expiresIn: 3600,
+      expiresIn: 900,
     };
   }
 

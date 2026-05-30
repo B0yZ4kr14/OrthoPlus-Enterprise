@@ -121,7 +121,7 @@ export class AuthController {
       res.json({
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
-        expiresIn: 3600,
+        expiresIn: 900,
       });
     } catch (err) {
       if (err instanceof ApiError) throw err;
