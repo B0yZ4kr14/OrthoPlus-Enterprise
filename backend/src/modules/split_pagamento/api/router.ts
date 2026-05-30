@@ -1,10 +1,19 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { asyncHandler } from "@/middleware/errorHandler";
+import rateLimit from "express-rate-limit";
 import { Router } from "express";
 import { SplitPagamentoController } from "./controller";
 
 const controller = new SplitPagamentoController();
 const router: Router = Router();
+
+const splitPagamentoLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  message: "Too many requests from this IP, please try again later.",
+});
+
+router.use(splitPagamentoLimiter);
 router.use(clinicGuard);
 
 // Root route — module status

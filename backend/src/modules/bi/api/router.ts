@@ -1,9 +1,19 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { BIController } from "./controller";
 
 const controller = new BIController();
 const router: Router = Router();
+
+const biLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  message: "Too many requests from this IP, please try again later.",
+});
+
+// Apply rate limiter before clinic context validation
+router.use(biLimiter);
 
 // Apply clinic context validation to all routes in this module
 router.use(clinicGuard);

@@ -1,9 +1,18 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import rateLimit from "express-rate-limit";
 import { Router } from "express";
 import { MarketingController } from "./controller";
 
 const controller = new MarketingController();
 const router: Router = Router();
+
+const marketingLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  message: "Too many requests from this IP, please try again later.",
+});
+
+router.use(marketingLimiter);
 router.use(clinicGuard);
 
 // Rota raiz

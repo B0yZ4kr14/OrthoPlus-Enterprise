@@ -1,4 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
+import rateLimit from "express-rate-limit";
 import { Router } from "express";
 import { IDatabaseConnection } from "@/infrastructure/database/IDatabaseConnection";
 import { DashboardController } from "../controllers/DashboardController";
@@ -6,6 +7,14 @@ import { cacheRoute } from "@/infrastructure/redis/cacheRoute";
 
 export function createDashboardRouter(db?: IDatabaseConnection): Router {
   const router: Router = Router();
+
+  const dashboardLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200,
+    message: "Too many requests from this IP, please try again later.",
+  });
+
+  router.use(dashboardLimiter);
   router.use(clinicGuard);
 
   if (!db) {
