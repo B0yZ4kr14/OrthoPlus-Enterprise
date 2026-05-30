@@ -30,8 +30,11 @@ export function authMiddleware(
   const allowMock = process.env.AUTH_ALLOW_MOCK === "true";
 
   // BYPASS FOR INTERNAL CRON JOBS
+  // Requires both a shared secret header AND localhost origin
+  const cronSecret = process.env.CRON_SECRET;
   const isInternalCron =
-    req.headers["x-internal-cron"] === "true" &&
+    cronSecret &&
+    req.headers["x-cron-secret"] === cronSecret &&
     (req.ip === "127.0.0.1" ||
       req.ip === "::ffff:127.0.0.1" ||
       req.ip === "::1");

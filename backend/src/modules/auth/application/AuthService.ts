@@ -87,8 +87,11 @@ export class AuthService {
 
     if (!allowMock()) throw Errors.invalidCredentials();
 
-    const mockEmail = process.env.MOCK_ADMIN_EMAIL || "admin@clinic.com";
-    const mockPassword = process.env.MOCK_ADMIN_PASSWORD || "correct";
+    const mockEmail = process.env.MOCK_ADMIN_EMAIL;
+    const mockPassword = process.env.MOCK_ADMIN_PASSWORD;
+    if (!mockEmail || !mockPassword) {
+      throw Errors.invalidCredentials();
+    }
     if (email !== mockEmail || password !== mockPassword) {
       throw Errors.invalidCredentials();
     }

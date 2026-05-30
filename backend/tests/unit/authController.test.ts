@@ -115,6 +115,8 @@ describe("Auth Controller (mock mode)", () => {
     });
 
     it("returns JWT on valid mock credentials", async () => {
+      process.env.MOCK_ADMIN_EMAIL = "admin@clinic.com";
+      process.env.MOCK_ADMIN_PASSWORD = "correct";
       const req = mockReq({ email: "admin@clinic.com", password: "correct" });
       const res = mockRes();
       await controller.login(req as Request, res, jest.fn());

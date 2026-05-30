@@ -37,7 +37,10 @@ export class ApiGateway {
   private setupMiddlewares(): void {
     // Security
     this.app.use(helmet());
-    this.app.use(cors());
+    this.app.use(cors({
+      origin: process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:3000"],
+      credentials: true,
+    }));
 
     // Body parsing
     this.app.use(express.json({ limit: "10mb" }));

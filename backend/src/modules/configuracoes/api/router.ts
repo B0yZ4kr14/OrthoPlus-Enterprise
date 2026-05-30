@@ -14,6 +14,10 @@ export function createConfiguracoesRouter(): Router {
   // Module catalog endpoints — hardcoded, no clinic context needed
   router.get("/modulos", controller.getMyModules);
   router.get("/modulos/dependencies", controller.getDependencies);
+
+  // Clinic-scoped endpoints require clinicGuard
+  router.use(clinicGuard);
+
   router.post("/modulos/toggle", controller.toggleModuleByKey);
   router.post("/modulos/:id/toggle", controller.toggleModuleState);
 
@@ -22,9 +26,6 @@ export function createConfiguracoesRouter(): Router {
   router.post("/suggest", controller.suggestModules);
   router.post("/recommend-sequence", controller.recommendModuleSequence);
   router.post("/import-data", controller.importClinicData);
-
-  // Clinic-scoped endpoints require clinicGuard
-  router.use(clinicGuard);
   router.get("/export-data", controller.exportClinicData);
 
   // Scheduled Backups
