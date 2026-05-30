@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 // jsPDF loaded dynamically to reduce initial bundle
 import html2canvas from "html2canvas";
+import { logger } from "@/lib/logger";
 import type { AnaliseComplete } from "../types/radiografia.types";
 import { tipoRadiografiaLabels } from "../types/radiografia.types";
 
@@ -210,7 +211,7 @@ export function ComparativoPDFExport({
         pdf.addImage(img1, "JPEG", margin, yPosition, imgWidth, finalHeight);
         yPosition += finalHeight + 15;
       } catch (error) {
-        console.warn("Imagem 1 nao disponivel para exportacao:", error);
+        logger.warn("Imagem 1 nao disponivel para exportacao", { error });
         pdf.text("[Imagem nao disponivel para exportacao]", margin, yPosition);
         yPosition += 10;
       }
@@ -266,7 +267,7 @@ export function ComparativoPDFExport({
         pdf.addImage(img2, "JPEG", margin, yPosition, imgWidth, finalHeight);
         yPosition += finalHeight + 10;
       } catch (error) {
-        console.warn("Imagem 2 nao disponivel para exportacao:", error);
+        logger.warn("Imagem 2 nao disponivel para exportacao", { error });
         pdf.text("[Imagem nao disponivel para exportacao]", margin, yPosition);
         yPosition += 10;
       }

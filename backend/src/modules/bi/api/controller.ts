@@ -10,9 +10,7 @@ import { IBIRepository } from "../domain/repositories/IBIRepository";
 import { BIRepository } from "../infrastructure/BIRepository";
 
 export class BIController {
-  constructor(
-    private repo: IBIRepository = new BIRepository(),
-  ) {}
+  constructor(private repo: IBIRepository = new BIRepository()) {}
 
   listDashboards = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
@@ -94,7 +92,10 @@ export class BIController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { dashboard_id } = req.params;
-    const data = await this.repo.findManyWidgets(dashboard_id, clinicId as string);
+    const data = await this.repo.findManyWidgets(
+      dashboard_id,
+      clinicId as string,
+    );
     res.json(data);
     return;
   });

@@ -1,4 +1,3 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 import { PacienteIndexer } from "../services/PacienteIndexer";
@@ -11,6 +10,9 @@ import {
 } from "@/infrastructure/cache/searchCache";
 import { logger } from "@/infrastructure/logger";
 import { redisInstance } from "@/infrastructure/redis/redisClient";
+import { ISearchIndexRepository } from "../domain/repositories/ISearchIndexRepository";
+import { SearchIndexRepository } from "../infrastructure/SearchIndexRepository";
+import { prisma } from "@/infrastructure/database/prismaClient";
 
 export interface SearchResultItem {
   id: string;
@@ -29,22 +31,16 @@ export interface SearchResponse {
   results: SearchResultItem[];
 }
 
-interface SearchRow {
-  id: string;
-  entity_type: string;
-  entity_id: string;
-  title: string;
-  content: string;
-  module: string;
-  score: number;
-}
-
 const SEARCH_CACHE_TTL_MS = 60 * 1000; // 60 seconds
 
 export class SearchIndexController {
   private indexer = new PacienteIndexer(prisma);
   private agendaIndexer = new AgendaIndexer(prisma);
   private pepIndexer = new PepIndexer(prisma);
+
+  constructor(
+    private repo: ISearchIndexRepository = new SearchIndexRepository(),
+  ) {}
 
   search = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
@@ -83,8 +79,8 @@ export class SearchIndexController {
 
     // Run search query and count in parallel
     const [results, countResult] = await Promise.all([
-      this.runSearch(query, clinicId, moduleFilter, limit, offset),
-      this.runCount(query, clinicId, moduleFilter),
+      this.repo.search(query, clinicId, moduleFilter, limit, offset),
+      this.repo.count(query, clinicId, moduleFilter),
     ]);
 
     const total = Number(countResult[0]?.count || 0);
@@ -122,60 +118,6 @@ export class SearchIndexController {
 
     res.json(response);
   });
-
-  private async runSearch(
-    query: string,
-    clinicId: string,
-    moduleFilter: string | undefined,
-    limit: number,
-    offset: number,
-  ): Promise<SearchRow[]> {
-    if (moduleFilter) {
-      return prisma.$queryRaw<SearchRow[]>`
-        SELECT id, entity_type, entity_id, clinic_id, title, content, module, updated_at,
-               ts_rank(content_tsv, websearch_to_tsquery('portuguese', ${query})) as score
-        FROM core.search_index
-        WHERE content_tsv @@ websearch_to_tsquery('portuguese', ${query})
-          AND clinic_id = ${clinicId}
-          AND module = ${moduleFilter}
-        ORDER BY score DESC
-        LIMIT ${limit} OFFSET ${offset}
-      `;
-    }
-
-    return prisma.$queryRaw<SearchRow[]>`
-      SELECT id, entity_type, entity_id, clinic_id, title, content, module, updated_at,
-             ts_rank(content_tsv, websearch_to_tsquery('portuguese', ${query})) as score
-      FROM core.search_index
-      WHERE content_tsv @@ websearch_to_tsquery('portuguese', ${query})
-        AND clinic_id = ${clinicId}
-      ORDER BY score DESC
-      LIMIT ${limit} OFFSET ${offset}
-    `;
-  }
-
-  private async runCount(
-    query: string,
-    clinicId: string,
-    moduleFilter: string | undefined,
-  ): Promise<[{ count: bigint }]> {
-    if (moduleFilter) {
-      return prisma.$queryRaw<[{ count: bigint }]>`
-        SELECT COUNT(*) as count
-        FROM core.search_index
-        WHERE content_tsv @@ websearch_to_tsquery('portuguese', ${query})
-          AND clinic_id = ${clinicId}
-          AND module = ${moduleFilter}
-      `;
-    }
-
-    return prisma.$queryRaw<[{ count: bigint }]>`
-      SELECT COUNT(*) as count
-      FROM core.search_index
-      WHERE content_tsv @@ websearch_to_tsquery('portuguese', ${query})
-        AND clinic_id = ${clinicId}
-    `;
-  }
 
   private async runReindex(
     indexer: {
@@ -250,10 +192,8 @@ export class SearchIndexController {
     // 1. PostgreSQL FTS check
     try {
       const pgStart = Date.now();
-      await prisma.$queryRaw`SELECT 1 as ping`;
-      const pgRows = await prisma.$queryRaw<{ count: bigint }[]>`
-        SELECT COUNT(*) as count FROM core.search_index WHERE clinic_id = ${clinicId}
-      `;
+      await this.repo.ping();
+      const pgRows = await this.repo.countByClinic(clinicId);
       const totalIndex = Number(pgRows[0]?.count || 0);
       checks.postgresql = {
         status: "ok",
@@ -286,11 +226,7 @@ export class SearchIndexController {
 
     // 3. Search index recency check
     try {
-      const recencyRows = await prisma.$queryRaw<
-        { max_updated: Date | null }[]
-      >`
-        SELECT MAX(updated_at) as max_updated FROM core.search_index WHERE clinic_id = ${clinicId}
-      `;
+      const recencyRows = await this.repo.maxUpdatedByClinic(clinicId);
       const lastUpdate = recencyRows[0]?.max_updated;
       checks.indexRecency = {
         status: "ok",

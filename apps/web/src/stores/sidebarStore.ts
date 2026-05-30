@@ -8,6 +8,7 @@
 
 import { create } from "zustand";
 import { z } from "zod";
+import { logger } from "@/lib/logger";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useCallback } from "react";
@@ -85,7 +86,7 @@ function savePersistedState(key: string, expandedGroups: string[]) {
       JSON.stringify({ state: { expandedGroups }, version: 1 }),
     );
   } catch (err) {
-    console.warn("[sidebarStore] Failed to save state:", err);
+    logger.warn("[sidebarStore] Failed to save state", { error: err });
   }
 }
 

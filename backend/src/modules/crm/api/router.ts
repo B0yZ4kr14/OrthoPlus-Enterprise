@@ -1,7 +1,6 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { CRMController } from "./controller";
-import { dbRouter } from "./dbRouter";
 
 const controller = new CRMController();
 const router: Router = Router();
@@ -13,6 +12,5 @@ router.get("/leads/:id", controller.getLeadById);
 router.post("/leads", controller.createLead);
 router.patch("/leads/:id", controller.updateLead);
 router.delete("/leads/:id", controller.deleteLead);
-router.use("/db", dbRouter);
 
 export default router;

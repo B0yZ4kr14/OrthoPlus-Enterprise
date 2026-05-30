@@ -1,6 +1,5 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
-import { dbRouter } from "./dbRouter";
 import { TeleodontoController } from "./controller";
 
 const controller = new TeleodontoController();
@@ -24,7 +23,5 @@ router.post("/sessions/end", controller.endSession);
 // Clinical notes and prescriptions
 router.post("/notes", controller.addNotes);
 router.post("/prescriptions", controller.addPrescription);
-
-router.use("/db", dbRouter);
 
 export default router;

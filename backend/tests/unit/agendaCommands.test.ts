@@ -59,6 +59,19 @@ class MockAppointmentRepository implements IAppointmentRepository {
     return conflicts.length > 0;
   }
 
+  async findUpcomingAppointments(
+    _startTime: string,
+    _endTime: string,
+  ): Promise<any[]> {
+    return [];
+  }
+
+  async findPatientPhoneById(
+    _patientId: string,
+  ): Promise<{ phone_primary: string | null; full_name: string } | null> {
+    return null;
+  }
+
   async delete(id: string): Promise<void> {
     this.appointments.delete(id);
   }

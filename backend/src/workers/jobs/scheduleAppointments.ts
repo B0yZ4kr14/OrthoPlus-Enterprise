@@ -1,9 +1,11 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import cron from "node-cron";
+import { IAppointmentRepository } from "@/modules/agenda/domain/repositories/IAppointmentRepository";
+import { AppointmentRepositoryPostgres } from "@/modules/agenda/infrastructure/repositories/AppointmentRepositoryPostgres";
 
 // Replacing schedule-appointments edge function
 export const runScheduleAppointmentsJob = async () => {
+  const repo: IAppointmentRepository = new AppointmentRepositoryPostgres();
   logger.info("Running scheduled appointments job...");
   try {
     // 1. Fetch upcoming appointments
@@ -15,15 +17,10 @@ export const runScheduleAppointmentsJob = async () => {
     const nowStr = now.toISOString();
     const tomorrowStr = tomorrow.toISOString();
 
-    const appointments = await prisma.appointments.findMany({
-      where: {
-        start_time: {
-          gte: nowStr,
-          lt: tomorrowStr,
-        },
-        status: "AGENDADO",
-      },
-    });
+    const appointments = await repo.findUpcomingAppointments(
+      nowStr,
+      tomorrowStr,
+    );
 
     logger.info(
       `Found ${appointments.length} upcoming appointments. Supposed to send reminders.`,
@@ -31,10 +28,7 @@ export const runScheduleAppointmentsJob = async () => {
 
     // 2. Fetch patient data separately (sem relation definida no schema)
     for (const apt of appointments) {
-      const patient = await prisma.patients.findUnique({
-        where: { id: apt.patient_id },
-        select: { phone_primary: true, full_name: true },
-      });
+      const patient = await repo.findPatientPhoneById(apt.patient_id);
 
       if (patient?.phone_primary) {
         logger.info(

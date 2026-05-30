@@ -121,10 +121,7 @@ export class InadimplenciaController {
       return res.status(401).json({ error: "Missing clinic context" });
     }
     const { id } = req.params;
-    const existing = await this.repo.findCampanhaById(
-      id,
-      clinicId as string,
-    );
+    const existing = await this.repo.findCampanhaById(id, clinicId as string);
     if (!existing) return res.status(404).json({ error: "Campanha not found" });
 
     const parsed = updateCampanhaSchema.safeParse(req.body);

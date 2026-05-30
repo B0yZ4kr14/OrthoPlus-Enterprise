@@ -48,14 +48,22 @@ export interface IAnalyticsRepository {
     clinicId: string,
     userId: string,
   ): Promise<unknown[]>;
+  findAllActiveGamificationGoals(take: number): Promise<unknown[]>;
   countAppointmentsByDentist(
     dentistId: string,
     startMonth: Date,
   ): Promise<number>;
+  groupAppointmentsByDentist(
+    dentistIds: string[],
+    startMonth: Date,
+  ): Promise<Array<{ dentist_id: string; _count?: { _all: number } }>>;
   updateGamificationGoal(id: string, data: unknown): Promise<unknown>;
 
   // BI Export
   createBIExportJob(data: unknown): Promise<unknown>;
+  groupAnalyticsEventsByType(): Promise<
+    Array<{ event_type: string; _count: { id: number } }>
+  >;
 
   // Onboarding
   createOnboardingAnalytics(data: unknown): Promise<unknown>;

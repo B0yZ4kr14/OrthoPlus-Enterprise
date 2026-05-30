@@ -1,19 +1,15 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { logger } from "@/infrastructure/logger";
 import cron from "node-cron";
+import { IAnalyticsRepository } from "@/modules/analytics/domain/repositories/IAnalyticsRepository";
+import { AnalyticsRepository } from "@/modules/analytics/infrastructure/AnalyticsRepository";
 
 // Replacing schedule-bi-export edge function
 export const runScheduleBiExportJob = async () => {
+  const repo: IAnalyticsRepository = new AnalyticsRepository();
   logger.info("Running BI Export job...");
   try {
     // Basic BI export mock logic
-    const reports = await prisma.analytics_events.groupBy({
-      // eslint-disable-line @typescript-eslint/no-explicit-any
-      by: ["event_type"],
-      _count: {
-        id: true,
-      },
-    });
+    const reports = await repo.groupAnalyticsEventsByType();
 
     logger.info(
       `Generated BI aggregated report for ${reports.length} event types.`,

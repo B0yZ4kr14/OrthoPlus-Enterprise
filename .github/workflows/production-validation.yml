@@ -20,11 +20,14 @@ jobs:
       - name: Make validation script executable
         run: chmod +x ./scripts/validate-production.sh
 
+      - name: Generate test secrets
+        run: |
+          echo "JWT_SECRET=$(openssl rand -base64 32)" >> $GITHUB_ENV
+
       - name: Run production validation (dry-run with test env)
         env:
           NODE_ENV: production
           PORT: "3005"
-          JWT_SECRET: "KCbSOYkbFl9p27AIpuEyfsOfeSBurBy0pBySacKgi0o="
           AUTH_ALLOW_MOCK: "false"
           ENABLE_DANGEROUS_ADMIN_ENDPOINTS: "false"
           DB_SSL: "true"

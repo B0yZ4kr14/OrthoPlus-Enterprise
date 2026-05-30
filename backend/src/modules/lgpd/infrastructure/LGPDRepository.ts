@@ -31,6 +31,9 @@ export class LGPDRepository implements ILGPDRepository {
   }
 
   async updateSolicitacao(id: string, data: Record<string, unknown>) {
-    return prisma.lgpd_data_requests.update({ where: { id }, data: data as any });
+    return prisma.lgpd_data_requests.update({
+      where: { id },
+      data: data as any,
+    });
   }
 }

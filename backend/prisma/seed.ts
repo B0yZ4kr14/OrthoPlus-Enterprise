@@ -106,7 +106,12 @@ async function main() {
   ];
 
   for (const prof of dentistProfiles) {
-    await upsertOrCreate(prisma.profiles, { id: prof.id }, prof, `Profile: ${prof.full_name}`);
+    await upsertOrCreate(
+      prisma.profiles,
+      { id: prof.id },
+      prof,
+      `Profile: ${prof.full_name}`,
+    );
   }
 
   // ─── Seed Patients ───
@@ -174,7 +179,12 @@ async function main() {
   ];
 
   for (const p of seedPatients) {
-    await upsertOrCreate(prisma.patients, { id: p.id }, p as any, `Patient: ${p.full_name}`);
+    await upsertOrCreate(
+      prisma.patients,
+      { id: p.id },
+      p as any,
+      `Patient: ${p.full_name}`,
+    );
   }
 
   // ─── Seed Funcionários ───
@@ -263,7 +273,12 @@ async function main() {
   ];
 
   for (const f of seedFuncionarios) {
-    await upsertOrCreate(prisma.funcionarios, { id: f.id }, f as any, `Funcionario: ${f.nome}`);
+    await upsertOrCreate(
+      prisma.funcionarios,
+      { id: f.id },
+      f as any,
+      `Funcionario: ${f.nome}`,
+    );
   }
 
   // ─── Seed Appointments ───
@@ -310,7 +325,12 @@ async function main() {
   ];
 
   for (const apt of seedAppointments) {
-    await upsertOrCreate(prisma.appointments, { id: apt.id }, apt as any, `Appointment: ${apt.title}`);
+    await upsertOrCreate(
+      prisma.appointments,
+      { id: apt.id },
+      apt as any,
+      `Appointment: ${apt.title}`,
+    );
   }
 
   // ─── Seed Leads (CRM) ───
@@ -357,7 +377,12 @@ async function main() {
   ];
 
   for (const lead of seedLeads) {
-    await upsertOrCreate(prisma.leads, { id: lead.id }, lead as any, `Lead: ${lead.nome}`);
+    await upsertOrCreate(
+      prisma.leads,
+      { id: lead.id },
+      lead as any,
+      `Lead: ${lead.nome}`,
+    );
   }
 
   // ─── Seed Produtos (Estoque) ───
@@ -401,7 +426,12 @@ async function main() {
   ];
 
   for (const prod of seedProdutos) {
-    await upsertOrCreate(prisma.produtos, { id: prod.id }, prod as any, `Produto: ${prod.nome}`);
+    await upsertOrCreate(
+      prisma.produtos,
+      { id: prod.id },
+      prod as any,
+      `Produto: ${prod.nome}`,
+    );
   }
 
   console.log("[seed] Database seed completed.");

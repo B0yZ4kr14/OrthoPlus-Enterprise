@@ -3,6 +3,8 @@
  * Monitora performance de componentes e operações
  */
 
+import { logger } from "@/lib/logger";
+
 interface PerformanceMetric {
   name: string;
   duration: number;
@@ -44,7 +46,7 @@ class PerformanceTracker {
       });
 
       if (duration > this.thresholds[type]) {
-        console.warn(
+        logger.warn(
           `[PerformanceTracker] Slow ${type} detected: ${name} took ${duration.toFixed(2)}ms (threshold: ${this.thresholds[type]}ms)`,
           metadata,
         );
@@ -89,7 +91,7 @@ class PerformanceTracker {
       });
 
       if (duration > this.thresholds[type]) {
-        console.warn(
+        logger.warn(
           `[PerformanceTracker] Slow ${type} detected: ${name} took ${duration.toFixed(2)}ms`,
           metadata,
         );

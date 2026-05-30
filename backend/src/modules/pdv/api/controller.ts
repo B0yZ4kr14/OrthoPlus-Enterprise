@@ -4,9 +4,7 @@ import { IPdvRepository } from "../domain/repositories/IPdvRepository";
 import { PdvRepository } from "../infrastructure/PdvRepository";
 
 export class PDVController {
-  constructor(
-    private repo: IPdvRepository = new PdvRepository(),
-  ) {}
+  constructor(private repo: IPdvRepository = new PdvRepository()) {}
 
   getDashboardExecutivo = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;

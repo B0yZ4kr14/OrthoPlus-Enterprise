@@ -6,7 +6,6 @@ import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { IDatabaseConnection } from "@/infrastructure/database/IDatabaseConnection";
 import { ProdutoRepositoryPostgres } from "../infrastructure/repositories/ProdutoRepositoryPostgres";
-import { dbRouter } from "./dbRouter";
 import { InventarioController } from "./InventarioController";
 
 export function createInventarioRouter(db?: IDatabaseConnection): Router {
@@ -57,8 +56,6 @@ export function createInventarioRouter(db?: IDatabaseConnection): Router {
     req.body.action = "webhook-confirmacao-pedido";
     controller.manageAutomation(req, res, next);
   });
-
-  router.use("/db", dbRouter);
 
   return router;
 }

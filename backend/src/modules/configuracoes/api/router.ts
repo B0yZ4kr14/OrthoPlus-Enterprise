@@ -1,7 +1,6 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { logger } from "@/infrastructure/logger";
 import { Router, Request, Response } from "express";
-import { dbRouter } from "./dbRouter";
 import { ModulosController } from "./ModulosController";
 import { IScheduledBackupRepository } from "../domain/repositories/IScheduledBackupRepository";
 import { ScheduledBackupRepository } from "../infrastructure/ScheduledBackupRepository";
@@ -9,9 +8,8 @@ import { ScheduledBackupRepository } from "../infrastructure/ScheduledBackupRepo
 export function createConfiguracoesRouter(): Router {
   const router: Router = Router();
   const controller = new ModulosController();
-  const backupRepo: IScheduledBackupRepository = new ScheduledBackupRepository();
-
-  router.use("/db", dbRouter);
+  const backupRepo: IScheduledBackupRepository =
+    new ScheduledBackupRepository();
 
   // Module catalog endpoints — hardcoded, no clinic context needed
   router.get("/modulos", controller.getMyModules);

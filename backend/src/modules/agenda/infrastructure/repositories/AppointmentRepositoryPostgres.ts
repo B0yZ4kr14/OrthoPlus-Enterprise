@@ -80,6 +80,27 @@ export class AppointmentRepositoryPostgres implements IAppointmentRepository {
     return count > 0;
   }
 
+  async findUpcomingAppointments(
+    startTime: string,
+    endTime: string,
+  ): Promise<any[]> {
+    return prisma.appointments.findMany({
+      where: {
+        start_time: { gte: startTime, lt: endTime },
+        status: "AGENDADO",
+      },
+    });
+  }
+
+  async findPatientPhoneById(
+    patientId: string,
+  ): Promise<{ phone_primary: string | null; full_name: string } | null> {
+    return prisma.patients.findUnique({
+      where: { id: patientId },
+      select: { phone_primary: true, full_name: true },
+    });
+  }
+
   private mapToEntity(raw: any): Appointment {
     return Appointment.create({
       id: raw.id,

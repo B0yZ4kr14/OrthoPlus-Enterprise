@@ -15,7 +15,6 @@ import analyticsRouter from "./modules/analytics/api/router";
 import backupsRouter from "./modules/backups/api/router";
 import { commRouter } from "./modules/comm/api/router";
 import { createConfiguracoesRouter } from "./modules/configuracoes/api/router";
-import { dbRouter as configuracoesDbRouter } from "./modules/configuracoes/api/dbRouter";
 import {
   createCryptoConfigRouter,
   createCryptoRouter,
@@ -24,13 +23,10 @@ import databaseRouter from "./modules/database_admin/api/router";
 import { createFaturamentoRouter } from "./modules/faturamento/api/router";
 import filesRouter from "./modules/files/api/router";
 import { createFinanceiroRouter } from "./modules/financeiro/api/router";
-import { dbRouter as financeiroDbRouter } from "./modules/financeiro/api/dbRouter";
 import { createGitHubToolsRouter } from "./modules/github_tools/api/router";
 import { createInventarioRouter } from "./modules/inventario/api/router";
-import { dbRouter as inventarioDbRouter } from "./modules/inventario/api/dbRouter";
 import notificationRouter from "./modules/notifications/api/router";
 import { pacientesRouter } from "./modules/pacientes/api/router";
-import { dbRouter as pacientesDbRouter } from "./modules/pacientes/api/dbRouter";
 import { createTerminalRouter } from "./modules/terminal/api/router";
 import usuariosRouter from "./modules/usuarios/api/router";
 import { startCategoryBackupScheduler } from "./workers/categoryBackupScheduler";
@@ -44,13 +40,11 @@ import { createMemoryHubRouter } from "./modules/memory_hub/api/router";
 import searchIndexRouter from "./modules/search_index/api/router";
 import contratosRouter from "./modules/contratos/api/router";
 import crmRouter from "./modules/crm/api/router";
-import { dbRouter as crmDbRouter } from "./modules/crm/api/dbRouter";
 import funcionariosRouter from "./modules/funcionarios/api/router";
 import lgpdRouter from "./modules/lgpd/api/router";
 import orcamentosRouter from "./modules/orcamentos/api/router";
 import procedimentosRouter from "./modules/procedimentos/api/router";
 import teleodontoRouter from "./modules/teleodonto/api/router";
-import { dbRouter as teleodontoDbRouter } from "./modules/teleodonto/api/dbRouter";
 
 // Batch 9 Module Routers
 import biRouter from "./modules/bi/api/router";
@@ -309,7 +303,6 @@ const faturamentoRouter = createFaturamentoRouter();
 app.use("/api/faturamento", faturamentoRouter);
 app.use("/api/fiscal", faturamentoRouter); // alias: /fiscal → /faturamento
 app.use("/api/pacientes", pacientesRouter);
-app.use("/api/pacientes/db", pacientesDbRouter);
 app.use("/api/comm", commRouter);
 app.use("/api/agenda", agendaRouter);
 app.use("/api/usuarios", usuariosRouter);
@@ -318,24 +311,20 @@ app.use("/api/github", createGitHubToolsRouter());
 app.use("/api/crypto", createCryptoRouter());
 const financeiroRouter = createFinanceiroRouter();
 app.use("/api/financeiro", financeiroRouter);
-app.use("/api/financeiro/db", financeiroDbRouter);
 app.use("/api/payments", financeiroRouter); // alias: /payments → /financeiro
 app.use("/api/configuracoes", createConfiguracoesRouter());
-app.use("/api/configuracoes/db", configuracoesDbRouter);
 
 // Batch 8 — CRUD Modules
 app.use("/api/admin", adminToolsRouter);
 app.use("/api/contratos", contratosRouter);
 app.use("/api/contrato-templates", contratosRouter); // alias for /contratos/templates
 app.use("/api/crm", crmRouter);
-app.use("/api/crm/db", crmDbRouter);
 app.use("/api/funcionarios", funcionariosRouter);
 app.use("/api/lgpd", lgpdRouter);
 app.use("/api/ia-radiografia", iaRadiografiaRouter);
 app.use("/api/orcamentos", orcamentosRouter);
 app.use("/api/procedimentos", procedimentosRouter);
 app.use("/api/teleodonto", teleodontoRouter);
-app.use("/api/teleodonto/db", teleodontoDbRouter);
 
 // Batch 9 — Medium Complexity Modules
 app.use("/api/bi", biRouter);
@@ -355,9 +344,7 @@ app.use("/api/pdv", createPdvRouter());
 import { db as pgDb } from "./infrastructure/database/connection";
 import aiRouter from "./modules/ai/api/router";
 app.use("/api/estoque", createInventarioRouter(pgDb));
-app.use("/api/estoque/db", inventarioDbRouter);
 app.use("/api/inventario", createInventarioRouter(pgDb));
-app.use("/api/inventario/db", inventarioDbRouter);
 app.use("/api/dashboard", createDashboardRouter(pgDb));
 app.use("/api/nfe", createNfeRouter());
 

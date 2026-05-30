@@ -2,6 +2,7 @@
 Agno Agent Service - API FastAPI para OrthoPlus Enterprise
 """
 import asyncio
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -18,10 +19,22 @@ app = FastAPI(
     version="0.2.0",
 )
 
-# CORS
+# CORS — restrict in production; never allow wildcard in prod
+_env_origins = os.getenv("CORS_ALLOWED_ORIGINS", "")
+if _env_origins:
+    _cors_origins = [o.strip() for o in _env_origins.split(",") if o.strip()]
+elif os.getenv("ENVIRONMENT") == "production":
+    _cors_origins = []
+else:
+    _cors_origins = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:8080",
+    ]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

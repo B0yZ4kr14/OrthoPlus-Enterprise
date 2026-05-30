@@ -8,9 +8,7 @@ import { ILGPDRepository } from "../domain/repositories/ILGPDRepository";
 import { LGPDRepository } from "../infrastructure/LGPDRepository";
 
 export class LGPDController {
-  constructor(
-    private repo: ILGPDRepository = new LGPDRepository(),
-  ) {}
+  constructor(private repo: ILGPDRepository = new LGPDRepository()) {}
 
   // --- Consentimentos ---
   async listConsentimentos(req: Request, res: Response) {

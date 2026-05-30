@@ -12,4 +12,10 @@ export interface IAppointmentRepository {
     endTime: Date,
     clinicId: string,
   ): Promise<boolean>;
+
+  findUpcomingAppointments(startTime: string, endTime: string): Promise<any[]>;
+
+  findPatientPhoneById(
+    patientId: string,
+  ): Promise<{ phone_primary: string | null; full_name: string } | null>;
 }

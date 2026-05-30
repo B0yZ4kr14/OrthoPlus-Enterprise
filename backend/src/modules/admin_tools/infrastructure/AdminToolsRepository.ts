@@ -88,4 +88,8 @@ export class AdminToolsRepository implements IAdminToolsRepository {
       where: { id, clinic_id: clinicId },
     });
   }
+
+  async runVacuumAnalyze() {
+    await prisma.$executeRawUnsafe(`VACUUM ANALYZE;`);
+  }
 }

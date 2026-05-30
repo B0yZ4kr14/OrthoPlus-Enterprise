@@ -25,10 +25,7 @@ jobs:
       DB_USER: orthoplus
       DB_PASSWORD: orthoplus
       DATABASE_URL: postgresql://orthoplus:orthoplus@localhost:5432/orthoplus
-      JWT_SECRET: "test-jwt-secret-for-e2e-tests-minimum-32-characters-long"
       IA_ENCRYPTION_KEY: "test-encryption-key-for-e2e-tests-32chars-long"
-      LGPD_ENCRYPTION_KEY: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
-      LGPD_ENCRYPTION_SALT: "0123456789abcdef"
       REDIS_URL: redis://localhost:6379
       NODE_ENV: test
       CI: true
@@ -64,6 +61,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Generate test secrets
+        run: |
+          echo "JWT_SECRET=$(openssl rand -base64 32)" >> $GITHUB_ENV
+          echo "LGPD_ENCRYPTION_KEY=$(openssl rand -hex 32)" >> $GITHUB_ENV
+          echo "LGPD_ENCRYPTION_SALT=$(openssl rand -hex 8)" >> $GITHUB_ENV
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

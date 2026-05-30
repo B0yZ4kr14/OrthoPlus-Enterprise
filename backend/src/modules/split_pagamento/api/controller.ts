@@ -36,10 +36,7 @@ export class SplitPagamentoController {
     const existing = await this.repo.findConfigByClinic(clinicId as string);
     let data;
     if (existing) {
-      data = await this.repo.updateConfig(
-        (existing as any).id,
-        parsed.data,
-      );
+      data = await this.repo.updateConfig((existing as any).id, parsed.data);
     } else {
       data = await this.repo.createConfig({
         ...parsed.data,

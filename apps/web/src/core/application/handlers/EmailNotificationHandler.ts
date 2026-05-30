@@ -1,5 +1,6 @@
 import { IEventHandler } from "@/core/domain/events/EventBus";
 import { apiClient } from "@/lib/api/apiClient";
+import { logger } from "@/lib/logger";
 import { AppointmentScheduledEvent } from "@/modules/agenda/domain/events/AppointmentScheduledEvent";
 import { LeadConvertedEvent } from "@/modules/crm/domain/events/LeadConvertedEvent";
 
@@ -33,10 +34,9 @@ export class EmailNotificationHandler implements IEventHandler<
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.warn(
-        "Email integration unavailable for appointment event.",
+      logger.warn("Email integration unavailable for appointment event.", {
         error,
-      );
+      });
     }
   }
 
@@ -52,10 +52,9 @@ export class EmailNotificationHandler implements IEventHandler<
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.warn(
-        "Email integration unavailable for lead-conversion event.",
+      logger.warn("Email integration unavailable for lead-conversion event.", {
         error,
-      );
+      });
     }
   }
 }

@@ -1,12 +1,13 @@
 import { Queue, Worker } from "bullmq";
 import { redisInstance } from "@/infrastructure/redis/redisClient";
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { LocalAIService } from "@/modules/ia_radiografia/domain/services/LocalAIService";
 import { IAAuditService } from "@/modules/ia_radiografia/domain/services/IAAuditService";
 import { IAEncryptionService } from "@/modules/ia_radiografia/domain/services/IAEncryptionService";
 import { AcaoAuditIA } from "@prisma/client";
 import { logger } from "@/infrastructure/logger";
 import fs from "fs";
+import { IIARadiografiaRepository } from "@/modules/ia_radiografia/domain/repositories/IIARadiografiaRepository";
+import { IARadiografiaRepository } from "@/modules/ia_radiografia/infrastructure/IARadiografiaRepository";
 
 const aiService = new LocalAIService();
 const auditService = new IAAuditService();
@@ -19,28 +20,22 @@ export const iaRadiografiaQueue = new Queue("ia-radiografia-analysis", {
 export const iaRadiografiaWorker = new Worker(
   "ia-radiografia-analysis",
   async (job) => {
+    const repo: IIARadiografiaRepository = new IARadiografiaRepository();
     const { analiseId, storagePath, tipoRadiografia } = job.data as {
       analiseId: string;
       storagePath: string;
       tipoRadiografia: string;
     };
 
-    const analise = await prisma.ia_radiografia_analise.findUnique({
-      where: { id: analiseId },
-    });
+    const analise = await repo.findAnaliseByIdOnly(analiseId);
     if (!analise) throw new Error("Analysis not found");
 
-    await prisma.ia_radiografia_analise.update({
-      where: { id: analiseId },
-      data: { status: "PROCESSANDO" },
-    });
+    await repo.updateAnalise(analiseId, { status: "PROCESSANDO" });
 
     const imageBuffer = fs.readFileSync(storagePath);
 
     // Load clinic model config for A/B testing support (T045)
-    const modelConfig = await prisma.ia_modelo_config.findUnique({
-      where: { clinic_id: analise.clinic_id },
-    });
+    const modelConfig = await repo.findModelConfigByClinic(analise.clinic_id);
 
     const startTime = Date.now();
     const { resultado, confidence, processingTimeMs, modelUsed, modelVersion } =
@@ -59,22 +54,19 @@ export const iaRadiografiaWorker = new Worker(
 
     const encrypted = encryptionService.encrypt(resultado, analiseId);
 
-    await prisma.ia_radiografia_analise.update({
-      where: { id: analiseId },
-      data: {
-        status: "CONCLUIDA",
-        resultado_ia: encrypted as unknown as never,
-        confidence_score: confidence,
-        processamento_ms: processingTimeMs ?? durationMs,
-        modelo_usado: modelUsed,
-        modelo_version: modelVersion,
-      },
+    await repo.updateAnalise(analiseId, {
+      status: "CONCLUIDA",
+      resultado_ia: encrypted as unknown as never,
+      confidence_score: confidence,
+      processamento_ms: processingTimeMs ?? durationMs,
+      modelo_usado: modelUsed,
+      modelo_version: modelVersion,
     });
 
     // Normalize detected problems into problema_radiografico table (T044)
     if (resultado.problemas_detectados?.length > 0) {
-      await prisma.problema_radiografico.createMany({
-        data: resultado.problemas_detectados.map((p) => ({
+      await repo.createProblemasRadiograficos(
+        resultado.problemas_detectados.map((p: any) => ({
           analise_id: analiseId,
           tipo_problema: mapTipoProblema(p.tipo_problema),
           dente_codigo: p.dente_codigo ?? null,
@@ -85,7 +77,7 @@ export const iaRadiografiaWorker = new Worker(
           sugestao_tratamento: p.sugestao_tratamento ?? null,
           urgente: p.urgente ?? false,
         })),
-      });
+      );
     }
 
     await auditService.registrarAcao({
@@ -144,10 +136,11 @@ iaRadiografiaWorker.on("completed", (job) => {
 iaRadiografiaWorker.on("failed", async (job, err) => {
   logger.error(`[Worker] Job ${job?.id} failed:`, err);
   if (job?.data.analiseId) {
-    await prisma.ia_radiografia_analise
-      .update({
-        where: { id: job.data.analiseId },
-        data: { status: "ERRO", erro_processamento: err.message },
+    const repo: IIARadiografiaRepository = new IARadiografiaRepository();
+    await repo
+      .updateAnalise(job.data.analiseId, {
+        status: "ERRO",
+        erro_processamento: err.message,
       })
       .catch((e) => logger.error("[Worker] Failed to update error status:", e));
   }

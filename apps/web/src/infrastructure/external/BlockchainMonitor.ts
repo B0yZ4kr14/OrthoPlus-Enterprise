@@ -200,7 +200,7 @@ export class BlockchainMonitor {
       // const response = await fetch(`https://api.etherscan.io/api?module=account&action=balance&address=${config.address}`);
 
       // Por enquanto, retornar null (não implementado)
-      console.warn(
+      logger.warn(
         "[BlockchainMonitor] Ethereum monitoring not fully implemented",
       );
       return null;

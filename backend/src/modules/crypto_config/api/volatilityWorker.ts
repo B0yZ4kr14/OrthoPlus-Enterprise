@@ -1,17 +1,17 @@
 import { logger } from "@/infrastructure/logger";
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
+import { ICryptoConfigRepository } from "../domain/repositories/ICryptoConfigRepository";
+import { CryptoConfigRepository } from "../infrastructure/CryptoConfigRepository";
 
 export class VolatilityWorkerController {
+  constructor(
+    private repo: ICryptoConfigRepository = new CryptoConfigRepository(),
+  ) {}
+
   async processVolatilityAlerts(_req: Request, res: Response): Promise<void> {
     try {
       // Fetch active volatility alerts
-      const alerts = await prisma.crypto_price_alerts.findMany({
-        where: {
-          alert_type: "VOLATILITY",
-          is_active: true,
-        },
-      });
+      const alerts = await this.repo.findActiveVolatilityAlerts();
 
       if (!alerts || alerts.length === 0) {
         res.status(200).json({ message: "No active alerts" });
@@ -76,21 +76,19 @@ export class VolatilityWorkerController {
 
           if (shouldTrigger) {
             // Update last_triggered_at
-            await prisma.crypto_price_alerts.update({
-              where: { id: alert.id },
-              data: { last_triggered_at: new Date().toISOString() },
-            });
+            await this.repo.updateAlertTriggeredAt(
+              alert.id,
+              new Date().toISOString(),
+            );
 
             // Create notification
-            await prisma.notifications.create({
-              data: {
-                clinic_id: alert.clinic_id,
-                tipo: "CRIPTO_VOLATILIDADE",
-                titulo: `Alerta de Volatilidade: ${alert.coin_type}`,
-                mensagem: `${alert.coin_type} variou ${changePercentage >= 0 ? "+" : ""}${changePercentage.toFixed(2)}% em ${timeframeMinutes} minutos. Preço atual: R$ ${lastPrice.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
-                link_acao: "/financeiro/crypto-pagamentos",
-                lida: false,
-              },
+            await this.repo.createNotification({
+              clinic_id: alert.clinic_id,
+              tipo: "CRIPTO_VOLATILIDADE",
+              titulo: `Alerta de Volatilidade: ${alert.coin_type}`,
+              mensagem: `${alert.coin_type} variou ${changePercentage >= 0 ? "+" : ""}${changePercentage.toFixed(2)}% em ${timeframeMinutes} minutos. Preço atual: R$ ${lastPrice.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+              link_acao: "/financeiro/crypto-pagamentos",
+              lida: false,
             });
 
             triggeredAlerts.push({

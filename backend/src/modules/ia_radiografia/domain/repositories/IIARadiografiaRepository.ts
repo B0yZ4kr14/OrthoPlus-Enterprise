@@ -3,6 +3,7 @@ export interface IIARadiografiaRepository {
   createAnalise(data: any): Promise<any>;
   findAnalisesByClinic(clinicId: string): Promise<any[]>;
   findAnaliseById(id: string, clinicId: string): Promise<any | null>;
+  findAnaliseByIdOnly(id: string): Promise<any | null>;
   updateAnalise(id: string, data: any): Promise<any>;
   countAnalises(where: any): Promise<number>;
   aggregateConfidence(where: any): Promise<any>;
@@ -20,6 +21,12 @@ export interface IIARadiografiaRepository {
     pacienteId: string,
     clinicId: string,
   ): Promise<any[]>;
+
+  // ── Model Config ──────────────────────────────────────────────────────
+  findModelConfigByClinic(clinicId: string): Promise<any | null>;
+
+  // ── Problemas ──────────────────────────────────────────────────────────
+  createProblemasRadiograficos(data: any[]): Promise<any>;
 
   // ── Audit Log ─────────────────────────────────────────────────────────
   createAuditLog(data: any): Promise<any>;

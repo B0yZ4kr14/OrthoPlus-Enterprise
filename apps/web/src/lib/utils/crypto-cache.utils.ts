@@ -1,3 +1,5 @@
+import { logger } from "@/lib/logger";
+
 // Cache de cotações de criptomoedas para reduzir chamadas à API externa
 
 interface CachedRate {
@@ -130,7 +132,7 @@ export const fetchExchangeRateWithCache = async (
     return rate;
   } catch (error) {
     // 3. API falhou, usar fallback
-    console.warn(`[CryptoCache] Using fallback rate for ${coinType}`);
+    logger.warn(`[CryptoCache] Using fallback rate for ${coinType}`);
     const fallbackRate = FALLBACK_RATES[coinType] || 0;
     return fallbackRate;
   }

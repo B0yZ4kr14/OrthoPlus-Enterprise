@@ -293,6 +293,16 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     });
   }
 
+  async findAllActiveGamificationGoals(take: number) {
+    return prisma.gamification_goals.findMany({
+      where: {
+        status: "ACTIVE",
+        deadline: { gte: new Date() },
+      },
+      take,
+    });
+  }
+
   async countAppointmentsByDentist(dentistId: string, startMonth: Date) {
     return prisma.appointments.count({
       where: {
@@ -303,6 +313,20 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     });
   }
 
+  async groupAppointmentsByDentist(dentistIds: string[], startMonth: Date) {
+    return prisma.appointments.groupBy({
+      by: ["dentist_id"],
+      where: {
+        dentist_id: { in: dentistIds },
+        status: "CONCLUIDA",
+        start_time: { gte: startMonth.toISOString() },
+      },
+      _count: { _all: true },
+    } as any) as Promise<
+      Array<{ dentist_id: string; _count?: { _all: number } }>
+    >;
+  }
+
   async updateGamificationGoal(id: string, data: any) {
     return prisma.gamification_goals.update({ where: { id }, data });
   }
@@ -311,6 +335,13 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 
   async createBIExportJob(data: any) {
     return prisma.bi_export_jobs.create({ data });
+  }
+
+  async groupAnalyticsEventsByType() {
+    return prisma.analytics_events.groupBy({
+      by: ["event_type"],
+      _count: { id: true },
+    } as any) as Promise<Array<{ event_type: string; _count: { id: number } }>>;
   }
 
   // ── Onboarding ────────────────────────────────────────────────────────

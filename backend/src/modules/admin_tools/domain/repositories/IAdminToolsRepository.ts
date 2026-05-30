@@ -5,6 +5,7 @@ export interface IAdminToolsRepository {
   getTableSizes(): Promise<any>;
   searchPatients(clinicId: string, query: string): Promise<any[]>;
   searchDentists(clinicId: string, query: string): Promise<any[]>;
+  runVacuumAnalyze(): Promise<void>;
 
   // ADR
   findAdrsByClinic(clinicId: string): Promise<any[]>;

@@ -1,7 +1,6 @@
 import { clinicGuard } from "@/middleware/clinicGuard";
 import { Router } from "express";
 import { FinanceiroController } from "./FinanceiroController";
-import { dbRouter } from "./dbRouter";
 
 export function createFinanceiroRouter(): Router {
   const router: Router = Router();
@@ -109,8 +108,6 @@ export function createFinanceiroRouter(): Router {
   router.post("/processar", c.processarPagamento);
   router.post("/processar/tef", c.processarPagamentoTef);
   router.post("/processar/split", c.processarSplitPagamento);
-
-  router.use("/db", dbRouter);
 
   return router;
 }

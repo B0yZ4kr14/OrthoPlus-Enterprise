@@ -231,8 +231,7 @@ export class PdvController {
               (produto as any).estoque_atual !== null
             ) {
               await this.repo.updateProduto(item.produtoId, {
-                estoque_atual:
-                  (produto as any).estoque_atual + item.quantidade,
+                estoque_atual: (produto as any).estoque_atual + item.quantidade,
               });
             }
           }

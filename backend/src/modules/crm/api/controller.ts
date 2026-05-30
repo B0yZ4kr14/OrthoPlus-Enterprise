@@ -5,9 +5,7 @@ import { ICRMRepository } from "../domain/repositories/ICRMRepository";
 import { CRMRepository } from "../infrastructure/CRMRepository";
 
 export class CRMController {
-  constructor(
-    private repo: ICRMRepository = new CRMRepository(),
-  ) {}
+  constructor(private repo: ICRMRepository = new CRMRepository()) {}
 
   listLeads = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;

@@ -31,6 +31,12 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
     });
   }
 
+  async findAnaliseByIdOnly(id: string) {
+    return prisma.ia_radiografia_analise.findUnique({
+      where: { id },
+    });
+  }
+
   async updateAnalise(id: string, data: any) {
     return prisma.ia_radiografia_analise.update({ where: { id }, data });
   }
@@ -97,6 +103,20 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
       },
       orderBy: { created_at: "desc" },
     });
+  }
+
+  // ── Model Config ──────────────────────────────────────────────────────
+
+  async findModelConfigByClinic(clinicId: string) {
+    return prisma.ia_modelo_config.findUnique({
+      where: { clinic_id: clinicId },
+    });
+  }
+
+  // ── Problemas ──────────────────────────────────────────────────────────
+
+  async createProblemasRadiograficos(data: any[]) {
+    return prisma.problema_radiografico.createMany({ data });
   }
 
   // ── Audit Log ─────────────────────────────────────────────────────────
