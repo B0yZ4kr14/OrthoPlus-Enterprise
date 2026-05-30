@@ -12,6 +12,7 @@
  * - Retention policy automática (mantém 10 backups)
  */
 
+import { Errors } from "@/middleware/errorHandler";
 import { CategoryBackupService } from "@/infrastructure/database/CategoryBackupService";
 import { DB_CATEGORIES } from "./MasterDatabaseManager";
 import type {
@@ -88,12 +89,12 @@ export class BackupSchedulerService {
   ): Promise<BackupExecutionResult> {
     const catConfig = DB_CATEGORIES.find((c) => c.name === category);
     if (!catConfig) {
-      throw new Error(`Categoria "${category}" não encontrada`);
+      throw Errors.notFound("Backup category", category);
     }
 
     const service = this.getBackupService(category);
     if (!service) {
-      throw new Error(`Serviço de backup não disponível para ${category}`);
+      throw Errors.externalService("Backup");
     }
 
     const result = await service.runBackup(options);

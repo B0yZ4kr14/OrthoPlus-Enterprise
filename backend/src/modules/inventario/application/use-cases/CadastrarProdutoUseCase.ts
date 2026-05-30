@@ -2,6 +2,7 @@
  * MÓDULO INVENTÁRIO - Use Case: Cadastrar Produto
  */
 
+import { Errors } from "@/middleware/errorHandler";
 import { randomUUID } from "crypto";
 import { Produto } from "../../domain/entities/Produto";
 import { IProdutoRepository } from "../../domain/repositories/IProdutoRepository";
@@ -31,7 +32,7 @@ export class CadastrarProdutoUseCase {
       dto.clinicId,
     );
     if (produtoExistente) {
-      throw new Error(`Já existe um produto com o código ${dto.codigo}`);
+      throw Errors.conflict(`Já existe um produto com o código ${dto.codigo}`);
     }
 
     // Criar entidade

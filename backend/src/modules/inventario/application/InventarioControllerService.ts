@@ -1,3 +1,4 @@
+import { Errors } from "@/middleware/errorHandler";
 import { logger } from "@/infrastructure/logger";
 import { IInventarioRepository } from "@/modules/inventario/domain/repositories/IInventarioRepository";
 import { IProdutoRepository } from "@/modules/inventario/domain/repositories/IProdutoRepository";
@@ -29,7 +30,7 @@ export class InventarioControllerService {
     lowStockCount: number;
   }> {
     if (!this.produtoRepository) {
-      throw new Error("Repository not initialized");
+      throw Errors.internal("Repository not initialized");
     }
 
     const lowStockProducts =
@@ -117,7 +118,7 @@ export class InventarioControllerService {
 
   async sendStockAlerts(clinicId: string): Promise<{ alertsSent: number }> {
     if (!this.produtoRepository) {
-      throw new Error("Repository not initialized");
+      throw Errors.internal("Repository not initialized");
     }
 
     const alertProducts =

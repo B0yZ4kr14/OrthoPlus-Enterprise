@@ -1,3 +1,4 @@
+import { Errors } from "@/middleware/errorHandler";
 import { logger } from "@/infrastructure/logger";
 import { IPatientRepository } from "../../domain/repositories/IPatientRepository";
 import { Patient } from "../../domain/entities/Patient";
@@ -37,7 +38,7 @@ export class UpdatePatientCommand {
         data.clinicId,
       );
       if (!patient) {
-        throw new Error("Patient not found");
+        throw Errors.notFound("Patient");
       }
 
       patient.atualizarDadosPessoais(

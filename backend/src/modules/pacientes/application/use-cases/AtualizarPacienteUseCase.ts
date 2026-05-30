@@ -5,6 +5,7 @@
  * persistência e publicação de eventos.
  */
 
+import { Errors } from "@/middleware/errorHandler";
 import { logger } from "@/infrastructure/logger";
 import { eventBus } from "@/shared/events/EventBus";
 import { PatientUpdatedEvent } from "../../domain/events/PatientUpdatedEvent";
@@ -47,7 +48,7 @@ export class AtualizarPacienteUseCase {
     const patient = await this.patientRepository.findById(dto.id, dto.clinicId);
 
     if (!patient) {
-      throw new Error("Paciente não encontrado");
+      throw Errors.notFound("Paciente");
     }
 
     // Validar duplicação por CPF se estiver sendo alterado
@@ -57,7 +58,9 @@ export class AtualizarPacienteUseCase {
         dto.clinicId,
       );
       if (existingByCPF && existingByCPF.id !== patient.id) {
-        throw new Error("Já existe outro paciente cadastrado com este CPF");
+        throw Errors.conflict(
+          "Já existe outro paciente cadastrado com este CPF",
+        );
       }
     }
 
@@ -68,7 +71,9 @@ export class AtualizarPacienteUseCase {
         dto.clinicId,
       );
       if (existingByEmail && existingByEmail.id !== patient.id) {
-        throw new Error("Já existe outro paciente cadastrado com este email");
+        throw Errors.conflict(
+          "Já existe outro paciente cadastrado com este email",
+        );
       }
     }
 

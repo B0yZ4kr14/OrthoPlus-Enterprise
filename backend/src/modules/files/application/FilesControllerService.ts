@@ -346,8 +346,7 @@ export class FilesControllerService {
       body: dataBuffer,
     });
 
-    if (!response.ok)
-      throw new Error(`S3 upload failed: ${response.statusText}`);
+    if (!response.ok) throw Errors.externalService("S3");
     return url;
   }
 
@@ -367,8 +366,7 @@ export class FilesControllerService {
       }),
     });
 
-    if (!tokenResponse.ok)
-      throw new Error("Failed to refresh Google Drive token");
+    if (!tokenResponse.ok) throw Errors.externalService("Google Drive");
 
     const { access_token } = (await tokenResponse.json()) as {
       access_token: string;
@@ -394,7 +392,7 @@ export class FilesControllerService {
       },
     );
 
-    if (!uploadResponse.ok) throw new Error("Failed to upload to Google Drive");
+    if (!uploadResponse.ok) throw Errors.externalService("Google Drive");
 
     const result = (await uploadResponse.json()) as { id: string };
     return `https://drive.google.com/file/d/${result.id}/view`;
@@ -427,7 +425,7 @@ export class FilesControllerService {
       },
     );
 
-    if (!response.ok) throw new Error("Failed to upload to Dropbox");
+    if (!response.ok) throw Errors.externalService("Dropbox");
 
     const result = (await response.json()) as { path_display: string };
     return result.path_display;

@@ -1,3 +1,4 @@
+import { Errors } from "@/middleware/errorHandler";
 import { INFeRepository } from "../../domain/repositories/INFeRepository";
 import { logger } from "@/infrastructure/logger";
 import { EventBus } from "@/shared/events/EventBus";
@@ -22,7 +23,7 @@ export class AutorizarNFeCommandHandler {
       const nfe = await this.nfeRepository.findById(command.nfeId);
 
       if (!nfe || nfe.clinicId !== command.clinicId) {
-        throw new Error("NFe não encontrada");
+        throw Errors.notFound("NFe");
       }
 
       nfe.autorizar(command.protocolo, command.chaveAcesso);

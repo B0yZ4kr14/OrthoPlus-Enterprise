@@ -1,3 +1,4 @@
+import { Errors } from "@/middleware/errorHandler";
 import { IOrcamentoRepository } from "@/modules/orcamentos/domain/repositories/IOrcamentoRepository";
 
 import { OrcamentoRepository } from "@/modules/orcamentos/infrastructure/OrcamentoRepository";
@@ -110,7 +111,9 @@ export class OrcamentoService {
     const existing = await this.getById(id, clinicId);
     if (!existing) return null;
     if (existing.status !== "RASCUNHO") {
-      throw new Error("Apenas orçamentos em rascunho podem ser enviados");
+      throw Errors.validation(
+        "Apenas orçamentos em rascunho podem ser enviados",
+      );
     }
 
     return this.repo.updateOrcamento(id, {
@@ -123,7 +126,9 @@ export class OrcamentoService {
     const existing = await this.getById(id, clinicId);
     if (!existing) return null;
     if (existing.status !== "PENDENTE") {
-      throw new Error("Apenas orçamentos pendentes podem ser aprovados");
+      throw Errors.validation(
+        "Apenas orçamentos pendentes podem ser aprovados",
+      );
     }
 
     const now = new Date();
@@ -144,7 +149,9 @@ export class OrcamentoService {
     const existing = await this.getById(id, clinicId);
     if (!existing) return null;
     if (existing.status !== "PENDENTE") {
-      throw new Error("Apenas orçamentos pendentes podem ser rejeitados");
+      throw Errors.validation(
+        "Apenas orçamentos pendentes podem ser rejeitados",
+      );
     }
 
     const now = new Date();

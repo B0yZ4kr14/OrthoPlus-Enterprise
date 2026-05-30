@@ -2,6 +2,7 @@ import { z } from "zod";
 import { CryptoConfigRepository } from "@/modules/crypto_config/infrastructure/CryptoConfigRepository";
 import { ExchangeConfig } from "@/modules/crypto_config/domain/entities/ExchangeConfig";
 import { fetchExchangeRateBRL } from "@/modules/crypto_config/api/exchangeRate";
+import { Errors } from "@/middleware/errorHandler";
 
 export class CryptoConfigControllerService {
   constructor(
@@ -40,7 +41,7 @@ export class CryptoConfigControllerService {
     const data = schema.parse(body);
 
     if (!clinicId || !isAdmin) {
-      throw new Error("Acesso negado");
+      throw Errors.forbidden("Acesso negado");
     }
 
     const exchange = new ExchangeConfig({
@@ -107,16 +108,16 @@ export class CryptoConfigControllerService {
     } = body;
 
     if (action !== "create") {
-      throw new Error("Invalid action");
+      throw Errors.validation("Invalid action");
     }
 
     const clinicId = clinicIdBody ?? authClinicId;
     if (!clinicId) {
-      throw new Error("clinicId is required");
+      throw Errors.validation("clinicId is required");
     }
 
     if (!address || !currency || !network) {
-      throw new Error("address, currency and network are required");
+      throw Errors.validation("address, currency and network are required");
     }
 
     const newWallet = await this.cryptoRepo.createOfflineWallet({
@@ -132,7 +133,7 @@ export class CryptoConfigControllerService {
 
   validateXpub(xpub: string) {
     if (!xpub || !xpub.match(/^(xpub|ypub|zpub|tpub)/)) {
-      throw new Error("xPub invalido");
+      throw Errors.validation("xPub invalido");
     }
     const mockAddress = `bc1q${Math.random().toString(36).substring(2, 42)}`;
     return { address: mockAddress };
@@ -176,7 +177,7 @@ export class CryptoConfigControllerService {
         : Number(payload.network_fee);
 
     if (!walletAddress || !coin || !txHash || !Number.isFinite(amountRaw)) {
-      throw new Error("Missing or invalid transaction data");
+      throw Errors.validation("Missing or invalid transaction data");
     }
 
     const wallet = await this.cryptoRepo.findWalletByAddressAndCoin(
@@ -185,7 +186,7 @@ export class CryptoConfigControllerService {
     );
 
     if (!wallet) {
-      throw new Error("Wallet not found");
+      throw Errors.notFound("Wallet");
     }
 
     const status = confirmations >= 1 ? "CONFIRMADO" : "PENDENTE";

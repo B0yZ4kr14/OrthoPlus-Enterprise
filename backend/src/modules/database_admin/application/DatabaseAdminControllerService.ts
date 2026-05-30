@@ -5,6 +5,7 @@ import { logger } from "@/infrastructure/logger";
 import { AuditLogRepository } from "@/modules/database_admin/infrastructure/AuditLogRepository";
 import { DatabaseHealth } from "@/modules/database_admin/domain/entities/DatabaseHealth";
 import type { SlowQuery } from "@orthoplus/shared-types";
+import { Errors } from "@/middleware/errorHandler";
 
 export interface HealthResult {
   health: ReturnType<DatabaseHealth["toJSON"]>;
@@ -269,14 +270,14 @@ export class DatabaseAdminControllerService {
     const { operation, targetSchema } = schema.parse(body);
 
     if (!clinicId || !isAdmin) {
-      throw new Error("Acesso negado");
+      throw Errors.forbidden("Acesso negado");
     }
 
     const startedAt = new Date();
     const schemaTarget = targetSchema ?? "public";
 
     if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(schemaTarget)) {
-      throw new Error("Nome de schema invalido");
+      throw Errors.validation("Nome de schema invalido");
     }
 
     try {

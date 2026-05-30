@@ -1,4 +1,5 @@
 import { AdminToolsRepository } from "../infrastructure/AdminToolsRepository";
+import { Errors } from "@/middleware/errorHandler";
 
 export class UpdateWikiEntryUseCase {
   constructor(
@@ -11,7 +12,7 @@ export class UpdateWikiEntryUseCase {
       clinicId,
     );
     if (!existing) {
-      throw new Error("Wiki page not found");
+      throw Errors.notFound("Wiki page", id);
     }
     return this.repository.updateWikiPage(id, data);
   }

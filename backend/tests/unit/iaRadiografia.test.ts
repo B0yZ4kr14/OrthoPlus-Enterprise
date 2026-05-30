@@ -1,4 +1,7 @@
-import { LocalAIService, AIModelConfig } from "../../src/modules/ia_radiografia/domain/services/LocalAIService";
+import {
+  LocalAIService,
+  AIModelConfig,
+} from "../../src/modules/ia_radiografia/domain/services/LocalAIService";
 import { IAEncryptionService } from "../../src/modules/ia_radiografia/domain/services/IAEncryptionService";
 import { IAConsentimentoService } from "../../src/modules/ia_radiografia/domain/services/IAConsentimentoService";
 import { IIARadiografiaRepository } from "../../src/modules/ia_radiografia/domain/repositories/IIARadiografiaRepository";
@@ -51,10 +54,15 @@ describe("LocalAIService", () => {
       });
 
       const imageBuffer = Buffer.from("fake-image-data");
-      const result = await service.analyzeRadiografia(imageBuffer, "PERIAPICAL");
+      const result = await service.analyzeRadiografia(
+        imageBuffer,
+        "PERIAPICAL",
+      );
 
       expect(result.resultado.problemas_detectados).toHaveLength(1);
-      expect(result.resultado.problemas_detectados[0].tipo_problema).toBe("CARIE");
+      expect(result.resultado.problemas_detectados[0].tipo_problema).toBe(
+        "CARIE",
+      );
       expect(result.confidence).toBeGreaterThanOrEqual(0.79);
       expect(result.modelUsed).toBe("llava");
       expect(result.processingTimeMs).toBeGreaterThanOrEqual(0);
@@ -133,7 +141,14 @@ describe("LocalAIService", () => {
     it("should calculate confidence based on result quality", async () => {
       const mockResponse = {
         response: JSON.stringify({
-          problemas_detectados: [{ tipo_problema: "CARIE", severidade: "LEVE", confianca: 70, urgente: false }],
+          problemas_detectados: [
+            {
+              tipo_problema: "CARIE",
+              severidade: "LEVE",
+              confianca: 70,
+              urgente: false,
+            },
+          ],
           sugestoes_tratamento: [],
           observacoes_ia: "A".repeat(100),
           dentes_avaliados: [11, 12, 13, 14, 15],
@@ -216,7 +231,9 @@ describe("IAConsentimentoService", () => {
       findConsentimento: jest.fn(),
       createConsentimento: jest.fn().mockResolvedValue({ id: "cons-1" }),
       findConsentimentoToRevoke: jest.fn(),
-      updateConsentimento: jest.fn().mockResolvedValue({ id: "cons-1", revogado: true }),
+      updateConsentimento: jest
+        .fn()
+        .mockResolvedValue({ id: "cons-1", revogado: true }),
       findHistoricoConsentimento: jest.fn().mockResolvedValue([]),
     } as unknown as jest.Mocked<IIARadiografiaRepository>;
 
@@ -225,18 +242,30 @@ describe("IAConsentimentoService", () => {
 
   describe("verificarConsentimento", () => {
     it("should return true when consentimento exists", async () => {
-      mockRepo.findConsentimento.mockResolvedValue({ id: "cons-1", consentido: true } as any);
+      mockRepo.findConsentimento.mockResolvedValue({
+        id: "cons-1",
+        consentido: true,
+      } as any);
 
-      const result = await service.verificarConsentimento("paciente-1", "clinica-1");
+      const result = await service.verificarConsentimento(
+        "paciente-1",
+        "clinica-1",
+      );
 
       expect(result).toBe(true);
-      expect(mockRepo.findConsentimento).toHaveBeenCalledWith("paciente-1", "clinica-1");
+      expect(mockRepo.findConsentimento).toHaveBeenCalledWith(
+        "paciente-1",
+        "clinica-1",
+      );
     });
 
     it("should return false when consentimento does not exist", async () => {
       mockRepo.findConsentimento.mockResolvedValue(null);
 
-      const result = await service.verificarConsentimento("paciente-1", "clinica-1");
+      const result = await service.verificarConsentimento(
+        "paciente-1",
+        "clinica-1",
+      );
 
       expect(result).toBe(false);
     });
@@ -269,7 +298,9 @@ describe("IAConsentimentoService", () => {
 
   describe("revogarConsentimento", () => {
     it("should revoke existing consentimento", async () => {
-      mockRepo.findConsentimentoToRevoke.mockResolvedValue({ id: "cons-1" } as any);
+      mockRepo.findConsentimentoToRevoke.mockResolvedValue({
+        id: "cons-1",
+      } as any);
 
       await service.revogarConsentimento({
         pacienteId: "paciente-1",
@@ -302,10 +333,16 @@ describe("IAConsentimentoService", () => {
       const historico = [{ id: "cons-1" }, { id: "cons-2" }];
       mockRepo.findHistoricoConsentimento.mockResolvedValue(historico as any);
 
-      const result = await service.obterHistoricoConsentimento("paciente-1", "clinica-1");
+      const result = await service.obterHistoricoConsentimento(
+        "paciente-1",
+        "clinica-1",
+      );
 
       expect(result).toEqual(historico);
-      expect(mockRepo.findHistoricoConsentimento).toHaveBeenCalledWith("paciente-1", "clinica-1");
+      expect(mockRepo.findHistoricoConsentimento).toHaveBeenCalledWith(
+        "paciente-1",
+        "clinica-1",
+      );
     });
   });
 });

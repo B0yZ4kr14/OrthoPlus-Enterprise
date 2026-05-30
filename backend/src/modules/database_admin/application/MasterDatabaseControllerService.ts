@@ -4,6 +4,7 @@ import { circuitBreakerRegistry } from "@/infrastructure/database/CategoryCircui
 import { BackupSchedulerService } from "@/modules/database_admin/infrastructure/BackupSchedulerService";
 import { prometheusMetrics } from "@/infrastructure/metrics/PrometheusMetrics";
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector";
+import { Errors } from "@/middleware/errorHandler";
 
 const masterManager = new MasterDatabaseManager();
 const backupService = new BackupSchedulerService();
@@ -46,7 +47,7 @@ export class MasterDatabaseControllerService {
 
     const parsed = schema.safeParse(body);
     if (!parsed.success) {
-      throw new Error(
+      throw Errors.validation(
         `Invalid input: ${JSON.stringify(parsed.error.flatten())}`,
       );
     }

@@ -10,7 +10,7 @@ import { UserRepository } from "@/modules/auth/infrastructure/UserRepository";
 function requireJwtSecret(): string {
   const secret = process.env.JWT_SECRET;
   if (!secret) {
-    throw new Error("JWT_SECRET is not configured");
+    throw Errors.internal("JWT_SECRET is not configured");
   }
   return secret;
 }

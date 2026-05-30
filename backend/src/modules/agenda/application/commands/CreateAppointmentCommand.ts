@@ -6,6 +6,7 @@ import { AppointmentCreatedEvent } from "../../domain/events/AppointmentCreatedE
 import { agendaMetrics } from "@/infrastructure/metrics/AgendaMetrics";
 import { withTiming } from "@/infrastructure/metrics/withTiming";
 import { randomUUID } from "crypto";
+import { Errors } from "@/middleware/errorHandler";
 
 export interface CreateAppointmentCommand {
   patientId: string;
@@ -36,7 +37,7 @@ export class CreateAppointmentCommandHandler {
         );
 
         if (hasConflict) {
-          throw new Error("Conflito de horário detectado");
+          throw Errors.conflict("Conflito de horário detectado");
         }
 
         const appointment = Appointment.create({

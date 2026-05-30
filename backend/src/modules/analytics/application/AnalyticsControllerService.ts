@@ -2,6 +2,7 @@ import { logger } from "@/infrastructure/logger";
 import { AnalyticsRepository } from "@/modules/analytics/infrastructure/AnalyticsRepository";
 import { GetDashboardOverviewUseCase } from "@/modules/analytics/application/GetDashboardOverviewUseCase";
 import { GetUnifiedMetricsUseCase } from "@/modules/analytics/application/GetUnifiedMetricsUseCase";
+import { Errors } from "@/middleware/errorHandler";
 
 export interface MarketingROIResult {
   metrics: {
@@ -142,23 +143,23 @@ export class AnalyticsControllerService {
 
     switch (action) {
       case "loyalty-points":
-        if (!patientId) throw new Error("patientId required");
+        if (!patientId) throw Errors.validation("patientId required");
         return this.processLoyaltyPoints(clinicId, patientId, points || 0);
 
       case "gamification-goals":
-        if (!userId) throw new Error("userId required");
+        if (!userId) throw Errors.validation("userId required");
         return this.processGamificationGoals(clinicId, userId, goalType);
 
       case "bi-export":
         return this.scheduleBIExport(clinicId);
 
       case "onboarding-analytics":
-        if (!analyticsData) throw new Error("analyticsData required");
+        if (!analyticsData) throw Errors.validation("analyticsData required");
         analyticsData.clinicId = clinicId;
         return this.saveOnboardingAnalytics(analyticsData);
 
       default:
-        throw new Error(`Unknown action: ${action}`);
+        throw Errors.validation(`Unknown action: ${action}`);
     }
   }
 

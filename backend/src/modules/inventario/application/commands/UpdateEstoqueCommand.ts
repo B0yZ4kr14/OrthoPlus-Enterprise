@@ -1,3 +1,4 @@
+import { Errors } from "@/middleware/errorHandler";
 import { IProdutoRepository } from "../../domain/repositories/IProdutoRepository";
 import { logger } from "@/infrastructure/logger";
 import { EventBus } from "@/shared/events/EventBus";
@@ -23,7 +24,7 @@ export class UpdateEstoqueCommandHandler {
       const produto = await this.produtoRepository.findById(command.produtoId);
 
       if (!produto || produto.clinicId !== command.clinicId) {
-        throw new Error("Produto não encontrado");
+        throw Errors.notFound("Produto");
       }
 
       const quantidadeAnterior = produto.quantidadeAtual;

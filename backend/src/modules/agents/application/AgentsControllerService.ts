@@ -6,6 +6,7 @@ import {
   RefactorRequest,
   CodeReviewRequest,
 } from "@/modules/agents/services/AgentProxyService";
+import { Errors } from "@/middleware/errorHandler";
 
 const FieldDefinitionSchema = z.object({
   name: z.string().min(1, "Nome do campo e obrigatorio"),
@@ -64,7 +65,7 @@ export class AgentsControllerService {
   async createCRUD(body: unknown) {
     const validationResult = CRUDRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(
+      throw Errors.validation(
         `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
       );
     }
@@ -86,10 +87,12 @@ export class AgentsControllerService {
     const { entity_name, fields } = body;
 
     if (!entity_name || typeof entity_name !== "string") {
-      throw new Error("entity_name e obrigatorio");
+      throw Errors.validation("entity_name e obrigatorio");
     }
     if (!fields || typeof fields !== "string") {
-      throw new Error("fields e obrigatorio (ex: nome:String,ativo:Boolean)");
+      throw Errors.validation(
+        "fields e obrigatorio (ex: nome:String,ativo:Boolean)",
+      );
     }
 
     const result = await this.agentService.createCRUDSimple(
@@ -106,7 +109,7 @@ export class AgentsControllerService {
   async fixBug(body: unknown) {
     const validationResult = BugfixRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(
+      throw Errors.validation(
         `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
       );
     }
@@ -126,7 +129,7 @@ export class AgentsControllerService {
   async refactor(body: unknown) {
     const validationResult = RefactorRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(
+      throw Errors.validation(
         `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
       );
     }
@@ -148,7 +151,7 @@ export class AgentsControllerService {
   async codeReview(body: unknown) {
     const validationResult = CodeReviewRequestSchema.safeParse(body);
     if (!validationResult.success) {
-      throw new Error(
+      throw Errors.validation(
         `Dados invalidos: ${JSON.stringify(validationResult.error.errors)}`,
       );
     }

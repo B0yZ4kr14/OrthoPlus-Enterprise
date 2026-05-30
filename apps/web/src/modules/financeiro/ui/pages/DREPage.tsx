@@ -1,9 +1,23 @@
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Card, CardContent, CardHeader, CardTitle } from "@orthoplus/core-ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@orthoplus/core-ui/card";
 import { useFinanceiro } from "../../application/hooks/useFinanceiro";
-import { TrendingUp, TrendingDown, Calculator, ArrowDown, ArrowUp, Minus } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Calculator,
+  ArrowDown,
+  ArrowUp,
+  Minus,
+} from "lucide-react";
 const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
+    value,
+  );
 
 function DRECard({
   title,
@@ -50,7 +64,11 @@ export function DREPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <PageHeader icon={Calculator} title="DRE" description="Demonstração do Resultado do Exercício" />
+        <PageHeader
+          icon={Calculator}
+          title="DRE"
+          description="Demonstração do Resultado do Exercício"
+        />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <Card key={i} className="h-32 animate-pulse bg-muted" />

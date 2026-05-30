@@ -3,6 +3,7 @@ import {
   CatalogModule,
 } from "@/modules/configuracoes/domain/moduleCatalog";
 import { ClinicDataRepository } from "@/modules/configuracoes/infrastructure/ClinicDataRepository";
+import { Errors } from "@/middleware/errorHandler";
 
 export interface ModuleView {
   id: number;
@@ -78,7 +79,7 @@ export class ModulosControllerService {
   toggleModule(moduleKey: string): ToggleResult {
     const mod = MODULE_CATALOG.find((m) => m.module_key === moduleKey);
     if (!mod) {
-      throw new Error("Modulo nao encontrado");
+      throw Errors.notFound("Module", moduleKey);
     }
     return this.performToggle(mod);
   }
@@ -86,7 +87,7 @@ export class ModulosControllerService {
   toggleModuleById(moduleId: number): ToggleResult {
     const mod = MODULE_CATALOG.find((m) => m.id === moduleId);
     if (!mod) {
-      throw new Error("Modulo nao encontrado");
+      throw Errors.notFound("Module", String(moduleId));
     }
     return this.performToggle(mod);
   }
@@ -99,14 +100,16 @@ export class ModulosControllerService {
     if (!mod.is_active) {
       const unmet = mod.dependencies.filter((dep) => !activeKeys.has(dep));
       if (unmet.length > 0) {
-        throw new Error(`Dependencias nao atendidas: ${unmet.join(", ")}`);
+        throw Errors.conflict(
+          `Dependencias nao atendidas: ${unmet.join(", ")}`,
+        );
       }
     } else {
       const dependents = MODULE_CATALOG.filter(
         (m) => m.is_active && m.dependencies.includes(mod.module_key),
       );
       if (dependents.length > 0) {
-        throw new Error(
+        throw Errors.conflict(
           `Modulo tem dependentes ativos: ${dependents.map((d) => d.name).join(", ")}`,
         );
       }
@@ -157,7 +160,7 @@ export class ModulosControllerService {
     clinicId?: string,
   ): Promise<{ export: unknown[]; format: string }> {
     if (!clinicId) {
-      throw new Error("Unauthorized");
+      throw Errors.unauthorized("clinicId is required");
     }
     const patients = await this.clinicDataRepo.findPatientsByClinic(clinicId);
     return { export: patients, format: "json" };

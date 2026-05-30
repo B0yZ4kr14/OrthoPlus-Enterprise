@@ -1,5 +1,6 @@
 import { CryptoRepository } from "@/modules/crypto/infrastructure/CryptoRepository";
 import { fetchExchangeRateBRL } from "@/modules/crypto_config/api/exchangeRate";
+import { Errors } from "@/middleware/errorHandler";
 
 export class CryptoControllerService {
   constructor(private repo: CryptoRepository = new CryptoRepository()) {}
@@ -8,15 +9,17 @@ export class CryptoControllerService {
     const transaction = await this.repo.findTransactionById(transactionId);
 
     if (!transaction) {
-      throw new Error("Transaction not found");
+      throw Errors.notFound("Transaction", transactionId);
     }
 
     if (transaction.status === "CONVERTIDO") {
-      throw new Error("Transaction already converted");
+      throw Errors.conflict("Transaction already converted");
     }
 
     if (transaction.status !== "CONFIRMADO") {
-      throw new Error("Transaction must be confirmed before conversion");
+      throw Errors.validation(
+        "Transaction must be confirmed before conversion",
+      );
     }
 
     const exchangeRate = await fetchExchangeRateBRL(transaction.coin);
@@ -73,15 +76,15 @@ export class CryptoControllerService {
     const parsedFee = fee === undefined ? undefined : Number(fee);
 
     if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
-      throw new Error("amount must be greater than 0");
+      throw Errors.validation("amount must be greater than 0");
     }
 
     if (!currency || typeof currency !== "string") {
-      throw new Error("currency is required");
+      throw Errors.validation("currency is required");
     }
 
     if (!clinicId || typeof clinicId !== "string") {
-      throw new Error("clinicId is required");
+      throw Errors.validation("clinicId is required");
     }
 
     const coin = currency.toUpperCase();
@@ -144,7 +147,7 @@ export class CryptoControllerService {
 
   validateXpub(xpub: string, currency?: string) {
     if (!xpub) {
-      throw new Error("xpub parameter is required");
+      throw Errors.validation("xpub parameter is required");
     }
 
     const isValid =

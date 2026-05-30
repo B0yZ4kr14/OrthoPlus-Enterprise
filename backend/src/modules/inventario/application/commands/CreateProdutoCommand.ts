@@ -1,3 +1,4 @@
+import { Errors } from "@/middleware/errorHandler";
 import { IProdutoRepository } from "../../domain/repositories/IProdutoRepository";
 import { randomUUID } from "crypto";
 import { Produto } from "../../domain/entities/Produto";
@@ -33,7 +34,7 @@ export class CreateProdutoCommandHandler {
         command.clinicId,
       );
       if (existingProduto) {
-        throw new Error("Produto com este código já existe");
+        throw Errors.conflict("Produto com este código já existe");
       }
 
       const produto = Produto.create({

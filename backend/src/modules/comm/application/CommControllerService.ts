@@ -40,7 +40,7 @@ function getAgoraConfig(): AgoraConfig {
   const appId = process.env.AGORA_APP_ID;
   if (!appId) {
     if (process.env.NODE_ENV === "production") {
-      throw new Error(
+      throw Errors.internal(
         "FATAL: AGORA_APP_ID environment variable is not set. " +
           "Agora video/recording features will not work in production.",
       );

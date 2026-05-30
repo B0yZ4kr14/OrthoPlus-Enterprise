@@ -5,6 +5,7 @@
  * histórico e eventos.
  */
 
+import { Errors } from "@/middleware/errorHandler";
 import { IPatientRepository } from "../../domain/repositories/IPatientRepository";
 import { PatientStatus } from "../../domain/value-objects/PatientStatus";
 import { eventBus } from "@/shared/events/EventBus";
@@ -37,11 +38,13 @@ export class AlterarStatusPacienteUseCase {
     );
 
     if (!patient) {
-      throw new Error("Paciente não encontrado");
+      throw Errors.notFound("Paciente");
     }
 
     if (!patient.isActive) {
-      throw new Error("Não é possível alterar status de paciente inativo");
+      throw Errors.validation(
+        "Não é possível alterar status de paciente inativo",
+      );
     }
 
     // Validar novo status
