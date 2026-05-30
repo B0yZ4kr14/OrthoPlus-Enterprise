@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 export interface IndexerResult {
   indexed: number;
@@ -112,25 +112,28 @@ export class PacienteIndexer {
     cursor?: string,
     since?: Date,
   ): Promise<PatientRow[]> {
-    const sinceClause = since
-      ? `AND updated_at > ${this.escapeLiteral(since.toISOString())}`
-      : "";
-    const cursorClause = cursor ? `AND id > ${this.escapeLiteral(cursor)}` : "";
+    const conditions: Prisma.Sql[] = [];
+    if (since) {
+      conditions.push(Prisma.sql`updated_at > ${since.toISOString()}`);
+    }
+    if (cursor) {
+      conditions.push(Prisma.sql`id > ${cursor}`);
+    }
 
-    return this.prisma.$queryRawUnsafe<PatientRow[]>(`
+    const whereClause =
+      conditions.length > 0
+        ? Prisma.sql`WHERE ${Prisma.join(conditions, " AND ")}`
+        : Prisma.sql``;
+
+    return this.prisma.$queryRaw<PatientRow[]>`
       SELECT id, clinic_id, full_name, cpf, email,
              phone_primary, phone_secondary, phone_emergency,
              clinical_observations
       FROM pacientes.patients
-      WHERE 1=1 ${sinceClause} ${cursorClause}
+      ${whereClause}
       ORDER BY id ASC
       LIMIT ${this.batchSize}
-    `);
-  }
-
-  private escapeLiteral(value: string): string {
-    // Simple escaping for string literals in raw SQL
-    return "'" + value.replace(/'/g, "''") + "'";
+    `;
   }
 
   private async clearPacienteEntries(): Promise<void> {

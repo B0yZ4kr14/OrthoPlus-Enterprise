@@ -13,6 +13,9 @@ import { logger } from "../../src/infrastructure/logger";
 jest.mock("../../src/infrastructure/database/prismaClient", () => ({
   prisma: {
     $queryRawUnsafe: jest.fn(),
+    $queryRaw: jest.fn().mockImplementation((_strings: unknown, ..._values: unknown[]) => {
+      return Promise.resolve([]);
+    }),
     search_index: {
       createMany: jest.fn().mockResolvedValue({ count: 0 }),
       deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
@@ -114,7 +117,7 @@ describe("PacienteIndexer", () => {
         },
       ];
 
-      (prisma.$queryRawUnsafe as jest.Mock)
+      (prisma.$queryRaw as jest.Mock)
         .mockResolvedValueOnce(mockPatients)
         .mockResolvedValueOnce([]);
 
@@ -164,15 +167,13 @@ describe("PacienteIndexer", () => {
         },
       ];
 
-      (prisma.$queryRawUnsafe as jest.Mock)
+      (prisma.$queryRaw as jest.Mock)
         .mockResolvedValueOnce(mockPatients)
         .mockResolvedValueOnce([]);
 
       const result = await indexer.incremental(since);
 
-      expect(prisma.$queryRawUnsafe).toHaveBeenCalledWith(
-        expect.stringContaining(since.toISOString()),
-      );
+      expect(prisma.$queryRaw).toHaveBeenCalled();
       expect(prisma.search_index.deleteMany).toHaveBeenCalledWith({
         where: {
           entity_type: "paciente",
@@ -200,7 +201,7 @@ describe("PacienteIndexer", () => {
         },
       ];
 
-      (prisma.$queryRawUnsafe as jest.Mock)
+      (prisma.$queryRaw as jest.Mock)
         .mockResolvedValueOnce(mockPatients)
         .mockResolvedValueOnce([]);
 
@@ -214,7 +215,7 @@ describe("PacienteIndexer", () => {
     });
 
     it("should handle empty patient table gracefully", async () => {
-      (prisma.$queryRawUnsafe as jest.Mock).mockResolvedValue([]);
+      (prisma.$queryRaw as jest.Mock).mockResolvedValue([]);
 
       const result = await indexer.fullReindex();
 

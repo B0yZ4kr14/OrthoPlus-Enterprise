@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { BaseIndexer, SearchIndexEntry } from "./BaseIndexer";
 
 interface AppointmentRow {
@@ -36,23 +36,29 @@ export class AgendaIndexer extends BaseIndexer<AppointmentRow> {
     cursor?: string,
     since?: Date,
   ): Promise<AppointmentRow[]> {
-    const sinceClause = since
-      ? `AND a.updated_at > ${this.escapeLiteral(since.toISOString())}`
-      : "";
-    const cursorClause = cursor
-      ? `AND a.id > ${this.escapeLiteral(cursor)}`
-      : "";
+    const conditions: Prisma.Sql[] = [];
+    if (since) {
+      conditions.push(Prisma.sql`a.updated_at > ${since.toISOString()}`);
+    }
+    if (cursor) {
+      conditions.push(Prisma.sql`a.id > ${cursor}`);
+    }
 
-    return this.prisma.$queryRawUnsafe<AppointmentRow[]>(`
+    const whereClause =
+      conditions.length > 0
+        ? Prisma.sql`WHERE ${Prisma.join(conditions, " AND ")}`
+        : Prisma.sql``;
+
+    return this.prisma.$queryRaw<AppointmentRow[]>`
       SELECT a.id, a.clinic_id, a.title, a.description, a.status,
              a.start_time, a.end_time, a.dentist_id,
              p.full_name as patient_full_name
       FROM pacientes.appointments a
       LEFT JOIN pacientes.patients p ON a.patient_id = p.id
-      WHERE 1=1 ${sinceClause} ${cursorClause}
+      ${whereClause}
       ORDER BY a.id ASC
       LIMIT ${this.batchSize}
-    `);
+    `;
   }
 
   protected extractData(entity: AppointmentRow): Promise<AppointmentRow> {
@@ -91,23 +97,21 @@ export class AgendaIndexer extends BaseIndexer<AppointmentRow> {
     return entity.id;
   }
 
-  private escapeLiteral(value: string): string {
-    return "'" + value.replace(/'/g, "''") + "'";
-  }
+
 
   /**
    * Reindexa um unico agendamento por ID.
    * Remove a entrada anterior e reinsere com dados atualizados.
    */
   async reindexById(appointmentId: string): Promise<void> {
-    const rows = await this.prisma.$queryRawUnsafe<AppointmentRow[]>(`
+    const rows = await this.prisma.$queryRaw<AppointmentRow[]>`
       SELECT a.id, a.clinic_id, a.title, a.description, a.status,
              a.start_time, a.end_time, a.dentist_id,
              p.full_name as patient_full_name
       FROM pacientes.appointments a
       LEFT JOIN pacientes.patients p ON a.patient_id = p.id
-      WHERE a.id = ${this.escapeLiteral(appointmentId)}
-    `);
+      WHERE a.id = ${appointmentId}
+    `;
 
     const entity = rows[0];
     if (!entity) return;
