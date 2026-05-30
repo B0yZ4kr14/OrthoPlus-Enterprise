@@ -1,19 +1,20 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
 import { createFuncionarioSchema, updateFuncionarioSchema } from "./schemas";
+import { IFuncionarioRepository } from "../domain/repositories/IFuncionarioRepository";
+import { FuncionarioRepository } from "../infrastructure/FuncionarioRepository";
 
 export class FuncionariosController {
+  constructor(
+    private repo: IFuncionarioRepository = new FuncionarioRepository(),
+  ) {}
+
   async list(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
       res.status(401).json({ error: "Missing clinic context" });
       return;
     }
-    const data = await prisma.funcionarios.findMany({
-      // eslint-disable-line @typescript-eslint/no-explicit-any
-      where: { clinic_id: clinicId },
-      orderBy: { nome: "asc" },
-    });
+    const data = await this.repo.findManyByClinic(clinicId as string);
     res.json(data);
   }
 
@@ -24,9 +25,7 @@ export class FuncionariosController {
       return;
     }
     const { id } = req.params;
-    const data = await prisma.funcionarios.findFirst({
-      where: { id, clinic_id: clinicId },
-    }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data = await this.repo.findById(id, clinicId as string);
     if (!data) {
       res.status(404).json({ error: "Funcionário not found" });
       return;
@@ -47,8 +46,9 @@ export class FuncionariosController {
         .json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
-    const data = await prisma.funcionarios.create({
-      data: { ...parsed.data, clinic_id: clinicId } as any,
+    const data = await this.repo.create({
+      ...parsed.data,
+      clinic_id: clinicId as string,
     });
     res.status(201).json(data);
   }
@@ -67,10 +67,7 @@ export class FuncionariosController {
         .json({ error: "Invalid input", details: parsed.error.flatten() });
       return;
     }
-    const data = await prisma.funcionarios.update({
-      where: { id },
-      data: parsed.data as any,
-    });
+    const data = await this.repo.update(id, parsed.data);
     res.json(data);
   }
 
@@ -81,7 +78,7 @@ export class FuncionariosController {
       return;
     }
     const { id } = req.params;
-    await prisma.funcionarios.delete({ where: { id } }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    await this.repo.delete(id);
     res.status(204).send();
   }
 }
