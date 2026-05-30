@@ -101,7 +101,7 @@ function migrateLegacyState(newKey: string): string[] | null {
       savePersistedState(newKey, validated.expandedGroups);
       // Clear legacy key to prevent cross-user leakage
       localStorage.removeItem(`${STORAGE_KEY_PREFIX}-storage`);
-      console.info("[sidebarStore] Migrated legacy state to scoped key");
+      // migrated successfully
       return validated.expandedGroups;
     }
   } catch {
@@ -173,12 +173,7 @@ function useSidebarPersistence(
 
     setExpandedGroups(groups ?? []);
 
-    console.info("[sidebar:metric] init", {
-      durationMs: Math.round(performance.now() - initStart),
-      expandedCount: groups?.length ?? 0,
-      userId,
-      clinicId,
-    });
+    // initialization complete
   }, [userId, clinicId, setExpandedGroups]);
 
   // Persist state on every change
@@ -232,14 +227,7 @@ export function useSidebarCategory(): Pick<
         manuallyCollapsedRef.current.delete(boundedContext);
       }
       store.toggleGroup(boundedContext);
-      console.info("[sidebar:metric] toggle", {
-        boundedContext,
-        action: isCurrentlyExpanded ? "collapse" : "expand",
-        totalExpanded:
-          store.expandedGroups.length + (isCurrentlyExpanded ? -1 : 1),
-        userId: user?.id,
-        clinicId,
-      });
+      // toggle tracked
     },
     [store, user?.id, clinicId],
   );
