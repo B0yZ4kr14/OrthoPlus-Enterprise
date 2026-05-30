@@ -67,8 +67,7 @@ docker compose -f docker-compose.prod.yml ps
 
 # Run Prisma migrations
 echo "🗄️  Running database migrations..."
-docker compose -f docker-compose.prod.yml exec backend npx prisma migrate deploy || \
-  echo "⚠️  Migration step skipped (run manually if needed)"
+docker compose -f docker-compose.prod.yml exec backend npx prisma migrate deploy
 
 echo ""
 echo "✅ Deploy completed successfully!"

@@ -383,7 +383,10 @@ const memoryHubModule = createMemoryHubModule();
     memoryHubModule.startFileWatcher();
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    logger.error("[MemoryHub] Initialization failed — continuing without memory hub features", { error: message });
+    logger.error(
+      "[MemoryHub] Initialization failed — continuing without memory hub features",
+      { error: message },
+    );
     // Degrade gracefully: memory hub is non-critical
   }
 })();

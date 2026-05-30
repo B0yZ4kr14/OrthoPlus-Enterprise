@@ -27,13 +27,13 @@ services:
   backend:
     image: orthoplus-backend:${VERSION:-latest}
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./backend/Dockerfile
     ports:
       - "3333:3333"
     environment:
       - NODE_ENV=production
-      - PORT=3333
+      - PORT=3005
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
       - REDIS_URL=redis://redis:6379
@@ -59,8 +59,8 @@ services:
   ***REMOVED*** (Cache)
   redis:
     image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
     volumes:
       - redis_data:/data
     networks:

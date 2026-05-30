@@ -52,8 +52,8 @@ services:
   backend:
     image: orthoplus-backend:${VERSION:-latest}
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./backend/Dockerfile
     # ports:
     #  - "3005:3005"
     environment:

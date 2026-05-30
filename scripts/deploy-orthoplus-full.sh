@@ -23,7 +23,7 @@ log_error()   { echo -e "${RED}[ERRO]${NC} $1"; exit 1; }
 VPS_HOST=${VPS_HOST:-"100.111.74.69"}
 VPS_USER="tsi"
 SSH_KEY="$HOME/.ssh/id_ed25519_b0yz4kr14"
-SSH_OPTS="-i $SSH_KEY -o StrictHostKeyChecking=no -o ConnectTimeout=10"
+SSH_OPTS="-i $SSH_KEY -o ConnectTimeout=10"
 REMOTE_BACKEND="/home/tsi/OrthoPlus-Enterprise"
 REMOTE_FRONTEND="/var/www/orthoplus"
 LOCAL_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -58,8 +58,9 @@ log_success "Frontend buildado em apps/web/dist/"
 
 # --- [2/5] Build Backend ---
 log_info "[2/5] Build do backend (TypeScript)..."
-cd "$LOCAL_ROOT/backend"
-node_modules/.bin/tsc --build
+cd "$LOCAL_ROOT"
+pnpm --filter @orthoplus/shared-types run build
+pnpm --filter orthoplus-backend run build
 log_success "Backend buildado em backend/dist/"
 
 # --- [3/5] Sync Frontend + Nginx para VPS ---
@@ -96,6 +97,18 @@ rsync -avz --delete \
 
 rsync -avz \
   -e "ssh $SSH_OPTS" \
+  "$LOCAL_ROOT/package.json" \
+  "$LOCAL_ROOT/pnpm-lock.yaml" \
+  "$LOCAL_ROOT/pnpm-workspace.yaml" \
+  "$VPS_USER@$VPS_HOST:$REMOTE_BACKEND/../"
+
+rsync -avz \
+  -e "ssh $SSH_OPTS" \
+  "$LOCAL_ROOT/shared-types/" \
+  "$VPS_USER@$VPS_HOST:$REMOTE_BACKEND/../shared-types/"
+
+rsync -avz \
+  -e "ssh $SSH_OPTS" \
   "$LOCAL_ROOT/backend/package.json" \
   "$LOCAL_ROOT/backend/prisma/" \
   "$VPS_USER@$VPS_HOST:$REMOTE_BACKEND/"
@@ -108,8 +121,12 @@ ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
   set -e
   cd /home/tsi/OrthoPlus-Enterprise
 
+  # Criar diretório de logs para PM2
+  mkdir -p logs
+
   # Instalar/atualizar deps do backend (incluindo prisma para migrations)
-  pnpm install
+  cd /home/tsi/OrthoPlus-Enterprise
+  pnpm install --frozen-lockfile
 
   # Prisma migrate deploy
   echo "[VPS] Aplicando migrações Prisma..."
@@ -117,7 +134,15 @@ ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
   # Using db push with --accept-data-loss can cause IRREVERSIBLE DATA LOSS in production.
   # Now the deploy aborts if migrations fail, requiring manual investigation.
   # Carregar .env e rodar migrations
-  set -a && source .env && set +a
+  # Carregar .env.production se existir
+  if [ -f .env.production ]; then
+    set -a && source .env.production && set +a
+  elif [ -f .env ]; then
+    set -a && source .env && set +a
+  else
+    echo "⚠️  Nenhum arquivo .env ou .env.production encontrado!"
+    exit 1
+  fi
 
   # Rodar migrations e gerar Prisma client
   ./backend/node_modules/.bin/prisma migrate deploy --schema=backend/prisma/schema.prisma || { echo "Migration failed! Aborting deploy."; exit 1; }
