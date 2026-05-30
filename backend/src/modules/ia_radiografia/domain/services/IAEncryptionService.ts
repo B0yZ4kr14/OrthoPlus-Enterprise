@@ -1,16 +1,18 @@
 import crypto from "crypto";
 
-const ENCRYPTION_KEY = process.env.IA_ENCRYPTION_KEY;
-
-if (!ENCRYPTION_KEY || ENCRYPTION_KEY.length < 32) {
-  throw new Error(
-    "[SECURITY] IA_ENCRYPTION_KEY must be set and at least 32 characters long. " +
-      "This is required for AES-256-GCM encryption of AI radiography results.",
-  );
+function getEncryptionKey(): string {
+  const key = process.env.IA_ENCRYPTION_KEY;
+  if (!key || key.length < 32) {
+    throw new Error(
+      "[SECURITY] IA_ENCRYPTION_KEY must be set and at least 32 characters long. " +
+        "This is required for AES-256-GCM encryption of AI radiography results.",
+    );
+  }
+  return key;
 }
 
 function deriveKey(analiseId: string): Buffer {
-  return crypto.scryptSync(ENCRYPTION_KEY!, analiseId, 32);
+  return crypto.scryptSync(getEncryptionKey(), analiseId, 32);
 }
 
 export class IAEncryptionService {

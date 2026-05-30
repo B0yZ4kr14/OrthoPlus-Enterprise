@@ -81,6 +81,9 @@ const NotasFiscais = lazy(
 const Conciliacao = lazy(
   () => import("@/modules/financeiro/ui/pages/Conciliacao"),
 );
+const DREPage = lazy(() =>
+  import("@/modules/financeiro").then((m) => ({ default: m.DREPage })),
+);
 
 // Contratos
 const ContratosPage = lazy(
@@ -324,6 +327,10 @@ const AppRoutes = () => (
     <Route
       path="/financeiro/conciliacao"
       element={protectedRoute(<Conciliacao />, { moduleKey: "FINANCEIRO" })}
+    />
+    <Route
+      path="/financeiro/dre"
+      element={protectedRoute(<DREPage />, { moduleKey: "FINANCEIRO" })}
     />
 
     {/* PEP Module */}
