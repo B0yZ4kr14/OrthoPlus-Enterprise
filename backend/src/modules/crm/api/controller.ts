@@ -1,9 +1,14 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 import { createLeadSchema, updateLeadSchema } from "./schemas";
+import { ICRMRepository } from "../domain/repositories/ICRMRepository";
+import { CRMRepository } from "../infrastructure/CRMRepository";
 
 export class CRMController {
+  constructor(
+    private repo: ICRMRepository = new CRMRepository(),
+  ) {}
+
   listLeads = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
@@ -12,10 +17,7 @@ export class CRMController {
     const { status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
     if (status) where.status = String(status);
-    const data = await prisma.crm_leads.findMany({
-      where,
-      orderBy: { created_at: "desc" },
-    });
+    const data = await this.repo.findManyLeads(where);
     res.json(data);
     return;
   });
@@ -26,9 +28,7 @@ export class CRMController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const data = await prisma.crm_leads.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const data = await this.repo.findLeadById(id, clinicId as string);
     if (!data) {
       throw Errors.notFound("Lead", id);
     }
@@ -45,14 +45,12 @@ export class CRMController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await prisma.crm_leads.create({
-      data: {
-        ...parsed.data,
-        clinic_id: clinicId,
-        created_by: req.user?.id || "system",
-        status: parsed.data.status || "NOVO",
-        source: parsed.data.source || "manual",
-      },
+    const data = await this.repo.createLead({
+      ...parsed.data,
+      clinic_id: clinicId,
+      created_by: req.user?.id || "system",
+      status: parsed.data.status || "NOVO",
+      source: parsed.data.source || "manual",
     });
     res.status(201).json(data);
     return;
@@ -64,9 +62,7 @@ export class CRMController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await prisma.crm_leads.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await this.repo.findLeadById(id, clinicId as string);
     if (!existing) {
       throw Errors.notFound("Lead", id);
     }
@@ -74,10 +70,7 @@ export class CRMController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await prisma.crm_leads.update({
-      where: { id },
-      data: parsed.data,
-    });
+    const data = await this.repo.updateLead(id, parsed.data);
     res.json(data);
     return;
   });
@@ -88,13 +81,11 @@ export class CRMController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    const existing = await prisma.crm_leads.findFirst({
-      where: { id, clinic_id: clinicId },
-    });
+    const existing = await this.repo.findLeadById(id, clinicId as string);
     if (!existing) {
       throw Errors.notFound("Lead", id);
     }
-    await prisma.crm_leads.delete({ where: { id } });
+    await this.repo.deleteLead(id);
     res.status(204).send();
     return;
   });
