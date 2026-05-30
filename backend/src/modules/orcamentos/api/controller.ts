@@ -10,6 +10,7 @@ import {
   updateOrcamentoSchema,
   addItemSchema,
 } from "./schemas";
+import { Errors, ApiError } from "@/middleware/errorHandler";
 
 export class OrcamentosController {
   private service: OrcamentoService;
@@ -21,7 +22,7 @@ export class OrcamentosController {
   async list(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { patient_id, status } = req.query;
     const filters = {
@@ -35,12 +36,12 @@ export class OrcamentosController {
   async getById(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const data = await this.service.getById(id, clinicId);
     if (!data) {
-      return res.status(404).json({ error: "Orçamento not found" });
+      throw Errors.notFound("Orçamento", id);
     }
     return res.json(data);
   }
@@ -49,13 +50,11 @@ export class OrcamentosController {
     const clinicId = req.user?.clinicId;
     const createdBy = req.user?.id;
     if (!clinicId || !createdBy) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = createOrcamentoSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.service.create(
       { ...parsed.data, created_by: createdBy } as CreateOrcamentoInput,
@@ -67,18 +66,16 @@ export class OrcamentosController {
   async update(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const parsed = updateOrcamentoSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.service.update(id, parsed.data, clinicId);
     if (!data) {
-      return res.status(404).json({ error: "Orçamento not found" });
+      throw Errors.notFound("Orçamento", id);
     }
     return res.json(data);
   }
@@ -86,12 +83,12 @@ export class OrcamentosController {
   async delete(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const deleted = await this.service.delete(id, clinicId);
     if (!deleted) {
-      return res.status(404).json({ error: "Orçamento not found" });
+      throw Errors.notFound("Orçamento", id);
     }
     return res.status(204).send();
   }
@@ -100,20 +97,21 @@ export class OrcamentosController {
   async enviar(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     try {
       const data = await this.service.enviar(id, clinicId);
       if (!data) {
-        return res.status(404).json({ error: "Orçamento not found" });
+        throw Errors.notFound("Orçamento", id);
       }
       return res.json(data);
     } catch (error: unknown) {
+      if (error instanceof ApiError) throw error;
       const msg =
         error instanceof Error ? error.message : "Internal server error";
       logger.error("Error enviando orcamento", { error });
-      return res.status(400).json({ error: msg });
+      throw Errors.validation(msg);
     }
   }
 
@@ -121,20 +119,21 @@ export class OrcamentosController {
     const clinicId = req.user?.clinicId;
     const aprovadoPor = req.user?.id;
     if (!clinicId || !aprovadoPor) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     try {
       const data = await this.service.aprovar(id, aprovadoPor, clinicId);
       if (!data) {
-        return res.status(404).json({ error: "Orçamento not found" });
+        throw Errors.notFound("Orçamento", id);
       }
       return res.json(data);
     } catch (error: unknown) {
+      if (error instanceof ApiError) throw error;
       const msg =
         error instanceof Error ? error.message : "Internal server error";
       logger.error("Error aprovando orcamento", { error });
-      return res.status(400).json({ error: msg });
+      throw Errors.validation(msg);
     }
   }
 
@@ -142,14 +141,12 @@ export class OrcamentosController {
     const clinicId = req.user?.clinicId;
     const rejeitadoPor = req.user?.id;
     if (!clinicId || !rejeitadoPor) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const { motivo } = req.body;
     if (!motivo || typeof motivo !== "string") {
-      return res
-        .status(400)
-        .json({ error: "Motivo de rejeição é obrigatório" });
+      throw Errors.validation("Motivo de rejeição é obrigatório");
     }
     try {
       const data = await this.service.rejeitar(
@@ -159,14 +156,15 @@ export class OrcamentosController {
         clinicId,
       );
       if (!data) {
-        return res.status(404).json({ error: "Orçamento not found" });
+        throw Errors.notFound("Orçamento", id);
       }
       return res.json(data);
     } catch (error: unknown) {
+      if (error instanceof ApiError) throw error;
       const msg =
         error instanceof Error ? error.message : "Internal server error";
       logger.error("Error rejeitando orcamento", { error });
-      return res.status(400).json({ error: msg });
+      throw Errors.validation(msg);
     }
   }
 
@@ -174,7 +172,7 @@ export class OrcamentosController {
   async listItems(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { orcamento_id } = req.params;
     const data = await this.service.listItems(orcamento_id, clinicId);
@@ -184,14 +182,12 @@ export class OrcamentosController {
   async addItem(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { orcamento_id } = req.params;
     const parsed = addItemSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.service.addItem(
       orcamento_id,
@@ -199,7 +195,7 @@ export class OrcamentosController {
       clinicId,
     );
     if (!data) {
-      return res.status(404).json({ error: "Orçamento not found" });
+      throw Errors.notFound("Orçamento", orcamento_id);
     }
     return res.status(201).json(data);
   }

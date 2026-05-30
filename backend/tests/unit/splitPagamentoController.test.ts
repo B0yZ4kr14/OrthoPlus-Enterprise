@@ -86,8 +86,7 @@ describe("SplitPagamentoController.getConfig", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await controller.getConfig(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.getConfig(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns config list for clinic", async () => {
@@ -119,8 +118,7 @@ describe("SplitPagamentoController.upsertConfig", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, body: validBody });
     const res = mockRes();
-    await controller.upsertConfig(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.upsertConfig(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 on invalid body (percentage > 100)", async () => {
@@ -128,8 +126,7 @@ describe("SplitPagamentoController.upsertConfig", () => {
       body: { professional_id: professionalId, percentage: 150 },
     });
     const res = mockRes();
-    await controller.upsertConfig(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.upsertConfig(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("creates config when none exists", async () => {
@@ -176,8 +173,7 @@ describe("SplitPagamentoController.listComissoes", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await controller.listComissoes(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.listComissoes(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns all comissoes for clinic", async () => {
@@ -212,15 +208,13 @@ describe("SplitPagamentoController.createComissao", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, body: validBody });
     const res = mockRes();
-    await controller.createComissao(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.createComissao(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 on invalid body", async () => {
     const req = mockReq({ body: { amount: -1 } });
     const res = mockRes();
-    await controller.createComissao(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.createComissao(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("creates comissao and returns 201", async () => {
@@ -240,8 +234,7 @@ describe("SplitPagamentoController.listTransacoes", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await controller.listTransacoes(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.listTransacoes(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns all transactions for clinic", async () => {
@@ -276,23 +269,20 @@ describe("SplitPagamentoController.calculateSplit", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, body: validBody });
     const res = mockRes();
-    await controller.calculateSplit(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.calculateSplit(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 on invalid body (total_amount not positive)", async () => {
     const req = mockReq({ body: { ...validBody, total_amount: 0 } });
     const res = mockRes();
-    await controller.calculateSplit(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.calculateSplit(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("returns 404 when no active config found", async () => {
     splitConfig.findFirst.mockResolvedValue(null);
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await controller.calculateSplit(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.calculateSplit(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("calculates split amounts correctly", async () => {
@@ -355,8 +345,7 @@ describe("SplitPagamentoController.calculateSplit", () => {
     });
     const req = mockReq({ body: validBody });
     const res = mockRes();
-    await controller.calculateSplit(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(422);
+    await expect(controller.calculateSplit(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("returns 500 on database error", async () => {

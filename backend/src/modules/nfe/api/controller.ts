@@ -5,6 +5,7 @@ import { NFeRepositoryPostgres } from "../infrastructure/repositories/NFeReposit
 import { NFe } from "../domain/entities/NFe";
 import { createNfeSchema, updateNfeSchema } from "./schemas";
 import { randomUUID } from "crypto";
+import { Errors } from "@/middleware/errorHandler";
 
 const repository = new NFeRepositoryPostgres();
 
@@ -12,7 +13,7 @@ export class NFeController {
   async list(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { status, tipo, cliente_id, skip, take } = req.query;
     const result = await repository.findAll({
@@ -29,11 +30,11 @@ export class NFeController {
   async getById(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const nfe = await repository.findById(req.params.id);
     if (!nfe || nfe.clinicId !== clinicId) {
-      return res.status(404).json({ error: "NF-e not found" });
+      throw Errors.notFound("NF-e", req.params.id);
     }
     return res.json(nfe);
   }
@@ -41,13 +42,11 @@ export class NFeController {
   async create(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = createNfeSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const now = new Date();
     const nfe = NFe.create({
@@ -76,17 +75,15 @@ export class NFeController {
   async update(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const nfe = await repository.findById(req.params.id);
     if (!nfe || nfe.clinicId !== clinicId) {
-      return res.status(404).json({ error: "NF-e not found" });
+      throw Errors.notFound("NF-e", req.params.id);
     }
     const parsed = updateNfeSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     if (parsed.data.status !== undefined) nfe.status = parsed.data.status;
     if (parsed.data.chave_acesso !== undefined)
@@ -103,18 +100,18 @@ export class NFeController {
   async cancel(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const nfe = await repository.findById(req.params.id);
     if (!nfe || nfe.clinicId !== clinicId) {
-      return res.status(404).json({ error: "NF-e not found" });
+      throw Errors.notFound("NF-e", req.params.id);
     }
     try {
       nfe.cancelar();
     } catch (domainError) {
       const message =
         domainError instanceof Error ? domainError.message : "Cannot cancel";
-      return res.status(422).json({ error: message });
+      throw Errors.validation(message);
     }
     await repository.update(nfe);
     logger.info("NF-e cancelled", { clinicId, nfeId: nfe.id });

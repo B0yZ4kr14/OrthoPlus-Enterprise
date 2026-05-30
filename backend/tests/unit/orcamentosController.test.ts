@@ -92,8 +92,7 @@ describe("OrcamentosController.list", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined });
     const res = mockRes();
-    await controller.list(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.list(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns orcamentos for the clinic", async () => {
@@ -135,16 +134,14 @@ describe("OrcamentosController.getById", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.getById(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.getById(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when not found", async () => {
     orcamentos.findFirst.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "orc-missing" } });
     const res = mockRes();
-    await controller.getById(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.getById(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("returns the orcamento when found", async () => {
@@ -170,15 +167,13 @@ describe("OrcamentosController.create", () => {
   it("returns 401 when no user", async () => {
     const req = mockReq({ user: undefined, body: validBody });
     const res = mockRes();
-    await controller.create(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.create(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 on invalid body", async () => {
     const req = mockReq({ body: { ...validBody, valor_total: -10 } });
     const res = mockRes();
-    await controller.create(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.create(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("creates orcamento and returns 201", async () => {
@@ -205,8 +200,7 @@ describe("OrcamentosController.update", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.update(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.update(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when orcamento not found", async () => {
@@ -216,8 +210,7 @@ describe("OrcamentosController.update", () => {
       body: { titulo: "Atualizado" },
     });
     const res = mockRes();
-    await controller.update(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.update(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("updates and returns orcamento", async () => {
@@ -239,16 +232,14 @@ describe("OrcamentosController.delete", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.delete(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.delete(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when not found", async () => {
     orcamentos.findFirst.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "orc-x" } });
     const res = mockRes();
-    await controller.delete(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.delete(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("deletes and returns 204", async () => {
@@ -268,16 +259,14 @@ describe("OrcamentosController.enviar", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.enviar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.enviar(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when not found", async () => {
     orcamentos.findFirst.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "orc-x" } });
     const res = mockRes();
-    await controller.enviar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.enviar(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("returns 400 if status is not RASCUNHO", async () => {
@@ -287,8 +276,7 @@ describe("OrcamentosController.enviar", () => {
     });
     const req = mockReq({ params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.enviar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.enviar(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("sends orcamento and returns updated data", async () => {
@@ -312,16 +300,14 @@ describe("OrcamentosController.aprovar", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.aprovar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.aprovar(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 404 when not found", async () => {
     orcamentos.findFirst.mockResolvedValueOnce(null);
     const req = mockReq({ params: { id: "orc-x" } });
     const res = mockRes();
-    await controller.aprovar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.aprovar(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("returns 400 if status is not PENDENTE", async () => {
@@ -331,8 +317,7 @@ describe("OrcamentosController.aprovar", () => {
     });
     const req = mockReq({ params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.aprovar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.aprovar(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("approves orcamento and returns updated data", async () => {
@@ -366,15 +351,13 @@ describe("OrcamentosController.rejeitar", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { id: "orc-1" } });
     const res = mockRes();
-    await controller.rejeitar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.rejeitar(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 when motivo is missing", async () => {
     const req = mockReq({ params: { id: "orc-1" }, body: {} });
     const res = mockRes();
-    await controller.rejeitar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.rejeitar(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("returns 404 when not found", async () => {
@@ -384,8 +367,7 @@ describe("OrcamentosController.rejeitar", () => {
       body: { motivo: "Preço alto" },
     });
     const res = mockRes();
-    await controller.rejeitar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.rejeitar(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("returns 400 if status is not PENDENTE", async () => {
@@ -398,8 +380,7 @@ describe("OrcamentosController.rejeitar", () => {
       body: { motivo: "Preço alto" },
     });
     const res = mockRes();
-    await controller.rejeitar(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.rejeitar(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("rejects orcamento and returns updated data", async () => {
@@ -436,8 +417,7 @@ describe("OrcamentosController.listItems", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { orcamento_id: "orc-1" } });
     const res = mockRes();
-    await controller.listItems(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.listItems(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns items for the orcamento", async () => {
@@ -471,8 +451,7 @@ describe("OrcamentosController.addItem", () => {
   it("returns 401 when no clinicId", async () => {
     const req = mockReq({ user: undefined, params: { orcamento_id: "orc-1" } });
     const res = mockRes();
-    await controller.addItem(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(401);
+    await expect(controller.addItem(req as Request, res)).rejects.toMatchObject({ status: 401 });
   });
 
   it("returns 400 on invalid body", async () => {
@@ -481,8 +460,7 @@ describe("OrcamentosController.addItem", () => {
       body: { ...validItemBody, quantidade: 0 },
     });
     const res = mockRes();
-    await controller.addItem(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    await expect(controller.addItem(req as Request, res)).rejects.toMatchObject({ status: 400 });
   });
 
   it("returns 404 when orcamento not found", async () => {
@@ -492,8 +470,7 @@ describe("OrcamentosController.addItem", () => {
       body: validItemBody,
     });
     const res = mockRes();
-    await controller.addItem(req as Request, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    await expect(controller.addItem(req as Request, res)).rejects.toMatchObject({ status: 404 });
   });
 
   it("adds item and returns 201", async () => {

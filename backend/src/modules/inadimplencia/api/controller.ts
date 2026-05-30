@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { z } from "zod";
 import { IInadimplenciaRepository } from "../domain/repositories/IInadimplenciaRepository";
 import { InadimplenciaRepository } from "../infrastructure/InadimplenciaRepository";
+import { Errors } from "@/middleware/errorHandler";
 
 const updateInadimplenteSchema = z.object({
   status: z.string().max(100).optional(),
@@ -40,7 +41,7 @@ export class InadimplenciaController {
   async listInadimplentes(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
@@ -52,18 +53,18 @@ export class InadimplenciaController {
   async getInadimplente(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const data = await this.repo.findInadimplenteById(id, clinicId as string);
-    if (!data) return res.status(404).json({ error: "Inadimplente not found" });
+    if (!data)     if (!data) throw Errors.notFound("Inadimplente", id);
     return res.json(data);
   }
 
   async updateInadimplente(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findInadimplenteById(
@@ -71,13 +72,11 @@ export class InadimplenciaController {
       clinicId as string,
     );
     if (!existing)
-      return res.status(404).json({ error: "Inadimplente not found" });
+      throw Errors.notFound("Inadimplente", id);
 
     const parsed = updateInadimplenteSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.updateInadimplente(id, parsed.data);
     return res.json(data);
@@ -86,7 +85,7 @@ export class InadimplenciaController {
   async listCampanhasCobranca(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
@@ -98,13 +97,11 @@ export class InadimplenciaController {
   async createCampanhaCobranca(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = createCampanhaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.createCampanha({
       ...parsed.data,
@@ -118,17 +115,15 @@ export class InadimplenciaController {
   async updateCampanhaCobranca(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findCampanhaById(id, clinicId as string);
-    if (!existing) return res.status(404).json({ error: "Campanha not found" });
+    if (!existing)     if (!existing) throw Errors.notFound("Campanha", id);
 
     const parsed = updateCampanhaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.updateCampanha(id, parsed.data);
     return res.json(data);

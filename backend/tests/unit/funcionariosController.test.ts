@@ -31,11 +31,10 @@ describe("FuncionariosController", () => {
   });
 
   describe("list", () => {
-    it("returns 401 when clinicId is missing", async () => {
+    it("throws unauthorized when clinicId is missing", async () => {
       const req = mockReq({}, {}, {} as any);
       const res = mockRes();
-      await controller.list(req, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.list(req, res)).rejects.toThrow("Missing clinic context");
     });
 
     it("returns funcionarios for clinic", async () => {
@@ -49,12 +48,11 @@ describe("FuncionariosController", () => {
   });
 
   describe("getById", () => {
-    it("returns 404 when not found", async () => {
+    it("throws notFound when not found", async () => {
       const req = mockReq({}, { id: "f1" });
       const res = mockRes();
       repo.findById.mockResolvedValue(null);
-      await controller.getById(req, res);
-      expect(res.status).toHaveBeenCalledWith(404);
+      await expect(controller.getById(req, res)).rejects.toThrow("Funcionário");
     });
 
     it("returns funcionario when found", async () => {
@@ -68,11 +66,10 @@ describe("FuncionariosController", () => {
   });
 
   describe("create", () => {
-    it("returns 400 on invalid input", async () => {
+    it("throws validation on invalid input", async () => {
       const req = mockReq({ nome: "" });
       const res = mockRes();
-      await controller.create(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.create(req, res)).rejects.toThrow("Invalid input");
     });
 
     it("creates funcionario with clinic_id", async () => {
@@ -101,11 +98,10 @@ describe("FuncionariosController", () => {
   });
 
   describe("update", () => {
-    it("returns 400 on invalid input", async () => {
+    it("throws validation on invalid input", async () => {
       const req = mockReq({ nome: 123 }, { id: "f1" });
       const res = mockRes();
-      await controller.update(req, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.update(req, res)).rejects.toThrow("Invalid input");
     });
 
     it("updates funcionario", async () => {

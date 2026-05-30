@@ -46,11 +46,7 @@ describe("ProcedimentosController", () => {
         params: {},
       };
       const res = mockRes();
-      await controller.listTemplates(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({
-        error: "Missing clinic context",
-      });
+      await expect(controller.listTemplates(req as Request, res)).rejects.toMatchObject({ status: 401 });
     });
 
     it("lists templates for the clinic", async () => {
@@ -117,8 +113,7 @@ describe("ProcedimentosController", () => {
         params: { id: "t-x" },
       };
       const res = mockRes();
-      await controller.getTemplateById(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.getTemplateById(req as Request, res)).rejects.toMatchObject({ status: 401 });
     });
 
     it("returns 404 when template not found", async () => {
@@ -130,8 +125,7 @@ describe("ProcedimentosController", () => {
         params: { id: "t-x" },
       };
       const res = mockRes();
-      await controller.getTemplateById(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(404);
+      await expect(controller.getTemplateById(req as Request, res)).rejects.toMatchObject({ status: 404 });
     });
 
     it("returns template when found", async () => {
@@ -175,8 +169,7 @@ describe("ProcedimentosController", () => {
         params: {},
       };
       const res = mockRes();
-      await controller.createTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.createTemplate(req as Request, res)).rejects.toMatchObject({ status: 401 });
     });
 
     it("returns 400 on invalid input", async () => {
@@ -187,8 +180,7 @@ describe("ProcedimentosController", () => {
         params: {},
       };
       const res = mockRes();
-      await controller.createTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.createTemplate(req as Request, res)).rejects.toMatchObject({ status: 400 });
     });
 
     it("creates template and returns 201", async () => {
@@ -232,8 +224,7 @@ describe("ProcedimentosController", () => {
         params: { id: "t1" },
       };
       const res = mockRes();
-      await controller.updateTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.updateTemplate(req as Request, res)).rejects.toMatchObject({ status: 401 });
     });
 
     it("returns 404 when template not found", async () => {
@@ -245,8 +236,7 @@ describe("ProcedimentosController", () => {
         params: { id: "t-x" },
       };
       const res = mockRes();
-      await controller.updateTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(404);
+      await expect(controller.updateTemplate(req as Request, res)).rejects.toMatchObject({ status: 404 });
     });
 
     it("returns 400 on invalid input", async () => {
@@ -258,8 +248,7 @@ describe("ProcedimentosController", () => {
         params: { id: "t1" },
       };
       const res = mockRes();
-      await controller.updateTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(400);
+      await expect(controller.updateTemplate(req as Request, res)).rejects.toMatchObject({ status: 400 });
     });
 
     it("updates and returns template", async () => {
@@ -310,8 +299,7 @@ describe("ProcedimentosController", () => {
         params: { id: "t1" },
       };
       const res = mockRes();
-      await controller.deleteTemplate(req as Request, res);
-      expect(res.status).toHaveBeenCalledWith(401);
+      await expect(controller.deleteTemplate(req as Request, res)).rejects.toMatchObject({ status: 401 });
     });
 
     it("deletes and returns 204", async () => {

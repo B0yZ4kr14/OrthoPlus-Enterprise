@@ -7,6 +7,7 @@ import {
 } from "./schemas";
 import { ISplitPagamentoRepository } from "../domain/repositories/ISplitPagamentoRepository";
 import { SplitPagamentoRepository } from "../infrastructure/SplitPagamentoRepository";
+import { Errors } from "@/middleware/errorHandler";
 
 export class SplitPagamentoController {
   constructor(
@@ -16,7 +17,7 @@ export class SplitPagamentoController {
   async getConfig(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const data = await this.repo.findManyConfig(clinicId as string);
     return res.json(data);
@@ -25,13 +26,11 @@ export class SplitPagamentoController {
   async upsertConfig(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = upsertConfigSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const existing = await this.repo.findConfigByClinic(clinicId as string);
     let data;
@@ -50,7 +49,7 @@ export class SplitPagamentoController {
   async listComissoes(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { professional_id } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
@@ -62,13 +61,11 @@ export class SplitPagamentoController {
   async createComissao(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = createComissaoSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.createComissao({
       ...parsed.data,
@@ -81,7 +78,7 @@ export class SplitPagamentoController {
   async listTransacoes(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
@@ -93,13 +90,11 @@ export class SplitPagamentoController {
   async calculateSplit(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = calculateSplitSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
 
     const { transaction_id, total_amount, professional_id, procedure_type } =
@@ -119,16 +114,12 @@ export class SplitPagamentoController {
     }
 
     if (!config) {
-      return res
-        .status(404)
-        .json({ error: "No active split config found for this professional" });
+      throw Errors.notFound("No active split config found for this professional");
     }
 
     const percentage = (config as any).percentage as number;
     if (percentage < 0 || percentage > 100) {
-      return res
-        .status(422)
-        .json({ error: "Invalid percentage in config", percentage });
+      throw Errors.validation("Invalid percentage in config");
     }
     const professional_amount = Math.round((total_amount * percentage) / 100);
     const clinic_amount = total_amount - professional_amount;

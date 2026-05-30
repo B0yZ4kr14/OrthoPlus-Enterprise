@@ -10,6 +10,7 @@ import {
   submitBatchSchema,
   registerGlosaSchema,
 } from "./schemas";
+import { Errors } from "@/middleware/errorHandler";
 
 export class TISSController {
   constructor(private repo: ITISSRepository = new TISSRepository()) {}
@@ -18,7 +19,7 @@ export class TISSController {
   async listGuias(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { insurance_company, status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
@@ -31,12 +32,12 @@ export class TISSController {
   async getGuiaById(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const data = await this.repo.findGuiaById(id, clinicId);
     if (!data) {
-      return res.status(404).json({ error: "Guia not found" });
+      throw Errors.notFound("Guia", id);
     }
     return res.json(data);
   }
@@ -44,13 +45,11 @@ export class TISSController {
   async createGuia(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = createGuiaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.createGuia({
       ...parsed.data,
@@ -63,18 +62,16 @@ export class TISSController {
   async updateGuia(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findGuiaById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Guia not found" });
+      throw Errors.notFound("Guia", id);
     }
     const parsed = updateGuiaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.updateGuia(id, parsed.data);
     return res.json(data);
@@ -83,12 +80,12 @@ export class TISSController {
   async deleteGuia(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findGuiaById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Guia not found" });
+      throw Errors.notFound("Guia", id);
     }
     await this.repo.deleteGuia(id, clinicId);
     return res.status(204).send();
@@ -98,7 +95,7 @@ export class TISSController {
   async listLotes(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { status } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
@@ -110,13 +107,11 @@ export class TISSController {
   async createLote(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = createLoteSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.createLote({
       ...parsed.data,
@@ -129,18 +124,16 @@ export class TISSController {
   async updateLote(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findLoteById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Lote not found" });
+      throw Errors.notFound("Lote", id);
     }
     const parsed = updateLoteSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.updateLote(id, parsed.data);
     return res.json(data);
@@ -150,13 +143,11 @@ export class TISSController {
   async submitBatch(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const parsed = submitBatchSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
 
     const { guide_ids, insurance_company, batch_number } = parsed.data;
@@ -168,11 +159,7 @@ export class TISSController {
     })) as Array<{ amount?: number }>;
 
     if (guides.length !== guide_ids.length) {
-      return res.status(400).json({
-        error: "Some guides not found or do not belong to this clinic",
-        found: guides.length,
-        expected: guide_ids.length,
-      });
+            throw Errors.validation("Some guides not found or do not belong to this clinic");
     }
 
     // Calculate totals from guides
@@ -227,7 +214,7 @@ export class TISSController {
   async getStatistics(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
 
     const [guidesByStatus, batchesByStatus, totalAmount, totalGlosa] =
@@ -278,7 +265,7 @@ export class TISSController {
   async listGlosas(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const data = await this.repo.findManyGuias(
       { clinic_id: clinicId, glosa_amount: { not: null } },
@@ -290,18 +277,16 @@ export class TISSController {
   async updateGlosa(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findGuiaById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Guia not found" });
+      throw Errors.notFound("Guia", id);
     }
     const parsed = registerGlosaSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res
-        .status(400)
-        .json({ error: "Invalid input", details: parsed.error.flatten() });
+      throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
     const data = await this.repo.updateGuia(id, {
       status: "glosada",
@@ -320,12 +305,12 @@ export class TISSController {
   async reprocessarGlosa(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findGuiaById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Guia not found" });
+      throw Errors.notFound("Guia", id);
     }
     const data = await this.repo.updateGuia(id, {
       status: "RASCUNHO",
@@ -341,7 +326,7 @@ export class TISSController {
   async listConvenios(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const data = await this.repo.findManyConvenios(clinicId);
     return res.json(data);
@@ -350,7 +335,7 @@ export class TISSController {
   async createConvenio(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const {
       nome,
@@ -361,7 +346,7 @@ export class TISSController {
       is_active,
     } = req.body;
     if (!nome) {
-      return res.status(400).json({ error: "Nome is required" });
+      throw Errors.validation("Nome is required");
     }
     const data = await this.repo.createConvenio({
       clinic_id: clinicId,
@@ -378,12 +363,12 @@ export class TISSController {
   async updateConvenio(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findConvenioById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Convenio not found" });
+      throw Errors.notFound("Convenio", id);
     }
     const data = await this.repo.updateConvenio(id, req.body);
     return res.json(data);
@@ -392,12 +377,12 @@ export class TISSController {
   async deleteConvenio(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findConvenioById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Convenio not found" });
+      throw Errors.notFound("Convenio", id);
     }
     await this.repo.deleteConvenio(id, clinicId);
     return res.status(204).send();
@@ -407,7 +392,7 @@ export class TISSController {
   async listPacienteConvenios(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { patient_id } = req.query;
     const where: Record<string, unknown> = { clinic_id: clinicId };
@@ -419,14 +404,12 @@ export class TISSController {
   async createPacienteConvenio(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { patient_id, convenio_id, numero_carteira, validade_carteira } =
       req.body;
     if (!patient_id || !convenio_id) {
-      return res
-        .status(400)
-        .json({ error: "patient_id and convenio_id are required" });
+      throw Errors.validation("patient_id and convenio_id are required");
     }
     const data = await this.repo.createPacienteConvenio({
       clinic_id: clinicId,
@@ -446,12 +429,12 @@ export class TISSController {
   async updatePacienteConvenio(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findPacienteConvenioById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Vinculacao not found" });
+      throw Errors.notFound("Vinculacao", id);
     }
     const data = await this.repo.updatePacienteConvenio(id, req.body);
     return res.json(data);
@@ -460,12 +443,12 @@ export class TISSController {
   async deletePacienteConvenio(req: Request, res: Response) {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      return res.status(401).json({ error: "Missing clinic context" });
+      throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
     const existing = await this.repo.findPacienteConvenioById(id, clinicId);
     if (!existing) {
-      return res.status(404).json({ error: "Vinculacao not found" });
+      throw Errors.notFound("Vinculacao", id);
     }
     await this.repo.deletePacienteConvenio(id, clinicId);
     return res.status(204).send();
