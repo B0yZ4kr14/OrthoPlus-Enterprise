@@ -57,7 +57,7 @@ rsync -avz \
 # If REDIS_PASSWORD is not set locally, a strong random password is generated.
 REDIS_PASSWORD="${REDIS_PASSWORD:-$(openssl rand -base64 32)}"
 
-ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$VPS_USER@$VPS_HOST" << REMOTE
+ssh -i "$SSH_KEY" -o "$VPS_USER@$VPS_HOST" << REMOTE
   set -e
   cd "$REMOTE_DIR"
 
@@ -100,10 +100,17 @@ server {
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
         proxy_cache_bypass \$http_upgrade;
     }
     location /health {
         proxy_pass http://127.0.0.1:3005/health;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
     }
 }
 NGINX

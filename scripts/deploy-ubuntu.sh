@@ -354,8 +354,13 @@ copy_project_files() {
     # Copiar arquivos necessários
     cp "$PROJECT_ROOT/docker-compose.ubuntu.yml" "$INSTALL_DIR/docker-compose.yml"
     cp "$PROJECT_ROOT/nginx.conf" "$INSTALL_DIR/" 2>/dev/null || true
+    cp "$PROJECT_ROOT/package.json" "$INSTALL_DIR/app/" 2>/dev/null || true
+    cp "$PROJECT_ROOT/pnpm-lock.yaml" "$INSTALL_DIR/app/" 2>/dev/null || true
+    cp "$PROJECT_ROOT/pnpm-workspace.yaml" "$INSTALL_DIR/app/" 2>/dev/null || true
     cp -r "$PROJECT_ROOT/backend" "$INSTALL_DIR/app/" 2>/dev/null || true
+    cp -r "$PROJECT_ROOT/shared-types" "$INSTALL_DIR/app/" 2>/dev/null || true
     cp -r "$PROJECT_ROOT/categories" "$INSTALL_DIR/app/" 2>/dev/null || true
+    cp -r "$PROJECT_ROOT/agent-service" "$INSTALL_DIR/app/" 2>/dev/null || true
     
     # Copiar .env
     cp "$INSTALL_DIR/.env" "$INSTALL_DIR/app/.env"

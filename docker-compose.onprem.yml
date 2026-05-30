@@ -64,7 +64,7 @@ services:
       - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
       - STORAGE_ENDPOINT=minio:9000
       - STORAGE_ACCESS_KEY=${MINIO_ROOT_USER:-admin}
-      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD:-miniopassword}
+      - STORAGE_SECRET_KEY=${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD must be set}
       - STORAGE_USE_SSL=false
     networks:
       - backend_net
@@ -195,7 +195,7 @@ services:
       - "9001:9001"
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER:-admin}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-miniopassword}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD must be set}
       - MINIO_BROWSER_REDIRECT_URL=http://localhost:9001
     volumes:
       - minio_data:/data
@@ -292,7 +292,7 @@ services:
     container_name: orthoplus-minio-backup
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER:-admin}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-miniopassword}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD must be set}
     volumes:
       - minio_data:/minio-source:ro
       - minio_backups:/minio-backups
@@ -306,7 +306,7 @@ services:
     command:
       - |
         echo "Setting up automated MinIO backups..."
-        mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-admin} ${MINIO_ROOT_PASSWORD:-miniopassword}
+        mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-admin} ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD must be set}
         echo "0 3 * * * /backup.sh" > /etc/crontabs/root
         crond -f -l 2
     deploy:
