@@ -269,9 +269,17 @@ export class FilesControllerService {
     return true;
   }
 
-  async uploadBackupToCloud(backupId: string, provider: string, config: any) {
+  async uploadBackupToCloud(
+    backupId: string,
+    provider: string,
+    config: any,
+    clinicId: string,
+  ) {
     const backup = await this.repo.findBackupById(backupId);
     if (!backup) throw Errors.notFound("Backup", backupId);
+    if (backup.clinic_id !== clinicId) {
+      throw Errors.forbidden("Backup does not belong to this clinic");
+    }
 
     const dataToUpload = JSON.stringify(backup.metadata);
     const fileName = `orthoplus_backup_${backup.clinic_id}_${new Date().toISOString().replace(/:/g, "-")}.json`;

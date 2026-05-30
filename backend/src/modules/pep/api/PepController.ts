@@ -50,7 +50,7 @@ export class PepController {
           parsed.data.patientId,
         ),
       )
-      .catch(() => {});
+      .catch((err) => logger.error("EventBus publish failed", { error: err }));
 
     logger.info("Prontuario created", {
       clinicId,
@@ -127,7 +127,7 @@ export class PepController {
 
     eventBus
       .publish(new ProntuarioUpdatedEvent(req.params.id, clinicId))
-      .catch(() => {});
+      .catch((err) => logger.error("EventBus publish failed", { error: err }));
 
     res.json(data);
   });
@@ -150,7 +150,7 @@ export class PepController {
 
     eventBus
       .publish(new ProntuarioDeletedEvent(req.params.id, clinicId))
-      .catch(() => {});
+      .catch((err) => logger.error("EventBus publish failed", { error: err }));
 
     res.status(204).send();
   });
@@ -438,7 +438,7 @@ export class PepController {
           clinicId,
         ),
       )
-      .catch(() => {});
+      .catch((err) => logger.error("EventBus publish failed", { error: err }));
 
     res.status(201).json(data);
   });
@@ -464,7 +464,7 @@ export class PepController {
           clinicId,
         ),
       )
-      .catch(() => {});
+      .catch((err) => logger.error("EventBus publish failed", { error: err }));
 
     res.json(data);
   });
@@ -490,7 +490,7 @@ export class PepController {
           clinicId,
         ),
       )
-      .catch(() => {});
+      .catch((err) => logger.error("EventBus publish failed", { error: err }));
 
     res.status(204).send();
   });

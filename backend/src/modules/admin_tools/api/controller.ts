@@ -127,7 +127,9 @@ export class AdminToolsController {
         tenantId: "00000000-0000-0000-0000-000000000000",
       });
 
-      await this.repo.updateUserRole(email, "ROOT").catch(() => {});
+      await this.repo.updateUserRole(email, "ROOT").catch((err) => {
+        logger.error("Failed to update user role", { email, error: err });
+      });
 
       res.status(200).json({ message: "Root user created successfully", user });
       return;
@@ -137,7 +139,12 @@ export class AdminToolsController {
     }
   });
 
-  analyzeDatabaseHealth = asyncHandler(async (_req: Request, res: Response) => {
+  analyzeDatabaseHealth = asyncHandler(async (req: Request, res: Response) => {
+    const role = req.user?.role;
+    if (role !== "ADMIN" && role !== "ROOT") {
+      throw Errors.forbidden("Admin access required");
+    }
+
     const activeConnections = await this.repo
       .getActiveConnections()
       .catch(() => [{ count: 0 }]);
@@ -156,7 +163,17 @@ export class AdminToolsController {
     try {
       const { url, method = "GET", data } = req.body;
 
-      if (!url || !url.startsWith("https://api.github.com/")) {
+      // Strict URL validation: must be a valid https URL with host exactly api.github.com
+      let parsedUrl: URL;
+      try {
+        parsedUrl = new URL(url);
+      } catch {
+        throw Errors.validation("Invalid GitHub URL");
+      }
+      if (
+        parsedUrl.protocol !== "https:" ||
+        parsedUrl.hostname !== "api.github.com"
+      ) {
         throw Errors.validation("Invalid GitHub URL");
       }
 

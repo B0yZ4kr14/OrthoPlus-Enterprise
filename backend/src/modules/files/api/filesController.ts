@@ -89,6 +89,8 @@ export class FilesController {
   });
 
   uploadBackupToCloud = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.user?.clinicId as string;
+    if (!clinicId) throw Errors.unauthorized("Authentication required");
     const { backupId, provider, config } = req.body;
     if (!backupId || !provider || !config)
       throw Errors.validation(
@@ -98,6 +100,7 @@ export class FilesController {
       backupId,
       provider,
       config,
+      clinicId,
     );
     res.status(200).json({ success: true, ...result });
   });

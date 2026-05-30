@@ -44,7 +44,9 @@ export class ApiKeyHotSwap {
    */
   stop(): void {
     if (this.watcher) {
-      this.watcher.close().catch(() => {});
+      this.watcher.close().catch((err: any) => {
+        logger.error("[ApiKeyHotSwap] Failed to close watcher", { error: err });
+      });
       this.watcher = null;
       this.isWatching = false;
       logger.info("[ApiKeyHotSwap] File watcher stopped");
