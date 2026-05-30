@@ -13,4 +13,7 @@ export interface IPdvRepository {
     id: string,
     data: Prisma.pdv_vendasUpdateInput,
   ): Promise<pdv_vendas>;
+
+  findManyDashboard(where: Record<string, unknown>): Promise<unknown[]>
+  findManyMetas(clinicId: string): Promise<unknown[]>
 }

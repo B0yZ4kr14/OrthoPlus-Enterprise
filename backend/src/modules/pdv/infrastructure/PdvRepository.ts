@@ -24,4 +24,18 @@ export class PdvRepository implements IPdvRepository {
   async updateVenda(id: string, data: Prisma.pdv_vendasUpdateInput) {
     return prisma.pdv_vendas.update({ where: { id }, data });
   }
+
+  async findManyDashboard(where: Record<string, unknown>) {
+    return prisma.pdv_dashboard.findMany({
+      where,
+      orderBy: { data_referencia: "desc" },
+    });
+  }
+
+  async findManyMetas(clinicId: string) {
+    return prisma.pdv_metas_gamificacao.findMany({
+      where: { clinic_id: clinicId },
+      orderBy: { created_at: "desc" },
+    });
+  }
 }

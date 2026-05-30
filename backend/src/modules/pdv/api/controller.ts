@@ -1,22 +1,24 @@
-import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
+import { IPdvRepository } from "../domain/repositories/IPdvRepository";
+import { PdvRepository } from "../infrastructure/PdvRepository";
 
 export class PDVController {
+  constructor(
+    private repo: IPdvRepository = new PdvRepository(),
+  ) {}
+
   getDashboardExecutivo = asyncHandler(async (req: Request, res: Response) => {
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { periodo } = req.query;
-    const where: { clinic_id: string; periodo?: string } = {
+    const where: Record<string, unknown> = {
       clinic_id: clinicId,
     };
     if (periodo) where.periodo = String(periodo);
-    const data = await prisma.pdv_dashboard.findMany({
-      where,
-      orderBy: { data_referencia: "desc" },
-    });
+    const data = await this.repo.findManyDashboard(where);
     res.json(data);
   });
 
@@ -25,10 +27,7 @@ export class PDVController {
     if (!clinicId) {
       throw Errors.unauthorized("Missing clinic context");
     }
-    const data = await prisma.pdv_metas_gamificacao.findMany({
-      where: { clinic_id: clinicId },
-      orderBy: { created_at: "desc" },
-    });
+    const data = await this.repo.findManyMetas(clinicId as string);
     res.json(data);
   });
 }
