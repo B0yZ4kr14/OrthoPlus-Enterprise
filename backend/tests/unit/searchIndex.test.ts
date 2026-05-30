@@ -13,9 +13,11 @@ import { logger } from "../../src/infrastructure/logger";
 jest.mock("../../src/infrastructure/database/prismaClient", () => ({
   prisma: {
     $queryRawUnsafe: jest.fn(),
-    $queryRaw: jest.fn().mockImplementation((_strings: unknown, ..._values: unknown[]) => {
-      return Promise.resolve([]);
-    }),
+    $queryRaw: jest
+      .fn()
+      .mockImplementation((_strings: unknown, ..._values: unknown[]) => {
+        return Promise.resolve([]);
+      }),
     search_index: {
       createMany: jest.fn().mockResolvedValue({ count: 0 }),
       deleteMany: jest.fn().mockResolvedValue({ count: 0 }),

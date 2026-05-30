@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { redisInstance } from "@/infrastructure/redis/redisClient";
+import { logger } from "@/infrastructure/logger";
 
 function getKey(prefix: string, id: string): string {
   return `rate_limit:${prefix}:${id}`;
@@ -51,10 +52,11 @@ export async function iaRateLimiter(
     next();
   } catch (error) {
     // Fallback: allow request but log warning if Redis is unavailable
-    console.warn(
-      "[IA-RateLimiter] Redis unavailable, allowing request:",
+    logger.warn("[IA-RateLimiter] Redis unavailable, allowing request", {
       error,
-    );
+      dentistId,
+      clinicId,
+    });
     next();
   }
 }

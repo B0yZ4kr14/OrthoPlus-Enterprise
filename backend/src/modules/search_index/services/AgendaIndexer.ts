@@ -97,8 +97,6 @@ export class AgendaIndexer extends BaseIndexer<AppointmentRow> {
     return entity.id;
   }
 
-
-
   /**
    * Reindexa um unico agendamento por ID.
    * Remove a entrada anterior e reinsere com dados atualizados.
