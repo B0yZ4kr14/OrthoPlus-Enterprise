@@ -16,4 +16,13 @@ export interface IPdvRepository {
 
   findManyDashboard(where: Record<string, unknown>): Promise<unknown[]>
   findManyMetas(clinicId: string): Promise<unknown[]>
+
+  // Produtos
+  findProdutoById(id: string, clinicId: string): Promise<unknown | null>
+  updateProduto(id: string, data: Record<string, unknown>): Promise<unknown>
+  findProdutosBaixoEstoque(clinicId: string): Promise<unknown[]>
+
+  // Venda Itens
+  createVendaItens(data: unknown[]): Promise<unknown>
+  findVendaItens(vendaId: string, clinicId: string): Promise<unknown[]>
 }

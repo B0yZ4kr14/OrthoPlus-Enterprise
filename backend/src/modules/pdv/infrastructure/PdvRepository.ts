@@ -38,4 +38,35 @@ export class PdvRepository implements IPdvRepository {
       orderBy: { created_at: "desc" },
     });
   }
+
+  async findProdutoById(id: string, clinicId: string) {
+    return prisma.pdv_produtos.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
+  }
+
+  async updateProduto(id: string, data: Record<string, unknown>) {
+    return prisma.pdv_produtos.update({ where: { id }, data });
+  }
+
+  async findProdutosBaixoEstoque(clinicId: string) {
+    return prisma.pdv_produtos.findMany({
+      where: {
+        clinic_id: clinicId,
+        controla_estoque: true,
+        estoque_atual: { lte: prisma.pdv_produtos.fields.estoque_minimo },
+      },
+      orderBy: { estoque_atual: "asc" },
+    });
+  }
+
+  async createVendaItens(data: unknown[]) {
+    return prisma.pdv_venda_itens.createMany({ data: data as any });
+  }
+
+  async findVendaItens(vendaId: string, clinicId: string) {
+    return prisma.pdv_venda_itens.findMany({
+      where: { venda_id: vendaId, clinic_id: clinicId },
+    });
+  }
 }

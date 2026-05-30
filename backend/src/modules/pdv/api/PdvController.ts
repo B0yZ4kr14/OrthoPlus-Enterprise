@@ -5,7 +5,6 @@ import { z } from "zod";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 
 import { PdvRepository } from "@/modules/pdv/infrastructure/PdvRepository";
-import { prisma } from "@/infrastructure/database/prismaClient";
 
 const createVendaSchema = z.object({
   patientId: z.string().uuid().optional(),
@@ -63,19 +62,20 @@ export class PdvController {
         quantidade: number;
       }> = [];
       for (const item of req.body.itens) {
-        const produto = await prisma.pdv_produtos.findFirst({
-          where: { id: item.produtoId, clinic_id: clinicId },
-        });
+        const produto = await this.repo.findProdutoById(
+          item.produtoId,
+          clinicId,
+        );
         if (
           produto &&
-          produto.controla_estoque &&
-          produto.estoque_atual !== null &&
-          produto.estoque_atual < item.quantidade
+          (produto as any).controla_estoque &&
+          (produto as any).estoque_atual !== null &&
+          (produto as any).estoque_atual < item.quantidade
         ) {
           res.status(400).json({
             error: "Estoque insuficiente",
-            produto: produto.descricao,
-            estoqueAtual: produto.estoque_atual,
+            produto: (produto as any).descricao,
+            estoqueAtual: (produto as any).estoque_atual,
             quantidadeSolicitada: item.quantidade,
           });
           return;
@@ -95,8 +95,8 @@ export class PdvController {
       });
 
       // Create sale items in dedicated table
-      await prisma.pdv_venda_itens.createMany({
-        data: req.body.itens.map((item: any) => ({
+      await this.repo.createVendaItens(
+        req.body.itens.map((item: any) => ({
           venda_id: venda.id,
           produto_id: item.produtoId,
           descricao: item.descricao,
@@ -107,27 +107,27 @@ export class PdvController {
             item.quantidade * item.valorUnitario - (item.valorDesconto || 0),
           clinic_id: clinicId,
         })),
-      });
+      );
 
       // Deduct stock
       for (const item of req.body.itens) {
-        const produto = await prisma.pdv_produtos.findFirst({
-          where: { id: item.produtoId, clinic_id: clinicId },
-        });
+        const produto = await this.repo.findProdutoById(
+          item.produtoId,
+          clinicId,
+        );
         if (
           produto &&
-          produto.controla_estoque &&
-          produto.estoque_atual !== null
+          (produto as any).controla_estoque &&
+          (produto as any).estoque_atual !== null
         ) {
-          const novoEstoque = produto.estoque_atual - item.quantidade;
-          await prisma.pdv_produtos.update({
-            where: { id: item.produtoId },
-            data: { estoque_atual: novoEstoque },
+          const novoEstoque = (produto as any).estoque_atual - item.quantidade;
+          await this.repo.updateProduto(item.produtoId, {
+            estoque_atual: novoEstoque,
           });
-          if (novoEstoque <= (produto.estoque_minimo || 0)) {
+          if (novoEstoque <= ((produto as any).estoque_minimo || 0)) {
             estoqueAlertas.push({
               produtoId: item.produtoId,
-              nome: produto.descricao,
+              nome: (produto as any).descricao,
               estoqueAtual: novoEstoque,
               quantidade: item.quantidade,
             });
@@ -192,21 +192,19 @@ export class PdvController {
       }
 
       // Rollback stock for items in dedicated table
-      const itens = await prisma.pdv_venda_itens.findMany({
-        where: { venda_id: id, clinic_id: clinicId },
-      });
-      for (const item of itens) {
-        const produto = await prisma.pdv_produtos.findFirst({
-          where: { id: item.produto_id, clinic_id: clinicId },
-        });
+      const itens = await this.repo.findVendaItens(id, clinicId);
+      for (const item of itens as any[]) {
+        const produto = await this.repo.findProdutoById(
+          item.produto_id,
+          clinicId,
+        );
         if (
           produto &&
-          produto.controla_estoque &&
-          produto.estoque_atual !== null
+          (produto as any).controla_estoque &&
+          (produto as any).estoque_atual !== null
         ) {
-          await prisma.pdv_produtos.update({
-            where: { id: item.produto_id },
-            data: { estoque_atual: produto.estoque_atual + item.quantidade },
+          await this.repo.updateProduto(item.produto_id, {
+            estoque_atual: (produto as any).estoque_atual + item.quantidade,
           });
         }
       }
@@ -223,19 +221,18 @@ export class PdvController {
           | undefined;
         if (metadataItens) {
           for (const item of metadataItens) {
-            const produto = await prisma.pdv_produtos.findFirst({
-              where: { id: item.produtoId, clinic_id: clinicId },
-            });
+            const produto = await this.repo.findProdutoById(
+              item.produtoId,
+              clinicId,
+            );
             if (
               produto &&
-              produto.controla_estoque &&
-              produto.estoque_atual !== null
+              (produto as any).controla_estoque &&
+              (produto as any).estoque_atual !== null
             ) {
-              await prisma.pdv_produtos.update({
-                where: { id: item.produtoId },
-                data: {
-                  estoque_atual: produto.estoque_atual + item.quantidade,
-                },
+              await this.repo.updateProduto(item.produtoId, {
+                estoque_atual:
+                  (produto as any).estoque_atual + item.quantidade,
               });
             }
           }
@@ -254,14 +251,9 @@ export class PdvController {
       if (!clinicId) {
         throw Errors.unauthorized("Clinic ID not found in token");
       }
-      const produtos = await prisma.pdv_produtos.findMany({
-        where: {
-          clinic_id: clinicId,
-          controla_estoque: true,
-          estoque_atual: { lte: prisma.pdv_produtos.fields.estoque_minimo },
-        },
-        orderBy: { estoque_atual: "asc" },
-      });
+      const produtos = await this.repo.findProdutosBaixoEstoque(
+        clinicId as string,
+      );
       res.status(200).json({ produtos });
     },
   );
