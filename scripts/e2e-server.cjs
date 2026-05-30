@@ -30,11 +30,19 @@ function createProxyHandler() {
     proxy.on("error", (err) => {
       console.error("[e2e-server] Proxy error:", err.message);
       if (!res.headersSent) {
-        res
-          .status(502)
-          .json({ error: "Backend unavailable", message: err.message });
+        res.status(502).json({ error: "Backend unavailable" });
       }
     });
+
+    proxy.on("timeout", () => {
+      console.error("[e2e-server] Proxy timeout");
+      proxy.destroy();
+      if (!res.headersSent) {
+        res.status(504).json({ error: "Gateway timeout" });
+      }
+    });
+
+    proxy.setTimeout(30000);
 
     req.pipe(proxy, { end: true });
   };
