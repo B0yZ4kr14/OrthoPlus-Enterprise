@@ -21,7 +21,7 @@ const searchService = new SearchService(embedder, embeddings, documents);
 const briefService = new ContextBriefService(searchService, documents);
 
 briefService
-  .generateBrief(topic)
+  .generateBrief({ topic })
   .then((brief) => {
     console.log(brief.markdown);
     console.log(

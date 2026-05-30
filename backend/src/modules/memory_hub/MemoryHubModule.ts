@@ -11,6 +11,7 @@ import { IndexingService } from "./domain/services/IndexingService";
 import { GraphService } from "./domain/services/GraphService";
 import { FileWatcher } from "./infrastructure/FileWatcher";
 import { SearchAuditRepository } from "./infrastructure/SearchAuditRepository";
+import { DriftRepository } from "./infrastructure/DriftRepository";
 import { DocumentRepository } from "./infrastructure/DocumentRepository";
 import { EmbeddingRepository } from "./infrastructure/EmbeddingRepository";
 import { EmbeddingClientFactory } from "./infrastructure/EmbeddingClientFactory";
@@ -93,17 +94,18 @@ export function createMemoryHubModule(
   });
   const graphService = new GraphService(documents);
 
+  const driftRepository = new DriftRepository(db);
+
   const controller = new MemoryHubController({
     searchService,
     contextBriefService,
     indexingService,
     graphService,
-    documents,
     auditRepository,
+    driftRepository,
     healthService,
     costTrackingService,
     metrics,
-    db,
   });
 
   let fileWatcher: FileWatcher | null = null;

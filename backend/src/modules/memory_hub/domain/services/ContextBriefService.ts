@@ -76,12 +76,18 @@ export class ContextBriefService {
     this.documents = documents;
   }
 
-  async generateBrief(
-    topic: string,
-    maxTokens = 80000,
-    _includeRelated = true,
-    clinicId = "default",
-  ): Promise<ContextBrief> {
+  async generateBrief(params: {
+    topic: string;
+    maxTokens?: number;
+    includeRelated?: boolean;
+    clinicId?: string;
+  }): Promise<ContextBrief> {
+    const {
+      topic,
+      maxTokens = 80000,
+      includeRelated: _includeRelated = true,
+      clinicId = "default",
+    } = params;
     const { results } = await this.searchService.search(
       topic,
       {},

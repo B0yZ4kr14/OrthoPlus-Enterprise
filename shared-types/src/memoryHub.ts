@@ -6,6 +6,7 @@ export interface SearchResult {
   excerpt: string;
   relevanceScore: number;
   headingPath: string[];
+  confidential?: boolean;
 }
 
 export interface SearchFilters {

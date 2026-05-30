@@ -5,7 +5,6 @@ import { ContextBriefService } from "../../../src/modules/memory_hub/domain/serv
 import { IndexingService } from "../../../src/modules/memory_hub/domain/services/IndexingService";
 import { GraphService } from "../../../src/modules/memory_hub/domain/services/GraphService";
 import { HealthService } from "../../../src/modules/memory_hub/domain/services/HealthService";
-import { DocumentRepository } from "../../../src/modules/memory_hub/infrastructure/DocumentRepository";
 import { SearchAuditRepository } from "../../../src/modules/memory_hub/infrastructure/SearchAuditRepository";
 
 const createMockMetrics = () => ({
@@ -36,14 +35,13 @@ describe("MemoryHubController", () => {
   let mockContextBriefService: jest.Mocked<ContextBriefService>;
   let mockIndexingService: jest.Mocked<IndexingService>;
   let mockGraphService: jest.Mocked<GraphService>;
-  let mockDocuments: jest.Mocked<DocumentRepository>;
   let mockAuditRepository: jest.Mocked<SearchAuditRepository>;
   let mockHealthService: jest.Mocked<HealthService>;
   let mockMetrics: ReturnType<typeof createMockMetrics>;
+  let mockDriftRepository: any;
 
   beforeEach(() => {
     mockSearchService = {
-      searchWithConfidentialityFilter: jest.fn(),
       search: jest.fn(),
     } as any;
 
@@ -59,14 +57,6 @@ describe("MemoryHubController", () => {
       buildGraph: jest.fn(),
     } as any;
 
-    mockDocuments = {
-      findByPath: jest.fn(),
-      isConfidential: jest.fn(),
-      findVersions: jest.fn(),
-      count: jest.fn(),
-      listAll: jest.fn(),
-    } as any;
-
     mockAuditRepository = {
       logQuery: jest.fn(),
       getRecentQueries: jest.fn(),
@@ -78,16 +68,20 @@ describe("MemoryHubController", () => {
 
     mockMetrics = createMockMetrics();
 
+    mockDriftRepository = {
+      findUnresolved: jest.fn(),
+      countUnresolved: jest.fn(),
+    };
+
     controller = new MemoryHubController({
       searchService: mockSearchService,
       contextBriefService: mockContextBriefService,
       indexingService: mockIndexingService,
       graphService: mockGraphService,
-      documents: mockDocuments,
       auditRepository: mockAuditRepository,
       healthService: mockHealthService,
       metrics: mockMetrics as any,
-      db: {} as any,
+      driftRepository: mockDriftRepository,
     });
   });
 
@@ -104,7 +98,7 @@ describe("MemoryHubController", () => {
       const res = createMockResponse();
       const next = createMockNext();
 
-      mockSearchService.searchWithConfidentialityFilter.mockResolvedValue({
+      mockSearchService.search.mockResolvedValue({
         results: [
           {
             id: "1",
@@ -117,14 +111,17 @@ describe("MemoryHubController", () => {
           },
         ],
         total: 1,
-        confidentialExcluded: 0,
       });
 
       await controller.search(req, res as unknown as Response, next);
 
-      expect(
-        mockSearchService.searchWithConfidentialityFilter,
-      ).toHaveBeenCalledWith("test query", {}, 10, 0, "clinic-1");
+      expect(mockSearchService.search).toHaveBeenCalledWith(
+        "test query",
+        {},
+        10,
+        0,
+        "clinic-1",
+      );
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           results: expect.any(Array),
@@ -151,7 +148,7 @@ describe("MemoryHubController", () => {
       expect(res.json).not.toHaveBeenCalled();
     });
 
-    it("should clamp limit to max 100", async () => {
+    it("should reject limit over 100", async () => {
       const req = {
         body: { query: "test", limit: 200 },
         user: { clinicId: "clinic-1", id: "user-1" },
@@ -159,17 +156,12 @@ describe("MemoryHubController", () => {
       const res = createMockResponse();
       const next = createMockNext();
 
-      mockSearchService.searchWithConfidentialityFilter.mockResolvedValue({
-        results: [],
-        total: 0,
-        confidentialExcluded: 0,
-      });
-
       await controller.search(req, res as unknown as Response, next);
 
-      expect(
-        mockSearchService.searchWithConfidentialityFilter,
-      ).toHaveBeenCalledWith("test", expect.any(Object), 100, 0, "clinic-1");
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 400 }),
+      );
+      expect(mockSearchService.search).not.toHaveBeenCalled();
     });
 
     it("should log audit query after search", async () => {
@@ -180,7 +172,7 @@ describe("MemoryHubController", () => {
       const res = createMockResponse();
       const next = createMockNext();
 
-      mockSearchService.searchWithConfidentialityFilter.mockResolvedValue({
+      mockSearchService.search.mockResolvedValue({
         results: [
           {
             id: "1",
@@ -193,7 +185,6 @@ describe("MemoryHubController", () => {
           },
         ],
         total: 1,
-        confidentialExcluded: 0,
       });
 
       await controller.search(req, res as unknown as Response, next);
@@ -210,7 +201,9 @@ describe("MemoryHubController", () => {
 
   describe("health", () => {
     it("should return health metrics from HealthService", async () => {
-      const req = { user: { clinicId: "clinic-1" } } as unknown as Request;
+      const req = {
+        user: { clinicId: "clinic-1", role: "ADMIN" },
+      } as unknown as Request;
       const res = createMockResponse();
       const next = createMockNext();
 
@@ -240,7 +233,9 @@ describe("MemoryHubController", () => {
 
   describe("reindex", () => {
     it("should trigger reindex and return success", async () => {
-      const req = { user: { clinicId: "clinic-1" } } as unknown as Request;
+      const req = {
+        user: { clinicId: "clinic-1", role: "ADMIN" },
+      } as unknown as Request;
       const res = createMockResponse();
       const next = createMockNext();
 
@@ -249,27 +244,15 @@ describe("MemoryHubController", () => {
       await controller.reindex(req, res as unknown as Response, next);
 
       expect(mockIndexingService.reindexAll).toHaveBeenCalled();
-      expect(res.json).toHaveBeenCalledWith({ message: "Reindex complete" });
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Reindex complete",
+        clinicId: "clinic-1",
+      });
     });
   });
 
   describe("graph", () => {
     it("should return graph data from GraphService", async () => {
-      const req = { user: { clinicId: "clinic-1" } } as unknown as Request;
-      const res = createMockResponse();
-      const next = createMockNext();
-
-      mockGraphService.buildGraph.mockReturnValue({ nodes: [], edges: [] });
-
-      await controller.graph(req, res as unknown as Response, next);
-
-      expect(mockGraphService.buildGraph).toHaveBeenCalledWith("clinic-1");
-      expect(res.json).toHaveBeenCalledWith({ nodes: [], edges: [] });
-    });
-  });
-
-  describe("versions", () => {
-    it("should return versions for a valid sourcePath", async () => {
       const req = {
         query: { sourcePath: "specs/test.md" },
         user: { clinicId: "clinic-1" },
@@ -277,34 +260,19 @@ describe("MemoryHubController", () => {
       const res = createMockResponse();
       const next = createMockNext();
 
-      mockDocuments.findVersions.mockReturnValue([
-        {
-          version: 1,
-          contentHash: "abc",
-          title: "Test",
-          wordCount: 100,
-          createdAt: Date.now(),
-        },
-      ]);
+      mockGraphService.buildGraph.mockReturnValue({ nodes: [], edges: [] });
 
-      await controller.versions(req, res as unknown as Response, next);
+      await controller.graph(req, res as unknown as Response, next);
 
-      expect(mockDocuments.findVersions).toHaveBeenCalledWith(
-        "specs/test.md",
-        "clinic-1",
-      );
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({
-          sourcePath: "specs/test.md",
-          versions: expect.any(Array),
-          count: 1,
-        }),
-      );
+      expect(mockGraphService.buildGraph).toHaveBeenCalledWith("specs/test.md");
+      expect(res.json).toHaveBeenCalledWith({ nodes: [], edges: [] });
     });
+  });
 
-    it("should call next with error for invalid sourcePath", async () => {
+  describe("versions", () => {
+    it("should return version info", async () => {
       const req = {
-        query: { sourcePath: "/etc/passwd" },
+        query: {},
         user: { clinicId: "clinic-1" },
       } as unknown as Request;
       const res = createMockResponse();
@@ -312,10 +280,13 @@ describe("MemoryHubController", () => {
 
       await controller.versions(req, res as unknown as Response, next);
 
-      expect(next).toHaveBeenCalledWith(
-        expect.objectContaining({ status: 400 }),
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          memory_hub: expect.any(String),
+          api: expect.any(String),
+          embedding_providers: expect.any(Array),
+        }),
       );
-      expect(res.json).not.toHaveBeenCalled();
     });
   });
 
@@ -339,10 +310,12 @@ describe("MemoryHubController", () => {
       await controller.contextBrief(req, res as unknown as Response, next);
 
       expect(mockContextBriefService.generateBrief).toHaveBeenCalledWith(
-        "auth flow",
-        128000,
-        true,
-        "clinic-1",
+        expect.objectContaining({
+          topic: "auth flow",
+          maxTokens: 200000,
+          includeRelated: true,
+          clinicId: "clinic-1",
+        }),
       );
     });
   });

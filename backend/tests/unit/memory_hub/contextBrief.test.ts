@@ -47,7 +47,9 @@ describe("ContextBriefService", () => {
         .mockReturnValue({ id: "doc-1", frontmatter: "{}" });
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false);
 
-      const brief = await service.generateBrief("patient management");
+      const brief = await service.generateBrief({
+        topic: "patient management",
+      });
 
       expect(brief.documents.length).toBe(1);
       expect(brief.documents[0].sourcePath).toBe("specs/001-pacientes/spec.md");
@@ -92,7 +94,7 @@ describe("ContextBriefService", () => {
         .mockReturnValue({ id: "doc-1", frontmatter: "{}" });
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false);
 
-      const brief = await service.generateBrief("patient");
+      const brief = await service.generateBrief({ topic: "patient" });
 
       expect(brief.documents[0].docType).toBe("spec");
       expect(brief.documents[1].docType).toBe("architecture");
@@ -141,7 +143,7 @@ describe("ContextBriefService", () => {
           }
         });
 
-      const brief = await service.generateBrief("test");
+      const brief = await service.generateBrief({ topic: "test" });
 
       expect(brief.documents.length).toBe(1);
       expect(brief.documents[0].sourcePath).toBe("specs/open.md");
@@ -171,7 +173,10 @@ describe("ContextBriefService", () => {
         .mockReturnValue({ id: "doc-1", frontmatter: "{}" });
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false);
 
-      const brief = await service.generateBrief("test", 2000);
+      const brief = await service.generateBrief({
+        topic: "test",
+        maxTokens: 2000,
+      });
 
       // Should include some but not all documents due to hard token budget cap
       expect(brief.documents.length).toBeLessThan(10);
@@ -200,7 +205,10 @@ describe("ContextBriefService", () => {
         .mockReturnValue({ id: "doc-1", frontmatter: "{}" });
       mockDocuments.isConfidential = jest.fn().mockReturnValue(false);
 
-      const brief = await service.generateBrief("test", 50);
+      const brief = await service.generateBrief({
+        topic: "test",
+        maxTokens: 50,
+      });
 
       // With a 50-token budget, no documents should be included
       expect(brief.documents.length).toBe(0);
