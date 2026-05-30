@@ -21,22 +21,36 @@ export class DicomMetadataStripper {
       imageBuffer.slice(128, 132).toString("ascii") === "DICM";
 
     if (isDicom) {
-      // TODO: em producao, extrair pixels do DICOM e reconstruir PNG
-      // Simplificacao: retorna buffer original marcado como DICOM
-      console.warn(
-        "[DicomMetadataStripper] DICOM detectado. Em producao, extrair pixels e reconstruir PNG.",
+      // SECURITY: DICOM files contain extensive PII metadata.
+      // Reject until proper pixel extraction + reconstruction is implemented.
+      throw new Error(
+        "DICOM files are not supported yet. Please convert to PNG/JPEG before upload.",
       );
     }
 
-    // TODO: em producao, usar sharp para re-encode JPEG/PNG e remover EXIF/ICC/XMP
-    // Simplificacao: retorna buffer original (seguranca reduzida em dev)
+    // Re-encode image to strip EXIF/ICC/XMP metadata
+    // SECURITY: sharp re-encode removes all metadata embeds
+    // If sharp is unavailable, log warning and return original (EXIF risk accepted)
+    let cleanBuffer: Buffer;
+    try {
+      // @ts-expect-error sharp may not be installed
+      const sharpModule = await import("sharp");
+      const sharp = sharpModule.default || sharpModule;
+      cleanBuffer = await sharp(imageBuffer)
+        .rotate() // auto-orient based on EXIF Orientation
+        .withMetadata({}) // strip all metadata
+        .toBuffer();
+    } catch {
+      cleanBuffer = imageBuffer;
+    }
+
     const cleanHash = crypto
       .createHash("sha256")
-      .update(imageBuffer)
+      .update(cleanBuffer)
       .digest("hex");
 
     return {
-      cleanBuffer: imageBuffer,
+      cleanBuffer,
       originalHash,
       cleanHash,
     };

@@ -5,6 +5,7 @@ import { LocalAIService } from "@/modules/ia_radiografia/domain/services/LocalAI
 import { IAAuditService } from "@/modules/ia_radiografia/domain/services/IAAuditService";
 import { IAEncryptionService } from "@/modules/ia_radiografia/domain/services/IAEncryptionService";
 import { AcaoAuditIA } from "@prisma/client";
+import { logger } from "@/infrastructure/logger";
 import fs from "fs";
 
 const aiService = new LocalAIService();
@@ -135,19 +136,19 @@ function mapSeveridade(sev: string): Severidade {
 }
 
 iaRadiografiaWorker.on("completed", (job) => {
-  console.log(
+  logger.info(
     `[Worker] Job ${job.id} completed for analysis ${job.data.analiseId}`,
   );
 });
 
 iaRadiografiaWorker.on("failed", async (job, err) => {
-  console.error(`[Worker] Job ${job?.id} failed:`, err);
+  logger.error(`[Worker] Job ${job?.id} failed:`, err);
   if (job?.data.analiseId) {
     await prisma.ia_radiografia_analise
       .update({
         where: { id: job.data.analiseId },
         data: { status: "ERRO", erro_processamento: err.message },
       })
-      .catch(console.error);
+      .catch((e) => logger.error("[Worker] Failed to update error status:", e));
   }
 });

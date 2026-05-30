@@ -448,7 +448,7 @@ app.get("/api/clinics/:id/active-modules", tenantGuard, async (req, res) => {
     });
     res.json(rows.map((r) => r.module_catalog?.module_key).filter(Boolean));
   } catch (error) {
-    console.error("Error fetching active modules", error);
+    logger.error("Error fetching active modules", { error });
     res.status(500).json({ error: "Erro ao carregar módulos ativos" });
   }
 });
