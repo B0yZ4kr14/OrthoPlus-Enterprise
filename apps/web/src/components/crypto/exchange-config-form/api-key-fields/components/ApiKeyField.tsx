@@ -37,7 +37,7 @@ export function ApiKeyField({
                 <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
               </TooltipTrigger>
               <TooltipContent className="max-w-xs">
-                <p dangerouslySetInnerHTML={{ __html: tooltipContent }} />
+                <p>{tooltipContent}</p>
               </TooltipContent>
             </Tooltip>
           </div>

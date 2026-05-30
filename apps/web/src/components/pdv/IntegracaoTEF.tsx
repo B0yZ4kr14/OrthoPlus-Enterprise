@@ -102,6 +102,14 @@ export default function IntegracaoTEF({
     }
   };
 
+  const escapeHtml = (str: string) =>
+    str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
   const imprimirComprovante = () => {
     if (!transacao?.comprovante_cliente) return;
 
@@ -110,7 +118,7 @@ export default function IntegracaoTEF({
       printWindow.document.write(
         '<pre style="font-family: monospace; font-size: 12px;">',
       );
-      printWindow.document.write(transacao.comprovante_cliente);
+      printWindow.document.write(escapeHtml(transacao.comprovante_cliente));
       printWindow.document.write("</pre>");
       printWindow.document.close();
       printWindow.print();

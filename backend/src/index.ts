@@ -278,8 +278,26 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
 });
 
-// Prometheus metrics endpoint (internal network only — no auth required)
-app.get("/metrics", async (_req, res) => {
+// Prometheus metrics endpoint (restricted to internal/private IPs)
+app.get("/metrics", async (req, res) => {
+  const clientIp = req.ip || req.socket.remoteAddress || "";
+  const isInternal =
+    clientIp === "127.0.0.1" ||
+    clientIp === "::1" ||
+    clientIp === "::ffff:127.0.0.1" ||
+    clientIp.startsWith("10.") ||
+    clientIp.startsWith("172.16.") ||
+    clientIp.startsWith("172.17.") ||
+    clientIp.startsWith("172.18.") ||
+    clientIp.startsWith("172.19.") ||
+    clientIp.startsWith("172.2") ||
+    clientIp.startsWith("172.30.") ||
+    clientIp.startsWith("172.31.") ||
+    clientIp.startsWith("192.168.");
+  if (!isInternal) {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
   res.set("Content-Type", "text/plain; version=0.0.4; charset=utf-8");
   res.send(await prometheusMetrics.getMetrics());
 });
