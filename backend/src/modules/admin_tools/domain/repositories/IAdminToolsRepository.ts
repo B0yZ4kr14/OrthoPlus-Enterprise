@@ -1,20 +1,23 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AdminToolResult = any;
+
 export interface IAdminToolsRepository {
-  createUser(data: any): Promise<any>;
-  updateUserRole(email: string, role: string): Promise<any>;
-  getActiveConnections(): Promise<any>;
-  getTableSizes(): Promise<any>;
-  searchPatients(clinicId: string, query: string): Promise<any[]>;
-  searchDentists(clinicId: string, query: string): Promise<any[]>;
+  createUser(data: Record<string, unknown>): Promise<AdminToolResult>;
+  updateUserRole(email: string, role: string): Promise<AdminToolResult>;
+  getActiveConnections(): Promise<AdminToolResult>;
+  getTableSizes(): Promise<AdminToolResult>;
+  searchPatients(clinicId: string, query: string): Promise<AdminToolResult[]>;
+  searchDentists(clinicId: string, query: string): Promise<AdminToolResult[]>;
   runVacuumAnalyze(): Promise<void>;
 
   // ADR
-  findAdrsByClinic(clinicId: string): Promise<any[]>;
-  createAdr(data: any): Promise<any>;
+  findAdrsByClinic(clinicId: string): Promise<AdminToolResult[]>;
+  createAdr(data: Record<string, unknown>): Promise<AdminToolResult>;
 
   // Wiki
-  findWikiPagesByClinic(clinicId: string): Promise<any[]>;
-  createWikiPage(data: any): Promise<any>;
-  findWikiPageByIdAndClinic(id: string, clinicId: string): Promise<any | null>;
-  updateWikiPage(id: string, data: any): Promise<any>;
-  deleteWikiPage(id: string, clinicId: string): Promise<any>;
+  findWikiPagesByClinic(clinicId: string): Promise<AdminToolResult[]>;
+  createWikiPage(data: Record<string, unknown>): Promise<AdminToolResult>;
+  findWikiPageByIdAndClinic(id: string, clinicId: string): Promise<AdminToolResult | null>;
+  updateWikiPage(id: string, data: Record<string, unknown>): Promise<AdminToolResult>;
+  deleteWikiPage(id: string, clinicId: string): Promise<AdminToolResult>;
 }
