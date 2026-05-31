@@ -1,6 +1,6 @@
 import { redisInstance } from "@/infrastructure/redis/redisClient";
 import { logger } from "@/infrastructure/logger";
-import type { SearchResultItem, SearchResponse } from "@orthoplus/shared-types";
+import type { SearchResponse } from "@orthoplus/shared-types";
 
 function buildKey(
   clinicId: string,

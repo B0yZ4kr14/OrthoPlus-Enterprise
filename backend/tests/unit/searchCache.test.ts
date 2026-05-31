@@ -6,8 +6,8 @@ import {
   getSearchCache,
   setSearchCache,
   invalidateSearchCache,
-  SearchResponse,
 } from "../../src/infrastructure/cache/searchCache";
+import type { SearchResponse } from "@orthoplus/shared-types";
 import { redisInstance } from "../../src/infrastructure/redis/redisClient";
 
 jest.mock("../../src/infrastructure/redis/redisClient", () => ({
