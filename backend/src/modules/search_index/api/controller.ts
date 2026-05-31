@@ -13,23 +13,7 @@ import { redisInstance } from "@/infrastructure/redis/redisClient";
 import { ISearchIndexRepository } from "../domain/repositories/ISearchIndexRepository";
 import { SearchIndexRepository } from "../infrastructure/SearchIndexRepository";
 import { prisma } from "@/infrastructure/database/prismaClient";
-
-export interface SearchResultItem {
-  id: string;
-  entityType: string;
-  entityId: string;
-  title: string;
-  snippet: string;
-  score: number;
-  module: string;
-}
-
-export interface SearchResponse {
-  total: number;
-  page: number;
-  limit: number;
-  results: SearchResultItem[];
-}
+import type { SearchResultItem, SearchResponse } from "@orthoplus/shared-types";
 
 const SEARCH_CACHE_TTL_MS = 60 * 1000; // 60 seconds
 
