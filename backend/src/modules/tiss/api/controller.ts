@@ -73,7 +73,7 @@ export class TISSController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateGuia(id, parsed.data);
+    const data = await this.repo.updateGuia(id, clinicId, parsed.data);
     return res.json(data);
   }
 
@@ -290,7 +290,7 @@ export class TISSController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateGuia(id, {
+    const data = await this.repo.updateGuia(id, clinicId, {
       status: "glosada",
       glosa_amount: parsed.data.glosa_amount,
       glosa_reason: parsed.data.glosa_reason,
@@ -314,7 +314,7 @@ export class TISSController {
     if (!existing) {
       throw Errors.notFound("Guia", id);
     }
-    const data = await this.repo.updateGuia(id, {
+    const data = await this.repo.updateGuia(id, clinicId, {
       status: "RASCUNHO",
       glosa_reason: null,
       glosa_amount: null,
@@ -372,7 +372,7 @@ export class TISSController {
     if (!existing) {
       throw Errors.notFound("Convenio", id);
     }
-    const data = await this.repo.updateConvenio(id, req.body);
+    const data = await this.repo.updateConvenio(id, clinicId, req.body);
     return res.json(data);
   }
 
@@ -438,7 +438,7 @@ export class TISSController {
     if (!existing) {
       throw Errors.notFound("Vinculacao", id);
     }
-    const data = await this.repo.updatePacienteConvenio(id, req.body);
+    const data = await this.repo.updatePacienteConvenio(id, clinicId, req.body);
     return res.json(data);
   }
 

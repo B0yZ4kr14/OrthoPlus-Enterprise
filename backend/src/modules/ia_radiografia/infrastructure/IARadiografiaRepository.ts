@@ -39,8 +39,9 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateAnalise(id: string, data: Record<string, unknown>) {
-    return prisma.ia_radiografia_analise.update({ where: { id }, data: data as any });
+  async updateAnalise(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.ia_radiografia_analise.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
+    return prisma.ia_radiografia_analise.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async countAnalises(where: Record<string, unknown>) {
@@ -94,8 +95,9 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateConsentimento(id: string, data: Record<string, unknown>) {
-    return prisma.paciente_consentimento_ia.update({ where: { id }, data: data as any });
+  async updateConsentimento(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.paciente_consentimento_ia.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
+    return prisma.paciente_consentimento_ia.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async findHistoricoConsentimento(pacienteId: string, clinicId: string) {

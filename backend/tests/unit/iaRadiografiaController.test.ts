@@ -42,6 +42,7 @@ jest.mock("../../src/infrastructure/database/prismaClient", () => ({
       create: mockPrismaCreate,
       findFirst: mockPrismaFindFirst,
       update: mockPrismaUpdate,
+      updateMany: jest.fn(),
       findMany: mockPrismaFindMany,
     },
     ia_radiografia_consentimento: {

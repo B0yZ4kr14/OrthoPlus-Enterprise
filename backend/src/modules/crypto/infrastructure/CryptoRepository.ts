@@ -8,9 +8,11 @@ export class CryptoRepository {
 
   async updateTransaction(
     id: string,
+    clinicId: string,
     data: Prisma.crypto_transactionsUpdateInput,
   ) {
-    return prisma.crypto_transactions.update({ where: { id }, data });
+    await prisma.crypto_transactions.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.crypto_transactions.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async createTransaction(data: Prisma.crypto_transactionsCreateInput) {

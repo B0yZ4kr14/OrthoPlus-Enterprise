@@ -105,12 +105,37 @@ export class AgendaRepository implements IAgendaRepository {
 
   async updateConfirmation(
     id: string,
+    clinicId: string,
     data: Prisma.appointment_confirmationsUpdateInput,
   ) {
+    const confirmation = await prisma.appointment_confirmations.findUnique({
+      where: { id },
+    });
+    if (!confirmation) {
+      throw new Error("Confirmation not found");
+    }
+    const appointment = await prisma.appointments.findFirst({
+      where: { id: confirmation.appointment_id, clinic_id: clinicId },
+    });
+    if (!appointment) {
+      throw new Error("Confirmation not found");
+    }
     return prisma.appointment_confirmations.update({ where: { id }, data });
   }
 
-  async deleteConfirmation(id: string) {
+  async deleteConfirmation(id: string, clinicId: string) {
+    const confirmation = await prisma.appointment_confirmations.findUnique({
+      where: { id },
+    });
+    if (!confirmation) {
+      throw new Error("Confirmation not found");
+    }
+    const appointment = await prisma.appointments.findFirst({
+      where: { id: confirmation.appointment_id, clinic_id: clinicId },
+    });
+    if (!appointment) {
+      throw new Error("Confirmation not found");
+    }
     return prisma.appointment_confirmations.delete({ where: { id } });
   }
 

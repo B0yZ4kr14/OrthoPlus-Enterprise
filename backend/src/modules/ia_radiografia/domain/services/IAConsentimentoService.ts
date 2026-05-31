@@ -44,7 +44,7 @@ export class IAConsentimentoService {
       throw new Error("Consentimento nao encontrado");
     }
 
-    return this.repo.updateConsentimento(existing.id, {
+    return this.repo.updateConsentimento(existing.id, dto.clinicId, {
       revogado: true,
       data_revogacao: new Date(),
       motivo_revogacao: dto.motivo,

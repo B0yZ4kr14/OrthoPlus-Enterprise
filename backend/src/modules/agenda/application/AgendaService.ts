@@ -302,7 +302,7 @@ export class AgendaService {
       throw err;
     }
 
-    return this.repo.updateConfirmation(id, parsed.data);
+    return this.repo.updateConfirmation(id, clinicId, parsed.data);
   }
 
   async deleteConfirmation(id: string, clinicId: string) {
@@ -323,7 +323,7 @@ export class AgendaService {
       throw err;
     }
 
-    await this.repo.deleteConfirmation(id);
+    await this.repo.deleteConfirmation(id, clinicId);
   }
 
   // ─── Blocked Times ───

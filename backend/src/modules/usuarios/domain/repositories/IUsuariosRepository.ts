@@ -29,6 +29,10 @@ export interface IUsuariosRepository {
     ids: string[],
   ): Promise<Pick<users, "id" | "email" | "last_sign_in_at">[]>;
   createUser(data: Prisma.usersCreateInput): Promise<users>;
-  updateUser(id: string, data: Prisma.usersUpdateInput): Promise<users>;
+  updateUser(
+    id: string,
+    clinicId: string,
+    data: Prisma.usersUpdateManyMutationInput,
+  ): Promise<Prisma.BatchPayload>;
   deleteUser(id: string, clinicId: string): Promise<Prisma.BatchPayload>;
 }

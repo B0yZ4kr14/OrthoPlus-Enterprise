@@ -30,7 +30,7 @@ export const iaRadiografiaWorker = new Worker(
     const analise = await repo.findAnaliseByIdOnly(analiseId);
     if (!analise) throw new Error("Analysis not found");
 
-    await repo.updateAnalise(analiseId, { status: "PROCESSANDO" });
+    await repo.updateAnalise(analiseId, analise.clinic_id, { status: "PROCESSANDO" });
 
     const imageBuffer = fs.readFileSync(storagePath);
 
@@ -54,7 +54,7 @@ export const iaRadiografiaWorker = new Worker(
 
     const encrypted = encryptionService.encrypt(resultado, analiseId);
 
-    await repo.updateAnalise(analiseId, {
+    await repo.updateAnalise(analiseId, analise.clinic_id, {
       status: "CONCLUIDA",
       resultado_ia: encrypted as unknown as never,
       confidence_score: confidence,
@@ -138,11 +138,14 @@ iaRadiografiaWorker.on("failed", async (job, err) => {
   logger.error(`[Worker] Job ${job?.id} failed:`, err);
   if (job?.data.analiseId) {
     const repo: IIARadiografiaRepository = new IARadiografiaRepository();
-    await repo
-      .updateAnalise(job.data.analiseId, {
-        status: "ERRO",
-        erro_processamento: err.message,
-      })
-      .catch((e) => logger.error("[Worker] Failed to update error status:", e));
+    const analise = await repo.findAnaliseByIdOnly(job.data.analiseId);
+    if (analise) {
+      await repo
+        .updateAnalise(job.data.analiseId, analise.clinic_id, {
+          status: "ERRO",
+          erro_processamento: err.message,
+        })
+        .catch((e) => logger.error("[Worker] Failed to update error status:", e));
+    }
   }
 });

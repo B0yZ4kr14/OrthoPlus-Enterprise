@@ -107,7 +107,7 @@ export class UsuariosController {
 
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 12);
-        await this.repo.updateUser(id, { password_hash: hashedPassword });
+        await this.repo.updateUser(id, clinicId, { password_hash: hashedPassword });
       }
 
       res.json({ success: true });
@@ -135,7 +135,7 @@ export class UsuariosController {
       }
 
       await this.repo.updateProfile(id, clinicId, { is_active });
-      await this.repo.updateUser(id, { is_active });
+      await this.repo.updateUser(id, clinicId, { is_active });
 
       res.json({ success: true });
     } catch (error) {

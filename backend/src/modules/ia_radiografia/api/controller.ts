@@ -225,7 +225,7 @@ export class IARadiografiaController {
       .update(assinatura_digital)
       .digest("hex");
 
-    await this.repo.updateAnalise(id, {
+    await this.repo.updateAnalise(id, clinicId, {
       revisada: true,
       dentista_revisor_id: dentistaRevisorId,
       observacoes_dentista,

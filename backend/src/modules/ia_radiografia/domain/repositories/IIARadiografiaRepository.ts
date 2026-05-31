@@ -4,7 +4,7 @@ export interface IIARadiografiaRepository {
   findAnalisesByClinic(clinicId: string): Promise<any[]>;
   findAnaliseById(id: string, clinicId: string): Promise<any | null>;
   findAnaliseByIdOnly(id: string): Promise<any | null>;
-  updateAnalise(id: string, data: Record<string, unknown>): Promise<any>;
+  updateAnalise(id: string, clinicId: string, data: Record<string, unknown>): Promise<any>;
   countAnalises(where: Record<string, unknown>): Promise<number>;
   aggregateConfidence(where: Record<string, unknown>): Promise<any>;
   aggregateProcessingTime(where: Record<string, unknown>): Promise<any>;
@@ -16,7 +16,7 @@ export interface IIARadiografiaRepository {
     pacienteId: string,
     clinicId: string,
   ): Promise<any | null>;
-  updateConsentimento(id: string, data: Record<string, unknown>): Promise<any>;
+  updateConsentimento(id: string, clinicId: string, data: Record<string, unknown>): Promise<any>;
   findHistoricoConsentimento(
     pacienteId: string,
     clinicId: string,

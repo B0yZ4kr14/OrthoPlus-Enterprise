@@ -308,11 +308,15 @@ describe("IAConsentimentoService", () => {
         motivo: "Paciente solicitou revogação",
       });
 
-      expect(mockRepo.updateConsentimento).toHaveBeenCalledWith("cons-1", {
-        revogado: true,
-        data_revogacao: expect.any(Date),
-        motivo_revogacao: "Paciente solicitou revogação",
-      });
+      expect(mockRepo.updateConsentimento).toHaveBeenCalledWith(
+        "cons-1",
+        "clinica-1",
+        {
+          revogado: true,
+          data_revogacao: expect.any(Date),
+          motivo_revogacao: "Paciente solicitou revogação",
+        },
+      );
     });
 
     it("should throw when consentimento not found", async () => {

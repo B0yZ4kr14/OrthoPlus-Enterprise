@@ -62,10 +62,11 @@ export interface IAgendaRepository {
 
   updateConfirmation(
     id: string,
+    clinicId: string,
     data: Prisma.appointment_confirmationsUpdateInput,
   ): Promise<appointment_confirmations>;
 
-  deleteConfirmation(id: string): Promise<appointment_confirmations>;
+  deleteConfirmation(id: string, clinicId: string): Promise<appointment_confirmations>;
 
   // ── Blocked Times ─────────────────────────────────────────────────────
   findBlockedTimes(

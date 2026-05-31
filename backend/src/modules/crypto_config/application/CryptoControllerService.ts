@@ -28,11 +28,16 @@ export class CryptoControllerService {
 
     const updatedTransaction = await this.repo.updateTransaction(
       transactionId,
+      transaction.clinic_id as string,
       {
         status: "CONVERTIDO",
         price_brl: amountBrl,
       },
     );
+
+    if (!updatedTransaction) {
+      throw Errors.notFound("Transaction", transactionId);
+    }
 
     await this.repo.createAuditLog({
       clinic_id: transaction.clinic_id,

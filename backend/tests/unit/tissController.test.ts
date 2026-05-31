@@ -253,7 +253,8 @@ describe("TISSController.updateGuia", () => {
   it("updates the guide and returns it", async () => {
     guides.findFirst.mockResolvedValueOnce(sampleGuide);
     const updated = { ...sampleGuide, status: "SUBMITTED" };
-    guides.update.mockResolvedValueOnce(updated);
+    guides.updateMany.mockResolvedValueOnce({ count: 1 });
+    guides.findFirst.mockResolvedValueOnce(updated);
     const req = mockReq({
       params: { id: "guide-1" },
       body: { status: "SUBMITTED" },

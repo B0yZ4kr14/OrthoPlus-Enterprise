@@ -24,8 +24,9 @@ export class TISSRepository implements ITISSRepository {
     return prisma.tiss_guides.create({ data: data as any });
   }
 
-  async updateGuia(id: string, data: Record<string, unknown>) {
-    return prisma.tiss_guides.update({ where: { id }, data });
+  async updateGuia(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.tiss_guides.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.tiss_guides.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async deleteGuia(id: string, clinicId: string) {
@@ -100,8 +101,9 @@ export class TISSRepository implements ITISSRepository {
     return prisma.tiss_batches.create({ data: data as any });
   }
 
-  async updateBatch(id: string, data: Record<string, unknown>) {
-    return prisma.tiss_batches.update({ where: { id }, data });
+  async updateBatch(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.tiss_batches.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.tiss_batches.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async groupByBatches(args: Record<string, unknown>) {
@@ -125,8 +127,9 @@ export class TISSRepository implements ITISSRepository {
     return prisma.tiss_convenios.create({ data: data as any });
   }
 
-  async updateConvenio(id: string, data: Record<string, unknown>) {
-    return prisma.tiss_convenios.update({ where: { id }, data });
+  async updateConvenio(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.tiss_convenios.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.tiss_convenios.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async deleteConvenio(id: string, clinicId: string) {
@@ -151,8 +154,9 @@ export class TISSRepository implements ITISSRepository {
     return prisma.paciente_convenios.create({ data: data as any });
   }
 
-  async updatePacienteConvenio(id: string, data: Record<string, unknown>) {
-    return prisma.paciente_convenios.update({ where: { id }, data });
+  async updatePacienteConvenio(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.paciente_convenios.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.paciente_convenios.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async deletePacienteConvenio(id: string, clinicId: string) {
