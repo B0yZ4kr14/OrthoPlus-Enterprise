@@ -12,7 +12,7 @@ export class Appointment {
   createdAt!: Date;
   updatedAt!: Date;
 
-  static create(props: any): Appointment {
+  static create(props: Partial<Appointment>): Appointment {
     return Object.assign(new Appointment(), props);
   }
 

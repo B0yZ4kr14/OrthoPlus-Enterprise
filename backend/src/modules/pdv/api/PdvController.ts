@@ -96,15 +96,15 @@ export class PdvController {
 
       // Create sale items in dedicated table
       await this.repo.createVendaItens(
-        req.body.itens.map((item: any) => ({
+        req.body.itens.map((item: Record<string, unknown>) => ({
           venda_id: venda.id,
-          produto_id: item.produtoId,
-          descricao: item.descricao,
-          quantidade: item.quantidade,
-          valor_unitario: item.valorUnitario,
-          valor_desconto: item.valorDesconto || 0,
+          produto_id: item.produtoId as string,
+          descricao: item.descricao as string,
+          quantidade: item.quantidade as number,
+          valor_unitario: item.valorUnitario as number,
+          valor_desconto: (item.valorDesconto as number) || 0,
           valor_total:
-            item.quantidade * item.valorUnitario - (item.valorDesconto || 0),
+            (item.quantidade as number) * (item.valorUnitario as number) - ((item.valorDesconto as number) || 0),
           clinic_id: clinicId,
         })),
       );

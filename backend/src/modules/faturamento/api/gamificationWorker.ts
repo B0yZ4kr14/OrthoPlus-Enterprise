@@ -24,7 +24,7 @@ export class GamificationWorkerController {
           );
 
           const valor_atingido = vendas.reduce(
-            (sum: number, v: any) => sum + parseFloat(v.valor_total || 0),
+            (sum: number, v: Record<string, unknown>) => sum + (parseFloat(String(v.valor_total || 0)) || 0),
             0,
           );
           const quantidade_atingida = vendas.length;
@@ -99,23 +99,24 @@ export class GamificationWorkerController {
           );
 
           const vendedoresMap = new Map();
-          vendasPeriodo.forEach((venda: any) => {
-            if (!vendedoresMap.has(venda.created_by)) {
-              vendedoresMap.set(venda.created_by, {
+          vendasPeriodo.forEach((venda: Record<string, unknown>) => {
+            const createdBy = venda.created_by as string;
+            if (!vendedoresMap.has(createdBy)) {
+              vendedoresMap.set(createdBy, {
                 total_vendas: 0,
                 quantidade_vendas: 0,
               });
             }
-            const v = vendedoresMap.get(venda.created_by);
-            v.total_vendas += parseFloat(venda.valor_total || 0);
+            const v = vendedoresMap.get(createdBy) as { total_vendas: number; quantidade_vendas: number };
+            v.total_vendas += parseFloat(String(venda.valor_total || 0));
             v.quantidade_vendas += 1;
           });
 
           const ranking = Array.from(vendedoresMap.entries())
-            .map(([vendedor_id, stats]: [string, any]) => ({
+            .map(([vendedor_id, stats]) => ({
               vendedor_id,
-              total_vendas: stats.total_vendas,
-              quantidade_vendas: stats.quantidade_vendas,
+              total_vendas: (stats as Record<string, unknown>).total_vendas as number,
+              quantidade_vendas: (stats as Record<string, unknown>).quantidade_vendas as number,
               ticket_medio: stats.total_vendas / stats.quantidade_vendas,
             }))
             .sort((a, b) => b.total_vendas - a.total_vendas);

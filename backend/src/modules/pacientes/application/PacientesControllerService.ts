@@ -173,7 +173,7 @@ export class PacientesControllerService {
 
     return {
       ...result,
-      data: result.data.map((patient: any) => ({
+      data: result.data.map((patient) => ({
         id: patient.id,
         fullName: patient.fullName,
         cpf: patient.cpf,

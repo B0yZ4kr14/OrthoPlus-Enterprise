@@ -39,13 +39,13 @@ export class AgendaService {
     query: {
       dentistId?: string;
       patientId?: string;
-      status?: any;
-      startTime?: any;
+      status?: unknown;
+      startTime?: unknown;
     },
   ) {
     const start = Date.now();
     try {
-      const result = await this.repo.findAppointments(clinicId, query);
+      const result = await this.repo.findAppointments(clinicId, query as any);
       const duration = Date.now() - start;
       agendaMetrics.observeCalendarLoadDuration(clinicId, duration);
       return result;
@@ -332,11 +332,11 @@ export class AgendaService {
     clinicId: string,
     query: {
       dentistId?: string;
-      endDatetime?: any;
-      startDatetime?: any;
+      endDatetime?: unknown;
+      startDatetime?: unknown;
     },
   ) {
-    return this.repo.findBlockedTimes(clinicId, query);
+    return this.repo.findBlockedTimes(clinicId, query as any);
   }
 
   async getBlockedTime(id: string, clinicId: string) {

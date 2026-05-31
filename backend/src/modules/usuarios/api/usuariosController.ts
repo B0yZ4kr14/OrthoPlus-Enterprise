@@ -23,8 +23,7 @@ export class UsuariosController {
       const profileIds = profiles.map((p: { id: string }) => p.id);
       const users = await this.repo.findUsersByIds(profileIds);
 
-      const usersWithEmail = profiles.map((p: any) => {
-        // eslint-disable-line @typescript-eslint/no-explicit-any
+      const usersWithEmail = profiles.map((p: Record<string, unknown>) => {
         const u = users.find((u) => u.id === p.id);
         return {
           id: p.id,

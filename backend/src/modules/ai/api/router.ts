@@ -34,11 +34,12 @@ router.post("/triagem", authMiddleware, async (req: Request, res: Response) => {
 
     const result = await triagemVirtual(parsed.data);
     res.json(result);
-  } catch (error: any) {
-    logger.error("[AI/Triagem] Erro:", error.message);
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    logger.error("[AI/Triagem] Erro:", err.message);
     res.status(500).json({
       error: "Erro ao processar triagem",
-      message: error.message,
+      message: err.message,
     });
   }
 });
