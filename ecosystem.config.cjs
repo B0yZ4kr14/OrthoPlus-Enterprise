@@ -29,11 +29,11 @@ module.exports = {
   
   deploy: {
     production: {
-      user: 'deploy',
-      host: ['tsiapp.io'],
+      user: process.env.PM2_DEPLOY_USER || 'tsi',
+      host: [process.env.PM2_DEPLOY_HOST || 'your-server.com'],
       ref: 'origin/main',
       repo: 'https://github.com/B0yZ4kr14/OrthoPlus-Enterprise.git',
-      path: '/var/www/orthoplus',
+      path: process.env.PM2_DEPLOY_PATH || '/home/tsi/OrthoPlus-Enterprise',
       'post-deploy': 'pnpm install --frozen-lockfile && pnpm build && pm2 reload ecosystem.config.cjs --env production'
     }
   }
