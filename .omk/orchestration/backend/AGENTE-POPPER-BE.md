@@ -8,8 +8,8 @@ Experimento: ls backend/src/modules/ | wc -l
 Previsao: 37
 Falsificador: != 37
 
-### HF-BE-002: "Todos os routers em index.ts usam clinicGuard (exceto auth/health)"
-Experimento: grep -c "app.use" backend/src/index.ts vs grep -c "clinicGuard" backend/src/index.ts
+### HF-BE-002: "Todos os routers de módulos usam clinicGuard (exceto auth/health)"
+Experimento: grep -rl "clinicGuard" backend/src/modules/*/api/router.ts | wc -l
 Previsao: clinicGuard aparece em todos os routers protegidos
 Falsificador: Router registrado sem clinicGuard
 

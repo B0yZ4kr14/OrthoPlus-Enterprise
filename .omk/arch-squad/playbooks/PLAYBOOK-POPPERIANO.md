@@ -32,9 +32,9 @@ EVIDÊNCIA REQUERIDA: [Como provar que é falsa]
 
 ```
 HIPÓTESE BE-ARCH-001: "Todo router backend possui clinicGuard aplicado"
-FALSA SE: Qualquer router em backend/src/index.ts que não use clinicGuard
+FALSA SE: Qualquer router de módulo que não use clinicGuard
 SEVERIDADE: CRITICAL
-EVIDÊNCIA: grep -n "clinicGuard" backend/src/index.ts
+EVIDÊNCIA: grep -rn "clinicGuard" backend/src/modules/*/api/router.ts
 
 HIPÓTESE FE-ARCH-001: "O frontend usa Clean Architecture em todos os módulos"
 FALSA SE: Qualquer módulo em apps/web/src/modules/ sem camada domain/ ou application/

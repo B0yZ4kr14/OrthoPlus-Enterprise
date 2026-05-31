@@ -24,7 +24,7 @@ Previsao: Container Up
 Falsificador: Container ausente
 
 ### HF-DEV-005: "O frontend responde na porta 8083"
-Experimento: curl -s -o /dev/null -w "%{http_code}" http://localhost:8083/
+Experimento: curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/
 Previsao: 200
 Falsificador: != 200
 

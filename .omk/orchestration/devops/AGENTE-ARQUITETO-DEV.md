@@ -21,5 +21,5 @@
 | 1 | Host network no backend | docker inspect tsiapp-orthoplus-backend |
 | 2 | Non-root user | docker inspect --format='{{.Config.User}}' |
 | 3 | Healthcheck no backend | docker inspect --format='{{.Config.Healthcheck}}' |
-| 4 | CSP header no nginx | curl -I http://localhost:8083 |
+| 4 | CSP header no nginx | curl -I http://localhost:8080 |
 | 5 | .env no .gitignore | grep .env .gitignore |

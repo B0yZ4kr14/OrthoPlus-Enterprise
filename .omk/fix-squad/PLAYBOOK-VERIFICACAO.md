@@ -44,7 +44,7 @@ cd backend && pnpm test 2>&1 | tail -5
 ```bash
 docker ps --filter "name=tsiapp-orthoplus" --format "{{.Names}}|{{.Status}}"
 curl -s -o /dev/null -w "%{http_code}" http://localhost:3005/health
-curl -s -o /dev/null -w "%{http_code}" http://localhost:8083/
+curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/
 ```
 
 ### 7. Verificar Documentacao (se aplicavel)

@@ -65,9 +65,9 @@ EVIDENCIA ANEXADA: [arquivo, linha, output completo]
 
 ### Exemplo 1: clinicGuard
 
-HIPOTESE: "Todos os routers registrados em index.ts usam clinicGuard."
-PREVISAO: "Cada router em index.ts tem .use(clinicGuard) antes das rotas."
-EXPERIMENTO: grep -n "clinicGuard" backend/src/index.ts
+HIPOTESE: "Todos os routers de módulos usam clinicGuard."
+PREVISAO: "Cada router em backend/src/modules/*/api/router.ts tem .use(clinicGuard) antes das rotas."
+EXPERIMENTO: grep -rn "clinicGuard" backend/src/modules/*/api/router.ts | wc -l
 RESULTADO ESPERADO: clinicGuard aparece antes de cada router
 RESULTADO QUE FALSIFICA: clinicGuard ausente em algum router
 EVIDENCIA REAL: [output do grep]

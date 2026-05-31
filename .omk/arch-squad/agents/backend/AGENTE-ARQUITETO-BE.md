@@ -18,9 +18,9 @@ O backend é um monólito modular com 37 módulos de domínio.
 
 ### HIPÓTESE BE-ARCH-001
 **"Todo router backend possui clinicGuard aplicado"**
-- FALSA SE: Router em index.ts sem clinicGuard
+- FALSA SE: Router de módulo sem clinicGuard
 - SEVERIDADE: CRITICAL
-- EVIDÊNCIA: grep -c "clinicGuard" backend/src/index.ts
+- EVIDÊNCIA: grep -rl "clinicGuard" backend/src/modules/*/api/router.ts | wc -l
 
 ### HIPÓTESE BE-ARCH-002
 **"Todo módulo com tabela Prisma tem controller funcional"**

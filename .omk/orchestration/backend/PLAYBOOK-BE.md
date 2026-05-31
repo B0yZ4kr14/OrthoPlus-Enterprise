@@ -7,7 +7,7 @@
 ls backend/src/modules/ | wc -l
 
 ### Verificar clinicGuard
-grep -n "clinicGuard" backend/src/index.ts
+grep -rn "clinicGuard" backend/src/modules/*/api/router.ts | wc -l
 
 ### Verificar Build
 cd backend && pnpm run build 2>&1 | tail -10

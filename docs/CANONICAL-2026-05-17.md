@@ -100,7 +100,7 @@ cd agent-service && python src/main.py   # FastAPI (porta 8000)
 
 ## 5. Módulos Backend (36)
 
-Todos registrados em `backend/src/index.ts` com `clinicGuard`.
+Todos os routers de módulos em `backend/src/modules/*/api/router.ts` usam `clinicGuard`.
 
 | # | Módulo | Router | Controller | Prisma | Stubs | Status |
 |---|--------|--------|------------|--------|-------|--------|

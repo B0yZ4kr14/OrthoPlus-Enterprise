@@ -33,7 +33,7 @@ EVIDENCIA-ID: BE-001-2026-05-15T20:15:00Z
 ORIGEM: backend/src/index.ts, linha 45
 COLETOR: AGENTE-POPPER-BE
 TIMESTAMP: 2026-05-15T20:15:00Z
-COMANDO: grep -n "clinicGuard" backend/src/index.ts
+COMANDO: grep -rn "clinicGuard" backend/src/modules/*/api/router.ts | wc -l
 OUTPUT:
   45: app.use(clinicGuard);
   67: app.use(clinicGuard);

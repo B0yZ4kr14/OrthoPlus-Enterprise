@@ -16,7 +16,7 @@ docker inspect --format='{{.State.Health.Status}}' tsiapp-orthoplus
 curl -s -o /dev/null -w "%{http_code}" http://localhost:3005/health
 
 ### Verificar Frontend
-curl -s -o /dev/null -w "%{http_code}" http://localhost:8083/
+curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/
 
 ### Verificar Nginx Config
 cat /etc/nginx/sites-enabled/tsiapp-https 2>/dev/null || echo "nginx config nao acessivel"
