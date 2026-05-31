@@ -24,8 +24,8 @@ export function ProdutosTable({ produtos }: ProdutosTableProps) {
             </tr>
           </thead>
           <tbody>
-            {produtos.map((produto, index) => (
-              <tr key={index} className="border-b hover:bg-muted/50">
+            {produtos.map((produto) => (
+              <tr key={produto.nome} className="border-b hover:bg-muted/50">
                 <td className="p-3 font-medium">{produto.nome}</td>
                 <td className="text-right p-3">{produto.quantidade}</td>
                 <td className="text-right p-3">

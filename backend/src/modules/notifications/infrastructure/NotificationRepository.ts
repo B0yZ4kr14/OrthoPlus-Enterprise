@@ -37,8 +37,9 @@ export class NotificationRepository implements INotificationRepository {
     });
   }
 
-  async createNotification(data: any) {
-    return prisma.notifications.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createNotification(data: Record<string, unknown>) {
+    return prisma.notifications.create({ data: data as any });
   }
 
   async markNotificationRead(id: string, clinicId: string) {
@@ -64,8 +65,9 @@ export class NotificationRepository implements INotificationRepository {
     });
   }
 
-  async updateCryptoAlert(id: string, data: any) {
-    return prisma.crypto_price_alerts.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateCryptoAlert(id: string, data: Record<string, unknown>) {
+    return prisma.crypto_price_alerts.update({ where: { id }, data: data as any });
   }
 
   async findCryptoAlertsByCascadeGroup(
@@ -106,14 +108,16 @@ export class NotificationRepository implements INotificationRepository {
 
   // ── Audit Logs ────────────────────────────────────────────────────────
 
-  async createAuditLog(data: any) {
-    return prisma.audit_logs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAuditLog(data: Record<string, unknown>) {
+    return prisma.audit_logs.create({ data: data as any });
   }
 
   // ── Stock Alerts ──────────────────────────────────────────────────────
 
-  async createStockAlert(data: any) {
-    return prisma.estoque_alertas.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createStockAlert(data: Record<string, unknown>) {
+    return prisma.estoque_alertas.create({ data: data as any });
   }
 
   // ── Raw SQL Queries (Prisma limitations: cross-column comparisons, EXTRACT, JOINs) ──

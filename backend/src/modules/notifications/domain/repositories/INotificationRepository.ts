@@ -7,13 +7,13 @@ export interface INotificationRepository {
 
   // ── Notifications ─────────────────────────────────────────────────────
   findNotificationsByClinic(clinicId: string): Promise<any[]>;
-  createNotification(data: any): Promise<any>;
+  createNotification(data: Record<string, unknown>): Promise<any>;
   markNotificationRead(id: string, clinicId: string): Promise<any>;
   markAllNotificationsRead(clinicId: string): Promise<any>;
 
   // ── Crypto Price Alerts ───────────────────────────────────────────────
   findActiveVolatilityAlerts(): Promise<any[]>;
-  updateCryptoAlert(id: string, data: any): Promise<any>;
+  updateCryptoAlert(id: string, data: Record<string, unknown>): Promise<any>;
   findCryptoAlertsByCascadeGroup(
     cascadeGroupId: string,
     cascadeOrder: number,
@@ -26,10 +26,10 @@ export interface INotificationRepository {
   findAdminsByClinic(clinicId: string | undefined): Promise<any[]>;
 
   // ── Audit Logs ────────────────────────────────────────────────────────
-  createAuditLog(data: any): Promise<any>;
+  createAuditLog(data: Record<string, unknown>): Promise<any>;
 
   // ── Stock Alerts ──────────────────────────────────────────────────────
-  createStockAlert(data: any): Promise<any>;
+  createStockAlert(data: Record<string, unknown>): Promise<any>;
 
   // ── Raw SQL Queries ───────────────────────────────────────────────────
   findOverduePayments(today: Date): Promise<any[]>;

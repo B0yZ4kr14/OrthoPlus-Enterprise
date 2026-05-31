@@ -96,7 +96,7 @@ Upstreams: backend (3005), agent-service (8000), MinIO (9000).
 | JWT_SECRET | Sim | Chave JWT (min. 256 bits) |
 | REDIS_URL | Sim | Redis connection string |
 | NODE_ENV | Sim | development / production |
-| FRONTEND_URL | Sim | URL publica |
+| ~~FRONTEND_URL~~ | — | **Legacy** — nao utilizado pelo codigo. Use `ALLOWED_ORIGINS` para CORS. |
 | ALLOWED_ORIGINS | Sim | CORS whitelist |
 | DB_SSL | Prod | true em producao |
 | AUTH_ALLOW_MOCK | Nao | **PROIBIDO em producao** |

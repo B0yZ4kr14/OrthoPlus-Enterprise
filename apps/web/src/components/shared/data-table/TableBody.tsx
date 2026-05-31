@@ -8,6 +8,17 @@ interface DataTableBodyProps<T extends Record<string, unknown>> {
   columns: Column<T>[];
 }
 
+function getRowKey<T extends Record<string, unknown>>(
+  row: T,
+  index: number,
+): string {
+  const id = row.id;
+  if (typeof id === "string" || typeof id === "number") return String(id);
+  const _id = row._id;
+  if (typeof _id === "string" || typeof _id === "number") return String(_id);
+  return `row-${index}`;
+}
+
 export function DataTableBody<T extends Record<string, unknown>>({
   data,
   columns,
@@ -28,7 +39,7 @@ export function DataTableBody<T extends Record<string, unknown>>({
         </TableRow>
       ) : (
         data.map((row, index) => (
-          <TableRow key={index}>
+          <TableRow key={getRowKey(row, index)}>
             {columns.map((column) => (
               <TableCell key={String(column.key)}>{column.cell(row)}</TableCell>
             ))}
