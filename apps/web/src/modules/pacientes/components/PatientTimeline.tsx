@@ -48,8 +48,8 @@ const COLOR_MAP: Record<string, string> = {
   status_change:
     "bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground",
   payment:
-    "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300",
-  document: "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300",
+    "bg-secondary/10 text-secondary dark:bg-secondary/30 dark:text-secondary-foreground",
+  document: "bg-destructive/10 text-destructive dark:bg-destructive/30 dark:text-destructive-foreground",
 };
 
 const LABEL_MAP: Record<string, string> = {

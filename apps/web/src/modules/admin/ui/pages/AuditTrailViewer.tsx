@@ -78,7 +78,7 @@ export default function AuditTrailViewer() {
       UPDATE: "bg-info/10 text-info dark:text-info",
       DELETE: "bg-destructive/10 text-destructive dark:text-destructive",
       SELECT: "bg-muted text-muted-foreground dark:text-muted-foreground",
-      EXPORT: "bg-purple-500/10 text-purple-700 dark:text-purple",
+      EXPORT: "bg-secondary/10 text-secondary dark:text-secondary-foreground",
     };
 
     return <Badge className={colors[action] || ""}>{action}</Badge>;

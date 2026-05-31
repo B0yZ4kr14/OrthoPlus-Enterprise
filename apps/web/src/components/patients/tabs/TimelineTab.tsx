@@ -62,7 +62,7 @@ export function TimelineTab({ patientId }: TimelineTabProps) {
       case "pagamento":
         return "text-success bg-success/10";
       case "prontuario":
-        return "text-purple-500 bg-purple-500/10";
+        return "text-secondary bg-secondary/10";
       case "status_change":
         return "text-warning bg-warning/10";
       case "budget":

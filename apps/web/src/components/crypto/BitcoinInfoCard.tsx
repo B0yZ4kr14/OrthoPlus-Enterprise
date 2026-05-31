@@ -153,7 +153,7 @@ export function BitcoinInfoCard() {
                   },
                   {
                     name: "Kraken",
-                    color: "bg-purple-500/10 border-purple-500/20",
+                    color: "bg-secondary/10 border-secondary/20",
                   },
                   {
                     name: "Bybit",

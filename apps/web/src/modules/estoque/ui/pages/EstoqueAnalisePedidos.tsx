@@ -361,7 +361,7 @@ export default function EstoqueAnalisePedidos() {
 
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-lg bg-purple-500/10">
+            <div className="p-3 rounded-lg bg-secondary/10">
               <TrendingUp className="h-5 w-5 text-purple-500" />
             </div>
             <div>

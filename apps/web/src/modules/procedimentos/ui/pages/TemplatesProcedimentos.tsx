@@ -106,10 +106,10 @@ export default function TemplatesProcedimentosPage() {
     const colors: Record<string, string> = {
       RESTAURACAO: "bg-info/10 text-info dark:text-info",
       ENDODONTIA: "bg-destructive/10 text-destructive dark:text-destructive",
-      PROTESE: "bg-purple-500/10 text-purple-700 dark:text-purple",
+      PROTESE: "bg-secondary/10 text-secondary dark:text-secondary-foreground",
       ORTODONTIA: "bg-success/10 text-success dark:text-success",
       CIRURGIA: "bg-warning/10 text-warning dark:text-warning/80",
-      PERIODONTIA: "bg-pink-500/10 text-pink-700 dark:text-pink",
+      PERIODONTIA: "bg-accent/10 text-accent dark:text-accent-foreground",
       ESTETICA: "bg-interactive/10 text-interactive",
       PREVENTIVA: "bg-success/10 text-success dark:text-success",
     };
