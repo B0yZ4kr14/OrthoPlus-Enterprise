@@ -397,20 +397,21 @@ export class FinanceiroService {
     return { success: true, executed: true };
   }
 
-  async enviarCobranca(body: Record<string, unknown>) {
+  async enviarCobranca(clinicId: string, body: Record<string, unknown>) {
     const contaReceberId = body.contaReceberId as string;
     const method = body.method as string;
     const message = body.message as string | undefined;
     if (!contaReceberId || !method)
       throw badRequest("contaReceberId and method are required");
     const cobranca = await this.repo.findContaReceberById(contaReceberId);
-    if (!cobranca) throw notFound("Billing record not found");
+    if (!cobranca || cobranca.clinic_id !== clinicId)
+      throw notFound("Billing record not found");
     const patient = cobranca.patient_id
       ? await this.repo.getPatient(cobranca.patient_id)
       : null;
     await this.repo.createComunicacaoLog({
       paciente_id: cobranca.patient_id,
-      clinic_id: cobranca.clinic_id,
+      clinic_id: clinicId,
       tipo: method.toUpperCase(),
       mensagem:
         message ||
@@ -421,12 +422,15 @@ export class FinanceiroService {
     return { success: true, message: "Cobrança enviada com sucesso" };
   }
 
-  async processarPagamento(body: Record<string, unknown>) {
+  async processarPagamento(clinicId: string, body: Record<string, unknown>) {
     const contaReceberId = body.contaReceberId as string;
     const amount = body.amount as number;
     const paymentMethod = body.paymentMethod as string;
     if (!contaReceberId || !amount || !paymentMethod)
       throw badRequest("Required fields missing");
+    const contaReceber = await this.repo.findContaReceberById(contaReceberId);
+    if (!contaReceber || contaReceber.clinic_id !== clinicId)
+      throw notFound("Billing record not found");
     const result = await this.processarPagamentoUseCase.execute({
       contaReceberId,
       amount,
@@ -447,11 +451,13 @@ export class FinanceiroService {
     };
   }
 
-  async processarSplitPagamento(body: Record<string, unknown>) {
+  async processarSplitPagamento(clinicId: string, body: Record<string, unknown>) {
     const transactionId = body.transactionId as string;
     const splits = body.splits as unknown[];
     if (!transactionId || !splits || !splits.length)
       throw badRequest("transactionId and splits mapping are required");
+    const transaction = await this.repo.getTransaction(transactionId, clinicId);
+    if (!transaction) throw notFound("Transaction not found");
     return { success: true, message: "Split rules applied successfully" };
   }
 }

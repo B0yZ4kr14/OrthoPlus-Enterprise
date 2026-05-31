@@ -385,16 +385,25 @@ export class FinanceiroController {
   manageFinanceiroJobs = this.wrap(async (_req, res) => {
     res.json(await this.service.manageFinanceiroJobs());
   }, "Error managing financeiro jobs");
-  enviarCobranca = this.wrap(async (req, res) => {
-    res.json(await this.service.enviarCobranca(req.body));
-  }, "Error in enviar-cobranca");
-  processarPagamento = this.wrap(async (req, res) => {
-    res.json(await this.service.processarPagamento(req.body));
-  }, "Error in processar-pagamento");
+  enviarCobranca = this.withClinic(
+    "Error in enviar-cobranca",
+    async (c, req, res) => {
+      res.json(await this.service.enviarCobranca(c, req.body));
+    },
+  );
+  processarPagamento = this.withClinic(
+    "Error in processar-pagamento",
+    async (c, req, res) => {
+      res.json(await this.service.processarPagamento(c, req.body));
+    },
+  );
   processarPagamentoTef = this.wrap(async (_req, res) => {
     res.json(await this.service.processarPagamentoTef());
   }, "Error in processar-pagamento-tef");
-  processarSplitPagamento = this.wrap(async (req, res) => {
-    res.json(await this.service.processarSplitPagamento(req.body));
-  }, "Error in processar-split-pagamento");
+  processarSplitPagamento = this.withClinic(
+    "Error in processar-split-pagamento",
+    async (c, req, res) => {
+      res.json(await this.service.processarSplitPagamento(c, req.body));
+    },
+  );
 }
