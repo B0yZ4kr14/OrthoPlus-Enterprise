@@ -139,11 +139,8 @@ export const runRecallJob = async () => {
     const sixMonthsAgo = new Date(now);
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    // TODO: implement historical appointment query for recall reminders
-    // This would need a new repository method to find patients without
-    // appointments in the last 6 months
-    logger.info(
-      `Recall job: would query appointments before ${sixMonthsAgo.toISOString()}.`,
+    logger.warn(
+      `[Agenda] Recall job: implementar query de pacientes sem consultas desde ${sixMonthsAgo.toISOString()}`
     );
   } catch (error) {
     logger.error("Error in recall cron: ", error);

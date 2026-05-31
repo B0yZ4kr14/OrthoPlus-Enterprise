@@ -5,8 +5,9 @@ import cron from "node-cron";
 // Helper for local API calls mapping back to our Express `estoqueController`
 const triggerEstoqueAction = async (action: string) => {
   try {
+    const baseUrl = process.env.API_BASE_URL || "http://localhost:3005";
     await axios.post(
-      "http://localhost:3005/api/estoque/automation",
+      `${baseUrl}/api/estoque/automation`,
       {
         action,
       },

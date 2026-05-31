@@ -210,7 +210,7 @@ export default function CRMPage() {
                 icon={Users}
                 message="Nenhum lead encontrado"
                 description="Adicione seu primeiro lead ou ajuste os filtros."
-                action={{ label: "Novo Lead", onClick: () => {} }}
+                action={{ label: "Novo Lead", onClick: () => undefined }}
               />
             ) : (
               <div className="divide-y divide-border/50">

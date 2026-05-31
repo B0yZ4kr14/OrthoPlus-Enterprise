@@ -40,7 +40,7 @@ export function useCashFlow(period?: Period) {
     } finally {
       setLoading(false);
     }
-  }, [clinicId, currentPeriod]);
+  }, [clinicId, currentPeriod, getCashFlowUseCase]);
 
   useEffect(() => {
     loadCashFlow();

@@ -67,7 +67,7 @@ export class EmitirNFeCommandHandler {
     _clinicId: string,
     _serie: string,
   ): Promise<string> {
-    // TODO: Em produção, usar sequence do PostgreSQL para garantir unicidade
+    logger.warn("[NFe] Usando timestamp como número da nota. Em produção, configurar sequence do PostgreSQL.");
     const timestamp = Date.now();
     return String(timestamp);
   }

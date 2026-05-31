@@ -51,7 +51,7 @@ export function BackupRestoreDialog({
             requiresDecryption={requiresDecryption}
             decryptionPassword={decryptionPassword}
             onPasswordChange={setDecryptionPassword}
-            onDecrypt={() => {}} // Hook gerencia internamente
+            onDecrypt={() => { /* no-op: hook handles decryption internally */ }} // Hook gerencia internamente
             loading={loading}
             error={error}
           />

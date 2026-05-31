@@ -70,6 +70,7 @@ export function useAuditLogs() {
 
   useEffect(() => {
     fetchLogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fetch on mount only
   }, []);
 
   const filteredLogs = useMemo(() => {

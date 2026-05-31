@@ -128,8 +128,7 @@ export class TISSSoapClient {
       xmlLength: xml.length,
     });
 
-    // TODO: implement actual SOAP request
-    // Mock response for now
+    logger.warn("[TISS] SOAP request mocked — implement actual operator WSDL transport");
     const protocolNumber = `PROT-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
     return {

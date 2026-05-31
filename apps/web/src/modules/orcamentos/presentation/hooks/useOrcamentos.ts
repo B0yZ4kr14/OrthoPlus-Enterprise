@@ -50,7 +50,7 @@ export function useOrcamentos() {
         setLoading(false);
       }
     },
-    [clinicId, isPatient],
+    [clinicId, isPatient, listUseCase],
   );
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export function useOrcamentos() {
 
       await loadOrcamentos();
     },
-    [clinicId, user, isPatient, loadOrcamentos],
+    [clinicId, user, isPatient, loadOrcamentos, createUseCase],
   );
 
   const enviarOrcamento = useCallback(
@@ -89,7 +89,7 @@ export function useOrcamentos() {
       await enviarUseCase.execute({ orcamentoId });
       await loadOrcamentos();
     },
-    [loadOrcamentos],
+    [loadOrcamentos, enviarUseCase],
   );
 
   const aprovarOrcamento = useCallback(
@@ -98,7 +98,7 @@ export function useOrcamentos() {
       await aprovarUseCase.execute({ orcamentoId, aprovadoPor: user.id });
       await loadOrcamentos();
     },
-    [user, loadOrcamentos],
+    [user, loadOrcamentos, aprovarUseCase],
   );
 
   // Análises

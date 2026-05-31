@@ -13,12 +13,7 @@ export class NotificarClienteNFeHandler implements EventHandler<NFeAutorizadaEve
         cliente: event.nfe.clienteNome,
       });
 
-      // TODO: Implementar envio real de email/WhatsApp
-      // await emailService.send({
-      //   to: event.nfe.clienteEmail,
-      //   subject: ,
-      //   ...
-      // });
+      logger.warn("[NFe] Envio real de email/WhatsApp para cliente ainda não implementado");
     } catch (error) {
       logger.error("Erro ao notificar cliente sobre NFe", { error, event });
     }

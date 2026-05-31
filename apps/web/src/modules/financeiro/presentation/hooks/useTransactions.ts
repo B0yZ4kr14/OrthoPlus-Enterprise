@@ -41,7 +41,7 @@ export function useTransactions(filters?: TransactionFilters) {
     } finally {
       setLoading(false);
     }
-  }, [clinicId, filters]);
+  }, [clinicId, filters, listUseCase]);
 
   useEffect(() => {
     loadTransactions();
@@ -69,7 +69,7 @@ export function useTransactions(filters?: TransactionFilters) {
 
       await loadTransactions();
     },
-    [clinicId, user, loadTransactions],
+    [clinicId, user, loadTransactions, createUseCase],
   );
 
   const payTransaction = useCallback(
@@ -82,7 +82,7 @@ export function useTransactions(filters?: TransactionFilters) {
 
       await loadTransactions();
     },
-    [loadTransactions],
+    [loadTransactions, payUseCase],
   );
 
   // Analytics

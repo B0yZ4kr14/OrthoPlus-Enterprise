@@ -4,8 +4,9 @@ import cron from "node-cron";
 
 const triggerFinanceiroJob = async (jobName: string) => {
   try {
+    const baseUrl = process.env.API_BASE_URL || "http://localhost:3005";
     await axios.post(
-      "http://localhost:3005/api/financeiro/jobs/execute",
+      `${baseUrl}/api/financeiro/jobs/execute`,
       {
         jobName,
       },

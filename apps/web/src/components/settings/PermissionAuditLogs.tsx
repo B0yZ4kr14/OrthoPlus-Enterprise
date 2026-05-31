@@ -54,6 +54,7 @@ export function PermissionAuditLogs() {
   useEffect(() => {
     fetchLogs();
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fetch on mount only
   }, []);
 
   const fetchUsers = async () => {

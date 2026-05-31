@@ -230,7 +230,7 @@ export function useSidebarCategory(): Pick<
       store.toggleGroup(boundedContext);
       // toggle tracked
     },
-    [store, user?.id, clinicId],
+    [store],
   );
 
   return {

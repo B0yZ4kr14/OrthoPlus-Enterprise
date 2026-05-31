@@ -5,8 +5,9 @@ import cron from "node-cron";
 // Helper mapping for crypto endpoints executing background checks
 const triggerCryptoJob = async (jobName: string) => {
   try {
+    const baseUrl = process.env.API_BASE_URL || "http://localhost:3005";
     await axios.post(
-      "http://localhost:3005/api/crypto/jobs/execute",
+      `${baseUrl}/api/crypto/jobs/execute`,
       {
         jobName,
       },

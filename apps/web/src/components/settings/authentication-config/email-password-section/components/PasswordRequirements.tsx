@@ -32,7 +32,7 @@ export function PasswordRequirements({
             Não exigir confirmação de email (recomendado para testes)
           </p>
         </div>
-        <Switch checked={false} onCheckedChange={() => {}} />
+        <Switch checked={false} onCheckedChange={() => { /* no-op: controlled by parent */ }} />
       </div>
 
       <div className="space-y-2">

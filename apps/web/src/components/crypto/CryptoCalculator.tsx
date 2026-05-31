@@ -73,6 +73,7 @@ export function CryptoCalculator() {
     }, 60000);
 
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fetch on mount + interval setup
   }, []);
 
   const calculateConversion = () => {

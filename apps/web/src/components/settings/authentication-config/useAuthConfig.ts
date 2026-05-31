@@ -72,6 +72,7 @@ export function useAuthConfig() {
 
   useEffect(() => {
     loadConfig();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- loadConfig depends on selectedClinic which is already in deps
   }, [selectedClinic]);
 
   return { config, loading, saving, loadConfig, saveConfig, updateConfig };

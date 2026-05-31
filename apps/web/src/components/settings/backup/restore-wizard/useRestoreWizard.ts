@@ -37,7 +37,7 @@ export function useRestoreWizard(onClose: () => void) {
 
   const prevStep = useCallback(() => {
     if (step > 1) setStep((prev) => prev - 1);
-  }, []);
+  }, [step]);
 
   const confirm = useCallback(() => {
     onClose();
