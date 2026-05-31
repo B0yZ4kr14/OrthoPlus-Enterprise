@@ -83,7 +83,7 @@ export default function EstoqueRequisicoes() {
       });
       setShowForm(false);
     } catch (error) {
-      console.error("Erro ao criar requisição:", error);
+      toast({ title: "Erro", description: "Erro ao criar requisição", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao criar requisição",
@@ -97,7 +97,7 @@ export default function EstoqueRequisicoes() {
       await aprovarRequisicao(id, currentUser);
       toast({ title: "Sucesso", description: "Requisição aprovada!" });
     } catch (error) {
-      console.error("Erro ao aprovar requisição:", error);
+      toast({ title: "Erro", description: "Erro ao aprovar requisição", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao aprovar requisição",
@@ -116,7 +116,7 @@ export default function EstoqueRequisicoes() {
       toast({ title: "Sucesso", description: "Requisição rejeitada" });
       setRejectDialog({ open: false, id: null });
     } catch (error) {
-      console.error("Erro ao rejeitar requisição:", error);
+      toast({ title: "Erro", description: "Erro ao rejeitar requisição", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao rejeitar requisição",

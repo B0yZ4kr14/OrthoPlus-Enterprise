@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card } from "@orthoplus/core-ui/card";
 import { DollarSign } from "lucide-react";
@@ -31,7 +32,7 @@ export default function ContasReceber() {
         observacoes: formData.observacoes,
       });
     } catch (error) {
-      console.error("Erro ao criar conta:", error);
+      toast.error("Erro ao criar conta");
     }
   };
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
@@ -58,7 +59,7 @@ export default function RelatorioCaixa() {
       );
       setMovimentos(data || []);
     } catch (error) {
-      console.error("Error loading movimentos:", error);
+      toast.error("Erro ao carregar movimentos");
     } finally {
       setLoading(false);
     }

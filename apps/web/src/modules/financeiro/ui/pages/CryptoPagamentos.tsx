@@ -169,7 +169,7 @@ export default function CryptoPagamentos() {
       );
       setCascadeWizardOpen(false);
     } catch (error) {
-      console.error("Error creating cascade:", error);
+      toast.error("Erro ao criar cascade");
       toast.error("Erro ao criar estratégia em cascata");
     }
   };
