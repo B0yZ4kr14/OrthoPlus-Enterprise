@@ -3,6 +3,7 @@ import { IAgendamentoRepository } from "@/domain/repositories/IAgendamentoReposi
 import { apiClient } from "@/lib/api/apiClient";
 import { AgendamentoMapper } from "./mappers/AgendamentoMapper";
 import type { Tables } from "@/types/database";
+import { logger } from "@/lib/logger";
 
 export class DbAgendamentoRepository implements IAgendamentoRepository {
   async findById(id: string): Promise<Agendamento | null> {
@@ -139,7 +140,7 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
       );
       return data?.hasConflict ?? false;
     } catch (error) {
-      console.error("Erro ao verificar conflito:", error);
+      logger.error("Erro ao verificar conflito", error);
       return false;
     }
   }

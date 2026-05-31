@@ -1,6 +1,7 @@
 import { DomainEvent } from "@/core/domain/events/DomainEvent";
 import { IEventHandler } from "@/core/domain/events/EventBus";
 import { apiClient } from "@/lib/api/apiClient";
+import { logger } from "@/lib/logger";
 
 /**
  * Handler that logs all domain events to audit_logs table
@@ -18,7 +19,7 @@ export class AuditLogHandler implements IEventHandler<DomainEvent> {
         },
       });
     } catch (err) {
-      console.error("Failed to log event:", err);
+      logger.error("Failed to log event", err);
     }
   }
 }

@@ -74,7 +74,6 @@ export function useAgendamentos(
 
       setAgendamentos(result);
     } catch (error) {
-      console.error("Erro ao buscar agendamentos:", error);
       toast({
         title: "Erro ao buscar agendamentos",
         description:
@@ -122,7 +121,6 @@ export function useAgendamentos(
 
         await fetchAgendamentos();
       } catch (error) {
-        console.error("Erro ao criar agendamento:", error);
         toast({
           title: "Erro ao criar agendamento",
           description:
@@ -164,7 +162,6 @@ export function useAgendamentos(
 
         await fetchAgendamentos();
       } catch (error) {
-        console.error("Erro ao atualizar agendamento:", error);
         toast({
           title: "Erro ao atualizar agendamento",
           description:
@@ -195,7 +192,6 @@ export function useAgendamentos(
 
         await fetchAgendamentos();
       } catch (error) {
-        console.error("Erro ao cancelar agendamento:", error);
         toast({
           title: "Erro ao cancelar agendamento",
           description:
@@ -232,7 +228,6 @@ export function useAgendamentos(
 
         await fetchAgendamentos();
       } catch (error) {
-        console.error("Erro ao confirmar agendamento:", error);
         toast({
           title: "Erro ao confirmar agendamento",
           description:
@@ -269,7 +264,6 @@ export function useAgendamentos(
 
         await fetchAgendamentos();
       } catch (error) {
-        console.error("Erro ao iniciar atendimento:", error);
         toast({
           title: "Erro ao iniciar atendimento",
           description:

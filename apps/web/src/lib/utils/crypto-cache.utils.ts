@@ -83,7 +83,7 @@ const getCachedRate = (coinType: string): number | null => {
     if (!isValid) return null;
     return cached.rate;
   } catch (error) {
-    console.error("[CryptoCache] Error reading cache:", error);
+    logger.error("[CryptoCache] Error reading cache", error as Error);
     return null;
   }
 };
@@ -103,7 +103,7 @@ const setCachedRate = (coinType: string, rate: number): void => {
 
     safeStorage.setItem(CACHE_KEY, JSON.stringify(cacheStore));
   } catch (error) {
-    console.error("[CryptoCache] Error writing cache:", error);
+    logger.error("[CryptoCache] Error writing cache", error as Error);
   }
 };
 
@@ -129,9 +129,9 @@ const fetchRateFromAPI = async (coinType: string): Promise<number> => {
     }
     return rate;
   } catch (error) {
-    console.error(
-      `[CryptoCache] Error fetching ${coinType} rate from API:`,
-      error,
+    logger.error(
+      `[CryptoCache] Error fetching ${coinType} rate from API`,
+      error as Error,
     );
     throw error;
   }
@@ -174,7 +174,7 @@ export const clearCryptoCache = (): void => {
   try {
     safeStorage.removeItem(CACHE_KEY);
   } catch (error) {
-    console.error("[CryptoCache] Error clearing cache:", error);
+    logger.error("[CryptoCache] Error clearing cache", error as Error);
   }
 };
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -152,7 +153,7 @@ export function DCABacktesting() {
         lumpSumTotalCoin: finalResult.lumpSumCoin,
       });
     } catch (error) {
-      console.error("Erro no backtesting:", error);
+      toast.error("Erro no backtesting");
     } finally {
       setLoading(false);
     }

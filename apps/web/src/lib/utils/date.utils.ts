@@ -23,6 +23,7 @@ import {
   eachMonthOfInterval,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from "@/lib/logger";
 
 export function formatDate(
   date: string | Date,
@@ -33,7 +34,7 @@ export function formatDate(
     if (!isValid(dateObj)) return "-";
     return dateFnsFormat(dateObj, formatStr, { locale: ptBR });
   } catch (error) {
-    console.error("Error formatting date:", error);
+    logger.error("Error formatting date", error as Error);
     return "-";
   }
 }
@@ -59,7 +60,7 @@ export function formatDateCustom(
     if (!isValid(dateObj)) return "-";
     return dateFnsFormat(dateObj, formatStr, { locale: ptBR });
   } catch (error) {
-    console.error("Error formatting date:", error);
+    logger.error("Error formatting date", error as Error);
     return "-";
   }
 }

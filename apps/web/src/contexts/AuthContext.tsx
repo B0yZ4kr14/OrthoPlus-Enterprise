@@ -208,7 +208,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
     } catch (error) {
-      console.error("Error fetching user metadata:", error);
+      // Silently ignore - not user-facing
     }
   }, []);
 
@@ -220,7 +220,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       );
       setActiveModules(moduleKeys || []);
     } catch (error) {
-      console.error("Error fetching active modules:", error);
+      // Silently ignore - not user-facing
     }
   };
 

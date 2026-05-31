@@ -4,6 +4,7 @@
  */
 
 import { DomainEvent } from "@/domain/events/DomainEvent";
+import { logger } from "@/lib/logger";
 
 type EventHandler<T extends DomainEvent = DomainEvent> = (
   event: T,
@@ -69,7 +70,7 @@ export class EventBus {
         try {
           await handler(event);
         } catch (error) {
-          console.error(`Erro ao processar evento ${event.eventType}:`, error);
+          logger.error(`Erro ao processar evento ${event.eventType}`, error);
           // Continua executando outros handlers mesmo se um falhar
         }
       }),

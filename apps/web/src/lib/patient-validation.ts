@@ -208,7 +208,6 @@ export async function fetchAddressFromCEP(cep: string) {
       address_country: "Brasil",
     };
   } catch (error) {
-    console.error("Erro ao buscar CEP:", error);
     return null;
   }
 }

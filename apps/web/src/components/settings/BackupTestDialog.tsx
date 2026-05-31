@@ -75,7 +75,6 @@ export function BackupTestDialog({
       }
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error running backup test:", error);
       toast.error("Erro ao executar teste de restauração");
       setTestResult({
         success: false,

@@ -40,9 +40,7 @@ class ApiClient {
           if (status === 401) {
             return Promise.reject(error);
           }
-          console.error(
-            `[API Error]: ${error.response?.status} on ${error.config?.method?.toUpperCase()} ${error.config?.baseURL || ""}${error.config?.url}`,
-          );
+          // API errors are handled by callers
         }
         return Promise.reject(error);
       },
