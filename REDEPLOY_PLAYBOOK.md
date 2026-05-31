@@ -99,3 +99,39 @@ Verifique se `.env` está presente e válido:
 cd /home/tsi/OrthoPlus-Enterprise
 ./scripts/validate-production.sh
 ```
+
+### ⚠️ CRÍTICO: NODE_ENV=development em Produção
+
+**Bug detectado:** O backend está rodando com `NODE_ENV=development` no VPS de produção. Isso expõe stack traces detalhados, desativa otimizações de segurança e pode comprometer dados sensíveis.
+
+**Verificação:**
+```bash
+ssh tsapp "cat /home/tsi/OrthoPlus-Enterprise/backend/.env | grep NODE_ENV"
+# Esperado: NODE_ENV=production
+# Atual:    NODE_ENV=development ⚠️
+```
+
+**Correção (executar ANTES do deploy):**
+```bash
+ssh tsapp "sed -i 's/NODE_ENV=development/NODE_ENV=production/' /home/tsi/OrthoPlus-Enterprise/backend/.env"
+ssh tsapp "pm2 reload orthoplus-backend --update-env"
+ssh tsapp "curl -s http://localhost:3005/health"
+```
+
+**Impacto:** Alterar para `production` ativa:
+- Stack traces genéricos (sem paths internos)
+- Headers de segurança adicionais (Helmet modo production)
+- Rate limiting mais agressivo
+- Log de erros via Winston (não console)
+- Desativação de endpoints de debug
+
+## 8. Sync Nginx Config (Paridade Local ↔ VPS)
+
+Verifique se `nginx.conf` local está sincronizado com o VPS:
+```bash
+# Comparar configs
+ssh tsapp "cat /etc/nginx/sites-enabled/tsiapp-https" > /tmp/vps-nginx.conf
+diff -u nginx.conf /tmp/vps-nginx.conf || echo "Divergência detectada — avaliar merge manual"
+```
+
+**Nota:** A configuração VPS inclui múltiplos serviços (TSiSIP, Smith-Agent, TSiMUSIC, TSiView) que não estão no repositório. Não sobrescrever sem validar.
