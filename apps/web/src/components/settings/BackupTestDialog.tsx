@@ -191,8 +191,8 @@ export function BackupTestDialog({
                     <AlertDescription>
                       <p className="font-semibold mb-2">Erros encontrados:</p>
                       <ul className="list-disc list-inside space-y-1 text-sm">
-                        {testResult.errors.map((error, index) => (
-                          <li key={index}>{error}</li>
+                        {testResult.errors.map((error) => (
+                          <li key={error}>{error}</li>
                         ))}
                       </ul>
                     </AlertDescription>
