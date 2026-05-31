@@ -101,7 +101,7 @@ export class TeleodontoService {
 
   async update(id: string, input: UpdateTeleconsultaInput, clinicId: string) {
     await this.getById(id, clinicId);
-    return this.repo.updateTeleconsulta(id, input);
+    return this.repo.updateTeleconsulta(id, clinicId, input);
   }
 
   async delete(id: string, clinicId: string) {
@@ -112,7 +112,7 @@ export class TeleodontoService {
   async startSession(input: StartSessionInput, clinicId: string) {
     await this.getById(input.teleconsulta_id, clinicId);
 
-    const data = await this.repo.updateTeleconsulta(input.teleconsulta_id, {
+    const data = await this.repo.updateTeleconsulta(input.teleconsulta_id, clinicId, {
       status: "EM_ANDAMENTO",
       data_iniciada: new Date().toISOString(),
     });
@@ -139,6 +139,7 @@ export class TeleodontoService {
 
     const data = await this.repo.updateTeleconsulta(
       input.teleconsulta_id,
+      clinicId,
       updateData,
     );
 
@@ -154,7 +155,7 @@ export class TeleodontoService {
   async addNotes(input: AddNotesInput, clinicId: string) {
     await this.getById(input.teleconsulta_id, clinicId);
 
-    return this.repo.updateTeleconsulta(input.teleconsulta_id, {
+    return this.repo.updateTeleconsulta(input.teleconsulta_id, clinicId, {
       observacoes: input.notes,
       diagnostico: input.diagnosis,
       conduta: input.recommendations,
@@ -176,7 +177,7 @@ export class TeleodontoService {
       observations: input.observations,
     };
 
-    const data = await this.repo.updateTeleconsulta(input.teleconsulta_id, {
+    const data = await this.repo.updateTeleconsulta(input.teleconsulta_id, clinicId, {
       prescricao: JSON.stringify(prescription),
     });
 

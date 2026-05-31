@@ -39,7 +39,7 @@ export class GamificationWorkerController {
             }
           }
 
-          await this.repo.updateMeta(meta.id, {
+          await this.repo.updateMeta(meta.id, clinic.id, {
             valor_atingido,
             quantidade_atingida,
             percentual_atingido,
@@ -56,7 +56,7 @@ export class GamificationWorkerController {
             );
 
             if (premiacao) {
-              await this.repo.updateMeta(meta.id, {
+              await this.repo.updateMeta(meta.id, clinic.id, {
                 premiacao_id: premiacao.id,
                 premiacao_paga: false,
               });
@@ -141,7 +141,7 @@ export class GamificationWorkerController {
             );
 
             if (existing) {
-              await this.repo.updateRanking(existing.id, {
+              await this.repo.updateRanking(existing.id, clinic.id, {
                 posicao,
                 pontos,
                 total_vendas: vendedor.total_vendas,

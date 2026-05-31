@@ -21,8 +21,8 @@ export class PdvRepository implements IPdvRepository {
     });
   }
 
-  async updateVenda(id: string, data: Prisma.pdv_vendasUpdateInput) {
-    return prisma.pdv_vendas.update({ where: { id }, data });
+  async updateVenda(id: string, clinicId: string, data: Prisma.pdv_vendasUpdateInput) {
+    return prisma.pdv_vendas.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async findManyDashboard(where: Record<string, unknown>) {
@@ -45,8 +45,8 @@ export class PdvRepository implements IPdvRepository {
     });
   }
 
-  async updateProduto(id: string, data: Record<string, unknown>) {
-    return prisma.pdv_produtos.update({ where: { id }, data });
+  async updateProduto(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.pdv_produtos.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async findProdutosBaixoEstoque(clinicId: string) {

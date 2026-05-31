@@ -50,5 +50,5 @@ export interface IFilesRepository {
   // ── Audit Logs / Backup ───────────────────────────────────────────────
   createAuditLog(data: Record<string, unknown>): Promise<FileRepositoryResult>;
   findBackupById(id: string): Promise<FileRepositoryResult | null>;
-  updateBackup(id: string, data: Record<string, unknown>): Promise<FileRepositoryResult>;
+  updateBackup(id: string, clinicId: string, data: Record<string, unknown>): Promise<FileRepositoryResult>;
 }

@@ -16,6 +16,7 @@ export interface ITeleodontoRepository {
   ): Promise<teleconsultas>;
   updateTeleconsulta(
     id: string,
+    clinicId: string,
     data: Prisma.teleconsultasUpdateInput,
   ): Promise<teleconsultas>;
   deleteTeleconsultasByIdAndClinic(

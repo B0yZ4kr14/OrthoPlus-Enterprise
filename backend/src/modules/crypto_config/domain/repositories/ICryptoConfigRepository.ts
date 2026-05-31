@@ -10,6 +10,8 @@ export interface ICryptoConfigRepository {
     }>
   >;
   updateAlertTriggeredAt(id: string, triggeredAt: string): Promise<unknown>;
+  updateTransaction(id: string, clinicId: string, data: Record<string, unknown>): Promise<unknown>;
+  updateWallet(id: string, clinicId: string, data: Record<string, unknown>): Promise<unknown>;
   createNotification(data: {
     clinic_id: string;
     tipo: string;

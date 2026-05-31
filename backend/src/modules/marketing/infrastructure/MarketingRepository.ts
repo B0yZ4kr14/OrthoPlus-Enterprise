@@ -25,9 +25,11 @@ export class MarketingRepository implements IMarketingRepository {
 
   async updateCampaign(
     id: string,
+    clinicId: string,
     data: Prisma.marketing_campaignsUpdateInput,
   ) {
-    return prisma.marketing_campaigns.update({ where: { id }, data });
+    await prisma.marketing_campaigns.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
+    return prisma.marketing_campaigns.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async deleteCampaign(id: string, clinicId: string) {
@@ -66,8 +68,9 @@ export class MarketingRepository implements IMarketingRepository {
     return prisma.recalls.create({ data });
   }
 
-  async updateRecall(id: string, data: Prisma.recallsUpdateInput) {
-    return prisma.recalls.update({ where: { id }, data });
+  async updateRecall(id: string, clinicId: string, data: Prisma.recallsUpdateInput) {
+    await prisma.recalls.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
+    return prisma.recalls.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   // campaign_triggers

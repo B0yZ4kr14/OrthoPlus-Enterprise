@@ -120,7 +120,7 @@ export class ProcedimentosController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateTemplate(id, parsed.data);
+    const data = await this.repo.updateTemplate(id, clinicId as string, parsed.data);
     return res.json(data);
   }
 
@@ -184,7 +184,7 @@ export class ProcedimentosController {
         { is_default: false },
       );
     }
-    const data = await this.repo.updateTabela(id, parsed.data);
+    const data = await this.repo.updateTabela(id, clinicId as string, parsed.data);
     return res.json(data);
   }
 
@@ -229,7 +229,7 @@ export class ProcedimentosController {
     const parsed = updatePrecoSchema.safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
-    const data = await this.repo.updatePreco(id, parsed.data);
+    const data = await this.repo.updatePreco(id, clinicId as string, parsed.data);
     return res.json(data);
   }
 
@@ -297,7 +297,7 @@ export class ProcedimentosController {
     const parsed = dentistaProcSchema.partial().safeParse(req.body);
     if (!parsed.success)
       throw Errors.validation("Invalid input", parsed.error.errors as any);
-    const data = await this.repo.updateDentistaProc(id, parsed.data);
+    const data = await this.repo.updateDentistaProc(id, clinicId as string, parsed.data);
     return res.json(data);
   }
 

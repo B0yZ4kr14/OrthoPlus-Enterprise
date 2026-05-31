@@ -26,8 +26,9 @@ export class CryptoConfigRepository implements ICryptoConfigRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateTransaction(id: string, data: Record<string, unknown>) {
-    return prisma.crypto_transactions.update({ where: { id }, data: data as any });
+  async updateTransaction(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.crypto_transactions.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
+    return prisma.crypto_transactions.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,8 +37,8 @@ export class CryptoConfigRepository implements ICryptoConfigRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateWallet(id: string, data: Record<string, unknown>) {
-    return prisma.crypto_wallets.update({ where: { id }, data: data as any });
+  async updateWallet(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.crypto_wallets.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

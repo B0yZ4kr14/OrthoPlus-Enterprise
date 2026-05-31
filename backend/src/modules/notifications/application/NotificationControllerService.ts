@@ -233,7 +233,7 @@ export class NotificationControllerService {
           shouldTrigger = true;
 
         if (shouldTrigger) {
-          await this.repo.updateCryptoAlert(alert.id, {
+          await this.repo.updateCryptoAlert(alert.id, alert.clinic_id, {
             last_triggered_at: new Date().toISOString(),
           });
 
@@ -323,7 +323,7 @@ export class NotificationControllerService {
         }
       }
 
-      await this.repo.updateCryptoAlert(alert.id, {
+      await this.repo.updateCryptoAlert(alert.id, alert.clinic_id, {
         last_triggered_at: new Date().toISOString(),
       });
 

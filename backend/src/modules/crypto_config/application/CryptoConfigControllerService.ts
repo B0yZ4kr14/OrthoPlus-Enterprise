@@ -203,7 +203,7 @@ export class CryptoConfigControllerService {
     );
 
     const transaction = existingTx
-      ? await this.cryptoRepo.updateTransaction(existingTx.id, {
+      ? await this.cryptoRepo.updateTransaction(existingTx.id, wallet.clinic_id as string, {
           amount,
           coin,
           price_brl: amountBrl,
@@ -228,7 +228,7 @@ export class CryptoConfigControllerService {
 
     if (status === "CONFIRMADO") {
       const currentBalance = wallet.balance ?? 0;
-      await this.cryptoRepo.updateWallet(wallet.id, {
+      await this.cryptoRepo.updateWallet(wallet.id, wallet.clinic_id as string, {
         balance: currentBalance + amount,
       });
     }
@@ -252,7 +252,7 @@ export class CryptoConfigControllerService {
     return {
       confirmations,
       status,
-      transaction_id: transaction.id,
+      transaction_id: transaction!.id,
     };
   }
 

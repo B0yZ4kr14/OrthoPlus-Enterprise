@@ -11,6 +11,7 @@ export interface IPdvRepository {
   findVendaById(id: string, clinicId: string): Promise<pdv_vendas | null>;
   updateVenda(
     id: string,
+    clinicId: string,
     data: Prisma.pdv_vendasUpdateInput,
   ): Promise<pdv_vendas>;
 
@@ -19,7 +20,7 @@ export interface IPdvRepository {
 
   // Produtos
   findProdutoById(id: string, clinicId: string): Promise<unknown | null>;
-  updateProduto(id: string, data: Record<string, unknown>): Promise<unknown>;
+  updateProduto(id: string, clinicId: string, data: Record<string, unknown>): Promise<unknown>;
   findProdutosBaixoEstoque(clinicId: string): Promise<unknown[]>;
 
   // Venda Itens

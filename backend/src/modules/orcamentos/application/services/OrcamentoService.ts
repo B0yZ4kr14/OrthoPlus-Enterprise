@@ -93,7 +93,7 @@ export class OrcamentoService {
     const existing = await this.getById(id, clinicId);
     if (!existing) return null;
 
-    return this.repo.updateOrcamento(id, {
+    return this.repo.updateOrcamento(id, clinicId, {
       ...data,
       updated_at: new Date(),
     });
@@ -116,7 +116,7 @@ export class OrcamentoService {
       );
     }
 
-    return this.repo.updateOrcamento(id, {
+    return this.repo.updateOrcamento(id, clinicId, {
       status: "PENDENTE",
       updated_at: new Date(),
     });
@@ -132,7 +132,7 @@ export class OrcamentoService {
     }
 
     const now = new Date();
-    return this.repo.updateOrcamento(id, {
+    return this.repo.updateOrcamento(id, clinicId, {
       status: "APROVADO",
       aprovado_por: aprovadoPor,
       aprovado_em: now.toISOString(),
@@ -155,7 +155,7 @@ export class OrcamentoService {
     }
 
     const now = new Date();
-    return this.repo.updateOrcamento(id, {
+    return this.repo.updateOrcamento(id, clinicId, {
       status: "REJEITADO",
       rejeitado_em: now.toISOString(),
       motivo_rejeicao: motivo,

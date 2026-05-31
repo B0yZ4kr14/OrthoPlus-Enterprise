@@ -19,8 +19,8 @@ export class ProcedimentosRepository implements IProcedimentosRepository {
     return prisma.procedimento_templates.create({ data: data as any });
   }
 
-  async updateTemplate(id: string, data: Record<string, unknown>) {
-    return prisma.procedimento_templates.update({ where: { id }, data });
+  async updateTemplate(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.procedimento_templates.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async deleteTemplate(id: string, clinicId: string) {
@@ -47,8 +47,8 @@ export class ProcedimentosRepository implements IProcedimentosRepository {
     return prisma.tabela_precos.create({ data: data as any });
   }
 
-  async updateTabela(id: string, data: Record<string, unknown>) {
-    return prisma.tabela_precos.update({ where: { id }, data });
+  async updateTabela(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.tabela_precos.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async deleteTabela(id: string, clinicId: string) {
@@ -82,8 +82,8 @@ export class ProcedimentosRepository implements IProcedimentosRepository {
     });
   }
 
-  async updatePreco(id: string, data: Record<string, unknown>) {
-    return prisma.procedimento_precos.update({ where: { id }, data });
+  async updatePreco(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.procedimento_precos.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async deletePreco(id: string, clinicId: string) {
@@ -124,8 +124,8 @@ export class ProcedimentosRepository implements IProcedimentosRepository {
     });
   }
 
-  async updateDentistaProc(id: string, data: Record<string, unknown>) {
-    return prisma.dentista_procedimentos.update({ where: { id }, data });
+  async updateDentistaProc(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.dentista_procedimentos.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async deleteDentistaProc(id: string, clinicId: string) {

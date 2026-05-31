@@ -1,7 +1,7 @@
 export interface ISplitPagamentoRepository {
   findManyConfig(clinicId: string): Promise<unknown[]>;
   findConfigByClinic(clinicId: string): Promise<unknown | null>;
-  updateConfig(id: string, data: Record<string, unknown>): Promise<unknown>;
+  updateConfig(id: string, clinicId: string, data: Record<string, unknown>): Promise<unknown>;
   createConfig(data: Record<string, unknown>): Promise<unknown>;
 
   findManyComissoes(where: Record<string, unknown>): Promise<unknown[]>;

@@ -66,8 +66,8 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateCryptoAlert(id: string, data: Record<string, unknown>) {
-    return prisma.crypto_price_alerts.update({ where: { id }, data: data as any });
+  async updateCryptoAlert(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.crypto_price_alerts.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   async findCryptoAlertsByCascadeGroup(

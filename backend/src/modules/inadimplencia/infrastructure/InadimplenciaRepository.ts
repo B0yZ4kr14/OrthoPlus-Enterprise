@@ -15,8 +15,9 @@ export class InadimplenciaRepository implements IInadimplenciaRepository {
     });
   }
 
-  async updateInadimplente(id: string, data: Record<string, unknown>) {
-    return prisma.inadimplentes.update({ where: { id }, data });
+  async updateInadimplente(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.inadimplentes.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.inadimplentes.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async findManyCampanhas(where: Record<string, unknown>) {
@@ -36,7 +37,8 @@ export class InadimplenciaRepository implements IInadimplenciaRepository {
     });
   }
 
-  async updateCampanha(id: string, data: Record<string, unknown>) {
-    return prisma.campanhas_inadimplencia.update({ where: { id }, data });
+  async updateCampanha(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.campanhas_inadimplencia.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
+    return prisma.campanhas_inadimplencia.findFirst({ where: { id, clinic_id: clinicId } });
   }
 }

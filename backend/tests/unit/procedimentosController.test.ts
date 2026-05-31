@@ -283,7 +283,7 @@ describe("ProcedimentosController", () => {
       const res = mockRes();
       await controller.updateTemplate(req as Request, res);
       expect(procedimentoTemplates.update).toHaveBeenCalledWith({
-        where: { id: "t1" },
+        where: { id: "t1", clinic_id: "clinic-1" },
         data: { nome: "New" },
       });
       expect(res.json).toHaveBeenCalledWith(updated);

@@ -6,8 +6,10 @@ jest.mock("../../src/infrastructure/database/prismaClient", () => ({
     orcamentos: {
       findMany: jest.fn(),
       findFirst: jest.fn(),
+      findUnique: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      updateMany: jest.fn(),
       delete: jest.fn(),
       deleteMany: jest.fn(),
     },
@@ -231,13 +233,19 @@ describe("OrcamentosController.update", () => {
   it("updates and returns orcamento", async () => {
     orcamentos.findFirst.mockResolvedValueOnce(sampleOrcamento);
     const updated = { ...sampleOrcamento, titulo: "Atualizado" };
-    orcamentos.update.mockResolvedValueOnce(updated);
+    orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
+    orcamentos.findUnique.mockResolvedValueOnce(updated);
     const req = mockReq({
       params: { id: "orc-1" },
       body: { titulo: "Atualizado" },
     });
     const res = mockRes();
     await controller.update(req as Request, res);
+    expect(orcamentos.updateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ id: "orc-1", clinic_id: "clinic-1" }),
+      }),
+    );
     expect(res.json).toHaveBeenCalledWith(updated);
   });
 });
@@ -307,11 +315,12 @@ describe("OrcamentosController.enviar", () => {
   it("sends orcamento and returns updated data", async () => {
     orcamentos.findFirst.mockResolvedValueOnce(sampleOrcamento);
     const sent = { ...sampleOrcamento, status: "PENDENTE" };
-    orcamentos.update.mockResolvedValueOnce(sent);
+    orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
+    orcamentos.findUnique.mockResolvedValueOnce(sent);
     const req = mockReq({ params: { id: "orc-1" } });
     const res = mockRes();
     await controller.enviar(req as Request, res);
-    expect(orcamentos.update).toHaveBeenCalledWith(
+    expect(orcamentos.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ status: "PENDENTE" }),
       }),
@@ -361,11 +370,12 @@ describe("OrcamentosController.aprovar", () => {
       status: "APROVADO",
       aprovado_por: "user-1",
     };
-    orcamentos.update.mockResolvedValueOnce(approved);
+    orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
+    orcamentos.findUnique.mockResolvedValueOnce(approved);
     const req = mockReq({ params: { id: "orc-1" } });
     const res = mockRes();
     await controller.aprovar(req as Request, res);
-    expect(orcamentos.update).toHaveBeenCalledWith(
+    expect(orcamentos.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           status: "APROVADO",
@@ -432,14 +442,15 @@ describe("OrcamentosController.rejeitar", () => {
       status: "REJEITADO",
       motivo_rejeicao: "Preço alto",
     };
-    orcamentos.update.mockResolvedValueOnce(rejected);
+    orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
+    orcamentos.findUnique.mockResolvedValueOnce(rejected);
     const req = mockReq({
       params: { id: "orc-1" },
       body: { motivo: "Preço alto" },
     });
     const res = mockRes();
     await controller.rejeitar(req as Request, res);
-    expect(orcamentos.update).toHaveBeenCalledWith(
+    expect(orcamentos.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           status: "REJEITADO",

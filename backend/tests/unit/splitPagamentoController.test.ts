@@ -159,7 +159,7 @@ describe("SplitPagamentoController.upsertConfig", () => {
     const res = mockRes();
     await controller.upsertConfig(req as Request, res);
     expect(splitConfig.update).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { id: "cfg-1" } }),
+      expect.objectContaining({ where: { id: "cfg-1", clinic_id: "clinic-1" } }),
     );
     expect(splitConfig.create).not.toHaveBeenCalled();
   });

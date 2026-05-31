@@ -13,7 +13,7 @@ export interface INotificationRepository {
 
   // ── Crypto Price Alerts ───────────────────────────────────────────────
   findActiveVolatilityAlerts(): Promise<any[]>;
-  updateCryptoAlert(id: string, data: Record<string, unknown>): Promise<any>;
+  updateCryptoAlert(id: string, clinicId: string, data: Record<string, unknown>): Promise<any>;
   findCryptoAlertsByCascadeGroup(
     cascadeGroupId: string,
     cascadeOrder: number,

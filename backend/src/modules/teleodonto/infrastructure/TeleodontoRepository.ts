@@ -20,8 +20,8 @@ export class TeleodontoRepository implements ITeleodontoRepository {
     return prisma.teleconsultas.create({ data });
   }
 
-  async updateTeleconsulta(id: string, data: Prisma.teleconsultasUpdateInput) {
-    return prisma.teleconsultas.update({ where: { id }, data });
+  async updateTeleconsulta(id: string, clinicId: string, data: Prisma.teleconsultasUpdateInput) {
+    return prisma.teleconsultas.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async deleteTeleconsultasByIdAndClinic(id: string, clinicId: string) {

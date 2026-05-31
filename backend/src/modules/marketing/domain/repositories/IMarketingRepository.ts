@@ -26,8 +26,9 @@ export interface IMarketingRepository {
   ): Promise<marketing_campaigns>;
   updateCampaign(
     id: string,
+    clinicId: string,
     data: Prisma.marketing_campaignsUpdateInput,
-  ): Promise<marketing_campaigns>;
+  ): Promise<marketing_campaigns | null>;
   deleteCampaign(id: string, clinicId: string): Promise<Prisma.BatchPayload>;
 
   // campanha_envios
@@ -42,7 +43,7 @@ export interface IMarketingRepository {
   // recalls
   listRecalls(clinicId: string, tipoRecall?: string): Promise<recalls[]>;
   createRecall(data: Prisma.recallsCreateInput): Promise<recalls>;
-  updateRecall(id: string, data: Prisma.recallsUpdateInput): Promise<recalls>;
+  updateRecall(id: string, clinicId: string, data: Prisma.recallsUpdateInput): Promise<recalls | null>;
 
   // campaign_triggers
   findActiveTriggers(clinicId: string): Promise<any[]>;

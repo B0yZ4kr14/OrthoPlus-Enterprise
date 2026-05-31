@@ -321,7 +321,7 @@ export class FilesControllerService {
         );
     }
 
-    await this.repo.updateBackup(backupId, {
+    await this.repo.updateBackup(backupId, clinicId, {
       file_path: uploadUrl,
       metadata: {
         ...(typeof backup.metadata === "object" && backup.metadata !== null

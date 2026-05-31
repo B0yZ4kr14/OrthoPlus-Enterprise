@@ -121,7 +121,7 @@ export class PdvController {
           (produto as any).estoque_atual !== null
         ) {
           const novoEstoque = (produto as any).estoque_atual - item.quantidade;
-          await this.repo.updateProduto(item.produtoId, {
+          await this.repo.updateProduto(item.produtoId, clinicId, {
             estoque_atual: novoEstoque,
           });
           if (novoEstoque <= ((produto as any).estoque_minimo || 0)) {
@@ -203,7 +203,7 @@ export class PdvController {
           (produto as any).controla_estoque &&
           (produto as any).estoque_atual !== null
         ) {
-          await this.repo.updateProduto(item.produto_id, {
+          await this.repo.updateProduto(item.produto_id, clinicId, {
             estoque_atual: (produto as any).estoque_atual + item.quantidade,
           });
         }
@@ -230,7 +230,7 @@ export class PdvController {
               (produto as any).controla_estoque &&
               (produto as any).estoque_atual !== null
             ) {
-              await this.repo.updateProduto(item.produtoId, {
+              await this.repo.updateProduto(item.produtoId, clinicId, {
                 estoque_atual: (produto as any).estoque_atual + item.quantidade,
               });
             }
@@ -238,7 +238,7 @@ export class PdvController {
         }
       }
 
-      const updated = await this.repo.updateVenda(id, { status: "CANCELADA" });
+      const updated = await this.repo.updateVenda(id, clinicId, { status: "CANCELADA" });
       logger.info("Venda cancelled", { clinicId, vendaId: id });
       res.json(updated);
     },

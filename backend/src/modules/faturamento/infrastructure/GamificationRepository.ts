@@ -34,8 +34,8 @@ export class GamificationRepository implements IGamificationRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateMeta(id: string, data: Record<string, unknown>) {
-    return prisma.vendedor_metas.update({ where: { id }, data: data as any });
+  async updateMeta(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.vendedor_metas.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   async findPremiacao(_clinicId: string, _percentualAtingido: number) {
@@ -70,8 +70,8 @@ export class GamificationRepository implements IGamificationRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateRanking(id: string, data: Record<string, unknown>) {
-    return prisma.vendedor_ranking.update({ where: { id }, data: data as any });
+  async updateRanking(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.vendedor_ranking.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

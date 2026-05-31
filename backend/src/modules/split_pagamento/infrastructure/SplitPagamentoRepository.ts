@@ -14,8 +14,8 @@ export class SplitPagamentoRepository implements ISplitPagamentoRepository {
     });
   }
 
-  async updateConfig(id: string, data: Record<string, unknown>) {
-    return prisma.split_payment_config.update({ where: { id }, data });
+  async updateConfig(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.split_payment_config.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   async createConfig(data: Record<string, unknown>) {

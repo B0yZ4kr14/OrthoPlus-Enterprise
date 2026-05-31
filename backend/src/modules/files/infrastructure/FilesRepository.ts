@@ -149,7 +149,7 @@ export class FilesRepository implements IFilesRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateBackup(id: string, data: Record<string, unknown>) {
-    return prisma.backup_history.update({ where: { id }, data: data as any });
+  async updateBackup(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.backup_history.updateMany({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 }

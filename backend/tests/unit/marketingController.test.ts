@@ -6,6 +6,7 @@ const mockPrisma = {
     findFirst: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
+    updateMany: jest.fn(),
     deleteMany: jest.fn(),
   },
   campanha_envios: {
@@ -15,8 +16,10 @@ const mockPrisma = {
   },
   recalls: {
     findMany: jest.fn(),
+    findFirst: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
+    updateMany: jest.fn(),
   },
   campaign_triggers: {
     findMany: jest.fn(),
@@ -228,16 +231,17 @@ describe("MarketingController", () => {
       mockPrisma.marketing_campaigns.findFirst.mockResolvedValue({
         id: "550e8400-e29b-41d4-a716-446655440000",
       });
-      mockPrisma.marketing_campaigns.update.mockResolvedValue({
+      mockPrisma.marketing_campaigns.updateMany.mockResolvedValue({ count: 1 });
+      mockPrisma.marketing_campaigns.findFirst.mockResolvedValue({
         id: "550e8400-e29b-41d4-a716-446655440000",
         name: "Updated",
       });
 
       await controller.updateCampanha(req, res, next);
 
-      expect(mockPrisma.marketing_campaigns.update).toHaveBeenCalledWith(
+      expect(mockPrisma.marketing_campaigns.updateMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: "550e8400-e29b-41d4-a716-446655440000" },
+          where: { id: "550e8400-e29b-41d4-a716-446655440000", clinic_id: "clinic-1" },
           data: { name: "Updated" },
         }),
       );
@@ -336,13 +340,14 @@ describe("MarketingController", () => {
         },
       ]);
       mockPrisma.notifications.create.mockResolvedValue({});
-      mockPrisma.recalls.update.mockResolvedValue({});
+      mockPrisma.recalls.updateMany.mockResolvedValue({ count: 1 });
+      mockPrisma.recalls.findFirst.mockResolvedValue({});
 
       await controller.processRecalls(req, res, next);
 
       expect(mockPrisma.recalls.findMany).toHaveBeenCalled();
       expect(mockPrisma.notifications.create).toHaveBeenCalled();
-      expect(mockPrisma.recalls.update).toHaveBeenCalled();
+      expect(mockPrisma.recalls.updateMany).toHaveBeenCalled();
       expect(jsonMock).toHaveBeenCalledWith(
         expect.objectContaining({ success: true, processed: 1 }),
       );

@@ -77,7 +77,7 @@ export class InadimplenciaController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateInadimplente(id, parsed.data);
+    const data = await this.repo.updateInadimplente(id, clinicId as string, parsed.data);
     return res.json(data);
   }
 
@@ -124,7 +124,7 @@ export class InadimplenciaController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateCampanha(id, parsed.data);
+    const data = await this.repo.updateCampanha(id, clinicId as string, parsed.data);
     return res.json(data);
   }
 }

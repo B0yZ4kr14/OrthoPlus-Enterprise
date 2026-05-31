@@ -27,8 +27,17 @@ export class OrcamentoRepository implements IOrcamentoRepository {
     return prisma.orcamentos.create({ data });
   }
 
-  async updateOrcamento(id: string, data: Prisma.orcamentosUpdateInput) {
-    return prisma.orcamentos.update({ where: { id }, data });
+  async updateOrcamento(
+    id: string,
+    clinicId: string,
+    data: Prisma.orcamentosUpdateInput,
+  ) {
+    const result = await prisma.orcamentos.updateMany({
+      where: { id, clinic_id: clinicId },
+      data,
+    });
+    if (result.count === 0) return null;
+    return prisma.orcamentos.findUnique({ where: { id } });
   }
 
   async deleteOrcamento(id: string, clinicId: string) {

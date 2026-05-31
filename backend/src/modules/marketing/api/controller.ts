@@ -78,7 +78,7 @@ export class MarketingController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     }
-    const data = await this.repo.updateCampaign(id, parsed.data as any);
+    const data = await this.repo.updateCampaign(id, clinicId, parsed.data as any);
     res.json(data);
   });
 
@@ -365,7 +365,7 @@ export class MarketingController {
       } as any);
 
       // Mark recall as sent
-      await this.repo.updateRecall(recall.id, {
+      await this.repo.updateRecall(recall.id, clinicId, {
         notificacao_enviada: true,
         status: "SENT",
       });
