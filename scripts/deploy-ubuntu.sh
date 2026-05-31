@@ -165,7 +165,8 @@ create_directories() {
         "$INSTALL_DIR/ssl"
     
     # Permissões
-    chown -R 1000:1000 "$DATA_DIR"
+    chown -R 70:70 "$DATA_DIR/postgres"
+    chown -R 1000:1000 "$DATA_DIR/redis" "$BACKUP_DIR" "$LOG_DIR" "$INSTALL_DIR/config" "$INSTALL_DIR/ssl"
     chmod 700 "$DATA_DIR/postgres"
     
     log_success "Diretórios criados em $INSTALL_DIR"

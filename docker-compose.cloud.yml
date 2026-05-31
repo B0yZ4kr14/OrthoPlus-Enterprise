@@ -35,7 +35,7 @@ services:
       - PORT=3005
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
     networks:
       - backend_net
       - db_net
