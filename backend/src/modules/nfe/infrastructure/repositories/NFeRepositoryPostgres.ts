@@ -60,8 +60,9 @@ export class NFeRepositoryPostgres implements INFeRepository {
       return queryResult.rows[0]
         ? this.mapToEntity(queryResult.rows[0] as NFeRow)
         : null;
-    } catch (err: any) {
-      if (err.code === "42P01") {
+    } catch (err: unknown) {
+      const pgError = err as { code?: string };
+      if (pgError.code === "42P01") {
         logger.warn("Tabela fiscal.nfes não encontrada, retornando null");
         return null;
       }
@@ -121,8 +122,9 @@ export class NFeRepositoryPostgres implements INFeRepository {
         ),
         total,
       };
-    } catch (err: any) {
-      if (err.code === "42P01") {
+    } catch (err: unknown) {
+      const pgError = err as { code?: string };
+      if (pgError.code === "42P01") {
         logger.warn(
           "Tabela fiscal.nfes não encontrada, retornando lista vazia",
         );
@@ -158,8 +160,9 @@ export class NFeRepositoryPostgres implements INFeRepository {
           nfe.updatedAt,
         ],
       );
-    } catch (err: any) {
-      if (err.code === "42P01") {
+    } catch (err: unknown) {
+      const pgError = err as { code?: string };
+      if (pgError.code === "42P01") {
         logger.warn(
           "Tabela fiscal.nfes não encontrada, não foi possível salvar NF-e",
         );
@@ -186,8 +189,9 @@ export class NFeRepositoryPostgres implements INFeRepository {
           nfe.id,
         ],
       );
-    } catch (err: any) {
-      if (err.code === "42P01") {
+    } catch (err: unknown) {
+      const pgError = err as { code?: string };
+      if (pgError.code === "42P01") {
         logger.warn(
           "Tabela fiscal.nfes não encontrada, não foi possível atualizar NF-e",
         );

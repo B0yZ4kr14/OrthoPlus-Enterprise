@@ -2,8 +2,9 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { IAdminToolsRepository } from "@/modules/admin_tools/domain/repositories/IAdminToolsRepository";
 
 export class AdminToolsRepository implements IAdminToolsRepository {
-  async createUser(data: any) {
-    return prisma.users.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createUser(data: Record<string, unknown>) {
+    return prisma.users.create({ data: data as any });
   }
 
   async updateUserRole(email: string, role: string) {
@@ -69,8 +70,9 @@ export class AdminToolsRepository implements IAdminToolsRepository {
     });
   }
 
-  async createWikiPage(data: any) {
-    return prisma.wiki_pages.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createWikiPage(data: Record<string, unknown>) {
+    return prisma.wiki_pages.create({ data: data as any });
   }
 
   async findWikiPageByIdAndClinic(id: string, clinicId: string) {
@@ -79,8 +81,9 @@ export class AdminToolsRepository implements IAdminToolsRepository {
     });
   }
 
-  async updateWikiPage(id: string, data: any) {
-    return prisma.wiki_pages.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateWikiPage(id: string, data: Record<string, unknown>) {
+    return prisma.wiki_pages.update({ where: { id }, data: data as any });
   }
 
   async deleteWikiPage(id: string, clinicId: string) {
