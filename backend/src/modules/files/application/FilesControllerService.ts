@@ -67,7 +67,7 @@ export class FilesControllerService {
     clinicId: string;
     userId: string;
     userRole: string | undefined;
-    body: any;
+    body: Record<string, unknown>;
     ip?: string;
     userAgent?: string;
   }) {
@@ -91,12 +91,17 @@ export class FilesControllerService {
       });
     }
 
-    if (body.pacienteId && visibilidade) {
+    const pacienteId = body.pacienteId as string | undefined;
+    const consultaId = body.consultaId as string | undefined;
+    const orcamentoId = body.orcamentoId as string | undefined;
+    const categoria = body.categoria as string | undefined;
+
+    if (pacienteId && visibilidade) {
       const parsedVis = parseVisibilidade(visibilidade);
       if (parsedVis) {
         const inheritedVis =
           await this.filesService.inheritPermissionFromPatient(
-            body.pacienteId,
+            pacienteId,
             parsedVis,
             clinicId,
           );
@@ -107,14 +112,14 @@ export class FilesControllerService {
     const startTime = Date.now();
     const fileRecord = await this.filesService.create({
       clinicId,
-      pacienteId: body.pacienteId,
-      consultaId: body.consultaId,
-      orcamentoId: body.orcamentoId,
+      pacienteId,
+      consultaId,
+      orcamentoId,
       nomeOriginal: file.originalname,
       nomeStorage: file.filename,
       mimeType: file.mimetype,
       tamanhoBytes: file.size,
-      categoria: body.categoria ?? "OUTRO",
+      categoria: categoria ?? "OUTRO",
       visibilidade: visibilidade as string | undefined,
       uploadedBy: userId,
     });
@@ -153,16 +158,16 @@ export class FilesControllerService {
   async listFiles(
     clinicId: string,
     userRole: "ADMIN" | "MEMBER" | "PATIENT" | undefined,
-    query: any,
+    query: Record<string, unknown>,
   ) {
     return this.filesService.list({
       clinicId,
       userRole,
-      pacienteId: query.pacienteId,
-      consultaId: query.consultaId,
-      orcamentoId: query.orcamentoId,
-      categoria: query.categoria,
-      visibilidade: query.visibilidade,
+      pacienteId: query.pacienteId as string | undefined,
+      consultaId: query.consultaId as string | undefined,
+      orcamentoId: query.orcamentoId as string | undefined,
+      categoria: query.categoria as string | undefined,
+      visibilidade: query.visibilidade as string | undefined,
     });
   }
 
@@ -272,7 +277,7 @@ export class FilesControllerService {
   async uploadBackupToCloud(
     backupId: string,
     provider: string,
-    config: any,
+    config: Record<string, unknown>,
     clinicId: string,
   ) {
     const backup = await this.repo.findBackupById(backupId);
@@ -290,21 +295,21 @@ export class FilesControllerService {
         uploadUrl = await this.uploadToS3(
           dataToUpload,
           fileName,
-          config as S3Config,
+          config as unknown as S3Config,
         );
         break;
       case "google_drive":
         uploadUrl = await this.uploadToGoogleDrive(
           dataToUpload,
           fileName,
-          config as GoogleDriveConfig,
+          config as unknown as GoogleDriveConfig,
         );
         break;
       case "dropbox":
         uploadUrl = await this.uploadToDropbox(
           dataToUpload,
           fileName,
-          config as DropboxConfig,
+          config as unknown as DropboxConfig,
         );
         break;
       default:

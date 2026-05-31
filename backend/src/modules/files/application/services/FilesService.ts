@@ -383,7 +383,7 @@ export class FilesService {
       () => [],
     );
 
-    const arquivoIds = ocrRecords.map((r: any) => r.arquivo_id);
+    const arquivoIds = ocrRecords.map((r) => (r as Record<string, unknown>).arquivo_id as string);
     if (arquivoIds.length === 0) return [];
 
     const files = await cb.execute(
@@ -396,15 +396,15 @@ export class FilesService {
       () => [],
     );
 
-    return files.map((f: any) => ({
-      id: f.id,
-      nomeOriginal: f.nome_original,
-      mimeType: f.mime_type,
-      tamanhoBytes: f.tamanho_bytes,
-      categoria: f.categoria,
-      visibilidade: f.visibilidade,
-      pacienteId: f.paciente_id,
-      createdAt: f.created_at,
+    return files.map((f) => ({
+      id: (f as Record<string, unknown>).id as string,
+      nomeOriginal: (f as Record<string, unknown>).nome_original as string,
+      mimeType: (f as Record<string, unknown>).mime_type as string,
+      tamanhoBytes: (f as Record<string, unknown>).tamanho_bytes as number,
+      categoria: (f as Record<string, unknown>).categoria as string,
+      visibilidade: (f as Record<string, unknown>).visibilidade as string,
+      pacienteId: (f as Record<string, unknown>).paciente_id as string | null,
+      createdAt: (f as Record<string, unknown>).created_at as Date,
     }));
   }
 
@@ -509,15 +509,15 @@ export class FilesService {
       () => [],
     );
 
-    return records.map((r: any) => ({
-      id: r.id,
-      arquivoId: r.arquivo_id,
-      numeroVersao: r.numero_versao,
-      nomeStorage: r.nome_storage,
-      tamanhoBytes: r.tamanho_bytes,
-      urlTemp: r.url_temp,
-      createdBy: r.created_by,
-      createdAt: r.created_at,
+    return records.map((r) => ({
+      id: (r as Record<string, unknown>).id as string,
+      arquivoId: (r as Record<string, unknown>).arquivo_id as string,
+      numeroVersao: (r as Record<string, unknown>).numero_versao as number,
+      nomeStorage: (r as Record<string, unknown>).nome_storage as string,
+      tamanhoBytes: (r as Record<string, unknown>).tamanho_bytes as number,
+      urlTemp: (r as Record<string, unknown>).url_temp as string | null,
+      createdBy: (r as Record<string, unknown>).created_by as string,
+      createdAt: (r as Record<string, unknown>).created_at as Date,
     }));
   }
 
