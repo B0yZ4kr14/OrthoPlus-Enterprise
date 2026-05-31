@@ -13,8 +13,8 @@ export class FidelidadeRepository implements IFidelidadeRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async createPonto(data: any) {
-    return prisma.fidelidade_pontos.create({ data });
+  async createPonto(data: Record<string, unknown>) {
+    return prisma.fidelidade_pontos.create({ data: data as any });
   }
 
   async upsertPacienteFidelidade(
@@ -61,15 +61,14 @@ export class FidelidadeRepository implements IFidelidadeRepository {
     clinicId: string,
     patientId: string,
     pontos: number,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    pontoData: any,
+    pontoData: Record<string, unknown>,
   ): Promise<[any, any, any[]]> {
     const existing = await prisma.fidelidade_pacientes.findFirst({
       where: { clinic_id: clinicId, patient_id: patientId },
     });
     return prisma.$transaction([
       prisma.fidelidade_pontos.create({
-        data: { ...pontoData, clinic_id: clinicId },
+        data: { ...(pontoData as any), clinic_id: clinicId },
       }),
       existing
         ? prisma.fidelidade_pacientes.update({
@@ -103,8 +102,8 @@ export class FidelidadeRepository implements IFidelidadeRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async createBadge(data: any) {
-    return prisma.fidelidade_badges.create({ data });
+  async createBadge(data: Record<string, unknown>) {
+    return prisma.fidelidade_badges.create({ data: data as any });
   }
 
   // Recompensas
@@ -118,8 +117,8 @@ export class FidelidadeRepository implements IFidelidadeRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async createRecompensa(data: any) {
-    return prisma.fidelidade_recompensas.create({ data });
+  async createRecompensa(data: Record<string, unknown>) {
+    return prisma.fidelidade_recompensas.create({ data: data as any });
   }
 
   // Indicacoes
@@ -133,7 +132,7 @@ export class FidelidadeRepository implements IFidelidadeRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async createIndicacao(data: any) {
-    return prisma.fidelidade_indicacoes.create({ data });
+  async createIndicacao(data: Record<string, unknown>) {
+    return prisma.fidelidade_indicacoes.create({ data: data as any });
   }
 }

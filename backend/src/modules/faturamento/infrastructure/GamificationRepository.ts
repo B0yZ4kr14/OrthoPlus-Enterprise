@@ -33,8 +33,9 @@ export class GamificationRepository implements IGamificationRepository {
     });
   }
 
-  async updateMeta(id: string, data: any) {
-    return prisma.vendedor_metas.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateMeta(id: string, data: Record<string, unknown>) {
+    return prisma.vendedor_metas.update({ where: { id }, data: data as any });
   }
 
   async findPremiacao(_clinicId: string, _percentualAtingido: number) {
@@ -68,15 +69,18 @@ export class GamificationRepository implements IGamificationRepository {
     });
   }
 
-  async updateRanking(id: string, data: any) {
-    return prisma.vendedor_ranking.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateRanking(id: string, data: Record<string, unknown>) {
+    return prisma.vendedor_ranking.update({ where: { id }, data: data as any });
   }
 
-  async createRanking(data: any) {
-    return prisma.vendedor_ranking.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createRanking(data: Record<string, unknown>) {
+    return prisma.vendedor_ranking.create({ data: data as any });
   }
 
-  async createAuditLog(data: any) {
-    return prisma.audit_logs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAuditLog(data: Record<string, unknown>) {
+    return prisma.audit_logs.create({ data: data as any });
   }
 }

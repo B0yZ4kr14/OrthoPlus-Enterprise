@@ -7,7 +7,7 @@ export interface IGamificationRepository {
     periodoInicio: Date,
     periodoFim: Date,
   ): Promise<any[]>;
-  updateMeta(id: string, data: any): Promise<any>;
+  updateMeta(id: string, data: Record<string, unknown>): Promise<any>;
   findPremiacao(
     clinicId: string,
     percentualAtingido: number,
@@ -19,7 +19,7 @@ export interface IGamificationRepository {
     periodo: string,
     dataReferencia: string,
   ): Promise<any | null>;
-  updateRanking(id: string, data: any): Promise<any>;
-  createRanking(data: any): Promise<any>;
-  createAuditLog(data: any): Promise<any>;
+  updateRanking(id: string, data: Record<string, unknown>): Promise<any>;
+  createRanking(data: Record<string, unknown>): Promise<any>;
+  createAuditLog(data: Record<string, unknown>): Promise<any>;
 }
