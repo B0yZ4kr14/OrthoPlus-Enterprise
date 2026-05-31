@@ -86,7 +86,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
 
     setTestingXPub(true);
     try {
-      const data = await apiClient.post<unknown>(
+      const data = await apiClient.post<{ address: string }>(
         "/crypto/wallet/validate-xpub",
         {
           xpub,
@@ -95,7 +95,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
         },
       );
 
-      setTestAddress((data as { address?: string }).address || "");
+      setTestAddress(data.address || "");
       setIsValid(true);
       toast.success("xPub validado com sucesso!");
     } catch (error: unknown) {
