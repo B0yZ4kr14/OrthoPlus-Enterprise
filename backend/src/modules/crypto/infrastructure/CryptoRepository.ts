@@ -17,7 +17,8 @@ export class CryptoRepository {
     return prisma.crypto_transactions.create({ data });
   }
 
-  async createAuditLog(data: any) {
-    return prisma.audit_logs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAuditLog(data: Record<string, unknown>) {
+    return prisma.audit_logs.create({ data: data as any });
   }
 }

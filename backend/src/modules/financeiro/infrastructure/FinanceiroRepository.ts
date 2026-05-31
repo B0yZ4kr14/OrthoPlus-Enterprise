@@ -473,7 +473,7 @@ export class FinanceiroRepository implements IFinanceiroRepository {
   async processarPagamento(
     contaReceberId: string,
     updateData: Prisma.contas_receberUpdateInput,
-    transacaoData: any,
+    transacaoData: Record<string, unknown>,
   ) {
     return prisma.$transaction(async (tx) => {
       await tx.contas_receber.update({

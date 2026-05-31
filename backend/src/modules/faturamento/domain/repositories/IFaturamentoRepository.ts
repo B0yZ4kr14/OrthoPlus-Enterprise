@@ -14,7 +14,7 @@ export interface IFaturamentoRepository {
   ): Promise<Prisma.BatchPayload>;
 
   getConfig(clinicId: string): Promise<any | null>;
-  upsertConfig(clinicId: string, data: any): Promise<any>;
+  upsertConfig(clinicId: string, data: Record<string, unknown>): Promise<any>;
   getRelatorio(
     clinicId: string,
     filters: { dataInicio?: string; dataFim?: string; tipo?: string },

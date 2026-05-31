@@ -81,7 +81,7 @@ export class FaturamentoControllerService {
   }
 
   async upsertConfig(clinicId: string, data: unknown) {
-    return this.repo.upsertConfig(clinicId, data);
+    return this.repo.upsertConfig(clinicId, data as Record<string, unknown>);
   }
 
   async getRelatorio(

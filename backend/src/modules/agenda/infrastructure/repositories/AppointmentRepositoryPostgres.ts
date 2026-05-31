@@ -101,20 +101,20 @@ export class AppointmentRepositoryPostgres implements IAppointmentRepository {
     });
   }
 
-  private mapToEntity(raw: any): Appointment {
+  private mapToEntity(raw: Record<string, unknown>): Appointment {
     return Appointment.create({
-      id: raw.id,
-      clinicId: raw.clinic_id,
-      patientId: raw.patient_id,
-      dentistId: raw.dentist_id,
-      startTime: raw.start_time,
-      endTime: raw.end_time,
-      status: raw.status,
-      type: raw.title,
-      notes: raw.notes,
-      createdBy: raw.created_by,
-      createdAt: raw.created_at,
-      updatedAt: raw.updated_at,
+      id: raw.id as string,
+      clinicId: raw.clinic_id as string,
+      patientId: raw.patient_id as string | undefined,
+      dentistId: raw.dentist_id as string | undefined,
+      startTime: raw.start_time as Date,
+      endTime: raw.end_time as Date,
+      status: raw.status as string,
+      type: raw.title as string | undefined,
+      notes: raw.notes as string | undefined,
+      createdBy: raw.created_by as string,
+      createdAt: raw.created_at as Date,
+      updatedAt: raw.updated_at as Date,
     });
   }
 }

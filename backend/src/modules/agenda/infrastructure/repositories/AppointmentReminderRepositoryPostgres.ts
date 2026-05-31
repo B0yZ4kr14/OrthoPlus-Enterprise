@@ -1,5 +1,5 @@
 import { IAppointmentReminderRepository } from "../../domain/repositories/IAppointmentReminderRepository";
-import { AppointmentReminder } from "../../domain/entities/AppointmentReminder";
+import { AppointmentReminder, ReminderType, ReminderStatus } from "../../domain/entities/AppointmentReminder";
 import { prisma } from "@/infrastructure/database/prismaClient";
 
 export class AppointmentReminderRepositoryPostgres implements IAppointmentReminderRepository {
@@ -66,18 +66,18 @@ export class AppointmentReminderRepositoryPostgres implements IAppointmentRemind
     await prisma.appointment_reminders.delete({ where: { id } });
   }
 
-  private mapToEntity(raw: any): AppointmentReminder {
+  private mapToEntity(raw: Record<string, unknown>): AppointmentReminder {
     return AppointmentReminder.restore({
-      id: raw.id,
-      appointmentId: raw.appointment_id,
-      messageTemplate: raw.message_template,
-      reminderType: raw.reminder_type,
-      scheduledFor: new Date(raw.scheduled_for),
-      status: raw.status,
-      sentAt: raw.sent_at ? new Date(raw.sent_at) : undefined,
-      errorMessage: raw.error_message ?? undefined,
-      phoneNumber: raw.phone_number ?? undefined,
-      createdAt: raw.created_at,
+      id: raw.id as string,
+      appointmentId: raw.appointment_id as string,
+      messageTemplate: raw.message_template as string,
+      reminderType: raw.reminder_type as ReminderType,
+      scheduledFor: new Date(raw.scheduled_for as string),
+      status: raw.status as ReminderStatus,
+      sentAt: raw.sent_at ? new Date(raw.sent_at as string) : undefined,
+      errorMessage: (raw.error_message as string | null) ?? undefined,
+      phoneNumber: (raw.phone_number as string | null) ?? undefined,
+      createdAt: new Date(raw.created_at as string),
     });
   }
 }

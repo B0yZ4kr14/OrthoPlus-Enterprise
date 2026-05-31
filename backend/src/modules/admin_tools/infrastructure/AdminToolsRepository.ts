@@ -58,8 +58,9 @@ export class AdminToolsRepository implements IAdminToolsRepository {
     });
   }
 
-  async createAdr(data: any) {
-    return (prisma as any).adrs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAdr(data: Record<string, unknown>) {
+    return (prisma as any).adrs.create({ data: data as any });
   }
 
   // Wiki
