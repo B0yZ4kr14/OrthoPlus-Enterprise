@@ -282,7 +282,7 @@ export class ProdutoRepositoryPostgres implements IProdutoRepository {
     if (filters?.search) {
       where += ` AND (nome ILIKE $${paramIndex} OR codigo ILIKE $${paramIndex})`;
       params.push(`%${filters.search}%`);
-      paramIndex++;
+      void paramIndex; // consumed in template literal above
     }
 
     return { where, params };

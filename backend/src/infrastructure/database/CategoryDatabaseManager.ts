@@ -117,15 +117,15 @@ export class CategoryDatabaseManager {
     const pool = this.getPool();
 
     for (const schema of this.schemas) {
-      let tables: { tablename: string }[] = [];
+      let tables: { tablename: string }[]
       try {
         const res = await pool.query<{ tablename: string }>(
           "SELECT tablename FROM pg_tables WHERE schemaname = $1",
           [schema],
-        );
-        tables = res.rows;
+        )
+        tables = res.rows
       } catch {
-        continue;
+        continue
       }
 
       for (const { tablename } of tables) {
