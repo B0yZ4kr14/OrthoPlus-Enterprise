@@ -68,9 +68,10 @@ export default function Conciliacao() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">
-            Tabela de conciliação será exibida aqui
-          </p>
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
+            <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
+            <span>Funcionalidade em desenvolvimento</span>
+          </div>
         </CardContent>
       </Card>
     </div>
