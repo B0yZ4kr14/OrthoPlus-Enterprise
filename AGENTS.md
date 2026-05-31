@@ -484,6 +484,7 @@ packages:
 | Configuracoes          | `settings`                   | `configuracoes`   | `/configuracoes/*`                    | `/api/configuracoes`                 |
 | Crypto Pagamentos      | `crypto`                     | `crypto_config`   | `/crypto-payment`                     | `/api/crypto`, `/api/crypto_config`  |
 | Financeiro/Fiscal      | `financeiro`                 | `faturamento`     | `/financeiro/*`                       | `/api/faturamento`, `/api/fiscal`    |
+| Financeiro (Transacoes)| `financeiro`                 | `financeiro`      | `/financeiro/*`                       | `/api/financeiro`, `/api/payments`   |
 | Marketing              | `marketing-auto`             | `marketing`       | `/marketing-auto`, `/recall`          | `/api/marketing`                     |
 | IA Radiografia         | `ia-radiografia`             | `ai`              | `/ia-radiografia`                     | `/api/ai`                            |
 | Cobranca/Inadimplencia | `cobranca` / `inadimplencia` | `inadimplencia`   | `/inadimplencia`                      | `/api/inadimplencia`                 |

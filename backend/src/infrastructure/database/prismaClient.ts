@@ -14,6 +14,11 @@ export const prisma = new PrismaClient();
 
 // Gracefully disconnect from the database on process exit to avoid
 // connection leaks and allow clean restarts.
-process.on("beforeExit", async () => {
-  await prisma.$disconnect();
-});
+let prismaBeforeExitHandler: (() => Promise<void>) | null = null;
+
+if (!prismaBeforeExitHandler) {
+  prismaBeforeExitHandler = async () => {
+    await prisma.$disconnect();
+  };
+  process.on("beforeExit", prismaBeforeExitHandler);
+}
