@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -124,7 +125,7 @@ export function CryptoAnalysisDashboard({
         setCandlestickData(mockData);
       }
     } catch (error) {
-      console.error("Error fetching analysis data:", error);
+      toast.error("Erro ao carregar dados de análise");
     } finally {
       setLoading(false);
     }

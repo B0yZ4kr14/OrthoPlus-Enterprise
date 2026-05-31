@@ -68,7 +68,7 @@ export default function CryptoPaymentPage() {
       });
     } catch (error: unknown) {
       const _e = error as { message?: string };
-      console.error("Error creating invoice:", error);
+      toast.error("Erro ao criar fatura");
       if (_e.message?.includes("Rate limit")) {
         toast.error("Rate limit excedido", {
           description: "Aguarde alguns minutos e tente novamente",

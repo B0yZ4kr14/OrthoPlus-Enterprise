@@ -172,7 +172,7 @@ export const AvatarUpload = ({
         description: "Foto atualizada com sucesso",
       });
     } catch (error: unknown) {
-      console.error("Erro no upload:", error);
+      toast({ title: "Erro", description: "Erro no upload", variant: "destructive" });
       const msg =
         error instanceof Error
           ? error.message
@@ -212,7 +212,7 @@ export const AvatarUpload = ({
         description: "Foto removida com sucesso",
       });
     } catch (error: unknown) {
-      console.error("Erro ao remover:", error);
+      toast({ title: "Erro", description: "Erro ao remover", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Não foi possível remover a foto",

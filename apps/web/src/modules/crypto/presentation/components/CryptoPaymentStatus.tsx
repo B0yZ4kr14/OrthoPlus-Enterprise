@@ -78,7 +78,7 @@ export function CryptoPaymentStatus({
         });
       }
     } catch (error) {
-      console.error("Error fetching payment status:", error);
+      toast.error("Erro ao carregar status");
       toast.error("Erro ao buscar status do pagamento");
     } finally {
       setLoading(false);

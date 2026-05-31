@@ -110,7 +110,7 @@ export function UserForm({ user, onSuccess, onCancel }: UserFormProps) {
       onSuccess();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Erro ao salvar usuário:", error);
+      toast.error("Erro ao salvar usuário");
       toast.error("Erro ao salvar usuário", {
         description: _e.message,
       });

@@ -48,7 +48,7 @@ export function CryptoPaymentHistory() {
       );
       setPayments(data || []);
     } catch (error) {
-      console.error("Error fetching payments:", error);
+      toast.error("Erro ao carregar pagamentos");
       toast.error("Erro ao buscar histórico de pagamentos");
     } finally {
       setLoading(false);
