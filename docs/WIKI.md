@@ -99,7 +99,7 @@ Upstreams: backend (3005), agent-service (8000), MinIO (9000).
 | FRONTEND_URL | Sim | URL publica |
 | ALLOWED_ORIGINS | Sim | CORS whitelist |
 | DB_SSL | Prod | true em producao |
-| ENABLE_MOCK_AUTH | Nao | **PROIBIDO em producao** |
+| AUTH_ALLOW_MOCK | Nao | **PROIBIDO em producao** |
 | ENABLE_DANGEROUS_ADMIN | Nao | **PROIBIDO em producao** |
 
 ### 1.7 Checklist Pre-Deploy
