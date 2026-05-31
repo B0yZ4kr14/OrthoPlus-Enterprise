@@ -16,10 +16,20 @@ export function ContaReceberForm({ onSubmit }: ContaReceberFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const parsedValor = parseFloat(valor);
+    if (Number.isNaN(parsedValor)) {
+      alert("Valor inválido");
+      return;
+    }
+    const parsedDate = new Date(dataVencimento);
+    if (Number.isNaN(parsedDate.getTime())) {
+      alert("Data de vencimento inválida");
+      return;
+    }
     onSubmit({
       descricao,
-      valor: parseFloat(valor),
-      dataVencimento: new Date(dataVencimento),
+      valor: parsedValor,
+      dataVencimento: parsedDate,
       observacoes: observacoes || undefined,
     });
   };

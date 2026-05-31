@@ -164,7 +164,8 @@ export default function PatientFormPage() {
           </p>
         </div>
         <Button
-          onClick={form.handleSubmit(onSubmit)}
+          type="submit"
+          form="patient-form"
           disabled={isLoading}
           className="gap-2"
           data-testid="patient-form-submit"
