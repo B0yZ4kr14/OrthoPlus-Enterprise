@@ -52,7 +52,7 @@ export class FinanceiroService {
     this.createTransactionUseCase = new CreateTransactionUseCase(this.repo);
   }
 
-  private validate(schema: z.ZodSchema<any>, data: unknown): any {
+  private validate<T>(schema: z.ZodSchema<T>, data: unknown): T {
     const parsed = schema.safeParse(data);
     if (!parsed.success)
       throw badRequest("Invalid input", parsed.error.flatten());
@@ -60,7 +60,7 @@ export class FinanceiroService {
   }
 
   // Transactions
-  async listTransactions(clinicId: string, query: any) {
+  async listTransactions(clinicId: string, query: Record<string, unknown>) {
     const { type, status, category, payment_method, start_date, end_date } =
       query;
     return this.repo.listTransactions({
@@ -107,7 +107,7 @@ export class FinanceiroService {
   }
 
   // Categories
-  async listCategories(clinicId: string, query: any) {
+  async listCategories(clinicId: string, query: Record<string, unknown>) {
     const { type, is_active, name } = query;
     return this.repo.listCategories({
       clinicId,
@@ -142,7 +142,7 @@ export class FinanceiroService {
   }
 
   // Cash Registers
-  async listCashRegisters(clinicId: string, query: any) {
+  async listCashRegisters(clinicId: string, query: Record<string, unknown>) {
     const { status, opened_by, start_date, end_date } = query;
     return this.repo.listCashRegisters({
       clinicId,
@@ -181,7 +181,7 @@ export class FinanceiroService {
   }
 
   // Movimentos
-  async listMovimentos(clinicId: string, query: any) {
+  async listMovimentos(clinicId: string, query: Record<string, unknown>) {
     const { status, tipo, start_date, end_date } = query;
     return this.repo.listMovimentos({
       clinicId,
@@ -217,7 +217,7 @@ export class FinanceiroService {
   }
 
   // Incidentes
-  async listIncidentes(clinicId: string, query: any) {
+  async listIncidentes(clinicId: string, query: Record<string, unknown>) {
     const { tipo_incidente, start_date, end_date } = query;
     return this.repo.listIncidentes({
       clinicId,
@@ -371,7 +371,7 @@ export class FinanceiroService {
   }
 
   // Legacy
-  async sincronizarExtratoBancario(body: any) {
+  async sincronizarExtratoBancario(body: Record<string, unknown>) {
     const { bancoConfigId } = body;
     return {
       success: true,
@@ -381,7 +381,7 @@ export class FinanceiroService {
     };
   }
 
-  async sugerirSangriaIa(body: any) {
+  async sugerirSangriaIa(body: Record<string, unknown>) {
     const { valorAtualCaixa } = body;
     return {
       success: true,
@@ -397,8 +397,10 @@ export class FinanceiroService {
     return { success: true, executed: true };
   }
 
-  async enviarCobranca(body: any) {
-    const { contaReceberId, method, message } = body;
+  async enviarCobranca(body: Record<string, unknown>) {
+    const contaReceberId = body.contaReceberId as string;
+    const method = body.method as string;
+    const message = body.message as string | undefined;
     if (!contaReceberId || !method)
       throw badRequest("contaReceberId and method are required");
     const cobranca = await this.repo.findContaReceberById(contaReceberId);
@@ -419,8 +421,10 @@ export class FinanceiroService {
     return { success: true, message: "Cobrança enviada com sucesso" };
   }
 
-  async processarPagamento(body: any) {
-    const { contaReceberId, amount, paymentMethod } = body;
+  async processarPagamento(body: Record<string, unknown>) {
+    const contaReceberId = body.contaReceberId as string;
+    const amount = body.amount as number;
+    const paymentMethod = body.paymentMethod as string;
     if (!contaReceberId || !amount || !paymentMethod)
       throw badRequest("Required fields missing");
     const result = await this.processarPagamentoUseCase.execute({
