@@ -15,6 +15,7 @@ import { Card } from "@orthoplus/core-ui/card";
 import { Plus, Trash2 } from "lucide-react";
 import { z } from "zod";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useConfetti } from "@/hooks/useConfetti";
 
 const orcamentoItemSchema = z.object({
@@ -105,10 +106,18 @@ export function OrcamentoForm({
   const valorFinal =
     valorTotal - (valorTotal * descontoPerc) / 100 - descontoVal;
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleFormSubmit = (data: OrcamentoFormData) => {
-    onSubmit(data);
-    // Trigger celebration confetti for budget approval
-    triggerCelebrationConfetti();
+    setIsSubmitting(true);
+    try {
+      onSubmit(data);
+      triggerCelebrationConfetti();
+    } catch (error) {
+      toast.error("Erro ao salvar orçamento");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

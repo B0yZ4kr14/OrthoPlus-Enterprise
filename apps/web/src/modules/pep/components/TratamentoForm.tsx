@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,6 +59,7 @@ export function TratamentoForm({
 }: TratamentoFormProps) {
   const { user, clinicId } = useAuth();
   const { createTratamento } = useTratamentos(prontuarioId, clinicId || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -79,6 +81,7 @@ export function TratamentoForm({
   const onSubmit = async (data: TratamentoFormData) => {
     if (!user) return;
 
+    setIsSubmitting(true);
     try {
       await createTratamento({
         titulo: data.titulo,
@@ -95,6 +98,8 @@ export function TratamentoForm({
     } catch (error) {
       toast.error("Erro ao salvar tratamento");
       // Toast já exibido pelo hook
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
