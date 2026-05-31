@@ -178,7 +178,7 @@ function validateEnvironment() {
     }
   });
 
-  console.log("✅ Environment validation passed");
+  logger.info("✅ Environment validation passed");
 }
 
 validateEnvironment();
@@ -465,7 +465,7 @@ startAllWorkers();
 app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.info(`Server running on port ${PORT}`);
   // Notify PM2 that the process is ready (required when wait_ready: true)
   if (process.send) {
     process.send("ready");

@@ -152,7 +152,7 @@ services:
 
   # Prometheus (Monitoramento)
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.0.1
     container_name: orthoplus-prometheus
     # Port not exposed to host — accessible only within orthoplus-network
     volumes:
@@ -170,7 +170,7 @@ services:
 
   # Redis Exporter
   redis-exporter:
-    image: oliver006/redis_exporter:latest
+    image: oliver006/redis_exporter:v1.67.0
     container_name: orthoplus-redis-exporter
     environment:
       - REDIS_ADDR=redis://:${REDIS_PASSWORD}@redis:6379
@@ -183,7 +183,7 @@ services:
 
   # Node Exporter (System Metrics)
   node-exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.8.2
     container_name: orthoplus-node-exporter
     volumes:
       - /proc:/host/proc:ro
@@ -206,7 +206,7 @@ services:
 
   # Grafana (Visualização)
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:11.3.1
     container_name: orthoplus-grafana
     # Exposed only on localhost — use host nginx reverse proxy for external access
     ports:

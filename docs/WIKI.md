@@ -1,7 +1,7 @@
 # OrthoPlus Enterprise — Wiki Oficial
 
 > **Versao:** 2.9.10 (Frontend) / 2.5.4 (Backend)
-> **Atualizado:** 2026-05-19
+> **Atualizado:** 2026-05-31
 > **Status:** Producao
 
 ---
