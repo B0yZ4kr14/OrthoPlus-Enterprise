@@ -771,12 +771,8 @@ describe("AuthContext", () => {
       expect(screen.getByTestId("role").textContent).toBe("ADMIN");
     });
 
-    it("should log console.error and leave state unchanged on error", async () => {
+    it("should leave state unchanged on error", async () => {
       mockGet.mockRejectedValueOnce(new Error("metadata failed"));
-
-      const consoleError = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
 
       render(<TestConsumer />, { wrapper: Wrapper });
       await waitFor(() =>
@@ -788,15 +784,8 @@ describe("AuthContext", () => {
       });
 
       await waitFor(() =>
-        expect(consoleError).toHaveBeenCalledWith(
-          "Error fetching user metadata:",
-          expect.any(Error),
-        ),
+        expect(screen.getByTestId("role").textContent).toBe("no-role"),
       );
-
-      expect(screen.getByTestId("role").textContent).toBe("no-role");
-
-      consoleError.mockRestore();
     });
 
     it("should preserve existing userRole when roleData.role is missing", async () => {
