@@ -180,6 +180,18 @@ export const menuGroups: MenuGroup[] = [
         // badge: { count: 0, variant: "destructive" },
       },
       {
+        title: "Conciliação Bancária",
+        url: "/financeiro/conciliacao",
+        icon: ClipboardCheck,
+        moduleKey: "FINANCEIRO",
+      },
+      {
+        title: "DRE",
+        url: "/financeiro/dre",
+        icon: BarChart3,
+        moduleKey: "FINANCEIRO",
+      },
+      {
         title: "Inadimplência",
         url: "/inadimplencia",
         icon: AlertCircle,
@@ -294,6 +306,12 @@ export const menuGroups: MenuGroup[] = [
             title: "Histórico Inventários",
             url: "/estoque/inventario-historico",
             icon: History,
+            moduleKey: "INVENTARIO",
+          },
+          {
+            title: "Scanner de Código",
+            url: "/estoque/scanner",
+            icon: ScanLine,
             moduleKey: "INVENTARIO",
           },
         ],
