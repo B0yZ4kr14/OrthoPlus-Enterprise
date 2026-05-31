@@ -112,18 +112,22 @@ export class DashboardController {
          AND start_time < TO_CHAR(DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '7 days', 'YYYY-MM-DD')`,
         [clinicId],
       ),
-      // Tratamentos pendentes (pep_tratamentos has no clinic_id — skip clinic filter)
+      // Tratamentos pendentes
       this.db.query(
-        `SELECT COUNT(*) as count FROM pep.pep_tratamentos
-         WHERE status = 'EM_ANDAMENTO'`,
-        [],
+        `SELECT COUNT(*) as count FROM pep.pep_tratamentos t
+         JOIN pep.prontuarios p ON t.prontuario_id = p.id
+         WHERE t.status = 'EM_ANDAMENTO'
+         AND p.clinic_id = $1`,
+        [clinicId],
       ),
       // Tratamentos concluídos (últimos 30 dias)
       this.db.query(
-        `SELECT COUNT(*) as count FROM pep.pep_tratamentos
-         WHERE status = 'CONCLUIDO'
-         AND updated_at >= CURRENT_DATE - INTERVAL '30 days'`,
-        [],
+        `SELECT COUNT(*) as count FROM pep.pep_tratamentos t
+         JOIN pep.prontuarios p ON t.prontuario_id = p.id
+         WHERE t.status = 'CONCLUIDO'
+         AND t.updated_at >= CURRENT_DATE - INTERVAL '30 days'
+         AND p.clinic_id = $1`,
+        [clinicId],
       ),
     ]);
 
@@ -195,16 +199,17 @@ export class DashboardController {
     }));
   }
 
-  private async getTreatmentsByStatus(_clinicId: string) {
-    // Tratamentos por status (pep_tratamentos has no clinic_id)
+  private async getTreatmentsByStatus(clinicId: string) {
     const result = await this.db.query(
       `SELECT
-        status as name,
+        t.status as name,
         COUNT(*) as value
-       FROM pep.pep_tratamentos
-       GROUP BY status
+       FROM pep.pep_tratamentos t
+       JOIN pep.prontuarios p ON t.prontuario_id = p.id
+       WHERE p.clinic_id = $1
+       GROUP BY t.status
        ORDER BY value DESC`,
-      [],
+      [clinicId],
     );
 
     const statusLabels: Record<string, string> = {

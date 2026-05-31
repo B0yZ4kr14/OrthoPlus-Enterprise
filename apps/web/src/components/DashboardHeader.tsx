@@ -37,6 +37,7 @@ function SidebarPinToggle() {
       onClick={toggleAutoHide}
       className="h-9 w-9 hidden md:flex"
       title={isAutoHide ? "Fixar sidebar (Ctrl+B)" : "Modo hover"}
+      aria-label={isAutoHide ? "Fixar sidebar" : "Modo hover sidebar"}
       data-testid="sidebar-pin-toggle"
     >
       {isAutoHide ? (
@@ -88,6 +89,7 @@ export function DashboardHeader({
             <Button
               variant="ghost"
               size="icon"
+              aria-label="Abrir menu"
               onClick={onMenuClick}
               className="md:hidden min-h-[44px] min-w-[44px]"
             >

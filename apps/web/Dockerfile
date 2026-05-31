@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.title="OrthoPlus Frontend" \
       org.opencontainers.image.source="https://github.com/B0yZ4kr14/OrthoPlus-Enterprise"
 
 COPY dist/ /usr/share/nginx/html/
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx-frontend.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 

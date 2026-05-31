@@ -2,10 +2,21 @@ import { Request, Response } from "express";
 import { Errors, asyncHandler } from "@/middleware/errorHandler";
 import { CryptoConfigControllerService } from "@/modules/crypto_config/application/CryptoConfigControllerService";
 
+const CRYPTO_ENABLED = process.env.ENABLE_CRYPTO_MODULE === "true";
+
 export class CryptoConfigController {
   private service = new CryptoConfigControllerService();
 
+  private checkEnabled(res: Response): boolean {
+    if (!CRYPTO_ENABLED) {
+      res.status(503).json({ error: "Crypto module is disabled" });
+      return false;
+    }
+    return true;
+  }
+
   listExchanges = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
       throw Errors.unauthorized("Nao autenticado");
@@ -15,6 +26,7 @@ export class CryptoConfigController {
   });
 
   createExchange = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const clinicId = req.user?.clinicId;
     const isAdmin = req.user?.role === "ADMIN";
     const result = this.service.createExchange(
@@ -26,6 +38,7 @@ export class CryptoConfigController {
   });
 
   getPortfolio = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
       throw Errors.unauthorized("Nao autenticado");
@@ -35,6 +48,7 @@ export class CryptoConfigController {
   });
 
   getDCAStrategies = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
       throw Errors.unauthorized("Nao autenticado");
@@ -44,6 +58,7 @@ export class CryptoConfigController {
   });
 
   manageOfflineWallet = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const result = await this.service.manageOfflineWallet(
       req.body,
       req.user?.clinicId,
@@ -52,12 +67,14 @@ export class CryptoConfigController {
   });
 
   validateXpub = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const { xpub } = req.body;
     const result = this.service.validateXpub(xpub);
     res.json(result);
   });
 
   syncCryptoWallet = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const { walletId } = req.body;
     if (!walletId) {
       throw Errors.validation("walletId is required");
@@ -67,9 +84,10 @@ export class CryptoConfigController {
   });
 
   realtimeNotify = asyncHandler(async (req: Request, res: Response) => {
-    const clinicId = req.query.clinicId;
+    if (!this.checkEnabled(res)) return;
+    const clinicId = req.user?.clinicId;
     if (!clinicId) {
-      throw Errors.validation("Missing clinicId parameter");
+      throw Errors.unauthorized("Nao autenticado");
     }
     const result = this.service.realtimeNotify();
     res.json({ success: true, ...result });
@@ -77,6 +95,7 @@ export class CryptoConfigController {
 
   webhookCryptoTransaction = asyncHandler(
     async (req: Request, res: Response) => {
+      if (!this.checkEnabled(res)) return;
       const result = await this.service.webhookCryptoTransaction(
         req.body,
         req.user?.clinicId,
@@ -91,6 +110,7 @@ export class CryptoConfigController {
   );
 
   generatePaymentAddress = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const clinicId = req.user?.clinicId;
     if (!clinicId) {
       throw Errors.unauthorized("Nao autenticado");

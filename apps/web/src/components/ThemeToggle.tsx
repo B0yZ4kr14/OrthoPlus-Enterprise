@@ -43,6 +43,7 @@ export const ThemeToggle = memo(function ThemeToggle() {
         <Button
           variant="ghost"
           size="icon"
+          aria-label="Alternar tema"
           className="h-9 w-9 hover:bg-accent transition-colors"
         >
           {currentIcon}

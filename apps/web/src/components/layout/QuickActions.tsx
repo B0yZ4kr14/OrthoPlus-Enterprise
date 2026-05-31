@@ -25,10 +25,11 @@ export function QuickActions() {
         <Button
           variant="default"
           size="icon"
+          aria-label="Ações rápidas"
           data-testid="quick-actions-btn"
           className="shadow-[0_0_12px_hsl(var(--interactive)/0.25)] hover:shadow-[0_0_16px_hsl(var(--interactive)/0.35)] transition-shadow duration-300"
         >
-          <Plus className="h-5 w-5" />
+          <Plus className="h-5 w-5" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
