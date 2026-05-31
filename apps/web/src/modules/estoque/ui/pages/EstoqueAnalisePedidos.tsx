@@ -508,8 +508,8 @@ export default function EstoqueAnalisePedidos() {
               </tr>
             </thead>
             <tbody>
-              {historicoFornecedor.map((fornecedor, index) => (
-                <tr key={index} className="border-b hover:bg-muted/50">
+              {historicoFornecedor.map((fornecedor) => (
+                <tr key={fornecedor.nome} className="border-b hover:bg-muted/50">
                   <td className="p-3 font-medium">{fornecedor.nome}</td>
                   <td className="text-right p-3">{fornecedor.quantidade}</td>
                   <td className="text-right p-3">
@@ -541,8 +541,8 @@ export default function EstoqueAnalisePedidos() {
               </tr>
             </thead>
             <tbody>
-              {produtosMaisPedidos.map((produto, index) => (
-                <tr key={index} className="border-b hover:bg-muted/50">
+              {produtosMaisPedidos.map((produto) => (
+                <tr key={produto.nome} className="border-b hover:bg-muted/50">
                   <td className="p-3 font-medium">{produto.nome}</td>
                   <td className="text-right p-3">{produto.quantidade}</td>
                   <td className="text-right p-3">

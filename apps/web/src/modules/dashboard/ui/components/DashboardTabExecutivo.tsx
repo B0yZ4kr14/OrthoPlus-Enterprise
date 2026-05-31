@@ -266,15 +266,15 @@ export default function DashboardTabExecutivo({
                     </tr>
                   </thead>
                   <tbody>
-                    {treatmentsByStatus?.map((row: unknown, index: number) => {
+                    {treatmentsByStatus?.map((row: unknown) => {
                       const entry = row as { name: string; value: number };
                       return (
-                        <tr key={index}>
+                        <tr key={entry.name}>
                           <td>{String(entry.name)}</td>
                           <td>{String(entry.value)}</td>
                         </tr>
                       );
-                    })}
+                    })};
                   </tbody>
                 </table>
               </span>

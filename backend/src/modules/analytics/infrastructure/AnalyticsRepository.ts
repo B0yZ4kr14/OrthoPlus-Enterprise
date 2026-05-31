@@ -267,16 +267,19 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     });
   }
 
-  async createLoyalty(data: any) {
-    return prisma.fidelidade_pacientes.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createLoyalty(data: unknown) {
+    return prisma.fidelidade_pacientes.create({ data: data as any });
   }
 
-  async updateLoyalty(id: string, data: any) {
-    return prisma.fidelidade_pacientes.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateLoyalty(id: string, data: unknown) {
+    return prisma.fidelidade_pacientes.update({ where: { id }, data: data as any });
   }
 
-  async createLoyaltyTransaction(data: any) {
-    return prisma.fidelidade_transacoes.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createLoyaltyTransaction(data: unknown) {
+    return prisma.fidelidade_transacoes.create({ data: data as any });
   }
 
   // ── Gamification ──────────────────────────────────────────────────────
@@ -327,14 +330,16 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     >;
   }
 
-  async updateGamificationGoal(id: string, data: any) {
-    return prisma.gamification_goals.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateGamificationGoal(id: string, data: unknown) {
+    return prisma.gamification_goals.update({ where: { id }, data: data as any });
   }
 
   // ── BI Export ─────────────────────────────────────────────────────────
 
-  async createBIExportJob(data: any) {
-    return prisma.bi_export_jobs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createBIExportJob(data: unknown) {
+    return prisma.bi_export_jobs.create({ data: data as any });
   }
 
   async groupAnalyticsEventsByType() {
@@ -346,8 +351,9 @@ export class AnalyticsRepository implements IAnalyticsRepository {
 
   // ── Onboarding ────────────────────────────────────────────────────────
 
-  async createOnboardingAnalytics(data: any) {
-    return prisma.onboarding_analytics.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createOnboardingAnalytics(data: unknown) {
+    return prisma.onboarding_analytics.create({ data: data as any });
   }
 
   // ── Sidebar Badges ────────────────────────────────────────────────────
