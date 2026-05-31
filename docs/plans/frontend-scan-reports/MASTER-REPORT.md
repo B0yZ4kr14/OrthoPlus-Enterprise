@@ -94,11 +94,11 @@ Constitution AP-3 requires all HTTP requests use `apiClient`. Found 18 raw `fetc
 
 | ID | Title |
 |----|-------|
-| PB01 | Circular Dependency Resolution Strategy |
-| PB02 | Fetch-to-apiClient Migration Guide |
-| PB03 | Component Size Refactoring Pattern |
-| PB04 | ARIA Accessibility Audit Checklist |
-| PB05 | Module Test Coverage Strategy |
-| PB06 | Auth Module Refactoring Pattern |
+| PB01 | Varredura de Componente Individual |
+| PB02 | Varredura de Módulo |
+| PB03 | Fix Rápido (Scout Rule) |
+| PB04 | Validação pelo Método Socrático |
+| PB05 | Falsificação pelo Método Popperiano |
+| PB06 | Architecture Guard Scan |
 
 Playbooks are available in `docs/plans/frontend-scan-reports/playbooks/`.

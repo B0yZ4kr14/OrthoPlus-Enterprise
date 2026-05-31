@@ -16,9 +16,9 @@ The original P1 scan (2026-05-19) was partially stale. Many reported issues had 
 
 | ID | File | Change | Method |
 |----|------|--------|--------|
-| FIX-004 | CryptoPaymentConfirmedHandler.ts | Removed 6 console.log debug statements | Scout Rule |
-| FIX-005 | CryptoPaymentConfirmedHandler.ts | Replaced log stubs with void event comments | Scout Rule |
-| FIX-006 | EmailNotificationHandler.ts | Migrated 2 fetch() calls to apiClient.post | AP-3 Compliance |
+| ~~FIX-004~~ | ~~CryptoPaymentConfirmedHandler.ts~~ | **REMOVED** — file deleted in cleanup | N/A |
+| ~~FIX-005~~ | ~~CryptoPaymentConfirmedHandler.ts~~ | **REMOVED** — file deleted in cleanup | N/A |
+| ~~FIX-006~~ | ~~EmailNotificationHandler.ts~~ | **REMOVED** — file deleted in cleanup | N/A |
 | FIX-007 | hooks/api/useFiles.ts | Migrated download fetch() to apiClient.get<Blob> | AP-3 Compliance |
 | FIX-008 | pep/PEPPage.tsx | Fixed empty arrow function warning | Scout Rule |
 
@@ -29,8 +29,8 @@ The original P1 scan (2026-05-19) was partially stale. Many reported issues had 
 | fetch() fallback in Auth.tsx | modules/Auth.tsx | Intentional fallback pattern — requires analysis before removal |
 | fetch() in useBackendStatus.ts | settings/backend-selector/ | Health check to arbitrary URLs — acceptable use case |
 | fetch() in exchange adapters | infrastructure/external/exchanges/ | External API calls — in correct infrastructure layer |
-| fetch() in BlockchainMonitor | infrastructure/external/ | External blockchain API — in correct layer |
-| fetch() in useCEPLookup | hooks/useCEPLookup.ts | External ViaCEP API — acceptable |
+| ~~fetch() in BlockchainMonitor~~ | ~~infrastructure/external/~~ | **REMOVED** — file deleted in cleanup |
+| ~~fetch() in useCEPLookup~~ | ~~hooks/useCEPLookup.ts~~ | **REMOVED** — file deleted in cleanup |
 | 10 components >400 lines | various | Requires careful extraction — deferred to next session |
 
 ## Quality Gates Post-Fixes

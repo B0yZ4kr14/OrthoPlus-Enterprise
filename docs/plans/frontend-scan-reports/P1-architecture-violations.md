@@ -69,18 +69,16 @@ modules/pep/components/lazy/TabOdontograma.tsx
 | 2 | `components/crypto/crypto-performance-report/marketData.ts` | 10 | `fetch(btcUrl)` |
 | 3 | `components/crypto/crypto-portfolio-dashboard/usePortfolioData.ts` | 21 | `fetch(portfolioUrl)` |
 | 4 | `components/crypto/dca-backtesting/useDCABacktesting.ts` | 27 | `fetch(dcaUrl)` |
-| 5 | `components/crypto/krux-integration/useKruxIntegration.ts` | 30 | `fetch("/api/crypto/broadcast")` |
-| 6 | `components/crypto/psbt-builder/usePSBTBuilder.ts` | 19 | `fetch("/api/crypto/create-psbt")` |
+| 5 | ~~`components/crypto/krux-integration/useKruxIntegration.ts`~~ | — | **REMOVED** — component deleted in cleanup |
+| 6 | ~~`components/crypto/psbt-builder/usePSBTBuilder.ts`~~ | — | **REMOVED** — component deleted in cleanup |
 | 7 | `components/crypto/CryptoCalculator.tsx` | 127 | `fetch(...)` |
 | 8 | `components/crypto/CryptoPerformanceReport.tsx` | 250 | `fetch(btcUrl)` |
 | 9 | `components/crypto/CryptoPortfolioDashboard.tsx` | 45 | `fetch(...)` |
 | 10 | `components/crypto/DCABacktesting.tsx` | 67 | `fetch(...)` |
-| 11 | `components/crypto/KruxIntegration.tsx` | 49 | `fetch("/api/crypto/broadcast")` |
-| 12 | `components/crypto/PSBTBuilder.tsx` | 38 | `fetch("/api/crypto/create-psbt")` |
-| 13 | `components/dashboard/market-rates-widget/hooks/useMarketRates.ts` | 18 | `fetch(btcUrl)` |
-| 14 | `components/dashboard/market-rates-widget/hooks/useMarketRates.ts` | 24 | `fetch(usdUrl)` |
-| 15 | `components/dashboard/MarketRatesWidget.tsx` | 27 | `fetch(btcUrl)` |
-| 16 | `components/dashboard/MarketRatesWidget.tsx` | 33 | `fetch(usdUrl)` |
+| 11 | ~~`components/crypto/KruxIntegration.tsx`~~ | — | **REMOVED** — component deleted in cleanup |
+| 12 | ~~`components/crypto/PSBTBuilder.tsx`~~ | — | **REMOVED** — component deleted in cleanup |
+| 13 | ~~`components/dashboard/market-rates-widget/hooks/useMarketRates.ts`~~ | — | **REMOVED** — component deleted in cleanup |
+| 14 | ~~`components/dashboard/MarketRatesWidget.tsx`~~ | — | **REMOVED** — component deleted in cleanup |
 | 17 | `components/settings/backend-selector/useBackendStatus.ts` | 21 | `fetch(${backend.url}/health)` |
 | 18 | `components/settings/BackendSelector.tsx` | 43 | `fetch(${backend.url}/health)` |
 
