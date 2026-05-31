@@ -25,7 +25,10 @@ export const getMyModules = async (req: Request, res: Response) => {
         module_catalog: true,
       },
     })
-    .catch(() => []);
+    .catch((err) => {
+      logger.error("Failed to fetch clinic modules", { clinicId: user.clinicId, error: err })
+      return []
+    });
 
   return res.status(200).json({ modules });
 };
@@ -60,8 +63,8 @@ export const toggleModuleState = async (req: Request, res: Response) => {
       },
       data: { is_active: isActive },
     })
-    .catch(() => {
-      /* no-op */
+    .catch((err) => {
+      logger.error("Failed to toggle module state", { moduleId, clinicId: user.clinicId, error: err })
     });
 
   return res
@@ -92,7 +95,10 @@ export const exportClinicData = async (req: Request, res: Response) => {
     .findMany({
       where: { clinic_id: user.clinicId },
     })
-    .catch(() => []);
+    .catch((err) => {
+      logger.error("Failed to export clinic patients", { clinicId: user.clinicId, error: err })
+      return []
+    });
 
   return res.status(200).json({ export: patients, format: "json" });
 };

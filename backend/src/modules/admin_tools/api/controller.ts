@@ -147,9 +147,15 @@ export class AdminToolsController {
 
     const activeConnections = await this.repo
       .getActiveConnections()
-      .catch(() => [{ count: 0 }]);
+      .catch((err) => {
+        logger.error("Failed to get active connections", { error: err })
+        return [{ count: 0 }]
+      });
 
-    const tableSizes = await this.repo.getTableSizes().catch(() => []);
+    const tableSizes = await this.repo.getTableSizes().catch((err) => {
+      logger.error("Failed to get table sizes", { error: err })
+      return []
+    });
 
     res.status(200).json({
       status: "healthy",
@@ -224,13 +230,19 @@ export class AdminToolsController {
     if (!entityType || entityType === "patients") {
       results.patients = await this.repo
         .searchPatients(clinicId, String(query))
-        .catch(() => []);
+        .catch((err) => {
+          logger.error("Failed to search patients", { clinicId, query, error: err })
+          return []
+        });
     }
 
     if (!entityType || entityType === "dentists") {
       results.dentists = await this.repo
         .searchDentists(clinicId, String(query))
-        .catch(() => []);
+        .catch((err) => {
+          logger.error("Failed to search dentists", { clinicId, query, error: err })
+          return []
+        });
     }
 
     res.status(200).json({ results });
