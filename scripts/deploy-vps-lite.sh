@@ -11,7 +11,7 @@ if [ -z "$VPS_HOST" ]; then
   echo "[ERROR] VPS_HOST is required. Usage: $0 <VPS_HOST> [SSH_KEY]"
   exit 1
 fi
-REMOTE_DIR="/home/tsi/OrthoPlus-Enterprise"
+REMOTE_DIR="/home/${VPS_USER:-tsi}/OrthoPlus-Enterprise"
 
 echo "[DEPLOY-LITE] Target VPS: $VPS_USER@$VPS_HOST"
 

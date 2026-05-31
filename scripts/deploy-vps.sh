@@ -17,7 +17,7 @@ fi
 # Resolve project root relative to script location
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-REMOTE_DIR="/home/tsi/OrthoPlus-Enterprise"
+REMOTE_DIR="/home/${VPS_USER:-tsi}/OrthoPlus-Enterprise"
 
 echo "[DEPLOY] Target VPS: $VPS_TARGET"
 echo "[DEPLOY] VPS Host: $VPS_HOST"

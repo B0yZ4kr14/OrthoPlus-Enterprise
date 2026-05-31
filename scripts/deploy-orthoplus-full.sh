@@ -28,8 +28,8 @@ if [ -z "$VPS_HOST" ]; then
   log_error "VPS_HOST is required. Usage: $0 <VPS_HOST>"
 fi
 SSH_OPTS="-i $SSH_KEY -o ConnectTimeout=10"
-REMOTE_BACKEND="/home/tsi/OrthoPlus-Enterprise"
-REMOTE_FRONTEND="/var/www/orthoplus"
+REMOTE_BACKEND="/home/${VPS_USER}/OrthoPlus-Enterprise"
+REMOTE_FRONTEND="${REMOTE_FRONTEND:-/var/www/orthoplus}"
 LOCAL_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo ""
@@ -121,15 +121,14 @@ log_success "Backend sincronizado para $REMOTE_BACKEND"
 
 # --- [5/5] Migrations + PM2 Reload ---
 log_info "[5/5] Aplicando migrações Prisma e recarregando PM2..."
-ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << 'REMOTE'
+ssh $SSH_OPTS "$VPS_USER@$VPS_HOST" << REMOTE
   set -e
-  cd /home/tsi/OrthoPlus-Enterprise
+  cd $REMOTE_BACKEND
 
   # Criar diretório de logs para PM2
   mkdir -p logs
 
   # Instalar/atualizar deps do backend (incluindo prisma para migrations)
-  cd /home/tsi/OrthoPlus-Enterprise
   pnpm install --frozen-lockfile
 
   # Prisma migrate deploy
