@@ -16,8 +16,10 @@ services:
       - ./nginx/security-headers.conf:/etc/nginx/security-headers.conf:ro
       - ./ssl:/etc/nginx/ssl:ro
     depends_on:
-      - backend
-      - orthoplus
+      backend:
+        condition: service_healthy
+      orthoplus:
+        condition: service_healthy
     networks:
       - orthoplus-network
     healthcheck:
@@ -42,7 +44,8 @@ services:
     env_file:
       - .env.production
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     networks:
       - orthoplus-network
     healthcheck:
@@ -50,7 +53,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 30s
+      start_period: 60s
 
   agent-service:
     build:
@@ -70,7 +73,8 @@ services:
     env_file:
       - .env.production
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - orthoplus-network
     healthcheck:
@@ -98,6 +102,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 40s
 
   redis:
     image: redis:7-alpine
@@ -117,7 +122,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 5s
+      start_period: 10s
     deploy:
       resources:
         limits:

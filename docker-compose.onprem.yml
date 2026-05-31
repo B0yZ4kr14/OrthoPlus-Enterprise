@@ -26,6 +26,7 @@ services:
       - VITE_API_URL=http://backend:3005
     networks:
       - frontend_net
+    restart: unless-stopped
     deploy:
       replicas: 2
       restart_policy:
@@ -75,6 +76,7 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+    restart: unless-stopped
     deploy:
       replicas: 3
       restart_policy:
@@ -114,6 +116,7 @@ services:
       - ./scripts/postgres-backup.sh:/usr/local/bin/backup.sh:ro
     networks:
       - db_net
+    restart: unless-stopped
     deploy:
       replicas: 1
       restart_policy:
@@ -130,7 +133,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 60s
     labels:
       - "com.orthoplus.service=database"
       - "com.orthoplus.description=PostgreSQL 16 with RLS"
@@ -203,6 +206,7 @@ services:
     command: server /data --console-address ":9001"
     networks:
       - backend_net
+    restart: unless-stopped
     deploy:
       replicas: 1
       restart_policy:
@@ -219,7 +223,7 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
-      start_period: 30s
+      start_period: 60s
     labels:
       - "com.orthoplus.service=storage"
       - "com.orthoplus.description=MinIO S3-Compatible Storage"
@@ -240,8 +244,11 @@ services:
       - frontend_net
       - backend_net
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
     deploy:
       replicas: 1
       restart_policy:
@@ -251,6 +258,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
     labels:
       - "com.orthoplus.service=proxy"
       - "com.orthoplus.description=Nginx Reverse Proxy + TLS"
@@ -273,6 +281,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    restart: unless-stopped
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
@@ -303,6 +312,7 @@ services:
     depends_on:
       minio:
         condition: service_healthy
+    restart: unless-stopped
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
@@ -330,6 +340,7 @@ services:
       - /:/rootfs:ro
     networks:
       - backend_net
+    restart: unless-stopped
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
@@ -338,6 +349,12 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9100/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     labels:
       - "com.orthoplus.service=monitoring"
       - "com.orthoplus.description=System Health Monitor"
