@@ -66,6 +66,7 @@ export const iaRadiografiaWorker = new Worker(
     // Normalize detected problems into problema_radiografico table (T044)
     if (resultado.problemas_detectados?.length > 0) {
       await repo.createProblemasRadiograficos(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         resultado.problemas_detectados.map((p: any) => ({
           analise_id: analiseId,
           tipo_problema: mapTipoProblema(p.tipo_problema),

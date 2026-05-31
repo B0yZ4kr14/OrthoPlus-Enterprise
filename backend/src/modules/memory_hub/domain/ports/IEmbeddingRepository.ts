@@ -17,7 +17,9 @@ export interface IEmbeddingRepository {
     featureNumber?: string,
     dateFrom?: number,
     dateTo?: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bulkInsert(data: any[], useCompression?: boolean): void;
   deleteByDocument(documentId: string): void;
 }
