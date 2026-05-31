@@ -4,12 +4,17 @@ import { IFilesRepository } from "@/modules/files/domain/repositories/IFilesRepo
 export class FilesRepository implements IFilesRepository {
   // ── Arquivo ───────────────────────────────────────────────────────────
 
-  async createArquivo(data: any) {
-    return prisma.arquivo.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createArquivo(data: Record<string, unknown>) {
+    return prisma.arquivo.create({ data: data as any });
   }
 
-  async findArquivos(where: any, orderBy?: any, take?: number) {
-    return prisma.arquivo.findMany({ where, orderBy, take });
+  async findArquivos(
+    where: Record<string, unknown>,
+    orderBy?: Record<string, unknown>,
+    take?: number,
+  ) {
+    return prisma.arquivo.findMany({ where: where as any, orderBy: orderBy as any, take });
   }
 
   async findArquivoById(id: string, clinicId: string) {
@@ -75,8 +80,9 @@ export class FilesRepository implements IFilesRepository {
 
   // ── Arquivo OCR ───────────────────────────────────────────────────────
 
-  async createOCR(data: any) {
-    return prisma.arquivo_ocr.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createOCR(data: Record<string, unknown>) {
+    return prisma.arquivo_ocr.create({ data: data as any });
   }
 
   async findOCRByArquivoId(arquivoId: string) {
@@ -104,8 +110,9 @@ export class FilesRepository implements IFilesRepository {
     });
   }
 
-  async createVersion(data: any) {
-    return prisma.arquivo_versao.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createVersion(data: Record<string, unknown>) {
+    return prisma.arquivo_versao.create({ data: data as any });
   }
 
   async findVersionsByArquivoId(arquivoId: string) {
@@ -132,15 +139,17 @@ export class FilesRepository implements IFilesRepository {
 
   // ── Audit Logs / Backup ───────────────────────────────────────────────
 
-  async createAuditLog(data: any) {
-    return prisma.audit_logs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAuditLog(data: Record<string, unknown>) {
+    return prisma.audit_logs.create({ data: data as any });
   }
 
   async findBackupById(id: string) {
     return prisma.backup_history.findUnique({ where: { id } });
   }
 
-  async updateBackup(id: string, data: any) {
-    return prisma.backup_history.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateBackup(id: string, data: Record<string, unknown>) {
+    return prisma.backup_history.update({ where: { id }, data: data as any });
   }
 }

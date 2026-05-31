@@ -500,8 +500,8 @@ export default function EstoqueInventarioDashboard() {
               </PieChart>
             </ResponsiveContainer>
             <div className="grid grid-cols-2 gap-4 mt-6">
-              {distribuicaoCriticidade.map((item, index) => (
-                <div key={index} className="flex items-center gap-2">
+              {distribuicaoCriticidade.map((item) => (
+                <div key={item.name} className="flex items-center gap-2">
                   <div
                     className="w-4 h-4 rounded"
                     style={{ backgroundColor: item.color }}

@@ -43,8 +43,8 @@ export function OverviewTab({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {certificadosTipos.map((cert, index) => (
-              <div key={index} className="flex items-center justify-between">
+            {certificadosTipos.map((cert) => (
+              <div key={cert.tipo} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Badge
                     variant="outline"
