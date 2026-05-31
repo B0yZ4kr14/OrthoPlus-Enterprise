@@ -25,6 +25,7 @@ export class ReportControllerService {
     userId: string,
     options: ExportOptions,
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const exportData: any = {
       version: "1.0.0",
       exportedAt: new Date().toISOString(),
@@ -98,6 +99,7 @@ export class ReportControllerService {
     return exportData;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async importClinicData(clinicId: string, userId: string, body: any) {
     const importData = body.data;
     const options = body.options || {
@@ -138,7 +140,7 @@ export class ReportControllerService {
             );
             results.imported.modules++;
           }
-        } catch (error: any) {
+        } catch (error: unknown) {
           results.errors.push("Error importing module");
         }
       }
@@ -164,8 +166,8 @@ export class ReportControllerService {
             importData.data.odontogramas &&
             Array.isArray(importData.data.odontogramas)
           ) {
-            const odontogramasOriginal = importData.data.odontogramas.filter(
-              (o: any) => o.prontuario_id === prontuario.id,
+            const odontogramasOriginal = (importData.data.odontogramas as Array<Record<string, unknown>>).filter(
+              (o) => o.prontuario_id === prontuario.id,
             );
 
             for (const odonto of odontogramasOriginal) {
@@ -176,7 +178,7 @@ export class ReportControllerService {
               });
             }
           }
-        } catch (error: any) {
+        } catch (error: unknown) {
           if (options.skipConflicts) {
             results.skipped.push(`Prontuario: ${prontuario.id}`);
           } else {
@@ -192,7 +194,7 @@ export class ReportControllerService {
         user_id: userId,
         action: "DATA_IMPORT",
         details: {
-          sourceClinicId: importData.clinicId,
+          sourceClinicId: importData.clinicId as string,
           options,
           results: {
             imported: results.imported,

@@ -33,7 +33,7 @@ export const cacheRoute = (
 
       // Monkey patch res.send to capture the response body and cache it
       const originalSend = res.send.bind(res);
-      res.send = (body: any) => {
+      res.send = (body: unknown) => {
         // eslint-disable-line @typescript-eslint/no-explicit-any
         // Cache the body. We assume body is a parsed JSON string or Buffer (if from res.json it's usually stringified)
         let dataToCache = body;
@@ -41,7 +41,7 @@ export const cacheRoute = (
           dataToCache = JSON.stringify(body);
         }
 
-        redisInstance.set(key, dataToCache, "EX", ttlSeconds).catch((err) => {
+        redisInstance.set(key, dataToCache as string, "EX", ttlSeconds).catch((err) => {
           logger.error(`[Cache Set Error] Failed to cache ${key}`, err);
         });
 

@@ -38,10 +38,10 @@ export async function runGamificationMetricsJob() {
     // goals so we can batch the appointment counts in a single GROUP BY query
     // instead of one COUNT query per goal (eliminates the inner N+1 pattern).
     const consultasMesGoals = metas.filter(
-      (m: any) => m.type === "CONSULTAS_MES",
+      (m: unknown) => (m as Record<string, unknown>).type === "CONSULTAS_MES",
     );
     const dentistIds = [
-      ...new Set(consultasMesGoals.map((m: any) => m.user_id).filter(Boolean)),
+      ...new Set(consultasMesGoals.map((m: unknown) => (m as Record<string, unknown>).user_id).filter(Boolean)),
     ] as string[];
 
     // appointmentCountByDentist maps user_id → count for O(1) lookup below.

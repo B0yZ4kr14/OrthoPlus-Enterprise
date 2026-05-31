@@ -23,7 +23,7 @@ try {
  */
 export class ApiKeyHotSwap {
   private envPath: string;
-  private watcher: any | null = null;
+  private watcher: unknown | null = null;
   private isWatching = false;
 
   constructor(envPath = ".env") {
@@ -44,7 +44,7 @@ export class ApiKeyHotSwap {
    */
   stop(): void {
     if (this.watcher) {
-      this.watcher.close().catch((err: any) => {
+      (this.watcher as { close(): Promise<void> }).close().catch((err: unknown) => {
         logger.error("[ApiKeyHotSwap] Failed to close watcher", { error: err });
       });
       this.watcher = null;
@@ -81,12 +81,13 @@ export class ApiKeyHotSwap {
       awaitWriteFinish: { stabilityThreshold: 500, pollInterval: 100 },
     });
 
-    this.watcher.on("change", () => {
+    const watcher = this.watcher as { on(event: string, handler: (arg?: unknown) => void): void };
+    watcher.on("change", () => {
       logger.info(`[ApiKeyHotSwap] .env changed — reloading API configuration`);
       this.reload();
     });
 
-    this.watcher.on("error", (error: unknown) => {
+    watcher.on("error", (error: unknown) => {
       const message = error instanceof Error ? error.message : String(error);
       logger.error("[ApiKeyHotSwap] File watcher error", { error: message });
     });

@@ -20,9 +20,10 @@ export function startCategoryBackupScheduler(): void {
         logger.info(
           `[CategoryBackup] ${category} backup completed: ${result.filePath} (${result.sizeBytes} bytes)`,
         );
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
         logger.error(
-          `[CategoryBackup] ${category} backup failed: ${err.message}`,
+          `[CategoryBackup] ${category} backup failed: ${message}`,
         );
       }
     });

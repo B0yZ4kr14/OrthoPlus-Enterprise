@@ -52,9 +52,10 @@ export function startSearchIndexScheduler(): void {
         logger.info(
           `[SearchIndexScheduler] ${job.name} reindexados: ${result.indexed} em ${result.durationMs}ms`,
         );
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
         logger.error(
-          `[SearchIndexScheduler] Falha na reindexacao de ${job.name}: ${err.message}`,
+          `[SearchIndexScheduler] Falha na reindexacao de ${job.name}: ${message}`,
         );
       }
     }
