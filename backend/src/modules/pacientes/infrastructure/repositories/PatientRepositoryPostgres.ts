@@ -306,8 +306,9 @@ export class PatientRepositoryPostgres implements IPatientRepository {
     });
   }
 
-  async createPatientSession(data: any) {
-    return prisma.patient_sessions.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createPatientSession(data: Record<string, unknown>) {
+    return prisma.patient_sessions.create({ data: data as any });
   }
 
   async deletePatientSessionsByPatient(patientId: string) {

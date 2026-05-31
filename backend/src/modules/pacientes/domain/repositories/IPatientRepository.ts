@@ -147,7 +147,7 @@ export interface IPatientRepository {
   /**
    * Cria sessão do paciente
    */
-  createPatientSession(data: any): Promise<any>;
+  createPatientSession(data: Record<string, unknown>): Promise<any>;
 
   /**
    * Deleta sessões do paciente

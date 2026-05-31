@@ -55,8 +55,8 @@ export function AnamneseTab({ patient }: AnamneseTabProps) {
                 patient.systemic_diseases.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {patient.systemic_diseases.map(
-                      (disease: string, index: number) => (
-                        <Badge key={index} variant="outline">
+                      (disease: string) => (
+                        <Badge key={disease} variant="outline">
                           {disease}
                         </Badge>
                       ),
@@ -197,8 +197,8 @@ export function AnamneseTab({ patient }: AnamneseTabProps) {
                   patient.allergies_list.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {patient.allergies_list.map(
-                        (allergy: string, index: number) => (
-                          <Badge key={index} variant="outline">
+                        (allergy: string) => (
+                          <Badge key={allergy} variant="outline">
                             {allergy}
                           </Badge>
                         ),
@@ -223,8 +223,8 @@ export function AnamneseTab({ patient }: AnamneseTabProps) {
                   patient.medication_allergies.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {patient.medication_allergies.map(
-                        (med: string, index: number) => (
-                          <Badge key={index} variant="destructive">
+                        (med: string) => (
+                          <Badge key={med} variant="destructive">
                             {med}
                           </Badge>
                         ),

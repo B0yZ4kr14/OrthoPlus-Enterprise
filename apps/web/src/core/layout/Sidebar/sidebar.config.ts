@@ -203,6 +203,10 @@ export const menuGroups: MenuGroup[] = [
         url: "/pdv",
         icon: ShoppingCart,
         moduleKey: "PDV",
+        subItems: [
+          { title: "Dashboard PDV", url: "/pdv/dashboard", icon: LayoutDashboard, isSubItem: true },
+          { title: "Metas e Ranking", url: "/pdv/metas", icon: Target, isSubItem: true },
+        ],
       },
       {
         title: "Split de Pagamentos",
