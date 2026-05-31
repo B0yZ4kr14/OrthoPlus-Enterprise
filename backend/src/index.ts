@@ -273,16 +273,24 @@ app.use(
 app.use(helmet());
 app.use(express.json({ limit: "10mb" }));
 
+// Rate limiter for public endpoints
+const healthLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Health check (public - must be before authMiddleware)
-app.get("/health", (_req, res) => {
+app.get("/health", healthLimiter, (_req, res) => {
   res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
 });
-app.get("/api/health", (_req, res) => {
+app.get("/api/health", healthLimiter, (_req, res) => {
   res.json({ status: "ok", time: new Date(), uptime: process.uptime() });
 });
 
 // Prometheus metrics endpoint (restricted to internal/private IPs)
-app.get("/metrics", async (req, res) => {
+app.get("/metrics", healthLimiter, async (req, res) => {
   const clientIp = req.ip || req.socket.remoteAddress || "";
   const isInternal =
     clientIp === "127.0.0.1" ||
