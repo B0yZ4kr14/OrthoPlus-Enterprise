@@ -42,7 +42,7 @@ const loginSchema = z.object({
 const signupSchema = z
   .object({
     fullName: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
-    email: z.string().min(1, "Informe seu email ou usuário"),
+    email: z.string().email("Informe um email válido"),
     password: z
       .string()
       .min(12, "Senha deve ter no mínimo 12 caracteres")

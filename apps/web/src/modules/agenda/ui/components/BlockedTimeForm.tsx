@@ -31,9 +31,9 @@ import { cn } from "@/lib/utils";
 
 const blockedTimeSchema = z.object({
   dentistId: z.string().min(1, "Selecione um dentista"),
-  startDate: z.any(),
+  startDate: z.date({ message: "Selecione uma data válida" }),
   startTime: z.string().min(1, "Informe o horário de início"),
-  endDate: z.any(),
+  endDate: z.date({ message: "Selecione uma data válida" }),
   endTime: z.string().min(1, "Informe o horário de término"),
   reason: z.string().min(1, "Informe o motivo do bloqueio"),
 });
