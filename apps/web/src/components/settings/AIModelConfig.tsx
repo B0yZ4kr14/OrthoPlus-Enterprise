@@ -226,6 +226,7 @@ export function AIModelConfig() {
               <Button
                 variant="outline"
                 size="icon"
+                aria-label={showKeys.openai ? "Ocultar chave OpenAI" : "Mostrar chave OpenAI"}
                 onClick={() => toggleShowKey("openai")}
               >
                 {showKeys.openai ? (
@@ -264,6 +265,7 @@ export function AIModelConfig() {
               <Button
                 variant="outline"
                 size="icon"
+                aria-label={showKeys.google ? "Ocultar chave Google" : "Mostrar chave Google"}
                 onClick={() => toggleShowKey("google")}
               >
                 {showKeys.google ? (
@@ -304,6 +306,7 @@ export function AIModelConfig() {
               <Button
                 variant="outline"
                 size="icon"
+                aria-label={showKeys.anthropic ? "Ocultar chave Anthropic" : "Mostrar chave Anthropic"}
                 onClick={() => toggleShowKey("anthropic")}
               >
                 {showKeys.anthropic ? (
