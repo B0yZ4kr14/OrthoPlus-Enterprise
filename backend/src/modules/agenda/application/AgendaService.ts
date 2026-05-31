@@ -1,3 +1,4 @@
+import { logger } from "@/infrastructure/logger";
 import { IAgendaRepository } from "@/modules/agenda/domain/repositories/IAgendaRepository";
 import { AppointmentRepositoryPostgres } from "@/modules/agenda/infrastructure/repositories/AppointmentRepositoryPostgres";
 import { CreateAppointmentCommandHandler } from "@/modules/agenda/application/commands/CreateAppointmentCommand";
@@ -138,8 +139,8 @@ export class AgendaService {
     // Reindexacao em tempo real (non-blocking)
     eventBus
       .publish(new AppointmentUpdatedEvent(id, clinicId, existing.patient_id))
-      .catch(() => {
-        /* indexing failure is non-blocking */
+      .catch((err) => {
+        logger.warn("Appointment indexing failure (non-blocking)", { appointmentId: id, clinicId, error: err })
       });
 
     try {

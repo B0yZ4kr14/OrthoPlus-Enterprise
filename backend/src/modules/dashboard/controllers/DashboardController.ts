@@ -26,10 +26,22 @@ export class DashboardController {
       // Buscar estatísticas agregadas em paralelo — each is individually resilient
       const [stats, appointmentsData, revenueData, treatmentsByStatus] =
         await Promise.all([
-          this.getStats(clinicId).catch(() => this.defaultStats()),
-          this.getAppointmentsData(clinicId).catch(() => []),
-          this.getRevenueData(clinicId).catch(() => []),
-          this.getTreatmentsByStatus(clinicId).catch(() => []),
+          this.getStats(clinicId).catch((err) => {
+            logger.error("Failed to get dashboard stats", { clinicId, error: err })
+            return this.defaultStats()
+          }),
+          this.getAppointmentsData(clinicId).catch((err) => {
+            logger.error("Failed to get appointments data", { clinicId, error: err })
+            return []
+          }),
+          this.getRevenueData(clinicId).catch((err) => {
+            logger.error("Failed to get revenue data", { clinicId, error: err })
+            return []
+          }),
+          this.getTreatmentsByStatus(clinicId).catch((err) => {
+            logger.error("Failed to get treatments by status", { clinicId, error: err })
+            return []
+          }),
         ]);
 
       dashboardMetrics.incRequests(clinicId, "success");

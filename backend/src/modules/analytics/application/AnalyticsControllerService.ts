@@ -339,11 +339,20 @@ export class AnalyticsControllerService {
     const [appointments, overdue, recalls] = await Promise.all([
       this.repo
         .countAppointmentsToday(clinicId, todayStr, tomorrowStr)
-        .catch(() => 0),
-      this.repo.countOverdueContasReceber(clinicId, todayStr).catch(() => 0),
+        .catch((err) => {
+          logger.error("Failed to count appointments today", { clinicId, error: err })
+          return 0
+        }),
+      this.repo.countOverdueContasReceber(clinicId, todayStr).catch((err) => {
+        logger.error("Failed to count overdue contas", { clinicId, error: err })
+        return 0
+      }),
       this.repo
         .countRecallsToday(clinicId, todayStr, tomorrowStr)
-        .catch(() => 0),
+        .catch((err) => {
+          logger.error("Failed to count recalls today", { clinicId, error: err })
+          return 0
+        }),
     ]);
 
     return {

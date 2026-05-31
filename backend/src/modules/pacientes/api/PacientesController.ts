@@ -1,3 +1,4 @@
+import { logger } from "@/infrastructure/logger";
 import { pacientesMetrics } from "@/infrastructure/metrics/PacientesMetrics";
 import { Request, Response } from "express";
 import { Errors, asyncHandler } from "@/middleware/errorHandler";
@@ -218,8 +219,8 @@ export class PacientesController {
       pacientesMetrics.decPatientsTotal(patient.status, clinicId);
     }
     // Publicar evento de remoção de forma não-bloqueante
-    eventBus.publish(new PatientDeletedEvent(id, clinicId)).catch(() => {
-      // Silenciar erro para não interromper a resposta HTTP
+    eventBus.publish(new PatientDeletedEvent(id, clinicId)).catch((err) => {
+      logger.warn("Patient indexing failure (non-blocking)", { patientId: id, clinicId, error: err })
     });
     res.status(200).json({ success: true, message: "Paciente removido" });
   });
