@@ -89,6 +89,7 @@ import { prometheusMetrics } from "./infrastructure/metrics/PrometheusMetrics";
 function validateEnvironment() {
   const required = [
     "JWT_SECRET",
+    "DATABASE_URL",
     "DB_HOST",
     "DB_NAME",
     "DB_USER",
@@ -187,7 +188,7 @@ fs.mkdirSync(uploadDir, { recursive: true });
 const app = express();
 
 // Trust proxy for rate limiting (needed when behind Nginx)
-app.set("trust proxy", "loopback");
+app.set("trust proxy", ["loopback", "linklocal", "uniquelocal"]);
 
 // Rate limiting — per-context limits instead of a single global limit
 // Auth endpoints: strict limit to prevent brute-force attacks

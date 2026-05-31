@@ -57,7 +57,7 @@ rsync -avz \
 # If REDIS_PASSWORD is not set locally, a strong random password is generated.
 REDIS_PASSWORD="${REDIS_PASSWORD:-$(openssl rand -base64 32)}"
 
-ssh -i "$SSH_KEY" -o "$VPS_USER@$VPS_HOST" << REMOTE
+ssh -i "$SSH_KEY" "$VPS_USER@$VPS_HOST" << REMOTE
   set -e
   cd "$REMOTE_DIR"
 
@@ -95,7 +95,7 @@ server {
         try_files \$uri /index.html;
     }
     location /api/ {
-        proxy_pass http://127.0.0.1:3005/;
+        proxy_pass http://127.0.0.1:3005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';

@@ -31,7 +31,7 @@ rsync -avz --delete \
 REDIS_PASSWORD="${REDIS_PASSWORD:-$(openssl rand -base64 32)}"
 
 echo "[DEPLOY] Installing pnpm and dependencies on VPS..."
-ssh -F $HOME/.ssh/config -o "$VPS_TARGET" << REMOTE
+ssh -F $HOME/.ssh/config "$VPS_TARGET" << REMOTE
   set -e
   cd "$REMOTE_DIR"
   
@@ -62,7 +62,7 @@ ssh -F $HOME/.ssh/config -o "$VPS_TARGET" << REMOTE
   if ! docker ps --format '{{.Names}}' | grep -q orthoplus-redis; then
     echo "[DEPLOY] Starting Redis container..."
     docker run -d --name orthoplus-redis --restart always \
-      -p 6379:6379 \
+      -p 127.0.0.1:6379:6379 \
       -v redis-data:/data \
       redis:7-alpine \
       redis-server --requirepass "$REDIS_PASSWORD"
@@ -79,7 +79,7 @@ server {
         try_files \$uri /index.html;
     }
     location /api/ {
-        proxy_pass http://127.0.0.1:3005/;
+        proxy_pass http://127.0.0.1:3005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
