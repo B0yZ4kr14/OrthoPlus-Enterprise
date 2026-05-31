@@ -124,6 +124,18 @@ export const menuGroups: MenuGroup[] = [
         moduleKey: "PEP",
       },
       {
+        title: "Assinatura ICP",
+        url: "/assinatura-icp",
+        icon: FileSignature,
+        moduleKey: "PEP",
+      },
+      {
+        title: "Fluxo Digital",
+        url: "/fluxo-digital",
+        icon: ScanLine,
+        moduleKey: "PEP",
+      },
+      {
         title: "Orçamentos",
         url: "/orcamentos",
         icon: Calculator,
@@ -299,6 +311,18 @@ export const menuGroups: MenuGroup[] = [
         moduleKey: "TELEODONTO",
       },
       {
+        title: "Memory Hub",
+        url: "/memory-hub",
+        icon: BrainCircuit,
+        moduleKey: "MEMORY_HUB",
+      },
+      {
+        title: "Central de Ajuda",
+        url: "/help",
+        icon: BookOpen,
+        moduleKey: "HELP",
+      },
+      {
         title: "Faturamento TISS",
         url: "/faturamento-tiss",
         icon: FileSpreadsheet,
@@ -404,6 +428,30 @@ export const adminMenuItems: MenuItem[] = [
     title: "Monitoramento",
     url: "/admin/monitoring",
     icon: Activity,
+    moduleKey: "ADMIN_ONLY",
+  },
+  {
+    title: "ADRs",
+    url: "/admin/adrs",
+    icon: ClipboardCheck,
+    moduleKey: "ADMIN_ONLY",
+  },
+  {
+    title: "API Docs",
+    url: "/admin/api-docs",
+    icon: BookOpen,
+    moduleKey: "ADMIN_ONLY",
+  },
+  {
+    title: "Audit Trail",
+    url: "/admin/audit-trail",
+    icon: ClipboardCheck,
+    moduleKey: "ADMIN_ONLY",
+  },
+  {
+    title: "Logs",
+    url: "/admin/logs",
+    icon: Terminal,
     moduleKey: "ADMIN_ONLY",
   },
 ];
