@@ -51,6 +51,7 @@ export function UsersList({ users, onEdit, onDelete }: UsersListProps) {
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label="Excluir usuário"
                 onClick={() => onDelete(user.id)}
               >
                 <Trash2 className="h-4 w-4" />

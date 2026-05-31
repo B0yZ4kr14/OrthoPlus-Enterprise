@@ -100,6 +100,7 @@ export function UserTable({
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Editar usuário"
                         onClick={() => onEdit(user)}
                       >
                         <Edit className="h-4 w-4" />
@@ -108,6 +109,7 @@ export function UserTable({
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Excluir usuário"
                         onClick={() => onDelete(user.id)}
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
