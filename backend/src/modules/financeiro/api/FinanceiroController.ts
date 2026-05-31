@@ -12,14 +12,15 @@ export class FinanceiroController {
     return async (req: Request, res: Response): Promise<void> => {
       try {
         await fn(req, res);
-      } catch (error: any) {
-        if (error.statusCode) {
-          res.status(error.statusCode).json({
-            type: `https://httpstatuses.com/${error.statusCode}`,
-            title: error.message,
-            status: error.statusCode,
-            detail: error.message,
-            errors: error.details,
+      } catch (error: unknown) {
+        const apiError = error as { statusCode?: number; message?: string; details?: unknown };
+        if (apiError.statusCode) {
+          res.status(apiError.statusCode).json({
+            type: `https://httpstatuses.com/${apiError.statusCode}`,
+            title: apiError.message,
+            status: apiError.statusCode,
+            detail: apiError.message,
+            errors: apiError.details,
           });
           return;
         }

@@ -21,13 +21,14 @@ export class ModulosController {
     try {
       const result = this.service.toggleModule(module_key);
       res.json(result);
-    } catch (err: any) {
-      if (err.message?.startsWith("Dependencias")) {
-        res.status(412).json({ error: err.message });
-      } else if (err.message?.startsWith("Modulo tem dependentes")) {
-        res.status(412).json({ error: err.message });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.startsWith("Dependencias")) {
+        res.status(412).json({ error: message });
+      } else if (message.startsWith("Modulo tem dependentes")) {
+        res.status(412).json({ error: message });
       } else {
-        res.status(404).json({ error: err.message });
+        res.status(404).json({ error: message });
       }
     }
   };
@@ -37,13 +38,14 @@ export class ModulosController {
     try {
       const result = this.service.toggleModuleById(moduleId);
       res.json(result);
-    } catch (err: any) {
-      if (err.message?.startsWith("Dependencias")) {
-        res.status(412).json({ error: err.message });
-      } else if (err.message?.startsWith("Modulo tem dependentes")) {
-        res.status(412).json({ error: err.message });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      if (message.startsWith("Dependencias")) {
+        res.status(412).json({ error: message });
+      } else if (message.startsWith("Modulo tem dependentes")) {
+        res.status(412).json({ error: message });
       } else {
-        res.status(404).json({ error: err.message });
+        res.status(404).json({ error: message });
       }
     }
   };

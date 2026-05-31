@@ -2,7 +2,7 @@ import { logger } from "@/infrastructure/logger";
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler";
 import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository";
 import jwt from "jsonwebtoken";
-import type { LoginResponse, User } from "@orthoplus/shared-types";
+import type { LoginResponse, User, UserRole } from "@orthoplus/shared-types";
 import type { AuthenticateUserResult } from "./AuthenticateUserUseCase";
 
 import { UserRepository } from "@/modules/auth/infrastructure/UserRepository";
@@ -282,7 +282,7 @@ export class AuthService {
           .filter((p) => p.can_view)
           .map((p) => p.module_catalog_id);
         const modules = await this.repo.findModulesByIds(moduleIds);
-        permissionsData = modules.map((m: any) => m.module_key);
+        permissionsData = modules.map((m) => (m as Record<string, unknown>).module_key as string);
       } else {
         permissionsData = [];
       }
@@ -388,17 +388,13 @@ export class AuthService {
 
   // ─── Response Builders ───
 
-  buildStaffLoginResponse(result: {
-    user: any;
-    accessToken: string;
-    refreshToken: string;
-  }): LoginResponse {
+  buildStaffLoginResponse(result: AuthenticateUserResult): LoginResponse {
     return {
       user: {
         id: result.user.id,
         email: result.user.email,
         name: result.user.email.split("@")[0],
-        role: result.user.role,
+        role: result.user.role as UserRole,
         clinicId: result.user.clinicId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

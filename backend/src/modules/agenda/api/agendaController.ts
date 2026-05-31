@@ -26,11 +26,12 @@ function wrap<T>(
         return;
       }
       res.status(statusCode).json(result);
-    } catch (error: any) {
-      if (error.statusCode) {
+    } catch (error: unknown) {
+      const apiError = error as { statusCode?: number; message?: string; details?: unknown };
+      if (apiError.statusCode) {
         res
-          .status(error.statusCode)
-          .json({ error: error.message, details: error.details });
+          .status(apiError.statusCode)
+          .json({ error: apiError.message, details: apiError.details });
         return;
       }
       logger.error("Agenda controller error:", { error });
