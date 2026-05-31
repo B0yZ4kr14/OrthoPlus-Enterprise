@@ -12,13 +12,15 @@ class FrontendMetrics {
   private buffer: HookMetric[] = [];
   private flushInterval: number | null = null;
   private readonly endpoint = "/api/metrics/frontend";
+  private beforeUnloadHandler: (() => void) | null = null;
 
   constructor() {
     if (typeof window !== "undefined") {
       // Flush every 30 seconds
       this.flushInterval = window.setInterval(() => this.flush(), 30000);
       // Flush on page unload
-      window.addEventListener("beforeunload", () => this.flush());
+      this.beforeUnloadHandler = () => this.flush();
+      window.addEventListener("beforeunload", this.beforeUnloadHandler);
     }
   }
 
@@ -48,6 +50,11 @@ class FrontendMetrics {
   destroy() {
     if (this.flushInterval !== null) {
       clearInterval(this.flushInterval);
+      this.flushInterval = null;
+    }
+    if (this.beforeUnloadHandler !== null) {
+      window.removeEventListener("beforeunload", this.beforeUnloadHandler);
+      this.beforeUnloadHandler = null;
     }
   }
 }
