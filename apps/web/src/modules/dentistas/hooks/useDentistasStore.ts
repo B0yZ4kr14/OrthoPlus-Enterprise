@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { Dentista, DentistaFilters } from "../types/dentista.types";
 import { toast } from "sonner";
 
@@ -103,31 +104,14 @@ const mockDentistas: Dentista[] = [
 ];
 
 export function useDentistasStore() {
-  const [dentistas, setDentistas] = useState<Dentista[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Load dentistas from localStorage
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setDentistas(JSON.parse(stored));
-      } else {
-        // Initialize with mock data
-        setDentistas(mockDentistas);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(mockDentistas));
-      }
-    } catch (error) {
-      console.error("Error loading dentistas:", error);
-      toast.error("Erro ao carregar dentistas");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const [dentistas, setDentistas] = useLocalStorage<Dentista[]>(
+    STORAGE_KEY,
+    mockDentistas,
+  );
+  const [loading, setLoading] = useState(false);
 
   const saveDentistas = (updatedDentistas: Dentista[]) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDentistas));
       setDentistas(updatedDentistas);
     } catch (error) {
       console.error("Error saving dentistas:", error);

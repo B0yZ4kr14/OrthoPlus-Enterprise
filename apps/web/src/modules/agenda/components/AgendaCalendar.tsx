@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { format, startOfWeek, addDays, isSameDay, parseISO } from "@/lib/utils/date.utils.ts";
+import {
+  format,
+  startOfWeek,
+  addDays,
+  isSameDay,
+  parseISO,
+} from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import {
   ChevronLeft,

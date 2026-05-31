@@ -1,17 +1,8 @@
-import { useEffect, useState } from "react";
 import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
+import { useCryptoTour } from "@/components/crypto/crypto-tour/useCryptoTour";
 
 export function CryptoTour() {
-  const [run, setRun] = useState(false);
-
-  useEffect(() => {
-    // Verifica se é a primeira vez visitando a página
-    const hasSeenTour = localStorage.getItem("crypto-tour-completed");
-    if (!hasSeenTour) {
-      // Aguarda 1 segundo antes de iniciar o tour
-      setTimeout(() => setRun(true), 1000);
-    }
-  }, []);
+  const { run, handleJoyrideCallback } = useCryptoTour();
 
   const steps: Step[] = [
     {
@@ -95,16 +86,6 @@ export function CryptoTour() {
       disableBeacon: true,
     },
   ];
-
-  const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status } = data;
-    const finishedStatuses: string[] = ["finished", "skipped"];
-
-    if (finishedStatuses.includes(status)) {
-      setRun(false);
-      localStorage.setItem("crypto-tour-completed", "true");
-    }
-  };
 
   return (
     <Joyride

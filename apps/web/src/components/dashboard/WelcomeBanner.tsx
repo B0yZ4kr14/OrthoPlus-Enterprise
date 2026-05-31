@@ -24,7 +24,10 @@ function getGreeting(): string {
 }
 
 export function WelcomeBanner({ userName }: WelcomeBannerProps) {
-  const [dismissed, setDismissed] = useLocalStorage<boolean>("orthoplus-welcome-dismissed", false);
+  const [dismissed, setDismissed] = useLocalStorage<boolean>(
+    "orthoplus-welcome-dismissed",
+    false,
+  );
   const [tipIndex] = useState(() => Math.floor(Math.random() * tips.length));
   const reduced = useReducedMotion();
 

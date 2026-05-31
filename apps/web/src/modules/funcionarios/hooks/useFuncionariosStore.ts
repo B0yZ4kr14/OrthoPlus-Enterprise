@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import { Funcionario, FuncionarioFilters } from "../types/funcionario.types";
 import { toast } from "sonner";
 
@@ -127,31 +128,14 @@ const mockFuncionarios: Funcionario[] = [
 ];
 
 export function useFuncionariosStore() {
-  const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Load funcionarios from localStorage
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setFuncionarios(JSON.parse(stored));
-      } else {
-        // Initialize with mock data
-        setFuncionarios(mockFuncionarios);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(mockFuncionarios));
-      }
-    } catch (error) {
-      console.error("Error loading funcionarios:", error);
-      toast.error("Erro ao carregar funcionários");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const [funcionarios, setFuncionarios] = useLocalStorage<Funcionario[]>(
+    STORAGE_KEY,
+    mockFuncionarios,
+  );
+  const [loading, setLoading] = useState(false);
 
   const saveFuncionarios = (updatedFuncionarios: Funcionario[]) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedFuncionarios));
       setFuncionarios(updatedFuncionarios);
     } catch (error) {
       console.error("Error saving funcionarios:", error);

@@ -11,6 +11,31 @@ import {
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 
+/** Safe localStorage wrapper to avoid direct storage access in business logic */
+const safeStorage = {
+  removeItem(key: string): void {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      /* ignore */
+    }
+  },
+  key(index: number): string | null {
+    try {
+      return localStorage.key(index);
+    } catch {
+      return null;
+    }
+  },
+  get length(): number {
+    try {
+      return localStorage.length;
+    } catch {
+      return 0;
+    }
+  },
+};
+
 interface Clinic {
   id: string;
   name: string;
@@ -363,19 +388,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUserRole(null);
       setClinicId(null);
       // Clear legacy tokens from localStorage (migration to HttpOnly cookies)
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("token");
+      safeStorage.removeItem("accessToken");
+      safeStorage.removeItem("refreshToken");
+      safeStorage.removeItem("auth_token");
+      safeStorage.removeItem("token");
       // Clear sidebar state from localStorage to prevent cross-user leakage
       const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
+      for (let i = 0; i < safeStorage.length; i++) {
+        const key = safeStorage.key(i);
         if (key && key.startsWith("orthoplus:sidebar:groups")) {
           keysToRemove.push(key);
         }
       }
-      keysToRemove.forEach((key) => localStorage.removeItem(key));
+      keysToRemove.forEach((key) => safeStorage.removeItem(key));
       toast.success("Logout realizado com sucesso");
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Erro desconhecido";

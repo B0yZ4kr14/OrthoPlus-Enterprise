@@ -7,6 +7,7 @@ import { Settings, Info, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import confetti from "canvas-confetti";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 import type { ModuleData } from "../components/types";
 import { ModulesToolbar } from "../components/ModulesToolbar";
 import { ModuleCard } from "../components/ModuleCard";
@@ -21,15 +22,19 @@ export default function ModulesAdmin() {
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [hasCompletedOnboarding] = useLocalStorage<boolean>(
+    "ortho-onboarding-completed",
+    false,
+  );
+  const [moduleActivations, setModuleActivations] = useLocalStorage<
+    Record<string, boolean>
+  >("ortho-module-activations", {});
 
   useEffect(() => {
-    const hasCompletedOnboarding = localStorage.getItem(
-      "ortho-onboarding-completed",
-    );
     if (!hasCompletedOnboarding) {
       setOnboardingOpen(true);
     }
-  }, []);
+  }, [hasCompletedOnboarding]);
 
   const fetchModules = async () => {
     try {
@@ -83,9 +88,7 @@ export default function ModulesAdmin() {
       const newState = !currentState;
 
       if (newState) {
-        const wasActivatedBefore = localStorage.getItem(
-          `module-activated-${moduleKey}`,
-        );
+        const wasActivatedBefore = moduleActivations[moduleKey];
         if (!wasActivatedBefore) {
           const cardElement = cardRefs.current[moduleKey];
           if (cardElement) {
@@ -100,7 +103,7 @@ export default function ModulesAdmin() {
               colors: ["#2dd4bf", "#14b8a6", "#0d9488", "#fbbf24", "#f59e0b"],
             });
           }
-          localStorage.setItem(`module-activated-${moduleKey}`, "true");
+          setModuleActivations((prev) => ({ ...prev, [moduleKey]: true }));
         }
       }
 
@@ -367,7 +370,6 @@ export default function ModulesAdmin() {
           onClose={() => setOnboardingOpen(false)}
           onComplete={() => {
             setOnboardingOpen(false);
-            localStorage.setItem("ortho-onboarding-completed", "true");
             fetchModules();
           }}
         />

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 // ─── Temas suportados (Spec 016 — TC-3) ───────────────────────────────────
 // premium-light, premium-dental-dark e system (auto-detect) são temas oficiais.
@@ -40,24 +41,38 @@ function getSystemTheme(): "premium-light" | "premium-dental-dark" {
     : "premium-light";
 }
 
+function migrateLegacyTheme(): Theme | null {
+  try {
+    const stored = window.localStorage.getItem("ortho-theme");
+    if (stored && stored in LEGACY_THEME_MAP) {
+      const migrated = LEGACY_THEME_MAP[stored];
+      window.localStorage.setItem("ortho-theme", migrated);
+      return migrated;
+    }
+    if (stored && CSS_CLASS_THEMES.includes(stored as Theme)) {
+      return stored as Theme;
+    }
+  } catch {
+    // ignore storage errors
+  }
+  return null;
+}
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    const stored = localStorage.getItem("ortho-theme");
+  const [theme, setTheme] = useLocalStorage<Theme>("ortho-theme", "premium-light");
+  const [migrated, setMigrated] = useState(false);
 
-    // Migração: se tema legado estiver no localStorage, converte para o premium equivalente
-    if (stored && stored in LEGACY_THEME_MAP) {
-      const migrated = LEGACY_THEME_MAP[stored];
-      localStorage.setItem("ortho-theme", migrated);
-      return migrated;
+  // Migração de tema legado (executa uma única vez)
+  useEffect(() => {
+    if (migrated) return;
+    const legacy = migrateLegacyTheme();
+    if (legacy && legacy !== theme) {
+      setTheme(legacy);
     }
-
-    if (!stored || !CSS_CLASS_THEMES.includes(stored as Theme)) {
-      return "premium-light";
-    }
-    return stored as Theme;
-  });
+    setMigrated(true);
+  }, [migrated, theme, setTheme]);
 
   const resolvedTheme: "premium-light" | "premium-dental-dark" =
     theme === "system" ? getSystemTheme() : theme;
@@ -87,9 +102,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     } else {
       root.classList.remove("dark");
     }
-
-    // 3. Persiste
-    localStorage.setItem("ortho-theme", theme);
   }, [theme, resolvedTheme]);
 
   // Listener para mudança de prefers-color-scheme quando em modo system
@@ -97,15 +109,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (theme !== "system") return;
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = () => {
-      setThemeState("system"); // Força re-render para aplicar novo resolvedTheme
+      setTheme("system"); // Força re-render para aplicar novo resolvedTheme
     };
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [theme]);
-
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-  };
+  }, [theme, setTheme]);
 
   return (
     <ThemeContext.Provider

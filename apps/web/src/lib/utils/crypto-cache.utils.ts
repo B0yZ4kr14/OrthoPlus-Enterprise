@@ -1,6 +1,8 @@
 import { logger } from "@/lib/logger";
 
 // Cache de cotações de criptomoedas para reduzir chamadas à API externa
+// NOTA: Este arquivo é um utilitário puro (não-hook) e usa safeStorage para
+// encapsular acesso a localStorage. Não usar useLocalStorage aqui.
 
 interface CachedRate {
   rate: number;
@@ -37,11 +39,38 @@ const FALLBACK_RATES: Record<string, number> = {
 };
 
 /**
+ * Encapsula acesso seguro a localStorage para evitar acessos diretos
+ */
+const safeStorage = {
+  getItem(key: string): string | null {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  setItem(key: string, value: string): void {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      /* ignore */
+    }
+  },
+  removeItem(key: string): void {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      /* ignore */
+    }
+  },
+};
+
+/**
  * Busca cotação do cache local (localStorage)
  */
 const getCachedRate = (coinType: string): number | null => {
   try {
-    const cache = localStorage.getItem(CACHE_KEY);
+    const cache = safeStorage.getItem(CACHE_KEY);
     if (!cache) return null;
 
     const cacheStore: CacheStore = JSON.parse(cache);
@@ -64,7 +93,7 @@ const getCachedRate = (coinType: string): number | null => {
  */
 const setCachedRate = (coinType: string, rate: number): void => {
   try {
-    const cache = localStorage.getItem(CACHE_KEY);
+    const cache = safeStorage.getItem(CACHE_KEY);
     const cacheStore: CacheStore = cache ? JSON.parse(cache) : {};
 
     cacheStore[coinType] = {
@@ -72,7 +101,7 @@ const setCachedRate = (coinType: string, rate: number): void => {
       timestamp: Date.now(),
     };
 
-    localStorage.setItem(CACHE_KEY, JSON.stringify(cacheStore));
+    safeStorage.setItem(CACHE_KEY, JSON.stringify(cacheStore));
   } catch (error) {
     console.error("[CryptoCache] Error writing cache:", error);
   }
@@ -143,7 +172,7 @@ export const fetchExchangeRateWithCache = async (
  */
 export const clearCryptoCache = (): void => {
   try {
-    localStorage.removeItem(CACHE_KEY);
+    safeStorage.removeItem(CACHE_KEY);
   } catch (error) {
     console.error("[CryptoCache] Error clearing cache:", error);
   }

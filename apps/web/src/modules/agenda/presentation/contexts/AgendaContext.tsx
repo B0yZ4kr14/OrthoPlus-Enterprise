@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { startOfWeek, endOfWeek, addWeeks, subWeeks } from "@/lib/utils/date.utils.ts";
+import {
+  startOfWeek,
+  endOfWeek,
+  addWeeks,
+  subWeeks,
+} from "@/lib/utils/date.utils.ts";
 
 interface AgendaContextData {
   currentDate: Date;

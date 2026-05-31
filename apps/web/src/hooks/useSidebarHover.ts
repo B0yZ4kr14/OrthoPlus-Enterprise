@@ -29,7 +29,10 @@ interface UseSidebarHoverReturn {
  * O estado de auto-hide é persistido no localStorage.
  */
 export function useSidebarHover(): UseSidebarHoverReturn {
-  const [isAutoHide, setIsAutoHide] = useLocalStorage<boolean>("orthoplus:sidebar:auto-hide", true);
+  const [isAutoHide, setIsAutoHide] = useLocalStorage<boolean>(
+    "orthoplus:sidebar:auto-hide",
+    true,
+  );
   const [hoverOpen, setHoverOpen] = useState(false);
   const enterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
