@@ -16,7 +16,7 @@ export interface IOrcamentoRepository {
     id: string,
     data: Prisma.orcamentosUpdateInput,
   ): Promise<orcamentos>;
-  deleteOrcamento(id: string): Promise<orcamentos>;
+  deleteOrcamento(id: string, clinicId: string): Promise<void>;
   listItems(orcamentoId: string): Promise<orcamento_itens[]>;
   addItem(data: Prisma.orcamento_itensCreateInput): Promise<orcamento_itens>;
 }

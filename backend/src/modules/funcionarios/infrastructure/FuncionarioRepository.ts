@@ -30,7 +30,7 @@ export class FuncionarioRepository implements IFuncionarioRepository {
     });
   }
 
-  async delete(id: string) {
-    await prisma.funcionarios.delete({ where: { id } });
+  async delete(id: string, clinicId: string) {
+    await prisma.funcionarios.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 }

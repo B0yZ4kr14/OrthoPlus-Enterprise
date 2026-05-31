@@ -28,8 +28,8 @@ export class TISSRepository implements ITISSRepository {
     return prisma.tiss_guides.update({ where: { id }, data });
   }
 
-  async deleteGuia(id: string, _clinicId: string) {
-    await prisma.tiss_guides.delete({ where: { id } });
+  async deleteGuia(id: string, clinicId: string) {
+    await prisma.tiss_guides.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 
   async updateManyGuias(
@@ -129,8 +129,8 @@ export class TISSRepository implements ITISSRepository {
     return prisma.tiss_convenios.update({ where: { id }, data });
   }
 
-  async deleteConvenio(id: string, _clinicId: string) {
-    await prisma.tiss_convenios.delete({ where: { id } });
+  async deleteConvenio(id: string, clinicId: string) {
+    await prisma.tiss_convenios.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 
   async findManyPacienteConvenios(where: Record<string, unknown>) {
@@ -155,7 +155,7 @@ export class TISSRepository implements ITISSRepository {
     return prisma.paciente_convenios.update({ where: { id }, data });
   }
 
-  async deletePacienteConvenio(id: string, _clinicId: string) {
-    await prisma.paciente_convenios.delete({ where: { id } });
+  async deletePacienteConvenio(id: string, clinicId: string) {
+    await prisma.paciente_convenios.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 }

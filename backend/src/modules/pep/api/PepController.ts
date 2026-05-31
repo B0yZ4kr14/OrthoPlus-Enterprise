@@ -146,7 +146,7 @@ export class PepController {
       throw Errors.notFound("Prontuario", req.params.id);
     }
 
-    await this.repo.deleteProntuario(req.params.id);
+    await this.repo.deleteProntuario(req.params.id, clinicId);
 
     eventBus
       .publish(new ProntuarioDeletedEvent(req.params.id, clinicId))
@@ -268,7 +268,7 @@ export class PepController {
       throw Errors.notFound("Odontograma", req.params.id);
     }
 
-    await this.repo.deleteOdontograma(req.params.id);
+    await this.repo.deleteOdontograma(req.params.id, clinicId);
     res.status(204).send();
   });
 
@@ -345,7 +345,7 @@ export class PepController {
       throw Errors.unauthorized("Missing clinic context");
     }
 
-    await this.repo.deleteAnexo(req.params.id);
+    await this.repo.deleteAnexo(req.params.id, clinicId);
     res.status(204).send();
   });
 
@@ -382,7 +382,7 @@ export class PepController {
       throw Errors.unauthorized("Missing clinic context");
     }
 
-    await this.repo.deleteEvolucao(req.params.id);
+    await this.repo.deleteEvolucao(req.params.id, clinicId);
     res.status(204).send();
   });
 
@@ -480,7 +480,7 @@ export class PepController {
       throw Errors.notFound("Tratamento", req.params.id);
     }
 
-    await this.repo.deleteTratamento(req.params.id);
+    await this.repo.deleteTratamento(req.params.id, clinicId);
 
     eventBus
       .publish(
@@ -578,7 +578,7 @@ export class PepController {
     }
 
     const { id } = req.body;
-    await this.repo.deleteOdontogramaData(id);
+    await this.repo.deleteOdontogramaData(id, clinicId);
     res.status(204).send();
   });
 }

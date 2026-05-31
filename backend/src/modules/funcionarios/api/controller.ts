@@ -73,7 +73,7 @@ export class FuncionariosController {
       throw Errors.unauthorized("Missing clinic context");
     }
     const { id } = req.params;
-    await this.repo.delete(id);
+    await this.repo.delete(id, clinicId as string);
     res.status(204).send();
   }
 }

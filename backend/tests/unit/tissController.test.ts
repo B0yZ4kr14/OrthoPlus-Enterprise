@@ -11,6 +11,7 @@ jest.mock("../../src/infrastructure/database/prismaClient", () => ({
       update: jest.fn(),
       updateMany: jest.fn(),
       delete: jest.fn(),
+      deleteMany: jest.fn(),
       groupBy: jest.fn(),
       aggregate: jest.fn(),
     },
@@ -288,7 +289,7 @@ describe("TISSController.deleteGuia", () => {
     const req = mockReq({ params: { id: "guide-1" } });
     const res = mockRes();
     await controller.deleteGuia(req as Request, res);
-    expect(guides.delete).toHaveBeenCalledWith({ where: { id: "guide-1" } });
+    expect(guides.deleteMany).toHaveBeenCalledWith({ where: { id: "guide-1", clinic_id: "clinic-1" } });
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalled();
   });

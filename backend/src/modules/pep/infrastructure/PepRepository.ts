@@ -51,8 +51,8 @@ export class PepRepository implements IPepRepository {
     });
   }
 
-  async deleteOdontograma(id: string) {
-    await prisma.odontogramas.delete({ where: { id } });
+  async deleteOdontograma(id: string, clinicId: string) {
+    await prisma.odontogramas.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 
   // Odontograma history
@@ -82,8 +82,8 @@ export class PepRepository implements IPepRepository {
     });
   }
 
-  async deleteProntuario(id: string) {
-    await prisma.prontuarios.delete({ where: { id } });
+  async deleteProntuario(id: string, clinicId: string) {
+    await prisma.prontuarios.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 
   // Anexos
@@ -98,8 +98,14 @@ export class PepRepository implements IPepRepository {
     });
   }
 
-  async deleteAnexo(id: string) {
-    await prisma.pep_anexos.delete({ where: { id } });
+  async deleteAnexo(id: string, clinicId: string) {
+    await prisma.$executeRaw`
+      DELETE FROM "pep_anexos"
+      WHERE id = ${id}
+      AND prontuario_id IN (
+        SELECT id FROM "prontuarios" WHERE clinic_id = ${clinicId}
+      )
+    `;
   }
 
   // Evolucoes
@@ -114,8 +120,17 @@ export class PepRepository implements IPepRepository {
     });
   }
 
-  async deleteEvolucao(id: string) {
-    await prisma.pep_evolucoes.delete({ where: { id } });
+  async deleteEvolucao(id: string, clinicId: string) {
+    await prisma.$executeRaw`
+      DELETE FROM "pep_evolucoes"
+      WHERE id = ${id}
+      AND tratamento_id IN (
+        SELECT id FROM "pep_tratamentos"
+        WHERE prontuario_id IN (
+          SELECT id FROM "prontuarios" WHERE clinic_id = ${clinicId}
+        )
+      )
+    `;
   }
 
   // Tratamentos
@@ -143,8 +158,10 @@ export class PepRepository implements IPepRepository {
     });
   }
 
-  async deleteTratamento(id: string) {
-    await prisma.pep_tratamentos.delete({ where: { id } });
+  async deleteTratamento(id: string, clinicId: string) {
+    await prisma.pep_tratamentos.deleteMany({
+      where: { id, prontuario: { clinic_id: clinicId } },
+    });
   }
 
   // Odontograma data
@@ -165,8 +182,14 @@ export class PepRepository implements IPepRepository {
     });
   }
 
-  async deleteOdontogramaData(id: string) {
-    await prisma.pep_odontograma_data.delete({ where: { id } });
+  async deleteOdontogramaData(id: string, clinicId: string) {
+    await prisma.$executeRaw`
+      DELETE FROM "pep_odontograma_data"
+      WHERE id = ${id}
+      AND prontuario_id IN (
+        SELECT id FROM "prontuarios" WHERE clinic_id = ${clinicId}
+      )
+    `;
   }
 
   // Tooth surfaces

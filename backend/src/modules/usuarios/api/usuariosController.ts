@@ -161,7 +161,7 @@ export class UsuariosController {
       }
 
       await this.repo.deleteProfilesByIdAndClinic(id, clinicId);
-      await this.repo.deleteUser(id);
+      await this.repo.deleteUser(id, clinicId);
 
       res.json({ success: true });
     } catch (error) {

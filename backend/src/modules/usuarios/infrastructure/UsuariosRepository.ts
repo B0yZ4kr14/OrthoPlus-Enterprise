@@ -54,7 +54,7 @@ export class UsuariosRepository implements IUsuariosRepository {
     return prisma.users.update({ where: { id }, data });
   }
 
-  async deleteUser(id: string) {
-    return prisma.users.delete({ where: { id } });
+  async deleteUser(id: string, clinicId: string) {
+    return prisma.users.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 }

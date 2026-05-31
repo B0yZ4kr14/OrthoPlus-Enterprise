@@ -9,6 +9,7 @@ jest.mock("../../src/infrastructure/database/prismaClient", () => ({
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      deleteMany: jest.fn(),
     },
     orcamento_itens: {
       findMany: jest.fn(),
@@ -266,7 +267,7 @@ describe("OrcamentosController.delete", () => {
     const req = mockReq({ params: { id: "orc-1" } });
     const res = mockRes();
     await controller.delete(req as Request, res);
-    expect(orcamentos.delete).toHaveBeenCalledWith({ where: { id: "orc-1" } });
+    expect(orcamentos.deleteMany).toHaveBeenCalledWith({ where: { id: "orc-1", clinic_id: "clinic-1" } });
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalled();
   });

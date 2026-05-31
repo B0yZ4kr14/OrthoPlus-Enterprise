@@ -14,7 +14,7 @@ export interface IPepRepository {
     id: string,
     data: Record<string, unknown>,
   ): Promise<unknown>;
-  deleteOdontograma(id: string): Promise<void>;
+  deleteOdontograma(id: string, clinicId: string): Promise<void>;
 
   // Odontograma history
   findOdontogramaHistory(where: Record<string, unknown>): Promise<unknown[]>;
@@ -26,24 +26,24 @@ export interface IPepRepository {
     clinicId: string,
   ): Promise<unknown | null>;
   updateProntuario(id: string, data: Record<string, unknown>): Promise<unknown>;
-  deleteProntuario(id: string): Promise<void>;
+  deleteProntuario(id: string, clinicId: string): Promise<void>;
 
   // Anexos
   createAnexo(data: Record<string, unknown>): Promise<unknown>;
   updateAnexo(id: string, data: Record<string, unknown>): Promise<unknown>;
-  deleteAnexo(id: string): Promise<void>;
+  deleteAnexo(id: string, clinicId: string): Promise<void>;
 
   // Evolucoes
   createEvolucao(data: Record<string, unknown>): Promise<unknown>;
   updateEvolucao(id: string, data: Record<string, unknown>): Promise<unknown>;
-  deleteEvolucao(id: string): Promise<void>;
+  deleteEvolucao(id: string, clinicId: string): Promise<void>;
 
   // Tratamentos
   findManyTratamentos(where: Record<string, unknown>): Promise<unknown[]>;
   findTratamentoById(id: string): Promise<unknown | null>;
   createTratamento(data: Record<string, unknown>): Promise<unknown>;
   updateTratamento(id: string, data: Record<string, unknown>): Promise<unknown>;
-  deleteTratamento(id: string): Promise<void>;
+  deleteTratamento(id: string, clinicId: string): Promise<void>;
 
   // Odontograma data
   findOdontogramaDataByTooth(
@@ -55,7 +55,7 @@ export interface IPepRepository {
     id: string,
     data: Record<string, unknown>,
   ): Promise<unknown>;
-  deleteOdontogramaData(id: string): Promise<void>;
+  deleteOdontogramaData(id: string, clinicId: string): Promise<void>;
 
   // Tooth surfaces
   findToothSurfaceByOdontogramaDataAndSurface(

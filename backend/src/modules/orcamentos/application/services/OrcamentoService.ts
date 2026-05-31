@@ -103,7 +103,7 @@ export class OrcamentoService {
     const existing = await this.getById(id, clinicId);
     if (!existing) return false;
 
-    await this.repo.deleteOrcamento(id);
+    await this.repo.deleteOrcamento(id, clinicId);
     return true;
   }
 

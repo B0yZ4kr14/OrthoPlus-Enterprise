@@ -126,7 +126,7 @@ describe("FuncionariosController", () => {
       const res = mockRes();
       repo.delete.mockResolvedValue(undefined);
       await controller.delete(req, res);
-      expect(repo.delete).toHaveBeenCalledWith("f1");
+      expect(repo.delete).toHaveBeenCalledWith("f1", "clinic-001");
       expect(res.status).toHaveBeenCalledWith(204);
     });
   });

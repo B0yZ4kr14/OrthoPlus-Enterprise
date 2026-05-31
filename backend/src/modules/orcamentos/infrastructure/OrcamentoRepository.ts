@@ -31,8 +31,8 @@ export class OrcamentoRepository implements IOrcamentoRepository {
     return prisma.orcamentos.update({ where: { id }, data });
   }
 
-  async deleteOrcamento(id: string) {
-    return prisma.orcamentos.delete({ where: { id } });
+  async deleteOrcamento(id: string, clinicId: string) {
+    await prisma.orcamentos.deleteMany({ where: { id, clinic_id: clinicId } });
   }
 
   async listItems(orcamentoId: string) {

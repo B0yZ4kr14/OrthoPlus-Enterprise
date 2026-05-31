@@ -23,5 +23,5 @@ export interface IFuncionarioRepository {
   findById(id: string, clinicId: string): Promise<unknown | null>;
   create(data: CreateFuncionarioData & { clinic_id: string }): Promise<unknown>;
   update(id: string, data: UpdateFuncionarioData): Promise<unknown>;
-  delete(id: string): Promise<void>;
+  delete(id: string, clinicId: string): Promise<void>;
 }
