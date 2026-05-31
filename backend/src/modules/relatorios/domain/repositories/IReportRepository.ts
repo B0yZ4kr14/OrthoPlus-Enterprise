@@ -12,13 +12,13 @@ export interface IReportRepository {
   findAppointmentsOrthoByClinic(clinicId: string): Promise<any[]>;
   findContasReceberByClinic(clinicId: string): Promise<any[]>;
   findContasPagarByClinic(clinicId: string): Promise<any[]>;
-  createAuditLog(data: any): Promise<any>;
+  createAuditLog(data: Record<string, unknown>): Promise<any>;
   findModuleCatalogByKey(moduleKey: string): Promise<any>;
   upsertClinicModule(
     clinicId: string,
     moduleCatalogId: number,
     isActive: boolean,
   ): Promise<any>;
-  createProntuario(data: any): Promise<any>;
-  createPepOdontograma(data: any): Promise<any>;
+  createProntuario(data: Record<string, unknown>): Promise<any>;
+  createPepOdontograma(data: Record<string, unknown>): Promise<any>;
 }

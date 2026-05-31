@@ -1,22 +1,22 @@
 export interface IIARadiografiaRepository {
   // ── Analise ───────────────────────────────────────────────────────────
-  createAnalise(data: any): Promise<any>;
+  createAnalise(data: Record<string, unknown>): Promise<any>;
   findAnalisesByClinic(clinicId: string): Promise<any[]>;
   findAnaliseById(id: string, clinicId: string): Promise<any | null>;
   findAnaliseByIdOnly(id: string): Promise<any | null>;
-  updateAnalise(id: string, data: any): Promise<any>;
-  countAnalises(where: any): Promise<number>;
-  aggregateConfidence(where: any): Promise<any>;
-  aggregateProcessingTime(where: any): Promise<any>;
+  updateAnalise(id: string, data: Record<string, unknown>): Promise<any>;
+  countAnalises(where: Record<string, unknown>): Promise<number>;
+  aggregateConfidence(where: Record<string, unknown>): Promise<any>;
+  aggregateProcessingTime(where: Record<string, unknown>): Promise<any>;
 
   // ── Consentimento ─────────────────────────────────────────────────────
   findConsentimento(pacienteId: string, clinicId: string): Promise<any | null>;
-  createConsentimento(data: any): Promise<any>;
+  createConsentimento(data: Record<string, unknown>): Promise<any>;
   findConsentimentoToRevoke(
     pacienteId: string,
     clinicId: string,
   ): Promise<any | null>;
-  updateConsentimento(id: string, data: any): Promise<any>;
+  updateConsentimento(id: string, data: Record<string, unknown>): Promise<any>;
   findHistoricoConsentimento(
     pacienteId: string,
     clinicId: string,
@@ -26,10 +26,10 @@ export interface IIARadiografiaRepository {
   findModelConfigByClinic(clinicId: string): Promise<any | null>;
 
   // ── Problemas ──────────────────────────────────────────────────────────
-  createProblemasRadiograficos(data: any[]): Promise<any>;
+  createProblemasRadiograficos(data: Record<string, unknown>[]): Promise<any>;
 
   // ── Audit Log ─────────────────────────────────────────────────────────
-  createAuditLog(data: any): Promise<any>;
+  createAuditLog(data: Record<string, unknown>): Promise<any>;
   findAuditLogsByAnalise(analiseId: string): Promise<any[]>;
   findAuditLogsByPaciente(pacienteId: string, clinicId: string): Promise<any[]>;
 }

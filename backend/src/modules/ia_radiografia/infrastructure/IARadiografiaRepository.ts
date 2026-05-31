@@ -5,8 +5,9 @@ import { IIARadiografiaRepository } from "@/modules/ia_radiografia/domain/reposi
 export class IARadiografiaRepository implements IIARadiografiaRepository {
   // ── Analise ───────────────────────────────────────────────────────────
 
-  async createAnalise(data: any) {
-    return prisma.ia_radiografia_analise.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAnalise(data: Record<string, unknown>) {
+    return prisma.ia_radiografia_analise.create({ data: data as any });
   }
 
   async findAnalisesByClinic(clinicId: string) {
@@ -37,24 +38,25 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
     });
   }
 
-  async updateAnalise(id: string, data: any) {
-    return prisma.ia_radiografia_analise.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateAnalise(id: string, data: Record<string, unknown>) {
+    return prisma.ia_radiografia_analise.update({ where: { id }, data: data as any });
   }
 
-  async countAnalises(where: any) {
-    return prisma.ia_radiografia_analise.count({ where });
+  async countAnalises(where: Record<string, unknown>) {
+    return prisma.ia_radiografia_analise.count({ where: where as any });
   }
 
-  async aggregateConfidence(where: any) {
+  async aggregateConfidence(where: Record<string, unknown>) {
     return prisma.ia_radiografia_analise.aggregate({
-      where: { ...where, confidence_score: { not: null } },
+      where: { ...(where as any), confidence_score: { not: null } },
       _avg: { confidence_score: true },
     });
   }
 
-  async aggregateProcessingTime(where: any) {
+  async aggregateProcessingTime(where: Record<string, unknown>) {
     return prisma.ia_radiografia_analise.aggregate({
-      where: { ...where, processamento_ms: { not: null } },
+      where: { ...(where as any), processamento_ms: { not: null } },
       _avg: { processamento_ms: true },
     });
   }
@@ -74,8 +76,9 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
     });
   }
 
-  async createConsentimento(data: any) {
-    return prisma.paciente_consentimento_ia.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createConsentimento(data: Record<string, unknown>) {
+    return prisma.paciente_consentimento_ia.create({ data: data as any });
   }
 
   async findConsentimentoToRevoke(pacienteId: string, clinicId: string) {
@@ -90,8 +93,9 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
     });
   }
 
-  async updateConsentimento(id: string, data: any) {
-    return prisma.paciente_consentimento_ia.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateConsentimento(id: string, data: Record<string, unknown>) {
+    return prisma.paciente_consentimento_ia.update({ where: { id }, data: data as any });
   }
 
   async findHistoricoConsentimento(pacienteId: string, clinicId: string) {
@@ -115,14 +119,16 @@ export class IARadiografiaRepository implements IIARadiografiaRepository {
 
   // ── Problemas ──────────────────────────────────────────────────────────
 
-  async createProblemasRadiograficos(data: any[]) {
-    return prisma.problema_radiografico.createMany({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createProblemasRadiograficos(data: Record<string, unknown>[]) {
+    return prisma.problema_radiografico.createMany({ data: data as any });
   }
 
   // ── Audit Log ─────────────────────────────────────────────────────────
 
-  async createAuditLog(data: any) {
-    return prisma.ia_radiografia_audit_log.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAuditLog(data: Record<string, unknown>) {
+    return prisma.ia_radiografia_audit_log.create({ data: data as any });
   }
 
   async findAuditLogsByAnalise(analiseId: string) {

@@ -55,8 +55,9 @@ export class ReportRepository implements IReportRepository {
     return prisma.contas_pagar.findMany({ where: { clinic_id: clinicId } });
   }
 
-  async createAuditLog(data: any) {
-    return prisma.audit_logs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAuditLog(data: Record<string, unknown>) {
+    return prisma.audit_logs.create({ data: data as any });
   }
 
   async findModuleCatalogByKey(moduleKey: string) {
@@ -89,11 +90,13 @@ export class ReportRepository implements IReportRepository {
     });
   }
 
-  async createProntuario(data: any) {
-    return prisma.prontuarios.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createProntuario(data: Record<string, unknown>) {
+    return prisma.prontuarios.create({ data: data as any });
   }
 
-  async createPepOdontograma(data: any) {
-    return prisma.pep_odontograma.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createPepOdontograma(data: Record<string, unknown>) {
+    return prisma.pep_odontograma.create({ data: data as any });
   }
 }
