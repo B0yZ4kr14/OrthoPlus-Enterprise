@@ -13,6 +13,10 @@ rsync -avz --delete \
 --exclude="dist" \
 --exclude=".turbo" \
 --exclude="playwright-report" \
+--exclude=".env" \
+--exclude=".env.production" \
+--exclude="uploads" \
+--exclude="logs" \
 -e "ssh -i ~/.ssh/id_ed25519_b0yz4kr14" \
 . tsi@100.111.74.69:/home/tsi/OrthoPlus-Enterprise/
 ```
@@ -39,7 +43,7 @@ curl -s --max-time 10 http://localhost:3005/health
 # Frontend
 cd ../apps/web
 pnpm build
-sudo cp -rv dist/* /var/www/orthoplus/
+sudo cp -a dist/* /var/www/orthoplus/
 
 # Recarregar nginx
 sudo nginx -t && sudo systemctl reload nginx
@@ -77,7 +81,7 @@ Caso o deploy falhe:
 ```bash
 # Reverter para última versão estável
 cd /home/tsi/OrthoPlus-Enterprise
-git reset --hard HEAD~1
+git revert --no-edit HEAD
 # Re-executar passos 2-4
 ```
 
