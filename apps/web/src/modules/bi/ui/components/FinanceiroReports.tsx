@@ -38,9 +38,9 @@ export function FinanceiroReports({
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <Label>Tipo:</Label>
+              <Label htmlFor="report-tipo">Tipo:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-tipo">
                   <SelectValue placeholder="-- Todos --" />
                 </SelectTrigger>
                 <SelectContent>
@@ -49,12 +49,12 @@ export function FinanceiroReports({
               </Select>
             </div>
             <div>
-              <Label>Mês:</Label>
-              <Input type="month" />
+              <Label htmlFor="report-mes-inicio">Mês:</Label>
+              <Input id="report-mes-inicio" type="month" />
             </div>
             <div>
-              <Label>Fim:</Label>
-              <Input type="month" />
+              <Label htmlFor="report-mes-fim">Fim:</Label>
+              <Input id="report-mes-fim" type="month" />
             </div>
           </div>
         </ReportSection>
@@ -72,17 +72,17 @@ export function FinanceiroReports({
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <Label>Mês:</Label>
-              <Input type="month" />
+              <Label htmlFor="report-lanc-mes">Mês:</Label>
+              <Input id="report-lanc-mes" type="month" />
             </div>
             <div>
-              <Label>Fim:</Label>
-              <Input type="month" />
+              <Label htmlFor="report-lanc-fim">Fim:</Label>
+              <Input id="report-lanc-fim" type="month" />
             </div>
             <div>
-              <Label>Conta:</Label>
+              <Label htmlFor="report-conta">Conta:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-conta">
                   <SelectValue placeholder="Todas" />
                 </SelectTrigger>
                 <SelectContent>

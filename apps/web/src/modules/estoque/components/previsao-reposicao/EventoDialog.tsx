@@ -85,14 +85,14 @@ export function EventoDialog({
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Tipo de Evento</Label>
+              <Label htmlFor="evento-tipo">Tipo de Evento</Label>
               <Select
                 value={novoEvento.tipo}
                 onValueChange={(v) =>
                   setNovoEvento({ ...novoEvento, tipo: v as TipoEvento })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger id="evento-tipo">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -104,8 +104,9 @@ export function EventoDialog({
               </Select>
             </div>
             <div>
-              <Label>Impacto (%)</Label>
+              <Label htmlFor="evento-impacto">Impacto (%)</Label>
               <Input
+                id="evento-impacto"
                 type="number"
                 placeholder="Ex: 30 ou -20"
                 value={novoEvento.impactoEstimado || ""}
@@ -120,8 +121,9 @@ export function EventoDialog({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Data Início</Label>
+              <Label htmlFor="evento-data-inicio">Data Início</Label>
               <Input
+                id="evento-data-inicio"
                 type="date"
                 value={novoEvento.dataInicio}
                 onChange={(e) =>
@@ -130,8 +132,9 @@ export function EventoDialog({
               />
             </div>
             <div>
-              <Label>Data Fim</Label>
+              <Label htmlFor="evento-data-fim">Data Fim</Label>
               <Input
+                id="evento-data-fim"
                 type="date"
                 value={novoEvento.dataFim}
                 onChange={(e) =>
@@ -141,8 +144,9 @@ export function EventoDialog({
             </div>
           </div>
           <div>
-            <Label>Descrição</Label>
+            <Label htmlFor="evento-descricao">Descrição</Label>
             <Textarea
+              id="evento-descricao"
               placeholder="Descreva o evento..."
               value={novoEvento.descricao}
               onChange={(e) =>

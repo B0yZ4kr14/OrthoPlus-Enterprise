@@ -8,7 +8,7 @@ interface ImageViewerProps {
 
 export function ImageViewer({ imageUrl, annotations = [] }: ImageViewerProps) {
   return (
-    <div className="relative w-full h-[600px] bg-slate-900 rounded-lg overflow-hidden">
+    <div className="relative w-full h-[600px] bg-black rounded-lg overflow-hidden">
       <div className="absolute top-4 right-4 z-10 flex gap-2">
         <Button size="icon" variant="secondary">
           <ZoomIn className="h-4 w-4" />

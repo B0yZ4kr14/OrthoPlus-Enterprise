@@ -21,8 +21,9 @@ export function StorjConfigForm({ config, onChange }: StorjConfigFormProps) {
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label>Access Grant</Label>
+        <Label htmlFor="storj-access-grant">Access Grant</Label>
         <Input
+          id="storj-access-grant"
           placeholder="Seu access grant do Storj DCS"
           value={config?.accessGrant || ""}
           onChange={(e) => updateField("accessGrant", e.target.value)}
@@ -40,16 +41,18 @@ export function StorjConfigForm({ config, onChange }: StorjConfigFormProps) {
         </p>
       </div>
       <div className="space-y-2">
-        <Label>Bucket</Label>
+        <Label htmlFor="storj-bucket">Bucket</Label>
         <Input
+          id="storj-bucket"
           placeholder="orthoplus-backups"
           value={config?.bucket || ""}
           onChange={(e) => updateField("bucket", e.target.value)}
         />
       </div>
       <div className="space-y-2">
-        <Label>Prefixo (opcional)</Label>
+        <Label htmlFor="storj-prefix">Prefixo (opcional)</Label>
         <Input
+          id="storj-prefix"
           placeholder="clinic-name/"
           value={config?.prefix || ""}
           onChange={(e) => updateField("prefix", e.target.value)}

@@ -20,14 +20,14 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
       </div>
 
       <div className="space-y-2">
-        <Label>Onde deseja armazenar o backup?</Label>
+        <Label htmlFor="cloud-provider">Onde deseja armazenar o backup?</Label>
         <Select
           value={config.cloudStorageProvider}
           onValueChange={(
             value: ScheduledBackupConfig["cloudStorageProvider"],
           ) => setConfig({ ...config, cloudStorageProvider: value })}
         >
-          <SelectTrigger>
+          <SelectTrigger id="cloud-provider">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -43,8 +43,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
 
       {config.cloudStorageProvider === "local" && (
         <div className="space-y-2">
-          <Label>Caminho Local</Label>
+          <Label htmlFor="local-path">Caminho Local</Label>
           <Input
+            id="local-path"
             placeholder="/var/backups/orthoplus"
             value={config.localPath || ""}
             onChange={(e) =>
@@ -60,8 +61,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
       {config.cloudStorageProvider === "ftp" && (
         <div className="space-y-3">
           <div className="space-y-2">
-            <Label>Servidor FTP/SFTP</Label>
+            <Label htmlFor="ftp-host">Servidor FTP/SFTP</Label>
             <Input
+              id="ftp-host"
               placeholder="ftp.example.com"
               value={config.ftpConfig?.host || ""}
               onChange={(e) =>
@@ -76,8 +78,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label>Porta</Label>
+            <Label htmlFor="ftp-port">Porta</Label>
             <Input
+              id="ftp-port"
               type="number"
               placeholder="21"
               value={config.ftpConfig?.port || ""}
@@ -93,8 +96,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label>Usuário</Label>
+            <Label htmlFor="ftp-user">Usuário</Label>
             <Input
+              id="ftp-user"
               placeholder="username"
               value={config.ftpConfig?.username || ""}
               onChange={(e) =>
@@ -109,8 +113,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label>Senha</Label>
+            <Label htmlFor="ftp-password">Senha</Label>
             <Input
+              id="ftp-password"
               type="password"
               value={config.ftpConfig?.password || ""}
               onChange={(e) =>
@@ -125,8 +130,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label>Caminho Remoto</Label>
+            <Label htmlFor="ftp-remote-path">Caminho Remoto</Label>
             <Input
+              id="ftp-remote-path"
               placeholder="/backups"
               value={config.ftpConfig?.remotePath || ""}
               onChange={(e) =>
@@ -146,8 +152,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
       {config.cloudStorageProvider === "storj" && (
         <div className="space-y-3">
           <div className="space-y-2">
-            <Label>Access Grant</Label>
+            <Label htmlFor="storj-access-grant">Access Grant</Label>
             <Input
+              id="storj-access-grant"
               placeholder="Seu access grant do Storj DCS"
               value={config.storjConfig?.accessGrant || ""}
               onChange={(e) =>
@@ -173,8 +180,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
             </p>
           </div>
           <div className="space-y-2">
-            <Label>Bucket</Label>
+            <Label htmlFor="storj-bucket">Bucket</Label>
             <Input
+              id="storj-bucket"
               placeholder="orthoplus-backups"
               value={config.storjConfig?.bucket || ""}
               onChange={(e) =>
@@ -189,8 +197,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label>Prefixo (opcional)</Label>
+            <Label htmlFor="storj-prefix">Prefixo (opcional)</Label>
             <Input
+              id="storj-prefix"
               placeholder="clinic-name/"
               value={config.storjConfig?.prefix || ""}
               onChange={(e) =>
@@ -208,8 +217,9 @@ export function DestinationStep({ config, setConfig }: WizardStepProps) {
       )}
 
       <div className="space-y-2 mt-4">
-        <Label>E-mails para Notificação (opcional)</Label>
+        <Label htmlFor="notification-emails">E-mails para Notificação (opcional)</Label>
         <Input
+          id="notification-emails"
           placeholder="admin@example.com, backup@example.com"
           value={config.notificationEmails.join(", ")}
           onChange={(e) =>

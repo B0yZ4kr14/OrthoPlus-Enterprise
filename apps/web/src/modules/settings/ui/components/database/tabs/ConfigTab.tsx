@@ -80,18 +80,18 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
         <CardContent className="p-6 space-y-4">
           {config.fields.includes("host") && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-foreground">Host</Label>
+              <Label htmlFor="db-host" className="text-right text-foreground">Host</Label>
               <div className="col-span-3">
-                <Input defaultValue="localhost" />
+                <Input id="db-host" defaultValue="localhost" />
               </div>
             </div>
           )}
 
           {config.fields.includes("port") && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-foreground">Porta</Label>
+              <Label htmlFor="db-port" className="text-right text-foreground">Porta</Label>
               <div className="col-span-3">
-                <Input defaultValue={config.portDefault} />
+                <Input id="db-port" defaultValue={config.portDefault} />
               </div>
             </div>
           )}
@@ -100,11 +100,12 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
             config.fields.includes("dbpath") ||
             config.fields.includes("filepath")) && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-foreground">
+              <Label htmlFor="db-name" className="text-right text-foreground">
                 {config.dbLabel}
               </Label>
               <div className="col-span-3">
                 <Input
+                  id="db-name"
                   defaultValue={
                     config.fields.includes("database")
                       ? "orthoplus"
@@ -117,18 +118,19 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
 
           {config.fields.includes("user") && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-foreground">Usuário</Label>
+              <Label htmlFor="db-user" className="text-right text-foreground">Usuário</Label>
               <div className="col-span-3">
-                <Input defaultValue={config.userDefault} />
+                <Input id="db-user" defaultValue={config.userDefault} />
               </div>
             </div>
           )}
 
           {config.fields.includes("password") && (
             <div className="grid grid-cols-4 gap-4 items-center">
-              <Label className="text-right text-foreground">Senha</Label>
+              <Label htmlFor="db-password" className="text-right text-foreground">Senha</Label>
               <div className="col-span-3 relative">
                 <Input
+                  id="db-password"
                   type={showPassword ? "text" : "password"}
                   defaultValue="********"
                   className="pr-10"

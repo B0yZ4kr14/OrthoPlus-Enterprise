@@ -20,8 +20,9 @@ export function BasicInfoStep({ config, setConfig }: WizardStepProps) {
       </div>
 
       <div className="space-y-2">
-        <Label>Nome do Backup</Label>
+        <Label htmlFor="backup-name">Nome do Backup</Label>
         <Input
+          id="backup-name"
           placeholder="Ex: Backup Diário Completo"
           value={config.name}
           onChange={(e) => setConfig({ ...config, name: e.target.value })}
@@ -29,14 +30,14 @@ export function BasicInfoStep({ config, setConfig }: WizardStepProps) {
       </div>
 
       <div className="space-y-2">
-        <Label>Frequência</Label>
+        <Label htmlFor="backup-frequency">Frequência</Label>
         <Select
           value={config.frequency}
           onValueChange={(value: "daily" | "weekly" | "monthly") =>
             setConfig({ ...config, frequency: value })
           }
         >
-          <SelectTrigger>
+          <SelectTrigger id="backup-frequency">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -48,8 +49,9 @@ export function BasicInfoStep({ config, setConfig }: WizardStepProps) {
       </div>
 
       <div className="space-y-2">
-        <Label>Horário</Label>
+        <Label htmlFor="backup-time">Horário</Label>
         <Input
+          id="backup-time"
           type="time"
           value={config.timeOfDay}
           onChange={(e) => setConfig({ ...config, timeOfDay: e.target.value })}
@@ -58,14 +60,14 @@ export function BasicInfoStep({ config, setConfig }: WizardStepProps) {
 
       {config.frequency === "weekly" && (
         <div className="space-y-2">
-          <Label>Dia da Semana</Label>
+          <Label htmlFor="backup-day-week">Dia da Semana</Label>
           <Select
             value={config.dayOfWeek?.toString()}
             onValueChange={(value) =>
               setConfig({ ...config, dayOfWeek: parseInt(value) })
             }
           >
-            <SelectTrigger>
+            <SelectTrigger id="backup-day-week">
               <SelectValue placeholder="Selecione o dia" />
             </SelectTrigger>
             <SelectContent>
@@ -83,8 +85,9 @@ export function BasicInfoStep({ config, setConfig }: WizardStepProps) {
 
       {config.frequency === "monthly" && (
         <div className="space-y-2">
-          <Label>Dia do Mês</Label>
+          <Label htmlFor="backup-day-month">Dia do Mês</Label>
           <Input
+            id="backup-day-month"
             type="number"
             min="1"
             max="31"

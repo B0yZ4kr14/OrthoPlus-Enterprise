@@ -189,8 +189,9 @@ export default function RelatorioFiscalPage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label>Data Inicio</Label>
+              <Label htmlFor="filtro-data-inicio">Data Inicio</Label>
               <Input
+                id="filtro-data-inicio"
                 type="date"
                 onChange={(e) =>
                   setFilters({ ...filters, dataInicio: e.target.value })
@@ -198,8 +199,9 @@ export default function RelatorioFiscalPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Data Fim</Label>
+              <Label htmlFor="filtro-data-fim">Data Fim</Label>
               <Input
+                id="filtro-data-fim"
                 type="date"
                 onChange={(e) =>
                   setFilters({ ...filters, dataFim: e.target.value })
@@ -207,8 +209,9 @@ export default function RelatorioFiscalPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Tipo de Nota</Label>
+              <Label htmlFor="filtro-tipo">Tipo de Nota</Label>
               <Input
+                id="filtro-tipo"
                 placeholder="NFE, NFCE, NFSE"
                 onChange={(e) =>
                   setFilters({ ...filters, tipo: e.target.value })

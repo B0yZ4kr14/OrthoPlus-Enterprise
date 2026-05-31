@@ -138,9 +138,9 @@ export function BitcoinQRCodeDialog({
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Carteira *</Label>
+              <Label htmlFor="qr-wallet">Carteira *</Label>
               <Select value={selectedWallet} onValueChange={setSelectedWallet}>
-                <SelectTrigger>
+                <SelectTrigger id="qr-wallet">
                   <SelectValue placeholder="Selecione a carteira" />
                 </SelectTrigger>
                 <SelectContent>
@@ -159,8 +159,9 @@ export function BitcoinQRCodeDialog({
             </div>
 
             <div className="space-y-2">
-              <Label>Valor em {wallet?.coin_type || "Crypto"} *</Label>
+              <Label htmlFor="qr-amount">Valor em {wallet?.coin_type || "Crypto"} *</Label>
               <Input
+                id="qr-amount"
                 type="number"
                 step="0.00000001"
                 placeholder="0.00000000"
@@ -172,9 +173,10 @@ export function BitcoinQRCodeDialog({
 
           {wallet && (
             <div className="space-y-2">
-              <Label>Endereço da Carteira</Label>
+              <Label htmlFor="qr-address">Endereço da Carteira</Label>
               <div className="flex gap-2">
                 <Input
+                  id="qr-address"
                   value={wallet.wallet_address}
                   readOnly
                   className="font-mono text-sm"
@@ -201,9 +203,10 @@ export function BitcoinQRCodeDialog({
               </div>
 
               <div className="space-y-2">
-                <Label>URI Bitcoin (BIP21)</Label>
+                <Label htmlFor="qr-uri">URI Bitcoin (BIP21)</Label>
                 <div className="flex gap-2">
                   <Input
+                    id="qr-uri"
                     value={bitcoinUri}
                     readOnly
                     className="font-mono text-xs"

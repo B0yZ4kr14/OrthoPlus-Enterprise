@@ -128,8 +128,9 @@ export default function CryptoConfigPage() {
                 <CardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-3">
                     <div>
-                      <Label>Nome da Exchange</Label>
+                      <Label htmlFor="exchange-name">Nome da Exchange</Label>
                       <Input
+                        id="exchange-name"
                         placeholder="Binance, Coinbase, etc"
                         value={newExchange.name}
                         onChange={(e) =>
@@ -141,8 +142,9 @@ export default function CryptoConfigPage() {
                       />
                     </div>
                     <div>
-                      <Label>API Key</Label>
+                      <Label htmlFor="exchange-api-key">API Key</Label>
                       <Input
+                        id="exchange-api-key"
                         type="password"
                         placeholder="Sua API Key"
                         value={newExchange.api_key}
@@ -155,8 +157,9 @@ export default function CryptoConfigPage() {
                       />
                     </div>
                     <div>
-                      <Label>API Secret</Label>
+                      <Label htmlFor="exchange-api-secret">API Secret</Label>
                       <Input
+                        id="exchange-api-secret"
                         type="password"
                         placeholder="Seu API Secret"
                         value={newExchange.api_secret}

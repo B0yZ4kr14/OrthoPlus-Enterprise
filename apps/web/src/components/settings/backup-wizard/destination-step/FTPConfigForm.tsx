@@ -21,16 +21,18 @@ export function FTPConfigForm({ config, onChange }: FTPConfigFormProps) {
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label>Servidor FTP/SFTP</Label>
+        <Label htmlFor="ftp-host">Servidor FTP/SFTP</Label>
         <Input
+          id="ftp-host"
           placeholder="ftp.example.com"
           value={config?.host || ""}
           onChange={(e) => updateField("host", e.target.value)}
         />
       </div>
       <div className="space-y-2">
-        <Label>Porta</Label>
+        <Label htmlFor="ftp-port">Porta</Label>
         <Input
+          id="ftp-port"
           type="number"
           placeholder="21"
           value={config?.port || ""}
@@ -38,24 +40,27 @@ export function FTPConfigForm({ config, onChange }: FTPConfigFormProps) {
         />
       </div>
       <div className="space-y-2">
-        <Label>Usuário</Label>
+        <Label htmlFor="ftp-user">Usuário</Label>
         <Input
+          id="ftp-user"
           placeholder="username"
           value={config?.username || ""}
           onChange={(e) => updateField("username", e.target.value)}
         />
       </div>
       <div className="space-y-2">
-        <Label>Senha</Label>
+        <Label htmlFor="ftp-password">Senha</Label>
         <Input
+          id="ftp-password"
           type="password"
           value={config?.password || ""}
           onChange={(e) => updateField("password", e.target.value)}
         />
       </div>
       <div className="space-y-2">
-        <Label>Caminho Remoto</Label>
+        <Label htmlFor="ftp-remote-path">Caminho Remoto</Label>
         <Input
+          id="ftp-remote-path"
           placeholder="/backups"
           value={config?.remotePath || ""}
           onChange={(e) => updateField("remotePath", e.target.value)}

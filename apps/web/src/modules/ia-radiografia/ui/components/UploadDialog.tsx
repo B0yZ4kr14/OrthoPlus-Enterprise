@@ -72,8 +72,9 @@ export function UploadDialog({
         </DialogHeader>
         <div className="space-y-4">
           <div>
-            <Label>Paciente ID</Label>
+            <Label htmlFor="upload-paciente-id">Paciente ID</Label>
             <Input
+              id="upload-paciente-id"
               placeholder="ID do paciente"
               value={selectedPatient}
               onChange={(e) => onPatientChange(e.target.value)}
@@ -127,9 +128,9 @@ export function UploadDialog({
           )}
 
           <div>
-            <Label>Tipo de Radiografia</Label>
+            <Label htmlFor="upload-tipo">Tipo de Radiografia</Label>
             <Select value={selectedTipo} onValueChange={onTipoChange}>
-              <SelectTrigger>
+              <SelectTrigger id="upload-tipo">
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
               <SelectContent>
@@ -142,8 +143,8 @@ export function UploadDialog({
             </Select>
           </div>
           <div>
-            <Label>Arquivo de Imagem</Label>
-            <Input type="file" accept="image/*" onChange={onFileChange} />
+            <Label htmlFor="upload-arquivo">Arquivo de Imagem</Label>
+            <Input id="upload-arquivo" type="file" accept="image/*" onChange={onFileChange} />
           </div>
           {uploadError && (
             <Alert className="bg-destructive/10 border-destructive/30">

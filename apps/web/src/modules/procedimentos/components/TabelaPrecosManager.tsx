@@ -198,6 +198,7 @@ export default function TabelaPrecosManager() {
         </h3>
         <div className="flex flex-wrap gap-3">
           <Input
+            aria-label="Nome da tabela"
             value={nomeTabela}
             onChange={(e) => setNomeTabela(e.target.value)}
             placeholder="Nome da tabela"

@@ -46,8 +46,8 @@ export function DadosPessoaisTab({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Nome *</Label>
-          <Input {...register("nome")} placeholder="Nome completo" />
+          <Label htmlFor="dentista-nome">Nome *</Label>
+          <Input id="dentista-nome" {...register("nome")} placeholder="Nome completo" />
           {errors?.nome && (
             <p className="text-sm text-destructive">
               {String(errors.nome.message)}
@@ -56,8 +56,9 @@ export function DadosPessoaisTab({
         </div>
 
         <div className="space-y-2">
-          <Label>Email *</Label>
+          <Label htmlFor="dentista-email">Email *</Label>
           <Input
+            id="dentista-email"
             type="email"
             {...register("email")}
             placeholder="email@exemplo.com"
@@ -70,8 +71,8 @@ export function DadosPessoaisTab({
         </div>
 
         <div className="space-y-2">
-          <Label>CRO *</Label>
-          <Input {...register("cro")} placeholder="00000" />
+          <Label htmlFor="dentista-cro">CRO *</Label>
+          <Input id="dentista-cro" {...register("cro")} placeholder="00000" />
           {errors?.cro && (
             <p className="text-sm text-destructive">
               {String(errors.cro.message)}
@@ -80,8 +81,8 @@ export function DadosPessoaisTab({
         </div>
 
         <div className="space-y-2">
-          <Label>Telefone *</Label>
-          <Input {...register("telefone")} placeholder="(00) 00000-0000" />
+          <Label htmlFor="dentista-telefone">Telefone *</Label>
+          <Input id="dentista-telefone" {...register("telefone")} placeholder="(00) 00000-0000" />
         </div>
 
         <div className="space-y-2">

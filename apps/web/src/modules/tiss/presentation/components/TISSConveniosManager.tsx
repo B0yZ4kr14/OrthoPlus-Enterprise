@@ -98,8 +98,9 @@ export function TISSConveniosManager() {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label>Nome *</Label>
+                <Label htmlFor="convenio-nome">Nome *</Label>
                 <Input
+                  id="convenio-nome"
                   value={form.nome || ""}
                   onChange={(e) => setForm({ ...form, nome: e.target.value })}
                   required
@@ -107,8 +108,9 @@ export function TISSConveniosManager() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Código Operadora</Label>
+                  <Label htmlFor="convenio-codigo">Código Operadora</Label>
                   <Input
+                    id="convenio-codigo"
                     value={form.codigo_operadora || ""}
                     onChange={(e) =>
                       setForm({ ...form, codigo_operadora: e.target.value })
@@ -116,15 +118,17 @@ export function TISSConveniosManager() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>CNPJ</Label>
+                  <Label htmlFor="convenio-cnpj">CNPJ</Label>
                   <Input
+                    id="convenio-cnpj"
                     value={form.cnpj || ""}
                     onChange={(e) => setForm({ ...form, cnpj: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Registro ANS</Label>
+                  <Label htmlFor="convenio-ans">Registro ANS</Label>
                   <Input
+                    id="convenio-ans"
                     value={form.registro_ans || ""}
                     onChange={(e) =>
                       setForm({ ...form, registro_ans: e.target.value })
@@ -132,8 +136,9 @@ export function TISSConveniosManager() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Tipo Plano</Label>
+                  <Label htmlFor="convenio-tipo">Tipo Plano</Label>
                   <Input
+                    id="convenio-tipo"
                     value={form.tipo_plano || ""}
                     onChange={(e) =>
                       setForm({ ...form, tipo_plano: e.target.value })

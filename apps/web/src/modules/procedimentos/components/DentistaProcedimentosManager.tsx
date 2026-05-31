@@ -133,6 +133,7 @@ export default function DentistaProcedimentosManager() {
             ))}
           </select>
           <Input
+            aria-label="Duração em minutos"
             value={duracao}
             onChange={(e) => setDuracao(e.target.value)}
             type="number"
@@ -140,6 +141,7 @@ export default function DentistaProcedimentosManager() {
             className="w-32"
           />
           <Input
+            aria-label="Comissão percentual"
             value={comissao}
             onChange={(e) => setComissao(e.target.value)}
             type="number"
