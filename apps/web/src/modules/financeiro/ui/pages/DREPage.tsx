@@ -33,9 +33,9 @@ function DRECard({
   description?: string;
 }) {
   const variantClasses = {
-    positive: "border-l-4 border-emerald-500",
-    negative: "border-l-4 border-red-500",
-    neutral: "border-l-4 border-blue-500",
+    positive: "border-l-4 border-[hsl(var(--success))]",
+    negative: "border-l-4 border-[hsl(var(--destructive))]",
+    neutral: "border-l-4 border-[hsl(var(--interactive))]",
   };
 
   return (

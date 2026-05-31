@@ -197,6 +197,7 @@ export function AgendaCalendar({
                           <button
                             onClick={() => onAddAppointment(dateStr, hora)}
                             className="absolute inset-0 w-full h-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            aria-label={`Agendar em ${dateStr} ${hora}`}
                           >
                             <Plus className="h-4 w-4 text-muted-foreground" />
                           </button>
