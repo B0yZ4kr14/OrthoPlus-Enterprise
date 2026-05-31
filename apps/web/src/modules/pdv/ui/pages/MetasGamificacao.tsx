@@ -64,7 +64,7 @@ export default function MetasGamificacao() {
       setMetas((data.metas as MetaItem[]) || []);
       setRanking((data.ranking as RankingItem[]) || []);
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
+      toast({ title: "Erro", description: "Erro ao carregar dados", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Não foi possível carregar os dados de metas e ranking",

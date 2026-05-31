@@ -121,7 +121,7 @@ export default function IARadiografia() {
       await registrarConsentimento(selectedPatient);
       setConsentStatus("consented");
     } catch (error) {
-      console.error("Erro ao registrar consentimento:", error);
+      toast({ title: "Erro", description: "Erro ao registrar consentimento", variant: "destructive" });
     }
   };
 
@@ -155,7 +155,7 @@ export default function IARadiografia() {
       setSelectedTipo("");
       setConsentStatus("loading");
     } catch (error) {
-      console.error("Erro no upload:", error);
+      toast({ title: "Erro", description: "Erro no upload", variant: "destructive" });
     }
   };
 

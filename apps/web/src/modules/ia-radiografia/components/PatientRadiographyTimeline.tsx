@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 import {
   Calendar,
   TrendingUp,
@@ -87,7 +88,7 @@ export const PatientRadiographyTimeline = () => {
           }
         }
       } catch (error) {
-        console.error("Error loading timeline data:", error);
+        toast.error("Erro ao carregar timeline");
       } finally {
         setLoading(false);
       }

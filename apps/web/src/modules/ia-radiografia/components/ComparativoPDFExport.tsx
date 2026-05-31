@@ -296,7 +296,7 @@ export function ComparativoPDFExport({
 
       toast.success("PDF exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao gerar PDF:", error);
+      toast.error("Erro ao gerar PDF");
       toast.error("Erro ao exportar PDF. Tente novamente.");
     } finally {
       setIsExporting(false);

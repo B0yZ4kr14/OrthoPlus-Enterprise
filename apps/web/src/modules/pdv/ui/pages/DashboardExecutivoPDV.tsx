@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
@@ -110,7 +111,7 @@ export default function DashboardExecutivoPDV() {
       );
       setRankingTop5((data.rankingTop5 as RankingTop5Item[]) || []);
     } catch (error) {
-      console.error("Erro ao carregar dashboard executivo:", error);
+      toast.error("Erro ao carregar dashboard");
     } finally {
       setLoading(false);
     }
