@@ -50,7 +50,7 @@ export function BarcodeScannerDialog({
 
     return () => {
       if (scanner) {
-        scanner.clear().catch(console.error);
+        scanner.clear().catch(() => {});
       }
     };
   }, [open]);

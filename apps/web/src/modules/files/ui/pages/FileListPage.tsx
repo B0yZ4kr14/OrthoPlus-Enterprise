@@ -83,7 +83,7 @@ export default function FileListPage() {
       toast.success("Arquivo excluído com sucesso");
     } catch (err) {
       toast.error("Erro ao excluir arquivo");
-      console.error(err);
+      toast.error("Erro ao processar arquivo");
     }
   };
 
@@ -93,7 +93,7 @@ export default function FileListPage() {
       toast.success("Download iniciado");
     } catch (err) {
       toast.error("Erro ao baixar arquivo");
-      console.error(err);
+      toast.error("Erro ao processar arquivo");
     }
   };
 

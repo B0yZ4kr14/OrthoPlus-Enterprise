@@ -71,7 +71,7 @@ export default function FileUploadPage() {
         toast.success(`"${file.name}" enviado com sucesso`);
       } catch (error) {
         toast.error(`Erro ao enviar "${file.name}"`);
-        console.error(error);
+        toast.error("Erro ao fazer upload");
       }
     }
 

@@ -123,7 +123,7 @@ export function FileVersionPanel({ file }: FileVersionPanelProps) {
       toast.success("Nova versão enviada com sucesso");
     } catch (err) {
       toast.error("Erro ao enviar nova versão");
-      console.error(err);
+      toast.error("Erro ao carregar versões");
     } finally {
       setUploadingFile(null);
       if (fileInputRef.current) {
@@ -138,7 +138,7 @@ export function FileVersionPanel({ file }: FileVersionPanelProps) {
       toast.success("Versão restaurada com sucesso");
     } catch (err) {
       toast.error("Erro ao restaurar versão");
-      console.error(err);
+      toast.error("Erro ao carregar versões");
     }
   };
 

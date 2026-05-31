@@ -41,7 +41,7 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
       toast.success("OCR iniciado com sucesso");
     } catch (err) {
       toast.error("Erro ao iniciar OCR");
-      console.error(err);
+      toast.error("Erro ao processar OCR");
     }
   };
 
