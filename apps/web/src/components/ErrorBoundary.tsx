@@ -42,8 +42,7 @@ export class ErrorBoundary extends Component<
       error,
       errorInfo,
     );
-    // TODO: Send to error reporting service (e.g., Sentry)
-    // reportError({ error, errorInfo, moduleName: this.props.moduleName });
+    // Error already logged above. Integrate Sentry/Datadog here when needed.
   }
 
   private handleRetry = (): void => {

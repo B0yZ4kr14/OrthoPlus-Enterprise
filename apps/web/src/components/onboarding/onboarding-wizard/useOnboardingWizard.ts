@@ -76,7 +76,9 @@ export function useOnboardingWizard(
     stepStartTime: stepStartTimeRef.current,
     setCurrentStep,
     setCompleted,
-    setStepStartTime: () => { /* no-op: managed by ref */ },
+    setStepStartTime: () => {
+      /* no-op: managed by ref */
+    },
     handleClose,
     handleNext,
     handlePrevious,

@@ -140,7 +140,7 @@ export const runRecallJob = async () => {
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
     logger.warn(
-      `[Agenda] Recall job: implementar query de pacientes sem consultas desde ${sixMonthsAgo.toISOString()}`
+      `[Agenda] Recall job: implementar query de pacientes sem consultas desde ${sixMonthsAgo.toISOString()}`,
     );
   } catch (error) {
     logger.error("Error in recall cron: ", error);

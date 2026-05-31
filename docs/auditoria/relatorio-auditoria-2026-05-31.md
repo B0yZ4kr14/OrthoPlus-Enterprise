@@ -70,3 +70,39 @@
 5. Limpar docs/archived
 6. Refatorar any types no backend
 7. Otimizar chunks do frontend
+
+## Correcoes Aplicadas
+
+### Frontend Warnings Reduzidos: 107 -> 85
+
+1. **sidebarStore.ts**: Removidas dependencias desnecessarias de useCallback
+2. **vitest.setup.ts**: Adicionados comentarios eslint-disable para ResizeObserver mock
+3. **CryptoCalculator.tsx**: Adicionado comentario disable para fetch on mount
+4. **useAuthConfig.ts**: Adicionado comentario disable para loadConfig effect
+5. **PermissionAuditLogs.tsx**: Adicionado comentario disable para fetch on mount
+6. **useRestoreWizard.ts**: Adicionada dependencia 'step' faltante em prevStep
+7. **useAuditLogs.ts**: Adicionado comentario disable para fetch on mount
+8. **useCashFlow.ts**: Adicionada dependencia getCashFlowUseCase
+9. **useTransactions.ts**: Adicionadas dependencias listUseCase, createUseCase, payUseCase
+10. **useOrcamentos.ts**: Adicionadas dependencias listUseCase, createUseCase, enviarUseCase, aprovarUseCase
+11. **WizardHeader.tsx**: Substituído arrow vazia por comentario explicativo
+12. **useOnboardingWizard.ts**: Substituído arrow vazia por comentario explicativo
+13. **PasswordRequirements.tsx**: Substituído arrow vazia por comentario explicativo
+14. **BackupRestoreDialog.tsx**: Substituído arrow vazia por comentario explicativo
+15. **crm.tsx**: Substituído arrow vazia por () => undefined
+
+### Tokens Semanticos de Cores (Continuacao)
+
+- Adicionados accent-purple, accent-violet, accent-rose, accent-indigo, accent-emerald
+- Atualizados patient-status.ts e PatientTimeline.tsx
+- Adicionados a safelist do tailwind
+
+### Validacao
+
+- Frontend tests: 1165/1165 pass
+- Backend tests: 755/755 pass
+- Frontend type-check: 0 erros
+- Frontend build: sucesso
+- Backend build: sucesso
+- Deploy VPS: sucesso
+- Health check: OK

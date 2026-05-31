@@ -251,8 +251,8 @@ generate_secrets() {
     log_info "Gerando secrets de segurança..."
     
     JWT_SECRET=$(openssl rand -base64 32)
-    DB_PASSWORD=<REMOVED>
-    REDIS_PASSWORD=<REMOVED>
+    DB_PASSWORD=$(openssl rand -base64 16)
+    REDIS_PASSWORD=$(openssl rand -base64 16)
     GRAFANA_PASSWORD=$(openssl rand -base64 16)
     
     # Salvar em arquivo seguro
@@ -310,7 +310,7 @@ DB_PASSWORD=$DB_PASSWORD
 DB_SSL=true
 
 # Connection string usada pelo Prisma
-DATABASE_URL=<REMOVED><user>:<password>@postgres:5432/orthoplus?schema=public
+DATABASE_URL=postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?schema=public
 
 # ============================================================================
 # REDIS

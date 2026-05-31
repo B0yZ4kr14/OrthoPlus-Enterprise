@@ -13,7 +13,9 @@ export class NotificarClienteNFeHandler implements EventHandler<NFeAutorizadaEve
         cliente: event.nfe.clienteNome,
       });
 
-      logger.warn("[NFe] Envio real de email/WhatsApp para cliente ainda não implementado");
+      logger.warn(
+        "[NFe] Envio real de email/WhatsApp para cliente ainda não implementado",
+      );
     } catch (error) {
       logger.error("Erro ao notificar cliente sobre NFe", { error, event });
     }
