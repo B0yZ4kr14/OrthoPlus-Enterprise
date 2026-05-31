@@ -1,7 +1,7 @@
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Check, X, Clock, Package } from "lucide-react";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import type { Requisicao, Produto } from "../types/estoque.types";
 import {

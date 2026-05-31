@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";
 import { Calendar } from "@orthoplus/core-ui/calendar";

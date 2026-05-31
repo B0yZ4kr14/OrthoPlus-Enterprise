@@ -1,7 +1,7 @@
 // cspell:disable
 import { Check, X, FileText, Calendar } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { ACTION_LABELS } from "./constants";
 import type { AuditLog } from "./types";

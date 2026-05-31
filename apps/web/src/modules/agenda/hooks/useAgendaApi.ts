@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api/apiClient";
-import { endOfDay, isWithinInterval, parseISO, startOfDay } from "date-fns";
+import { endOfDay, isWithinInterval, parseISO, startOfDay } from "@/lib/utils/date.utils.ts";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type {

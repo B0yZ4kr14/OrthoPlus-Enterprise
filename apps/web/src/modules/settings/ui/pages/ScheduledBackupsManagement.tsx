@@ -23,7 +23,7 @@ import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Switch } from "@orthoplus/core-ui/switch";
 import { Calendar, Clock, Edit, Pause, Play, Trash2, Plus } from "lucide-react";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { ScheduledBackupWizard } from "@/components/settings/ScheduledBackupWizard";

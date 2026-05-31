@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
 import { TrendingDown, Plus, Trash2 } from "lucide-react";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { CryptoPriceAlertForm } from "@/modules/crypto/components/CryptoPriceAlertForm";
 import { CascadeAlertWizard } from "@/modules/crypto/components/CascadeAlertWizard";

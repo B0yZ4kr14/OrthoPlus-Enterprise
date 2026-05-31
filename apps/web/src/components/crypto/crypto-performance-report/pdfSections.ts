@@ -1,5 +1,5 @@
 // cspell:disable
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import type { jsPDF } from "jspdf";
 import type { PortfolioData, MarketComparison } from "./types";

@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { useEvolucoes } from "@/modules/pep/hooks/useEvolucoes";
 import { useAuth } from "@/contexts/AuthContext";

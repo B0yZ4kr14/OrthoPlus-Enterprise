@@ -19,7 +19,7 @@ import {
   MessageSquare,
   Megaphone,
 } from "lucide-react";
-import { format, addDays, isAfter, isBefore } from "date-fns";
+import { format, addDays, isAfter, isBefore } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader } from "@/components/shared/PageHeader";

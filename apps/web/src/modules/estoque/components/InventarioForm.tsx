@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 
 interface InventarioFormProps {
   inventario?: Inventario;

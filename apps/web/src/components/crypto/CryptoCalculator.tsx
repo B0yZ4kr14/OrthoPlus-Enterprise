@@ -32,7 +32,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { format, subHours } from "date-fns";
+import { format, subHours } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 
 export function CryptoCalculator() {

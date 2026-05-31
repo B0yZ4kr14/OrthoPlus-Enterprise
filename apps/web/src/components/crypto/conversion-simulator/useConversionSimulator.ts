@@ -1,6 +1,6 @@
 // cspell:disable
 import { useState, useCallback } from "react";
-import { subDays } from "date-fns";
+import { subDays } from "@/lib/utils/date.utils.ts";
 import type {
   CoinType,
   ExchangeRate,

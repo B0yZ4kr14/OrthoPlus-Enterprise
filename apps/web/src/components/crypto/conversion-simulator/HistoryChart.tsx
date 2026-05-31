@@ -15,7 +15,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import type { HistoricalData, BestMoment } from "./types";
 

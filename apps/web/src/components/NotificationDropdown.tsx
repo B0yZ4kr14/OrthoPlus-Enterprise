@@ -12,7 +12,7 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { ScrollArea } from "@orthoplus/core-ui/scroll-area";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useNavigate } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 
 export const NotificationDropdown = () => {

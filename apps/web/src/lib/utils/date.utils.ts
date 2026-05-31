@@ -4,9 +4,23 @@ import {
   isValid,
   addDays,
   subDays,
+  subHours,
   startOfDay,
   endOfDay,
   subMonths,
+  startOfWeek,
+  endOfWeek,
+  addWeeks,
+  subWeeks,
+  isSameDay,
+  isAfter,
+  isBefore,
+  isWithinInterval,
+  formatDistanceToNow,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  eachMonthOfInterval,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -63,4 +77,29 @@ export function isValidDate(dateString: string): boolean {
   }
 }
 
-export { parseISO, isValid, addDays, subDays, startOfDay, endOfDay, subMonths };
+export {
+  parseISO,
+  isValid,
+  addDays,
+  subDays,
+  startOfDay,
+  endOfDay,
+  subMonths,
+  startOfWeek,
+  endOfWeek,
+  addWeeks,
+  subWeeks,
+  isSameDay,
+  isAfter,
+  isBefore,
+  isWithinInterval,
+  formatDistanceToNow,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  eachMonthOfInterval,
+  subHours,
+};
+
+// Re-export format with the same name for drop-in replacement
+export { dateFnsFormat as format };

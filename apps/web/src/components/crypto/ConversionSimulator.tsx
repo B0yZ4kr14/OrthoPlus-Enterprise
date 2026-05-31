@@ -36,7 +36,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { format, subDays } from "date-fns";
+import { format, subDays } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 
 interface ExchangeRate {

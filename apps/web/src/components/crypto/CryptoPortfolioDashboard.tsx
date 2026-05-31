@@ -4,7 +4,7 @@ import { RefreshCw } from "lucide-react";
 import { generateCryptoPerformanceReport } from "./CryptoPerformanceReport";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import type {
   CryptoWallet,

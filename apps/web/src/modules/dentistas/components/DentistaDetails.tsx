@@ -18,7 +18,7 @@ import {
   Clock,
   DollarSign,
 } from "lucide-react";
-import { format, parseISO } from "date-fns";
+import { format, parseISO } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { diasSemana } from "../types/dentista.types";
 

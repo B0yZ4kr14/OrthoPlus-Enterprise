@@ -19,7 +19,7 @@ import {
   PopoverTrigger,
 } from "@orthoplus/core-ui/popover";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useTratamentos } from "@/modules/pep/hooks/useTratamentos";

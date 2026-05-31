@@ -35,7 +35,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { StatsCard } from "@/components/shared/StatsCard";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";

@@ -26,7 +26,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { TrendingUp, Calculator, DollarSign } from "lucide-react";
-import { format, subMonths } from "date-fns";
+import { format, subMonths } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 
 interface BacktestResult {

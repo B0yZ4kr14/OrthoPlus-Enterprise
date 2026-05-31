@@ -7,7 +7,7 @@ import {
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Download, FileText } from "lucide-react";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import type { ConversionHistoryItem } from "./types";
 import { formatBRL } from "./types";

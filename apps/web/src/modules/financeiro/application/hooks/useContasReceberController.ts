@@ -1,5 +1,5 @@
 import { useContasReceber } from "@/modules/financeiro/application/hooks/useContasReceber";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { toast } from "sonner";
 
 export function useContasReceberController() {

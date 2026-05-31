@@ -1,6 +1,6 @@
 // cspell:disable
 import { useState, useCallback } from "react";
-import { format, subMonths } from "date-fns";
+import { format, subMonths } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { logger } from "@/lib/logger";
 import { getMarketChartRange } from "@/lib/api/cryptoMarketApi";

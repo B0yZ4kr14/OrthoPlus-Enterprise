@@ -1,4 +1,4 @@
-import { format, addDays, isSameDay } from "date-fns";
+import { format, addDays, isSameDay } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";

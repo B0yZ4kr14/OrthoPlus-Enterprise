@@ -18,7 +18,7 @@ import {
   Clock,
   XCircle,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 
 interface AtividadesListProps {

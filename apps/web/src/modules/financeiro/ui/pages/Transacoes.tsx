@@ -34,7 +34,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import {
   PieChart,

@@ -23,7 +23,7 @@ import {
   TableRow,
 } from "@orthoplus/core-ui/table";
 import { Shield, Calendar, User, FileText, AlertCircle } from "lucide-react";
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { useAuditTrail } from "@/hooks/api/useAuditTrail";
 

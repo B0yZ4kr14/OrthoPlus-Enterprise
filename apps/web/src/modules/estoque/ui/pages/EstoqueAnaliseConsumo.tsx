@@ -53,7 +53,7 @@ import {
   endOfMonth,
   eachDayOfInterval,
   eachMonthOfInterval,
-} from "date-fns";
+} from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LoadingState } from "@/components/shared/LoadingState";

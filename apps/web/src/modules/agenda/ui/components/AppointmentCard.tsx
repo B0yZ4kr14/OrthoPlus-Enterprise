@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { Clock, User, FileText, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@orthoplus/core-ui/card";
