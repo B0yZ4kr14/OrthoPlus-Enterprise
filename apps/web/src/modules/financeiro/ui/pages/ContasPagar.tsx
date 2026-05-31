@@ -57,6 +57,10 @@ import { ptBR } from "date-fns/locale";
 
 import { useFinanceiro } from "@/modules/financeiro/application/hooks/useFinanceiro";
 import type { ContaPagar } from "@/modules/financeiro/types/financeiro-completo.types";
+import {
+  FinanceiroKPICard,
+  formatBRL,
+} from "@/modules/financeiro/components/FinanceiroKPICard";
 
 export default function ContasPagar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -115,68 +119,27 @@ export default function ContasPagar() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card variant="elevated">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              Total a Pagar
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-warning">
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(totalPagar)}
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              {contasPagar.filter((c) => c.status !== "pago").length} contas
-              pendentes
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card variant="elevated">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4" />
-              Atrasadas
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-destructive">
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(totalAtrasado)}
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              {contasPagar.filter((c) => c.status === "atrasado").length} contas
-              vencidas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card variant="elevated">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              Pago (Mês)
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-success">
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(totalPago)}
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              {contasPagar.filter((c) => c.status === "pago").length} contas
-              quitadas
-            </p>
-          </CardContent>
-        </Card>
+        <FinanceiroKPICard
+          icon={Clock}
+          label="Total a Pagar"
+          value={formatBRL(totalPagar)}
+          valueClassName="text-warning"
+          footer={`${contasPagar.filter((c) => c.status !== "pago").length} contas pendentes`}
+        />
+        <FinanceiroKPICard
+          icon={AlertCircle}
+          label="Atrasadas"
+          value={formatBRL(totalAtrasado)}
+          valueClassName="text-destructive"
+          footer={`${contasPagar.filter((c) => c.status === "atrasado").length} contas vencidas`}
+        />
+        <FinanceiroKPICard
+          icon={CheckCircle2}
+          label="Pago (Mês)"
+          value={formatBRL(totalPago)}
+          valueClassName="text-success"
+          footer={`${contasPagar.filter((c) => c.status === "pago").length} contas quitadas`}
+        />
       </div>
 
       {/* Filters and Actions */}

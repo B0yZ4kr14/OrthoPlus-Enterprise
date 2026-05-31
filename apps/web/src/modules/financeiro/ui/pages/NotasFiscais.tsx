@@ -60,6 +60,10 @@ import { formatDate } from "@/lib/utils/date.utils";
 
 import { useFinanceiro } from "@/modules/financeiro/application/hooks/useFinanceiro";
 import type { NotaFiscal } from "@/modules/financeiro/types/financeiro-completo.types";
+import {
+  FinanceiroKPICard,
+  formatBRL,
+} from "@/modules/financeiro/components/FinanceiroKPICard";
 
 export default function NotasFiscais() {
   const {
@@ -122,88 +126,44 @@ export default function NotasFiscais() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card variant="elevated">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Total Emitido
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-success">
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(totalEmitido)}
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              {
-                notasFiscais.filter(
-                  (n) => n.status === "emitida" || n.status === "enviada",
-                ).length
-              }{" "}
-              notas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card variant="elevated">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              Pendentes
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-warning">
-              {new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(totalPendente)}
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              {notasFiscais.filter((n) => n.status === "pendente").length} notas
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card variant="elevated">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              NFSe Emitidas
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">
-              {
-                notasFiscais.filter(
-                  (n) => n.tipo === "NFSe" && n.status === "emitida",
-                ).length
-              }
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">Este mês</p>
-          </CardContent>
-        </Card>
-
-        <Card variant="elevated">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              NFe Emitidas
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">
-              {
-                notasFiscais.filter(
-                  (n) => n.tipo === "NFe" && n.status === "emitida",
-                ).length
-              }
-            </div>
-            <p className="text-xs text-muted-foreground mt-2">Este mês</p>
-          </CardContent>
-        </Card>
+        <FinanceiroKPICard
+          icon={FileText}
+          label="Total Emitido"
+          value={formatBRL(totalEmitido)}
+          valueClassName="text-success"
+          footer={`${
+            notasFiscais.filter(
+              (n) => n.status === "emitida" || n.status === "enviada",
+            ).length
+          } notas`}
+        />
+        <FinanceiroKPICard
+          icon={Clock}
+          label="Pendentes"
+          value={formatBRL(totalPendente)}
+          valueClassName="text-warning"
+          footer={`${notasFiscais.filter((n) => n.status === "pendente").length} notas`}
+        />
+        <FinanceiroKPICard
+          icon={CheckCircle2}
+          label="NFSe Emitidas"
+          value={
+            notasFiscais.filter(
+              (n) => n.tipo === "NFSe" && n.status === "emitida",
+            ).length
+          }
+          footer="Este mês"
+        />
+        <FinanceiroKPICard
+          icon={CheckCircle2}
+          label="NFe Emitidas"
+          value={
+            notasFiscais.filter(
+              (n) => n.tipo === "NFe" && n.status === "emitida",
+            ).length
+          }
+          footer="Este mês"
+        />
       </div>
 
       {/* Filters and Actions */}
