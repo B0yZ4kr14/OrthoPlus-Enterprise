@@ -268,14 +268,14 @@ export function AnexosUpload({
           <div className="overflow-auto">
             {previewFile?.tipo_arquivo === "IMAGEM" && (
               <img
-                src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api"}/storage/pep-anexos/public?path=${encodeURIComponent(previewFile.caminho_storage)}`}
+                src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3005/api"}/storage/pep-anexos/public?path=${encodeURIComponent(previewFile.caminho_storage)}`}
                 alt={previewFile.nome_arquivo}
                 className="max-w-full h-auto"
               />
             )}
             {previewFile?.tipo_arquivo === "PDF" && (
               <iframe
-                src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api"}/storage/pep-anexos/public?path=${encodeURIComponent(previewFile.caminho_storage)}`}
+                src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3005/api"}/storage/pep-anexos/public?path=${encodeURIComponent(previewFile.caminho_storage)}`}
                 className="w-full h-[70vh]"
                 title={previewFile.nome_arquivo}
               />

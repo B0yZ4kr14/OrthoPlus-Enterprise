@@ -244,7 +244,7 @@ export default function ApiDocsPage() {
                     Exemplo de Chamada
                   </h4>
                   <pre className="bg-muted p-4 rounded text-sm overflow-x-auto">
-                    {`fetch('http://localhost:3000${func.endpoint}', {
+                    {`fetch('${import.meta.env.VITE_API_BASE_URL || "http://localhost:3005/api"}${func.endpoint}', {
   method: '${func.method}',
   headers: {
     'Authorization': 'Bearer YOUR_TOKEN',

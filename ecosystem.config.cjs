@@ -23,8 +23,7 @@ module.exports = {
       min_uptime: '10s',
       listen_timeout: 10000,
       kill_timeout: 5000,
-      wait_ready: true,
-      env_file: '.env.production'
+      wait_ready: true
     }
   ],
   

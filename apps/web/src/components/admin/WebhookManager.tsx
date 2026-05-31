@@ -184,7 +184,7 @@ export function WebhookManager() {
           <div className="space-y-2">
             <h4 className="font-medium">URL do Webhook</h4>
             <code className="block bg-muted p-3 rounded text-sm">
-              {import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api"}
+              {import.meta.env.VITE_API_BASE_URL || "http://localhost:3005/api"}
               /webhooks/github
             </code>
             <p className="text-xs text-muted-foreground">

@@ -38,7 +38,7 @@ export function useCryptoNotifications() {
   const connectWebSocket = () => {
     try {
       // Conectar ao WebSocket do Backend
-      const wsUrl = import.meta.env.VITE_WS_URL || "ws://localhost:3000";
+      const wsUrl = import.meta.env.VITE_WS_URL || "ws://localhost:3005";
       const ws = new WebSocket(
         `${wsUrl}/ws/crypto-notifications?clinicId=${clinicId}`,
       );
