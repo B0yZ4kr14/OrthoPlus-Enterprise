@@ -20,12 +20,12 @@ export class ContratosRepository implements IContratosRepository {
     return prisma.contratos.create({ data });
   }
 
-  async updateContrato(id: string, data: Prisma.contratosUpdateInput) {
-    return prisma.contratos.update({ where: { id }, data });
+  async updateContrato(id: string, clinicId: string, data: Prisma.contratosUpdateInput) {
+    return prisma.contratos.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteContrato(id: string) {
-    return prisma.contratos.delete({ where: { id } });
+  async deleteContrato(id: string, clinicId: string) {
+    return prisma.contratos.delete({ where: { id, clinic_id: clinicId } });
   }
 
   async listTemplates() {

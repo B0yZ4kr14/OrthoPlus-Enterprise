@@ -68,7 +68,7 @@ export class CRMController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateLead(id, parsed.data);
+    const data = await this.repo.updateLead(id, clinicId, parsed.data);
     res.json(data);
     return;
   });
@@ -83,7 +83,7 @@ export class CRMController {
     if (!existing) {
       throw Errors.notFound("Lead", id);
     }
-    await this.repo.deleteLead(id);
+    await this.repo.deleteLead(id, clinicId);
     res.status(204).send();
     return;
   });

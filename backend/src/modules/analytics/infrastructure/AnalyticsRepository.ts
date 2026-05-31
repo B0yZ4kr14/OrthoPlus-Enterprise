@@ -273,8 +273,8 @@ export class AnalyticsRepository implements IAnalyticsRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateLoyalty(id: string, data: unknown) {
-    return prisma.fidelidade_pacientes.update({ where: { id }, data: data as any });
+  async updateLoyalty(id: string, clinicId: string, data: unknown) {
+    return prisma.fidelidade_pacientes.update({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -331,8 +331,8 @@ export class AnalyticsRepository implements IAnalyticsRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateGamificationGoal(id: string, data: unknown) {
-    return prisma.gamification_goals.update({ where: { id }, data: data as any });
+  async updateGamificationGoal(id: string, clinicId: string, data: unknown) {
+    return prisma.gamification_goals.update({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   // ── BI Export ─────────────────────────────────────────────────────────

@@ -125,7 +125,7 @@ export class AgendaService {
       throw err;
     }
 
-    const appointment = await this.repo.updateAppointment(id, {
+    const appointment = await this.repo.updateAppointment(id, clinicId, {
       ...parsed.data,
       updated_at: new Date(),
     });
@@ -169,7 +169,7 @@ export class AgendaService {
       throw err;
     }
 
-    await this.repo.deleteAppointment(id);
+    await this.repo.deleteAppointment(id, clinicId);
 
     MetricsEmitter.incrementCounter(
       "agenda_appointment_deleted",
@@ -368,7 +368,7 @@ export class AgendaService {
       err.statusCode = 404;
       throw err;
     }
-    await this.repo.deleteBlockedTime(id);
+    await this.repo.deleteBlockedTime(id, clinicId);
   }
 
   // ─── Dentist Schedules ───
@@ -425,7 +425,7 @@ export class AgendaService {
       throw err;
     }
 
-    return this.repo.updateDentistSchedule(id, parsed.data);
+    return this.repo.updateDentistSchedule(id, clinicId, parsed.data);
   }
 
   async deleteDentistSchedule(id: string, clinicId: string) {
@@ -435,6 +435,6 @@ export class AgendaService {
       err.statusCode = 404;
       throw err;
     }
-    await this.repo.deleteDentistSchedule(id);
+    await this.repo.deleteDentistSchedule(id, clinicId);
   }
 }

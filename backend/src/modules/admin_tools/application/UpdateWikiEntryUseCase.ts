@@ -14,6 +14,6 @@ export class UpdateWikiEntryUseCase {
     if (!existing) {
       throw Errors.notFound("Wiki page", id);
     }
-    return this.repository.updateWikiPage(id, data);
+    return this.repository.updateWikiPage(id, clinicId, data);
   }
 }

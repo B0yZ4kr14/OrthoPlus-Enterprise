@@ -203,7 +203,7 @@ export class AnalyticsControllerService {
       else if (newTotal >= 500) newLevel = "GOLD";
       else if (newTotal >= 100) newLevel = "SILVER";
 
-      await this.repo.updateLoyalty(loyalty.id, {
+      await this.repo.updateLoyalty(loyalty.id, clinicId, {
         pontos_acumulados: newTotal,
         nivel: newLevel,
       });
@@ -272,7 +272,7 @@ export class AnalyticsControllerService {
             break;
         }
 
-        await this.repo.updateGamificationGoal(goal.id, {
+        await this.repo.updateGamificationGoal(goal.id, clinicId, {
           current_value: Math.round(progress),
           status: isCompleted ? "COMPLETED" : "ACTIVE",
           completed_at: isCompleted ? new Date() : null,

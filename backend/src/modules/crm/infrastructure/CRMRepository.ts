@@ -19,11 +19,11 @@ export class CRMRepository implements ICRMRepository {
     return prisma.crm_leads.create({ data: data as any });
   }
 
-  async updateLead(id: string, data: Record<string, unknown>) {
-    return prisma.crm_leads.update({ where: { id }, data });
+  async updateLead(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.crm_leads.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteLead(id: string) {
-    await prisma.crm_leads.delete({ where: { id } });
+  async deleteLead(id: string, clinicId: string) {
+    await prisma.crm_leads.delete({ where: { id, clinic_id: clinicId } });
   }
 }

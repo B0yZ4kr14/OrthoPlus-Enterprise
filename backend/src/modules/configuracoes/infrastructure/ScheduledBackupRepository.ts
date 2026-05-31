@@ -9,11 +9,11 @@ export class ScheduledBackupRepository implements IScheduledBackupRepository {
     });
   }
 
-  async update(id: string, data: Record<string, unknown>) {
-    return prisma.scheduled_backups.update({ where: { id }, data });
+  async update(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.scheduled_backups.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async delete(id: string) {
-    await prisma.scheduled_backups.delete({ where: { id } });
+  async delete(id: string, clinicId: string) {
+    await prisma.scheduled_backups.delete({ where: { id, clinic_id: clinicId } });
   }
 }

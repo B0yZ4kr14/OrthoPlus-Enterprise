@@ -40,12 +40,21 @@ export class AgendaRepository implements IAgendaRepository {
     });
   }
 
-  async updateAppointment(id: string, data: Prisma.appointmentsUpdateInput) {
-    return prisma.appointments.update({ where: { id }, data });
+  async updateAppointment(
+    id: string,
+    clinicId: string,
+    data: Prisma.appointmentsUpdateInput,
+  ) {
+    return prisma.appointments.update({
+      where: { id, clinic_id: clinicId },
+      data,
+    });
   }
 
-  async deleteAppointment(id: string) {
-    return prisma.appointments.delete({ where: { id } });
+  async deleteAppointment(id: string, clinicId: string) {
+    return prisma.appointments.delete({
+      where: { id, clinic_id: clinicId },
+    });
   }
 
   async findAppointmentConflicts(
@@ -138,8 +147,10 @@ export class AgendaRepository implements IAgendaRepository {
     return prisma.blocked_times.create({ data });
   }
 
-  async deleteBlockedTime(id: string) {
-    return prisma.blocked_times.delete({ where: { id } });
+  async deleteBlockedTime(id: string, clinicId: string) {
+    return prisma.blocked_times.delete({
+      where: { id, clinic_id: clinicId },
+    });
   }
 
   // ── Dentist Schedules ─────────────────────────────────────────────────
@@ -179,12 +190,18 @@ export class AgendaRepository implements IAgendaRepository {
 
   async updateDentistSchedule(
     id: string,
+    clinicId: string,
     data: Prisma.dentist_schedulesUpdateInput,
   ) {
-    return prisma.dentist_schedules.update({ where: { id }, data });
+    return prisma.dentist_schedules.update({
+      where: { id, clinic_id: clinicId },
+      data,
+    });
   }
 
-  async deleteDentistSchedule(id: string) {
-    return prisma.dentist_schedules.delete({ where: { id } });
+  async deleteDentistSchedule(id: string, clinicId: string) {
+    return prisma.dentist_schedules.delete({
+      where: { id, clinic_id: clinicId },
+    });
   }
 }

@@ -34,10 +34,11 @@ export interface IAgendaRepository {
 
   updateAppointment(
     id: string,
+    clinicId: string,
     data: Prisma.appointmentsUpdateInput,
   ): Promise<appointments>;
 
-  deleteAppointment(id: string): Promise<appointments>;
+  deleteAppointment(id: string, clinicId: string): Promise<appointments>;
 
   findAppointmentConflicts(
     clinicId: string,
@@ -85,7 +86,7 @@ export interface IAgendaRepository {
     data: Prisma.blocked_timesCreateInput,
   ): Promise<blocked_times>;
 
-  deleteBlockedTime(id: string): Promise<blocked_times>;
+  deleteBlockedTime(id: string, clinicId: string): Promise<blocked_times>;
 
   // ── Dentist Schedules ─────────────────────────────────────────────────
   findDentistSchedules(
@@ -108,8 +109,9 @@ export interface IAgendaRepository {
 
   updateDentistSchedule(
     id: string,
+    clinicId: string,
     data: Prisma.dentist_schedulesUpdateInput,
   ): Promise<dentist_schedules>;
 
-  deleteDentistSchedule(id: string): Promise<dentist_schedules>;
+  deleteDentistSchedule(id: string, clinicId: string): Promise<dentist_schedules>;
 }

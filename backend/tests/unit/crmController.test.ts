@@ -267,7 +267,7 @@ describe("CRMController", () => {
 
       await controller.updateLead(req as Request, res, jest.fn());
       expect(crmLeads.update).toHaveBeenCalledWith({
-        where: { id: "lead-1" },
+        where: { id: "lead-1", clinic_id: "clinic-1" },
         data: { name: "New" },
       });
       expect(res.json).toHaveBeenCalledWith(updated);

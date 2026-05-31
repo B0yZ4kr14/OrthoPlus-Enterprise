@@ -19,8 +19,8 @@ export class BIRepository implements IBIRepository {
     return prisma.bi_dashboards.create({ data: data as any });
   }
 
-  async updateDashboard(id: string, data: Record<string, unknown>) {
-    return prisma.bi_dashboards.update({ where: { id }, data: data as any });
+  async updateDashboard(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.bi_dashboards.update({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   async findManyMetricas(where: Record<string, unknown>) {
@@ -47,11 +47,11 @@ export class BIRepository implements IBIRepository {
     });
   }
 
-  async updateWidget(id: string, data: Record<string, unknown>) {
-    return prisma.bi_widgets.update({ where: { id }, data: data as any });
+  async updateWidget(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.bi_widgets.update({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
-  async deleteWidget(id: string) {
-    await prisma.bi_widgets.delete({ where: { id } });
+  async deleteWidget(id: string, clinicId: string) {
+    await prisma.bi_widgets.delete({ where: { id, clinic_id: clinicId } });
   }
 }

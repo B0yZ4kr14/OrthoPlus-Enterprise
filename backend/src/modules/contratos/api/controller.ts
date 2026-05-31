@@ -67,7 +67,7 @@ export class ContratosController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateContrato(id, parsed.data as any);
+    const data = await this.repo.updateContrato(id, clinicId, parsed.data as any);
     res.json(data);
     return;
   });
@@ -82,7 +82,7 @@ export class ContratosController {
     if (!existing) {
       throw Errors.notFound("Contrato", id);
     }
-    await this.repo.deleteContrato(id);
+    await this.repo.deleteContrato(id, clinicId);
     res.status(204).send();
     return;
   });

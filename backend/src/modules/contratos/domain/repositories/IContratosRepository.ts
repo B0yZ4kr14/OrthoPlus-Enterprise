@@ -11,8 +11,9 @@ export interface IContratosRepository {
   createContrato(data: Prisma.contratosCreateInput): Promise<contratos>;
   updateContrato(
     id: string,
+    clinicId: string,
     data: Prisma.contratosUpdateInput,
   ): Promise<contratos>;
-  deleteContrato(id: string): Promise<contratos>;
+  deleteContrato(id: string, clinicId: string): Promise<contratos>;
   listTemplates(): Promise<contrato_templates[]>;
 }

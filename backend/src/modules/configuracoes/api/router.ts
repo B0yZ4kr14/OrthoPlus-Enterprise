@@ -49,7 +49,7 @@ export function createConfiguracoesRouter(): Router {
         const clinicId = req.user?.clinicId;
         if (!clinicId)
           return res.status(401).json({ error: "Missing clinic context" });
-        const data = await backupRepo.update(req.params.id, req.body);
+        const data = await backupRepo.update(req.params.id, clinicId as string, req.body);
         return res.json(data);
       } catch (error) {
         logger.error("Error updating scheduled backup", { error });
@@ -65,7 +65,7 @@ export function createConfiguracoesRouter(): Router {
         const clinicId = req.user?.clinicId;
         if (!clinicId)
           return res.status(401).json({ error: "Missing clinic context" });
-        await backupRepo.delete(req.params.id);
+        await backupRepo.delete(req.params.id, clinicId as string);
         return res.status(204).send();
       } catch (error) {
         logger.error("Error deleting scheduled backup", { error });

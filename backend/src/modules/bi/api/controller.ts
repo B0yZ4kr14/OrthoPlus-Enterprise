@@ -67,7 +67,7 @@ export class BIController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateDashboard(id, parsed.data);
+    const data = await this.repo.updateDashboard(id, clinicId, parsed.data);
     res.json(data);
     return;
   });
@@ -140,7 +140,7 @@ export class BIController {
     if (!parsed.success) {
       throw Errors.validation("Invalid input", parsed.error.errors as any);
     }
-    const data = await this.repo.updateWidget(id, parsed.data);
+    const data = await this.repo.updateWidget(id, clinicId, parsed.data);
     res.json(data);
     return;
   });
@@ -155,7 +155,7 @@ export class BIController {
     if (!existing) {
       throw Errors.notFound("Widget", id);
     }
-    await this.repo.deleteWidget(id);
+    await this.repo.deleteWidget(id, clinicId);
     res.status(204).send();
     return;
   });

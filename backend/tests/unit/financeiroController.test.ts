@@ -268,7 +268,7 @@ describe("FinanceiroController.deleteTransaction", () => {
     const res = mockRes();
     await controller.deleteTransaction(req as Request, res);
     expect(transactions.delete).toHaveBeenCalledWith({
-      where: { id: "txn-1" },
+      where: { id: "txn-1", clinic_id: "clinic-1" },
     });
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalled();

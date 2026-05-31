@@ -40,7 +40,7 @@ export interface IAnalyticsRepository {
     patientId: string,
   ): Promise<unknown | null>;
   createLoyalty(data: unknown): Promise<unknown>;
-  updateLoyalty(id: string, data: unknown): Promise<unknown>;
+  updateLoyalty(id: string, clinicId: string, data: unknown): Promise<unknown>;
   createLoyaltyTransaction(data: unknown): Promise<unknown>;
 
   // Gamification
@@ -57,7 +57,7 @@ export interface IAnalyticsRepository {
     dentistIds: string[],
     startMonth: Date,
   ): Promise<Array<{ dentist_id: string; _count?: { _all: number } }>>;
-  updateGamificationGoal(id: string, data: unknown): Promise<unknown>;
+  updateGamificationGoal(id: string, clinicId: string, data: unknown): Promise<unknown>;
 
   // BI Export
   createBIExportJob(data: unknown): Promise<unknown>;

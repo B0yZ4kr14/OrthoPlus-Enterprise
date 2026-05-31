@@ -69,7 +69,7 @@ export async function runGamificationMetricsJob() {
       }
 
       const completedAt = isCompleted ? new Date() : null;
-      await repo.updateGamificationGoal(meta.id, {
+      await repo.updateGamificationGoal(meta.id, meta.clinic_id, {
         current_value: Math.round(progress),
         status: isCompleted ? "COMPLETED" : "ACTIVE",
         completed_at: completedAt,

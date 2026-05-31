@@ -46,7 +46,7 @@ export class AppointmentRepositoryPostgres implements IAppointmentRepository {
 
   async update(appointment: Appointment): Promise<void> {
     await prisma.appointments.update({
-      where: { id: appointment.id },
+      where: { id: appointment.id, clinic_id: appointment.clinicId },
       data: {
         patient_id: appointment.patientId,
         dentist_id: appointment.dentistId,

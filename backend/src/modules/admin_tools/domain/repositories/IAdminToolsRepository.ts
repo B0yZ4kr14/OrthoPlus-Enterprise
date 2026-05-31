@@ -18,6 +18,6 @@ export interface IAdminToolsRepository {
   findWikiPagesByClinic(clinicId: string): Promise<AdminToolResult[]>;
   createWikiPage(data: Record<string, unknown>): Promise<AdminToolResult>;
   findWikiPageByIdAndClinic(id: string, clinicId: string): Promise<AdminToolResult | null>;
-  updateWikiPage(id: string, data: Record<string, unknown>): Promise<AdminToolResult>;
+  updateWikiPage(id: string, clinicId: string, data: Record<string, unknown>): Promise<AdminToolResult>;
   deleteWikiPage(id: string, clinicId: string): Promise<AdminToolResult>;
 }

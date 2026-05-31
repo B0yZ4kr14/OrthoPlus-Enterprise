@@ -83,8 +83,8 @@ export class AdminToolsRepository implements IAdminToolsRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async updateWikiPage(id: string, data: Record<string, unknown>) {
-    return prisma.wiki_pages.update({ where: { id }, data: data as any });
+  async updateWikiPage(id: string, clinicId: string, data: Record<string, unknown>) {
+    return prisma.wiki_pages.update({ where: { id, clinic_id: clinicId }, data: data as any });
   }
 
   async deleteWikiPage(id: string, clinicId: string) {
