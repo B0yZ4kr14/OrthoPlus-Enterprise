@@ -139,7 +139,6 @@ services:
       - ./nginx.docker.conf:/etc/nginx/nginx.conf:ro
       - ./apps/web/dist:/var/www/orthoplus:ro
       - ./ssl:/etc/nginx/ssl:ro
-      - ./apps/web/dist:/var/www/orthoplus:ro
     networks:
       - orthoplus-network
     depends_on:
