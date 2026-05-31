@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'ortho-backend',
+      name: 'orthoplus-backend',
       script: './backend/dist/index.js',
       instances: 'max',
       exec_mode: 'cluster',

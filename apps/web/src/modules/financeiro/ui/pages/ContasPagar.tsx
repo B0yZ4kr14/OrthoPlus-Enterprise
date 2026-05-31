@@ -82,7 +82,7 @@ export default function ContasPagar() {
   const getCategoryBadge = (categoria: string) => {
     const colors: Record<string, string> = {
       "Materiais Odontológicos": "bg-info/10 text-info border-info/20",
-      "Contas Fixas": "bg-purple-500/10 text-purple-700 border-purple-500/20",
+      "Contas Fixas": "bg-secondary/10 text-secondary border-secondary/20",
       Laboratório: "bg-interactive/10 text-interactive border-interactive/20",
       "Taxas e Impostos": "bg-warning/10 text-warning border-warning/20",
     };

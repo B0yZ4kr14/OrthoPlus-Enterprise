@@ -65,7 +65,7 @@ export const LeadCard = ({
           </div>
           <div className="flex items-center gap-1">
             {onEdit && (
-              <Button variant="ghost" size="icon" onClick={() => onEdit(lead)}>
+              <Button variant="ghost" size="icon" onClick={() => onEdit(lead)} aria-label="Editar lead">
                 <Edit className="h-4 w-4" />
               </Button>
             )}

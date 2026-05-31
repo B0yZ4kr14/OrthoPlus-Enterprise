@@ -10,16 +10,16 @@ export function ImageViewer({ imageUrl, annotations = [] }: ImageViewerProps) {
   return (
     <div className="relative w-full h-[600px] bg-black rounded-lg overflow-hidden">
       <div className="absolute top-4 right-4 z-10 flex gap-2">
-        <Button size="icon" variant="secondary">
+        <Button size="icon" variant="secondary" aria-label="Rotar imagem">
           <ZoomIn className="h-4 w-4" />
         </Button>
-        <Button size="icon" variant="secondary">
+        <Button size="icon" variant="secondary" aria-label="Zoom in">
           <ZoomOut className="h-4 w-4" />
         </Button>
-        <Button size="icon" variant="secondary">
+        <Button size="icon" variant="secondary" aria-label="Zoom out">
           <RotateCw className="h-4 w-4" />
         </Button>
-        <Button size="icon" variant="secondary">
+        <Button size="icon" variant="secondary" aria-label="Resetar zoom">
           <Download className="h-4 w-4" />
         </Button>
       </div>

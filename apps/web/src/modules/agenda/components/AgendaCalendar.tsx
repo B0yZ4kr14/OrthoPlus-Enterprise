@@ -85,13 +85,13 @@ export function AgendaCalendar({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="icon" onClick={previousWeek}>
+          <Button variant="outline" size="icon" onClick={previousWeek} aria-label="Semana anterior">
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button variant="outline" onClick={goToToday}>
             Hoje
           </Button>
-          <Button variant="outline" size="icon" onClick={nextWeek}>
+          <Button variant="outline" size="icon" onClick={nextWeek} aria-label="Próxima semana">
             <ChevronRight className="h-4 w-4" />
           </Button>
           <h3 className="text-lg font-semibold">

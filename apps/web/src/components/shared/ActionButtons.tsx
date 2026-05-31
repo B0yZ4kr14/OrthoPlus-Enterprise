@@ -21,17 +21,17 @@ export function ActionButtons({
   return (
     <div className="flex justify-end gap-2">
       {showView && onView && (
-        <Button variant="ghost" size="icon" onClick={onView} title="Visualizar">
+        <Button variant="ghost" size="icon" onClick={onView} title="Visualizar" aria-label="Visualizar">
           <Eye className="h-4 w-4" />
         </Button>
       )}
       {showEdit && onEdit && (
-        <Button variant="ghost" size="icon" onClick={onEdit} title="Editar">
+        <Button variant="ghost" size="icon" onClick={onEdit} title="Editar" aria-label="Editar">
           <Edit className="h-4 w-4" />
         </Button>
       )}
       {showDelete && onDelete && (
-        <Button variant="ghost" size="icon" onClick={onDelete} title="Excluir">
+        <Button variant="ghost" size="icon" onClick={onDelete} title="Excluir" aria-label="Excluir">
           <Trash2 className="h-4 w-4 text-destructive" />
         </Button>
       )}

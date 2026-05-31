@@ -624,7 +624,7 @@ const AppRoutes = () => (
       path="/configuracoes"
       element={protectedRoute(<Configuracoes />, { requireAdmin: true })}
     />
-    <Route path="/help" element={protectedRoute(<HelpCenter />)} />
+    <Route path="/help" element={protectedRoute(<HelpCenter />, { moduleKey: "HELP" })} />
 
     {/* 403 Forbidden page - v2.9.5 */}
     <Route path="/403" element={<Forbidden />} />

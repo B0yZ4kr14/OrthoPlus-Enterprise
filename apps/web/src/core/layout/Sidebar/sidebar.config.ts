@@ -44,6 +44,12 @@ import {
   CircleDollarSign,
   BookOpen,
   ClipboardCheck,
+  ClipboardList,
+  ClipboardSignature,
+  FileCheck,
+  FileCode,
+  ScrollText,
+  Scan,
   Activity,
   Bell,
   FolderOpen,
@@ -81,7 +87,7 @@ export const menuGroups: MenuGroup[] = [
     items: [
       {
         title: "Dashboard Executivo",
-        url: "/",
+        url: "/dashboard",
         icon: LayoutDashboard,
         moduleKey: "DASHBOARD",
       },
@@ -132,7 +138,7 @@ export const menuGroups: MenuGroup[] = [
       {
         title: "Fluxo Digital",
         url: "/fluxo-digital",
-        icon: ScanLine,
+        icon: Scan,
         moduleKey: "PEP",
       },
       {
@@ -196,7 +202,7 @@ export const menuGroups: MenuGroup[] = [
         title: "Notas Fiscais",
         url: "/financeiro/fiscal/notas",
         icon: Receipt,
-        moduleKey: "FISCAL",
+        moduleKey: "FINANCEIRO",
       },
       {
         title: "NF-e",
@@ -421,7 +427,7 @@ export const adminMenuItems: MenuItem[] = [
   {
     title: "Audit Logs",
     url: "/admin/audit",
-    icon: ClipboardCheck,
+    icon: ClipboardList,
     moduleKey: "ADMIN_ONLY",
   },
   {
@@ -433,25 +439,25 @@ export const adminMenuItems: MenuItem[] = [
   {
     title: "ADRs",
     url: "/admin/adrs",
-    icon: ClipboardCheck,
+    icon: FileCheck,
     moduleKey: "ADMIN_ONLY",
   },
   {
     title: "API Docs",
     url: "/admin/api-docs",
-    icon: BookOpen,
+    icon: FileCode,
     moduleKey: "ADMIN_ONLY",
   },
   {
     title: "Audit Trail",
     url: "/admin/audit-trail",
-    icon: ClipboardCheck,
+    icon: ClipboardSignature,
     moduleKey: "ADMIN_ONLY",
   },
   {
     title: "Logs",
     url: "/admin/logs",
-    icon: Terminal,
+    icon: ScrollText,
     moduleKey: "ADMIN_ONLY",
   },
 ];

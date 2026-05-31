@@ -43,9 +43,7 @@ const App = () => (
           <AuthProvider>
             <ModulesProvider>
               <Sonner />
-              <ErrorBoundary moduleName="app">
-                <AppRoutes />
-              </ErrorBoundary>
+              <AppRoutes />
             </ModulesProvider>
           </AuthProvider>
         </BrowserRouter>

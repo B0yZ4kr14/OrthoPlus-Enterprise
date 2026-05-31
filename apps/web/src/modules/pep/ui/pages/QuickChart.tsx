@@ -90,7 +90,7 @@ export default function QuickChart() {
           >
             Modo Chairside {chairsideMode ? "✓" : ""}
           </Button>
-          <Button variant="outline" size="icon">
+          <Button variant="outline" size="icon" aria-label="Adicionar evolução">
             <Printer className="h-5 w-5" />
           </Button>
         </div>

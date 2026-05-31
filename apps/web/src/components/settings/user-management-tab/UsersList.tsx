@@ -42,10 +42,10 @@ export function UsersList({ users, onEdit, onDelete }: UsersListProps) {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" onClick={() => onEdit(user)}>
+              <Button variant="ghost" size="icon" onClick={() => onEdit(user)} aria-label="Editar usuário">
                 <Shield className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => onEdit(user)}>
+              <Button variant="ghost" size="icon" onClick={() => onEdit(user)} aria-label="Excluir usuário">
                 <Edit className="h-4 w-4" />
               </Button>
               <Button
