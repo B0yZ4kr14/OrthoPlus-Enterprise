@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, act } from "@testing-library/react";
+import { render, screen, waitFor, act, fireEvent } from "@testing-library/react";
 
 const authState: { clinicId: string | null; user: { id: string } | null } = {
   clinicId: "clinic-1",
@@ -184,10 +184,10 @@ describe("PatientFormPage", () => {
 
     render(<PatientFormPage />);
 
-    const saveButton = screen.getByText("Salvar");
+    const form = screen.getByTestId("patient-form");
 
     await act(async () => {
-      saveButton.click();
+      fireEvent.submit(form);
     });
 
     await waitFor(() => {
@@ -219,10 +219,10 @@ describe("PatientFormPage", () => {
       expect(screen.getByText("Editar Paciente")).toBeTruthy();
     });
 
-    const saveButton = screen.getByText("Salvar");
+    const form = screen.getByTestId("patient-form");
 
     await act(async () => {
-      saveButton.click();
+      fireEvent.submit(form);
     });
 
     await waitFor(() => {
@@ -244,10 +244,10 @@ describe("PatientFormPage", () => {
 
     render(<PatientFormPage />);
 
-    const saveButton = screen.getByText("Salvar");
+    const form = screen.getByTestId("patient-form");
 
     await act(async () => {
-      saveButton.click();
+      fireEvent.submit(form);
     });
 
     expect(toast.error).toHaveBeenCalledWith("Erro", {
@@ -260,10 +260,10 @@ describe("PatientFormPage", () => {
 
     render(<PatientFormPage />);
 
-    const saveButton = screen.getByText("Salvar");
+    const form = screen.getByTestId("patient-form");
 
     await act(async () => {
-      saveButton.click();
+      fireEvent.submit(form);
     });
 
     await waitFor(() => {
