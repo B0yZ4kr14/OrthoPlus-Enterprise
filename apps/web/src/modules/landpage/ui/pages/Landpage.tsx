@@ -150,7 +150,7 @@ export default function Landpage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[hsl(var(--interactive)/0.05)] to-[hsl(var(--success)/0.05)] dark:from-background dark:to-card text-slate-900 dark:text-foreground">
+    <div className="min-h-screen bg-gradient-to-b from-[hsl(var(--interactive)/0.05)] to-[hsl(var(--success)/0.05)] dark:from-background dark:to-card text-foreground dark:text-foreground">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 w-full border-b border-white/20 bg-white/70 backdrop-blur-lg dark:border-border/50 dark:bg-background/70">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -204,7 +204,7 @@ export default function Landpage() {
               variants={motionVariants}
               initial="hidden"
               animate="visible"
-              className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl dark:text-white"
+              className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl dark:text-white"
             >
               OrthoPlus{" "}
               <span className="bg-gradient-to-r from-[hsl(var(--interactive))] to-[hsl(var(--success))] bg-clip-text text-transparent">
@@ -220,7 +220,7 @@ export default function Landpage() {
               variants={motionVariants}
               initial="hidden"
               animate="visible"
-              className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600 sm:text-xl dark:text-muted-foreground"
+              className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl dark:text-muted-foreground"
             >
               Sistema completo de gestão clínica, financeira e comercial.
               Multi-clínica. Multi-tenant. Seguro.
@@ -270,10 +270,10 @@ export default function Landpage() {
             transition={{ duration: 0.6 }}
             className="mb-16 text-center"
           >
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl dark:text-white">
               Tudo que sua clínica precisa
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-muted-foreground">
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground dark:text-muted-foreground">
               Módulos integrados que conversam entre si, eliminando retrabalho e
               aumentando a produtividade da sua equipe.
             </p>
@@ -296,12 +296,12 @@ export default function Landpage() {
                     >
                       <feature.icon className="h-6 w-6 text-white" />
                     </div>
-                    <CardTitle className="text-xl font-semibold text-slate-900 dark:text-white">
+                    <CardTitle className="text-xl font-semibold text-foreground dark:text-white">
                       {feature.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm leading-relaxed text-slate-600 dark:text-muted-foreground">
+                    <p className="text-sm leading-relaxed text-muted-foreground dark:text-muted-foreground">
                       {feature.description}
                     </p>
                   </CardContent>
@@ -321,10 +321,10 @@ export default function Landpage() {
             transition={{ duration: 0.6 }}
             className="mb-16 text-center"
           >
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl dark:text-white">
               Planos e Preços
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-muted-foreground">
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground dark:text-muted-foreground">
               Escolha o plano ideal para o tamanho da sua operação. Sem taxa de
               setup. Cancele quando quiser.
             </p>
@@ -350,20 +350,20 @@ export default function Landpage() {
                     }
                   >
                     <CardHeader className="pb-4 text-center">
-                      <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">
+                      <CardTitle className="text-lg font-semibold text-foreground dark:text-white">
                         {plan.name}
                       </CardTitle>
                       <div className="mt-4 flex items-baseline justify-center gap-1">
-                        <span className="text-4xl font-extrabold text-slate-900 dark:text-white">
+                        <span className="text-4xl font-extrabold text-foreground dark:text-white">
                           {plan.price}
                         </span>
                         {plan.period && (
-                          <span className="text-sm font-medium text-slate-500 dark:text-muted-foreground">
+                          <span className="text-sm font-medium text-muted-foreground dark:text-muted-foreground">
                             {plan.period}
                           </span>
                         )}
                       </div>
-                      <p className="mt-2 text-sm text-slate-500 dark:text-muted-foreground">
+                      <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
                         {plan.description}
                       </p>
                     </CardHeader>
@@ -372,7 +372,7 @@ export default function Landpage() {
                         {plan.features.map((f) => (
                           <li
                             key={f}
-                            className="flex items-start gap-3 text-sm text-slate-700 dark:text-muted-foreground"
+                            className="flex items-start gap-3 text-sm text-muted-foreground dark:text-muted-foreground"
                           >
                             <Check className="mt-0.5 h-4 w-4 shrink-0 text-[hsl(var(--interactive))]" />
                             <span>{f}</span>
@@ -401,7 +401,7 @@ export default function Landpage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200/60 bg-white/50 px-4 py-12 backdrop-blur-sm dark:border-border/50 dark:bg-background/50 sm:px-6 lg:px-8">
+      <footer className="border-t border-border/50 bg-white/50 px-4 py-12 backdrop-blur-sm dark:border-border/50 dark:bg-background/50 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <div className="flex items-center gap-3">
@@ -410,25 +410,25 @@ export default function Landpage() {
                 alt="OrthoPlus Enterprise"
                 className="h-8 w-auto opacity-80 dark:brightness-200 dark:drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]"
               />
-              <span className="text-sm font-semibold text-slate-700 dark:text-muted-foreground">
+              <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">
                 OrthoPlus Enterprise
               </span>
             </div>
 
-            <nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-600 dark:text-muted-foreground">
+            <nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground dark:text-muted-foreground">
               <button
                 onClick={handleCta}
                 className="transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]"
               >
                 Entrar no Sistema
               </button>
-              <span className="hidden text-slate-300 dark:text-foreground sm:inline">
+              <span className="hidden text-muted-foreground/50 dark:text-foreground sm:inline">
                 |
               </span>
               <span className="cursor-pointer transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]">
                 Termos de Uso
               </span>
-              <span className="hidden text-slate-300 dark:text-foreground sm:inline">
+              <span className="hidden text-muted-foreground/50 dark:text-foreground sm:inline">
                 |
               </span>
               <span className="cursor-pointer transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]">
@@ -436,7 +436,7 @@ export default function Landpage() {
               </span>
             </nav>
 
-            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
               <Mail className="h-4 w-4" />
               <a
                 href="mailto:contato@tsiapp.io"
@@ -447,7 +447,7 @@ export default function Landpage() {
             </div>
           </div>
 
-          <div className="mt-8 text-center text-xs text-slate-400 dark:text-muted-foreground">
+          <div className="mt-8 text-center text-xs text-muted-foreground/50 dark:text-muted-foreground">
             OrthoPlus Enterprise © 2026 — Todos os direitos reservados.
           </div>
         </div>
