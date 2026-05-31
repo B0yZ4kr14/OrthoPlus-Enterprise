@@ -42,37 +42,37 @@ export class PacientesControllerService {
       ]);
 
     const timeline: TimelineItem[] = [
-      ...appointments.map((a: any) => ({
-        id: a.id,
-        type: "appointment",
-        title: a.title,
+      ...appointments.map((a: Record<string, unknown>) => ({
+        id: a.id as string,
+        type: "appointment" as const,
+        title: a.title as string,
         description: `Consulta - ${a.status}`,
-        date: a.start_time,
-        icon: "calendar",
+        date: a.start_time as string,
+        icon: "calendar" as const,
       })),
-      ...treatments.map((t: any) => ({
-        id: t.id,
-        type: "treatment",
-        title: t.titulo,
+      ...treatments.map((t: Record<string, unknown>) => ({
+        id: t.id as string,
+        type: "treatment" as const,
+        title: t.titulo as string,
         description: `Tratamento - ${t.status}`,
-        date: t.data_inicio || t.created_at,
-        icon: "activity",
+        date: (t.data_inicio || t.created_at) as string,
+        icon: "activity" as const,
       })),
-      ...budgets.map((b: any) => ({
-        id: b.id,
-        type: "budget",
-        title: b.titulo,
+      ...budgets.map((b: Record<string, unknown>) => ({
+        id: b.id as string,
+        type: "budget" as const,
+        title: b.titulo as string,
         description: `Orçamento - R$ ${b.valor_total}`,
-        date: b.created_at,
-        icon: "file-text",
+        date: b.created_at as string,
+        icon: "file-text" as const,
       })),
-      ...statusChanges.map((s: any) => ({
-        id: s.id,
-        type: "status_change",
+      ...statusChanges.map((s: Record<string, unknown>) => ({
+        id: s.id as string,
+        type: "status_change" as const,
         title: "Mudança de Status",
         description: `${s.from_status} -> ${s.to_status}`,
-        date: s.changed_at,
-        icon: "refresh-cw",
+        date: s.changed_at as string,
+        icon: "refresh-cw" as const,
       })),
     ];
 

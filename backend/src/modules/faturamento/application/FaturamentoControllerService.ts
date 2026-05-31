@@ -42,7 +42,7 @@ export class FaturamentoControllerService {
   }
 
   async listNFes(clinicId: string) {
-    let nfes: any[] = [];
+    let nfes: unknown[] = [];
     try {
       nfes = await this.repo.findNFesByClinic(clinicId);
     } catch (err) {
@@ -91,15 +91,15 @@ export class FaturamentoControllerService {
     const notas = await this.repo.getRelatorio(clinicId, filters);
     const totais = {
       valorTotal: notas.reduce(
-        (acc: number, n: any) => acc + (n.valor_total || 0),
+        (acc: number, n: Record<string, unknown>) => acc + ((n.valor_total as number) || 0),
         0,
       ),
       valorIcms: notas.reduce(
-        (acc: number, n: any) => acc + (n.valor_icms || 0),
+        (acc: number, n: Record<string, unknown>) => acc + ((n.valor_icms as number) || 0),
         0,
       ),
       valorIss: notas.reduce(
-        (acc: number, n: any) => acc + (n.valor_iss || 0),
+        (acc: number, n: Record<string, unknown>) => acc + ((n.valor_iss as number) || 0),
         0,
       ),
       valorIpi: 0,

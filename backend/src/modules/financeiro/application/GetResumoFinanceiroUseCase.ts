@@ -45,13 +45,14 @@ export class GetResumoFinanceiroUseCase {
     let caixasAbertos = 0;
     try {
       caixasAbertos = await this.repo.countOpenCashRegisters(clinicId);
-    } catch (cashError: any) {
-      if (cashError.code === "P2021") {
+    } catch (cashError: unknown) {
+      const prismaError = cashError as { code?: string; meta?: { table?: string } };
+      if (prismaError.code === "P2021") {
         logger.warn(
           "Tabela cash_registers não encontrada, retornando caixasAbertos=0",
           {
             clinicId,
-            table: cashError.meta?.table,
+            table: prismaError.meta?.table,
           },
         );
       } else {

@@ -447,8 +447,9 @@ export class FinanceiroService {
     };
   }
 
-  async processarSplitPagamento(body: any) {
-    const { transactionId, splits } = body;
+  async processarSplitPagamento(body: Record<string, unknown>) {
+    const transactionId = body.transactionId as string;
+    const splits = body.splits as unknown[];
     if (!transactionId || !splits || !splits.length)
       throw badRequest("transactionId and splits mapping are required");
     return { success: true, message: "Split rules applied successfully" };

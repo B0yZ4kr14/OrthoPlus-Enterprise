@@ -49,8 +49,8 @@ export class PdvController {
       }
 
       const valorTotal = req.body.itens.reduce(
-        (acc: number, item: any) =>
-          acc + item.quantidade * item.valorUnitario - item.valorDesconto,
+        (acc: number, item: Record<string, unknown>) =>
+          acc + (item.quantidade as number) * (item.valorUnitario as number) - (item.valorDesconto as number),
         0,
       );
 

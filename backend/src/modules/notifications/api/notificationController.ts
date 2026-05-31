@@ -90,14 +90,14 @@ export class NotificationController {
       });
 
       const admins = await this.service["repo"].findAdminsByClinic(clinic_id);
-      const adminEmails = admins.map((a: any) => a.email).filter(Boolean);
+      const adminEmails = admins.map((a: Record<string, unknown>) => a.email as string).filter(Boolean);
 
       if (adminEmails.length > 0) {
         const produtosCriticos = previsoes.filter(
-          (p: any) => p.status === "CRITICO",
+          (p: Record<string, unknown>) => p.status === "CRITICO",
         );
         const produtosAlerta = previsoes.filter(
-          (p: any) => p.status === "ALERTA",
+          (p: Record<string, unknown>) => p.status === "ALERTA",
         );
 
         try {
