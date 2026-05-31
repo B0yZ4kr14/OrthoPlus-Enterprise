@@ -373,7 +373,7 @@ packages:
 
 ### ESLint
 
-- **Root (`eslint.config.js`):** Flat config com `typescript-eslint`, `react-hooks`, `react-refresh`. A maioria das regras TypeScript esta desabilitada (incluindo `no-explicit-any`, `no-floating-promises`, `no-misused-promises`). Target: 0 erros, warnings tolerados (~45 frontend, ~390 backend).
+- **Root (`eslint.config.js`):** Flat config com `typescript-eslint`, `react-hooks`, `react-refresh`. A maioria das regras TypeScript esta desabilitada (incluindo `no-explicit-any`, `no-floating-promises`, `no-misused-promises`). Target: 0 erros, warnings tolerados (~43 frontend, ~390 backend).
 - **Backend:** Usa `ESLINT_USE_FLAT_CONFIG=false` porque ainda depende de ESLint v8 com config legacy (`@typescript-eslint/eslint-plugin` v7).
 
 ### Prettier
