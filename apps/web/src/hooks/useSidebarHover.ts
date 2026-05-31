@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 /** Delay para abertura — rápido o suficiente para sentir responsivo */
 const ENTER_DELAY_MS = 80;
@@ -28,15 +29,7 @@ interface UseSidebarHoverReturn {
  * O estado de auto-hide é persistido no localStorage.
  */
 export function useSidebarHover(): UseSidebarHoverReturn {
-  const [isAutoHide, setIsAutoHide] = useState(() => {
-    try {
-      const raw = localStorage.getItem("orthoplus:sidebar:auto-hide");
-      return raw !== "false"; // padrão: true (auto-hide ativado)
-    } catch {
-      return true;
-    }
-  });
-
+  const [isAutoHide, setIsAutoHide] = useLocalStorage<boolean>("orthoplus:sidebar:auto-hide", true);
   const [hoverOpen, setHoverOpen] = useState(false);
   const enterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const leaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -69,18 +62,10 @@ export function useSidebarHover(): UseSidebarHoverReturn {
   }, [isAutoHide, clearTimers]);
 
   const toggleAutoHide = useCallback(() => {
-    setIsAutoHide((prev) => {
-      const next = !prev;
-      try {
-        localStorage.setItem("orthoplus:sidebar:auto-hide", String(next));
-      } catch {
-        // ignore
-      }
-      return next;
-    });
+    setIsAutoHide((prev) => !prev);
     clearTimers();
     setHoverOpen(false);
-  }, [clearTimers]);
+  }, [clearTimers, setIsAutoHide]);
 
   // Quando alternar para modo fixo, limpar hover state
   useEffect(() => {

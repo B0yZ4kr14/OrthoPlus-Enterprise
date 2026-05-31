@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X, Lightbulb } from "lucide-react";
 import { CardTopBorder } from "@/components/shared/CardTopBorder";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 interface WelcomeBannerProps {
   userName: string;
@@ -23,22 +24,13 @@ function getGreeting(): string {
 }
 
 export function WelcomeBanner({ userName }: WelcomeBannerProps) {
-  const [dismissed, setDismissed] = useState(false);
-  const [tipIndex, setTipIndex] = useState(0);
+  const [dismissed, setDismissed] = useLocalStorage<boolean>("orthoplus-welcome-dismissed", false);
+  const [tipIndex] = useState(() => Math.floor(Math.random() * tips.length));
   const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const stored = localStorage.getItem("orthoplus-welcome-dismissed");
-    if (stored === "true") {
-      setDismissed(true);
-    }
-    setTipIndex(Math.floor(Math.random() * tips.length));
-  }, []);
-
   const handleDismiss = useCallback(() => {
-    localStorage.setItem("orthoplus-welcome-dismissed", "true");
     setDismissed(true);
-  }, []);
+  }, [setDismissed]);
 
   if (dismissed) return null;
 
