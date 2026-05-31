@@ -24,7 +24,6 @@ import {
 } from "@orthoplus/core-ui/dialog";
 import { Card } from "@orthoplus/core-ui/card";
 import { NotificationBadge } from "./NotificationBadge";
-import { BitcoinInfoSection } from "./BitcoinInfoSection";
 import { ClinicWarning } from "./ClinicWarning";
 import { CryptoCalculator } from "@/components/crypto/CryptoCalculator";
 import { ExchangeConfigForm } from "@financeiro/components/crypto-exchange";
@@ -78,9 +77,6 @@ export function CryptoPagamentos() {
 
   return (
     <div className="space-y-6">
-      {/* Bitcoin Info Section */}
-      <BitcoinInfoSection />
-
       {/* Notification Badge */}
       <NotificationBadge count={dashboardData.pendingTransactions} />
 

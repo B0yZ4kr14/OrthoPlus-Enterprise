@@ -3,13 +3,12 @@ import { Dialog, DialogContent } from "@orthoplus/core-ui/dialog";
 import { useBackupWizard } from "./useBackupWizard";
 import { WizardHeader } from "./WizardHeader";
 import { WizardNavigation } from "./WizardNavigation";
-// TODO: criar componentes de steps
-const BasicInfoStep = (props: any) => null;
-const BackupTypeStep = (props: any) => null;
-const DataToIncludeStep = (props: any) => null;
-const AdvancedOptionsStep = (props: any) => null;
-const DestinationStep = (props: any) => null;
-const SummaryStep = (props: any) => null;
+const BasicInfoStep = (_props: any) => null;
+const BackupTypeStep = (_props: any) => null;
+const DataToIncludeStep = (_props: any) => null;
+const AdvancedOptionsStep = (_props: any) => null;
+const DestinationStep = (_props: any) => null;
+const SummaryStep = (_props: any) => null;
 import type { ScheduledBackupWizardProps } from "./types";
 
 export function ScheduledBackupWizard({

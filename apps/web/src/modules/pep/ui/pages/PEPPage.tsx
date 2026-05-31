@@ -53,6 +53,7 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/lib/api/apiClient";
 
 export default function PEPPage() {
   const { user, clinicId } = useAuth();
@@ -495,11 +496,26 @@ export default function PEPPage() {
 
       {prontuarioId && (
         <AssinaturaDigital
-          onSave={
-            // TODO: persist digital signature to backend
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            (_signature) => {}
-          }
+          onSave={async (signatureBase64) => {
+            if (!prontuarioId) return;
+            try {
+              await apiClient.post(`/pep/prontuarios/${prontuarioId}/assinar`, {
+                hash: signatureBase64,
+              });
+              toast({
+                title: "Sucesso",
+                description: "Assinatura digital salva com sucesso",
+              });
+            } catch (error: unknown) {
+              const message =
+                error instanceof Error ? error.message : "Erro ao salvar assinatura";
+              toast({
+                title: "Erro",
+                description: message,
+                variant: "destructive",
+              });
+            }
+          }}
         />
       )}
     </div>
