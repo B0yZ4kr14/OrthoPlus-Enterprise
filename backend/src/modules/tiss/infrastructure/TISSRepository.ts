@@ -67,8 +67,9 @@ export class TISSRepository implements ITISSRepository {
     return prisma.tiss_batches.create({ data: data as any });
   }
 
-  async updateLote(id: string, data: Record<string, unknown>) {
-    return prisma.tiss_batches.update({ where: { id }, data });
+  async updateLote(id: string, clinicId: string, data: Record<string, unknown>) {
+    await prisma.tiss_batches.updateMany({ where: { id, clinic_id: clinicId }, data });
+    return prisma.tiss_batches.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async deleteLote(id: string, clinicId: string) {

@@ -20,7 +20,7 @@ export interface ITISSRepository {
   findManyLotes(where: Record<string, unknown>): Promise<unknown[]>;
   findLoteById(id: string, clinicId: string): Promise<unknown | null>;
   createLote(data: Record<string, unknown>): Promise<unknown>;
-  updateLote(id: string, data: Record<string, unknown>): Promise<unknown>;
+  updateLote(id: string, clinicId: string, data: Record<string, unknown>): Promise<unknown>;
   deleteLote(id: string, clinicId: string): Promise<void>;
   countGuiasInLote(loteId: string, clinicId: string): Promise<number>;
 
