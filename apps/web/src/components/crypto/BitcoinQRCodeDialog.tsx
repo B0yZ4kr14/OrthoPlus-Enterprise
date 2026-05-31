@@ -184,6 +184,7 @@ export function BitcoinQRCodeDialog({
                 <Button
                   variant="outline"
                   size="icon"
+                  aria-label="Copiar endereço Bitcoin"
                   onClick={handleCopyAddress}
                 >
                   <Copy className="h-4 w-4" />
@@ -211,7 +212,7 @@ export function BitcoinQRCodeDialog({
                     readOnly
                     className="font-mono text-xs"
                   />
-                  <Button variant="outline" size="icon" onClick={handleCopyUri}>
+                  <Button variant="outline" size="icon" aria-label="Copiar URI Bitcoin" onClick={handleCopyUri}>
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>

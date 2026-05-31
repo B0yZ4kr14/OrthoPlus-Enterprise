@@ -240,6 +240,7 @@ export function CryptoCalculator() {
             <Button
               variant="outline"
               size="icon"
+              aria-label="Trocar moedas"
               onClick={handleSwapCurrencies}
               className="rounded-full hover:rotate-180 transition-transform duration-300"
             >

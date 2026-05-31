@@ -377,6 +377,7 @@ export function VolatilityAlerts() {
                         <Button
                           variant="ghost"
                           size="icon"
+                          aria-label="Excluir alerta"
                           onClick={() => handleDeleteAlert(alert.id)}
                         >
                           <Trash2 className="h-4 w-4" />
