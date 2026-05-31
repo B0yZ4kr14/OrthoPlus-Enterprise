@@ -82,6 +82,7 @@ export default function ResetPassword() {
     try {
       const token = resetTokenRef.current;
       if (!token) {
+        setIsLoading(false);
         toast.error("Token inválido", {
           description: "Por favor, solicite um novo link de recuperação.",
         });

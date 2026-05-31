@@ -170,6 +170,13 @@ export class AuthController {
     const userId = req.params.id;
     if (!userId) throw Errors.validation("User ID is required");
 
+    // Security: users can only access their own metadata unless admin
+    const currentUserId = req.user?.id;
+    const isAdmin = req.user?.role === "ADMIN";
+    if (currentUserId && userId !== currentUserId && !isAdmin) {
+      throw Errors.forbidden("You can only access your own metadata");
+    }
+
     try {
       const metadata = await this.authService.getUserMetadata(userId);
       if (metadata) {
