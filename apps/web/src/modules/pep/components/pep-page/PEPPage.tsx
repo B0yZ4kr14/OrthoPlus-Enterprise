@@ -1,4 +1,5 @@
 // cspell:disable
+import { toast } from "sonner";
 import {
   FileText,
   History,
@@ -169,7 +170,7 @@ export function PEPPage() {
                 hash: signatureBase64,
               });
             } catch (error: unknown) {
-              console.error("Erro ao salvar assinatura:", error);
+              toast.error("Erro ao salvar assinatura");
             }
           }}
         />

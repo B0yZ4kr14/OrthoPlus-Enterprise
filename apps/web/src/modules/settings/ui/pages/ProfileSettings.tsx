@@ -46,7 +46,7 @@ export default function ProfileSettings() {
         description: "Suas informações foram salvas com sucesso",
       });
     } catch (error: unknown) {
-      console.error("Erro ao salvar:", error);
+      toast({ title: "Erro", description: "Erro ao salvar", variant: "destructive" });
       toast({
         title: "Erro ao salvar",
         description:

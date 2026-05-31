@@ -43,7 +43,7 @@ export default function ModulesAdmin() {
       );
       setModules(data?.modules ?? []);
     } catch (error) {
-      console.error("Error fetching modules:", error);
+      toast({ title: "Erro", description: "Erro ao carregar módulos", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao carregar módulos",
@@ -113,7 +113,7 @@ export default function ModulesAdmin() {
       });
       await fetchModules();
     } catch (error: unknown) {
-      console.error("Toggle error:", error);
+      toast({ title: "Erro", description: "Erro ao alternar módulo", variant: "destructive" });
 
       const cardElement = cardRefs.current[moduleKey];
       if (cardElement) {
@@ -146,7 +146,7 @@ export default function ModulesAdmin() {
         description: `Sua solicitação para o módulo ${moduleName} foi enviada ao time comercial.`,
       });
     } catch (error: unknown) {
-      console.error("Request error:", error);
+      toast({ title: "Erro", description: "Erro na requisição", variant: "destructive" });
       toast({
         title: "Erro ao solicitar módulo",
         description:
@@ -233,7 +233,7 @@ export default function ModulesAdmin() {
         description: `${activated} módulos ativados com sucesso.`,
       });
     } catch (error: unknown) {
-      console.error("Import error:", error);
+      toast({ title: "Erro", description: "Erro ao importar", variant: "destructive" });
       toast({
         title: "Erro ao importar",
         description:
@@ -273,7 +273,7 @@ export default function ModulesAdmin() {
         description: "Confira as recomendações de módulos abaixo.",
       });
     } catch (error: unknown) {
-      console.error("Suggestions error:", error);
+      toast({ title: "Erro", description: "Erro ao carregar sugestões", variant: "destructive" });
       toast({
         title: "Erro ao gerar sugestões",
         description:

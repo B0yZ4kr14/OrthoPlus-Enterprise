@@ -58,7 +58,7 @@ export function HistoricoClinicoForm({
       toast.success("Histórico clínico salvo com sucesso!");
       onSuccess();
     } catch (error) {
-      console.error("Erro ao salvar histórico:", error);
+      toast.error("Erro ao salvar histórico");
       toast.error("Erro ao salvar histórico clínico");
     }
   };

@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -92,7 +93,7 @@ export function TratamentoForm({
 
       onSuccess();
     } catch (error) {
-      console.error("Erro ao salvar tratamento:", error);
+      toast.error("Erro ao salvar tratamento");
       // Toast já exibido pelo hook
     }
   };

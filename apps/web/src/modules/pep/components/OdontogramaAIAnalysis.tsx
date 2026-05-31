@@ -88,7 +88,7 @@ export const OdontogramaAIAnalysis = ({
         );
       }
     } catch (error) {
-      console.error("Erro na análise:", error);
+      toast.error("Erro na análise");
       toast.error(
         error instanceof Error ? error.message : "Erro ao analisar odontograma",
       );
@@ -159,7 +159,7 @@ export const OdontogramaAIAnalysis = ({
       setSuggestions([]);
       setSelectedSuggestions(new Set());
     } catch (error) {
-      console.error("Erro ao agendar consultas:", error);
+      toast.error("Erro ao agendar consultas");
       toast.error(
         error instanceof Error ? error.message : "Erro ao agendar consultas",
       );

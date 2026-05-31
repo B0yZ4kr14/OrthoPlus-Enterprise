@@ -113,7 +113,7 @@ export const OdontogramaComparison = ({
       pdf.save(`relatorio-comparacao-${new Date().toISOString()}.pdf`);
       toast.success("Relatório exportado com sucesso");
     } catch (error) {
-      console.error("Erro ao exportar PDF:", error);
+      toast.error("Erro ao exportar PDF");
       toast.error("Erro ao exportar relatório");
     } finally {
       setIsExporting(false);

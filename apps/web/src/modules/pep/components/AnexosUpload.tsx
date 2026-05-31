@@ -84,7 +84,7 @@ export function AnexosUpload({
 
       onUploadSuccess?.();
     } catch (error) {
-      console.error("Erro ao fazer upload:", error);
+      toast.error("Erro ao fazer upload");
       // Toast já exibido pelo hook
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -110,7 +110,7 @@ export function AnexosUpload({
       toast.success("Download iniciado!");
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Erro ao baixar arquivo:", error);
+      toast.error("Erro ao baixar arquivo");
       toast.error("Erro ao baixar arquivo", { description: _e.message });
     }
   };
@@ -132,7 +132,7 @@ export function AnexosUpload({
     try {
       await deleteAnexo(anexoId, caminhoStorage);
     } catch (error: unknown) {
-      console.error("Erro ao excluir anexo:", error);
+      toast.error("Erro ao excluir anexo");
       // Toast já exibido pelo hook
     }
   };
