@@ -26,7 +26,8 @@ export class InventarioRepository implements IInventarioRepository {
     return prisma.estoque_pedidos_itens.create({ data });
   }
 
-  async createNotification(data: any) {
-    return prisma.notifications.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createNotification(data: Record<string, unknown>) {
+    return prisma.notifications.create({ data: data as any });
   }
 }

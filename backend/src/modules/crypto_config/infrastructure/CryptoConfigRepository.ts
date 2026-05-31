@@ -2,8 +2,9 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { ICryptoConfigRepository } from "../domain/repositories/ICryptoConfigRepository";
 
 export class CryptoConfigRepository implements ICryptoConfigRepository {
-  async createOfflineWallet(data: any) {
-    return prisma.crypto_offline_wallets.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createOfflineWallet(data: Record<string, unknown>) {
+    return prisma.crypto_offline_wallets.create({ data: data as any });
   }
 
   async findWalletByAddress(address: string, clinicId: string) {
@@ -24,20 +25,24 @@ export class CryptoConfigRepository implements ICryptoConfigRepository {
     });
   }
 
-  async updateTransaction(id: string, data: any) {
-    return prisma.crypto_transactions.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateTransaction(id: string, data: Record<string, unknown>) {
+    return prisma.crypto_transactions.update({ where: { id }, data: data as any });
   }
 
-  async createTransaction(data: any) {
-    return prisma.crypto_transactions.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createTransaction(data: Record<string, unknown>) {
+    return prisma.crypto_transactions.create({ data: data as any });
   }
 
-  async updateWallet(id: string, data: any) {
-    return prisma.crypto_wallets.update({ where: { id }, data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async updateWallet(id: string, data: Record<string, unknown>) {
+    return prisma.crypto_wallets.update({ where: { id }, data: data as any });
   }
 
-  async createAuditLog(data: any) {
-    return prisma.audit_logs.create({ data });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async createAuditLog(data: Record<string, unknown>) {
+    return prisma.audit_logs.create({ data: data as any });
   }
 
   async findActiveVolatilityAlerts() {

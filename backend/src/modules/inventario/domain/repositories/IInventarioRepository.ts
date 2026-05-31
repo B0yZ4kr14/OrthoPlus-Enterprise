@@ -22,5 +22,5 @@ export interface IInventarioRepository {
     data: Prisma.estoque_pedidos_itensCreateInput,
   ): Promise<estoque_pedidos_itens>;
 
-  createNotification(data: any): Promise<any>;
+  createNotification(data: Record<string, unknown>): Promise<any>;
 }
