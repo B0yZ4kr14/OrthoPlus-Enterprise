@@ -25,8 +25,12 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
 
   backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
     image: orthoplus/backend:latest
     container_name: orthoplus-backend
     restart: always
@@ -46,8 +50,12 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
 
   agent-service:
+    build:
+      context: ./agent-service
+      dockerfile: ./Dockerfile
     image: orthoplus/agent-service:latest
     container_name: orthoplus-agent
     restart: always
@@ -55,6 +63,12 @@ services:
       - "8000"
     environment:
       - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+    env_file:
+      - .env.production
     depends_on:
       - backend
     networks:
@@ -64,8 +78,14 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
 
   orthoplus:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - VITE_API_BASE_URL=${VITE_API_BASE_URL}
     image: orthoplus/frontend:latest
     container_name: orthoplus-app
     restart: always

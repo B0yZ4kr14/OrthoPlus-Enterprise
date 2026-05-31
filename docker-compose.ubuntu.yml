@@ -108,12 +108,13 @@ services:
       NODE_ENV: production
       PORT: 3005
       # Database - APENAS PostgreSQL suportado
-      DATABASE_URL: postgresql://orthoplus:${DB_PASSWORD}@postgres:5432/orthoplus?schema=public
+      DATABASE_URL: postgresql://orthoplus:${DB_PASSWORD}@postgres:5432/orthoplus?schema=public&sslmode=require
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       # Security
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
       AUTH_ALLOW_MOCK: "false"
       ENABLE_DANGEROUS_ADMIN_ENDPOINTS: "false"
+      DB_SSL: "true"
       # CORS
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://tsiapp.io}
       # Email (opcional)
