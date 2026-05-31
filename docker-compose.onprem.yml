@@ -155,7 +155,7 @@ services:
       -c log_statement=all
       -c log_duration=on
 
-  ***REMOVED*** 7 (Cache & Session Store)
+  # Redis 7 (Cache & Session Store)
   redis:
     image: redis:7-alpine
     container_name: orthoplus-redis

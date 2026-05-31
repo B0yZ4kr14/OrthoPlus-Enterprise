@@ -56,7 +56,7 @@ services:
           cpus: '1'
           memory: 1G
 
-  ***REMOVED*** (Cache)
+  # Redis (Cache)
   redis:
     image: redis:7-alpine
     expose:

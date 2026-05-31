@@ -50,7 +50,7 @@ ufw allow 443/tcp
 ufw allow from 127.0.0.1 to any port 3005  # Backend
 ufw allow from 127.0.0.1 to any port 8000  # Agent Service
 ufw allow from 127.0.0.1 to any port 5432  # PostgreSQL
-ufw allow from 127.0.0.1 to any port 6379  ***REMOVED***
+ufw allow from 127.0.0.1 to any port 6379  # Redis
 
 # Habilitar UFW
 ufw --force enable

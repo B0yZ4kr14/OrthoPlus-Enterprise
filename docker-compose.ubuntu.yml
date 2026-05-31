@@ -63,7 +63,7 @@ services:
         max-file: "5"
 
   # ==========================================================================
-  ***REMOVED*** 7 - Cache e sessões
+  # Redis 7 - Cache e sessões
   # ==========================================================================
   redis:
     image: redis:7-alpine
@@ -110,7 +110,6 @@ services:
       PORT: 3005
       # Database - APENAS PostgreSQL suportado
       DATABASE_URL: postgresql://orthoplus:${DB_PASSWORD}@postgres:5432/orthoplus?schema=public
-      ***REMOVED***
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       # Security
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}

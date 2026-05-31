@@ -376,7 +376,7 @@ VITE_API_BASE_URL=http://localhost:3005
 # Database
 DATABASE_URL=<REMOVED><user>:<password>@localhost:5432/${DB_NAME}
 
-***REMOVED***
+# Cache
 REDIS_URL=redis://localhost:6379
 
 # JWT
