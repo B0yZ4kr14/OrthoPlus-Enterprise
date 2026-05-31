@@ -9,14 +9,14 @@
 | Produção HTTPS | https://tsiapp.io/OrthoPlus-Enterprise/ | ✅ HTTP 200 |
 | API Health | https://tsiapp.io/api/orthoplus/health | ✅ HTTP 200 |
 | Wiki | https://tsiapp.io/OrthoPlus-Enterprise/WiKi | ✅ HTTP 200 |
-| Tailscale | http://100.111.74.69 | ✅ Funcionando |
-| IP Público | http://179.190.15.116 | ✅ Funcionando |
+| Tailscale | `$VPS_TAILSCALE_IP` | ✅ Configurado via secret |
+| IP Público | `$VPS_PUBLIC_IP` | ✅ Configurado via secret |
 
 ## 🔐 Credenciais de Acesso
 
 **Administrador Padrão:**
-- Email: `admin@orthoplus.com`
-- Senha: `Admin123!`
+- Configurado via variáveis de ambiente no primeiro deploy (`SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`).
+- Nunca armazene credenciais em documentação.
 
 ## 🏗️ Arquitetura do Sistema
 

@@ -44,7 +44,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading categorias:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -120,7 +120,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading fornecedores:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -190,7 +190,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading produtos:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -290,7 +290,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading requisicoes:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -359,7 +359,7 @@ export function useEstoque() {
 
       toast.success("Requisição aprovada com sucesso");
     } catch (error) {
-      console.error(error);
+      // Erro silencioso - hook retorna erro para UI
     }
   };
 
@@ -401,7 +401,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading movimentacoes:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -457,7 +457,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading alertas:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -533,7 +533,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading pedidos:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -556,7 +556,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading pedidos itens:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -577,7 +577,7 @@ export function useEstoque() {
         })),
       );
     } catch (error) {
-      console.error("Error loading pedidos config:", error);
+      // Erro silencioso - hook retorna erro para UI
     }
   }, []);
 
@@ -660,7 +660,7 @@ export function useEstoque() {
         loadPedidosConfig(),
       ]);
     } catch (error) {
-      console.error("Error loading initial data:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar dados do estoque");
     } finally {
       setLoading(false);

@@ -6,8 +6,13 @@ set -e
 
 # DEVOPS-2 FIX: Extracted hardcoded IP to environment variable for multi-environment support
 # Keeps backward compatibility with positional argument usage.
-VPS_HOST=${VPS_HOST:-"${1:-100.111.74.69}"}
-VPS_TARGET="vps-orthoplus"
+VPS_HOST=${VPS_HOST:-"${1}"}
+VPS_TARGET="${VPS_TARGET:-vps-orthoplus}"
+
+if [ -z "$VPS_HOST" ]; then
+  echo "[ERROR] VPS_HOST is required. Usage: $0 <VPS_HOST> [VPS_TARGET]"
+  exit 1
+fi
 REMOTE_DIR="/home/tsi/OrthoPlus-Enterprise"
 
 echo "[DEPLOY] Target VPS: $VPS_TARGET"
@@ -15,7 +20,7 @@ echo "[DEPLOY] VPS Host: $VPS_HOST"
 echo "[DEPLOY] Syncing project files..."
 
 rsync -avz --delete \
-  -e "ssh -F $HOME/.ssh/config -o StrictHostKeyChecking=no" \
+  -e "ssh -F $HOME/.ssh/config" \
   --exclude='.git' \
   --exclude='node_modules' \
   --exclude='.turbo' \

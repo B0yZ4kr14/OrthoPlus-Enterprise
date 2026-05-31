@@ -67,7 +67,7 @@ export function useCrypto() {
       setExchanges(data.exchanges || []);
       setOfflineWallets(data.offline || []);
     } catch (error) {
-      console.error("Error loading crypto data:", error);
+        toast.error("Erro ao carregar dados de cripto");
       toast.error("Erro ao carregar dados crypto");
     } finally {
       setLoading(false);
@@ -84,7 +84,7 @@ export function useCrypto() {
       toast.success("Exchange configurada com sucesso!");
       await loadCryptoData();
     } catch (error: unknown) {
-      console.error("Error creating exchange:", error);
+        toast.error("Erro ao criar exchange");
       toast.error("Erro ao configurar exchange");
       throw error;
     }
@@ -100,7 +100,7 @@ export function useCrypto() {
       toast.success("Wallet criada com sucesso!");
       await loadCryptoData();
     } catch (error: unknown) {
-      console.error("Error creating wallet:", error);
+        toast.error("Erro ao criar wallet");
       toast.error("Erro ao criar wallet");
       throw error;
     }
@@ -125,7 +125,7 @@ export function useCrypto() {
       await loadCryptoData();
       return data;
     } catch (error: unknown) {
-      console.error("Error creating offline wallet:", error);
+        toast.error("Erro ao criar offline wallet");
       toast.error("Erro ao configurar wallet offline");
       throw error;
     }
@@ -143,7 +143,7 @@ export function useCrypto() {
 
       return data;
     } catch (error: unknown) {
-      console.error("Error generating payment address:", error);
+        toast.error("Erro ao gerar endereço de pagamento");
       toast.error("Erro ao gerar endereço de pagamento");
       throw error;
     }

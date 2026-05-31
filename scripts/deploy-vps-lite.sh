@@ -3,9 +3,14 @@ set -e
 
 # DEVOPS-2 FIX: Extracted hardcoded IP to environment variable for multi-environment support
 # Keeps backward compatibility with positional argument usage.
-VPS_HOST=${VPS_HOST:-"${1:-100.111.74.69}"}
-SSH_KEY="${2:-$HOME/.ssh/id_ed25519_b0yz4kr14}"
-VPS_USER="tsi"
+VPS_HOST=${VPS_HOST:-"${1}"}
+SSH_KEY="${2:-$HOME/.ssh/id_ed25519}"
+VPS_USER="${VPS_USER:-tsi}"
+
+if [ -z "$VPS_HOST" ]; then
+  echo "[ERROR] VPS_HOST is required. Usage: $0 <VPS_HOST> [SSH_KEY]"
+  exit 1
+fi
 REMOTE_DIR="/home/tsi/OrthoPlus-Enterprise"
 
 echo "[DEPLOY-LITE] Target VPS: $VPS_USER@$VPS_HOST"
@@ -22,34 +27,34 @@ fi
 
 # Sync root workspace files
 rsync -avz \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $SSH_KEY" \
   "$(dirname $0)/../pnpm-lock.yaml" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/"
 
 rsync -avz \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $SSH_KEY" \
   "$(dirname $0)/../pnpm-workspace.yaml" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/"
 
 # Sync backend production artifacts
 rsync -avz --delete \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $SSH_KEY" \
   "$(dirname $0)/../backend/dist/" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/backend/dist/"
 
 rsync -avz --delete \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $SSH_KEY" \
   "$(dirname $0)/../backend/prisma/" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/backend/prisma/"
 
 rsync -avz \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $SSH_KEY" \
   "$(dirname $0)/../backend/package.json" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/backend/"
 
 # Sync frontend static files
 rsync -avz --delete \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $SSH_KEY" \
   "$(dirname $0)/../apps/web/dist/" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/apps/web/dist/"
 
 # Sync nginx configs
 rsync -avz \
-  -e "ssh -i $SSH_KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $SSH_KEY" \
   "$(dirname $0)/../nginx.conf" "$VPS_USER@$VPS_HOST:$REMOTE_DIR/"
 
 # Remote setup

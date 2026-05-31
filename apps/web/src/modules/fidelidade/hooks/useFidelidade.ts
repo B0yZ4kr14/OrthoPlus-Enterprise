@@ -56,7 +56,7 @@ export function useFidelidade() {
       if (indicacoesData)
         setIndicacoes(indicacoesData as FidelidadeIndicacao[]);
     } catch (error: unknown) {
-      console.error("Erro ao carregar dados de fidelidade:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar dados de fidelidade");
     } finally {
       setLoading(false);
@@ -95,7 +95,7 @@ export function useFidelidade() {
 
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao salvar configuração:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao salvar configuração");
     }
   };
@@ -111,7 +111,7 @@ export function useFidelidade() {
       toast.success("Recompensa criada com sucesso!");
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao criar recompensa:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao criar recompensa");
     }
   };
@@ -127,7 +127,7 @@ export function useFidelidade() {
       toast.success("Recompensa atualizada com sucesso!");
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao atualizar recompensa:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar recompensa");
     }
   };
@@ -143,7 +143,7 @@ export function useFidelidade() {
       toast.success("Recompensa excluída com sucesso!");
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao excluir recompensa:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao excluir recompensa");
     }
   };
@@ -159,7 +159,7 @@ export function useFidelidade() {
       toast.success("Badge criada com sucesso!");
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao criar badge:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao criar badge");
     }
   };

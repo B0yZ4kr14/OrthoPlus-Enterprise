@@ -68,6 +68,7 @@ import modulesRouter from "./routes/modules";
 
 // Agents Module — Integration with Agno Agent Service
 import { createAgentsRouter } from "./modules/agents/api/router";
+import aiRouter from "./modules/ai/api/router";
 
 // Domain event handlers
 import { registerEventHandlers } from "./shared/events/EventRegistry";
@@ -81,6 +82,7 @@ import {
 } from "./infrastructure/redis/redisClient";
 import { logger } from "./infrastructure/logger";
 import { prometheusMetrics } from "./infrastructure/metrics/PrometheusMetrics";
+import { db as pgDb } from "./infrastructure/database/connection";
 
 /**
  * SECURITY: Validate required environment variables on startup
@@ -188,7 +190,7 @@ fs.mkdirSync(uploadDir, { recursive: true });
 const app = express();
 
 // Trust proxy for rate limiting (needed when behind Nginx)
-app.set("trust proxy", ["loopback", "linklocal", "uniquelocal"]);
+app.set("trust proxy", "loopback, 172.16.0.0/12, 10.0.0.0/8, 192.168.0.0/16");
 
 // Rate limiting — per-context limits instead of a single global limit
 // Auth endpoints: strict limit to prevent brute-force attacks
@@ -287,13 +289,7 @@ app.get("/metrics", async (req, res) => {
     clientIp === "::1" ||
     clientIp === "::ffff:127.0.0.1" ||
     clientIp.startsWith("10.") ||
-    clientIp.startsWith("172.16.") ||
-    clientIp.startsWith("172.17.") ||
-    clientIp.startsWith("172.18.") ||
-    clientIp.startsWith("172.19.") ||
-    clientIp.startsWith("172.2") ||
-    clientIp.startsWith("172.30.") ||
-    clientIp.startsWith("172.31.") ||
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(clientIp) ||
     clientIp.startsWith("192.168.");
   if (!isInternal) {
     res.status(403).json({ error: "Forbidden" });
@@ -360,8 +356,6 @@ app.use("/api/split", splitPagamentoRouter); // alias: frontend uses /split/*
 // PEP, PDV, Dashboard & NF-e — modules with existing controllers
 app.use("/api/pep", createPepRouter());
 app.use("/api/pdv", createPdvRouter());
-import { db as pgDb } from "./infrastructure/database/connection";
-import aiRouter from "./modules/ai/api/router";
 app.use("/api/estoque", createInventarioRouter(pgDb));
 app.use("/api/inventario", createInventarioRouter(pgDb));
 app.use("/api/dashboard", createDashboardRouter(pgDb));

@@ -114,7 +114,7 @@ export function useDentistasStore() {
     try {
       setDentistas(updatedDentistas);
     } catch (error) {
-      console.error("Error saving dentistas:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao salvar dentistas");
       throw error;
     }

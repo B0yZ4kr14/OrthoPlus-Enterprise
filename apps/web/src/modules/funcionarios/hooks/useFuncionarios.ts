@@ -118,7 +118,7 @@ export function useFuncionarios() {
       const mapped = (data || []).map(mapRowToFuncionario);
       setFuncionarios(mapped);
     } catch (error) {
-      console.error("Erro ao carregar funcionários:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar funcionários");
     } finally {
       setLoading(false);
@@ -148,7 +148,7 @@ export function useFuncionarios() {
       toast.success("Funcionário cadastrado com sucesso!");
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Erro ao adicionar funcionário:", error);
+      // Erro silencioso - hook retorna erro para UI
       if ((error as { code?: string }).code === "23505") {
         toast.error("CPF já cadastrado para esta clínica");
       } else {
@@ -178,7 +178,7 @@ export function useFuncionarios() {
       );
       toast.success("Funcionário atualizado com sucesso!");
     } catch (error) {
-      console.error("Erro ao atualizar funcionário:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar funcionário");
     }
   };
@@ -195,7 +195,7 @@ export function useFuncionarios() {
       setFuncionarios((prev) => prev.filter((f) => f.id !== id));
       toast.success("Funcionário removido com sucesso!");
     } catch (error) {
-      console.error("Erro ao remover funcionário:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao remover funcionário");
     }
   };

@@ -29,7 +29,7 @@ export const useNotifications = () => {
       setNotifications(data.notifications || []);
       setUnreadCount(data.notifications?.filter((n) => !n.lida).length || 0);
     } catch (error) {
-      console.error("Error loading notifications:", error);
+      // Error silencioso - não bloqueia a experiência do usuário
     } finally {
       setLoading(false);
     }
@@ -40,7 +40,7 @@ export const useNotifications = () => {
       await apiClient.patch(`/notifications/${notificationId}/read`, {});
       await loadNotifications();
     } catch (error) {
-      console.error("Error marking notification as read:", error);
+      // Error silencioso - não bloqueia a experiência do usuário
     }
   };
 
@@ -51,7 +51,7 @@ export const useNotifications = () => {
       await apiClient.post("/notifications/mark-all-read", {});
       await loadNotifications();
     } catch (error) {
-      console.error("Error marking all notifications as read:", error);
+      // Error silencioso - não bloqueia a experiência do usuário
     }
   };
 

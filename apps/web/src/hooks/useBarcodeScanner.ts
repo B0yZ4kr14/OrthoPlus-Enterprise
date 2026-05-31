@@ -43,7 +43,7 @@ export function useBarcodeScanner() {
       const newStatus = await BarcodeScanner.checkPermission({ force: true });
       return newStatus.granted;
     } catch (error) {
-      console.error("Erro ao verificar permissão:", error);
+      // Permissão negada silenciosamente - não bloqueia
       toast({
         title: "Erro",
         description: "Erro ao verificar permissão da câmera",
@@ -83,7 +83,7 @@ export function useBarcodeScanner() {
 
       return null;
     } catch (error) {
-      console.error("Erro ao escanear:", error);
+      // Erro de scan silencioso - não bloqueia
       document.body.classList.remove("scanner-active");
       setIsScanning(false);
 
@@ -104,7 +104,7 @@ export function useBarcodeScanner() {
       document.body.classList.remove("scanner-active");
       setIsScanning(false);
     } catch (error) {
-      console.error("Erro ao parar scanner:", error);
+      // Erro ao parar scanner silencioso
     }
   };
 

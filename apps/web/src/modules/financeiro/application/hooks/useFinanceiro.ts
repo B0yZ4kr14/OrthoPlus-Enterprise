@@ -29,7 +29,7 @@ export function useFinanceiro() {
       );
       setContasReceber(data || []);
     } catch (error) {
-      console.error("Erro ao carregar contas a receber:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar contas a receber");
     }
   };
@@ -54,7 +54,7 @@ export function useFinanceiro() {
       toast.success("Conta a receber adicionada com sucesso!");
       return data || null;
     } catch (error) {
-      console.error("Erro ao adicionar conta a receber:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao adicionar conta a receber");
       throw error;
     }
@@ -69,7 +69,7 @@ export function useFinanceiro() {
       await loadContasReceber();
       toast.success("Conta a receber atualizada com sucesso!");
     } catch (error) {
-      console.error("Erro ao atualizar conta a receber:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar conta a receber");
       throw error;
     }
@@ -81,7 +81,7 @@ export function useFinanceiro() {
       await loadContasReceber();
       toast.success("Conta a receber excluída com sucesso!");
     } catch (error) {
-      console.error("Erro ao excluir conta a receber:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao excluir conta a receber");
       throw error;
     }
@@ -98,7 +98,7 @@ export function useFinanceiro() {
       );
       setContasPagar(data || []);
     } catch (error) {
-      console.error("Erro ao carregar contas a pagar:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar contas a pagar");
     }
   };
@@ -123,7 +123,7 @@ export function useFinanceiro() {
       toast.success("Conta a pagar adicionada com sucesso!");
       return data || null;
     } catch (error) {
-      console.error("Erro ao adicionar conta a pagar:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao adicionar conta a pagar");
       throw error;
     }
@@ -135,7 +135,7 @@ export function useFinanceiro() {
       await loadContasPagar();
       toast.success("Conta a pagar atualizada com sucesso!");
     } catch (error) {
-      console.error("Erro ao atualizar conta a pagar:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar conta a pagar");
       throw error;
     }
@@ -147,7 +147,7 @@ export function useFinanceiro() {
       await loadContasPagar();
       toast.success("Conta a pagar excluída com sucesso!");
     } catch (error) {
-      console.error("Erro ao excluir conta a pagar:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao excluir conta a pagar");
       throw error;
     }
@@ -164,7 +164,7 @@ export function useFinanceiro() {
       );
       setNotasFiscais(data || []);
     } catch (error) {
-      console.error("Erro ao carregar notas fiscais:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar notas fiscais");
     }
   };
@@ -189,7 +189,7 @@ export function useFinanceiro() {
       toast.success("Nota fiscal emitida com sucesso!");
       return data || null;
     } catch (error) {
-      console.error("Erro ao emitir nota fiscal:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao emitir nota fiscal");
       throw error;
     }
@@ -201,7 +201,7 @@ export function useFinanceiro() {
       await loadNotasFiscais();
       toast.success("Nota fiscal atualizada com sucesso!");
     } catch (error) {
-      console.error("Erro ao atualizar nota fiscal:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar nota fiscal");
       throw error;
     }
@@ -213,7 +213,7 @@ export function useFinanceiro() {
       await loadNotasFiscais();
       toast.success("Nota fiscal excluída com sucesso!");
     } catch (error) {
-      console.error("Erro ao excluir nota fiscal:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao excluir nota fiscal");
       throw error;
     }
@@ -337,7 +337,7 @@ export function useFinanceiro() {
           loadNotasFiscais(),
         ]);
       } catch (error) {
-        console.error("Polling error:", error);
+        // Polling error silencioso
       }
 
       if (mounted) {

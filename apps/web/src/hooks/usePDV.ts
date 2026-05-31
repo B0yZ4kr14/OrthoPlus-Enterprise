@@ -84,7 +84,11 @@ export const usePDV = (clinicId: string | undefined) => {
 
       setCaixaAberto(data || null);
     } catch (error: unknown) {
-      console.error("Error loading caixa:", error);
+        toast({
+          title: "Erro ao carregar caixa",
+          description: "Não foi possível carregar o caixa.",
+          variant: "destructive",
+        });
     }
   };
 
@@ -98,7 +102,11 @@ export const usePDV = (clinicId: string | undefined) => {
 
       setVendas(data || []);
     } catch (error: unknown) {
-      console.error("Error loading vendas:", error);
+        toast({
+          title: "Erro ao carregar vendas",
+          description: "Não foi possível carregar as vendas.",
+          variant: "destructive",
+        });
     }
   };
 
@@ -152,7 +160,7 @@ export const usePDV = (clinicId: string | undefined) => {
       return data;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error opening caixa:", error);
+        sonnerToast.error("Erro ao abrir caixa");
       toast({
         title: "Erro ao abrir caixa",
         description: _e.message,
@@ -175,7 +183,7 @@ export const usePDV = (clinicId: string | undefined) => {
       sonnerToast.success("Caixa fechado com sucesso!");
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error closing caixa:", error);
+        sonnerToast.error("Erro ao fechar caixa");
       toast({
         title: "Erro ao fechar caixa",
         description: _e.message,
@@ -228,7 +236,7 @@ export const usePDV = (clinicId: string | undefined) => {
       return response.venda;
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error creating venda:", error);
+        sonnerToast.error("Erro ao criar venda");
       toast({
         title: "Erro ao criar venda",
         description: _e.message,
@@ -250,7 +258,7 @@ export const usePDV = (clinicId: string | undefined) => {
       sonnerToast.success("Venda cancelada");
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error canceling venda:", error);
+        sonnerToast.error("Erro ao cancelar venda");
       toast({
         title: "Erro ao cancelar venda",
         description: _e.message,

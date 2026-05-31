@@ -5,12 +5,16 @@ set -e
 # Feature 017: OMK Governance Integration
 # Usage: ./scripts/vps-health-check.sh
 
-VPS_HOST="${VPS_HOST:-100.111.74.69}"
+VPS_HOST="${VPS_HOST}"
 VPS_USER="${VPS_USER:-tsi}"
-SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519_b0yz4kr14}"
-PUBLIC_URL="https://tsiapp.io/OrthoPlus-Enterprise/"
-API_HEALTH="https://tsiapp.io/health"
-WIKI_URL="https://tsiapp.io/OrthoPlus-Enterprise/WiKi"
+SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519}"
+PUBLIC_URL="${PUBLIC_URL:-}"
+API_HEALTH="${API_HEALTH:-}"
+
+if [ -z "$VPS_HOST" ]; then
+  echo "[ERROR] VPS_HOST is required."
+  exit 1
+fi
 
 echo "=========================================="
 echo "OrthoPlus Enterprise — VPS Health Check"

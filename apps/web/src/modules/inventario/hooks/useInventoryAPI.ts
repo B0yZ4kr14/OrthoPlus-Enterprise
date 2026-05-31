@@ -71,7 +71,7 @@ export function useInventoryAPI() {
       setProducts(transformed);
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error loading products:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar produtos: " + _e.message);
     } finally {
       setLoading(false);
@@ -107,7 +107,7 @@ export function useInventoryAPI() {
       await loadProducts();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error adding product:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao cadastrar produto: " + _e.message);
       throw error;
     }
@@ -127,7 +127,7 @@ export function useInventoryAPI() {
       await loadProducts();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error updating product:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar produto: " + _e.message);
       throw error;
     }
@@ -148,7 +148,7 @@ export function useInventoryAPI() {
       await loadProducts();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error adjusting stock:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao ajustar estoque: " + _e.message);
       throw error;
     }
@@ -161,7 +161,7 @@ export function useInventoryAPI() {
       await loadProducts();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error deleting product:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao remover produto: " + _e.message);
       throw error;
     }

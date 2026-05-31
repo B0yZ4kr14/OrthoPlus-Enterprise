@@ -32,7 +32,7 @@ export function useSplit() {
       if (transacoesData) setTransacoes(transacoesData as unknown[]);
       if (comissoesData) setComissoes(comissoesData as unknown[]);
     } catch (error: unknown) {
-      console.error("Erro ao carregar dados de split:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar dados de split");
     } finally {
       setLoading(false);
@@ -67,7 +67,7 @@ export function useSplit() {
       toast.success("Configuração de split criada com sucesso!");
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao criar configuração:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao criar configuração de split");
     }
   };
@@ -84,7 +84,7 @@ export function useSplit() {
       toast.success("Configuração de split atualizada com sucesso!");
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao atualizar configuração:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar configuração de split");
     }
   };
@@ -101,7 +101,7 @@ export function useSplit() {
       toast.success("Configuração de split excluída com sucesso!");
       await loadData();
     } catch (error: unknown) {
-      console.error("Erro ao excluir configuração:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao excluir configuração de split");
     }
   };

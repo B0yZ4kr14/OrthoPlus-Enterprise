@@ -3,7 +3,7 @@
 # deploy-orthoplus-full.sh — Deploy Completo OrthoPlus Enterprise → VPS
 # Inclui: frontend dist já buildado + backend build + rsync + PM2 reload
 # USO: bash scripts/deploy-orthoplus-full.sh
-# PRÉ-REQUISITO: ~/.ssh/id_ed25519_b0yz4kr14 configurada
+# PRÉ-REQUISITO: SSH_KEY configurada via env var ou argumento
 # =============================================================================
 
 set -e
@@ -20,9 +20,13 @@ log_warn()    { echo -e "${YELLOW}[AVISO]${NC} $1"; }
 log_error()   { echo -e "${RED}[ERRO]${NC} $1"; exit 1; }
 
 # DEVOPS-2 FIX: Extracted hardcoded IP to environment variable for multi-environment support
-VPS_HOST=${VPS_HOST:-"100.111.74.69"}
-VPS_USER="tsi"
-SSH_KEY="$HOME/.ssh/id_ed25519_b0yz4kr14"
+VPS_HOST=${VPS_HOST:-"${1}"}
+VPS_USER="${VPS_USER:-tsi}"
+SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519}"
+
+if [ -z "$VPS_HOST" ]; then
+  log_error "VPS_HOST is required. Usage: $0 <VPS_HOST>"
+fi
 SSH_OPTS="-i $SSH_KEY -o ConnectTimeout=10"
 REMOTE_BACKEND="/home/tsi/OrthoPlus-Enterprise"
 REMOTE_FRONTEND="/var/www/orthoplus"

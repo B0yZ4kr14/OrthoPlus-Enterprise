@@ -37,7 +37,7 @@ export function usePatientsAPI(): UsePatientsReturn {
       setPatients(transformedPatients);
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error loading patients:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao carregar pacientes: " + _e.message);
     } finally {
       setLoading(false);
@@ -62,7 +62,7 @@ export function usePatientsAPI(): UsePatientsReturn {
       await loadPatients();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error adding patient:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao cadastrar paciente: " + _e.message);
       throw error;
     }
@@ -80,7 +80,7 @@ export function usePatientsAPI(): UsePatientsReturn {
       await loadPatients();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error updating patient:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao atualizar paciente: " + _e.message);
       throw error;
     }
@@ -93,7 +93,7 @@ export function usePatientsAPI(): UsePatientsReturn {
       await loadPatients();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error deleting patient:", error);
+      // Erro silencioso - hook retorna erro para UI
       toast.error("Erro ao remover paciente: " + _e.message);
       throw error;
     }

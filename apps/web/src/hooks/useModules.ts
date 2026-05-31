@@ -55,7 +55,11 @@ export function useModules() {
         const errorMessage =
           err instanceof Error ? err.message : "Erro desconhecido";
         setError(errorMessage);
-        console.error("❌ Error loading modules:", err);
+        toast({
+          title: "Erro ao carregar módulos",
+          description: "Não foi possível carregar seus módulos. Tente novamente.",
+          variant: "destructive",
+        });
         toast({
           title: "Erro ao carregar módulos",
           description: errorMessage,
@@ -97,7 +101,11 @@ export function useModules() {
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Erro ao alterar status";
-        console.error("Error toggling module:", err);
+        toast({
+          title: "Erro ao alterar módulo",
+          description: "Não foi possível alterar o estado do módulo.",
+          variant: "destructive",
+        });
         toast({
           title: "Erro ao alterar módulo",
           description: errorMessage,

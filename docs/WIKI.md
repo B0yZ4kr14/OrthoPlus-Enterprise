@@ -130,12 +130,12 @@ Upstreams: backend (3005), agent-service (8000), MinIO (9000).
 ```
 
 **VPS TSiAPP:**
-- Tailscale: `100.111.74.69`
-- Public IP: `179.190.15.116`
-- Domain: `tsiapp.io`
-- SSL: Cloudflare Origin CA (expira 23/07/2026)
-- Usuario: `tsi`
-- SSH Key: `id_ed25519_b0yz4kr14`
+- Tailscale: `$VPS_TAILSCALE_IP` (configurado via secret)
+- Public IP: `$VPS_PUBLIC_IP` (configurado via secret)
+- Domain: `$VPS_DOMAIN` (configurado via secret)
+- SSL: Cloudflare Origin CA
+- Usuario: `$VPS_USER` (configurado via secret)
+- SSH Key: `$SSH_KEY_PATH` (configurado via secret)
 
 ### 1.9 Gaps Criticos (Prioridade)
 
@@ -714,17 +714,17 @@ pm2 reload backend
 
 1. Gerar nova chave Ed25519:
    ```bash
-   ssh-keygen -t ed25519 -C "tsi@$(date +%Y%m%d)" -f ~/.ssh/id_ed25519_b0yz4kr14_new
+   ssh-keygen -t ed25519 -C "orthoplus@$(date +%Y%m%d)" -f ~/.ssh/id_ed25519_orthoplus_new
    ```
 
 2. Adicionar chave publica ao VPS:
    ```bash
-   ssh-copy-id -i ~/.ssh/id_ed25519_b0yz4kr14_new.pub tsi@100.111.74.69
+   ssh-copy-id -i ~/.ssh/id_ed25519_orthoplus_new.pub $VPS_USER@$VPS_HOST
    ```
 
 3. Testar acesso com nova chave:
    ```bash
-   ssh -i ~/.ssh/id_ed25519_b0yz4kr14_new tsi@100.111.74.69 "echo OK"
+   ssh -i ~/.ssh/id_ed25519_orthoplus_new $VPS_USER@$VPS_HOST "echo OK"
    ```
 
 4. Remover chave antiga do `~/.ssh/authorized_keys` no VPS
