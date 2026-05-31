@@ -2,7 +2,7 @@
   AGENTS.md — OrthoPlus Enterprise (Root)
   Arquivo de referencia canonico para agentes de IA.
   Idioma principal do projeto: Portugues (codigo e documentacao).
-  **Atualizado:** 2026-05-24
+  **Atualizado:** 2026-05-31
 -->
 
 # AGENTS.md — OrthoPlus Enterprise
@@ -183,7 +183,7 @@ pnpm clean            # Turbo clean + rm -rf node_modules
 pnpm guard            # Style guard: detecta cores Tailwind nativas/hardcoded em UI
 ```
 
-> **Nota:** O script `format:check` e usado no CI (`quality-check.yml`) para verificar formatacao. Nao esta definido no root `package.json` — e injetado via CI ou pode ser executado com `npx prettier --check "**/*.{ts,tsx,json,md}"`.
+> **Nota:** O script `format:check` esta definido no root `package.json` e usado no CI (`quality-check.yml`).
 
 ### Backend
 
@@ -192,7 +192,7 @@ cd backend
 pnpm dev              # nodemon + tsx (hot reload)
 pnpm build            # tsc -p tsconfig.build.json && tsc-alias (ESTRITO — falha em erro)
 pnpm start            # node dist/index.js
-pnpm test             # jest (26 suites, ~450+ testes)
+pnpm test             # jest (48 suites, ~741+ testes)
 pnpm lint             # ESLINT_USE_FLAT_CONFIG=false eslint src --ext .ts
 pnpm predeploy        # Valida env vars criticas e flags de seguranca
 ```
@@ -594,7 +594,7 @@ specs/017-omk-governance-integration/plan.md
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **OrthoPlus-Enterprise** (31471 symbols, 66491 relationships, 267 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **OrthoPlus-Enterprise** (31465 symbols, 66485 relationships, 267 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

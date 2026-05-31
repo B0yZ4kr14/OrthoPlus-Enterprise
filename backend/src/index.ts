@@ -356,8 +356,9 @@ app.use("/api/split", splitPagamentoRouter); // alias: frontend uses /split/*
 // PEP, PDV, Dashboard & NF-e — modules with existing controllers
 app.use("/api/pep", createPepRouter());
 app.use("/api/pdv", createPdvRouter());
-app.use("/api/estoque", createInventarioRouter(pgDb));
-app.use("/api/inventario", createInventarioRouter(pgDb));
+const inventarioRouter = createInventarioRouter(pgDb);
+app.use("/api/estoque", inventarioRouter);
+app.use("/api/inventario", inventarioRouter);
 app.use("/api/dashboard", createDashboardRouter(pgDb));
 app.use("/api/nfe", createNfeRouter());
 
