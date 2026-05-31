@@ -178,8 +178,8 @@ export class AgendaService {
     );
 
     // Reindexacao em tempo real (non-blocking)
-    eventBus.publish(new AppointmentDeletedEvent(id, clinicId)).catch(() => {
-      /* indexing failure is non-blocking */
+    eventBus.publish(new AppointmentDeletedEvent(id, clinicId)).catch((err) => {
+      logger.warn("Appointment deletion indexing failure (non-blocking)", { appointmentId: id, clinicId, error: err })
     });
 
     try {
