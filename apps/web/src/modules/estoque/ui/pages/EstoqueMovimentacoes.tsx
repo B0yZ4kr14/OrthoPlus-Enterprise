@@ -60,7 +60,7 @@ export default function EstoqueMovimentacoes() {
       });
       setShowForm(false);
     } catch (error) {
-      console.error("Erro ao registrar movimentação:", error);
+      toast({ title: "Erro", description: "Erro ao registrar movimentação", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao registrar movimentação",

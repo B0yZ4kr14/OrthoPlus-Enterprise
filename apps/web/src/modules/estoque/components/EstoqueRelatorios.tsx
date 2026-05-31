@@ -294,7 +294,7 @@ export function EstoqueRelatorios() {
         toast.success("Relatório Excel gerado com sucesso!");
       })
       .catch((err: unknown) => {
-        console.error("Erro ao gerar Excel:", err);
+        toast.error("Erro ao gerar Excel");
         toast.error("Erro ao gerar relatório Excel");
       });
   };

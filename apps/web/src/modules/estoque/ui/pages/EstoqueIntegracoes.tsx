@@ -127,7 +127,7 @@ export default function EstoqueIntegracoes() {
         tempoMedioResposta: tempoMedio,
       });
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
+      toast({ title: "Erro", description: "Erro ao carregar dados", variant: "destructive" });
       toast({
         title: "Erro ao carregar dados",
         description: "Não foi possível carregar as informações de integração",
@@ -190,7 +190,7 @@ export default function EstoqueIntegracoes() {
       loadData();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Erro ao disparar pedidos:", error);
+      toast({ title: "Erro", description: "Erro ao disparar pedidos", variant: "destructive" });
       toast({
         title: "Erro ao disparar pedidos",
         description:

@@ -145,7 +145,7 @@ export default function EstoqueCadastros() {
       setFornecedorViewMode("list");
       setSelectedFornecedor(undefined);
     } catch (error) {
-      console.error("Erro ao salvar fornecedor:", error);
+      toast({ title: "Erro", description: "Erro ao salvar fornecedor", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao salvar fornecedor",
@@ -188,7 +188,7 @@ export default function EstoqueCadastros() {
       setCategoriaViewMode("list");
       setSelectedCategoria(undefined);
     } catch (error) {
-      console.error("Erro ao salvar categoria:", error);
+      toast({ title: "Erro", description: "Erro ao salvar categoria", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao salvar categoria",
@@ -233,7 +233,7 @@ export default function EstoqueCadastros() {
       setDeleteDialogOpen(false);
       setItemToDelete(null);
     } catch (error) {
-      console.error("Erro ao excluir:", error);
+      toast({ title: "Erro", description: "Erro ao excluir", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao excluir item",

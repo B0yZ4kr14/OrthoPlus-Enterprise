@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { useInventario } from "@/modules/estoque/hooks/useInventario";
 import { Card } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
@@ -110,7 +111,7 @@ export default function EstoqueInventario() {
       }
       setDialogOpen(false);
     } catch (error) {
-      console.error("Error saving inventário:", error);
+      toast.error("Erro ao salvar inventário");
     }
   };
 

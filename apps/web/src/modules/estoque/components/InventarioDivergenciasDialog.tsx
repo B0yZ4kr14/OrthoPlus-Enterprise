@@ -60,7 +60,7 @@ export function InventarioDivergenciasDialog({
       toast.success("Ajustes automáticos gerados com sucesso");
       onOpenChange(false);
     } catch (error) {
-      console.error("Error generating adjustments:", error);
+      toast.error("Erro ao gerar ajustes");
       toast.error("Erro ao gerar ajustes automáticos");
     } finally {
       setLoading(false);
@@ -74,7 +74,7 @@ export function InventarioDivergenciasDialog({
       await exportInventarioPDF(inventario, items);
       toast.success("Relatório PDF exportado com sucesso");
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      toast.error("Erro ao exportar PDF");
       toast.error("Erro ao exportar relatório PDF");
     }
   };
