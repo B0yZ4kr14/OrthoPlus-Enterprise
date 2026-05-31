@@ -12,6 +12,7 @@ export class FidelidadeRepository implements IFidelidadeRepository {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createPonto(data: any) {
     return prisma.fidelidade_pontos.create({ data });
   }
@@ -60,6 +61,7 @@ export class FidelidadeRepository implements IFidelidadeRepository {
     clinicId: string,
     patientId: string,
     pontos: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     pontoData: any,
   ): Promise<[any, any, any[]]> {
     const existing = await prisma.fidelidade_pacientes.findFirst({
@@ -100,6 +102,7 @@ export class FidelidadeRepository implements IFidelidadeRepository {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createBadge(data: any) {
     return prisma.fidelidade_badges.create({ data });
   }
@@ -114,6 +117,7 @@ export class FidelidadeRepository implements IFidelidadeRepository {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createRecompensa(data: any) {
     return prisma.fidelidade_recompensas.create({ data });
   }
@@ -128,6 +132,7 @@ export class FidelidadeRepository implements IFidelidadeRepository {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createIndicacao(data: any) {
     return prisma.fidelidade_indicacoes.create({ data });
   }
