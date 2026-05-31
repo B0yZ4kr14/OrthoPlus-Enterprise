@@ -192,7 +192,7 @@ cd backend
 pnpm dev              # nodemon + tsx (hot reload)
 pnpm build            # tsc -p tsconfig.build.json && tsc-alias (ESTRITO — falha em erro)
 pnpm start            # node dist/index.js
-pnpm test             # jest (48 suites, ~741+ testes)
+pnpm test             # jest (51 suites, 741 testes)
 pnpm lint             # ESLINT_USE_FLAT_CONFIG=false eslint src --ext .ts
 pnpm predeploy        # Valida env vars criticas e flags de seguranca
 ```
@@ -468,7 +468,7 @@ packages:
 **ESLint:**
 
 - `eslint.config.js` na raiz desabilita a **maioria** das regras TypeScript (incluindo `no-explicit-any`, `no-floating-promises`, `no-misused-promises`, etc.).
-- Target: 0 erros, warnings tolerados (~98 atualmente).
+- Target: 0 erros, warnings tolerados (~98 atualmente no frontend, ~390 no backend).
 
 ---
 
