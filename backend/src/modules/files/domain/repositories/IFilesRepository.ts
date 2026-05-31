@@ -1,25 +1,28 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FileRepositoryResult = any;
+
 export interface IFilesRepository {
   // ── Arquivo ───────────────────────────────────────────────────────────
-  createArquivo(data: any): Promise<any>;
-  findArquivos(where: any, orderBy?: any, take?: number): Promise<any[]>;
-  findArquivoById(id: string, clinicId: string): Promise<any | null>;
-  deleteArquivo(id: string, clinicId: string): Promise<any>;
+  createArquivo(data: Record<string, unknown>): Promise<FileRepositoryResult>;
+  findArquivos(where: Record<string, unknown>, orderBy?: Record<string, unknown>, take?: number): Promise<FileRepositoryResult[]>;
+  findArquivoById(id: string, clinicId: string): Promise<FileRepositoryResult | null>;
+  deleteArquivo(id: string, clinicId: string): Promise<FileRepositoryResult>;
   updateArquivoUrlTemp(
     id: string,
     clinicId: string,
     urlTemp: string,
     expiraEm: Date,
-  ): Promise<any>;
+  ): Promise<FileRepositoryResult>;
   updateArquivoOcrStatus(
     id: string,
     clinicId: string,
     status: string,
-  ): Promise<any>;
+  ): Promise<FileRepositoryResult>;
   updateArquivoVersaoAtual(
     id: string,
     clinicId: string,
     versaoAtualId: string,
-  ): Promise<any>;
+  ): Promise<FileRepositoryResult>;
   updateArquivoFromVersion(
     id: string,
     clinicId: string,
@@ -28,24 +31,24 @@ export interface IFilesRepository {
       tamanho_bytes: number;
       versao_atual_id: string;
     },
-  ): Promise<any>;
+  ): Promise<FileRepositoryResult>;
 
   // ── Arquivo OCR ───────────────────────────────────────────────────────
-  createOCR(data: any): Promise<any>;
-  findOCRByArquivoId(arquivoId: string): Promise<any | null>;
-  findOCRsByText(searchTerm: string): Promise<any[]>;
+  createOCR(data: Record<string, unknown>): Promise<FileRepositoryResult>;
+  findOCRByArquivoId(arquivoId: string): Promise<FileRepositoryResult | null>;
+  findOCRsByText(searchTerm: string): Promise<FileRepositoryResult[]>;
 
   // ── Arquivo Versao ────────────────────────────────────────────────────
-  findLastVersion(arquivoId: string): Promise<any | null>;
-  createVersion(data: any): Promise<any>;
-  findVersionsByArquivoId(arquivoId: string): Promise<any[]>;
-  findVersionById(id: string, arquivoId: string): Promise<any | null>;
+  findLastVersion(arquivoId: string): Promise<FileRepositoryResult | null>;
+  createVersion(data: Record<string, unknown>): Promise<FileRepositoryResult>;
+  findVersionsByArquivoId(arquivoId: string): Promise<FileRepositoryResult[]>;
+  findVersionById(id: string, arquivoId: string): Promise<FileRepositoryResult | null>;
 
   // ── Patients ──────────────────────────────────────────────────────────
-  findPatientById(id: string, clinicId: string): Promise<any | null>;
+  findPatientById(id: string, clinicId: string): Promise<FileRepositoryResult | null>;
 
   // ── Audit Logs / Backup ───────────────────────────────────────────────
-  createAuditLog(data: any): Promise<any>;
-  findBackupById(id: string): Promise<any | null>;
-  updateBackup(id: string, data: any): Promise<any>;
+  createAuditLog(data: Record<string, unknown>): Promise<FileRepositoryResult>;
+  findBackupById(id: string): Promise<FileRepositoryResult | null>;
+  updateBackup(id: string, data: Record<string, unknown>): Promise<FileRepositoryResult>;
 }
