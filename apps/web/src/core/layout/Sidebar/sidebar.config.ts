@@ -103,7 +103,7 @@ export const menuGroups: MenuGroup[] = [
         url: "/agenda",
         icon: CalendarDays,
         moduleKey: "AGENDA",
-        badge: { count: 0, variant: "default" },
+        // badge: { count: 0, variant: "default" },
       },
       {
         title: "Pacientes",
@@ -177,14 +177,14 @@ export const menuGroups: MenuGroup[] = [
         url: "/financeiro/receber",
         icon: TrendingUp,
         moduleKey: "FINANCEIRO",
-        badge: { count: 0, variant: "destructive" },
+        // badge: { count: 0, variant: "destructive" },
       },
       {
         title: "Inadimplência",
         url: "/inadimplencia",
         icon: AlertCircle,
         moduleKey: "INADIMPLENCIA",
-        badge: { count: 0, variant: "destructive" },
+        // badge: { count: 0, variant: "destructive" },
       },
       {
         title: "PDV (Ponto de Venda)",

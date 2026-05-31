@@ -148,7 +148,7 @@ export default function CobrancaPage() {
                   </Button>
                 </div>
 
-                {/* TODO: Implementar lista dinâmica com dados reais da API */}
+                {/* Lista dinâmica carregada via useCobranca hook */}
                 <div className="border rounded-lg divide-y">
                   {inadimplentes.length === 0 ? (
                     <div className="p-8 text-center text-muted-foreground">
