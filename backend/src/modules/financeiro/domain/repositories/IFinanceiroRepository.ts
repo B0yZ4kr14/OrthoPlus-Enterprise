@@ -83,9 +83,10 @@ export interface IFinanceiroRepository {
   ): Promise<financial_transactions>;
   updateTransaction(
     id: string,
+    clinicId: string,
     data: Prisma.financial_transactionsUpdateInput,
   ): Promise<financial_transactions>;
-  deleteTransaction(id: string): Promise<financial_transactions>;
+  deleteTransaction(id: string, clinicId: string): Promise<financial_transactions>;
   aggregateTransactions(
     clinicId: string,
     type: string,
@@ -107,9 +108,10 @@ export interface IFinanceiroRepository {
   ): Promise<financial_categories>;
   updateCategory(
     id: string,
+    clinicId: string,
     data: Prisma.financial_categoriesUpdateInput,
   ): Promise<financial_categories>;
-  deleteCategory(id: string): Promise<financial_categories>;
+  deleteCategory(id: string, clinicId: string): Promise<financial_categories>;
 
   // cash_registers
   listCashRegisters(filters: CashRegisterFilters): Promise<cash_registers[]>;
@@ -119,9 +121,10 @@ export interface IFinanceiroRepository {
   ): Promise<cash_registers>;
   updateCashRegister(
     id: string,
+    clinicId: string,
     data: Prisma.cash_registersUpdateInput,
   ): Promise<cash_registers>;
-  deleteCashRegister(id: string): Promise<cash_registers>;
+  deleteCashRegister(id: string, clinicId: string): Promise<cash_registers>;
   countOpenCashRegisters(clinicId: string): Promise<number>;
 
   // caixa_movimentos
@@ -132,9 +135,10 @@ export interface IFinanceiroRepository {
   ): Promise<caixa_movimentos>;
   updateMovimento(
     id: string,
+    clinicId: string,
     data: Prisma.caixa_movimentosUpdateInput,
   ): Promise<caixa_movimentos>;
-  deleteMovimento(id: string): Promise<caixa_movimentos>;
+  deleteMovimento(id: string, clinicId: string): Promise<caixa_movimentos>;
 
   // caixa_incidentes
   listIncidentes(filters: IncidenteFilters): Promise<caixa_incidentes[]>;
@@ -144,9 +148,10 @@ export interface IFinanceiroRepository {
   ): Promise<caixa_incidentes>;
   updateIncidente(
     id: string,
+    clinicId: string,
     data: Prisma.caixa_incidentesUpdateInput,
   ): Promise<caixa_incidentes>;
-  deleteIncidente(id: string): Promise<caixa_incidentes>;
+  deleteIncidente(id: string, clinicId: string): Promise<caixa_incidentes>;
 
   // contas_receber
   listContasReceber(clinicId: string): Promise<contas_receber[]>;
@@ -156,15 +161,16 @@ export interface IFinanceiroRepository {
   ): Promise<contas_receber>;
   updateContaReceber(
     id: string,
+    clinicId: string,
     data: Prisma.contas_receberUpdateInput,
   ): Promise<contas_receber>;
-  deleteContaReceber(id: string): Promise<contas_receber>;
+  deleteContaReceber(id: string, clinicId: string): Promise<contas_receber>;
   aggregateContasReceber(
     clinicId: string,
   ): Promise<
     Prisma.GetContas_receberAggregateType<Prisma.Contas_receberAggregateArgs>
   >;
-  findContaReceberById(id: string): Promise<contas_receber | null>;
+  findContaReceberById(id: string, clinicId: string): Promise<contas_receber | null>;
 
   // contas_pagar
   listContasPagar(clinicId: string): Promise<contas_pagar[]>;
@@ -172,9 +178,10 @@ export interface IFinanceiroRepository {
   createContaPagar(data: Prisma.contas_pagarCreateInput): Promise<contas_pagar>;
   updateContaPagar(
     id: string,
+    clinicId: string,
     data: Prisma.contas_pagarUpdateInput,
   ): Promise<contas_pagar>;
-  deleteContaPagar(id: string): Promise<contas_pagar>;
+  deleteContaPagar(id: string, clinicId: string): Promise<contas_pagar>;
   aggregateContasPagar(
     clinicId: string,
   ): Promise<
@@ -189,9 +196,10 @@ export interface IFinanceiroRepository {
   ): Promise<notas_fiscais>;
   updateNotaFiscal(
     id: string,
+    clinicId: string,
     data: Prisma.notas_fiscaisUpdateInput,
   ): Promise<notas_fiscais>;
-  deleteNotaFiscal(id: string): Promise<notas_fiscais>;
+  deleteNotaFiscal(id: string, clinicId: string): Promise<notas_fiscais>;
 
   // pdv_vendas
   listVendasPDV(filters: VendaFilters): Promise<pdv_vendas[]>;
@@ -201,6 +209,7 @@ export interface IFinanceiroRepository {
   getExtrato(id: string, clinicId: string): Promise<banco_extratos | null>;
   updateExtrato(
     id: string,
+    clinicId: string,
     data: Prisma.banco_extratosUpdateInput,
   ): Promise<banco_extratos>;
 

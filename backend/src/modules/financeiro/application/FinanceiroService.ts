@@ -88,19 +88,19 @@ export class FinanceiroService {
     const existing = await this.repo.getTransaction(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateTransactionSchema, body);
-    return this.repo.updateTransaction(id, data as any);
+    return this.repo.updateTransaction(id, clinicId, data as any);
   }
 
   async deleteTransaction(id: string, clinicId: string) {
     const existing = await this.repo.getTransaction(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteTransaction(id);
+    return this.repo.deleteTransaction(id, clinicId);
   }
 
   async markTransactionAsPaid(id: string, clinicId: string) {
     const existing = await this.repo.getTransaction(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.updateTransaction(id, {
+    return this.repo.updateTransaction(id, clinicId, {
       status: "PAGO",
       paid_date: new Date().toISOString(),
     } as any);
@@ -132,13 +132,13 @@ export class FinanceiroService {
     const existing = await this.repo.getCategory(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateCategorySchema, body);
-    return this.repo.updateCategory(id, data as any);
+    return this.repo.updateCategory(id, clinicId, data as any);
   }
 
   async deleteCategory(id: string, clinicId: string) {
     const existing = await this.repo.getCategory(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteCategory(id);
+    return this.repo.deleteCategory(id, clinicId);
   }
 
   // Cash Registers
@@ -171,13 +171,13 @@ export class FinanceiroService {
     const existing = await this.repo.getCashRegister(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateCashRegisterSchema, body);
-    return this.repo.updateCashRegister(id, data as any);
+    return this.repo.updateCashRegister(id, clinicId, data as any);
   }
 
   async deleteCashRegister(id: string, clinicId: string) {
     const existing = await this.repo.getCashRegister(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteCashRegister(id);
+    return this.repo.deleteCashRegister(id, clinicId);
   }
 
   // Movimentos
@@ -207,13 +207,13 @@ export class FinanceiroService {
     const existing = await this.repo.getMovimento(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateMovimentoSchema, body);
-    return this.repo.updateMovimento(id, data as any);
+    return this.repo.updateMovimento(id, clinicId, data as any);
   }
 
   async deleteMovimento(id: string, clinicId: string) {
     const existing = await this.repo.getMovimento(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteMovimento(id);
+    return this.repo.deleteMovimento(id, clinicId);
   }
 
   // Incidentes
@@ -242,13 +242,13 @@ export class FinanceiroService {
     const existing = await this.repo.getIncidente(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateIncidenteSchema, body);
-    return this.repo.updateIncidente(id, data as any);
+    return this.repo.updateIncidente(id, clinicId, data as any);
   }
 
   async deleteIncidente(id: string, clinicId: string) {
     const existing = await this.repo.getIncidente(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteIncidente(id);
+    return this.repo.deleteIncidente(id, clinicId);
   }
 
   // Contas Receber
@@ -269,13 +269,13 @@ export class FinanceiroService {
     const existing = await this.repo.getContaReceber(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateContaReceberSchema, body);
-    return this.repo.updateContaReceber(id, data as any);
+    return this.repo.updateContaReceber(id, clinicId, data as any);
   }
 
   async deleteContaReceber(id: string, clinicId: string) {
     const existing = await this.repo.getContaReceber(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteContaReceber(id);
+    return this.repo.deleteContaReceber(id, clinicId);
   }
 
   // Contas Pagar
@@ -296,13 +296,13 @@ export class FinanceiroService {
     const existing = await this.repo.getContaPagar(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateContaPagarSchema, body);
-    return this.repo.updateContaPagar(id, data as any);
+    return this.repo.updateContaPagar(id, clinicId, data as any);
   }
 
   async deleteContaPagar(id: string, clinicId: string) {
     const existing = await this.repo.getContaPagar(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteContaPagar(id);
+    return this.repo.deleteContaPagar(id, clinicId);
   }
 
   // Notas Fiscais
@@ -323,13 +323,13 @@ export class FinanceiroService {
     const existing = await this.repo.getNotaFiscal(id, clinicId);
     if (!existing) throw notFound();
     const data = this.validate(updateNotaFiscalSchema, body);
-    return this.repo.updateNotaFiscal(id, data as any);
+    return this.repo.updateNotaFiscal(id, clinicId, data as any);
   }
 
   async deleteNotaFiscal(id: string, clinicId: string) {
     const existing = await this.repo.getNotaFiscal(id, clinicId);
     if (!existing) throw notFound();
-    return this.repo.deleteNotaFiscal(id);
+    return this.repo.deleteNotaFiscal(id, clinicId);
   }
 
   // PDV Vendas
@@ -354,7 +354,7 @@ export class FinanceiroService {
       updateExtratoSchema,
       body,
     );
-    return this.repo.updateExtrato(id, {
+    return this.repo.updateExtrato(id, clinicId, {
       ...(conciliado !== undefined && { conciliado }),
       ...(transaction_id !== undefined && { transaction_id }),
       ...(observacoes !== undefined && { observacoes }),
@@ -403,9 +403,8 @@ export class FinanceiroService {
     const message = body.message as string | undefined;
     if (!contaReceberId || !method)
       throw badRequest("contaReceberId and method are required");
-    const cobranca = await this.repo.findContaReceberById(contaReceberId);
-    if (!cobranca || cobranca.clinic_id !== clinicId)
-      throw notFound("Billing record not found");
+    const cobranca = await this.repo.findContaReceberById(contaReceberId, clinicId);
+    if (!cobranca) throw notFound("Billing record not found");
     const patient = cobranca.patient_id
       ? await this.repo.getPatient(cobranca.patient_id)
       : null;
@@ -428,9 +427,8 @@ export class FinanceiroService {
     const paymentMethod = body.paymentMethod as string;
     if (!contaReceberId || !amount || !paymentMethod)
       throw badRequest("Required fields missing");
-    const contaReceber = await this.repo.findContaReceberById(contaReceberId);
-    if (!contaReceber || contaReceber.clinic_id !== clinicId)
-      throw notFound("Billing record not found");
+    const contaReceber = await this.repo.findContaReceberById(contaReceberId, clinicId);
+    if (!contaReceber) throw notFound("Billing record not found");
     const result = await this.processarPagamentoUseCase.execute({
       contaReceberId,
       amount,

@@ -99,13 +99,14 @@ export class FinanceiroRepository implements IFinanceiroRepository {
 
   async updateTransaction(
     id: string,
+    clinicId: string,
     data: Prisma.financial_transactionsUpdateInput,
   ) {
-    return prisma.financial_transactions.update({ where: { id }, data });
+    return prisma.financial_transactions.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteTransaction(id: string) {
-    return prisma.financial_transactions.delete({ where: { id } });
+  async deleteTransaction(id: string, clinicId: string) {
+    return prisma.financial_transactions.delete({ where: { id, clinic_id: clinicId } });
   }
 
   async aggregateTransactions(
@@ -163,13 +164,14 @@ export class FinanceiroRepository implements IFinanceiroRepository {
 
   async updateCategory(
     id: string,
+    clinicId: string,
     data: Prisma.financial_categoriesUpdateInput,
   ) {
-    return prisma.financial_categories.update({ where: { id }, data });
+    return prisma.financial_categories.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteCategory(id: string) {
-    return prisma.financial_categories.delete({ where: { id } });
+  async deleteCategory(id: string, clinicId: string) {
+    return prisma.financial_categories.delete({ where: { id, clinic_id: clinicId } });
   }
 
   // ─── cash_registers ───
@@ -205,12 +207,12 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     return prisma.cash_registers.create({ data });
   }
 
-  async updateCashRegister(id: string, data: Prisma.cash_registersUpdateInput) {
-    return prisma.cash_registers.update({ where: { id }, data });
+  async updateCashRegister(id: string, clinicId: string, data: Prisma.cash_registersUpdateInput) {
+    return prisma.cash_registers.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteCashRegister(id: string) {
-    return prisma.cash_registers.delete({ where: { id } });
+  async deleteCashRegister(id: string, clinicId: string) {
+    return prisma.cash_registers.delete({ where: { id, clinic_id: clinicId } });
   }
 
   async countOpenCashRegisters(clinicId: string) {
@@ -252,12 +254,12 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     return prisma.caixa_movimentos.create({ data });
   }
 
-  async updateMovimento(id: string, data: Prisma.caixa_movimentosUpdateInput) {
-    return prisma.caixa_movimentos.update({ where: { id }, data });
+  async updateMovimento(id: string, clinicId: string, data: Prisma.caixa_movimentosUpdateInput) {
+    return prisma.caixa_movimentos.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteMovimento(id: string) {
-    return prisma.caixa_movimentos.delete({ where: { id } });
+  async deleteMovimento(id: string, clinicId: string) {
+    return prisma.caixa_movimentos.delete({ where: { id, clinic_id: clinicId } });
   }
 
   // ─── caixa_incidentes ───
@@ -293,12 +295,12 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     return prisma.caixa_incidentes.create({ data });
   }
 
-  async updateIncidente(id: string, data: Prisma.caixa_incidentesUpdateInput) {
-    return prisma.caixa_incidentes.update({ where: { id }, data });
+  async updateIncidente(id: string, clinicId: string, data: Prisma.caixa_incidentesUpdateInput) {
+    return prisma.caixa_incidentes.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteIncidente(id: string) {
-    return prisma.caixa_incidentes.delete({ where: { id } });
+  async deleteIncidente(id: string, clinicId: string) {
+    return prisma.caixa_incidentes.delete({ where: { id, clinic_id: clinicId } });
   }
 
   // ─── contas_receber ───
@@ -320,12 +322,12 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     return prisma.contas_receber.create({ data });
   }
 
-  async updateContaReceber(id: string, data: Prisma.contas_receberUpdateInput) {
-    return prisma.contas_receber.update({ where: { id }, data });
+  async updateContaReceber(id: string, clinicId: string, data: Prisma.contas_receberUpdateInput) {
+    return prisma.contas_receber.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteContaReceber(id: string) {
-    return prisma.contas_receber.delete({ where: { id } });
+  async deleteContaReceber(id: string, clinicId: string) {
+    return prisma.contas_receber.delete({ where: { id, clinic_id: clinicId } });
   }
 
   async aggregateContasReceber(clinicId: string) {
@@ -339,8 +341,8 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     });
   }
 
-  async findContaReceberById(id: string) {
-    return prisma.contas_receber.findUnique({ where: { id } });
+  async findContaReceberById(id: string, clinicId: string) {
+    return prisma.contas_receber.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   // ─── contas_pagar ───
@@ -362,12 +364,12 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     return prisma.contas_pagar.create({ data });
   }
 
-  async updateContaPagar(id: string, data: Prisma.contas_pagarUpdateInput) {
-    return prisma.contas_pagar.update({ where: { id }, data });
+  async updateContaPagar(id: string, clinicId: string, data: Prisma.contas_pagarUpdateInput) {
+    return prisma.contas_pagar.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteContaPagar(id: string) {
-    return prisma.contas_pagar.delete({ where: { id } });
+  async deleteContaPagar(id: string, clinicId: string) {
+    return prisma.contas_pagar.delete({ where: { id, clinic_id: clinicId } });
   }
 
   async aggregateContasPagar(clinicId: string) {
@@ -400,12 +402,12 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     return prisma.notas_fiscais.create({ data });
   }
 
-  async updateNotaFiscal(id: string, data: Prisma.notas_fiscaisUpdateInput) {
-    return prisma.notas_fiscais.update({ where: { id }, data });
+  async updateNotaFiscal(id: string, clinicId: string, data: Prisma.notas_fiscaisUpdateInput) {
+    return prisma.notas_fiscais.update({ where: { id, clinic_id: clinicId }, data });
   }
 
-  async deleteNotaFiscal(id: string) {
-    return prisma.notas_fiscais.delete({ where: { id } });
+  async deleteNotaFiscal(id: string, clinicId: string) {
+    return prisma.notas_fiscais.delete({ where: { id, clinic_id: clinicId } });
   }
 
   // ─── pdv_vendas ───
@@ -446,8 +448,8 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     });
   }
 
-  async updateExtrato(id: string, data: Prisma.banco_extratosUpdateInput) {
-    return prisma.banco_extratos.update({ where: { id }, data });
+  async updateExtrato(id: string, clinicId: string, data: Prisma.banco_extratosUpdateInput) {
+    return prisma.banco_extratos.update({ where: { id, clinic_id: clinicId }, data });
   }
 
   // ─── patients (auxiliary) ───
