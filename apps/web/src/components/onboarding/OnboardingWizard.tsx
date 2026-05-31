@@ -90,7 +90,7 @@ export function OnboardingWizard({
         metadata: { timestamp: new Date().toISOString() },
       });
     } catch (error) {
-      console.error("Error tracking analytics:", error);
+      toast.error("Erro ao rastrear analytics");
     }
   };
 

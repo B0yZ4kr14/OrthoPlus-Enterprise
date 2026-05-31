@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { apiClient } from "@/lib/api/apiClient";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -155,7 +156,7 @@ export function OnboardingAnalyticsDashboard() {
         dropOffByStep,
       });
     } catch (error) {
-      console.error("Error fetching analytics:", error);
+      toast.error("Erro ao carregar analytics");
     } finally {
       setLoading(false);
     }

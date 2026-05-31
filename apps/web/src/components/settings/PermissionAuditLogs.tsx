@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
@@ -64,7 +65,7 @@ export function PermissionAuditLogs() {
       >("/configuracoes/usuarios");
       setUsers(data || []);
     } catch (error) {
-      console.error("Erro ao carregar usuários:", error);
+      toast.error("Erro ao carregar usuários");
     }
   };
 
@@ -123,7 +124,7 @@ export function PermissionAuditLogs() {
 
       setLogs(processedLogs as AuditLog[]);
     } catch (error) {
-      console.error("Erro ao carregar logs:", error);
+      toast.error("Erro ao carregar logs");
     } finally {
       setLoading(false);
     }

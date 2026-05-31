@@ -150,7 +150,7 @@ export const UserManagementTab = () => {
       loadUsers();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Erro ao criar usuário:", error);
+      toast.error("Erro ao criar usuário");
       toast.error(_e.message || "Erro ao criar usuário");
     }
   };
@@ -167,7 +167,7 @@ export const UserManagementTab = () => {
       toast.success("Role atualizada com sucesso");
       loadUsers();
     } catch (error: unknown) {
-      console.error("Erro ao atualizar role:", error);
+      toast.error("Erro ao atualizar role");
       toast.error("Erro ao atualizar role");
     }
   };
@@ -183,7 +183,7 @@ export const UserManagementTab = () => {
       toast.success("Usuário removido com sucesso");
       loadUsers();
     } catch (error: unknown) {
-      console.error("Erro ao remover usuário:", error);
+      toast.error("Erro ao remover usuário");
       toast.error("Erro ao remover usuário");
     }
   };
