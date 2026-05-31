@@ -101,4 +101,18 @@ jobs:
       - name: Health Check (External)
         run: |
           sleep 10
-          curl -s http://${{ secrets.VPS_TSiAPP_HOST }}:3005/health || echo "⚠️ Health check failed"
+          MAX_RETRIES=5
+          RETRY_DELAY=10
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Health check attempt $i/$MAX_RETRIES..."
+            if curl -sf http://${{ secrets.VPS_TSiAPP_HOST }}:3005/health >/dev/null; then
+              echo "✅ Health check passed"
+              exit 0
+            fi
+            if [ $i -lt $MAX_RETRIES ]; then
+              echo "⏳ Retrying in ${RETRY_DELAY}s..."
+              sleep $RETRY_DELAY
+            fi
+          done
+          echo "❌ Health check failed after $MAX_RETRIES attempts"
+          exit 1
