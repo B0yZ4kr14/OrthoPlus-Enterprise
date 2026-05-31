@@ -2,8 +2,18 @@ import { Request, Response } from "express";
 import { Errors, asyncHandler } from "@/middleware/errorHandler";
 import { CryptoControllerService } from "@/modules/crypto_config/application/CryptoControllerService";
 
+const CRYPTO_ENABLED = process.env.ENABLE_CRYPTO_MODULE === "true";
+
 export class CryptoController {
   private service = new CryptoControllerService();
+
+  private checkEnabled(res: Response): boolean {
+    if (!CRYPTO_ENABLED) {
+      res.status(503).json({ error: "Crypto module is disabled" });
+      return false;
+    }
+    return true;
+  }
 
   convertCryptoToBrl = asyncHandler(async (req: Request, res: Response) => {
     const { transactionId } = req.body;
@@ -50,10 +60,12 @@ export class CryptoController {
   });
 
   handleCryptoWebhook = asyncHandler(async (_req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     res.status(200).json({ success: true, message: "Webhook processed" });
   });
 
   manageOfflineWallet = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const { action } = req.body;
     res.status(200).json({
       success: true,
@@ -62,6 +74,7 @@ export class CryptoController {
   });
 
   runCryptoJobs = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const { jobName } = req.body;
     res.status(200).json({ success: true, job: jobName, executed: true });
   });

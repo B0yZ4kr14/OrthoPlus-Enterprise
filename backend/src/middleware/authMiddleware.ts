@@ -1,6 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
+interface DecodedToken {
+  sub: string;
+  email: string;
+  role: string;
+  clinicId: string;
+  iat?: number;
+  exp?: number;
+}
+
 /**
  * Auth middleware that extracts JWT from Authorization header or HttpOnly cookie
  * and populates req.clinicId and req.user for downstream controllers.
@@ -66,12 +75,11 @@ export function authMiddleware(
       throw new Error("JWT_SECRET is not configured");
     }
 
-    const decoded: any = jwt.verify(
-      // eslint-disable-line @typescript-eslint/no-explicit-any
+    const decoded = jwt.verify(
       token,
       jwtSecret,
       { algorithms: ["HS256"] },
-    );
+    ) as DecodedToken;
 
     // SECURITY: clinicId MUST exist in token (except in explicit mock mode)
     if (!decoded.clinicId && !allowMock) {

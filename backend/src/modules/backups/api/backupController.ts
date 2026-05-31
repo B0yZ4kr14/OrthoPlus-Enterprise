@@ -2,11 +2,17 @@ import { logger } from '@/infrastructure/logger';
 import { Request, Response } from "express";
 import { asyncHandler, Errors } from "@/middleware/errorHandler";
 
+const BACKUP_ENABLED = process.env.ENABLE_BACKUP_MODULE === "true";
+
 export const backupController = {
   /**
    * Ponto de entrada consolidado (imita o antigo backup-manager)
    */
   manager: asyncHandler(async (req: Request, res: Response) => {
+    if (!BACKUP_ENABLED) {
+      res.status(503).json({ error: "Backup module is disabled" });
+      return;
+    }
     const user = req.user;
 
     if (!user) {
