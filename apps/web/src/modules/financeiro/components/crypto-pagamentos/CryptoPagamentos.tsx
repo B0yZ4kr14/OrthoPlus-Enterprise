@@ -26,20 +26,20 @@ import { Card } from "@orthoplus/core-ui/card";
 import { NotificationBadge } from "./NotificationBadge";
 import { BitcoinInfoSection } from "./BitcoinInfoSection";
 import { ClinicWarning } from "./ClinicWarning";
-import { CryptoCalculator } from "@financeiro/components/crypto-calculator";
+import { CryptoCalculator } from "@/components/crypto/CryptoCalculator";
 import { ExchangeConfigForm } from "@financeiro/components/crypto-exchange";
 import { CryptoWalletsView } from "@financeiro/components/crypto-wallets";
 import { CryptoTransactionsView } from "@financeiro/components/crypto-transactions";
 import { CryptoExchangesView } from "@financeiro/components/crypto-exchanges";
 import { CryptoPortfolioDashboard } from "@financeiro/components/crypto-portfolio";
 import { CryptoAnalysisDashboard } from "@financeiro/components/crypto-analysis";
-import { CryptoTechnicalAnalysisView } from "@financeiro/components/crypto-technical-analysis";
-import { CryptoSimulatorView } from "@financeiro/components/crypto-simulator";
+import { CryptoTechnicalAnalysisView } from "@/modules/financeiro/ui/views/crypto/CryptoTechnicalAnalysisView";
+import { CryptoSimulatorView } from "@/modules/financeiro/ui/views/crypto/CryptoSimulatorView";
 import { CryptoComparativeView } from "@financeiro/components/crypto-comparative";
 import { CryptoAlertsView } from "@financeiro/components/crypto-alerts";
 import { BitcoinQRCodeDialog } from "@financeiro/components/bitcoin-qr-code";
-import { DCABacktesting } from "@financeiro/components/dca-backtesting";
-import { VolatilityAlerts } from "@financeiro/components/volatility-alerts";
+import { DCABacktesting } from "@/components/crypto/DCABacktesting";
+import { VolatilityAlerts } from "@/components/crypto/VolatilityAlerts";
 import { useCryptoPagamentos } from "./useCryptoPagamentos";
 
 export function CryptoPagamentos() {
