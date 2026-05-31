@@ -373,10 +373,12 @@ app.use("/api/search-index", searchIndexRouter);
 const memoryHubModule = createMemoryHubModule();
 
 // Initialize memory hub asynchronously (API key validation + hot-swap setup)
+let memoryHubInitialized = false;
 (async () => {
   try {
     await memoryHubModule.initialize();
     memoryHubModule.startFileWatcher();
+    memoryHubInitialized = true;
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     logger.error(
@@ -387,7 +389,13 @@ const memoryHubModule = createMemoryHubModule();
   }
 })();
 
-app.use("/api/memory-hub", createMemoryHubRouter(memoryHubModule.controller));
+app.use("/api/memory-hub", (_req, res, next) => {
+  if (!memoryHubInitialized) {
+    res.status(503).json({ error: "Memory hub is initializing, please retry shortly" });
+    return;
+  }
+  next();
+}, createMemoryHubRouter(memoryHubModule.controller));
 
 // Active modules endpoint: returns module keys for a clinic from the database.
 // Falls back to returning all modules when AUTH_ALLOW_MOCK=true to unblock frontend in dev/test.
