@@ -15,5 +15,5 @@ const schemaPath = path.join(__dirname, "../infrastructure/initSchema.sql");
 const schema = fs.readFileSync(schemaPath, "utf-8");
 
 db.exec(schema);
-console.log("[MemoryHub] SQLite schema initialized at", dbPath);
+process.stdout.write(`[MemoryHub] SQLite schema initialized at ${dbPath}\n`);
 db.close();

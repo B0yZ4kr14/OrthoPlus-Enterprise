@@ -13,6 +13,10 @@ if [ -z "$VPS_HOST" ]; then
   echo "[ERROR] VPS_HOST is required. Usage: $0 <VPS_HOST> [VPS_TARGET]"
   exit 1
 fi
+
+# Resolve project root relative to script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REMOTE_DIR="/home/tsi/OrthoPlus-Enterprise"
 
 echo "[DEPLOY] Target VPS: $VPS_TARGET"
@@ -28,7 +32,7 @@ rsync -avz --delete \
   --exclude='.cache' \
   --exclude='coverage' \
   --exclude='tests' \
-  ~/Projects/OrthoPlus-Enterprise/ \
+  "${PROJECT_ROOT}/" \
   "$VPS_TARGET:$REMOTE_DIR/"
 
 # DEVOPS-2 FIX: Generate secure random Redis password instead of using insecure hardcoded fallback.

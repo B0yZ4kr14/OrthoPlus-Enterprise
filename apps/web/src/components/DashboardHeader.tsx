@@ -201,9 +201,9 @@ export function DashboardHeader({
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link to="/settings/profile" className="flex items-center">
+                  <Link to="/configuracoes" className="flex items-center">
                     <User className="mr-2 h-4 w-4" />
-                    Meu Perfil
+                    Configurações
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

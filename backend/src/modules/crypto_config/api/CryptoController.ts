@@ -16,6 +16,7 @@ export class CryptoController {
   }
 
   convertCryptoToBrl = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const { transactionId } = req.body;
     if (!transactionId) {
       throw Errors.validation("transactionId is required");
@@ -28,6 +29,7 @@ export class CryptoController {
   });
 
   createCryptoInvoice = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const result = await this.service.createCryptoInvoice(
       req.body,
       req.ip || undefined,
@@ -37,16 +39,19 @@ export class CryptoController {
 
   getCryptoManagerStatus = asyncHandler(
     async (_req: Request, res: Response) => {
+      if (!this.checkEnabled(res)) return;
       res.status(200).json({ success: true, status: "active" });
     },
   );
 
   getCryptoRates = asyncHandler(async (_req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const result = await this.service.getCryptoRates();
     res.status(200).json({ success: true, ...result });
   });
 
   syncCryptoWallet = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const { walletId } = req.body;
     res
       .status(200)
@@ -54,6 +59,7 @@ export class CryptoController {
   });
 
   validateXpub = asyncHandler(async (req: Request, res: Response) => {
+    if (!this.checkEnabled(res)) return;
     const { xpub, currency } = req.body;
     const result = this.service.validateXpub(xpub, currency);
     res.status(200).json({ success: true, ...result });
