@@ -73,7 +73,7 @@ export function BitcoinQRCodeDialog({
       });
       setQrCodeUrl(url);
     } catch (error) {
-      console.error("Error generating QR code:", error);
+      toast.error("Erro ao gerar QR code");
       toast.error("Erro ao gerar QR Code");
     }
   };
@@ -120,7 +120,7 @@ export function BitcoinQRCodeDialog({
       setAmount("");
       setSelectedWallet("");
     } catch (error) {
-      console.error("Error generating payment:", error);
+      toast.error("Erro ao gerar pagamento");
       toast.error("Erro ao criar solicitação de pagamento");
     }
   };

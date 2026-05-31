@@ -98,7 +98,7 @@ export function PaymentDialog({
       onClose();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Erro ao processar pagamento:", error);
+      toast.error("Erro ao processar pagamento");
       toast.error("Erro ao processar pagamento", {
         description: _e.message || "Tente novamente",
       });

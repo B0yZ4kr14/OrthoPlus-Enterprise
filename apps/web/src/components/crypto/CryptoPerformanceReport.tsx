@@ -1,6 +1,7 @@
 // jsPDF loaded dynamically to reduce initial bundle
 import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
 
 interface PortfolioData {
   totalBRL: number;
@@ -275,7 +276,7 @@ async function fetchMarketComparison(
       portfolioReturn,
     };
   } catch (error) {
-    console.error("Erro ao buscar comparação de mercado:", error);
+    toast.error("Erro ao buscar comparação de mercado");
     return {
       btcReturn: 0,
       sp500Return: 0,

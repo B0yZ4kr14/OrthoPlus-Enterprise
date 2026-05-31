@@ -79,7 +79,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
 
       setTemplates(processedTemplates as Template[]);
     } catch (error) {
-      console.error("Error fetching templates:", error);
+      toast({ title: "Erro", description: "Erro ao carregar templates", variant: "destructive" });
       toast({
         title: "Erro",
         description: "Erro ao carregar templates",
@@ -109,7 +109,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
       onApply?.();
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Error applying template:", error);
+      toast({ title: "Erro", description: "Erro ao aplicar template", variant: "destructive" });
       toast({
         title: "Erro ao aplicar template",
         description: _e.message || "Tente novamente mais tarde.",

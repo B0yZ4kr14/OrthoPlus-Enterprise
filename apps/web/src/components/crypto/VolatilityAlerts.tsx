@@ -90,7 +90,7 @@ export function VolatilityAlerts() {
 
       setAlerts(mappedAlerts);
     } catch (error) {
-      console.error("Erro ao carregar alertas:", error);
+      toast.error("Erro ao carregar alertas");
       toast.error("Erro ao carregar alertas de volatilidade");
     } finally {
       setLoading(false);
@@ -126,7 +126,7 @@ export function VolatilityAlerts() {
       setShowForm(false);
       loadAlerts();
     } catch (error) {
-      console.error("Erro ao criar alerta:", error);
+      toast.error("Erro ao criar alerta");
       toast.error("Erro ao criar alerta de volatilidade");
     }
   };
@@ -142,7 +142,7 @@ export function VolatilityAlerts() {
       );
       loadAlerts();
     } catch (error) {
-      console.error("Erro ao atualizar alerta:", error);
+      toast.error("Erro ao atualizar alerta");
       toast.error("Erro ao atualizar alerta");
     }
   };
@@ -154,7 +154,7 @@ export function VolatilityAlerts() {
       toast.success("Alerta removido com sucesso!");
       loadAlerts();
     } catch (error) {
-      console.error("Erro ao remover alerta:", error);
+      toast.error("Erro ao remover alerta");
       toast.error("Erro ao remover alerta");
     }
   };

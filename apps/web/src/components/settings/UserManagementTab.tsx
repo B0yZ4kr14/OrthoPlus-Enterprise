@@ -61,7 +61,7 @@ export const UserManagementTab = () => {
 
       setUsers(usersWithRoles);
     } catch (error: unknown) {
-      console.error("Erro ao carregar usuários:", error);
+      toast.error("Erro ao carregar usuários");
       toast.error("Erro ao carregar usuários");
     } finally {
       setLoading(false);
@@ -88,7 +88,7 @@ export const UserManagementTab = () => {
       );
       setUserPermissions(initialPermissions);
     } catch (error: unknown) {
-      console.error("Erro ao carregar módulos:", error);
+      toast.error("Erro ao carregar módulos");
     }
   };
 

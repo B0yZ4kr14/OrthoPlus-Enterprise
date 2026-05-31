@@ -73,7 +73,7 @@ export function BackupExportTab() {
 
       toast.success("Exportação concluída com sucesso");
     } catch (error) {
-      console.error("Erro ao exportar:", error);
+      toast.error("Erro ao exportar backup");
       toast.error("Erro ao exportar dados");
     } finally {
       setIsExporting(false);

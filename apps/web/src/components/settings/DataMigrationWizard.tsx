@@ -97,7 +97,7 @@ export function DataMigrationWizard({
       setStep(3);
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Export error:", error);
+      toast.error("Erro ao exportar dados");
       toast.error("Erro ao exportar dados", { description: _e.message });
     } finally {
       setLoading(false);
@@ -134,7 +134,7 @@ export function DataMigrationWizard({
       setStep(4);
     } catch (error: unknown) {
       const _e = error instanceof Error ? error : { message: String(error) };
-      console.error("Import error:", error);
+      toast.error("Erro ao importar dados");
       toast.error("Erro ao importar dados", { description: _e.message });
     } finally {
       setLoading(false);

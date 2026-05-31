@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 export function BackupStatsTab() {
   const { clinicId } = useAuth();
@@ -47,7 +48,7 @@ export function BackupStatsTab() {
         });
       }
     } catch (e) {
-      console.error("Failed to fetch stats", e);
+      toast.error("Erro ao carregar estatísticas");
     }
   };
 

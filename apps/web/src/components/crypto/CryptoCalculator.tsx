@@ -118,7 +118,7 @@ export function CryptoCalculator() {
 
       setHistory24h(historyData);
     } catch (error) {
-      console.error("Erro ao buscar histórico:", error);
+      toast.error("Erro ao buscar histórico");
     } finally {
       setLoadingHistory(false);
     }
@@ -143,7 +143,7 @@ export function CryptoCalculator() {
       await fetchHistory24h();
       toast.success("Cotações atualizadas com sucesso!");
     } catch (error) {
-      console.error("Erro ao atualizar cotações:", error);
+      toast.error("Erro ao atualizar cotações");
       toast.error("Erro ao atualizar cotações. Usando valores em cache.");
     }
   };

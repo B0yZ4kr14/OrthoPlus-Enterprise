@@ -160,7 +160,7 @@ export function ExportDashboardDialog({
 
       toast.success("Excel exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao exportar Excel:", error);
+      toast.error("Erro ao exportar Excel");
       toast.error("Erro ao exportar para Excel");
     }
   };
@@ -195,7 +195,7 @@ export function ExportDashboardDialog({
 
       toast.success("CSV exportado com sucesso!");
     } catch (error) {
-      console.error("Erro ao exportar CSV:", error);
+      toast.error("Erro ao exportar CSV");
       toast.error("Erro ao exportar para CSV");
     }
   };
@@ -247,7 +247,7 @@ export function ExportDashboardDialog({
           } em ${email}`,
       );
     } catch (error: unknown) {
-      console.error("Erro ao agendar exportação:", error);
+      toast.error("Erro ao agendar exportação");
       toast.error(
         error instanceof Error ? error.message : "Erro ao agendar exportação",
       );

@@ -105,7 +105,7 @@ export function BackupRestoreDialog({
       setStep(3); // Go to selection step
       toast.success("Backup carregado com sucesso!");
     } catch (error) {
-      console.error("Error loading backup:", error);
+      toast.error("Erro ao carregar backup");
       toast.error("Erro ao carregar backup", {
         description: "Arquivo inválido ou corrompido",
       });
@@ -131,7 +131,7 @@ export function BackupRestoreDialog({
       setStep(3);
       toast.success("Backup descriptografado com sucesso!");
     } catch (error) {
-      console.error("Error decrypting:", error);
+      toast.error("Erro ao descriptografar backup");
       toast.error("Erro ao descriptografar", {
         description: "Senha incorreta ou backup corrompido",
       });
@@ -195,7 +195,7 @@ export function BackupRestoreDialog({
         description: `${Object.values(data.results).reduce((a: number, b: number) => a + b, 0)} registros restaurados`,
       });
     } catch (error) {
-      console.error("Error restoring:", error);
+      toast.error("Erro ao restaurar backup");
       toast.error("Erro ao restaurar backup", {
         description:
           error instanceof Error ? error.message : "Erro desconhecido",

@@ -79,7 +79,7 @@ export function PermissionTemplates() {
 
       setUsers(memberUsers);
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
+      toast.error("Erro ao carregar dados");
       toast.error("Erro ao carregar templates");
     } finally {
       setLoading(false);
@@ -135,7 +135,7 @@ export function PermissionTemplates() {
       toast.success(`Template "${template.name}" aplicado com sucesso!`);
       setSelectedUser("");
     } catch (error) {
-      console.error("Erro ao aplicar template:", error);
+      toast.error("Erro ao aplicar template");
       toast.error("Erro ao aplicar template");
     } finally {
       setApplying(null);

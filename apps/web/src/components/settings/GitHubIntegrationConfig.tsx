@@ -54,7 +54,7 @@ export function GitHubIntegrationConfig() {
         setConfig(data.config_data as GitHubConfig);
       }
     } catch (error) {
-      console.error("Erro ao carregar config GitHub:", error);
+      toast({ title: "Erro", description: "Erro ao carregar configurações GitHub.", variant: "destructive" });
     } finally {
       setLoading(false);
     }

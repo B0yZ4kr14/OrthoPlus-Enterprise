@@ -107,7 +107,7 @@ export function AIModelConfig() {
         setConfig(data.config_data as AIModelConfig);
       }
     } catch (error) {
-      console.error("Erro ao carregar config IA:", error);
+      toast({ title: "Erro", description: "Erro ao carregar configurações de IA.", variant: "destructive" });
     } finally {
       setLoading(false);
     }

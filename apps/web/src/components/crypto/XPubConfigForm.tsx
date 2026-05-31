@@ -99,7 +99,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
       setIsValid(true);
       toast.success("xPub validado com sucesso!");
     } catch (error: unknown) {
-      console.error("Error validating xPub:", error);
+      toast.error("Erro ao validar xPub");
       toast.error("xPub inválido ou erro ao validar");
       setIsValid(false);
     } finally {
@@ -125,7 +125,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
       setIsValid(false);
       onSuccess?.();
     } catch (error: unknown) {
-      console.error("Error saving offline wallet:", error);
+      toast.error("Erro ao salvar carteira offline");
       toast.error("Erro ao salvar configuração");
     }
   };

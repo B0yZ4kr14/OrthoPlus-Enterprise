@@ -93,7 +93,7 @@ export function ModulePermissionsManager() {
         setSelectedUser(usersWithRoles[0].id);
       }
     } catch (error) {
-      console.error("Erro ao carregar dados:", error);
+      toast.error("Erro ao carregar dados");
       toast.error("Erro ao carregar dados de permissões");
     } finally {
       setLoading(false);
@@ -158,7 +158,7 @@ export function ModulePermissionsManager() {
 
       toast.success("Permissão atualizada com sucesso!");
     } catch (error) {
-      console.error("Erro ao atualizar permissão:", error);
+      toast.error("Erro ao atualizar permissão");
       toast.error("Erro ao atualizar permissão");
     }
   };
@@ -184,7 +184,7 @@ export function ModulePermissionsManager() {
       await fetchData();
       toast.success("Todas as permissões concedidas com sucesso!");
     } catch (error) {
-      console.error("Erro ao conceder permissões:", error);
+      toast.error("Erro ao conceder permissões");
       toast.error("Erro ao conceder permissões");
     } finally {
       setSaving(false);
@@ -200,7 +200,7 @@ export function ModulePermissionsManager() {
       await fetchData();
       toast.success("Todas as permissões revogadas com sucesso!");
     } catch (error) {
-      console.error("Erro ao revogar permissões:", error);
+      toast.error("Erro ao revogar permissões");
       toast.error("Erro ao revogar permissões");
     } finally {
       setSaving(false);

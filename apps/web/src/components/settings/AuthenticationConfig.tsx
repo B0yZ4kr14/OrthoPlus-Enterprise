@@ -64,7 +64,7 @@ export function AuthenticationConfig() {
         setConfig(data.config_data as AuthConfig);
       }
     } catch (error) {
-      console.error("Erro ao carregar config auth:", error);
+      toast({ title: "Erro", description: "Erro ao carregar configurações de autenticação.", variant: "destructive" });
     } finally {
       setLoading(false);
     }

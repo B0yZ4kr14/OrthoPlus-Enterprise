@@ -59,7 +59,7 @@ export function WebhookManager() {
       });
       setEvents(data || []);
     } catch (error) {
-      console.error("Erro ao carregar eventos:", error);
+      toast.error("Erro ao carregar eventos");
       toast.error("Erro ao carregar eventos de webhook");
     } finally {
       setLoading(false);

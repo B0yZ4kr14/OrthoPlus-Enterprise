@@ -259,7 +259,7 @@ export function ScheduledBackupWizard({
       onClose();
       setStep(1);
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("Erro inesperado");
       toast.error(
         error instanceof Error ? error.message : "Erro ao configurar backup",
       );
