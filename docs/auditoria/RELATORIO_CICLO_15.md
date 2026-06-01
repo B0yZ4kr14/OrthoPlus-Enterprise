@@ -126,7 +126,12 @@ sudo systemctl reload nginx
 - 18 arquivos, 31 insertions(+), 302 deletions(-)
 - Remove ~25 interfaces, types, classes e funções exportadas sem uso
 - Corrige referência CategoryDatabaseManager em categoryClients.ts
-- Exporta ExchangeConfigProps e tipos MasterDatabaseManager para inferência
+
+### `d8050c132` — fix(backend): exporta interfaces para inferência de tipos
+- ExchangeConfig: exporta ExchangeType e ExchangeConfigProps
+- MasterDatabaseManager: exporta CategoryConfig, MasterHealthResult,
+  MasterStatsResult, CrossQueryResult
+- Correção de build necessária após remoção de dead exports
 
 ---
 
