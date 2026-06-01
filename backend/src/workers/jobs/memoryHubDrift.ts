@@ -3,8 +3,6 @@ import { spawn } from "child_process";
 import path from "path";
 
 const CRON_EXPRESSION = process.env.MEMORY_HUB_DRIFT_SCAN_CRON || "0 2 * * *";
-let driftTimeout: NodeJS.Timeout | null = null;
-let driftInterval: NodeJS.Timeout | null = null;
 
 function parseCronExpression(cron: string): { hour: number; minute: number } {
   const parts = cron.split(" ");
@@ -67,20 +65,8 @@ export function startMemoryHubDriftCron(): void {
     `[MemoryHubDrift] Scheduled drift scan at ${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")} (in ${Math.round(msUntil / 1000 / 60)} minutes)`,
   );
 
-  driftTimeout = setTimeout(() => {
+  setTimeout(() => {
     runDriftScan();
-    driftInterval = setInterval(runDriftScan, 24 * 60 * 60 * 1000);
+    setInterval(runDriftScan, 24 * 60 * 60 * 1000);
   }, msUntil);
-}
-
-export function stopMemoryHubDrift(): void {
-  if (driftTimeout) {
-    clearTimeout(driftTimeout);
-    driftTimeout = null;
-  }
-  if (driftInterval) {
-    clearInterval(driftInterval);
-    driftInterval = null;
-  }
-  logger.info("[MemoryHubDrift] Stopped drift scan scheduler");
 }
