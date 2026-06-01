@@ -1,37 +1,26 @@
-import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 import { logger } from "@/infrastructure/logger";
 import { IDocumentRepository } from "../ports/IDocumentRepository";
+import { IDriftRepository } from "../ports/IDriftRepository";
 import { PathSandbox } from "../../infrastructure/PathSandbox";
 import { ContradictionDetector } from "./ContradictionDetector";
+import { DriftIssue } from "../types";
 
-export interface DriftIssue {
-  type:
-    | "missing_impl"
-    | "broken_ref"
-    | "outdated_decision"
-    | "orphan_doc"
-    | "contradictory_spec"
-    | "overlapping_scope";
-  severity: "low" | "medium" | "high" | "critical";
-  sourceDocument: string;
-  targetDocument?: string;
-  description: string;
-}
+export { DriftIssue };
 
 export class DriftDetectionService {
   private documents: IDocumentRepository;
-  private db: Database.Database;
+  private driftReports: IDriftRepository;
   private sandbox?: PathSandbox;
 
   constructor(
-    db: Database.Database,
     documents: IDocumentRepository,
+    driftReports: IDriftRepository,
     sandbox?: PathSandbox,
   ) {
-    this.db = db;
     this.documents = documents;
+    this.driftReports = driftReports;
     this.sandbox = sandbox;
   }
 
@@ -44,24 +33,7 @@ export class DriftDetectionService {
     issues.push(...this.detectOrphanDocs());
     issues.push(...this.detectContradictions());
 
-    // Store in drift_reports table
-    const insert = this.db.prepare(
-      `INSERT INTO drift_reports (id, type, severity, source_document, target_document, description, detected_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)
-       ON CONFLICT DO NOTHING`,
-    );
-
-    for (const issue of issues) {
-      insert.run(
-        crypto.randomUUID(),
-        issue.type,
-        issue.severity,
-        issue.sourceDocument,
-        issue.targetDocument || null,
-        issue.description,
-        Date.now(),
-      );
-    }
+    this.driftReports.insertMany(issues);
 
     return issues;
   }

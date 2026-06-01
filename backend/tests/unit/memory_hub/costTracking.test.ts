@@ -1,5 +1,6 @@
 import Database from "better-sqlite3";
 import { CostTrackingService } from "../../../src/modules/memory_hub/domain/services/CostTrackingService";
+import { CostRepository } from "../../../src/modules/memory_hub/infrastructure/CostRepository";
 
 describe("CostTrackingService", () => {
   let db: Database.Database;
@@ -7,7 +8,8 @@ describe("CostTrackingService", () => {
 
   beforeEach(() => {
     db = new Database(":memory:");
-    service = new CostTrackingService(db);
+    const costRepository = new CostRepository(db);
+    service = new CostTrackingService(costRepository);
   });
 
   afterEach(() => {

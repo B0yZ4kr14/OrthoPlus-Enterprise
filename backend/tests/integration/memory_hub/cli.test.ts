@@ -10,6 +10,7 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { DocumentRepository } from "../../../src/modules/memory_hub/infrastructure/DocumentRepository";
+import { DriftRepository } from "../../../src/modules/memory_hub/infrastructure/DriftRepository";
 
 describe("MemoryHub CLI", () => {
   let db: Database.Database;
@@ -91,7 +92,8 @@ describe("MemoryHub CLI", () => {
       const { DocumentRepository } =
         await import("../../../src/modules/memory_hub/infrastructure/DocumentRepository");
       const documents = new DocumentRepository(db);
-      const service = new DriftDetectionService(db, documents);
+      const driftReports = new DriftRepository(db);
+      const service = new DriftDetectionService(documents, driftReports);
       const issues = await service.detect();
       expect(Array.isArray(issues)).toBe(true);
     });

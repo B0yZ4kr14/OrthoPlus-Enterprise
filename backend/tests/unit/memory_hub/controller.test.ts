@@ -319,4 +319,210 @@ describe("MemoryHubController", () => {
       );
     });
   });
+
+
+  describe("rotateKey", () => {
+    it("should update embedding config for admin user", async () => {
+      const req = {
+        body: { provider: "ollama", model: "nomic-embed-text" },
+        user: { clinicId: "clinic-1", role: "ADMIN" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controller.rotateKey(req, res as unknown as Response, next);
+
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: "Embedding configuration updated",
+          provider: expect.any(String),
+        }),
+      );
+    });
+
+    it("should reject non-admin users", async () => {
+      const req = {
+        body: { provider: "openai" },
+        user: { clinicId: "clinic-1", role: "DENTISTA" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controller.rotateKey(req, res as unknown as Response, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 403 }),
+      );
+      expect(res.json).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("costs", () => {
+    it("should return monthly cost summary when costTracking is enabled", async () => {
+      const mockCostService = {
+        getMonthlySummary: jest.fn().mockReturnValue({
+          clinicId: "clinic-1",
+          month: "2026-05",
+          totalCostUsd: 1.23,
+          totalTokens: 45000,
+          queryCount: 12,
+          budgetLimitUsd: 50,
+          alertTriggered: false,
+        }),
+      };
+
+      const controllerWithCosts = new MemoryHubController({
+        searchService: mockSearchService,
+        contextBriefService: mockContextBriefService,
+        indexingService: mockIndexingService,
+        graphService: mockGraphService,
+        auditRepository: mockAuditRepository,
+        healthService: mockHealthService,
+        metrics: mockMetrics as any,
+        driftRepository: mockDriftRepository,
+        costTrackingService: mockCostService as any,
+      });
+
+      const req = {
+        query: { month: "2026-05" },
+        user: { clinicId: "clinic-1" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controllerWithCosts.costs(req, res as unknown as Response, next);
+
+      expect(mockCostService.getMonthlySummary).toHaveBeenCalledWith("clinic-1", "2026-05");
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          totalCostUsd: 1.23,
+          queryCount: 12,
+        }),
+      );
+    });
+
+    it("should return 503 when costTracking is not enabled", async () => {
+      const req = {
+        query: {},
+        user: { clinicId: "clinic-1" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controller.costs(req, res as unknown as Response, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 503 }),
+      );
+    });
+  });
+
+  describe("drift", () => {
+    it("should return drift issues with pagination", async () => {
+      mockDriftRepository.findUnresolved.mockReturnValue([
+        { id: "1", type: "broken_ref", severity: "medium", source_document: "specs/test.md" },
+      ]);
+      mockDriftRepository.countUnresolved.mockReturnValue(1);
+
+      const req = {
+        query: { severity: "medium", limit: "10", offset: "0" },
+        user: { clinicId: "clinic-1" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controller.drift(req, res as unknown as Response, next);
+
+      expect(mockDriftRepository.findUnresolved).toHaveBeenCalledWith({
+        severity: "medium",
+        limit: 10,
+        offset: 0,
+      });
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          issues: expect.any(Array),
+          total: 1,
+          limit: 10,
+          offset: 0,
+        }),
+      );
+    });
+
+    it("should call next with error when limit exceeds 100", async () => {
+      const req = {
+        query: { limit: "201" },
+        user: { clinicId: "clinic-1" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controller.drift(req, res as unknown as Response, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 400 }),
+      );
+    });
+  });
+
+  describe("admin authorization", () => {
+    it("should allow ADMIN role to access reindex", async () => {
+      const req = {
+        user: { clinicId: "clinic-1", role: "ADMIN" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      mockIndexingService.reindexAll.mockResolvedValue(undefined);
+
+      await controller.reindex(req, res as unknown as Response, next);
+
+      expect(mockIndexingService.reindexAll).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalled();
+    });
+
+    it("should allow ROOT role to access reindex", async () => {
+      const req = {
+        user: { clinicId: "clinic-1", role: "ROOT" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      mockIndexingService.reindexAll.mockResolvedValue(undefined);
+
+      await controller.reindex(req, res as unknown as Response, next);
+
+      expect(mockIndexingService.reindexAll).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalled();
+    });
+
+    it("should reject DENTISTA role from reindex", async () => {
+      const req = {
+        user: { clinicId: "clinic-1", role: "DENTISTA" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controller.reindex(req, res as unknown as Response, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 403 }),
+      );
+      expect(mockIndexingService.reindexAll).not.toHaveBeenCalled();
+    });
+
+    it("should reject ATENDENTE role from rotateKey", async () => {
+      const req = {
+        body: { provider: "openai" },
+        user: { clinicId: "clinic-1", role: "ATENDENTE" },
+      } as unknown as Request;
+      const res = createMockResponse();
+      const next = createMockNext();
+
+      await controller.rotateKey(req, res as unknown as Response, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 403 }),
+      );
+    });
+  });
 });

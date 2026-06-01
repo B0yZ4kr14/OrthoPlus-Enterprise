@@ -4,10 +4,12 @@ import { SearchService } from "../domain/services/SearchService";
 import { EmbeddingClientFactory } from "../infrastructure/EmbeddingClientFactory";
 import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository";
 import { DocumentRepository } from "../infrastructure/DocumentRepository";
+import { isJsonMode } from "./jsonMode";
 
+const jsonMode = isJsonMode();
 const topic = process.argv.slice(2).join(" ");
 if (!topic) {
-  console.error("Usage: tsx brief.ts <topic>");
+  console.error("Usage: tsx brief.ts [--json] <topic>");
   process.exit(1);
 }
 
@@ -23,14 +25,22 @@ const briefService = new ContextBriefService(searchService, documents);
 briefService
   .generateBrief({ topic })
   .then((brief) => {
-    console.log(brief.markdown);
-    console.log(
-      `\n---\nDocuments: ${brief.documents.length} | Tokens: ${brief.tokenCount}`,
-    );
+    if (jsonMode) {
+      console.log(JSON.stringify(brief, null, 2));
+    } else {
+      console.log(brief.markdown);
+      console.log(
+        `\n---\nDocuments: ${brief.documents.length} | Tokens: ${brief.tokenCount}`,
+      );
+    }
     db.close();
   })
   .catch((err) => {
-    console.error("Brief generation failed:", err);
+    if (jsonMode) {
+      console.error(JSON.stringify({ error: err.message || String(err) }));
+    } else {
+      console.error("Brief generation failed:", err);
+    }
     db.close();
     process.exit(1);
   });

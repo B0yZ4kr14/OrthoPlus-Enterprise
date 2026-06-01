@@ -1,15 +1,17 @@
 import Database from "better-sqlite3";
 import { DocumentRepository } from "../infrastructure/DocumentRepository";
+import { DriftRepository } from "../infrastructure/DriftRepository";
+import { isJsonMode } from "./jsonMode";
 
+const jsonMode = isJsonMode();
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db";
 const db = new Database(dbPath);
 const documents = new DocumentRepository(db);
+const driftReports = new DriftRepository(db);
 
 const totalDocs = documents.count();
 const allDocs = documents.listAll();
-const driftCount = db
-  .prepare("SELECT COUNT(*) as c FROM drift_reports WHERE resolved_at IS NULL")
-  .get() as { c: number };
+const driftCount = driftReports.countUnresolved();
 
 const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
 const recentlyIndexed = allDocs.filter(
@@ -18,14 +20,29 @@ const recentlyIndexed = allDocs.filter(
 const coverage =
   totalDocs > 0 ? Math.round((recentlyIndexed / totalDocs) * 100) : 0;
 
-console.log("\n🏥 Memory Hub Health\n");
-console.log(`  📊 Documents indexed: ${totalDocs}`);
-console.log(`  🔄 Recently indexed:  ${recentlyIndexed} (${coverage}%)`);
-console.log(`  ⚠️  Open drift issues: ${driftCount.c}`);
-console.log(
-  `  📅 Last scan:         ${allDocs[0]?.lastIndexed ? new Date(allDocs[0].lastIndexed).toLocaleString() : "N/A"}`,
-);
-console.log(`  💾 Index path:        ${dbPath}`);
-console.log();
+const healthData = {
+  documentsIndexed: totalDocs,
+  recentlyIndexed,
+  coveragePercent: coverage,
+  openDriftIssues: driftCount,
+  lastScan: allDocs[0]?.lastIndexed
+    ? new Date(allDocs[0].lastIndexed).toISOString()
+    : null,
+  indexPath: dbPath,
+};
+
+if (jsonMode) {
+  console.log(JSON.stringify(healthData, null, 2));
+} else {
+  console.log("\n🏥 Memory Hub Health\n");
+  console.log(`  📊 Documents indexed: ${healthData.documentsIndexed}`);
+  console.log(`  🔄 Recently indexed:  ${healthData.recentlyIndexed} (${healthData.coveragePercent}%)`);
+  console.log(`  ⚠️  Open drift issues: ${healthData.openDriftIssues}`);
+  console.log(
+    `  📅 Last scan:         ${healthData.lastScan ? new Date(healthData.lastScan).toLocaleString() : "N/A"}`,
+  );
+  console.log(`  💾 Index path:        ${healthData.indexPath}`);
+  console.log();
+}
 
 db.close();

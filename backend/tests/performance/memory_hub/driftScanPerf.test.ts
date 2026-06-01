@@ -11,6 +11,7 @@ import path from "path";
 import os from "os";
 import { DriftDetectionService } from "../../../src/modules/memory_hub/domain/services/DriftDetectionService";
 import { DocumentRepository } from "../../../src/modules/memory_hub/infrastructure/DocumentRepository";
+import { DriftRepository } from "../../../src/modules/memory_hub/infrastructure/DriftRepository";
 
 describe("DriftScan Performance", () => {
   let db: Database.Database;
@@ -80,7 +81,8 @@ describe("DriftScan Performance", () => {
     const { DocumentRepository } =
       await import("../../../src/modules/memory_hub/infrastructure/DocumentRepository");
     const documents = new DocumentRepository(db);
-    const service = new DriftDetectionService(db, documents);
+    const driftReports = new DriftRepository(db);
+    const service = new DriftDetectionService(documents, driftReports);
 
     const start = Date.now();
     const issues = await service.detect();

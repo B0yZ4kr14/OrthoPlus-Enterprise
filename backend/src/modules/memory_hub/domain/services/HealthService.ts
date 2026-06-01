@@ -1,6 +1,6 @@
-import Database from "better-sqlite3";
 import { IDocumentRepository } from "../ports/IDocumentRepository";
 import { IEmbeddingRepository } from "../ports/IEmbeddingRepository";
+import { IDriftRepository } from "../ports/IDriftRepository";
 
 export interface HealthMetrics {
   indexStatus: "healthy" | "empty";
@@ -14,29 +14,25 @@ export interface HealthMetrics {
 }
 
 export class HealthService {
-  private db: Database.Database;
   private documents: IDocumentRepository;
   private embeddings: IEmbeddingRepository;
+  private driftReports: IDriftRepository;
 
   constructor(
-    db: Database.Database,
     documents: IDocumentRepository,
     embeddings: IEmbeddingRepository,
+    driftReports: IDriftRepository,
   ) {
-    this.db = db;
     this.documents = documents;
     this.embeddings = embeddings;
+    this.driftReports = driftReports;
   }
 
   getMetrics(clinicId: string): HealthMetrics {
     const totalDocs = this.documents.count(clinicId);
     const allDocs = this.documents.listAll(clinicId);
 
-    const driftRow = this.db
-      .prepare(
-        "SELECT COUNT(*) as c FROM drift_reports WHERE resolved_at IS NULL",
-      )
-      .get() as { c: number };
+    const driftCount = this.driftReports.countUnresolved();
 
     // Coverage: docs indexed in last 7 days vs total markdown files
     const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -58,7 +54,7 @@ export class HealthService {
       lastScan: allDocs[0]?.lastIndexed
         ? new Date(allDocs[0].lastIndexed).toISOString()
         : null,
-      driftCount: driftRow.c,
+      driftCount: driftCount,
       coveragePercent: coveragePercent,
     };
   }

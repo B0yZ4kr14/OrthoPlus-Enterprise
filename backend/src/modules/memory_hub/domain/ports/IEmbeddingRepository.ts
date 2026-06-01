@@ -1,12 +1,14 @@
+import { EmbeddingInput, EmbeddingSearchResult } from "../types"
+
 /**
  * Port (interface) for embedding repository operations.
  */
 export interface IEmbeddingRepository {
   getCompressionStats(): {
-    compressionRatio: number;
-    compressedEmbeddings: number;
-    spaceSavedBytes: number;
-  };
+    compressionRatio: number
+    compressedEmbeddings: number
+    spaceSavedBytes: number
+  }
   searchSimilar(
     embedding: number[],
     model: string,
@@ -17,9 +19,7 @@ export interface IEmbeddingRepository {
     featureNumber?: string,
     dateFrom?: number,
     dateTo?: number,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  bulkInsert(data: any[], useCompression?: boolean): void;
-  deleteByDocument(documentId: string): void;
+  ): EmbeddingSearchResult[]
+  bulkInsert(data: EmbeddingInput[], useCompression?: boolean): void
+  deleteByDocument(documentId: string): void
 }

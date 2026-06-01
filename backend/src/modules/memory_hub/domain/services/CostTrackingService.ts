@@ -1,5 +1,5 @@
-import Database from "better-sqlite3";
 import { logger } from "@/infrastructure/logger";
+import { ICostRepository } from "../ports/ICostRepository";
 
 export interface CostEstimate {
   tokens: number;
@@ -19,28 +19,12 @@ export interface MonthlyBudget {
 }
 
 export class CostTrackingService {
-  private db: Database.Database;
+  private repository: ICostRepository;
   private readonly charsPerToken = 4;
 
-  constructor(db: Database.Database) {
-    this.db = db;
-    this.ensureTable();
-  }
-
-  private ensureTable(): void {
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS embedding_costs (
-        id TEXT PRIMARY KEY,
-        clinic_id TEXT NOT NULL,
-        query_text TEXT,
-        tokens INTEGER NOT NULL,
-        cost_usd REAL NOT NULL,
-        provider TEXT NOT NULL,
-        model TEXT NOT NULL,
-        timestamp INTEGER NOT NULL
-      );
-      CREATE INDEX IF NOT EXISTS idx_costs_clinic_month ON embedding_costs(clinic_id, timestamp);
-    `);
+  constructor(repository: ICostRepository) {
+    this.repository = repository;
+    this.repository.ensureTable();
   }
 
   estimateTokens(text: string): number {
@@ -71,20 +55,15 @@ export class CostTrackingService {
     const tokens = this.estimateTokens(queryText);
     const estimate = this.estimateCost(tokens, provider, model);
 
-    const stmt = this.db.prepare(
-      `INSERT INTO embedding_costs (id, clinic_id, query_text, tokens, cost_usd, provider, model, timestamp)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    );
-    stmt.run(
-      crypto.randomUUID(),
+    this.repository.insert({
       clinicId,
       queryText,
-      estimate.tokens,
-      estimate.costUsd,
-      estimate.provider,
-      estimate.model,
-      Date.now(),
-    );
+      tokens: estimate.tokens,
+      costUsd: estimate.costUsd,
+      provider: estimate.provider,
+      model: estimate.model,
+      timestamp: Date.now(),
+    });
 
     return estimate;
   }
@@ -97,20 +76,7 @@ export class CostTrackingService {
     const startMs = new Date(year, month - 1, 1).getTime();
     const endMs = new Date(year, month, 1).getTime();
 
-    const row = this.db
-      .prepare(
-        `SELECT
-          COALESCE(SUM(tokens), 0) as total_tokens,
-          COALESCE(SUM(cost_usd), 0) as total_cost,
-          COUNT(*) as query_count
-         FROM embedding_costs
-         WHERE clinic_id = ? AND timestamp >= ? AND timestamp < ?`,
-      )
-      .get(clinicId, startMs, endMs) as {
-      total_tokens: number;
-      total_cost: number;
-      query_count: number;
-    };
+    const row = this.repository.getMonthlySummary(clinicId, startMs, endMs);
 
     const budgetLimitUsd = this.getBudgetLimit(clinicId);
     const alertTriggered = row.total_cost > budgetLimitUsd;

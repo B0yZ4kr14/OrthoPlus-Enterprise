@@ -3,6 +3,7 @@ import { logger } from "@/infrastructure/logger";
 import { DriftDetectionService } from "../domain/services/DriftDetectionService";
 import { PathSandbox } from "../infrastructure/PathSandbox";
 import { DocumentRepository } from "../infrastructure/DocumentRepository";
+import { DriftRepository } from "../infrastructure/DriftRepository";
 
 const dbPath = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db";
 const projectRoot = process.env.MEMORY_HUB_PROJECT_ROOT || process.cwd();
@@ -15,7 +16,8 @@ const timeoutMs = parseInt(
 const sandbox = new PathSandbox(projectRoot);
 const db = new Database(dbPath);
 const documents = new DocumentRepository(db);
-const detector = new DriftDetectionService(db, documents, sandbox);
+const driftReports = new DriftRepository(db);
+const detector = new DriftDetectionService(documents, driftReports, sandbox);
 
 const startTime = Date.now();
 

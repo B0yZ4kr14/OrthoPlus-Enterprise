@@ -12,6 +12,7 @@ import { GraphService } from "./domain/services/GraphService";
 import { FileWatcher } from "./infrastructure/FileWatcher";
 import { SearchAuditRepository } from "./infrastructure/SearchAuditRepository";
 import { DriftRepository } from "./infrastructure/DriftRepository";
+import { CostRepository } from "./infrastructure/CostRepository";
 import { DocumentRepository } from "./infrastructure/DocumentRepository";
 import { EmbeddingRepository } from "./infrastructure/EmbeddingRepository";
 import { EmbeddingClientFactory } from "./infrastructure/EmbeddingClientFactory";
@@ -81,9 +82,11 @@ export function createMemoryHubModule(
   const embeddings = new EmbeddingRepository(db);
   const auditRepository = new SearchAuditRepository(db);
   const embedder = EmbeddingClientFactory.create();
+  const driftRepository = new DriftRepository(db);
 
-  const healthService = new HealthService(db, documents, embeddings);
-  const costTrackingService = new CostTrackingService(db);
+  const healthService = new HealthService(documents, embeddings, driftRepository);
+  const costRepository = new CostRepository(db);
+  const costTrackingService = new CostTrackingService(costRepository);
   const searchService = new SearchService(embedder, embeddings);
   const contextBriefService = new ContextBriefService(searchService, documents);
   const indexingService = IndexingServiceFactory.create(db, {
@@ -92,8 +95,6 @@ export function createMemoryHubModule(
     embedder,
   });
   const graphService = new GraphService(documents);
-
-  const driftRepository = new DriftRepository(db);
 
   const controller = new MemoryHubController({
     searchService,

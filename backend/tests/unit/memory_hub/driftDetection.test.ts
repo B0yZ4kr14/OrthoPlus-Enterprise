@@ -4,6 +4,7 @@ import path from "path";
 import os from "os";
 import { DriftDetectionService } from "../../../src/modules/memory_hub/domain/services/DriftDetectionService";
 import { DocumentRepository } from "../../../src/modules/memory_hub/infrastructure/DocumentRepository";
+import { DriftRepository } from "../../../src/modules/memory_hub/infrastructure/DriftRepository";
 
 const originalExistsSync = fs.existsSync;
 
@@ -11,6 +12,7 @@ describe("DriftDetectionService", () => {
   let db: Database.Database;
   let service: DriftDetectionService;
   let repo: DocumentRepository;
+  let driftRepo: DriftRepository;
   let tempDir: string;
 
   beforeEach(() => {
@@ -49,7 +51,8 @@ describe("DriftDetectionService", () => {
     `);
 
     repo = new DocumentRepository(db);
-    service = new DriftDetectionService(db, repo);
+    driftRepo = new DriftRepository(db);
+    service = new DriftDetectionService(repo, driftRepo);
   });
 
   afterEach(() => {

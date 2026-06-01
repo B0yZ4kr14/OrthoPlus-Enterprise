@@ -1,5 +1,6 @@
 import Database from "better-sqlite3";
 import { IDriftRepository } from "../domain/ports/IDriftRepository";
+import { DriftIssue } from "../domain/types";
 
 export class DriftRepository implements IDriftRepository {
   constructor(private db: Database.Database) {}
@@ -37,5 +38,31 @@ export class DriftRepository implements IDriftRepository {
     );
     const row = stmt.get() as { c: number };
     return row.c;
+  }
+
+  insertMany(issues: DriftIssue[]): void {
+    if (issues.length === 0) return;
+
+    const insert = this.db.prepare(
+      `INSERT INTO drift_reports (id, type, severity, source_document, target_document, description, detected_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT DO NOTHING`,
+    );
+
+    const insertAll = this.db.transaction((items: DriftIssue[]) => {
+      for (const issue of items) {
+        insert.run(
+          crypto.randomUUID(),
+          issue.type,
+          issue.severity,
+          issue.sourceDocument,
+          issue.targetDocument || null,
+          issue.description,
+          Date.now(),
+        );
+      }
+    });
+
+    insertAll(issues);
   }
 }
