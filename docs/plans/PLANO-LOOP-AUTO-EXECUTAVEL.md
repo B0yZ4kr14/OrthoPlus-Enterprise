@@ -19,14 +19,14 @@
 ### Specs Parciais
 | Spec | Done/Total | Pendente |
 |------|-----------|----------|
-| 001-pacientes | 37/38 | 1 |
+| pacientes | 37/38 | 1 |
 | 005-auth-usuarios | 38/39 | 1 |
 | 015-files | 48/62 | 14 |
 
 ### Specs Não Iniciadas (0%)
 | Spec | Total | Prioridade |
 |------|-------|-----------|
-| 002-agenda | 56 | P1 (Core) |
+| agenda | 56 | P1 (Core) |
 | 003-pep | 56 | P1 (Core) |
 | 004-financeiro | 56 | P1 (Finance) |
 | 006-orcamentos | 52 | P2 (Operacional) |
@@ -111,7 +111,7 @@ FIM
 ## PRIORIDADE POR ITERAÇÃO
 
 ### Iteração 1: Core (002, 003, 004)
-- 002-agenda: CRUD, agendamentos, notificações
+- agenda: CRUD, agendamentos, notificações
 - 003-pep: Prontuário eletrônico
 - 004-financeiro: Financeiro básico
 
