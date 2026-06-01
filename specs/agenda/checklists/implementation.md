@@ -1,6 +1,6 @@
-# Implementation Checklist: 001-pacientes
+# Implementation Checklist: Agenda
 
-**Feature**: 001-pacientes
+**Feature**: agenda
 **Created**: 2026-05-20
 **Purpose**: Validate implementation completeness against spec, plan, and tasks.
 

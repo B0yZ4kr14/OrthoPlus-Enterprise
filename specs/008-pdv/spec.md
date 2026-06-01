@@ -103,6 +103,7 @@
 
 ### PDV-FR-003: Controle de Caixa
 **Description**: Operação diária de caixa. **Owner: Financeiro (entidade); PDV (operação)** — PDV abre, movimenta e solicita fechamento; Financeiro consolida e torna o fechamento irreversível.
+> **Cross-Reference**: Ver também `specs/004-financeiro/spec.md` (FIN-FR-002) para detalhes do bounded context Financeiro, fechamento oficial e relatórios.
 **Priority**: Must Have
 **Acceptance Criteria**:
 - Abertura com saldo inicial (via API do Financeiro)

@@ -227,3 +227,92 @@ AND o envio é registrado no histórico de confirmações
 | GAP-3 | ~~Low~~ ✅ **PARTIALLY RESOLVED** | ~~Backend duplicates business logic instead of using domain commands~~ — `createAppointment` now uses `CreateAppointmentCommandHandler` + `AppointmentRepositoryPostgres` (2026-05-23). `updateAppointment`, `deleteAppointment`, `getAppointments` still use direct Prisma. Gradual migration in progress. |
 | GAP-4 | ~~Low~~ ✅ **RESOLVED** | ~~E2E tests rely on fragile locators~~ — 20+ `data-testid` attributes added to Agenda components on 2026-05-23. |
 | GAP-5 | ~~Low~~ ✅ **RESOLVED** | ~~No rate limiting on agenda endpoints~~ — `agendaLimiter` (200 req/15min) added to router on 2026-05-23. |
+
+---
+
+## Edge Cases
+
+> *Consolidated from specs/002-agenda/spec.md*
+
+### EC-001: Paciente Não Encontrado
+**Condition**: Paciente ainda não cadastrado durante a marcação
+**Expected Behavior**: Shortcut para cadastro rápido sem sair da tela de agenda
+
+### EC-002: Dentista em Férias
+**Condition**: Tentativa de agendar durante férias do dentista
+**Expected Behavior**: Horários aparecem como bloqueados. Mensagem: "Dr. Silva em férias de X a Y."
+
+### EC-003: Consulta Passada
+**Condition**: Tentativa de editar agendamento de data passada
+**Expected Behavior**: Edição bloqueada. Apenas visualização e adição de notas.
+
+---
+
+## Key Entities
+
+> *Consolidated from specs/002-agenda/spec.md*
+
+### Entity: Appointment
+**Attributes**:
+- `id` (UUID)
+- `clinicId` (String)
+- `patientId` (UUID) → Patient
+- `dentistId` (UUID) → Funcionário
+- `startTime` (DateTime)
+- `endTime` (DateTime)
+- `procedureId` (UUID) → Procedimento
+- `status` (Enum): AGENDADO, CONFIRMADO, CANCELADO, CONCLUIDO, FALTOU
+- `notes` (String)
+- `confirmationSentAt` (DateTime)
+- `confirmedAt` (DateTime)
+- `createdAt`, `updatedAt`
+
+### Entity: BlockedTime
+**Attributes**:
+- `id` (UUID)
+- `clinicId` (String)
+- `dentistId` (UUID)
+- `startTime` (DateTime)
+- `endTime` (DateTime)
+- `reason` (String)
+- `isRecurring` (Boolean)
+- `recurrenceRule` (String) — iCal RRULE format
+
+---
+
+## Dependencies & Assumptions
+
+> *Consolidated from specs/002-agenda/spec.md*
+
+### Dependencies
+- `pacientes` — busca de paciente
+- `procedimentos` — duração e tipo
+- `funcionarios` — dentistas disponíveis
+- `notifications` — envio de confirmações
+
+### Assumptions
+- Cada consulta tem duração definida pelo procedimento
+- Dentistas têm horário de trabalho configurado
+- Fuso horário é America/Sao_Paulo
+
+---
+
+## Out of Scope
+
+> *Consolidated from specs/002-agenda/spec.md*
+
+- Integração com Google Calendar / Outlook
+- Videochamada (teleodonto)
+- Gestão de fila de espera
+- Chat entre paciente e clínica
+
+---
+
+## Notes
+
+> *Consolidated from specs/002-agenda/spec.md*
+
+- Backend: módulo `agenda` com Prisma (appointments, blocked_times, dentist_schedules)
+- Frontend: Clean Architecture completa (domain, application, infrastructure, presentation)
+- WebSocket ou SSE para atualização em tempo real
+- **Spec consolidation**: Esta spec foi consolidada a partir de `specs/002-agenda/` em `specs/agenda/` em 2026-05-28.

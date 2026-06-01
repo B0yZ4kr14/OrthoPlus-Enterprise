@@ -147,7 +147,7 @@ SCAN -> ANALYZE -> FIX -> VALIDATE -> (loop se falhar)
 ### FASE 2: Implementacao Specs Criticas (120 min)
 
 **Prioridade de Negocio**:
-- T1 (Core): 005-auth, 001-pacientes, 002-agenda
+- T1 (Core): 005-auth, pacientes, agenda
 - T2 (Financeiro): 004-financeiro, 008-pdv, 009-faturamento
 - T3 (Operacional): 003-pep, 007-procedimentos, 006-orcamentos
 - T4-T5: demais modulos
@@ -179,7 +179,7 @@ Codigo ja implementado. Acao: verificar, marcar tasks [X], adicionar testes.
 
 **Deliverables**:
 - specs/005-auth-usuarios/tasks.md atualizado
-- specs/001-pacientes/tasks.md atualizado
+- specs/pacientes/tasks.md atualizado
 - specs/018-sidebar-collapsed-default/tasks.md atualizado
 
 ---
@@ -252,7 +252,7 @@ Codigo ja implementado. Acao: verificar, marcar tasks [X], adicionar testes.
 | O que funcionou bem? | Gates passando, backend saudavel |
 | O que melhorar? | Velocidade de deploy |
 | Dividas tecnicas? | 738 ts-ignore, 7 circular deps, 18 fetch() |
-| Proxima prioridade? | Specs 002-agenda, 004-financeiro |
+| Proxima prioridade? | Specs agenda, 004-financeiro |
 
 #### 5.2 Atualizar Artefatos
 - specs/*/tasks.md -> marcar [X]

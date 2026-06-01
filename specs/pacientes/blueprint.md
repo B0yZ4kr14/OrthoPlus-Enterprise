@@ -1,6 +1,6 @@
 # Blueprint: Gestão de Pacientes
 
-**Branch**: `[001-pacientes]` | **Date**: 2026-05-18
+**Branch**: `pacientes` | **Date**: 2026-05-18
 **Mode**: scaffold
 **Total Tasks**: 51 | **Files**: 4 new, 3 modified, 0 deleted
 
@@ -43,7 +43,7 @@ T001 (Audit) → T002-T004 (Analysis)
 
 ### T002: Audit existing `pacientes` frontend module
 
-**File**: `specs/001-pacientes/audit-frontend.md` (new)
+**File**: `specs/pacientes/audit-frontend.md` (new)
 
 **Requirements**: FR-001
 
@@ -67,7 +67,7 @@ This is an analysis task — no code artifact. Document findings:
 
 ### T003: Identify gaps between spec and current implementation
 
-**File**: `specs/001-pacientes/gap-analysis.md` (new)
+**File**: `specs/pacientes/gap-analysis.md` (new)
 
 **Requirements**: FR-001, FR-002, FR-003, FR-004, FR-005
 
@@ -92,7 +92,7 @@ Analysis task — document gaps:
 
 ### T004: Document API contract changes
 
-**File**: `specs/001-pacientes/contracts/api-contracts.md` (new)
+**File**: `specs/pacientes/contracts/api-contracts.md` (new)
 
 **Requirements**: FR-001
 

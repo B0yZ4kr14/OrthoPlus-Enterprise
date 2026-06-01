@@ -9,8 +9,8 @@
 
 | Spec | Status | Drift |
 |------|--------|-------|
-| specs/001-pacientes | Partial | Tests missing, some TS errors |
-| specs/002-agenda | Partial | Tests missing |
+| specs/pacientes | Partial | Tests missing, some TS errors |
+| specs/agenda | Partial | Tests missing |
 | specs/003-pep | Partial | Tests minimal |
 
 ---

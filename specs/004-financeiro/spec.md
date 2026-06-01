@@ -100,6 +100,7 @@ Dentistas e administradores precisam:
 
 ### FIN-FR-002: Caixa Registradora
 **Description**: Controle de entradas e saídas do dia. **Owner: Financeiro** — PDV opera o caixa no dia-a-dia, mas o registro histórico e fechamento oficial são do Financeiro.
+> **Cross-Reference**: Ver também `specs/008-pdv/spec.md` (PDV-FR-003) para detalhes operacionais de abertura, sangria, reforço e solicitação de fechamento.
 **Priority**: Must Have
 **Acceptance Criteria**:
 - Entidade `Caixa` pertence ao bounded context Financeiro

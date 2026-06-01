@@ -160,3 +160,93 @@ AND o IMC e calculado automaticamente a partir de peso e altura
 | GAP-3 | ~~Low~~ ✅ **RESOLVED** | ~~Patient form uses apiClient directly instead of use cases~~ — Clean Architecture applied: `PatientRepositoryApi`, `ListPatientsUseCase`, `AddPatientUseCase`, `UpdatePatientUseCase`, `DeletePatientUseCase`, `usePatientsClean` on 2026-05-23. |
 | GAP-4 | ~~Low~~ ✅ **RESOLVED** | ~~E2E tests use text-based locators~~ — `data-testid` attributes added to `PacientesListPage`, `PatientFormPage` on 2026-05-23. |
 | GAP-5 | ~~Low~~ ✅ **RESOLVED** | ~~Patient portal auth returns key in body~~ — Migrated to HttpOnly/Secure/SameSite=Strict cookie (`patient_session`) on 2026-05-23. |
+
+---
+
+## Edge Cases
+
+> *Consolidated from specs/001-pacientes/spec.md*
+
+### EC-001: CPF Inválido
+**Condition**: Usuário digita CPF com dígitos verificadores errados
+**Expected Behavior**: Mensagem de erro específica: CPF inválido. Verifique os dígitos.
+
+### EC-002: Paciente Sem CPF (Estrangeiro)
+**Condition**: Paciente não tem CPF brasileiro
+**Expected Behavior**: Campo CPF opcional, passaporte como alternativa. Alerta visual mas não bloqueante.
+
+### EC-003: CEP Não Encontrado
+**Condition**: CEP inexistente na base dos Correios
+**Expected Behavior**: Campos de endereço ficam editáveis manualmente. Toast informativo.
+
+### EC-004: Upload de Foto Muito Grande
+**Condition**: Arquivo > 5MB
+**Expected Behavior**: Rejeição com mensagem clara. Sugestão de compressão.
+
+---
+
+## Key Entities
+
+> *Consolidated from specs/001-pacientes/spec.md*
+
+### Entity: Patient
+**Attributes**:
+- id (UUID): Identificador único
+- clinicId (String): Tenant (multi-clínica)
+- name (String): Nome completo
+- cpf (String): CPF brasileiro (unique per clinic)
+- rg (String): RG opcional
+- birthDate (Date): Data de nascimento
+- phone (String): Telefone principal
+- email (String): Email
+- address (JSON): cep, street, number, complement, neighborhood, city, state
+- photoUrl (String): URL da foto
+- status (Enum): NOVO, ATIVO, EM_TRATAMENTO, INATIVO, ARQUIVADO
+- notes (String): Observações internas
+- createdAt (DateTime)
+- updatedAt (DateTime)
+
+**Relationships**:
+- Has many appointments (Agenda)
+- Has many budgets (Orçamentos)
+- Has many records (PEP)
+- Has many transactions (Financeiro)
+- Has many notifications
+
+---
+
+## Dependencies & Assumptions
+
+> *Consolidated from specs/001-pacientes/spec.md*
+
+### Dependencies
+- files — upload de foto
+- auth — autenticação do portal do paciente
+- notifications — alertas de recall e aniversário
+
+### Assumptions
+- CPF é o identificador principal no Brasil
+- ViaCEP ou API equivalente disponível para auto-complete
+- Cada clínica opera como tenant isolado (clinicId)
+
+---
+
+## Out of Scope
+
+> *Consolidated from specs/001-pacientes/spec.md*
+
+- Integração com gov.br ou CNES
+- Biometria facial
+- Prontuário clínico completo (módulo PEP separado)
+- Gestão de convênios (módulo TISS separado)
+
+---
+
+## Notes
+
+> *Consolidated from specs/001-pacientes/spec.md*
+
+- O módulo pacientes no backend usa Prisma com schema dedicado
+- Frontend usa hooks diretos (não Clean Architecture) — usePatientsUnified
+- A entidade patients no Prisma já existe com ~15 campos
+- **Spec consolidation**: Esta spec foi consolidada a partir de `specs/001-pacientes/` em `specs/pacientes/` em 2026-05-28.

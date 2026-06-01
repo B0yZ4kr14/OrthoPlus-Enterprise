@@ -173,3 +173,37 @@
 
 - [x] TD003 [P2] Extract manual `Date.now()` timing pattern into shared `withTiming()` helper — duplicated in `CadastrarPacienteUseCase` and `PacienteSearchService`. — Fixed on 2026-05-24. Refactored both use cases to use shared `withTiming()` helper.
 - [X] TD004 [P2] `patients_total` Gauge does not decrement on patient deletion or status change — current implementation only increments on creation. Consider migrating to a Counter or adding reconciliation logic.
+
+---
+
+## Summary
+
+> *Consolidated from specs/001-pacientes/tasks.md*
+
+| Phase | Tasks | Done | Status |
+|-------|-------|------|--------|
+| Phase 1 (Audit) | 4 | 4 | COMPLETE |
+| Phase 2 (Backend) | 10 | 10 | COMPLETE |
+| Phase 3 (Frontend Foundation) | 5 | 5 | COMPLETE |
+| Phase 4 (User Stories) | 11 | 11 | COMPLETE |
+| Phase 5 (Quality Gates) | 7 | 6 | 1 PENDING |
+| **Total** | **37** | **36** | **97% COMPLETE** |
+
+---
+
+## Identified Gaps (Legacy)
+
+> *Consolidated from specs/001-pacientes/tasks.md*
+
+| Gap | Priority | Description |
+|-----|----------|-------------|
+| GAP-001 | LOW | Patient form advanced validation (RG, birth date cross-check) |
+| GAP-002 | MEDIUM | Frontend unit test coverage verification |
+| GAP-003 | LOW | Patient import/export (CSV/Excel) |
+
+---
+
+## Notes
+
+- **Task consolidation**: Este tasks.md foi consolidado a partir de `specs/001-pacientes/tasks.md` em 2026-05-28.
+- O tasks.md original (`specs/001-pacientes/`) usava uma estrutura por fase; o canonical (`specs/pacientes/`) usa estrutura por camada arquitetural (Domain, Application, Infrastructure, API, Frontend).

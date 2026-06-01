@@ -1,6 +1,6 @@
-# Implementation Checklist: 002-agenda
+# Implementation Checklist: Pacientes
 
-**Feature**: 002-agenda
+**Feature**: pacientes
 **Created**: 2026-05-20
 **Purpose**: Validate implementation completeness against spec, plan, and tasks.
 

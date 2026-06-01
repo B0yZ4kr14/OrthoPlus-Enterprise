@@ -23,10 +23,12 @@
 - Could Have: Gestão de contratos e certificados.
 
 **Exclui:**
-- Folha de pagamento completa
+- Folha de pagamento completa (holerite, INSS, IRRF, dissídio, 13º, férias)
 - Recrutamento
 - Avaliação de desempenho 360°
 - Gestão de benefícios
+
+> **Nota sobre `salario`**: O campo `salario` existe no schema Prisma (`funcionarios.salario Int`) para registro básico de remuneração de referência e cálculo de comissões (FUN-FR-004). Isso não implica processamento de folha de pagamento completa, que permanece fora de escopo.
 
 ---
 
@@ -255,10 +257,12 @@
 
 ## 10. Out of Scope
 
-- Folha de pagamento completa
+- Folha de pagamento completa (holerite, INSS, IRRF, dissídio, 13º, férias)
 - Recrutamento
 - Avaliação de desempenho 360°
 - Gestão de benefícios
+
+> **Nota sobre `salario`**: O campo `salario` existe no schema Prisma (`funcionarios.salario Int`) para registro básico de remuneração de referência e cálculo de comissões (FUN-FR-004). Isso não implica processamento de folha de pagamento completa, que permanece fora de escopo.
 
 ---
 

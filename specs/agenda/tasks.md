@@ -165,3 +165,34 @@
 ### Detected Issues
 
 - [x] TD004 [P2] Extract manual `Date.now()` timing pattern into shared `withTiming()` helper — duplicated in `CreateAppointmentCommandHandler` and `getAppointments` controller. ~~Current pattern is error-prone and hard to maintain consistently across handlers.~~ — Fixed on 2026-05-24. Created `withTiming()` in `backend/src/infrastructure/metrics/withTiming.ts` and refactored `CreateAppointmentCommandHandler` to use it. `getAppointments` controller kept manual pattern due to Express `next(error)` semantics.
+
+---
+
+## Summary
+
+> *Consolidated from specs/002-agenda/tasks.md*
+
+| Phase | Tasks | Done | Status |
+|-------|-------|------|--------|
+| Phase 1 (Audit) | 4 | 4 | COMPLETE |
+| Phase 2 (Backend) | 10 | 10 | COMPLETE |
+| Phase 3 (Frontend Foundation) | 5 | 5 | COMPLETE |
+| Phase 4 (User Stories) | 12 | 12 | COMPLETE |
+| Phase 5 (Quality Gates) | 7 | 6 | 1 PENDING |
+| **Total** | **38** | **37** | **97% COMPLETE** |
+
+## Identified Gaps (Legacy)
+
+> *Consolidated from specs/002-agenda/tasks.md*
+
+| Gap | Priority | Description |
+|-----|----------|-------------|
+| GAP-001 | MEDIUM | E2E tests for complete agenda flow |
+| GAP-002 | LOW | Advanced calendar drag-and-drop optimization |
+
+---
+
+## Notes
+
+- **Task consolidation**: Este tasks.md foi consolidado a partir de `specs/002-agenda/tasks.md` em 2026-05-28.
+- O tasks.md original (`specs/002-agenda/`) usava uma estrutura por fase; o canonical (`specs/agenda/`) usa estrutura por camada arquitetural (Domain, Application, Infrastructure, Presentation, UI, Backend API, Backend Domain, E2E).
