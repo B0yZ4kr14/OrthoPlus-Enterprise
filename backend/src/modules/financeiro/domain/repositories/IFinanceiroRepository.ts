@@ -214,7 +214,7 @@ export interface IFinanceiroRepository {
   ): Promise<banco_extratos>;
 
   // auxiliary
-  getPatient(id: string): Promise<patients | null>;
+  getPatient(id: string, clinicId: string): Promise<patients | null>;
   createComunicacaoLog(
     data: Prisma.comunicacao_logsCreateInput,
   ): Promise<comunicacao_logs>;

@@ -454,8 +454,8 @@ export class FinanceiroRepository implements IFinanceiroRepository {
 
   // ─── patients (auxiliary) ───
 
-  async getPatient(id: string) {
-    return prisma.patients.findUnique({ where: { id } });
+  async getPatient(id: string, clinicId: string) {
+    return prisma.patients.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   // ─── comunicacao_logs ───

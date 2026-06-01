@@ -144,8 +144,8 @@ export class FilesRepository implements IFilesRepository {
     return prisma.audit_logs.create({ data: data as any });
   }
 
-  async findBackupById(id: string) {
-    return prisma.backup_history.findUnique({ where: { id } });
+  async findBackupById(id: string, clinicId: string) {
+    return prisma.backup_history.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

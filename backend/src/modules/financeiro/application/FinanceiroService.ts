@@ -406,7 +406,7 @@ export class FinanceiroService {
     const cobranca = await this.repo.findContaReceberById(contaReceberId, clinicId);
     if (!cobranca) throw notFound("Billing record not found");
     const patient = cobranca.patient_id
-      ? await this.repo.getPatient(cobranca.patient_id)
+      ? await this.repo.getPatient(cobranca.patient_id, clinicId)
       : null;
     await this.repo.createComunicacaoLog({
       paciente_id: cobranca.patient_id,

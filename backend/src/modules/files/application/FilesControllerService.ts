@@ -280,11 +280,8 @@ export class FilesControllerService {
     config: Record<string, unknown>,
     clinicId: string,
   ) {
-    const backup = await this.repo.findBackupById(backupId);
+    const backup = await this.repo.findBackupById(backupId, clinicId);
     if (!backup) throw Errors.notFound("Backup", backupId);
-    if (backup.clinic_id !== clinicId) {
-      throw Errors.forbidden("Backup does not belong to this clinic");
-    }
 
     const dataToUpload = JSON.stringify(backup.metadata);
     const fileName = `orthoplus_backup_${backup.clinic_id}_${new Date().toISOString().replace(/:/g, "-")}.json`;
