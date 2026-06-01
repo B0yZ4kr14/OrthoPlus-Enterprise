@@ -256,13 +256,13 @@ export default function ContasPagar() {
                     </div>
                   </div>
                   <div className="flex justify-end gap-3">
-                    <Button
+                    <Button type="button"
                       variant="outline"
                       onClick={() => setDialogOpen(false)}
                     >
                       Cancelar
                     </Button>
-                    <Button
+                    <Button type="button"
                       variant="elevated"
                       onClick={() => setDialogOpen(false)}
                     >

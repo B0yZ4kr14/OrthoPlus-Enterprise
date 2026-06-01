@@ -16,7 +16,7 @@ export function BadgesTab({ onCreateBadge }: BadgesTabProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Badges Compartilháveis</CardTitle>
-        <Button onClick={onCreateBadge}>Criar Badge</Button>
+        <Button type="button" onClick={onCreateBadge}>Criar Badge</Button>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground">

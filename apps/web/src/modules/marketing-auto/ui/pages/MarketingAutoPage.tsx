@@ -99,7 +99,7 @@ export function MarketingAutoPage() {
         title="Marketing Automação"
         description="Campanhas automáticas e comunicação com pacientes"
         actions={
-          <Button onClick={() => setShowCreateDialog(true)}>
+          <Button type="button" onClick={() => setShowCreateDialog(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Campanha
           </Button>

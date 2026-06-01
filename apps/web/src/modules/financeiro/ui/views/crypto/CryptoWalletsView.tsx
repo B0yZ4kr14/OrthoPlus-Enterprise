@@ -83,7 +83,7 @@ export function CryptoWalletsView({
               </p>
             </div>
             <div className="flex justify-center">
-              <Button onClick={() => setExchangeDialogOpen(true)} size="lg">
+              <Button type="button" onClick={() => setExchangeDialogOpen(true)} size="lg">
                 <Settings className="h-5 w-5 mr-2" />
                 Configurar Exchange
               </Button>
@@ -108,7 +108,7 @@ export function CryptoWalletsView({
               </p>
             </div>
             <div className="flex justify-center">
-              <Button
+              <Button type="button"
                 onClick={() => setWalletDialogOpen(true)}
                 size="lg"
                 className="bg-warning hover:bg-warning"

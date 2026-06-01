@@ -71,7 +71,7 @@ export function CategoryBackupPanel() {
                       {cat.backupCount} backups
                     </p>
                   </div>
-                  <Button
+                  <Button type="button"
                     size="sm"
                     onClick={() => executeBackup(cat.category)}
                     disabled={isExecuting}

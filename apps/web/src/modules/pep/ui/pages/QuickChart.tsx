@@ -85,7 +85,7 @@ export default function QuickChart() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
+          <Button type="button"
             variant={chairsideMode ? "default" : "outline"}
             onClick={() => setChairsideMode(!chairsideMode)}
           >

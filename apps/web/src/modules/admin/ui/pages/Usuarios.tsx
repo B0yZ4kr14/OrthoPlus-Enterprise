@@ -123,7 +123,7 @@ export default function Usuarios() {
         actions={
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={() => handleDialogClose()} className="gap-2">
+              <Button type="button" onClick={() => handleDialogClose()} className="gap-2">
                 <Plus className="h-4 w-4" />
                 Novo Usuário
               </Button>

@@ -268,7 +268,7 @@ export default function ProgramaFidelidade() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Catálogo de Recompensas</CardTitle>
-              <Button onClick={() => setRecompensaFormOpen(true)}>
+              <Button type="button" onClick={() => setRecompensaFormOpen(true)}>
                 Adicionar Recompensa
               </Button>
             </CardHeader>
@@ -378,7 +378,7 @@ export default function ProgramaFidelidade() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Badges Compartilháveis</CardTitle>
-              <Button onClick={() => setBadgeFormOpen(true)}>
+              <Button type="button" onClick={() => setBadgeFormOpen(true)}>
                 Criar Badge
               </Button>
             </CardHeader>

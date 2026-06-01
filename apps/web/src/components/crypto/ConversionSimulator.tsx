@@ -217,7 +217,7 @@ export function ConversionSimulator() {
             </div>
           </div>
 
-          <Button
+          <Button type="button"
             onClick={() => {
               generateHistoricalData();
               generateExchangeRates();

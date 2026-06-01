@@ -121,7 +121,7 @@ export default function DatabaseMaintenancePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
+                <Button type="button"
                   onClick={() => executeMaintenance({ operation: "VACUUM" })}
                   disabled={executing !== null}
                   className="w-full"
@@ -140,7 +140,7 @@ export default function DatabaseMaintenancePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
+                <Button type="button"
                   onClick={() => executeMaintenance({ operation: "ANALYZE" })}
                   disabled={executing !== null}
                   className="w-full"
@@ -161,7 +161,7 @@ export default function DatabaseMaintenancePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
+                <Button type="button"
                   onClick={() => executeMaintenance({ operation: "REINDEX" })}
                   disabled={executing !== null}
                   className="w-full"

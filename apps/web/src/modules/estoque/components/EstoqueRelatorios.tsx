@@ -374,11 +374,11 @@ export function EstoqueRelatorios() {
         )}
 
         <div className="flex gap-4 pt-4">
-          <Button onClick={generatePDFReport} className="flex-1">
+          <Button type="button" onClick={generatePDFReport} className="flex-1">
             <FileDown className="mr-2 h-4 w-4" />
             Gerar PDF
           </Button>
-          <Button
+          <Button type="button"
             onClick={generateExcelReport}
             variant="outline"
             className="flex-1"

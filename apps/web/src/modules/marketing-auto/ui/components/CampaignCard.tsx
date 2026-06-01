@@ -135,28 +135,28 @@ export function CampaignCard({
       </CardContent>
 
       <CardFooter className="flex justify-between">
-        <Button variant="outline" size="sm" onClick={onViewDetails}>
+        <Button type="button" variant="outline" size="sm" onClick={onViewDetails}>
           <BarChart3 className="h-4 w-4 mr-2" />
           Detalhes
         </Button>
 
         <div className="flex gap-2">
           {campaign.canBeActivated() && onActivate && (
-            <Button size="sm" onClick={onActivate}>
+            <Button type="button" size="sm" onClick={onActivate}>
               <Play className="h-4 w-4 mr-2" />
               Ativar
             </Button>
           )}
 
           {campaign.canBePaused() && onPause && (
-            <Button size="sm" variant="outline" onClick={onPause}>
+            <Button type="button" size="sm" variant="outline" onClick={onPause}>
               <Pause className="h-4 w-4 mr-2" />
               Pausar
             </Button>
           )}
 
           {campaign.canBeCompleted() && onComplete && (
-            <Button size="sm" variant="secondary" onClick={onComplete}>
+            <Button type="button" size="sm" variant="secondary" onClick={onComplete}>
               <CheckCircle className="h-4 w-4 mr-2" />
               Concluir
             </Button>

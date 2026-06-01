@@ -88,7 +88,7 @@ export function ForgotPassword({ onBack }: ForgotPasswordProps) {
               em 1 hora.
             </AlertDescription>
           </Alert>
-          <Button variant="outline" className="w-full" onClick={onBack}>
+          <Button type="button" variant="outline" className="w-full" onClick={onBack}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar para Login
           </Button>

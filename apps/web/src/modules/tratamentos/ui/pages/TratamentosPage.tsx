@@ -186,7 +186,7 @@ export function TratamentosPage() {
                             </div>
                             <div className="flex gap-2">
                               {tratamento.status === "PLANEJADO" && (
-                                <Button
+                                <Button type="button"
                                   size="sm"
                                   onClick={() => handleIniciar(tratamento.id)}
                                 >

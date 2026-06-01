@@ -101,7 +101,7 @@ export function ContasPagarList({
                 )}
               </div>
               {conta.isPendente() && (
-                <Button
+                <Button type="button"
                   onClick={() => onPagar(conta.id, conta.valor, "DINHEIRO")}
                   size="sm"
                 >

@@ -73,7 +73,7 @@ export default function Orcamentos() {
           title="Orçamentos"
           description="Gestão completa de orçamentos e propostas comerciais"
         />
-        <Button variant="elevated" onClick={() => setFormOpen(true)}>
+        <Button type="button" variant="elevated" onClick={() => setFormOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Orçamento
         </Button>

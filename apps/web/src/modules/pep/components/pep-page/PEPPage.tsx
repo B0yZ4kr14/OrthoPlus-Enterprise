@@ -62,7 +62,7 @@ export function PEPPage() {
           icon={FileText}
         />
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setSelectedPatient(null)}>
+          <Button type="button" variant="outline" onClick={() => setSelectedPatient(null)}>
             Trocar Paciente
           </Button>
           <ProntuarioPDF

@@ -153,7 +153,7 @@ export function ConfigTab({ selectedEngine }: ConfigTabProps) {
           <div className="grid grid-cols-4 gap-4 pt-4">
             <div className="col-span-1"></div>
             <div className="col-span-3">
-              <Button
+              <Button type="button"
                 onClick={handleTestConnection}
                 className="bg-interactive hover:bg-interactive/90 text-white w-full border-none"
               >

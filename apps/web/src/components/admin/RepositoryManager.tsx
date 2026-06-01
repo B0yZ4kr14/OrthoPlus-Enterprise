@@ -126,7 +126,7 @@ export function RepositoryManager() {
                 Gerencie os repositórios GitHub vinculados ao sistema
               </CardDescription>
             </div>
-            <Button onClick={() => setShowForm(!showForm)}>
+            <Button type="button" onClick={() => setShowForm(!showForm)}>
               {showForm ? "Cancelar" : "+ Adicionar Repositório"}
             </Button>
           </div>

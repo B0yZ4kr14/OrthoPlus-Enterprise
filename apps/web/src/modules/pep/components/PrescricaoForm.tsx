@@ -225,8 +225,7 @@ export function PrescricaoForm({
           </div>
         </div>
 
-        <Button
-          type="button"
+        <Button type="button"
           onClick={addMedicamento}
           variant="outline"
           className="w-full"

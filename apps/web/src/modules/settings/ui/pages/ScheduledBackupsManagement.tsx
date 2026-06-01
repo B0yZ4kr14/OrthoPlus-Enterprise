@@ -147,7 +147,7 @@ export default function ScheduledBackupsManagement() {
       </div>
 
       <div className="flex justify-end">
-        <Button onClick={() => setWizardOpen(true)} className="gap-2">
+        <Button type="button" onClick={() => setWizardOpen(true)} className="gap-2">
           <Plus className="h-4 w-4" />
           Novo Backup Agendado
         </Button>
@@ -272,7 +272,7 @@ export default function ScheduledBackupsManagement() {
           <p className="text-muted-foreground mb-4">
             Nenhum backup agendado configurado
           </p>
-          <Button onClick={() => setWizardOpen(true)} className="gap-2">
+          <Button type="button" onClick={() => setWizardOpen(true)} className="gap-2">
             <Plus className="h-4 w-4" />
             Criar Primeiro Backup
           </Button>

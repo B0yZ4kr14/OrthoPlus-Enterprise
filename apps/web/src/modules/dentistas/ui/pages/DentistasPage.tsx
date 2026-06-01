@@ -78,7 +78,7 @@ export default function DentistasPage() {
         title="Dentistas"
         description="Gerenciamento de dentistas e especialistas"
         actions={
-          <Button onClick={handleAdd}>
+          <Button type="button" onClick={handleAdd}>
             <Plus className="mr-2 h-4 w-4" />
             Novo Dentista
           </Button>

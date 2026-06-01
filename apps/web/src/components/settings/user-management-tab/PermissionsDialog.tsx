@@ -80,10 +80,10 @@ export function PermissionsDialog({
           ))}
         </div>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={onClose}>
             Cancelar
           </Button>
-          <Button onClick={onSave}>Salvar Permissões</Button>
+          <Button type="button" onClick={onSave}>Salvar Permissões</Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -295,10 +295,10 @@ export function AuthenticationConfig() {
         </div>
 
         <div className="flex gap-2">
-          <Button onClick={saveConfig} disabled={saving}>
+          <Button type="button" onClick={saveConfig} disabled={saving}>
             {saving ? "Salvando..." : "Salvar Configurações"}
           </Button>
-          <Button variant="outline" onClick={() => loadConfig()}>
+          <Button type="button" variant="outline" onClick={() => loadConfig()}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Recarregar
           </Button>

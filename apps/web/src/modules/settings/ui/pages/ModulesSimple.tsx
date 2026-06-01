@@ -272,7 +272,7 @@ const ModulesSimple = memo(function ModulesSimple() {
         />
 
         <div className="flex gap-2">
-          <Button
+          <Button type="button"
             variant="outline"
             onClick={handleLoadRoadmap}
             disabled={loadingRoadmap}
@@ -286,7 +286,7 @@ const ModulesSimple = memo(function ModulesSimple() {
             Roadmap de Adoção
           </Button>
 
-          <Button
+          <Button type="button"
             variant="outline"
             onClick={() => setShowWizard(true)}
             className="gap-2"
@@ -295,7 +295,7 @@ const ModulesSimple = memo(function ModulesSimple() {
             Assistente de Configuração
           </Button>
 
-          <Button
+          <Button type="button"
             variant={showPreview ? "default" : "outline"}
             onClick={() => setShowPreview(!showPreview)}
             className="gap-2"

@@ -42,11 +42,11 @@ export function EstoqueIntegracoes() {
       />
 
       <div className="flex gap-3">
-        <Button onClick={handleDisparaPedidosAutomaticos} disabled={loading}>
+        <Button type="button" onClick={handleDisparaPedidosAutomaticos} disabled={loading}>
           <Send className="mr-2 h-4 w-4" />
           Disparar Pedidos Automáticos
         </Button>
-        <Button variant="outline" onClick={loadData} disabled={loading}>
+        <Button type="button" variant="outline" onClick={loadData} disabled={loading}>
           <RefreshCw
             className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`}
           />

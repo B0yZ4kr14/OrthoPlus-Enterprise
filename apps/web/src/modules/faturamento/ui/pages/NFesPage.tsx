@@ -265,13 +265,13 @@ export default function NFesPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => setCancelDialogOpen(false)}
             >
               Voltar
             </Button>
-            <Button
+            <Button type="button"
               variant="destructive"
               onClick={handleCancel}
               disabled={!motivoCancelamento.trim() || isCanceling}

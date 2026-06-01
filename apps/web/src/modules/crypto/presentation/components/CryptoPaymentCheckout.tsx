@@ -192,7 +192,7 @@ export function CryptoPaymentCheckout({
               </div>
             </div>
 
-            <Button onClick={handleOpenCheckout} className="w-full" size="lg">
+            <Button type="button" onClick={handleOpenCheckout} className="w-full" size="lg">
               <ExternalLink className="mr-2 h-4 w-4" />
               Abrir Checkout BTCPay
             </Button>

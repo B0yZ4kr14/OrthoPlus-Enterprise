@@ -175,7 +175,7 @@ export function AnexosUpload({
             onChange={handleFileSelect}
             className="hidden"
           />
-          <Button
+          <Button type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
           >

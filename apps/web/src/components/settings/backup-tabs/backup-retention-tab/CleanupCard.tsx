@@ -26,7 +26,7 @@ export function CleanupCard({ onCleanup, isPending }: CleanupCardProps) {
           Execute a limpeza manual de backups antigos baseado nas configurações
           atuais.
         </p>
-        <Button variant="destructive" onClick={onCleanup} disabled={isPending}>
+        <Button type="button" variant="destructive" onClick={onCleanup} disabled={isPending}>
           Executar Limpeza Agora
         </Button>
       </CardContent>

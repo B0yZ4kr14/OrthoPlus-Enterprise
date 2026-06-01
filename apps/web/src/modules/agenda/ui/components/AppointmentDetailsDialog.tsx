@@ -211,7 +211,7 @@ export function AppointmentDetailsDialog({
                 >
                   Cancelar
                 </Button>
-                <Button
+                <Button type="button"
                   size="sm"
                   onClick={handleSave}
                   disabled={isUpdating}

@@ -82,11 +82,11 @@ export function AppointmentDetails({
           </p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={onEdit} size="sm">
+          <Button type="button" onClick={onEdit} size="sm">
             <Edit className="h-4 w-4 mr-2" />
             Editar
           </Button>
-          <Button onClick={onClose} variant="outline" size="sm">
+          <Button type="button" onClick={onClose} variant="outline" size="sm">
             Fechar
           </Button>
         </div>
@@ -169,7 +169,7 @@ export function AppointmentDetails({
               </p>
             </div>
             {!appointment.lembreteEnviado && onSendReminder && (
-              <Button
+              <Button type="button"
                 onClick={onSendReminder}
                 variant="outline"
                 size="sm"

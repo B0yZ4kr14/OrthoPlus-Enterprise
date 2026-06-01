@@ -67,13 +67,13 @@ export function BarcodeScanner({
           </div>
 
           <div className="flex gap-2 justify-center">
-            <Button onClick={handleStartScan} size="lg" className="gap-2">
+            <Button type="button" onClick={handleStartScan} size="lg" className="gap-2">
               <Camera className="h-5 w-5" />
               Iniciar Scanner
             </Button>
 
             {onCancel && (
-              <Button onClick={onCancel} variant="outline" size="lg">
+              <Button type="button" onClick={onCancel} variant="outline" size="lg">
                 Cancelar
               </Button>
             )}
@@ -112,7 +112,7 @@ export function BarcodeScanner({
               Posicione o código dentro da área destacada
             </p>
 
-            <Button
+            <Button type="button"
               onClick={handleCancel}
               variant="destructive"
               size="lg"

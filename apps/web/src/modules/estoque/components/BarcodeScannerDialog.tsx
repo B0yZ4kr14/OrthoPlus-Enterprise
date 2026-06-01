@@ -71,7 +71,7 @@ export function BarcodeScannerDialog({
         <div id="barcode-reader" className="w-full"></div>
 
         <div className="flex justify-end">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
         </div>

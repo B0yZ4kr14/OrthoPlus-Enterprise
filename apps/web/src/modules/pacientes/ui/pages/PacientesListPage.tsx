@@ -79,7 +79,7 @@ export default function PacientesListPage() {
         title="Pacientes"
         description="Gestão completa de pacientes com ficha clínica profissional"
         actions={
-          <Button
+          <Button type="button"
             variant="default"
             onClick={() => navigate("/pacientes/novo")}
             className="gap-2 glow-interactive"

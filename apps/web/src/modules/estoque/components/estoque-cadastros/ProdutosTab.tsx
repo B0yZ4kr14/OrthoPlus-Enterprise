@@ -53,7 +53,7 @@ export function ProdutosTab({
               Gerencie o cadastro de produtos do estoque
             </CardDescription>
           </div>
-          <Button onClick={onAdd}>
+          <Button type="button" onClick={onAdd}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Produto
           </Button>

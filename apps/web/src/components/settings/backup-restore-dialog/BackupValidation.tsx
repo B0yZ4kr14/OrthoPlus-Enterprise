@@ -59,7 +59,7 @@ export function BackupValidation({
         />
       </div>
 
-      <Button
+      <Button type="button"
         onClick={onDecrypt}
         disabled={!decryptionPassword || loading}
         className="w-full"

@@ -42,7 +42,7 @@ export function CategoriasTab({
             <CardTitle>Categorias</CardTitle>
             <CardDescription>Organize produtos em categorias</CardDescription>
           </div>
-          <Button onClick={onAdd}>
+          <Button type="button" onClick={onAdd}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Categoria
           </Button>

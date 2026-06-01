@@ -62,7 +62,7 @@ export function CompletionScreen({ onClose, onFinish }: CompletionScreenProps) {
           </ul>
         </div>
 
-        <Button onClick={onFinish} size="lg" className="w-full gap-2">
+        <Button type="button" onClick={onFinish} size="lg" className="w-full gap-2">
           <Sparkles className="h-5 w-5" />
           Começar a usar o OrthoPlus Enterprise
         </Button>

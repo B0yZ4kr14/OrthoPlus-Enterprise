@@ -185,7 +185,7 @@ export default function PDVPage() {
                   </p>
                 </div>
               </div>
-              <Button
+              <Button type="button"
                 onClick={() => setShowAbertura(true)}
                 className="gap-2 glow-interactive"
               >
@@ -222,7 +222,7 @@ export default function PDVPage() {
                   </p>
                 </div>
               </div>
-              <Button
+              <Button type="button"
                 variant="destructive"
                 onClick={() => setShowFechamento(true)}
                 className="gap-2"
@@ -279,7 +279,7 @@ export default function PDVPage() {
                   />
                 </div>
                 <div className="col-span-2 flex items-end">
-                  <Button
+                  <Button type="button"
                     onClick={adicionarItem}
                     disabled={!caixaAberto}
                     className="w-full gap-1 glow-interactive"
@@ -400,7 +400,7 @@ export default function PDVPage() {
                 </div>
               </div>
 
-              <Button
+              <Button type="button"
                 onClick={finalizarVenda}
                 disabled={!caixaAberto || itens.length === 0}
                 className="w-full gap-2 glow-interactive"

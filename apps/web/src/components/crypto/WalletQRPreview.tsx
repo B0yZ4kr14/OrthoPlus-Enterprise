@@ -134,7 +134,7 @@ export function WalletQRPreview({ wallet }: WalletQRPreviewProps) {
                 <code className="text-xs flex-1 break-all">
                   {wallet.wallet_address}
                 </code>
-                <Button variant="ghost" size="sm" onClick={handleCopyAddress}>
+                <Button type="button" variant="ghost" size="sm" onClick={handleCopyAddress}>
                   {copied ? (
                     <Check className="h-4 w-4 text-success" />
                   ) : (

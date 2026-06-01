@@ -195,7 +195,7 @@ export function OnboardingWizard({
                   </ul>
                 </div>
 
-                <Button
+                <Button type="button"
                   onClick={handleFinish}
                   size="lg"
                   className="w-full gap-2"
@@ -292,7 +292,7 @@ export function OnboardingWizard({
 
                 {/* Navigation Buttons */}
                 <div className="flex justify-between pt-2">
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     onClick={handlePrevious}
                     disabled={currentStep === 0}
@@ -302,7 +302,7 @@ export function OnboardingWizard({
                     Anterior
                   </Button>
 
-                  <Button onClick={handleNext} className="gap-2">
+                  <Button type="button" onClick={handleNext} className="gap-2">
                     {currentStep === STEPS.length - 1 ? "Concluir" : "Próximo"}
                     <ArrowRight className="h-4 w-4" />
                   </Button>

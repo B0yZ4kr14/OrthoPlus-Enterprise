@@ -53,14 +53,14 @@ export function BackupWizard({ open, onOpenChange }: BackupWizardProps) {
 
         <DialogFooter>
           {step > 1 && (
-            <Button variant="outline" onClick={prevStep}>
+            <Button type="button" variant="outline" onClick={prevStep}>
               Voltar
             </Button>
           )}
           {step < 3 ? (
-            <Button onClick={nextStep}>Próximo</Button>
+            <Button type="button" onClick={nextStep}>Próximo</Button>
           ) : (
-            <Button onClick={confirm}>Confirmar Backup</Button>
+            <Button type="button" onClick={confirm}>Confirmar Backup</Button>
           )}
         </DialogFooter>
       </DialogContent>

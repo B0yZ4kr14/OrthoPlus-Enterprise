@@ -79,7 +79,7 @@ export default function WikiPage() {
         actions={
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button onClick={startCreating}>
+              <Button type="button" onClick={startCreating}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nova Página
               </Button>
@@ -162,13 +162,13 @@ export default function WikiPage() {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     onClick={() => setDialogOpen(false)}
                   >
                     Cancelar
                   </Button>
-                  <Button
+                  <Button type="button"
                     onClick={handleSave}
                     disabled={isSaving || isDeleting}
                   >

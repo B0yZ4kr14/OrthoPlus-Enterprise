@@ -187,7 +187,7 @@ export function ModuleTemplateSelector({ onApply }: { onApply?: () => void }) {
                     <span>{template.modules.length} módulos inclusos</span>
                   </div>
 
-                  <Button
+                  <Button type="button"
                     onClick={() =>
                       handleApplyTemplate(template.id, template.name)
                     }

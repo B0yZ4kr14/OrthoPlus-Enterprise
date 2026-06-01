@@ -114,7 +114,7 @@ export function BackupRetentionTab() {
             <Switch id="backup-auto-cleanup" checked={autoCleanup} onCheckedChange={setAutoCleanup} />
           </div>
 
-          <Button
+          <Button type="button"
             onClick={() => updateConfigMutation.mutate()}
             disabled={updateConfigMutation.isPending}
           >
@@ -135,7 +135,7 @@ export function BackupRetentionTab() {
             Execute a limpeza manual de backups antigos baseado nas
             configurações atuais.
           </p>
-          <Button
+          <Button type="button"
             variant="destructive"
             onClick={() => cleanupMutation.mutate()}
             disabled={cleanupMutation.isPending}

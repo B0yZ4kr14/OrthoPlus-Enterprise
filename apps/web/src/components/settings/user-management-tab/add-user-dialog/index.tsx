@@ -37,7 +37,7 @@ export function AddUserDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button onClick={() => onOpenChange(true)}>
+        <Button type="button" onClick={() => onOpenChange(true)}>
           <UserPlus className="h-4 w-4 mr-2" />
           Adicionar Usuário
         </Button>

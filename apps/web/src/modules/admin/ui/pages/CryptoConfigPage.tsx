@@ -172,7 +172,7 @@ export default function CryptoConfigPage() {
                       />
                     </div>
                   </div>
-                  <Button onClick={wrappedAddExchange}>
+                  <Button type="button" onClick={wrappedAddExchange}>
                     <Key className="mr-2 h-4 w-4" />
                     Adicionar Exchange
                   </Button>

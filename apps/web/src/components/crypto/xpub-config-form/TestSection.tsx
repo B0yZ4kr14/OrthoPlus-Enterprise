@@ -27,8 +27,7 @@ export function TestSection({
         </AlertDescription>
       </Alert>
 
-      <Button
-        type="button"
+      <Button type="button"
         onClick={onTest}
         variant="outline"
         disabled={testing || !hasXpub}

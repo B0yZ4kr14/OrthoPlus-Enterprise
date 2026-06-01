@@ -135,7 +135,7 @@ export function FuncionariosList({
           </Select>
         </div>
 
-        <Button onClick={onAdd} className="w-full sm:w-auto">
+        <Button type="button" onClick={onAdd} className="w-full sm:w-auto">
           <Plus className="h-4 w-4 mr-2" />
           Novo Funcionário
         </Button>

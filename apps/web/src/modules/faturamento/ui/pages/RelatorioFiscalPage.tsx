@@ -170,11 +170,11 @@ export default function RelatorioFiscalPage() {
         icon={FileText}
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleExportCSV}>
+            <Button type="button" variant="outline" onClick={handleExportCSV}>
               <Download className="h-4 w-4 mr-2" />
               CSV
             </Button>
-            <Button variant="outline" onClick={handleExportExcel}>
+            <Button type="button" variant="outline" onClick={handleExportExcel}>
               <Download className="h-4 w-4 mr-2" />
               Excel
             </Button>

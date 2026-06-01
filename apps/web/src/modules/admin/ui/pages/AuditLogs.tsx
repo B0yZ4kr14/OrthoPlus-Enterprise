@@ -245,17 +245,17 @@ export default function AuditLogs() {
           </div>
 
           <div className="flex gap-2">
-            <Button
+            <Button type="button"
               onClick={() => setSelectedUser(selectedUser)}
               className="flex-1"
             >
               <Search className="mr-2 h-4 w-4" />
               Aplicar Filtros
             </Button>
-            <Button onClick={handleClearFilters} variant="outline">
+            <Button type="button" onClick={handleClearFilters} variant="outline">
               Limpar
             </Button>
-            <Button onClick={exportLogs} variant="outline">
+            <Button type="button" onClick={exportLogs} variant="outline">
               <Download className="mr-2 h-4 w-4" />
               Exportar CSV
             </Button>

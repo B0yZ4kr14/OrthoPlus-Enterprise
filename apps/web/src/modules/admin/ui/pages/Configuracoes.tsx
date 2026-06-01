@@ -231,7 +231,7 @@ export default function Configuracoes() {
             </CardHeader>
             <CardContent>
               <div className="flex gap-4">
-                <Button
+                <Button type="button"
                   onClick={() => setShowExportWizard(true)}
                   variant="elevated"
                   className="flex-1"
@@ -239,7 +239,7 @@ export default function Configuracoes() {
                   <Download className="h-4 w-4 mr-2" />
                   Exportar Dados
                 </Button>
-                <Button
+                <Button type="button"
                   onClick={() => setShowImportWizard(true)}
                   variant="elevated"
                   className="flex-1"

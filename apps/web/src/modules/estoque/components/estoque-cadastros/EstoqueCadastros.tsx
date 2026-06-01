@@ -84,7 +84,7 @@ export function EstoqueCadastros() {
           title="Cadastros de Estoque"
           description="Gestão de produtos, fornecedores e categorias do estoque"
         />
-        <Button
+        <Button type="button"
           onClick={() => setScannerOpen(true)}
           variant="outline"
           className="hover-scale"

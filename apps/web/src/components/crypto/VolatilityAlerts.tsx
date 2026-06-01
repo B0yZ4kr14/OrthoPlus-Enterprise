@@ -178,7 +178,7 @@ export function VolatilityAlerts() {
               <AlertTriangle className="h-5 w-5" />
               Alertas de Volatilidade
             </CardTitle>
-            <Button
+            <Button type="button"
               onClick={() => setShowForm(!showForm)}
               size="sm"
               className="gap-2"
@@ -286,10 +286,10 @@ export function VolatilityAlerts() {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowForm(false)}>
+                  <Button type="button" variant="outline" onClick={() => setShowForm(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleCreateAlert}>Criar Alerta</Button>
+                  <Button type="button" onClick={handleCreateAlert}>Criar Alerta</Button>
                 </div>
               </CardContent>
             </Card>

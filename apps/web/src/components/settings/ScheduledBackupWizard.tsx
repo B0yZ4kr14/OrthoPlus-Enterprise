@@ -309,18 +309,18 @@ export function ScheduledBackupWizard({
         )}
 
         <div className="flex justify-between mt-6">
-          <Button variant="outline" onClick={prevStep} disabled={step === 1}>
+          <Button type="button" variant="outline" onClick={prevStep} disabled={step === 1}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Anterior
           </Button>
 
           {step < totalSteps ? (
-            <Button onClick={nextStep}>
+            <Button type="button" onClick={nextStep}>
               Próximo
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           ) : (
-            <Button onClick={handleSubmit} disabled={loading || !config.name}>
+            <Button type="button" onClick={handleSubmit} disabled={loading || !config.name}>
               {loading ? "Configurando..." : "Confirmar e Ativar"}
             </Button>
           )}

@@ -75,7 +75,7 @@ export function PatientSelector({
             CPF: {selectedPatient.cpf || "Não informado"}
           </p>
         </div>
-        <Button variant="ghost" size="sm" onClick={() => onSelect(null)}>
+        <Button type="button" variant="ghost" size="sm" onClick={() => onSelect(null)}>
           Trocar
         </Button>
       </div>

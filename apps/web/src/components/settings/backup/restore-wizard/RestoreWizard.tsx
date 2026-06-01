@@ -49,16 +49,16 @@ export function RestoreWizard({ open, onOpenChange }: RestoreWizardProps) {
 
         <DialogFooter>
           {step > 1 && (
-            <Button variant="outline" onClick={prevStep}>
+            <Button type="button" variant="outline" onClick={prevStep}>
               Voltar
             </Button>
           )}
           {step < 3 ? (
-            <Button onClick={nextStep} disabled={step === 1 && !selectedBackup}>
+            <Button type="button" onClick={nextStep} disabled={step === 1 && !selectedBackup}>
               Próximo
             </Button>
           ) : (
-            <Button variant="destructive" onClick={confirm}>
+            <Button type="button" variant="destructive" onClick={confirm}>
               Confirmar Restauração
             </Button>
           )}

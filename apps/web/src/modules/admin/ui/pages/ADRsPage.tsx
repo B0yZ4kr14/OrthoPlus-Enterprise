@@ -196,10 +196,10 @@ export default function ADRsPage() {
               </div>
 
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button onClick={handleCreate} disabled={isCreating}>
+                <Button type="button" onClick={handleCreate} disabled={isCreating}>
                   Criar ADR
                 </Button>
               </div>

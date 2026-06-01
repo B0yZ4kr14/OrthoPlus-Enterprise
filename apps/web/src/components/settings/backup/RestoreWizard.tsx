@@ -177,19 +177,19 @@ export function RestoreWizard({ open, onOpenChange }: RestoreWizardProps) {
 
         <DialogFooter>
           {step > 1 && (
-            <Button variant="outline" onClick={handleBack}>
+            <Button type="button" variant="outline" onClick={handleBack}>
               Voltar
             </Button>
           )}
           {step < 3 ? (
-            <Button
+            <Button type="button"
               onClick={handleNext}
               disabled={step === 1 && !selectedBackup}
             >
               Próximo
             </Button>
           ) : (
-            <Button variant="destructive" onClick={handleConfirm}>
+            <Button type="button" variant="destructive" onClick={handleConfirm}>
               Confirmar Restauração
             </Button>
           )}

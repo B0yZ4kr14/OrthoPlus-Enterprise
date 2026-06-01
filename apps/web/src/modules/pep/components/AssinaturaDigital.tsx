@@ -156,11 +156,11 @@ export const AssinaturaDigital = ({
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" onClick={clearSignature} className="flex-1">
+          <Button type="button" variant="outline" onClick={clearSignature} className="flex-1">
             <Eraser className="h-4 w-4 mr-2" />
             Limpar
           </Button>
-          <Button
+          <Button type="button"
             variant="default"
             onClick={saveSignature}
             disabled={!hasSignature}
@@ -170,7 +170,7 @@ export const AssinaturaDigital = ({
             Salvar Assinatura
           </Button>
           {onCancel && (
-            <Button variant="ghost" onClick={onCancel}>
+            <Button type="button" variant="ghost" onClick={onCancel}>
               <X className="h-4 w-4" />
             </Button>
           )}

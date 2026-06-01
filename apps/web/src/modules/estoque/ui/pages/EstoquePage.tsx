@@ -50,7 +50,7 @@ export const EstoquePage = () => {
         title="Controle de Estoque"
         description="Gerencie produtos, movimentações e alertas"
         actions={
-          <Button
+          <Button type="button"
             onClick={() => setShowProdutoForm(true)}
             className="gap-2 glow-interactive"
           >

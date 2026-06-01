@@ -98,7 +98,7 @@ export const ProcedimentosList = memo(function ProcedimentosList({
             </SelectContent>
           </Select>
 
-          <Button onClick={onNovo}>
+          <Button type="button" onClick={onNovo}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Procedimento
           </Button>

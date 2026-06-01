@@ -170,7 +170,7 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
             </AlertDescription>
           </Alert>
 
-          <Button
+          <Button type="button"
             onClick={handleGeneratePayment}
             disabled={!selectedWallet || generatingAddress}
             className="w-full gap-2"

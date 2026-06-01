@@ -227,12 +227,12 @@ export function InventarioDivergenciasDialog({
               Total de {divergencias.length} divergência(s) encontrada(s)
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" onClick={handleExportarRelatorio}>
+              <Button type="button" variant="outline" onClick={handleExportarRelatorio}>
                 <FileDown className="h-4 w-4 mr-2" />
                 Exportar Relatório
               </Button>
               {divergencias.length > 0 && (
-                <Button onClick={handleGerarAjustes} disabled={loading}>
+                <Button type="button" onClick={handleGerarAjustes} disabled={loading}>
                   <AlertTriangle className="h-4 w-4 mr-2" />
                   {loading ? "Gerando..." : "Gerar Ajustes Automáticos"}
                 </Button>

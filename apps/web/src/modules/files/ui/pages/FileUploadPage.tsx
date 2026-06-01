@@ -192,7 +192,7 @@ export default function FileUploadPage() {
           </div>
 
           <div className="mt-4 flex justify-end">
-            <Button
+            <Button type="button"
               onClick={handleUpload}
               disabled={uploadMutation.isPending}
               className="flex items-center gap-2"

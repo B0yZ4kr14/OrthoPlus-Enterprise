@@ -63,7 +63,7 @@ export function CryptoExchangesView({
               </Alert>
             </div>
             <div className="flex justify-center">
-              <Button onClick={() => setExchangeDialogOpen(true)} size="lg">
+              <Button type="button" onClick={() => setExchangeDialogOpen(true)} size="lg">
                 <Settings className="h-5 w-5 mr-2" />
                 Configurar Exchange
               </Button>

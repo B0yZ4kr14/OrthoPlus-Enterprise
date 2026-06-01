@@ -133,7 +133,7 @@ export function CaixaPanel({
                           placeholder="0.00"
                         />
                       </div>
-                      <Button onClick={handleAbrirCaixa} className="w-full">
+                      <Button type="button" onClick={handleAbrirCaixa} className="w-full">
                         Confirmar Abertura
                       </Button>
                     </div>
@@ -176,7 +176,7 @@ export function CaixaPanel({
                             placeholder="Descreva o motivo da sangria"
                           />
                         </div>
-                        <Button
+                        <Button type="button"
                           onClick={handleRegistrarSangria}
                           className="w-full"
                         >
@@ -236,7 +236,7 @@ export function CaixaPanel({
                             placeholder="Observações sobre o fechamento"
                           />
                         </div>
-                        <Button
+                        <Button type="button"
                           onClick={handleFecharCaixa}
                           className="w-full"
                           variant="destructive"

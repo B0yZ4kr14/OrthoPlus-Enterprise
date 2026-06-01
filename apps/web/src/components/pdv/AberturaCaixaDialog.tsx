@@ -77,14 +77,14 @@ export function AberturaCaixaDialog({
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
               Cancelar
             </Button>
-            <Button onClick={handleSubmit} disabled={loading}>
+            <Button type="button" onClick={handleSubmit} disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />

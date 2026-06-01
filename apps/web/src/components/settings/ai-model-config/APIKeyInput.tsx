@@ -37,7 +37,7 @@ export function APIKeyInput({
           value={value || ""}
           onChange={(e) => onChange(e.target.value)}
         />
-        <Button variant="outline" size="icon" onClick={onToggleShow} aria-label="Mostrar/ocultar API key">
+        <Button type="button" variant="outline" size="icon" onClick={onToggleShow} aria-label="Mostrar/ocultar API key">
           {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
         </Button>
       </div>

@@ -175,7 +175,7 @@ export default function IARadiografia() {
           title="IA Análise de Radiografias"
           description="Detecção automática de problemas dentários via Inteligência Artificial"
         />
-        <Button variant="elevated" onClick={() => setUploadDialogOpen(true)}>
+        <Button type="button" variant="elevated" onClick={() => setUploadDialogOpen(true)}>
           <Upload className="h-4 w-4 mr-2" />
           Fazer Upload de Raio-X
         </Button>

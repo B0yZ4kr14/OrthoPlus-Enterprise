@@ -141,14 +141,14 @@ export default function TerminalPage() {
                 disabled={isExecuting}
               />
             </div>
-            <Button
+            <Button type="button"
               onClick={handleExecute}
               disabled={!command.trim() || isExecuting}
             >
               <Send className="h-4 w-4 mr-2" />
               Executar
             </Button>
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={clearHistory}
               disabled={history.length === 0}

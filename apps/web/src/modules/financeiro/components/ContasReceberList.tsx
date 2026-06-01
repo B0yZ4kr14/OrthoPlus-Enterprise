@@ -102,7 +102,7 @@ export function ContasReceberList({
                 )}
               </div>
               {conta.isPendente() && (
-                <Button
+                <Button type="button"
                   onClick={() => onReceber(conta.id, conta.valor, "DINHEIRO")}
                   size="sm"
                 >

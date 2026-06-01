@@ -154,7 +154,7 @@ export function UploadDialog({
               </AlertDescription>
             </Alert>
           )}
-          <Button onClick={onUpload} disabled={!canUpload} className="w-full">
+          <Button type="button" onClick={onUpload} disabled={!canUpload} className="w-full">
             {isUploading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

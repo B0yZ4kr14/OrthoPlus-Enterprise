@@ -83,7 +83,7 @@ export default function FuncionariosPage() {
         title="Funcionários"
         description="Gestão da equipe e colaboradores da clínica"
         actions={
-          <Button onClick={handleAdd}>
+          <Button type="button" onClick={handleAdd}>
             <Plus className="mr-2 h-4 w-4" />
             Novo Funcionário
           </Button>

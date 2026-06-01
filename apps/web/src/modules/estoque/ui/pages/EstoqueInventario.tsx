@@ -250,7 +250,7 @@ export default function EstoqueInventario() {
             </Select>
           </div>
 
-          <Button onClick={handleAdd} className="w-full md:w-auto">
+          <Button type="button" onClick={handleAdd} className="w-full md:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Novo Inventário
           </Button>

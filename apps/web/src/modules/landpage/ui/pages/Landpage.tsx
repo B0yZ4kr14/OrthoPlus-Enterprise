@@ -166,7 +166,7 @@ export default function Landpage() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Button
+            <Button type="button"
               onClick={handleCta}
               variant="elevated"
               className="rounded-full px-5 py-2 text-sm"
@@ -232,7 +232,7 @@ export default function Landpage() {
               animate="visible"
               className="flex flex-col items-center justify-center gap-4 sm:flex-row"
             >
-              <Button
+              <Button type="button"
                 onClick={handleCta}
                 size="lg"
                 variant="elevated"
@@ -241,7 +241,7 @@ export default function Landpage() {
                 Entrar no Sistema
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button
+              <Button type="button"
                 onClick={() => {
                   const el = document.getElementById("precos");
                   el?.scrollIntoView({ behavior: "smooth" });
@@ -379,7 +379,7 @@ export default function Landpage() {
                           </li>
                         ))}
                       </ul>
-                      <Button
+                      <Button type="button"
                         onClick={handleCta}
                         variant={plan.highlighted ? "elevated" : "outline"}
                         className={

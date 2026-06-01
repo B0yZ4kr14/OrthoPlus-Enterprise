@@ -223,14 +223,14 @@ export default function TabelaPrecosManager() {
             />
             Padrão
           </label>
-          <Button
+          <Button type="button"
             onClick={editingTabela ? handleUpdateTabela : handleCreateTabela}
             disabled={isSubmitting}
           >
             {editingTabela ? "Salvar" : "Criar"}
           </Button>
           {editingTabela && (
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => {
                 setEditingTabela(null);
@@ -326,7 +326,7 @@ export default function TabelaPrecosManager() {
                       step="0.01"
                       placeholder="Percentual (ex: 10 ou -5)"
                     />
-                    <Button onClick={handleReajuste} disabled={isSubmitting}>
+                    <Button type="button" onClick={handleReajuste} disabled={isSubmitting}>
                       Aplicar
                     </Button>
                   </div>
@@ -366,7 +366,7 @@ export default function TabelaPrecosManager() {
                       step="0.01"
                       placeholder="Valor (R$)"
                     />
-                    <Button onClick={handleCreatePreco} disabled={isSubmitting}>
+                    <Button type="button" onClick={handleCreatePreco} disabled={isSubmitting}>
                       Salvar
                     </Button>
                   </div>

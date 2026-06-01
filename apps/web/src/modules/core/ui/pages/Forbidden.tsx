@@ -28,7 +28,7 @@ export default function Forbidden() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => navigate(-1)}
               className="gap-2"
@@ -36,7 +36,7 @@ export default function Forbidden() {
               <ArrowLeft className="h-4 w-4" />
               Voltar
             </Button>
-            <Button onClick={() => navigate("/")} className="gap-2">
+            <Button type="button" onClick={() => navigate("/")} className="gap-2">
               <Home className="h-4 w-4" />
               Dashboard
             </Button>

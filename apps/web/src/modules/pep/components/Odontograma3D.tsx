@@ -254,7 +254,7 @@ export const Odontograma3D = memo(({ prontuarioId }: Odontograma3DProps) => {
                   {TOOTH_STATUS_LABELS[status]}
                 </Button>
               ))}
-              <Button variant="destructive" onClick={resetOdontograma}>
+              <Button type="button" variant="destructive" onClick={resetOdontograma}>
                 Resetar Odontograma
               </Button>
             </div>

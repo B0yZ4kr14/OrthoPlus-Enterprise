@@ -25,7 +25,7 @@ export function RecompensasTab({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Catálogo de Recompensas</CardTitle>
-        <Button onClick={onAdd}>Adicionar Recompensa</Button>
+        <Button type="button" onClick={onAdd}>Adicionar Recompensa</Button>
       </CardHeader>
       <CardContent>
         {recompensas.length === 0 ? (

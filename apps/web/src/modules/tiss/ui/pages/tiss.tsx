@@ -33,7 +33,7 @@ export default function TISSPage() {
         title="TISS"
         description="Troca de Informações em Saúde Suplementar"
         actions={
-          <Button onClick={() => setActiveTab("guides")}>
+          <Button type="button" onClick={() => setActiveTab("guides")}>
             <FileText className="mr-2 h-4 w-4" />
             Nova Guia
           </Button>

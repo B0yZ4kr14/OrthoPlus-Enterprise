@@ -276,8 +276,7 @@ export function XPubConfigForm({ onSuccess, onCancel }: XPubConfigFormProps) {
               </AlertDescription>
             </Alert>
 
-            <Button
-              type="button"
+            <Button type="button"
               onClick={handleTestXPub}
               variant="outline"
               disabled={testingXPub || !form.watch("xpub")}

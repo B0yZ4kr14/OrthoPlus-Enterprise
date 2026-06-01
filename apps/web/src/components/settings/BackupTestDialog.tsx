@@ -213,10 +213,10 @@ export function BackupTestDialog({
           )}
 
           <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Fechar
             </Button>
-            <Button onClick={runTest} disabled={testing}>
+            <Button type="button" onClick={runTest} disabled={testing}>
               {testing ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />

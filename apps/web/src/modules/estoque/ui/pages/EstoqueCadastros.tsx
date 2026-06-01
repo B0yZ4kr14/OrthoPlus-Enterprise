@@ -299,7 +299,7 @@ export default function EstoqueCadastros() {
           title="Cadastros de Estoque"
           description="Gestão de produtos, fornecedores e categorias do estoque"
         />
-        <Button
+        <Button type="button"
           onClick={() => setScannerOpen(true)}
           variant="outline"
           className="hover-scale"
@@ -367,7 +367,7 @@ export default function EstoqueCadastros() {
                     Gerencie o cadastro de produtos do estoque
                   </CardDescription>
                 </div>
-                <Button onClick={handleAddProduto}>
+                <Button type="button" onClick={handleAddProduto}>
                   <Plus className="h-4 w-4 mr-2" />
                   Novo Produto
                 </Button>
@@ -415,7 +415,7 @@ export default function EstoqueCadastros() {
                     Gerencie o cadastro de fornecedores
                   </CardDescription>
                 </div>
-                <Button onClick={handleAddFornecedor}>
+                <Button type="button" onClick={handleAddFornecedor}>
                   <Plus className="h-4 w-4 mr-2" />
                   Novo Fornecedor
                 </Button>
@@ -459,7 +459,7 @@ export default function EstoqueCadastros() {
                     Organize produtos em categorias
                   </CardDescription>
                 </div>
-                <Button onClick={handleAddCategoria}>
+                <Button type="button" onClick={handleAddCategoria}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nova Categoria
                 </Button>

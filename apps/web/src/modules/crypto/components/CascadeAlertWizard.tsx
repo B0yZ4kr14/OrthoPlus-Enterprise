@@ -342,7 +342,7 @@ export function CascadeAlertWizard({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button
+        <Button type="button"
           onClick={validateAndSubmit}
           disabled={!isValidTotal || !coinType}
         >

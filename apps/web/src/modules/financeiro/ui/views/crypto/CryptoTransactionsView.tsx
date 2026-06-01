@@ -78,7 +78,7 @@ export function CryptoTransactionsView({
             </p>
           </div>
           <div className="flex justify-center gap-4">
-            <Button onClick={() => setExchangeDialogOpen(true)} size="lg">
+            <Button type="button" onClick={() => setExchangeDialogOpen(true)} size="lg">
               <Settings className="h-5 w-5 mr-2" />
               Configurar Exchange
             </Button>
@@ -129,7 +129,7 @@ export function CryptoTransactionsView({
             </p>
           </div>
           <div className="flex justify-center gap-4">
-            <Button
+            <Button type="button"
               onClick={() => setWalletDialogOpen(true)}
               size="lg"
               className="bg-warning hover:bg-warning"
@@ -302,7 +302,7 @@ export function CryptoTransactionsView({
 
                   <div className="flex flex-col gap-2">
                     {tx.status === "CONFIRMADO" && !tx.converted_to_brl_at && (
-                      <Button
+                      <Button type="button"
                         size="sm"
                         onClick={() => handleConvert(tx.id || "")}
                         disabled={convertingTx === tx.id}

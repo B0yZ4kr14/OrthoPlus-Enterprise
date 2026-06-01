@@ -56,7 +56,7 @@ export default function CryptoConfig() {
         <TabsContent value="exchanges" className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-medium">Exchanges Configuradas</h3>
-            <Button onClick={() => setShowExchangeDialog(true)}>
+            <Button type="button" onClick={() => setShowExchangeDialog(true)}>
               Adicionar Exchange
             </Button>
           </div>
@@ -114,7 +114,7 @@ export default function CryptoConfig() {
             <h3 className="text-lg font-medium">
               Wallets Não-Custodiais (xPub)
             </h3>
-            <Button onClick={() => setShowXPubDialog(true)}>
+            <Button type="button" onClick={() => setShowXPubDialog(true)}>
               Configurar Hardware Wallet
             </Button>
           </div>

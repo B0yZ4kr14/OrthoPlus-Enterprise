@@ -110,11 +110,11 @@ export function StepExport() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Button variant="outline" className="gap-2" onClick={handleViewConfig}>
+        <Button type="button" variant="outline" className="gap-2" onClick={handleViewConfig}>
           <Eye className="h-4 w-4" />
           Ver Configurações
         </Button>
-        <Button variant="default" className="gap-2" onClick={handleExport}>
+        <Button type="button" variant="default" className="gap-2" onClick={handleExport}>
           <Download className="h-4 w-4" />
           Exportar Config
         </Button>

@@ -186,10 +186,10 @@ export const ToothDetailDialog = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={onClose}>
             Fechar
           </Button>
-          <Button onClick={handleSaveNotes}>Salvar Observações</Button>
+          <Button type="button" onClick={handleSaveNotes}>Salvar Observações</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

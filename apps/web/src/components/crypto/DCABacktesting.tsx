@@ -215,7 +215,7 @@ export function DCABacktesting() {
             </div>
 
             <div className="flex items-end">
-              <Button
+              <Button type="button"
                 onClick={runBacktest}
                 disabled={loading}
                 className="w-full"

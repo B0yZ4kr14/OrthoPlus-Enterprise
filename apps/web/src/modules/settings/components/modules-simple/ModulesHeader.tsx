@@ -27,7 +27,7 @@ export function ModulesHeader({
       />
 
       <div className="flex gap-2">
-        <Button
+        <Button type="button"
           variant="outline"
           onClick={onLoadRoadmap}
           disabled={loadingRoadmap}
@@ -41,12 +41,12 @@ export function ModulesHeader({
           Roadmap de Adoção
         </Button>
 
-        <Button variant="outline" onClick={onShowWizard} className="gap-2">
+        <Button type="button" variant="outline" onClick={onShowWizard} className="gap-2">
           <Sparkles className="h-4 w-4" />
           Assistente de Configuração
         </Button>
 
-        <Button
+        <Button type="button"
           variant={showPreview ? "default" : "outline"}
           onClick={onTogglePreview}
           className="gap-2"

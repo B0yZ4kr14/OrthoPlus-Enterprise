@@ -46,7 +46,7 @@ export function StatusSelector({
               {TOOTH_STATUS_LABELS[status]}
             </Button>
           ))}
-          <Button variant="destructive" onClick={onReset}>
+          <Button type="button" variant="destructive" onClick={onReset}>
             Resetar Odontograma
           </Button>
         </div>

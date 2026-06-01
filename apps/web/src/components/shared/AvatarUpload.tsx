@@ -336,8 +336,7 @@ export const AvatarUpload = ({
               >
                 Cancelar
               </Button>
-              <Button
-                type="button"
+              <Button type="button"
                 onClick={handleCropComplete}
                 disabled={!completedCrop}
               >

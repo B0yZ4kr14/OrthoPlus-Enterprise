@@ -71,7 +71,7 @@ export function TableFilter({
       ))}
 
       {hasActiveFilters && onClear && (
-        <Button variant="outline" onClick={onClear} className="gap-2">
+        <Button type="button" variant="outline" onClick={onClear} className="gap-2">
           <X className="h-4 w-4" />
           Limpar
         </Button>

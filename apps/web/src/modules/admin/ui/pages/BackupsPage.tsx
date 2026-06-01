@@ -82,7 +82,7 @@ export default function BackupsPage() {
         title="Backups"
         description="Central de backups e restauração de dados"
         actions={
-          <Button onClick={() => createBackup()} disabled={creating}>
+          <Button type="button" onClick={() => createBackup()} disabled={creating}>
             {creating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -15,10 +15,10 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   return (
     <div className="flex gap-2">
-      <Button onClick={onSave} disabled={saving}>
+      <Button type="button" onClick={onSave} disabled={saving}>
         {saving ? "Salvando..." : "Salvar Configurações"}
       </Button>
-      <Button variant="outline" onClick={onReload}>
+      <Button type="button" variant="outline" onClick={onReload}>
         <RefreshCw className="h-4 w-4 mr-2" />
         Recarregar
       </Button>

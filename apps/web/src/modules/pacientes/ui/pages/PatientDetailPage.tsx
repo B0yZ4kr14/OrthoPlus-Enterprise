@@ -61,7 +61,7 @@ export default function PatientDetailPage() {
     return (
       <div className="p-8 text-center">
         <h2 className="text-2xl font-bold mb-4">Paciente não encontrado</h2>
-        <Button onClick={() => navigate("/pacientes")}>Voltar</Button>
+        <Button type="button" onClick={() => navigate("/pacientes")}>Voltar</Button>
       </div>
     );
   }

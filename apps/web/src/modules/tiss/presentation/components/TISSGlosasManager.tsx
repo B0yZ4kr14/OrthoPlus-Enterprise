@@ -146,7 +146,7 @@ export function TISSGlosasManager() {
                                 placeholder="Ex: 5000"
                               />
                             </div>
-                            <Button
+                            <Button type="button"
                               onClick={() => handleRegistrarGlosa(glosa.id)}
                             >
                               Salvar Glosa

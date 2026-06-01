@@ -49,7 +49,7 @@ export function FornecedoresTab({
               Gerencie o cadastro de fornecedores
             </CardDescription>
           </div>
-          <Button onClick={onAdd}>
+          <Button type="button" onClick={onAdd}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Fornecedor
           </Button>

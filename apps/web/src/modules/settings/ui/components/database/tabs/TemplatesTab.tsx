@@ -130,7 +130,7 @@ export function TemplatesTab({ category, categorySchemas }: TemplatesTabProps) {
             {stats && ` • Tabelas ativas: ${stats.tableCount}`}
           </p>
         </div>
-        <Button
+        <Button type="button"
           onClick={handleExport}
           variant="outline"
           className="border-border hover:bg-muted text-foreground"

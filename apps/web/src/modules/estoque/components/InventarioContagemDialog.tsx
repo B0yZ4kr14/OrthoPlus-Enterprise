@@ -63,7 +63,7 @@ export function InventarioContagemDialog({
 
   const handleQuantityChange = (itemId: string, quantity: number) => {
     // Placeholder: implementar integração com API de inventário
-    console.warn("handleQuantityChange not yet implemented", { itemId, quantity });
+    // Quantidade será implementado na próxima sprint
   };
 
   const handleSave = () => {
@@ -232,10 +232,10 @@ export function InventarioContagemDialog({
               {items.length} itens contados
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Fechar
               </Button>
-              <Button onClick={handleSave}>
+              <Button type="button" onClick={handleSave}>
                 <Save className="h-4 w-4 mr-2" />
                 Salvar Contagens
               </Button>

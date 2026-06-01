@@ -32,7 +32,7 @@ export function ReportSection({
     <div className="p-4 border rounded-lg space-y-4">
       <h3 className="font-semibold">{title}</h3>
       {children}
-      <Button className="w-full" onClick={onGenerate}>
+      <Button type="button" className="w-full" onClick={onGenerate}>
         <Download className="mr-2 h-4 w-4" />
         Gerar Relatório
       </Button>

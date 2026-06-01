@@ -268,7 +268,7 @@ export function BackupRestoreDialog({
               />
             </div>
 
-            <Button
+            <Button type="button"
               onClick={handleDecrypt}
               disabled={!decryptionPassword || loading}
               className="w-full"
@@ -466,7 +466,7 @@ export function BackupRestoreDialog({
               </AlertDescription>
             </Alert>
 
-            <Button
+            <Button type="button"
               onClick={handleRestore}
               disabled={loading || !Object.values(selectedItems).some((v) => v)}
               className="w-full"
@@ -515,7 +515,7 @@ export function BackupRestoreDialog({
               )}
             </Card>
 
-            <Button onClick={onClose} className="w-full">
+            <Button type="button" onClick={onClose} className="w-full">
               Fechar
             </Button>
           </div>

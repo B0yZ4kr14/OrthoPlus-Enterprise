@@ -70,7 +70,7 @@ export function TemplateForm({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button onClick={() => onCancel()}>
+        <Button type="button" onClick={() => onCancel()}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Template
         </Button>

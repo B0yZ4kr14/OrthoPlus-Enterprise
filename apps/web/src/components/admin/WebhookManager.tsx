@@ -103,7 +103,7 @@ export function WebhookManager() {
                 Eventos recebidos do repositório GitHub
               </CardDescription>
             </div>
-            <Button onClick={loadWebhookEvents} disabled={loading}>
+            <Button type="button" onClick={loadWebhookEvents} disabled={loading}>
               {loading ? "Carregando..." : "Atualizar"}
             </Button>
           </div>

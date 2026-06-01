@@ -166,7 +166,7 @@ export default function SystemLogsPage() {
             <SelectItem value="error">Error</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={exportLogs}>
+        <Button type="button" variant="outline" onClick={exportLogs}>
           <Download className="h-4 w-4 mr-2" />
           Exportar
         </Button>

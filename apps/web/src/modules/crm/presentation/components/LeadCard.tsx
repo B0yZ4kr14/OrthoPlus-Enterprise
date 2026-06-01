@@ -65,7 +65,7 @@ export const LeadCard = ({
           </div>
           <div className="flex items-center gap-1">
             {onEdit && (
-              <Button variant="ghost" size="icon" onClick={() => onEdit(lead)} aria-label="Editar lead">
+              <Button type="button" variant="ghost" size="icon" onClick={() => onEdit(lead)} aria-label="Editar lead">
                 <Edit className="h-4 w-4" />
               </Button>
             )}
@@ -181,7 +181,7 @@ export const LeadCard = ({
           lead.status !== "GANHO" &&
           lead.status !== "PERDIDO" && (
             <div className="border-t pt-3">
-              <Button
+              <Button type="button"
                 onClick={() => onStatusChange(lead)}
                 className="w-full"
                 variant="outline"

@@ -304,7 +304,7 @@ export function ComparativoPDFExport({
   };
 
   return (
-    <Button
+    <Button type="button"
       variant="elevated"
       onClick={generatePDF}
       disabled={isExporting}

@@ -168,14 +168,14 @@ export function FechamentoCaixaDialog({
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t">
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
               Cancelar
             </Button>
-            <Button
+            <Button type="button"
               onClick={handleSubmit}
               disabled={
                 loading || !valorFinal || (hasDiferenca && !observacoes)

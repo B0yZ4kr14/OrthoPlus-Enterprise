@@ -132,7 +132,7 @@ export function RepairTab({ selectedEngine, category }: RepairTabProps) {
                     {tool.desc}
                   </p>
                 </div>
-                <Button
+                <Button type="button"
                   onClick={() => handleRun(tool.name)}
                   variant="outline"
                   size="sm"

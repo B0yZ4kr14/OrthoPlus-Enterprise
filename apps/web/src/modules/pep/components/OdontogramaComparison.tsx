@@ -145,11 +145,11 @@ export const OdontogramaComparison = ({
           <div className="flex items-center justify-between">
             <CardTitle>Comparação de Odontogramas</CardTitle>
             <div className="flex gap-2">
-              <Button onClick={exportToPDF} disabled={isExporting}>
+              <Button type="button" onClick={exportToPDF} disabled={isExporting}>
                 <Download className="h-4 w-4 mr-2" />
                 {isExporting ? "Exportando..." : "Exportar PDF"}
               </Button>
-              <Button variant="outline" onClick={onClearSelection}>
+              <Button type="button" variant="outline" onClick={onClearSelection}>
                 Limpar Seleção
               </Button>
             </div>

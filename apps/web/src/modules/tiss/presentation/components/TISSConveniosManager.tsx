@@ -85,7 +85,7 @@ export function TISSConveniosManager() {
         </h3>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button onClick={resetForm} className="gap-2">
+            <Button type="button" onClick={resetForm} className="gap-2">
               <Plus className="h-4 w-4" />
               Novo Convênio
             </Button>

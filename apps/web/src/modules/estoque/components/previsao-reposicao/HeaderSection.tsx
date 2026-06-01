@@ -22,7 +22,7 @@ export function HeaderSection({
         Análise preditiva usando machine learning baseada em padrões históricos
         de consumo
       </p>
-      <Button
+      <Button type="button"
         onClick={onGerarPrevisoes}
         disabled={loading || disabled}
         className="mt-4"

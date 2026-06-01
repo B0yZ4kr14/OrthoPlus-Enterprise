@@ -62,7 +62,7 @@ export function RetentionConfigCard({
           <Switch id="retention-auto-cleanup" checked={autoCleanup} onCheckedChange={onAutoCleanupChange} />
         </div>
 
-        <Button onClick={onSave} disabled={isPending}>
+        <Button type="button" onClick={onSave} disabled={isPending}>
           Salvar Configurações
         </Button>
       </CardContent>

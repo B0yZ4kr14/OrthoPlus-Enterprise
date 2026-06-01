@@ -356,7 +356,7 @@ export function ExportDashboardDialog({
                   </div>
                 </div>
 
-                <Button
+                <Button type="button"
                   onClick={() => {
                     void handleScheduleExport();
                   }}
@@ -370,7 +370,7 @@ export function ExportDashboardDialog({
             )}
           </div>
 
-          <Button
+          <Button type="button"
             onClick={() => {
               void handleExport();
             }}

@@ -201,7 +201,7 @@ export default function EstoqueMovimentacoes() {
               Ajustes ({movimentacoesAjuste.length})
             </TabsTrigger>
           </TabsList>
-          <Button onClick={() => setShowForm(true)} className="hover-scale">
+          <Button type="button" onClick={() => setShowForm(true)} className="hover-scale">
             <Plus className="h-4 w-4 mr-2" />
             Nova Movimentação
           </Button>

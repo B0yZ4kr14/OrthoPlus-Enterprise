@@ -212,14 +212,14 @@ export function BitcoinQRCodeDialog({
                     readOnly
                     className="font-mono text-xs"
                   />
-                  <Button variant="outline" size="icon" aria-label="Copiar URI Bitcoin" onClick={handleCopyUri}>
+                  <Button type="button" variant="outline" size="icon" aria-label="Copiar URI Bitcoin" onClick={handleCopyUri}>
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
 
               <div className="flex gap-3">
-                <Button
+                <Button type="button"
                   variant="outline"
                   onClick={handleDownloadQR}
                   className="flex-1"
@@ -227,7 +227,7 @@ export function BitcoinQRCodeDialog({
                   <Download className="h-4 w-4 mr-2" />
                   Baixar QR Code
                 </Button>
-                <Button onClick={handleGeneratePayment} className="flex-1">
+                <Button type="button" onClick={handleGeneratePayment} className="flex-1">
                   <QrCode className="h-4 w-4 mr-2" />
                   Gerar Solicitação de Pagamento
                 </Button>

@@ -13,7 +13,7 @@ export function GenerateButton({
   onClick,
 }: GenerateButtonProps) {
   return (
-    <Button
+    <Button type="button"
       onClick={onClick}
       disabled={disabled || loading}
       className="w-full gap-2"

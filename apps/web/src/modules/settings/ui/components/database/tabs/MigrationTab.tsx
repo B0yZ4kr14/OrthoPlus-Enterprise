@@ -65,7 +65,7 @@ export function MigrationTab({ selectedEngine }: MigrationTabProps) {
               Faça download de um dump SQL ou arquivo JSON com todos os
               registros atuais.
             </p>
-            <Button
+            <Button type="button"
               onClick={handleExport}
               variant="outline"
               className="w-full border-border text-foreground"
@@ -85,7 +85,7 @@ export function MigrationTab({ selectedEngine }: MigrationTabProps) {
             <p className="text-sm text-muted-foreground mb-4">
               Restaure um dump anterior ou carregue dados de um banco externo.
             </p>
-            <Button
+            <Button type="button"
               onClick={handleImport}
               variant="outline"
               className="w-full border-border text-foreground"
@@ -140,7 +140,7 @@ export function MigrationTab({ selectedEngine }: MigrationTabProps) {
               </div>
             </div>
 
-            <Button
+            <Button type="button"
               onClick={handleMigration}
               className="w-full bg-interactive hover:bg-interactive/90 text-white border-none"
             >

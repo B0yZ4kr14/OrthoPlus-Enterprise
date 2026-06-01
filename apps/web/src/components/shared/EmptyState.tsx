@@ -68,7 +68,7 @@ export function EmptyState({
         </p>
       )}
       {action && (
-        <Button
+        <Button type="button"
           onClick={action.onClick}
           size="sm"
           className="rounded-full px-6"

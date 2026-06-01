@@ -103,7 +103,7 @@ export function BackupRestoreDialog({
 
         <div className="flex justify-between">
           {step > 1 && step < 4 && (
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => setStep(step - 1)}
               disabled={loading}
@@ -113,12 +113,12 @@ export function BackupRestoreDialog({
           )}
 
           <div className="flex gap-2 ml-auto">
-            <Button variant="outline" onClick={handleClose}>
+            <Button type="button" variant="outline" onClick={handleClose}>
               {step === 4 && results ? "Fechar" : "Cancelar"}
             </Button>
 
             {step === 2 && (
-              <Button
+              <Button type="button"
                 onClick={() => setStep(3)}
                 disabled={!Object.values(selectedItems).some(Boolean)}
               >
@@ -127,7 +127,7 @@ export function BackupRestoreDialog({
             )}
 
             {step === 3 && (
-              <Button onClick={handleRestore} disabled={loading}>
+              <Button type="button" onClick={handleRestore} disabled={loading}>
                 Restaurar Dados
               </Button>
             )}

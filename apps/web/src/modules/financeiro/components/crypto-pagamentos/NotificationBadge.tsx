@@ -31,7 +31,7 @@ export function NotificationBadge({
           : "Notificações Desconectadas"}
       </Badge>
       {!connected && onRequestPermission && (
-        <Button variant="outline" size="sm" onClick={onRequestPermission}>
+        <Button type="button" variant="outline" size="sm" onClick={onRequestPermission}>
           Ativar Notificações Push
         </Button>
       )}

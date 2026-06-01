@@ -196,12 +196,12 @@ export default function OrcamentosPage() {
                   </div>
                   <div className="space-x-2">
                     {orcamento.isDraft() && (
-                      <Button onClick={() => handleEnviar(orcamento.id)}>
+                      <Button type="button" onClick={() => handleEnviar(orcamento.id)}>
                         Enviar
                       </Button>
                     )}
                     {orcamento.isPending() && (
-                      <Button onClick={() => handleAprovar(orcamento.id)}>
+                      <Button type="button" onClick={() => handleAprovar(orcamento.id)}>
                         Aprovar
                       </Button>
                     )}
@@ -224,7 +224,7 @@ export default function OrcamentosPage() {
                   <p className="text-2xl font-bold">
                     {formatCurrency(orcamento.valorTotal)}
                   </p>
-                  <Button onClick={() => handleEnviar(orcamento.id)}>
+                  <Button type="button" onClick={() => handleEnviar(orcamento.id)}>
                     Enviar
                   </Button>
                 </div>
@@ -245,7 +245,7 @@ export default function OrcamentosPage() {
                   <p className="text-2xl font-bold">
                     {formatCurrency(orcamento.valorTotal)}
                   </p>
-                  <Button onClick={() => handleAprovar(orcamento.id)}>
+                  <Button type="button" onClick={() => handleAprovar(orcamento.id)}>
                     Aprovar
                   </Button>
                 </div>

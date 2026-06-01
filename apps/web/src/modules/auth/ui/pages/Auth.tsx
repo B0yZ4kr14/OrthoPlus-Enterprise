@@ -121,7 +121,6 @@ export default function Auth() {
       // On success, signIn updated user state → useEffect will navigate automatically.
       // No manual navigate needed here.
     } catch (e) {
-      console.error("Login error:", e);
       toast.error("Erro ao fazer login", {
         description: "Não foi possível conectar ao servidor. Tente novamente.",
       });

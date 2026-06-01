@@ -43,7 +43,7 @@ export default function GitHubManagerPage() {
           description="Gerenciamento de repositório, commits, branches e CI/CD"
           icon={Github}
         />
-        <Button onClick={() => fetchGitHubData()} disabled={loading}>
+        <Button type="button" onClick={() => fetchGitHubData()} disabled={loading}>
           <RefreshCw
             className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
             aria-hidden="true"

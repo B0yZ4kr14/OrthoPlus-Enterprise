@@ -22,7 +22,7 @@ export function MemoryHubHealth() {
         data-testid="health-error"
       >
         {error}
-        <Button variant="link" onClick={refresh} className="ml-2 h-auto p-0">
+        <Button type="button" variant="link" onClick={refresh} className="ml-2 h-auto p-0">
           Retry
         </Button>
       </div>

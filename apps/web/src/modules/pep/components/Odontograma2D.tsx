@@ -223,7 +223,7 @@ export const Odontograma2D = memo(({ prontuarioId }: Odontograma2DProps) => {
                 </Button>
               ),
             )}
-            <Button variant="destructive" onClick={resetOdontograma}>
+            <Button type="button" variant="destructive" onClick={resetOdontograma}>
               Resetar Odontograma
             </Button>
           </div>

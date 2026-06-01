@@ -169,7 +169,7 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
               </Select>
             </div>
             <div className="flex gap-2">
-              <Button
+              <Button type="button"
                 onClick={handleGenerate}
                 disabled={isLoading}
                 className="gap-2"
@@ -179,7 +179,7 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
               </Button>
               {data && (
                 <>
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     onClick={handleExportCSV}
                     className="gap-2"

@@ -81,7 +81,7 @@ export default function PatientSearchPage() {
         description="Pesquise pacientes por nome, CPF, telefone ou email"
         icon={Search}
         actions={
-          <Button onClick={() => navigate("/pacientes/novo")}>
+          <Button type="button" onClick={() => navigate("/pacientes/novo")}>
             <User className="h-4 w-4 mr-2" />
             Novo Paciente
           </Button>
@@ -124,7 +124,7 @@ export default function PatientSearchPage() {
         </div>
 
         {hasFilters && (
-          <Button variant="outline" onClick={clearFilters}>
+          <Button type="button" variant="outline" onClick={clearFilters}>
             Limpar
           </Button>
         )}

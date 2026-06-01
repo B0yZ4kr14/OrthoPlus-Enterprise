@@ -151,7 +151,7 @@ export default function DentistaProcedimentosManager() {
             placeholder="Comissão %"
             className="w-32"
           />
-          <Button onClick={handleCreate} disabled={isSubmitting}>
+          <Button type="button" onClick={handleCreate} disabled={isSubmitting}>
             <Plus className="mr-1 h-4 w-4" /> Adicionar
           </Button>
         </div>

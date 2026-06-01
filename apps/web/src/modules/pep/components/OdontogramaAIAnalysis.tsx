@@ -186,7 +186,7 @@ export const OdontogramaAIAnalysis = ({
               tratamentos com orçamentos
             </CardDescription>
           </div>
-          <Button onClick={handleAnalyze} disabled={isAnalyzing} size="lg">
+          <Button type="button" onClick={handleAnalyze} disabled={isAnalyzing} size="lg">
             {isAnalyzing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -306,7 +306,7 @@ export const OdontogramaAIAnalysis = ({
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => {
                 setSuggestions([]);
@@ -315,14 +315,14 @@ export const OdontogramaAIAnalysis = ({
             >
               Cancelar
             </Button>
-            <Button
+            <Button type="button"
               variant="secondary"
               onClick={handleCreateTreatments}
               disabled={selectedSuggestions.size === 0}
             >
               Criar {selectedSuggestions.size} Tratamento(s)
             </Button>
-            <Button
+            <Button type="button"
               onClick={handleScheduleAppointments}
               disabled={selectedSuggestions.size === 0 || isScheduling}
             >

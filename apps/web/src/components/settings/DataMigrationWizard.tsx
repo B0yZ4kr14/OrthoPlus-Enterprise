@@ -250,7 +250,7 @@ export function DataMigrationWizard({
 
           {/* Actions */}
           <div className="flex justify-between pt-4">
-            <Button
+            <Button type="button"
               variant="outline"
               onClick={() => (step === 1 ? onClose() : setStep(step - 1))}
               disabled={
@@ -264,14 +264,14 @@ export function DataMigrationWizard({
             </Button>
 
             {mode === "export" && step === 1 && (
-              <Button onClick={() => setStep(2)}>
+              <Button type="button" onClick={() => setStep(2)}>
                 Avançar
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             )}
 
             {mode === "export" && step === 2 && (
-              <Button onClick={handleExport} disabled={loading}>
+              <Button type="button" onClick={handleExport} disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -287,18 +287,18 @@ export function DataMigrationWizard({
             )}
 
             {mode === "export" && step === 3 && (
-              <Button onClick={onClose}>Concluir</Button>
+              <Button type="button" onClick={onClose}>Concluir</Button>
             )}
 
             {mode === "import" && step === 2 && (
-              <Button onClick={() => setStep(3)} disabled={!importData}>
+              <Button type="button" onClick={() => setStep(3)} disabled={!importData}>
                 Avançar
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             )}
 
             {mode === "import" && step === 3 && (
-              <Button onClick={handleImport} disabled={loading}>
+              <Button type="button" onClick={handleImport} disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -314,7 +314,7 @@ export function DataMigrationWizard({
             )}
 
             {mode === "import" && step === 4 && (
-              <Button onClick={onClose}>Concluir</Button>
+              <Button type="button" onClick={onClose}>Concluir</Button>
             )}
           </div>
         </div>

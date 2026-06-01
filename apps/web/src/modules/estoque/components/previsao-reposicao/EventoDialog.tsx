@@ -154,7 +154,7 @@ export function EventoDialog({
               }
             />
           </div>
-          <Button onClick={handleAdicionar} className="w-full">
+          <Button type="button" onClick={handleAdicionar} className="w-full">
             Adicionar Evento
           </Button>
           {eventos.length > 0 && (

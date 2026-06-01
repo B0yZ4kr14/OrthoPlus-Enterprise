@@ -19,12 +19,12 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   return (
     <div className="flex gap-2">
-      <Button variant="outline" size="sm" onClick={onOpenEventos}>
+      <Button type="button" variant="outline" size="sm" onClick={onOpenEventos}>
         <CalendarDays className="w-4 h-4 mr-2" />
         Eventos Futuros ({eventosCount})
       </Button>
       {hasPrevisoes && (
-        <Button
+        <Button type="button"
           onClick={onEnviarEmail}
           disabled={sendingEmail}
           variant="outline"

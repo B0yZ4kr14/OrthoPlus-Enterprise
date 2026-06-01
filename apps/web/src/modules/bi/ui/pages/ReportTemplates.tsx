@@ -269,7 +269,7 @@ export default function ReportTemplates() {
       <div className="flex justify-end">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditingTemplate(null)}>
+            <Button type="button" onClick={() => setEditingTemplate(null)}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Template
             </Button>
@@ -405,7 +405,7 @@ export default function ReportTemplates() {
             </Tabs>
 
             <div className="flex gap-2 mt-4">
-              <Button
+              <Button type="button"
                 onClick={
                   editingTemplate ? handleUpdateTemplate : handleCreateTemplate
                 }
@@ -413,7 +413,7 @@ export default function ReportTemplates() {
               >
                 {editingTemplate ? "Atualizar" : "Criar"} Template
               </Button>
-              <Button variant="outline" onClick={handleCloseDialog}>
+              <Button type="button" variant="outline" onClick={handleCloseDialog}>
                 Cancelar
               </Button>
             </div>

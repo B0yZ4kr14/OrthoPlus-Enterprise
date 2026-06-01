@@ -210,7 +210,7 @@ export default function EstoqueMovimentacoesPage() {
             </SelectContent>
           </Select>
         </div>
-        <Button onClick={() => setShowForm(true)}>
+        <Button type="button" onClick={() => setShowForm(true)}>
           <Plus className="h-4 w-4 mr-2" />
           Nova Movimentação
         </Button>

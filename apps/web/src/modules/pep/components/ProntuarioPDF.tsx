@@ -213,7 +213,7 @@ export function ProntuarioPDF({
         </div>
       </div>
 
-      <Button onClick={generatePDF} className="w-full" size="lg">
+      <Button type="button" onClick={generatePDF} className="w-full" size="lg">
         <Download className="mr-2 h-4 w-4" />
         Gerar e Baixar PDF
       </Button>

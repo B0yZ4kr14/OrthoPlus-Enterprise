@@ -117,7 +117,7 @@ export function BackupExportTab() {
             </Select>
           </div>
 
-          <Button
+          <Button type="button"
             onClick={handleExport}
             disabled={isExporting}
             className="w-full"

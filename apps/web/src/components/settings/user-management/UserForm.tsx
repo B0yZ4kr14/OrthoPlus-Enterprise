@@ -160,10 +160,10 @@ export function UserForm({
         </Tabs>
 
         <div className="flex gap-2 mt-4">
-          <Button onClick={onSubmit} className="flex-1">
+          <Button type="button" onClick={onSubmit} className="flex-1">
             Criar Usuário
           </Button>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
         </div>

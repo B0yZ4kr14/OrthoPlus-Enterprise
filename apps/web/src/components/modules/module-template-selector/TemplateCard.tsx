@@ -54,7 +54,7 @@ export function TemplateCard({
           <span>{template.modules.length} módulos inclusos</span>
         </div>
 
-        <Button
+        <Button type="button"
           onClick={() => onApply(template.id, template.name)}
           disabled={isApplying}
           className="w-full gap-2"

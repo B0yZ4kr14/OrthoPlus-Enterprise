@@ -23,18 +23,18 @@ export function WizardNavigation({
 }: WizardNavigationProps) {
   return (
     <div className="flex justify-between mt-6">
-      <Button variant="outline" onClick={onPrev} disabled={step === 1}>
+      <Button type="button" variant="outline" onClick={onPrev} disabled={step === 1}>
         <ArrowLeft className="h-4 w-4 mr-2" />
         Anterior
       </Button>
 
       {step < totalSteps ? (
-        <Button onClick={onNext}>
+        <Button type="button" onClick={onNext}>
           Próximo
           <ArrowRight className="h-4 w-4 ml-2" />
         </Button>
       ) : (
-        <Button onClick={onSubmit} disabled={loading || !canSubmit}>
+        <Button type="button" onClick={onSubmit} disabled={loading || !canSubmit}>
           {loading ? "Configurando..." : "Confirmar e Ativar"}
         </Button>
       )}
