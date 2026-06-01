@@ -417,6 +417,7 @@ export default function Landpage() {
 
             <nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground dark:text-muted-foreground">
               <button
+                type="button"
                 onClick={handleCta}
                 className="transition-colors hover:text-[hsl(var(--interactive))] dark:hover:text-[hsl(var(--interactive))]"
               >

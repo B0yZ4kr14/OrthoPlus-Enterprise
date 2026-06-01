@@ -253,6 +253,7 @@ export default function FileListPage() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
                       <button
+                        type="button"
                         onClick={() => setSelectedFileForOCR(file)}
                         className="p-2 hover:bg-muted rounded-md"
                         title="OCR"
@@ -260,6 +261,7 @@ export default function FileListPage() {
                         <FileText className="h-4 w-4 text-muted-foreground" />
                       </button>
                       <button
+                        type="button"
                         onClick={() => setSelectedFileForVersions(file)}
                         className="p-2 hover:bg-muted rounded-md"
                         title="Versões"
@@ -267,6 +269,7 @@ export default function FileListPage() {
                         <GitBranch className="h-4 w-4 text-muted-foreground" />
                       </button>
                       <button
+                        type="button"
                         onClick={() =>
                           handleDownload(file.id, file.nomeOriginal)
                         }
@@ -276,6 +279,7 @@ export default function FileListPage() {
                         <Download className="h-4 w-4 text-muted-foreground" />
                       </button>
                       <button
+                        type="button"
                         onClick={() => handleDelete(file.id)}
                         className="p-2 hover:bg-destructive/5 rounded-md"
                         title="Excluir"

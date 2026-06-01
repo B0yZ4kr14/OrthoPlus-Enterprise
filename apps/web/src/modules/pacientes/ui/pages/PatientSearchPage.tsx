@@ -100,6 +100,7 @@ export default function PatientSearchPage() {
           />
           {searchInput && (
             <button
+              type="button"
               onClick={() => setSearchInput("")}
               className="absolute right-3 top-1/2 -translate-y-1/2"
             >

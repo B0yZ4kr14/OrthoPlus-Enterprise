@@ -87,6 +87,7 @@ export class ErrorBoundary extends Component<
             )}
 
             <button
+              type="button"
               onClick={this.handleRetry}
               className="inline-flex items-center gap-2 px-4 py-2 bg-interactive hover:bg-interactive/90 text-white text-sm font-medium rounded-lg transition-colors"
             >

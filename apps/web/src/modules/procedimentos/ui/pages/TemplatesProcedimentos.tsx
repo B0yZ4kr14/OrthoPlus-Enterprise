@@ -154,6 +154,7 @@ export default function TemplatesProcedimentosPage() {
       {/* Tabs */}
       <div className="flex gap-2 border-b">
         <button
+          type="button"
           onClick={() => setActiveTab("templates")}
           className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeTab === "templates"
@@ -164,6 +165,7 @@ export default function TemplatesProcedimentosPage() {
           Templates
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab("tabelas")}
           className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeTab === "tabelas"
@@ -174,6 +176,7 @@ export default function TemplatesProcedimentosPage() {
           Tabela de Preços
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab("dentistas")}
           className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeTab === "dentistas"

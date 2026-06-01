@@ -259,6 +259,7 @@ export function OnboardingWizard({
                   {STEPS.map((s, index) => (
                     <button
                       key={s.id}
+                      type="button"
                       onClick={() => setCurrentStep(index)}
                       className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                         index === currentStep

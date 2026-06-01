@@ -182,6 +182,7 @@ export default function FileUploadPage() {
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => removeFile(index)}
                   className="p-1 hover:bg-muted/50 rounded"
                 >

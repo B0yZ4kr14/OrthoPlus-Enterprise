@@ -35,7 +35,8 @@ export class OrcamentoRepositoryApi implements IOrcamentoRepository {
     try {
       const data = await apiClient.get<RawOrcamento>(`/orcamentos/${id}`);
       return this.toDomain(data);
-    } catch {
+    } catch (error) {
+      console.error("[OrcamentoRepositoryApi.findById] failed:", error);
       return null;
     }
   }
@@ -51,7 +52,8 @@ export class OrcamentoRepositoryApi implements IOrcamentoRepository {
       if (Array.isArray(data) && data.length > 0) return this.toDomain(data[0]);
       if (data && !Array.isArray(data)) return this.toDomain(data);
       return null;
-    } catch {
+    } catch (error) {
+      console.error("[OrcamentoRepositoryApi.findByNumero] failed:", error);
       return null;
     }
   }
@@ -69,7 +71,8 @@ export class OrcamentoRepositoryApi implements IOrcamentoRepository {
         },
       });
       return data.map((item) => this.toDomain(item));
-    } catch {
+    } catch (error) {
+      console.error("[OrcamentoRepositoryApi.findByPatientId] failed:", error);
       return [];
     }
   }
@@ -80,7 +83,8 @@ export class OrcamentoRepositoryApi implements IOrcamentoRepository {
         params: { clinic_id: clinicId, sort: "created_at.desc" },
       });
       return data.map((item) => this.toDomain(item));
-    } catch {
+    } catch (error) {
+      console.error("[OrcamentoRepositoryApi.findByClinicId] failed:", error);
       return [];
     }
   }
@@ -94,7 +98,8 @@ export class OrcamentoRepositoryApi implements IOrcamentoRepository {
         params: { clinic_id: clinicId, status, sort: "created_at.desc" },
       });
       return data.map((item) => this.toDomain(item));
-    } catch {
+    } catch (error) {
+      console.error("[OrcamentoRepositoryApi.findByStatus] failed:", error);
       return [];
     }
   }
@@ -114,7 +119,8 @@ export class OrcamentoRepositoryApi implements IOrcamentoRepository {
         },
       });
       return data.map((item) => this.toDomain(item));
-    } catch {
+    } catch (error) {
+      console.error("[OrcamentoRepositoryApi.findExpirados] failed:", error);
       return [];
     }
   }

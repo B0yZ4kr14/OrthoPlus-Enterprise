@@ -16,21 +16,23 @@ const safeStorage = {
   removeItem(key: string): void {
     try {
       localStorage.removeItem(key);
-    } catch {
-      /* ignore */
+    } catch (error) {
+      console.error("[AuthContext.safeStorage.removeItem] failed:", error);
     }
   },
   key(index: number): string | null {
     try {
       return localStorage.key(index);
-    } catch {
+    } catch (error) {
+      console.error("[AuthContext.safeStorage.key] failed:", error);
       return null;
     }
   },
   get length(): number {
     try {
       return localStorage.length;
-    } catch {
+    } catch (error) {
+      console.error("[AuthContext.safeStorage.length] failed:", error);
       return 0;
     }
   },

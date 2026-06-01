@@ -47,6 +47,7 @@ export function FileSearchOCR() {
           />
           {query && (
             <button
+              type="button"
               onClick={handleClear}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
@@ -72,6 +73,7 @@ export function FileSearchOCR() {
             {results.map((file) => (
               <button
                 key={file.id}
+                type="button"
                 onClick={() => navigate(`/files?fileId=${file.id}`)}
                 className="w-full flex items-start gap-3 px-3 py-2 hover:bg-muted text-left"
               >

@@ -73,8 +73,8 @@ export function TISSGuideForm() {
         reset();
         setTimeout(() => setShowSuccess(false), 3000);
       })
-      .catch(() => {
-        // erro já tratado pelo hook (toast)
+      .catch((error) => {
+        console.error("[TISSGuideForm.onSubmit] failed:", error);
       });
   };
 

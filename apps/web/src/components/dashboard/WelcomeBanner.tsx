@@ -66,6 +66,7 @@ export function WelcomeBanner({ userName }: WelcomeBannerProps) {
               </div>
             </div>
             <button
+              type="button"
               onClick={handleDismiss}
               className="shrink-0 p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-[hsl(var(--interactive))] focus-visible:ring-offset-2 focus-visible:outline-none"
               aria-label="Fechar banner de boas-vindas"

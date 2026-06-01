@@ -55,6 +55,7 @@ export function WizardHeader({
         {steps.map((s, index) => (
           <button
             key={s.id}
+            type="button"
             onClick={() => {
               /* no-op: step indicator is read-only */
             }}

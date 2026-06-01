@@ -29,7 +29,8 @@ function validatePersistedState(
   try {
     const parsed = persistedSidebarSchema.parse(raw);
     return parsed.state;
-  } catch {
+  } catch (error) {
+    console.error("[sidebarStore.validatePersistedState] failed:", error);
     return null;
   }
 }
@@ -74,7 +75,8 @@ function loadPersistedState(key: string): string[] | null {
     const parsed = JSON.parse(raw);
     const validated = validatePersistedState(parsed);
     return validated?.expandedGroups ?? null;
-  } catch {
+  } catch (error) {
+    console.error("[sidebarStore.loadPersistedState] failed:", error);
     return null;
   }
 }
@@ -105,8 +107,8 @@ function migrateLegacyState(newKey: string): string[] | null {
       // migrated successfully
       return validated.expandedGroups;
     }
-  } catch {
-    // ignore
+  } catch (error) {
+    console.error("[sidebarStore.migrateLegacyState] failed:", error);
   }
   return null;
 }

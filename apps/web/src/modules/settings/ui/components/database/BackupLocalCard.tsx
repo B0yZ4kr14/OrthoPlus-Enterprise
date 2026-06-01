@@ -138,6 +138,7 @@ export function BackupLocalCard() {
               ].map((tab) => (
                 <button
                   key={tab.id}
+                  type="button"
                   onClick={() => setActiveSubTab(tab.id as SubTab)}
                   className={`px-6 py-3 text-sm font-medium transition-colors border-b-2
                     ${
@@ -156,6 +157,7 @@ export function BackupLocalCard() {
               <div className="space-y-6">
                 <div className="flex w-full bg-muted rounded-lg p-1 border border-border">
                   <button
+                    type="button"
                     onClick={() => setBackupType("completo")}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-md text-sm font-medium transition-colors
                       ${backupType === "completo" ? "bg-interactive text-white shadow-sm" : "bg-transparent text-muted-foreground hover:text-foreground"}
@@ -164,6 +166,7 @@ export function BackupLocalCard() {
                     <Download className="w-4 h-4" /> Backup Completo
                   </button>
                   <button
+                    type="button"
                     onClick={() => setBackupType("incremental")}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-md text-sm font-medium transition-colors
                       ${backupType === "incremental" ? "bg-interactive text-white shadow-sm" : "bg-transparent text-muted-foreground hover:text-foreground"}

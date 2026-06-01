@@ -158,6 +158,7 @@ export function PatientSelector({
                   {filteredPatients.map((patient) => (
                     <button
                       key={patient.id}
+                      type="button"
                       onClick={() => onSelect(patient)}
                       className="w-full flex items-start gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors text-left group"
                     >
