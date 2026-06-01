@@ -4,7 +4,7 @@
 
 **Created**: 2026-05-24
 
-**Status**: Migrated (reverse-engineered from existing implementation)
+**Status**: migrated
 
 **Input**: Existing nfe module in backend
 

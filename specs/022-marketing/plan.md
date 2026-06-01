@@ -14,6 +14,37 @@ Marketing Automático module provides dental clinic marketing capabilities inclu
 
 ---
 
+## Architecture
+
+### Frontend
+- Campaign management UI: list, create, edit, and delete marketing campaigns (email, SMS, WhatsApp)
+- Campaign metrics dashboard: sends, opens, conversions with KPI cards and charts
+- `ProgramaFidelidade` component with tabs: `BadgesTab`, `RecompensasTab`, `IndicacoesTab`, `PacientesTab`, `ConfigTab`
+- `KPICards` for loyalty program statistics (active patients, top referrers, redemption rate)
+- Recall management interface: list pending recalls, trigger batch processing
+- Use cases: `ListCampaignsUseCase`, `CreateCampaignUseCase`, `GetCampaignMetricsUseCase`, `SendCampaignMessageUseCase`, `UpdateCampaignStatusUseCase`, `ActivateCampaignUseCase`
+
+### Backend
+- Base path: `/api/marketing/*` with `authMiddleware` → `clinicGuard`
+- `GET /api/marketing/campanhas` — list campaigns with filters
+- `GET /api/marketing/campanhas/:id` — get campaign details
+- `POST /api/marketing/campanhas` — create campaign (status: RASCUNHO)
+- `PATCH /api/marketing/campanhas/:id` — update campaign
+- `DELETE /api/marketing/campanhas/:id` — delete campaign
+- `GET /api/marketing/envios` — list send tracking records
+- `POST /api/marketing/envios` — create send (status: pending → sent → delivered → failed)
+- `GET /api/marketing/recalls` — list recall scheduling records
+- `POST /api/marketing/recalls` — create recall
+- `POST /api/marketing/triggers/process` — process trigger-based marketing rules
+- `POST /api/marketing/recalls/process` — batch process pending recalls (1000+ per run)
+
+### Database
+- `marketing_campaigns`: id, clinic_id, name, type, channel, start_date, end_date, audience, status (RASCUNHO, ATIVA, PAUSADA, CONCLUIDA)
+- `marketing_campaign_sends` (envios): id, campaign_id, patient_id, status, sent_at, delivered_at, failed_reason
+- `marketing_recalls`: id, clinic_id, patient_id, recall_type, scheduled_date, status, notification_method
+- `marketing_triggers`: id, clinic_id, name, condition, action, is_active
+- `fidelidade_pacientes`: id, clinic_id, patient_id, points_balance, total_points_earned, total_redeemed, tier
+
 ## Technical Context
 
 | Aspect | Value |
@@ -115,3 +146,21 @@ apps/web/src/modules/marketing-auto/
 | **MKT-FR-005** | Loyalty program with points, badges, rewards, and ... | ✅ Covered |
 | **MKT-FR-006** | Campaign metrics dashboard (sends, opens, conversi... | ✅ Covered |
 | **MKT-FR-007** | Clinic-scoped data access — all queries filter by ... | ✅ Covered |
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Extract controller business logic into service layer (fix architecture drift — controller uses Prisma directly)
+- [ ] Task 2: Remove `as any` casts from controller and enforce strict TypeScript compliance
+- [ ] Task 3: Add backend unit tests for `MarketingController` covering campaigns, sends, recalls, and triggers
+
+### Phase 2: Implementation
+- [ ] Task 4: Implement asynchronous send tracking pipeline (non-blocking API with background queue)
+- [ ] Task 5: Build batch recall processor supporting 1000+ recalls per run with timeout protection
+- [ ] Task 6: Create loyalty program API endpoints under `/api/fidelidade/` (points, badges, rewards, referrals) if not already present
+- [ ] Task 7: Align frontend module naming: decide between `marketing-auto` (frontend) and `marketing` (backend) or create unified naming
+
+### Phase 3: Polish
+- [ ] Task 8: Add campaign metrics dashboard with real data from `marketing_campaign_sends`
+- [ ] Task 9: Verify recall automation reduces no-show rate by measuring before/after metrics
+- [ ] Task 10: Document webhook integration points for external email/SMS/WhatsApp providers

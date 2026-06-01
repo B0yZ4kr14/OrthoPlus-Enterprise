@@ -13,6 +13,36 @@ Sistema de gestao de pacientes com ficha clinica multi-aba, busca avancada, time
 
 ---
 
+## Architecture
+
+### Frontend
+- `PacientesListPage` — paginated list with search, filters by status, and statistic cards (total, ativos, alto risco, consultas hoje)
+- `PatientFormPage` — multi-tab form (Dados Pessoais, Contato/Endereço, Histórico Médico, Hábitos/Medidas, Odontológica, Marketing, Outros) with React Hook Form + Zod
+- `PatientDetailPage` / `PatientDetail-v2` — patient profile with timeline and photo
+- `PatientSearchPage` — full-text search by nome, documento, or telefone
+- `PatientTimeline` — chronological view aggregating appointments, treatments, budgets, status changes
+- `PatientPhotoUpload` — image upload with 5MB size validation
+- Hooks: `usePatientsClean` (repository + use-case pattern), `usePatientTimeline.ts`, `usePatientsUnified.ts`
+
+### Backend
+- Base path: `/api/pacientes/*` with `clinicGuard` middleware
+- `GET /api/pacientes` — list patients with pagination, filtering, sorting
+- `POST /api/pacientes` — create patient with CPF/email deduplication and document validation
+- `GET /api/pacientes/:id` — get patient with full profile
+- `PATCH /api/pacientes/:id` — update patient (multi-tab data)
+- `DELETE /api/pacientes/:id` — archive/delete patient
+- `GET /api/pacientes/:id/timeline` — aggregate timeline events
+- `POST /api/pacientes/:id/status` — change patient status with history tracking
+- CQRS: `CreatePatientCommand`, `UpdatePatientCommand`, `ChangePatientStatusCommand` + query handlers
+- `PacienteSearchService` for full-text search
+- Patient portal auth: HttpOnly/Secure/SameSite=Strict cookie (`patient_session`)
+
+### Database
+- `patients`: id, clinic_id, name, cpf (unique per clinic), rg, birth_date, phone, email, address JSON, photo_url, status (NOVO, ATIVO, EM_TRATAMENTO, INATIVO, ARQUIVADO), notes
+- `patient_accounts`: portal login credentials (email + bcrypt password)
+- `patient_sessions`: session tokens with 24h validity
+- `patient_status_history`: who, when, why for each status change
+
 ## Technical Context
 
 ### Frontend Stack
@@ -187,6 +217,24 @@ tests/e2e/modules/pacientes.spec.ts
 | **PAC-FR-003** | Gestão de Status | ✅ Covered |
 | **PAC-FR-004** | Upload de Foto ✅ IMPLEMENTADO | ✅ Covered |
 | **PAC-FR-005** | Timeline do Paciente ✅ IMPLEMENTADO | ✅ Covered |
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Verify patient portal auth uses HttpOnly/Secure/SameSite=Strict cookies (not body tokens)
+- [ ] Task 2: Ensure CPF validation (dígitos verificadores) works in both frontend and backend
+- [ ] Task 3: Add `data-testid` attributes to `PacientesListPage` and `PatientFormPage` for E2E stability
+
+### Phase 2: Implementation
+- [ ] Task 4: Build cross-module timeline aggregation: merge appointments (agenda), treatments (PEP), budgets (orçamentos) via event bus or API composition
+- [ ] Task 5: Add virtual scrolling + server-side search for patient lists >10k records
+- [ ] Task 6: Implement CEP auto-complete integration (ViaCEP) with manual fallback for invalid CEPs
+- [ ] Task 7: Add IMC automatic calculation when weight and height are provided
+
+### Phase 3: Polish
+- [ ] Task 8: Write backend unit tests for `CreatePatientCommand`, `UpdatePatientCommand`, and `PatientRepositoryPostgres`
+- [ ] Task 9: Verify document deduplication by CPF/email per clinic with edge cases (estrangeiros sem CPF)
+- [ ] Task 10: Add instrumentation metrics (`patient_create_duration_ms`, `patient_search_duration_ms`)
 
 ---
 

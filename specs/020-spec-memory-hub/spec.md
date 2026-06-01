@@ -4,7 +4,7 @@
 
 **Created**: 2026-05-18
 
-**Status**: In Progress — Post-`/speckit-analyze` remediation applied (2026-05-27)
+**Status**: in-progress
 
 **Input**: User description: "spec-kit-memory-hub"
 

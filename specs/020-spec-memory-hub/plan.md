@@ -10,6 +10,27 @@
 
 Build a centralized project memory hub that indexes all markdown documentation (specs, plans, architecture decisions, API contracts) into a searchable SQLite-backed semantic index using Ollama embeddings. Provide CLI and API interfaces for developers and AI agents to query context, generate feature briefs, and detect memory drift between specs and implementations.
 
+## Architecture
+
+### Frontend
+- MemoryHub search page with semantic query input and ranked results list
+- Health dashboard showing memory coverage percentage, drift count, index status, and last scan timestamp
+- Context brief viewer for AI agents (Markdown with YAML frontmatter)
+- All UI components via `@orthoplus/core-ui` with Tailwind styling
+
+### Backend
+- `GET /api/memory/search?q=&filter=&limit=` — semantic search with source type filtering
+- `POST /api/memory/brief` — generate structured context brief for AI agents given feature identifier
+- `GET /api/memory/health` — memory health metrics (coverage, drift, index status)
+- `GET /api/memory/drift` — retrieve latest drift report
+- CLI interface: `memory-hub search`, `memory-hub index`, `memory-hub health`, `memory-hub drift`
+- Services: `SearchService` (SQLite cosine similarity), `ContextBriefService` (token budget management), `DriftDetectionService`, `FileWatcherService` (chokidar/inotify)
+
+### Database
+- SQLite primary index (`better-sqlite3`): document metadata, embeddings, search index
+- PostgreSQL `core.search_index` with `tsvector` GIN index (existing) — migration path to `pgvector` with HNSW when >10k chunks
+- Prisma models: no new application schema changes required for v1
+
 ## Technical Context
 
 <!--
@@ -367,3 +388,22 @@ LIMIT $3;
 - [OpenAI Embeddings API pricing](https://openai.com/pricing)
 - [PostgreSQL 16 Full-Text Search documentation](https://www.postgresql.org/docs/16/textsearch.html)
 
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Scaffold MemoryHub CLI and API structure with SQLite index schema
+- [ ] Task 2: Implement `FileWatcherService` using chokidar with inotify primary and 30s polling fallback
+- [ ] Task 3: Index all markdown documents in `specs/`, `docs/`, `.specify/memory/`, and `.omk/memory/` directories
+
+### Phase 2: Implementation
+- [ ] Task 4: Build `SearchService` with Ollama embeddings and in-memory cosine similarity (<2s for 1000 documents)
+- [ ] Task 5: Build `ContextBriefService` that assembles AI agent briefs within 128k token budget with intelligent truncation
+- [ ] Task 6: Implement `DriftDetectionService` with daily cron scan (default 02:00) for broken links and outdated architecture decisions
+- [ ] Task 7: Add API key validation on startup (`MEMORY_HUB_EMBEDDING_PROVIDER`, `MEMORY_HUB_API_KEY`) with hot-swap via SIGHUP/file watcher
+
+### Phase 3: Polish
+- [ ] Task 8: Add health dashboard UI with coverage metrics and drift reports
+- [ ] Task 9: Implement provider failover (primary → secondary → Ollama fallback) with exponential backoff
+- [ ] Task 10: Write tests for search latency (<2s), index update (<60s), and drift detection accuracy
+- [ ] Task 11: Document pgvector/HNSW migration plan and backfill strategy for when index exceeds 10k chunks

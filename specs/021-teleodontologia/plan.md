@@ -14,6 +14,37 @@ Teleodontologia module provides remote dental consultation capabilities includin
 
 ---
 
+## Architecture
+
+### Frontend
+- `TeleodontoDashboard` — overview with teleconsultation statistics (sessions today, average duration, completion rate)
+- `TeleodontoSessionList` — list of teleconsultations with status filters
+- `TeleodontoScheduler` — schedule teleconsultation between dentist and patient
+- `TeleconsultaForm` — create/edit teleconsultation (title, reason, type, scheduled date, patient, dentist)
+- `TriagemForm` — pre-session triage data capture
+- `PrescricaoRemotaForm` — digital prescription with medications (name, dosage, frequency, duration, instructions)
+- `VideoRoom` — external video service link generation (not embedded WebRTC)
+- Hooks: `useTeleconsultas.ts`, `useTeleodontologia.ts`
+- Types: `teleodontologia.types.ts`
+
+### Backend
+- Base path: `/api/teleodonto/*` with `authMiddleware` → `clinicGuard`
+- `GET /api/teleodonto/teleconsultas` — list with filters (status, dentist_id)
+- `GET /api/teleodonto/teleconsultas/:id` — get single teleconsultation
+- `POST /api/teleodonto/teleconsultas` — create teleconsultation
+- `PATCH /api/teleodonto/teleconsultas/:id` — update teleconsultation
+- `DELETE /api/teleodonto/teleconsultas/:id` — delete/cancel teleconsultation
+- `POST /api/teleodonto/sessions/start` — start session (status → EM_ANDAMENTO)
+- `POST /api/teleodonto/sessions/end` — end session with notes (status → CONCLUIDA, duration recorded)
+- `POST /api/teleodonto/notes` — add clinical notes (diagnosis, recommendations)
+- `POST /api/teleodonto/prescriptions` — create digital prescription
+
+### Database
+- `teleconsultas`: id, clinic_id, patient_id, dentist_id, title, reason, type, scheduled_date, status (AGENDADA, EM_ANDAMENTO, CONCLUIDA, CANCELADA)
+- `teleodonto_sessions`: id, teleconsulta_id, start_time, end_time, duration_seconds, status, notes
+- `teleodonto_chat`: id, session_id, sender_id, message, timestamp
+- `teleodonto_files`: id, session_id, file_name, storage_path, uploaded_by, uploaded_at
+
 ## Technical Context
 
 | Aspect | Value |
@@ -121,3 +152,21 @@ apps/web/src/modules/teleodonto/
 | **TEL-FR-005** | Dashboard with teleconsultation statistics (sessio... | ✅ Covered |
 | **TEL-FR-006** | Video room integration (link generation for extern... | ✅ Covered |
 | **TEL-FR-007** | Clinic-scoped data access — all queries filter by ... | ✅ Covered |
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Extract controller business logic into service layer (fix architecture drift — controller uses Prisma directly)
+- [ ] Task 2: Remove `as any` casts from controller and enforce strict TypeScript compliance
+- [ ] Task 3: Replace raw `res.status(500)` with `ApiError` + RFC 7807 Problem Details
+
+### Phase 2: Implementation
+- [ ] Task 4: Add backend unit tests for `TeleodontoController` covering CRUD, session lifecycle, and prescriptions
+- [ ] Task 5: Implement real statistics in `TeleodontoDashboard` (replace static/mock data with aggregated queries)
+- [ ] Task 6: Add clinical notes and prescription retrieval endpoints (`GET /api/teleodonto/notes/:teleconsultaId`, `GET /api/teleodonto/prescriptions/:teleconsultaId`)
+- [ ] Task 7: Verify LGPD compliance: all clinical data encrypted at rest, audit trail for session access
+
+### Phase 3: Polish
+- [ ] Task 8: Add rate limiting to teleconsultation endpoints
+- [ ] Task 9: Write E2E tests for video session flow (start → notes → prescription → end)
+- [ ] Task 10: Document external video service integration and link generation logic

@@ -12,6 +12,27 @@ NF-e module manages electronic invoices for Brazilian dental clinics. It provide
 
 ---
 
+## Architecture
+
+### Frontend
+- NF-e list page with filters by status (RASCUNHO, EMITIDA, CANCELADA, REJEITADA)
+- NF-e creation form with patient selection, procedure, value, and fiscal data
+- NF-e cancellation UI with reason input and confirmation
+- Status badges and audit trail viewer
+
+### Backend
+- Base path: `/api/nfe/*` with `authMiddleware` → `clinicGuard`
+- `GET /api/nfe/status` — module status and health check
+- `GET /api/nfe/` — list NF-e records with filters
+- `GET /api/nfe/:id` — get NF-e by ID with full fiscal data
+- `POST /api/nfe/` — create NF-e (status: RASCUNHO)
+- `PATCH /api/nfe/:id` — update NF-e (only while status is RASCUNHO)
+- `POST /api/nfe/:id/cancelar` — cancel NF-e with reason and timestamp (creates immutable audit record)
+
+### Database
+- `nfe_notas_fiscais`: id, clinic_id, patient_id, procedure_id, valor, status (RASCUNHO, EMITIDA, CANCELADA, REJEITADA), fiscal_data JSON, created_at, updated_at, cancelled_at, cancellation_reason
+- Audit trail for cancellations stored as separate records or JSON log
+
 ## Technical Context
 
 | Aspect | Value |
@@ -60,3 +81,20 @@ backend/src/modules/nfe/
 | **NFE-FR-002** | NF-e cancellation with reason and audit trail | ✅ Covered |
 | **NFE-FR-003** | Status tracking (RASCUNHO, EMITIDA, CANCELADA, REJ... | ✅ Covered |
 | **NFE-FR-004** | Clinic-scoped data access | ✅ Covered |
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Write backend unit tests for `NFeController` (currently 0 test coverage)
+- [ ] Task 2: Extract controller business logic into service layer (fix architecture drift — controller may use Prisma directly)
+- [ ] Task 3: Verify NF-e cancellation creates immutable audit record and prevents modification after issuance
+
+### Phase 2: Implementation
+- [ ] Task 4: Build frontend NF-e list, creation form, and cancellation UI if not present
+- [ ] Task 5: Add Zod validation schemas for fiscal data payload
+- [ ] Task 6: Integrate with external SEFAZ service for NF-e XML generation and transmission (v2 scope)
+
+### Phase 3: Polish
+- [ ] Task 7: Verify all CRUD endpoints respond <300ms p95
+- [ ] Task 8: Add E2E tests for NF-e creation and cancellation flow
+- [ ] Task 9: Document SEFAZ integration assumptions and external service dependencies

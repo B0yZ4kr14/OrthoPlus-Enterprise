@@ -8,6 +8,17 @@
 
 Integrate OrthoPlus Enterprise with GitNexus (code intelligence), SpecKit (specification-driven development), and OMK (multi-agent orchestration). This feature establishes governance automation over the monorepo, ensuring every code change is traceable to specifications, impact-analyzed before editing, and orchestrated through quality gates. The VPS TSiAPP production environment is fully documented and validated as part of this governance baseline.
 
+## Architecture
+
+### Frontend
+No dedicated frontend pages — governance tooling operates via CLI (`npx gitnexus analyze`, `speckit-*` commands) and CI workflows (`.github/workflows/gitnexus-index.yml`, `speckit-compliance.yml`). Any new governance status UI must use `@orthoplus/core-ui`.
+
+### Backend
+No new application API endpoints — feature is infrastructure/tooling integration. Health/status endpoints for GitNexus index freshness (`gitnexus_index_freshness` metric) and SpecKit compliance gate must follow existing security patterns (auth + clinicGuard + rate limiting + Helmet).
+
+### Database
+No Prisma schema changes required — governance data lives in external indices (GitNexus symbol graph, `.specify/feature.json`, `.omk/memory/`). SQLite may be used for local search index in Memory Hub (see spec.md MEM-FR-001).
+
 ## Technical Context
 
 **Language/Version**: TypeScript 5.8.3 (frontend), Node.js 20 (backend), Python 3.14 (agent-service)
@@ -117,3 +128,19 @@ categories/@orthoplus/        # Internal packages
 | **OMG-FR-007** | System MUST validate that production endpoints are... | ✅ Covered |
 | **OMG-FR-008** | System MUST ensure all domain references in code, ... | ✅ Covered |
 | **OMG-FR-009** | System MUST maintain a canonical source of truth f... | ✅ Covered |
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Run `npx gitnexus analyze` and verify index covers >30,000 nodes with correct relationship mappings
+- [ ] Task 2: Configure `.github/workflows/gitnexus-index.yml` CI trigger for automatic re-index on push to `main`
+- [ ] Task 3: Validate SpecKit SDD workflow end-to-end: create test feature with `speckit-specify`, verify `specs/` directory and `feature.json` update
+
+### Phase 2: Implementation
+- [ ] Task 4: Integrate OMK multi-agent orchestration with SpecKit workflow (specify → plan → implement → verify)
+- [ ] Task 5: Document production VPS environment: network config, SSH access, service URLs, Docker Compose topology in `vps-topology.md` and `vps-services.md`
+- [ ] Task 6: Validate all documented production endpoints return HTTP 200 and SSL is valid
+
+### Phase 3: Polish
+- [ ] Task 7: Add governance metrics (`gitnexus_index_freshness`, `speckit_feature_count`) to Prometheus dashboard
+- [ ] Task 8: Run quality gates (`pnpm type-check`, `pnpm lint`, `pnpm test`, backend build) and fix any regressions

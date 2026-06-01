@@ -14,6 +14,37 @@ Reverse-engineer and document the existing `ia_radiografia` module (AI dental ra
 
 ---
 
+## Architecture
+
+### Frontend
+- `IARadiografia` main page at route `/ia-radiografia`
+- `UploadDialog` for radiograph upload (PNG, JPEG, DICOM) with metadata stripping
+- `AnaliseList` to display all analyses with status and confidence scores
+- `AnaliseDetailsDialog` for reviewing AI findings with dentist observations and digital signature
+- `IAInsightsDashboard` with KPI cards and charts showing aggregated clinic data
+- `RadiografiaComparison` for side-by-side analysis comparison
+- `PatientRadiographyTimeline` for chronological progression tracking
+- `ComparativoPDFExport` for PDF generation of comparative analyses
+- Hooks: `useRadiografia.ts` for API composition
+- Types: `radiografia.types.ts` with Zod schemas (fix enum mismatch with backend)
+
+### Backend
+- Base path: `/api/ia-radiografia` with middleware chain: `authMiddleware` → `clinicGuard` → `aiFeatureFlagGuard` → `iaRateLimiter`
+- `POST /consentimento` — register LGPD patient consent
+- `GET /consentimento/:pacienteId` — get consent status and history
+- `DELETE /consentimento/:pacienteId` — revoke consent
+- `POST /upload-e-analisar` — upload image, strip metadata, run AI analysis (async)
+- `GET /analises` — list analyses with filters
+- `GET /analises/:id` — get single analysis with decrypted AI result
+- `PATCH /analises/:id/revisar` — dentist review with observations and digital signature
+- `GET /audit/:analiseId` — retrieve immutable audit trail
+- Services: `LocalAIService`, `IAEncryptionService`, `IAAuditService`, `IAConsentimentoService`, `DicomMetadataStripper`
+
+### Database
+- `ia_radiografia_analise` (pep schema): patient, dentist, clinic, image hash, storage path, tipo_radiografia enum, status enum, encrypted resultado_ia JSON, confidence_score, processamento_ms, revisada, dentista_revisor_id, observacoes_dentista, assinatura_digital, modelo_usado
+- `ia_radiografia_audit_log` (pep schema): analysis ID, clinic, patient, dentist, action enum, timestamp, IP, user agent, details JSON
+- `paciente_consentimento_ia` (pep schema): patient, clinic, consent type, consent flag, timestamp, IP, terms hash, revocation fields
+
 ## Technical Context
 
 | Field | Value |
@@ -389,3 +420,21 @@ Content-Type: multipart/form-data
 | **IAR-FR-010** | Dentists MUST be able to compare multiple radiogra... | ✅ Covered |
 | **IAR-FR-011** | The system MUST support exporting comparative anal... | ✅ Covered |
 | **IAR-FR-012** | The entire feature MUST be gated by an environment... | ✅ Covered |
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Fix `TipoRadiografia` enum mismatch between frontend (`radiografia.types.ts`) and backend (`schema.prisma`)
+- [ ] Task 2: Implement real file upload to MinIO/S3 (replace local path placeholder in `controller.ts:50-52`)
+- [ ] Task 3: Add `GET /audit/:analiseId` endpoint and verify immutable audit trail logging
+
+### Phase 2: Implementation
+- [ ] Task 4: Move AI processing from synchronous inline to background worker/queue (Redis + worker)
+- [ ] Task 5: Add `assinatura_digital` field to frontend review flow and wire `PATCH /analises/:id/revisar` correctly
+- [ ] Task 6: Replace in-memory rate limiter with Redis-backed limiter (`iaRateLimiter.ts`)
+- [ ] Task 7: Remove hardcoded encryption fallback from `IAEncryptionService.ts` — fail hard if env var missing
+
+### Phase 3: Polish
+- [ ] Task 8: Write backend unit tests for `controller.ts`, `LocalAIService`, and `IAEncryptionService`
+- [ ] Task 9: Run load tests to verify rate limiting (10 uploads/hr per dentist, 100/day per clinic) and end-to-end analysis < 30s
+- [ ] Task 10: Update `quickstart.md` with setup instructions for Ollama/local AI model and MinIO configuration

@@ -13,6 +13,39 @@ Sistema de agenda odontologica implementado com Clean Architecture no frontend e
 
 ---
 
+## Architecture
+
+### Frontend
+- `AgendaPage` — main page with Tabs (Calendário / Lista) at route `/agenda`
+- `AgendaClinicaPage` — clinic-specific agenda view
+- `AppointmentForm` — create/edit appointments with patient, dentist, date, duration, type selection
+- `AppointmentCard` — card display in list view with status, patient, time, and actions
+- `AppointmentDetailsDialog` — modal with full appointment details
+- `WeekCalendar` — weekly grid view with drag-and-drop positioning
+- `BlockedTimeForm` — create/edit blocked periods (férias, reuniões, emergências)
+- `DentistScheduleForm` — configure working hours per dentist per day of week
+- Hooks: `useAppointments.ts`, `useBlockedTimes.ts`, `useDentistSchedules.ts`
+- Context: `AgendaContext.tsx` for week navigation state
+
+### Backend
+- Base path: `/api/agenda/*` with `clinicGuard` middleware
+- `POST /api/agenda` — create appointment with conflict detection
+- `GET /api/agenda` — list appointments with filters (dentist, status, date range)
+- `PATCH /api/agenda/:id` — update appointment (reagendar)
+- `DELETE /api/agenda/:id` — cancel appointment (requires motivo if <24h)
+- `POST /api/agenda/:id/confirmar` — confirm appointment (>2h antecedência)
+- `GET /api/agenda/bloqueios` — list blocked times
+- `POST /api/agenda/bloqueios` — create blocked time
+- `GET /api/agenda/horarios` — list dentist schedules
+- `POST /api/agenda/horarios` — create/update dentist schedule
+- Commands: `CreateAppointmentCommandHandler`, domain entities with conflict validation
+
+### Database
+- `appointments`: id, clinic_id, patient_id, dentist_id, start_time, end_time, procedure_id, status (AGENDADO, CONFIRMADO, CANCELADO, CONCLUIDO, FALTOU), notes, confirmation_sent_at, confirmed_at
+- `appointment_confirmations`: confirmation history (método, mensagem, data de envio)
+- `blocked_times`: id, clinic_id, dentist_id, start_time, end_time, reason, is_recurring, recurrence_rule
+- `dentist_schedules`: id, clinic_id, dentist_id, day_of_week, start_time, end_time, break_start, break_end, is_active
+
 ## Technical Context
 
 ### Frontend Stack
@@ -202,6 +235,24 @@ tests/e2e/agenda.spec.ts            # 10 E2E scenarios
 | **AGD-FR-003** | Gestão de Bloqueios | ✅ Covered |
 | **AGD-FR-004** | Confirmações | ✅ Covered |
 | **AGD-FR-005** | Recall de Pacientes | ✅ Covered |
+
+## Phases
+
+### Phase 1: Foundation
+- [ ] Task 1: Verify backend controller compiles under strict TypeScript without `@ts-nocheck`
+- [ ] Task 2: Ensure all agenda endpoints use `CreateAppointmentCommandHandler` + `AppointmentRepositoryPostgres` (align remaining direct Prisma endpoints)
+- [ ] Task 3: Add pagination to list endpoints for performance with large datasets
+
+### Phase 2: Implementation
+- [ ] Task 4: Implement real-time updates via WebSocket or SSE for appointment changes
+- [ ] Task 5: Add shortcut for quick patient registration from agenda screen (EC-001)
+- [ ] Task 6: Add vacation handling: display blocked periods with message "Dr. Silva em férias de X a Y" (EC-002)
+- [ ] Task 7: Block editing of past appointments — allow only visualization and note addition (EC-003)
+
+### Phase 3: Polish
+- [ ] Task 8: Add instrumentation metrics (`appointment_create_duration_ms`, `calendar_load_duration_ms`)
+- [ ] Task 9: Write/verify E2E tests for all 10 scenarios in `tests/e2e/agenda.spec.ts`
+- [ ] Task 10: Update documentation and quickstart for agenda module configuration
 
 ---
 

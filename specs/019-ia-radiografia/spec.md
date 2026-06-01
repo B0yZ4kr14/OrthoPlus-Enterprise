@@ -4,7 +4,7 @@
 
 **Created**: 2026-05-21
 
-**Status**: In Progress
+**Status**: in-progress
 
 **Input**: Reverse-engineered from existing codebase. Module provides AI-powered automated analysis of dental radiographs with LGPD compliance, audit trails, and dentist review workflow.
 
