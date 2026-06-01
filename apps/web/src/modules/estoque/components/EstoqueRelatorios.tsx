@@ -334,16 +334,18 @@ export function EstoqueRelatorios() {
           reportType === "historico-requisicoes") && (
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Data Início</Label>
+              <Label htmlFor="startDate">Data Início</Label>
               <Input
+                id="startDate"
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
             <div>
-              <Label>Data Fim</Label>
+              <Label htmlFor="endDate">Data Fim</Label>
               <Input
+                id="endDate"
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}

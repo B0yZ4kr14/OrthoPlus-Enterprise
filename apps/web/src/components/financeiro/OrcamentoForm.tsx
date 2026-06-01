@@ -224,8 +224,9 @@ export function OrcamentoForm({
           <Card key={index} className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2 md:col-span-2">
-                <Label>Descrição *</Label>
+                <Label htmlFor={`item-descricao-${index}`}>Descrição *</Label>
                 <Input
+                  id={`item-descricao-${index}`}
                   value={item.descricao}
                   onChange={(e) =>
                     updateItem(index, "descricao", e.target.value)
@@ -235,8 +236,9 @@ export function OrcamentoForm({
               </div>
 
               <div className="space-y-2">
-                <Label>Quantidade *</Label>
+                <Label htmlFor={`item-quantidade-${index}`}>Quantidade *</Label>
                 <Input
+                  id={`item-quantidade-${index}`}
                   type="number"
                   value={item.quantidade}
                   onChange={(e) =>
@@ -251,8 +253,9 @@ export function OrcamentoForm({
               </div>
 
               <div className="space-y-2">
-                <Label>Valor Unit. *</Label>
+                <Label htmlFor={`item-valor-${index}`}>Valor Unit. *</Label>
                 <Input
+                  id={`item-valor-${index}`}
                   type="number"
                   step="0.01"
                   value={item.valor_unitario}
@@ -267,8 +270,9 @@ export function OrcamentoForm({
               </div>
 
               <div className="space-y-2">
-                <Label>Dente</Label>
+                <Label htmlFor={`item-dente-${index}`}>Dente</Label>
                 <Input
+                  id={`item-dente-${index}`}
                   value={item.dente_codigo || ""}
                   onChange={(e) =>
                     updateItem(index, "dente_codigo", e.target.value)
@@ -278,8 +282,9 @@ export function OrcamentoForm({
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label>Observações</Label>
+                <Label htmlFor={`item-obs-${index}`}>Observações</Label>
                 <Input
+                  id={`item-obs-${index}`}
                   value={item.observacoes || ""}
                   onChange={(e) =>
                     updateItem(index, "observacoes", e.target.value)
