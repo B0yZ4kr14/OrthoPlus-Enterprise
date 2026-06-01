@@ -5,6 +5,7 @@
  * DEPOIS: ~100 linhas + estrutura modular
  */
 
+import { useState } from "react";
 import {
   Tabs,
   TabsContent,
@@ -36,6 +37,7 @@ export function DentistaForm({
   onSubmit,
   onCancel,
 }: DentistaFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     avatarUrl,
     setAvatarUrl,
@@ -51,13 +53,22 @@ export function DentistaForm({
     handleFormSubmit,
   } = useDentistaForm({ dentista, onSubmit });
 
+  const wrappedSubmit = async (data: Dentista) => {
+    setIsLoading(true);
+    try {
+      await handleFormSubmit(data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
         <CardTitle>{dentista ? "Editar Dentista" : "Novo Dentista"}</CardTitle>
       </CardHeader>
 
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
+      <form onSubmit={handleSubmit((data: Dentista) => wrappedSubmit(data))}>
         <CardContent>
           <Tabs defaultValue="pessoais" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
@@ -104,7 +115,9 @@ export function DentistaForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">{dentista ? "Atualizar" : "Cadastrar"}</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : dentista ? "Atualizar" : "Cadastrar"}
+          </Button>
         </CardFooter>
       </form>
     </Card>

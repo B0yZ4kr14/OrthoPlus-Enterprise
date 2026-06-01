@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -40,6 +41,7 @@ export function HistoricoClinicoForm({
   onSuccess,
   onCancel,
 }: HistoricoClinicoFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -53,6 +55,7 @@ export function HistoricoClinicoForm({
   const tipo = watch("tipo");
 
   const onSubmit = async (data: HistoricoFormData) => {
+    setIsLoading(true);
     try {
       // Aqui você faria a chamada para salvar via API
       toast.success("Histórico clínico salvo com sucesso!");
@@ -60,6 +63,8 @@ export function HistoricoClinicoForm({
     } catch (error) {
       toast.error("Erro ao salvar histórico");
       toast.error("Erro ao salvar histórico clínico");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -137,7 +142,9 @@ export function HistoricoClinicoForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit">Salvar Histórico</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Salvando..." : "Salvar Histórico"}
+        </Button>
       </div>
     </form>
   );

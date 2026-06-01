@@ -24,6 +24,7 @@ export function NovaContaWizard({
   onOpenChange,
   onSubmit,
 }: NovaContaWizardProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<ContasReceberFormData>({
     patient_name: "",
@@ -59,8 +60,13 @@ export function NovaContaWizard({
       nextStep();
       return;
     }
-    await onSubmit(formData);
-    handleOpenChange(false);
+    setIsLoading(true);
+    try {
+      await onSubmit(formData);
+      handleOpenChange(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -224,8 +230,13 @@ export function NovaContaWizard({
             >
               {step === 1 ? "Cancelar" : "Voltar"}
             </Button>
-            <Button type="submit" variant="default" className="min-w-[120px]">
-              {step === 3 ? "Salvar Conta" : "Próximo"}
+            <Button
+              type="submit"
+              variant="default"
+              className="min-w-[120px]"
+              disabled={isLoading}
+            >
+              {isLoading ? "Salvando..." : step === 3 ? "Salvar Conta" : "Próximo"}
             </Button>
           </DialogFooter>
         </form>

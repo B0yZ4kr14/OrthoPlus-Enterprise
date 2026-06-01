@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -40,6 +41,7 @@ export function WalletForm({
   initialData,
   exchanges = [],
 }: WalletFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof cryptoWalletSchema>>({
     resolver: zodResolver(cryptoWalletSchema) as Resolver<
       z.infer<typeof cryptoWalletSchema>
@@ -57,7 +59,17 @@ export function WalletForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(async (data) => {
+          setIsLoading(true);
+          try {
+            await onSubmit(data);
+          } finally {
+            setIsLoading(false);
+          }
+        })}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="wallet_name"
@@ -188,7 +200,9 @@ export function WalletForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">Salvar Carteira</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : "Salvar Carteira"}
+          </Button>
         </div>
       </form>
     </Form>

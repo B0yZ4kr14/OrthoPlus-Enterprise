@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
@@ -41,6 +42,7 @@ export function ProdutoForm({
   onSubmit,
   onCancel,
 }: ProdutoFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<Produto, any, Produto>({
     resolver: zodResolver(produtoSchema) as Resolver<Produto>,
     defaultValues: produto || {
@@ -62,7 +64,17 @@ export function ProdutoForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(async (data) => {
+          setIsLoading(true);
+          try {
+            await onSubmit(data);
+          } finally {
+            setIsLoading(false);
+          }
+        })}
+        className="space-y-6"
+      >
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
@@ -345,7 +357,9 @@ export function ProdutoForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">{produto ? "Atualizar" : "Cadastrar"}</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : produto ? "Atualizar" : "Cadastrar"}
+          </Button>
         </div>
       </form>
     </Form>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -29,6 +30,7 @@ export function InventarioForm({
   onSubmit,
   onCancel,
 }: InventarioFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -50,7 +52,17 @@ export function InventarioForm({
   const tipo = watch("tipo");
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      onSubmit={handleSubmit(async (data) => {
+        setIsLoading(true);
+        try {
+          await onSubmit(data);
+        } finally {
+          setIsLoading(false);
+        }
+      })}
+      className="space-y-6"
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Número */}
         <div className="space-y-2">
@@ -154,8 +166,8 @@ export function InventarioForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit">
-          {inventario ? "Atualizar" : "Criar"} Inventário
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Salvando..." : `${inventario ? "Atualizar" : "Criar"} Inventário`}
         </Button>
       </div>
     </form>

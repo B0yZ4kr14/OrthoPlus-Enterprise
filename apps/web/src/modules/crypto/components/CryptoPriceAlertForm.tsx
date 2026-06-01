@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -49,6 +50,7 @@ export function CryptoPriceAlertForm({
   onSubmit,
   onCancel,
 }: CryptoPriceAlertFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<AlertFormData, any, AlertFormData>({
     resolver: zodResolver(alertSchema) as Resolver<AlertFormData>,
     defaultValues: {
@@ -67,7 +69,17 @@ export function CryptoPriceAlertForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(async (data) => {
+          setIsLoading(true);
+          try {
+            await onSubmit(data);
+          } finally {
+            setIsLoading(false);
+          }
+        })}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="coin_type"
@@ -294,8 +306,8 @@ export function CryptoPriceAlertForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">
-            {stopLossEnabled ? "Criar Stop-Loss" : "Criar Alerta"}
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : stopLossEnabled ? "Criar Stop-Loss" : "Criar Alerta"}
           </Button>
         </div>
       </form>

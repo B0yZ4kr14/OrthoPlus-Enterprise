@@ -1,4 +1,5 @@
 // cspell:disable
+import { useState } from "react";
 import { Button } from "@orthoplus/core-ui/button";
 import { Form } from "@orthoplus/core-ui/form";
 import {
@@ -24,6 +25,7 @@ export function FornecedorForm({
   onSubmit,
   onCancel,
 }: FornecedorFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const { form, handleSubmit, apiEnabled, apiAuthType, isEditing } =
     useFornecedorForm({
       fornecedor,
@@ -33,7 +35,17 @@ export function FornecedorForm({
   return (
     <Form {...form}>
       {}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form
+        onSubmit={async (e) => {
+          setIsLoading(true);
+          try {
+            await handleSubmit(e);
+          } finally {
+            setIsLoading(false);
+          }
+        }}
+        className="space-y-6"
+      >
         <Tabs defaultValue="dados" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="dados">Dados Cadastrais</TabsTrigger>
@@ -65,7 +77,9 @@ export function FornecedorForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">{isEditing ? "Atualizar" : "Cadastrar"}</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : isEditing ? "Atualizar" : "Cadastrar"}
+          </Button>
         </div>
       </form>
     </Form>

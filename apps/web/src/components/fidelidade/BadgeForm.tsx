@@ -181,7 +181,7 @@ export function BadgeForm({ open, onOpenChange }: BadgeFormProps) {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    criterio_valor: Number(e.target.value),
+                    criterio_valor: Number(e.target.value) || 0,
                   })
                 }
                 required

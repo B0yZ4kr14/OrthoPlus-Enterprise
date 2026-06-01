@@ -17,6 +17,7 @@ interface ContaPagarFormProps {
 }
 
 export function ContaPagarForm({ onSubmit }: ContaPagarFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [descricao, setDescricao] = useState("");
   const [fornecedor, setFornecedor] = useState("");
   const [categoria, setCategoria] = useState<CategoriaContaPagar>("FORNECEDOR");
@@ -24,16 +25,21 @@ export function ContaPagarForm({ onSubmit }: ContaPagarFormProps) {
   const [dataVencimento, setDataVencimento] = useState("");
   const [observacoes, setObservacoes] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
+    setIsLoading(true);
+    try {
+      await onSubmit({
       descricao,
       fornecedor,
       categoria,
       valor: parseFloat(valor),
       dataVencimento: new Date(dataVencimento),
       observacoes: observacoes || undefined,
-    });
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -112,8 +118,8 @@ export function ContaPagarForm({ onSubmit }: ContaPagarFormProps) {
         />
       </div>
 
-      <Button type="submit" className="w-full">
-        Criar Conta a Pagar
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Salvando..." : "Criar Conta a Pagar"}
       </Button>
     </form>
   );

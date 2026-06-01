@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -37,6 +38,7 @@ export function ReceitaForm({
   onSuccess,
   onCancel,
 }: ReceitaFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -49,7 +51,9 @@ export function ReceitaForm({
     },
   });
 
-  const onSubmit = (data: ReceitaFormData) => {
+  const onSubmit = async (data: ReceitaFormData) => {
+    setIsLoading(true);
+    try {
     const receita = {
       ...data,
       prontuarioId,
@@ -59,8 +63,11 @@ export function ReceitaForm({
       ).toISOString(),
     };
 
-    toast.success("Receita criada com sucesso!");
-    onSuccess();
+      toast.success("Receita criada com sucesso!");
+      onSuccess();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -167,7 +174,9 @@ export function ReceitaForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit">Salvar Receita</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Salvando..." : "Salvar Receita"}
+        </Button>
       </div>
     </form>
   );

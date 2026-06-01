@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
@@ -51,6 +52,7 @@ export function MovimentacaoForm({
   onCancel,
   currentUser,
 }: MovimentacaoFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<Movimentacao>({
     resolver: zodResolver(movimentacaoSchema),
     defaultValues: {
@@ -83,7 +85,17 @@ export function MovimentacaoForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(async (data) => {
+          setIsLoading(true);
+          try {
+            await onSubmit(data);
+          } finally {
+            setIsLoading(false);
+          }
+        })}
+        className="space-y-6"
+      >
         <div className="grid gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
@@ -323,7 +335,9 @@ export function MovimentacaoForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">Registrar Movimentação</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : "Registrar Movimentação"}
+          </Button>
         </div>
       </form>
     </Form>

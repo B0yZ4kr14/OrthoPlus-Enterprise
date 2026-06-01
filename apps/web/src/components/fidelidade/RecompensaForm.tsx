@@ -70,9 +70,9 @@ export function RecompensaForm({
     try {
       const validated = recompensaSchema.parse({
         ...formData,
-        pontos_necessarios: Number(formData.pontos_necessarios),
+        pontos_necessarios: Number(formData.pontos_necessarios) || 0,
         valor_desconto: formData.valor_desconto
-          ? Number(formData.valor_desconto)
+          ? Number(formData.valor_desconto) || 0
           : null,
       });
 
@@ -157,7 +157,7 @@ export function RecompensaForm({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    pontos_necessarios: Number(e.target.value),
+                    pontos_necessarios: Number(e.target.value) || 0,
                   })
                 }
                 required
@@ -202,7 +202,7 @@ export function RecompensaForm({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    valor_desconto: Number(e.target.value),
+                    valor_desconto: Number(e.target.value) || 0,
                   })
                 }
                 required

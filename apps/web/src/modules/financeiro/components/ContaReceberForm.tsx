@@ -9,14 +9,17 @@ interface ContaReceberFormProps {
 }
 
 export function ContaReceberForm({ onSubmit }: ContaReceberFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
   const [dataVencimento, setDataVencimento] = useState("");
   const [observacoes, setObservacoes] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsedValor = parseFloat(valor);
+    setIsLoading(true);
+    try {
+      const parsedValor = parseFloat(valor);
     if (Number.isNaN(parsedValor)) {
       alert("Valor inválido");
       return;
@@ -26,12 +29,15 @@ export function ContaReceberForm({ onSubmit }: ContaReceberFormProps) {
       alert("Data de vencimento inválida");
       return;
     }
-    onSubmit({
-      descricao,
-      valor: parsedValor,
-      dataVencimento: parsedDate,
-      observacoes: observacoes || undefined,
-    });
+      onSubmit({
+        descricao,
+        valor: parsedValor,
+        dataVencimento: parsedDate,
+        observacoes: observacoes || undefined,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -78,8 +84,8 @@ export function ContaReceberForm({ onSubmit }: ContaReceberFormProps) {
         />
       </div>
 
-      <Button type="submit" className="w-full">
-        Criar Conta a Receber
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Salvando..." : "Criar Conta a Receber"}
       </Button>
     </form>
   );

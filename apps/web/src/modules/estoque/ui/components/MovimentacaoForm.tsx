@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -59,9 +60,12 @@ export const MovimentacaoForm = ({
     },
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit = async (data: FormValues) => {
     if (!user?.id) return;
 
+    setIsLoading(true);
     try {
       const baseInput = {
         produtoId,
@@ -93,6 +97,8 @@ export const MovimentacaoForm = ({
       onClose();
     } catch (error) {
       // Error handled by hook
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -184,7 +190,9 @@ export const MovimentacaoForm = ({
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancelar
               </Button>
-              <Button type="submit">Confirmar</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Salvando..." : "Confirmar"}
+              </Button>
             </div>
           </form>
         </Form>

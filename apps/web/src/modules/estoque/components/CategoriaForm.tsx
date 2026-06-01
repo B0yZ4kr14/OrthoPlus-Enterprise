@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@orthoplus/core-ui/button";
@@ -37,6 +38,7 @@ export function CategoriaForm({
   onSubmit,
   onCancel,
 }: CategoriaFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<Categoria>({
     resolver: zodResolver(categoriaSchema),
     defaultValues: categoria || {
@@ -48,7 +50,17 @@ export function CategoriaForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(async (data) => {
+          setIsLoading(true);
+          try {
+            await onSubmit(data);
+          } finally {
+            setIsLoading(false);
+          }
+        })}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="nome"
@@ -116,7 +128,9 @@ export function CategoriaForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">{categoria ? "Atualizar" : "Cadastrar"}</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : categoria ? "Atualizar" : "Cadastrar"}
+          </Button>
         </div>
       </form>
     </Form>

@@ -412,7 +412,7 @@ export function ExchangeConfigForm({
                       placeholder="0.00"
                       {...field}
                       onChange={(e) =>
-                        field.onChange(parseFloat(e.target.value))
+                        field.onChange(parseFloat(e.target.value) || 0)
                       }
                     />
                   </FormControl>

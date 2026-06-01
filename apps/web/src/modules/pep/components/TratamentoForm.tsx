@@ -247,7 +247,9 @@ export function TratamentoForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit">Salvar Tratamento</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Salvando..." : "Salvar Tratamento"}
+        </Button>
       </div>
     </form>
   );

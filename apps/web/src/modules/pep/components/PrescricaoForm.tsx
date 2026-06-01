@@ -49,6 +49,7 @@ export function PrescricaoForm({
   onSuccess,
   onCancel,
 }: PrescricaoFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [medicamentos, setMedicamentos] = useState<MedicamentoFormData[]>([]);
   const [currentMed, setCurrentMed] = useState<Partial<MedicamentoFormData>>({
     via: "oral",
@@ -82,21 +83,26 @@ export function PrescricaoForm({
     setMedicamentos(medicamentos.filter((_, i) => i !== index));
   };
 
-  const onSubmit = (data: PrescricaoFormData) => {
+  const onSubmit = async (data: PrescricaoFormData) => {
     if (medicamentos.length === 0) {
       toast.error("Adicione pelo menos um medicamento");
       return;
     }
 
-    const prescricao = {
-      ...data,
-      medicamentos,
-      prontuarioId,
-      dataPrescricao: new Date().toISOString(),
-    };
+    setIsLoading(true);
+    try {
+      const prescricao = {
+        ...data,
+        medicamentos,
+        prontuarioId,
+        dataPrescricao: new Date().toISOString(),
+      };
 
-    toast.success("Prescrição criada com sucesso!");
-    onSuccess();
+      toast.success("Prescrição criada com sucesso!");
+      onSuccess();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -276,7 +282,9 @@ export function PrescricaoForm({
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit">Salvar Prescrição</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Salvando..." : "Salvar Prescrição"}
+        </Button>
       </div>
     </form>
   );

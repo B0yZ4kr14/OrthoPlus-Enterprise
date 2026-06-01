@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +22,17 @@ export function AddUserDialog({
   onOpenChange,
   onSubmit,
 }: AddUserDialogProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const { formData, updateField, handleSubmit } = useAddUserForm(onSubmit);
+
+  const wrappedHandleSubmit = async (e: React.FormEvent) => {
+    setIsLoading(true);
+    try {
+      await handleSubmit(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -38,7 +49,7 @@ export function AddUserDialog({
             Crie uma nova conta de usuário para a clínica
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={wrappedHandleSubmit} className="space-y-4">
           <UserFormField
             label="Nome"
             value={formData.name}
@@ -74,7 +85,9 @@ export function AddUserDialog({
             >
               Cancelar
             </Button>
-            <Button type="submit">Criar Usuário</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Salvando..." : "Criar Usuário"}
+            </Button>
           </div>
         </form>
       </DialogContent>

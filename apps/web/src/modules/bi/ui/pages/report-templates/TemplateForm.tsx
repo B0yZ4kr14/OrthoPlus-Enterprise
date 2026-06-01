@@ -25,6 +25,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
+import { useState } from "react";
 import { Plus, Check } from "lucide-react";
 import type { ReportTemplate, TemplateFormData } from "./types";
 import {
@@ -54,9 +55,16 @@ export function TemplateForm({
   onCancel,
   toggleMetric,
 }: TemplateFormProps) {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit();
+    setIsLoading(true);
+    try {
+      await onSubmit();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -200,8 +208,8 @@ export function TemplateForm({
             <Button type="button" variant="outline" onClick={onCancel}>
               Cancelar
             </Button>
-            <Button type="submit">
-              {editingTemplate ? "Atualizar" : "Criar"} Template
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Salvando..." : `${editingTemplate ? "Atualizar" : "Criar"} Template`}
             </Button>
           </div>
         </form>

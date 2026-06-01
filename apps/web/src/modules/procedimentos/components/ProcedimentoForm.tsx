@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -45,6 +45,7 @@ export function ProcedimentoForm({
   onSuccess,
   onCancel,
 }: ProcedimentoFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const { adicionarProcedimento, atualizarProcedimento, buscarPorId } =
     useProcedimentosStore();
 
@@ -84,13 +85,18 @@ export function ProcedimentoForm({
     }
   }, [procedimentoId, buscarPorId, form]);
 
-  const onSubmit = (data: CriarProcedimento) => {
-    if (procedimentoId) {
-      atualizarProcedimento(procedimentoId, data);
-    } else {
-      adicionarProcedimento(data);
+  const onSubmit = async (data: CriarProcedimento) => {
+    setIsLoading(true);
+    try {
+      if (procedimentoId) {
+        atualizarProcedimento(procedimentoId, data);
+      } else {
+        adicionarProcedimento(data);
+      }
+      onSuccess();
+    } finally {
+      setIsLoading(false);
     }
-    onSuccess();
   };
 
   return (
@@ -326,8 +332,8 @@ export function ProcedimentoForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">
-            {procedimentoId ? "Atualizar" : "Cadastrar"} Procedimento
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : `${procedimentoId ? "Atualizar" : "Cadastrar"} Procedimento`}
           </Button>
         </div>
       </form>

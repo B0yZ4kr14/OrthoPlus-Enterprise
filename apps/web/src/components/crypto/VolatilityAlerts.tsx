@@ -230,7 +230,7 @@ export function VolatilityAlerts() {
                       onValueChange={(v) =>
                         setFormData({
                           ...formData,
-                          timeframe_minutes: Number(v),
+                          timeframe_minutes: Number(v) || 15,
                         })
                       }
                     >
@@ -255,7 +255,7 @@ export function VolatilityAlerts() {
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          threshold_percentage: Number(e.target.value),
+                          threshold_percentage: Number(e.target.value) || 5,
                         })
                       }
                       min={1}

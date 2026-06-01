@@ -5,6 +5,7 @@
  * DEPOIS: ~90 linhas + estrutura modular
  */
 
+import { useState } from "react";
 import {
   Tabs,
   TabsContent,
@@ -36,6 +37,7 @@ export function FuncionarioForm({
   onSubmit,
   onCancel,
 }: FuncionarioFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     avatarUrl,
     setAvatarUrl,
@@ -51,6 +53,15 @@ export function FuncionarioForm({
     handleFormSubmit,
   } = useFuncionarioForm({ funcionario, onSubmit });
 
+  const wrappedSubmit = async (data: Funcionario) => {
+    setIsLoading(true);
+    try {
+      await handleFormSubmit(data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
@@ -59,7 +70,7 @@ export function FuncionarioForm({
         </CardTitle>
       </CardHeader>
 
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
+      <form onSubmit={handleSubmit((data) => wrappedSubmit(data as Funcionario))}>
         <CardContent>
           <Tabs defaultValue="pessoais" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
@@ -105,8 +116,8 @@ export function FuncionarioForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar
           </Button>
-          <Button type="submit">
-            {funcionario ? "Atualizar" : "Cadastrar"}
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Salvando..." : funcionario ? "Atualizar" : "Cadastrar"}
           </Button>
         </CardFooter>
       </form>
