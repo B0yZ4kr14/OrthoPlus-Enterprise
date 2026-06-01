@@ -305,12 +305,12 @@ export function EstoqueRelatorios() {
 
       <div className="space-y-6">
         <div>
-          <Label>Tipo de Relatório</Label>
+          <Label htmlFor="tipo-relatorio">Tipo de Relatório</Label>
           <Select
             value={reportType}
             onValueChange={(value) => setReportType(value as ReportType)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="tipo-relatorio">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -356,9 +356,9 @@ export function EstoqueRelatorios() {
 
         {reportType === "produtos-fornecedor" && (
           <div>
-            <Label>Fornecedor (Opcional)</Label>
+            <Label htmlFor="fornecedor-relatorio">Fornecedor (Opcional)</Label>
             <Select value={fornecedorId} onValueChange={setFornecedorId}>
-              <SelectTrigger>
+              <SelectTrigger id="fornecedor-relatorio">
                 <SelectValue placeholder="Todos os fornecedores" />
               </SelectTrigger>
               <SelectContent>

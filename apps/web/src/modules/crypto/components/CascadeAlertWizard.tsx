@@ -155,9 +155,9 @@ export function CascadeAlertWizard({
     <div className="space-y-6">
       <div className="space-y-4">
         <div>
-          <Label>Criptomoeda</Label>
+          <Label htmlFor="cascade-coin-type">Criptomoeda</Label>
           <Select value={coinType} onValueChange={setCoinType}>
-            <SelectTrigger>
+            <SelectTrigger id="cascade-coin-type">
               <SelectValue placeholder="Selecione a moeda" />
             </SelectTrigger>
             <SelectContent>
@@ -171,12 +171,12 @@ export function CascadeAlertWizard({
         </div>
 
         <div>
-          <Label>Direção da Estratégia</Label>
+          <Label htmlFor="cascade-alert-type">Direção da Estratégia</Label>
           <Select
             value={alertType}
             onValueChange={(v: "ABOVE" | "BELOW") => setAlertType(v)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="cascade-alert-type">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -237,8 +237,9 @@ export function CascadeAlertWizard({
                   <div className="flex-1 space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <Label className="text-xs">Taxa Alvo (R$)</Label>
+                        <Label htmlFor={`target-rate-${level.id}`} className="text-xs">Taxa Alvo (R$)</Label>
                         <Input
+                          id={`target-rate-${level.id}`}
                           type="number"
                           step="0.01"
                           placeholder={
@@ -255,8 +256,9 @@ export function CascadeAlertWizard({
                         />
                       </div>
                       <div>
-                        <Label className="text-xs">Converter (%)</Label>
+                        <Label htmlFor={`conversion-pct-${level.id}`} className="text-xs">Converter (%)</Label>
                         <Input
+                          id={`conversion-pct-${level.id}`}
                           type="number"
                           step="1"
                           min="1"

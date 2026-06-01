@@ -10,6 +10,7 @@ export interface IFaturamentoRepository {
   findNFesByClinic(clinicId: string): Promise<nfe_records[]>;
   updateNFeStatus(
     id: string,
+    clinicId: string,
     data: Prisma.nfe_recordsUpdateManyMutationInput,
   ): Promise<Prisma.BatchPayload>;
 

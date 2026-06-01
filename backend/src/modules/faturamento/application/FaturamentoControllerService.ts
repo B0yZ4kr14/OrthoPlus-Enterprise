@@ -52,9 +52,9 @@ export class FaturamentoControllerService {
     return nfes;
   }
 
-  async autorizarNFe(id: string, protocolo: string, xml: string) {
+  async autorizarNFe(id: string, clinicId: string, protocolo: string, xml: string) {
     await this.repo
-      .updateNFeStatus(id, {
+      .updateNFeStatus(id, clinicId, {
         status: "AUTORIZADA",
         protocolo,
         xml_autorizacao: xml,
@@ -64,9 +64,9 @@ export class FaturamentoControllerService {
     logger.info("NFe authorized", { id, protocolo });
   }
 
-  async cancelarNFe(id: string, motivo: string) {
+  async cancelarNFe(id: string, clinicId: string, motivo: string) {
     await this.repo
-      .updateNFeStatus(id, {
+      .updateNFeStatus(id, clinicId, {
         status: "CANCELADA",
         motivo_cancelamento: motivo,
         data_cancelamento: new Date(),

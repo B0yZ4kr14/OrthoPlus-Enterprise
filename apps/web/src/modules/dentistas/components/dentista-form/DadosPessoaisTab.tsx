@@ -86,10 +86,11 @@ export function DadosPessoaisTab({
         </div>
 
         <div className="space-y-2">
-          <Label>Data de Nascimento</Label>
+          <Label htmlFor="data-nascimento">Data de Nascimento</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
+                id="data-nascimento"
                 variant="outline"
                 className={cn(
                   "w-full justify-start text-left font-normal",
@@ -117,8 +118,9 @@ export function DadosPessoaisTab({
         </div>
 
         <div className="space-y-2 md:col-span-2">
-          <Label>Sobre</Label>
+          <Label htmlFor="sobre-dentista">Sobre</Label>
           <Textarea
+            id="sobre-dentista"
             {...register("sobre")}
             placeholder="Descrição do dentista"
           />

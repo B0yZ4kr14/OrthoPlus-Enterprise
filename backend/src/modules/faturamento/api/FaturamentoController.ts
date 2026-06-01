@@ -36,7 +36,9 @@ export class FaturamentoController {
       if (!protocolo || !xml) {
         throw Errors.validation("Protocolo and XML are required");
       }
-      await this.service.autorizarNFe(id, protocolo, xml);
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) throw Errors.unauthorized("Missing clinic context");
+      await this.service.autorizarNFe(id, clinicId, protocolo, xml);
       res
         .status(200)
         .json({ message: "NFe authorized successfully", protocolo });
@@ -50,7 +52,9 @@ export class FaturamentoController {
       if (!motivo) {
         throw Errors.validation("Motivo is required");
       }
-      await this.service.cancelarNFe(id, motivo);
+      const clinicId = req.user?.clinicId;
+      if (!clinicId) throw Errors.unauthorized("Missing clinic context");
+      await this.service.cancelarNFe(id, clinicId, motivo);
       res.status(200).json({ message: "NFe canceled successfully" });
     },
   );

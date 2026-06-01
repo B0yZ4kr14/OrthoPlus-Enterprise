@@ -24,12 +24,12 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Cor no Calendário</Label>
+        <Label htmlFor="cor-calendario">Cor no Calendário</Label>
         <Select
           value={corCalendario}
           onValueChange={(value) => setValue("corCalendario", value)}
         >
-          <SelectTrigger>
+          <SelectTrigger id="cor-calendario">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -49,12 +49,12 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
       </div>
 
       <div className="space-y-2">
-        <Label>Status</Label>
+        <Label htmlFor="status-dentista">Status</Label>
         <Select
           value={status}
           onValueChange={(value) => setValue("status", value)}
         >
-          <SelectTrigger>
+          <SelectTrigger id="status-dentista">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -67,10 +67,11 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
 
       <div className="flex items-center space-x-2">
         <Switch
+          id="aceita-emergencias"
           checked={aceitaEmergencia}
           onCheckedChange={(checked) => setValue("aceitaEmergencia", checked)}
         />
-        <Label>Aceita Emergências</Label>
+        <Label htmlFor="aceita-emergencias">Aceita Emergências</Label>
       </div>
 
       <div className="space-y-2">

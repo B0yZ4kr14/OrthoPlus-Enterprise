@@ -13,9 +13,10 @@ export class FaturamentoRepository implements IFaturamentoRepository {
 
   async updateNFeStatus(
     id: string,
+    clinicId: string,
     data: Prisma.nfe_recordsUpdateManyMutationInput,
   ) {
-    return prisma.nfe_records.updateMany({ where: { id }, data });
+    return prisma.nfe_records.updateMany({ where: { id, clinic_id: clinicId }, data });
   }
 
   async getConfig(clinicId: string) {
