@@ -37,7 +37,7 @@ export class OrcamentoRepository implements IOrcamentoRepository {
       data,
     });
     if (result.count === 0) return null;
-    return prisma.orcamentos.findUnique({ where: { id } });
+    return prisma.orcamentos.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async deleteOrcamento(id: string, clinicId: string) {

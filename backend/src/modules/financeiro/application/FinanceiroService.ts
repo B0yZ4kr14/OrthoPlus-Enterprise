@@ -371,7 +371,7 @@ export class FinanceiroService {
   }
 
   // Legacy
-  async sincronizarExtratoBancario(body: Record<string, unknown>) {
+  async sincronizarExtratoBancario(_clinicId: string, body: Record<string, unknown>) {
     const { bancoConfigId } = body;
     return {
       success: true,

@@ -23,6 +23,7 @@ export class CryptoController {
     }
     const result = await this.service.convertCryptoToBrl(
       transactionId,
+      req.clinicId as string,
       req.ip || undefined,
     );
     res.status(200).json({ success: true, ...result });

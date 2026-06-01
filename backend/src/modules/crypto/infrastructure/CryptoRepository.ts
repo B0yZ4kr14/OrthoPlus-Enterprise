@@ -2,8 +2,8 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { Prisma } from "@prisma/client";
 
 export class CryptoRepository {
-  async findTransactionById(id: string) {
-    return prisma.crypto_transactions.findUnique({ where: { id } });
+  async findTransactionById(id: string, clinicId: string) {
+    return prisma.crypto_transactions.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async updateTransaction(

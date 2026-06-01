@@ -234,7 +234,7 @@ describe("OrcamentosController.update", () => {
     orcamentos.findFirst.mockResolvedValueOnce(sampleOrcamento);
     const updated = { ...sampleOrcamento, titulo: "Atualizado" };
     orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
-    orcamentos.findUnique.mockResolvedValueOnce(updated);
+    orcamentos.findFirst.mockResolvedValueOnce(updated);
     const req = mockReq({
       params: { id: "orc-1" },
       body: { titulo: "Atualizado" },
@@ -316,7 +316,7 @@ describe("OrcamentosController.enviar", () => {
     orcamentos.findFirst.mockResolvedValueOnce(sampleOrcamento);
     const sent = { ...sampleOrcamento, status: "PENDENTE" };
     orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
-    orcamentos.findUnique.mockResolvedValueOnce(sent);
+    orcamentos.findFirst.mockResolvedValueOnce(sent);
     const req = mockReq({ params: { id: "orc-1" } });
     const res = mockRes();
     await controller.enviar(req as Request, res);
@@ -371,7 +371,7 @@ describe("OrcamentosController.aprovar", () => {
       aprovado_por: "user-1",
     };
     orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
-    orcamentos.findUnique.mockResolvedValueOnce(approved);
+    orcamentos.findFirst.mockResolvedValueOnce(approved);
     const req = mockReq({ params: { id: "orc-1" } });
     const res = mockRes();
     await controller.aprovar(req as Request, res);
@@ -443,7 +443,7 @@ describe("OrcamentosController.rejeitar", () => {
       motivo_rejeicao: "Preço alto",
     };
     orcamentos.updateMany.mockResolvedValueOnce({ count: 1 });
-    orcamentos.findUnique.mockResolvedValueOnce(rejected);
+    orcamentos.findFirst.mockResolvedValueOnce(rejected);
     const req = mockReq({
       params: { id: "orc-1" },
       body: { motivo: "Preço alto" },

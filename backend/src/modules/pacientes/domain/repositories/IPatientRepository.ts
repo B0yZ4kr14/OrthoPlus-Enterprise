@@ -162,7 +162,7 @@ export interface IPatientRepository {
   /**
    * Deleta paciente permanentemente
    */
-  deletePatientHard(id: string): Promise<any>;
+  deletePatientHard(id: string, clinicId: string): Promise<any>;
 }
 
 export interface FindAllOptions {

@@ -5,8 +5,8 @@ import { Errors } from "@/middleware/errorHandler";
 export class CryptoControllerService {
   constructor(private repo: CryptoRepository = new CryptoRepository()) {}
 
-  async convertCryptoToBrl(transactionId: string, ipAddress?: string) {
-    const transaction = await this.repo.findTransactionById(transactionId);
+  async convertCryptoToBrl(transactionId: string, clinicId: string, ipAddress?: string) {
+    const transaction = await this.repo.findTransactionById(transactionId, clinicId);
 
     if (!transaction) {
       throw Errors.notFound("Transaction", transactionId);

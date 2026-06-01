@@ -376,9 +376,12 @@ export class FinanceiroController {
     },
   );
 
-  sincronizarExtratoBancario = this.wrap(async (req, res) => {
-    res.json(await this.service.sincronizarExtratoBancario(req.body));
-  }, "Error syncing extratos");
+  sincronizarExtratoBancario = this.withClinic(
+    "Error syncing extratos",
+    async (c, req, res) => {
+      res.json(await this.service.sincronizarExtratoBancario(c, req.body));
+    },
+  );
   sugerirSangriaIa = this.wrap(async (req, res) => {
     res.json(await this.service.sugerirSangriaIa(req.body));
   }, "Error suggesting sangria IA");
