@@ -149,6 +149,7 @@ export default function OrcamentoFormPage() {
             variant="ghost"
             size="icon"
             onClick={() => navigate("/orcamentos")}
+            aria-label="Voltar para lista de orçamentos"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>

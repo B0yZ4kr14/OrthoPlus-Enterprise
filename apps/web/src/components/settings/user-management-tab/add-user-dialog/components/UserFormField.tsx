@@ -12,8 +12,9 @@ export function UserFormField({
 }: UserFormFieldProps) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
+      <Label htmlFor={`user-field-${label}`}>{label}</Label>
       <Input
+        id={`user-field-${label}`}
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}

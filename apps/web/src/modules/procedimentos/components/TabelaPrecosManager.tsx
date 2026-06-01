@@ -198,6 +198,7 @@ export default function TabelaPrecosManager() {
         </h3>
         <div className="flex flex-wrap gap-3">
           <Input
+            id="tabela-nome"
             aria-label="Nome da tabela"
             value={nomeTabela}
             onChange={(e) => setNomeTabela(e.target.value)}
@@ -276,6 +277,7 @@ export default function TabelaPrecosManager() {
                   size="icon"
                   variant="ghost"
                   onClick={() => startEdit(t)}
+                  aria-label="Editar tabela"
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
@@ -284,6 +286,7 @@ export default function TabelaPrecosManager() {
                   variant="ghost"
                   className="text-destructive"
                   onClick={() => handleDeleteTabela(t.id)}
+                  aria-label="Excluir tabela"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -316,6 +319,7 @@ export default function TabelaPrecosManager() {
                   </DialogHeader>
                   <div className="space-y-3">
                     <Input
+                      id="reajuste-percentual"
                       value={reajustePercentual}
                       onChange={(e) => setReajustePercentual(e.target.value)}
                       type="number"
@@ -355,6 +359,7 @@ export default function TabelaPrecosManager() {
                       ))}
                     </select>
                     <Input
+                      id="preco-valor"
                       value={precoValor}
                       onChange={(e) => setPrecoValor(e.target.value)}
                       type="number"
@@ -394,6 +399,7 @@ export default function TabelaPrecosManager() {
                       variant="ghost"
                       className="text-destructive"
                       onClick={() => handleDeletePreco(p.id)}
+                      aria-label="Excluir preço"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

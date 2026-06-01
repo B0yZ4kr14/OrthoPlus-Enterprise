@@ -148,6 +148,7 @@ export default function SystemLogsPage() {
       <div className="flex gap-4">
         <div className="flex-1 relative">
           <Input
+            id="logs-search"
             placeholder="Buscar logs..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

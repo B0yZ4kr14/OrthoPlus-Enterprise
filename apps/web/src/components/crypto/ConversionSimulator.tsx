@@ -204,8 +204,9 @@ export function ConversionSimulator() {
             </div>
 
             <div className="space-y-2">
-              <Label>Quantidade</Label>
+              <Label htmlFor="conv-quantidade">Quantidade</Label>
               <Input
+                id="conv-quantidade"
                 type="number"
                 step="0.001"
                 min="0"

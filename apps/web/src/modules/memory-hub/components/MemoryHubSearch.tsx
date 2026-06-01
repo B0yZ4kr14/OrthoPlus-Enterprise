@@ -18,6 +18,7 @@ export function MemoryHubSearch() {
     <div className="space-y-4">
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
+          id="memory-hub-search"
           type="text"
           value={query}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

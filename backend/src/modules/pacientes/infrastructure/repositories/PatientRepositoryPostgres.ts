@@ -317,8 +317,8 @@ export class PatientRepositoryPostgres implements IPatientRepository {
     });
   }
 
-  async findPatientById(id: string) {
-    return prisma.patients.findFirst({ where: { id } });
+  async findPatientById(id: string, clinicId: string) {
+    return prisma.patients.findFirst({ where: { id, clinic_id: clinicId } });
   }
 
   async deletePatientHard(id: string, clinicId: string) {

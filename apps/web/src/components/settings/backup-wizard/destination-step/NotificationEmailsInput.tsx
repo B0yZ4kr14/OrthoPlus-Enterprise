@@ -12,8 +12,9 @@ export function NotificationEmailsInput({
 }: NotificationEmailsInputProps) {
   return (
     <div className="space-y-2">
-      <Label>E-mails para Notificação (opcional)</Label>
+      <Label htmlFor="backup-emails">E-mails para Notificação (opcional)</Label>
       <Input
+        id="backup-emails"
         placeholder="admin@example.com, backup@example.com"
         value={emails.join(", ")}
         onChange={(e) =>

@@ -132,6 +132,7 @@ export default function TerminalPage() {
             <div className="flex-1 flex items-center gap-2 bg-slate-950 rounded-lg px-3 py-2">
               <span className="text-info font-mono">$</span>
               <Input
+                id="terminal-command"
                 value={command}
                 onChange={(e) => setCommand(e.target.value)}
                 onKeyPress={handleKeyPress}

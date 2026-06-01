@@ -17,6 +17,7 @@ export function CompletionScreen({ onClose, onFinish }: CompletionScreenProps) {
         size="icon"
         className="absolute right-4 top-4 z-50 rounded-full h-10 w-10 bg-destructive/10 hover:bg-destructive/20 border-2 border-destructive/30"
         onClick={onClose}
+        aria-label="Fechar"
       >
         <X className="h-5 w-5 text-destructive" />
       </Button>

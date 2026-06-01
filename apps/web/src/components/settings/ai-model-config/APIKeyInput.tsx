@@ -28,9 +28,10 @@ export function APIKeyInput({
 }: APIKeyInputProps) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
+      <Label htmlFor="api-key-input">{label}</Label>
       <div className="flex gap-2">
         <Input
+          id="api-key-input"
           type={show ? "text" : "password"}
           placeholder={placeholder}
           value={value || ""}

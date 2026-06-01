@@ -78,6 +78,7 @@ export function TemplatesList({
                   variant="ghost"
                   size="icon"
                   onClick={() => onEdit(template)}
+                  aria-label="Editar template"
                 >
                   <Edit className="h-4 w-4" />
                 </Button>
@@ -85,6 +86,7 @@ export function TemplatesList({
                   variant="ghost"
                   size="icon"
                   onClick={() => onDuplicate(template)}
+                  aria-label="Duplicar template"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -93,6 +95,7 @@ export function TemplatesList({
                   size="icon"
                   onClick={() => onDelete(template.id)}
                   className="text-destructive hover:text-destructive"
+                  aria-label="Excluir template"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

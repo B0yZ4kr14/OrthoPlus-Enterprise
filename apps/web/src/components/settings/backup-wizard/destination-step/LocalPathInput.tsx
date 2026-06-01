@@ -9,8 +9,9 @@ interface LocalPathInputProps {
 export function LocalPathInput({ value, onChange }: LocalPathInputProps) {
   return (
     <div className="space-y-2">
-      <Label>Caminho Local</Label>
+      <Label htmlFor="backup-local-path">Caminho Local</Label>
       <Input
+        id="backup-local-path"
         placeholder="/var/backups/orthoplus"
         value={value}
         onChange={(e) => onChange(e.target.value)}

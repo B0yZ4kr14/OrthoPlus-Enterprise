@@ -99,13 +99,13 @@ export function FinanceiroReports({
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label>Mês/Inicial:</Label>
-              <Input type="month" />
+              <Label htmlFor="report-mes-inicial">Mês/Inicial:</Label>
+              <Input id="report-mes-inicial" type="month" />
             </div>
             <div>
-              <Label>Ano:</Label>
+              <Label htmlFor="report-ano">Ano:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-ano">
                   <SelectValue placeholder="2025" />
                 </SelectTrigger>
                 <SelectContent>

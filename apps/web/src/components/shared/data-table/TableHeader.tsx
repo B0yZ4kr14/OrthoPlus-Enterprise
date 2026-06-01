@@ -37,6 +37,7 @@ export function DataTableHeader<T extends Record<string, unknown>>({
                 aria-hidden="true"
               />
               <Input
+                id="data-table-search"
                 placeholder="Buscar..."
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}

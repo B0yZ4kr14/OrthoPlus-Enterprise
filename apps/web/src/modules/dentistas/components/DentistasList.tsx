@@ -109,6 +109,7 @@ export const DentistasList = memo(function DentistasList({
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              id="dentistas-search"
               placeholder="Buscar por nome, CRO, CPF, email..."
               value={filters.search || ""}
               onChange={(e) =>
@@ -246,6 +247,7 @@ export const DentistasList = memo(function DentistasList({
                         size="icon"
                         onClick={() => onView(dentista)}
                         title="Visualizar"
+                        aria-label="Visualizar dentista"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
@@ -254,6 +256,7 @@ export const DentistasList = memo(function DentistasList({
                         size="icon"
                         onClick={() => onEdit(dentista)}
                         title="Editar"
+                        aria-label="Editar dentista"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -262,6 +265,7 @@ export const DentistasList = memo(function DentistasList({
                         size="icon"
                         onClick={() => setDeleteId(dentista.id!)}
                         title="Excluir"
+                        aria-label="Excluir dentista"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>

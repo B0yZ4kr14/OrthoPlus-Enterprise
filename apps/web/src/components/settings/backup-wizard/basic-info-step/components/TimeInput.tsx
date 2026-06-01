@@ -9,8 +9,9 @@ interface TimeInputProps {
 export function TimeInput({ value, onChange }: TimeInputProps) {
   return (
     <div className="space-y-2">
-      <Label>Horário</Label>
+      <Label htmlFor="backup-time">Horário</Label>
       <Input
+        id="backup-time"
         type="time"
         value={value}
         onChange={(e) => onChange(e.target.value)}

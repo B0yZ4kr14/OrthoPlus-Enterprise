@@ -185,8 +185,9 @@ export function DCABacktesting() {
             </div>
 
             <div className="space-y-2">
-              <Label>Valor Mensal (R$)</Label>
+              <Label htmlFor="dca-valor">Valor Mensal (R$)</Label>
               <Input
+                id="dca-valor"
                 type="number"
                 value={monthlyAmount}
                 onChange={(e) => setMonthlyAmount(Number(e.target.value))}

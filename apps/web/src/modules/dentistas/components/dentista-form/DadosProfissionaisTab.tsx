@@ -90,12 +90,12 @@ export function DadosProfissionaisTab({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Horário Início</Label>
-          <Input type="time" {...register("horarioAtendimento.inicio")} />
+          <Label htmlFor="horario-inicio">Horário Início</Label>
+          <Input id="horario-inicio" type="time" {...register("horarioAtendimento.inicio")} />
         </div>
         <div className="space-y-2">
-          <Label>Horário Fim</Label>
-          <Input type="time" {...register("horarioAtendimento.fim")} />
+          <Label htmlFor="horario-fim">Horário Fim</Label>
+          <Input id="horario-fim" type="time" {...register("horarioAtendimento.fim")} />
         </div>
       </div>
     </div>

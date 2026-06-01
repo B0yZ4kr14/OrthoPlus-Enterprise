@@ -75,6 +75,7 @@ export const LeadCard = ({
                 size="icon"
                 onClick={() => onDelete(lead)}
                 className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                aria-label="Excluir lead"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

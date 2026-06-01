@@ -154,10 +154,11 @@ export function AppointmentForm({
 
         {/* Data */}
         <div className="space-y-2">
-          <Label>Data *</Label>
+          <Label htmlFor="data">Data *</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
+                id="data"
                 type="button"
                 variant="outline"
                 className={cn(

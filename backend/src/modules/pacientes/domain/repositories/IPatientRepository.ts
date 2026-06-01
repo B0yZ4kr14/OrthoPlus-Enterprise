@@ -157,7 +157,7 @@ export interface IPatientRepository {
   /**
    * Busca paciente por ID (raw)
    */
-  findPatientById(id: string): Promise<any | null>;
+  findPatientById(id: string, clinicId: string): Promise<any | null>;
 
   /**
    * Deleta paciente permanentemente

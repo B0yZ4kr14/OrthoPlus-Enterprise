@@ -56,8 +56,9 @@ export function DateRangeFields({
   return (
     <>
       <div>
-        <Label>De:</Label>
+        <Label htmlFor="report-date-from">De:</Label>
         <Input
+          id="report-date-from"
           type="date"
           value={dateFrom}
           onChange={
@@ -68,8 +69,9 @@ export function DateRangeFields({
         />
       </div>
       <div>
-        <Label>Até:</Label>
+        <Label htmlFor="report-date-to">Até:</Label>
         <Input
+          id="report-date-to"
           type="date"
           value={dateTo}
           onChange={
@@ -117,9 +119,9 @@ export function ComercialReports({
               onDateToChange={onDateToChange}
             />
             <div>
-              <Label>Status:</Label>
+              <Label htmlFor="report-status">Status:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-status">
                   <SelectValue placeholder="-- Todos --" />
                 </SelectTrigger>
                 <SelectContent>
@@ -131,9 +133,9 @@ export function ComercialReports({
               </Select>
             </div>
             <div>
-              <Label>Plano:</Label>
+              <Label htmlFor="report-plano">Plano:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-plano">
                   <SelectValue placeholder="-- Todos --" />
                 </SelectTrigger>
                 <SelectContent>
@@ -153,9 +155,9 @@ export function ComercialReports({
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label>Mês:</Label>
+              <Label htmlFor="report-mes">Mês:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-mes">
                   <SelectValue placeholder="Selecione o mês" />
                 </SelectTrigger>
                 <SelectContent>
@@ -181,9 +183,9 @@ export function ComercialReports({
               </Select>
             </div>
             <div>
-              <Label>Ano:</Label>
+              <Label htmlFor="report-ano">Ano:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-ano">
                   <SelectValue placeholder="2025" />
                 </SelectTrigger>
                 <SelectContent>
@@ -212,9 +214,9 @@ export function ComercialReports({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <DateRangeFields />
             <div>
-              <Label>Funcionário:</Label>
+              <Label htmlFor="report-funcionario">Funcionário:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-funcionario">
                   <SelectValue placeholder="-- Todos --" />
                 </SelectTrigger>
                 <SelectContent>

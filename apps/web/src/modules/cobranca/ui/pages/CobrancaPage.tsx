@@ -139,6 +139,7 @@ export default function CobrancaPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <Input
+                    id="cobranca-search"
                     placeholder="Buscar por paciente ou CPF..."
                     className="max-w-sm"
                   />

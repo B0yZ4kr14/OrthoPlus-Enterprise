@@ -81,6 +81,7 @@ export function FuncionariosList({
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              id="funcionarios-search"
               placeholder="Buscar por nome, CPF, email..."
               value={filters.search || ""}
               onChange={(e) =>
@@ -203,6 +204,7 @@ export function FuncionariosList({
                         size="icon"
                         onClick={() => onView(funcionario)}
                         title="Visualizar"
+                        aria-label="Visualizar funcionário"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
@@ -211,6 +213,7 @@ export function FuncionariosList({
                         size="icon"
                         onClick={() => onEdit(funcionario)}
                         title="Editar"
+                        aria-label="Editar funcionário"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -219,6 +222,7 @@ export function FuncionariosList({
                         size="icon"
                         onClick={() => setDeleteId(funcionario.id!)}
                         title="Excluir"
+                        aria-label="Excluir funcionário"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>

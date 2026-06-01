@@ -133,6 +133,7 @@ export default function DentistaProcedimentosManager() {
             ))}
           </select>
           <Input
+            id="proc-duracao"
             aria-label="Duração em minutos"
             value={duracao}
             onChange={(e) => setDuracao(e.target.value)}
@@ -141,6 +142,7 @@ export default function DentistaProcedimentosManager() {
             className="w-32"
           />
           <Input
+            id="proc-comissao"
             aria-label="Comissão percentual"
             value={comissao}
             onChange={(e) => setComissao(e.target.value)}
@@ -194,6 +196,7 @@ export default function DentistaProcedimentosManager() {
                   variant="ghost"
                   className="text-destructive"
                   onClick={() => handleDelete(a.id)}
+                  aria-label="Excluir associação"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

@@ -9,8 +9,9 @@ interface DayOfMonthInputProps {
 export function DayOfMonthInput({ value, onChange }: DayOfMonthInputProps) {
   return (
     <div className="space-y-2">
-      <Label>Dia do Mês</Label>
+      <Label htmlFor="backup-day">Dia do Mês</Label>
       <Input
+        id="backup-day"
         type="number"
         min="1"
         max="31"

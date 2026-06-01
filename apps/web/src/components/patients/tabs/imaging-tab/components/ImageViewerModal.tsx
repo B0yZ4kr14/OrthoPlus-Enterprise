@@ -16,6 +16,7 @@ export function ImageViewerModal({ imageUrl, onClose }: ImageViewerModalProps) {
           size="icon"
           className="absolute top-4 right-4 z-10"
           onClick={onClose}
+          aria-label="Fechar visualizador"
         >
           <ZoomIn className="h-6 w-6" />
         </Button>

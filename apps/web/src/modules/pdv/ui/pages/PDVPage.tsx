@@ -320,6 +320,7 @@ export default function PDVPage() {
                           variant="ghost"
                           onClick={() => removerItem(idx)}
                           title="Remover item"
+                          aria-label="Remover item"
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>

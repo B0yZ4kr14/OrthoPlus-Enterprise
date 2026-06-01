@@ -229,8 +229,9 @@ export function BackupRestoreDialog({
             </Alert>
 
             <div className="space-y-2">
-              <Label>Selecione o arquivo de backup</Label>
+              <Label htmlFor="backup-file">Selecione o arquivo de backup</Label>
               <Input
+                id="backup-file"
                 type="file"
                 accept=".json,.zip"
                 onChange={(e) => {
@@ -257,8 +258,9 @@ export function BackupRestoreDialog({
             </Alert>
 
             <div className="space-y-2">
-              <Label>Senha de Descriptografia</Label>
+              <Label htmlFor="backup-password">Senha de Descriptografia</Label>
               <Input
+                id="backup-password"
                 type="password"
                 value={decryptionPassword}
                 onChange={(e) => setDecryptionPassword(e.target.value)}

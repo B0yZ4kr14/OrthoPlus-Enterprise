@@ -97,6 +97,7 @@ export default function WikiPage() {
                 <div>
                   <label className="text-sm font-medium">Título</label>
                   <Input
+                    id="wiki-title"
                     value={formData.title}
                     onChange={(e) =>
                       setFormData({ ...formData, title: e.target.value })
@@ -205,6 +206,7 @@ export default function WikiPage() {
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
+            id="wiki-search"
             placeholder="Buscar páginas..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

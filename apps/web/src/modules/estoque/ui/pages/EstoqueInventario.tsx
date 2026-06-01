@@ -207,6 +207,7 @@ export default function EstoqueInventario() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
+                id="inventario-search"
                 placeholder="Número do inventário ou responsável..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -330,6 +331,7 @@ export default function EstoqueInventario() {
                         size="icon"
                         onClick={() => handleView(inventario)}
                         title="Visualizar"
+                        aria-label="Visualizar inventário"
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
@@ -339,6 +341,7 @@ export default function EstoqueInventario() {
                           size="icon"
                           onClick={() => handleContagem(inventario)}
                           title="Contagem"
+                          aria-label="Realizar contagem"
                         >
                           <ClipboardCheck className="h-4 w-4" />
                         </Button>
@@ -350,6 +353,7 @@ export default function EstoqueInventario() {
                             size="icon"
                             onClick={() => handleDivergencias(inventario)}
                             title="Ver Divergências"
+                            aria-label="Ver divergências"
                           >
                             <AlertTriangle className="h-4 w-4 text-warning" />
                           </Button>
@@ -360,6 +364,7 @@ export default function EstoqueInventario() {
                           size="icon"
                           onClick={() => handleEdit(inventario)}
                           title="Editar"
+                          aria-label="Editar inventário"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>

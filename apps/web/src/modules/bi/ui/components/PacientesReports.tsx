@@ -42,8 +42,8 @@ export function PacientesReports({ onGenerateReport }: PacientesReportsProps) {
           onGenerate={() => onGenerateReport("Sem Agendamento")}
         >
           <div>
-            <Label>Data:</Label>
-            <Input type="date" />
+            <Label htmlFor="report-pacientes-date">Data:</Label>
+            <Input id="report-pacientes-date" type="date" />
           </div>
         </ReportSection>
 
@@ -54,9 +54,9 @@ export function PacientesReports({ onGenerateReport }: PacientesReportsProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <DateRangeFields />
             <div>
-              <Label>Funcionário:</Label>
+              <Label htmlFor="report-funcionario">Funcionário:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-funcionario">
                   <SelectValue placeholder="-- Todos --" />
                 </SelectTrigger>
                 <SelectContent>

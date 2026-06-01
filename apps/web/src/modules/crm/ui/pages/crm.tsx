@@ -138,6 +138,7 @@ export default function CRMPage() {
       {/* Filtros */}
       <div className="flex flex-col sm:flex-row gap-3">
         <Input
+          id="crm-search"
           placeholder="Buscar leads..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

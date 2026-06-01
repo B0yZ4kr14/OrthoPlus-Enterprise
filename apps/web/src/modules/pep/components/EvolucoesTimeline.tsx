@@ -120,6 +120,7 @@ export function EvolucoesTimeline({ prontuarioId }: EvolucoesTimelineProps) {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
+                id="evolucoes-search"
                 placeholder="Buscar nas evoluções..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

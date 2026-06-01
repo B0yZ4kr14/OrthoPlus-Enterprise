@@ -213,7 +213,7 @@ export class PacientesController {
     if (!clinicId) {
       throw Errors.unauthorized("Missing clinic context");
     }
-    const patient = await this.patientRepository.findPatientById(id);
+    const patient = await this.patientRepository.findPatientById(id, clinicId);
     await this.patientRepository.delete(id, clinicId);
     if (patient && patient.status) {
       pacientesMetrics.decPatientsTotal(patient.status, clinicId);

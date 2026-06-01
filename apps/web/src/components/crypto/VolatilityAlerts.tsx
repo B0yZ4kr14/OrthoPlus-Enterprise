@@ -248,8 +248,9 @@ export function VolatilityAlerts() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Threshold de Variação (%)</Label>
+                    <Label htmlFor="vol-threshold">Threshold de Variação (%)</Label>
                     <Input
+                      id="vol-threshold"
                       type="number"
                       value={formData.threshold_percentage}
                       onChange={(e) =>

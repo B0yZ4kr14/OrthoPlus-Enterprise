@@ -74,8 +74,9 @@ export function ConfiguracoesTab({ register, setValue, watch }: Props) {
       </div>
 
       <div className="space-y-2">
-        <Label>Duração Padrão Consulta (min)</Label>
+        <Label htmlFor="duracao-consulta">Duração Padrão Consulta (min)</Label>
         <Input
+          id="duracao-consulta"
           type="number"
           {...register("duracaoConsulta")}
           defaultValue={30}

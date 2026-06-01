@@ -51,9 +51,9 @@ export function ProfissionaisReports({
           onGenerate={() => onGenerateReport("Lista de Profissionais")}
         >
           <div>
-            <Label>Tipo:</Label>
+            <Label htmlFor="report-tipo-lista">Tipo:</Label>
             <Select>
-              <SelectTrigger>
+              <SelectTrigger id="report-tipo-lista">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
@@ -72,9 +72,9 @@ export function ProfissionaisReports({
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label>Tipo:</Label>
+              <Label htmlFor="report-tipo-aniversario">Tipo:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-tipo-aniversario">
                   <SelectValue placeholder="Todos" />
                 </SelectTrigger>
                 <SelectContent>
@@ -83,9 +83,9 @@ export function ProfissionaisReports({
               </Select>
             </div>
             <div>
-              <Label>Mês:</Label>
+              <Label htmlFor="report-mes">Mês:</Label>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger id="report-mes">
                   <SelectValue placeholder="Setembro" />
                 </SelectTrigger>
                 <SelectContent>
@@ -105,9 +105,9 @@ export function ProfissionaisReports({
           onGenerate={() => onGenerateReport("Permissões")}
         >
           <div>
-            <Label>Funcionário:</Label>
+            <Label htmlFor="report-funcionario">Funcionário:</Label>
             <Select>
-              <SelectTrigger>
+              <SelectTrigger id="report-funcionario">
                 <SelectValue placeholder="-- Todos --" />
               </SelectTrigger>
               <SelectContent>

@@ -110,6 +110,7 @@ export default function ADRsPage() {
               <div>
                 <label className="text-sm font-medium">Título</label>
                 <Input
+                  id="adr-title"
                   value={formData.title}
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })

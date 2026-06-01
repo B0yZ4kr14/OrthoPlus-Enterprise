@@ -49,6 +49,7 @@ export function ImagingTab({ patientId }: ImagingTabProps) {
               size="icon"
               className="absolute top-4 right-4 z-10"
               onClick={() => setSelectedImage(null)}
+              aria-label="Fechar visualização de imagem"
             >
               <ZoomIn className="h-6 w-6" />
             </Button>

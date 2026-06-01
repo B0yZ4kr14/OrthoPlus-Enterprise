@@ -98,6 +98,7 @@ export function InventarioContagemDialog({
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
+              id="inventario-produto-search"
               placeholder="Buscar produto..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -155,6 +156,7 @@ export function InventarioContagemDialog({
                       </TableCell>
                       <TableCell>
                         <Input
+                          id={`qtd-fisica-${item.id}`}
                           type="number"
                           min="0"
                           placeholder="0"

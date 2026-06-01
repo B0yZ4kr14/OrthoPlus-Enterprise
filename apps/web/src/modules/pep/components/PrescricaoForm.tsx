@@ -142,8 +142,9 @@ export function PrescricaoForm({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label>Nome do Medicamento</Label>
+            <Label htmlFor="med-nome">Nome do Medicamento</Label>
             <Input
+              id="med-nome"
               value={currentMed.nome || ""}
               onChange={(e) =>
                 setCurrentMed({ ...currentMed, nome: e.target.value })
@@ -153,8 +154,9 @@ export function PrescricaoForm({
           </div>
 
           <div className="space-y-2">
-            <Label>Dosagem</Label>
+            <Label htmlFor="med-dosagem">Dosagem</Label>
             <Input
+              id="med-dosagem"
               value={currentMed.dosagem || ""}
               onChange={(e) =>
                 setCurrentMed({ ...currentMed, dosagem: e.target.value })
@@ -187,8 +189,9 @@ export function PrescricaoForm({
           </div>
 
           <div className="space-y-2">
-            <Label>Frequência</Label>
+            <Label htmlFor="med-frequencia">Frequência</Label>
             <Input
+              id="med-frequencia"
               value={currentMed.frequencia || ""}
               onChange={(e) =>
                 setCurrentMed({ ...currentMed, frequencia: e.target.value })
@@ -198,8 +201,9 @@ export function PrescricaoForm({
           </div>
 
           <div className="space-y-2">
-            <Label>Duração</Label>
+            <Label htmlFor="med-duracao">Duração</Label>
             <Input
+              id="med-duracao"
               value={currentMed.duracao || ""}
               onChange={(e) =>
                 setCurrentMed({ ...currentMed, duracao: e.target.value })
@@ -209,8 +213,9 @@ export function PrescricaoForm({
           </div>
 
           <div className="space-y-2">
-            <Label>Observações (Opcional)</Label>
+            <Label htmlFor="med-obs">Observações (Opcional)</Label>
             <Input
+              id="med-obs"
               value={currentMed.observacoes || ""}
               onChange={(e) =>
                 setCurrentMed({ ...currentMed, observacoes: e.target.value })

@@ -282,6 +282,7 @@ export function CascadeAlertWizard({
                     onClick={() => removeLevel(level.id)}
                     disabled={levels.length <= 2}
                     className="shrink-0"
+                    aria-label="Remover nível"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

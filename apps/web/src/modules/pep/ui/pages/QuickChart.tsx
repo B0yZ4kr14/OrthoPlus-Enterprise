@@ -69,6 +69,7 @@ export default function QuickChart() {
             variant="ghost"
             size="icon"
             onClick={() => window.history.back()}
+            aria-label="Voltar"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
