@@ -2,7 +2,7 @@ import { logger } from "@/infrastructure/logger";
 import { ApiError, Errors, ErrorCodes } from "@/middleware/errorHandler";
 import { IUserRepository } from "@/modules/auth/domain/repositories/IUserRepository";
 import jwt from "jsonwebtoken";
-import type { LoginResponse, User, UserRole } from "@orthoplus/shared-types";
+import type { LoginResponse, UserRole } from "@orthoplus/shared-types";
 import type { AuthenticateUserResult } from "./AuthenticateUserUseCase";
 
 import { UserRepository } from "@/modules/auth/infrastructure/UserRepository";
@@ -26,7 +26,7 @@ export interface PatientAuthResult {
   refreshToken: string;
 }
 
-export interface UserMetadataResult {
+interface UserMetadataResult {
   roleData: { role: string };
   profileData: {
     clinic_id: string;
@@ -35,13 +35,6 @@ export interface UserMetadataResult {
   };
   clinicData: { id: string; name: string };
   permissionsData: string[];
-}
-
-export interface StaffAuthResult {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
 }
 
 const DEFAULT_CLINIC_SETTINGS = {

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AdminToolResult = any;
+type AdminToolResult = any;
 
 export interface IAdminToolsRepository {
   createUser(data: Record<string, unknown>): Promise<AdminToolResult>;

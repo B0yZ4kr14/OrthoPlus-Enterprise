@@ -325,27 +325,4 @@ export function asyncHandler(
   };
 }
 
-/**
- * Validation helper for Express routes
- */
-export function validateRequest(req: Request, requiredFields: string[]): void {
-  const missing: ValidationError[] = [];
 
-  for (const field of requiredFields) {
-    if (
-      req.body[field] === undefined ||
-      req.body[field] === null ||
-      req.body[field] === ""
-    ) {
-      missing.push({
-        field,
-        message: `Field '${field}' is required`,
-        code: ErrorCodes.VALIDATION_REQUIRED_FIELD,
-      });
-    }
-  }
-
-  if (missing.length > 0) {
-    throw Errors.validation("Required fields are missing", missing);
-  }
-}

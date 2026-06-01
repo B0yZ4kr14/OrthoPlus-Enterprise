@@ -8,7 +8,7 @@
 export * from "../services/AgentProxyService";
 
 // Tipos adicionais específicos do backend
-export interface AgentJob {
+interface AgentJob {
   id: string;
   type: "crud" | "bugfix" | "refactor" | "review";
   status: "pending" | "running" | "completed" | "failed";
@@ -19,7 +19,7 @@ export interface AgentJob {
   completedAt?: Date;
 }
 
-export interface AgentModuleConfig {
+interface AgentModuleConfig {
   baseURL: string;
   timeout: number;
   retryAttempts: number;

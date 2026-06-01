@@ -1,7 +1,6 @@
-import { CategoryDatabaseManager } from "@/infrastructure/database/CategoryDatabaseManager";
 import { CategoryBackupService } from "@/infrastructure/database/CategoryBackupService";
 
-export const CATEGORY_SCHEMAS: Record<string, string[]> = {
+const CATEGORY_SCHEMAS: Record<string, string[]> = {
   CORE: ["core", "pacientes", "pep"],
   FINANCEIRO: ["financeiro", "pdv", "faturamento", "crypto_config"],
   OPERACIONAL: ["operacional", "inventario"],
@@ -16,24 +15,7 @@ export const CATEGORY_SCHEMAS: Record<string, string[]> = {
 };
 
 // Lazy-instantiated singletons per category
-const dbManagerCache = new Map<string, CategoryDatabaseManager>();
 const backupServiceCache = new Map<string, CategoryBackupService>();
-
-export function getCategoryDatabaseManager(
-  category: string,
-): CategoryDatabaseManager {
-  const key = category.toUpperCase();
-  if (!dbManagerCache.has(key)) {
-    const schemas = CATEGORY_SCHEMAS[key];
-    if (!schemas) {
-      throw new Error(
-        `Unknown category: ${category}. Valid: ${Object.keys(CATEGORY_SCHEMAS).join(", ")}`,
-      );
-    }
-    dbManagerCache.set(key, new CategoryDatabaseManager(schemas, key));
-  }
-  return dbManagerCache.get(key)!;
-}
 
 export function getCategoryBackupService(
   category: string,

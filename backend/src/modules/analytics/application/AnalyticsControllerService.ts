@@ -4,7 +4,7 @@ import { GetDashboardOverviewUseCase } from "@/modules/analytics/application/Get
 import { GetUnifiedMetricsUseCase } from "@/modules/analytics/application/GetUnifiedMetricsUseCase";
 import { Errors } from "@/middleware/errorHandler";
 
-export interface MarketingROIResult {
+interface MarketingROIResult {
   metrics: {
     totalBudget: number;
     cac: number;
@@ -29,7 +29,7 @@ export interface MarketingROIResult {
   };
 }
 
-export interface SidebarBadgesResult {
+interface SidebarBadgesResult {
   badges: {
     appointments: number;
     overdue: number;

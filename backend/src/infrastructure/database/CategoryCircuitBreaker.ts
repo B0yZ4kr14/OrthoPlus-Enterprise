@@ -11,7 +11,7 @@
  * Padrão: Circuit Breaker (Release It! — Michael Nygard)
  */
 
-export type CircuitState = "CLOSED" | "OPEN" | "HALF_OPEN";
+type CircuitState = "CLOSED" | "OPEN" | "HALF_OPEN";
 
 export interface CircuitBreakerConfig {
   failureThreshold: number; // Falhas consecutivas para abrir
@@ -205,7 +205,7 @@ class CategoryCircuitBreakerInstance {
 }
 
 /** Registry singleton de circuit breakers por categoria */
-export class CategoryCircuitBreakerRegistry {
+class CategoryCircuitBreakerRegistry {
   private static instance: CategoryCircuitBreakerRegistry;
   private breakers = new Map<string, CategoryCircuitBreakerInstance>();
 

@@ -2,13 +2,13 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { Pool } from "pg";
 import type { CategoryBackupService } from "./CategoryBackupService";
 
-export interface CategoryHealthResult {
+interface CategoryHealthResult {
   status: "healthy" | "degraded" | "down";
   schemas: string[];
   latencyMs: number;
 }
 
-export interface CategoryStatsResult {
+interface CategoryStatsResult {
   schemas: string[];
   tableCount: number;
   sizeBytes: number;
@@ -16,7 +16,7 @@ export interface CategoryStatsResult {
   lastBackup: string | null;
 }
 
-export interface CategoryMaintenanceResult {
+interface CategoryMaintenanceResult {
   vacuum: boolean;
   analyze: boolean;
   reindex: boolean;

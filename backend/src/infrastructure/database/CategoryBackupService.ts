@@ -2,20 +2,20 @@ import { spawn } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
-export interface BackupResult {
+interface BackupResult {
   filePath: string;
   sizeBytes: number;
   durationMs: number;
   schemas: string[];
 }
 
-export interface BackupInfo {
+interface BackupInfo {
   filePath: string;
   createdAt: Date;
   sizeBytes: number;
 }
 
-export interface LastBackupInfo {
+interface LastBackupInfo {
   lastBackup: string | null;
   lastBackupSize: number | null;
 }

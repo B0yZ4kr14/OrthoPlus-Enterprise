@@ -32,7 +32,7 @@ export function parseVisibilidade(
   return map[value] ?? VisibilidadeArquivo.RESTRITO;
 }
 
-export interface CreateFileInput {
+interface CreateFileInput {
   clinicId: string;
   pacienteId?: string;
   consultaId?: string;
@@ -46,7 +46,7 @@ export interface CreateFileInput {
   uploadedBy: string;
 }
 
-export interface FileFilters {
+interface FileFilters {
   clinicId: string;
   pacienteId?: string;
   consultaId?: string;
@@ -56,7 +56,7 @@ export interface FileFilters {
   userRole?: string;
 }
 
-export interface VersionData {
+interface VersionData {
   nomeStorage: string;
   tamanhoBytes: number;
   urlTemp?: string;

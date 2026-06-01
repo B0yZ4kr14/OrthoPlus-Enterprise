@@ -63,11 +63,4 @@ export interface IDatabaseConnection {
   getPool(): any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-/**
- * Tipo de implementação de banco
- */
-export enum DatabaseType {
-  HOSTED_CLOUD = "hosted_cloud",
-  SELF_HOSTED = "self_hosted",
-  POSTGRES_LOCAL = "postgres_local",
-}
+
