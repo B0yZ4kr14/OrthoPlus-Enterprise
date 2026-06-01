@@ -31,9 +31,9 @@ export function DataStep({ selectedData, onToggle }: DataStepProps) {
               className="flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-accent"
               onClick={() => onToggle(option.id)}
             >
-              <Checkbox checked={isSelected} />
+              <Checkbox id={`data-${option.id}`} checked={isSelected} />
               <Icon className="h-5 w-5 text-muted-foreground" />
-              <Label className="flex-1 cursor-pointer font-medium">
+              <Label htmlFor={`data-${option.id}`} className="flex-1 cursor-pointer font-medium">
                 {option.label}
               </Label>
             </div>

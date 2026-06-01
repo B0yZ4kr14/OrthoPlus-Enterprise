@@ -293,12 +293,13 @@ export function ExportDashboardDialog({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>Agendar Exportação Automática</Label>
+                <Label htmlFor="export-schedule">Agendar Exportação Automática</Label>
                 <p className="text-sm text-muted-foreground">
                   Receba relatórios periodicamente por email
                 </p>
               </div>
               <Switch
+                id="export-schedule"
                 checked={scheduleExport}
                 onCheckedChange={setScheduleExport}
               />
@@ -341,7 +342,7 @@ export function ExportDashboardDialog({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Email de Destino</Label>
+                  <Label htmlFor="export-email">Email de Destino</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input

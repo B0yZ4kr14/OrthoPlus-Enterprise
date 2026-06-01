@@ -106,12 +106,12 @@ export function BackupRetentionTab() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Limpeza Automática</Label>
+              <Label htmlFor="backup-auto-cleanup">Limpeza Automática</Label>
               <p className="text-sm text-muted-foreground">
                 Ativar remoção automática de backups antigos
               </p>
             </div>
-            <Switch checked={autoCleanup} onCheckedChange={setAutoCleanup} />
+            <Switch id="backup-auto-cleanup" checked={autoCleanup} onCheckedChange={setAutoCleanup} />
           </div>
 
           <Button

@@ -10,12 +10,12 @@ export function AutoSyncToggle({ checked, onChange }: AutoSyncToggleProps) {
   return (
     <div className="flex items-center justify-between">
       <div className="space-y-0.5">
-        <Label>Sincronização Automática</Label>
+        <Label htmlFor="github-auto-sync">Sincronização Automática</Label>
         <p className="text-sm text-muted-foreground">
           Enviar commits automaticamente após mudanças
         </p>
       </div>
-      <Switch checked={checked} onCheckedChange={onChange} />
+      <Switch id="github-auto-sync" checked={checked} onCheckedChange={onChange} />
     </div>
   );
 }

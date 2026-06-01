@@ -15,6 +15,7 @@ export function AdvancedOptionsStep({ config, setConfig }: WizardStepProps) {
       <div className="space-y-3">
         <div className="flex items-center space-x-2">
           <Checkbox
+            id="backup-compression"
             checked={config.enableCompression}
             onCheckedChange={(checked) =>
               setConfig({
@@ -23,7 +24,7 @@ export function AdvancedOptionsStep({ config, setConfig }: WizardStepProps) {
               })
             }
           />
-          <Label>
+          <Label htmlFor="backup-compression">
             Compressão Automática (.zip)
             <p className="text-xs text-muted-foreground">
               Reduz o tamanho dos arquivos em até 60%
@@ -33,6 +34,7 @@ export function AdvancedOptionsStep({ config, setConfig }: WizardStepProps) {
 
         <div className="flex items-center space-x-2">
           <Checkbox
+            id="backup-encryption"
             checked={config.enableEncryption}
             onCheckedChange={(checked) =>
               setConfig({
@@ -41,7 +43,7 @@ export function AdvancedOptionsStep({ config, setConfig }: WizardStepProps) {
               })
             }
           />
-          <Label>
+          <Label htmlFor="backup-encryption">
             Criptografia AES-256-GCM
             <p className="text-xs text-muted-foreground">
               Protege backups com senha forte (recomendado para dados sensíveis)

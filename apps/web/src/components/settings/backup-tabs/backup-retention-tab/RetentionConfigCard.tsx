@@ -54,12 +54,12 @@ export function RetentionConfigCard({
 
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>Limpeza Automática</Label>
+            <Label htmlFor="retention-auto-cleanup">Limpeza Automática</Label>
             <p className="text-sm text-muted-foreground">
               Ativar remoção automática de backups antigos
             </p>
           </div>
-          <Switch checked={autoCleanup} onCheckedChange={onAutoCleanupChange} />
+          <Switch id="retention-auto-cleanup" checked={autoCleanup} onCheckedChange={onAutoCleanupChange} />
         </div>
 
         <Button onClick={onSave} disabled={isPending}>

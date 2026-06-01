@@ -46,22 +46,22 @@ export function StorageCard() {
 
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>Compressão</Label>
+            <Label htmlFor="storage-compression">Compressão</Label>
             <p className="text-sm text-muted-foreground">
               Reduz o tamanho dos backups
             </p>
           </div>
-          <Switch defaultChecked />
+          <Switch id="storage-compression" defaultChecked />
         </div>
 
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>Criptografia</Label>
+            <Label htmlFor="storage-encryption">Criptografia</Label>
             <p className="text-sm text-muted-foreground">
               Protege os backups com AES-256
             </p>
           </div>
-          <Switch defaultChecked />
+          <Switch id="storage-encryption" defaultChecked />
         </div>
       </CardContent>
     </Card>

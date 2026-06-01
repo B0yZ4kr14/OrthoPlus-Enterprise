@@ -37,12 +37,12 @@ export function ScheduleCard() {
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>Backup Automático</Label>
+            <Label htmlFor="schedule-backup-auto">Backup Automático</Label>
             <p className="text-sm text-muted-foreground">
               Criar backups automaticamente
             </p>
           </div>
-          <Switch defaultChecked />
+          <Switch id="schedule-backup-auto" defaultChecked />
         </div>
 
         <div className="space-y-2">

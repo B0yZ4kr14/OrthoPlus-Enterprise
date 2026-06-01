@@ -25,12 +25,13 @@ export function EmailPasswordSection({
         <div className="ml-6 space-y-4 border-l-2 border-border pl-4">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Auto-confirmar Email</Label>
+              <Label htmlFor="auth-auto-confirm">Auto-confirmar Email</Label>
               <p className="text-sm text-muted-foreground">
                 Não exigir confirmação de email (recomendado para testes)
               </p>
             </div>
             <Switch
+              id="auth-auto-confirm"
               checked={config.auto_confirm_email || false}
               onCheckedChange={(checked) =>
                 onUpdate({ auto_confirm_email: checked })
@@ -56,8 +57,9 @@ export function EmailPasswordSection({
             <Label>Requisitos de Senha</Label>
 
             <div className="flex items-center justify-between">
-              <Label className="font-normal">Exigir letra maiúscula</Label>
+              <Label htmlFor="auth-req-uppercase" className="font-normal">Exigir letra maiúscula</Label>
               <Switch
+                id="auth-req-uppercase"
                 checked={config.require_uppercase || false}
                 onCheckedChange={(checked) =>
                   onUpdate({ require_uppercase: checked })
@@ -66,8 +68,9 @@ export function EmailPasswordSection({
             </div>
 
             <div className="flex items-center justify-between">
-              <Label className="font-normal">Exigir número</Label>
+              <Label htmlFor="auth-req-number" className="font-normal">Exigir número</Label>
               <Switch
+                id="auth-req-number"
                 checked={config.require_number || false}
                 onCheckedChange={(checked) =>
                   onUpdate({ require_number: checked })
@@ -76,10 +79,11 @@ export function EmailPasswordSection({
             </div>
 
             <div className="flex items-center justify-between">
-              <Label className="font-normal">
+              <Label htmlFor="auth-req-special" className="font-normal">
                 Exigir caractere especial (!@#$%)
               </Label>
               <Switch
+                id="auth-req-special"
                 checked={config.require_special_char || false}
                 onCheckedChange={(checked) =>
                   onUpdate({ require_special_char: checked })

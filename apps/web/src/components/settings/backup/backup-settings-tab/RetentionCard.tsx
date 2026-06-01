@@ -47,12 +47,12 @@ export function RetentionCard() {
 
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>Limpeza Automática</Label>
+            <Label htmlFor="retention-auto-cleanup">Limpeza Automática</Label>
             <p className="text-sm text-muted-foreground">
               Deletar backups antigos automaticamente
             </p>
           </div>
-          <Switch defaultChecked />
+          <Switch id="retention-auto-cleanup" defaultChecked />
         </div>
       </CardContent>
     </Card>

@@ -13,13 +13,13 @@ export function MainToggle({ enabled, onEnabledChange }: MainToggleProps) {
       <div className="space-y-0.5">
         <div className="flex items-center gap-2">
           <Mail className="h-4 w-4" />
-          <Label>Login com Email/Senha</Label>
+          <Label htmlFor="auth-email-password">Login com Email/Senha</Label>
         </div>
         <p className="text-sm text-muted-foreground">
           Permitir login tradicional com email e senha
         </p>
       </div>
-      <Switch checked={enabled} onCheckedChange={onEnabledChange} />
+      <Switch id="auth-email-password" checked={enabled} onCheckedChange={onEnabledChange} />
     </div>
   );
 }

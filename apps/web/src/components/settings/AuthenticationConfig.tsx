@@ -121,13 +121,14 @@ export function AuthenticationConfig() {
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                <Label>Login com Email/Senha</Label>
+                <Label htmlFor="auth-email-password">Login com Email/Senha</Label>
               </div>
               <p className="text-sm text-muted-foreground">
                 Permitir login tradicional com email e senha
               </p>
             </div>
             <Switch
+              id="auth-email-password"
               checked={config.email_password_enabled || false}
               onCheckedChange={(checked) =>
                 setConfig({ ...config, email_password_enabled: checked })
@@ -139,12 +140,13 @@ export function AuthenticationConfig() {
             <div className="ml-6 space-y-4 border-l-2 border-border pl-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Auto-confirmar Email</Label>
+                  <Label htmlFor="auth-auto-confirm">Auto-confirmar Email</Label>
                   <p className="text-sm text-muted-foreground">
                     Não exigir confirmação de email (recomendado para testes)
                   </p>
                 </div>
                 <Switch
+                  id="auth-auto-confirm"
                   checked={config.auto_confirm_email || false}
                   onCheckedChange={(checked) =>
                     setConfig({ ...config, auto_confirm_email: checked })
@@ -216,13 +218,14 @@ export function AuthenticationConfig() {
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">
                 <Chrome className="h-4 w-4" />
-                <Label>Login com Google</Label>
+                <Label htmlFor="auth-google">Login com Google</Label>
               </div>
               <p className="text-sm text-muted-foreground">
                 Permitir login com conta Google (OAuth 2.0)
               </p>
             </div>
             <Switch
+              id="auth-google"
               checked={config.google_oauth_enabled || false}
               onCheckedChange={(checked) =>
                 setConfig({ ...config, google_oauth_enabled: checked })

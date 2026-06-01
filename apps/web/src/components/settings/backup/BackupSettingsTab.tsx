@@ -25,12 +25,12 @@ export function BackupSettingsTab() {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Backup Automático</Label>
+              <Label htmlFor="settings-backup-auto">Backup Automático</Label>
               <p className="text-sm text-muted-foreground">
                 Criar backups automaticamente
               </p>
             </div>
-            <Switch defaultChecked />
+            <Switch id="settings-backup-auto" defaultChecked />
           </div>
 
           <div className="space-y-2">
@@ -88,12 +88,12 @@ export function BackupSettingsTab() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Limpeza Automática</Label>
+              <Label htmlFor="settings-retention-cleanup">Limpeza Automática</Label>
               <p className="text-sm text-muted-foreground">
                 Deletar backups antigos automaticamente
               </p>
             </div>
-            <Switch defaultChecked />
+            <Switch id="settings-retention-cleanup" defaultChecked />
           </div>
         </CardContent>
       </Card>
@@ -120,22 +120,22 @@ export function BackupSettingsTab() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Compressão</Label>
+              <Label htmlFor="settings-storage-compression">Compressão</Label>
               <p className="text-sm text-muted-foreground">
                 Reduz o tamanho dos backups
               </p>
             </div>
-            <Switch defaultChecked />
+            <Switch id="settings-storage-compression" defaultChecked />
           </div>
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Criptografia</Label>
+              <Label htmlFor="settings-storage-encryption">Criptografia</Label>
               <p className="text-sm text-muted-foreground">
                 Protege os backups com AES-256
               </p>
             </div>
-            <Switch defaultChecked />
+            <Switch id="settings-storage-encryption" defaultChecked />
           </div>
         </CardContent>
       </Card>

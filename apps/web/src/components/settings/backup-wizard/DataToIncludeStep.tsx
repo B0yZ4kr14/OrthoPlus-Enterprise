@@ -29,12 +29,13 @@ export function DataToIncludeStep({ config, setConfig }: WizardStepProps) {
         {items.map((item) => (
           <div key={item.key} className="flex items-center space-x-2">
             <Checkbox
+              id={`backup-${item.key}`}
               checked={config[item.key] as boolean}
               onCheckedChange={(checked) =>
                 setConfig({ ...config, [item.key]: checked })
               }
             />
-            <Label>{item.label}</Label>
+            <Label htmlFor={`backup-${item.key}`}>{item.label}</Label>
           </div>
         ))}
       </div>
