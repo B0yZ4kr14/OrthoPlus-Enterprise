@@ -133,6 +133,12 @@ sudo systemctl reload nginx
   MasterStatsResult, CrossQueryResult
 - Correção de build necessária após remoção de dead exports
 
+### `877d4041f` — fix(backend): clinic isolation in AppointmentRepositoryPostgres
+- `findById(id)` → `findById(id, clinicId)` com `findFirst({ id, clinic_id })`
+- `delete(id)` → `delete(id, clinicId)` com `deleteMany({ id, clinic_id })`
+- Atualiza interface `IAppointmentRepository` para exigir `clinicId`
+- Análise de outros 'gaps' confirmou: `appointment_confirmations` e `appointment_reminders` não possuem `clinic_id` (isolamento via appointment pai); auth/UserRepository e ReportRepository são casos legítimos
+
 ---
 
 ## 4. Issues Pendentes (Próximo Ciclo)
@@ -166,7 +172,7 @@ sudo systemctl reload nginx
 | Frontend test failures | 0 | 0 | — |
 | Forms sem disabled | 23 | 0 | -23 |
 | NaN guards missing | 7 | 3 | -4 |
-| Backend clinic isolation gaps | 9 | 5 | -4 |
+| Backend clinic isolation gaps | 9 | 4 | -5 |
 | Backend dead exports | ~35 | ~10 | -25 |
 | Backend magic numbers | 10 | 0 | -10 |
 | Backend snake_case vars | 15 | 0 | -15 |

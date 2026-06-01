@@ -5,6 +5,7 @@ import { AppLayout } from "@/components/AppLayout";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Forbidden from "@/modules/core/ui/pages/Forbidden";
+import NotFound from "@/modules/core/ui/pages/NotFound";
 
 // Core pages (não lazy - carregamento imediato)
 import Demo from "@/modules/core/ui/pages/Demo";
@@ -628,6 +629,9 @@ const AppRoutes = () => (
 
     {/* 403 Forbidden page - v2.9.5 */}
     <Route path="/403" element={<Forbidden />} />
+
+    {/* 404 Catch-all */}
+    <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
