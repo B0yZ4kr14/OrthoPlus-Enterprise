@@ -35,12 +35,18 @@ export interface CircuitBreakerMetrics {
   rejectedCalls: number;
 }
 
+const CIRCUIT_TIMEOUT_MS = 5000;
+const CIRCUIT_RECOVERY_TIMEOUT_MS = 30000;
+const CIRCUIT_FAILURE_THRESHOLD = 5;
+const CIRCUIT_SUCCESS_THRESHOLD = 3;
+const CIRCUIT_HALF_OPEN_MAX_CALLS = 5;
+
 const DEFAULT_CONFIG: CircuitBreakerConfig = {
-  failureThreshold: 5,
-  successThreshold: 3,
-  timeoutMs: 5000,
-  recoveryTimeoutMs: 30000,
-  halfOpenMaxCalls: 5,
+  failureThreshold: CIRCUIT_FAILURE_THRESHOLD,
+  successThreshold: CIRCUIT_SUCCESS_THRESHOLD,
+  timeoutMs: CIRCUIT_TIMEOUT_MS,
+  recoveryTimeoutMs: CIRCUIT_RECOVERY_TIMEOUT_MS,
+  halfOpenMaxCalls: CIRCUIT_HALF_OPEN_MAX_CALLS,
 };
 
 class CategoryCircuitBreakerInstance {

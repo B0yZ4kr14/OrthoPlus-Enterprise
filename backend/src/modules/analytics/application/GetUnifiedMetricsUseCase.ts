@@ -39,7 +39,7 @@ export class GetUnifiedMetricsUseCase {
     const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 
     // Executive Metrics
-    const [receita_total, receita_mes_anterior, despesas_total] =
+    const [receitaTotal, receitaMesAnterior, despesasTotal] =
       await Promise.all([
         this.repo.aggregateRevenue(clinicId, "RECEITA", startOfMonth),
         this.repo.aggregateRevenue(
@@ -51,27 +51,27 @@ export class GetUnifiedMetricsUseCase {
         this.repo.aggregateRevenue(clinicId, "DESPESA", startOfMonth),
       ]);
 
-    const crescimento_mes =
-      receita_mes_anterior > 0
-        ? ((receita_total - receita_mes_anterior) / receita_mes_anterior) * 100
+    const crescimentoMes =
+      receitaMesAnterior > 0
+        ? ((receitaTotal - receitaMesAnterior) / receitaMesAnterior) * 100
         : 0;
 
-    const lucro_liquido = receita_total - despesas_total;
-    const margem_lucro =
-      receita_total > 0 ? (lucro_liquido / receita_total) * 100 : 0;
+    const lucroLiquido = receitaTotal - despesasTotal;
+    const margemLucro =
+      receitaTotal > 0 ? (lucroLiquido / receitaTotal) * 100 : 0;
 
     // Clinical Metrics
     const appointments = await this.repo.getAppointmentsForPeriod(
       clinicId,
       startOfMonth,
     );
-    const total_appointments = appointments.length;
-    const completed_appointments = appointments.filter(
+    const totalAppointments = appointments.length;
+    const completedAppointments = appointments.filter(
       (a) => a.status === "CONCLUIDA",
     ).length;
-    const taxa_ocupacao =
-      total_appointments > 0
-        ? (completed_appointments / total_appointments) * 100
+    const taxaOcupacao =
+      totalAppointments > 0
+        ? (completedAppointments / totalAppointments) * 100
         : 0;
 
     const durations = appointments
@@ -81,78 +81,78 @@ export class GetUnifiedMetricsUseCase {
           new Date(a.end_time).getTime() - new Date(a.start_time).getTime(),
       );
 
-    const tempo_medio_consulta = durations.length
+    const tempoMedioConsulta = durations.length
       ? durations.reduce((sum, d) => sum + d, 0) / durations.length / 60000
       : 0;
 
     // Financial Metrics
-    const unique_patients = await this.repo.getUniquePayingPatients(
+    const uniquePatients = await this.repo.getUniquePayingPatients(
       clinicId,
       startOfMonth,
     );
-    const ticket_medio =
-      unique_patients > 0 ? receita_total / unique_patients : 0;
+    const ticketMedio =
+      uniquePatients > 0 ? receitaTotal / uniquePatients : 0;
 
     const receivables = await this.repo.getPendingReceivables(clinicId);
     const overdue = receivables.filter(
       (r) => r.data_vencimento && new Date(r.data_vencimento) < new Date(),
     ).length;
-    const total_receivables = receivables.length;
+    const totalReceivables = receivables.length;
     const inadimplencia =
-      total_receivables > 0 ? (overdue / total_receivables) * 100 : 0;
-    const fluxo_caixa = lucro_liquido;
+      totalReceivables > 0 ? (overdue / totalReceivables) * 100 : 0;
+    const fluxoCaixa = lucroLiquido;
 
     // Commercial Metrics
-    const [total_leads, converted_leads] = await Promise.all([
+    const [totalLeads, convertedLeads] = await Promise.all([
       this.repo.countLeads(clinicId, startOfMonth),
       this.repo.countConvertedLeads(clinicId, startOfMonth),
     ]);
 
-    const conversao_leads =
-      total_leads && converted_leads
-        ? (converted_leads / total_leads) * 100
+    const conversaoLeads =
+      totalLeads && convertedLeads
+        ? (convertedLeads / totalLeads) * 100
         : 0;
 
-    const custo_marketing = await this.repo.getMarketingExpenses(
+    const custoMarketing = await this.repo.getMarketingExpenses(
       clinicId,
       startOfMonth,
     );
-    const custo_aquisicao = converted_leads
-      ? custo_marketing / converted_leads
+    const custoAquisicao = convertedLeads
+      ? custoMarketing / convertedLeads
       : 0;
 
-    const lifetime_value = ticket_medio * 12;
-    const roi_marketing =
-      custo_marketing > 0
-        ? ((lifetime_value * converted_leads - custo_marketing) /
-            custo_marketing) *
+    const lifetimeValue = ticketMedio * 12;
+    const roiMarketing =
+      custoMarketing > 0
+        ? ((lifetimeValue * convertedLeads - custoMarketing) /
+            custoMarketing) *
           100
         : 0;
 
     return {
       executive: {
-        receita_total,
-        crescimento_mes,
-        lucro_liquido,
-        margem_lucro,
+        receita_total: receitaTotal,
+        crescimento_mes: crescimentoMes,
+        lucro_liquido: lucroLiquido,
+        margem_lucro: margemLucro,
       },
       clinical: {
-        taxa_ocupacao,
-        tempo_medio_consulta,
+        taxa_ocupacao: taxaOcupacao,
+        tempo_medio_consulta: tempoMedioConsulta,
         satisfacao_pacientes: 85,
-        procedimentos_realizados: completed_appointments,
+        procedimentos_realizados: completedAppointments,
       },
       financial: {
-        ticket_medio,
+        ticket_medio: ticketMedio,
         recorrencia: 75,
         inadimplencia,
-        fluxo_caixa,
+        fluxo_caixa: fluxoCaixa,
       },
       commercial: {
-        conversao_leads,
-        custo_aquisicao,
-        lifetime_value,
-        roi_marketing,
+        conversao_leads: conversaoLeads,
+        custo_aquisicao: custoAquisicao,
+        lifetime_value: lifetimeValue,
+        roi_marketing: roiMarketing,
       },
     };
   }

@@ -24,13 +24,16 @@ import {
   deleteDentistSchedule,
 } from "./agendaController";
 
+const AGENDA_RATE_LIMIT_WINDOW_MINUTES = 15;
+const AGENDA_RATE_LIMIT_MAX_REQUESTS = 200;
+
 const router: Router = Router();
 
 // Rate limiting for agenda endpoints — clinical operations need higher limits
 // than general API but still protected against abuse
 const agendaLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200,
+  windowMs: AGENDA_RATE_LIMIT_WINDOW_MINUTES * 60 * 1000, // 15 minutes
+  max: AGENDA_RATE_LIMIT_MAX_REQUESTS,
   message: "Too many agenda requests from this IP, please try again later.",
 });
 

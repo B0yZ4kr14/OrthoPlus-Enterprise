@@ -15,6 +15,11 @@ import {
   Transaction,
 } from "./IDatabaseConnection";
 
+const POOL_MAX_CONNECTIONS = 20;
+const POOL_IDLE_TIMEOUT_MS = 30000;
+const POOL_CONNECTION_TIMEOUT_MS = 10000;
+const POOL_STATEMENT_TIMEOUT_MS = 30000;
+
 export class PostgresDatabaseConnection implements IDatabaseConnection {
   private pool: Pool;
   private config: DatabaseConfig;
@@ -28,10 +33,10 @@ export class PostgresDatabaseConnection implements IDatabaseConnection {
       user: config.user,
       password: config.password,
       ssl: config.ssl ? { rejectUnauthorized: false } : false,
-      max: 20, // max pool size
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 10000,
-      statement_timeout: 30000,
+      max: POOL_MAX_CONNECTIONS, // max pool size
+      idleTimeoutMillis: POOL_IDLE_TIMEOUT_MS,
+      connectionTimeoutMillis: POOL_CONNECTION_TIMEOUT_MS,
+      statement_timeout: POOL_STATEMENT_TIMEOUT_MS,
       ...(config.schema && {
         options: `-c search_path=${config.schema},public`,
       }),

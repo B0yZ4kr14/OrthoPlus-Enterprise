@@ -9,11 +9,14 @@ import { AuthService } from "@/modules/auth/application/AuthService";
  * Delegates all business logic to AuthService.
  */
 
+const ACCESS_TOKEN_MAX_AGE_MS = 3600 * 1000;
+const REFRESH_TOKEN_EXPIRES_IN_SECONDS = 900;
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict" as const,
-  maxAge: 3600 * 1000,
+  maxAge: ACCESS_TOKEN_MAX_AGE_MS,
   path: "/",
 };
 
@@ -121,7 +124,7 @@ export class AuthController {
       res.json({
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
-        expiresIn: 900,
+        expiresIn: REFRESH_TOKEN_EXPIRES_IN_SECONDS,
       });
     } catch (err) {
       if (err instanceof ApiError) throw err;

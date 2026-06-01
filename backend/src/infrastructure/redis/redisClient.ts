@@ -49,6 +49,11 @@ function parseRedisUrl(url: string): {
 
 const parsedRedis = parseRedisUrl(redisUrl);
 
+const REDIS_CLUSTER_RETRY_BASE_MS = 200;
+const REDIS_CLUSTER_RETRY_CAP_MS = 5000;
+const REDIS_RETRY_BASE_MS = 100;
+const REDIS_RETRY_CAP_MS = 3000;
+
 const getClusterNodes = (): ClusterNode[] => {
   if (process.env.REDIS_CLUSTER_NODES) {
     return process.env.REDIS_CLUSTER_NODES.split(",").map((node) => {
@@ -71,7 +76,8 @@ class RedisClientManager {
           enableReadyCheck: false,
           maxRetriesPerRequest: null,
         },
-        clusterRetryStrategy: (times) => Math.min(times * 200, 5000),
+        clusterRetryStrategy: (times) =>
+          Math.min(times * REDIS_CLUSTER_RETRY_BASE_MS, REDIS_CLUSTER_RETRY_CAP_MS),
       };
 
       this.client = new Cluster(nodes, options);
@@ -90,7 +96,8 @@ class RedisClientManager {
         password: parsedRedis.password,
         maxRetriesPerRequest: null,
         enableReadyCheck: false,
-        retryStrategy: (times) => Math.min(times * 100, 3000),
+        retryStrategy: (times) =>
+          Math.min(times * REDIS_RETRY_BASE_MS, REDIS_RETRY_CAP_MS),
       };
 
       this.client = new Redis(options);
