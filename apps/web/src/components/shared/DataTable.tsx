@@ -244,6 +244,7 @@ export function DataTable<T extends Record<string, unknown>>({
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
               className="h-8 w-8"
+              aria-label="Primeira página"
             >
               <ChevronsLeft className="h-4 w-4" />
             </Button>
@@ -253,6 +254,7 @@ export function DataTable<T extends Record<string, unknown>>({
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="h-8 w-8"
+              aria-label="Página anterior"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -265,6 +267,7 @@ export function DataTable<T extends Record<string, unknown>>({
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               className="h-8 w-8"
+              aria-label="Próxima página"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -274,6 +277,7 @@ export function DataTable<T extends Record<string, unknown>>({
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages}
               className="h-8 w-8"
+              aria-label="Última página"
             >
               <ChevronsRight className="h-4 w-4" />
             </Button>

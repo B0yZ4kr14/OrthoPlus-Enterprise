@@ -225,6 +225,7 @@ export default function PacientesListPage() {
                           e.stopPropagation();
                           navigate(`/pacientes/${patient.id}`);
                         }}
+                        aria-label="Visualizar paciente"
                       >
                         <Eye className="h-3.5 w-3.5 text-muted-foreground" />
                       </Button>
@@ -236,6 +237,7 @@ export default function PacientesListPage() {
                           e.stopPropagation();
                           navigate(`/pacientes/editar/${patient.id}`);
                         }}
+                        aria-label="Editar paciente"
                       >
                         <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
                       </Button>

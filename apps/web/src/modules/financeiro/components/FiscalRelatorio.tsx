@@ -137,16 +137,18 @@ export function FiscalRelatorio({ data, isLoading, onGenerate }: Props) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div className="space-y-2">
-              <Label>Data Início</Label>
+              <Label htmlFor="dataInicio">Data Início</Label>
               <Input
+                id="dataInicio"
                 type="date"
                 value={dataInicio}
                 onChange={(e) => setDataInicio(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label>Data Fim</Label>
+              <Label htmlFor="dataFim">Data Fim</Label>
               <Input
+                id="dataFim"
                 type="date"
                 value={dataFim}
                 onChange={(e) => setDataFim(e.target.value)}

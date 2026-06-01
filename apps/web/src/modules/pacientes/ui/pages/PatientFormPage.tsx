@@ -152,6 +152,7 @@ export default function PatientFormPage() {
           size="icon"
           onClick={() => navigate("/pacientes")}
           data-testid="patient-form-back"
+          aria-label="Voltar para lista de pacientes"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>

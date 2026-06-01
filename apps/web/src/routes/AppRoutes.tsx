@@ -619,11 +619,11 @@ const AppRoutes = () => (
     />
     <Route
       path="/usuarios"
-      element={protectedRoute(<Usuarios />, { requireAdmin: true })}
+      element={protectedRoute(<Usuarios />, { requireAdmin: true, moduleKey: "ADMIN_ONLY" })}
     />
     <Route
       path="/configuracoes"
-      element={protectedRoute(<Configuracoes />, { requireAdmin: true })}
+      element={protectedRoute(<Configuracoes />, { requireAdmin: true, moduleKey: "ADMIN_ONLY" })}
     />
     <Route path="/help" element={protectedRoute(<HelpCenter />, { moduleKey: "HELP" })} />
 

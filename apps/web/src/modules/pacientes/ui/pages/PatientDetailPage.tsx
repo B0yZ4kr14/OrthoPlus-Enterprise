@@ -74,6 +74,7 @@ export default function PatientDetailPage() {
           variant="ghost"
           size="icon"
           onClick={() => navigate("/pacientes")}
+          aria-label="Voltar para lista de pacientes"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
