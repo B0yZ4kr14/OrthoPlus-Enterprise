@@ -27,7 +27,7 @@ export function startAdminJobs() {
     );
     try {
       // Simulate cleanup of hypothetical 'deleted_at' rows
-      // await prisma.$executeRawUnsafe(`DELETE FROM records WHERE deleted_at < NOW() - INTERVAL '30 days';`);
+      // Cleanup job placeholder — implementar purge de registros soft-deleted após validação de retenção LGPD
       logger.info("[Cron] scheduled-cleanup complete");
     } catch (e) {
       logger.error("[Cron] scheduled-cleanup Error:", e);
