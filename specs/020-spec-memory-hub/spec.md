@@ -4,7 +4,7 @@
 
 **Created**: 2026-05-18
 
-**Status**: in-progress
+**Status**: completed
 
 **Input**: User description: "spec-kit-memory-hub"
 
@@ -22,7 +22,7 @@ A developer or AI agent working on the OrthoPlus project needs to quickly find r
 
 1. **Given** project memory contains 15 spec documents, 8 architecture decisions, and 20 API contracts, **When** a user searches for "LGPD consent", **Then** the system returns all relevant documents ranked by relevance within 2 seconds.
 2. **Given** a user is viewing a feature specification, **When** they click "Find Related Context", **Then** the system suggests related specs, architecture decisions, and implementation notes based on semantic similarity.
-3. **Given** an AI agent is generating implementation code, **When** it queries the memory hub for "how do we handle clinic isolation?", **Then** it receives the architecture constitution section, relevant middleware examples, and past implementation patterns.
+3. **Given** an AI agent is generating implementation code, **When** it queries the memory hub for "clinic isolation" (searching project documentation for how clinic-level data separation is implemented), **Then** it receives relevant documents including the architecture constitution section on multi-tenancy, clinicGuard middleware examples, and past implementation patterns for clinic-scoped queries.
 
 ---
 
@@ -110,11 +110,11 @@ The memory hub periodically scans all memory sources to detect issues: broken li
 - **MEM-NFR-002**: The index update latency MUST be under 60 seconds for file changes. Inotify/fswatch provides near-real-time updates; polling fallback checks every 30 seconds.
 - **MEM-NFR-003**: Context briefs for AI agents MUST fit within a 128k token budget, with intelligent summarization for overflow. When the budget is exceeded, secondary documents are truncated with a `[truncated]` suffix; critical documents (spec + plan) are never truncated. If truncation is insufficient, the brief returns a 413 Payload Too Large with a summary of what was included.
 - **MEM-NFR-004**: The system SHOULD be operable without external cloud dependencies (local-first architecture). Ollama fallback ensures local operation; API-key providers are optional enhancements for production environments.
+- **MEM-NFR-005**: Health scan MUST complete within 5 minutes for the current project size (~300 documents).
 - **MEM-NFR-006**: API keys MUST be stored encrypted at rest (AES-256-GCM) and never logged or exposed in error messages.
 - **MEM-NFR-007**: The system MUST support provider failover: if the primary API fails (timeout, rate limit, invalid key), fallback to secondary provider or queue for retry.
 - **MEM-NFR-008**: API usage costs MUST be trackable per clinic/workspace with monthly budget alerts configurable via environment.
 - **MEM-NFR-009**: Embedding requests MUST include request ID for provider-side tracing and cost attribution.
-- **MEM-NFR-005**: Health scan MUST complete within 5 minutes for the current project size (~300 documents).
 
 ---
 

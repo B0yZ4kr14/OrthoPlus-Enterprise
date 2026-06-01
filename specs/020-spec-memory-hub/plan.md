@@ -19,10 +19,10 @@ Build a centralized project memory hub that indexes all markdown documentation (
 - All UI components via `@orthoplus/core-ui` with Tailwind styling
 
 ### Backend
-- `GET /api/memory/search?q=&filter=&limit=` — semantic search with source type filtering
-- `POST /api/memory/brief` — generate structured context brief for AI agents given feature identifier
-- `GET /api/memory/health` — memory health metrics (coverage, drift, index status)
-- `GET /api/memory/drift` — retrieve latest drift report
+- `POST /api/memory-hub/search` — semantic search with source type filtering
+- `POST /api/memory-hub/context-brief` — generate structured context brief for AI agents given feature identifier
+- `GET /api/memory-hub/health` — memory health metrics (coverage, drift, index status)
+- `GET /api/memory-hub/drift` — retrieve latest drift report
 - CLI interface: `memory-hub search`, `memory-hub index`, `memory-hub health`, `memory-hub drift`
 - Services: `SearchService` (SQLite cosine similarity), `ContextBriefService` (token budget management), `DriftDetectionService`, `FileWatcherService` (chokidar/inotify)
 
@@ -184,17 +184,17 @@ categories/@orthoplus/core/packages/
 | **MEM-FR-008** | The system MUST respect document confidentiality m... | ✅ Covered |
 | **MEM-FR-009** | The system MUST maintain version history for index... | ✅ Covered |
 | **MEM-FR-010** | The system MUST expose both a CLI interface (for d... | ✅ Covered |
-| **MEM-FR-011** | The system MUST validate API key permissions (read... | ⚠️ Partial — T050 adds validation; T039 gates build |
-| **MEM-FR-012** | The system MUST support hot-swapping of API keys w... | ⚠️ Partial — T051 adds SIGHUP + watcher |
+| **MEM-FR-011** | The system MUST validate API key permissions (read... | ✅ Covered — T050 (ApiKeyValidator) |
+| **MEM-FR-012** | The system MUST support hot-swapping of API keys w... | ✅ Covered — T051 (ApiKeyHotSwap) |
 | **MEM-NFR-001** | Search queries MUST return results within 2 second... | ✅ Covered — T012 (SearchService) |
 | **MEM-NFR-002** | The index update latency MUST be under 60 seconds... | ✅ Covered — T020 (FileWatcher) |
-| **MEM-NFR-003** | Context briefs for AI agents MUST fit within a 128... | ⚠️ Partial — T026 (ContextBriefService); overflow behavior clarified in spec |
+| **MEM-NFR-003** | Context briefs for AI agents MUST fit within a 128... | ✅ Covered — T026 (ContextBriefService) |
 | **MEM-NFR-004** | The system SHOULD be operable without external clo... | ✅ Covered — T007 (Ollama fallback) |
 | **MEM-NFR-005** | Health scan MUST complete within 5 minutes... | ✅ Covered — T032 (cron with timeout) |
-| **MEM-NFR-006** | API keys MUST be stored encrypted at rest (AES-256... | ⚠️ Partial — T052 adds SecureConfigStore |
-| **MEM-NFR-007** | The system MUST support provider failover... | ⚠️ Partial — T007 (Ollama client) + T038 (metrics) |
+| **MEM-NFR-006** | API keys MUST be stored encrypted at rest (AES-256... | ✅ Covered — T052 (SecureConfigStore) |
+| **MEM-NFR-007** | The system MUST support provider failover... | ✅ Covered — T007 (ResilientEmbeddingClient) |
 | **MEM-NFR-008** | API usage costs MUST be trackable per clinic/work... | ✅ Covered — T053 (CostTrackingService) |
-| **MEM-NFR-009** | Embedding requests MUST include request ID... | ⚠️ Partial — T054 adds request ID injection |
+| **MEM-NFR-009** | Embedding requests MUST include request ID... | ✅ Covered — T054 (OllamaEmbeddingClient) |
 
 ---
 
@@ -391,19 +391,21 @@ LIMIT $3;
 
 ## Phases
 
-### Phase 1: Foundation
-- [ ] Task 1: Scaffold MemoryHub CLI and API structure with SQLite index schema
-- [ ] Task 2: Implement `FileWatcherService` using chokidar with inotify primary and 30s polling fallback
-- [ ] Task 3: Index all markdown documents in `specs/`, `docs/`, `.specify/memory/`, and `.omk/memory/` directories
+> **Note**: All implementation tasks are tracked in `tasks.md` (55 tasks, all [X]). The phases below are preserved for high-level roadmap reference.
 
-### Phase 2: Implementation
-- [ ] Task 4: Build `SearchService` with Ollama embeddings and in-memory cosine similarity (<2s for 1000 documents)
-- [ ] Task 5: Build `ContextBriefService` that assembles AI agent briefs within 128k token budget with intelligent truncation
-- [ ] Task 6: Implement `DriftDetectionService` with daily cron scan (default 02:00) for broken links and outdated architecture decisions
-- [ ] Task 7: Add API key validation on startup (`MEMORY_HUB_EMBEDDING_PROVIDER`, `MEMORY_HUB_API_KEY`) with hot-swap via SIGHUP/file watcher
+### Phase 1: Foundation ✅
+- [X] Task 1: Scaffold MemoryHub CLI and API structure with SQLite index schema
+- [X] Task 2: Implement `FileWatcherService` using chokidar with inotify primary and 30s polling fallback
+- [X] Task 3: Index all markdown documents in `specs/`, `docs/`, `.specify/memory/`, and `.omk/memory/` directories
 
-### Phase 3: Polish
-- [ ] Task 8: Add health dashboard UI with coverage metrics and drift reports
-- [ ] Task 9: Implement provider failover (primary → secondary → Ollama fallback) with exponential backoff
-- [ ] Task 10: Write tests for search latency (<2s), index update (<60s), and drift detection accuracy
-- [ ] Task 11: Document pgvector/HNSW migration plan and backfill strategy for when index exceeds 10k chunks
+### Phase 2: Implementation ✅
+- [X] Task 4: Build `SearchService` with Ollama embeddings and in-memory cosine similarity (<2s for 1000 documents)
+- [X] Task 5: Build `ContextBriefService` that assembles AI agent briefs within 128k token budget with intelligent truncation
+- [X] Task 6: Implement `DriftDetectionService` with daily cron scan (default 02:00) for broken links and outdated architecture decisions
+- [X] Task 7: Add API key validation on startup (`MEMORY_HUB_EMBEDDING_PROVIDER`, `MEMORY_HUB_API_KEY`) with hot-swap via SIGHUP/file watcher
+
+### Phase 3: Polish ✅
+- [X] Task 8: Add health dashboard UI with coverage metrics and drift reports
+- [X] Task 9: Implement provider failover (primary → secondary → Ollama fallback) with exponential backoff
+- [X] Task 10: Write tests for search latency (<2s), index update (<60s), and drift detection accuracy
+- [X] Task 11: Document pgvector/HNSW migration plan and backfill strategy for when index exceeds 10k chunks

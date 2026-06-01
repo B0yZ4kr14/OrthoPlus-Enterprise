@@ -290,8 +290,6 @@
   - Compare indexed specs for overlapping requirements with conflicting values
   - Flag in health dashboard and search results; prioritize more recent document
   - Detects: ID conflicts (critical), semantic contradictions (high), overlapping scope (medium)
-  - Compare indexed specs for overlapping requirements with conflicting values
-  - Flag in health dashboard and search results; prioritize more recent document
   - Depends on: mature index with >50 specs for meaningful detection
 
 ---
