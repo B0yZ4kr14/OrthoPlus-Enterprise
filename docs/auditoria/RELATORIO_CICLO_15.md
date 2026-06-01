@@ -118,6 +118,16 @@ sudo systemctl reload nginx
 - Atualiza `AGENT-RECOVERY-PROMPT.md` com versões, test counts, commit hash
 - Marca VPS como com nginx fix pendente
 
+### `7d63a2c40` — fix(backend): remove mock data fallback + clean adminJobs
+- GetDashboardOverviewUseCase: remove fallback com mock data hardcoded
+- adminJobs.ts: substitui SQL comentado por placeholder descritivo LGPD
+
+### `41086e1a2` — refactor(backend): remove dead exports e interfaces não usadas
+- 18 arquivos, 31 insertions(+), 302 deletions(-)
+- Remove ~25 interfaces, types, classes e funções exportadas sem uso
+- Corrige referência CategoryDatabaseManager em categoryClients.ts
+- Exporta ExchangeConfigProps e tipos MasterDatabaseManager para inferência
+
 ---
 
 ## 4. Issues Pendentes (Próximo Ciclo)
@@ -132,7 +142,7 @@ sudo systemctl reload nginx
 
 ### MEDIUM
 5. **Magic Numbers**: Extrair constantes para connection timeouts, rate limits, file size limits.
-6. **Dead Exports**: Remover ~35 exports sem uso (interfaces/types).
+6. ~~**Dead Exports**: Remover ~35 exports sem uso (interfaces/types).~~ ✅ Concluído no commit `41086e1a2`
 7. **Skills Duplicadas**: Decidir fonte canônica (`.agents/skills/` ou `.kimi/skills/`) e remover 377 duplicatas.
 
 ### LOW
@@ -149,10 +159,12 @@ sudo systemctl reload nginx
 | Backend test failures | 0 | 0 | — |
 | Frontend type-check errors | 0 | 0 | — |
 | Frontend test failures | 0 | 0 | — |
-| Forms sem disabled | 23 | 2 | -21 |
+| Forms sem disabled | 23 | 0 | -23 |
 | NaN guards missing | 7 | 3 | -4 |
 | Backend clinic isolation gaps | 9 | 5 | -4 |
+| Backend dead exports | ~35 | ~10 | -25 |
 | Docs desatualizados | 2 | 0 | -2 |
+| Mock data hardcoded | 1 | 0 | -1 |
 | VPS asset 301 | 2 | 2 | — (fix no repo, não deployado) |
 
 ---
