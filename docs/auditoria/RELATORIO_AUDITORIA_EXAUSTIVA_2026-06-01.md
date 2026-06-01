@@ -141,3 +141,50 @@ Auditoria cross-system realizada usando SpecKit, GitNexus, analise manual de doc
 9. Componentes crypto nao usados (~35)
 10. Imagens sem alt (2)
 11. Specs-backfill desatualizado
+
+## Correcoes Aplicadas na Sessao (continuacao 2)
+
+| Commit | Descricao |
+|--------|-----------|
+| 24310c641 | fix(frontend): remove dead code + accessibility fixes |
+| b1e368f90 | fix(frontend): add id to search inputs for accessibility |
+
+### Detalhes
+
+**Remocao de Codigo Morto (57 arquivos, -2390 linhas):**
+- components/auth/forgot-password/ (6 arquivos)
+- components/crypto/bitcoin-info-card/ (7 arquivos)
+- components/crypto/conversion-simulator/ (10 arquivos)
+- components/crypto/crypto-portfolio-dashboard/ (6 arquivos)
+- components/crypto/dca-backtesting/ (10 arquivos)
+- components/crypto/wallet-form/ (9 arquivos)
+
+**Acessibilidade:**
+- OrcamentoForm.tsx: htmlFor/id em labels de itens
+- EstoqueRelatorios.tsx: htmlFor/id em labels de data
+- TratamentoForm.tsx: type="button" em 2 PopoverTrigger
+- ContasReceberFilters.tsx: id="contas-receber-search"
+- ContasPagar.tsx: id="contas-pagar-search"
+- NotasFiscais.tsx: id="notas-fiscais-search"
+- Transacoes.tsx: id="transacoes-search"
+- PatientSearchPage.tsx: id="patient-search"
+
+### Quality Gates Finais
+- Backend build: 0 erros
+- Backend tests: 741/741 passando
+- Frontend type-check: 0 erros
+- Frontend tests: 1014/1014 passando
+- Frontend build: 0 erros
+
+## Commits Totais da Sessao Completa
+
+1. d1c1d0f2d - fix(frontend): add catch-all 404 route
+2. fb9abc82b - docs(auditoria): relatorio exaustivo 2026-06-01
+3. 8704e3a48 - fix(frontend): barrel exports estoque/financeiro/pep
+4. 9b52a84bd - fix(frontend): type="button" em botoes secundarios agenda
+5. f9ef76c2c - fix(frontend): acessibilidade + moduleKey admin
+6. c519c98b6 - docs(auditoria): atualiza relatorio
+7. c20fe73aa - fix(frontend): dependencia jspdf-autotable
+8. 04cfd781e - docs(auditoria): relatorio final
+9. 24310c641 - fix(frontend): remove dead code + accessibility
+10. b1e368f90 - fix(frontend): id em search inputs
