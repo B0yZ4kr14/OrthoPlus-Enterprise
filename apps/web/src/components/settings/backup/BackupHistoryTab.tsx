@@ -68,7 +68,7 @@ export function BackupHistoryTab() {
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button aria-label="Excluir" variant="ghost" size="sm">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>

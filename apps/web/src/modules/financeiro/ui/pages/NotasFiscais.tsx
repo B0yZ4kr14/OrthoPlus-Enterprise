@@ -389,14 +389,14 @@ export default function NotasFiscais() {
                     <TableCell>{getStatusBadge(nota.status)}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-2 justify-end">
-                        <Button variant="ghost" size="sm">
+                        <Button aria-label="Visualizar" variant="ghost" size="sm">
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button aria-label="Download" variant="ghost" size="sm">
                           <Download className="h-4 w-4" />
                         </Button>
                         {nota.status === "emitida" && (
-                          <Button variant="ghost" size="sm">
+                          <Button aria-label="Ação Send" variant="ghost" size="sm">
                             <Send className="h-4 w-4" />
                           </Button>
                         )}

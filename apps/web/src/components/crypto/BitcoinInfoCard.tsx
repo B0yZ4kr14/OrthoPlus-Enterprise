@@ -46,7 +46,7 @@ export function BitcoinInfoCard() {
               </div>
             </div>
             <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-2">
+              <Button aria-label="Recolher" variant="ghost" size="sm" className="gap-2">
                 {isOpen ? (
                   <>
                     <ChevronUp className="h-4 w-4" />

@@ -242,7 +242,7 @@ export default function AssinaturaICP() {
                         <CheckCircle className="h-3 w-3" />
                         <span>{doc.signers} assin.</span>
                       </Badge>
-                      <Button size="sm" variant="ghost">
+                      <Button aria-label="Download" size="sm" variant="ghost">
                         <Download className="h-4 w-4" />
                       </Button>
                     </div>

@@ -178,7 +178,7 @@ export function RepositoryManager() {
                         <Play className="h-4 w-4 mr-2" />
                         Deploy
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button aria-label="Atualizar" variant="ghost" size="sm">
                         <RefreshCw className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="sm">
