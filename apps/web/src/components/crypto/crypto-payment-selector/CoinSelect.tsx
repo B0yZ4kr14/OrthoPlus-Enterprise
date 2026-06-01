@@ -16,9 +16,9 @@ interface CoinSelectProps {
 export function CoinSelect({ value, onChange }: CoinSelectProps) {
   return (
     <div>
-      <label className="text-sm font-medium mb-2 block">Criptomoeda</label>
+      <label htmlFor="crypto-currency" className="text-sm font-medium mb-2 block">Criptomoeda</label>
       <Select value={value} onValueChange={(v) => onChange(v as CoinType)}>
-        <SelectTrigger>
+        <SelectTrigger id="crypto-currency">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

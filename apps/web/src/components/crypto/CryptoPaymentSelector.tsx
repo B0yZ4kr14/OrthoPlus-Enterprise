@@ -122,11 +122,11 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
       <Card className="p-4">
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium mb-2 block">
+            <label htmlFor="wallet-recebimento" className="text-sm font-medium mb-2 block">
               Wallet de Recebimento
             </label>
             <Select value={selectedWallet} onValueChange={setSelectedWallet}>
-              <SelectTrigger>
+              <SelectTrigger id="wallet-recebimento">
                 <SelectValue placeholder="Selecione uma wallet" />
               </SelectTrigger>
               <SelectContent>
@@ -143,14 +143,14 @@ export const CryptoPaymentSelector = memo(function CryptoPaymentSelector({
           </div>
 
           <div>
-            <label className="text-sm font-medium mb-2 block">
+            <label htmlFor="crypto-currency" className="text-sm font-medium mb-2 block">
               Criptomoeda
             </label>
             <Select
               value={selectedCoin}
               onValueChange={(value) => setSelectedCoin(value as CoinType)}
             >
-              <SelectTrigger>
+              <SelectTrigger id="crypto-currency">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
