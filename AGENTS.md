@@ -375,6 +375,7 @@ packages:
 
 - **Root (`eslint.config.js`):** Flat config com `typescript-eslint`, `react-hooks`, `react-refresh`. A maioria das regras TypeScript esta desabilitada (incluindo `no-explicit-any`, `no-floating-promises`, `no-misused-promises`). Target: 0 erros, warnings tolerados (~43 frontend, ~390 backend).
 - **Frontend Tests:** 103 suites, 1014 tests (Vitest + jsdom)
+- **Backend Clinic Isolation:** 30+ repositories updated with clinic_id filters on delete/update operations
 - **Backend:** Usa `ESLINT_USE_FLAT_CONFIG=false` porque ainda depende de ESLint v8 com config legacy (`@typescript-eslint/eslint-plugin` v7).
 
 ### Prettier
@@ -596,7 +597,7 @@ specs/017-omk-governance-integration/plan.md
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **OrthoPlus-Enterprise** (31500 symbols, 66521 relationships, 267 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **OrthoPlus-Enterprise** (31509 symbols, 66554 relationships, 267 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
