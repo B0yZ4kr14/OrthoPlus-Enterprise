@@ -2,12 +2,12 @@
 ## Método Socrático-Popperiano de Documentação e Recuperação de Memória
 
 > **Versão:** 2.0.0
-> **Data:** 2026-05-15
+> **Data:** 2026-06-01
 > **Método:** Socrático (elenchus) + Popperiano (falsificabilidade)
 > **Documentação Canônica:** `vault:tsi-vault/orthoplus/canonical/OrthoPlus-Enterprise-Canonical-2026-05-15.md`
 > **Checkpoint:** `vault:tsi-vault/orthoplus/checkpoints/OrthoPlus-Checkpoint-2026-05-15.md`
 > **Estado OMK:** `.omk/memory/state-2026-05-15.json`
-> **Commit Referência:** `12862627e`
+> **Commit Referência:** `3faa759a0`
 
 ---
 
@@ -25,17 +25,17 @@ O projeto foi **validado forensemente em 3 rodadas** com **zero discrepâncias**
 
 | Sistema | Estado | Commit/Versão |
 |---------|--------|--------------|
-| **Local** | ✅ Sincronizado | `12862627e` |
-| **GitHub** | ✅ Sincronizado | `12862627e` |
-| **VPS** | ✅ Sincronizado | Frontend `v2.9.9` / Backend `v2.5.3` |
+| **Local** | ✅ Sincronizado | `3faa759a0` |
+| **GitHub** | ✅ Sincronizado | `3faa759a0` |
+| **VPS** | ⚠️ Nginx fix pendente deploy | Frontend `v2.9.9` / Backend `v2.5.4` |
 | **TSi-Vault** | ✅ Atualizado | Canonical 2026-05-15 |
 | **OMK Memory** | ✅ Atualizada | `state-2026-05-15.json` |
 
 **Infraestrutura Local:**
 - `tsiapp-orthoplus` → `orthoplus-frontend:v2.9.9` → porta 8083 → **healthy**
-- `tsiapp-orthoplus-backend` → `orthoplus-backend:v2.5.3` → porta 3005 → **running**
+- `tsiapp-orthoplus-backend` → `orthoplus-backend:v2.5.4` → porta 3005 → **running**
 - `orthoplus-redis` → `redis:7-alpine` → porta 6379 → **running**
-- PostgreSQL → `localhost:5432` → `orthoplus` database → 180 tabelas, 17 schemas
+- PostgreSQL → `localhost:5432` → `orthoplus` database → 196 models, 18 schemas
 
 **Login:** `admin@orthoplus.com` / `admin123!`
 
@@ -71,11 +71,11 @@ Após ler, responda:
 |---|---|---|
 | "Backend v2.5.3 rodando" | `docker ps` + `curl /health` | `docker ps \| grep backend && curl -s http://localhost:3005/health` |
 | "Frontend v2.9.9 rodando" | `docker ps` + acesso HTTP | `docker ps \| grep frontend && curl -sI http://localhost:8083/` |
-| "367 testes passando" | Rodar testes | `cd backend && pnpm test` |
+| "741 testes passando" | Rodar testes | `cd backend && pnpm test` |
 | "180 tabelas" | Verificar banco | `psql -h localhost -U orthoplus -d orthoplus -c "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog', 'information_schema');"` |
 | "17 schemas" | Verificar banco | `psql -h localhost -U orthoplus -d orthoplus -c "SELECT COUNT(*) FROM information_schema.schemata WHERE schema_name NOT IN ('pg_catalog', 'information_schema', 'pg_toast');"` |
 | "Login funcional" | Testar auth | `curl -X POST http://localhost:3005/api/auth/token -d '{"email":"admin@orthoplus.com","password":"admin123!"}'` |
-| "Commit 12862627e" | Verificar git | `git rev-parse --short HEAD` |
+| "Commit 3faa759a0" | Verificar git | `git rev-parse --short HEAD` |
 
 ### 2.2 Checklist de Recuperação Rápida
 
