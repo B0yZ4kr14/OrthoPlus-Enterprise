@@ -56,3 +56,34 @@ Auditoria cross-system realizada usando SpecKit, GitNexus, analise manual de doc
 3. Barrel exports
 4. Remover duplicatas
 5. Acessibilidade (htmlFor, id, aria-label)
+
+## Correcoes Aplicadas na Sessao (continuacao)
+
+| Commit | Descricao |
+|--------|-----------|
+| 8704e3a48 | fix(frontend): barrel exports estoque/financeiro/pep |
+| 9b52a84bd | fix(frontend): type="button" em botoes secundarios de agenda |
+| f9ef76c2c | fix(frontend): acessibilidade (aria-label, htmlFor, id) + moduleKey admin |
+
+### Detalhes das Correcoes
+
+**Barrel Exports:**
+- estoque: EstoqueInventarioHistorico, ScannerMobile, EstoqueInventario
+- financeiro: Conciliacao, NotasFiscais, ContasReceber
+- pep: AssinaturaICP, FluxoDigital
+
+**Acessibilidade:**
+- DataTable.tsx: aria-label em 4 botoes de paginacao
+- PacientesListPage.tsx: aria-label em 2 botoes (visualizar/editar)
+- PatientDetailPage.tsx: aria-label em botao voltar
+- PatientFormPage.tsx: aria-label em botao voltar
+- FiscalRelatorio.tsx: htmlFor/id em 2 inputs de data
+
+**Rotas Admin:**
+- /usuarios: moduleKey="ADMIN_ONLY" adicionado
+- /configuracoes: moduleKey="ADMIN_ONLY" adicionado
+
+### Quality Gates Apos Correcoes
+- Frontend type-check: 0 erros
+- Frontend tests: 1014/1014 passando
+- Frontend lint: 0 erros, 40 warnings (conhecidos)
