@@ -108,6 +108,7 @@ export function BlockedTimeForm({ onSubmit, isLoading }: BlockedTimeFormProps) {
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
+                        type="button"
                         variant="outline"
                         className={cn(
                           "w-full pl-3 text-left font-normal",
@@ -164,6 +165,7 @@ export function BlockedTimeForm({ onSubmit, isLoading }: BlockedTimeFormProps) {
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
+                        type="button"
                         variant="outline"
                         className={cn(
                           "w-full pl-3 text-left font-normal",
