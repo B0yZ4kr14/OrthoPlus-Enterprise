@@ -3,13 +3,13 @@
  * Configuração de exchange de criptomoedas
  */
 
-export export type ExchangeType =
+export type ExchangeType =
   | "BINANCE"
   | "COINBASE"
   | "KRAKEN"
   | "MERCADO_BITCOIN";
 
-export export interface ExchangeConfigProps {
+export interface ExchangeConfigProps {
   id: string;
   clinicId: string;
   exchangeType: ExchangeType;

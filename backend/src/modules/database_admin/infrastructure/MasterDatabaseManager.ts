@@ -22,7 +22,7 @@ import {
   type CircuitBreakerConfig,
 } from "@/infrastructure/database/CategoryCircuitBreaker";
 
-export export interface CategoryConfig {
+export interface CategoryConfig {
   name: string;
   schemas: string[];
   description: string;
@@ -47,14 +47,14 @@ export interface CategoryStats {
   lastBackup: string | null;
 }
 
-export export interface MasterHealthResult {
+export interface MasterHealthResult {
   overallStatus: "healthy" | "degraded" | "down";
   categories: CategoryHealth[];
   totalLatencyMs: number;
   checkedAt: string;
 }
 
-export export interface MasterStatsResult {
+export interface MasterStatsResult {
   totalCategories: number;
   totalSchemas: number;
   totalTables: number;
@@ -64,7 +64,7 @@ export export interface MasterStatsResult {
   checkedAt: string;
 }
 
-export export interface CrossQueryResult {
+export interface CrossQueryResult {
   query: string;
   schemas: string[];
   rows: Record<string, unknown>[];
