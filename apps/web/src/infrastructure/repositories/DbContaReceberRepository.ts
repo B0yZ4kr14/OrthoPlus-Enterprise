@@ -12,7 +12,8 @@ export class DbContaReceberRepository implements IContaReceberRepository {
       );
       if (!data) return null;
       return ContaReceberMapper.toDomain(data);
-    } catch {
+    } catch (error) {
+      console.error("[DbContaReceberRepository.findById] failed:", error);
       return null;
     }
   }
@@ -23,7 +24,8 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         "/financeiro/contas-receber",
       );
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbContaReceberRepository.findByClinicId] failed:", error);
       return [];
     }
   }
@@ -38,7 +40,8 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         { params: { patient_id: patientId } },
       );
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbContaReceberRepository.findByPatientId] failed:", error);
       return [];
     }
   }
@@ -50,7 +53,8 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         { params: { status: "PENDENTE" } },
       );
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbContaReceberRepository.findPendentes] failed:", error);
       return [];
     }
   }
@@ -63,7 +67,8 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         { params: { status: "PENDENTE", vencidas_antes: hoje } },
       );
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbContaReceberRepository.findVencidas] failed:", error);
       return [];
     }
   }
@@ -84,7 +89,8 @@ export class DbContaReceberRepository implements IContaReceberRepository {
         },
       );
       return (data || []).map((row) => ContaReceberMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbContaReceberRepository.findByPeriodo] failed:", error);
       return [];
     }
   }

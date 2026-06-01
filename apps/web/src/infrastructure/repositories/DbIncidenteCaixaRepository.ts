@@ -15,7 +15,8 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
       );
       if (!data) return null;
       return IncidenteCaixaMapper.toDomain(data);
-    } catch {
+    } catch (error) {
+      console.error("[DbIncidenteCaixaRepository.findById] failed:", error);
       return null;
     }
   }
@@ -29,7 +30,8 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
         },
       );
       return (data || []).map((row) => IncidenteCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbIncidenteCaixaRepository.findByClinicId] failed:", error);
       return [];
     }
   }
@@ -46,7 +48,8 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
         },
       );
       return (data || []).map((row) => IncidenteCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbIncidenteCaixaRepository.findByTipo] failed:", error);
       return [];
     }
   }
@@ -68,7 +71,8 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
         },
       );
       return (data || []).map((row) => IncidenteCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbIncidenteCaixaRepository.findByPeriodo] failed:", error);
       return [];
     }
   }
@@ -82,7 +86,8 @@ export class DbIncidenteCaixaRepository implements IIncidenteCaixaRepository {
         },
       );
       return (data || []).map((row) => IncidenteCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbIncidenteCaixaRepository.findGraves] failed:", error);
       return [];
     }
   }

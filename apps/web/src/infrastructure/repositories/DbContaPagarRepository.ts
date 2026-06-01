@@ -14,7 +14,8 @@ export class DbContaPagarRepository implements IContaPagarRepository {
       return ContaPagarMapper.toDomain(
         data as Parameters<typeof ContaPagarMapper.toDomain>[0],
       );
-    } catch {
+    } catch (error) {
+      console.error("[DbContaPagarRepository.findById] failed:", error);
       return null;
     }
   }
@@ -29,7 +30,8 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           row as Parameters<typeof ContaPagarMapper.toDomain>[0],
         ),
       );
-    } catch {
+    } catch (error) {
+      console.error("[DbContaPagarRepository.findByClinicId] failed:", error);
       return [];
     }
   }
@@ -45,7 +47,8 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           row as Parameters<typeof ContaPagarMapper.toDomain>[0],
         ),
       );
-    } catch {
+    } catch (error) {
+      console.error("[DbContaPagarRepository.findPendentes] failed:", error);
       return [];
     }
   }
@@ -62,7 +65,8 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           row as Parameters<typeof ContaPagarMapper.toDomain>[0],
         ),
       );
-    } catch {
+    } catch (error) {
+      console.error("[DbContaPagarRepository.findVencidas] failed:", error);
       return [];
     }
   }
@@ -81,7 +85,8 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           row as Parameters<typeof ContaPagarMapper.toDomain>[0],
         ),
       );
-    } catch {
+    } catch (error) {
+      console.error("[DbContaPagarRepository.findByFornecedor] failed:", error);
       return [];
     }
   }
@@ -100,7 +105,8 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           row as Parameters<typeof ContaPagarMapper.toDomain>[0],
         ),
       );
-    } catch {
+    } catch (error) {
+      console.error("[DbContaPagarRepository.findByCategoria] failed:", error);
       return [];
     }
   }
@@ -125,7 +131,8 @@ export class DbContaPagarRepository implements IContaPagarRepository {
           row as Parameters<typeof ContaPagarMapper.toDomain>[0],
         ),
       );
-    } catch {
+    } catch (error) {
+      console.error("[DbContaPagarRepository.findByPeriodo] failed:", error);
       return [];
     }
   }

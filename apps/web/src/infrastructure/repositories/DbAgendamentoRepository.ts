@@ -13,7 +13,8 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
       );
       if (!data) return null;
       return AgendamentoMapper.toDomain(data);
-    } catch {
+    } catch (error) {
+      console.error("[DbAgendamentoRepository.findById] failed:", error);
       return null;
     }
   }
@@ -35,7 +36,8 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
         },
       );
       return (data || []).map(AgendamentoMapper.toDomain);
-    } catch {
+    } catch (error) {
+      console.error("[DbAgendamentoRepository.findByDentistAndDateRange] failed:", error);
       return [];
     }
   }
@@ -52,7 +54,8 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
         },
       );
       return (data || []).map((d) => AgendamentoMapper.toDomain(d));
-    } catch {
+    } catch (error) {
+      console.error("[DbAgendamentoRepository.findByPatientId] failed:", error);
       return [];
     }
   }
@@ -74,7 +77,8 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
         },
       );
       return (data || []).map((d) => AgendamentoMapper.toDomain(d));
-    } catch {
+    } catch (error) {
+      console.error("[DbAgendamentoRepository.findByClinicAndDateRange] failed:", error);
       return [];
     }
   }
@@ -98,7 +102,8 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
         },
       );
       return (data || []).map((d) => AgendamentoMapper.toDomain(d));
-    } catch {
+    } catch (error) {
+      console.error("[DbAgendamentoRepository.findByStatus] failed:", error);
       return [];
     }
   }
@@ -115,7 +120,8 @@ export class DbAgendamentoRepository implements IAgendamentoRepository {
         },
       );
       return (data || []).map((d) => AgendamentoMapper.toDomain(d));
-    } catch {
+    } catch (error) {
+      console.error("[DbAgendamentoRepository.findAtivos] failed:", error);
       return [];
     }
   }

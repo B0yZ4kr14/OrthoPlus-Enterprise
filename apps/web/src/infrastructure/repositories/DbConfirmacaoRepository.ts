@@ -12,7 +12,8 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
       );
       if (!data) return null;
       return ConfirmacaoMapper.toDomain(data);
-    } catch {
+    } catch (error) {
+      console.error("[DbConfirmacaoRepository.findById] failed:", error);
       return null;
     }
   }
@@ -29,7 +30,8 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
       );
       if (!data || data.length === 0) return null;
       return ConfirmacaoMapper.toDomain(data[0]);
-    } catch {
+    } catch (error) {
+      console.error("[DbConfirmacaoRepository.findByAgendamentoId] failed:", error);
       return null;
     }
   }
@@ -54,7 +56,8 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
         },
       );
       return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
-    } catch {
+    } catch (error) {
+      console.error("[DbConfirmacaoRepository.findByStatus] failed:", error);
       return [];
     }
   }
@@ -68,7 +71,8 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
         },
       );
       return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
-    } catch {
+    } catch (error) {
+      console.error("[DbConfirmacaoRepository.findPendentes] failed:", error);
       return [];
     }
   }
@@ -82,7 +86,8 @@ export class DbConfirmacaoRepository implements IConfirmacaoRepository {
         },
       );
       return (data || []).map((d) => ConfirmacaoMapper.toDomain(d));
-    } catch {
+    } catch (error) {
+      console.error("[DbConfirmacaoRepository.findEnviadasNaoConfirmadas] failed:", error);
       return [];
     }
   }

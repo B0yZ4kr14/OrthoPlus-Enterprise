@@ -12,7 +12,8 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
       );
       if (!data) return null;
       return MovimentoCaixaMapper.toDomain(data);
-    } catch {
+    } catch (error) {
+      console.error("[DbMovimentoCaixaRepository.findById] failed:", error);
       return null;
     }
   }
@@ -26,7 +27,8 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
         },
       );
       return (data || []).map((row) => MovimentoCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbMovimentoCaixaRepository.findByClinicId] failed:", error);
       return [];
     }
   }
@@ -40,7 +42,8 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
         },
       );
       return (data || []).map((row) => MovimentoCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbMovimentoCaixaRepository.findAbertos] failed:", error);
       return [];
     }
   }
@@ -55,7 +58,8 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
       );
       if (!data || data.length === 0) return null;
       return MovimentoCaixaMapper.toDomain(data[0]);
-    } catch {
+    } catch (error) {
+      console.error("[DbMovimentoCaixaRepository.findUltimoAberto] failed:", error);
       return null;
     }
   }
@@ -77,7 +81,8 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
         },
       );
       return (data || []).map((row) => MovimentoCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbMovimentoCaixaRepository.findByPeriodo] failed:", error);
       return [];
     }
   }
@@ -91,7 +96,8 @@ export class DbMovimentoCaixaRepository implements IMovimentoCaixaRepository {
         },
       );
       return (data || []).map((row) => MovimentoCaixaMapper.toDomain(row));
-    } catch {
+    } catch (error) {
+      console.error("[DbMovimentoCaixaRepository.findSangrias] failed:", error);
       return [];
     }
   }
