@@ -3,8 +3,10 @@ import { Appointment } from "../../domain/entities/Appointment";
 import { prisma } from "@/infrastructure/database/prismaClient";
 
 export class AppointmentRepositoryPostgres implements IAppointmentRepository {
-  async findById(id: string): Promise<Appointment | null> {
-    const result = await prisma.appointments.findUnique({ where: { id } });
+  async findById(id: string, clinicId: string): Promise<Appointment | null> {
+    const result = await prisma.appointments.findFirst({
+      where: { id, clinic_id: clinicId },
+    });
     return result ? this.mapToEntity(result) : null;
   }
 
@@ -59,8 +61,10 @@ export class AppointmentRepositoryPostgres implements IAppointmentRepository {
     });
   }
 
-  async delete(id: string): Promise<void> {
-    await prisma.appointments.delete({ where: { id } });
+  async delete(id: string, clinicId: string): Promise<void> {
+    await prisma.appointments.deleteMany({
+      where: { id, clinic_id: clinicId },
+    });
   }
 
   async hasTimeConflict(

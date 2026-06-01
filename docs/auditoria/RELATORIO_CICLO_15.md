@@ -146,13 +146,13 @@ sudo systemctl reload nginx
 4. **Duplicate Components**: Consolidar `AppointmentForm` e `MovimentacaoForm` duplicados.
 
 ### MEDIUM
-5. **Magic Numbers**: Extrair constantes para connection timeouts, rate limits, file size limits.
+5. ~~**Magic Numbers**: Extrair constantes para connection timeouts, rate limits, file size limits.~~ ✅ Concluído no commit `3dd6e6ab0`
 6. ~~**Dead Exports**: Remover ~35 exports sem uso (interfaces/types).~~ ✅ Concluído no commit `41086e1a2`
 7. **Skills Duplicadas**: Decidir fonte canônica (`.agents/skills/` ou `.kimi/skills/`) e remover 377 duplicatas.
 
 ### LOW
 8. **Mock Data Remaining**: `GetDashboardOverviewUseCase.ts` ainda tem mock data hardcoded.
-9. **Snake_case Variables**: Renomear variáveis em `GetUnifiedMetricsUseCase.ts`.
+9. ~~**Snake_case Variables**: Renomear variáveis em `GetUnifiedMetricsUseCase.ts`.~~ ✅ Concluído no commit `3dd6e6ab0`
 
 ---
 
@@ -168,6 +168,8 @@ sudo systemctl reload nginx
 | NaN guards missing | 7 | 3 | -4 |
 | Backend clinic isolation gaps | 9 | 5 | -4 |
 | Backend dead exports | ~35 | ~10 | -25 |
+| Backend magic numbers | 10 | 0 | -10 |
+| Backend snake_case vars | 15 | 0 | -15 |
 | Docs desatualizados | 2 | 0 | -2 |
 | Mock data hardcoded | 1 | 0 | -1 |
 | VPS asset 301 | 2 | 2 | — (fix no repo, não deployado) |
