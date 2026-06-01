@@ -2,7 +2,6 @@ import Database from "better-sqlite3";
 import { SearchService } from "../domain/services/SearchService";
 import { EmbeddingClientFactory } from "../infrastructure/EmbeddingClientFactory";
 import { EmbeddingRepository } from "../infrastructure/EmbeddingRepository";
-import { DocumentRepository } from "../infrastructure/DocumentRepository";
 
 const query = process.argv.slice(2).join(" ");
 if (!query) {
@@ -15,8 +14,7 @@ const db = new Database(dbPath);
 EmbeddingClientFactory.validateConfig();
 const embedder = EmbeddingClientFactory.create();
 const embeddings = new EmbeddingRepository(db);
-const documents = new DocumentRepository(db);
-const searchService = new SearchService(embedder, embeddings, documents);
+const searchService = new SearchService(embedder, embeddings);
 
 searchService
   .search(query, {}, 10)

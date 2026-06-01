@@ -114,10 +114,6 @@ export class EmbeddingRepository implements IEmbeddingRepository {
     insertAll(embeddings);
   }
 
-  deleteByChunk(chunkId: string): void {
-    this.db.prepare("DELETE FROM embeddings WHERE chunk_id = ?").run(chunkId);
-  }
-
   deleteByDocument(documentId: string): void {
     this.db
       .prepare(

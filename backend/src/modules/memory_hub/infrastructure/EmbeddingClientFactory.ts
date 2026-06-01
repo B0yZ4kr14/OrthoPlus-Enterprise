@@ -2,6 +2,7 @@ import { EmbeddingClient, validateApiKey } from "./EmbeddingClient";
 import { OllamaEmbeddingClient } from "./OllamaEmbeddingClient";
 import { OpenAIEmbeddingClient } from "./OpenAIEmbeddingClient";
 import { ResilientEmbeddingClient } from "./ResilientEmbeddingClient";
+import { PIIDetector } from "./PIIDetector";
 import { logger } from "@/infrastructure/logger";
 
 export interface EmbeddingProviderConfig {
@@ -30,7 +31,7 @@ export class EmbeddingClientFactory {
     if (provider !== "ollama") {
       const fallbackModel =
         process.env.MEMORY_HUB_OLLAMA_MODEL || "nomic-embed-text";
-      const fallback = new OllamaEmbeddingClient(undefined, fallbackModel);
+      const fallback = new OllamaEmbeddingClient(undefined, fallbackModel, new PIIDetector());
       return new ResilientEmbeddingClient(primary, fallback);
     }
 
@@ -45,12 +46,13 @@ export class EmbeddingClientFactory {
   ): EmbeddingClient {
     switch (provider) {
       case "ollama":
-        return new OllamaEmbeddingClient(undefined, model);
+        return new OllamaEmbeddingClient(undefined, model, new PIIDetector());
       case "openai":
         return new OpenAIEmbeddingClient(
           apiKey || "",
           model || "text-embedding-3-small",
           baseUrl || "https://api.openai.com/v1",
+          new PIIDetector(),
         );
       case "anthropic":
         // Anthropic uses OpenAI-compatible embedding API via third-party providers
@@ -58,6 +60,7 @@ export class EmbeddingClientFactory {
           apiKey || "",
           model || "text-embedding-3-small",
           baseUrl || "https://api.anthropic.com/v1",
+          new PIIDetector(),
         );
       case "google":
         return new OpenAIEmbeddingClient(

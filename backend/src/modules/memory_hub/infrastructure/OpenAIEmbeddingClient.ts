@@ -1,15 +1,18 @@
 import { EmbeddingClient, EmbeddingResult } from "./EmbeddingClient";
+import { PIIDetector } from "./PIIDetector";
 import { logger } from "@/infrastructure/logger";
 
 export class OpenAIEmbeddingClient extends EmbeddingClient {
   private apiKey: string;
   private baseUrl: string;
   private requestId: string;
+  private piiDetector?: PIIDetector;
 
   constructor(
     apiKey: string,
     model = "text-embedding-3-small",
     baseUrl = "https://api.openai.com/v1",
+    piiDetector?: PIIDetector,
   ) {
     super(model);
     if (!apiKey || apiKey.length < 16) {
@@ -18,6 +21,7 @@ export class OpenAIEmbeddingClient extends EmbeddingClient {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl.replace(/\/$/, "");
     this.requestId = `emb_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    this.piiDetector = piiDetector;
   }
 
   async embed(texts: string[]): Promise<EmbeddingResult[]> {
@@ -25,6 +29,22 @@ export class OpenAIEmbeddingClient extends EmbeddingClient {
 
     if (uncached.length === 0) {
       return results as EmbeddingResult[];
+    }
+
+    // PII check before sending to external embedding service
+    if (this.piiDetector) {
+      for (const item of uncached) {
+        const result = this.piiDetector.scan(item.text);
+        if (result.hasPII && result.confidence === "high") {
+          logger.error("[OpenAIEmbeddingClient] PII detected in embedding text — blocking", {
+            detectedTypes: result.detectedTypes,
+            matchCount: result.matchCount,
+          });
+          throw new Error(
+            `PII detected in embedding text (${result.detectedTypes.join(", ")}) — blocked by security policy`,
+          );
+        }
+      }
     }
 
     try {

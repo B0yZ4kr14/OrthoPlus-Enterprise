@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { asyncHandler, Errors } from "@/middleware/errorHandler";
+import { asyncHandler, Errors, ApiError } from "@/middleware/errorHandler";
+import { ErrorCodes } from "@/middleware/errorHandler";
 import { logger } from "@/infrastructure/logger";
 
 import { getMetricsCollector } from "@/infrastructure/metrics/MetricsCollector";
@@ -77,12 +78,15 @@ export class MemoryHubController {
 
     const { query, filters, limit, offset } = parsed.data;
 
-    const searchFilters: Record<string, string> = {};
+    const searchFilters: Record<string, string | string[]> = {};
     if (filters?.author) {
       searchFilters.author = filters.author;
     }
     if (filters?.featureNumber) {
       searchFilters.featureNumber = filters.featureNumber;
+    }
+    if (filters?.docTypes) {
+      searchFilters.docTypes = filters.docTypes;
     }
 
     const results = await this.searchService.search(
@@ -192,6 +196,16 @@ export class MemoryHubController {
       (Date.now() - startTime) / 1000,
     );
 
+    // 413 Payload Too Large when no documents fit within budget
+    if (brief.documents.length === 0) {
+      throw new ApiError(
+        413,
+        ErrorCodes.VALIDATION_ERROR,
+        "Payload Too Large",
+        `Context brief for topic "${topic}" exceeds token budget (${max_tokens}). Try increasing max_tokens or narrowing the topic.`,
+      );
+    }
+
     res.json(brief);
   });
 
@@ -285,8 +299,12 @@ export class MemoryHubController {
     }
 
     if (!this.costTrackingService) {
-      res.status(503).json({ error: "Cost tracking not enabled" });
-      return;
+      throw new ApiError(
+        503,
+        ErrorCodes.EXTERNAL_SERVICE_ERROR,
+        "Service Unavailable",
+        "Cost tracking not enabled",
+      );
     }
 
     const parsed = costsSchema.safeParse(req.query);

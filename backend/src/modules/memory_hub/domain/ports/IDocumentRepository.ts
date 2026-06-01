@@ -10,7 +10,7 @@ export interface IDocumentRepository {
   findByPath(path: string, clinicId?: string): any | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isConfidential(doc: any): boolean;
-  archive(id: string): void;
+  archive(sourcePath: string): void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   upsert(doc: any): any;
   findVersions(

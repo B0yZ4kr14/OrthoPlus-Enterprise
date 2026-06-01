@@ -1,7 +1,6 @@
 import { logger } from "@/infrastructure/logger";
 import { IEmbeddingClient } from "../ports/IEmbeddingClient";
 import { IEmbeddingRepository } from "../ports/IEmbeddingRepository";
-import { IDocumentRepository } from "../ports/IDocumentRepository";
 import type { SearchResult } from "@orthoplus/shared-types";
 
 export interface SearchFilters {
@@ -16,16 +15,13 @@ export interface SearchFilters {
 export class SearchService {
   private embedder: IEmbeddingClient;
   private embeddings: IEmbeddingRepository;
-  private documents: IDocumentRepository;
 
   constructor(
     embedder: IEmbeddingClient,
     embeddings: IEmbeddingRepository,
-    documents: IDocumentRepository,
   ) {
     this.embedder = embedder;
     this.embeddings = embeddings;
-    this.documents = documents;
   }
 
   async search(
@@ -84,39 +80,6 @@ export class SearchService {
     });
 
     return { results, total: deduped.length };
-  }
-
-  async searchWithConfidentialityFilter(
-    query: string,
-    filters: SearchFilters = {},
-    limit = 10,
-    offset = 0,
-    clinicId = "default",
-  ): Promise<{
-    results: SearchResult[];
-    total: number;
-    confidentialExcluded: number;
-  }> {
-    const { results, total } = await this.search(
-      query,
-      filters,
-      limit,
-      offset,
-      clinicId,
-    );
-
-    let confidentialExcluded = 0;
-    const filteredResults = results.filter((r) => {
-      const doc = this.documents.findByPath(r.sourcePath, clinicId);
-      if (!doc) return false;
-      if (this.documents.isConfidential(doc)) {
-        confidentialExcluded++;
-        return false;
-      }
-      return true;
-    });
-
-    return { results: filteredResults, total, confidentialExcluded };
   }
 
   private inferDocType(sourcePath: string): string {

@@ -17,7 +17,7 @@ EmbeddingClientFactory.validateConfig();
 const embedder = EmbeddingClientFactory.create();
 const embeddings = new EmbeddingRepository(db);
 const documents = new DocumentRepository(db);
-const searchService = new SearchService(embedder, embeddings, documents);
+const searchService = new SearchService(embedder, embeddings);
 const briefService = new ContextBriefService(searchService, documents);
 
 briefService

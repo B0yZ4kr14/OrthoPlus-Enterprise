@@ -49,20 +49,20 @@ export function quantize(embedding: number[]): QuantizedEmbedding {
 }
 
 /**
- * Dequantize an int8 embedding back to float32.
- * @param quantized Quantized embedding
- * @returns Reconstructed float32 array
+ * Dequantize an Int8Array back to approximate float32 values.
+ * Reverse of quantize(): values[i] = ((values[i] + 128) / 255) * range + min
  */
 export function dequantize(quantized: QuantizedEmbedding): number[] {
-  const { values, min, max } = quantized;
-  if (values.length === 0) return [];
+  if (quantized.values.length === 0) {
+    return [];
+  }
 
-  const range = max - min;
-  const result = new Array<number>(values.length);
+  const range = quantized.max - quantized.min;
+  const result: number[] = [];
 
-  for (let i = 0; i < values.length; i++) {
-    const normalized = (values[i] + 128) / 255;
-    result[i] = normalized * range + min;
+  for (let i = 0; i < quantized.values.length; i++) {
+    const normalized = (quantized.values[i] + 128) / 255;
+    result[i] = normalized * range + quantized.min;
   }
 
   return result;

@@ -1,16 +1,20 @@
 import crypto from "crypto";
 import { EmbeddingClient, EmbeddingResult } from "./EmbeddingClient";
+import { PIIDetector } from "./PIIDetector";
 import { logger } from "@/infrastructure/logger";
 
 export class OllamaEmbeddingClient extends EmbeddingClient {
   private endpoint: string;
+  private piiDetector?: PIIDetector;
 
   constructor(
     endpoint = process.env.AI_LOCAL_ENDPOINT || "http://localhost:11434",
     model = process.env.MEMORY_HUB_OLLAMA_MODEL || "nomic-embed-text",
+    piiDetector?: PIIDetector,
   ) {
     super(model);
     this.endpoint = endpoint.replace(/\/$/, "");
+    this.piiDetector = piiDetector;
   }
 
   async embed(texts: string[]): Promise<EmbeddingResult[]> {
@@ -18,6 +22,22 @@ export class OllamaEmbeddingClient extends EmbeddingClient {
 
     if (uncached.length === 0) {
       return results as EmbeddingResult[];
+    }
+
+    // PII check before sending to external embedding service
+    if (this.piiDetector) {
+      for (const item of uncached) {
+        const result = this.piiDetector.scan(item.text);
+        if (result.hasPII && result.confidence === "high") {
+          logger.error("[OllamaEmbeddingClient] PII detected in embedding text — blocking", {
+            detectedTypes: result.detectedTypes,
+            matchCount: result.matchCount,
+          });
+          throw new Error(
+            `PII detected in embedding text (${result.detectedTypes.join(", ")}) — blocked by security policy`,
+          );
+        }
+      }
     }
 
     const requestId = this.generateRequestId();

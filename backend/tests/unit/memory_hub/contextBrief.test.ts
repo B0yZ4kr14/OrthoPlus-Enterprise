@@ -14,7 +14,6 @@ describe("ContextBriefService", () => {
     mockSearchService = new SearchService(
       {} as any,
       {} as any,
-      {} as any,
     ) as jest.Mocked<SearchService>;
     mockDocuments = new DocumentRepository(
       {} as any,

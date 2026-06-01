@@ -84,7 +84,7 @@ export class ContextBriefService {
   }): Promise<ContextBrief> {
     const {
       topic,
-      maxTokens = 80000,
+      maxTokens = 128000,
       includeRelated: _includeRelated = true,
       clinicId = "default",
     } = params;
@@ -148,11 +148,15 @@ export class ContextBriefService {
       if (tokenCount + docTokens > maxTokens) {
         break;
       }
+      const isTruncated = sanitizedExcerpt.length > 500;
       selected.push({
         sourcePath: r.sourcePath,
         docType: r.docType,
         relevance: r.relevanceScore,
-        summary: sanitizedExcerpt.slice(0, 500),
+        summary: isTruncated
+          ? sanitizedExcerpt.slice(0, 500) + "\n\n[truncated]"
+          : sanitizedExcerpt,
+        truncated: isTruncated,
       });
       tokenCount += docTokens;
     }

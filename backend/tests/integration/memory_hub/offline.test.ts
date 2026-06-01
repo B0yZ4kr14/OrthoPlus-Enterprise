@@ -74,13 +74,9 @@ describe("MemoryHub Offline Operation", () => {
     ) as jest.Mocked<EmbeddingRepository>;
     mockEmbeddings.searchSimilar = jest.fn().mockReturnValue([]);
 
-    const mockDocuments = new DocumentRepository(
-      db,
-    ) as jest.Mocked<DocumentRepository>;
     const searchService = new SearchService(
       mockEmbedder,
       mockEmbeddings,
-      mockDocuments,
     );
 
     const result = await searchService.search("rate limiting");

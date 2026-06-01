@@ -23,6 +23,7 @@ export interface ContextBriefDocument {
   docType: string;
   relevance: number;
   summary: string;
+  truncated?: boolean;
 }
 
 export interface ContextBrief {

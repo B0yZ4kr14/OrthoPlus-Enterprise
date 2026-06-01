@@ -6,6 +6,7 @@ export const searchSchema = z.object({
     .object({
       author: z.string().optional(),
       featureNumber: z.string().optional(),
+      docTypes: z.array(z.string()).optional(),
     })
     .optional(),
   limit: z.coerce.number().int().min(1).max(100).default(10),
@@ -14,7 +15,7 @@ export const searchSchema = z.object({
 
 export const contextBriefSchema = z.object({
   topic: z.string().min(1, "Topic is required"),
-  max_tokens: z.number().int().min(100).max(200000).default(80000),
+  max_tokens: z.number().int().min(100).max(200000).default(128000),
   include_related: z.boolean().default(true),
 });
 

@@ -37,7 +37,7 @@ export function createMemoryHubModule(
   dbPath: string = process.env.MEMORY_HUB_INDEX_PATH || ".memory-hub/index.db",
   enabled: boolean = process.env.MEMORY_HUB_ENABLED !== "false",
   watchDirs: string[] = (
-    process.env.MEMORY_HUB_WATCH_DIRS || "specs/,docs/,categories/"
+    process.env.MEMORY_HUB_WATCH_DIRS || "specs/,docs/,categories/,.specify/memory/,.omk/memory/"
   )
     .split(",")
     .map((d) => d.trim()),
@@ -84,11 +84,10 @@ export function createMemoryHubModule(
 
   const healthService = new HealthService(db, documents, embeddings);
   const costTrackingService = new CostTrackingService(db);
-  const searchService = new SearchService(embedder, embeddings, documents);
+  const searchService = new SearchService(embedder, embeddings);
   const contextBriefService = new ContextBriefService(searchService, documents);
   const indexingService = IndexingServiceFactory.create(db, {
     documents,
-    chunks: undefined, // factory will create ChunkRepository
     embeddings,
     embedder,
   });
