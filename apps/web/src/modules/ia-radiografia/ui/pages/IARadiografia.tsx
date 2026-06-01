@@ -336,9 +336,9 @@ export default function IARadiografia() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div>
-            <Label className="text-xs">Status</Label>
+            <Label htmlFor="filterStatus" className="text-xs">Status</Label>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger>
+              <SelectTrigger id="filterStatus">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -351,9 +351,9 @@ export default function IARadiografia() {
             </Select>
           </div>
           <div>
-            <Label className="text-xs">Tipo de Radiografia</Label>
+            <Label htmlFor="filterTipo" className="text-xs">Tipo de Radiografia</Label>
             <Select value={filterTipo} onValueChange={setFilterTipo}>
-              <SelectTrigger>
+              <SelectTrigger id="filterTipo">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -367,9 +367,9 @@ export default function IARadiografia() {
             </Select>
           </div>
           <div>
-            <Label className="text-xs">Período</Label>
+            <Label htmlFor="filterPeriodo" className="text-xs">Período</Label>
             <Select value={filterPeriodo} onValueChange={setFilterPeriodo}>
-              <SelectTrigger>
+              <SelectTrigger id="filterPeriodo">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

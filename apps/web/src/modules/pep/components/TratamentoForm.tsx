@@ -151,10 +151,11 @@ export function TratamentoForm({
         </div>
 
         <div className="space-y-2">
-          <Label>Data de Início *</Label>
+          <Label htmlFor="dataInicio">Data de Início *</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
+                id="dataInicio"
                 type="button"
                 variant="outline"
                 className={cn(
@@ -180,10 +181,11 @@ export function TratamentoForm({
         </div>
 
         <div className="space-y-2">
-          <Label>Data de Conclusão</Label>
+          <Label htmlFor="dataConclusao">Data de Conclusão</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
+                id="dataConclusao"
                 type="button"
                 variant="outline"
                 className={cn(

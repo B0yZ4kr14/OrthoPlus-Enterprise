@@ -166,7 +166,7 @@ export function PrescricaoForm({
           </div>
 
           <div className="space-y-2">
-            <Label>Via de Administração</Label>
+            <Label htmlFor="viaAdministracao">Via de Administração</Label>
             <Select
               value={currentMed.via || "oral"}
               onValueChange={(value) =>
@@ -176,7 +176,7 @@ export function PrescricaoForm({
                 })
               }
             >
-              <SelectTrigger>
+              <SelectTrigger id="viaAdministracao">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

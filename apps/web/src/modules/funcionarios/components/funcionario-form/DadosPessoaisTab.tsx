@@ -98,10 +98,11 @@ export function DadosPessoaisTab({
         </div>
 
         <div className="space-y-2">
-          <Label>Data de Nascimento</Label>
+          <Label htmlFor="dataNascimento">Data de Nascimento</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
+                id="dataNascimento"
                 variant="outline"
                 className={cn(
                   "w-full justify-start text-left font-normal",

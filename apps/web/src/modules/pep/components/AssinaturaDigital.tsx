@@ -136,9 +136,10 @@ export const AssinaturaDigital = ({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label>Área de Assinatura</Label>
+          <Label htmlFor="areaAssinatura">Área de Assinatura</Label>
           <div className="border-2 border-border rounded-lg overflow-hidden bg-background">
             <canvas
+              id="areaAssinatura"
               ref={canvasRef}
               width={600}
               height={200}
@@ -177,9 +178,10 @@ export const AssinaturaDigital = ({
 
         {existingSignature && (
           <div className="space-y-2">
-            <Label>Assinatura Atual</Label>
+            <Label htmlFor="assinaturaAtual">Assinatura Atual</Label>
             <div className="border rounded-lg p-4 bg-muted">
               <img
+                id="assinaturaAtual"
                 src={existingSignature}
                 alt="Assinatura Atual"
                 className="max-h-24 mx-auto"
