@@ -51,6 +51,7 @@ export function ContasReceberFilters({
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
+                id="contas-receber-search"
                 placeholder="Buscar por cliente ou descrição..."
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
