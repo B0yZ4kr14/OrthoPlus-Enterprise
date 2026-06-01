@@ -208,7 +208,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
     } catch (error) {
-      // Silently ignore - not user-facing
+      // Log error for debugging but don't show to user
+      console.error("[AuthContext] fetchUserMetadata failed:", error);
     }
   }, []);
 
@@ -220,7 +221,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       );
       setActiveModules(moduleKeys || []);
     } catch (error) {
-      // Silently ignore - not user-facing
+      // Log error for debugging but don't show to user
+      console.error("[AuthContext] fetchActiveModules failed:", error);
     }
   };
 
@@ -245,7 +247,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSession(
             data.session
               ? { access_token: data.session }
-              : { access_token: "cookie" },
+              : null,
           );
           setUser(data.user);
 
@@ -319,7 +321,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }>("/auth/token", { email, password });
 
       const token = response.access_token || response.accessToken;
-      setSession(token ? { access_token: token } : { access_token: "cookie" });
+      setSession(token ? { access_token: token } : null);
       setUser(response.user ?? null);
 
       // Set role immediately from login response (fallback if fetchUserMetadata fails)
@@ -413,8 +415,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const hasModuleAccess = (moduleKey: string) => {
-    // If user role hasn't loaded yet, allow access (will re-check when loaded)
-    if (!userRole) return true;
+    // If user role hasn't loaded yet, deny access (prevents race condition)
+    if (!userRole) return false;
 
     // Admin-only items are always visible to ADMINs (not real modules in backend catalog)
     if (moduleKey === "ADMIN_ONLY" && userRole === "ADMIN") return true;
