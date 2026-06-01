@@ -257,6 +257,7 @@ export default function FileListPage() {
                         onClick={() => setSelectedFileForOCR(file)}
                         className="p-2 hover:bg-muted rounded-md"
                         title="OCR"
+                        aria-label="Abrir OCR"
                       >
                         <FileText className="h-4 w-4 text-muted-foreground" />
                       </button>
@@ -265,6 +266,7 @@ export default function FileListPage() {
                         onClick={() => setSelectedFileForVersions(file)}
                         className="p-2 hover:bg-muted rounded-md"
                         title="Versões"
+                        aria-label="Ver versões"
                       >
                         <GitBranch className="h-4 w-4 text-muted-foreground" />
                       </button>
@@ -275,6 +277,7 @@ export default function FileListPage() {
                         }
                         className="p-2 hover:bg-muted rounded-md"
                         title="Download"
+                        aria-label="Baixar arquivo"
                       >
                         <Download className="h-4 w-4 text-muted-foreground" />
                       </button>
@@ -283,6 +286,7 @@ export default function FileListPage() {
                         onClick={() => handleDelete(file.id)}
                         className="p-2 hover:bg-destructive/5 rounded-md"
                         title="Excluir"
+                        aria-label="Excluir arquivo"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </button>
