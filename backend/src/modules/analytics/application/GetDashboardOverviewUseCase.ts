@@ -46,7 +46,7 @@ export class GetDashboardOverviewUseCase {
       this.repo.countTreatmentsByStatus(clinicId, "CONCLUIDO"),
     ]);
 
-    let stats: DashboardStats = {
+    const stats: DashboardStats = {
       totalPatients,
       todayAppointments,
       monthlyRevenue,
