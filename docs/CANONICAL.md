@@ -1,12 +1,14 @@
 # OrthoPlus Enterprise — Documentacao Canonica
 
 > Status: CANONICA  
-> Atualizado: 2026-05-19
+> Atualizado: 2026-06-01
 > Deploy: VPS tsiapp.io — Frontend v2.9.10 / Backend v2.5.4
 > Status: ONLINE / HTTPS 200 / API OK  
 > Branch: main  
-> Testes: 1129 passando  
+> Testes: 755 passando  
 > Type-check: 0 erros  
+> GitNexus: 31.861 nodes, 66.380 edges, 883 clusters  
+> Specs: 42/42 completas  
 
 ---
 
