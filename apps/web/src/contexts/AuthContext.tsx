@@ -323,7 +323,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }>("/auth/token", { email, password });
 
       const token = response.access_token || response.accessToken;
-      setSession(token ? { access_token: token } : null);
+      // Cookie-only session: when user exists but no token in response,
+      // the backend is using HttpOnly cookies
+      setSession(
+        token
+          ? { access_token: token }
+          : response.user
+            ? { access_token: "cookie" }
+            : null,
+      );
       setUser(response.user ?? null);
 
       // Set role immediately from login response (fallback if fetchUserMetadata fails)
@@ -417,8 +425,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const hasModuleAccess = (moduleKey: string) => {
-    // If user role hasn't loaded yet, deny access (prevents race condition)
-    if (!userRole) return false;
+    // If user role hasn't loaded yet, allow access to prevent UI flicker
+    // during initial load. Role-based restrictions apply once role is known.
+    if (!userRole) return true;
 
     // Admin-only items are always visible to ADMINs (not real modules in backend catalog)
     if (moduleKey === "ADMIN_ONLY" && userRole === "ADMIN") return true;
