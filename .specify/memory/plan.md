@@ -1,7 +1,7 @@
 # Project Plan — OrthoPlus Enterprise
 
-**Version**: 1.0.0-archived
-**Last Updated**: 2026-05-19
+**Version**: 1.1.0
+**Last Updated**: 2026-06-02
 
 ---
 
@@ -21,7 +21,7 @@
 
 **Constraints**: Multi-tenancy via clinicId isolation, LGPD compliance, zero-downtime Docker deploys
 
-**Scale/Scope**: ~33k symbols, 37 modules, 180 Prisma models, production VPS with Tailscale + Cloudflare
+**Scale/Scope**: ~32k symbols, 42 specs (100% complete), 37 modules, 180 Prisma models, production VPS with Tailscale + Cloudflare
 
 ---
 

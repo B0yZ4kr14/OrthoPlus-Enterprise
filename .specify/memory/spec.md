@@ -1,8 +1,8 @@
 # Project Specification — OrthoPlus Enterprise
 
-**Version**: 1.0.0-archived
-**Last Updated**: 2026-05-19
-**Source**: Merged feature specifications
+**Version**: 1.1.0
+**Last Updated**: 2026-06-02
+**Source**: Merged feature specifications + Remediation Session
 
 ---
 
@@ -66,7 +66,7 @@ As an administrator, I want the production VPS environment to be fully documente
 
 ## Key Entities
 
-- **GitNexus Index**: Symbol graph containing ~33,000+ nodes representing the OrthoPlus codebase structure.
+- **GitNexus Index**: Symbol graph containing 31,885 nodes, 66,404 edges, 883 clusters, 266 flows representing the OrthoPlus codebase structure.
 - **SpecKit Feature**: A specification artifact living in `specs/<NNN>-<name>/` containing spec.md, plan.md, tasks.md, and checklists.
 - **OMK Goal**: A tracked objective in the OMK memory graph with success criteria, evidence, and assigned squad agents.
 - **VPS Configuration**: Immutable record of the production server including network addresses, access config, service ports, and Docker Compose topology.
