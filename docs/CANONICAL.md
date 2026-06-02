@@ -1,7 +1,7 @@
 # OrthoPlus Enterprise — Documentacao Canonica
 
 > Status: CANONICA  
-> Atualizado: 2026-06-01
+> Atualizado: 2026-06-02
 > Deploy: VPS tsiapp.io — Frontend v2.9.10 / Backend v2.5.4
 > Status: ONLINE / HTTPS 200 / API OK  
 > Branch: main  
