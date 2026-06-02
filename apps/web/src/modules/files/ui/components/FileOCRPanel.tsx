@@ -97,7 +97,7 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
             <AlertCircle className="h-4 w-4" />
             Falha ao extrair texto do documento.
           </div>
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={handleRequestOCR}
@@ -117,7 +117,7 @@ export function FileOCRPanel({ file }: FileOCRPanelProps) {
             O texto deste documento ainda não foi extraído. Inicie o OCR para
             permitir busca por conteúdo.
           </p>
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={handleRequestOCR}

@@ -54,7 +54,7 @@ export function DataTableFooter({
         </Select>
 
         <div className="flex items-center gap-2">
-          <Button
+          <Button type="button"
             variant="outline"
             size="icon"
             onClick={() => onPageChange(currentPage - 1)}
@@ -68,7 +68,7 @@ export function DataTableFooter({
             Página {currentPage} de {totalPages}
           </span>
 
-          <Button
+          <Button type="button"
             variant="outline"
             size="icon"
             onClick={() => onPageChange(currentPage + 1)}

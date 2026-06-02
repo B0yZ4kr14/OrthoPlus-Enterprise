@@ -190,7 +190,7 @@ export function AppointmentDetailsDialog({
         </div>
 
         <div className="flex justify-between gap-2">
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={handleSendReminder}
@@ -203,7 +203,7 @@ export function AppointmentDetailsDialog({
           <div className="flex gap-2">
             {isEditing ? (
               <>
-                <Button
+                <Button type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setIsEditing(false)}
@@ -221,7 +221,7 @@ export function AppointmentDetailsDialog({
                 </Button>
               </>
             ) : (
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="sm"
                 onClick={handleEdit}

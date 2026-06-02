@@ -19,7 +19,7 @@ export function RealTimeRates({ rates, onRefresh }: RealTimeRatesProps) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>Cotações em Tempo Real</CardTitle>
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={onRefresh}

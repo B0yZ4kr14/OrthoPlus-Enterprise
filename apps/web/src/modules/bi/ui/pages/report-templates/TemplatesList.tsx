@@ -74,7 +74,7 @@ export function TemplatesList({
               </div>
 
               <div className="flex items-center gap-1">
-                <Button
+                <Button type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => onEdit(template)}
@@ -82,7 +82,7 @@ export function TemplatesList({
                 >
                   <Edit className="h-4 w-4" />
                 </Button>
-                <Button
+                <Button type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => onDuplicate(template)}
@@ -90,7 +90,7 @@ export function TemplatesList({
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
-                <Button
+                <Button type="button"
                   variant="ghost"
                   size="icon"
                   onClick={() => onDelete(template.id)}

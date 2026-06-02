@@ -42,7 +42,7 @@ export function WalletCard({
             <code className="text-xs flex-1 break-all">
               {wallet.wallet_address}
             </code>
-            <Button
+            <Button type="button"
               variant="ghost"
               size="sm"
               onClick={onCopy}
@@ -64,7 +64,7 @@ export function WalletCard({
               {wallet.balance.toFixed(8)} {wallet.coin_type}
             </p>
           </div>
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={onShowQR}

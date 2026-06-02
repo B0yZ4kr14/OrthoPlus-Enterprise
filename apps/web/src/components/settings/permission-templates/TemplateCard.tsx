@@ -53,7 +53,7 @@ export function TemplateCard({
         </div>
       </div>
 
-      <Button
+      <Button type="button"
         variant="outline"
         className="w-full"
         disabled={!selectedUser || isApplying}

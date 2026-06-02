@@ -326,7 +326,7 @@ export default function EstoqueInventario() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => handleView(inventario)}
@@ -336,7 +336,7 @@ export default function EstoqueInventario() {
                         <Eye className="h-4 w-4" />
                       </Button>
                       {inventario.status === "EM_ANDAMENTO" && (
-                        <Button
+                        <Button type="button"
                           variant="ghost"
                           size="icon"
                           onClick={() => handleContagem(inventario)}
@@ -348,7 +348,7 @@ export default function EstoqueInventario() {
                       )}
                       {inventario.divergenciasEncontradas &&
                         inventario.divergenciasEncontradas > 0 && (
-                          <Button
+                          <Button type="button"
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDivergencias(inventario)}
@@ -359,7 +359,7 @@ export default function EstoqueInventario() {
                           </Button>
                         )}
                       {inventario.status !== "CONCLUIDO" && (
-                        <Button
+                        <Button type="button"
                           variant="ghost"
                           size="icon"
                           onClick={() => handleEdit(inventario)}

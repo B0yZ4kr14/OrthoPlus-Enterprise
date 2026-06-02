@@ -63,7 +63,7 @@ export const ToothDetailDialog = ({
             <div className="flex flex-wrap gap-2">
               {(Object.keys(TOOTH_STATUS_COLORS) as ToothStatus[]).map(
                 (status) => (
-                  <Button
+                  <Button type="button"
                     key={status}
                     variant={tooth.status === status ? "default" : "outline"}
                     size="sm"
@@ -112,7 +112,7 @@ export const ToothDetailDialog = ({
                           {TOOTH_STATUS_LABELS[tooth.surfaces[surface]]}
                         </Badge>
                       </div>
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() =>
@@ -130,7 +130,7 @@ export const ToothDetailDialog = ({
                         {(
                           Object.keys(TOOTH_STATUS_COLORS) as ToothStatus[]
                         ).map((status) => (
-                          <Button
+                          <Button type="button"
                             key={status}
                             variant={
                               tooth.surfaces[surface] === status

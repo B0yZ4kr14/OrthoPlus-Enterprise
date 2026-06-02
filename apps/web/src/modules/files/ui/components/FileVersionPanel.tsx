@@ -81,7 +81,7 @@ function VersionItem({
       </div>
 
       {!isCurrent && (
-        <Button
+        <Button type="button"
           variant="outline"
           size="sm"
           onClick={onRestore}
@@ -168,7 +168,7 @@ export function FileVersionPanel({ file }: FileVersionPanelProps) {
             className="hidden"
             onChange={handleFileChange}
           />
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={handleUploadClick}

@@ -467,7 +467,7 @@ export default function ReportTemplates() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => handleEditClick(template)}
@@ -476,14 +476,14 @@ export default function ReportTemplates() {
                     <Edit className="h-3 w-3 mr-1" />
                     Editar
                   </Button>
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => handleDuplicateTemplate(template)}
                   >
                     <Copy className="h-3 w-3" />
                   </Button>
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => handleDeleteTemplate(template.id)}

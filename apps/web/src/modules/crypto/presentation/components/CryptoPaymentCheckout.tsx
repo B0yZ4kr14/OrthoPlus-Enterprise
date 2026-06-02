@@ -182,7 +182,7 @@ export function CryptoPaymentCheckout({
                 <code className="flex-1 p-3 bg-muted rounded-md text-xs break-all">
                   {qrCodeData}
                 </code>
-                <Button
+                <Button type="button"
                   variant="outline"
                   size="icon"
                   onClick={handleCopyAddress}

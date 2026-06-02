@@ -168,7 +168,7 @@ export default function TerminalPage() {
               "git status",
               "git log --oneline",
             ].map((cmd) => (
-              <Button
+              <Button type="button"
                 key={cmd}
                 variant="secondary"
                 size="sm"

@@ -147,7 +147,7 @@ export default function PatientFormPage() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Button
+        <Button type="button"
           variant="ghost"
           size="icon"
           onClick={() => navigate("/pacientes")}

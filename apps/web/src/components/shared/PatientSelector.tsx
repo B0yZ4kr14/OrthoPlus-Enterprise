@@ -125,7 +125,7 @@ export function PatientSelector({
                   {selectedPatient.status}
                 </Badge>
               </div>
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => onSelect(null)}

@@ -13,7 +13,7 @@ export function ActionButtons({ onBackup, onRestore }: ActionButtonsProps) {
         <HardDrive className="mr-2 h-5 w-5" />
         Backup Agora
       </Button>
-      <Button
+      <Button type="button"
         size="lg"
         variant="secondary"
         className="flex-1"

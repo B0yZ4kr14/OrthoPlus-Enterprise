@@ -141,7 +141,7 @@ export function GitHubIntegrationConfig() {
                   setConfig({ ...config, repository_url: e.target.value })
                 }
               />
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="icon"
                 onClick={testConnection}

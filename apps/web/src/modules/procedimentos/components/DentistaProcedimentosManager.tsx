@@ -191,7 +191,7 @@ export default function DentistaProcedimentosManager() {
                 </Badge>
               </TableCell>
               <TableCell>
-                <Button
+                <Button type="button"
                   size="icon"
                   variant="ghost"
                   className="text-destructive"

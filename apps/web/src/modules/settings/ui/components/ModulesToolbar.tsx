@@ -37,7 +37,7 @@ export function ModulesToolbar({
 }: ModulesToolbarProps) {
   return (
     <div className="flex flex-wrap gap-3">
-      <Button
+      <Button type="button"
         variant="outline"
         size="lg"
         className="gap-2"
@@ -49,7 +49,7 @@ export function ModulesToolbar({
 
       <ModuleTemplateSelector onApply={onRefresh} />
 
-      <Button
+      <Button type="button"
         variant="outline"
         size="lg"
         className="gap-2"
@@ -64,7 +64,7 @@ export function ModulesToolbar({
         Sugestões IA
       </Button>
 
-      <Button
+      <Button type="button"
         variant="outline"
         size="lg"
         className="gap-2"
@@ -83,7 +83,7 @@ export function ModulesToolbar({
           id="import-config"
           title="Selecione arquivo JSON de configuração"
         />
-        <Button
+        <Button type="button"
           variant="outline"
           size="lg"
           className="gap-2"

@@ -147,7 +147,7 @@ export function CryptoTransactionsView({
     <>
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Histórico de Transações</h3>
-        <Button
+        <Button type="button"
           variant="outline"
           size="sm"
           onClick={() => setQrCodeDialogOpen(true)}

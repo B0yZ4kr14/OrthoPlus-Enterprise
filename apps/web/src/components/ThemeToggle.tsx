@@ -56,7 +56,7 @@ export const ThemeToggle = memo(function ThemeToggle() {
         {THEME_OPTIONS.map((option) => {
           const Icon = option.icon;
           return (
-            <Button
+            <Button type="button"
               key={option.value}
               variant={theme === option.value ? "secondary" : "ghost"}
               className="w-full justify-start gap-2"

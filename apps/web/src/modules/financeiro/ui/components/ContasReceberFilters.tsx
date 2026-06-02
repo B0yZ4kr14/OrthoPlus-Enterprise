@@ -102,7 +102,7 @@ export function ContasReceberFilters({
               </SelectContent>
             </Select>
 
-            <Button
+            <Button type="button"
               variant="elevated"
               className="gap-2"
               onClick={onOpenNovaConta}

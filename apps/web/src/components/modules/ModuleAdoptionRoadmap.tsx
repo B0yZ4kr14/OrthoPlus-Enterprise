@@ -145,7 +145,7 @@ export function ModuleAdoptionRoadmap({
                 </div>
 
                 {onActivatePhase && (
-                  <Button
+                  <Button type="button"
                     variant={index === 0 ? "default" : "outline"}
                     size="sm"
                     onClick={() => onActivatePhase(phase.modules)}

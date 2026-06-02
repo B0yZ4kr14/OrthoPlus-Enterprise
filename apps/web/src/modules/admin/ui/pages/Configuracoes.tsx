@@ -205,7 +205,7 @@ export default function Configuracoes() {
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Gerenciamento Avançado de Banco de Dados</span>
-                <Button
+                <Button type="button"
                   variant="elevated"
                   size="sm"
                   onClick={() => navigate("/configuracoes/database")}

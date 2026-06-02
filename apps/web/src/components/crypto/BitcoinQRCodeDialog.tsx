@@ -181,7 +181,7 @@ export function BitcoinQRCodeDialog({
                   readOnly
                   className="font-mono text-sm"
                 />
-                <Button
+                <Button type="button"
                   variant="outline"
                   size="icon"
                   aria-label="Copiar endereço Bitcoin"

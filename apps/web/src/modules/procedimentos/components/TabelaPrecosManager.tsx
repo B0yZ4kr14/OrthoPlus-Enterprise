@@ -273,7 +273,7 @@ export default function TabelaPrecosManager() {
               <TableCell>{t.is_default ? "Sim" : "Não"}</TableCell>
               <TableCell>{t.is_active ? "Ativa" : "Inativa"}</TableCell>
               <TableCell className="flex gap-2">
-                <Button
+                <Button type="button"
                   size="icon"
                   variant="ghost"
                   onClick={() => startEdit(t)}
@@ -281,7 +281,7 @@ export default function TabelaPrecosManager() {
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
-                <Button
+                <Button type="button"
                   size="icon"
                   variant="ghost"
                   className="text-destructive"
@@ -394,7 +394,7 @@ export default function TabelaPrecosManager() {
                   <TableCell>R$ {(p.valor / 100).toFixed(2)}</TableCell>
                   <TableCell>{p.tempo_retorno_dias ?? "—"}</TableCell>
                   <TableCell>
-                    <Button
+                    <Button type="button"
                       size="icon"
                       variant="ghost"
                       className="text-destructive"

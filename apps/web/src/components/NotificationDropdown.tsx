@@ -68,7 +68,7 @@ export const NotificationDropdown = () => {
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Notificações</span>
           {unreadCount > 0 && (
-            <Button
+            <Button type="button"
               variant="ghost"
               size="sm"
               className="h-auto p-1 text-xs"

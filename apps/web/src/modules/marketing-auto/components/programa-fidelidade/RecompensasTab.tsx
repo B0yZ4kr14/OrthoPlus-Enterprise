@@ -55,7 +55,7 @@ export function RecompensasTab({
                       {recompensa.pontos_necessarios}
                     </span>
                   </div>
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => onEdit(recompensa)}

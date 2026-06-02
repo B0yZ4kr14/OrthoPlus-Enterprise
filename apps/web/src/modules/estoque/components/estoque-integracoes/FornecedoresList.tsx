@@ -108,7 +108,7 @@ export function FornecedoresList({
                       </div>
                     </div>
                   </div>
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => onTestarAPI(fornecedor.id)}

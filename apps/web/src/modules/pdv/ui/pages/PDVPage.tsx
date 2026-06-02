@@ -315,7 +315,7 @@ export default function PDVPage() {
                             currency: "BRL",
                           }).format(item.valor_total || 0)}
                         </p>
-                        <Button
+                        <Button type="button"
                           size="icon"
                           variant="ghost"
                           onClick={() => removerItem(idx)}
@@ -346,7 +346,7 @@ export default function PDVPage() {
                 <Label>Forma de Pagamento</Label>
                 <div className="grid grid-cols-2 gap-2">
                   {formasPagamento.map((forma) => (
-                    <Button
+                    <Button type="button"
                       key={forma.value}
                       variant={
                         formaPagamento === forma.value ? "default" : "outline"

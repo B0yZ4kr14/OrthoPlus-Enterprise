@@ -290,7 +290,7 @@ export default function TemplatesProcedimentosPage() {
                         Usar Template
                       </Button>
                       {template.created_by === user?.id && (
-                        <Button
+                        <Button type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => deleteMutation.mutate(template.id)}

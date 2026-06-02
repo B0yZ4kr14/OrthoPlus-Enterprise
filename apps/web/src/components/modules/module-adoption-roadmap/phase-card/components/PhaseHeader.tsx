@@ -37,7 +37,7 @@ export function PhaseHeader({
       </div>
 
       {onActivate && (
-        <Button
+        <Button type="button"
           variant={isFirst ? "default" : "outline"}
           size="sm"
           onClick={() => onActivate(phase.modules)}

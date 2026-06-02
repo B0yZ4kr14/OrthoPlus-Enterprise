@@ -130,7 +130,7 @@ export default function ResetPassword() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button
+            <Button type="button"
               variant="outline"
               className="w-full"
               onClick={() => navigate("/auth")}

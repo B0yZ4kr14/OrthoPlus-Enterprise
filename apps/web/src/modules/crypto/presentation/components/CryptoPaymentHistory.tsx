@@ -148,7 +148,7 @@ export function CryptoPaymentHistory() {
                   <TableCell>{getStatusBadge(payment.status)}</TableCell>
                   <TableCell className="text-right">
                     {payment.transaction_id && (
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => {

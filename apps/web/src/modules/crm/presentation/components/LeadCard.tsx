@@ -70,7 +70,7 @@ export const LeadCard = ({
               </Button>
             )}
             {onDelete && (
-              <Button
+              <Button type="button"
                 variant="ghost"
                 size="icon"
                 onClick={() => onDelete(lead)}

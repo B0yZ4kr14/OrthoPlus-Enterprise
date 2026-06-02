@@ -99,14 +99,14 @@ export function AgendaCalendar({
           </h3>
         </div>
         <div className="flex gap-2">
-          <Button
+          <Button type="button"
             variant={viewMode === "week" ? "default" : "outline"}
             size="sm"
             onClick={() => setViewMode("week")}
           >
             Semana
           </Button>
-          <Button
+          <Button type="button"
             variant={viewMode === "day" ? "default" : "outline"}
             size="sm"
             onClick={() => setViewMode("day")}

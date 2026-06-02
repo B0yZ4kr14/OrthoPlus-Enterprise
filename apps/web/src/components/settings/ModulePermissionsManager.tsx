@@ -264,7 +264,7 @@ export function ModulePermissionsManager() {
       {/* Seleção de usuário */}
       <div className="flex gap-2 flex-wrap">
         {users.map((user) => (
-          <Button
+          <Button type="button"
             key={user.id}
             variant={selectedUser === user.id ? "default" : "outline"}
             size="sm"
@@ -288,7 +288,7 @@ export function ModulePermissionsManager() {
               </p>
             </div>
             <div className="flex gap-2">
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => grantAllPermissions(selectedUser)}
@@ -299,7 +299,7 @@ export function ModulePermissionsManager() {
                 ) : null}
                 Conceder Tudo
               </Button>
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => revokeAllPermissions(selectedUser)}

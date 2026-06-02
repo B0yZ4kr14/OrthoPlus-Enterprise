@@ -223,7 +223,7 @@ export function AIModelConfig() {
                   setConfig({ ...config, openai_api_key: e.target.value })
                 }
               />
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="icon"
                 aria-label={showKeys.openai ? "Ocultar chave OpenAI" : "Mostrar chave OpenAI"}
@@ -262,7 +262,7 @@ export function AIModelConfig() {
                   setConfig({ ...config, google_api_key: e.target.value })
                 }
               />
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="icon"
                 aria-label={showKeys.google ? "Ocultar chave Google" : "Mostrar chave Google"}
@@ -303,7 +303,7 @@ export function AIModelConfig() {
                   setConfig({ ...config, anthropic_api_key: e.target.value })
                 }
               />
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="icon"
                 aria-label={showKeys.anthropic ? "Ocultar chave Anthropic" : "Mostrar chave Anthropic"}
@@ -342,7 +342,7 @@ export function AIModelConfig() {
                   setConfig({ ...config, openrouter_api_key: e.target.value })
                 }
               />
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="icon"
                 aria-label={showKeys.openrouter ? "Ocultar chave OpenRouter" : "Mostrar chave OpenRouter"}
@@ -381,7 +381,7 @@ export function AIModelConfig() {
                   setConfig({ ...config, huggingface_api_key: e.target.value })
                 }
               />
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="icon"
                 aria-label={showKeys.huggingface ? "Ocultar chave HuggingFace" : "Mostrar chave HuggingFace"}

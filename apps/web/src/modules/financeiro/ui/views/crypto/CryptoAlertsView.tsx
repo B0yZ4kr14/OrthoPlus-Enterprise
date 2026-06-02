@@ -191,7 +191,7 @@ export function CryptoAlertsView({
                                     !sortedAlerts[idx - 1].last_triggered_at
                                   }
                                 />
-                                <Button
+                                <Button type="button"
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => deleteAlert(alert.id)}
@@ -262,7 +262,7 @@ export function CryptoAlertsView({
                               toggleAlert(alert.id, alert.is_active)
                             }
                           />
-                          <Button
+                          <Button type="button"
                             variant="ghost"
                             size="sm"
                             onClick={() => deleteAlert(alert.id)}

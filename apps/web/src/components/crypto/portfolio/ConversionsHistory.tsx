@@ -29,7 +29,7 @@ export function ConversionsHistory({
         <div className="flex items-center justify-between">
           <CardTitle>Histórico de Conversões</CardTitle>
           <div className="flex gap-2">
-            <Button
+            <Button type="button"
               variant="outline"
               size="sm"
               onClick={onExportPDF}
@@ -38,7 +38,7 @@ export function ConversionsHistory({
               <FileText className="h-4 w-4" />
               Relatório PDF
             </Button>
-            <Button
+            <Button type="button"
               variant="outline"
               size="sm"
               onClick={onExportCSV}

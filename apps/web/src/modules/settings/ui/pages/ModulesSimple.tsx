@@ -390,7 +390,7 @@ const ModulesSimple = memo(function ModulesSimple() {
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
-                                        <Button
+                                        <Button type="button"
                                           variant="ghost"
                                           size="sm"
                                           className="h-6 w-6 p-0"

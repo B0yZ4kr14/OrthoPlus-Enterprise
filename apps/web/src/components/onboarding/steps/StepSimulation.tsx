@@ -165,7 +165,7 @@ export function StepSimulation() {
                     </div>
                   </div>
 
-                  <Button
+                  <Button type="button"
                     variant={module.active ? "destructive" : "default"}
                     size="sm"
                     onClick={() => toggleModule(module.id)}
@@ -207,7 +207,7 @@ export function StepSimulation() {
         })}
       </div>
 
-      <Button
+      <Button type="button"
         variant="outline"
         className="w-full gap-2"
         onClick={resetSimulation}

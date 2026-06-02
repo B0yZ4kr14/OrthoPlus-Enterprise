@@ -225,7 +225,7 @@ export default function CryptoPagamentos() {
               : "Notificações Desconectadas"}
           </Badge>
           {!notificationsConnected && (
-            <Button
+            <Button type="button"
               variant="outline"
               size="sm"
               onClick={requestNotificationPermission}

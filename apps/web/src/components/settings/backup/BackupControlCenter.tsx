@@ -42,7 +42,7 @@ export function BackupControlCenter() {
     <div className="space-y-6">
       {/* CTAs Principais */}
       <div className="flex gap-4">
-        <Button
+        <Button type="button"
           size="lg"
           className="flex-1"
           onClick={() => setIsBackupWizardOpen(true)}
@@ -50,7 +50,7 @@ export function BackupControlCenter() {
           <HardDrive className="mr-2 h-5 w-5" />
           Backup Agora
         </Button>
-        <Button
+        <Button type="button"
           size="lg"
           variant="secondary"
           className="flex-1"

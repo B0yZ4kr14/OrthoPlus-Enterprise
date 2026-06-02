@@ -93,7 +93,7 @@ export function AppointmentCard({
             </Button>
           )}
           {appointment.canBeRescheduled && onReschedule && (
-            <Button
+            <Button type="button"
               size="sm"
               variant="outline"
               onClick={onReschedule}
@@ -104,7 +104,7 @@ export function AppointmentCard({
             </Button>
           )}
           {appointment.canBeCancelled && onCancel && (
-            <Button
+            <Button type="button"
               size="sm"
               variant="destructive"
               onClick={onCancel}

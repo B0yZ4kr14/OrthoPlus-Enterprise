@@ -97,7 +97,7 @@ export function UserTable({
                         </SelectContent>
                       </Select>
 
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         aria-label="Editar usuário"
@@ -106,7 +106,7 @@ export function UserTable({
                         <Edit className="h-4 w-4" />
                       </Button>
 
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         aria-label="Excluir usuário"

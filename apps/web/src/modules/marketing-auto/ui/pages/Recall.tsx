@@ -257,7 +257,7 @@ export default function RecallPage() {
 
                       {!recall.notificacao_enviada &&
                         recall.status === "PENDENTE" && (
-                          <Button
+                          <Button type="button"
                             size="sm"
                             variant="outline"
                             className="gap-2"

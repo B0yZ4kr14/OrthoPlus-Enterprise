@@ -145,7 +145,7 @@ export default function OrcamentoFormPage() {
         description="Preencha os dados do orcamento para o paciente"
         icon={FileText}
         actions={
-          <Button
+          <Button type="button"
             variant="ghost"
             size="icon"
             onClick={() => navigate("/orcamentos")}

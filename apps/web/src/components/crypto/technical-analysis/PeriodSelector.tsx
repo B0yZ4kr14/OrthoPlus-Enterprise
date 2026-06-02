@@ -20,7 +20,7 @@ export function PeriodSelector({
   return (
     <div className="flex items-center gap-2">
       {PERIODS.map((p) => (
-        <Button
+        <Button type="button"
           key={p.value}
           variant={period === p.value ? "default" : "outline"}
           size="sm"

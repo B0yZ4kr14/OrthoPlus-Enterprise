@@ -79,7 +79,7 @@ export function WalletQRPreview({ wallet }: WalletQRPreviewProps) {
               <code className="text-xs flex-1 break-all">
                 {wallet.wallet_address}
               </code>
-              <Button
+              <Button type="button"
                 variant="ghost"
                 size="sm"
                 onClick={handleCopyAddress}
@@ -101,7 +101,7 @@ export function WalletQRPreview({ wallet }: WalletQRPreviewProps) {
                 {wallet.balance.toFixed(8)} {wallet.coin_type}
               </p>
             </div>
-            <Button
+            <Button type="button"
               variant="outline"
               size="sm"
               onClick={handleShowQRCode}

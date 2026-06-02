@@ -239,7 +239,7 @@ export function DataTable<T extends Record<string, unknown>>({
           </div>
 
           <div className="flex items-center gap-1">
-            <Button
+            <Button type="button"
               variant="ghost"
               size="icon"
               onClick={() => setCurrentPage(1)}
@@ -249,7 +249,7 @@ export function DataTable<T extends Record<string, unknown>>({
             >
               <ChevronsLeft className="h-4 w-4" />
             </Button>
-            <Button
+            <Button type="button"
               variant="ghost"
               size="icon"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
@@ -262,7 +262,7 @@ export function DataTable<T extends Record<string, unknown>>({
             <div className="flex items-center gap-1 px-2 text-sm">
               Página {currentPage} de {totalPages}
             </div>
-            <Button
+            <Button type="button"
               variant="ghost"
               size="icon"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
@@ -272,7 +272,7 @@ export function DataTable<T extends Record<string, unknown>>({
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
-            <Button
+            <Button type="button"
               variant="ghost"
               size="icon"
               onClick={() => setCurrentPage(totalPages)}

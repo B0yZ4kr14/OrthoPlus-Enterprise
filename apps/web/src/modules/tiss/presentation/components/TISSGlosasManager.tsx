@@ -108,7 +108,7 @@ export function TISSGlosasManager() {
                     <div className="flex gap-2">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button
+                          <Button type="button"
                             variant="outline"
                             size="sm"
                             onClick={() => setSelectedGlosa(glosa.id)}
@@ -154,7 +154,7 @@ export function TISSGlosasManager() {
                           </div>
                         </DialogContent>
                       </Dialog>
-                      <Button
+                      <Button type="button"
                         variant="outline"
                         size="sm"
                         onClick={() => reprocessarGlosa(glosa.id)}

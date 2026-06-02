@@ -217,7 +217,7 @@ export function ModuleCard({
             </Tooltip>
           </TooltipProvider>
         ) : (
-          <Button
+          <Button type="button"
             variant="outline"
             className="w-full"
             onClick={() => onRequest(module.module_key, module.name)}

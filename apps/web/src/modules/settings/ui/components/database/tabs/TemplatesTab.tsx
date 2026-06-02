@@ -145,7 +145,7 @@ export function TemplatesTab({ category, categorySchemas }: TemplatesTabProps) {
             <CardContent className="p-0">
               <div className="flex items-center justify-between p-4 border-b border-border">
                 <span className="font-medium text-foreground">{tpl.name}</span>
-                <Button
+                <Button type="button"
                   size="sm"
                   variant="ghost"
                   className="h-8 w-8 p-0"

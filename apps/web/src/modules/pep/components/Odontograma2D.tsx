@@ -209,7 +209,7 @@ export const Odontograma2D = memo(({ prontuarioId }: Odontograma2DProps) => {
           <div className="flex flex-wrap gap-2">
             {(Object.keys(TOOTH_STATUS_COLORS) as ToothStatus[]).map(
               (status) => (
-                <Button
+                <Button type="button"
                   key={status}
                   variant={selectedStatus === status ? "default" : "outline"}
                   onClick={() => setSelectedStatus(status)}

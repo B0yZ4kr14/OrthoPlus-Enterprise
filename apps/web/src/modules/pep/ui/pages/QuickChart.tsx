@@ -65,7 +65,7 @@ export default function QuickChart() {
       {/* Header */}
       <div className="bg-background border-b px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button
+          <Button type="button"
             variant="ghost"
             size="icon"
             onClick={() => window.history.back()}

@@ -145,7 +145,7 @@ const GlobalSearch = memo(function GlobalSearch() {
                 className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
               />
               {query && (
-                <Button
+                <Button type="button"
                   variant="ghost"
                   size="icon"
                   className="h-7 w-7 shrink-0"
@@ -250,7 +250,7 @@ const GlobalSearch = memo(function GlobalSearch() {
                 {/* Load more */}
                 {!loading && !error && hasMore && hasResults && (
                   <div className="px-2 py-3">
-                    <Button
+                    <Button type="button"
                       variant="ghost"
                       size="sm"
                       className="w-full h-9 text-xs text-muted-foreground hover:text-foreground"

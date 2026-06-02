@@ -375,7 +375,7 @@ export function VolatilityAlerts() {
                             handleToggleAlert(alert.id, alert.is_active)
                           }
                         />
-                        <Button
+                        <Button type="button"
                           variant="ghost"
                           size="icon"
                           aria-label="Excluir alerta"

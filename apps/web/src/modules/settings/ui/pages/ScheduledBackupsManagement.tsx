@@ -247,7 +247,7 @@ export default function ScheduledBackupsManagement() {
                     />
                   </div>
 
-                  <Button
+                  <Button type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => handleEdit(backup)}
@@ -255,7 +255,7 @@ export default function ScheduledBackupsManagement() {
                     <Edit className="h-4 w-4" />
                   </Button>
 
-                  <Button
+                  <Button type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => handleDelete(backup.id)}

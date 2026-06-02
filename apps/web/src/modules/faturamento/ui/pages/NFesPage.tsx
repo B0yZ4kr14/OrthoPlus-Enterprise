@@ -227,7 +227,7 @@ export default function NFesPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       {nfe.status === "PENDENTE" && (
-                        <Button
+                        <Button type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => openCancelDialog(nfe.id)}

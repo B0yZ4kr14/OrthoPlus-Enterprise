@@ -131,7 +131,7 @@ export function AnaliseList({
                   </div>
                 </div>
               )}
-              <Button
+              <Button type="button"
                 size="sm"
                 variant="outline"
                 onClick={() => onViewDetails(analise)}
@@ -152,7 +152,7 @@ export function AnaliseList({
             análises
           </div>
           <div className="flex items-center gap-2">
-            <Button
+            <Button type="button"
               variant="outline"
               size="sm"
               onClick={() => onPageChange(Math.max(1, currentPage - 1))}
@@ -163,7 +163,7 @@ export function AnaliseList({
             <div className="flex items-center gap-1">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                 (page) => (
-                  <Button
+                  <Button type="button"
                     key={page}
                     variant={currentPage === page ? "default" : "outline"}
                     size="sm"
@@ -175,7 +175,7 @@ export function AnaliseList({
                 ),
               )}
             </div>
-            <Button
+            <Button type="button"
               variant="outline"
               size="sm"
               onClick={() =>

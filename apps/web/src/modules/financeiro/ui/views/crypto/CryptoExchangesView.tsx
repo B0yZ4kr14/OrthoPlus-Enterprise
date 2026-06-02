@@ -26,7 +26,7 @@ export function CryptoExchangesView({
     <>
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Exchanges Configuradas</h3>
-        <Button
+        <Button type="button"
           variant="outline"
           size="sm"
           onClick={() => setExchangeDialogOpen(true)}

@@ -206,21 +206,21 @@ export default function MetasGamificacao() {
             <h2 className="text-xl font-bold">Ranking de Vendedores</h2>
           </div>
           <div className="flex gap-2">
-            <Button
+            <Button type="button"
               variant={periodoRanking === "DIA" ? "default" : "outline"}
               size="sm"
               onClick={() => setPeriodoRanking("DIA")}
             >
               Dia
             </Button>
-            <Button
+            <Button type="button"
               variant={periodoRanking === "SEMANA" ? "default" : "outline"}
               size="sm"
               onClick={() => setPeriodoRanking("SEMANA")}
             >
               Semana
             </Button>
-            <Button
+            <Button type="button"
               variant={periodoRanking === "MES" ? "default" : "outline"}
               size="sm"
               onClick={() => setPeriodoRanking("MES")}

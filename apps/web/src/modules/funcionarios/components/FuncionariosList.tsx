@@ -199,7 +199,7 @@ export function FuncionariosList({
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => onView(funcionario)}
@@ -208,7 +208,7 @@ export function FuncionariosList({
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => onEdit(funcionario)}
@@ -217,7 +217,7 @@ export function FuncionariosList({
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => setDeleteId(funcionario.id!)}

@@ -105,7 +105,7 @@ export function UploadDialog({
                     de enviar.
                   </AlertDescription>
                   {onRegisterConsent && (
-                    <Button
+                    <Button type="button"
                       size="sm"
                       variant="outline"
                       className="mt-2"

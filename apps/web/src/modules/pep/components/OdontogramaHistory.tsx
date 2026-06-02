@@ -118,7 +118,7 @@ export const OdontogramaHistory = ({
                 )}
 
                 <div className="flex gap-2">
-                  <Button
+                  <Button type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => handleRestore(entry)}
@@ -127,7 +127,7 @@ export const OdontogramaHistory = ({
                     <RotateCcw className="h-3 w-3 mr-1" />
                     Restaurar
                   </Button>
-                  <Button
+                  <Button type="button"
                     variant={
                       selectedForComparison === entry.id ? "default" : "outline"
                     }
@@ -138,7 +138,7 @@ export const OdontogramaHistory = ({
                       ? "Selecionado"
                       : "Comparar"}
                   </Button>
-                  <Button
+                  <Button type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => handleExport(entry)}

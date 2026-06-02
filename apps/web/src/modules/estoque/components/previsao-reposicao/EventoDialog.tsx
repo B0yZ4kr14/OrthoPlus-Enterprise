@@ -169,7 +169,7 @@ export function EventoDialog({
                     <Badge variant="outline">{e.tipo}</Badge>{" "}
                     <span className="text-sm">{e.descricao}</span>
                   </div>
-                  <Button
+                  <Button type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => onRemover(i)}

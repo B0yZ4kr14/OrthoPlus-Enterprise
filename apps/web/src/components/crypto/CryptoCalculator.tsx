@@ -176,7 +176,7 @@ export function CryptoCalculator() {
             <ArrowRightLeft className="h-5 w-5 text-primary" />
             Calculadora de Conversão Cripto ↔ BRL
           </CardTitle>
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={handleRefreshRates}
@@ -237,7 +237,7 @@ export function CryptoCalculator() {
 
           {/* Swap Button */}
           <div className="flex justify-center">
-            <Button
+            <Button type="button"
               variant="outline"
               size="icon"
               aria-label="Trocar moedas"

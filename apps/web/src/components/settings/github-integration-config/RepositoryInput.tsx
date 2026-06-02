@@ -24,7 +24,7 @@ export function RepositoryInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
-        <Button
+        <Button type="button"
           variant="outline"
           size="icon"
           onClick={onTest}

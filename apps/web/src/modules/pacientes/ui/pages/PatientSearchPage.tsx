@@ -231,7 +231,7 @@ export default function PatientSearchPage() {
 
       {data && data.total > data.limit && (
         <div className="flex items-center justify-between">
-          <Button
+          <Button type="button"
             variant="outline"
             disabled={page <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}

@@ -194,14 +194,14 @@ export function TISSConveniosManager() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEdit(c)}
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteConvenio(c.id)}

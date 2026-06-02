@@ -276,7 +276,7 @@ export default function WikiPage() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button
+                    <Button type="button"
                       size="sm"
                       variant="outline"
                       className="flex-1"
@@ -285,7 +285,7 @@ export default function WikiPage() {
                       <Edit className="h-3 w-3 mr-1" />
                       Editar
                     </Button>
-                    <Button
+                    <Button type="button"
                       size="sm"
                       variant="outline"
                       onClick={() => handleDelete(page.id)}

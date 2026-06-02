@@ -458,7 +458,7 @@ export default function EstoqueIntegracoes() {
                         </div>
                       </div>
                     </div>
-                    <Button
+                    <Button type="button"
                       variant="outline"
                       size="sm"
                       onClick={() => handleTestarAPI(fornecedor.id)}

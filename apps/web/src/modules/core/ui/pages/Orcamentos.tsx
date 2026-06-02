@@ -161,7 +161,7 @@ export default function Orcamentos() {
                   </div>
                   <div className="flex gap-2">
                     {orcamento.status === "RASCUNHO" && (
-                      <Button
+                      <Button type="button"
                         size="sm"
                         variant="outline"
                         onClick={(e) => {
@@ -174,7 +174,7 @@ export default function Orcamentos() {
                       </Button>
                     )}
                     {orcamento.status === "PENDENTE" && (
-                      <Button
+                      <Button type="button"
                         size="sm"
                         variant="elevated"
                         onClick={(e) => {
@@ -187,7 +187,7 @@ export default function Orcamentos() {
                       </Button>
                     )}
                     {orcamento.status === "APROVADO" && (
-                      <Button
+                      <Button type="button"
                         size="sm"
                         variant="elevated-secondary"
                         onClick={(e) => {

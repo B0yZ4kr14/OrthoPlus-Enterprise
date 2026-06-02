@@ -108,7 +108,7 @@ export function BackupTimelineTab() {
                           <Download className="h-4 w-4 mr-1" />
                           Download
                         </Button>
-                        <Button
+                        <Button type="button"
                           variant="outline"
                           size="sm"
                           onClick={() => handleRestoreClick(backup)}

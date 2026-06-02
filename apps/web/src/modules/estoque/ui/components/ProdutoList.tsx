@@ -99,7 +99,7 @@ export const ProdutoList = ({
               </div>
 
               {/* Ações */}
-              <Button
+              <Button type="button"
                 variant="outline"
                 size="sm"
                 className="w-full"

@@ -98,14 +98,14 @@ export default function Demo() {
             tecnologia de ponta.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-            <Button
+            <Button type="button"
               size="lg"
               className="text-lg px-8"
               onClick={() => navigate("/auth")}
             >
               Começar Agora <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button
+            <Button type="button"
               size="lg"
               variant="outline"
               className="text-lg px-8"
@@ -244,7 +244,7 @@ export default function Demo() {
             Sistema completo, modular e escalável. Comece agora e ative apenas
             os módulos que você precisa.
           </p>
-          <Button
+          <Button type="button"
             size="lg"
             className="text-lg px-8"
             onClick={() => navigate("/auth")}

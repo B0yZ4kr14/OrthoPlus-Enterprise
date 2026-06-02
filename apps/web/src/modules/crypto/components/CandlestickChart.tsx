@@ -96,7 +96,7 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
+          <Button type="button"
             variant="outline"
             size="icon"
             onClick={handleZoomIn}
@@ -104,7 +104,7 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
            aria-label="Ampliar">
             <ZoomIn className="h-4 w-4" />
           </Button>
-          <Button
+          <Button type="button"
             variant="outline"
             size="icon"
             onClick={handleZoomOut}
@@ -113,7 +113,7 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
            aria-label="Reduzir">
             <ZoomOut className="h-4 w-4" />
           </Button>
-          <Button
+          <Button type="button"
             variant="outline"
             size="icon"
             onClick={handleResetZoom}

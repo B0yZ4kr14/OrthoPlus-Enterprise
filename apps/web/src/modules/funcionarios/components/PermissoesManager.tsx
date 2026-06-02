@@ -94,7 +94,7 @@ export function PermissoesManager({
         <CardContent>
           <div className="flex gap-2 flex-wrap">
             {Object.keys(perfisPermissoes).map((perfil) => (
-              <Button
+              <Button type="button"
                 key={perfil}
                 variant="outline"
                 size="sm"
@@ -123,7 +123,7 @@ export function PermissoesManager({
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base">{config.label}</CardTitle>
                   <div className="flex items-center gap-2">
-                    <Button
+                    <Button type="button"
                       variant="ghost"
                       size="sm"
                       onClick={() => handleToggleTodos(modulo, !todasMarcadas)}

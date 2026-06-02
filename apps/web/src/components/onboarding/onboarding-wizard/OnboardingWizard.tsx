@@ -51,7 +51,7 @@ export function OnboardingWizard({
       {open && (
         <Dialog open={open} onOpenChange={handleClose}>
           <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto p-0">
-            <Button
+            <Button type="button"
               variant="ghost"
               size="icon"
               className="absolute right-4 top-4 z-50 rounded-full h-10 w-10 bg-destructive/10 hover:bg-destructive/20 border-2 border-destructive/30"

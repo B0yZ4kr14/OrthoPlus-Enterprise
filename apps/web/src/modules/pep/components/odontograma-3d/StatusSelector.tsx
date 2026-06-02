@@ -33,7 +33,7 @@ export function StatusSelector({
       <CardContent>
         <div className="flex flex-wrap gap-2">
           {TOOTH_STATUS_KEYS.map((status) => (
-            <Button
+            <Button type="button"
               key={status}
               variant={selectedStatus === status ? "default" : "outline"}
               onClick={() => onStatusChange(status)}

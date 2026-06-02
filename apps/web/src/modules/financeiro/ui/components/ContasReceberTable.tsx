@@ -100,7 +100,7 @@ export function ContasReceberTable({
                 <div className="flex gap-2 justify-end">
                   {conta.status === "atrasado" && (
                     <>
-                      <Button
+                      <Button type="button"
                         variant="outline"
                         size="sm"
                         className="gap-2"
@@ -114,7 +114,7 @@ export function ContasReceberTable({
                         <Mail className="h-4 w-4" aria-hidden="true" />
                         Email
                       </Button>
-                      <Button
+                      <Button type="button"
                         variant="outline"
                         size="sm"
                         className="gap-2"
@@ -131,7 +131,7 @@ export function ContasReceberTable({
                     </>
                   )}
                   {conta.status !== "pago" && conta.status !== "cancelado" && (
-                    <Button
+                    <Button type="button"
                       variant="default"
                       size="sm"
                       className="gap-2"

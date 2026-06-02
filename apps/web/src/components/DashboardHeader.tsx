@@ -31,7 +31,7 @@ function SidebarPinToggle() {
   const { isAutoHide, toggleAutoHide } = useSidebarHover();
 
   return (
-    <Button
+    <Button type="button"
       variant="ghost"
       size="icon"
       onClick={toggleAutoHide}
@@ -86,7 +86,7 @@ export function DashboardHeader({
         <div className="flex items-center justify-between h-[60px] px-6 gap-6">
           {/* Mobile menu button - shown only on mobile */}
           {onMenuClick && (
-            <Button
+            <Button type="button"
               variant="ghost"
               size="icon"
               aria-label="Abrir menu"

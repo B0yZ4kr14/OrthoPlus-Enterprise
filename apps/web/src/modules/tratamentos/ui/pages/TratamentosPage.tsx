@@ -194,7 +194,7 @@ export function TratamentosPage() {
                                 </Button>
                               )}
                               {tratamento.status === "EM_ANDAMENTO" && (
-                                <Button
+                                <Button type="button"
                                   size="sm"
                                   variant="outline"
                                   onClick={() => handleConcluir(tratamento.id)}

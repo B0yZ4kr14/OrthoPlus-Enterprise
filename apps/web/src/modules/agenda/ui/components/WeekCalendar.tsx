@@ -32,7 +32,7 @@ export function WeekCalendar({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={goToPreviousWeek}
@@ -41,7 +41,7 @@ export function WeekCalendar({
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={goToToday}
@@ -50,7 +50,7 @@ export function WeekCalendar({
           >
             Hoje
           </Button>
-          <Button
+          <Button type="button"
             variant="outline"
             size="sm"
             onClick={goToNextWeek}

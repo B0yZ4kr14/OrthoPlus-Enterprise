@@ -224,7 +224,7 @@ export function AnexosUpload({
                   <div className="flex items-center gap-1">
                     {(anexo.tipo_arquivo === "IMAGEM" ||
                       anexo.tipo_arquivo === "PDF") && (
-                      <Button
+                      <Button type="button"
                         size="sm"
                         variant="ghost"
                         onClick={() => handlePreview(anexo)}
@@ -232,14 +232,14 @@ export function AnexosUpload({
                         <Eye className="h-4 w-4" />
                       </Button>
                     )}
-                    <Button
+                    <Button type="button"
                       size="sm"
                       variant="ghost"
                       onClick={() => handleDownload(anexo)}
                     >
                       <Download className="h-4 w-4" />
                     </Button>
-                    <Button
+                    <Button type="button"
                       size="sm"
                       variant="ghost"
                       onClick={() =>

@@ -242,7 +242,7 @@ export const DentistasList = memo(function DentistasList({
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => onView(dentista)}
@@ -251,7 +251,7 @@ export const DentistasList = memo(function DentistasList({
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => onEdit(dentista)}
@@ -260,7 +260,7 @@ export const DentistasList = memo(function DentistasList({
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button
+                      <Button type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => setDeleteId(dentista.id!)}

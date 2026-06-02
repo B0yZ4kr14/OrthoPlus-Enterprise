@@ -46,7 +46,7 @@ export function ModuleCard({
             </div>
           </div>
 
-          <Button
+          <Button type="button"
             variant={module.active ? "destructive" : "default"}
             size="sm"
             onClick={() => onToggle(module.id)}

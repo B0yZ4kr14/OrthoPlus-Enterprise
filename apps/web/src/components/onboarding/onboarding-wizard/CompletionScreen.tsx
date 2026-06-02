@@ -12,7 +12,7 @@ interface CompletionScreenProps {
 export function CompletionScreen({ onClose, onFinish }: CompletionScreenProps) {
   return (
     <DialogContent className="max-w-2xl">
-      <Button
+      <Button type="button"
         variant="ghost"
         size="icon"
         className="absolute right-4 top-4 z-50 rounded-full h-10 w-10 bg-destructive/10 hover:bg-destructive/20 border-2 border-destructive/30"
