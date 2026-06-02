@@ -10,7 +10,7 @@ SYNC IMPACT REPORT
 
 **Version**: 1.3.1
 **Ratification Date**: 2026-05-20
-**Last Amended Date**: 2026-05-23
+**Last Amended Date**: 2026-06-02
 **Authority**: Non-negotiable within spec-kit analysis scope
 
 ---
