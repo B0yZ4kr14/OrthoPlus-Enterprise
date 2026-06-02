@@ -252,6 +252,7 @@ export const AvatarUpload = ({
               size="icon"
               className="absolute -top-2 -right-2 h-8 w-8 rounded-full shadow-lg"
               onClick={handleRemoveAvatar}
+              aria-label="Remover avatar"
             >
               <X className="h-4 w-4" />
             </Button>

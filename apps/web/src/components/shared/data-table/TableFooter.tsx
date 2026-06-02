@@ -59,6 +59,7 @@ export function DataTableFooter({
             size="icon"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage <= 1}
+            aria-label="Página anterior"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -72,6 +73,7 @@ export function DataTableFooter({
             size="icon"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}
+            aria-label="Próxima página"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>

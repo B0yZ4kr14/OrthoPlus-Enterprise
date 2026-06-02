@@ -345,6 +345,7 @@ export function AIModelConfig() {
               <Button
                 variant="outline"
                 size="icon"
+                aria-label={showKeys.openrouter ? "Ocultar chave OpenRouter" : "Mostrar chave OpenRouter"}
                 onClick={() => toggleShowKey("openrouter")}
               >
                 {showKeys.openrouter ? (
@@ -383,6 +384,7 @@ export function AIModelConfig() {
               <Button
                 variant="outline"
                 size="icon"
+                aria-label={showKeys.huggingface ? "Ocultar chave HuggingFace" : "Mostrar chave HuggingFace"}
                 onClick={() => toggleShowKey("huggingface")}
               >
                 {showKeys.huggingface ? (

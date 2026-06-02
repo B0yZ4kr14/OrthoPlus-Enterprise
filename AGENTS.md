@@ -714,4 +714,40 @@ Before handoff, report:
 - commands run
 - tests/validation result
 - unresolved risks
+---
+
+## 14. Auditoria Consolidada (2026-06-01)
+
+Relatório completo: `docs/auditoria/RELATORIO-CONSOLIDADO-2026-06-01.md`
+
+### Correções Aplicadas
+
+| Prioridade | Issue | Status | Commit |
+|------------|-------|--------|--------|
+| P0 | VPS asset path mismatch (`/OrthoPlus-Enterprise/assets/` → 404) | ✅ Fix `base: "/"` em `vite.config.ts` | 7df46eb29 |
+| P1 | 14 brownfield specs com tasks `[ ]` mas código implementado | ✅ Backfill tasks → `[x]` | 7df46eb29 |
+| P1 | 019-ia-radiografia tasks pendentes | ✅ Verificado — 45/45 completas | — |
+
+### Métricas Atuais
+
+| Área | Valor |
+|------|-------|
+| Backend tests | 751/751 passando |
+| Frontend type-check | 0 erros |
+| Backend build | 0 erros |
+| Specs completos | 35/36 (97%) |
+| Specs backfilled | 14 |
+
+### Issues Pendentes (Backlog)
+
+| Prioridade | Issue | Escopo |
+|------------|-------|--------|
+| P1 | i18n infrastructure | 7,660+ strings hardcoded |
+| P1 | shared-types adoption | Apenas 9 imports no frontend |
+| P2 | Acessibilidade audit | aria-labels, focus rings, reduced-motion |
+| P2 | Test coverage expansion | Módulos sem tests |
+| P2 | Estrutura de módulos inconsistente | Padronizar CA layers |
+| P3 | ESLint unification | Migrar backend v8 → flat config v10 |
+| P3 | `as any` elimination | ~520 ocorrências |
+
 <!-- SPECKIT GOVERNANCE END -->

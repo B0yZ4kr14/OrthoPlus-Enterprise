@@ -146,6 +146,7 @@ export function GitHubIntegrationConfig() {
                 size="icon"
                 onClick={testConnection}
                 title="Testar conexão"
+                aria-label="Testar conexão com repositório"
               >
                 <ExternalLink className="h-4 w-4" />
               </Button>

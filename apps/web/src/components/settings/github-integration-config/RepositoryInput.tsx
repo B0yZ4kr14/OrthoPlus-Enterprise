@@ -29,6 +29,7 @@ export function RepositoryInput({
           size="icon"
           onClick={onTest}
           title="Testar conexão"
+          aria-label="Testar conexão com repositório"
         >
           <ExternalLink className="h-4 w-4" />
         </Button>
