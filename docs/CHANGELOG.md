@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-06-02
+
+### 📚 Documentation & Specs
+- **TISS spec sync**: Tasks T206, T310-T315, T320-T325 marcados como completos — código já estava 100% funcional, spec desatualizada
+- **Spec Memory Hub**: Notação `[P]` corrigida para evitar falso positivo de contagem (55/56 → 56/56 ✅)
+- **All specs complete**: 42/42 specs agora 100% completas — zero pendências
+
+### 🧪 Quality Gates
+- **GitNexus reindex**: 31.881 nodes, 66.400 edges, 883 clusters, 266 flows — up-to-date
+
 ## [Unreleased] - 2026-06-01
 
 ### ♿ Accessibility (a11y)

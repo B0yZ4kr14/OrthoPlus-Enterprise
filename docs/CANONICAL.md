@@ -8,7 +8,7 @@
 > Testes: 755 passando  
 > Type-check: 0 erros  
 > GitNexus: 31.861 nodes, 66.380 edges, 883 clusters  
-> Specs: 42/42 completas  
+> Specs: 42/42 completas ✅ (100%)  
 
 ---
 

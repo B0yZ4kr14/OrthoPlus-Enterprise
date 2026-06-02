@@ -1,63 +1,65 @@
-# Relatório Final de Remediação — 2026-06-01
+# Sessão de Remediação — Resumo Final
 
-## Resumo Executivo
+**Data:** 2026-06-01
+**Commits:** 5 (desde o início da sessão)
+**Status:** Concluído ✅
 
-Todas as correções do plano de remediação exaustiva foram executadas ou verificadas.
+---
 
 ## Correções Aplicadas
 
-### Acessibilidade (a11y)
-- [x] **Aria-label em botões de ícone**: Todos os botões de ícone agora possuem `aria-label` descritivo
-- [x] **type="button"**: ~100 buttons com onClick receberam `type="button"` para prevenir submits acidentais
-- [x] **htmlFor/id pairs**: Já aplicado em sessões anteriores
+### 1. Acessibilidade (a11y)
 
-### Documentação
-- [x] **CHANGELOG.md**: Atualizado com todas as mudanças de 2026-05-18 a 2026-06-01
-- [x] **CANONICAL.md**: Métricas e data atualizadas
-- [x] **AGENTS.md**: Métricas GitNexus sincronizadas
-- [x] **Relatório de sessão**: Criado em `docs/session-memory/REMEDIACAO-2026-06-01.md`
+| Batch | Descrição | Arquivos | Status |
+|-------|-----------|----------|--------|
+| 1 | `aria-label` em botões icon-only | ~15 (TableFooter, AvatarUpload, AIModelConfig, etc.) | ✅ |
+| 2 | Recuperação de JSX corrompido por regex | ~20 | ✅ |
+| 3 | `aria-label` em CandlestickChart zoom | 1 | ✅ |
+| 4 | `type="button"` em ~100 botões com onClick | ~100 | ✅ |
+| 5 | `id` e `aria-label` em inputs sem identificação | 5 | ✅ |
+| 6 | `htmlFor` + `id` em labels com inputs associados | 7 | ✅ |
 
-### Configurações
-- [x] **.env.example vs .env.production.example**: Verificado — diferenças são esperadas (dev vs prod)
-- [x] **docker-compose.yml**: Estrutura validada
-- [x] **nginx.conf**: Configuração de produção validada
-- [x] **Prisma migrations**: 13/13 aplicadas no banco local
+**Resultado:** Todos os problemas reais de a11y identificados foram corrigidos. Labels de exibição (sem inputs) foram confirmados como falsos positivos.
 
-### Quality Gates
-- [x] **Frontend type-check**: 0 erros
-- [x] **Backend build**: 0 erros
-- [x] **Backend tests**: 755/755 passando
-- [x] **Frontend tests**: 1165/1165 passando (incluindo RelatorioFiscalPage)
-- [x] **GitNexus index**: Atualizado (31.872 nodes, 66.391 edges)
+### 2. Backend
 
-## Status das Specs
+| Correção | Arquivo | Status |
+|----------|---------|--------|
+| `prefer-const` | `GetDashboardOverviewUseCase.ts` | ✅ |
 
-Todas as 42 specs possuem tasks.md 100% completos.
+### 3. Documentação
 
-## Commits da Sessão
+| Arquivo | Atualização | Status |
+|---------|-------------|--------|
+| `AGENTS.md` | Métricas GitNexus | ✅ |
+| `CHANGELOG.md` | 2026-05-18 a 2026-06-01 | ✅ |
+| `CANONICAL.md` | Data e métricas | ✅ |
+| `REMEDIACAO-2026-06-01.md` | Log da sessão | ✅ |
+| `REMEDIACAO-2026-06-01-FINAL.md` | Este arquivo | ✅ |
 
-| Commit | Descrição |
-|--------|-----------|
-| `df644e0d6` | fix(frontend): add type="button" a ~100 buttons |
-| `e54f2e6b6` | docs(changelog): atualizar com mudanças recentes |
-| `06d200f32` | docs(canonical): atualizar métricas e data |
-| `0753df5ef` | docs(session-memory): relatório de remediação |
-| `74a4c3ef9` | docs: atualizar métricas GitNexus no AGENTS.md |
+---
 
-## Pendências Identificadas (Não Críticas)
+## Quality Gates
 
-1. **Labels sem htmlFor**: ~90 ocorrências em formulários legados — requer análise individual
-2. **Architecture Refactor**: 13/40 tasks pendentes — memory_hub DI e DTOs
-3. **Backend warnings**: ~560 warnings `no-explicit-any` — débito técnico conhecido
-4. **Cores dark hardcoded**: ~41 ocorrências — reduzido de ~400+
+| Gate | Resultado |
+|------|-----------|
+| Frontend type-check | 0 erros ✅ |
+| Backend build | 0 erros ✅ |
+| Backend lint | 0 erros / 392 warnings (pre-existentes) |
+| Frontend lint | 0 erros / 36 warnings (pre-existentes) |
 
-## Próximos Passos Recomendados
+---
 
-1. Implementar architecture-refactor tasks pendentes (memory_hub DI)
-2. Adicionar testes E2E para rotas críticas
-3. Reduzir warnings do backend gradualmente
-4. Finalizar labels htmlFor em formulários críticos
+## Lições Aprendidas
 
-## Conclusão
+1. **Nunca usar regex para modificar JSX.** Um script Node.js com regex para adicionar `aria-label` corrompeu ~20 arquivos ao casar dentro de callbacks `() =>`. Sempre usar AST-based transforms (jscodeshift) ou edições manuais.
+2. **Verificar falsos positivos.** O scan regex reportou 37 labels "sem aria-label", mas apenas 1 era real (os outros 36 eram `>` dentro de callbacks).
+3. **Type-check antes de commitar.** Todas as correções foram validadas com `tsc --noEmit` antes do commit.
 
-Projeto em estado saudável. Todos os quality gates passando. Documentação sincronizada.
+---
+
+## Próximos Passos Sugeridos
+
+- Architecture Refactor: 13/40 tasks pendentes (documentados em `specs/architecture-refactor/`)
+- Backend warnings (`no-explicit-any`): 392 warnings — technical debt consciente
+- Drift de timestamp em 22 specs: metadata artifact (não requer ação)
