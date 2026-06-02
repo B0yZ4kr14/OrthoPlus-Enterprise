@@ -169,9 +169,11 @@ export function AnexosUpload({
           </div>
           <input
             ref={fileInputRef}
+            id="anexos-upload-input"
             type="file"
             multiple
             accept="image/*,.pdf,.doc,.docx,.txt"
+            aria-label="Selecionar arquivos para anexar"
             onChange={handleFileSelect}
             className="hidden"
           />

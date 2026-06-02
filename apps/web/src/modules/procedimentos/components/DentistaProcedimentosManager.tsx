@@ -109,8 +109,10 @@ export default function DentistaProcedimentosManager() {
         <h3 className="mb-4 text-lg font-semibold">Nova Associação</h3>
         <div className="flex flex-wrap gap-3">
           <select
+            id="select-dentista"
             value={selectedDentista}
             onChange={(e) => setSelectedDentista(e.target.value)}
+            aria-label="Selecionar dentista"
             className="h-10 rounded-md border px-3 w-48"
           >
             <option value="">Selecione o dentista</option>
@@ -121,8 +123,10 @@ export default function DentistaProcedimentosManager() {
             ))}
           </select>
           <select
+            id="select-procedimento"
             value={selectedProc}
             onChange={(e) => setSelectedProc(e.target.value)}
+            aria-label="Selecionar procedimento"
             className="h-10 rounded-md border px-3 w-48"
           >
             <option value="">Selecione o procedimento</option>

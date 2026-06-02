@@ -206,10 +206,12 @@ export default function TabelaPrecosManager() {
             className="w-64"
           />
           <select
+            id="select-tipo-tabela"
             value={tipoTabela}
             onChange={(e) =>
               setTipoTabela(e.target.value as "PARTICULAR" | "CONVENIO")
             }
+            aria-label="Tipo de tabela de preços"
             className="h-10 rounded-md border px-3"
           >
             <option value="PARTICULAR">Particular</option>
@@ -217,9 +219,11 @@ export default function TabelaPrecosManager() {
           </select>
           <label className="flex items-center gap-2">
             <input
+              id="checkbox-tabela-padrao"
               type="checkbox"
               checked={isDefault}
               onChange={(e) => setIsDefault(e.target.checked)}
+              aria-label="Tabela padrão"
             />
             Padrão
           </label>

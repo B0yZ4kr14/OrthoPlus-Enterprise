@@ -284,6 +284,7 @@ export const AvatarUpload = ({
 
         <input
           ref={fileInputRef}
+          id="avatar-upload-input"
           type="file"
           accept="image/*"
           aria-label="Selecionar foto de perfil"

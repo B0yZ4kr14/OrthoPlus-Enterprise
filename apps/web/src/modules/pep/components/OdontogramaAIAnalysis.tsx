@@ -250,8 +250,10 @@ export const OdontogramaAIAnalysis = ({
                       <TableCell>
                         <input
                           type="checkbox"
+                          id={`suggestion-${index}`}
                           checked={selectedSuggestions.has(index)}
                           onChange={() => toggleSuggestion(index)}
+                          aria-label={`Selecionar sugestão para dente ${suggestion.tooth_number}`}
                           className="h-4 w-4"
                         />
                       </TableCell>
