@@ -8,7 +8,6 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import {
   TrendingUp,
   TrendingDown,
-  DollarSign,
   type LucideIcon,
 } from "lucide-react";
 

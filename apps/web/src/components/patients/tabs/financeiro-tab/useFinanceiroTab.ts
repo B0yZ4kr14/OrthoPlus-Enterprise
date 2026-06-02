@@ -3,7 +3,6 @@ import {
   TrendingUp,
   TrendingDown,
   AlertCircle,
-  type LucideIcon,
 } from "lucide-react";
 import type { PaymentStatusConfig } from "./types";
 

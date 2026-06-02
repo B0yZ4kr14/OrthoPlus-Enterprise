@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
 import { Card } from "@orthoplus/core-ui/card";
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   XAxis,

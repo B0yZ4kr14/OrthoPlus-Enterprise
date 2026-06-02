@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
-import { Input } from "@orthoplus/core-ui/input";
 import {
   Select,
   SelectContent,
@@ -15,22 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { Checkbox } from "@orthoplus/core-ui/checkbox";
 import { Card, CardContent } from "@orthoplus/core-ui/card";
-import { Badge } from "@orthoplus/core-ui/badge";
 import { Progress } from "@orthoplus/core-ui/progress";
 import { apiClient } from "@/lib/api/apiClient";
 import { toast } from "sonner";
 import {
   ArrowRight,
   ArrowLeft,
-  Check,
-  Calendar,
-  Clock,
-  Database,
-  Cloud,
-  Mail,
-} from "lucide-react";
+  } from "lucide-react";
 
 import { ScheduledBackupConfig } from "./backup-wizard/types";
 import { BasicInfoStep } from "./backup-wizard/BasicInfoStep";

@@ -13,7 +13,6 @@ import {
   Activity,
   Package,
   CreditCard,
-  BarChart3,
   FileBarChart,
   Briefcase,
   FileSignature,
