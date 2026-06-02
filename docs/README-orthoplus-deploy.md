@@ -1,14 +1,14 @@
 # OrthoPlus Enterprise - Documentação de Deploy
 
-**Atualizado**: 2026-05-19 | **Feature Ativa**: 017-omk-governance-integration
+**Atualizado**: 2026-06-02 | **Feature Ativa**: main (all specs 100% complete)
 
 ## 🌐 Acesso ao Sistema
 
 | Ambiente | URL | Status |
 |----------|-----|--------|
-| Produção HTTPS | https://tsiapp.io/OrthoPlus-Enterprise/ | ✅ HTTP 200 |
+| Produção HTTPS | https://tsiapp.io/ | ✅ HTTP 200 |
 | API Health | https://tsiapp.io/api/orthoplus/health | ✅ HTTP 200 |
-| Wiki | https://tsiapp.io/OrthoPlus-Enterprise/WiKi | ✅ HTTP 200 |
+| Wiki | https://tsiapp.io/WiKi | ✅ HTTP 200 |
 | Tailscale | `$VPS_TAILSCALE_IP` | ✅ Configurado via secret |
 | IP Público | `$VPS_PUBLIC_IP` | ✅ Configurado via secret |
 
