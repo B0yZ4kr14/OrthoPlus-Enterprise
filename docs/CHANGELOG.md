@@ -33,8 +33,13 @@ All notable changes to this project will be documented in this file.
 ### 🚀 DevOps
 - **VPS fix**: `vite.config.ts` base path corrigido de `/OrthoPlus-Enterprise/` para `/` — resolve 404 em chunks JS/CSS
 
+### 🔧 Auth Fixes
+- **Cookie-only session**: `signIn` agora define session como `{access_token: 'cookie'}` quando o backend retorna usuário sem token (HttpOnly cookie mode)
+- **hasModuleAccess**: Retorna `true` quando `userRole` ainda não carregou — previne flicker de UI durante autenticação inicial
+
 ### 🧪 Quality Gates
 - **Frontend type-check**: 0 erros
+- **Frontend tests**: 1007/1007 passando (101 test suites)
 - **Backend build**: 0 erros
 - **Backend tests**: 755/755 passando
 - **GitNexus index**: Atualizado e saudável
