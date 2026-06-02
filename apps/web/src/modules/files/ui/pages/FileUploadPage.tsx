@@ -91,8 +91,9 @@ export default function FileUploadPage() {
       <div className="bg-background rounded-lg shadow p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Categoria</label>
+            <label className="block text-sm font-medium mb-1" htmlFor="categoria">Categoria</label>
             <select
+              id="categoria"
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
               className="w-full border rounded-md px-3 py-2"
@@ -105,10 +106,11 @@ export default function FileUploadPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium mb-1" htmlFor="visibilidade">
               Visibilidade
             </label>
             <select
+              id="visibilidade"
               value={visibilidade}
               onChange={(e) => setVisibilidade(e.target.value)}
               className="w-full border rounded-md px-3 py-2"
@@ -124,10 +126,11 @@ export default function FileUploadPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium mb-1" htmlFor="paciente-id">
               ID do Paciente (opcional)
             </label>
             <input
+              id="paciente-id"
               type="text"
               value={pacienteId}
               onChange={(e) => setPacienteId(e.target.value)}

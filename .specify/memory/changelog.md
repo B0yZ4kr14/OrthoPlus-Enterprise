@@ -112,6 +112,42 @@ api-evolve, architect-preview, changelog, ci-guard, confluence, m365, pr-bridge,
 - `.specify/memory/extension-suite-final-report.md`
 - `.omk/orchestration/extension-suite/OMK-ORCHESTRATOR.md`
 - `.omk/orchestration/extension-suite/playbook.md`
+
+---
+
+## 2026-06-01 — Remediação Exaustiva (Speckit + GitNexus)
+
+**Branch**: `main`
+**Status**: Completed ✅
+
+### Correções Aplicadas
+- **Acessibilidade (a11y)**: `type="button"` adicionado a ~100 buttons com onClick
+- **Acessibilidade (a11y)**: `aria-label` verificado em todos os botões de ícone
+- **Acessibilidade (a11y)**: `id` e `aria-label` adicionados a inputs/selects sem identificação
+- **Backend lint**: Erro `prefer-const` corrigido em `GetDashboardOverviewUseCase.ts`
+
+### Documentação Atualizada
+- `docs/CHANGELOG.md` — atualizado com mudanças de 2026-05-18 a 2026-06-01
+- `docs/CANONICAL.md` — métricas e data sincronizadas
+- `docs/MODULES.md` — data atualizada
+- `docs/session-memory/REMEDIACAO-2026-06-01.md` — relatório de sessão
+- `docs/session-memory/REMEDIACAO-2026-06-01-FINAL.md` — relatório final
+- `AGENTS.md` — métricas GitNexus atualizadas
+
+### Quality Gates
+- Frontend type-check: 0 erros ✅
+- Backend build: 0 erros ✅
+- Backend tests: 755/755 ✅
+- Frontend tests: 1165/1165 ✅
+- Backend lint: 0 erros, 392 warnings ✅
+- Frontend lint: 0 erros, 36 warnings ✅
+- GitNexus index: 31.885 nodes, 66.404 edges ✅
+
+### Pendências Identificadas
+- ~90 labels sem `htmlFor` em formulários legados
+- Architecture Refactor: 13/40 tasks (memory_hub DI e DTOs)
+- ~392 backend warnings `no-explicit-any`
+- ~36 frontend warnings (react-refresh, react-hooks)
 - `.omk/orchestration/extension-suite/execute-suite.sh`
 
 ## 2026-05-23 — OMK Flow Team Run: Multi-Agent Extension Suite Execution

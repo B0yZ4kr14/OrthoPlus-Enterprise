@@ -74,7 +74,7 @@ export function ModulesToolbar({
         Exportar Config
       </Button>
 
-      <label>
+      <label htmlFor="import-config">
         <input
           type="file"
           accept=".json"

@@ -217,7 +217,7 @@ export default function TabelaPrecosManager() {
             <option value="PARTICULAR">Particular</option>
             <option value="CONVENIO">Convênio</option>
           </select>
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2" htmlFor="checkbox-tabela-padrao">
             <input
               id="checkbox-tabela-padrao"
               type="checkbox"

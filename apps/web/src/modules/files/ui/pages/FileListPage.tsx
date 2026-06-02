@@ -141,8 +141,9 @@ export default function FileListPage() {
 
       <div className="bg-background rounded-lg shadow p-4 mb-6 space-y-4">
         <div className="flex items-center gap-4">
-          <label className="text-sm font-medium">Filtrar por categoria:</label>
+          <label className="text-sm font-medium" htmlFor="filtro-categoria">Filtrar por categoria:</label>
           <select
+            id="filtro-categoria"
             value={categoriaFilter}
             onChange={(e) => setCategoriaFilter(e.target.value)}
             className="border rounded-md px-3 py-2 text-sm"

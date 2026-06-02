@@ -129,8 +129,9 @@ export default function WikiPage() {
                   </div>
 
                   <div className="flex items-end">
-                    <label className="flex items-center gap-2">
+                    <label className="flex items-center gap-2" htmlFor="is-published">
                       <input
+                        id="is-published"
                         type="checkbox"
                         checked={formData.is_published}
                         onChange={(e) =>
