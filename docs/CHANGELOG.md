@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-06-01
+
+### ♿ Accessibility (a11y)
+- **Aria-label batch fix**: Todos os botões de ícone no frontend agora possuem `aria-label` descritivo
+- **htmlFor/id pairs**: Adicionados labels associados a inputs em formulários críticos (crypto, pacientes, agenda)
+- **type="button"**: ~293 buttons receberem `type="button"` para prevenir submits acidentais
+
+### 🔧 Backend Fixes
+- **Clinic isolation**: Corrigido isolamento de clínica em `FilesRepository.findBackupById`, `FinanceiroRepository.getPatient`, `PatientRepository.findPatientById`, `FaturamentoRepository`
+- **Error logging**: Adicionado logging de erro a 48 empty catch blocks (13 frontend + 35 backend repositories)
+- **Dead code removal**: Removido código morto identificado por análise estática
+
+### 📚 Documentation & Specs
+- **14 brownfield specs**: Backfill completo de specs para módulos não documentados (`admin-tools`, `backups`, `comm`, `configuracoes`, `contratos`, `crypto`, `database-admin`, `github-tools`, `inadimplencia`, `lgpd`, `relatorios`, `search-index`, `split-pagamento`, `terminal`)
+- **Speckit artifacts**: Sincronizados plan.md e tasks.md para 10 specs legadas, normalizados 7 status fields
+- **Memory Hub**: P0-P2 remediações aplicadas (repository extraction, type safety, CLI json mode, tests)
+- **AGENTS.md**: Métricas GitNexus atualizadas (31.861 nodes, 66.380 edges, 883 clusters)
+
+### 🚀 DevOps
+- **VPS fix**: `vite.config.ts` base path corrigido de `/OrthoPlus-Enterprise/` para `/` — resolve 404 em chunks JS/CSS
+
+### 🧪 Quality Gates
+- **Frontend type-check**: 0 erros
+- **Backend build**: 0 erros
+- **Backend tests**: 755/755 passando
+- **GitNexus index**: Atualizado e saudável
+
 ## [Unreleased] - 2026-05-18
 
 ### 🎨 Frontend
