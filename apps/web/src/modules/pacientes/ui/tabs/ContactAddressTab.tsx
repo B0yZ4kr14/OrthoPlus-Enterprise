@@ -198,7 +198,7 @@ export function ContactAddressTab({ form }: ContactAddressTabProps) {
                     size="icon"
                     onClick={handleSearchCEP}
                     disabled={loadingCEP}
-                  >
+                   aria-label="Buscar">
                     <Search className="h-4 w-4" />
                   </Button>
                 </div>

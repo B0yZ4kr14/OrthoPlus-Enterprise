@@ -186,7 +186,7 @@ export function CryptoPaymentCheckout({
                   variant="outline"
                   size="icon"
                   onClick={handleCopyAddress}
-                >
+                 aria-label="Copiar">
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>

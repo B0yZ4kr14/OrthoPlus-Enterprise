@@ -101,7 +101,7 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
             size="icon"
             onClick={handleZoomIn}
             title="Zoom In"
-          >
+           aria-label="Ampliar">
             <ZoomIn className="h-4 w-4" />
           </Button>
           <Button
@@ -110,7 +110,7 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
             onClick={handleZoomOut}
             disabled={!zoomDomain}
             title="Zoom Out"
-          >
+           aria-label="Reduzir">
             <ZoomOut className="h-4 w-4" />
           </Button>
           <Button
@@ -119,6 +119,7 @@ export function CandlestickChart({ data, coinType }: CandlestickChartProps) {
             onClick={handleResetZoom}
             disabled={!zoomDomain}
             title="Reset Zoom"
+            aria-label="Redefinir zoom"
           >
             <Maximize2 className="h-4 w-4" />
           </Button>
