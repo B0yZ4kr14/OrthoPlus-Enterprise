@@ -35,7 +35,7 @@ import {
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { FileText, Plus, Edit, Trash2, Copy, Eye } from "lucide-react";
+import {FileText, Plus, Edit, Trash2, Copy} from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";

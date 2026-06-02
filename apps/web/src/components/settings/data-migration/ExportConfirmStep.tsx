@@ -1,4 +1,3 @@
-import React from "react";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Progress } from "@orthoplus/core-ui/progress";

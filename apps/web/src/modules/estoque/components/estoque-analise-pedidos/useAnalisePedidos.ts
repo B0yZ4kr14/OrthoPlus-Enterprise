@@ -1,5 +1,5 @@
 // cspell:disable
-import { useState, useEffect, useMemo } from "react";
+import {useMemo} from "react";
 import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
 import type {
   AnaliseStats,

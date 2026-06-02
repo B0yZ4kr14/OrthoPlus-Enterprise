@@ -50,7 +50,6 @@ interface Prontuario {
 }
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
-import { Separator } from "@orthoplus/core-ui/separator";
 import {
   Tabs,
   TabsContent,

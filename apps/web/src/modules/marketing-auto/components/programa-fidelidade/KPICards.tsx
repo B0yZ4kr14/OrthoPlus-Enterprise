@@ -1,5 +1,5 @@
 // cspell:disable
-import { Award, Users, Star, Gift, TrendingUp } from "lucide-react";
+import {Users, Star, Gift, TrendingUp} from "lucide-react";
 import {
   Card,
   CardContent,

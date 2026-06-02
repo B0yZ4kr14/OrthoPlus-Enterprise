@@ -1,4 +1,4 @@
-import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
+import Joyride, { Step } from "react-joyride";
 import { useCryptoTour } from "@/components/crypto/crypto-tour/useCryptoTour";
 
 export function CryptoTour() {

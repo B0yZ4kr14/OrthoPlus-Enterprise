@@ -1,4 +1,3 @@
-import React from "react";
 import { CryptoComparativeDashboard } from "@/modules/crypto/components/CryptoComparativeDashboard";
 
 interface CryptoComparativeViewProps {

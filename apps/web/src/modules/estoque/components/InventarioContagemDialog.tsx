@@ -7,7 +7,6 @@ import {
 } from "@orthoplus/core-ui/dialog";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
-import { Label } from "@orthoplus/core-ui/label";
 import {
   Table,
   TableBody,

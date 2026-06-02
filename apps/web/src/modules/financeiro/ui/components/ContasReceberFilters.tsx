@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent } from "@orthoplus/core-ui/card";
 import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";

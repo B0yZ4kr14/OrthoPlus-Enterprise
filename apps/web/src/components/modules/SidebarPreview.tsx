@@ -30,8 +30,7 @@ import {
 } from "lucide-react";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Separator } from "@orthoplus/core-ui/separator";
-import { cn } from "@/lib/utils";
+
 
 interface Module {
   id: number;

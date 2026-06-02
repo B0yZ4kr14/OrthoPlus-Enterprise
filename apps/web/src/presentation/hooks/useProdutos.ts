@@ -9,7 +9,6 @@ import type {
   GetProdutoByIdUseCase,
   ListProdutosByClinicUseCase,
 } from "@/application/use-cases/estoque";
-import { Produto } from "@/domain/entities/Produto";
 import { toast } from "sonner";
 
 const QUERY_KEY = "produtos";

@@ -1,5 +1,4 @@
 import { Patient } from "@/domain/entities/Patient";
-import { Email } from "@/domain/value-objects/Email";
 import { CPF } from "@/domain/value-objects/CPF";
 import { Phone } from "@/domain/value-objects/Phone";
 import { Database } from "@/types/database";

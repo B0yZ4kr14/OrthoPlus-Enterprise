@@ -5,7 +5,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@orthoplus/core-ui/form";
-import { Input } from "@orthoplus/core-ui/input";
 import { Textarea } from "@orthoplus/core-ui/textarea";
 import {
   Select,

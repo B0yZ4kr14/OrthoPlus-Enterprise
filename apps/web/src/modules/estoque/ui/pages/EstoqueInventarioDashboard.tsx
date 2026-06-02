@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState} from "react";
 import { Card } from "@orthoplus/core-ui/card";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {

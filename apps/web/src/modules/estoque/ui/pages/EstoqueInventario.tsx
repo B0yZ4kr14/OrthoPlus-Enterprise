@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState} from "react";
 import { toast } from "sonner";
 import { useInventario } from "@/modules/estoque/hooks/useInventario";
 import { Card } from "@orthoplus/core-ui/card";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Checkbox } from "@orthoplus/core-ui/checkbox";
 import { Label } from "@orthoplus/core-ui/label";
 import { RadioGroup, RadioGroupItem } from "@orthoplus/core-ui/radio-group";

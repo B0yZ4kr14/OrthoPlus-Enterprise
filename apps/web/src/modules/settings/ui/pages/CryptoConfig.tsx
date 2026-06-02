@@ -13,7 +13,6 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Bitcoin, Wallet, Server } from "lucide-react";
 import { ExchangeConfigForm } from "@/components/crypto/ExchangeConfigForm";
-import { WalletForm } from "@/components/crypto/WalletForm";
 import { XPubConfigForm } from "@/components/crypto/XPubConfigForm";
 import { useCrypto } from "@/hooks/useCrypto";
 import { Card } from "@orthoplus/core-ui/card";

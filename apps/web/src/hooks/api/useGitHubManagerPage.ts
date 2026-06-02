@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/apiClient";
-import { toast } from "sonner";
 
 export interface GitHubData {
   commits: any[];

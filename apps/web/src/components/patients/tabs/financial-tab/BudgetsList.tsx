@@ -6,8 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@orthoplus/core-ui/table";
-import { Badge } from "@orthoplus/core-ui/badge";
-import { BudgetStatusBadge } from "./BudgetStatusBadge";
+import {BudgetStatusBadge} from "./BudgetStatusBadge";
 import type { Budget } from "./types";
 
 interface BudgetsListProps {

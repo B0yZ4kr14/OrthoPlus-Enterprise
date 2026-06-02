@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import {useState, useRef} from "react";
 import { Upload, File, X, Eye, Download, Loader2 } from "lucide-react";
 import { Button } from "@orthoplus/core-ui/button";
 import { Card } from "@orthoplus/core-ui/card";

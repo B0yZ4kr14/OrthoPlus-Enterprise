@@ -10,7 +10,6 @@ import type {
   AjustarEstoqueInput,
   GetMovimentacoesByProdutoUseCase,
 } from "@/application/use-cases/estoque";
-import { MovimentacaoEstoque } from "@/domain/entities/MovimentacaoEstoque";
 import { toast } from "sonner";
 
 const QUERY_KEY = "movimentacoes-estoque";

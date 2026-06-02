@@ -1,4 +1,3 @@
-import React from "react";
 import { Cloud } from "lucide-react";
 import { Label } from "@orthoplus/core-ui/label";
 import { Input } from "@orthoplus/core-ui/input";

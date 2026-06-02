@@ -1,4 +1,3 @@
-import React from "react";
 import { Database, Check } from "lucide-react";
 import { Card, CardContent } from "@orthoplus/core-ui/card";
 import { WizardStepProps } from "./types";

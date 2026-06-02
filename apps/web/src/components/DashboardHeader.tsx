@@ -1,4 +1,4 @@
-import { LogOut, Building2, User, Pin, PinOff, PanelLeft } from "lucide-react";
+import { LogOut, Building2, User, Pin, PanelLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@orthoplus/core-ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";

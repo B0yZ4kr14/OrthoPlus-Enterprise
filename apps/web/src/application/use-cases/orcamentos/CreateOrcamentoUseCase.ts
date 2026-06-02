@@ -1,6 +1,5 @@
 import { Orcamento } from "@/domain/entities/Orcamento";
 import { IOrcamentoRepository } from "@/domain/repositories/IOrcamentoRepository";
-import { IItemOrcamentoRepository } from "@/domain/repositories/IItemOrcamentoRepository";
 
 export interface CreateOrcamentoInput {
   clinicId: string;

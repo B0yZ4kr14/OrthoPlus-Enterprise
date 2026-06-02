@@ -4,7 +4,7 @@
  * BroadcastChannel is mocked since it is not available in jsdom.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import {describe, it, expect, beforeEach, afterEach} from "vitest";
 
 // ─── BroadcastChannel mock ────────────────────────────────────────────────────
 

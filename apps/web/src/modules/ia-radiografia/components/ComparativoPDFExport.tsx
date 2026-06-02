@@ -3,7 +3,6 @@ import { FileDown, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 // jsPDF loaded dynamically to reduce initial bundle
-import html2canvas from "html2canvas";
 import { logger } from "@/lib/logger";
 import type { AnaliseComplete } from "../types/radiografia.types";
 import { tipoRadiografiaLabels } from "../types/radiografia.types";

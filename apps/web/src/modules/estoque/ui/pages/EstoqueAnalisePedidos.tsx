@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { useEstoque } from "@/modules/estoque/hooks/useEstoque";
 import { formatCurrency } from "@/lib/utils/validation.utils";
-import { formatDate } from "@/lib/utils/date.utils";
 import {
   BarChart,
   Bar,

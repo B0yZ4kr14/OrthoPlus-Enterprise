@@ -32,7 +32,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import { FileBarChart, Download, Search, FileSpreadsheet } from "lucide-react";
+import {FileBarChart, Download, Search} from "lucide-react";
 
 interface NFe {
   id: string;

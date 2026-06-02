@@ -1,4 +1,3 @@
-import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@orthoplus/core-ui/alert";
 import { Sparkles } from "lucide-react";
 

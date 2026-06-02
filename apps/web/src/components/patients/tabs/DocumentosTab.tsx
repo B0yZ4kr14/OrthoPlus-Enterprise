@@ -5,7 +5,6 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { FileImage, Shield, CheckCircle, XCircle } from "lucide-react";
-import { Badge } from "@orthoplus/core-ui/badge";
 
 interface DocumentosTabProps {
   patient: Record<string, any>;

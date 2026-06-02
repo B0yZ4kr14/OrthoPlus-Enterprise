@@ -9,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@orthoplus/core-ui/select";
-import { Switch } from "@orthoplus/core-ui/switch";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
   Dialog,

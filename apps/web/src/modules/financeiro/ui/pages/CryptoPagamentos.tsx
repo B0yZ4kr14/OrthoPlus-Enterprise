@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCrypto } from "@/modules/crypto/hooks/useCrypto";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { LoadingState } from "@/components/shared/LoadingState";
 import {
   CryptoKPISkeleton,
   CryptoListSkeleton,

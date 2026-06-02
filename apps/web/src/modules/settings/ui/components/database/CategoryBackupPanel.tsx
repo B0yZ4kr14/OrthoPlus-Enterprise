@@ -1,4 +1,4 @@
-import { Database, Play, Archive, Clock, CheckCircle } from "lucide-react";
+import {Database, Play, Archive, Clock} from "lucide-react";
 import {
   Card,
   CardContent,

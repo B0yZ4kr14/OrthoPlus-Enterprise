@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import type { CallBackProps, STATUS } from "react-joyride";
+import type { CallBackProps } from "react-joyride";
 import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
 
 export function useCryptoTour() {

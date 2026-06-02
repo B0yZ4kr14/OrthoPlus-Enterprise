@@ -12,7 +12,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
-import { Button } from "@orthoplus/core-ui/button";
 import {
   Select,
   SelectContent,

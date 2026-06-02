@@ -1,4 +1,3 @@
-import React from "react";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import {

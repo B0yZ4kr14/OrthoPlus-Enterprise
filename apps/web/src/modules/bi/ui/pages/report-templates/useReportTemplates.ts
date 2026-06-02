@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { logger } from "@/lib/logger";
 import type { ReportTemplate, TemplateFormData } from "./types";
 import { DEFAULT_FORM_DATA } from "./types";
 

@@ -10,7 +10,6 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { apiClient } from "@/lib/api/apiClient";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";

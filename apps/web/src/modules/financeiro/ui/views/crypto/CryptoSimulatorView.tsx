@@ -1,4 +1,3 @@
-import React from "react";
 import { ConversionSimulator } from "@/components/crypto/ConversionSimulator";
 
 export function CryptoSimulatorView() {

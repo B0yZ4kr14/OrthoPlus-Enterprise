@@ -31,7 +31,6 @@ import {
 } from "@/core/tooltips/odonto-tooltips-data";
 import { Separator } from "@orthoplus/core-ui/separator";
 import { ScrollArea } from "@orthoplus/core-ui/scroll-area";
-import { TableFilter } from "@/components/shared/TableFilter";
 
 export default function HelpCenter() {
   const [searchTerm, setSearchTerm] = useState("");

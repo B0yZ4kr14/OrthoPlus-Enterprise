@@ -9,7 +9,6 @@ import { Button } from "@orthoplus/core-ui/button";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
 import { Textarea } from "@orthoplus/core-ui/textarea";
-import { Badge } from "@orthoplus/core-ui/badge";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Loader2, Lock, AlertTriangle, CheckCircle2 } from "lucide-react";
 import type { CaixaMovimento } from "@/hooks/usePDV";

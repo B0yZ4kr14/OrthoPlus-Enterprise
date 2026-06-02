@@ -24,7 +24,6 @@ import {
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
 import { CreditCard, QrCode, Loader2, Bitcoin } from "lucide-react";
-import { CryptoPaymentSelector } from "@/components/crypto/CryptoPaymentSelector";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api/apiClient";
 import type { ContaReceber } from "@/modules/financeiro/types/financeiro-completo.types";

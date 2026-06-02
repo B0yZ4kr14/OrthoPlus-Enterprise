@@ -6,7 +6,6 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { Switch } from "@orthoplus/core-ui/switch";
-import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import {
   Tooltip,

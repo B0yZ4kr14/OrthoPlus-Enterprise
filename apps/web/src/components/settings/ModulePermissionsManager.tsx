@@ -5,9 +5,8 @@ import { Card } from "@orthoplus/core-ui/card";
 import { Checkbox } from "@orthoplus/core-ui/checkbox";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
-import { Shield, Loader2, Save } from "lucide-react";
+import {Shield, Loader2} from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 interface User {
   id: string;

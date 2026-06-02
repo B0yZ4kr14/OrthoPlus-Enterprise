@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@orthoplus/core-ui/dialog";
-import { Label } from "@orthoplus/core-ui/label";
 import { Input } from "@orthoplus/core-ui/input";
 import {
   Select,

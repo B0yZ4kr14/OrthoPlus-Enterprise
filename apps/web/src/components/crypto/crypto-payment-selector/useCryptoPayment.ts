@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { logger } from "@/lib/logger";
 import { toast } from "sonner";
 import { useCrypto } from "@/hooks/useCrypto";
-import type { PaymentData, CombinedWallet, CoinType } from "./types";
+import type { PaymentData, CoinType } from "./types";
 
 export function useCryptoPayment(
   amount: number,

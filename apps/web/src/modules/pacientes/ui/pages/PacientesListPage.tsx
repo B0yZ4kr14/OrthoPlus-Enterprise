@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePatients } from "@/modules/pacientes/hooks/usePatientsUnified";
 import { Button } from "@orthoplus/core-ui/button";
-import { Input } from "@orthoplus/core-ui/input";
 import { Card } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { PageHeader } from "@/components/shared/PageHeader";

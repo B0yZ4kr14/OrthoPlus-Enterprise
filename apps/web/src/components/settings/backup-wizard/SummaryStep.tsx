@@ -1,4 +1,3 @@
-import React from "react";
 import { Check } from "lucide-react";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Card } from "@orthoplus/core-ui/card";

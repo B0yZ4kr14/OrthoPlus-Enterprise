@@ -9,7 +9,6 @@ import { FileOCRPanel } from "../components/FileOCRPanel";
 import { FileVersionPanel } from "../components/FileVersionPanel";
 import { FileSearchOCR } from "../components/FileSearchOCR";
 import { Button } from "@orthoplus/core-ui";
-import { Badge } from "@orthoplus/core-ui";
 import {
   Dialog,
   DialogContent,

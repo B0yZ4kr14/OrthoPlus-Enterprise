@@ -5,7 +5,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
-import { Button } from "@orthoplus/core-ui/button";
 import { Shield, FileText, History } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { LGPDRequests } from "@/modules/lgpd/presentation/components/LGPDRequests";

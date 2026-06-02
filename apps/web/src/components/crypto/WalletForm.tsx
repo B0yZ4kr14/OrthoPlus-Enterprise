@@ -5,7 +5,6 @@ import {
   cryptoWalletSchema,
   coinLabels,
   type ExchangeConfig,
-  type CryptoWallet,
 } from "@/modules/crypto/types/crypto.types";
 import {
   Form,

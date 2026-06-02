@@ -15,7 +15,7 @@ import {
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { Bitcoin, Wallet, TrendingUp, Bell, Key, Loader2 } from "lucide-react";
+import {Bitcoin, Wallet, TrendingUp, Key, Loader2} from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatsCard } from "@/components/shared/StatsCard";
 import { useState } from "react";

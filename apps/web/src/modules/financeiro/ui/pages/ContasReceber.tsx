@@ -1,4 +1,3 @@
-import React from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card } from "@orthoplus/core-ui/card";

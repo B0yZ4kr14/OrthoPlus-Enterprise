@@ -1,4 +1,3 @@
-import React from "react";
 import { Database } from "lucide-react";
 import { Checkbox } from "@orthoplus/core-ui/checkbox";
 import { Label } from "@orthoplus/core-ui/label";

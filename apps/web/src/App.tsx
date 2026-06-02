@@ -9,7 +9,6 @@ import { useHotkeys } from "@/hooks/useHotkeys";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
 import { initPerformanceMonitoring } from "@/lib/performance";
 import AppRoutes from "./routes/AppRoutes";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@orthoplus/core-ui/card";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { DollarSign, TrendingUp, TrendingDown, Clock } from "lucide-react";
+import {DollarSign, TrendingUp, Clock} from "lucide-react";
 import { formatDate } from "@/lib/utils/date.utils";
 
 interface FinancialTabProps {

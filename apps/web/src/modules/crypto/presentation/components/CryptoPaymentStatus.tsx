@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@orthoplus/core-ui/card";
-import { Badge } from "@orthoplus/core-ui/badge";
 import { Progress } from "@orthoplus/core-ui/progress";
 import { CheckCircle2, Clock, Loader2, AlertCircle } from "lucide-react";
 import { apiClient } from "@/lib/api/apiClient";

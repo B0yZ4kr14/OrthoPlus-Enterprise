@@ -6,7 +6,7 @@ import {
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
 import { Button } from "@orthoplus/core-ui/button";
-import { AlertCircle, Settings, History, TrendingDown } from "lucide-react";
+import {AlertCircle, Settings, TrendingDown} from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { InadimplenciaList } from "@/modules/inadimplencia/presentation/components/InadimplenciaList";
 import { CobrancaAutomation } from "@/modules/inadimplencia/presentation/components/CobrancaAutomation";

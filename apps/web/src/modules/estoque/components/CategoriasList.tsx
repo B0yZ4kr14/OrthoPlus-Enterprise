@@ -1,4 +1,3 @@
-import { Badge } from "@orthoplus/core-ui/badge";
 import { ActionButtons } from "@/components/shared/ActionButtons";
 import type { Categoria } from "../types/estoque.types";
 

@@ -1,7 +1,7 @@
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Button } from "@orthoplus/core-ui/button";
 import { Clock, CheckCircle2 } from "lucide-react";
-import { PhaseNumber } from "./PhaseNumber";
+import {PhaseNumber} from "./PhaseNumber";
 import type { Phase, PhaseCardProps } from "../types";
 
 type PhaseHeaderProps = Pick<

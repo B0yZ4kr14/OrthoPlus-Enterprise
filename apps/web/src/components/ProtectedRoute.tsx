@@ -18,7 +18,7 @@ export function ProtectedRoute({
   requirePatient = false,
   moduleKey,
 }: ProtectedRouteProps) {
-  const { user, loading, isAdmin, isMember, isPatient, hasModuleAccess } =
+  const { user, loading, isAdmin, isPatient, hasModuleAccess } =
     useAuth();
 
   if (loading) {

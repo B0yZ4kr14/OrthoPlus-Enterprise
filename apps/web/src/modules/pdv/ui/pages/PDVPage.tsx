@@ -15,7 +15,6 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import { Input } from "@orthoplus/core-ui/input";
 import { Label } from "@orthoplus/core-ui/label";
 import { Separator } from "@orthoplus/core-ui/separator";
-import { EmptyState } from "@/components/shared/EmptyState";
 import { AberturaCaixaDialog } from "@/components/pdv/AberturaCaixaDialog";
 import { FechamentoCaixaDialog } from "@/components/pdv/FechamentoCaixaDialog";
 import {

@@ -39,7 +39,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@orthoplus/core-ui/dialog";
-import { toast } from "sonner";
 
 function StatusBadge({ status }: { status: string }) {
   const config: Record<

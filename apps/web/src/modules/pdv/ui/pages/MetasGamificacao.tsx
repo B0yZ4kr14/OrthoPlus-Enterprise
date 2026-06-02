@@ -6,7 +6,7 @@ import { Button } from "@orthoplus/core-ui/button";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Progress } from "@orthoplus/core-ui/progress";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Trophy, Target, TrendingUp, Award, Medal, Crown } from "lucide-react";
+import {Trophy, Target, Award, Medal, Crown} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface MetaItem {

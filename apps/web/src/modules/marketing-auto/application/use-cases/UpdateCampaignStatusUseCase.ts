@@ -1,4 +1,4 @@
-import { Campaign, CampaignStatus } from "../../domain/entities/Campaign";
+import {Campaign} from "../../domain/entities/Campaign";
 import { ICampaignRepository } from "../../domain/repositories/ICampaignRepository";
 
 export interface UpdateCampaignStatusInput {

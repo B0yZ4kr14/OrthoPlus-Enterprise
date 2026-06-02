@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Checkbox } from "@orthoplus/core-ui/checkbox";
-import { Label } from "@orthoplus/core-ui/label";
 import { Button } from "@orthoplus/core-ui/button";
 import {
   Card,

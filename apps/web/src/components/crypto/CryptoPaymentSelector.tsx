@@ -15,7 +15,7 @@ import {
 } from "@orthoplus/core-ui/select";
 import { Badge } from "@orthoplus/core-ui/badge";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
-import { Bitcoin, Loader2, CheckCircle2, QrCode } from "lucide-react";
+import { Bitcoin, Loader2, QrCode } from "lucide-react";
 import { useCrypto } from "@/hooks/useCrypto";
 import { BitcoinQRCodeDialog } from "./BitcoinQRCodeDialog";
 import { toast } from "sonner";

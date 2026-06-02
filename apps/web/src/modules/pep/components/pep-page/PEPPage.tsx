@@ -22,7 +22,6 @@ import { ProntuarioPDF } from "@/modules/pep/components/ProntuarioPDF";
 import { AssinaturaDigital } from "@/modules/pep/components/AssinaturaDigital";
 import { usePEPPage } from "./usePEPPage";
 import { apiClient } from "@/lib/api/apiClient";
-import { useToast } from "@/hooks/use-toast";
 import { PatientSelectorCard } from "./PatientSelectorCard";
 import { HistoricoTab } from "./HistoricoTab";
 import { TratamentosTab } from "./TratamentosTab";

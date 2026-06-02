@@ -12,7 +12,6 @@ import { Badge } from "@orthoplus/core-ui/badge";
 import {
   Loader2,
   TrendingUp,
-  TrendingDown,
   Clock,
   Users,
   AlertCircle,
@@ -52,13 +51,7 @@ interface AnalyticsData {
   }>;
 }
 
-const COLORS = [
-  "hsl(160, 84%, 30%)",
-  "hsl(180, 60%, 45%)",
-  "hsl(180, 60%, 35%)",
-  "hsl(38, 92%, 50%)",
-  "hsl(38, 92%, 40%)",
-];
+
 
 export function OnboardingAnalyticsDashboard() {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);

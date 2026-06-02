@@ -1,4 +1,3 @@
-import React from "react";
 import { Alert, AlertDescription } from "@orthoplus/core-ui/alert";
 import { Button } from "@orthoplus/core-ui/button";
 import { Label } from "@orthoplus/core-ui/label";
