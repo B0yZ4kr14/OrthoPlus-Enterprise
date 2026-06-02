@@ -1,6 +1,6 @@
 # Modulos OrthoPlus Enterprise
 
-> Atualizado: 2026-05-19
+> Atualizado: 2026-06-02
 
 ## Mapa Frontend ↔ Backend
 
