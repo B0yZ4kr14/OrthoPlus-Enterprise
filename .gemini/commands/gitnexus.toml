@@ -1,0 +1,4 @@
+description = "Use GitNexus code intelligence for TSiAPP Stack repositories. Activate when the user asks about codebase structure, dependencies, impacts, flows, or wants to query the knowledge graph."
+prompt = """
+Use the gitnexus skill for this project. Read .agents/skills/gitnexus/SKILL.md and follow its instructions.
+"""

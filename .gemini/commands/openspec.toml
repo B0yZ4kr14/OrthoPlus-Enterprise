@@ -1,0 +1,4 @@
+description = "Read, write and synchronize OpenSpec deployment specifications for TSiAPP Stack projects."
+prompt = """
+Use the openspec skill for this project. Read .agents/skills/openspec/SKILL.md and follow its instructions.
+"""

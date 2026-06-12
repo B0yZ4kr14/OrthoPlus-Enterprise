@@ -1,0 +1,4 @@
+description = "Run the Reversa reverse-engineering framework for legacy systems. Activate when the user types /reversa or asks for reverse engineering, legacy analysis, or migration planning."
+prompt = """
+Use the reversa skill for this project. Read .agents/skills/reversa/SKILL.md and follow its instructions.
+"""
