@@ -1,0 +1,4 @@
+description = "Create and refactor high-quality agent prompts for TSiAPP Stack projects. Activate when the user asks for a new prompt, wants to improve an existing prompt, or needs a prompt following the canonical Multi Agent Orchestrator pattern."
+prompt = """
+Use the prompt-engineer skill for this project. Read .agents/skills/prompt-engineer/SKILL.md and follow its instructions.
+"""
