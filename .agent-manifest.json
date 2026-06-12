@@ -1,0 +1,19 @@
+{
+  "project": "OrthoPlus Enterprise",
+  "generated_at": "2026-06-12T00:23:33Z",
+  "author": "TSiAPP Stack",
+  "base_dir": "/Projects/OrthoPlus-Enterprise",
+  "production_deploy_note": "Deploy de producao documentado em /opt/tsi-stack/apps/orthoplus-enterprise via Docker; este workspace nao configura producao.",
+  "repositories": [
+    {
+      "name": "orthoplus-enterprise",
+      "remote": "registry.tsiapp.io/orthoplus-enterprise",
+      "branch": "main",
+      "last_commit": "unknown",
+      "last_commit_date": "unknown"
+    }
+  ],
+  "docs_scraped": false,
+  "docs_scraped_dir": "/Projects/OrthoPlus-Enterprise/.docs-scraped",
+  "docs_markdown_files": 0
+}

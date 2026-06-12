@@ -1,0 +1,19 @@
+---
+apiVersion: openspec.io/v1
+kind: ChangeLog
+metadata:
+  name: orthoplus-sync-tsiapp-stack
+  app: OrthoPlus Enterprise
+  date: 2026-06-12
+changes:
+  - type: sync
+    description: Sincronizado com estrutura canonica /opt/tsi-stack/apps/orthoplus-enterprise
+    files:
+      - README.md (atualizado com path, network, labels e convenções TSiAPP)
+      - .agent-manifest.json (criado)
+      - .openspec/specs/tsiapp-deploy.spec (atualizado)
+    references:
+      - /opt/tsi-stack/README.md
+      - /opt/tsi-stack/.agent-rules/secrets-protocol.md
+      - /opt/tsi-stack/.agent-rules/conventions.md
+      - /opt/tsi-stack/apps/orthoplus-enterprise/docker-compose.yml

@@ -1,169 +1,198 @@
 # OrthoPlus Enterprise
 
-> Sistema de Gestão Odontológica Enterprise — Monorepo Full-Stack
+SaaS de gestao odontologica enterprise. Monorepo full-stack com frontend React, backend Node.js/Express, agent service Python/FastAPI e 38 modulos de dominio.
 
-## Visão Geral
+Subdominio canônico: `orthoplus.tsiapp.io`
+Porta do servico: `3000`
 
-O **OrthoPlus Enterprise** é um sistema de gestão odontológica completo, composto por:
+---
 
-- **Frontend** — React 19 + Vite 6 + Tailwind CSS + shadcn/ui
-- **Backend** — Node.js 20 + Express 4 + Prisma 6 + PostgreSQL 16
-- **Agent Service** — Python 3.14 + FastAPI + Agno (IA generativa)
-- **Infraestrutura** — Docker, PM2, Nginx, Redis
+## 1. Visao Geral
 
-## VPS TSiAPP — Deploy Canônico
+O OrthoPlus Enterprise e a plataforma core de gestao clinica e administrativa para consultorios e redes odontologicas. O monorepo compreende:
 
-> **Arquivo de configuração:** `VPS-TSiAPP.md`
+- Frontend SPA — React 19 + Vite 6 + Tailwind CSS + shadcn/ui
+- Backend API — Node.js 20 + Express 4 + Prisma 6 + PostgreSQL 16
+- Agent Service — Python 3.14 + FastAPI + Agno (IA generativa)
+- Infraestrutura — Docker CE, Redis, Prometheus, Grafana
 
-| Variável                  | Valor                            |
-| ------------------------- | -------------------------------- | --------------------------- |
-| Variável                  | Valor                            | Descrição                   |
-| ----------                | -------                          | -----------                 |
-| `VPS_TSiAPP_HOSTNAME`     | `TSiAPP`                         | Hostname do servidor        |
-| `VPS_TSiAPP_IP_PUBLIC`    | `179.190.15.116`                 | IP público (Internet)       |
-| `VPS_TSiAPP_IP_TAILSCALE` | `100.111.74.69`                  | IP Tailscale (rede privada) |
-| `VPS_TSiAPP_KEY`          | `~/.ssh/keys/private/TSiHomeLab` | Chave SSH canônica          |
-| `VPS_TSiAPP_USER`         | `tsi`                            | Usuário padrão              |
-| `VPS_TSiAPP_PORT`         | `22`                             | Porta SSH                   |
+Para detalhes de arquitetura de codigo, convencoes e comandos de desenvolvimento, consulte `AGENTS.md` na raiz do repositorio.
 
-### Acesso SSH (passwordless)
+---
 
-```bash
-# Usuário tsi — Tailscale (rede privada)
-ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@100.111.74.69
+## 2. Estrutura Canônica de Deploy
 
-# Usuário tsi — IP público (fallback)
-ssh -i ~/.ssh/keys/private/TSiHomeLab tsi@179.190.15.116
+A fonte de verdade para deploy Docker e a stack canônica em `/opt/tsi-stack/`.
 
-# Usuário root — Tailscale
-ssh -i ~/.ssh/keys/private/TSiHomeLab root@100.111.74.69
-
-# Usuário root — IP público
-ssh -i ~/.ssh/keys/private/TSiHomeLab root@179.190.15.116
+```
+/opt/tsi-stack/
+├── apps/
+│   └── orthoplus-enterprise/    # <<< Este servico
+│       ├── docker-compose.yml
+│       ├── .env                 # Injetado via Infisical (nunca commitar)
+│       └── config/              # Configs bind-mount (read-only)
+├── global/traefik/              # Reverse proxy e TLS (Traefik v3)
+├── vault/infisical/             # Vault de secrets (Infisical CE)
+└── scripts/
+    └── vault-get.sh             # Protocolo de leitura de secrets
 ```
 
-### Deploy
+Regra absoluta: nenhum secret ou credencial e hardcoded no compose, Dockerfile ou codigo fonte. Todas as variaveis sensíveis sao injetadas via Infisical CE e consumidas pelo servico em runtime.
+
+---
+
+## 3. Protocolo de Secrets
+
+Nunca armazene secrets em arquivos versionados. O fluxo canônico e:
+
+1. Armazenar o secret no Infisical CE (`/opt/tsi-stack/vault/infisical/`).
+2. No host de deploy, exportar via script de vault:
+   ```bash
+   source /opt/tsi-stack/scripts/vault-get.sh orthoplus
+   ```
+3. O script injeta as variaveis no ambiente do shell antes de `docker compose up`.
+4. O `docker-compose.yml` referencia as variaveis com sintaxe `${VAR}` sem valores default para secrets.
+
+Secrets obrigatorios (exemplos):
+
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `REDIS_URL`
+- `POSTGRES_PASSWORD`
+- `INFISICAL_TOKEN` (se o proprio servico consultar o vault)
+
+Exemplo de uso do vault-get.sh:
 
 ```bash
-cd /home/tsi/OrthoPlus-Enterprise
+export DATABASE_URL=$(/opt/tsi-stack/scripts/vault-get.sh orthoplus DATABASE_URL)
+export POSTGRES_PASSWORD=$(/opt/tsi-stack/scripts/vault-get.sh orthoplus POSTGRES_PASSWORD)
+export JWT_SECRET=$(/opt/tsi-stack/scripts/vault-get.sh orthoplus JWT_SECRET)
+```
+
+---
+
+## 4. Labels Traefik Obrigatorios
+
+Todo servico exposto na stack deve declarar os labels abaixo no `docker-compose.yml`:
+
+```yaml
+labels:
+  - "traefik.enable=true"
+  - "traefik.http.routers.orthoplus.rule=Host(`orthoplus.tsiapp.io`)"
+  - "traefik.http.routers.orthoplus.entrypoints=websecure"
+  - "traefik.http.routers.orthoplus.tls.certresolver=letsencrypt"
+  - "traefik.http.routers.orthoplus.tls=true"
+  - "traefik.http.services.orthoplus.loadbalancer.server.port=3000"
+  - "traefik.docker.network=tsi-network"
+```
+
+Convencoes:
+
+- Nome do router: `<app>` (ex: `orthoplus`)
+- Nome do service: `<app>` (ex: `orthoplus`)
+- Network Docker: `tsi-network` (rede externa compartilhada com Traefik)
+- Cert resolver: `letsencrypt` (HTTP-01 via Traefik)
+- Entrypoint: `websecure` (HTTPS na 443)
+
+---
+
+## 5. Comandos de Deploy na Stack
+
+### 5.1 Pre-requisitos no host
+
+- Debian 13
+- Docker CE 25+
+- Usuario com permissao no grupo `docker`
+- Acesso ao vault Infisical CE em `/opt/tsi-stack/vault/infisical/`
+- Rede `tsi-network` criada e Traefik v3 em execucao
+
+### 5.2 Deploy completo
+
+```bash
+# 1. Acesse o diretorio canônico do servico
+cd /opt/tsi-stack/apps/orthoplus-enterprise
+
+# 2. Carregue os secrets do vault
+source /opt/tsi-stack/scripts/vault-get.sh orthoplus
+
+# 3. Puxe as ultimas imagens (recomendado fixar tag em producao)
+docker compose pull
+
+# 4. Sobe a stack
 docker compose up -d
+
+# 5. Verifique saude
 docker compose ps
+docker compose logs -f --tail 100
 ```
 
-### Healthchecks
-
-| Serviço       | URL Local                      | Via Nginx                                |
-| ------------- | ------------------------------ | ---------------------------------------- |
-| Backend API   | `http://127.0.0.1:3005/health` | `https://tsiapp.io/api/orthoplus/health` |
-| Frontend SPA  | `http://127.0.0.1:8083/`       | `https://tsiapp.io/`                     |
-| Agent Service | `http://127.0.0.1:8000/`       | `https://tsiapp.io/api/agent/`           |
-
-## Estrutura do Monorepo
-
-```
-OrthoPlus-Enterprise/
-├── apps/web/                  # Frontend React (porta 5173)
-├── backend/                   # Backend Node.js/Express (porta 3005)
-│   ├── src/modules/           # 35 módulos de domínio
-│   ├── src/routes/            # Rotas Express
-│   ├── prisma/                # Schema Prisma (171 models)
-│   └── workers/               # 9 cron jobs
-├── agent-service/             # Serviço Python/FastAPI (porta 8000)
-├── shared-types/              # Tipos TypeScript compartilhados
-├── categories/@orthoplus/     # Pacotes internos
-└── docs/                      # Documentação
-```
-
-## Módulos Backend (35)
-
-| Domínio         | Módulo            | Status       |
-| --------------- | ----------------- | ------------ |
-| Agenda          | `agenda`          | ✅ Funcional |
-| Admin           | `admin_tools`     | ✅ Funcional |
-| Analytics       | `analytics`       | ✅ Funcional |
-| Auth            | `auth`            | ✅ Funcional |
-| Backups         | `backups`         | ✅ Funcional |
-| BI              | `bi`              | ✅ Funcional |
-| Comunicação     | `comm`            | ✅ Funcional |
-| Configurações   | `configuracoes`   | ✅ Funcional |
-| Contratos       | `contratos`       | ✅ Funcional |
-| CRM             | `crm`             | ✅ Funcional |
-| Crypto          | `crypto_config`   | ✅ Funcional |
-| Dashboard       | `dashboard`       | ✅ Funcional |
-| Database Admin  | `database_admin`  | ✅ Funcional |
-| Faturamento     | `faturamento`     | ✅ Funcional |
-| Fidelidade      | `fidelidade`      | ✅ Funcional |
-| Arquivos        | `files`           | ✅ Funcional |
-| Financeiro      | `financeiro`      | ✅ Funcional |
-| Funcionários    | `funcionarios`    | ✅ Funcional |
-| GitHub Tools    | `github_tools`    | ✅ Funcional |
-| Inadimplência   | `inadimplencia`   | ✅ Funcional |
-| Inventário      | `inventario`      | ✅ Funcional |
-| LGPD            | `lgpd`            | ✅ Funcional |
-| Marketing       | `marketing`       | ✅ Funcional |
-| NF-e            | `nfe`             | ✅ Funcional |
-| Notificações    | `notifications`   | ✅ Funcional |
-| Orçamentos      | `orcamentos`      | ✅ Funcional |
-| Pacientes       | `pacientes`       | ✅ Funcional |
-| PDV             | `pdv`             | ✅ Funcional |
-| PEP             | `pep`             | ✅ Funcional |
-| Procedimentos   | `procedimentos`   | ✅ Funcional |
-| Split Pagamento | `split_pagamento` | ✅ Funcional |
-| Teleodonto      | `teleodonto`      | ✅ Funcional |
-| Terminal        | `terminal`        | ✅ Funcional |
-| TISS            | `tiss`            | ✅ Funcional |
-| Usuários        | `usuarios`        | ✅ Funcional |
-| Agents IA       | `agents`          | ✅ Funcional |
-
-## Stack Tecnológica
-
-| Camada            | Tecnologia                                         |
-| ----------------- | -------------------------------------------------- |
-| **Frontend**      | React 19, Vite 6, Tailwind CSS, shadcn/ui, Zustand |
-| **Backend**       | Node.js 20, Express 4, Prisma 6, TypeScript 5.9    |
-| **Agent Service** | Python 3.14, FastAPI, Agno 2.5                     |
-| **Database**      | PostgreSQL 16, Redis 7                             |
-| **Auth**          | JWT + bcrypt                                       |
-| **Deploy**        | PM2, Nginx, Docker                                 |
-
-## Comandos
+### 5.3 Healthcheck rapido
 
 ```bash
-# Instalar dependências
-pnpm install
-
-# Desenvolvimento
-pnpm dev          # Inicia todos os apps
-pnpm build        # Build de todos os workspaces
-pnpm lint         # ESLint em todos os workspaces
-pnpm type-check   # TypeScript --noEmit
-
-# Backend específico
-cd backend && pnpm build    # Build TypeScript
-cd backend && pnpm dev      # Desenvolvimento com nodemon
-
-# Frontend específico
-cd apps/web && pnpm dev     # Vite dev server
-
-# Agent Service
-cd agent-service && python src/main.py
+curl -sf https://orthoplus.tsiapp.io/health || echo "FALHA"
+curl -sf https://orthoplus.tsiapp.io/api/health || echo "FALHA API"
 ```
 
-## Segurança
+### 5.4 Rollback emergencial
 
-- JWT secret com 256 bits de entropia
-- clinicGuard middleware em todos os routers (35 módulos)
+```bash
+cd /opt/tsi-stack/apps/orthoplus-enterprise
+docker compose down
+docker compose up -d --force-recreate
+```
+
+---
+
+## 6. Convenções de Nomenclatura
+
+| Entidade | Padrao | Exemplo |
+|----------|--------|---------|
+| Diretorio de deploy | `/opt/tsi-stack/apps/<app>/` | `/opt/tsi-stack/apps/orthoplus-enterprise/` |
+| Subdominio canônico | `<app>.tsiapp.io` | `orthoplus.tsiapp.io` |
+| Router Traefik | `<app>` | `orthoplus` |
+| Service Traefik | `<app>` | `orthoplus` |
+| Container prefixo | `tsi-<app>-<servico>` | `tsi-orthoplus-app`, `tsi-orthoplus-db` |
+| Volume Docker | `tsi_<app>_<dados>` | `tsi_orthoplus_postgres_data` |
+| Network | `tsi-network` | — |
+| Env var prefixo | generico ou `ORTHoplus_` | `DATABASE_URL`, `JWT_SECRET` |
+
+---
+
+## 7. Stack de Producao
+
+| Camada | Tecnologia | Versao |
+|--------|------------|--------|
+| SO | Debian | 13 |
+| Container | Docker CE | 25+ |
+| Proxy / Ingress | Traefik | v3 |
+| Vault | Infisical CE | latest |
+| DNS / TLS | Cloudflare + Let's Encrypt | DNS-01 / HTTP-01 |
+| IP Publico | 177.10.116.10 | — |
+| Dominio | tsiapp.io | — |
+
+---
+
+## 8. Manifesto e Documentacao Oficial
+
+- `.agent-manifest.json` — Metadados do workspace para agentes de IA
+- `AGENTS.md` — Guia canônico para agentes de IA e desenvolvedores (arquitetura, codigo, testes)
+- `.openspec/specs/tsiapp-deploy.spec` — Especificacao OpenSpec de deploy
+- `backend/ARCHITECTURE.md` — Arquitetura do backend
+- `docs/DEPLOYMENT.md` — Guia de deploy legacy (referencia apenas)
+- `docs/CONTRIBUTING.md` — Guia de contribuicao
+
+---
+
+## 9. Seguranca e Compliance
+
+- clinicGuard middleware em todos os routers (35 modulos)
 - Rate limiting por contexto (auth, upload, API geral)
 - CSRF protection com sameSite=strict
-- Helmet para headers de segurança
+- Helmet para headers de seguranca
 - Redis auth-enabled
+- TLS 1.3 via Traefik + Let's Encrypt
+- Nenhum secret hardcoded em arquivos versionados
 
-## Documentação
-
-- [`backend/ARCHITECTURE.md`](backend/ARCHITECTURE.md) — Arquitetura do backend
-- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — Guia de deploy
-- [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) — Guia de contribuição
-
-## Licença
+---
 
 Proprietary — All rights reserved.
