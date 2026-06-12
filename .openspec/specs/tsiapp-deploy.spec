@@ -131,3 +131,10 @@ spec:
     vaultUrl: https://vault.tsiapp.io
     vaultProject: orthoplus
     vaultEnvironment: production
+  gitnexus:
+    indexed: true
+    endpoint: https://gitnexus.tsiapp.io
+    auth: basicauth
+    username: tsiadmin
+    repoPath: /Projects/OrthoPlus-Enterprise
+    workspacePath: /workspace/OrthoPlus-Enterprise

@@ -1,0 +1,19 @@
+---
+apiVersion: openspec.io/v1
+kind: ChangeLog
+metadata:
+  name: orthoplus-enterprise-gitnexus-index
+  app: OrthoPlus-Enterprise
+  date: 2026-06-12
+changes:
+  - type: feature
+    description: Repositório indexado no GitNexus para code intelligence
+    files:
+      - .gitnexus/ (índice GitNexus gerado)
+      - AGENTS.md (contexto GitNexus)
+      - CLAUDE.md (contexto GitNexus)
+      - .openspec/specs/tsiapp-deploy.spec (seção gitnexus adicionada)
+    references:
+      - https://gitnexus.tsiapp.io
+      - /opt/tsi-stack/apps/gitnexus/docker-compose.yml
+      - /opt/tsi-stack/global/traefik/dynamic/gitnexus.yml
