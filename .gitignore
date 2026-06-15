@@ -17,6 +17,7 @@ dist-ssr
 .env
 .env.*
 !.env.template
+!.env.e2e.example
 *.pem
 *.key
 *.crt
@@ -71,6 +72,8 @@ Thumbs.db
 *.pid
 *.seed
 *.pid.lock
+.tmp/
+!/.tmp/.gitkeep
 
 # Python (se houver scripts auxiliares)
 __pycache__/
@@ -108,7 +111,14 @@ tests/evidence/
 CLAUDE.md
 KIMI.md
 test-results/
+test-results.json
 tests/e2e/.auth/
+
+# Firecrawl cache
+.firecrawl/
+
+# Playwright report (generated artifact)
+playwright-report/
 
 # SpecKit project memory (versioned)
 !.specify/scripts/

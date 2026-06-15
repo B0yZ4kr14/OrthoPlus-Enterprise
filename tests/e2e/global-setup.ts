@@ -17,12 +17,15 @@ async function globalSetup(config: FullConfig) {
 
   try {
     // Call backend /auth/token directly
+    // Use E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD from environment; fallback is the local test account.
+    const adminEmail = process.env.E2E_ADMIN_EMAIL || "admin@orthoplus.com";
+    const adminPassword = process.env.E2E_ADMIN_PASSWORD || "admin123!";
     const response = await fetch(`${backendURL}/api/auth/token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: "admin@orthoplus.com",
-        password: "admin123!",
+        email: adminEmail,
+        password: adminPassword,
       }),
     });
 

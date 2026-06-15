@@ -23,9 +23,12 @@ jobs:
       DB_PORT: "5432"
       DB_NAME: orthoplus
       DB_USER: orthoplus
-      DB_PASSWORD: orthoplus
-      DATABASE_URL: postgresql://orthoplus:orthoplus@localhost:5432/orthoplus
-      IA_ENCRYPTION_KEY: "test-encryption-key-for-e2e-tests-32chars-long"
+      # These credentials are for the ephemeral PostgreSQL service in the CI runner only.
+      # For production-like workflows, configure secrets.E2E_DB_PASSWORD and secrets.E2E_DATABASE_URL.
+      DB_PASSWORD: ${{ secrets.E2E_DB_PASSWORD || 'orthoplus' }}
+      DATABASE_URL: ${{ secrets.E2E_DATABASE_URL || 'postgresql://orthoplus:orthoplus@localhost:5432/orthoplus' }}
+      # Prefer a repository secret; fallback is a deterministic test key for local CI reproduction.
+      IA_ENCRYPTION_KEY: ${{ secrets.E2E_IA_ENCRYPTION_KEY || 'test-encryption-key-for-e2e-tests-32chars-long' }}
       REDIS_URL: redis://localhost:6379
       NODE_ENV: test
       CI: true
@@ -40,7 +43,8 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: orthoplus
-          POSTGRES_PASSWORD: orthoplus
+          # Ephemeral CI credentials. Configure secrets.E2E_POSTGRES_PASSWORD for stronger isolation.
+          POSTGRES_PASSWORD: ${{ secrets.E2E_POSTGRES_PASSWORD || 'orthoplus' }}
           POSTGRES_DB: orthoplus
         ports:
           - 5432:5432

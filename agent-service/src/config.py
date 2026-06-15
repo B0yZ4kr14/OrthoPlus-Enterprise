@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Paths do projeto
-ORTHoplus_ROOT = Path(os.getenv("ORTHoplus_ROOT", "/home/heosphoros/Projects/OrthoPlus-Enterprise"))
+ORTHoplus_ROOT = Path(os.getenv("ORTHoplus_ROOT", "/Projects/OrthoPlus-Enterprise"))
 BACKEND_PATH = Path(os.getenv("ORTHoplus_BACKEND_PATH", ORTHoplus_ROOT / "backend"))
 FRONTEND_PATH = Path(os.getenv("ORTHoplus_FRONTEND_PATH", ORTHoplus_ROOT / "apps" / "web"))
 

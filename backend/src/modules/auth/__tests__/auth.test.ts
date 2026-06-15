@@ -1,6 +1,7 @@
 import request from "supertest";
 import express from "express";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { createAuthRouter } from "../api/router";
 import { errorHandler } from "../../../middleware/errorHandler";
 import bcrypt from "bcrypt";
@@ -20,7 +21,7 @@ jest.mock("../../../infrastructure/database/prismaClient", () => ({
 
 import { prisma } from "../../../infrastructure/database/prismaClient";
 
-const JWT_SECRET = "test-jwt-secret-for-auth-tests";
+const JWT_SECRET = crypto.randomBytes(32).toString("hex");
 process.env.JWT_SECRET = JWT_SECRET;
 
 function buildApp() {
