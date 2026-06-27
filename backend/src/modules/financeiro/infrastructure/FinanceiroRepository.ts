@@ -410,6 +410,26 @@ export class FinanceiroRepository implements IFinanceiroRepository {
     return prisma.notas_fiscais.delete({ where: { id, clinic_id: clinicId } });
   }
 
+  // ─── fiscal_config ───
+
+  async getFiscalConfig(clinicId: string) {
+    return prisma.fiscal_config.findFirst({
+      where: { clinic_id: clinicId },
+    });
+  }
+
+  async createFiscalConfig(data: Prisma.fiscal_configCreateInput) {
+    return prisma.fiscal_config.create({ data });
+  }
+
+  async updateFiscalConfig(
+    id: string,
+    clinicId: string,
+    data: Prisma.fiscal_configUpdateInput,
+  ) {
+    return prisma.fiscal_config.update({ where: { id, clinic_id: clinicId }, data });
+  }
+
   // ─── pdv_vendas ───
 
   async listVendasPDV(filters: VendaFilters) {

@@ -1,5 +1,9 @@
 import { z } from "zod";
 import { IFinanceiroRepository } from "@/modules/financeiro/domain/repositories/IFinanceiroRepository";
+import {
+  encryptField,
+  decryptField,
+} from "@/modules/financeiro/application/crypto/fieldEncryption";
 import { ProcessarPagamentoUseCase } from "@/modules/financeiro/application/ProcessarPagamentoUseCase";
 import { GetResumoFinanceiroUseCase } from "@/modules/financeiro/application/GetResumoFinanceiroUseCase";
 import { GetCashFlowUseCase } from "@/modules/financeiro/application/GetCashFlowUseCase";
@@ -330,6 +334,63 @@ export class FinanceiroService {
     const existing = await this.repo.getNotaFiscal(id, clinicId);
     if (!existing) throw notFound();
     return this.repo.deleteNotaFiscal(id, clinicId);
+  }
+
+  // Fiscal Config
+  async getFiscalConfig(clinicId: string) {
+    const row = await this.repo.getFiscalConfig(clinicId);
+    if (!row) return null;
+    return {
+      ...row,
+      senha_certificado: row.senha_certificado
+        ? decryptField(row.senha_certificado)
+        : null,
+      csc_token: row.csc_token ? decryptField(row.csc_token) : null,
+    };
+  }
+
+  async createFiscalConfig(clinicId: string, body: Record<string, unknown>) {
+    const data = body as any;
+    const encryptedSenha = data.senha_certificado
+      ? encryptField(data.senha_certificado)
+      : undefined;
+    const encryptedCsc = data.csc_token
+      ? encryptField(data.csc_token)
+      : undefined;
+    return this.repo.createFiscalConfig({
+      ...data,
+      clinic_id: clinicId,
+      ...(encryptedSenha !== undefined && { senha_certificado: encryptedSenha }),
+      ...(encryptedCsc !== undefined && { csc_token: encryptedCsc }),
+    } as any);
+  }
+
+  async updateFiscalConfig(
+    id: string,
+    clinicId: string,
+    body: Record<string, unknown>,
+  ) {
+    const existing = await this.repo.getFiscalConfig(clinicId);
+    if (!existing || existing.id !== id) throw notFound();
+    const data = body as any;
+    const encryptedSenha = data.senha_certificado
+      ? encryptField(data.senha_certificado)
+      : undefined;
+    const encryptedCsc = data.csc_token
+      ? encryptField(data.csc_token)
+      : undefined;
+    const updated = await this.repo.updateFiscalConfig(id, clinicId, {
+      ...data,
+      ...(encryptedSenha !== undefined && { senha_certificado: encryptedSenha }),
+      ...(encryptedCsc !== undefined && { csc_token: encryptedCsc }),
+    } as any);
+    return {
+      ...updated,
+      senha_certificado: updated.senha_certificado
+        ? decryptField(updated.senha_certificado)
+        : null,
+      csc_token: updated.csc_token ? decryptField(updated.csc_token) : null,
+    };
   }
 
   // PDV Vendas
