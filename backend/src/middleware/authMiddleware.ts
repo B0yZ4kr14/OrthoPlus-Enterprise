@@ -36,7 +36,9 @@ export function authMiddleware(
     req.path.startsWith("/api") || req.path.startsWith("/functions/v1");
   const isPublicApi =
     req.path.startsWith("/api/auth") || req.path === "/health";
-  const allowMock = process.env.AUTH_ALLOW_MOCK === "true";
+  const allowMock =
+    process.env.NODE_ENV !== "production" &&
+    process.env.AUTH_ALLOW_MOCK === "true";
 
   // BYPASS FOR INTERNAL CRON JOBS
   // Requires both a shared secret header AND localhost origin

@@ -29,16 +29,16 @@ import {
 import { Button } from "@orthoplus/core-ui/button";
 import { useNavigate } from "react-router-dom";
 import ModulesSimple from "@/modules/settings/ui/pages/ModulesSimple";
-import DatabaseBackupTab from "@/components/settings/DatabaseBackupTab";
-import { UserManagementTab } from "@/components/settings/UserManagementTab";
-import { ModulePermissionsManager } from "@/components/settings/ModulePermissionsManager";
-import { PermissionTemplates } from "@/components/settings/PermissionTemplates";
-import { PermissionAuditLogs } from "@/components/settings/PermissionAuditLogs";
-import { DataMigrationWizard } from "@/components/settings/DataMigrationWizard";
-import { GitHubIntegrationConfig } from "@/components/settings/GitHubIntegrationConfig";
-import { AuthenticationConfig } from "@/components/settings/AuthenticationConfig";
-import { AIModelConfig } from "@/components/settings/AIModelConfig";
-import { BackendSelector } from "@/components/settings/backend-selector";
+import DatabaseBackupTab from "@/modules/settings/components/legacy/DatabaseBackupTab";
+import { UserManagementTab } from "@/modules/settings/components/legacy/UserManagementTab";
+import { ModulePermissionsManager } from "@/modules/settings/components/legacy/ModulePermissionsManager";
+import { PermissionTemplates } from "@/modules/settings/components/legacy/PermissionTemplates";
+import { PermissionAuditLogs } from "@/modules/settings/components/legacy/PermissionAuditLogs";
+import { DataMigrationWizard } from "@/modules/settings/components/legacy/DataMigrationWizard";
+import { GitHubIntegrationConfig } from "@/modules/settings/components/legacy/GitHubIntegrationConfig";
+import { AuthenticationConfig } from "@/modules/settings/components/legacy/AuthenticationConfig";
+import { AIModelConfig } from "@/modules/settings/components/legacy/AIModelConfig";
+import { BackendSelector } from "@/modules/settings/components/legacy/backend-selector";
 
 export default function Configuracoes() {
   const navigate = useNavigate();

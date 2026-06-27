@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import {
   LocalAIService,
   AIModelConfig,
@@ -176,7 +177,7 @@ describe("IAEncryptionService", () => {
   const originalEnv = process.env.IA_ENCRYPTION_KEY;
 
   beforeAll(() => {
-    process.env.IA_ENCRYPTION_KEY = "test-key-32-characters-long!!!!!";
+    process.env.IA_ENCRYPTION_KEY = crypto.randomBytes(32).toString("hex");
   });
 
   afterAll(() => {

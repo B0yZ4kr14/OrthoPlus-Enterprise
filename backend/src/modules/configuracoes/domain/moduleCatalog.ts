@@ -10,7 +10,7 @@ export interface CatalogModule {
   dependencies: string[];
 }
 
-export const MODULE_CATALOG: CatalogModule[] = [
+export const MODULE_CATALOG: readonly CatalogModule[] = Object.freeze([
   {
     id: 1,
     module_key: "DASHBOARD",
@@ -209,4 +209,4 @@ export const MODULE_CATALOG: CatalogModule[] = [
     is_active: true,
     dependencies: [],
   },
-];
+]);

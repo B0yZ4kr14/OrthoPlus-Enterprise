@@ -9,46 +9,62 @@ export class ModulosController {
     res.json({ modules: this.service.getMyModules() });
   };
 
+  getModulesForClinic = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("clinicId is required");
+    }
+    const modules = await this.service.getModulesForClinic(clinicId);
+    res.json({ modules });
+  });
+
   getDependencies = (_req: Request, res: Response) => {
     res.json({ dependencies: this.service.getDependencies() });
   };
 
-  toggleModuleByKey = (req: Request, res: Response) => {
-    const { module_key } = req.body as { module_key?: string };
+  toggleModuleByKey = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("clinicId is required");
+    }
+    const { module_key, enabled } = req.body as {
+      module_key?: string;
+      enabled?: boolean;
+    };
     if (!module_key) {
       throw Errors.validation("module_key is required");
     }
-    try {
-      const result = this.service.toggleModule(module_key);
-      res.json(result);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      if (message.startsWith("Dependencias")) {
-        res.status(412).json({ error: message });
-      } else if (message.startsWith("Modulo tem dependentes")) {
-        res.status(412).json({ error: message });
-      } else {
-        res.status(404).json({ error: message });
-      }
+    if (typeof enabled !== "boolean") {
+      throw Errors.validation("enabled must be a boolean");
     }
-  };
+    const result = await this.service.toggleModule(
+      clinicId,
+      module_key,
+      enabled,
+    );
+    res.json(result);
+  });
 
-  toggleModuleState = (req: Request, res: Response) => {
-    const moduleId = parseInt(req.params.id, 10);
-    try {
-      const result = this.service.toggleModuleById(moduleId);
-      res.json(result);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      if (message.startsWith("Dependencias")) {
-        res.status(412).json({ error: message });
-      } else if (message.startsWith("Modulo tem dependentes")) {
-        res.status(412).json({ error: message });
-      } else {
-        res.status(404).json({ error: message });
-      }
+  toggleModuleState = asyncHandler(async (req: Request, res: Response) => {
+    const clinicId = req.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("clinicId is required");
     }
-  };
+    const moduleId = parseInt(req.params.id, 10);
+    const { enabled } = req.body as { enabled?: boolean };
+    if (Number.isNaN(moduleId)) {
+      throw Errors.validation("id must be a number");
+    }
+    if (typeof enabled !== "boolean") {
+      throw Errors.validation("enabled must be a boolean");
+    }
+    const result = await this.service.toggleModuleById(
+      clinicId,
+      moduleId,
+      enabled,
+    );
+    res.json(result);
+  });
 
   applyModuleTemplate = asyncHandler(async (_req: Request, res: Response) => {
     const result = this.service.applyModuleTemplate();

@@ -1,0 +1,3 @@
+[submodule "docs/spec-kit-source"]
+	path = docs/spec-kit-source
+	url = https://github.com/github/spec-kit.git

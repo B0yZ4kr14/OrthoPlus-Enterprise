@@ -16,11 +16,15 @@ dist-ssr
 # Environment & Secrets
 .env
 .env.*
-!.env.template
+!.env*.example
 *.pem
 *.key
 *.crt
 *.p12
+.secrets
+*.secrets
+.env.vps.credentials
+.env2
 
 # Prisma
 prisma/migrations/*/migration_lock.toml
@@ -71,6 +75,8 @@ Thumbs.db
 *.pid
 *.seed
 *.pid.lock
+.tmp/
+!/.tmp/.gitkeep
 
 # Python (se houver scripts auxiliares)
 __pycache__/
@@ -88,7 +94,6 @@ backups/
 # Misc
 *.tgz
 *.tar.gz
-node_modules
 deploy_key
 .ssh_key_vps
 ecosystem.json
@@ -108,7 +113,14 @@ tests/evidence/
 CLAUDE.md
 KIMI.md
 test-results/
+test-results.json
 tests/e2e/.auth/
+
+# Firecrawl cache
+.firecrawl/
+
+# Playwright report (generated artifact)
+playwright-report/
 
 # SpecKit project memory (versioned)
 !.specify/scripts/
@@ -119,7 +131,4 @@ tests/e2e/.auth/
 !.specify/memory/**
 graphify-out/.graphify_*
 .omk/open-design/
-.env.vps.credentials
 .worktrees/
-.worktrees/
-.env2

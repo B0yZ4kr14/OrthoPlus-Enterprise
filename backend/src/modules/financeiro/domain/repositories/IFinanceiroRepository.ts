@@ -8,6 +8,7 @@ import type {
   contas_receber,
   contas_pagar,
   notas_fiscais,
+  fiscal_config,
   pdv_vendas,
   banco_extratos,
   patients,
@@ -201,6 +202,17 @@ export interface IFinanceiroRepository {
   ): Promise<notas_fiscais>;
   deleteNotaFiscal(id: string, clinicId: string): Promise<notas_fiscais>;
 
+  // fiscal_config
+  getFiscalConfig(clinicId: string): Promise<fiscal_config | null>;
+  createFiscalConfig(
+    data: Prisma.fiscal_configCreateInput,
+  ): Promise<fiscal_config>;
+  updateFiscalConfig(
+    id: string,
+    clinicId: string,
+    data: Prisma.fiscal_configUpdateInput,
+  ): Promise<fiscal_config>;
+
   // pdv_vendas
   listVendasPDV(filters: VendaFilters): Promise<pdv_vendas[]>;
 
@@ -225,6 +237,7 @@ export interface IFinanceiroRepository {
   // transaction support
   processarPagamento(
     contaReceberId: string,
+    clinicId: string,
     updateData: Prisma.contas_receberUpdateInput,
     transacaoData: Record<string, unknown>,
   ): Promise<contas_receber | null>;

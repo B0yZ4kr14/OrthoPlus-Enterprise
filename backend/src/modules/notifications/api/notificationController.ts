@@ -58,7 +58,15 @@ export class NotificationController {
   });
 
   createNotification = asyncHandler(async (req: Request, res: Response) => {
-    const notif = await this.service.createNotification(req.body);
+    const clinicId = req.user?.clinicId;
+    if (!clinicId) {
+      throw Errors.unauthorized("Missing clinic context");
+    }
+    // SECURITY: ignore clinic_id from body; force token clinicId
+    const notif = await this.service.createNotification({
+      ...req.body,
+      clinic_id: clinicId,
+    });
     res.json({ success: true, notification: notif });
   });
 

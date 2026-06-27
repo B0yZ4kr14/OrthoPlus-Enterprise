@@ -94,24 +94,17 @@ export class CryptoConfigControllerService {
       currency: string;
       network: string;
       label?: string;
-      clinicId?: string;
     },
     authClinicId?: string,
   ) {
-    const {
-      action,
-      address,
-      currency,
-      network,
-      label,
-      clinicId: clinicIdBody,
-    } = body;
+    const { action, address, currency, network, label } = body;
 
     if (action !== "create") {
       throw Errors.validation("Invalid action");
     }
 
-    const clinicId = clinicIdBody ?? authClinicId;
+    // SECURITY: ignore any clinicId from body; only accept token clinicId
+    const clinicId = authClinicId;
     if (!clinicId) {
       throw Errors.validation("clinicId is required");
     }
@@ -168,7 +161,8 @@ export class CryptoConfigControllerService {
       .toString()
       .toUpperCase();
     const txHash = payload.transaction_hash ?? payload.tx_hash;
-    const clinicId = payload.clinic_id ?? authClinicId;
+    // SECURITY: ignore clinic_id from webhook payload; rely on authenticated clinic context
+    const clinicId = authClinicId;
     const confirmations = Number(payload.confirmations) || 0;
     const amountRaw = Number(payload.amount);
     const feeRaw =

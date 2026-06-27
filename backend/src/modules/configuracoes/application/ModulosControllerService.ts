@@ -3,6 +3,8 @@ import {
   CatalogModule,
 } from "@/modules/configuracoes/domain/moduleCatalog";
 import { ClinicDataRepository } from "@/modules/configuracoes/infrastructure/ClinicDataRepository";
+import { ClinicModuleRepository } from "@/modules/configuracoes/infrastructure/ClinicModuleRepository";
+import { prisma } from "@/infrastructure/database/prismaClient";
 import { Errors } from "@/middleware/errorHandler";
 
 export interface ModuleView {
@@ -26,22 +28,39 @@ export interface ToggleResult {
   message: string;
 }
 
-function buildModuleView(catalog: CatalogModule[]): ModuleView[] {
+function buildModuleView(
+  catalog: readonly CatalogModule[],
+  activeOverrides?: Map<string, boolean>,
+): ModuleView[] {
+  const resolvedActive = (moduleKey: string, defaultActive: boolean) => {
+    if (activeOverrides?.has(moduleKey)) {
+      return activeOverrides.get(moduleKey)!;
+    }
+    return defaultActive;
+  };
+
   const activeKeys = new Set(
-    catalog.filter((m) => m.is_active).map((m) => m.module_key),
+    catalog
+      .filter((m) => resolvedActive(m.module_key, m.is_active))
+      .map((m) => m.module_key),
   );
 
   return catalog.map((mod) => {
+    const isActive = resolvedActive(mod.module_key, mod.is_active);
     const unmet_dependencies = mod.dependencies.filter(
       (dep) => !activeKeys.has(dep),
     );
 
     const active_dependents = catalog
-      .filter((m) => m.is_active && m.dependencies.includes(mod.module_key))
+      .filter(
+        (m) =>
+          resolvedActive(m.module_key, m.is_active) &&
+          m.dependencies.includes(mod.module_key),
+      )
       .map((m) => m.module_key);
 
-    const can_activate = !mod.is_active && unmet_dependencies.length === 0;
-    const can_deactivate = mod.is_active && active_dependents.length === 0;
+    const can_activate = !isActive && unmet_dependencies.length === 0;
+    const can_deactivate = isActive && active_dependents.length === 0;
 
     return {
       id: mod.id,
@@ -51,7 +70,7 @@ function buildModuleView(catalog: CatalogModule[]): ModuleView[] {
       category: mod.category,
       icon: mod.icon,
       subscribed: mod.subscribed,
-      is_active: mod.is_active,
+      is_active: isActive,
       can_activate,
       can_deactivate,
       unmet_dependencies,
@@ -62,9 +81,18 @@ function buildModuleView(catalog: CatalogModule[]): ModuleView[] {
 
 export class ModulosControllerService {
   private clinicDataRepo = new ClinicDataRepository();
+  private clinicModuleRepo = new ClinicModuleRepository(prisma);
 
   getMyModules(): ModuleView[] {
     return buildModuleView(MODULE_CATALOG);
+  }
+
+  async getModulesForClinic(clinicId: string): Promise<ModuleView[]> {
+    const overrides = await this.clinicModuleRepo.listByClinic(clinicId);
+    const overridesMap = new Map(
+      overrides.map((o) => [o.module_catalog.module_key, o.is_active]),
+    );
+    return buildModuleView(MODULE_CATALOG, overridesMap);
   }
 
   getDependencies(): Array<{ module_key: string; depends_on: string[] }> {
@@ -76,28 +104,41 @@ export class ModulosControllerService {
     }));
   }
 
-  toggleModule(moduleKey: string): ToggleResult {
+  async toggleModule(
+    clinicId: string,
+    moduleKey: string,
+    enabled: boolean,
+  ): Promise<ToggleResult> {
     const mod = MODULE_CATALOG.find((m) => m.module_key === moduleKey);
     if (!mod) {
       throw Errors.notFound("Module", moduleKey);
     }
-    return this.performToggle(mod);
+    return this.performToggle(clinicId, mod, enabled);
   }
 
-  toggleModuleById(moduleId: number): ToggleResult {
+  async toggleModuleById(
+    clinicId: string,
+    moduleId: number,
+    enabled: boolean,
+  ): Promise<ToggleResult> {
     const mod = MODULE_CATALOG.find((m) => m.id === moduleId);
     if (!mod) {
       throw Errors.notFound("Module", String(moduleId));
     }
-    return this.performToggle(mod);
+    return this.performToggle(clinicId, mod, enabled);
   }
 
-  private performToggle(mod: CatalogModule): ToggleResult {
+  private async performToggle(
+    clinicId: string,
+    mod: CatalogModule,
+    enabled: boolean,
+  ): Promise<ToggleResult> {
+    const before = await this.getModulesForClinic(clinicId);
     const activeKeys = new Set(
-      MODULE_CATALOG.filter((m) => m.is_active).map((m) => m.module_key),
+      before.filter((m) => m.is_active).map((m) => m.module_key),
     );
 
-    if (!mod.is_active) {
+    if (enabled) {
       const unmet = mod.dependencies.filter((dep) => !activeKeys.has(dep));
       if (unmet.length > 0) {
         throw Errors.conflict(
@@ -106,7 +147,9 @@ export class ModulosControllerService {
       }
     } else {
       const dependents = MODULE_CATALOG.filter(
-        (m) => m.is_active && m.dependencies.includes(mod.module_key),
+        (m) =>
+          activeKeys.has(m.module_key) &&
+          m.dependencies.includes(mod.module_key),
       );
       if (dependents.length > 0) {
         throw Errors.conflict(
@@ -115,13 +158,14 @@ export class ModulosControllerService {
       }
     }
 
-    mod.is_active = !mod.is_active;
+    await this.clinicModuleRepo.toggle(clinicId, mod.module_key, enabled);
+
+    const after = await this.getModulesForClinic(clinicId);
+
     return {
       success: true,
-      module: buildModuleView(MODULE_CATALOG).find(
-        (m) => m.module_key === mod.module_key,
-      ),
-      message: `Modulo ${mod.is_active ? "ativado" : "desativado"} com sucesso`,
+      module: after.find((m) => m.module_key === mod.module_key),
+      message: `Modulo ${enabled ? "ativado" : "desativado"} com sucesso`,
     };
   }
 

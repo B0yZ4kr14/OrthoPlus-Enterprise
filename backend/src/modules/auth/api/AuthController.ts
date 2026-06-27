@@ -9,14 +9,22 @@ import { AuthService } from "@/modules/auth/application/AuthService";
  * Delegates all business logic to AuthService.
  */
 
-const ACCESS_TOKEN_MAX_AGE_MS = 3600 * 1000;
-const REFRESH_TOKEN_EXPIRES_IN_SECONDS = 900;
+const ACCESS_TOKEN_MAX_AGE_MS = 15 * 60 * 1000;
+const REFRESH_TOKEN_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict" as const,
   maxAge: ACCESS_TOKEN_MAX_AGE_MS,
+  path: "/",
+};
+
+const REFRESH_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict" as const,
+  maxAge: REFRESH_TOKEN_MAX_AGE_MS,
   path: "/",
 };
 
@@ -31,6 +39,9 @@ function getToken(req: Request): string | undefined {
 }
 
 function allowMock(): boolean {
+  if (process.env.NODE_ENV === "production" && process.env.AUTH_ALLOW_MOCK === "true") {
+    throw new Error("AUTH_ALLOW_MOCK is prohibited in production");
+  }
   return process.env.AUTH_ALLOW_MOCK === "true";
 }
 
@@ -64,9 +75,11 @@ export class AuthController {
       ]);
     }
 
-    const result = await this.authService.loginStaff(email, password);
-    res.cookie("access_token", result.accessToken, COOKIE_OPTIONS);
-    res.json(result);
+    const { accessToken, refreshToken, user } =
+      await this.authService.loginStaff(email, password);
+    res.cookie("access_token", accessToken, COOKIE_OPTIONS);
+    res.cookie("refresh_token", refreshToken, REFRESH_COOKIE_OPTIONS);
+    return res.status(200).json({ success: true, user });
   });
 
   // GET /auth/user
@@ -116,16 +129,16 @@ export class AuthController {
 
   // POST /auth/refresh
   public refreshToken = asyncHandler(async (req: Request, res: Response) => {
-    const { refreshToken } = req.body;
+    const refreshToken =
+      (req as Request & { cookies?: Record<string, string> }).cookies
+        ?.refresh_token || req.body?.refreshToken;
     if (!refreshToken) throw Errors.validation("Refresh token is required");
 
     try {
       const tokens = await this.authService.refreshAccessToken(refreshToken);
-      res.json({
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-        expiresIn: REFRESH_TOKEN_EXPIRES_IN_SECONDS,
-      });
+      res.cookie("access_token", tokens.accessToken, COOKIE_OPTIONS);
+      res.cookie("refresh_token", tokens.refreshToken, REFRESH_COOKIE_OPTIONS);
+      return res.status(200).json({ success: true });
     } catch (err) {
       if (err instanceof ApiError) throw err;
       throw Errors.tokenExpired();
@@ -209,12 +222,14 @@ export class AuthController {
     if (!caller || !hasPermission)
       throw Errors.forbidden("Admin role required to register staff");
 
-    const { email, password, role, clinicId } = req.body as {
+    const { email, password, role } = req.body as {
       email?: string;
       password?: string;
       role?: string;
-      clinicId?: string;
     };
+
+    // SECURITY: clinicId must come from the authenticated token, never from body
+    const clinicId = req.user?.clinicId;
 
     const validationErrors = [];
     if (!email)

@@ -184,6 +184,7 @@ export class OrcamentoService {
       procedimento_id: data.procedimento_id,
       observacoes: data.observacoes,
       dente_codigo: data.dente_codigo,
+      clinic_id: clinicId,
     });
   }
 }

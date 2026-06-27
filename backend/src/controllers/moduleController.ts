@@ -3,9 +3,10 @@ import { prisma } from "@/infrastructure/database/prismaClient";
 import { Request, Response } from "express";
 
 export const applyModuleTemplate = async (req: Request, res: Response) => {
-  const { clinicId: _clinicId, templateId: _templateId } = req.body;
+  const clinicId = req.user?.clinicId;
+  const { templateId: _templateId } = req.body;
   logger.info("Applying module template", {
-    clinicId: _clinicId,
+    clinicId,
     templateId: _templateId,
   });
   return res.status(200).json({ message: "Template applied successfully" });

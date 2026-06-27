@@ -18,6 +18,7 @@ export function createConfiguracoesRouter(): Router {
   // Clinic-scoped endpoints require clinicGuard
   router.use(clinicGuard);
 
+  router.get("/modulos/clinic", controller.getModulesForClinic);
   router.post("/modulos/toggle", controller.toggleModuleByKey);
   router.post("/modulos/:id/toggle", controller.toggleModuleState);
 

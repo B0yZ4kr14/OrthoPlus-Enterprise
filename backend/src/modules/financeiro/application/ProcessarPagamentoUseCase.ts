@@ -6,6 +6,7 @@ export interface ProcessarPagamentoInput {
   contaReceberId: string;
   amount: number;
   paymentMethod: string;
+  clinicId: string;
 }
 
 export interface ProcessarPagamentoResult {
@@ -31,6 +32,7 @@ export class ProcessarPagamentoUseCase {
 
     await this.repo.processarPagamento(
       input.contaReceberId,
+      input.clinicId,
       {
         status: "PAGO",
         data_pagamento: new Date().toISOString(),

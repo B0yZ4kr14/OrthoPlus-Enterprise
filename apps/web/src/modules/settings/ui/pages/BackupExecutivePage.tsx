@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/shared/PageHeader";
-import { BackupControlCenter } from "@/components/settings/backup/BackupControlCenter";
+import { BackupControlCenter } from "@/modules/settings/components/legacy/backup/BackupControlCenter";
 import { HardDrive } from "lucide-react";
 
 export default function BackupExecutivePage() {

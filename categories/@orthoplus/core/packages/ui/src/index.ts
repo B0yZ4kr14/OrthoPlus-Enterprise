@@ -50,5 +50,6 @@ export * from "./components/toast";
 export * from "./components/toggle-group";
 export * from "./components/toggle";
 export * from "./components/tooltip";
+export * from "./components/module-card";
 export * from "./lib/utils";
 export { cn } from "./lib/utils";

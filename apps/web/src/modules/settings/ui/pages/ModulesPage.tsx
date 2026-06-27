@@ -12,7 +12,7 @@ import {
   TabsTrigger,
 } from "@orthoplus/core-ui/tabs";
 import { Badge } from "@orthoplus/core-ui/badge";
-import { ModuleCard } from "@/components/settings/ModuleCard";
+import { ModuleCard } from "@/modules/settings/components/ModuleCard";
 import { SidebarPreview } from "@/components/modules/SidebarPreview";
 import { useModules } from "@/hooks/useModules";
 import {
