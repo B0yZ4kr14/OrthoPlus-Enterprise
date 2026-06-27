@@ -81,7 +81,7 @@ describe("Auth Module — Integration Tests", () => {
       expect(res.body.code).toBe("AUTH_INVALID_CREDENTIALS");
     });
 
-    it("returns 200 with JWT tokens on valid credentials", async () => {
+    it("returns 200 with cookies and user on valid credentials", async () => {
       (bcrypt.compare as jest.Mock) = jest.fn().mockResolvedValueOnce(true);
       (prisma.$queryRaw as jest.Mock).mockResolvedValueOnce([
         {
@@ -98,17 +98,16 @@ describe("Auth Module — Integration Tests", () => {
         .send({ email: "admin@clinic.com", password: "correct-password" });
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty("accessToken");
-      expect(res.body).toHaveProperty("refreshToken");
-      expect(res.body.user.email).toBe("admin@clinic.com");
-
-      // Verify JWT structure
-      const decoded = jwt.verify(res.body.accessToken, JWT_SECRET) as {
-        sub: string;
-        role: string;
-      };
-      expect(decoded.sub).toBe("user-1");
-      expect(decoded.role).toBe("ADMIN");
+      expect(res.body).toEqual({
+        success: true,
+        user: expect.objectContaining({ email: "admin@clinic.com" }),
+      });
+      expect(res.headers["set-cookie"]).toEqual(
+        expect.arrayContaining([
+          expect.stringContaining("access_token="),
+          expect.stringContaining("refresh_token="),
+        ]),
+      );
     });
   });
 
@@ -188,7 +187,7 @@ describe("Auth Module — Integration Tests", () => {
       delete process.env.AUTH_ALLOW_MOCK;
     });
 
-    it("returns mock tokens when DB is empty but mock is allowed", async () => {
+    it("returns mock user and cookies when DB is empty but mock is allowed", async () => {
       (prisma.$queryRaw as jest.Mock).mockRejectedValueOnce(
         new Error("DB down"),
       );
@@ -196,11 +195,16 @@ describe("Auth Module — Integration Tests", () => {
         .post("/auth/token")
         .send({ email: "admin@clinic.com", password: "correct" });
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty("accessToken");
-      const decoded = jwt.verify(res.body.accessToken, JWT_SECRET) as {
-        role: string;
-      };
-      expect(decoded.role).toBe("authenticated");
+      expect(res.body).toEqual({
+        success: true,
+        user: expect.objectContaining({ email: "admin@clinic.com" }),
+      });
+      expect(res.headers["set-cookie"]).toEqual(
+        expect.arrayContaining([
+          expect.stringContaining("access_token="),
+          expect.stringContaining("refresh_token="),
+        ]),
+      );
     });
   });
 });

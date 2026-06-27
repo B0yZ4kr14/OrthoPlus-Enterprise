@@ -114,22 +114,28 @@ describe("Auth Controller (mock mode)", () => {
       });
     });
 
-    it("returns JWT on valid mock credentials", async () => {
+    it("returns success and user on valid mock credentials", async () => {
       process.env.MOCK_ADMIN_EMAIL = "admin@clinic.com";
       process.env.MOCK_ADMIN_PASSWORD = "correct";
       const req = mockReq({ email: "admin@clinic.com", password: "correct" });
       const res = mockRes();
       await controller.login(req as Request, res, jest.fn());
-      expect(res.json).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.cookie).toHaveBeenCalledWith(
+        "access_token",
+        expect.any(String),
+        expect.objectContaining({ httpOnly: true }),
+      );
+      expect(res.cookie).toHaveBeenCalledWith(
+        "refresh_token",
+        expect.any(String),
+        expect.objectContaining({ httpOnly: true }),
+      );
       const payload = (res.json as jest.Mock).mock.calls[0][0];
-      expect(payload).toHaveProperty("accessToken");
-      expect(payload).toHaveProperty("expiresIn", 900);
-      expect(payload.user.email).toBe("admin@clinic.com");
-      // token must be verifiable
-      const decoded = jwt.verify(payload.accessToken, JWT_SECRET) as {
-        role: string;
-      };
-      expect(decoded.role).toBe("authenticated");
+      expect(payload).toEqual({
+        success: true,
+        user: expect.objectContaining({ email: "admin@clinic.com" }),
+      });
     });
   });
 
