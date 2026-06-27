@@ -10,11 +10,11 @@ export class ModulosController {
   };
 
   getModulesForClinic = asyncHandler(async (req: Request, res: Response) => {
-    const user = req.user;
-    if (!user?.clinicId) {
+    const clinicId = req.clinicId;
+    if (!clinicId) {
       throw Errors.unauthorized("clinicId is required");
     }
-    const modules = await this.service.getModulesForClinic(user.clinicId);
+    const modules = await this.service.getModulesForClinic(clinicId);
     res.json({ modules });
   });
 
@@ -23,8 +23,8 @@ export class ModulosController {
   };
 
   toggleModuleByKey = asyncHandler(async (req: Request, res: Response) => {
-    const user = req.user;
-    if (!user?.clinicId) {
+    const clinicId = req.clinicId;
+    if (!clinicId) {
       throw Errors.unauthorized("clinicId is required");
     }
     const { module_key, enabled } = req.body as {
@@ -38,7 +38,7 @@ export class ModulosController {
       throw Errors.validation("enabled must be a boolean");
     }
     const result = await this.service.toggleModule(
-      user.clinicId,
+      clinicId,
       module_key,
       enabled,
     );
@@ -46,8 +46,8 @@ export class ModulosController {
   });
 
   toggleModuleState = asyncHandler(async (req: Request, res: Response) => {
-    const user = req.user;
-    if (!user?.clinicId) {
+    const clinicId = req.clinicId;
+    if (!clinicId) {
       throw Errors.unauthorized("clinicId is required");
     }
     const moduleId = parseInt(req.params.id, 10);
@@ -59,7 +59,7 @@ export class ModulosController {
       throw Errors.validation("enabled must be a boolean");
     }
     const result = await this.service.toggleModuleById(
-      user.clinicId,
+      clinicId,
       moduleId,
       enabled,
     );

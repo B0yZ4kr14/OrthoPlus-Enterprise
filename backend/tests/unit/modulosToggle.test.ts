@@ -6,8 +6,7 @@ jest.mock("../../src/infrastructure/database/prismaClient", () => ({
     clinic_modules: {
       findFirst: jest.fn(),
       findMany: jest.fn(),
-      create: jest.fn(),
-      update: jest.fn(),
+      upsert: jest.fn(),
     },
   },
 }));
@@ -20,8 +19,7 @@ const mockedPrisma = prisma as unknown as {
   clinic_modules: {
     findFirst: jest.Mock;
     findMany: jest.Mock;
-    create: jest.Mock;
-    update: jest.Mock;
+    upsert: jest.Mock;
   };
 };
 
@@ -30,13 +28,12 @@ describe("ClinicModuleRepository", () => {
     jest.clearAllMocks();
   });
 
-  it("persists module toggle per clinic when creating new row", async () => {
+  it("upserts module toggle per clinic using unique constraint", async () => {
     mockedPrisma.module_catalog.findFirst.mockResolvedValueOnce({
       id: 1,
       module_key: "AGENDA",
     });
-    mockedPrisma.clinic_modules.findFirst.mockResolvedValueOnce(null);
-    mockedPrisma.clinic_modules.create.mockResolvedValueOnce({
+    mockedPrisma.clinic_modules.upsert.mockResolvedValueOnce({
       id: 1,
       clinic_id: "clinic-1",
       module_catalog_id: 1,
@@ -46,40 +43,20 @@ describe("ClinicModuleRepository", () => {
     const repo = new ClinicModuleRepository(prisma);
     await repo.toggle("clinic-1", "AGENDA", false);
 
-    expect(mockedPrisma.clinic_modules.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
+    expect(mockedPrisma.clinic_modules.upsert).toHaveBeenCalledWith({
+      where: {
+        clinic_id_module_catalog_id: {
+          clinic_id: "clinic-1",
+          module_catalog_id: 1,
+        },
+      },
+      update: { is_active: false },
+      create: expect.objectContaining({
         clinic_id: "clinic-1",
         module_catalog_id: 1,
         is_active: false,
         subscribed_at: expect.any(String),
       }),
-    });
-  });
-
-  it("updates existing row when toggle already exists", async () => {
-    mockedPrisma.module_catalog.findFirst.mockResolvedValueOnce({
-      id: 1,
-      module_key: "AGENDA",
-    });
-    mockedPrisma.clinic_modules.findFirst.mockResolvedValueOnce({
-      id: 42,
-      clinic_id: "clinic-1",
-      module_catalog_id: 1,
-      is_active: false,
-    });
-    mockedPrisma.clinic_modules.update.mockResolvedValueOnce({
-      id: 42,
-      clinic_id: "clinic-1",
-      module_catalog_id: 1,
-      is_active: true,
-    });
-
-    const repo = new ClinicModuleRepository(prisma);
-    await repo.toggle("clinic-1", "AGENDA", true);
-
-    expect(mockedPrisma.clinic_modules.update).toHaveBeenCalledWith({
-      where: { id: 42 },
-      data: { is_active: true },
     });
   });
 

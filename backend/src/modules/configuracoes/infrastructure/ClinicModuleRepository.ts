@@ -12,22 +12,15 @@ export class ClinicModuleRepository {
       throw new Error(`Module catalog not found for key: ${moduleKey}`);
     }
 
-    const existing = await this.prisma.clinic_modules.findFirst({
+    return this.prisma.clinic_modules.upsert({
       where: {
-        clinic_id: clinicId,
-        module_catalog_id: catalog.id,
+        clinic_id_module_catalog_id: {
+          clinic_id: clinicId,
+          module_catalog_id: catalog.id,
+        },
       },
-    });
-
-    if (existing) {
-      return this.prisma.clinic_modules.update({
-        where: { id: existing.id },
-        data: { is_active: enabled },
-      });
-    }
-
-    return this.prisma.clinic_modules.create({
-      data: {
+      update: { is_active: enabled },
+      create: {
         clinic_id: clinicId,
         module_catalog_id: catalog.id,
         is_active: enabled,

@@ -133,22 +133,9 @@ export class ModulosControllerService {
     mod: CatalogModule,
     enabled: boolean,
   ): Promise<ToggleResult> {
-    const overrides = await this.clinicModuleRepo.listByClinic(clinicId);
-    const overridesMap = new Map(
-      overrides.map((o) => [o.module_catalog.module_key, o.is_active]),
-    );
-
-    const resolvedActive = (moduleKey: string, defaultActive: boolean) => {
-      if (overridesMap.has(moduleKey)) {
-        return overridesMap.get(moduleKey)!;
-      }
-      return defaultActive;
-    };
-
+    const before = await this.getModulesForClinic(clinicId);
     const activeKeys = new Set(
-      MODULE_CATALOG.filter((m) =>
-        resolvedActive(m.module_key, m.is_active),
-      ).map((m) => m.module_key),
+      before.filter((m) => m.is_active).map((m) => m.module_key),
     );
 
     if (enabled) {
@@ -161,7 +148,7 @@ export class ModulosControllerService {
     } else {
       const dependents = MODULE_CATALOG.filter(
         (m) =>
-          resolvedActive(m.module_key, m.is_active) &&
+          activeKeys.has(m.module_key) &&
           m.dependencies.includes(mod.module_key),
       );
       if (dependents.length > 0) {
@@ -173,16 +160,11 @@ export class ModulosControllerService {
 
     await this.clinicModuleRepo.toggle(clinicId, mod.module_key, enabled);
 
-    const updatedOverrides = await this.clinicModuleRepo.listByClinic(clinicId);
-    const updatedOverridesMap = new Map(
-      updatedOverrides.map((o) => [o.module_catalog.module_key, o.is_active]),
-    );
+    const after = await this.getModulesForClinic(clinicId);
 
     return {
       success: true,
-      module: buildModuleView(MODULE_CATALOG, updatedOverridesMap).find(
-        (m) => m.module_key === mod.module_key,
-      ),
+      module: after.find((m) => m.module_key === mod.module_key),
       message: `Modulo ${enabled ? "ativado" : "desativado"} com sucesso`,
     };
   }

@@ -635,6 +635,7 @@ model clinic_modules {
   subscribed_at     String
   updated_at        DateTime       @updatedAt
 
+  @@unique([clinic_id, module_catalog_id])
   @@schema("configuracoes")
 }
 

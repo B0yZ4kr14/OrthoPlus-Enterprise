@@ -37,7 +37,7 @@ export function useModules() {
         setError(null);
 
         const data = await apiClient.get<{ modules: Module[] }>(
-          "/configuracoes/modulos",
+          "/configuracoes/modulos/clinic",
         );
 
         if (!data || !data.modules) {
