@@ -16,12 +16,15 @@ dist-ssr
 # Environment & Secrets
 .env
 .env.*
-!.env.template
-!.env.e2e.example
+!.env*.example
 *.pem
 *.key
 *.crt
 *.p12
+.secrets
+*.secrets
+.env.vps.credentials
+.env2
 
 # Prisma
 prisma/migrations/*/migration_lock.toml
@@ -91,7 +94,6 @@ backups/
 # Misc
 *.tgz
 *.tar.gz
-node_modules
 deploy_key
 .ssh_key_vps
 ecosystem.json
@@ -129,7 +131,4 @@ playwright-report/
 !.specify/memory/**
 graphify-out/.graphify_*
 .omk/open-design/
-.env.vps.credentials
 .worktrees/
-.worktrees/
-.env2
