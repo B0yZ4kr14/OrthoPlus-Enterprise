@@ -25,7 +25,7 @@ import { Calendar, Clock, Edit, Pause, Play, Trash2, Plus } from "lucide-react";
 import { format } from "@/lib/utils/date.utils.ts";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
-import { ScheduledBackupWizard } from "@/components/settings/ScheduledBackupWizard";
+import { ScheduledBackupWizard } from "@/modules/settings/components/legacy/ScheduledBackupWizard";
 import {
   AlertDialog,
   AlertDialogAction,

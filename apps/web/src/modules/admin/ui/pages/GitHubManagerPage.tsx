@@ -26,7 +26,7 @@ import {
 import { useGitHubManagerPage } from "@/hooks/api/useGitHubManagerPage";
 import { RepositoryManager } from "@/components/admin/RepositoryManager";
 import { WebhookManager } from "@/components/admin/WebhookManager";
-import { GitHubIntegrationConfig } from "@/components/settings/GitHubIntegrationConfig";
+import { GitHubIntegrationConfig } from "@/modules/settings/components/legacy/GitHubIntegrationConfig";
 
 export default function GitHubManagerPage() {
   const {
