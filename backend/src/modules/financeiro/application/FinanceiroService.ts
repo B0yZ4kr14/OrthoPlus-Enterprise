@@ -494,6 +494,7 @@ export class FinanceiroService {
       contaReceberId,
       amount,
       paymentMethod,
+      clinicId,
     });
     return {
       success: true,

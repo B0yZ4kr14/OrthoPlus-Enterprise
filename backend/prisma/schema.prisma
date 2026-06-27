@@ -374,6 +374,7 @@ model budget_approvals {
   acao                  String
   alteracoes_realizadas Json?
   budget_id             String
+  clinic_id             String
   created_at            DateTime @default(now())
   id                    String   @id @default(uuid())
   motivo                String?
@@ -381,11 +382,13 @@ model budget_approvals {
   valor_orcamento       Int
   versao                Int
 
+  @@index([clinic_id])
   @@schema("financeiro")
 }
 
 model budget_items {
   budget_id           String
+  clinic_id           String
   created_at          DateTime @default(now())
   dente_regiao        String?
   desconto_percentual Int?
@@ -399,17 +402,20 @@ model budget_items {
   valor_total         Int
   valor_unitario      Int
 
+  @@index([clinic_id])
   @@schema("financeiro")
 }
 
 model budget_versions {
   budget_id     String
+  clinic_id     String
   created_at    DateTime @default(now())
   created_by    String
   id            String   @id @default(uuid())
   snapshot_data Json
   versao        Int
 
+  @@index([clinic_id])
   @@schema("financeiro")
 }
 
@@ -1675,6 +1681,7 @@ model onboarding_analytics {
 }
 
 model orcamento_itens {
+  clinic_id       String
   created_at      DateTime @default(now())
   dente_codigo    String?
   descricao       String
@@ -1687,10 +1694,12 @@ model orcamento_itens {
   valor_total     Int
   valor_unitario  Int
 
+  @@index([clinic_id])
   @@schema("financeiro")
 }
 
 model orcamento_pagamento {
+  clinic_id       String
   created_at      DateTime @default(now())
   forma_pagamento String[]
   id              String   @id @default(uuid())
@@ -1701,10 +1710,12 @@ model orcamento_pagamento {
   valor_entrada   Int?
   valor_parcela   Int?
 
+  @@index([clinic_id])
   @@schema("financeiro")
 }
 
 model orcamento_visualizacoes {
+  clinic_id        String
   duracao_segundos Int?
   id               String  @id @default(uuid())
   ip_address       String?
@@ -1712,6 +1723,7 @@ model orcamento_visualizacoes {
   user_agent       String?
   visualizado_em   String
 
+  @@index([clinic_id])
   @@schema("financeiro")
 }
 

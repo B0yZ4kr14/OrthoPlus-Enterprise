@@ -494,6 +494,7 @@ export class FinanceiroRepository implements IFinanceiroRepository {
 
   async processarPagamento(
     contaReceberId: string,
+    clinicId: string,
     updateData: Prisma.contas_receberUpdateInput,
     transacaoData: Record<string, unknown>,
   ) {
@@ -506,7 +507,12 @@ export class FinanceiroRepository implements IFinanceiroRepository {
         where: { id: contaReceberId },
       });
       if (bill) {
-        await tx.orcamento_pagamento.create({ data: transacaoData as any });
+        await tx.orcamento_pagamento.create({
+          data: {
+            ...transacaoData,
+            clinic_id: clinicId,
+          } as any,
+        });
       }
       return bill;
     });

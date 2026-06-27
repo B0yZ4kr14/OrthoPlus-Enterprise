@@ -237,6 +237,7 @@ export interface IFinanceiroRepository {
   // transaction support
   processarPagamento(
     contaReceberId: string,
+    clinicId: string,
     updateData: Prisma.contas_receberUpdateInput,
     transacaoData: Record<string, unknown>,
   ): Promise<contas_receber | null>;
