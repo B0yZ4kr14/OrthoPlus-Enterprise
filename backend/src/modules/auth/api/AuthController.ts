@@ -39,6 +39,9 @@ function getToken(req: Request): string | undefined {
 }
 
 function allowMock(): boolean {
+  if (process.env.NODE_ENV === "production" && process.env.AUTH_ALLOW_MOCK === "true") {
+    throw new Error("AUTH_ALLOW_MOCK is prohibited in production");
+  }
   return process.env.AUTH_ALLOW_MOCK === "true";
 }
 

@@ -161,7 +161,10 @@ function validateEnvironment() {
   }
 
   // Warn if mock auth is enabled (non-production)
-  if (process.env.AUTH_ALLOW_MOCK === "true") {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    process.env.AUTH_ALLOW_MOCK === "true"
+  ) {
     console.warn("⚠️  WARNING: AUTH_ALLOW_MOCK=true");
     console.warn(
       "   This allows authentication bypass - ONLY for development/testing!",
@@ -408,7 +411,10 @@ app.use("/api/memory-hub", (_req, res, next) => {
 // Active modules endpoint: returns module keys for a clinic from the database.
 // Falls back to returning all modules when AUTH_ALLOW_MOCK=true to unblock frontend in dev/test.
 app.get("/api/clinics/:id/active-modules", tenantGuard, async (req, res) => {
-  if (process.env.AUTH_ALLOW_MOCK === "true") {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    process.env.AUTH_ALLOW_MOCK === "true"
+  ) {
     res.json([
       "DASHBOARD",
       "AGENDA",
