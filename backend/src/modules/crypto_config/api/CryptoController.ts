@@ -32,7 +32,7 @@ export class CryptoController {
   createCryptoInvoice = asyncHandler(async (req: Request, res: Response) => {
     if (!this.checkEnabled(res)) return;
     const result = await this.service.createCryptoInvoice(
-      req.body,
+      { ...req.body, clinicId: req.clinicId as string },
       req.ip || undefined,
     );
     res.status(201).json({ success: true, ...result });

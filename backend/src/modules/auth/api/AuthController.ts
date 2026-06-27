@@ -222,12 +222,14 @@ export class AuthController {
     if (!caller || !hasPermission)
       throw Errors.forbidden("Admin role required to register staff");
 
-    const { email, password, role, clinicId } = req.body as {
+    const { email, password, role } = req.body as {
       email?: string;
       password?: string;
       role?: string;
-      clinicId?: string;
     };
+
+    // SECURITY: clinicId must come from the authenticated token, never from body
+    const clinicId = req.user?.clinicId;
 
     const validationErrors = [];
     if (!email)
